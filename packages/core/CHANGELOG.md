@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — CI ownership and test isolation repair (P10.2)
+
+- Added `Messaging\Laravel\InboxRetention` for explicit cleanup of a consumer's selected inbox message IDs. Other consumers and IDs remain retained; callers must establish that the selected messages cannot be replayed.
+
 ## Unreleased — kernel package and API migration
 
 - Breaking (PLAN3.P02–P04, pre-1.0): CoreX owns the kernel feature namespaces under one PSR-4 root; Api/Spi attributes, CoreOptions, ExtensionContribution and coded error descriptors declare the supported kernel and extension contracts. Runtime models and scanners no longer grant an implicit public contract.

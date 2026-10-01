@@ -1,59 +1,59 @@
 > pest --exclude-group=pg '--filter=SalesStorageTest|ActivityTimelineTest'
 
-  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\ActivityTimelineTest[39m
-  [31;1m⨯[39;22m[90m [39m[90mit logs a polymorphic activity resolved through the morph alias[39m[90m     [39m [90m0.43s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit attaches activities to different subject types[39m[90m                   [39m [90m0.37s[39m  
+   FAIL  Tests\Feature\ActivityTimelineTest
+  ⨯ it logs a polymorphic activity resolved through the morph alias      0.43s
+  ✓ it attaches activities to different subject types                    0.37s
 
-  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\SalesStorageTest[39m
-  [32;1m✓[39;22m[90m [39m[90mit does not represent legacy statuses or note and task as activitie[39m[90m…[39m [90m0.21s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit rejects creation veto without persisted rows or success events[39m[90m   [39m [90m0.21s[39m  
-  [31;1m⨯[39;22m[90m [39m[90mit stores activity kinds and canonical target associations[39m[90m          [39m [90m0.26s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit persists canonical lead fields with trusted provenance[39m[90m           [39m [90m0.21s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit refuses conversion without explicit human identity and preserves[39m[90m…[39m [90m0.22s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit rolls back the entire conversion when the final lead update is v[39m[90m…[39m [90m0.35s[39m  
-  [31m────────────────────────────────────────────────────────────────────────────[39m  
-  [41;1m FAILED [49;22m [1mTests\Feature\ActivityTimelineTest[22m [90m>[39m it logs a polymorphic activi…   
-[39;1m  Failed asserting that two strings are identical.
-  [39;22m[31m-'crm.contact'[39m[39;1m
-  [39;22m[32m+'Flex\Crm\Contact\Models\Contact'[39m[39;1m
-  [39;22m
+   FAIL  Tests\Feature\SalesStorageTest
+  ✓ it does not represent legacy statuses or note and task as activitie… 0.21s
+  ✓ it rejects creation veto without persisted rows or success events    0.21s
+  ⨯ it stores activity kinds and canonical target associations           0.26s
+  ✓ it persists canonical lead fields with trusted provenance            0.21s
+  ✓ it refuses conversion without explicit human identity and preserves… 0.22s
+  ✓ it rolls back the entire conversion when the final lead update is v… 0.35s
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Feature\ActivityTimelineTest > it logs a polymorphic activi…
+  Failed asserting that two strings are identical.
+  -'crm.contact'
+  +'Flex\Crm\Contact\Models\Contact'
 
-  at [32mtests/Feature/ActivityTimelineTest.php[39m:[32m22[39m
+
+  at tests/Feature/ActivityTimelineTest.php:22
      18▕     $contact = app(CreateContact::class)->handle(new ContactData(nameFirst: 'Jane'));
      19▕     $activity = app(LogActivity::class)->handle($contact, ActivityType::Call, 'Intro call', body: 'Went well');
-     20▕ 
+     20▕
      21▕     expect($activity->kind)->toBe(ActivityType::Call)
   ➜  22▕         ->and($activity->targets()->sole()->entity_type)->toBe('crm.contact')
      23▕         ->and($activity->targets()->sole()->entity->is($contact))->toBeTrue()
      24▕         ->and($contact->activities()->count())->toBe(1);
-     25▕ 
+     25▕
      26▕     Event::assertDispatched(ActivityLogged::class);
 
-  [33m1   [39m[39;1mtests/Feature/ActivityTimelineTest.php[39;22m:[39;1m22[39;22m
+  1   tests/Feature/ActivityTimelineTest.php:22
 
-  [31m────────────────────────────────────────────────────────────────────────────[39m  
-  [41;1m FAILED [49;22m [1mTests\Feature\SalesStorageTest[22m [90m>[39m it stores activity kinds and can…   
-[39;1m  Failed asserting that two strings are identical.
-  [39;22m[31m-'crm.lead'[39m[39;1m
-  [39;22m[32m+'Flex\Crm\Lead\Models\Lead'[39m[39;1m
-  [39;22m
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Feature\SalesStorageTest > it stores activity kinds and can…
+  Failed asserting that two strings are identical.
+  -'crm.lead'
+  +'Flex\Crm\Lead\Models\Lead'
 
-  at [32mtests/Feature/SalesStorageTest.php[39m:[32m37[39m
+
+  at tests/Feature/SalesStorageTest.php:37
      33▕     $activity = app(LogActivity::class)->handle(subject: $lead, type: ActivityType::Call, summary: 'Intro call');
      34▕     expect($activity->fresh()->kind)->toBe(ActivityType::Call)
      35▕         ->and($activity->subject)->toBe('Intro call')
      36▕         ->and($lead->activities()->sole()->id)->toBe($activity->id)
   ➜  37▕         ->and(DB::table('crm_activity_targets')->sole()->entity_type)->toBe('crm.lead');
      38▕ });
-     39▕ 
+     39▕
      40▕ it('does not represent legacy statuses or note and task as activities', function (): void {
      41▕     expect(LeadStatus::tryFrom('new'))->toBeNull()
 
-  [33m1   [39m[39;1mtests/Feature/SalesStorageTest.php[39;22m:[39;1m37[39;22m
+  1   tests/Feature/SalesStorageTest.php:37
 
 
-  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m6 passed[39;22m[90m (27 assertions)[39m
-  [90mDuration:[39m [39m2.37s[39m
-  [90mRandom Order Seed:[39m [39m1790878476[39m
+  Tests:    2 failed, 6 passed (27 assertions)
+  Duration: 2.37s
+  Random Order Seed: 1790878476
 
 Script pest --exclude-group=pg handling the test event returned with error code 1

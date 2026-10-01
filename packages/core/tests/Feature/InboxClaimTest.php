@@ -5,6 +5,7 @@ declare(strict_types=1);
 use CoreX\Config\Internal\Config;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Exceptions\InboxRefused;
+use CoreX\Messaging\Laravel\InboxRetention;
 use CoreX\Time\Testing\FrozenClock;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -24,6 +25,24 @@ function inboxClaimInstallSchema(): void
 
 beforeEach(function (): void {
     inboxClaimInstallSchema();
+});
+
+it('forgets only explicit message ids for the selected consumer', function (): void {
+    $inbox = app(Inbox::class);
+    DB::transaction(function () use ($inbox): void {
+        foreach (['webhooks', 'billing'] as $consumer) {
+            foreach (['old', 'retained'] as $messageId) {
+                $inbox->claim(consumer: $consumer, messageId: $messageId, name: 'example');
+            }
+        }
+    });
+    $retention = new InboxRetention(connection: DB::connection(), table: Config::inboxMessagesTable());
+
+    expect($retention->forget(consumer: 'webhooks', messageIds: []))->toBe(0)
+        ->and($retention->forget(consumer: 'webhooks', messageIds: ['old']))->toBe(1)
+        ->and($retention->forget(consumer: 'webhooks', messageIds: ['old']))->toBe(0)
+        ->and(DB::table(Config::inboxMessagesTable())->where('consumer', 'billing')->count())->toBe(2)
+        ->and(DB::table(Config::inboxMessagesTable())->where('consumer', 'webhooks')->value('message_id'))->toBe('retained');
 });
 
 it('refuses claim outside a transaction with MSG-006', function (): void {

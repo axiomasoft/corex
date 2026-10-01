@@ -25230,6 +25230,56 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Messaging\\Laravel\\InboxRetention": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "connection",
+                        "type": "Illuminate\\Database\\ConnectionInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": "sys_inbox_messages",
+                        "name": "table",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "forget": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "consumer",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "messageIds",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
     "CoreX\\Messaging\\Laravel\\PubSubAdapters": {
         "abstract": false,
         "constants": [],

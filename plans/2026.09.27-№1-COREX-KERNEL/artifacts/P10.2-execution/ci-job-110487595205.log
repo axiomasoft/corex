@@ -153,32 +153,32 @@
 2026-10-01T17:10:05.5447953Z   github-token: ***
 2026-10-01T17:10:05.5448206Z ##[endgroup]
 2026-10-01T17:10:05.5796608Z [command]/usr/bin/bash /home/runner/work/_actions/shivammathur/setup-php/f3e473d116dcccaddc5834248c87452386958240/src/scripts/run.sh
-2026-10-01T17:10:05.6123964Z 
-2026-10-01T17:10:05.6124679Z [90;1m==> [0m[37;1mSetup PHP[0m
-2026-10-01T17:10:11.5017474Z [32;1m✓ [0m[34;1mPHP [0m[90;1mInstalled PHP 8.4.26[0m
-2026-10-01T17:10:11.5021877Z 
-2026-10-01T17:10:11.5023505Z [90;1m==> [0m[37;1mSetup Extensions[0m
-2026-10-01T17:10:11.5388525Z [32;1m✓ [0m[34;1mmbstring [0m[90;1mEnabled[0m
-2026-10-01T17:10:11.5411776Z [32;1m✓ [0m[34;1mpdo [0m[90;1mEnabled[0m
-2026-10-01T17:10:11.5435621Z [32;1m✓ [0m[34;1msqlite3 [0m[90;1mEnabled[0m
-2026-10-01T17:10:11.5449722Z [32;1m✓ [0m[34;1mpdo_sqlite [0m[90;1mEnabled[0m
-2026-10-01T17:10:11.5476654Z [32;1m✓ [0m[34;1mbcmath [0m[90;1mEnabled[0m
-2026-10-01T17:10:11.5497183Z [32;1m✓ [0m[34;1mcurl [0m[90;1mEnabled[0m
-2026-10-01T17:10:11.5522906Z [32;1m✓ [0m[34;1mintl [0m[90;1mEnabled[0m
-2026-10-01T17:10:11.5542709Z [32;1m✓ [0m[34;1mzip [0m[90;1mEnabled[0m
-2026-10-01T17:10:11.5567723Z [32;1m✓ [0m[34;1mgd [0m[90;1mEnabled[0m
-2026-10-01T17:10:11.5601236Z [32;1m✓ [0m[34;1mxdebug [0m[90;1mEnabled[0m
-2026-10-01T17:10:11.5601728Z 
-2026-10-01T17:10:11.5602098Z [90;1m==> [0m[37;1mSetup Tools[0m
-2026-10-01T17:10:12.0029712Z [32;1m✓ [0m[34;1mcomposer [0m[90;1mAdded composer 2.10.3[0m
-2026-10-01T17:10:12.0031250Z 
-2026-10-01T17:10:12.0046011Z [90;1m==> [0m[37;1mSetup Coverage[0m
-2026-10-01T17:10:12.0744835Z [32;1m✓ [0m[34;1mxdebug [0m[90;1mXdebug 3.5.3 enabled as coverage driver[0m
-2026-10-01T17:10:12.0760197Z 
-2026-10-01T17:10:12.0764700Z [90;1m==> [0m[37;1mSponsor setup-php[0m
-2026-10-01T17:10:12.0769730Z [32;1m✓ [0m[34;1msetup-php [0m[90;1mhttps://setup-php.com/sponsor[0m
+2026-10-01T17:10:05.6123964Z
+2026-10-01T17:10:05.6124679Z ==> Setup PHP
+2026-10-01T17:10:11.5017474Z ✓ PHP Installed PHP 8.4.26
+2026-10-01T17:10:11.5021877Z
+2026-10-01T17:10:11.5023505Z ==> Setup Extensions
+2026-10-01T17:10:11.5388525Z ✓ mbstring Enabled
+2026-10-01T17:10:11.5411776Z ✓ pdo Enabled
+2026-10-01T17:10:11.5435621Z ✓ sqlite3 Enabled
+2026-10-01T17:10:11.5449722Z ✓ pdo_sqlite Enabled
+2026-10-01T17:10:11.5476654Z ✓ bcmath Enabled
+2026-10-01T17:10:11.5497183Z ✓ curl Enabled
+2026-10-01T17:10:11.5522906Z ✓ intl Enabled
+2026-10-01T17:10:11.5542709Z ✓ zip Enabled
+2026-10-01T17:10:11.5567723Z ✓ gd Enabled
+2026-10-01T17:10:11.5601236Z ✓ xdebug Enabled
+2026-10-01T17:10:11.5601728Z
+2026-10-01T17:10:11.5602098Z ==> Setup Tools
+2026-10-01T17:10:12.0029712Z ✓ composer Added composer 2.10.3
+2026-10-01T17:10:12.0031250Z
+2026-10-01T17:10:12.0046011Z ==> Setup Coverage
+2026-10-01T17:10:12.0744835Z ✓ xdebug Xdebug 3.5.3 enabled as coverage driver
+2026-10-01T17:10:12.0760197Z
+2026-10-01T17:10:12.0764700Z ==> Sponsor setup-php
+2026-10-01T17:10:12.0769730Z ✓ setup-php https://setup-php.com/sponsor
 2026-10-01T17:10:12.0895881Z ##[group]Run python3 scripts/distribution/stage-stancl-providers.py
-2026-10-01T17:10:12.0896468Z [36;1mpython3 scripts/distribution/stage-stancl-providers.py[0m
+2026-10-01T17:10:12.0896468Z python3 scripts/distribution/stage-stancl-providers.py
 2026-10-01T17:10:12.1818947Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:10:12.1819384Z env:
 2026-10-01T17:10:12.1819707Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -187,7 +187,7 @@
 2026-10-01T17:10:12.1821056Z ##[endgroup]
 2026-10-01T17:10:12.9197715Z {"result": "PASS", "repository": "file:///home/runner/work/corex/corex/.composer-provider-staging", "staging": "/home/runner/work/corex/corex/.composer-provider-staging", "registered": ["/home/runner/work/corex/corex", "/home/runner/work/corex/corex/packages/tenancy", "/home/runner/work/corex/corex/packages/access"]}
 2026-10-01T17:10:12.9286112Z ##[group]Run composer update --prefer-dist --no-interaction --no-progress
-2026-10-01T17:10:12.9286642Z [36;1mcomposer update --prefer-dist --no-interaction --no-progress[0m
+2026-10-01T17:10:12.9286642Z composer update --prefer-dist --no-interaction --no-progress
 2026-10-01T17:10:12.9321710Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:10:12.9322256Z env:
 2026-10-01T17:10:12.9322524Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -693,7 +693,7 @@
 2026-10-01T17:10:26.9117146Z > pestphp/pest: ignored
 2026-10-01T17:10:26.9117672Z > phpstan/phpstan-strict-rules: ignored
 2026-10-01T17:10:26.9432136Z ##[group]Run composer audit --locked
-2026-10-01T17:10:26.9432534Z [36;1mcomposer audit --locked[0m
+2026-10-01T17:10:26.9432534Z composer audit --locked
 2026-10-01T17:10:26.9468069Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:10:26.9468401Z env:
 2026-10-01T17:10:26.9468668Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -702,7 +702,7 @@
 2026-10-01T17:10:26.9469697Z ##[endgroup]
 2026-10-01T17:10:27.4196616Z No security vulnerability advisories found.
 2026-10-01T17:10:27.4376687Z ##[group]Run composer --working-dir=packages/access update --prefer-dist --no-interaction --no-progress
-2026-10-01T17:10:27.4377706Z [36;1mcomposer --working-dir=packages/access update --prefer-dist --no-interaction --no-progress[0m
+2026-10-01T17:10:27.4377706Z composer --working-dir=packages/access update --prefer-dist --no-interaction --no-progress
 2026-10-01T17:10:27.4417950Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:10:27.4418351Z env:
 2026-10-01T17:10:27.4418637Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -999,7 +999,7 @@
 2026-10-01T17:10:35.3697734Z 92 packages you are using are looking for funding.
 2026-10-01T17:10:35.3698441Z Use the `composer fund` command to find out more!
 2026-10-01T17:10:35.3925722Z ##[group]Run composer audit --locked --working-dir=packages/access
-2026-10-01T17:10:35.3926260Z [36;1mcomposer audit --locked --working-dir=packages/access[0m
+2026-10-01T17:10:35.3926260Z composer audit --locked --working-dir=packages/access
 2026-10-01T17:10:35.3962866Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:10:35.3963196Z env:
 2026-10-01T17:10:35.3963473Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -1008,7 +1008,7 @@
 2026-10-01T17:10:35.3964395Z ##[endgroup]
 2026-10-01T17:10:35.8488829Z No security vulnerability advisories found.
 2026-10-01T17:10:35.8665821Z ##[group]Run composer test:packages
-2026-10-01T17:10:35.8666378Z [36;1mcomposer test:packages[0m
+2026-10-01T17:10:35.8666378Z composer test:packages
 2026-10-01T17:10:35.8727344Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:10:35.8727765Z env:
 2026-10-01T17:10:35.8728116Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -1016,99 +1016,99 @@
 2026-10-01T17:10:35.8729058Z   COMPOSER_NO_AUDIT: 1
 2026-10-01T17:10:35.8729449Z ##[endgroup]
 2026-10-01T17:10:36.0517919Z ==> packages/access
-2026-10-01T17:10:36.4412667Z 
-2026-10-01T17:10:36.4413506Z   [30;42;1m PASS [39;49;22m[39m Tests\Unit\AuthOptionsTest[39m
-2026-10-01T17:10:36.4438690Z   [32;1m✓[39;22m[90m [39m[90mit accumulates an empty panel and incomplete identity columns in one exception[39m
-2026-10-01T17:10:36.4444180Z   [32;1m✓[39;22m[90m [39m[90mit normalizes an empty workspace scope class to null[39m
-2026-10-01T17:10:36.4449166Z   [32;1m✓[39;22m[90m [39m[90mit rejects an empty panel[39m
-2026-10-01T17:10:36.8824937Z 
-2026-10-01T17:10:36.8826600Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\ScopeAvailabilityTest[39m
-2026-10-01T17:10:36.8836340Z   [32;1m✓[39;22m[90m [39m[90mit leaves none/account untouched regardless of capability or regist[39m[90m…[39m [90m0.16s[39m  
-2026-10-01T17:10:36.8845758Z   [32;1m✓[39;22m[90m [39m[90mit normalizes own/dept/dept_tree/workspace to account when neither[39m[90m… [39m [90m0.04s[39m  
-2026-10-01T17:10:36.8862503Z   [32;1m✓[39;22m[90m [39m[90mit normalizes own/dept/dept_tree/workspace to account when neither[39m[90m… [39m [90m0.04s[39m  
-2026-10-01T17:10:36.8869664Z   [32;1m✓[39;22m[90m [39m[90mit normalizes own/dept/dept_tree/workspace to account when neither[39m[90m… [39m [90m0.04s[39m  
-2026-10-01T17:10:36.8879140Z   [32;1m✓[39;22m[90m [39m[90mit normalizes own/dept/dept_tree/workspace to account when neither[39m[90m… [39m [90m0.04s[39m  
-2026-10-01T17:10:36.8890925Z   [32;1m✓[39;22m[90m [39m[90mit leaves the scope unchanged once the matching capability is decla[39m[90m…[39m [90m0.04s[39m  
-2026-10-01T17:10:36.8900593Z   [32;1m✓[39;22m[90m [39m[90mit throws ScopeCapabilityMismatch when the column exists but the ca[39m[90m…[39m [90m0.04s[39m  
-2026-10-01T17:10:36.8909436Z   [32;1m✓[39;22m[90m [39m[90mit normalizes to none for an entity_key unknown to the registry[39m[90m     [39m [90m0.04s[39m  
-2026-10-01T17:10:36.9728138Z 
-2026-10-01T17:10:36.9729167Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\BladeDirectivesTest[39m
-2026-10-01T17:10:36.9738683Z   [32;1m✓[39;22m[90m [39m[90mit compiles @scope to an entity-scoped role check[39m[90m                   [39m [90m0.05s[39m  
-2026-10-01T17:10:36.9748974Z   [32;1m✓[39;22m[90m [39m[90mit compiles @entity to an entity-scoped permission check[39m[90m            [39m [90m0.04s[39m  
-2026-10-01T17:10:37.1738941Z 
-2026-10-01T17:10:37.1740271Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\PermissionSurfaceTest[39m
-2026-10-01T17:10:37.1749317Z   [32;1m✓[39;22m[90m [39m[90mit excludes a declaration whose entity is unknown to EntityRegistry[39m[90m [39m [90m0.04s[39m  
-2026-10-01T17:10:37.1759050Z   [32;1m✓[39;22m[90m [39m[90mit includes every distinct scope when the entity declares both owna[39m[90m…[39m [90m0.04s[39m  
-2026-10-01T17:10:37.1771309Z   [32;1m✓[39;22m[90m [39m[90mit lists every declared action with the entity scope set for an act[39m[90m…[39m [90m0.04s[39m  
-2026-10-01T17:10:37.1780590Z   [32;1m✓[39;22m[90m [39m[90mit returns only account for a non-scopeable declaration[39m[90m             [39m [90m0.04s[39m  
-2026-10-01T17:10:37.1789966Z   [32;1m✓[39;22m[90m [39m[90mit excludes a declaration whose owning module is inactive[39m[90m           [39m [90m0.04s[39m  
-2026-10-01T17:10:37.3429375Z 
-2026-10-01T17:10:37.3430635Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\WorkspaceScopeWiringTest[39m
-2026-10-01T17:10:37.3440463Z   [32;1m✓[39;22m[90m [39m[90mit silently skips wiring when the scope class is null (boxed profil[39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:10:37.3449742Z   [32;1m✓[39;22m[90m [39m[90mit does not wire the workspace global scope onto a model without th[39m[90m…[39m [90m0.04s[39m  
-2026-10-01T17:10:37.3458879Z   [32;1m✓[39;22m[90m [39m[90mit silently skips wiring when the pinned scope class does not exist[39m[90m [39m [90m0.04s[39m  
-2026-10-01T17:10:37.3468017Z   [32;1m✓[39;22m[90m [39m[90mit wires the workspace global scope onto every model whose entity d[39m[90m…[39m [90m0.04s[39m  
-2026-10-01T17:10:37.5672661Z 
-2026-10-01T17:10:37.5673820Z   [39;41;1m FAIL [39;49;22m[39m Tests\Feature\TenantContextGuardTest[39m
-2026-10-01T17:10:37.5683214Z   [32;1m✓[39;22m[90m [39m[90mit returns false when the context entity does not exist[39m[90m             [39m [90m0.04s[39m  
-2026-10-01T17:10:37.5692590Z   [31;1m⨯[39;22m[90m [39m[90mit grants when the user has the permission scoped to the entity[39m[90m     [39m [90m0.05s[39m  
-2026-10-01T17:10:37.5701879Z   [32;1m✓[39;22m[90m [39m[90mit returns false for an unknown context type[39m[90m                        [39m [90m0.04s[39m  
-2026-10-01T17:10:37.5711406Z   [32;1m✓[39;22m[90m [39m[90mit denies when the user has neither scoped nor global permission[39m[90m    [39m [90m0.04s[39m  
-2026-10-01T17:10:37.5720821Z   [31;1m⨯[39;22m[90m [39m[90mit falls back to a global permission within the panel[39m[90m               [39m [90m0.04s[39m  
-2026-10-01T17:10:38.6795606Z 
-2026-10-01T17:10:38.6797232Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\PrincipalUserProviderTest[39m
-2026-10-01T17:10:38.6814197Z   [32;1m✓[39;22m[90m [39m[90mit logs a PrincipalIdentity(User) in via Auth::attempt() on the rig[39m[90m…[39m [90m0.15s[39m  
-2026-10-01T17:10:38.6818132Z   [32;1m✓[39;22m[90m [39m[90mit returns null from both retrieveByCredentials() and retrieveById([39m[90m…[39m [90m0.09s[39m  
-2026-10-01T17:10:38.6827418Z   [32;1m✓[39;22m[90m [39m[90mit gives the same class and identity from Auth::attempt() and Auth:[39m[90m…[39m [90m0.15s[39m  
-2026-10-01T17:10:38.6836318Z   [32;1m✓[39;22m[90m [39m[90mit makes retrieveByToken() a permanent no-op and updateRememberToke[39m[90m…[39m [90m0.09s[39m  
-2026-10-01T17:10:38.6845893Z   [32;1m✓[39;22m[90m [39m[90mit returns false from validateCredentials() for a wrong password[39m[90m    [39m [90m0.14s[39m  
-2026-10-01T17:10:38.6855152Z   [32;1m✓[39;22m[90m [39m[90mit works against a table with entirely different column names, driv[39m[90m…[39m [90m0.15s[39m  
-2026-10-01T17:10:38.6864644Z   [32;1m✓[39;22m[90m [39m[90mit returns null from both retrieveByCredentials() and retrieveById([39m[90m…[39m [90m0.09s[39m  
-2026-10-01T17:10:38.6873808Z   [32;1m✓[39;22m[90m [39m[90mit returns null from retrieveByCredentials() for an unknown email[39m[90m   [39m [90m0.09s[39m  
-2026-10-01T17:10:38.6883276Z   [32;1m✓[39;22m[90m [39m[90mit rehashes the password column only when Hash::needsRehash() is tr[39m[90m…[39m [90m0.15s[39m  
-2026-10-01T17:10:40.2720336Z 
-2026-10-01T17:10:40.2721571Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\ScopeVersionConcurrencyTest[39m
-2026-10-01T17:10:40.2741455Z   [32;1m✓[39;22m[90m [39m[90mit invalidates the captured tenant even when the active context cha[39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:10:40.2742801Z   [32;1m✓[39;22m[90m [39m[90mit retains every concurrent invalidation even on the non-atomic fil[39m[90m…[39m [90m1.54s[39m  
-2026-10-01T17:10:40.2750836Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:10:40.2758762Z   [41;1m FAILED [49;22m [1mTests\Feature\TenantContextGuardTest[22m [90m>[39m it grants when the user ha…   
-2026-10-01T17:10:40.2776350Z [39;1m  Failed asserting that false is true.[39;22m
-2026-10-01T17:10:40.2784509Z 
-2026-10-01T17:10:40.2785723Z   at [32mtests/Feature/TenantContextGuardTest.php[39m:[32m42[39m
+2026-10-01T17:10:36.4412667Z
+2026-10-01T17:10:36.4413506Z    PASS  Tests\Unit\AuthOptionsTest
+2026-10-01T17:10:36.4438690Z   ✓ it accumulates an empty panel and incomplete identity columns in one exception
+2026-10-01T17:10:36.4444180Z   ✓ it normalizes an empty workspace scope class to null
+2026-10-01T17:10:36.4449166Z   ✓ it rejects an empty panel
+2026-10-01T17:10:36.8824937Z
+2026-10-01T17:10:36.8826600Z    PASS  Tests\Feature\ScopeAvailabilityTest
+2026-10-01T17:10:36.8836340Z   ✓ it leaves none/account untouched regardless of capability or regist… 0.16s
+2026-10-01T17:10:36.8845758Z   ✓ it normalizes own/dept/dept_tree/workspace to account when neither…  0.04s
+2026-10-01T17:10:36.8862503Z   ✓ it normalizes own/dept/dept_tree/workspace to account when neither…  0.04s
+2026-10-01T17:10:36.8869664Z   ✓ it normalizes own/dept/dept_tree/workspace to account when neither…  0.04s
+2026-10-01T17:10:36.8879140Z   ✓ it normalizes own/dept/dept_tree/workspace to account when neither…  0.04s
+2026-10-01T17:10:36.8890925Z   ✓ it leaves the scope unchanged once the matching capability is decla… 0.04s
+2026-10-01T17:10:36.8900593Z   ✓ it throws ScopeCapabilityMismatch when the column exists but the ca… 0.04s
+2026-10-01T17:10:36.8909436Z   ✓ it normalizes to none for an entity_key unknown to the registry      0.04s
+2026-10-01T17:10:36.9728138Z
+2026-10-01T17:10:36.9729167Z    PASS  Tests\Feature\BladeDirectivesTest
+2026-10-01T17:10:36.9738683Z   ✓ it compiles @scope to an entity-scoped role check                    0.05s
+2026-10-01T17:10:36.9748974Z   ✓ it compiles @entity to an entity-scoped permission check             0.04s
+2026-10-01T17:10:37.1738941Z
+2026-10-01T17:10:37.1740271Z    PASS  Tests\Feature\PermissionSurfaceTest
+2026-10-01T17:10:37.1749317Z   ✓ it excludes a declaration whose entity is unknown to EntityRegistry  0.04s
+2026-10-01T17:10:37.1759050Z   ✓ it includes every distinct scope when the entity declares both owna… 0.04s
+2026-10-01T17:10:37.1771309Z   ✓ it lists every declared action with the entity scope set for an act… 0.04s
+2026-10-01T17:10:37.1780590Z   ✓ it returns only account for a non-scopeable declaration              0.04s
+2026-10-01T17:10:37.1789966Z   ✓ it excludes a declaration whose owning module is inactive            0.04s
+2026-10-01T17:10:37.3429375Z
+2026-10-01T17:10:37.3430635Z    PASS  Tests\Feature\WorkspaceScopeWiringTest
+2026-10-01T17:10:37.3440463Z   ✓ it silently skips wiring when the scope class is null (boxed profil… 0.05s
+2026-10-01T17:10:37.3449742Z   ✓ it does not wire the workspace global scope onto a model without th… 0.04s
+2026-10-01T17:10:37.3458879Z   ✓ it silently skips wiring when the pinned scope class does not exist  0.04s
+2026-10-01T17:10:37.3468017Z   ✓ it wires the workspace global scope onto every model whose entity d… 0.04s
+2026-10-01T17:10:37.5672661Z
+2026-10-01T17:10:37.5673820Z    FAIL  Tests\Feature\TenantContextGuardTest
+2026-10-01T17:10:37.5683214Z   ✓ it returns false when the context entity does not exist              0.04s
+2026-10-01T17:10:37.5692590Z   ⨯ it grants when the user has the permission scoped to the entity      0.05s
+2026-10-01T17:10:37.5701879Z   ✓ it returns false for an unknown context type                         0.04s
+2026-10-01T17:10:37.5711406Z   ✓ it denies when the user has neither scoped nor global permission     0.04s
+2026-10-01T17:10:37.5720821Z   ⨯ it falls back to a global permission within the panel                0.04s
+2026-10-01T17:10:38.6795606Z
+2026-10-01T17:10:38.6797232Z    PASS  Tests\Feature\PrincipalUserProviderTest
+2026-10-01T17:10:38.6814197Z   ✓ it logs a PrincipalIdentity(User) in via Auth::attempt() on the rig… 0.15s
+2026-10-01T17:10:38.6818132Z   ✓ it returns null from both retrieveByCredentials() and retrieveById(… 0.09s
+2026-10-01T17:10:38.6827418Z   ✓ it gives the same class and identity from Auth::attempt() and Auth:… 0.15s
+2026-10-01T17:10:38.6836318Z   ✓ it makes retrieveByToken() a permanent no-op and updateRememberToke… 0.09s
+2026-10-01T17:10:38.6845893Z   ✓ it returns false from validateCredentials() for a wrong password     0.14s
+2026-10-01T17:10:38.6855152Z   ✓ it works against a table with entirely different column names, driv… 0.15s
+2026-10-01T17:10:38.6864644Z   ✓ it returns null from both retrieveByCredentials() and retrieveById(… 0.09s
+2026-10-01T17:10:38.6873808Z   ✓ it returns null from retrieveByCredentials() for an unknown email    0.09s
+2026-10-01T17:10:38.6883276Z   ✓ it rehashes the password column only when Hash::needsRehash() is tr… 0.15s
+2026-10-01T17:10:40.2720336Z
+2026-10-01T17:10:40.2721571Z    PASS  Tests\Feature\ScopeVersionConcurrencyTest
+2026-10-01T17:10:40.2741455Z   ✓ it invalidates the captured tenant even when the active context cha… 0.05s
+2026-10-01T17:10:40.2742801Z   ✓ it retains every concurrent invalidation even on the non-atomic fil… 1.54s
+2026-10-01T17:10:40.2750836Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:10:40.2758762Z    FAILED  Tests\Feature\TenantContextGuardTest > it grants when the user ha…
+2026-10-01T17:10:40.2776350Z   Failed asserting that false is true.
+2026-10-01T17:10:40.2784509Z
+2026-10-01T17:10:40.2785723Z   at tests/Feature/TenantContextGuardTest.php:42
 2026-10-01T17:10:40.2796762Z      38▕ it('grants when the user has the permission scoped to the entity', function (): void {
 2026-10-01T17:10:40.2798505Z      39▕     $project = Project::create(['name' => 'p']);
 2026-10-01T17:10:40.2799349Z      40▕     $user = new ContextUser(scoped: true);
-2026-10-01T17:10:40.2800214Z      41▕ 
+2026-10-01T17:10:40.2800214Z      41▕
 2026-10-01T17:10:40.2801261Z   ➜  42▕     expect($this->guard->checkInContext($user, 'project', $project->id, 'crm.deal.view', 'app'))->toBeTrue();
 2026-10-01T17:10:40.2802792Z      43▕ });
-2026-10-01T17:10:40.2803379Z      44▕ 
+2026-10-01T17:10:40.2803379Z      44▕
 2026-10-01T17:10:40.2804158Z      45▕ it('falls back to a global permission within the panel', function (): void {
 2026-10-01T17:10:40.2805247Z      46▕     $project = Project::create(['name' => 'p']);
-2026-10-01T17:10:40.2816012Z 
-2026-10-01T17:10:40.2821779Z   [33m1   [39m[39;1mtests/Feature/TenantContextGuardTest.php[39;22m:[39;1m42[39;22m
-2026-10-01T17:10:40.2822511Z 
-2026-10-01T17:10:40.2823088Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:10:40.2824356Z   [41;1m FAILED [49;22m [1mTests\Feature\TenantContextGuardTest[22m [90m>[39m it falls back to a global…    
-2026-10-01T17:10:40.2825368Z [39;1m  Failed asserting that false is true.[39;22m
-2026-10-01T17:10:40.2825814Z 
-2026-10-01T17:10:40.2826317Z   at [32mtests/Feature/TenantContextGuardTest.php[39m:[32m49[39m
+2026-10-01T17:10:40.2816012Z
+2026-10-01T17:10:40.2821779Z   1   tests/Feature/TenantContextGuardTest.php:42
+2026-10-01T17:10:40.2822511Z
+2026-10-01T17:10:40.2823088Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:10:40.2824356Z    FAILED  Tests\Feature\TenantContextGuardTest > it falls back to a global…
+2026-10-01T17:10:40.2825368Z   Failed asserting that false is true.
+2026-10-01T17:10:40.2825814Z
+2026-10-01T17:10:40.2826317Z   at tests/Feature/TenantContextGuardTest.php:49
 2026-10-01T17:10:40.2833725Z      45▕ it('falls back to a global permission within the panel', function (): void {
 2026-10-01T17:10:40.2835367Z      46▕     $project = Project::create(['name' => 'p']);
 2026-10-01T17:10:40.2836169Z      47▕     $user = new ContextUser(global: true);
-2026-10-01T17:10:40.2860609Z      48▕ 
+2026-10-01T17:10:40.2860609Z      48▕
 2026-10-01T17:10:40.2873604Z   ➜  49▕     expect($this->guard->checkInContext($user, 'project', $project->id, 'crm.deal.view', 'app'))->toBeTrue();
 2026-10-01T17:10:40.2880842Z      50▕ });
-2026-10-01T17:10:40.2898194Z      51▕ 
+2026-10-01T17:10:40.2898194Z      51▕
 2026-10-01T17:10:40.2902065Z      52▕ it('denies when the user has neither scoped nor global permission', function (): void {
 2026-10-01T17:10:40.2903396Z      53▕     $project = Project::create(['name' => 'p']);
-2026-10-01T17:10:40.2904046Z 
-2026-10-01T17:10:40.2904818Z   [33m1   [39m[39;1mtests/Feature/TenantContextGuardTest.php[39;22m:[39;1m49[39;22m
-2026-10-01T17:10:40.2905510Z 
-2026-10-01T17:10:40.2905637Z 
-2026-10-01T17:10:40.2906482Z   [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m36 passed[39;22m[90m (65 assertions)[39m
-2026-10-01T17:10:40.2907527Z   [90mDuration:[39m [39m4.00s[39m
-2026-10-01T17:10:40.2908416Z   [90mRandom Order Seed:[39m [39m1790874636[39m
-2026-10-01T17:10:40.2908976Z 
+2026-10-01T17:10:40.2904046Z
+2026-10-01T17:10:40.2904818Z   1   tests/Feature/TenantContextGuardTest.php:49
+2026-10-01T17:10:40.2905510Z
+2026-10-01T17:10:40.2905637Z
+2026-10-01T17:10:40.2906482Z   Tests:    2 failed, 36 passed (65 assertions)
+2026-10-01T17:10:40.2907527Z   Duration: 4.00s
+2026-10-01T17:10:40.2908416Z   Random Order Seed: 1790874636
+2026-10-01T17:10:40.2908976Z
 2026-10-01T17:10:40.2946662Z Script pest --exclude-group=pg handling the test event returned with error code 1
 2026-10-01T17:10:40.3102853Z Script for p in packages/access packages/core packages/custom-fields packages/intl packages/media packages/notifications packages/operations packages/panels packages/recurrence packages/search packages/search-intl packages/search-meilisearch packages/tasks packages/tasks-workflow packages/tenancy packages/tools packages/transfer packages/wakeup packages/webhooks packages/workflow products/flex-crm; do echo "==> $p" && composer --working-dir="$p" test || exit 1; done handling the test:packages event returned with error code 1
 2026-10-01T17:10:40.3289327Z ##[error]Process completed with exit code 1.

@@ -258,32 +258,32 @@
 2026-10-01T17:28:08.2957469Z   github-token: ***
 2026-10-01T17:28:08.2957699Z ##[endgroup]
 2026-10-01T17:28:08.3355082Z [command]/usr/bin/bash /home/runner/work/_actions/shivammathur/setup-php/f3e473d116dcccaddc5834248c87452386958240/src/scripts/run.sh
-2026-10-01T17:28:08.3800229Z 
-2026-10-01T17:28:08.3811057Z [90;1m==> [0m[37;1mSetup PHP[0m
-2026-10-01T17:28:12.8207434Z [32;1m✓ [0m[34;1mPHP [0m[90;1mInstalled PHP 8.4.26[0m
-2026-10-01T17:28:12.8212078Z 
-2026-10-01T17:28:12.8212855Z [90;1m==> [0m[37;1mSetup Extensions[0m
-2026-10-01T17:28:12.8732526Z [32;1m✓ [0m[34;1mmbstring [0m[90;1mEnabled[0m
-2026-10-01T17:28:12.8770776Z [32;1m✓ [0m[34;1mpdo [0m[90;1mEnabled[0m
-2026-10-01T17:28:12.8795269Z [32;1m✓ [0m[34;1msqlite3 [0m[90;1mEnabled[0m
-2026-10-01T17:28:12.8811459Z [32;1m✓ [0m[34;1mpdo_sqlite [0m[90;1mEnabled[0m
-2026-10-01T17:28:12.8831379Z [32;1m✓ [0m[34;1mpdo_pgsql [0m[90;1mEnabled[0m
-2026-10-01T17:28:12.8863737Z [32;1m✓ [0m[34;1mbcmath [0m[90;1mEnabled[0m
-2026-10-01T17:28:12.8897423Z [32;1m✓ [0m[34;1mcurl [0m[90;1mEnabled[0m
-2026-10-01T17:28:12.8933019Z [32;1m✓ [0m[34;1mintl [0m[90;1mEnabled[0m
-2026-10-01T17:28:12.8963935Z [32;1m✓ [0m[34;1mzip [0m[90;1mEnabled[0m
-2026-10-01T17:28:12.8996970Z [32;1m✓ [0m[34;1mgd [0m[90;1mEnabled[0m
-2026-10-01T17:28:12.8997751Z 
-2026-10-01T17:28:12.8998283Z [90;1m==> [0m[37;1mSetup Tools[0m
-2026-10-01T17:28:13.4951817Z [32;1m✓ [0m[34;1mcomposer [0m[90;1mAdded composer 2.10.3[0m
-2026-10-01T17:28:13.4969169Z 
-2026-10-01T17:28:13.4969998Z [90;1m==> [0m[37;1mSetup Coverage[0m
-2026-10-01T17:28:13.7270694Z [32;1m✓ [0m[34;1mnone [0m[90;1mDisabled Xdebug and PCOV[0m
-2026-10-01T17:28:13.7273697Z 
-2026-10-01T17:28:13.7274354Z [90;1m==> [0m[37;1mSponsor setup-php[0m
-2026-10-01T17:28:13.7275393Z [32;1m✓ [0m[34;1msetup-php [0m[90;1mhttps://setup-php.com/sponsor[0m
+2026-10-01T17:28:08.3800229Z
+2026-10-01T17:28:08.3811057Z ==> Setup PHP
+2026-10-01T17:28:12.8207434Z ✓ PHP Installed PHP 8.4.26
+2026-10-01T17:28:12.8212078Z
+2026-10-01T17:28:12.8212855Z ==> Setup Extensions
+2026-10-01T17:28:12.8732526Z ✓ mbstring Enabled
+2026-10-01T17:28:12.8770776Z ✓ pdo Enabled
+2026-10-01T17:28:12.8795269Z ✓ sqlite3 Enabled
+2026-10-01T17:28:12.8811459Z ✓ pdo_sqlite Enabled
+2026-10-01T17:28:12.8831379Z ✓ pdo_pgsql Enabled
+2026-10-01T17:28:12.8863737Z ✓ bcmath Enabled
+2026-10-01T17:28:12.8897423Z ✓ curl Enabled
+2026-10-01T17:28:12.8933019Z ✓ intl Enabled
+2026-10-01T17:28:12.8963935Z ✓ zip Enabled
+2026-10-01T17:28:12.8996970Z ✓ gd Enabled
+2026-10-01T17:28:12.8997751Z
+2026-10-01T17:28:12.8998283Z ==> Setup Tools
+2026-10-01T17:28:13.4951817Z ✓ composer Added composer 2.10.3
+2026-10-01T17:28:13.4969169Z
+2026-10-01T17:28:13.4969998Z ==> Setup Coverage
+2026-10-01T17:28:13.7270694Z ✓ none Disabled Xdebug and PCOV
+2026-10-01T17:28:13.7273697Z
+2026-10-01T17:28:13.7274354Z ==> Sponsor setup-php
+2026-10-01T17:28:13.7275393Z ✓ setup-php https://setup-php.com/sponsor
 2026-10-01T17:28:13.7470576Z ##[group]Run python3 scripts/distribution/stage-stancl-providers.py
-2026-10-01T17:28:13.7471128Z [36;1mpython3 scripts/distribution/stage-stancl-providers.py[0m
+2026-10-01T17:28:13.7471128Z python3 scripts/distribution/stage-stancl-providers.py
 2026-10-01T17:28:13.7688209Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:28:13.7688483Z env:
 2026-10-01T17:28:13.7688687Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -292,7 +292,7 @@
 2026-10-01T17:28:13.7689406Z ##[endgroup]
 2026-10-01T17:28:14.2782288Z {"result": "PASS", "repository": "file:///home/runner/work/corex/corex/.composer-provider-staging", "staging": "/home/runner/work/corex/corex/.composer-provider-staging", "registered": ["/home/runner/work/corex/corex", "/home/runner/work/corex/corex/packages/tenancy", "/home/runner/work/corex/corex/packages/access"]}
 2026-10-01T17:28:14.2876791Z ##[group]Run composer update --prefer-dist --no-interaction --no-progress
-2026-10-01T17:28:14.2877629Z [36;1mcomposer update --prefer-dist --no-interaction --no-progress[0m
+2026-10-01T17:28:14.2877629Z composer update --prefer-dist --no-interaction --no-progress
 2026-10-01T17:28:14.2943895Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:28:14.2944151Z env:
 2026-10-01T17:28:14.2944352Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -798,7 +798,7 @@
 2026-10-01T17:28:30.6243915Z > pestphp/pest: ignored
 2026-10-01T17:28:30.6244464Z > phpstan/phpstan-strict-rules: ignored
 2026-10-01T17:28:30.6473226Z ##[group]Run composer audit --locked
-2026-10-01T17:28:30.6473575Z [36;1mcomposer audit --locked[0m
+2026-10-01T17:28:30.6473575Z composer audit --locked
 2026-10-01T17:28:30.6536662Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:28:30.6536916Z env:
 2026-10-01T17:28:30.6537114Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -807,7 +807,7 @@
 2026-10-01T17:28:30.6537838Z ##[endgroup]
 2026-10-01T17:28:31.1986280Z No security vulnerability advisories found.
 2026-10-01T17:28:31.2128952Z ##[group]Run composer --working-dir=packages/access update --prefer-dist --no-interaction --no-progress
-2026-10-01T17:28:31.2130222Z [36;1mcomposer --working-dir=packages/access update --prefer-dist --no-interaction --no-progress[0m
+2026-10-01T17:28:31.2130222Z composer --working-dir=packages/access update --prefer-dist --no-interaction --no-progress
 2026-10-01T17:28:31.2201121Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:28:31.2201528Z env:
 2026-10-01T17:28:31.2201847Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -1104,7 +1104,7 @@
 2026-10-01T17:28:37.8817442Z 92 packages you are using are looking for funding.
 2026-10-01T17:28:37.8818207Z Use the `composer fund` command to find out more!
 2026-10-01T17:28:37.9033583Z ##[group]Run composer audit --locked --working-dir=packages/access
-2026-10-01T17:28:37.9034430Z [36;1mcomposer audit --locked --working-dir=packages/access[0m
+2026-10-01T17:28:37.9034430Z composer audit --locked --working-dir=packages/access
 2026-10-01T17:28:37.9124485Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:28:37.9124925Z env:
 2026-10-01T17:28:37.9125261Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -1113,74 +1113,74 @@
 2026-10-01T17:28:37.9126552Z ##[endgroup]
 2026-10-01T17:28:38.4131267Z No security vulnerability advisories found.
 2026-10-01T17:28:38.4286792Z ##[group]Run composer --working-dir=packages/access test
-2026-10-01T17:28:38.4287578Z [36;1mcomposer --working-dir=packages/access test[0m
+2026-10-01T17:28:38.4287578Z composer --working-dir=packages/access test
 2026-10-01T17:28:38.4369019Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:28:38.4369454Z env:
 2026-10-01T17:28:38.4369664Z   COMPOSER_PROCESS_TIMEOUT: 0
 2026-10-01T17:28:38.4370225Z   COMPOSER_NO_INTERACTION: 1
 2026-10-01T17:28:38.4370677Z   COMPOSER_NO_AUDIT: 1
 2026-10-01T17:28:38.4370901Z ##[endgroup]
-2026-10-01T17:28:38.7736944Z 
-2026-10-01T17:28:38.7738334Z   [30;42;1m PASS [39;49;22m[39m Tests\Unit\AuthOptionsTest[39m
-2026-10-01T17:28:38.7787501Z   [32;1m✓[39;22m[90m [39m[90mit accumulates an empty panel and incomplete identity columns in on[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:38.7790386Z   [32;1m✓[39;22m[90m [39m[90mit normalizes an empty workspace scope class to null[39m
-2026-10-01T17:28:38.7793912Z   [32;1m✓[39;22m[90m [39m[90mit rejects an empty panel[39m
-2026-10-01T17:28:39.0165056Z 
-2026-10-01T17:28:39.0166495Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\PermissionSurfaceTest[39m
-2026-10-01T17:28:39.0171267Z   [32;1m✓[39;22m[90m [39m[90mit excludes a declaration whose owning module is inactive[39m[90m           [39m [90m0.16s[39m  
-2026-10-01T17:28:39.0176211Z   [32;1m✓[39;22m[90m [39m[90mit lists every declared action with the entity scope set for an act[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:39.0181286Z   [32;1m✓[39;22m[90m [39m[90mit excludes a declaration whose entity is unknown to EntityRegistry[39m[90m [39m [90m0.03s[39m  
-2026-10-01T17:28:39.0186168Z   [32;1m✓[39;22m[90m [39m[90mit includes every distinct scope when the entity declares both owna[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:39.0191091Z   [32;1m✓[39;22m[90m [39m[90mit returns only account for a non-scopeable declaration[39m[90m             [39m [90m0.02s[39m  
-2026-10-01T17:28:39.1682741Z 
-2026-10-01T17:28:39.1684162Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\ScopeAvailabilityTest[39m
-2026-10-01T17:28:39.1688831Z   [32;1m✓[39;22m[90m [39m[90mit throws ScopeCapabilityMismatch when the column exists but the ca[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:39.1694028Z   [32;1m✓[39;22m[90m [39m[90mit leaves none/account untouched regardless of capability or regist[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:39.1699008Z   [32;1m✓[39;22m[90m [39m[90mit normalizes own/dept/dept_tree/workspace to account when neither[39m[90m… [39m [90m0.02s[39m  
-2026-10-01T17:28:39.1704181Z   [32;1m✓[39;22m[90m [39m[90mit normalizes own/dept/dept_tree/workspace to account when neither[39m[90m… [39m [90m0.02s[39m  
-2026-10-01T17:28:39.1709009Z   [32;1m✓[39;22m[90m [39m[90mit normalizes own/dept/dept_tree/workspace to account when neither[39m[90m… [39m [90m0.02s[39m  
-2026-10-01T17:28:39.1714087Z   [32;1m✓[39;22m[90m [39m[90mit normalizes own/dept/dept_tree/workspace to account when neither[39m[90m… [39m [90m0.02s[39m  
-2026-10-01T17:28:39.1718877Z   [32;1m✓[39;22m[90m [39m[90mit leaves the scope unchanged once the matching capability is decla[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:39.1723742Z   [32;1m✓[39;22m[90m [39m[90mit normalizes to none for an entity_key unknown to the registry[39m[90m     [39m [90m0.02s[39m  
-2026-10-01T17:28:39.2480235Z 
-2026-10-01T17:28:39.2481810Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\WorkspaceScopeWiringTest[39m
-2026-10-01T17:28:39.2486564Z   [32;1m✓[39;22m[90m [39m[90mit wires the workspace global scope onto every model whose entity d[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:39.2491755Z   [32;1m✓[39;22m[90m [39m[90mit silently skips wiring when the pinned scope class does not exist[39m[90m [39m [90m0.02s[39m  
-2026-10-01T17:28:39.2496722Z   [32;1m✓[39;22m[90m [39m[90mit silently skips wiring when the scope class is null (boxed profil[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:39.2502317Z   [32;1m✓[39;22m[90m [39m[90mit does not wire the workspace global scope onto a model without th[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:40.2400412Z 
-2026-10-01T17:28:40.2402141Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\PrincipalUserProviderTest[39m
-2026-10-01T17:28:40.2413414Z   [32;1m✓[39;22m[90m [39m[90mit logs a PrincipalIdentity(User) in via Auth::attempt() on the rig[39m[90m…[39m [90m0.14s[39m  
-2026-10-01T17:28:40.2415832Z   [32;1m✓[39;22m[90m [39m[90mit rehashes the password column only when Hash::needsRehash() is tr[39m[90m…[39m [90m0.14s[39m  
-2026-10-01T17:28:40.2418353Z   [32;1m✓[39;22m[90m [39m[90mit returns false from validateCredentials() for a wrong password[39m[90m    [39m [90m0.14s[39m  
-2026-10-01T17:28:40.2421858Z   [32;1m✓[39;22m[90m [39m[90mit returns null from retrieveByCredentials() for an unknown email[39m[90m   [39m [90m0.08s[39m  
-2026-10-01T17:28:40.2426880Z   [32;1m✓[39;22m[90m [39m[90mit returns null from both retrieveByCredentials() and retrieveById([39m[90m…[39m [90m0.08s[39m  
-2026-10-01T17:28:40.2431914Z   [32;1m✓[39;22m[90m [39m[90mit works against a table with entirely different column names, driv[39m[90m…[39m [90m0.13s[39m  
-2026-10-01T17:28:40.2436895Z   [32;1m✓[39;22m[90m [39m[90mit gives the same class and identity from Auth::attempt() and Auth:[39m[90m…[39m [90m0.13s[39m  
-2026-10-01T17:28:40.2441942Z   [32;1m✓[39;22m[90m [39m[90mit returns null from both retrieveByCredentials() and retrieveById([39m[90m…[39m [90m0.08s[39m  
-2026-10-01T17:28:40.2446612Z   [32;1m✓[39;22m[90m [39m[90mit makes retrieveByToken() a permanent no-op and updateRememberToke[39m[90m…[39m [90m0.08s[39m  
-2026-10-01T17:28:40.2832076Z 
-2026-10-01T17:28:40.2833284Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\BladeDirectivesTest[39m
-2026-10-01T17:28:40.2838110Z   [32;1m✓[39;22m[90m [39m[90mit compiles @scope to an entity-scoped role check[39m[90m                   [39m [90m0.02s[39m  
-2026-10-01T17:28:40.2843315Z   [32;1m✓[39;22m[90m [39m[90mit compiles @entity to an entity-scoped permission check[39m[90m            [39m [90m0.02s[39m  
-2026-10-01T17:28:41.4845930Z 
-2026-10-01T17:28:41.4847228Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\ScopeVersionConcurrencyTest[39m
-2026-10-01T17:28:41.4853511Z   [32;1m✓[39;22m[90m [39m[90mit invalidates the captured tenant even when the active context cha[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:41.4858389Z   [32;1m✓[39;22m[90m [39m[90mit retains every concurrent invalidation even on the non-atomic fil[39m[90m…[39m [90m1.18s[39m  
-2026-10-01T17:28:41.5948075Z 
-2026-10-01T17:28:41.5949400Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\TenantContextGuardTest[39m
-2026-10-01T17:28:41.5954177Z   [32;1m✓[39;22m[90m [39m[90mit returns false when the context entity does not exist[39m[90m             [39m [90m0.03s[39m  
-2026-10-01T17:28:41.5959091Z   [32;1m✓[39;22m[90m [39m[90mit grants when the user has the permission scoped to the entity[39m[90m     [39m [90m0.02s[39m  
-2026-10-01T17:28:41.5964242Z   [32;1m✓[39;22m[90m [39m[90mit falls back to a global permission within the panel[39m[90m               [39m [90m0.02s[39m  
-2026-10-01T17:28:41.5969008Z   [32;1m✓[39;22m[90m [39m[90mit returns false for an unknown context type[39m[90m                        [39m [90m0.02s[39m  
-2026-10-01T17:28:41.5974075Z   [32;1m✓[39;22m[90m [39m[90mit denies when the user has neither scoped nor global permission[39m[90m    [39m [90m0.02s[39m  
-2026-10-01T17:28:41.5977203Z 
-2026-10-01T17:28:41.5978728Z   [90mTests:[39m    [32;1m38 passed[39;22m[90m (65 assertions)[39m
-2026-10-01T17:28:41.5979986Z   [90mDuration:[39m [39m2.94s[39m
-2026-10-01T17:28:41.5980893Z   [90mRandom Order Seed:[39m [39m1790875718[39m
-2026-10-01T17:28:41.5981517Z 
+2026-10-01T17:28:38.7736944Z
+2026-10-01T17:28:38.7738334Z    PASS  Tests\Unit\AuthOptionsTest
+2026-10-01T17:28:38.7787501Z   ✓ it accumulates an empty panel and incomplete identity columns in on… 0.01s
+2026-10-01T17:28:38.7790386Z   ✓ it normalizes an empty workspace scope class to null
+2026-10-01T17:28:38.7793912Z   ✓ it rejects an empty panel
+2026-10-01T17:28:39.0165056Z
+2026-10-01T17:28:39.0166495Z    PASS  Tests\Feature\PermissionSurfaceTest
+2026-10-01T17:28:39.0171267Z   ✓ it excludes a declaration whose owning module is inactive            0.16s
+2026-10-01T17:28:39.0176211Z   ✓ it lists every declared action with the entity scope set for an act… 0.02s
+2026-10-01T17:28:39.0181286Z   ✓ it excludes a declaration whose entity is unknown to EntityRegistry  0.03s
+2026-10-01T17:28:39.0186168Z   ✓ it includes every distinct scope when the entity declares both owna… 0.02s
+2026-10-01T17:28:39.0191091Z   ✓ it returns only account for a non-scopeable declaration              0.02s
+2026-10-01T17:28:39.1682741Z
+2026-10-01T17:28:39.1684162Z    PASS  Tests\Feature\ScopeAvailabilityTest
+2026-10-01T17:28:39.1688831Z   ✓ it throws ScopeCapabilityMismatch when the column exists but the ca… 0.02s
+2026-10-01T17:28:39.1694028Z   ✓ it leaves none/account untouched regardless of capability or regist… 0.02s
+2026-10-01T17:28:39.1699008Z   ✓ it normalizes own/dept/dept_tree/workspace to account when neither…  0.02s
+2026-10-01T17:28:39.1704181Z   ✓ it normalizes own/dept/dept_tree/workspace to account when neither…  0.02s
+2026-10-01T17:28:39.1709009Z   ✓ it normalizes own/dept/dept_tree/workspace to account when neither…  0.02s
+2026-10-01T17:28:39.1714087Z   ✓ it normalizes own/dept/dept_tree/workspace to account when neither…  0.02s
+2026-10-01T17:28:39.1718877Z   ✓ it leaves the scope unchanged once the matching capability is decla… 0.02s
+2026-10-01T17:28:39.1723742Z   ✓ it normalizes to none for an entity_key unknown to the registry      0.02s
+2026-10-01T17:28:39.2480235Z
+2026-10-01T17:28:39.2481810Z    PASS  Tests\Feature\WorkspaceScopeWiringTest
+2026-10-01T17:28:39.2486564Z   ✓ it wires the workspace global scope onto every model whose entity d… 0.02s
+2026-10-01T17:28:39.2491755Z   ✓ it silently skips wiring when the pinned scope class does not exist  0.02s
+2026-10-01T17:28:39.2496722Z   ✓ it silently skips wiring when the scope class is null (boxed profil… 0.02s
+2026-10-01T17:28:39.2502317Z   ✓ it does not wire the workspace global scope onto a model without th… 0.02s
+2026-10-01T17:28:40.2400412Z
+2026-10-01T17:28:40.2402141Z    PASS  Tests\Feature\PrincipalUserProviderTest
+2026-10-01T17:28:40.2413414Z   ✓ it logs a PrincipalIdentity(User) in via Auth::attempt() on the rig… 0.14s
+2026-10-01T17:28:40.2415832Z   ✓ it rehashes the password column only when Hash::needsRehash() is tr… 0.14s
+2026-10-01T17:28:40.2418353Z   ✓ it returns false from validateCredentials() for a wrong password     0.14s
+2026-10-01T17:28:40.2421858Z   ✓ it returns null from retrieveByCredentials() for an unknown email    0.08s
+2026-10-01T17:28:40.2426880Z   ✓ it returns null from both retrieveByCredentials() and retrieveById(… 0.08s
+2026-10-01T17:28:40.2431914Z   ✓ it works against a table with entirely different column names, driv… 0.13s
+2026-10-01T17:28:40.2436895Z   ✓ it gives the same class and identity from Auth::attempt() and Auth:… 0.13s
+2026-10-01T17:28:40.2441942Z   ✓ it returns null from both retrieveByCredentials() and retrieveById(… 0.08s
+2026-10-01T17:28:40.2446612Z   ✓ it makes retrieveByToken() a permanent no-op and updateRememberToke… 0.08s
+2026-10-01T17:28:40.2832076Z
+2026-10-01T17:28:40.2833284Z    PASS  Tests\Feature\BladeDirectivesTest
+2026-10-01T17:28:40.2838110Z   ✓ it compiles @scope to an entity-scoped role check                    0.02s
+2026-10-01T17:28:40.2843315Z   ✓ it compiles @entity to an entity-scoped permission check             0.02s
+2026-10-01T17:28:41.4845930Z
+2026-10-01T17:28:41.4847228Z    PASS  Tests\Feature\ScopeVersionConcurrencyTest
+2026-10-01T17:28:41.4853511Z   ✓ it invalidates the captured tenant even when the active context cha… 0.02s
+2026-10-01T17:28:41.4858389Z   ✓ it retains every concurrent invalidation even on the non-atomic fil… 1.18s
+2026-10-01T17:28:41.5948075Z
+2026-10-01T17:28:41.5949400Z    PASS  Tests\Feature\TenantContextGuardTest
+2026-10-01T17:28:41.5954177Z   ✓ it returns false when the context entity does not exist              0.03s
+2026-10-01T17:28:41.5959091Z   ✓ it grants when the user has the permission scoped to the entity      0.02s
+2026-10-01T17:28:41.5964242Z   ✓ it falls back to a global permission within the panel                0.02s
+2026-10-01T17:28:41.5969008Z   ✓ it returns false for an unknown context type                         0.02s
+2026-10-01T17:28:41.5974075Z   ✓ it denies when the user has neither scoped nor global permission     0.02s
+2026-10-01T17:28:41.5977203Z
+2026-10-01T17:28:41.5978728Z   Tests:    38 passed (65 assertions)
+2026-10-01T17:28:41.5979986Z   Duration: 2.94s
+2026-10-01T17:28:41.5980893Z   Random Order Seed: 1790875718
+2026-10-01T17:28:41.5981517Z
 2026-10-01T17:28:41.6211447Z ##[group]Run composer --working-dir=packages/access test:pg
-2026-10-01T17:28:41.6211905Z [36;1mcomposer --working-dir=packages/access test:pg[0m
+2026-10-01T17:28:41.6211905Z composer --working-dir=packages/access test:pg
 2026-10-01T17:28:41.6273235Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:28:41.6273493Z env:
 2026-10-01T17:28:41.6273698Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -1192,154 +1192,154 @@
 2026-10-01T17:28:41.6275028Z   PGSQL_USERNAME: corex
 2026-10-01T17:28:41.6275245Z   PGSQL_PASSWORD: corex
 2026-10-01T17:28:41.6275457Z ##[endgroup]
-2026-10-01T17:28:53.1440414Z 
-2026-10-01T17:28:53.1441396Z   [39;41;1m FAIL [39;49;22m[39m Tests\Pg\AccessCheckerTest[39m
-2026-10-01T17:28:53.1461357Z   [31;1m⨯[39;22m[90m [39m[90mit matches workspace scope against the active tenancy context, and[39m[90m… [39m [90m0.43s[39m  
-2026-10-01T17:28:53.1465497Z   [31;1m⨯[39;22m[90m [39m[90mit uses identical fail-closed capability normalization for record a[39m[90m…[39m [90m0.35s[39m  
-2026-10-01T17:28:53.1467304Z   [31;1m⨯[39;22m[90m [39m[90mit grants department scopes only for real same-department and desce[39m[90m…[39m [90m0.32s[39m  
-2026-10-01T17:28:53.1469037Z   [31;1m⨯[39;22m[90m [39m[90mit grants department scopes only for real same-department and desce[39m[90m…[39m [90m0.32s[39m  
-2026-10-01T17:28:53.1471117Z   [32;1m✓[39;22m[90m [39m[90mit lets a principal with the active system owner role pass any allo[39m[90m…[39m [90m0.30s[39m  
-2026-10-01T17:28:53.1481725Z   [32;1m✓[39;22m[90m [39m[90mit denies every department scope to non-user principals through Acc[39m[90m…[39m [90m0.31s[39m  
-2026-10-01T17:28:53.1483749Z   [32;1m✓[39;22m[90m [39m[90mit denies every department scope to non-user principals through Acc[39m[90m…[39m [90m0.29s[39m  
-2026-10-01T17:28:53.1486362Z   [32;1m✓[39;22m[90m [39m[90mit denies every department scope to non-user principals through Acc[39m[90m…[39m [90m0.30s[39m  
-2026-10-01T17:28:53.1488476Z   [32;1m✓[39;22m[90m [39m[90mit denies every department scope to non-user principals through Acc[39m[90m…[39m [90m0.29s[39m  
-2026-10-01T17:28:53.1491143Z   [31;1m⨯[39;22m[90m [39m[90mit with WorkspacePermissionLayer, a workspace switch gets a fresh,[39m[90m… [39m [90m0.30s[39m  
-2026-10-01T17:28:53.1496506Z   [31;1m⨯[39;22m[90m [39m[90mit excludes deleted broad roles when a live narrow role still grant[39m[90m…[39m [90m0.32s[39m  
-2026-10-01T17:28:53.1502047Z   [31;1m⨯[39;22m[90m [39m[90mit grants canOnRecord via an active AzGuard direct grant with no ma[39m[90m…[39m [90m0.28s[39m  
-2026-10-01T17:28:53.1507201Z   [31;1m⨯[39;22m[90m [39m[90mit grants allowed() inside the workspace the role was assigned to[39m[90m   [39m [90m0.37s[39m  
-2026-10-01T17:28:53.1512760Z   [32;1m✓[39;22m[90m [39m[90mit does not extend owner-wildcard capability to a non-system clone[39m[90m… [39m [90m1.16s[39m  
-2026-10-01T17:28:53.1517970Z   [31;1m⨯[39;22m[90m [39m[90mit without WorkspacePermissionLayer, a cached grant leaks across a[39m[90m… [39m [90m0.78s[39m  
-2026-10-01T17:28:53.1523372Z   [32;1m✓[39;22m[90m [39m[90mit denies canOnRecord for a record whose model is not registered in[39m[90m…[39m [90m0.30s[39m  
-2026-10-01T17:28:53.1528608Z   [32;1m✓[39;22m[90m [39m[90mit denies department scopes through AccessChecker when department t[39m[90m…[39m [90m0.30s[39m  
-2026-10-01T17:28:53.1534180Z   [32;1m✓[39;22m[90m [39m[90mit denies department scopes through AccessChecker when department t[39m[90m…[39m [90m0.30s[39m  
-2026-10-01T17:28:53.1539309Z   [31;1m⨯[39;22m[90m [39m[90mit grants canOnRecord for own scope only when the record belongs to[39m[90m…[39m [90m0.30s[39m  
-2026-10-01T17:28:53.1545235Z   [31;1m⨯[39;22m[90m [39m[90mit resolves allowed() through the real AzGuard round-trip for a sco[39m[90m…[39m [90m0.30s[39m  
-2026-10-01T17:28:53.1550434Z   [32;1m✓[39;22m[90m [39m[90mit resolves each of the six scope values from a single matching mat[39m[90m…[39m [90m0.28s[39m  
-2026-10-01T17:28:53.1555734Z   [32;1m✓[39;22m[90m [39m[90mit resolves each of the six scope values from a single matching mat[39m[90m…[39m [90m0.29s[39m  
-2026-10-01T17:28:53.1561108Z   [32;1m✓[39;22m[90m [39m[90mit resolves each of the six scope values from a single matching mat[39m[90m…[39m [90m0.30s[39m  
-2026-10-01T17:28:53.1566374Z   [32;1m✓[39;22m[90m [39m[90mit resolves each of the six scope values from a single matching mat[39m[90m…[39m [90m0.28s[39m  
-2026-10-01T17:28:53.1571823Z   [32;1m✓[39;22m[90m [39m[90mit resolves each of the six scope values from a single matching mat[39m[90m…[39m [90m0.29s[39m  
-2026-10-01T17:28:53.1577032Z   [32;1m✓[39;22m[90m [39m[90mit resolves each of the six scope values from a single matching mat[39m[90m…[39m [90m0.28s[39m  
-2026-10-01T17:28:53.1582533Z   [32;1m✓[39;22m[90m [39m[90mit lets a context row override, and narrow, the base scope for its[39m[90m… [39m [90m0.30s[39m  
-2026-10-01T17:28:53.1587786Z   [32;1m✓[39;22m[90m [39m[90mit does not reuse scope memo when a connection switch exposes ident[39m[90m…[39m [90m0.32s[39m  
-2026-10-01T17:28:53.1593204Z   [31;1m⨯[39;22m[90m [39m[90mit grants canOnRecord for account scope regardless of ownership[39m[90m     [39m [90m0.30s[39m  
-2026-10-01T17:28:53.1598170Z   [32;1m✓[39;22m[90m [39m[90mit denies allowed() outside the workspace the role was assigned to[39m[90m  [39m [90m0.31s[39m  
-2026-10-01T17:28:53.1603626Z   [32;1m✓[39;22m[90m [39m[90mit resolves the max weight across multiple roles held by the same p[39m[90m…[39m [90m0.31s[39m  
-2026-10-01T17:28:53.1608762Z   [32;1m✓[39;22m[90m [39m[90mit recomputes scope after replacing an assignment with an equally v[39m[90m…[39m [90m0.35s[39m  
-2026-10-01T17:29:05.8226888Z 
-2026-10-01T17:29:05.8241643Z   [39;41;1m FAIL [39;49;22m[39m Tests\Pg\ScopeResolverTest[39m
-2026-10-01T17:29:05.8243841Z   [32;1m✓[39;22m[90m [39m[90mit is NOT monotone in general — dept_tree can include a record outs[39m[90m…[39m [90m0.31s[39m  
-2026-10-01T17:29:05.8245914Z   [31;1m⨯[39;22m[90m [39m[90mit agent principals degrade own/dept/dept_tree to none on the build[39m[90m…[39m [90m0.31s[39m  
-2026-10-01T17:29:05.8248411Z   [32;1m✓[39;22m[90m [39m[90mit agent principals degrade own/dept/dept_tree to none on the build[39m[90m…[39m [90m0.31s[39m  
-2026-10-01T17:29:05.8250975Z   [32;1m✓[39;22m[90m [39m[90mit agent principals degrade own/dept/dept_tree to none on the build[39m[90m…[39m [90m0.31s[39m  
-2026-10-01T17:29:05.8253485Z   [32;1m✓[39;22m[90m [39m[90mit agent principals degrade own/dept/dept_tree to none on the build[39m[90m…[39m [90m0.31s[39m  
-2026-10-01T17:29:05.8257794Z   [31;1m⨯[39;22m[90m [39m[90mit dept scope on the builder narrows to rows owned by users in the[39m[90m… [39m [90m0.31s[39m  
-2026-10-01T17:29:05.8263157Z   [32;1m✓[39;22m[90m [39m[90mit account scope lifts exactly the pinned workspace scope class, ne[39m[90m…[39m [90m0.28s[39m  
-2026-10-01T17:29:05.8268147Z   [31;1m⨯[39;22m[90m [39m[90mit workspace scope shows only account-wide rows when no workspace i[39m[90m…[39m [90m0.33s[39m  
-2026-10-01T17:29:05.8273443Z   [31;1m⨯[39;22m[90m [39m[90mit workspace scope on the builder shows only the context workspace'[39m[90m…[39m [90m0.30s[39m  
-2026-10-01T17:29:05.8278280Z   [31;1m⨯[39;22m[90m [39m[90mit own scope on the builder narrows to only the rows the principal[39m[90m… [39m [90m0.31s[39m  
-2026-10-01T17:29:05.8283548Z   [31;1m⨯[39;22m[90m [39m[90mit resolves the max weight across multiple roles held by the same p[39m[90m…[39m [90m0.32s[39m  
-2026-10-01T17:29:05.8288806Z   [32;1m✓[39;22m[90m [39m[90mit denies dept/dept_tree on the builder when the principal has no d[39m[90m…[39m [90m0.28s[39m  
-2026-10-01T17:29:05.8293842Z   [32;1m✓[39;22m[90m [39m[90mit denies dept/dept_tree on the builder when the principal has no d[39m[90m…[39m [90m0.28s[39m  
-2026-10-01T17:29:05.8298751Z   [31;1m⨯[39;22m[90m [39m[90mit MatrixValidator warns when a matrix row names a scope the entity[39m[90m…[39m [90m0.28s[39m  
-2026-10-01T17:29:05.8303688Z   [31;1m⨯[39;22m[90m [39m[90mit a context row narrows the builder scope for its own context only[39m[90m [39m [90m0.32s[39m  
-2026-10-01T17:29:05.8308559Z   [32;1m✓[39;22m[90m [39m[90mit denies dept/dept_tree on the builder when users/sys_departments[39m[90m… [39m [90m0.46s[39m  
-2026-10-01T17:29:05.8313777Z   [32;1m✓[39;22m[90m [39m[90mit denies dept/dept_tree on the builder when users/sys_departments[39m[90m… [39m [90m0.45s[39m  
-2026-10-01T17:29:05.8318651Z   [31;1m⨯[39;22m[90m [39m[90mit cascade_view off hides child-workspace rows; on shows them[39m[90m       [39m [90m0.29s[39m  
-2026-10-01T17:29:05.8323729Z   [31;1m⨯[39;22m[90m [39m[90mit dept_tree scope on the builder narrows via the department subtre[39m[90m…[39m [90m0.31s[39m  
-2026-10-01T17:29:05.8328746Z   [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.31s[39m  
-2026-10-01T17:29:05.8333949Z   [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.31s[39m  
-2026-10-01T17:29:05.8339016Z   [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.31s[39m  
-2026-10-01T17:29:05.8344220Z   [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.32s[39m  
-2026-10-01T17:29:05.8349198Z   [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.31s[39m  
-2026-10-01T17:29:05.8354599Z   [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.31s[39m  
-2026-10-01T17:29:05.8361302Z   [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.34s[39m  
-2026-10-01T17:29:05.8368793Z   [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.31s[39m  
-2026-10-01T17:29:05.8374423Z   [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.31s[39m  
-2026-10-01T17:29:05.8379462Z   [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.31s[39m  
-2026-10-01T17:29:05.8384658Z   [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.31s[39m  
-2026-10-01T17:29:05.8389630Z   [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.31s[39m  
-2026-10-01T17:29:05.8394923Z   [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.35s[39m  
-2026-10-01T17:29:05.8399991Z   [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.31s[39m  
-2026-10-01T17:29:05.8405052Z   [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.31s[39m  
-2026-10-01T17:29:05.8410342Z   [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.31s[39m  
-2026-10-01T17:29:05.8415236Z   [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.34s[39m  
-2026-10-01T17:29:05.8420694Z   [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.31s[39m  
-2026-10-01T17:29:05.8425371Z   [32;1m✓[39;22m[90m [39m[90mit own ⊆ dept ⊆ dept_tree ⊆ workspace ⊆ account on a fixture where[39m[90m… [39m [90m0.30s[39m  
-2026-10-01T17:29:05.8430379Z   [31;1m⨯[39;22m[90m [39m[90mit matches real department records to the same IDs through ScopeRes[39m[90m…[39m [90m0.32s[39m  
-2026-10-01T17:29:05.8435133Z   [31;1m⨯[39;22m[90m [39m[90mit matches real department records to the same IDs through ScopeRes[39m[90m…[39m [90m0.32s[39m  
-2026-10-01T17:29:07.4379114Z 
-2026-10-01T17:29:07.4394758Z   [30;42;1m PASS [39;49;22m[39m Tests\Pg\SystemRolesTest[39m
-2026-10-01T17:29:07.4399501Z   [32;1m✓[39;22m[90m [39m[90mit throws when saving a matrix row that belongs to a system role, u[39m[90m…[39m [90m0.21s[39m  
-2026-10-01T17:29:07.4409560Z   [32;1m✓[39;22m[90m [39m[90mit is idempotent — running the seeder twice does not duplicate role[39m[90m…[39m [90m0.17s[39m  
-2026-10-01T17:29:07.4411731Z   [32;1m✓[39;22m[90m [39m[90mit seeds exactly the 3 system roles with an empty matrix[39m[90m            [39m [90m0.17s[39m  
-2026-10-01T17:29:07.4413571Z   [32;1m✓[39;22m[90m [39m[90mit throws when deleting a system role[39m[90m                               [39m [90m0.17s[39m  
-2026-10-01T17:29:07.4415427Z   [32;1m✓[39;22m[90m [39m[90mit cannot clear system status to bypass role and related matrix gua[39m[90m…[39m [90m0.19s[39m  
-2026-10-01T17:29:07.4417298Z   [32;1m✓[39;22m[90m [39m[90mit clones a system role into an editable copy with cloned_from_id a[39m[90m…[39m [90m0.18s[39m  
-2026-10-01T17:29:07.4419546Z   [32;1m✓[39;22m[90m [39m[90mit throws when saving an existing system role through the normal pa[39m[90m…[39m [90m0.17s[39m  
-2026-10-01T17:29:07.4424772Z   [32;1m✓[39;22m[90m [39m[90mit does not grant owner-wildcard capability to a clone of owner[39m[90m     [39m [90m0.17s[39m  
-2026-10-01T17:29:07.4429417Z   [32;1m✓[39;22m[90m [39m[90mit allows editing a system role through the flagged path[39m[90m            [39m [90m0.17s[39m  
-2026-10-01T17:29:09.6382249Z 
-2026-10-01T17:29:09.6383521Z   [39;41;1m FAIL [39;49;22m[39m Tests\Pg\RoleMatrixCompilerTest[39m
-2026-10-01T17:29:09.6388065Z   [32;1m✓[39;22m[90m [39m[90mit excludes a matrix row whose owning module is inactive, keeping t[39m[90m…[39m [90m0.18s[39m  
-2026-10-01T17:29:09.6394554Z   [31;1m⨯[39;22m[90m [39m[90mit leaves no new keys and no version bump when compilation fails mi[39m[90m…[39m [90m0.18s[39m  
-2026-10-01T17:29:09.6400179Z   [32;1m✓[39;22m[90m [39m[90mit returns no warning for a user-only role using own/dept scope[39m[90m     [39m [90m0.17s[39m  
-2026-10-01T17:29:09.6405917Z   [31;1m⨯[39;22m[90m [39m[90mit deduplicates identical keys produced by a base row and its conte[39m[90m…[39m [90m0.22s[39m  
-2026-10-01T17:29:09.6411644Z   [31;1m⨯[39;22m[90m [39m[90mit exposes compiled keys through MatrixPermissionCatalogBuilder for[39m[90m…[39m [90m0.17s[39m  
-2026-10-01T17:29:09.6417113Z   [32;1m✓[39;22m[90m [39m[90mit warns (does not throw) when a role assignable to agent uses own/[39m[90m…[39m [90m0.17s[39m  
-2026-10-01T17:29:09.6422697Z   [31;1m⨯[39;22m[90m [39m[90mit recompileAll is idempotent across repeated runs[39m[90m                  [39m [90m0.21s[39m  
-2026-10-01T17:29:09.6428003Z   [32;1m✓[39;22m[90m [39m[90mit does not compile a key for an entity_key unknown to EntityRegist[39m[90m…[39m [90m0.20s[39m  
-2026-10-01T17:29:09.6433589Z   [32;1m✓[39;22m[90m [39m[90mit invalidates matrix scope only after the outer commit and never a[39m[90m…[39m [90m0.18s[39m  
-2026-10-01T17:29:09.6438903Z   [31;1m⨯[39;22m[90m [39m[90mit compiles matrix rows with scope != none into panel-prefixed AzGu[39m[90m…[39m [90m0.18s[39m  
-2026-10-01T17:29:09.6444741Z   [31;1m⨯[39;22m[90m [39m[90mit recompiles the key once the owning module becomes active again ([39m[90m…[39m [90m0.18s[39m  
-2026-10-01T17:29:09.6449605Z   [32;1m✓[39;22m[90m [39m[90mit excludes catalog keys whose owning module is inactive[39m[90m            [39m [90m0.16s[39m  
-2026-10-01T17:29:10.0905546Z 
-2026-10-01T17:29:10.0906777Z   [30;42;1m PASS [39;49;22m[39m Tests\Pg\AutSchemaTest[39m
-2026-10-01T17:29:10.0911660Z   [32;1m✓[39;22m[90m [39m[90mit applies the tenant/ aut_* migrations on a clean schema without u[39m[90m…[39m [90m0.08s[39m  
-2026-10-01T17:29:10.0917319Z   [32;1m✓[39;22m[90m [39m[90mit matches DB_SCHEMA §3.5 aut_roles column-by-column[39m[90m                [39m [90m0.09s[39m  
-2026-10-01T17:29:10.0923156Z   [32;1m✓[39;22m[90m [39m[90mit matches DB_SCHEMA §3.5 aut_role_matrix column-by-column[39m[90m          [39m [90m0.09s[39m  
-2026-10-01T17:29:10.0928522Z   [32;1m✓[39;22m[90m [39m[90mit adds both cross-package FKs only via the tenant-cloud migration[39m[90m  [39m [90m0.10s[39m  
-2026-10-01T17:29:10.0934001Z   [32;1m✓[39;22m[90m [39m[90mit matches DB_SCHEMA §3.5 aut_role_assignments column-by-column[39m[90m     [39m [90m0.09s[39m  
-2026-10-01T17:29:11.7250699Z 
-2026-10-01T17:29:11.7253313Z   [39;41;1m FAIL [39;49;22m[39m Tests\Pg\PrincipalTypesTest[39m
-2026-10-01T17:29:11.7254831Z   [32;1m✓[39;22m[90m [39m[90mit excludes an expired assignment from allowed() and scopeFor()[39m[90m     [39m [90m0.19s[39m  
-2026-10-01T17:29:11.7268749Z   [31;1m⨯[39;22m[90m [39m[90mit honours a not-yet-expired assignment in allowed() and scopeFor()[39m[90m [39m [90m0.19s[39m  
-2026-10-01T17:29:11.7271057Z   [32;1m✓[39;22m[90m [39m[90mit leaves workspace and account scope untouched for an agent princi[39m[90m…[39m [90m0.17s[39m  
-2026-10-01T17:29:11.7273133Z   [32;1m✓[39;22m[90m [39m[90mit leaves workspace and account scope untouched for an agent princi[39m[90m…[39m [90m0.19s[39m  
-2026-10-01T17:29:11.7281414Z   [32;1m✓[39;22m[90m [39m[90mit degrades own/dept/dept_tree to none for an agent principal, but[39m[90m… [39m [90m0.18s[39m  
-2026-10-01T17:29:11.7283737Z   [32;1m✓[39;22m[90m [39m[90mit degrades own/dept/dept_tree to none for an agent principal, but[39m[90m… [39m [90m0.17s[39m  
-2026-10-01T17:29:11.7285768Z   [32;1m✓[39;22m[90m [39m[90mit degrades own/dept/dept_tree to none for an agent principal, but[39m[90m… [39m [90m0.17s[39m  
-2026-10-01T17:29:11.7289624Z   [31;1m⨯[39;22m[90m [39m[90mit resolves allowed() for an api_key principal with no users row[39m[90m    [39m [90m0.19s[39m  
-2026-10-01T17:29:11.7295296Z   [31;1m⨯[39;22m[90m [39m[90mit resolves allowed()/scopeFor() for an agent principal with no use[39m[90m…[39m [90m0.19s[39m  
-2026-10-01T17:29:12.6401186Z 
-2026-10-01T17:29:12.6402841Z   [39;41;1m FAIL [39;49;22m[39m Tests\Pg\PermissionsMergerTest[39m
-2026-10-01T17:29:12.6406746Z   [31;1m⨯[39;22m[90m [39m[90mit recompiles on ModuleDisabled too — both lifecycle events are wir[39m[90m…[39m [90m0.19s[39m  
-2026-10-01T17:29:12.6412522Z   [32;1m✓[39;22m[90m [39m[90mit gives out no key while the owning module has never been reported[39m[90m…[39m [90m0.18s[39m  
-2026-10-01T17:29:12.6418078Z   [31;1m⨯[39;22m[90m [39m[90mit returns no warning for a declaration whose entity is known to En[39m[90m…[39m [90m0.16s[39m  
-2026-10-01T17:29:12.6424015Z   [32;1m✓[39;22m[90m [39m[90mit returns a warning and creates no matrix row for a declaration wi[39m[90m…[39m [90m0.16s[39m  
-2026-10-01T17:29:12.6429491Z   [31;1m⨯[39;22m[90m [39m[90mit recompiles keys through the full enable -> disable -> re-enable[39m[90m… [39m [90m0.23s[39m  
-2026-10-01T17:29:12.6436796Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.6443768Z   [41;1m FAILED [49;22m [1mTests\Pg\AccessCheckerTest[22m [90m>[39m it matches workspace scope against t…   
-2026-10-01T17:29:12.6462741Z [39;1m  Failed asserting that false is true.[39;22m
-2026-10-01T17:29:12.6471345Z 
-2026-10-01T17:29:12.6472443Z   at [32mtests/Pg/AccessCheckerTest.php[39m:[32m309[39m
+2026-10-01T17:28:53.1440414Z
+2026-10-01T17:28:53.1441396Z    FAIL  Tests\Pg\AccessCheckerTest
+2026-10-01T17:28:53.1461357Z   ⨯ it matches workspace scope against the active tenancy context, and…  0.43s
+2026-10-01T17:28:53.1465497Z   ⨯ it uses identical fail-closed capability normalization for record a… 0.35s
+2026-10-01T17:28:53.1467304Z   ⨯ it grants department scopes only for real same-department and desce… 0.32s
+2026-10-01T17:28:53.1469037Z   ⨯ it grants department scopes only for real same-department and desce… 0.32s
+2026-10-01T17:28:53.1471117Z   ✓ it lets a principal with the active system owner role pass any allo… 0.30s
+2026-10-01T17:28:53.1481725Z   ✓ it denies every department scope to non-user principals through Acc… 0.31s
+2026-10-01T17:28:53.1483749Z   ✓ it denies every department scope to non-user principals through Acc… 0.29s
+2026-10-01T17:28:53.1486362Z   ✓ it denies every department scope to non-user principals through Acc… 0.30s
+2026-10-01T17:28:53.1488476Z   ✓ it denies every department scope to non-user principals through Acc… 0.29s
+2026-10-01T17:28:53.1491143Z   ⨯ it with WorkspacePermissionLayer, a workspace switch gets a fresh,…  0.30s
+2026-10-01T17:28:53.1496506Z   ⨯ it excludes deleted broad roles when a live narrow role still grant… 0.32s
+2026-10-01T17:28:53.1502047Z   ⨯ it grants canOnRecord via an active AzGuard direct grant with no ma… 0.28s
+2026-10-01T17:28:53.1507201Z   ⨯ it grants allowed() inside the workspace the role was assigned to    0.37s
+2026-10-01T17:28:53.1512760Z   ✓ it does not extend owner-wildcard capability to a non-system clone…  1.16s
+2026-10-01T17:28:53.1517970Z   ⨯ it without WorkspacePermissionLayer, a cached grant leaks across a…  0.78s
+2026-10-01T17:28:53.1523372Z   ✓ it denies canOnRecord for a record whose model is not registered in… 0.30s
+2026-10-01T17:28:53.1528608Z   ✓ it denies department scopes through AccessChecker when department t… 0.30s
+2026-10-01T17:28:53.1534180Z   ✓ it denies department scopes through AccessChecker when department t… 0.30s
+2026-10-01T17:28:53.1539309Z   ⨯ it grants canOnRecord for own scope only when the record belongs to… 0.30s
+2026-10-01T17:28:53.1545235Z   ⨯ it resolves allowed() through the real AzGuard round-trip for a sco… 0.30s
+2026-10-01T17:28:53.1550434Z   ✓ it resolves each of the six scope values from a single matching mat… 0.28s
+2026-10-01T17:28:53.1555734Z   ✓ it resolves each of the six scope values from a single matching mat… 0.29s
+2026-10-01T17:28:53.1561108Z   ✓ it resolves each of the six scope values from a single matching mat… 0.30s
+2026-10-01T17:28:53.1566374Z   ✓ it resolves each of the six scope values from a single matching mat… 0.28s
+2026-10-01T17:28:53.1571823Z   ✓ it resolves each of the six scope values from a single matching mat… 0.29s
+2026-10-01T17:28:53.1577032Z   ✓ it resolves each of the six scope values from a single matching mat… 0.28s
+2026-10-01T17:28:53.1582533Z   ✓ it lets a context row override, and narrow, the base scope for its…  0.30s
+2026-10-01T17:28:53.1587786Z   ✓ it does not reuse scope memo when a connection switch exposes ident… 0.32s
+2026-10-01T17:28:53.1593204Z   ⨯ it grants canOnRecord for account scope regardless of ownership      0.30s
+2026-10-01T17:28:53.1598170Z   ✓ it denies allowed() outside the workspace the role was assigned to   0.31s
+2026-10-01T17:28:53.1603626Z   ✓ it resolves the max weight across multiple roles held by the same p… 0.31s
+2026-10-01T17:28:53.1608762Z   ✓ it recomputes scope after replacing an assignment with an equally v… 0.35s
+2026-10-01T17:29:05.8226888Z
+2026-10-01T17:29:05.8241643Z    FAIL  Tests\Pg\ScopeResolverTest
+2026-10-01T17:29:05.8243841Z   ✓ it is NOT monotone in general — dept_tree can include a record outs… 0.31s
+2026-10-01T17:29:05.8245914Z   ⨯ it agent principals degrade own/dept/dept_tree to none on the build… 0.31s
+2026-10-01T17:29:05.8248411Z   ✓ it agent principals degrade own/dept/dept_tree to none on the build… 0.31s
+2026-10-01T17:29:05.8250975Z   ✓ it agent principals degrade own/dept/dept_tree to none on the build… 0.31s
+2026-10-01T17:29:05.8253485Z   ✓ it agent principals degrade own/dept/dept_tree to none on the build… 0.31s
+2026-10-01T17:29:05.8257794Z   ⨯ it dept scope on the builder narrows to rows owned by users in the…  0.31s
+2026-10-01T17:29:05.8263157Z   ✓ it account scope lifts exactly the pinned workspace scope class, ne… 0.28s
+2026-10-01T17:29:05.8268147Z   ⨯ it workspace scope shows only account-wide rows when no workspace i… 0.33s
+2026-10-01T17:29:05.8273443Z   ⨯ it workspace scope on the builder shows only the context workspace'… 0.30s
+2026-10-01T17:29:05.8278280Z   ⨯ it own scope on the builder narrows to only the rows the principal…  0.31s
+2026-10-01T17:29:05.8283548Z   ⨯ it resolves the max weight across multiple roles held by the same p… 0.32s
+2026-10-01T17:29:05.8288806Z   ✓ it denies dept/dept_tree on the builder when the principal has no d… 0.28s
+2026-10-01T17:29:05.8293842Z   ✓ it denies dept/dept_tree on the builder when the principal has no d… 0.28s
+2026-10-01T17:29:05.8298751Z   ⨯ it MatrixValidator warns when a matrix row names a scope the entity… 0.28s
+2026-10-01T17:29:05.8303688Z   ⨯ it a context row narrows the builder scope for its own context only  0.32s
+2026-10-01T17:29:05.8308559Z   ✓ it denies dept/dept_tree on the builder when users/sys_departments…  0.46s
+2026-10-01T17:29:05.8313777Z   ✓ it denies dept/dept_tree on the builder when users/sys_departments…  0.45s
+2026-10-01T17:29:05.8318651Z   ⨯ it cascade_view off hides child-workspace rows; on shows them        0.29s
+2026-10-01T17:29:05.8323729Z   ⨯ it dept_tree scope on the builder narrows via the department subtre… 0.31s
+2026-10-01T17:29:05.8328746Z   ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.31s
+2026-10-01T17:29:05.8333949Z   ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.31s
+2026-10-01T17:29:05.8339016Z   ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.31s
+2026-10-01T17:29:05.8344220Z   ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.32s
+2026-10-01T17:29:05.8349198Z   ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.31s
+2026-10-01T17:29:05.8354599Z   ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.31s
+2026-10-01T17:29:05.8361302Z   ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.34s
+2026-10-01T17:29:05.8368793Z   ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.31s
+2026-10-01T17:29:05.8374423Z   ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.31s
+2026-10-01T17:29:05.8379462Z   ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.31s
+2026-10-01T17:29:05.8384658Z   ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.31s
+2026-10-01T17:29:05.8389630Z   ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.31s
+2026-10-01T17:29:05.8394923Z   ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.35s
+2026-10-01T17:29:05.8399991Z   ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.31s
+2026-10-01T17:29:05.8405052Z   ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.31s
+2026-10-01T17:29:05.8410342Z   ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.31s
+2026-10-01T17:29:05.8415236Z   ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.34s
+2026-10-01T17:29:05.8420694Z   ✓ it apply() and canOnRecord() agree for every scope across every pri… 0.31s
+2026-10-01T17:29:05.8425371Z   ✓ it own ⊆ dept ⊆ dept_tree ⊆ workspace ⊆ account on a fixture where…  0.30s
+2026-10-01T17:29:05.8430379Z   ⨯ it matches real department records to the same IDs through ScopeRes… 0.32s
+2026-10-01T17:29:05.8435133Z   ⨯ it matches real department records to the same IDs through ScopeRes… 0.32s
+2026-10-01T17:29:07.4379114Z
+2026-10-01T17:29:07.4394758Z    PASS  Tests\Pg\SystemRolesTest
+2026-10-01T17:29:07.4399501Z   ✓ it throws when saving a matrix row that belongs to a system role, u… 0.21s
+2026-10-01T17:29:07.4409560Z   ✓ it is idempotent — running the seeder twice does not duplicate role… 0.17s
+2026-10-01T17:29:07.4411731Z   ✓ it seeds exactly the 3 system roles with an empty matrix             0.17s
+2026-10-01T17:29:07.4413571Z   ✓ it throws when deleting a system role                                0.17s
+2026-10-01T17:29:07.4415427Z   ✓ it cannot clear system status to bypass role and related matrix gua… 0.19s
+2026-10-01T17:29:07.4417298Z   ✓ it clones a system role into an editable copy with cloned_from_id a… 0.18s
+2026-10-01T17:29:07.4419546Z   ✓ it throws when saving an existing system role through the normal pa… 0.17s
+2026-10-01T17:29:07.4424772Z   ✓ it does not grant owner-wildcard capability to a clone of owner      0.17s
+2026-10-01T17:29:07.4429417Z   ✓ it allows editing a system role through the flagged path             0.17s
+2026-10-01T17:29:09.6382249Z
+2026-10-01T17:29:09.6383521Z    FAIL  Tests\Pg\RoleMatrixCompilerTest
+2026-10-01T17:29:09.6388065Z   ✓ it excludes a matrix row whose owning module is inactive, keeping t… 0.18s
+2026-10-01T17:29:09.6394554Z   ⨯ it leaves no new keys and no version bump when compilation fails mi… 0.18s
+2026-10-01T17:29:09.6400179Z   ✓ it returns no warning for a user-only role using own/dept scope      0.17s
+2026-10-01T17:29:09.6405917Z   ⨯ it deduplicates identical keys produced by a base row and its conte… 0.22s
+2026-10-01T17:29:09.6411644Z   ⨯ it exposes compiled keys through MatrixPermissionCatalogBuilder for… 0.17s
+2026-10-01T17:29:09.6417113Z   ✓ it warns (does not throw) when a role assignable to agent uses own/… 0.17s
+2026-10-01T17:29:09.6422697Z   ⨯ it recompileAll is idempotent across repeated runs                   0.21s
+2026-10-01T17:29:09.6428003Z   ✓ it does not compile a key for an entity_key unknown to EntityRegist… 0.20s
+2026-10-01T17:29:09.6433589Z   ✓ it invalidates matrix scope only after the outer commit and never a… 0.18s
+2026-10-01T17:29:09.6438903Z   ⨯ it compiles matrix rows with scope != none into panel-prefixed AzGu… 0.18s
+2026-10-01T17:29:09.6444741Z   ⨯ it recompiles the key once the owning module becomes active again (… 0.18s
+2026-10-01T17:29:09.6449605Z   ✓ it excludes catalog keys whose owning module is inactive             0.16s
+2026-10-01T17:29:10.0905546Z
+2026-10-01T17:29:10.0906777Z    PASS  Tests\Pg\AutSchemaTest
+2026-10-01T17:29:10.0911660Z   ✓ it applies the tenant/ aut_* migrations on a clean schema without u… 0.08s
+2026-10-01T17:29:10.0917319Z   ✓ it matches DB_SCHEMA §3.5 aut_roles column-by-column                 0.09s
+2026-10-01T17:29:10.0923156Z   ✓ it matches DB_SCHEMA §3.5 aut_role_matrix column-by-column           0.09s
+2026-10-01T17:29:10.0928522Z   ✓ it adds both cross-package FKs only via the tenant-cloud migration   0.10s
+2026-10-01T17:29:10.0934001Z   ✓ it matches DB_SCHEMA §3.5 aut_role_assignments column-by-column      0.09s
+2026-10-01T17:29:11.7250699Z
+2026-10-01T17:29:11.7253313Z    FAIL  Tests\Pg\PrincipalTypesTest
+2026-10-01T17:29:11.7254831Z   ✓ it excludes an expired assignment from allowed() and scopeFor()      0.19s
+2026-10-01T17:29:11.7268749Z   ⨯ it honours a not-yet-expired assignment in allowed() and scopeFor()  0.19s
+2026-10-01T17:29:11.7271057Z   ✓ it leaves workspace and account scope untouched for an agent princi… 0.17s
+2026-10-01T17:29:11.7273133Z   ✓ it leaves workspace and account scope untouched for an agent princi… 0.19s
+2026-10-01T17:29:11.7281414Z   ✓ it degrades own/dept/dept_tree to none for an agent principal, but…  0.18s
+2026-10-01T17:29:11.7283737Z   ✓ it degrades own/dept/dept_tree to none for an agent principal, but…  0.17s
+2026-10-01T17:29:11.7285768Z   ✓ it degrades own/dept/dept_tree to none for an agent principal, but…  0.17s
+2026-10-01T17:29:11.7289624Z   ⨯ it resolves allowed() for an api_key principal with no users row     0.19s
+2026-10-01T17:29:11.7295296Z   ⨯ it resolves allowed()/scopeFor() for an agent principal with no use… 0.19s
+2026-10-01T17:29:12.6401186Z
+2026-10-01T17:29:12.6402841Z    FAIL  Tests\Pg\PermissionsMergerTest
+2026-10-01T17:29:12.6406746Z   ⨯ it recompiles on ModuleDisabled too — both lifecycle events are wir… 0.19s
+2026-10-01T17:29:12.6412522Z   ✓ it gives out no key while the owning module has never been reported… 0.18s
+2026-10-01T17:29:12.6418078Z   ⨯ it returns no warning for a declaration whose entity is known to En… 0.16s
+2026-10-01T17:29:12.6424015Z   ✓ it returns a warning and creates no matrix row for a declaration wi… 0.16s
+2026-10-01T17:29:12.6429491Z   ⨯ it recompiles keys through the full enable -> disable -> re-enable…  0.23s
+2026-10-01T17:29:12.6436796Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.6443768Z    FAILED  Tests\Pg\AccessCheckerTest > it matches workspace scope against t…
+2026-10-01T17:29:12.6462741Z   Failed asserting that false is true.
+2026-10-01T17:29:12.6471345Z
+2026-10-01T17:29:12.6472443Z   at tests/Pg/AccessCheckerTest.php:309
 2026-10-01T17:29:12.6642658Z     305▕     $matching = Deal::query()->create(['id' => (string) Str::uuid7(), 'workspace_id' => $workspaceId]);
 2026-10-01T17:29:12.6644389Z     306▕     $other = Deal::query()->create(['id' => (string) Str::uuid7(), 'workspace_id' => $otherWorkspaceId]);
 2026-10-01T17:29:12.6648000Z     307▕     $accountWide = Deal::query()->create(['id' => (string) Str::uuid7(), 'workspace_id' => null]);
-2026-10-01T17:29:12.6649327Z     308▕ 
+2026-10-01T17:29:12.6649327Z     308▕
 2026-10-01T17:29:12.6670804Z   ➜ 309▕     expect($checker->canOnRecord($identity, 'read', $matching))->toBeTrue()
 2026-10-01T17:29:12.6680775Z     310▕         ->and($checker->canOnRecord($identity, 'read', $other))->toBeFalse()
 2026-10-01T17:29:12.6690916Z     311▕         ->and($checker->canOnRecord($identity, 'read', $accountWide))->toBeTrue();
 2026-10-01T17:29:12.6702175Z     312▕ });
 2026-10-01T17:29:12.6702911Z     313▕
-2026-10-01T17:29:12.6703291Z 
-2026-10-01T17:29:12.6703996Z   [33m1   [39m[39;1mtests/Pg/AccessCheckerTest.php[39;22m:[39;1m309[39;22m
-2026-10-01T17:29:12.6704741Z 
-2026-10-01T17:29:12.6705444Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.6706895Z   [41;1m FAILED [49;22m [1mTests\Pg\AccessCheckerTest[22m [90m>[39m it uses identical fail-closed capabi…   
-2026-10-01T17:29:12.6708368Z [39;1m  Exception [CoreX\Access\Exceptions\ScopeCapabilityMismatch] not thrown.[39;22m
-2026-10-01T17:29:12.6709167Z 
-2026-10-01T17:29:12.6709695Z   at [32mtests/Pg/AccessCheckerTest.php[39m:[32m55[39m
+2026-10-01T17:29:12.6703291Z
+2026-10-01T17:29:12.6703996Z   1   tests/Pg/AccessCheckerTest.php:309
+2026-10-01T17:29:12.6704741Z
+2026-10-01T17:29:12.6705444Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.6706895Z    FAILED  Tests\Pg\AccessCheckerTest > it uses identical fail-closed capabi…
+2026-10-01T17:29:12.6708368Z   Exception [CoreX\Access\Exceptions\ScopeCapabilityMismatch] not thrown.
+2026-10-01T17:29:12.6709167Z
+2026-10-01T17:29:12.6709695Z   at tests/Pg/AccessCheckerTest.php:55
 2026-10-01T17:29:12.6711381Z      51▕     $principal = new PrincipalIdentity(PrincipalType::User, (string) Str::uuid7());
 2026-10-01T17:29:12.6713133Z      52▕     RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => 'user', 'principal_id' => $principal->principalId()]);
 2026-10-01T17:29:12.6714617Z      53▕     $deal = new Deal(['owner_id' => $principal->principalId()]);
@@ -1349,76 +1349,76 @@
 2026-10-01T17:29:12.6720235Z      57▕         ->toThrow(ScopeCapabilityMismatch::class);
 2026-10-01T17:29:12.6721591Z      58▕     app(AzGuardManagerInterface::class)->forUser($principal)->on('app')->grant('app.crm.deal.read');
 2026-10-01T17:29:12.6723122Z      59▕     expect(app(AccessChecker::class)->canOnRecord($principal, 'read', $deal))->toBeTrue()
-2026-10-01T17:29:12.6723950Z 
-2026-10-01T17:29:12.6724583Z   [33m1   [39m[39;1mtests/Pg/AccessCheckerTest.php[39;22m:[39;1m55[39;22m
-2026-10-01T17:29:12.6725296Z 
-2026-10-01T17:29:12.6725997Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.6730957Z   [41;1m FAILED [49;22m [1mTests\Pg\AccessCheckerTest[22m [90m>[39m it grants department scopes only for…   
-2026-10-01T17:29:12.6732216Z [39;1m  Failed asserting that two arrays are identical.
-2026-10-01T17:29:12.6733029Z   [39;22m[31m-Array &0 [[39m[39;1m
-2026-10-01T17:29:12.6750543Z   [39;22m[31m-    0 => 'same',[39m[39;1m
-2026-10-01T17:29:12.6770394Z   [39;22m[31m-    1 => 'child',[39m[39;1m
-2026-10-01T17:29:12.6790288Z   [39;22m[31m-][39m[39;1m
-2026-10-01T17:29:12.6791171Z   [39;22m[32m+Array &0 [][39m[39;1m
-2026-10-01T17:29:12.6807885Z   [39;22m
-2026-10-01T17:29:12.6830051Z 
-2026-10-01T17:29:12.6850221Z   at [32mtests/Pg/AccessCheckerTest.php[39m:[32m348[39m
+2026-10-01T17:29:12.6723950Z
+2026-10-01T17:29:12.6724583Z   1   tests/Pg/AccessCheckerTest.php:55
+2026-10-01T17:29:12.6725296Z
+2026-10-01T17:29:12.6725997Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.6730957Z    FAILED  Tests\Pg\AccessCheckerTest > it grants department scopes only for…
+2026-10-01T17:29:12.6732216Z   Failed asserting that two arrays are identical.
+2026-10-01T17:29:12.6733029Z   -Array &0 [
+2026-10-01T17:29:12.6750543Z   -    0 => 'same',
+2026-10-01T17:29:12.6770394Z   -    1 => 'child',
+2026-10-01T17:29:12.6790288Z   -]
+2026-10-01T17:29:12.6791171Z   +Array &0 []
+2026-10-01T17:29:12.6807885Z
+2026-10-01T17:29:12.6830051Z
+2026-10-01T17:29:12.6850221Z   at tests/Pg/AccessCheckerTest.php:348
 2026-10-01T17:29:12.6851275Z     344▕         ->keys()
 2026-10-01T17:29:12.6871007Z     345▕         ->all();
-2026-10-01T17:29:12.6890404Z     346▕ 
+2026-10-01T17:29:12.6890404Z     346▕
 2026-10-01T17:29:12.6906926Z     347▕     expect($checker->scopeFor($identity, 'crm.deal', 'read'))->toBe($scope)
 2026-10-01T17:29:12.6930904Z   ➜ 348▕         ->and($grantedLabels)->toBe($expectedLabels)
 2026-10-01T17:29:12.6932218Z     349▕         ->and($checker->canOnRecord($identity, 'read', $records['sibling']))->toBeFalse()
 2026-10-01T17:29:12.6938821Z     350▕         ->and($checker->canOnRecord($identity, 'read', $records['null_owner']))->toBeFalse();
 2026-10-01T17:29:12.6939661Z     351▕ })->with([
 2026-10-01T17:29:12.6940564Z     352▕     'dept: same department only' => [Scope::Dept, ['same']],
-2026-10-01T17:29:12.6941022Z 
-2026-10-01T17:29:12.6941477Z   [33m1   [39m[39;1mtests/Pg/AccessCheckerTest.php[39;22m:[39;1m348[39;22m
-2026-10-01T17:29:12.6941972Z 
-2026-10-01T17:29:12.6942480Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.6943647Z   [41;1m FAILED [49;22m [1mTests\Pg\AccessCheckerTest[22m [90m>[39m it grants department scopes only for…   
-2026-10-01T17:29:12.6944700Z [39;1m  Failed asserting that two arrays are identical.
-2026-10-01T17:29:12.6945614Z   [39;22m[31m-Array &0 [[39m[39;1m
-2026-10-01T17:29:12.6946146Z   [39;22m[31m-    0 => 'same',[39m[39;1m
-2026-10-01T17:29:12.6946653Z   [39;22m[31m-][39m[39;1m
-2026-10-01T17:29:12.6947133Z   [39;22m[32m+Array &0 [][39m[39;1m
-2026-10-01T17:29:12.6947578Z   [39;22m
-2026-10-01T17:29:12.6947747Z 
-2026-10-01T17:29:12.6948100Z   at [32mtests/Pg/AccessCheckerTest.php[39m:[32m348[39m
+2026-10-01T17:29:12.6941022Z
+2026-10-01T17:29:12.6941477Z   1   tests/Pg/AccessCheckerTest.php:348
+2026-10-01T17:29:12.6941972Z
+2026-10-01T17:29:12.6942480Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.6943647Z    FAILED  Tests\Pg\AccessCheckerTest > it grants department scopes only for…
+2026-10-01T17:29:12.6944700Z   Failed asserting that two arrays are identical.
+2026-10-01T17:29:12.6945614Z   -Array &0 [
+2026-10-01T17:29:12.6946146Z   -    0 => 'same',
+2026-10-01T17:29:12.6946653Z   -]
+2026-10-01T17:29:12.6947133Z   +Array &0 []
+2026-10-01T17:29:12.6947578Z
+2026-10-01T17:29:12.6947747Z
+2026-10-01T17:29:12.6948100Z   at tests/Pg/AccessCheckerTest.php:348
 2026-10-01T17:29:12.6948707Z     344▕         ->keys()
 2026-10-01T17:29:12.6949120Z     345▕         ->all();
-2026-10-01T17:29:12.6949503Z     346▕ 
+2026-10-01T17:29:12.6949503Z     346▕
 2026-10-01T17:29:12.6950436Z     347▕     expect($checker->scopeFor($identity, 'crm.deal', 'read'))->toBe($scope)
 2026-10-01T17:29:12.6951336Z   ➜ 348▕         ->and($grantedLabels)->toBe($expectedLabels)
 2026-10-01T17:29:12.6952308Z     349▕         ->and($checker->canOnRecord($identity, 'read', $records['sibling']))->toBeFalse()
 2026-10-01T17:29:12.6953496Z     350▕         ->and($checker->canOnRecord($identity, 'read', $records['null_owner']))->toBeFalse();
 2026-10-01T17:29:12.6954332Z     351▕ })->with([
 2026-10-01T17:29:12.6954958Z     352▕     'dept: same department only' => [Scope::Dept, ['same']],
-2026-10-01T17:29:12.6955391Z 
-2026-10-01T17:29:12.6955848Z   [33m1   [39m[39;1mtests/Pg/AccessCheckerTest.php[39;22m:[39;1m348[39;22m
-2026-10-01T17:29:12.6956363Z 
-2026-10-01T17:29:12.6956861Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.6958280Z   [41;1m FAILED [49;22m [1mTests\Pg\AccessCheckerTest[22m [90m>[39m it with WorkspacePermissionLayer, a…    
-2026-10-01T17:29:12.6959398Z [39;1m  Failed asserting that false is true.[39;22m
-2026-10-01T17:29:12.6960615Z 
-2026-10-01T17:29:12.6961053Z   at [32mtests/Pg/AccessCheckerTest.php[39m:[32m523[39m
+2026-10-01T17:29:12.6955391Z
+2026-10-01T17:29:12.6955848Z   1   tests/Pg/AccessCheckerTest.php:348
+2026-10-01T17:29:12.6956363Z
+2026-10-01T17:29:12.6956861Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.6958280Z    FAILED  Tests\Pg\AccessCheckerTest > it with WorkspacePermissionLayer, a…
+2026-10-01T17:29:12.6959398Z   Failed asserting that false is true.
+2026-10-01T17:29:12.6960615Z
+2026-10-01T17:29:12.6961053Z   at tests/Pg/AccessCheckerTest.php:523
 2026-10-01T17:29:12.6962702Z     519▕     RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => 'user', 'principal_id' => $principalId, 'workspace_id' => $workspaceA->id]);
-2026-10-01T17:29:12.6963949Z     520▕ 
+2026-10-01T17:29:12.6963949Z     520▕
 2026-10-01T17:29:12.6965129Z     521▕     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
-2026-10-01T17:29:12.6965942Z     522▕ 
+2026-10-01T17:29:12.6965942Z     522▕
 2026-10-01T17:29:12.6966684Z   ➜ 523▕     expect($identity->hasPermission('app.crm.deal.read', 'app'))->toBeTrue();
-2026-10-01T17:29:12.6967494Z     524▕ 
+2026-10-01T17:29:12.6967494Z     524▕
 2026-10-01T17:29:12.6968018Z     525▕     $fakeTenancy->setWorkspace($workspaceB);
-2026-10-01T17:29:12.6968606Z     526▕ 
+2026-10-01T17:29:12.6968606Z     526▕
 2026-10-01T17:29:12.6969359Z     527▕     expect($identity->hasPermission('app.crm.deal.read', 'app'))->toBeFalse();
-2026-10-01T17:29:12.6970289Z 
-2026-10-01T17:29:12.6970825Z   [33m1   [39m[39;1mtests/Pg/AccessCheckerTest.php[39;22m:[39;1m523[39;22m
-2026-10-01T17:29:12.6971369Z 
-2026-10-01T17:29:12.6971908Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.6973181Z   [41;1m FAILED [49;22m [1mTests\Pg\AccessCheckerTest[22m [90m>[39m it excludes deleted broad roles when…   
-2026-10-01T17:29:12.6974245Z [39;1m  Failed asserting that false is true.[39;22m
-2026-10-01T17:29:12.6974627Z 
-2026-10-01T17:29:12.6974979Z   at [32mtests/Pg/AccessCheckerTest.php[39m:[32m124[39m
+2026-10-01T17:29:12.6970289Z
+2026-10-01T17:29:12.6970825Z   1   tests/Pg/AccessCheckerTest.php:523
+2026-10-01T17:29:12.6971369Z
+2026-10-01T17:29:12.6971908Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.6973181Z    FAILED  Tests\Pg\AccessCheckerTest > it excludes deleted broad roles when…
+2026-10-01T17:29:12.6974245Z   Failed asserting that false is true.
+2026-10-01T17:29:12.6974627Z
+2026-10-01T17:29:12.6974979Z   at tests/Pg/AccessCheckerTest.php:124
 2026-10-01T17:29:12.6975644Z     120▕         if ($scope === 'account') {
 2026-10-01T17:29:12.6976195Z     121▕             $role->delete();
 2026-10-01T17:29:12.6976650Z     122▕         }
@@ -1426,584 +1426,584 @@
 2026-10-01T17:29:12.6977907Z   ➜ 124▕     expect(app(AccessChecker::class)->allowed($principal, 'crm.deal', 'read'))->toBeTrue()
 2026-10-01T17:29:12.6979254Z     125▕         ->and(app(AccessChecker::class)->scopeFor($principal, 'crm.deal', 'read'))->toBe(Scope::Own);
 2026-10-01T17:29:12.6980748Z     126▕ });
-2026-10-01T17:29:12.6981102Z     127▕ 
+2026-10-01T17:29:12.6981102Z     127▕
 2026-10-01T17:29:12.6981502Z     128▕ beforeEach(function (): void {
-2026-10-01T17:29:12.6981818Z 
-2026-10-01T17:29:12.6982279Z   [33m1   [39m[39;1mtests/Pg/AccessCheckerTest.php[39;22m:[39;1m124[39;22m
-2026-10-01T17:29:12.6982793Z 
-2026-10-01T17:29:12.6983543Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.6984706Z   [41;1m FAILED [49;22m [1mTests\Pg\AccessCheckerTest[22m [90m>[39m it grants canOnRecord via an active…    
-2026-10-01T17:29:12.6985700Z [39;1m  Failed asserting that false is true.[39;22m
-2026-10-01T17:29:12.6986070Z 
-2026-10-01T17:29:12.6986416Z   at [32mtests/Pg/AccessCheckerTest.php[39m:[32m399[39m
+2026-10-01T17:29:12.6981818Z
+2026-10-01T17:29:12.6982279Z   1   tests/Pg/AccessCheckerTest.php:124
+2026-10-01T17:29:12.6982793Z
+2026-10-01T17:29:12.6983543Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.6984706Z    FAILED  Tests\Pg\AccessCheckerTest > it grants canOnRecord via an active…
+2026-10-01T17:29:12.6985700Z   Failed asserting that false is true.
+2026-10-01T17:29:12.6986070Z
+2026-10-01T17:29:12.6986416Z   at tests/Pg/AccessCheckerTest.php:399
 2026-10-01T17:29:12.6987725Z     395▕     app(AzGuardManagerInterface::class)->forUser($identity)->on('app')->grant('app.crm.deal.read');
-2026-10-01T17:29:12.6988751Z     396▕ 
+2026-10-01T17:29:12.6988751Z     396▕
 2026-10-01T17:29:12.6989689Z     397▕     $deal = Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => (string) Str::uuid7()]);
-2026-10-01T17:29:12.6991109Z     398▕ 
+2026-10-01T17:29:12.6991109Z     398▕
 2026-10-01T17:29:12.6992044Z   ➜ 399▕     expect(app(AccessChecker::class)->canOnRecord($identity, 'read', $deal))->toBeTrue();
 2026-10-01T17:29:12.6992955Z     400▕ });
-2026-10-01T17:29:12.6993396Z     401▕ 
+2026-10-01T17:29:12.6993396Z     401▕
 2026-10-01T17:29:12.6994386Z     402▕ // Implementation Rules — an unresolvable entity_key is fail-closed false, never "the whole scope".
 2026-10-01T17:29:12.6995934Z     403▕ it('denies canOnRecord for a record whose model is not registered in EntityRegistry', function (): void {
-2026-10-01T17:29:12.6996813Z 
-2026-10-01T17:29:12.6997383Z   [33m1   [39m[39;1mtests/Pg/AccessCheckerTest.php[39;22m:[39;1m399[39;22m
-2026-10-01T17:29:12.6997997Z 
-2026-10-01T17:29:12.6998592Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7000049Z   [41;1m FAILED [49;22m [1mTests\Pg\AccessCheckerTest[22m [90m>[39m it grants allowed() inside the works…   
-2026-10-01T17:29:12.7001187Z [39;1m  Failed asserting that false is true.[39;22m
-2026-10-01T17:29:12.7001676Z 
-2026-10-01T17:29:12.7002128Z   at [32mtests/Pg/AccessCheckerTest.php[39m:[32m453[39m
+2026-10-01T17:29:12.6996813Z
+2026-10-01T17:29:12.6997383Z   1   tests/Pg/AccessCheckerTest.php:399
+2026-10-01T17:29:12.6997997Z
+2026-10-01T17:29:12.6998592Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7000049Z    FAILED  Tests\Pg\AccessCheckerTest > it grants allowed() inside the works…
+2026-10-01T17:29:12.7001187Z   Failed asserting that false is true.
+2026-10-01T17:29:12.7001676Z
+2026-10-01T17:29:12.7002128Z   at tests/Pg/AccessCheckerTest.php:453
 2026-10-01T17:29:12.7009049Z     449▕     RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => 'user', 'principal_id' => $principalId, 'workspace_id' => $workspace->id]);
-2026-10-01T17:29:12.7011295Z     450▕ 
+2026-10-01T17:29:12.7011295Z     450▕
 2026-10-01T17:29:12.7012284Z     451▕     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
-2026-10-01T17:29:12.7013227Z     452▕ 
+2026-10-01T17:29:12.7013227Z     452▕
 2026-10-01T17:29:12.7014266Z   ➜ 453▕     expect(app(AccessChecker::class)->allowed($identity, 'crm.deal', 'read'))->toBeTrue();
 2026-10-01T17:29:12.7015301Z     454▕ });
-2026-10-01T17:29:12.7015823Z     455▕ 
+2026-10-01T17:29:12.7015823Z     455▕
 2026-10-01T17:29:12.7017198Z     456▕ it('denies allowed() outside the workspace the role was assigned to', function (): void {
 2026-10-01T17:29:12.7018877Z     457▕     $assignedWorkspace = (string) Str::uuid7();
-2026-10-01T17:29:12.7019402Z 
-2026-10-01T17:29:12.7020319Z   [33m1   [39m[39;1mtests/Pg/AccessCheckerTest.php[39;22m:[39;1m453[39;22m
-2026-10-01T17:29:12.7020974Z 
-2026-10-01T17:29:12.7021609Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7022933Z   [41;1m FAILED [49;22m [1mTests\Pg\AccessCheckerTest[22m [90m>[39m it without WorkspacePermissionLayer,…   
-2026-10-01T17:29:12.7024303Z [39;1m  Failed asserting that false is true.[39;22m
-2026-10-01T17:29:12.7024773Z 
-2026-10-01T17:29:12.7025232Z   at [32mtests/Pg/AccessCheckerTest.php[39m:[32m497[39m
+2026-10-01T17:29:12.7019402Z
+2026-10-01T17:29:12.7020319Z   1   tests/Pg/AccessCheckerTest.php:453
+2026-10-01T17:29:12.7020974Z
+2026-10-01T17:29:12.7021609Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7022933Z    FAILED  Tests\Pg\AccessCheckerTest > it without WorkspacePermissionLayer,…
+2026-10-01T17:29:12.7024303Z   Failed asserting that false is true.
+2026-10-01T17:29:12.7024773Z
+2026-10-01T17:29:12.7025232Z   at tests/Pg/AccessCheckerTest.php:497
 2026-10-01T17:29:12.7046716Z     493▕     RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => 'user', 'principal_id' => $principalId, 'workspace_id' => $workspaceA->id]);
-2026-10-01T17:29:12.7048563Z     494▕ 
+2026-10-01T17:29:12.7048563Z     494▕
 2026-10-01T17:29:12.7049556Z     495▕     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
-2026-10-01T17:29:12.7050829Z     496▕ 
+2026-10-01T17:29:12.7050829Z     496▕
 2026-10-01T17:29:12.7051718Z   ➜ 497▕     expect($identity->hasPermission('app.crm.deal.read', 'app'))->toBeTrue();
-2026-10-01T17:29:12.7052672Z     498▕ 
+2026-10-01T17:29:12.7052672Z     498▕
 2026-10-01T17:29:12.7053326Z     499▕     $fakeTenancy->setWorkspace($workspaceB);
-2026-10-01T17:29:12.7054483Z     500▕ 
+2026-10-01T17:29:12.7054483Z     500▕
 2026-10-01T17:29:12.7055736Z     501▕     // BUG proof, not the desired behaviour: workspace B has no assignment at
-2026-10-01T17:29:12.7056879Z 
-2026-10-01T17:29:12.7057534Z   [33m1   [39m[39;1mtests/Pg/AccessCheckerTest.php[39;22m:[39;1m497[39;22m
-2026-10-01T17:29:12.7058164Z 
-2026-10-01T17:29:12.7058773Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7060352Z   [41;1m FAILED [49;22m [1mTests\Pg\AccessCheckerTest[22m [90m>[39m it grants canOnRecord for own scope…    
-2026-10-01T17:29:12.7061512Z [39;1m  Failed asserting that false is true.[39;22m
-2026-10-01T17:29:12.7061998Z 
-2026-10-01T17:29:12.7062462Z   at [32mtests/Pg/AccessCheckerTest.php[39m:[32m272[39m
-2026-10-01T17:29:12.7084239Z     268▕ 
+2026-10-01T17:29:12.7056879Z
+2026-10-01T17:29:12.7057534Z   1   tests/Pg/AccessCheckerTest.php:497
+2026-10-01T17:29:12.7058164Z
+2026-10-01T17:29:12.7058773Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7060352Z    FAILED  Tests\Pg\AccessCheckerTest > it grants canOnRecord for own scope…
+2026-10-01T17:29:12.7061512Z   Failed asserting that false is true.
+2026-10-01T17:29:12.7061998Z
+2026-10-01T17:29:12.7062462Z   at tests/Pg/AccessCheckerTest.php:272
+2026-10-01T17:29:12.7084239Z     268▕
 2026-10-01T17:29:12.7085766Z     269▕     $ownDeal = Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => $principalId]);
 2026-10-01T17:29:12.7087839Z     270▕     $otherDeal = Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => (string) Str::uuid7()]);
-2026-10-01T17:29:12.7088970Z     271▕ 
+2026-10-01T17:29:12.7088970Z     271▕
 2026-10-01T17:29:12.7090291Z   ➜ 272▕     expect($checker->canOnRecord($identity, 'read', $ownDeal))->toBeTrue()
 2026-10-01T17:29:12.7091745Z     273▕         ->and($checker->canOnRecord($identity, 'read', $otherDeal))->toBeFalse();
 2026-10-01T17:29:12.7093577Z     274▕ });
-2026-10-01T17:29:12.7094106Z     275▕ 
+2026-10-01T17:29:12.7094106Z     275▕
 2026-10-01T17:29:12.7095417Z     276▕ it('grants canOnRecord for account scope regardless of ownership', function (): void {
-2026-10-01T17:29:12.7096179Z 
-2026-10-01T17:29:12.7096783Z   [33m1   [39m[39;1mtests/Pg/AccessCheckerTest.php[39;22m:[39;1m272[39;22m
-2026-10-01T17:29:12.7097413Z 
-2026-10-01T17:29:12.7098003Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7099275Z   [41;1m FAILED [49;22m [1mTests\Pg\AccessCheckerTest[22m [90m>[39m it resolves allowed() through the re…   
-2026-10-01T17:29:12.7100666Z [39;1m  Failed asserting that false is true.[39;22m
-2026-10-01T17:29:12.7101138Z 
-2026-10-01T17:29:12.7101639Z   at [32mtests/Pg/AccessCheckerTest.php[39m:[32m206[39m
-2026-10-01T17:29:12.7123044Z     202▕ 
+2026-10-01T17:29:12.7096179Z
+2026-10-01T17:29:12.7096783Z   1   tests/Pg/AccessCheckerTest.php:272
+2026-10-01T17:29:12.7097413Z
+2026-10-01T17:29:12.7098003Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7099275Z    FAILED  Tests\Pg\AccessCheckerTest > it resolves allowed() through the re…
+2026-10-01T17:29:12.7100666Z   Failed asserting that false is true.
+2026-10-01T17:29:12.7101138Z
+2026-10-01T17:29:12.7101639Z   at tests/Pg/AccessCheckerTest.php:206
+2026-10-01T17:29:12.7123044Z     202▕
 2026-10-01T17:29:12.7124085Z     203▕     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
 2026-10-01T17:29:12.7125702Z     204▕     $checker = app(AccessChecker::class);
-2026-10-01T17:29:12.7126472Z     205▕ 
+2026-10-01T17:29:12.7126472Z     205▕
 2026-10-01T17:29:12.7127317Z   ➜ 206▕     expect($checker->allowed($identity, 'crm.deal', 'read'))->toBeTrue()
 2026-10-01T17:29:12.7128575Z     207▕         ->and($checker->allowed($identity, 'crm.deal', 'delete'))->toBeFalse()
 2026-10-01T17:29:12.7130082Z     208▕         ->and($checker->allowed($identity, 'crm.deal', 'export'))->toBeFalse();
 2026-10-01T17:29:12.7131637Z     209▕ });
 2026-10-01T17:29:12.7132145Z     210▕
-2026-10-01T17:29:12.7132802Z 
-2026-10-01T17:29:12.7133469Z   [33m1   [39m[39;1mtests/Pg/AccessCheckerTest.php[39;22m:[39;1m206[39;22m
-2026-10-01T17:29:12.7134124Z 
-2026-10-01T17:29:12.7134729Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7136286Z   [41;1m FAILED [49;22m [1mTests\Pg\AccessCheckerTest[22m [90m>[39m it grants canOnRecord for account sc…   
-2026-10-01T17:29:12.7137423Z [39;1m  Failed asserting that false is true.[39;22m
-2026-10-01T17:29:12.7137904Z 
-2026-10-01T17:29:12.7138358Z   at [32mtests/Pg/AccessCheckerTest.php[39m:[32m287[39m
-2026-10-01T17:29:12.7160608Z     283▕ 
+2026-10-01T17:29:12.7132802Z
+2026-10-01T17:29:12.7133469Z   1   tests/Pg/AccessCheckerTest.php:206
+2026-10-01T17:29:12.7134124Z
+2026-10-01T17:29:12.7134729Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7136286Z    FAILED  Tests\Pg\AccessCheckerTest > it grants canOnRecord for account sc…
+2026-10-01T17:29:12.7137423Z   Failed asserting that false is true.
+2026-10-01T17:29:12.7137904Z
+2026-10-01T17:29:12.7138358Z   at tests/Pg/AccessCheckerTest.php:287
+2026-10-01T17:29:12.7160608Z     283▕
 2026-10-01T17:29:12.7162090Z     284▕     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
 2026-10-01T17:29:12.7164024Z     285▕     $deal = Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => (string) Str::uuid7()]);
-2026-10-01T17:29:12.7165073Z     286▕ 
+2026-10-01T17:29:12.7165073Z     286▕
 2026-10-01T17:29:12.7166134Z   ➜ 287▕     expect(app(AccessChecker::class)->canOnRecord($identity, 'read', $deal))->toBeTrue();
 2026-10-01T17:29:12.7167154Z     288▕ });
-2026-10-01T17:29:12.7167662Z     289▕ 
+2026-10-01T17:29:12.7167662Z     289▕
 2026-10-01T17:29:12.7168883Z     290▕ it('matches workspace scope against the active tenancy context, and passes a workspace-less record', function (): void {
 2026-10-01T17:29:12.7170967Z     291▕     $workspaceId = (string) Str::uuid7();
-2026-10-01T17:29:12.7171472Z 
-2026-10-01T17:29:12.7172080Z   [33m1   [39m[39;1mtests/Pg/AccessCheckerTest.php[39;22m:[39;1m287[39;22m
-2026-10-01T17:29:12.7172701Z 
-2026-10-01T17:29:12.7173383Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7174664Z   [41;1m FAILED [49;22m [1mTests\Pg\ScopeResolverTest[22m [90m>[39m it agent principals degrade own/dept…   
-2026-10-01T17:29:12.7175933Z [39;1m  Failed asserting that actual size 0 matches expected size 2.[39;22m
-2026-10-01T17:29:12.7176548Z 
-2026-10-01T17:29:12.7177009Z   at [32mtests/Pg/ScopeResolverTest.php[39m:[32m369[39m
-2026-10-01T17:29:12.7197549Z     365▕ 
+2026-10-01T17:29:12.7171472Z
+2026-10-01T17:29:12.7172080Z   1   tests/Pg/AccessCheckerTest.php:287
+2026-10-01T17:29:12.7172701Z
+2026-10-01T17:29:12.7173383Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7174664Z    FAILED  Tests\Pg\ScopeResolverTest > it agent principals degrade own/dept…
+2026-10-01T17:29:12.7175933Z   Failed asserting that actual size 0 matches expected size 2.
+2026-10-01T17:29:12.7176548Z
+2026-10-01T17:29:12.7177009Z   at tests/Pg/ScopeResolverTest.php:369
+2026-10-01T17:29:12.7197549Z     365▕
 2026-10-01T17:29:12.7198575Z     366▕     $identity = new PrincipalIdentity(PrincipalType::Agent, $principalId);
 2026-10-01T17:29:12.7201081Z     367▕     $ids = app(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
-2026-10-01T17:29:12.7202271Z     368▕ 
+2026-10-01T17:29:12.7202271Z     368▕
 2026-10-01T17:29:12.7202997Z   ➜ 369▕     expect($ids)->toHaveCount($expectEmpty ? 0 : 2);
 2026-10-01T17:29:12.7203792Z     370▕ })->with([
 2026-10-01T17:29:12.7204522Z     371▕     'own degrades' => [Scope::Own, true],
 2026-10-01T17:29:12.7205867Z     372▕     'dept degrades' => [Scope::Dept, true],
 2026-10-01T17:29:12.7207211Z     373▕     'dept_tree degrades' => [Scope::DeptTree, true],
-2026-10-01T17:29:12.7208131Z 
-2026-10-01T17:29:12.7208792Z   [33m1   [39m[39;1mtests/Pg/ScopeResolverTest.php[39;22m:[39;1m369[39;22m
-2026-10-01T17:29:12.7209453Z 
-2026-10-01T17:29:12.7210297Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7211623Z   [41;1m FAILED [49;22m [1mTests\Pg\ScopeResolverTest[22m [90m>[39m it dept scope on the builder narrows…   
-2026-10-01T17:29:12.7212768Z [39;1m  Failed asserting that two arrays are identical.
-2026-10-01T17:29:12.7213525Z   [39;22m[31m-Array &0 [[39m[39;1m
-2026-10-01T17:29:12.7214319Z   [39;22m[31m-    0 => '01a0f883-13c1-73f2-b0a5-85e73d2f2c4d',[39m[39;1m
-2026-10-01T17:29:12.7215082Z   [39;22m[31m-][39m[39;1m
-2026-10-01T17:29:12.7215652Z   [39;22m[32m+Array &0 [][39m[39;1m
-2026-10-01T17:29:12.7216214Z   [39;22m
-2026-10-01T17:29:12.7216492Z 
-2026-10-01T17:29:12.7216944Z   at [32mtests/Pg/ScopeResolverTest.php[39m:[32m175[39m
-2026-10-01T17:29:12.7235621Z     171▕ 
+2026-10-01T17:29:12.7208131Z
+2026-10-01T17:29:12.7208792Z   1   tests/Pg/ScopeResolverTest.php:369
+2026-10-01T17:29:12.7209453Z
+2026-10-01T17:29:12.7210297Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7211623Z    FAILED  Tests\Pg\ScopeResolverTest > it dept scope on the builder narrows…
+2026-10-01T17:29:12.7212768Z   Failed asserting that two arrays are identical.
+2026-10-01T17:29:12.7213525Z   -Array &0 [
+2026-10-01T17:29:12.7214319Z   -    0 => '01a0f883-13c1-73f2-b0a5-85e73d2f2c4d',
+2026-10-01T17:29:12.7215082Z   -]
+2026-10-01T17:29:12.7215652Z   +Array &0 []
+2026-10-01T17:29:12.7216214Z
+2026-10-01T17:29:12.7216492Z
+2026-10-01T17:29:12.7216944Z   at tests/Pg/ScopeResolverTest.php:175
+2026-10-01T17:29:12.7235621Z     171▕
 2026-10-01T17:29:12.7236634Z     172▕     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
 2026-10-01T17:29:12.7238655Z     173▕     $ids = app(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
-2026-10-01T17:29:12.7240016Z     174▕ 
+2026-10-01T17:29:12.7240016Z     174▕
 2026-10-01T17:29:12.7240672Z   ➜ 175▕     expect($ids)->toBe([$inDept->id]);
 2026-10-01T17:29:12.7241390Z     176▕ });
-2026-10-01T17:29:12.7241909Z     177▕ 
+2026-10-01T17:29:12.7241909Z     177▕
 2026-10-01T17:29:12.7242764Z     178▕ // AC-23 — dept_tree, ONE `path <@` subquery, no recursion (premortem A6).
 2026-10-01T17:29:12.7245043Z     179▕ it('dept_tree scope on the builder narrows via the department subtree in a single path <@ predicate', function (): void {
-2026-10-01T17:29:12.7246411Z 
-2026-10-01T17:29:12.7247075Z   [33m1   [39m[39;1mtests/Pg/ScopeResolverTest.php[39;22m:[39;1m175[39;22m
-2026-10-01T17:29:12.7247718Z 
-2026-10-01T17:29:12.7248328Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7249627Z   [41;1m FAILED [49;22m [1mTests\Pg\ScopeResolverTest[22m [90m>[39m it workspace scope shows only accoun…   
-2026-10-01T17:29:12.7251034Z [39;1m  Failed asserting that two arrays are identical.
-2026-10-01T17:29:12.7251750Z   [39;22m[31m-Array &0 [[39m[39;1m
-2026-10-01T17:29:12.7252558Z   [39;22m[31m-    0 => '01a0f883-1620-714a-ad9c-5678639689ad',[39m[39;1m
-2026-10-01T17:29:12.7253320Z   [39;22m[31m-][39m[39;1m
-2026-10-01T17:29:12.7253890Z   [39;22m[32m+Array &0 [][39m[39;1m
-2026-10-01T17:29:12.7254471Z   [39;22m
-2026-10-01T17:29:12.7254756Z 
-2026-10-01T17:29:12.7255208Z   at [32mtests/Pg/ScopeResolverTest.php[39m:[32m247[39m
-2026-10-01T17:29:12.7273731Z     243▕ 
+2026-10-01T17:29:12.7246411Z
+2026-10-01T17:29:12.7247075Z   1   tests/Pg/ScopeResolverTest.php:175
+2026-10-01T17:29:12.7247718Z
+2026-10-01T17:29:12.7248328Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7249627Z    FAILED  Tests\Pg\ScopeResolverTest > it workspace scope shows only accoun…
+2026-10-01T17:29:12.7251034Z   Failed asserting that two arrays are identical.
+2026-10-01T17:29:12.7251750Z   -Array &0 [
+2026-10-01T17:29:12.7252558Z   -    0 => '01a0f883-1620-714a-ad9c-5678639689ad',
+2026-10-01T17:29:12.7253320Z   -]
+2026-10-01T17:29:12.7253890Z   +Array &0 []
+2026-10-01T17:29:12.7254471Z
+2026-10-01T17:29:12.7254756Z
+2026-10-01T17:29:12.7255208Z   at tests/Pg/ScopeResolverTest.php:247
+2026-10-01T17:29:12.7273731Z     243▕
 2026-10-01T17:29:12.7275169Z     244▕     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
 2026-10-01T17:29:12.7276862Z     245▕     $ids = app(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
-2026-10-01T17:29:12.7277983Z     246▕ 
+2026-10-01T17:29:12.7277983Z     246▕
 2026-10-01T17:29:12.7278657Z   ➜ 247▕     expect($ids)->toBe([$accountWide->id]);
 2026-10-01T17:29:12.7279394Z     248▕ });
-2026-10-01T17:29:12.7280167Z     249▕ 
+2026-10-01T17:29:12.7280167Z     249▕
 2026-10-01T17:29:12.7280990Z     250▕ // D117 — cascade_view, negative before positive (Code Guidance).
 2026-10-01T17:29:12.7282267Z     251▕ it('cascade_view off hides child-workspace rows; on shows them', function (): void {
-2026-10-01T17:29:12.7283069Z 
-2026-10-01T17:29:12.7283738Z   [33m1   [39m[39;1mtests/Pg/ScopeResolverTest.php[39;22m:[39;1m247[39;22m
-2026-10-01T17:29:12.7284458Z 
-2026-10-01T17:29:12.7285438Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7286880Z   [41;1m FAILED [49;22m [1mTests\Pg\ScopeResolverTest[22m [90m>[39m it workspace scope on the builder sh…   
-2026-10-01T17:29:12.7288056Z [39;1m  Failed asserting that two arrays are equal.
-2026-10-01T17:29:12.7288768Z   [39;22m[32m Array ([39m[39;1m
-2026-10-01T17:29:12.7289526Z   [39;22m[31m-    '01a0f883-1750-7054-ac06-796023628598'[39m[39;1m
-2026-10-01T17:29:12.7290668Z   [39;22m[31m-    '01a0f883-1750-7054-ac06-796024585d4c'[39m[39;1m
-2026-10-01T17:29:12.7291394Z   [39;22m[32m )[39m[39;1m
-2026-10-01T17:29:12.7291909Z   [39;22m
-2026-10-01T17:29:12.7292179Z 
-2026-10-01T17:29:12.7292632Z   at [32mtests/Pg/ScopeResolverTest.php[39m:[32m228[39m
-2026-10-01T17:29:12.7313354Z     224▕ 
+2026-10-01T17:29:12.7283069Z
+2026-10-01T17:29:12.7283738Z   1   tests/Pg/ScopeResolverTest.php:247
+2026-10-01T17:29:12.7284458Z
+2026-10-01T17:29:12.7285438Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7286880Z    FAILED  Tests\Pg\ScopeResolverTest > it workspace scope on the builder sh…
+2026-10-01T17:29:12.7288056Z   Failed asserting that two arrays are equal.
+2026-10-01T17:29:12.7288768Z    Array (
+2026-10-01T17:29:12.7289526Z   -    '01a0f883-1750-7054-ac06-796023628598'
+2026-10-01T17:29:12.7290668Z   -    '01a0f883-1750-7054-ac06-796024585d4c'
+2026-10-01T17:29:12.7291394Z    )
+2026-10-01T17:29:12.7291909Z
+2026-10-01T17:29:12.7292179Z
+2026-10-01T17:29:12.7292632Z   at tests/Pg/ScopeResolverTest.php:228
+2026-10-01T17:29:12.7313354Z     224▕
 2026-10-01T17:29:12.7314369Z     225▕     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
 2026-10-01T17:29:12.7316279Z     226▕     $ids = app(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
-2026-10-01T17:29:12.7317428Z     227▕ 
+2026-10-01T17:29:12.7317428Z     227▕
 2026-10-01T17:29:12.7318306Z   ➜ 228▕     expect($ids)->toEqualCanonicalizing([$matching->id, $accountWide->id]);
 2026-10-01T17:29:12.7319240Z     229▕ });
-2026-10-01T17:29:12.7319998Z     230▕ 
+2026-10-01T17:29:12.7319998Z     230▕
 2026-10-01T17:29:12.7321221Z     231▕ it('workspace scope shows only account-wide rows when no workspace is narrowed in context (D107)', function (): void {
 2026-10-01T17:29:12.7322865Z     232▕     app()->instance(TenancyManager::class, new FakeTenancyManager(null));
-2026-10-01T17:29:12.7323597Z 
-2026-10-01T17:29:12.7324246Z   [33m1   [39m[39;1mtests/Pg/ScopeResolverTest.php[39;22m:[39;1m228[39;22m
-2026-10-01T17:29:12.7324921Z 
-2026-10-01T17:29:12.7325569Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7326983Z   [41;1m FAILED [49;22m [1mTests\Pg\ScopeResolverTest[22m [90m>[39m it own scope on the builder narrows…    
-2026-10-01T17:29:12.7328155Z [39;1m  Failed asserting that two arrays are identical.
-2026-10-01T17:29:12.7328874Z   [39;22m[31m-Array &0 [[39m[39;1m
-2026-10-01T17:29:12.7329673Z   [39;22m[31m-    0 => '01a0f883-188a-7308-af0b-230cf609743f',[39m[39;1m
-2026-10-01T17:29:12.7330684Z   [39;22m[31m-][39m[39;1m
-2026-10-01T17:29:12.7331264Z   [39;22m[32m+Array &0 [][39m[39;1m
-2026-10-01T17:29:12.7331834Z   [39;22m
-2026-10-01T17:29:12.7332135Z 
-2026-10-01T17:29:12.7332588Z   at [32mtests/Pg/ScopeResolverTest.php[39m:[32m151[39m
-2026-10-01T17:29:12.7352708Z     147▕ 
+2026-10-01T17:29:12.7323597Z
+2026-10-01T17:29:12.7324246Z   1   tests/Pg/ScopeResolverTest.php:228
+2026-10-01T17:29:12.7324921Z
+2026-10-01T17:29:12.7325569Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7326983Z    FAILED  Tests\Pg\ScopeResolverTest > it own scope on the builder narrows…
+2026-10-01T17:29:12.7328155Z   Failed asserting that two arrays are identical.
+2026-10-01T17:29:12.7328874Z   -Array &0 [
+2026-10-01T17:29:12.7329673Z   -    0 => '01a0f883-188a-7308-af0b-230cf609743f',
+2026-10-01T17:29:12.7330684Z   -]
+2026-10-01T17:29:12.7331264Z   +Array &0 []
+2026-10-01T17:29:12.7331834Z
+2026-10-01T17:29:12.7332135Z
+2026-10-01T17:29:12.7332588Z   at tests/Pg/ScopeResolverTest.php:151
+2026-10-01T17:29:12.7352708Z     147▕
 2026-10-01T17:29:12.7353737Z     148▕     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
 2026-10-01T17:29:12.7355336Z     149▕     $ids = app(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
-2026-10-01T17:29:12.7356482Z     150▕ 
+2026-10-01T17:29:12.7356482Z     150▕
 2026-10-01T17:29:12.7357128Z   ➜ 151▕     expect($ids)->toBe([$mine->id]);
 2026-10-01T17:29:12.7357844Z     152▕ });
-2026-10-01T17:29:12.7358588Z     153▕ 
+2026-10-01T17:29:12.7358588Z     153▕
 2026-10-01T17:29:12.7359394Z     154▕ // AC-23 — dept, against a real users/sys_departments fixture.
 2026-10-01T17:29:12.7361149Z     155▕ it("dept scope on the builder narrows to rows owned by users in the principal's own department", function (): void {
-2026-10-01T17:29:12.7362130Z 
-2026-10-01T17:29:12.7362800Z   [33m1   [39m[39;1mtests/Pg/ScopeResolverTest.php[39;22m:[39;1m151[39;22m
-2026-10-01T17:29:12.7363481Z 
-2026-10-01T17:29:12.7364152Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7365524Z   [41;1m FAILED [49;22m [1mTests\Pg\ScopeResolverTest[22m [90m>[39m it resolves the max weight across mu…   
-2026-10-01T17:29:12.7366650Z [39;1m  Failed asserting that two arrays are equal.
-2026-10-01T17:29:12.7367347Z   [39;22m[32m Array ([39m[39;1m
-2026-10-01T17:29:12.7368126Z   [39;22m[31m-    '01a0f883-19ca-73ad-9a3e-d95e76f0fd90'[39m[39;1m
-2026-10-01T17:29:12.7369078Z   [39;22m[31m-    '01a0f883-19cb-72af-94b4-4a869a462a7e'[39m[39;1m
-2026-10-01T17:29:12.7370036Z   [39;22m[32m )[39m[39;1m
-2026-10-01T17:29:12.7370583Z   [39;22m
-2026-10-01T17:29:12.7370888Z 
-2026-10-01T17:29:12.7371355Z   at [32mtests/Pg/ScopeResolverTest.php[39m:[32m329[39m
-2026-10-01T17:29:12.7391746Z     325▕ 
+2026-10-01T17:29:12.7362130Z
+2026-10-01T17:29:12.7362800Z   1   tests/Pg/ScopeResolverTest.php:151
+2026-10-01T17:29:12.7363481Z
+2026-10-01T17:29:12.7364152Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7365524Z    FAILED  Tests\Pg\ScopeResolverTest > it resolves the max weight across mu…
+2026-10-01T17:29:12.7366650Z   Failed asserting that two arrays are equal.
+2026-10-01T17:29:12.7367347Z    Array (
+2026-10-01T17:29:12.7368126Z   -    '01a0f883-19ca-73ad-9a3e-d95e76f0fd90'
+2026-10-01T17:29:12.7369078Z   -    '01a0f883-19cb-72af-94b4-4a869a462a7e'
+2026-10-01T17:29:12.7370036Z    )
+2026-10-01T17:29:12.7370583Z
+2026-10-01T17:29:12.7370888Z
+2026-10-01T17:29:12.7371355Z   at tests/Pg/ScopeResolverTest.php:329
+2026-10-01T17:29:12.7391746Z     325▕
 2026-10-01T17:29:12.7392767Z     326▕     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
 2026-10-01T17:29:12.7394377Z     327▕     $ids = app(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
-2026-10-01T17:29:12.7395516Z     328▕ 
+2026-10-01T17:29:12.7395516Z     328▕
 2026-10-01T17:29:12.7396317Z   ➜ 329▕     expect($ids)->toEqualCanonicalizing([$mine->id, $other->id]);
 2026-10-01T17:29:12.7397184Z     330▕ });
-2026-10-01T17:29:12.7397704Z     331▕ 
+2026-10-01T17:29:12.7397704Z     331▕
 2026-10-01T17:29:12.7398616Z     332▕ // AC-24 — a context row narrows (to none) the builder scope for its own context only.
 2026-10-01T17:29:12.7400305Z     333▕ it('a context row narrows the builder scope for its own context only', function (): void {
-2026-10-01T17:29:12.7401361Z 
-2026-10-01T17:29:12.7402056Z   [33m1   [39m[39;1mtests/Pg/ScopeResolverTest.php[39;22m:[39;1m329[39;22m
-2026-10-01T17:29:12.7402740Z 
-2026-10-01T17:29:12.7403380Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7404683Z   [41;1m FAILED [49;22m [1mTests\Pg\ScopeResolverTest[22m [90m>[39m it MatrixValidator warns when a matr…   
-2026-10-01T17:29:12.7405767Z [39;1m  Expecting [] not to be empty .[39;22m
-2026-10-01T17:29:12.7406222Z 
-2026-10-01T17:29:12.7406691Z   at [32mtests/Pg/ScopeResolverTest.php[39m:[32m562[39m
+2026-10-01T17:29:12.7401361Z
+2026-10-01T17:29:12.7402056Z   1   tests/Pg/ScopeResolverTest.php:329
+2026-10-01T17:29:12.7402740Z
+2026-10-01T17:29:12.7403380Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7404683Z    FAILED  Tests\Pg\ScopeResolverTest > it MatrixValidator warns when a matr…
+2026-10-01T17:29:12.7405767Z   Expecting [] not to be empty .
+2026-10-01T17:29:12.7406222Z
+2026-10-01T17:29:12.7406691Z   at tests/Pg/ScopeResolverTest.php:562
 2026-10-01T17:29:12.7429160Z     558▕     RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.drift', 'action' => 'read', 'scope' => 'own']);
-2026-10-01T17:29:12.7430647Z     559▕ 
+2026-10-01T17:29:12.7430647Z     559▕
 2026-10-01T17:29:12.7432001Z     560▕     $warnings = (new MatrixValidator(app(EntityRegistry::class)))->validate(RoleMatrixData::role((string) $role->getKey()));
-2026-10-01T17:29:12.7433290Z     561▕ 
+2026-10-01T17:29:12.7433290Z     561▕
 2026-10-01T17:29:12.7433926Z   ➜ 562▕     expect($warnings)->not->toBeEmpty()
 2026-10-01T17:29:12.7434820Z     563▕         ->and($warnings[0])->toContain('crm.drift')
 2026-10-01T17:29:12.7435777Z     564▕         ->and($warnings[0])->toContain('ownable');
 2026-10-01T17:29:12.7436546Z     565▕ });
 2026-10-01T17:29:12.7437045Z     566▕
-2026-10-01T17:29:12.7437349Z 
-2026-10-01T17:29:12.7438018Z   [33m1   [39m[39;1mtests/Pg/ScopeResolverTest.php[39;22m:[39;1m562[39;22m
-2026-10-01T17:29:12.7438694Z 
-2026-10-01T17:29:12.7439358Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7440987Z   [41;1m FAILED [49;22m [1mTests\Pg\ScopeResolverTest[22m [90m>[39m it a context row narrows the builder…   
-2026-10-01T17:29:12.7442285Z [39;1m  Failed asserting that actual size 0 matches expected size 1.[39;22m
-2026-10-01T17:29:12.7442928Z 
-2026-10-01T17:29:12.7443628Z   at [32mtests/Pg/ScopeResolverTest.php[39m:[32m350[39m
-2026-10-01T17:29:12.7466018Z     346▕ 
+2026-10-01T17:29:12.7437349Z
+2026-10-01T17:29:12.7438018Z   1   tests/Pg/ScopeResolverTest.php:562
+2026-10-01T17:29:12.7438694Z
+2026-10-01T17:29:12.7439358Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7440987Z    FAILED  Tests\Pg\ScopeResolverTest > it a context row narrows the builder…
+2026-10-01T17:29:12.7442285Z   Failed asserting that actual size 0 matches expected size 1.
+2026-10-01T17:29:12.7442928Z
+2026-10-01T17:29:12.7443628Z   at tests/Pg/ScopeResolverTest.php:350
+2026-10-01T17:29:12.7466018Z     346▕
 2026-10-01T17:29:12.7467292Z     347▕     $baseIds = app(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
 2026-10-01T17:29:12.7469471Z     348▕     $narrowedIds = app(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read', new RecordContext('stage', $stageId))->pluck('id')->all();
-2026-10-01T17:29:12.7471156Z     349▕ 
+2026-10-01T17:29:12.7471156Z     349▕
 2026-10-01T17:29:12.7471781Z   ➜ 350▕     expect($baseIds)->toHaveCount(1)
 2026-10-01T17:29:12.7472615Z     351▕         ->and($narrowedIds)->toBeEmpty();
 2026-10-01T17:29:12.7473431Z     352▕ });
-2026-10-01T17:29:12.7473962Z     353▕ 
+2026-10-01T17:29:12.7473962Z     353▕
 2026-10-01T17:29:12.7475062Z     354▕ // AC-25 — agent principals degrade own/dept/dept_tree to none on the builder path; account does not degrade.
-2026-10-01T17:29:12.7475990Z 
-2026-10-01T17:29:12.7476667Z   [33m1   [39m[39;1mtests/Pg/ScopeResolverTest.php[39;22m:[39;1m350[39;22m
-2026-10-01T17:29:12.7477386Z 
-2026-10-01T17:29:12.7478052Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7479347Z   [41;1m FAILED [49;22m [1mTests\Pg\ScopeResolverTest[22m [90m>[39m it cascade_view off hides child-work…   
-2026-10-01T17:29:12.7481021Z [39;1m  Failed asserting that an array contains '01a0f883-22ff-72c1-9018-ec24a42c2bb3'.[39;22m
-2026-10-01T17:29:12.7481783Z 
-2026-10-01T17:29:12.7482236Z   at [32mtests/Pg/ScopeResolverTest.php[39m:[32m274[39m
-2026-10-01T17:29:12.7503509Z     270▕ 
+2026-10-01T17:29:12.7475990Z
+2026-10-01T17:29:12.7476667Z   1   tests/Pg/ScopeResolverTest.php:350
+2026-10-01T17:29:12.7477386Z
+2026-10-01T17:29:12.7478052Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7479347Z    FAILED  Tests\Pg\ScopeResolverTest > it cascade_view off hides child-work…
+2026-10-01T17:29:12.7481021Z   Failed asserting that an array contains '01a0f883-22ff-72c1-9018-ec24a42c2bb3'.
+2026-10-01T17:29:12.7481783Z
+2026-10-01T17:29:12.7482236Z   at tests/Pg/ScopeResolverTest.php:274
+2026-10-01T17:29:12.7503509Z     270▕
 2026-10-01T17:29:12.7505365Z     271▕     DB::table('wsp_workspaces')->where('id', $parentWs)->update(['settings' => json_encode(['cascade_view' => true], JSON_THROW_ON_ERROR)]);
-2026-10-01T17:29:12.7506709Z     272▕ 
+2026-10-01T17:29:12.7506709Z     272▕
 2026-10-01T17:29:12.7507907Z     273▕     $idsOn = app(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
 2026-10-01T17:29:12.7509196Z   ➜ 274▕     expect($idsOn)->toContain($childRow->id);
 2026-10-01T17:29:12.7510480Z     275▕ });
-2026-10-01T17:29:12.7511038Z     276▕ 
+2026-10-01T17:29:12.7511038Z     276▕
 2026-10-01T17:29:12.7511939Z     277▕ // D109 — account lifts EXACTLY the pinned scope class, never an unrelated one.
 2026-10-01T17:29:12.7513589Z     278▕ it('account scope lifts exactly the pinned workspace scope class, never an unrelated global scope', function (): void {
-2026-10-01T17:29:12.7514596Z 
-2026-10-01T17:29:12.7515284Z   [33m1   [39m[39;1mtests/Pg/ScopeResolverTest.php[39;22m:[39;1m274[39;22m
-2026-10-01T17:29:12.7515981Z 
-2026-10-01T17:29:12.7516626Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7517927Z   [41;1m FAILED [49;22m [1mTests\Pg\ScopeResolverTest[22m [90m>[39m it dept_tree scope on the builder na…   
-2026-10-01T17:29:12.7519080Z [39;1m  Failed asserting that two arrays are identical.
-2026-10-01T17:29:12.7520028Z   [39;22m[31m-Array &0 [[39m[39;1m
-2026-10-01T17:29:12.7520857Z   [39;22m[31m-    0 => '01a0f883-243a-71e2-98ad-3d045935fbd7',[39m[39;1m
-2026-10-01T17:29:12.7521861Z   [39;22m[31m-][39m[39;1m
-2026-10-01T17:29:12.7522475Z   [39;22m[32m+Array &0 [][39m[39;1m
-2026-10-01T17:29:12.7523047Z   [39;22m
-2026-10-01T17:29:12.7523351Z 
-2026-10-01T17:29:12.7523815Z   at [32mtests/Pg/ScopeResolverTest.php[39m:[32m203[39m
+2026-10-01T17:29:12.7514596Z
+2026-10-01T17:29:12.7515284Z   1   tests/Pg/ScopeResolverTest.php:274
+2026-10-01T17:29:12.7515981Z
+2026-10-01T17:29:12.7516626Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7517927Z    FAILED  Tests\Pg\ScopeResolverTest > it dept_tree scope on the builder na…
+2026-10-01T17:29:12.7519080Z   Failed asserting that two arrays are identical.
+2026-10-01T17:29:12.7520028Z   -Array &0 [
+2026-10-01T17:29:12.7520857Z   -    0 => '01a0f883-243a-71e2-98ad-3d045935fbd7',
+2026-10-01T17:29:12.7521861Z   -]
+2026-10-01T17:29:12.7522475Z   +Array &0 []
+2026-10-01T17:29:12.7523047Z
+2026-10-01T17:29:12.7523351Z
+2026-10-01T17:29:12.7523815Z   at tests/Pg/ScopeResolverTest.php:203
 2026-10-01T17:29:12.7544208Z     199▕     $ids = app(ScopeResolver::class)->apply(Deal::query(), $identity, 'crm.deal', 'read')->pluck('id')->all();
 2026-10-01T17:29:12.7545524Z     200▕     $queries = DB::getQueryLog();
 2026-10-01T17:29:12.7546358Z     201▕     DB::disableQueryLog();
-2026-10-01T17:29:12.7547026Z     202▕ 
+2026-10-01T17:29:12.7547026Z     202▕
 2026-10-01T17:29:12.7547672Z   ➜ 203▕     expect($ids)->toBe([$inSubtree->id])
 2026-10-01T17:29:12.7549056Z     204▕         ->and(collect($queries)->filter(fn (array $q): bool => str_contains((string) $q['query'], '<@'))->count())->toBe(1);
 2026-10-01T17:29:12.7550507Z     205▕ });
-2026-10-01T17:29:12.7551026Z     206▕ 
+2026-10-01T17:29:12.7551026Z     206▕
 2026-10-01T17:29:12.7551763Z     207▕ // AC-23/AC-20 — workspace, plus D107 no-context narrowing.
-2026-10-01T17:29:12.7552423Z 
-2026-10-01T17:29:12.7553089Z   [33m1   [39m[39;1mtests/Pg/ScopeResolverTest.php[39;22m:[39;1m203[39;22m
-2026-10-01T17:29:12.7553778Z 
-2026-10-01T17:29:12.7554418Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7555825Z   [41;1m FAILED [49;22m [1mTests\Pg\ScopeResolverTest[22m [90m>[39m it matches real department records t…   
-2026-10-01T17:29:12.7557065Z [39;1m  Failed asserting that two arrays are identical.
-2026-10-01T17:29:12.7557798Z   [39;22m[31m-Array &0 [[39m[39;1m
-2026-10-01T17:29:12.7558602Z   [39;22m[31m-    0 => '01a0f883-3cd2-7266-a3a7-cca48fe3cb4e',[39m[39;1m
-2026-10-01T17:29:12.7559543Z   [39;22m[31m-    1 => '01a0f883-3cd3-706e-88c6-2764b4f2987d',[39m[39;1m
-2026-10-01T17:29:12.7560550Z   [39;22m[31m-][39m[39;1m
-2026-10-01T17:29:12.7561144Z   [39;22m[32m+Array &0 [][39m[39;1m
-2026-10-01T17:29:12.7561711Z   [39;22m
-2026-10-01T17:29:12.7562218Z 
-2026-10-01T17:29:12.7562694Z   at [32mtests/Pg/ScopeResolverTest.php[39m:[32m443[39m
+2026-10-01T17:29:12.7552423Z
+2026-10-01T17:29:12.7553089Z   1   tests/Pg/ScopeResolverTest.php:203
+2026-10-01T17:29:12.7553778Z
+2026-10-01T17:29:12.7554418Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7555825Z    FAILED  Tests\Pg\ScopeResolverTest > it matches real department records t…
+2026-10-01T17:29:12.7557065Z   Failed asserting that two arrays are identical.
+2026-10-01T17:29:12.7557798Z   -Array &0 [
+2026-10-01T17:29:12.7558602Z   -    0 => '01a0f883-3cd2-7266-a3a7-cca48fe3cb4e',
+2026-10-01T17:29:12.7559543Z   -    1 => '01a0f883-3cd3-706e-88c6-2764b4f2987d',
+2026-10-01T17:29:12.7560550Z   -]
+2026-10-01T17:29:12.7561144Z   +Array &0 []
+2026-10-01T17:29:12.7561711Z
+2026-10-01T17:29:12.7562218Z
+2026-10-01T17:29:12.7562694Z   at tests/Pg/ScopeResolverTest.php:443
 2026-10-01T17:29:12.7583047Z     439▕         ->sort()
 2026-10-01T17:29:12.7583752Z     440▕         ->values()
 2026-10-01T17:29:12.7584408Z     441▕         ->all();
-2026-10-01T17:29:12.7585012Z     442▕ 
+2026-10-01T17:29:12.7585012Z     442▕
 2026-10-01T17:29:12.7585672Z   ➜ 443▕     expect($builderIds)->toBe($expectedIds)
 2026-10-01T17:29:12.7586581Z     444▕         ->and($recordIds)->toBe($expectedIds);
 2026-10-01T17:29:12.7587328Z     445▕ })->with([
 2026-10-01T17:29:12.7588323Z     446▕     'dept: same department only' => [Scope::Dept, ['same']],
 2026-10-01T17:29:12.7589626Z     447▕     'dept_tree: same department and descendant' => [Scope::DeptTree, ['same', 'child']],
-2026-10-01T17:29:12.7590690Z 
-2026-10-01T17:29:12.7591367Z   [33m1   [39m[39;1mtests/Pg/ScopeResolverTest.php[39;22m:[39;1m443[39;22m
-2026-10-01T17:29:12.7592072Z 
-2026-10-01T17:29:12.7592753Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7594218Z   [41;1m FAILED [49;22m [1mTests\Pg\ScopeResolverTest[22m [90m>[39m it matches real department records t…   
-2026-10-01T17:29:12.7595484Z [39;1m  Failed asserting that two arrays are identical.
-2026-10-01T17:29:12.7596239Z   [39;22m[31m-Array &0 [[39m[39;1m
-2026-10-01T17:29:12.7597051Z   [39;22m[31m-    0 => '01a0f883-3e0e-733b-b9ff-bcf34db53fa8',[39m[39;1m
-2026-10-01T17:29:12.7597821Z   [39;22m[31m-][39m[39;1m
-2026-10-01T17:29:12.7598399Z   [39;22m[32m+Array &0 [][39m[39;1m
-2026-10-01T17:29:12.7598966Z   [39;22m
-2026-10-01T17:29:12.7599259Z 
-2026-10-01T17:29:12.7599717Z   at [32mtests/Pg/ScopeResolverTest.php[39m:[32m443[39m
+2026-10-01T17:29:12.7590690Z
+2026-10-01T17:29:12.7591367Z   1   tests/Pg/ScopeResolverTest.php:443
+2026-10-01T17:29:12.7592072Z
+2026-10-01T17:29:12.7592753Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7594218Z    FAILED  Tests\Pg\ScopeResolverTest > it matches real department records t…
+2026-10-01T17:29:12.7595484Z   Failed asserting that two arrays are identical.
+2026-10-01T17:29:12.7596239Z   -Array &0 [
+2026-10-01T17:29:12.7597051Z   -    0 => '01a0f883-3e0e-733b-b9ff-bcf34db53fa8',
+2026-10-01T17:29:12.7597821Z   -]
+2026-10-01T17:29:12.7598399Z   +Array &0 []
+2026-10-01T17:29:12.7598966Z
+2026-10-01T17:29:12.7599259Z
+2026-10-01T17:29:12.7599717Z   at tests/Pg/ScopeResolverTest.php:443
 2026-10-01T17:29:12.7621865Z     439▕         ->sort()
 2026-10-01T17:29:12.7622560Z     440▕         ->values()
 2026-10-01T17:29:12.7623201Z     441▕         ->all();
-2026-10-01T17:29:12.7623784Z     442▕ 
+2026-10-01T17:29:12.7623784Z     442▕
 2026-10-01T17:29:12.7624444Z   ➜ 443▕     expect($builderIds)->toBe($expectedIds)
 2026-10-01T17:29:12.7625342Z     444▕         ->and($recordIds)->toBe($expectedIds);
 2026-10-01T17:29:12.7626389Z     445▕ })->with([
 2026-10-01T17:29:12.7627280Z     446▕     'dept: same department only' => [Scope::Dept, ['same']],
 2026-10-01T17:29:12.7628608Z     447▕     'dept_tree: same department and descendant' => [Scope::DeptTree, ['same', 'child']],
-2026-10-01T17:29:12.7629412Z 
-2026-10-01T17:29:12.7630329Z   [33m1   [39m[39;1mtests/Pg/ScopeResolverTest.php[39;22m:[39;1m443[39;22m
-2026-10-01T17:29:12.7631028Z 
-2026-10-01T17:29:12.7631746Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7633140Z   [41;1m FAILED [49;22m [1mTests\Pg\RoleMatrixCompilerTest[22m [90m>[39m it leaves no new keys and no ve…   
-2026-10-01T17:29:12.7634311Z [39;1m  Exception [RuntimeException] not thrown.[39;22m
-2026-10-01T17:29:12.7634828Z 
-2026-10-01T17:29:12.7635341Z   at [32mtests/Pg/RoleMatrixCompilerTest.php[39m:[32m137[39m
+2026-10-01T17:29:12.7629412Z
+2026-10-01T17:29:12.7630329Z   1   tests/Pg/ScopeResolverTest.php:443
+2026-10-01T17:29:12.7631028Z
+2026-10-01T17:29:12.7631746Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7633140Z    FAILED  Tests\Pg\RoleMatrixCompilerTest > it leaves no new keys and no ve…
+2026-10-01T17:29:12.7634311Z   Exception [RuntimeException] not thrown.
+2026-10-01T17:29:12.7634828Z
+2026-10-01T17:29:12.7635341Z   at tests/Pg/RoleMatrixCompilerTest.php:137
 2026-10-01T17:29:12.7646717Z     133▕         }
 2026-10-01T17:29:12.7647349Z     134▕     });
-2026-10-01T17:29:12.7647929Z     135▕ 
+2026-10-01T17:29:12.7647929Z     135▕
 2026-10-01T17:29:12.7649281Z     136▕     expect(fn () => (new DatabaseRoleMatrixCompiler($scopeMapVersion, App::make(AuthOptions::class)))->compile($role->id))
 2026-10-01T17:29:12.7651325Z   ➜ 137▕         ->toThrow(RuntimeException::class, 'injected mid-compile failure');
-2026-10-01T17:29:12.7652266Z     138▕ 
+2026-10-01T17:29:12.7652266Z     138▕
 2026-10-01T17:29:12.7653248Z     139▕     $azguardRole = AzGuardRoleModel::query()->where('name', $role->slug)->first();
-2026-10-01T17:29:12.7654242Z     140▕ 
+2026-10-01T17:29:12.7654242Z     140▕
 2026-10-01T17:29:12.7654858Z     141▕     expect($azguardRole)->toBeNull()
-2026-10-01T17:29:12.7655373Z 
-2026-10-01T17:29:12.7656083Z   [33m1   [39m[39;1mtests/Pg/RoleMatrixCompilerTest.php[39;22m:[39;1m137[39;22m
-2026-10-01T17:29:12.7656803Z 
-2026-10-01T17:29:12.7657478Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7658893Z   [41;1m FAILED [49;22m [1mTests\Pg\RoleMatrixCompilerTest[22m [90m>[39m it deduplicates identical keys…    
-2026-10-01T17:29:12.7660653Z [39;1m  Failed asserting that 0 is identical to 1.[39;22m
-2026-10-01T17:29:12.7661179Z 
-2026-10-01T17:29:12.7661695Z   at [32mtests/Pg/RoleMatrixCompilerTest.php[39m:[32m112[39m
-2026-10-01T17:29:12.7672962Z     108▕ 
+2026-10-01T17:29:12.7655373Z
+2026-10-01T17:29:12.7656083Z   1   tests/Pg/RoleMatrixCompilerTest.php:137
+2026-10-01T17:29:12.7656803Z
+2026-10-01T17:29:12.7657478Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7658893Z    FAILED  Tests\Pg\RoleMatrixCompilerTest > it deduplicates identical keys…
+2026-10-01T17:29:12.7660653Z   Failed asserting that 0 is identical to 1.
+2026-10-01T17:29:12.7661179Z
+2026-10-01T17:29:12.7661695Z   at tests/Pg/RoleMatrixCompilerTest.php:112
+2026-10-01T17:29:12.7672962Z     108▕
 2026-10-01T17:29:12.7673670Z     109▕     makeCompiler()->compile($role->id);
-2026-10-01T17:29:12.7674410Z     110▕ 
+2026-10-01T17:29:12.7674410Z     110▕
 2026-10-01T17:29:12.7675462Z     111▕     $azguardRole = AzGuardRoleModel::query()->where('name', $role->slug)->firstOrFail();
 2026-10-01T17:29:12.7677052Z   ➜ 112▕     expect(RolePermission::query()->where('role_id', $azguardRole->id)->count())->toBe(1);
 2026-10-01T17:29:12.7678096Z     113▕ });
-2026-10-01T17:29:12.7678626Z     114▕ 
+2026-10-01T17:29:12.7678626Z     114▕
 2026-10-01T17:29:12.7679619Z     115▕ // AC-22 — a failure mid-compile leaves neither new keys nor a bumped version (B-11 §7.3 п.8).
 2026-10-01T17:29:12.7681494Z     116▕ it('leaves no new keys and no version bump when compilation fails mid-transaction', function (): void {
-2026-10-01T17:29:12.7682428Z 
-2026-10-01T17:29:12.7683147Z   [33m1   [39m[39;1mtests/Pg/RoleMatrixCompilerTest.php[39;22m:[39;1m112[39;22m
-2026-10-01T17:29:12.7683895Z 
-2026-10-01T17:29:12.7684542Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7685894Z   [41;1m FAILED [49;22m [1mTests\Pg\RoleMatrixCompilerTest[22m [90m>[39m it exposes compiled keys throug…   
-2026-10-01T17:29:12.7687196Z [39;1m  Failed asserting that an array contains 'app.crm.deal.read'.[39;22m
-2026-10-01T17:29:12.7687847Z 
-2026-10-01T17:29:12.7688342Z   at [32mtests/Pg/RoleMatrixCompilerTest.php[39m:[32m216[39m
+2026-10-01T17:29:12.7682428Z
+2026-10-01T17:29:12.7683147Z   1   tests/Pg/RoleMatrixCompilerTest.php:112
+2026-10-01T17:29:12.7683895Z
+2026-10-01T17:29:12.7684542Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7685894Z    FAILED  Tests\Pg\RoleMatrixCompilerTest > it exposes compiled keys throug…
+2026-10-01T17:29:12.7687196Z   Failed asserting that an array contains 'app.crm.deal.read'.
+2026-10-01T17:29:12.7687847Z
+2026-10-01T17:29:12.7688342Z   at tests/Pg/RoleMatrixCompilerTest.php:216
 2026-10-01T17:29:12.7699431Z     212▕         ->and($builder->supports('admin'))->toBeFalse();
-2026-10-01T17:29:12.7700562Z     213▕ 
+2026-10-01T17:29:12.7700562Z     213▕
 2026-10-01T17:29:12.7701600Z     214▕     $keys = array_map(static fn ($definition): string => $definition->key(), $builder->build('app'));
-2026-10-01T17:29:12.7702671Z     215▕ 
+2026-10-01T17:29:12.7702671Z     215▕
 2026-10-01T17:29:12.7703596Z   ➜ 216▕     expect($keys)->toContain('app.crm.deal.read')
 2026-10-01T17:29:12.7720887Z     217▕         ->and($keys)->not->toContain('app.crm.deal.delete');
 2026-10-01T17:29:12.7734177Z     218▕ });
-2026-10-01T17:29:12.7744768Z     219▕ 
+2026-10-01T17:29:12.7744768Z     219▕
 2026-10-01T17:29:12.7745720Z     220▕ // AC-27, negative first (Code Guidance anti-self-deception): before ActiveEntityFilter
-2026-10-01T17:29:12.7746475Z 
-2026-10-01T17:29:12.7747149Z   [33m1   [39m[39;1mtests/Pg/RoleMatrixCompilerTest.php[39;22m:[39;1m216[39;22m
-2026-10-01T17:29:12.7747815Z 
-2026-10-01T17:29:12.7748410Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7749692Z   [41;1m FAILED [49;22m [1mTests\Pg\RoleMatrixCompilerTest[22m [90m>[39m it recompileAll is idempotent a…   
-2026-10-01T17:29:12.7751118Z [39;1m  Failed asserting that 0 is identical to 1.[39;22m
-2026-10-01T17:29:12.7751621Z 
-2026-10-01T17:29:12.7752100Z   at [32mtests/Pg/RoleMatrixCompilerTest.php[39m:[32m164[39m
+2026-10-01T17:29:12.7746475Z
+2026-10-01T17:29:12.7747149Z   1   tests/Pg/RoleMatrixCompilerTest.php:216
+2026-10-01T17:29:12.7747815Z
+2026-10-01T17:29:12.7748410Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7749692Z    FAILED  Tests\Pg\RoleMatrixCompilerTest > it recompileAll is idempotent a…
+2026-10-01T17:29:12.7751118Z   Failed asserting that 0 is identical to 1.
+2026-10-01T17:29:12.7751621Z
+2026-10-01T17:29:12.7752100Z   at tests/Pg/RoleMatrixCompilerTest.php:164
 2026-10-01T17:29:12.7753214Z     160▕     $compiler->recompileAll();
 2026-10-01T17:29:12.7753899Z     161▕     $compiler->recompileAll();
-2026-10-01T17:29:12.7754486Z     162▕ 
+2026-10-01T17:29:12.7754486Z     162▕
 2026-10-01T17:29:12.7755416Z     163▕     $azguardRole = AzGuardRoleModel::query()->where('name', 'owner')->firstOrFail();
 2026-10-01T17:29:12.7756806Z   ➜ 164▕     expect(RolePermission::query()->where('role_id', $azguardRole->id)->count())->toBe(1);
 2026-10-01T17:29:12.7757713Z     165▕ });
-2026-10-01T17:29:12.7758156Z     166▕ 
+2026-10-01T17:29:12.7758156Z     166▕
 2026-10-01T17:29:12.7759221Z     167▕ // B-11 §5.5 / D103 — a role assignable to agent/api_key with own/dept scope gets a validator warning, never an exception.
 2026-10-01T17:29:12.7761183Z     168▕ it('warns (does not throw) when a role assignable to agent uses own/dept scope', function (): void {
-2026-10-01T17:29:12.7762050Z 
-2026-10-01T17:29:12.7762737Z   [33m1   [39m[39;1mtests/Pg/RoleMatrixCompilerTest.php[39;22m:[39;1m164[39;22m
-2026-10-01T17:29:12.7763488Z 
-2026-10-01T17:29:12.7764193Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7765685Z   [41;1m FAILED [49;22m [1mTests\Pg\RoleMatrixCompilerTest[22m [90m>[39m it compiles matrix rows with sc…   
-2026-10-01T17:29:12.7767026Z [39;1m  Failed asserting that two arrays are identical.
-2026-10-01T17:29:12.7767856Z   [39;22m[31m-Array &0 [[39m[39;1m
-2026-10-01T17:29:12.7768654Z   [39;22m[31m-    0 => 'app.crm.deal.read',[39m[39;1m
-2026-10-01T17:29:12.7769414Z   [39;22m[31m-][39m[39;1m
-2026-10-01T17:29:12.7770492Z   [39;22m[32m+Array &0 [][39m[39;1m
-2026-10-01T17:29:12.7771147Z   [39;22m
-2026-10-01T17:29:12.7771462Z 
-2026-10-01T17:29:12.7772006Z   at [32mtests/Pg/RoleMatrixCompilerTest.php[39m:[32m91[39m
-2026-10-01T17:29:12.7772969Z      87▕ 
+2026-10-01T17:29:12.7762050Z
+2026-10-01T17:29:12.7762737Z   1   tests/Pg/RoleMatrixCompilerTest.php:164
+2026-10-01T17:29:12.7763488Z
+2026-10-01T17:29:12.7764193Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7765685Z    FAILED  Tests\Pg\RoleMatrixCompilerTest > it compiles matrix rows with sc…
+2026-10-01T17:29:12.7767026Z   Failed asserting that two arrays are identical.
+2026-10-01T17:29:12.7767856Z   -Array &0 [
+2026-10-01T17:29:12.7768654Z   -    0 => 'app.crm.deal.read',
+2026-10-01T17:29:12.7769414Z   -]
+2026-10-01T17:29:12.7770492Z   +Array &0 []
+2026-10-01T17:29:12.7771147Z
+2026-10-01T17:29:12.7771462Z
+2026-10-01T17:29:12.7772006Z   at tests/Pg/RoleMatrixCompilerTest.php:91
+2026-10-01T17:29:12.7772969Z      87▕
 2026-10-01T17:29:12.7774024Z      88▕     $azguardRole = AzGuardRoleModel::query()->where('name', $role->slug)->firstOrFail();
-2026-10-01T17:29:12.7775033Z      89▕ 
+2026-10-01T17:29:12.7775033Z      89▕
 2026-10-01T17:29:12.7776156Z      90▕     expect(RolePermission::query()->where('role_id', $azguardRole->id)->pluck('permission_key')->all())
 2026-10-01T17:29:12.7777536Z   ➜  91▕         ->toBe(['app.crm.deal.read']);
-2026-10-01T17:29:12.7778194Z      92▕ 
+2026-10-01T17:29:12.7778194Z      92▕
 2026-10-01T17:29:12.7778680Z      93▕     $role->refresh();
 2026-10-01T17:29:12.7779420Z      94▕     expect($role->azguard_role_id)->toBe($azguardRole->id);
 2026-10-01T17:29:12.7780391Z      95▕ });
-2026-10-01T17:29:12.7780671Z 
-2026-10-01T17:29:12.7781261Z   [33m1   [39m[39;1mtests/Pg/RoleMatrixCompilerTest.php[39;22m:[39;1m91[39;22m
-2026-10-01T17:29:12.7781910Z 
-2026-10-01T17:29:12.7782490Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7783767Z   [41;1m FAILED [49;22m [1mTests\Pg\RoleMatrixCompilerTest[22m [90m>[39m it recompiles the key once the…    
-2026-10-01T17:29:12.7784934Z [39;1m  Failed asserting that two arrays are identical.
-2026-10-01T17:29:12.7785639Z   [39;22m[31m-Array &0 [[39m[39;1m
-2026-10-01T17:29:12.7786353Z   [39;22m[31m-    0 => 'app.crm.deal.read',[39m[39;1m
-2026-10-01T17:29:12.7787067Z   [39;22m[31m-][39m[39;1m
-2026-10-01T17:29:12.7787641Z   [39;22m[32m+Array &0 [][39m[39;1m
-2026-10-01T17:29:12.7788201Z   [39;22m
-2026-10-01T17:29:12.7788475Z 
-2026-10-01T17:29:12.7788968Z   at [32mtests/Pg/RoleMatrixCompilerTest.php[39m:[32m283[39m
+2026-10-01T17:29:12.7780671Z
+2026-10-01T17:29:12.7781261Z   1   tests/Pg/RoleMatrixCompilerTest.php:91
+2026-10-01T17:29:12.7781910Z
+2026-10-01T17:29:12.7782490Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7783767Z    FAILED  Tests\Pg\RoleMatrixCompilerTest > it recompiles the key once the…
+2026-10-01T17:29:12.7784934Z   Failed asserting that two arrays are identical.
+2026-10-01T17:29:12.7785639Z   -Array &0 [
+2026-10-01T17:29:12.7786353Z   -    0 => 'app.crm.deal.read',
+2026-10-01T17:29:12.7787067Z   -]
+2026-10-01T17:29:12.7787641Z   +Array &0 []
+2026-10-01T17:29:12.7788201Z
+2026-10-01T17:29:12.7788475Z
+2026-10-01T17:29:12.7788968Z   at tests/Pg/RoleMatrixCompilerTest.php:283
 2026-10-01T17:29:12.7794539Z     279▕     app()->instance(ModuleRegistry::class, new FakeModuleRegistry(['corex/access-tests']));
 2026-10-01T17:29:12.7795751Z     280▕     makeCompiler()->compile($role->id);
-2026-10-01T17:29:12.7796485Z     281▕ 
+2026-10-01T17:29:12.7796485Z     281▕
 2026-10-01T17:29:12.7797622Z     282▕     expect(RolePermission::query()->where('role_id', $azguardRole->id)->pluck('permission_key')->all())
 2026-10-01T17:29:12.7798850Z   ➜ 283▕         ->toBe(['app.crm.deal.read'])
 2026-10-01T17:29:12.7800279Z     284▕         ->and(RoleMatrixRow::query()->where('role_id', $role->id)->count())->toBe(1);
 2026-10-01T17:29:12.7801286Z     285▕ });
-2026-10-01T17:29:12.7801806Z     286▕ 
+2026-10-01T17:29:12.7801806Z     286▕
 2026-10-01T17:29:12.7802850Z     287▕ // Parity (Implementation Rules — ONE filter, both call sites): MatrixPermissionCatalogBuilder
-2026-10-01T17:29:12.7803988Z 
-2026-10-01T17:29:12.7804707Z   [33m1   [39m[39;1mtests/Pg/RoleMatrixCompilerTest.php[39;22m:[39;1m283[39;22m
-2026-10-01T17:29:12.7805456Z 
-2026-10-01T17:29:12.7806100Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7807417Z   [41;1m FAILED [49;22m [1mTests\Pg\PrincipalTypesTest[22m [90m>[39m it honours a not-yet-expired assign…   
-2026-10-01T17:29:12.7808553Z [39;1m  Failed asserting that false is true.[39;22m
-2026-10-01T17:29:12.7809048Z 
-2026-10-01T17:29:12.7809513Z   at [32mtests/Pg/PrincipalTypesTest.php[39m:[32m157[39m
-2026-10-01T17:29:12.7815388Z     153▕ 
+2026-10-01T17:29:12.7803988Z
+2026-10-01T17:29:12.7804707Z   1   tests/Pg/RoleMatrixCompilerTest.php:283
+2026-10-01T17:29:12.7805456Z
+2026-10-01T17:29:12.7806100Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7807417Z    FAILED  Tests\Pg\PrincipalTypesTest > it honours a not-yet-expired assign…
+2026-10-01T17:29:12.7808553Z   Failed asserting that false is true.
+2026-10-01T17:29:12.7809048Z
+2026-10-01T17:29:12.7809513Z   at tests/Pg/PrincipalTypesTest.php:157
+2026-10-01T17:29:12.7815388Z     153▕
 2026-10-01T17:29:12.7816398Z     154▕     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
 2026-10-01T17:29:12.7817569Z     155▕     $checker = app(AccessChecker::class);
-2026-10-01T17:29:12.7818323Z     156▕ 
+2026-10-01T17:29:12.7818323Z     156▕
 2026-10-01T17:29:12.7819206Z   ➜ 157▕     expect($checker->allowed($identity, 'crm.deal', 'read'))->toBeTrue()
 2026-10-01T17:29:12.7820906Z     158▕         ->and($checker->scopeFor($identity, 'crm.deal', 'read'))->toBe(Scope::Account);
 2026-10-01T17:29:12.7821901Z     159▕ });
 2026-10-01T17:29:12.7822397Z     160▕
-2026-10-01T17:29:12.7822712Z 
-2026-10-01T17:29:12.7823375Z   [33m1   [39m[39;1mtests/Pg/PrincipalTypesTest.php[39;22m:[39;1m157[39;22m
-2026-10-01T17:29:12.7824092Z 
-2026-10-01T17:29:12.7824766Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7826181Z   [41;1m FAILED [49;22m [1mTests\Pg\PrincipalTypesTest[22m [90m>[39m it resolves allowed() for an api_ke…   
-2026-10-01T17:29:12.7827425Z [39;1m  Failed asserting that false is true.[39;22m
-2026-10-01T17:29:12.7827954Z 
-2026-10-01T17:29:12.7828415Z   at [32mtests/Pg/PrincipalTypesTest.php[39m:[32m92[39m
+2026-10-01T17:29:12.7822712Z
+2026-10-01T17:29:12.7823375Z   1   tests/Pg/PrincipalTypesTest.php:157
+2026-10-01T17:29:12.7824092Z
+2026-10-01T17:29:12.7824766Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7826181Z    FAILED  Tests\Pg\PrincipalTypesTest > it resolves allowed() for an api_ke…
+2026-10-01T17:29:12.7827425Z   Failed asserting that false is true.
+2026-10-01T17:29:12.7827954Z
+2026-10-01T17:29:12.7828415Z   at tests/Pg/PrincipalTypesTest.php:92
 2026-10-01T17:29:12.7836618Z      88▕     RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => PrincipalType::ApiKey, 'principal_id' => $apiKeyId]);
-2026-10-01T17:29:12.7838431Z      89▕ 
+2026-10-01T17:29:12.7838431Z      89▕
 2026-10-01T17:29:12.7839401Z      90▕     $identity = new PrincipalIdentity(PrincipalType::ApiKey, $apiKeyId);
-2026-10-01T17:29:12.7840613Z      91▕ 
+2026-10-01T17:29:12.7840613Z      91▕
 2026-10-01T17:29:12.7841647Z   ➜  92▕     expect(app(AccessChecker::class)->allowed($identity, 'crm.deal', 'read'))->toBeTrue();
 2026-10-01T17:29:12.7842659Z      93▕ });
-2026-10-01T17:29:12.7843190Z      94▕ 
+2026-10-01T17:29:12.7843190Z      94▕
 2026-10-01T17:29:12.7844249Z      95▕ // B-11 §5.5 — own/dept/dept_tree degrade to none for agent/api_key (ENFORCE); workspace/account do not.
 2026-10-01T17:29:12.7846107Z      96▕ it('degrades own/dept/dept_tree to none for an agent principal, but leaves workspace/account untouched', function (Scope $degraded): void {
-2026-10-01T17:29:12.7847228Z 
-2026-10-01T17:29:12.7847886Z   [33m1   [39m[39;1mtests/Pg/PrincipalTypesTest.php[39;22m:[39;1m92[39;22m
-2026-10-01T17:29:12.7848533Z 
-2026-10-01T17:29:12.7849151Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7850926Z   [41;1m FAILED [49;22m [1mTests\Pg\PrincipalTypesTest[22m [90m>[39m it resolves allowed()/scopeFor() fo…   
-2026-10-01T17:29:12.7852065Z [39;1m  Failed asserting that false is true.[39;22m
-2026-10-01T17:29:12.7852545Z 
-2026-10-01T17:29:12.7853013Z   at [32mtests/Pg/PrincipalTypesTest.php[39m:[32m78[39m
-2026-10-01T17:29:12.7857474Z      74▕ 
+2026-10-01T17:29:12.7847228Z
+2026-10-01T17:29:12.7847886Z   1   tests/Pg/PrincipalTypesTest.php:92
+2026-10-01T17:29:12.7848533Z
+2026-10-01T17:29:12.7849151Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7850926Z    FAILED  Tests\Pg\PrincipalTypesTest > it resolves allowed()/scopeFor() fo…
+2026-10-01T17:29:12.7852065Z   Failed asserting that false is true.
+2026-10-01T17:29:12.7852545Z
+2026-10-01T17:29:12.7853013Z   at tests/Pg/PrincipalTypesTest.php:78
+2026-10-01T17:29:12.7857474Z      74▕
 2026-10-01T17:29:12.7858452Z      75▕     $identity = new PrincipalIdentity(PrincipalType::Agent, $agentId);
 2026-10-01T17:29:12.7859577Z      76▕     $checker = app(AccessChecker::class);
-2026-10-01T17:29:12.7860609Z      77▕ 
+2026-10-01T17:29:12.7860609Z      77▕
 2026-10-01T17:29:12.7861447Z   ➜  78▕     expect($checker->allowed($identity, 'crm.deal', 'read'))->toBeTrue()
 2026-10-01T17:29:12.7862865Z      79▕         ->and($checker->scopeFor($identity, 'crm.deal', 'read'))->toBe(Scope::Workspace);
 2026-10-01T17:29:12.7863860Z      80▕ });
-2026-10-01T17:29:12.7864381Z      81▕ 
+2026-10-01T17:29:12.7864381Z      81▕
 2026-10-01T17:29:12.7865351Z      82▕ it('resolves allowed() for an api_key principal with no users row', function (): void {
-2026-10-01T17:29:12.7866147Z 
-2026-10-01T17:29:12.7866818Z   [33m1   [39m[39;1mtests/Pg/PrincipalTypesTest.php[39;22m:[39;1m78[39;22m
-2026-10-01T17:29:12.7867505Z 
-2026-10-01T17:29:12.7868151Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7869582Z   [41;1m FAILED [49;22m [1mTests\Pg\PermissionsMergerTest[22m [90m>[39m it recompiles on ModuleDisabled…    
-2026-10-01T17:29:12.7871097Z [39;1m  Failed asserting that two arrays are identical.
-2026-10-01T17:29:12.7871827Z   [39;22m[31m-Array &0 [[39m[39;1m
-2026-10-01T17:29:12.7872533Z   [39;22m[31m-    0 => 'app.crm.deal.read',[39m[39;1m
-2026-10-01T17:29:12.7873274Z   [39;22m[31m-][39m[39;1m
-2026-10-01T17:29:12.7873873Z   [39;22m[32m+Array &0 [][39m[39;1m
-2026-10-01T17:29:12.7874446Z   [39;22m
-2026-10-01T17:29:12.7874721Z 
-2026-10-01T17:29:12.7875213Z   at [32mtests/Pg/PermissionsMergerTest.php[39m:[32m123[39m
+2026-10-01T17:29:12.7866147Z
+2026-10-01T17:29:12.7866818Z   1   tests/Pg/PrincipalTypesTest.php:78
+2026-10-01T17:29:12.7867505Z
+2026-10-01T17:29:12.7868151Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7869582Z    FAILED  Tests\Pg\PermissionsMergerTest > it recompiles on ModuleDisabled…
+2026-10-01T17:29:12.7871097Z   Failed asserting that two arrays are identical.
+2026-10-01T17:29:12.7871827Z   -Array &0 [
+2026-10-01T17:29:12.7872533Z   -    0 => 'app.crm.deal.read',
+2026-10-01T17:29:12.7873274Z   -]
+2026-10-01T17:29:12.7873873Z   +Array &0 []
+2026-10-01T17:29:12.7874446Z
+2026-10-01T17:29:12.7874721Z
+2026-10-01T17:29:12.7875213Z   at tests/Pg/PermissionsMergerTest.php:123
 2026-10-01T17:29:12.7878794Z     119▕     // recompileAll() and materialize the key, proving the listener reacts to
 2026-10-01T17:29:12.7880431Z     120▕     // ModuleDisabled on its own, not only piggy-backing on ModuleEnabled.
 2026-10-01T17:29:12.7881865Z     121▕     event(new ModuleDisabled('corex/access-tests', DisableReason::Manual));
-2026-10-01T17:29:12.7882826Z     122▕ 
+2026-10-01T17:29:12.7882826Z     122▕
 2026-10-01T17:29:12.7883650Z   ➜ 123▕     expect(compiledKeysFor($role->id))->toBe(['app.crm.deal.read']);
 2026-10-01T17:29:12.7884550Z     124▕ });
-2026-10-01T17:29:12.7885070Z     125▕ 
+2026-10-01T17:29:12.7885070Z     125▕
 2026-10-01T17:29:12.7885914Z     126▕ // D113 — a declaration whose entity is unknown to EntityRegistry cannot be
 2026-10-01T17:29:12.7887204Z     127▕ // attributed to any module (the compiled permissions slot carries no module
-2026-10-01T17:29:12.7887935Z 
-2026-10-01T17:29:12.7888623Z   [33m1   [39m[39;1mtests/Pg/PermissionsMergerTest.php[39;22m:[39;1m123[39;22m
-2026-10-01T17:29:12.7889380Z 
-2026-10-01T17:29:12.7890288Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7891616Z   [41;1m FAILED [49;22m [1mTests\Pg\PermissionsMergerTest[22m [90m>[39m it returns no warning for a decl…   
-2026-10-01T17:29:12.7892784Z [39;1m  Failed asserting that an array is empty.[39;22m
-2026-10-01T17:29:12.7893311Z 
-2026-10-01T17:29:12.7893798Z   at [32mtests/Pg/PermissionsMergerTest.php[39m:[32m148[39m
+2026-10-01T17:29:12.7887935Z
+2026-10-01T17:29:12.7888623Z   1   tests/Pg/PermissionsMergerTest.php:123
+2026-10-01T17:29:12.7889380Z
+2026-10-01T17:29:12.7890288Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7891616Z    FAILED  Tests\Pg\PermissionsMergerTest > it returns no warning for a decl…
+2026-10-01T17:29:12.7892784Z   Failed asserting that an array is empty.
+2026-10-01T17:29:12.7893311Z
+2026-10-01T17:29:12.7893798Z   at tests/Pg/PermissionsMergerTest.php:148
 2026-10-01T17:29:12.7897964Z     144▕         active: ['corex/access-tests'],
 2026-10-01T17:29:12.7899153Z     145▕         permissions: [Permissions::group('crm.deal', ['read'])->scopeable()],
 2026-10-01T17:29:12.7900396Z     146▕     ));
-2026-10-01T17:29:12.7901128Z     147▕ 
+2026-10-01T17:29:12.7901128Z     147▕
 2026-10-01T17:29:12.7902026Z   ➜ 148▕     expect(app(PermissionsMerger::class)->merge())->toBeEmpty();
 2026-10-01T17:29:12.7902896Z     149▕ });
 2026-10-01T17:29:12.7903386Z     150▕
-2026-10-01T17:29:12.7903694Z 
-2026-10-01T17:29:12.7904381Z   [33m1   [39m[39;1mtests/Pg/PermissionsMergerTest.php[39;22m:[39;1m148[39;22m
-2026-10-01T17:29:12.7905390Z 
-2026-10-01T17:29:12.7906066Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:12.7907521Z   [41;1m FAILED [49;22m [1mTests\Pg\PermissionsMergerTest[22m [90m>[39m it recompiles keys through the f…   
-2026-10-01T17:29:12.7908809Z [39;1m  Failed asserting that two arrays are identical.
-2026-10-01T17:29:12.7909628Z   [39;22m[31m-Array &0 [[39m[39;1m
-2026-10-01T17:29:12.7910834Z   [39;22m[31m-    0 => 'app.crm.deal.read',[39m[39;1m
-2026-10-01T17:29:12.7911544Z   [39;22m[31m-][39m[39;1m
-2026-10-01T17:29:12.7912128Z   [39;22m[32m+Array &0 [][39m[39;1m
-2026-10-01T17:29:12.7912685Z   [39;22m
-2026-10-01T17:29:12.7912981Z 
-2026-10-01T17:29:12.7913453Z   at [32mtests/Pg/PermissionsMergerTest.php[39m:[32m91[39m
-2026-10-01T17:29:12.7918186Z      87▕ 
+2026-10-01T17:29:12.7903694Z
+2026-10-01T17:29:12.7904381Z   1   tests/Pg/PermissionsMergerTest.php:148
+2026-10-01T17:29:12.7905390Z
+2026-10-01T17:29:12.7906066Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:12.7907521Z    FAILED  Tests\Pg\PermissionsMergerTest > it recompiles keys through the f…
+2026-10-01T17:29:12.7908809Z   Failed asserting that two arrays are identical.
+2026-10-01T17:29:12.7909628Z   -Array &0 [
+2026-10-01T17:29:12.7910834Z   -    0 => 'app.crm.deal.read',
+2026-10-01T17:29:12.7911544Z   -]
+2026-10-01T17:29:12.7912128Z   +Array &0 []
+2026-10-01T17:29:12.7912685Z
+2026-10-01T17:29:12.7912981Z
+2026-10-01T17:29:12.7913453Z   at tests/Pg/PermissionsMergerTest.php:91
+2026-10-01T17:29:12.7918186Z      87▕
 2026-10-01T17:29:12.7919195Z      88▕     app()->instance(ModuleRegistry::class, new FakeModuleRegistry(['corex/access-tests']));
 2026-10-01T17:29:12.7920838Z      89▕     event(new ModuleEnabled('corex/access-tests', 'community', []));
-2026-10-01T17:29:12.7921743Z      90▕ 
+2026-10-01T17:29:12.7921743Z      90▕
 2026-10-01T17:29:12.7922517Z   ➜  91▕     expect(compiledKeysFor($role->id))->toBe(['app.crm.deal.read']);
-2026-10-01T17:29:12.7923316Z      92▕ 
+2026-10-01T17:29:12.7923316Z      92▕
 2026-10-01T17:29:12.7924118Z      93▕     app()->instance(ModuleRegistry::class, new FakeModuleRegistry([]));
 2026-10-01T17:29:12.7925365Z      94▕     event(new ModuleDisabled('corex/access-tests', DisableReason::Manual));
 2026-10-01T17:29:12.7926227Z      95▕
-2026-10-01T17:29:12.7926523Z 
-2026-10-01T17:29:12.7927169Z   [33m1   [39m[39;1mtests/Pg/PermissionsMergerTest.php[39;22m:[39;1m91[39;22m
-2026-10-01T17:29:12.7927821Z 
-2026-10-01T17:29:12.7927922Z 
-2026-10-01T17:29:12.7928715Z   [90mTests:[39m    [31;1m36 failed[39;22m[90m,[39m[39m [39m[32;1m76 passed[39;22m[90m (260 assertions)[39m
-2026-10-01T17:29:12.7929694Z   [90mDuration:[39m [39m30.80s[39m
-2026-10-01T17:29:12.7930784Z   [90mRandom Order Seed:[39m [39m1790875721[39m
-2026-10-01T17:29:12.7934585Z 
+2026-10-01T17:29:12.7926523Z
+2026-10-01T17:29:12.7927169Z   1   tests/Pg/PermissionsMergerTest.php:91
+2026-10-01T17:29:12.7927821Z
+2026-10-01T17:29:12.7927922Z
+2026-10-01T17:29:12.7928715Z   Tests:    36 failed, 76 passed (260 assertions)
+2026-10-01T17:29:12.7929694Z   Duration: 30.80s
+2026-10-01T17:29:12.7930784Z   Random Order Seed: 1790875721
+2026-10-01T17:29:12.7934585Z
 2026-10-01T17:29:12.8051296Z Script pest --group=pg handling the test:pg event returned with error code 1
 2026-10-01T17:29:12.8156941Z ##[error]Process completed with exit code 1.
 2026-10-01T17:29:12.8286040Z Post job cleanup.
@@ -2027,13 +2027,13 @@
 2026-10-01T17:29:13.1199629Z  initdb: warning: enabling "trust" authentication for local connections
 2026-10-01T17:29:13.1201452Z  initdb: hint: You can change this by editing pg_hba.conf or using the option -A, or --auth-local and --auth-host, the next time you run initdb.
 2026-10-01T17:29:13.1202760Z  This user must also own the server process.
-2026-10-01T17:29:13.1203343Z  
+2026-10-01T17:29:13.1203343Z
 2026-10-01T17:29:13.1203910Z  The database cluster will be initialized with locale "en_US.utf8".
 2026-10-01T17:29:13.1204783Z  The default database encoding has accordingly been set to "UTF8".
 2026-10-01T17:29:13.1205617Z  The default text search configuration will be set to "english".
-2026-10-01T17:29:13.1206323Z  
+2026-10-01T17:29:13.1206323Z
 2026-10-01T17:29:13.1206752Z  Data page checksums are enabled.
-2026-10-01T17:29:13.1207254Z  
+2026-10-01T17:29:13.1207254Z
 2026-10-01T17:29:13.1207869Z  fixing permissions on existing directory /var/lib/postgresql/18/docker ... ok
 2026-10-01T17:29:13.1208689Z  creating subdirectories ... ok
 2026-10-01T17:29:13.1209384Z  selecting dynamic shared memory implementation ... posix
@@ -2044,18 +2044,18 @@
 2026-10-01T17:29:13.1212595Z  running bootstrap script ... ok
 2026-10-01T17:29:13.1213189Z  performing post-bootstrap initialization ... ok
 2026-10-01T17:29:13.1213817Z  syncing data to disk ... ok
-2026-10-01T17:29:13.1214315Z  
+2026-10-01T17:29:13.1214315Z
 2026-10-01T17:29:13.1215529Z  2026-10-01 17:27:57.962 UTC [1] LOG:  starting PostgreSQL 18.6 (Debian 18.6-1.pgdg13+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
 2026-10-01T17:29:13.1216853Z  2026-10-01 17:27:57.962 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
 2026-10-01T17:29:13.1217680Z  2026-10-01 17:27:57.962 UTC [1] LOG:  listening on IPv6 address "::", port 5432
 2026-10-01T17:29:13.1218571Z  2026-10-01 17:27:57.963 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
 2026-10-01T17:29:13.1219545Z  2026-10-01 17:27:57.968 UTC [75] LOG:  database system was shut down at 2026-10-01 17:27:57 UTC
 2026-10-01T17:29:13.1221303Z  2026-10-01 17:27:57.971 UTC [1] LOG:  database system is ready to accept connections
-2026-10-01T17:29:13.1221945Z  
+2026-10-01T17:29:13.1221945Z
 2026-10-01T17:29:13.1222354Z  Success. You can now start the database server using:
-2026-10-01T17:29:13.1222857Z  
+2026-10-01T17:29:13.1222857Z
 2026-10-01T17:29:13.1223264Z      pg_ctl -D /var/lib/postgresql/18/docker -l logfile start
-2026-10-01T17:29:13.1223807Z  
+2026-10-01T17:29:13.1223807Z
 2026-10-01T17:29:13.1224737Z  waiting for server to start....2026-10-01 17:27:57.629 UTC [53] LOG:  starting PostgreSQL 18.6 (Debian 18.6-1.pgdg13+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
 2026-10-01T17:29:13.1225695Z  2026-10-01 17:27:57.629 UTC [53] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
 2026-10-01T17:29:13.1226285Z  2026-10-01 17:27:57.633 UTC [59] LOG:  database system was shut down at 2026-10-01 17:27:57 UTC
@@ -2063,10 +2063,10 @@
 2026-10-01T17:29:13.1227186Z   done
 2026-10-01T17:29:13.1227370Z  server started
 2026-10-01T17:29:13.1227563Z  CREATE DATABASE
-2026-10-01T17:29:13.1227747Z  
-2026-10-01T17:29:13.1227910Z  
+2026-10-01T17:29:13.1227747Z
+2026-10-01T17:29:13.1227910Z
 2026-10-01T17:29:13.1228221Z  /usr/local/bin/docker-entrypoint.sh: ignoring /docker-entrypoint-initdb.d/*
-2026-10-01T17:29:13.1228617Z  
+2026-10-01T17:29:13.1228617Z
 2026-10-01T17:29:13.1228972Z  waiting for server to shut down...2026-10-01 17:27:57.837 UTC [53] LOG:  received fast shutdown request
 2026-10-01T17:29:13.1230185Z  .2026-10-01 17:27:57.837 UTC [53] LOG:  aborting any active transactions
 2026-10-01T17:29:13.1231010Z  2026-10-01 17:27:57.841 UTC [53] LOG:  background worker "logical replication launcher" (PID 62) exited with exit code 1
@@ -2076,9 +2076,9 @@
 2026-10-01T17:29:13.1234249Z  2026-10-01 17:27:57.869 UTC [53] LOG:  database system is shut down
 2026-10-01T17:29:13.1234572Z   done
 2026-10-01T17:29:13.1234756Z  server stopped
-2026-10-01T17:29:13.1234949Z  
+2026-10-01T17:29:13.1234949Z
 2026-10-01T17:29:13.1235191Z  PostgreSQL init process complete; ready for start up.
-2026-10-01T17:29:13.1235497Z  
+2026-10-01T17:29:13.1235497Z
 2026-10-01T17:29:13.1241318Z Stop and remove container: 25875273a0e243e5a9b6253a76333164_postgres18_ccf5a6
 2026-10-01T17:29:13.1245611Z ##[command]/usr/bin/docker rm --force 9fd0241485c55a43fde403984fef10eba2f97b572502b679e616b099be2898b5
 2026-10-01T17:29:13.2844313Z 9fd0241485c55a43fde403984fef10eba2f97b572502b679e616b099be2898b5

@@ -259,33 +259,33 @@
 2026-10-01T17:10:20.9780186Z   PGSQL_PORT: 5432
 2026-10-01T17:10:20.9780395Z ##[endgroup]
 2026-10-01T17:10:21.0219623Z [command]/usr/bin/bash /home/runner/work/_actions/shivammathur/setup-php/f3e473d116dcccaddc5834248c87452386958240/src/scripts/run.sh
-2026-10-01T17:10:21.0688625Z 
-2026-10-01T17:10:21.0709941Z [90;1m==> [0m[37;1mSetup PHP[0m
-2026-10-01T17:10:26.2065649Z [32;1m✓ [0m[34;1mPHP [0m[90;1mInstalled PHP 8.4.26[0m
-2026-10-01T17:10:26.2066628Z 
-2026-10-01T17:10:26.2067300Z [90;1m==> [0m[37;1mSetup Extensions[0m
-2026-10-01T17:10:26.2597906Z [32;1m✓ [0m[34;1mmbstring [0m[90;1mEnabled[0m
-2026-10-01T17:10:26.2628711Z [32;1m✓ [0m[34;1mpdo [0m[90;1mEnabled[0m
-2026-10-01T17:10:26.2663274Z [32;1m✓ [0m[34;1msqlite3 [0m[90;1mEnabled[0m
-2026-10-01T17:10:26.2686307Z [32;1m✓ [0m[34;1mpdo_sqlite [0m[90;1mEnabled[0m
-2026-10-01T17:10:26.2701556Z [32;1m✓ [0m[34;1mpdo_pgsql [0m[90;1mEnabled[0m
-2026-10-01T17:10:26.2742508Z [32;1m✓ [0m[34;1mbcmath [0m[90;1mEnabled[0m
-2026-10-01T17:10:26.2772585Z [32;1m✓ [0m[34;1mcurl [0m[90;1mEnabled[0m
-2026-10-01T17:10:26.2806726Z [32;1m✓ [0m[34;1mintl [0m[90;1mEnabled[0m
-2026-10-01T17:10:26.2840248Z [32;1m✓ [0m[34;1mzip [0m[90;1mEnabled[0m
-2026-10-01T17:10:26.2874137Z [32;1m✓ [0m[34;1mgd [0m[90;1mEnabled[0m
-2026-10-01T17:10:26.2908607Z [32;1m✓ [0m[34;1mxdebug [0m[90;1mEnabled[0m
-2026-10-01T17:10:26.2913215Z 
-2026-10-01T17:10:26.2913828Z [90;1m==> [0m[37;1mSetup Tools[0m
-2026-10-01T17:10:26.5570449Z [32;1m✓ [0m[34;1mcomposer [0m[90;1mAdded composer 2.10.3[0m
-2026-10-01T17:10:26.5573912Z 
-2026-10-01T17:10:26.5582234Z [90;1m==> [0m[37;1mSetup Coverage[0m
-2026-10-01T17:10:26.6617390Z [32;1m✓ [0m[34;1mxdebug [0m[90;1mXdebug 3.5.3 enabled as coverage driver[0m
-2026-10-01T17:10:26.6628530Z 
-2026-10-01T17:10:26.6639744Z [90;1m==> [0m[37;1mSponsor setup-php[0m
-2026-10-01T17:10:26.6641063Z [32;1m✓ [0m[34;1msetup-php [0m[90;1mhttps://setup-php.com/sponsor[0m
+2026-10-01T17:10:21.0688625Z
+2026-10-01T17:10:21.0709941Z ==> Setup PHP
+2026-10-01T17:10:26.2065649Z ✓ PHP Installed PHP 8.4.26
+2026-10-01T17:10:26.2066628Z
+2026-10-01T17:10:26.2067300Z ==> Setup Extensions
+2026-10-01T17:10:26.2597906Z ✓ mbstring Enabled
+2026-10-01T17:10:26.2628711Z ✓ pdo Enabled
+2026-10-01T17:10:26.2663274Z ✓ sqlite3 Enabled
+2026-10-01T17:10:26.2686307Z ✓ pdo_sqlite Enabled
+2026-10-01T17:10:26.2701556Z ✓ pdo_pgsql Enabled
+2026-10-01T17:10:26.2742508Z ✓ bcmath Enabled
+2026-10-01T17:10:26.2772585Z ✓ curl Enabled
+2026-10-01T17:10:26.2806726Z ✓ intl Enabled
+2026-10-01T17:10:26.2840248Z ✓ zip Enabled
+2026-10-01T17:10:26.2874137Z ✓ gd Enabled
+2026-10-01T17:10:26.2908607Z ✓ xdebug Enabled
+2026-10-01T17:10:26.2913215Z
+2026-10-01T17:10:26.2913828Z ==> Setup Tools
+2026-10-01T17:10:26.5570449Z ✓ composer Added composer 2.10.3
+2026-10-01T17:10:26.5573912Z
+2026-10-01T17:10:26.5582234Z ==> Setup Coverage
+2026-10-01T17:10:26.6617390Z ✓ xdebug Xdebug 3.5.3 enabled as coverage driver
+2026-10-01T17:10:26.6628530Z
+2026-10-01T17:10:26.6639744Z ==> Sponsor setup-php
+2026-10-01T17:10:26.6641063Z ✓ setup-php https://setup-php.com/sponsor
 2026-10-01T17:10:26.6819985Z ##[group]Run python3 scripts/distribution/stage-stancl-providers.py
-2026-10-01T17:10:26.6820533Z [36;1mpython3 scripts/distribution/stage-stancl-providers.py[0m
+2026-10-01T17:10:26.6820533Z python3 scripts/distribution/stage-stancl-providers.py
 2026-10-01T17:10:26.7052434Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:10:26.7052766Z env:
 2026-10-01T17:10:26.7053003Z   PGSQL_PORT: 5432
@@ -295,7 +295,7 @@
 2026-10-01T17:10:26.7054117Z ##[endgroup]
 2026-10-01T17:10:27.4659242Z {"result": "PASS", "repository": "file:///home/runner/work/corex/corex/.composer-provider-staging", "staging": "/home/runner/work/corex/corex/.composer-provider-staging", "registered": ["/home/runner/work/corex/corex", "/home/runner/work/corex/corex/packages/tenancy", "/home/runner/work/corex/corex/packages/access"]}
 2026-10-01T17:10:27.4759771Z ##[group]Run composer update --prefer-dist --no-interaction --no-progress
-2026-10-01T17:10:27.4760380Z [36;1mcomposer update --prefer-dist --no-interaction --no-progress[0m
+2026-10-01T17:10:27.4760380Z composer update --prefer-dist --no-interaction --no-progress
 2026-10-01T17:10:27.4826712Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:10:27.4826971Z env:
 2026-10-01T17:10:27.4827183Z   PGSQL_PORT: 5432
@@ -802,7 +802,7 @@
 2026-10-01T17:10:41.6692873Z > pestphp/pest: ignored
 2026-10-01T17:10:41.6693403Z > phpstan/phpstan-strict-rules: ignored
 2026-10-01T17:10:41.7145345Z ##[group]Run composer audit --locked
-2026-10-01T17:10:41.7145698Z [36;1mcomposer audit --locked[0m
+2026-10-01T17:10:41.7145698Z composer audit --locked
 2026-10-01T17:10:41.7210198Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:10:41.7210457Z env:
 2026-10-01T17:10:41.7210645Z   PGSQL_PORT: 5432
@@ -812,7 +812,7 @@
 2026-10-01T17:10:41.7211561Z ##[endgroup]
 2026-10-01T17:10:42.2541272Z No security vulnerability advisories found.
 2026-10-01T17:10:42.2781459Z ##[group]Run composer --working-dir=products/flex-crm update --prefer-dist --no-interaction --no-progress
-2026-10-01T17:10:42.2782261Z [36;1mcomposer --working-dir=products/flex-crm update --prefer-dist --no-interaction --no-progress[0m
+2026-10-01T17:10:42.2782261Z composer --working-dir=products/flex-crm update --prefer-dist --no-interaction --no-progress
 2026-10-01T17:10:42.2847702Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:10:42.2847968Z env:
 2026-10-01T17:10:42.2848517Z   PGSQL_PORT: 5432
@@ -1114,7 +1114,7 @@
 2026-10-01T17:10:47.9453074Z 93 packages you are using are looking for funding.
 2026-10-01T17:10:47.9453984Z Use the `composer fund` command to find out more!
 2026-10-01T17:10:47.9740789Z ##[group]Run composer audit --locked --working-dir=products/flex-crm
-2026-10-01T17:10:47.9741689Z [36;1mcomposer audit --locked --working-dir=products/flex-crm[0m
+2026-10-01T17:10:47.9741689Z composer audit --locked --working-dir=products/flex-crm
 2026-10-01T17:10:47.9833574Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:10:47.9834017Z env:
 2026-10-01T17:10:47.9834343Z   PGSQL_PORT: 5432
@@ -1124,7 +1124,7 @@
 2026-10-01T17:10:47.9835965Z ##[endgroup]
 2026-10-01T17:10:48.5348554Z No security vulnerability advisories found.
 2026-10-01T17:10:48.5617338Z ##[group]Run composer --working-dir=products/flex-crm test
-2026-10-01T17:10:48.5618871Z [36;1mcomposer --working-dir=products/flex-crm test[0m
+2026-10-01T17:10:48.5618871Z composer --working-dir=products/flex-crm test
 2026-10-01T17:10:48.5700061Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:10:48.5700328Z env:
 2026-10-01T17:10:48.5700519Z   PGSQL_PORT: 5432
@@ -1132,104 +1132,104 @@
 2026-10-01T17:10:48.5700999Z   COMPOSER_NO_INTERACTION: 1
 2026-10-01T17:10:48.5701238Z   COMPOSER_NO_AUDIT: 1
 2026-10-01T17:10:48.5701449Z ##[endgroup]
-2026-10-01T17:10:50.1848648Z 
-2026-10-01T17:10:50.1869891Z   [39;41;1m FAIL [39;49;22m[39m Tests\Feature\SalesStorageTest[39m
-2026-10-01T17:10:50.1880588Z   [32;1m✓[39;22m[90m [39m[90mit refuses conversion without explicit human identity and preserves[39m[90m…[39m [90m0.33s[39m  
-2026-10-01T17:10:50.1882770Z   [32;1m✓[39;22m[90m [39m[90mit rejects creation veto without persisted rows or success events[39m[90m   [39m [90m0.17s[39m  
-2026-10-01T17:10:50.1900215Z   [31;1m⨯[39;22m[90m [39m[90mit stores activity kinds and canonical target associations[39m[90m          [39m [90m0.18s[39m  
-2026-10-01T17:10:50.1915121Z   [32;1m✓[39;22m[90m [39m[90mit does not represent legacy statuses or note and task as activitie[39m[90m…[39m [90m0.13s[39m  
-2026-10-01T17:10:50.1928983Z   [32;1m✓[39;22m[90m [39m[90mit persists canonical lead fields with trusted provenance[39m[90m           [39m [90m0.15s[39m  
-2026-10-01T17:10:50.1942798Z   [32;1m✓[39;22m[90m [39m[90mit rolls back the entire conversion when the final lead update is v[39m[90m…[39m [90m0.20s[39m  
-2026-10-01T17:10:50.6424754Z 
-2026-10-01T17:10:50.6426546Z   [39;41;1m FAIL [39;49;22m[39m Tests\Feature\ActivityTimelineTest[39m
-2026-10-01T17:10:50.6444575Z   [31;1m⨯[39;22m[90m [39m[90mit logs a polymorphic activity resolved through the morph alias[39m[90m     [39m [90m0.19s[39m  
-2026-10-01T17:10:50.6463105Z   [32;1m✓[39;22m[90m [39m[90mit attaches activities to different subject types[39m[90m                   [39m [90m0.25s[39m  
-2026-10-01T17:10:51.8113162Z 
-2026-10-01T17:10:51.8114874Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\DealFlowTest[39m
-2026-10-01T17:10:51.8129754Z   [32;1m✓[39;22m[90m [39m[90mit rolls back a vetoed stage update without a success event[39m[90m         [39m [90m0.22s[39m  
-2026-10-01T17:10:51.8147622Z   [32;1m✓[39;22m[90m [39m[90mit refuses to create a deal in a pipeline without stages[39m[90m            [39m [90m0.16s[39m  
-2026-10-01T17:10:51.8161589Z   [32;1m✓[39;22m[90m [39m[90mit creates a deal at the first stage with money[39m[90m                     [39m [90m0.18s[39m  
-2026-10-01T17:10:51.8175029Z   [32;1m✓[39;22m[90m [39m[90mit moves a deal to a won stage and marks it won[39m[90m                     [39m [90m0.21s[39m  
-2026-10-01T17:10:51.8188729Z   [32;1m✓[39;22m[90m [39m[90mit clears optional amount without clearing mandatory currency[39m[90m       [39m [90m0.19s[39m  
-2026-10-01T17:10:51.8202534Z   [32;1m✓[39;22m[90m [39m[90mit rejects a stage from another pipeline without changing the deal[39m[90m… [39m [90m0.19s[39m  
-2026-10-01T17:10:53.6337136Z 
-2026-10-01T17:10:53.6339120Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\ContextSecurityTest[39m
-2026-10-01T17:10:53.6353793Z   [32;1m✓[39;22m[90m [39m[90mit overwrites forged creation provenance and prevents changing it a[39m[90m…[39m [90m0.17s[39m  
-2026-10-01T17:10:53.6372099Z   [32;1m✓[39;22m[90m [39m[90mit rejects direct foreign workspace writes and foreign connection q[39m[90m…[39m [90m0.14s[39m  
-2026-10-01T17:10:53.6385779Z   [32;1m✓[39;22m[90m [39m[90mit requires account-level capability when no workspace exists[39m[90m       [39m [90m0.14s[39m  
-2026-10-01T17:10:53.6399421Z   [32;1m✓[39;22m[90m [39m[90mit fails closed for disabled CRM and tenant context mismatch[39m[90m        [39m [90m0.14s[39m  
-2026-10-01T17:10:53.6413989Z   [32;1m✓[39;22m[90m [39m[90mit rejects a late observer changing association endpoints[39m[90m           [39m [90m0.26s[39m  
-2026-10-01T17:10:53.6427288Z   [32;1m✓[39;22m[90m [39m[90mit rechecks trusted provenance after late creating observers[39m[90m        [39m [90m0.17s[39m  
-2026-10-01T17:10:53.6441333Z   [32;1m✓[39;22m[90m [39m[90mit treats observer veto as failed mutation without dispatching succ[39m[90m…[39m [90m0.26s[39m  
-2026-10-01T17:10:53.6454776Z   [32;1m✓[39;22m[90m [39m[90mit rejects malformed actor identities and foreign profile IDs[39m[90m       [39m [90m0.15s[39m  
-2026-10-01T17:10:53.6468706Z   [32;1m✓[39;22m[90m [39m[90mit rejects a late observer changing the workspace and guards quiet[39m[90m… [39m [90m0.20s[39m  
-2026-10-01T17:10:53.6482366Z   [32;1m✓[39;22m[90m [39m[90mit guards direct association writes against cross-scope and foreign[39m[90m…[39m [90m0.21s[39m  
-2026-10-01T17:10:54.3017082Z 
-2026-10-01T17:10:54.3019067Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\ApiOperationsTest[39m
-2026-10-01T17:10:54.3039644Z   [32;1m✓[39;22m[90m [39m[90mit normalizes CRM identifiers for the configured ID strategy[39m[90m        [39m [90m0.17s[39m  
-2026-10-01T17:10:54.3047047Z   [32;1m✓[39;22m[90m [39m[90mit declares and dispatches company, contact and association operati[39m[90m…[39m [90m0.49s[39m  
-2026-10-01T17:10:54.5745235Z 
-2026-10-01T17:10:54.5769449Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\CompanyContactTest[39m
-2026-10-01T17:10:54.5770455Z   [32;1m✓[39;22m[90m [39m[90mit creates a company and a contact linked to it[39m[90m                     [39m [90m0.27s[39m  
-2026-10-01T17:10:55.6318931Z 
-2026-10-01T17:10:55.6320651Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\ParityTest[39m
-2026-10-01T17:10:55.6334934Z   [32;1m✓[39;22m[90m [39m[90mit rejects nameless contacts without usable channels[39m[90m                [39m [90m0.34s[39m  
-2026-10-01T17:10:55.6348722Z   [32;1m✓[39;22m[90m [39m[90mit creates approved records and a typed primary association[39m[90m         [39m [90m0.31s[39m  
-2026-10-01T17:10:55.6362519Z   [32;1m✓[39;22m[90m [39m[90mit normalizes Unicode whitespace before testing empty name componen[39m[90m…[39m [90m0.22s[39m  
-2026-10-01T17:10:55.6376038Z   [32;1m✓[39;22m[90m [39m[90mit rejects invalid UTF-8 names rather than silently dropping their[39m[90m… [39m [90m0.18s[39m  
-2026-10-01T17:10:56.0566086Z 
-2026-10-01T17:10:56.0567525Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\RegistryFieldCastsTest[39m
-2026-10-01T17:10:56.0582070Z   [32;1m✓[39;22m[90m [39m[90mit compiles a consumer money field using the intl cast registration[39m[90m [39m [90m0.42s[39m  
-2026-10-01T17:10:57.0138897Z 
-2026-10-01T17:10:57.0139867Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\LeadConversionTest[39m
-2026-10-01T17:10:57.0149403Z   [32;1m✓[39;22m[90m [39m[90mit returns the same conversion on retry even when passed a stale le[39m[90m…[39m [90m0.36s[39m  
-2026-10-01T17:10:57.0162437Z   [32;1m✓[39;22m[90m [39m[90mit converts a lead without company or deal[39m[90m                          [39m [90m0.23s[39m  
-2026-10-01T17:10:57.0175810Z   [32;1m✓[39;22m[90m [39m[90mit converts a lead into contact, company and deal[39m[90m                   [39m [90m0.37s[39m  
-2026-10-01T17:10:57.0185442Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:10:57.0201028Z   [41;1m FAILED [49;22m [1mTests\Feature\SalesStorageTest[22m [90m>[39m it stores activity kinds and can…   
-2026-10-01T17:10:57.0223253Z [39;1m  Failed asserting that two strings are identical.
-2026-10-01T17:10:57.0224592Z   [39;22m[31m-'crm.lead'[39m[39;1m
-2026-10-01T17:10:57.0225527Z   [39;22m[32m+'Flex\Crm\Lead\Models\Lead'[39m[39;1m
-2026-10-01T17:10:57.0226400Z   [39;22m
-2026-10-01T17:10:57.0235622Z 
-2026-10-01T17:10:57.0237058Z   at [32mtests/Feature/SalesStorageTest.php[39m:[32m37[39m
+2026-10-01T17:10:50.1848648Z
+2026-10-01T17:10:50.1869891Z    FAIL  Tests\Feature\SalesStorageTest
+2026-10-01T17:10:50.1880588Z   ✓ it refuses conversion without explicit human identity and preserves… 0.33s
+2026-10-01T17:10:50.1882770Z   ✓ it rejects creation veto without persisted rows or success events    0.17s
+2026-10-01T17:10:50.1900215Z   ⨯ it stores activity kinds and canonical target associations           0.18s
+2026-10-01T17:10:50.1915121Z   ✓ it does not represent legacy statuses or note and task as activitie… 0.13s
+2026-10-01T17:10:50.1928983Z   ✓ it persists canonical lead fields with trusted provenance            0.15s
+2026-10-01T17:10:50.1942798Z   ✓ it rolls back the entire conversion when the final lead update is v… 0.20s
+2026-10-01T17:10:50.6424754Z
+2026-10-01T17:10:50.6426546Z    FAIL  Tests\Feature\ActivityTimelineTest
+2026-10-01T17:10:50.6444575Z   ⨯ it logs a polymorphic activity resolved through the morph alias      0.19s
+2026-10-01T17:10:50.6463105Z   ✓ it attaches activities to different subject types                    0.25s
+2026-10-01T17:10:51.8113162Z
+2026-10-01T17:10:51.8114874Z    PASS  Tests\Feature\DealFlowTest
+2026-10-01T17:10:51.8129754Z   ✓ it rolls back a vetoed stage update without a success event          0.22s
+2026-10-01T17:10:51.8147622Z   ✓ it refuses to create a deal in a pipeline without stages             0.16s
+2026-10-01T17:10:51.8161589Z   ✓ it creates a deal at the first stage with money                      0.18s
+2026-10-01T17:10:51.8175029Z   ✓ it moves a deal to a won stage and marks it won                      0.21s
+2026-10-01T17:10:51.8188729Z   ✓ it clears optional amount without clearing mandatory currency        0.19s
+2026-10-01T17:10:51.8202534Z   ✓ it rejects a stage from another pipeline without changing the deal…  0.19s
+2026-10-01T17:10:53.6337136Z
+2026-10-01T17:10:53.6339120Z    PASS  Tests\Feature\ContextSecurityTest
+2026-10-01T17:10:53.6353793Z   ✓ it overwrites forged creation provenance and prevents changing it a… 0.17s
+2026-10-01T17:10:53.6372099Z   ✓ it rejects direct foreign workspace writes and foreign connection q… 0.14s
+2026-10-01T17:10:53.6385779Z   ✓ it requires account-level capability when no workspace exists        0.14s
+2026-10-01T17:10:53.6399421Z   ✓ it fails closed for disabled CRM and tenant context mismatch         0.14s
+2026-10-01T17:10:53.6413989Z   ✓ it rejects a late observer changing association endpoints            0.26s
+2026-10-01T17:10:53.6427288Z   ✓ it rechecks trusted provenance after late creating observers         0.17s
+2026-10-01T17:10:53.6441333Z   ✓ it treats observer veto as failed mutation without dispatching succ… 0.26s
+2026-10-01T17:10:53.6454776Z   ✓ it rejects malformed actor identities and foreign profile IDs        0.15s
+2026-10-01T17:10:53.6468706Z   ✓ it rejects a late observer changing the workspace and guards quiet…  0.20s
+2026-10-01T17:10:53.6482366Z   ✓ it guards direct association writes against cross-scope and foreign… 0.21s
+2026-10-01T17:10:54.3017082Z
+2026-10-01T17:10:54.3019067Z    PASS  Tests\Feature\ApiOperationsTest
+2026-10-01T17:10:54.3039644Z   ✓ it normalizes CRM identifiers for the configured ID strategy         0.17s
+2026-10-01T17:10:54.3047047Z   ✓ it declares and dispatches company, contact and association operati… 0.49s
+2026-10-01T17:10:54.5745235Z
+2026-10-01T17:10:54.5769449Z    PASS  Tests\Feature\CompanyContactTest
+2026-10-01T17:10:54.5770455Z   ✓ it creates a company and a contact linked to it                      0.27s
+2026-10-01T17:10:55.6318931Z
+2026-10-01T17:10:55.6320651Z    PASS  Tests\Feature\ParityTest
+2026-10-01T17:10:55.6334934Z   ✓ it rejects nameless contacts without usable channels                 0.34s
+2026-10-01T17:10:55.6348722Z   ✓ it creates approved records and a typed primary association          0.31s
+2026-10-01T17:10:55.6362519Z   ✓ it normalizes Unicode whitespace before testing empty name componen… 0.22s
+2026-10-01T17:10:55.6376038Z   ✓ it rejects invalid UTF-8 names rather than silently dropping their…  0.18s
+2026-10-01T17:10:56.0566086Z
+2026-10-01T17:10:56.0567525Z    PASS  Tests\Feature\RegistryFieldCastsTest
+2026-10-01T17:10:56.0582070Z   ✓ it compiles a consumer money field using the intl cast registration  0.42s
+2026-10-01T17:10:57.0138897Z
+2026-10-01T17:10:57.0139867Z    PASS  Tests\Feature\LeadConversionTest
+2026-10-01T17:10:57.0149403Z   ✓ it returns the same conversion on retry even when passed a stale le… 0.36s
+2026-10-01T17:10:57.0162437Z   ✓ it converts a lead without company or deal                           0.23s
+2026-10-01T17:10:57.0175810Z   ✓ it converts a lead into contact, company and deal                    0.37s
+2026-10-01T17:10:57.0185442Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:10:57.0201028Z    FAILED  Tests\Feature\SalesStorageTest > it stores activity kinds and can…
+2026-10-01T17:10:57.0223253Z   Failed asserting that two strings are identical.
+2026-10-01T17:10:57.0224592Z   -'crm.lead'
+2026-10-01T17:10:57.0225527Z   +'Flex\Crm\Lead\Models\Lead'
+2026-10-01T17:10:57.0226400Z
+2026-10-01T17:10:57.0235622Z
+2026-10-01T17:10:57.0237058Z   at tests/Feature/SalesStorageTest.php:37
 2026-10-01T17:10:57.0266815Z      33▕     $activity = app(LogActivity::class)->handle(subject: $lead, type: ActivityType::Call, summary: 'Intro call');
 2026-10-01T17:10:57.0269245Z      34▕     expect($activity->fresh()->kind)->toBe(ActivityType::Call)
 2026-10-01T17:10:57.0270655Z      35▕         ->and($activity->subject)->toBe('Intro call')
 2026-10-01T17:10:57.0271826Z      36▕         ->and($lead->activities()->sole()->id)->toBe($activity->id)
 2026-10-01T17:10:57.0273438Z   ➜  37▕         ->and(DB::table('crm_activity_targets')->sole()->entity_type)->toBe('crm.lead');
 2026-10-01T17:10:57.0274540Z      38▕ });
-2026-10-01T17:10:57.0275149Z      39▕ 
+2026-10-01T17:10:57.0275149Z      39▕
 2026-10-01T17:10:57.0276180Z      40▕ it('does not represent legacy statuses or note and task as activities', function (): void {
 2026-10-01T17:10:57.0277489Z      41▕     expect(LeadStatus::tryFrom('new'))->toBeNull()
-2026-10-01T17:10:57.0278413Z 
-2026-10-01T17:10:57.0279158Z   [33m1   [39m[39;1mtests/Feature/SalesStorageTest.php[39;22m:[39;1m37[39;22m
-2026-10-01T17:10:57.0279991Z 
-2026-10-01T17:10:57.0280741Z   [31m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:10:57.0286414Z   [41;1m FAILED [49;22m [1mTests\Feature\ActivityTimelineTest[22m [90m>[39m it logs a polymorphic activi…   
-2026-10-01T17:10:57.0290411Z [39;1m  Failed asserting that two strings are identical.
-2026-10-01T17:10:57.0291313Z   [39;22m[31m-'crm.contact'[39m[39;1m
-2026-10-01T17:10:57.0292273Z   [39;22m[32m+'Flex\Crm\Contact\Models\Contact'[39m[39;1m
-2026-10-01T17:10:57.0293082Z   [39;22m
-2026-10-01T17:10:57.0294136Z 
-2026-10-01T17:10:57.0296038Z   at [32mtests/Feature/ActivityTimelineTest.php[39m:[32m22[39m
+2026-10-01T17:10:57.0278413Z
+2026-10-01T17:10:57.0279158Z   1   tests/Feature/SalesStorageTest.php:37
+2026-10-01T17:10:57.0279991Z
+2026-10-01T17:10:57.0280741Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:10:57.0286414Z    FAILED  Tests\Feature\ActivityTimelineTest > it logs a polymorphic activi…
+2026-10-01T17:10:57.0290411Z   Failed asserting that two strings are identical.
+2026-10-01T17:10:57.0291313Z   -'crm.contact'
+2026-10-01T17:10:57.0292273Z   +'Flex\Crm\Contact\Models\Contact'
+2026-10-01T17:10:57.0293082Z
+2026-10-01T17:10:57.0294136Z
+2026-10-01T17:10:57.0296038Z   at tests/Feature/ActivityTimelineTest.php:22
 2026-10-01T17:10:57.0310718Z      18▕     $contact = app(CreateContact::class)->handle(new ContactData(nameFirst: 'Jane'));
 2026-10-01T17:10:57.0312911Z      19▕     $activity = app(LogActivity::class)->handle($contact, ActivityType::Call, 'Intro call', body: 'Went well');
-2026-10-01T17:10:57.0314145Z      20▕ 
+2026-10-01T17:10:57.0314145Z      20▕
 2026-10-01T17:10:57.0315000Z      21▕     expect($activity->kind)->toBe(ActivityType::Call)
 2026-10-01T17:10:57.0316270Z   ➜  22▕         ->and($activity->targets()->sole()->entity_type)->toBe('crm.contact')
 2026-10-01T17:10:57.0317577Z      23▕         ->and($activity->targets()->sole()->entity->is($contact))->toBeTrue()
 2026-10-01T17:10:57.0319075Z      24▕         ->and($contact->activities()->count())->toBe(1);
-2026-10-01T17:10:57.0320013Z      25▕ 
+2026-10-01T17:10:57.0320013Z      25▕
 2026-10-01T17:10:57.0320912Z      26▕     Event::assertDispatched(ActivityLogged::class);
-2026-10-01T17:10:57.0321575Z 
-2026-10-01T17:10:57.0322360Z   [33m1   [39m[39;1mtests/Feature/ActivityTimelineTest.php[39;22m:[39;1m22[39;22m
-2026-10-01T17:10:57.0323187Z 
-2026-10-01T17:10:57.0323382Z 
-2026-10-01T17:10:57.0324301Z   [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m33 passed[39;22m[90m (133 assertions)[39m
-2026-10-01T17:10:57.0325529Z   [90mDuration:[39m [39m8.16s[39m
-2026-10-01T17:10:57.0326457Z   [90mRandom Order Seed:[39m [39m1790874648[39m
-2026-10-01T17:10:57.0327123Z 
+2026-10-01T17:10:57.0321575Z
+2026-10-01T17:10:57.0322360Z   1   tests/Feature/ActivityTimelineTest.php:22
+2026-10-01T17:10:57.0323187Z
+2026-10-01T17:10:57.0323382Z
+2026-10-01T17:10:57.0324301Z   Tests:    2 failed, 33 passed (133 assertions)
+2026-10-01T17:10:57.0325529Z   Duration: 8.16s
+2026-10-01T17:10:57.0326457Z   Random Order Seed: 1790874648
+2026-10-01T17:10:57.0327123Z
 2026-10-01T17:10:57.0445278Z Script pest --exclude-group=pg handling the test event returned with error code 1
 2026-10-01T17:10:57.0640210Z ##[error]Process completed with exit code 1.
 2026-10-01T17:10:57.0766068Z Post job cleanup.
@@ -1255,13 +1255,13 @@
 2026-10-01T17:10:57.4130194Z  2026-10-01 17:10:11.103 UTC [1] LOG:  starting PostgreSQL 18.6 (Debian 18.6-1.pgdg13+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
 2026-10-01T17:10:57.4131422Z  This user must also own the server process.
 2026-10-01T17:10:57.4132924Z  2026-10-01 17:10:11.103 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
-2026-10-01T17:10:57.4133685Z  
+2026-10-01T17:10:57.4133685Z
 2026-10-01T17:10:57.4134153Z  The database cluster will be initialized with locale "en_US.utf8".
 2026-10-01T17:10:57.4134912Z  The default database encoding has accordingly been set to "UTF8".
 2026-10-01T17:10:57.4135651Z  The default text search configuration will be set to "english".
-2026-10-01T17:10:57.4136181Z  
+2026-10-01T17:10:57.4136181Z
 2026-10-01T17:10:57.4136486Z  Data page checksums are enabled.
-2026-10-01T17:10:57.4136897Z  
+2026-10-01T17:10:57.4136897Z
 2026-10-01T17:10:57.4137415Z  fixing permissions on existing directory /var/lib/postgresql/18/docker ... ok
 2026-10-01T17:10:57.4138323Z  creating subdirectories ... ok
 2026-10-01T17:10:57.4138843Z  selecting dynamic shared memory implementation ... posix
@@ -1272,12 +1272,12 @@
 2026-10-01T17:10:57.4141459Z  running bootstrap script ... ok
 2026-10-01T17:10:57.4141951Z  performing post-bootstrap initialization ... ok
 2026-10-01T17:10:57.4142475Z  syncing data to disk ... ok
-2026-10-01T17:10:57.4142860Z  
-2026-10-01T17:10:57.4143137Z  
+2026-10-01T17:10:57.4142860Z
+2026-10-01T17:10:57.4143137Z
 2026-10-01T17:10:57.4143738Z  Success. You can now start the database server using:
-2026-10-01T17:10:57.4144495Z  
+2026-10-01T17:10:57.4144495Z
 2026-10-01T17:10:57.4145183Z      pg_ctl -D /var/lib/postgresql/18/docker -l logfile start
-2026-10-01T17:10:57.4146353Z  
+2026-10-01T17:10:57.4146353Z
 2026-10-01T17:10:57.4147470Z  waiting for server to start....2026-10-01 17:10:10.769 UTC [52] LOG:  starting PostgreSQL 18.6 (Debian 18.6-1.pgdg13+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
 2026-10-01T17:10:57.4149285Z  2026-10-01 17:10:10.769 UTC [52] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
 2026-10-01T17:10:57.4150264Z  2026-10-01 17:10:10.773 UTC [58] LOG:  database system was shut down at 2026-10-01 17:10:10 UTC
@@ -1285,10 +1285,10 @@
 2026-10-01T17:10:57.4151780Z   done
 2026-10-01T17:10:57.4152080Z  server started
 2026-10-01T17:10:57.4152413Z  CREATE DATABASE
-2026-10-01T17:10:57.4152738Z  
-2026-10-01T17:10:57.4153013Z  
+2026-10-01T17:10:57.4152738Z
+2026-10-01T17:10:57.4153013Z
 2026-10-01T17:10:57.4153534Z  /usr/local/bin/docker-entrypoint.sh: ignoring /docker-entrypoint-initdb.d/*
-2026-10-01T17:10:57.4154077Z  
+2026-10-01T17:10:57.4154077Z
 2026-10-01T17:10:57.4154336Z  2026-10-01 17:10:10.977 UTC [52] LOG:  received fast shutdown request
 2026-10-01T17:10:57.4154892Z  waiting for server to shut down....2026-10-01 17:10:10.978 UTC [52] LOG:  aborting any active transactions
 2026-10-01T17:10:57.4155607Z  2026-10-01 17:10:10.981 UTC [52] LOG:  background worker "logical replication launcher" (PID 61) exited with exit code 1
@@ -1298,9 +1298,9 @@
 2026-10-01T17:10:57.4160173Z  2026-10-01 17:10:11.011 UTC [52] LOG:  database system is shut down
 2026-10-01T17:10:57.4160518Z   done
 2026-10-01T17:10:57.4160702Z  server stopped
-2026-10-01T17:10:57.4160890Z  
+2026-10-01T17:10:57.4160890Z
 2026-10-01T17:10:57.4161134Z  PostgreSQL init process complete; ready for start up.
-2026-10-01T17:10:57.4161448Z  
+2026-10-01T17:10:57.4161448Z
 2026-10-01T17:10:57.4161751Z  2026-10-01 17:10:11.103 UTC [1] LOG:  listening on IPv6 address "::", port 5432
 2026-10-01T17:10:57.4162281Z  2026-10-01 17:10:11.105 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
 2026-10-01T17:10:57.4162844Z  2026-10-01 17:10:11.112 UTC [74] LOG:  database system was shut down at 2026-10-01 17:10:10 UTC

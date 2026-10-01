@@ -262,33 +262,33 @@
 2026-10-01T17:28:06.0464010Z   PGSQL_PORT: 5432
 2026-10-01T17:28:06.0464218Z ##[endgroup]
 2026-10-01T17:28:06.0898860Z [command]/usr/bin/bash /home/runner/work/_actions/shivammathur/setup-php/f3e473d116dcccaddc5834248c87452386958240/src/scripts/run.sh
-2026-10-01T17:28:06.1356995Z 
-2026-10-01T17:28:06.1358125Z [90;1m==> [0m[37;1mSetup PHP[0m
-2026-10-01T17:28:09.7857697Z [32;1m✓ [0m[34;1mPHP [0m[90;1mInstalled PHP 8.4.26[0m
-2026-10-01T17:28:09.7858602Z 
-2026-10-01T17:28:09.7859367Z [90;1m==> [0m[37;1mSetup Extensions[0m
-2026-10-01T17:28:09.8407521Z [32;1m✓ [0m[34;1mmbstring [0m[90;1mEnabled[0m
-2026-10-01T17:28:09.8440042Z [32;1m✓ [0m[34;1mpdo [0m[90;1mEnabled[0m
-2026-10-01T17:28:09.8475423Z [32;1m✓ [0m[34;1msqlite3 [0m[90;1mEnabled[0m
-2026-10-01T17:28:09.8498982Z [32;1m✓ [0m[34;1mpdo_sqlite [0m[90;1mEnabled[0m
-2026-10-01T17:28:09.8513875Z [32;1m✓ [0m[34;1mpdo_pgsql [0m[90;1mEnabled[0m
-2026-10-01T17:28:09.8552669Z [32;1m✓ [0m[34;1mbcmath [0m[90;1mEnabled[0m
-2026-10-01T17:28:09.8582681Z [32;1m✓ [0m[34;1mcurl [0m[90;1mEnabled[0m
-2026-10-01T17:28:09.8615789Z [32;1m✓ [0m[34;1mintl [0m[90;1mEnabled[0m
-2026-10-01T17:28:09.8648610Z [32;1m✓ [0m[34;1mzip [0m[90;1mEnabled[0m
-2026-10-01T17:28:09.8686123Z [32;1m✓ [0m[34;1mgd [0m[90;1mEnabled[0m
-2026-10-01T17:28:09.8716057Z [32;1m✓ [0m[34;1mxdebug [0m[90;1mEnabled[0m
-2026-10-01T17:28:09.8720672Z 
-2026-10-01T17:28:09.8721291Z [90;1m==> [0m[37;1mSetup Tools[0m
-2026-10-01T17:28:10.1486532Z [32;1m✓ [0m[34;1mcomposer [0m[90;1mAdded composer 2.10.3[0m
-2026-10-01T17:28:10.1501392Z 
-2026-10-01T17:28:10.1512084Z [90;1m==> [0m[37;1mSetup Coverage[0m
-2026-10-01T17:28:10.2634414Z [32;1m✓ [0m[34;1mxdebug [0m[90;1mXdebug 3.5.3 enabled as coverage driver[0m
-2026-10-01T17:28:10.2643332Z 
-2026-10-01T17:28:10.2648321Z [90;1m==> [0m[37;1mSponsor setup-php[0m
-2026-10-01T17:28:10.2649477Z [32;1m✓ [0m[34;1msetup-php [0m[90;1mhttps://setup-php.com/sponsor[0m
+2026-10-01T17:28:06.1356995Z
+2026-10-01T17:28:06.1358125Z ==> Setup PHP
+2026-10-01T17:28:09.7857697Z ✓ PHP Installed PHP 8.4.26
+2026-10-01T17:28:09.7858602Z
+2026-10-01T17:28:09.7859367Z ==> Setup Extensions
+2026-10-01T17:28:09.8407521Z ✓ mbstring Enabled
+2026-10-01T17:28:09.8440042Z ✓ pdo Enabled
+2026-10-01T17:28:09.8475423Z ✓ sqlite3 Enabled
+2026-10-01T17:28:09.8498982Z ✓ pdo_sqlite Enabled
+2026-10-01T17:28:09.8513875Z ✓ pdo_pgsql Enabled
+2026-10-01T17:28:09.8552669Z ✓ bcmath Enabled
+2026-10-01T17:28:09.8582681Z ✓ curl Enabled
+2026-10-01T17:28:09.8615789Z ✓ intl Enabled
+2026-10-01T17:28:09.8648610Z ✓ zip Enabled
+2026-10-01T17:28:09.8686123Z ✓ gd Enabled
+2026-10-01T17:28:09.8716057Z ✓ xdebug Enabled
+2026-10-01T17:28:09.8720672Z
+2026-10-01T17:28:09.8721291Z ==> Setup Tools
+2026-10-01T17:28:10.1486532Z ✓ composer Added composer 2.10.3
+2026-10-01T17:28:10.1501392Z
+2026-10-01T17:28:10.1512084Z ==> Setup Coverage
+2026-10-01T17:28:10.2634414Z ✓ xdebug Xdebug 3.5.3 enabled as coverage driver
+2026-10-01T17:28:10.2643332Z
+2026-10-01T17:28:10.2648321Z ==> Sponsor setup-php
+2026-10-01T17:28:10.2649477Z ✓ setup-php https://setup-php.com/sponsor
 2026-10-01T17:28:10.2843271Z ##[group]Run python3 scripts/distribution/stage-stancl-providers.py
-2026-10-01T17:28:10.2843832Z [36;1mpython3 scripts/distribution/stage-stancl-providers.py[0m
+2026-10-01T17:28:10.2843832Z python3 scripts/distribution/stage-stancl-providers.py
 2026-10-01T17:28:10.3056726Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:28:10.3057068Z env:
 2026-10-01T17:28:10.3057297Z   PGSQL_PORT: 5432
@@ -298,7 +298,7 @@
 2026-10-01T17:28:10.3058392Z ##[endgroup]
 2026-10-01T17:28:11.0879918Z {"result": "PASS", "repository": "file:///home/runner/work/corex/corex/.composer-provider-staging", "staging": "/home/runner/work/corex/corex/.composer-provider-staging", "registered": ["/home/runner/work/corex/corex", "/home/runner/work/corex/corex/packages/tenancy", "/home/runner/work/corex/corex/packages/access"]}
 2026-10-01T17:28:11.0992577Z ##[group]Run composer update --prefer-dist --no-interaction --no-progress
-2026-10-01T17:28:11.0993138Z [36;1mcomposer update --prefer-dist --no-interaction --no-progress[0m
+2026-10-01T17:28:11.0993138Z composer update --prefer-dist --no-interaction --no-progress
 2026-10-01T17:28:11.1058210Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:28:11.1058465Z env:
 2026-10-01T17:28:11.1058649Z   PGSQL_PORT: 5432
@@ -805,7 +805,7 @@
 2026-10-01T17:28:25.2795640Z > pestphp/pest: ignored
 2026-10-01T17:28:25.2796230Z > phpstan/phpstan-strict-rules: ignored
 2026-10-01T17:28:25.3156886Z ##[group]Run composer audit --locked
-2026-10-01T17:28:25.3157265Z [36;1mcomposer audit --locked[0m
+2026-10-01T17:28:25.3157265Z composer audit --locked
 2026-10-01T17:28:25.3222033Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:28:25.3222290Z env:
 2026-10-01T17:28:25.3222482Z   PGSQL_PORT: 5432
@@ -815,7 +815,7 @@
 2026-10-01T17:28:25.3223400Z ##[endgroup]
 2026-10-01T17:28:25.8451568Z No security vulnerability advisories found.
 2026-10-01T17:28:25.8688756Z ##[group]Run composer --working-dir=products/flex-crm update --prefer-dist --no-interaction --no-progress
-2026-10-01T17:28:25.8689531Z [36;1mcomposer --working-dir=products/flex-crm update --prefer-dist --no-interaction --no-progress[0m
+2026-10-01T17:28:25.8689531Z composer --working-dir=products/flex-crm update --prefer-dist --no-interaction --no-progress
 2026-10-01T17:28:25.8754863Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:28:25.8755131Z env:
 2026-10-01T17:28:25.8755325Z   PGSQL_PORT: 5432
@@ -1117,7 +1117,7 @@
 2026-10-01T17:28:32.0224535Z 93 packages you are using are looking for funding.
 2026-10-01T17:28:32.0225458Z Use the `composer fund` command to find out more!
 2026-10-01T17:28:32.0539028Z ##[group]Run composer audit --locked --working-dir=products/flex-crm
-2026-10-01T17:28:32.0539916Z [36;1mcomposer audit --locked --working-dir=products/flex-crm[0m
+2026-10-01T17:28:32.0539916Z composer audit --locked --working-dir=products/flex-crm
 2026-10-01T17:28:32.0634437Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:28:32.0634950Z env:
 2026-10-01T17:28:32.0635280Z   PGSQL_PORT: 5432
@@ -1127,7 +1127,7 @@
 2026-10-01T17:28:32.0636900Z ##[endgroup]
 2026-10-01T17:28:32.5995960Z No security vulnerability advisories found.
 2026-10-01T17:28:32.6249230Z ##[group]Run composer --working-dir=products/flex-crm test
-2026-10-01T17:28:32.6250005Z [36;1mcomposer --working-dir=products/flex-crm test[0m
+2026-10-01T17:28:32.6250005Z composer --working-dir=products/flex-crm test
 2026-10-01T17:28:32.6332043Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:28:32.6332322Z env:
 2026-10-01T17:28:32.6332514Z   PGSQL_PORT: 5432
@@ -1135,66 +1135,66 @@
 2026-10-01T17:28:32.6332994Z   COMPOSER_NO_INTERACTION: 1
 2026-10-01T17:28:32.6333222Z   COMPOSER_NO_AUDIT: 1
 2026-10-01T17:28:32.6333426Z ##[endgroup]
-2026-10-01T17:28:34.5346525Z 
-2026-10-01T17:28:34.5347787Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\DealFlowTest[39m
-2026-10-01T17:28:34.5364209Z   [32;1m✓[39;22m[90m [39m[90mit moves a deal to a won stage and marks it won[39m[90m                     [39m [90m0.41s[39m  
-2026-10-01T17:28:34.5377054Z   [32;1m✓[39;22m[90m [39m[90mit refuses to create a deal in a pipeline without stages[39m[90m            [39m [90m0.19s[39m  
-2026-10-01T17:28:34.5400674Z   [32;1m✓[39;22m[90m [39m[90mit rolls back a vetoed stage update without a success event[39m[90m         [39m [90m0.20s[39m  
-2026-10-01T17:28:34.5410214Z   [32;1m✓[39;22m[90m [39m[90mit clears optional amount without clearing mandatory currency[39m[90m       [39m [90m0.19s[39m  
-2026-10-01T17:28:34.5422621Z   [32;1m✓[39;22m[90m [39m[90mit creates a deal at the first stage with money[39m[90m                     [39m [90m0.18s[39m  
-2026-10-01T17:28:34.5435334Z   [32;1m✓[39;22m[90m [39m[90mit rejects a stage from another pipeline without changing the deal[39m[90m… [39m [90m0.20s[39m  
-2026-10-01T17:28:35.0504148Z 
-2026-10-01T17:28:35.0508309Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\ApiOperationsTest[39m
-2026-10-01T17:28:35.0517778Z   [32;1m✓[39;22m[90m [39m[90mit normalizes CRM identifiers for the configured ID strategy[39m[90m        [39m [90m0.15s[39m  
-2026-10-01T17:28:35.0531043Z   [32;1m✓[39;22m[90m [39m[90mit declares and dispatches company, contact and association operati[39m[90m…[39m [90m0.36s[39m  
-2026-10-01T17:28:35.4903430Z 
-2026-10-01T17:28:35.4904469Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\ActivityTimelineTest[39m
-2026-10-01T17:28:35.4914796Z   [32;1m✓[39;22m[90m [39m[90mit attaches activities to different subject types[39m[90m                   [39m [90m0.24s[39m  
-2026-10-01T17:28:35.4927714Z   [32;1m✓[39;22m[90m [39m[90mit logs a polymorphic activity resolved through the morph alias[39m[90m     [39m [90m0.19s[39m  
-2026-10-01T17:28:36.2421841Z 
-2026-10-01T17:28:36.2442655Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\ParityTest[39m
-2026-10-01T17:28:36.2444465Z   [32;1m✓[39;22m[90m [39m[90mit creates approved records and a typed primary association[39m[90m         [39m [90m0.24s[39m  
-2026-10-01T17:28:36.2642285Z   [32;1m✓[39;22m[90m [39m[90mit normalizes Unicode whitespace before testing empty name componen[39m[90m…[39m [90m0.17s[39m  
-2026-10-01T17:28:36.2661747Z   [32;1m✓[39;22m[90m [39m[90mit rejects nameless contacts without usable channels[39m[90m                [39m [90m0.15s[39m  
-2026-10-01T17:28:36.2862857Z   [32;1m✓[39;22m[90m [39m[90mit rejects invalid UTF-8 names rather than silently dropping their[39m[90m… [39m [90m0.17s[39m  
-2026-10-01T17:28:36.4955723Z 
-2026-10-01T17:28:36.4957087Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\CompanyContactTest[39m
-2026-10-01T17:28:36.4967507Z   [32;1m✓[39;22m[90m [39m[90mit creates a company and a contact linked to it[39m[90m                     [39m [90m0.27s[39m  
-2026-10-01T17:28:37.4808248Z 
-2026-10-01T17:28:37.4809405Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\SalesStorageTest[39m
-2026-10-01T17:28:37.4823430Z   [32;1m✓[39;22m[90m [39m[90mit refuses conversion without explicit human identity and preserves[39m[90m…[39m [90m0.16s[39m  
-2026-10-01T17:28:37.4837363Z   [32;1m✓[39;22m[90m [39m[90mit does not represent legacy statuses or note and task as activitie[39m[90m…[39m [90m0.14s[39m  
-2026-10-01T17:28:37.4850809Z   [32;1m✓[39;22m[90m [39m[90mit rejects creation veto without persisted rows or success events[39m[90m   [39m [90m0.15s[39m  
-2026-10-01T17:28:37.4864253Z   [32;1m✓[39;22m[90m [39m[90mit stores activity kinds and canonical target associations[39m[90m          [39m [90m0.18s[39m  
-2026-10-01T17:28:37.4877528Z   [32;1m✓[39;22m[90m [39m[90mit persists canonical lead fields with trusted provenance[39m[90m           [39m [90m0.15s[39m  
-2026-10-01T17:28:37.4891095Z   [32;1m✓[39;22m[90m [39m[90mit rolls back the entire conversion when the final lead update is v[39m[90m…[39m [90m0.20s[39m  
-2026-10-01T17:28:38.8889542Z 
-2026-10-01T17:28:38.8902083Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\LeadConversionTest[39m
-2026-10-01T17:28:38.8922036Z   [32;1m✓[39;22m[90m [39m[90mit converts a lead into contact, company and deal[39m[90m                   [39m [90m0.46s[39m  
-2026-10-01T17:28:38.8961743Z   [32;1m✓[39;22m[90m [39m[90mit returns the same conversion on retry even when passed a stale le[39m[90m…[39m [90m0.45s[39m  
-2026-10-01T17:28:38.8963730Z   [32;1m✓[39;22m[90m [39m[90mit converts a lead without company or deal[39m[90m                          [39m [90m0.49s[39m  
-2026-10-01T17:28:39.0991376Z 
-2026-10-01T17:28:39.1002289Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\RegistryFieldCastsTest[39m
-2026-10-01T17:28:39.1004016Z   [32;1m✓[39;22m[90m [39m[90mit compiles a consumer money field using the intl cast registration[39m[90m [39m [90m0.20s[39m  
-2026-10-01T17:28:41.0677238Z 
-2026-10-01T17:28:41.0678143Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\ContextSecurityTest[39m
-2026-10-01T17:28:41.0693227Z   [32;1m✓[39;22m[90m [39m[90mit fails closed for disabled CRM and tenant context mismatch[39m[90m        [39m [90m0.19s[39m  
-2026-10-01T17:28:41.0705899Z   [32;1m✓[39;22m[90m [39m[90mit guards direct association writes against cross-scope and foreign[39m[90m…[39m [90m0.28s[39m  
-2026-10-01T17:28:41.0717960Z   [32;1m✓[39;22m[90m [39m[90mit rechecks trusted provenance after late creating observers[39m[90m        [39m [90m0.17s[39m  
-2026-10-01T17:28:41.0730067Z   [32;1m✓[39;22m[90m [39m[90mit rejects a late observer changing association endpoints[39m[90m           [39m [90m0.25s[39m  
-2026-10-01T17:28:41.0742126Z   [32;1m✓[39;22m[90m [39m[90mit rejects a late observer changing the workspace and guards quiet[39m[90m… [39m [90m0.20s[39m  
-2026-10-01T17:28:41.0754236Z   [32;1m✓[39;22m[90m [39m[90mit requires account-level capability when no workspace exists[39m[90m       [39m [90m0.14s[39m  
-2026-10-01T17:28:41.0766083Z   [32;1m✓[39;22m[90m [39m[90mit treats observer veto as failed mutation without dispatching succ[39m[90m…[39m [90m0.26s[39m  
-2026-10-01T17:28:41.0778102Z   [32;1m✓[39;22m[90m [39m[90mit rejects malformed actor identities and foreign profile IDs[39m[90m       [39m [90m0.15s[39m  
-2026-10-01T17:28:41.0790357Z   [32;1m✓[39;22m[90m [39m[90mit overwrites forged creation provenance and prevents changing it a[39m[90m…[39m [90m0.17s[39m  
-2026-10-01T17:28:41.0802656Z   [32;1m✓[39;22m[90m [39m[90mit rejects direct foreign workspace writes and foreign connection q[39m[90m…[39m [90m0.15s[39m  
-2026-10-01T17:28:41.0808345Z 
-2026-10-01T17:28:41.0811733Z   [90mTests:[39m    [32;1m35 passed[39;22m[90m (136 assertions)[39m
-2026-10-01T17:28:41.0812998Z   [90mDuration:[39m [39m8.16s[39m
-2026-10-01T17:28:41.0813774Z   [90mRandom Order Seed:[39m [39m1790875713[39m
-2026-10-01T17:28:41.0814261Z 
+2026-10-01T17:28:34.5346525Z
+2026-10-01T17:28:34.5347787Z    PASS  Tests\Feature\DealFlowTest
+2026-10-01T17:28:34.5364209Z   ✓ it moves a deal to a won stage and marks it won                      0.41s
+2026-10-01T17:28:34.5377054Z   ✓ it refuses to create a deal in a pipeline without stages             0.19s
+2026-10-01T17:28:34.5400674Z   ✓ it rolls back a vetoed stage update without a success event          0.20s
+2026-10-01T17:28:34.5410214Z   ✓ it clears optional amount without clearing mandatory currency        0.19s
+2026-10-01T17:28:34.5422621Z   ✓ it creates a deal at the first stage with money                      0.18s
+2026-10-01T17:28:34.5435334Z   ✓ it rejects a stage from another pipeline without changing the deal…  0.20s
+2026-10-01T17:28:35.0504148Z
+2026-10-01T17:28:35.0508309Z    PASS  Tests\Feature\ApiOperationsTest
+2026-10-01T17:28:35.0517778Z   ✓ it normalizes CRM identifiers for the configured ID strategy         0.15s
+2026-10-01T17:28:35.0531043Z   ✓ it declares and dispatches company, contact and association operati… 0.36s
+2026-10-01T17:28:35.4903430Z
+2026-10-01T17:28:35.4904469Z    PASS  Tests\Feature\ActivityTimelineTest
+2026-10-01T17:28:35.4914796Z   ✓ it attaches activities to different subject types                    0.24s
+2026-10-01T17:28:35.4927714Z   ✓ it logs a polymorphic activity resolved through the morph alias      0.19s
+2026-10-01T17:28:36.2421841Z
+2026-10-01T17:28:36.2442655Z    PASS  Tests\Feature\ParityTest
+2026-10-01T17:28:36.2444465Z   ✓ it creates approved records and a typed primary association          0.24s
+2026-10-01T17:28:36.2642285Z   ✓ it normalizes Unicode whitespace before testing empty name componen… 0.17s
+2026-10-01T17:28:36.2661747Z   ✓ it rejects nameless contacts without usable channels                 0.15s
+2026-10-01T17:28:36.2862857Z   ✓ it rejects invalid UTF-8 names rather than silently dropping their…  0.17s
+2026-10-01T17:28:36.4955723Z
+2026-10-01T17:28:36.4957087Z    PASS  Tests\Feature\CompanyContactTest
+2026-10-01T17:28:36.4967507Z   ✓ it creates a company and a contact linked to it                      0.27s
+2026-10-01T17:28:37.4808248Z
+2026-10-01T17:28:37.4809405Z    PASS  Tests\Feature\SalesStorageTest
+2026-10-01T17:28:37.4823430Z   ✓ it refuses conversion without explicit human identity and preserves… 0.16s
+2026-10-01T17:28:37.4837363Z   ✓ it does not represent legacy statuses or note and task as activitie… 0.14s
+2026-10-01T17:28:37.4850809Z   ✓ it rejects creation veto without persisted rows or success events    0.15s
+2026-10-01T17:28:37.4864253Z   ✓ it stores activity kinds and canonical target associations           0.18s
+2026-10-01T17:28:37.4877528Z   ✓ it persists canonical lead fields with trusted provenance            0.15s
+2026-10-01T17:28:37.4891095Z   ✓ it rolls back the entire conversion when the final lead update is v… 0.20s
+2026-10-01T17:28:38.8889542Z
+2026-10-01T17:28:38.8902083Z    PASS  Tests\Feature\LeadConversionTest
+2026-10-01T17:28:38.8922036Z   ✓ it converts a lead into contact, company and deal                    0.46s
+2026-10-01T17:28:38.8961743Z   ✓ it returns the same conversion on retry even when passed a stale le… 0.45s
+2026-10-01T17:28:38.8963730Z   ✓ it converts a lead without company or deal                           0.49s
+2026-10-01T17:28:39.0991376Z
+2026-10-01T17:28:39.1002289Z    PASS  Tests\Feature\RegistryFieldCastsTest
+2026-10-01T17:28:39.1004016Z   ✓ it compiles a consumer money field using the intl cast registration  0.20s
+2026-10-01T17:28:41.0677238Z
+2026-10-01T17:28:41.0678143Z    PASS  Tests\Feature\ContextSecurityTest
+2026-10-01T17:28:41.0693227Z   ✓ it fails closed for disabled CRM and tenant context mismatch         0.19s
+2026-10-01T17:28:41.0705899Z   ✓ it guards direct association writes against cross-scope and foreign… 0.28s
+2026-10-01T17:28:41.0717960Z   ✓ it rechecks trusted provenance after late creating observers         0.17s
+2026-10-01T17:28:41.0730067Z   ✓ it rejects a late observer changing association endpoints            0.25s
+2026-10-01T17:28:41.0742126Z   ✓ it rejects a late observer changing the workspace and guards quiet…  0.20s
+2026-10-01T17:28:41.0754236Z   ✓ it requires account-level capability when no workspace exists        0.14s
+2026-10-01T17:28:41.0766083Z   ✓ it treats observer veto as failed mutation without dispatching succ… 0.26s
+2026-10-01T17:28:41.0778102Z   ✓ it rejects malformed actor identities and foreign profile IDs        0.15s
+2026-10-01T17:28:41.0790357Z   ✓ it overwrites forged creation provenance and prevents changing it a… 0.17s
+2026-10-01T17:28:41.0802656Z   ✓ it rejects direct foreign workspace writes and foreign connection q… 0.15s
+2026-10-01T17:28:41.0808345Z
+2026-10-01T17:28:41.0811733Z   Tests:    35 passed (136 assertions)
+2026-10-01T17:28:41.0812998Z   Duration: 8.16s
+2026-10-01T17:28:41.0813774Z   Random Order Seed: 1790875713
+2026-10-01T17:28:41.0814261Z
 2026-10-01T17:28:41.1168241Z ##[group]Run composer --working-dir=products/flex-crm test:pg
-2026-10-01T17:28:41.1169031Z [36;1mcomposer --working-dir=products/flex-crm test:pg[0m
+2026-10-01T17:28:41.1169031Z composer --working-dir=products/flex-crm test:pg
 2026-10-01T17:28:41.1251101Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:28:41.1251485Z env:
 2026-10-01T17:28:41.1251691Z   PGSQL_PORT: 5432
@@ -1202,71 +1202,71 @@
 2026-10-01T17:28:41.1252191Z   COMPOSER_NO_INTERACTION: 1
 2026-10-01T17:28:41.1252422Z   COMPOSER_NO_AUDIT: 1
 2026-10-01T17:28:41.1252634Z ##[endgroup]
-2026-10-01T17:28:41.8484204Z 
-2026-10-01T17:28:41.8485273Z   [30;42;1m PASS [39;49;22m[39m Tests\Pg\UpgradeSafetyTest[39m
-2026-10-01T17:28:41.8549048Z   [32;1m✓[39;22m[90m [39m[90mit refuses automatic legacy backfill before altering any CRM data[39m[90m   [39m [90m0.19s[39m  
-2026-10-01T17:28:41.8582468Z   [32;1m✓[39;22m[90m [39m[90mit checks prerequisite ownership before any destructive schema oper[39m[90m…[39m [90m0.07s[39m  
-2026-10-01T17:28:43.3907311Z 
-2026-10-01T17:28:43.3909300Z   [30;42;1m PASS [39;49;22m[39m Tests\Pg\FullStorageParityTest[39m
-2026-10-01T17:28:43.3924127Z   [32;1m✓[39;22m[90m [39m[90mit refuses populated legacy sales tables before changing any storag[39m[90m…[39m [90m0.29s[39m  
-2026-10-01T17:28:43.3937917Z   [32;1m✓[39;22m[90m [39m[90mit refuses populated legacy sales tables before changing any storag[39m[90m…[39m [90m0.28s[39m  
-2026-10-01T17:28:43.3951882Z   [32;1m✓[39;22m[90m [39m[90mit refuses populated legacy sales tables before changing any storag[39m[90m…[39m [90m0.27s[39m  
-2026-10-01T17:28:43.3965704Z   [32;1m✓[39;22m[90m [39m[90mit matches every actual enabled column constraint and index against[39m[90m…[39m [90m0.70s[39m  
-2026-10-01T17:28:44.3045569Z 
-2026-10-01T17:28:44.3052263Z   [30;42;1m PASS [39;49;22m[39m Tests\Pg\ModuleLifecycleTest[39m
-2026-10-01T17:28:44.3063044Z   [32;1m✓[39;22m[90m [39m[90mit discovers CRM composer metadata and manages its schema through t[39m[90m…[39m [90m0.91s[39m  
-2026-10-01T17:28:48.3416822Z 
-2026-10-01T17:28:48.3418725Z   [30;42;1m PASS [39;49;22m[39m Tests\Pg\ActivityIdTest[39m
-2026-10-01T17:28:48.3433329Z   [32;1m✓[39;22m[90m [39m[90mit widens a legacy activity morph column before a UUID insert[39m[90m       [39m [90m0.09s[39m  
-2026-10-01T17:28:48.3446975Z   [32;1m✓[39;22m[90m [39m[90mit converts with canonical deal associations under enum configured[39m[90m… [39m [90m0.69s[39m  
-2026-10-01T17:28:48.3460800Z   [32;1m✓[39;22m[90m [39m[90mit converts with canonical deal associations under enum configured[39m[90m… [39m [90m0.81s[39m  
-2026-10-01T17:28:48.3474458Z   [32;1m✓[39;22m[90m [39m[90mit stores and resolves activity subjects on PostgreSQL for the conf[39m[90m…[39m [90m0.67s[39m  
-2026-10-01T17:28:48.3488632Z   [32;1m✓[39;22m[90m [39m[90mit stores and resolves activity subjects on PostgreSQL for the conf[39m[90m…[39m [90m0.62s[39m  
-2026-10-01T17:28:48.3502541Z   [32;1m✓[39;22m[90m [39m[90mit stores and resolves activity subjects on PostgreSQL for the conf[39m[90m…[39m [90m0.57s[39m  
-2026-10-01T17:28:48.3516215Z   [32;1m✓[39;22m[90m [39m[90mit stores and resolves activity subjects on PostgreSQL for the conf[39m[90m…[39m [90m0.58s[39m  
-2026-10-01T17:28:49.0928560Z 
-2026-10-01T17:28:49.0930341Z   [30;42;1m PASS [39;49;22m[39m Tests\Pg\ConversionConcurrencyTest[39m
-2026-10-01T17:28:49.0951438Z   [32;1m✓[39;22m[90m [39m[90mit serializes concurrent conversion and returns the committed resul[39m[90m…[39m [90m0.73s[39m  
-2026-10-01T17:29:07.4356183Z 
-2026-10-01T17:29:07.4371953Z   [30;42;1m PASS [39;49;22m[39m Tests\Pg\ParityContractTest[39m
-2026-10-01T17:29:07.4382263Z   [32;1m✓[39;22m[90m [39m[90mit separates NULL account data current workspace and foreign worksp[39m[90m…[39m [90m0.63s[39m  
-2026-10-01T17:29:07.4402808Z   [32;1m✓[39;22m[90m [39m[90mit fails closed for missing context and revoked membership on reads[39m[90m…[39m [90m0.55s[39m  
-2026-10-01T17:29:07.4421896Z   [32;1m✓[39;22m[90m [39m[90mit enforces pair and primary constraints for direct database writer[39m[90m…[39m [90m0.79s[39m  
-2026-10-01T17:29:07.4442496Z   [32;1m✓[39;22m[90m [39m[90mit preserves pivot on soft delete and applies hard delete SET NULL[39m[90m… [39m [90m0.73s[39m  
-2026-10-01T17:29:07.4461881Z   [32;1m✓[39;22m[90m [39m[90mit rejects foreign or inactive source and owner references[39m[90m          [39m [90m0.61s[39m  
-2026-10-01T17:29:07.4481904Z   [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with (['a@e[39m[90m…[39m [90m0.52s[39m  
-2026-10-01T17:29:07.4501947Z   [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['+1[39m[90m…[39m [90m0.52s[39m  
-2026-10-01T17:29:07.4521865Z   [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['in[39m[90m…[39m [90m0.52s[39m  
-2026-10-01T17:29:07.4541941Z   [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([[''][39m[90m…[39m [90m0.52s[39m  
-2026-10-01T17:29:07.4561947Z   [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['a@[39m[90m…[39m [90m0.53s[39m  
-2026-10-01T17:29:07.4581937Z   [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['+1[39m[90m…[39m [90m0.53s[39m  
-2026-10-01T17:29:07.4602228Z   [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['65[39m[90m…[39m [90m0.52s[39m  
-2026-10-01T17:29:07.4641749Z   [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['a@[39m[90m…[39m [90m0.52s[39m  
-2026-10-01T17:29:07.4643144Z   [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['a@[39m[90m…[39m [90m0.57s[39m  
-2026-10-01T17:29:07.4644499Z   [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['a@[39m[90m…[39m [90m0.54s[39m  
-2026-10-01T17:29:07.4645788Z   [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['+1[39m[90m…[39m [90m0.54s[39m  
-2026-10-01T17:29:07.4647105Z   [32;1m✓[39;22m[90m [39m[90mit keeps committed data when a synchronous after-commit listener fa[39m[90m…[39m [90m0.56s[39m  
-2026-10-01T17:29:07.4648383Z   [32;1m✓[39;22m[90m [39m[90mit rejects forged actors and mismatched account connections[39m[90m         [39m [90m0.50s[39m  
-2026-10-01T17:29:07.4649691Z   [32;1m✓[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as con[39m[90m…[39m [90m0.57s[39m  
-2026-10-01T17:29:07.4651090Z   [32;1m✓[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as con[39m[90m…[39m [90m0.55s[39m  
-2026-10-01T17:29:07.4652396Z   [32;1m✓[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as con[39m[90m…[39m [90m0.55s[39m  
-2026-10-01T17:29:07.4653655Z   [32;1m✓[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as con[39m[90m…[39m [90m0.55s[39m  
-2026-10-01T17:29:07.4654830Z   [32;1m✓[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as con[39m[90m…[39m [90m0.60s[39m  
-2026-10-01T17:29:07.4671789Z   [32;1m✓[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as con[39m[90m…[39m [90m0.56s[39m  
-2026-10-01T17:29:07.4691779Z   [32;1m✓[39;22m[90m [39m[90mit matches approved PostgreSQL fields lengths defaults indexes and[39m[90m… [39m [90m0.54s[39m  
-2026-10-01T17:29:07.4712277Z   [32;1m✓[39;22m[90m [39m[90mit dispatches mutation events only after the successful outer commi[39m[90m…[39m [90m0.81s[39m  
-2026-10-01T17:29:07.4714805Z   [32;1m✓[39;22m[90m [39m[90mit roundtrips all approved company and contact values and search[39m[90m    [39m [90m0.69s[39m  
-2026-10-01T17:29:07.4723869Z   [32;1m✓[39;22m[90m [39m[90mit rejects associations between NULL and workspace even with accoun[39m[90m…[39m [90m0.62s[39m  
-2026-10-01T17:29:07.4737253Z   [32;1m✓[39;22m[90m [39m[90mit serializes competing primary actions and rejects the loser after[39m[90m…[39m [90m0.85s[39m  
-2026-10-01T17:29:07.4750818Z   [32;1m✓[39;22m[90m [39m[90mit uses deterministic channel fallback and nullable whitespace comp[39m[90m…[39m [90m0.69s[39m  
-2026-10-01T17:29:07.4763896Z   [32;1m✓[39;22m[90m [39m[90mit rejects invalid dates and field widths[39m[90m                           [39m [90m0.57s[39m  
-2026-10-01T17:29:07.4771755Z 
-2026-10-01T17:29:07.4774107Z   [90mTests:[39m    [32;1m46 passed[39;22m[90m (269 assertions)[39m
-2026-10-01T17:29:07.4775555Z   [90mDuration:[39m [39m25.99s[39m
-2026-10-01T17:29:07.4776716Z   [90mRandom Order Seed:[39m [39m1790875721[39m
-2026-10-01T17:29:07.4777272Z 
+2026-10-01T17:28:41.8484204Z
+2026-10-01T17:28:41.8485273Z    PASS  Tests\Pg\UpgradeSafetyTest
+2026-10-01T17:28:41.8549048Z   ✓ it refuses automatic legacy backfill before altering any CRM data    0.19s
+2026-10-01T17:28:41.8582468Z   ✓ it checks prerequisite ownership before any destructive schema oper… 0.07s
+2026-10-01T17:28:43.3907311Z
+2026-10-01T17:28:43.3909300Z    PASS  Tests\Pg\FullStorageParityTest
+2026-10-01T17:28:43.3924127Z   ✓ it refuses populated legacy sales tables before changing any storag… 0.29s
+2026-10-01T17:28:43.3937917Z   ✓ it refuses populated legacy sales tables before changing any storag… 0.28s
+2026-10-01T17:28:43.3951882Z   ✓ it refuses populated legacy sales tables before changing any storag… 0.27s
+2026-10-01T17:28:43.3965704Z   ✓ it matches every actual enabled column constraint and index against… 0.70s
+2026-10-01T17:28:44.3045569Z
+2026-10-01T17:28:44.3052263Z    PASS  Tests\Pg\ModuleLifecycleTest
+2026-10-01T17:28:44.3063044Z   ✓ it discovers CRM composer metadata and manages its schema through t… 0.91s
+2026-10-01T17:28:48.3416822Z
+2026-10-01T17:28:48.3418725Z    PASS  Tests\Pg\ActivityIdTest
+2026-10-01T17:28:48.3433329Z   ✓ it widens a legacy activity morph column before a UUID insert        0.09s
+2026-10-01T17:28:48.3446975Z   ✓ it converts with canonical deal associations under enum configured…  0.69s
+2026-10-01T17:28:48.3460800Z   ✓ it converts with canonical deal associations under enum configured…  0.81s
+2026-10-01T17:28:48.3474458Z   ✓ it stores and resolves activity subjects on PostgreSQL for the conf… 0.67s
+2026-10-01T17:28:48.3488632Z   ✓ it stores and resolves activity subjects on PostgreSQL for the conf… 0.62s
+2026-10-01T17:28:48.3502541Z   ✓ it stores and resolves activity subjects on PostgreSQL for the conf… 0.57s
+2026-10-01T17:28:48.3516215Z   ✓ it stores and resolves activity subjects on PostgreSQL for the conf… 0.58s
+2026-10-01T17:28:49.0928560Z
+2026-10-01T17:28:49.0930341Z    PASS  Tests\Pg\ConversionConcurrencyTest
+2026-10-01T17:28:49.0951438Z   ✓ it serializes concurrent conversion and returns the committed resul… 0.73s
+2026-10-01T17:29:07.4356183Z
+2026-10-01T17:29:07.4371953Z    PASS  Tests\Pg\ParityContractTest
+2026-10-01T17:29:07.4382263Z   ✓ it separates NULL account data current workspace and foreign worksp… 0.63s
+2026-10-01T17:29:07.4402808Z   ✓ it fails closed for missing context and revoked membership on reads… 0.55s
+2026-10-01T17:29:07.4421896Z   ✓ it enforces pair and primary constraints for direct database writer… 0.79s
+2026-10-01T17:29:07.4442496Z   ✓ it preserves pivot on soft delete and applies hard delete SET NULL…  0.73s
+2026-10-01T17:29:07.4461881Z   ✓ it rejects foreign or inactive source and owner references           0.61s
+2026-10-01T17:29:07.4481904Z   ✓ it rejects malformed channels without storing a contact with (['a@e… 0.52s
+2026-10-01T17:29:07.4501947Z   ✓ it rejects malformed channels without storing a contact with ([['+1… 0.52s
+2026-10-01T17:29:07.4521865Z   ✓ it rejects malformed channels without storing a contact with ([['in… 0.52s
+2026-10-01T17:29:07.4541941Z   ✓ it rejects malformed channels without storing a contact with ([['']… 0.52s
+2026-10-01T17:29:07.4561947Z   ✓ it rejects malformed channels without storing a contact with ([['a@… 0.53s
+2026-10-01T17:29:07.4581937Z   ✓ it rejects malformed channels without storing a contact with ([['+1… 0.53s
+2026-10-01T17:29:07.4602228Z   ✓ it rejects malformed channels without storing a contact with ([['65… 0.52s
+2026-10-01T17:29:07.4641749Z   ✓ it rejects malformed channels without storing a contact with ([['a@… 0.52s
+2026-10-01T17:29:07.4643144Z   ✓ it rejects malformed channels without storing a contact with ([['a@… 0.57s
+2026-10-01T17:29:07.4644499Z   ✓ it rejects malformed channels without storing a contact with ([['a@… 0.54s
+2026-10-01T17:29:07.4645788Z   ✓ it rejects malformed channels without storing a contact with ([['+1… 0.54s
+2026-10-01T17:29:07.4647105Z   ✓ it keeps committed data when a synchronous after-commit listener fa… 0.56s
+2026-10-01T17:29:07.4648383Z   ✓ it rejects forged actors and mismatched account connections          0.50s
+2026-10-01T17:29:07.4649691Z   ✓ it stores each admitted B13 actor kind through a trusted run-as con… 0.57s
+2026-10-01T17:29:07.4651090Z   ✓ it stores each admitted B13 actor kind through a trusted run-as con… 0.55s
+2026-10-01T17:29:07.4652396Z   ✓ it stores each admitted B13 actor kind through a trusted run-as con… 0.55s
+2026-10-01T17:29:07.4653655Z   ✓ it stores each admitted B13 actor kind through a trusted run-as con… 0.55s
+2026-10-01T17:29:07.4654830Z   ✓ it stores each admitted B13 actor kind through a trusted run-as con… 0.60s
+2026-10-01T17:29:07.4671789Z   ✓ it stores each admitted B13 actor kind through a trusted run-as con… 0.56s
+2026-10-01T17:29:07.4691779Z   ✓ it matches approved PostgreSQL fields lengths defaults indexes and…  0.54s
+2026-10-01T17:29:07.4712277Z   ✓ it dispatches mutation events only after the successful outer commi… 0.81s
+2026-10-01T17:29:07.4714805Z   ✓ it roundtrips all approved company and contact values and search     0.69s
+2026-10-01T17:29:07.4723869Z   ✓ it rejects associations between NULL and workspace even with accoun… 0.62s
+2026-10-01T17:29:07.4737253Z   ✓ it serializes competing primary actions and rejects the loser after… 0.85s
+2026-10-01T17:29:07.4750818Z   ✓ it uses deterministic channel fallback and nullable whitespace comp… 0.69s
+2026-10-01T17:29:07.4763896Z   ✓ it rejects invalid dates and field widths                            0.57s
+2026-10-01T17:29:07.4771755Z
+2026-10-01T17:29:07.4774107Z   Tests:    46 passed (269 assertions)
+2026-10-01T17:29:07.4775555Z   Duration: 25.99s
+2026-10-01T17:29:07.4776716Z   Random Order Seed: 1790875721
+2026-10-01T17:29:07.4777272Z
 2026-10-01T17:29:07.5252688Z ##[group]Run composer --working-dir=products/flex-crm test:coverage
-2026-10-01T17:29:07.5253207Z [36;1mcomposer --working-dir=products/flex-crm test:coverage[0m
+2026-10-01T17:29:07.5253207Z composer --working-dir=products/flex-crm test:coverage
 2026-10-01T17:29:07.5316815Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:29:07.5317287Z env:
 2026-10-01T17:29:07.5317478Z   PGSQL_PORT: 5432
@@ -1274,183 +1274,183 @@
 2026-10-01T17:29:07.5317956Z   COMPOSER_NO_INTERACTION: 1
 2026-10-01T17:29:07.5318191Z   COMPOSER_NO_AUDIT: 1
 2026-10-01T17:29:07.5318404Z ##[endgroup]
-2026-10-01T17:29:29.0712234Z 
-2026-10-01T17:29:29.0713849Z   [30;42;1m PASS [39;49;22m[39m Tests\Pg\ParityContractTest[39m
-2026-10-01T17:29:29.0734599Z   [32;1m✓[39;22m[90m [39m[90mit roundtrips all approved company and contact values and search[39m[90m    [39m [90m1.01s[39m  
-2026-10-01T17:29:29.0751590Z   [32;1m✓[39;22m[90m [39m[90mit preserves pivot on soft delete and applies hard delete SET NULL[39m[90m… [39m [90m0.78s[39m  
-2026-10-01T17:29:29.0771379Z   [32;1m✓[39;22m[90m [39m[90mit rejects foreign or inactive source and owner references[39m[90m          [39m [90m0.65s[39m  
-2026-10-01T17:29:29.0788230Z   [32;1m✓[39;22m[90m [39m[90mit uses deterministic channel fallback and nullable whitespace comp[39m[90m…[39m [90m0.71s[39m  
-2026-10-01T17:29:29.0805157Z   [32;1m✓[39;22m[90m [39m[90mit enforces pair and primary constraints for direct database writer[39m[90m…[39m [90m0.94s[39m  
-2026-10-01T17:29:29.0821819Z   [32;1m✓[39;22m[90m [39m[90mit dispatches mutation events only after the successful outer commi[39m[90m…[39m [90m0.90s[39m  
-2026-10-01T17:29:29.0838494Z   [32;1m✓[39;22m[90m [39m[90mit separates NULL account data current workspace and foreign worksp[39m[90m…[39m [90m0.70s[39m  
-2026-10-01T17:29:29.0855232Z   [32;1m✓[39;22m[90m [39m[90mit fails closed for missing context and revoked membership on reads[39m[90m…[39m [90m0.61s[39m  
-2026-10-01T17:29:29.0871746Z   [32;1m✓[39;22m[90m [39m[90mit rejects invalid dates and field widths[39m[90m                           [39m [90m0.60s[39m  
-2026-10-01T17:29:29.0888462Z   [32;1m✓[39;22m[90m [39m[90mit keeps committed data when a synchronous after-commit listener fa[39m[90m…[39m [90m0.61s[39m  
-2026-10-01T17:29:29.0905480Z   [32;1m✓[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as con[39m[90m…[39m [90m0.64s[39m  
-2026-10-01T17:29:29.0921921Z   [32;1m✓[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as con[39m[90m…[39m [90m0.66s[39m  
-2026-10-01T17:29:29.0938640Z   [32;1m✓[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as con[39m[90m…[39m [90m0.61s[39m  
-2026-10-01T17:29:29.0955339Z   [32;1m✓[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as con[39m[90m…[39m [90m0.60s[39m  
-2026-10-01T17:29:29.0972530Z   [32;1m✓[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as con[39m[90m…[39m [90m0.61s[39m  
-2026-10-01T17:29:29.0989525Z   [32;1m✓[39;22m[90m [39m[90mit stores each admitted B13 actor kind through a trusted run-as con[39m[90m…[39m [90m0.62s[39m  
-2026-10-01T17:29:29.1006345Z   [32;1m✓[39;22m[90m [39m[90mit rejects associations between NULL and workspace even with accoun[39m[90m…[39m [90m0.67s[39m  
-2026-10-01T17:29:29.1022890Z   [32;1m✓[39;22m[90m [39m[90mit rejects forged actors and mismatched account connections[39m[90m         [39m [90m0.55s[39m  
-2026-10-01T17:29:29.1040699Z   [32;1m✓[39;22m[90m [39m[90mit serializes competing primary actions and rejects the loser after[39m[90m…[39m [90m0.93s[39m  
-2026-10-01T17:29:29.1056362Z   [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['65[39m[90m…[39m [90m0.64s[39m  
-2026-10-01T17:29:29.1072747Z   [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['a@[39m[90m…[39m [90m0.59s[39m  
-2026-10-01T17:29:29.1088040Z   [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['a@[39m[90m…[39m [90m0.58s[39m  
-2026-10-01T17:29:29.1103832Z   [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['a@[39m[90m…[39m [90m0.57s[39m  
-2026-10-01T17:29:29.1121967Z   [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['+1[39m[90m…[39m [90m0.59s[39m  
-2026-10-01T17:29:29.1137718Z   [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['in[39m[90m…[39m [90m0.59s[39m  
-2026-10-01T17:29:29.1153331Z   [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with (['a@e[39m[90m…[39m [90m0.58s[39m  
-2026-10-01T17:29:29.1168723Z   [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([[''][39m[90m…[39m [90m0.58s[39m  
-2026-10-01T17:29:29.1184453Z   [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['a@[39m[90m…[39m [90m0.64s[39m  
-2026-10-01T17:29:29.1199704Z   [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['+1[39m[90m…[39m [90m0.59s[39m  
-2026-10-01T17:29:29.1215489Z   [32;1m✓[39;22m[90m [39m[90mit rejects malformed channels without storing a contact with ([['+1[39m[90m…[39m [90m0.59s[39m  
-2026-10-01T17:29:29.1231320Z   [32;1m✓[39;22m[90m [39m[90mit matches approved PostgreSQL fields lengths defaults indexes and[39m[90m… [39m [90m0.57s[39m  
-2026-10-01T17:29:33.6043015Z 
-2026-10-01T17:29:33.6044367Z   [30;42;1m PASS [39;49;22m[39m Tests\Pg\ActivityIdTest[39m
-2026-10-01T17:29:33.6062298Z   [32;1m✓[39;22m[90m [39m[90mit widens a legacy activity morph column before a UUID insert[39m[90m       [39m [90m0.15s[39m  
-2026-10-01T17:29:33.6079639Z   [32;1m✓[39;22m[90m [39m[90mit converts with canonical deal associations under enum configured[39m[90m… [39m [90m0.77s[39m  
-2026-10-01T17:29:33.6096871Z   [32;1m✓[39;22m[90m [39m[90mit converts with canonical deal associations under enum configured[39m[90m… [39m [90m0.92s[39m  
-2026-10-01T17:29:33.6113936Z   [32;1m✓[39;22m[90m [39m[90mit stores and resolves activity subjects on PostgreSQL for the conf[39m[90m…[39m [90m0.66s[39m  
-2026-10-01T17:29:33.6130792Z   [32;1m✓[39;22m[90m [39m[90mit stores and resolves activity subjects on PostgreSQL for the conf[39m[90m…[39m [90m0.64s[39m  
-2026-10-01T17:29:33.6150046Z   [32;1m✓[39;22m[90m [39m[90mit stores and resolves activity subjects on PostgreSQL for the conf[39m[90m…[39m [90m0.73s[39m  
-2026-10-01T17:29:33.6167139Z   [32;1m✓[39;22m[90m [39m[90mit stores and resolves activity subjects on PostgreSQL for the conf[39m[90m…[39m [90m0.64s[39m  
-2026-10-01T17:29:33.8204006Z 
-2026-10-01T17:29:33.8205616Z   [30;42;1m PASS [39;49;22m[39m Tests\Pg\UpgradeSafetyTest[39m
-2026-10-01T17:29:33.8224387Z   [32;1m✓[39;22m[90m [39m[90mit checks prerequisite ownership before any destructive schema oper[39m[90m…[39m [90m0.13s[39m  
-2026-10-01T17:29:33.8241056Z   [32;1m✓[39;22m[90m [39m[90mit refuses automatic legacy backfill before altering any CRM data[39m[90m   [39m [90m0.08s[39m  
-2026-10-01T17:29:34.7878090Z 
-2026-10-01T17:29:34.7912113Z   [30;42;1m PASS [39;49;22m[39m Tests\Pg\ModuleLifecycleTest[39m
-2026-10-01T17:29:34.7932462Z   [32;1m✓[39;22m[90m [39m[90mit discovers CRM composer metadata and manages its schema through t[39m[90m…[39m [90m0.96s[39m  
-2026-10-01T17:29:36.4302308Z 
-2026-10-01T17:29:36.4303591Z   [30;42;1m PASS [39;49;22m[39m Tests\Pg\FullStorageParityTest[39m
-2026-10-01T17:29:36.4321801Z   [32;1m✓[39;22m[90m [39m[90mit matches every actual enabled column constraint and index against[39m[90m…[39m [90m0.70s[39m  
-2026-10-01T17:29:36.4338761Z   [32;1m✓[39;22m[90m [39m[90mit refuses populated legacy sales tables before changing any storag[39m[90m…[39m [90m0.31s[39m  
-2026-10-01T17:29:36.4355478Z   [32;1m✓[39;22m[90m [39m[90mit refuses populated legacy sales tables before changing any storag[39m[90m…[39m [90m0.30s[39m  
-2026-10-01T17:29:36.4372377Z   [32;1m✓[39;22m[90m [39m[90mit refuses populated legacy sales tables before changing any storag[39m[90m…[39m [90m0.31s[39m  
-2026-10-01T17:29:37.2258275Z 
-2026-10-01T17:29:37.2260150Z   [30;42;1m PASS [39;49;22m[39m Tests\Pg\ConversionConcurrencyTest[39m
-2026-10-01T17:29:37.2278809Z   [32;1m✓[39;22m[90m [39m[90mit serializes concurrent conversion and returns the committed resul[39m[90m…[39m [90m0.79s[39m  
-2026-10-01T17:29:38.5529115Z 
-2026-10-01T17:29:38.5531196Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\LeadConversionTest[39m
-2026-10-01T17:29:38.5548896Z   [32;1m✓[39;22m[90m [39m[90mit converts a lead into contact, company and deal[39m[90m                   [39m [90m0.55s[39m  
-2026-10-01T17:29:38.5565957Z   [32;1m✓[39;22m[90m [39m[90mit returns the same conversion on retry even when passed a stale le[39m[90m…[39m [90m0.46s[39m  
-2026-10-01T17:29:38.5583340Z   [32;1m✓[39;22m[90m [39m[90mit converts a lead without company or deal[39m[90m                          [39m [90m0.31s[39m  
-2026-10-01T17:29:40.1523986Z 
-2026-10-01T17:29:40.1525696Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\DealFlowTest[39m
-2026-10-01T17:29:40.1544077Z   [32;1m✓[39;22m[90m [39m[90mit moves a deal to a won stage and marks it won[39m[90m                     [39m [90m0.33s[39m  
-2026-10-01T17:29:40.1560904Z   [32;1m✓[39;22m[90m [39m[90mit creates a deal at the first stage with money[39m[90m                     [39m [90m0.25s[39m  
-2026-10-01T17:29:40.1577422Z   [32;1m✓[39;22m[90m [39m[90mit refuses to create a deal in a pipeline without stages[39m[90m            [39m [90m0.22s[39m  
-2026-10-01T17:29:40.1594046Z   [32;1m✓[39;22m[90m [39m[90mit rolls back a vetoed stage update without a success event[39m[90m         [39m [90m0.26s[39m  
-2026-10-01T17:29:40.1610306Z   [32;1m✓[39;22m[90m [39m[90mit clears optional amount without clearing mandatory currency[39m[90m       [39m [90m0.25s[39m  
-2026-10-01T17:29:40.1627062Z   [32;1m✓[39;22m[90m [39m[90mit rejects a stage from another pipeline without changing the deal[39m[90m… [39m [90m0.27s[39m  
-2026-10-01T17:29:40.4742206Z 
-2026-10-01T17:29:40.4743983Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\CompanyContactTest[39m
-2026-10-01T17:29:40.4762282Z   [32;1m✓[39;22m[90m [39m[90mit creates a company and a contact linked to it[39m[90m                     [39m [90m0.32s[39m  
-2026-10-01T17:29:41.0545320Z 
-2026-10-01T17:29:41.0546576Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\ActivityTimelineTest[39m
-2026-10-01T17:29:41.0562891Z   [32;1m✓[39;22m[90m [39m[90mit logs a polymorphic activity resolved through the morph alias[39m[90m     [39m [90m0.26s[39m  
-2026-10-01T17:29:41.0578579Z   [32;1m✓[39;22m[90m [39m[90mit attaches activities to different subject types[39m[90m                   [39m [90m0.31s[39m  
-2026-10-01T17:29:43.6219498Z 
-2026-10-01T17:29:43.6221247Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\ContextSecurityTest[39m
-2026-10-01T17:29:43.6237093Z   [32;1m✓[39;22m[90m [39m[90mit rejects direct foreign workspace writes and foreign connection q[39m[90m…[39m [90m0.20s[39m  
-2026-10-01T17:29:43.6252467Z   [32;1m✓[39;22m[90m [39m[90mit fails closed for disabled CRM and tenant context mismatch[39m[90m        [39m [90m0.19s[39m  
-2026-10-01T17:29:43.6267652Z   [32;1m✓[39;22m[90m [39m[90mit overwrites forged creation provenance and prevents changing it a[39m[90m…[39m [90m0.23s[39m  
-2026-10-01T17:29:43.6282899Z   [32;1m✓[39;22m[90m [39m[90mit rejects a late observer changing association endpoints[39m[90m           [39m [90m0.34s[39m  
-2026-10-01T17:29:43.6298157Z   [32;1m✓[39;22m[90m [39m[90mit requires account-level capability when no workspace exists[39m[90m       [39m [90m0.19s[39m  
-2026-10-01T17:29:43.6313242Z   [32;1m✓[39;22m[90m [39m[90mit guards direct association writes against cross-scope and foreign[39m[90m…[39m [90m0.27s[39m  
-2026-10-01T17:29:43.6328171Z   [32;1m✓[39;22m[90m [39m[90mit rechecks trusted provenance after late creating observers[39m[90m        [39m [90m0.28s[39m  
-2026-10-01T17:29:43.6344117Z   [32;1m✓[39;22m[90m [39m[90mit treats observer veto as failed mutation without dispatching succ[39m[90m…[39m [90m0.34s[39m  
-2026-10-01T17:29:43.6359092Z   [32;1m✓[39;22m[90m [39m[90mit rejects malformed actor identities and foreign profile IDs[39m[90m       [39m [90m0.21s[39m  
-2026-10-01T17:29:43.6374835Z   [32;1m✓[39;22m[90m [39m[90mit rejects a late observer changing the workspace and guards quiet[39m[90m… [39m [90m0.29s[39m  
-2026-10-01T17:29:44.2938659Z 
-2026-10-01T17:29:44.2939882Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\ApiOperationsTest[39m
-2026-10-01T17:29:44.2957220Z   [32;1m✓[39;22m[90m [39m[90mit normalizes CRM identifiers for the configured ID strategy[39m[90m        [39m [90m0.20s[39m  
-2026-10-01T17:29:44.2974602Z   [32;1m✓[39;22m[90m [39m[90mit declares and dispatches company, contact and association operati[39m[90m…[39m [90m0.46s[39m  
-2026-10-01T17:29:45.2519843Z 
-2026-10-01T17:29:45.2521738Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\ParityTest[39m
-2026-10-01T17:29:45.2539514Z   [32;1m✓[39;22m[90m [39m[90mit normalizes Unicode whitespace before testing empty name componen[39m[90m…[39m [90m0.23s[39m  
-2026-10-01T17:29:45.2556304Z   [32;1m✓[39;22m[90m [39m[90mit creates approved records and a typed primary association[39m[90m         [39m [90m0.31s[39m  
-2026-10-01T17:29:45.2572959Z   [32;1m✓[39;22m[90m [39m[90mit rejects nameless contacts without usable channels[39m[90m                [39m [90m0.21s[39m  
-2026-10-01T17:29:45.2589322Z   [32;1m✓[39;22m[90m [39m[90mit rejects invalid UTF-8 names rather than silently dropping their[39m[90m… [39m [90m0.21s[39m  
-2026-10-01T17:29:45.4617658Z 
-2026-10-01T17:29:45.4619258Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\RegistryFieldCastsTest[39m
-2026-10-01T17:29:45.4637106Z   [32;1m✓[39;22m[90m [39m[90mit compiles a consumer money field using the intl cast registration[39m[90m [39m [90m0.20s[39m  
-2026-10-01T17:29:46.7934226Z 
-2026-10-01T17:29:46.7935850Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\SalesStorageTest[39m
-2026-10-01T17:29:46.7956502Z   [32;1m✓[39;22m[90m [39m[90mit rejects creation veto without persisted rows or success events[39m[90m   [39m [90m0.20s[39m  
-2026-10-01T17:29:46.7969941Z   [32;1m✓[39;22m[90m [39m[90mit persists canonical lead fields with trusted provenance[39m[90m           [39m [90m0.21s[39m  
-2026-10-01T17:29:46.7984212Z   [32;1m✓[39;22m[90m [39m[90mit does not represent legacy statuses or note and task as activitie[39m[90m…[39m [90m0.19s[39m  
-2026-10-01T17:29:46.7997769Z   [32;1m✓[39;22m[90m [39m[90mit refuses conversion without explicit human identity and preserves[39m[90m…[39m [90m0.22s[39m  
-2026-10-01T17:29:46.8011523Z   [32;1m✓[39;22m[90m [39m[90mit rolls back the entire conversion when the final lead update is v[39m[90m…[39m [90m0.27s[39m  
-2026-10-01T17:29:46.8025184Z   [32;1m✓[39;22m[90m [39m[90mit stores activity kinds and canonical target associations[39m[90m          [39m [90m0.24s[39m  
-2026-10-01T17:29:46.8034121Z 
-2026-10-01T17:29:46.8036435Z   [90mTests:[39m    [32;1m81 passed[39;22m[90m (405 assertions)[39m
-2026-10-01T17:29:46.8037678Z   [90mDuration:[39m [39m38.94s[39m
-2026-10-01T17:29:46.8039250Z   [90mRandom Order Seed:[39m [39m1790875747[39m
-2026-10-01T17:29:46.8039922Z 
-2026-10-01T17:29:47.2919404Z   Activity/Actions/LogActivity [90m............................[39m [33m35, 39, 56[39m[33m [39m[90m/[39m[33m 87.5%[39m  
-2026-10-01T17:29:47.2930239Z   Activity/Enums/ActivityType [90m.........................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.2941218Z   Activity/Events/ActivityLogged [90m......................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.2952118Z   Activity/Models/Activity [90m............................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.2963047Z   Activity/Models/ActivityTarget [90m......................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.2976907Z   ApiShared/CrmIdentifier [90m.........................................[39m [33m41[39m[33m [39m[90m/[39m[33m 90.9%[39m  
-2026-10-01T17:29:47.2987617Z   ApiShared/CrmSchemas [90m................................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.2998478Z   Company/Actions/CreateCompany [90m.......................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3009562Z   Company/Api/CompanyPayload [90m..........................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3021035Z   Company/Api/CreateCompanyOperation [90m..................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3031602Z   Company/Api/ListCompaniesOperation [90m..................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3042497Z   Company/Api/ShowCompanyOperation [90m......................................[39m [31m0.0%[39m  
-2026-10-01T17:29:47.3053212Z   Company/Data/CompanyData [90m............................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3063951Z   Company/Events/CompanyCreated [90m.......................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3074554Z   Company/Models/Company [90m..............................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3089153Z   Contact/Actions/AssociateContactCompany [90m.........................[39m [33m25[39m[33m [39m[90m/[39m[33m 95.5%[39m  
-2026-10-01T17:29:47.3099791Z   Contact/Actions/CreateContact [90m.......................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3110803Z   Contact/Api/ContactPayload [90m..........................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3121775Z   Contact/Api/CreateContactCompanyOperation [90m...........................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3132836Z   Contact/Api/CreateContactOperation [90m..................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3143661Z   Contact/Api/ListContactsOperation [90m.....................................[39m [31m0.0%[39m  
-2026-10-01T17:29:47.3154432Z   Contact/Api/ShowContactOperation [90m....................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3165100Z   Contact/Data/ContactData [90m............................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3175879Z   Contact/Events/ContactCompanyAssociated [90m.............................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3186549Z   Contact/Events/ContactCreated [90m.......................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3197210Z   Contact/Models/Contact [90m..............................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3211405Z   Contact/Models/ContactCompany [90m...........................[39m [33m61, 78..80[39m[33m [39m[90m/[39m[33m 87.5%[39m  
-2026-10-01T17:29:47.3225444Z   Context/Channels [90m................................................[39m [33m53[39m[33m [39m[90m/[39m[33m 97.0%[39m  
-2026-10-01T17:29:47.3239338Z   Context/ContextGuard [90m............................................[39m [33m46[39m[33m [39m[90m/[39m[33m 98.0%[39m  
-2026-10-01T17:29:47.3249949Z   Context/Contracts/CrmExecutionContext [90m...............................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3260702Z   Context/CrmScope [90m....................................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3271994Z   Context/Data/Actor [90m..................................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3282435Z   Context/Data/ExecutionContext [90m.......................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3299497Z   Context/Internal/RecordRules [90m....................................[39m [33m75[39m[33m [39m[90m/[39m[33m 98.5%[39m  
-2026-10-01T17:29:47.3310645Z   Context/Models/Concerns/HasActivities [90m...............................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3321364Z   Context/Models/Concerns/HasCrmContext [90m...............................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3331993Z   Context/Models/Source [90m...............................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3342784Z   CrmModule [90m...........................................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3353415Z   CrmServiceProvider [90m..................................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3367448Z   Deal/Actions/CreateDeal [90m.........................[39m [33m30, 38, 60, 63..64[39m[33m [39m[90m/[39m[33m 84.4%[39m  
-2026-10-01T17:29:47.3381310Z   Deal/Actions/MoveDealToStage [90m............................[39m [33m28, 42..43[39m[33m [39m[90m/[39m[33m 87.5%[39m  
-2026-10-01T17:29:47.3391757Z   Deal/Casts/DealAmount [90m...............................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3402505Z   Deal/Enums/DealStatus [90m...............................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3413132Z   Deal/Events/DealCreated [90m.............................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3423717Z   Deal/Events/DealMovedToStage [90m........................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3434205Z   Deal/Models/Deal [90m....................................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3444728Z   Deal/Models/Pipeline [90m................................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3458221Z   Deal/Models/Stage [90m...........................................[39m [33m30..36[39m[33m [39m[90m/[39m[33m 77.8%[39m  
-2026-10-01T17:29:47.3472476Z   Lead/Actions/ConvertLead [90m....................................[39m [33m46, 88[39m[33m [39m[90m/[39m[33m 95.6%[39m  
-2026-10-01T17:29:47.3482993Z   Lead/Actions/CreateLead [90m.............................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3493510Z   Lead/Enums/LeadSource [90m...............................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3504016Z   Lead/Enums/LeadStatus [90m...............................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3514629Z   Lead/Events/LeadConverted [90m...........................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3525084Z   Lead/Events/LeadCreated [90m.............................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3535645Z   Lead/Models/Lead [90m....................................................[39m [32m100.0%[39m  
-2026-10-01T17:29:47.3549240Z   Support/CrmOptions [90m..........................................[39m [33m32..34[39m[33m [39m[90m/[39m[33m 77.8%[39m  
-2026-10-01T17:29:47.3559455Z   [90m────────────────────────────────────────────────────────────────────────────[39m  
-2026-10-01T17:29:47.3561386Z                                                                  [1mTotal: 94.9 %[22m  
-2026-10-01T17:29:47.3562184Z 
-2026-10-01T17:29:47.3563051Z   [37;41;1m FAIL [39;49;22m Code coverage below expected [37;1m 95.0 %[39;22m, currently [31;1m 94.9 %[39;22m.
-2026-10-01T17:29:47.3563904Z 
+2026-10-01T17:29:29.0712234Z
+2026-10-01T17:29:29.0713849Z    PASS  Tests\Pg\ParityContractTest
+2026-10-01T17:29:29.0734599Z   ✓ it roundtrips all approved company and contact values and search     1.01s
+2026-10-01T17:29:29.0751590Z   ✓ it preserves pivot on soft delete and applies hard delete SET NULL…  0.78s
+2026-10-01T17:29:29.0771379Z   ✓ it rejects foreign or inactive source and owner references           0.65s
+2026-10-01T17:29:29.0788230Z   ✓ it uses deterministic channel fallback and nullable whitespace comp… 0.71s
+2026-10-01T17:29:29.0805157Z   ✓ it enforces pair and primary constraints for direct database writer… 0.94s
+2026-10-01T17:29:29.0821819Z   ✓ it dispatches mutation events only after the successful outer commi… 0.90s
+2026-10-01T17:29:29.0838494Z   ✓ it separates NULL account data current workspace and foreign worksp… 0.70s
+2026-10-01T17:29:29.0855232Z   ✓ it fails closed for missing context and revoked membership on reads… 0.61s
+2026-10-01T17:29:29.0871746Z   ✓ it rejects invalid dates and field widths                            0.60s
+2026-10-01T17:29:29.0888462Z   ✓ it keeps committed data when a synchronous after-commit listener fa… 0.61s
+2026-10-01T17:29:29.0905480Z   ✓ it stores each admitted B13 actor kind through a trusted run-as con… 0.64s
+2026-10-01T17:29:29.0921921Z   ✓ it stores each admitted B13 actor kind through a trusted run-as con… 0.66s
+2026-10-01T17:29:29.0938640Z   ✓ it stores each admitted B13 actor kind through a trusted run-as con… 0.61s
+2026-10-01T17:29:29.0955339Z   ✓ it stores each admitted B13 actor kind through a trusted run-as con… 0.60s
+2026-10-01T17:29:29.0972530Z   ✓ it stores each admitted B13 actor kind through a trusted run-as con… 0.61s
+2026-10-01T17:29:29.0989525Z   ✓ it stores each admitted B13 actor kind through a trusted run-as con… 0.62s
+2026-10-01T17:29:29.1006345Z   ✓ it rejects associations between NULL and workspace even with accoun… 0.67s
+2026-10-01T17:29:29.1022890Z   ✓ it rejects forged actors and mismatched account connections          0.55s
+2026-10-01T17:29:29.1040699Z   ✓ it serializes competing primary actions and rejects the loser after… 0.93s
+2026-10-01T17:29:29.1056362Z   ✓ it rejects malformed channels without storing a contact with ([['65… 0.64s
+2026-10-01T17:29:29.1072747Z   ✓ it rejects malformed channels without storing a contact with ([['a@… 0.59s
+2026-10-01T17:29:29.1088040Z   ✓ it rejects malformed channels without storing a contact with ([['a@… 0.58s
+2026-10-01T17:29:29.1103832Z   ✓ it rejects malformed channels without storing a contact with ([['a@… 0.57s
+2026-10-01T17:29:29.1121967Z   ✓ it rejects malformed channels without storing a contact with ([['+1… 0.59s
+2026-10-01T17:29:29.1137718Z   ✓ it rejects malformed channels without storing a contact with ([['in… 0.59s
+2026-10-01T17:29:29.1153331Z   ✓ it rejects malformed channels without storing a contact with (['a@e… 0.58s
+2026-10-01T17:29:29.1168723Z   ✓ it rejects malformed channels without storing a contact with ([['']… 0.58s
+2026-10-01T17:29:29.1184453Z   ✓ it rejects malformed channels without storing a contact with ([['a@… 0.64s
+2026-10-01T17:29:29.1199704Z   ✓ it rejects malformed channels without storing a contact with ([['+1… 0.59s
+2026-10-01T17:29:29.1215489Z   ✓ it rejects malformed channels without storing a contact with ([['+1… 0.59s
+2026-10-01T17:29:29.1231320Z   ✓ it matches approved PostgreSQL fields lengths defaults indexes and…  0.57s
+2026-10-01T17:29:33.6043015Z
+2026-10-01T17:29:33.6044367Z    PASS  Tests\Pg\ActivityIdTest
+2026-10-01T17:29:33.6062298Z   ✓ it widens a legacy activity morph column before a UUID insert        0.15s
+2026-10-01T17:29:33.6079639Z   ✓ it converts with canonical deal associations under enum configured…  0.77s
+2026-10-01T17:29:33.6096871Z   ✓ it converts with canonical deal associations under enum configured…  0.92s
+2026-10-01T17:29:33.6113936Z   ✓ it stores and resolves activity subjects on PostgreSQL for the conf… 0.66s
+2026-10-01T17:29:33.6130792Z   ✓ it stores and resolves activity subjects on PostgreSQL for the conf… 0.64s
+2026-10-01T17:29:33.6150046Z   ✓ it stores and resolves activity subjects on PostgreSQL for the conf… 0.73s
+2026-10-01T17:29:33.6167139Z   ✓ it stores and resolves activity subjects on PostgreSQL for the conf… 0.64s
+2026-10-01T17:29:33.8204006Z
+2026-10-01T17:29:33.8205616Z    PASS  Tests\Pg\UpgradeSafetyTest
+2026-10-01T17:29:33.8224387Z   ✓ it checks prerequisite ownership before any destructive schema oper… 0.13s
+2026-10-01T17:29:33.8241056Z   ✓ it refuses automatic legacy backfill before altering any CRM data    0.08s
+2026-10-01T17:29:34.7878090Z
+2026-10-01T17:29:34.7912113Z    PASS  Tests\Pg\ModuleLifecycleTest
+2026-10-01T17:29:34.7932462Z   ✓ it discovers CRM composer metadata and manages its schema through t… 0.96s
+2026-10-01T17:29:36.4302308Z
+2026-10-01T17:29:36.4303591Z    PASS  Tests\Pg\FullStorageParityTest
+2026-10-01T17:29:36.4321801Z   ✓ it matches every actual enabled column constraint and index against… 0.70s
+2026-10-01T17:29:36.4338761Z   ✓ it refuses populated legacy sales tables before changing any storag… 0.31s
+2026-10-01T17:29:36.4355478Z   ✓ it refuses populated legacy sales tables before changing any storag… 0.30s
+2026-10-01T17:29:36.4372377Z   ✓ it refuses populated legacy sales tables before changing any storag… 0.31s
+2026-10-01T17:29:37.2258275Z
+2026-10-01T17:29:37.2260150Z    PASS  Tests\Pg\ConversionConcurrencyTest
+2026-10-01T17:29:37.2278809Z   ✓ it serializes concurrent conversion and returns the committed resul… 0.79s
+2026-10-01T17:29:38.5529115Z
+2026-10-01T17:29:38.5531196Z    PASS  Tests\Feature\LeadConversionTest
+2026-10-01T17:29:38.5548896Z   ✓ it converts a lead into contact, company and deal                    0.55s
+2026-10-01T17:29:38.5565957Z   ✓ it returns the same conversion on retry even when passed a stale le… 0.46s
+2026-10-01T17:29:38.5583340Z   ✓ it converts a lead without company or deal                           0.31s
+2026-10-01T17:29:40.1523986Z
+2026-10-01T17:29:40.1525696Z    PASS  Tests\Feature\DealFlowTest
+2026-10-01T17:29:40.1544077Z   ✓ it moves a deal to a won stage and marks it won                      0.33s
+2026-10-01T17:29:40.1560904Z   ✓ it creates a deal at the first stage with money                      0.25s
+2026-10-01T17:29:40.1577422Z   ✓ it refuses to create a deal in a pipeline without stages             0.22s
+2026-10-01T17:29:40.1594046Z   ✓ it rolls back a vetoed stage update without a success event          0.26s
+2026-10-01T17:29:40.1610306Z   ✓ it clears optional amount without clearing mandatory currency        0.25s
+2026-10-01T17:29:40.1627062Z   ✓ it rejects a stage from another pipeline without changing the deal…  0.27s
+2026-10-01T17:29:40.4742206Z
+2026-10-01T17:29:40.4743983Z    PASS  Tests\Feature\CompanyContactTest
+2026-10-01T17:29:40.4762282Z   ✓ it creates a company and a contact linked to it                      0.32s
+2026-10-01T17:29:41.0545320Z
+2026-10-01T17:29:41.0546576Z    PASS  Tests\Feature\ActivityTimelineTest
+2026-10-01T17:29:41.0562891Z   ✓ it logs a polymorphic activity resolved through the morph alias      0.26s
+2026-10-01T17:29:41.0578579Z   ✓ it attaches activities to different subject types                    0.31s
+2026-10-01T17:29:43.6219498Z
+2026-10-01T17:29:43.6221247Z    PASS  Tests\Feature\ContextSecurityTest
+2026-10-01T17:29:43.6237093Z   ✓ it rejects direct foreign workspace writes and foreign connection q… 0.20s
+2026-10-01T17:29:43.6252467Z   ✓ it fails closed for disabled CRM and tenant context mismatch         0.19s
+2026-10-01T17:29:43.6267652Z   ✓ it overwrites forged creation provenance and prevents changing it a… 0.23s
+2026-10-01T17:29:43.6282899Z   ✓ it rejects a late observer changing association endpoints            0.34s
+2026-10-01T17:29:43.6298157Z   ✓ it requires account-level capability when no workspace exists        0.19s
+2026-10-01T17:29:43.6313242Z   ✓ it guards direct association writes against cross-scope and foreign… 0.27s
+2026-10-01T17:29:43.6328171Z   ✓ it rechecks trusted provenance after late creating observers         0.28s
+2026-10-01T17:29:43.6344117Z   ✓ it treats observer veto as failed mutation without dispatching succ… 0.34s
+2026-10-01T17:29:43.6359092Z   ✓ it rejects malformed actor identities and foreign profile IDs        0.21s
+2026-10-01T17:29:43.6374835Z   ✓ it rejects a late observer changing the workspace and guards quiet…  0.29s
+2026-10-01T17:29:44.2938659Z
+2026-10-01T17:29:44.2939882Z    PASS  Tests\Feature\ApiOperationsTest
+2026-10-01T17:29:44.2957220Z   ✓ it normalizes CRM identifiers for the configured ID strategy         0.20s
+2026-10-01T17:29:44.2974602Z   ✓ it declares and dispatches company, contact and association operati… 0.46s
+2026-10-01T17:29:45.2519843Z
+2026-10-01T17:29:45.2521738Z    PASS  Tests\Feature\ParityTest
+2026-10-01T17:29:45.2539514Z   ✓ it normalizes Unicode whitespace before testing empty name componen… 0.23s
+2026-10-01T17:29:45.2556304Z   ✓ it creates approved records and a typed primary association          0.31s
+2026-10-01T17:29:45.2572959Z   ✓ it rejects nameless contacts without usable channels                 0.21s
+2026-10-01T17:29:45.2589322Z   ✓ it rejects invalid UTF-8 names rather than silently dropping their…  0.21s
+2026-10-01T17:29:45.4617658Z
+2026-10-01T17:29:45.4619258Z    PASS  Tests\Feature\RegistryFieldCastsTest
+2026-10-01T17:29:45.4637106Z   ✓ it compiles a consumer money field using the intl cast registration  0.20s
+2026-10-01T17:29:46.7934226Z
+2026-10-01T17:29:46.7935850Z    PASS  Tests\Feature\SalesStorageTest
+2026-10-01T17:29:46.7956502Z   ✓ it rejects creation veto without persisted rows or success events    0.20s
+2026-10-01T17:29:46.7969941Z   ✓ it persists canonical lead fields with trusted provenance            0.21s
+2026-10-01T17:29:46.7984212Z   ✓ it does not represent legacy statuses or note and task as activitie… 0.19s
+2026-10-01T17:29:46.7997769Z   ✓ it refuses conversion without explicit human identity and preserves… 0.22s
+2026-10-01T17:29:46.8011523Z   ✓ it rolls back the entire conversion when the final lead update is v… 0.27s
+2026-10-01T17:29:46.8025184Z   ✓ it stores activity kinds and canonical target associations           0.24s
+2026-10-01T17:29:46.8034121Z
+2026-10-01T17:29:46.8036435Z   Tests:    81 passed (405 assertions)
+2026-10-01T17:29:46.8037678Z   Duration: 38.94s
+2026-10-01T17:29:46.8039250Z   Random Order Seed: 1790875747
+2026-10-01T17:29:46.8039922Z
+2026-10-01T17:29:47.2919404Z   Activity/Actions/LogActivity ............................ 35, 39, 56 / 87.5%
+2026-10-01T17:29:47.2930239Z   Activity/Enums/ActivityType ......................................... 100.0%
+2026-10-01T17:29:47.2941218Z   Activity/Events/ActivityLogged ...................................... 100.0%
+2026-10-01T17:29:47.2952118Z   Activity/Models/Activity ............................................ 100.0%
+2026-10-01T17:29:47.2963047Z   Activity/Models/ActivityTarget ...................................... 100.0%
+2026-10-01T17:29:47.2976907Z   ApiShared/CrmIdentifier ......................................... 41 / 90.9%
+2026-10-01T17:29:47.2987617Z   ApiShared/CrmSchemas ................................................ 100.0%
+2026-10-01T17:29:47.2998478Z   Company/Actions/CreateCompany ....................................... 100.0%
+2026-10-01T17:29:47.3009562Z   Company/Api/CompanyPayload .......................................... 100.0%
+2026-10-01T17:29:47.3021035Z   Company/Api/CreateCompanyOperation .................................. 100.0%
+2026-10-01T17:29:47.3031602Z   Company/Api/ListCompaniesOperation .................................. 100.0%
+2026-10-01T17:29:47.3042497Z   Company/Api/ShowCompanyOperation ...................................... 0.0%
+2026-10-01T17:29:47.3053212Z   Company/Data/CompanyData ............................................ 100.0%
+2026-10-01T17:29:47.3063951Z   Company/Events/CompanyCreated ....................................... 100.0%
+2026-10-01T17:29:47.3074554Z   Company/Models/Company .............................................. 100.0%
+2026-10-01T17:29:47.3089153Z   Contact/Actions/AssociateContactCompany ......................... 25 / 95.5%
+2026-10-01T17:29:47.3099791Z   Contact/Actions/CreateContact ....................................... 100.0%
+2026-10-01T17:29:47.3110803Z   Contact/Api/ContactPayload .......................................... 100.0%
+2026-10-01T17:29:47.3121775Z   Contact/Api/CreateContactCompanyOperation ........................... 100.0%
+2026-10-01T17:29:47.3132836Z   Contact/Api/CreateContactOperation .................................. 100.0%
+2026-10-01T17:29:47.3143661Z   Contact/Api/ListContactsOperation ..................................... 0.0%
+2026-10-01T17:29:47.3154432Z   Contact/Api/ShowContactOperation .................................... 100.0%
+2026-10-01T17:29:47.3165100Z   Contact/Data/ContactData ............................................ 100.0%
+2026-10-01T17:29:47.3175879Z   Contact/Events/ContactCompanyAssociated ............................. 100.0%
+2026-10-01T17:29:47.3186549Z   Contact/Events/ContactCreated ....................................... 100.0%
+2026-10-01T17:29:47.3197210Z   Contact/Models/Contact .............................................. 100.0%
+2026-10-01T17:29:47.3211405Z   Contact/Models/ContactCompany ........................... 61, 78..80 / 87.5%
+2026-10-01T17:29:47.3225444Z   Context/Channels ................................................ 53 / 97.0%
+2026-10-01T17:29:47.3239338Z   Context/ContextGuard ............................................ 46 / 98.0%
+2026-10-01T17:29:47.3249949Z   Context/Contracts/CrmExecutionContext ............................... 100.0%
+2026-10-01T17:29:47.3260702Z   Context/CrmScope .................................................... 100.0%
+2026-10-01T17:29:47.3271994Z   Context/Data/Actor .................................................. 100.0%
+2026-10-01T17:29:47.3282435Z   Context/Data/ExecutionContext ....................................... 100.0%
+2026-10-01T17:29:47.3299497Z   Context/Internal/RecordRules .................................... 75 / 98.5%
+2026-10-01T17:29:47.3310645Z   Context/Models/Concerns/HasActivities ............................... 100.0%
+2026-10-01T17:29:47.3321364Z   Context/Models/Concerns/HasCrmContext ............................... 100.0%
+2026-10-01T17:29:47.3331993Z   Context/Models/Source ............................................... 100.0%
+2026-10-01T17:29:47.3342784Z   CrmModule ........................................................... 100.0%
+2026-10-01T17:29:47.3353415Z   CrmServiceProvider .................................................. 100.0%
+2026-10-01T17:29:47.3367448Z   Deal/Actions/CreateDeal ......................... 30, 38, 60, 63..64 / 84.4%
+2026-10-01T17:29:47.3381310Z   Deal/Actions/MoveDealToStage ............................ 28, 42..43 / 87.5%
+2026-10-01T17:29:47.3391757Z   Deal/Casts/DealAmount ............................................... 100.0%
+2026-10-01T17:29:47.3402505Z   Deal/Enums/DealStatus ............................................... 100.0%
+2026-10-01T17:29:47.3413132Z   Deal/Events/DealCreated ............................................. 100.0%
+2026-10-01T17:29:47.3423717Z   Deal/Events/DealMovedToStage ........................................ 100.0%
+2026-10-01T17:29:47.3434205Z   Deal/Models/Deal .................................................... 100.0%
+2026-10-01T17:29:47.3444728Z   Deal/Models/Pipeline ................................................ 100.0%
+2026-10-01T17:29:47.3458221Z   Deal/Models/Stage ........................................... 30..36 / 77.8%
+2026-10-01T17:29:47.3472476Z   Lead/Actions/ConvertLead .................................... 46, 88 / 95.6%
+2026-10-01T17:29:47.3482993Z   Lead/Actions/CreateLead ............................................. 100.0%
+2026-10-01T17:29:47.3493510Z   Lead/Enums/LeadSource ............................................... 100.0%
+2026-10-01T17:29:47.3504016Z   Lead/Enums/LeadStatus ............................................... 100.0%
+2026-10-01T17:29:47.3514629Z   Lead/Events/LeadConverted ........................................... 100.0%
+2026-10-01T17:29:47.3525084Z   Lead/Events/LeadCreated ............................................. 100.0%
+2026-10-01T17:29:47.3535645Z   Lead/Models/Lead .................................................... 100.0%
+2026-10-01T17:29:47.3549240Z   Support/CrmOptions .......................................... 32..34 / 77.8%
+2026-10-01T17:29:47.3559455Z   ────────────────────────────────────────────────────────────────────────────
+2026-10-01T17:29:47.3561386Z                                                                  Total: 94.9 %
+2026-10-01T17:29:47.3562184Z
+2026-10-01T17:29:47.3563051Z    FAIL  Code coverage below expected  95.0 %, currently  94.9 %.
+2026-10-01T17:29:47.3563904Z
 2026-10-01T17:29:47.3695850Z Script pest --coverage --min=95 handling the test:coverage event returned with error code 1
 2026-10-01T17:29:47.3898606Z ##[error]Process completed with exit code 1.
 2026-10-01T17:29:47.4014013Z Post job cleanup.
@@ -1475,7 +1475,7 @@
 2026-10-01T17:29:47.7761953Z  initdb: hint: You can change this by editing pg_hba.conf or using the option -A, or --auth-local and --auth-host, the next time you run initdb.
 2026-10-01T17:29:47.7770049Z  This user must also own the server process.
 2026-10-01T17:29:47.7779318Z  2026-10-01 17:27:56.673 UTC [1] LOG:  starting PostgreSQL 18.6 (Debian 18.6-1.pgdg13+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
-2026-10-01T17:29:47.7781662Z  
+2026-10-01T17:29:47.7781662Z
 2026-10-01T17:29:47.7786932Z  2026-10-01 17:27:56.674 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
 2026-10-01T17:29:47.7788074Z  The database cluster will be initialized with locale "en_US.utf8".
 2026-10-01T17:29:47.7790838Z  2026-10-01 17:27:56.674 UTC [1] LOG:  listening on IPv6 address "::", port 5432
@@ -1483,11 +1483,11 @@
 2026-10-01T17:29:47.7795161Z  2026-10-01 17:27:56.675 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
 2026-10-01T17:29:47.7796239Z  The default text search configuration will be set to "english".
 2026-10-01T17:29:47.7798195Z  2026-10-01 17:27:56.680 UTC [73] LOG:  database system was shut down at 2026-10-01 17:27:56 UTC
-2026-10-01T17:29:47.7798863Z  
+2026-10-01T17:29:47.7798863Z
 2026-10-01T17:29:47.7799633Z  2026-10-01 17:27:56.687 UTC [1] LOG:  database system is ready to accept connections
 2026-10-01T17:29:47.7800280Z  Data page checksums are enabled.
 2026-10-01T17:29:47.7802574Z  2026-10-01 17:28:48.955 UTC [174] ERROR:  canceling statement due to lock timeout
-2026-10-01T17:29:47.7803191Z  
+2026-10-01T17:29:47.7803191Z
 2026-10-01T17:29:47.7804148Z  2026-10-01 17:28:48.955 UTC [174] CONTEXT:  while locking tuple (0,1) in relation "crm_leads"
 2026-10-01T17:29:47.7805064Z  fixing permissions on existing directory /var/lib/postgresql/18/docker ... ok
 2026-10-01T17:29:47.7807514Z  2026-10-01 17:28:48.955 UTC [174] STATEMENT:  select * from "crm_leads" where "crm_leads"."id" = $1 and "crm_leads"."deleted_at" is null and ("crm_leads"."workspace_id" = $2) limit 1 for update
@@ -1509,17 +1509,17 @@
 2026-10-01T17:29:47.7833207Z  2026-10-01 17:28:51.050 UTC [177] STATEMENT:  insert into "crm_contact_company" ("id", "contact_id", "company_id", "is_primary") values ($1, $2, $3, $4)
 2026-10-01T17:29:47.7834434Z  syncing data to disk ... ok
 2026-10-01T17:29:47.7835589Z  2026-10-01 17:29:06.054 UTC [227] ERROR:  canceling statement due to lock timeout
-2026-10-01T17:29:47.7836412Z  
+2026-10-01T17:29:47.7836412Z
 2026-10-01T17:29:47.7838266Z  2026-10-01 17:29:06.054 UTC [227] CONTEXT:  while locking tuple (0,1) in relation "crm_contacts"
-2026-10-01T17:29:47.7839185Z  
+2026-10-01T17:29:47.7839185Z
 2026-10-01T17:29:47.7841201Z  2026-10-01 17:29:06.054 UTC [227] STATEMENT:  select * from "crm_contacts" where "crm_contacts"."id" = $1 and "crm_contacts"."deleted_at" is null and ("crm_contacts"."workspace_id" = $2) limit 1 for update
 2026-10-01T17:29:47.7842765Z  Success. You can now start the database server using:
 2026-10-01T17:29:47.7844917Z  2026-10-01 17:29:06.054 UTC [227] ERROR:  current transaction is aborted, commands ignored until end of transaction block
-2026-10-01T17:29:47.7845774Z  
+2026-10-01T17:29:47.7845774Z
 2026-10-01T17:29:47.7846521Z  2026-10-01 17:29:06.054 UTC [227] STATEMENT:  DEALLOCATE pdo_stmt_0000000f
 2026-10-01T17:29:47.7847243Z      pg_ctl -D /var/lib/postgresql/18/docker -l logfile start
 2026-10-01T17:29:47.7849398Z  2026-10-01 17:29:12.583 UTC [245] ERROR:  duplicate key value violates unique constraint "crm_contact_company_contact_id_company_id_unique"
-2026-10-01T17:29:47.7850361Z  
+2026-10-01T17:29:47.7850361Z
 2026-10-01T17:29:47.7851857Z  2026-10-01 17:29:12.583 UTC [245] DETAIL:  Key (contact_id, company_id)=(01a0f883-57c0-72cd-8016-e7fd388ff0fe, 01a0f883-5758-735e-a8f1-09a31285d7b7) already exists.
 2026-10-01T17:29:47.7853736Z  waiting for server to start....2026-10-01 17:27:56.336 UTC [51] LOG:  starting PostgreSQL 18.6 (Debian 18.6-1.pgdg13+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
 2026-10-01T17:29:47.7856588Z  2026-10-01 17:29:12.583 UTC [245] STATEMENT:  insert into "crm_contact_company" ("id", "contact_id", "company_id", "is_primary") values ($1, $2, $3, $4)
@@ -1542,10 +1542,10 @@
 2026-10-01T17:29:47.7876269Z  2026-10-01 17:29:37.079 UTC [330] STATEMENT:  DEALLOCATE pdo_stmt_0000000b
 2026-10-01T17:29:47.7876848Z  server started
 2026-10-01T17:29:47.7877186Z  CREATE DATABASE
-2026-10-01T17:29:47.7877499Z  
-2026-10-01T17:29:47.7877779Z  
+2026-10-01T17:29:47.7877499Z
+2026-10-01T17:29:47.7877779Z
 2026-10-01T17:29:47.7878287Z  /usr/local/bin/docker-entrypoint.sh: ignoring /docker-entrypoint-initdb.d/*
-2026-10-01T17:29:47.7878924Z  
+2026-10-01T17:29:47.7878924Z
 2026-10-01T17:29:47.7879330Z  2026-10-01 17:27:56.547 UTC [51] LOG:  received fast shutdown request
 2026-10-01T17:29:47.7880041Z  waiting for server to shut down....2026-10-01 17:27:56.548 UTC [51] LOG:  aborting any active transactions
 2026-10-01T17:29:47.7881115Z  2026-10-01 17:27:56.550 UTC [51] LOG:  background worker "logical replication launcher" (PID 60) exited with exit code 1
@@ -1555,9 +1555,9 @@
 2026-10-01T17:29:47.7884414Z  2026-10-01 17:27:56.581 UTC [51] LOG:  database system is shut down
 2026-10-01T17:29:47.7884753Z   done
 2026-10-01T17:29:47.7884935Z  server stopped
-2026-10-01T17:29:47.7885132Z  
+2026-10-01T17:29:47.7885132Z
 2026-10-01T17:29:47.7885364Z  PostgreSQL init process complete; ready for start up.
-2026-10-01T17:29:47.7885666Z  
+2026-10-01T17:29:47.7885666Z
 2026-10-01T17:29:47.7893854Z Stop and remove container: ab17f35c7e7747709c9295c1d32c76d7_postgres18_d3d492
 2026-10-01T17:29:47.7901082Z ##[command]/usr/bin/docker rm --force 3a8e80955a2a4bbd83c388e9284d18a83bb5cf97cd27e34854508660d94f7f9f
 2026-10-01T17:29:47.9527229Z 3a8e80955a2a4bbd83c388e9284d18a83bb5cf97cd27e34854508660d94f7f9f

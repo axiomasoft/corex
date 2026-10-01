@@ -1,28 +1,29 @@
 {
   "schema": "manifest-determinism/v1",
-  "equal": true,
   "writes": 2,
-  "digests": {
+  "files": {
+    "packages/access/resources/contracts/php-api.json": "c75ce99ed4840f837f96211c108da04234b7458e98d0a3da2246abf0d5128b7c",
+    "packages/core/resources/contracts/php-api.json": "5a7a77be5d21fa98b511ce0fdc23c466b1c30b4479875a604175e194e96a0260",
+    "packages/custom-fields/resources/contracts/php-api.json": "b9ec4326b55020d1e3fbe21ca912ecbe281ff18ea7a1c04c31bf473453ccc04b",
+    "packages/intl/resources/contracts/php-api.json": "95d31965aa9133bb8c149f1ab50dea2f2487deca1a798c5ce66ad898202be628",
     "packages/media/resources/contracts/php-api.json": "1e978261d3eee475440acac4480b030fd73ffbf9f9377b66a86acf270c4851d7",
-    "packages/workflow/resources/contracts/php-api.json": "caf8da59849c5fe13eb4ebbad34db09435e7b8c08c077eced07c5607b2c1cd46",
+    "packages/notifications/resources/contracts/php-api.json": "121b0e1d0caf5d34e059b64500e3367b0dfe2f031cc9bf5e25a9b632d4e5ecc6",
+    "packages/operations/resources/contracts/php-api.json": "ed785d47238b08331ca5bff1772bb20ecf0a12427f2f257e4cecc387e9f69a5b",
+    "packages/panels/resources/contracts/php-api.json": "8648ad5c52eca0ede87275f807015e1ed9364b958f3a59ea100e851952b1034d",
+    "packages/recurrence/resources/contracts/php-api.json": "5822089aafaa6187030f40e44162281013209b67d0cb84c69cf6336094c3486f",
+    "packages/search/resources/contracts/php-api.json": "9a993d2fba41125ea8a1eea33e25bb7de7f6c84158100295cb66f63652c5c431",
+    "packages/search-intl/resources/contracts/php-api.json": "28174da5b00c77382f9ef3c3da227a73ac6ac34a8cdaf870ba725549a61171fa",
     "packages/search-meilisearch/resources/contracts/php-api.json": "d15388f07e2bffb11152e79fd214f42d083523351b29cd03edfb4d6ca3919f43",
     "packages/tasks/resources/contracts/php-api.json": "082f911aa44eece22330d96569b2534d656554c78b6be5cbe8cdb68f5dd253e8",
     "packages/tasks-workflow/resources/contracts/php-api.json": "2534d22a2b7797033689e9ccee02158db6ba81de10a7542bc20dbeb5b3851227",
-    "packages/custom-fields/resources/contracts/php-api.json": "b9ec4326b55020d1e3fbe21ca912ecbe281ff18ea7a1c04c31bf473453ccc04b",
-    "packages/transfer/resources/contracts/php-api.json": "7ed17d3b77e78fc20ede315f89850e8f0a2ef67e48e5f2f77c7ef39c18ebd324",
-    "packages/panels/resources/contracts/php-api.json": "8648ad5c52eca0ede87275f807015e1ed9364b958f3a59ea100e851952b1034d",
-    "packages/search-intl/resources/contracts/php-api.json": "28174da5b00c77382f9ef3c3da227a73ac6ac34a8cdaf870ba725549a61171fa",
-    "packages/wakeup/resources/contracts/php-api.json": "59db7afb3fe95cdc4687fcc0dfefc426478b4408ae9bd2c6764c36c537a9d017",
-    "packages/search/resources/contracts/php-api.json": "9a993d2fba41125ea8a1eea33e25bb7de7f6c84158100295cb66f63652c5c431",
-    "packages/operations/resources/contracts/php-api.json": "ed785d47238b08331ca5bff1772bb20ecf0a12427f2f257e4cecc387e9f69a5b",
-    "packages/core/resources/contracts/php-api.json": "e7711c68fc72435ac666498fbbc7ef1105529ac15c38607a9d00ee5b1ef16983",
     "packages/tenancy/resources/contracts/php-api.json": "fda14fc95ba008e718b1260c263044a5bcca0cfd166f38a9f699bad6ebddec35",
-    "packages/webhooks/resources/contracts/php-api.json": "2b96b0739f3e3cce28c2e20d3f8debc72407487b5fe065893260c3e3ebba218c",
-    "packages/intl/resources/contracts/php-api.json": "95d31965aa9133bb8c149f1ab50dea2f2487deca1a798c5ce66ad898202be628",
-    "packages/notifications/resources/contracts/php-api.json": "121b0e1d0caf5d34e059b64500e3367b0dfe2f031cc9bf5e25a9b632d4e5ecc6",
-    "packages/recurrence/resources/contracts/php-api.json": "5822089aafaa6187030f40e44162281013209b67d0cb84c69cf6336094c3486f",
     "packages/tools/resources/contracts/php-api.json": "b25b84bda755b4184320e6aea20dcb12f7139fb82130316a5551699f1075a503",
-    "packages/access/resources/contracts/php-api.json": "c75ce99ed4840f837f96211c108da04234b7458e98d0a3da2246abf0d5128b7c",
-    "docs/reference/public-api.md": "6eacd8f6b552661a746e79f6a45d95fac5c321074eeea5430d0fcea66ee738e7"
-  }
+    "packages/transfer/resources/contracts/php-api.json": "7ed17d3b77e78fc20ede315f89850e8f0a2ef67e48e5f2f77c7ef39c18ebd324",
+    "packages/wakeup/resources/contracts/php-api.json": "59db7afb3fe95cdc4687fcc0dfefc426478b4408ae9bd2c6764c36c537a9d017",
+    "packages/webhooks/resources/contracts/php-api.json": "2b96b0739f3e3cce28c2e20d3f8debc72407487b5fe065893260c3e3ebba218c",
+    "packages/workflow/resources/contracts/php-api.json": "caf8da59849c5fe13eb4ebbad34db09435e7b8c08c077eced07c5607b2c1cd46",
+    "docs/reference/public-api.md": "8f55d855f21835e2c54196b0f52171582be7b4712b91d7a4d616fe7d2ca564b0"
+  },
+  "equal": true,
+  "diagnostics": []
 }

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — CI ownership and test isolation repair (P10.2)
+
+- Testbench teardown disconnects every remaining database connection after restoring the public schema, preventing retained application cycles from exhausting PostgreSQL's connection limit.
+
 ## Unreleased — kernel package and API migration
 
 - Breaking (PLAN3.P02–P04, pre-1.0): CoreX\Tenancy is owned exclusively by this package; AccountRead, central API and domain trust ports expose declared account/domain DTOs and events. TenancyOptions and feature-owned Laravel bindings replace implicit access to persistence internals.

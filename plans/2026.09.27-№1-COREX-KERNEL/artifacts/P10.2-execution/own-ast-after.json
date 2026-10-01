@@ -892,6 +892,12 @@
                 "notDeclared": "public static function notDeclared(string $name, int $version): self;"
             }
         },
+        "CoreX\\Messaging\\Laravel\\InboxRetention": {
+            "methods": {
+                "__construct": "public function __construct(private \\Illuminate\\Database\\ConnectionInterface $connection, private string $table = 'sys_inbox_messages');",
+                "forget": "/**\n * The consumer must establish that these messages cannot be replayed before forgetting them.\n *\n * @param  list<string>  $messageIds\n */\npublic function forget(string $consumer, array $messageIds): int;"
+            }
+        },
         "CoreX\\Messaging\\Laravel\\PubSubAdapters": {
             "methods": {
                 "redisAvailable": "public static function redisAvailable(): bool;"

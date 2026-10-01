@@ -9537,6 +9537,86 @@
             "enum_backing": null,
             "enum_cases": []
         },
+        "CoreX\\Messaging\\Laravel\\InboxRetention": {
+            "kind": "class",
+            "layer": "spi-call",
+            "since": "1.0",
+            "final": true,
+            "readonly": true,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "__construct": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "connection",
+                            "type": "Illuminate\\Database\\ConnectionInterface",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 4
+                        },
+                        {
+                            "name": "table",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "'sys_inbox_messages'",
+                            "flags": 4
+                        }
+                    ],
+                    "return": null,
+                    "doc": []
+                },
+                "forget": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "consumer",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "messageIds",
+                            "type": "array",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "int",
+                    "doc": {
+                        "@param": [
+                            "list<string> $messageIds"
+                        ]
+                    }
+                }
+            },
+            "properties": [],
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
         "CoreX\\Messaging\\Laravel\\PubSubAdapters": {
             "kind": "class",
             "layer": "spi-call",

@@ -105,6 +105,27 @@
         "products/flex-crm/tests/Feature/ApiOperationsTest.php"
       ],
       "delta": "Assert the public list-contacts operation returns the seeded contact under the existing trusted request context and bounded limit. Full CRM coverage 95.7%, threshold stays 95%. Separate corex_p102_crm_2ebafa81_test removed after execution."
+    },
+    {
+      "signal": "Owner-authorized DATA-003 CI repair (D82)",
+      "delta": "Exact Options FQN resolution; catalog migration owners; core-owned additive InboxRetention API for existing webhook cleanup; no existing public signature changed or writer exception added.",
+      "paths": [
+        "scripts/table-write-ownership-gate.php",
+        "scripts/tests/test_table_write_ownership_gate.py",
+        "docs/architecture/table-ownership.md",
+        "packages/core/src/Messaging/Laravel/InboxRetention.php",
+        "packages/core/tests/Feature/InboxClaimTest.php",
+        "packages/webhooks/src/Internal/WebhookRetention.php",
+        ".github/workflows/ci.yml"
+      ],
+      "public_signature_delta": "one additive API; existing signatures preserved"
+    },
+    {
+      "signal": "Hosted PostgreSQL connection limit exhaustion",
+      "delta": "Release all managed PDOs after public schema restoration and before Testbench application teardown; standalone package suite 497 passed/1800 assertions, normal max_connections=100, disposable cluster.",
+      "paths": [
+        "packages/tenancy/tests/TestCase.php"
+      ]
     }
   ],
   "new_analyser_ignores": 0,

@@ -108,6 +108,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Messaging\Exceptions\OutboxLeaseLost` | api | 1.0 |
 | `CoreX\Messaging\Exceptions\OutboxRefused` | api | 1.0 |
 | `CoreX\Messaging\Exceptions\UnknownMessageContract` | api | 1.0 |
+| `CoreX\Messaging\Laravel\InboxRetention` | spi-call | 1.0 |
 | `CoreX\Messaging\Laravel\PubSubAdapters` | spi-call | 1.0 |
 | `CoreX\Messaging\PHPStan\Rules\DurablePayloadPromotedPropertyRule` | spi-implement | 1.0 |
 | `CoreX\Messaging\PHPStan\Rules\DurablePayloadRule` | spi-call | 1.0 |

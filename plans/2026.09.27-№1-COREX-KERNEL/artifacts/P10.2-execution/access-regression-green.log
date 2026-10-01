@@ -1,60 +1,59 @@
 > pest --exclude-group=pg
 
-  [30;42;1m PASS [39;49;22m[39m Tests\Feature\ScopeAvailabilityTest[39m
-  [32;1m✓[39;22m[90m [39m[90mit normalizes to none for an entity_key unknown to the registry[39m[90m     [39m [90m0.10s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit normalizes own/dept/dept_tree/workspace to account when neither[39m[90m… [39m [90m0.03s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit normalizes own/dept/dept_tree/workspace to account when neither[39m[90m… [39m [90m0.03s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit normalizes own/dept/dept_tree/workspace to account when neither[39m[90m… [39m [90m0.03s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit normalizes own/dept/dept_tree/workspace to account when neither[39m[90m… [39m [90m0.03s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit leaves none/account untouched regardless of capability or regist[39m[90m…[39m [90m0.03s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit leaves the scope unchanged once the matching capability is decla[39m[90m…[39m [90m0.03s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit throws ScopeCapabilityMismatch when the column exists but the ca[39m[90m…[39m [90m0.03s[39m  
+   PASS  Tests\Feature\ScopeAvailabilityTest
+  ✓ it normalizes to none for an entity_key unknown to the registry      0.10s
+  ✓ it normalizes own/dept/dept_tree/workspace to account when neither…  0.03s
+  ✓ it normalizes own/dept/dept_tree/workspace to account when neither…  0.03s
+  ✓ it normalizes own/dept/dept_tree/workspace to account when neither…  0.03s
+  ✓ it normalizes own/dept/dept_tree/workspace to account when neither…  0.03s
+  ✓ it leaves none/account untouched regardless of capability or regist… 0.03s
+  ✓ it leaves the scope unchanged once the matching capability is decla… 0.03s
+  ✓ it throws ScopeCapabilityMismatch when the column exists but the ca… 0.03s
 
-  [30;42;1m PASS [39;49;22m[39m Tests\Feature\BladeDirectivesTest[39m
-  [32;1m✓[39;22m[90m [39m[90mit compiles @scope to an entity-scoped role check[39m[90m                   [39m [90m0.04s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit compiles @entity to an entity-scoped permission check[39m[90m            [39m [90m0.03s[39m  
+   PASS  Tests\Feature\BladeDirectivesTest
+  ✓ it compiles @scope to an entity-scoped role check                    0.04s
+  ✓ it compiles @entity to an entity-scoped permission check             0.03s
 
-  [30;42;1m PASS [39;49;22m[39m Tests\Feature\ScopeVersionConcurrencyTest[39m
-  [32;1m✓[39;22m[90m [39m[90mit invalidates the captured tenant even when the active context cha[39m[90m…[39m [90m0.04s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit retains every concurrent invalidation even on the non-atomic fil[39m[90m…[39m [90m0.87s[39m  
+   PASS  Tests\Feature\ScopeVersionConcurrencyTest
+  ✓ it invalidates the captured tenant even when the active context cha… 0.04s
+  ✓ it retains every concurrent invalidation even on the non-atomic fil… 0.87s
 
-  [30;42;1m PASS [39;49;22m[39m Tests\Feature\TenantContextGuardTest[39m
-  [32;1m✓[39;22m[90m [39m[90mit falls back to a global permission within the panel[39m[90m               [39m [90m0.05s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit returns false for an unknown context type[39m[90m                        [39m [90m0.03s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit returns false when the context entity does not exist[39m[90m             [39m [90m0.03s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit denies when the user has neither scoped nor global permission[39m[90m    [39m [90m0.04s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit grants when the user has the permission scoped to the entity[39m[90m     [39m [90m0.04s[39m  
+   PASS  Tests\Feature\TenantContextGuardTest
+  ✓ it falls back to a global permission within the panel                0.05s
+  ✓ it returns false for an unknown context type                         0.03s
+  ✓ it returns false when the context entity does not exist              0.03s
+  ✓ it denies when the user has neither scoped nor global permission     0.04s
+  ✓ it grants when the user has the permission scoped to the entity      0.04s
 
-  [30;42;1m PASS [39;49;22m[39m Tests\Feature\WorkspaceScopeWiringTest[39m
-  [32;1m✓[39;22m[90m [39m[90mit wires the workspace global scope onto every model whose entity d[39m[90m…[39m [90m0.04s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit does not wire the workspace global scope onto a model without th[39m[90m…[39m [90m0.03s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit silently skips wiring when the scope class is null (boxed profil[39m[90m…[39m [90m0.03s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit silently skips wiring when the pinned scope class does not exist[39m[90m [39m [90m0.03s[39m  
+   PASS  Tests\Feature\WorkspaceScopeWiringTest
+  ✓ it wires the workspace global scope onto every model whose entity d… 0.04s
+  ✓ it does not wire the workspace global scope onto a model without th… 0.03s
+  ✓ it silently skips wiring when the scope class is null (boxed profil… 0.03s
+  ✓ it silently skips wiring when the pinned scope class does not exist  0.03s
 
-  [30;42;1m PASS [39;49;22m[39m Tests\Feature\PermissionSurfaceTest[39m
-  [32;1m✓[39;22m[90m [39m[90mit excludes a declaration whose owning module is inactive[39m[90m           [39m [90m0.03s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit excludes a declaration whose entity is unknown to EntityRegistry[39m[90m [39m [90m0.03s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit includes every distinct scope when the entity declares both owna[39m[90m…[39m [90m0.03s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit returns only account for a non-scopeable declaration[39m[90m             [39m [90m0.03s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit lists every declared action with the entity scope set for an act[39m[90m…[39m [90m0.03s[39m  
+   PASS  Tests\Feature\PermissionSurfaceTest
+  ✓ it excludes a declaration whose owning module is inactive            0.03s
+  ✓ it excludes a declaration whose entity is unknown to EntityRegistry  0.03s
+  ✓ it includes every distinct scope when the entity declares both owna… 0.03s
+  ✓ it returns only account for a non-scopeable declaration              0.03s
+  ✓ it lists every declared action with the entity scope set for an act… 0.03s
 
-  [30;42;1m PASS [39;49;22m[39m Tests\Feature\PrincipalUserProviderTest[39m
-  [32;1m✓[39;22m[90m [39m[90mit works against a table with entirely different column names, driv[39m[90m…[39m [90m0.11s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit logs a PrincipalIdentity(User) in via Auth::attempt() on the rig[39m[90m…[39m [90m0.10s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit returns false from validateCredentials() for a wrong password[39m[90m    [39m [90m0.10s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit returns null from retrieveByCredentials() for an unknown email[39m[90m   [39m [90m0.07s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit returns null from both retrieveByCredentials() and retrieveById([39m[90m…[39m [90m0.07s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit returns null from both retrieveByCredentials() and retrieveById([39m[90m…[39m [90m0.07s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit gives the same class and identity from Auth::attempt() and Auth:[39m[90m…[39m [90m0.10s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit makes retrieveByToken() a permanent no-op and updateRememberToke[39m[90m…[39m [90m0.07s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit rehashes the password column only when Hash::needsRehash() is tr[39m[90m…[39m [90m0.10s[39m  
+   PASS  Tests\Feature\PrincipalUserProviderTest
+  ✓ it works against a table with entirely different column names, driv… 0.11s
+  ✓ it logs a PrincipalIdentity(User) in via Auth::attempt() on the rig… 0.10s
+  ✓ it returns false from validateCredentials() for a wrong password     0.10s
+  ✓ it returns null from retrieveByCredentials() for an unknown email    0.07s
+  ✓ it returns null from both retrieveByCredentials() and retrieveById(… 0.07s
+  ✓ it returns null from both retrieveByCredentials() and retrieveById(… 0.07s
+  ✓ it gives the same class and identity from Auth::attempt() and Auth:… 0.10s
+  ✓ it makes retrieveByToken() a permanent no-op and updateRememberToke… 0.07s
+  ✓ it rehashes the password column only when Hash::needsRehash() is tr… 0.10s
 
-  [30;42;1m PASS [39;49;22m[39m Tests\Unit\AuthOptionsTest[39m
-  [32;1m✓[39;22m[90m [39m[90mit normalizes an empty workspace scope class to null[39m[90m                [39m [90m0.01s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit accumulates an empty panel and incomplete identity columns in one exception[39m
-  [32;1m✓[39;22m[90m [39m[90mit rejects an empty panel[39m
+   PASS  Tests\Unit\AuthOptionsTest
+  ✓ it normalizes an empty workspace scope class to null                 0.01s
+  ✓ it accumulates an empty panel and incomplete identity columns in one exception
+  ✓ it rejects an empty panel
 
-  [90mTests:[39m    [32;1m38 passed[39;22m[90m (65 assertions)[39m
-  [90mDuration:[39m [39m2.72s[39m
-  [90mRandom Order Seed:[39m [39m1790879121[39m
-
+  Tests:    38 passed (65 assertions)
+  Duration: 2.72s
+  Random Order Seed: 1790879121

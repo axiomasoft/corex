@@ -1,0 +1,3 @@
+HOST-RESERVED NAMESPACE: CoreX\SearchMeilisearch\ host=axiomasoft/corex-search owner=axiomasoft/corex-search-meilisearch — host-reserved adapter namespace; host defines zero classes under the prefix; class_counts={"axiomasoft/corex-search":0,"axiomasoft/corex-search-meilisearch":7}
+UNDECLARED DEPENDENCY EXCEPTION: axiomasoft/corex-tasks-workflow -> axiomasoft/corex-wakeup in packages/tasks-workflow/src/Internal/MaterializationWakeupHandler.php — ADR P12.1; expires when: handler registration guarded in TasksWorkflowServiceProvider or axiomasoft/corex-wakeup promoted to require
+package-graph-gate: OK

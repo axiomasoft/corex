@@ -153,32 +153,32 @@
 2026-10-01T17:10:05.7471515Z   github-token: ***
 2026-10-01T17:10:05.7471787Z ##[endgroup]
 2026-10-01T17:10:05.7889130Z [command]/usr/bin/bash /home/runner/work/_actions/shivammathur/setup-php/f3e473d116dcccaddc5834248c87452386958240/src/scripts/run.sh
-2026-10-01T17:10:05.8329231Z 
-2026-10-01T17:10:05.8330190Z [90;1m==> [0m[37;1mSetup PHP[0m
-2026-10-01T17:10:11.4539170Z [32;1m✓ [0m[34;1mPHP [0m[90;1mInstalled PHP 8.4.26[0m
-2026-10-01T17:10:11.4540434Z 
-2026-10-01T17:10:11.4541035Z [90;1m==> [0m[37;1mSetup Extensions[0m
-2026-10-01T17:10:11.5050244Z [32;1m✓ [0m[34;1mmbstring [0m[90;1mEnabled[0m
-2026-10-01T17:10:11.5082766Z [32;1m✓ [0m[34;1mpdo [0m[90;1mEnabled[0m
-2026-10-01T17:10:11.5126037Z [32;1m✓ [0m[34;1msqlite3 [0m[90;1mEnabled[0m
-2026-10-01T17:10:11.5150971Z [32;1m✓ [0m[34;1mpdo_sqlite [0m[90;1mEnabled[0m
-2026-10-01T17:10:11.5169747Z [32;1m✓ [0m[34;1mpdo_pgsql [0m[90;1mEnabled[0m
-2026-10-01T17:10:11.5197839Z [32;1m✓ [0m[34;1mbcmath [0m[90;1mEnabled[0m
-2026-10-01T17:10:11.5232144Z [32;1m✓ [0m[34;1mcurl [0m[90;1mEnabled[0m
-2026-10-01T17:10:11.5264962Z [32;1m✓ [0m[34;1mintl [0m[90;1mEnabled[0m
-2026-10-01T17:10:11.5298698Z [32;1m✓ [0m[34;1mzip [0m[90;1mEnabled[0m
-2026-10-01T17:10:11.5331346Z [32;1m✓ [0m[34;1mgd [0m[90;1mEnabled[0m
-2026-10-01T17:10:11.5333211Z 
-2026-10-01T17:10:11.5336775Z [90;1m==> [0m[37;1mSetup Tools[0m
-2026-10-01T17:10:12.0492054Z [32;1m✓ [0m[34;1mcomposer [0m[90;1mAdded composer 2.10.3[0m
-2026-10-01T17:10:12.0513891Z 
-2026-10-01T17:10:12.0529229Z [90;1m==> [0m[37;1mSetup Coverage[0m
-2026-10-01T17:10:12.2838688Z [32;1m✓ [0m[34;1mnone [0m[90;1mDisabled Xdebug and PCOV[0m
-2026-10-01T17:10:12.2842262Z 
-2026-10-01T17:10:12.2843081Z [90;1m==> [0m[37;1mSponsor setup-php[0m
-2026-10-01T17:10:12.2846498Z [32;1m✓ [0m[34;1msetup-php [0m[90;1mhttps://setup-php.com/sponsor[0m
+2026-10-01T17:10:05.8329231Z
+2026-10-01T17:10:05.8330190Z ==> Setup PHP
+2026-10-01T17:10:11.4539170Z ✓ PHP Installed PHP 8.4.26
+2026-10-01T17:10:11.4540434Z
+2026-10-01T17:10:11.4541035Z ==> Setup Extensions
+2026-10-01T17:10:11.5050244Z ✓ mbstring Enabled
+2026-10-01T17:10:11.5082766Z ✓ pdo Enabled
+2026-10-01T17:10:11.5126037Z ✓ sqlite3 Enabled
+2026-10-01T17:10:11.5150971Z ✓ pdo_sqlite Enabled
+2026-10-01T17:10:11.5169747Z ✓ pdo_pgsql Enabled
+2026-10-01T17:10:11.5197839Z ✓ bcmath Enabled
+2026-10-01T17:10:11.5232144Z ✓ curl Enabled
+2026-10-01T17:10:11.5264962Z ✓ intl Enabled
+2026-10-01T17:10:11.5298698Z ✓ zip Enabled
+2026-10-01T17:10:11.5331346Z ✓ gd Enabled
+2026-10-01T17:10:11.5333211Z
+2026-10-01T17:10:11.5336775Z ==> Setup Tools
+2026-10-01T17:10:12.0492054Z ✓ composer Added composer 2.10.3
+2026-10-01T17:10:12.0513891Z
+2026-10-01T17:10:12.0529229Z ==> Setup Coverage
+2026-10-01T17:10:12.2838688Z ✓ none Disabled Xdebug and PCOV
+2026-10-01T17:10:12.2842262Z
+2026-10-01T17:10:12.2843081Z ==> Sponsor setup-php
+2026-10-01T17:10:12.2846498Z ✓ setup-php https://setup-php.com/sponsor
 2026-10-01T17:10:12.3053203Z ##[group]Run python3 scripts/distribution/stage-stancl-providers.py
-2026-10-01T17:10:12.3053770Z [36;1mpython3 scripts/distribution/stage-stancl-providers.py[0m
+2026-10-01T17:10:12.3053770Z python3 scripts/distribution/stage-stancl-providers.py
 2026-10-01T17:10:12.3304301Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:10:12.3304576Z env:
 2026-10-01T17:10:12.3304784Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -187,7 +187,7 @@
 2026-10-01T17:10:12.3305535Z ##[endgroup]
 2026-10-01T17:10:12.8902655Z {"result": "PASS", "repository": "file:///home/runner/work/corex/corex/.composer-provider-staging", "staging": "/home/runner/work/corex/corex/.composer-provider-staging", "registered": ["/home/runner/work/corex/corex", "/home/runner/work/corex/corex/packages/tenancy", "/home/runner/work/corex/corex/packages/access"]}
 2026-10-01T17:10:12.8983323Z ##[group]Run composer update --prefer-dist --no-interaction --no-progress
-2026-10-01T17:10:12.8983892Z [36;1mcomposer update --prefer-dist --no-interaction --no-progress[0m
+2026-10-01T17:10:12.8983892Z composer update --prefer-dist --no-interaction --no-progress
 2026-10-01T17:10:12.9049238Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:10:12.9049716Z env:
 2026-10-01T17:10:12.9049925Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -693,7 +693,7 @@
 2026-10-01T17:10:28.4516889Z > pestphp/pest: ignored
 2026-10-01T17:10:28.4517415Z > phpstan/phpstan-strict-rules: ignored
 2026-10-01T17:10:28.4845900Z ##[group]Run composer audit --locked
-2026-10-01T17:10:28.4846248Z [36;1mcomposer audit --locked[0m
+2026-10-01T17:10:28.4846248Z composer audit --locked
 2026-10-01T17:10:28.4914020Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:10:28.4914277Z env:
 2026-10-01T17:10:28.4914478Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -702,7 +702,7 @@
 2026-10-01T17:10:28.4916051Z ##[endgroup]
 2026-10-01T17:10:28.9927833Z No security vulnerability advisories found.
 2026-10-01T17:10:29.0095904Z ##[group]Run bash scripts/dependency-analyser.sh --all
-2026-10-01T17:10:29.0096620Z [36;1mbash scripts/dependency-analyser.sh --all[0m
+2026-10-01T17:10:29.0096620Z bash scripts/dependency-analyser.sh --all
 2026-10-01T17:10:29.0191860Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:10:29.0192277Z env:
 2026-10-01T17:10:29.0192608Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -710,137 +710,137 @@
 2026-10-01T17:10:29.0193461Z   COMPOSER_NO_AUDIT: 1
 2026-10-01T17:10:29.0193818Z ##[endgroup]
 2026-10-01T17:10:29.0390814Z ==> packages/access
-2026-10-01T17:10:36.7007218Z [37mUsing config[0m /home/runner/work/corex/corex/packages/access/composer-dependency-analyser.php
-2026-10-01T17:10:36.7234293Z 
-2026-10-01T17:10:36.7235169Z [32mNo composer issues found[0m
-2026-10-01T17:10:36.7236059Z [37m(scanned[0m 80 [37mfiles in[0m 0.017 [37ms)[0m
-2026-10-01T17:10:36.7236795Z 
+2026-10-01T17:10:36.7007218Z Using config /home/runner/work/corex/corex/packages/access/composer-dependency-analyser.php
+2026-10-01T17:10:36.7234293Z
+2026-10-01T17:10:36.7235169Z No composer issues found
+2026-10-01T17:10:36.7236059Z (scanned 80 files in 0.017 s)
+2026-10-01T17:10:36.7236795Z
 2026-10-01T17:10:36.7332370Z ==> packages/core
-2026-10-01T17:10:42.8840457Z [37mUsing config[0m /home/runner/work/corex/corex/packages/core/composer-dependency-analyser.php
-2026-10-01T17:10:43.0355509Z 
-2026-10-01T17:10:43.0356409Z [32mNo composer issues found[0m
-2026-10-01T17:10:43.0357212Z [37m(scanned[0m 366 [37mfiles in[0m 0.146 [37ms)[0m
-2026-10-01T17:10:43.0357742Z 
+2026-10-01T17:10:42.8840457Z Using config /home/runner/work/corex/corex/packages/core/composer-dependency-analyser.php
+2026-10-01T17:10:43.0355509Z
+2026-10-01T17:10:43.0356409Z No composer issues found
+2026-10-01T17:10:43.0357212Z (scanned 366 files in 0.146 s)
+2026-10-01T17:10:43.0357742Z
 2026-10-01T17:10:43.0464249Z ==> packages/custom-fields
-2026-10-01T17:10:48.0599777Z [37mUsing config[0m /home/runner/work/corex/corex/packages/custom-fields/composer-dependency-analyser.php
-2026-10-01T17:10:48.0859902Z 
-2026-10-01T17:10:48.0860721Z [32mNo composer issues found[0m
-2026-10-01T17:10:48.0862113Z [37m(scanned[0m 101 [37mfiles in[0m 0.02 [37ms)[0m
-2026-10-01T17:10:48.0862710Z 
+2026-10-01T17:10:48.0599777Z Using config /home/runner/work/corex/corex/packages/custom-fields/composer-dependency-analyser.php
+2026-10-01T17:10:48.0859902Z
+2026-10-01T17:10:48.0860721Z No composer issues found
+2026-10-01T17:10:48.0862113Z (scanned 101 files in 0.02 s)
+2026-10-01T17:10:48.0862710Z
 2026-10-01T17:10:48.0958084Z ==> packages/intl
-2026-10-01T17:10:53.3759429Z [37mUsing config[0m /home/runner/work/corex/corex/packages/intl/composer-dependency-analyser.php
-2026-10-01T17:10:53.4003565Z 
-2026-10-01T17:10:53.4004225Z [32mNo composer issues found[0m
-2026-10-01T17:10:53.4004969Z [37m(scanned[0m 87 [37mfiles in[0m 0.016 [37ms)[0m
-2026-10-01T17:10:53.4005458Z 
+2026-10-01T17:10:53.3759429Z Using config /home/runner/work/corex/corex/packages/intl/composer-dependency-analyser.php
+2026-10-01T17:10:53.4003565Z
+2026-10-01T17:10:53.4004225Z No composer issues found
+2026-10-01T17:10:53.4004969Z (scanned 87 files in 0.016 s)
+2026-10-01T17:10:53.4005458Z
 2026-10-01T17:10:53.4094724Z ==> packages/media
-2026-10-01T17:10:58.8021123Z [37mUsing config[0m /home/runner/work/corex/corex/packages/media/composer-dependency-analyser.php
-2026-10-01T17:10:58.8155663Z 
-2026-10-01T17:10:58.8156237Z [32mNo composer issues found[0m
-2026-10-01T17:10:58.8157165Z [37m(scanned[0m 53 [37mfiles in[0m 0.008 [37ms)[0m
-2026-10-01T17:10:58.8157828Z 
+2026-10-01T17:10:58.8021123Z Using config /home/runner/work/corex/corex/packages/media/composer-dependency-analyser.php
+2026-10-01T17:10:58.8155663Z
+2026-10-01T17:10:58.8156237Z No composer issues found
+2026-10-01T17:10:58.8157165Z (scanned 53 files in 0.008 s)
+2026-10-01T17:10:58.8157828Z
 2026-10-01T17:10:58.8245506Z ==> packages/notifications
-2026-10-01T17:11:04.9337575Z [37mUsing config[0m /home/runner/work/corex/corex/packages/notifications/composer-dependency-analyser.php
-2026-10-01T17:11:04.9493450Z 
-2026-10-01T17:11:04.9494189Z [32mNo composer issues found[0m
-2026-10-01T17:11:04.9494955Z [37m(scanned[0m 64 [37mfiles in[0m 0.01 [37ms)[0m
-2026-10-01T17:11:04.9495445Z 
+2026-10-01T17:11:04.9337575Z Using config /home/runner/work/corex/corex/packages/notifications/composer-dependency-analyser.php
+2026-10-01T17:11:04.9493450Z
+2026-10-01T17:11:04.9494189Z No composer issues found
+2026-10-01T17:11:04.9494955Z (scanned 64 files in 0.01 s)
+2026-10-01T17:11:04.9495445Z
 2026-10-01T17:11:04.9591473Z ==> packages/operations
-2026-10-01T17:11:10.2711509Z [37mUsing config[0m /home/runner/work/corex/corex/packages/operations/composer-dependency-analyser.php
-2026-10-01T17:11:10.3182390Z 
-2026-10-01T17:11:10.3183411Z [32mNo composer issues found[0m
-2026-10-01T17:11:10.3184473Z [37m(scanned[0m 194 [37mfiles in[0m 0.041 [37ms)[0m
-2026-10-01T17:11:10.3185095Z 
+2026-10-01T17:11:10.2711509Z Using config /home/runner/work/corex/corex/packages/operations/composer-dependency-analyser.php
+2026-10-01T17:11:10.3182390Z
+2026-10-01T17:11:10.3183411Z No composer issues found
+2026-10-01T17:11:10.3184473Z (scanned 194 files in 0.041 s)
+2026-10-01T17:11:10.3185095Z
 2026-10-01T17:11:10.3289134Z ==> packages/panels
-2026-10-01T17:11:15.6321697Z [37mUsing config[0m /home/runner/work/corex/corex/packages/panels/composer-dependency-analyser.php
-2026-10-01T17:11:15.6440845Z 
-2026-10-01T17:11:15.6441565Z [32mNo composer issues found[0m
-2026-10-01T17:11:15.6442734Z [37m(scanned[0m 37 [37mfiles in[0m 0.006 [37ms)[0m
-2026-10-01T17:11:15.6443415Z 
+2026-10-01T17:11:15.6321697Z Using config /home/runner/work/corex/corex/packages/panels/composer-dependency-analyser.php
+2026-10-01T17:11:15.6440845Z
+2026-10-01T17:11:15.6441565Z No composer issues found
+2026-10-01T17:11:15.6442734Z (scanned 37 files in 0.006 s)
+2026-10-01T17:11:15.6443415Z
 2026-10-01T17:11:15.6539507Z ==> packages/recurrence
-2026-10-01T17:11:18.3610927Z [37mUsing config[0m /home/runner/work/corex/corex/packages/recurrence/composer-dependency-analyser.php
-2026-10-01T17:11:18.3704521Z 
-2026-10-01T17:11:18.3705106Z [32mNo composer issues found[0m
-2026-10-01T17:11:18.3706041Z [37m(scanned[0m 24 [37mfiles in[0m 0.004 [37ms)[0m
-2026-10-01T17:11:18.3706693Z 
+2026-10-01T17:11:18.3610927Z Using config /home/runner/work/corex/corex/packages/recurrence/composer-dependency-analyser.php
+2026-10-01T17:11:18.3704521Z
+2026-10-01T17:11:18.3705106Z No composer issues found
+2026-10-01T17:11:18.3706041Z (scanned 24 files in 0.004 s)
+2026-10-01T17:11:18.3706693Z
 2026-10-01T17:11:18.3792886Z ==> packages/search-intl
-2026-10-01T17:11:23.7259028Z [37mUsing config[0m /home/runner/work/corex/corex/packages/search-intl/composer-dependency-analyser.php
-2026-10-01T17:11:23.7344685Z 
-2026-10-01T17:11:23.7345329Z [32mNo composer issues found[0m
-2026-10-01T17:11:23.7346341Z [37m(scanned[0m 12 [37mfiles in[0m 0.003 [37ms)[0m
-2026-10-01T17:11:23.7346973Z 
+2026-10-01T17:11:23.7259028Z Using config /home/runner/work/corex/corex/packages/search-intl/composer-dependency-analyser.php
+2026-10-01T17:11:23.7344685Z
+2026-10-01T17:11:23.7345329Z No composer issues found
+2026-10-01T17:11:23.7346341Z (scanned 12 files in 0.003 s)
+2026-10-01T17:11:23.7346973Z
 2026-10-01T17:11:23.7444221Z ==> packages/search-meilisearch
-2026-10-01T17:11:29.4153322Z [37mUsing config[0m /home/runner/work/corex/corex/packages/search-meilisearch/composer-dependency-analyser.php
-2026-10-01T17:11:29.4236520Z 
-2026-10-01T17:11:29.4237163Z [32mNo composer issues found[0m
-2026-10-01T17:11:29.4238301Z [37m(scanned[0m 11 [37mfiles in[0m 0.003 [37ms)[0m
-2026-10-01T17:11:29.4238893Z 
+2026-10-01T17:11:29.4153322Z Using config /home/runner/work/corex/corex/packages/search-meilisearch/composer-dependency-analyser.php
+2026-10-01T17:11:29.4236520Z
+2026-10-01T17:11:29.4237163Z No composer issues found
+2026-10-01T17:11:29.4238301Z (scanned 11 files in 0.003 s)
+2026-10-01T17:11:29.4238893Z
 2026-10-01T17:11:29.4331942Z ==> packages/search
-2026-10-01T17:11:33.9213528Z [37mUsing config[0m /home/runner/work/corex/corex/packages/search/composer-dependency-analyser.php
-2026-10-01T17:11:33.9342898Z 
-2026-10-01T17:11:33.9343735Z [32mNo composer issues found[0m
-2026-10-01T17:11:33.9344852Z [37m(scanned[0m 46 [37mfiles in[0m 0.007 [37ms)[0m
-2026-10-01T17:11:33.9345463Z 
+2026-10-01T17:11:33.9213528Z Using config /home/runner/work/corex/corex/packages/search/composer-dependency-analyser.php
+2026-10-01T17:11:33.9342898Z
+2026-10-01T17:11:33.9343735Z No composer issues found
+2026-10-01T17:11:33.9344852Z (scanned 46 files in 0.007 s)
+2026-10-01T17:11:33.9345463Z
 2026-10-01T17:11:33.9442920Z ==> packages/tasks-workflow
-2026-10-01T17:11:39.5484024Z [37mUsing config[0m /home/runner/work/corex/corex/packages/tasks-workflow/composer-dependency-analyser.php
-2026-10-01T17:11:39.5625309Z 
-2026-10-01T17:11:39.5626001Z [32mNo composer issues found[0m
-2026-10-01T17:11:39.5626964Z [37m(scanned[0m 29 [37mfiles in[0m 0.008 [37ms)[0m
-2026-10-01T17:11:39.5627509Z 
+2026-10-01T17:11:39.5484024Z Using config /home/runner/work/corex/corex/packages/tasks-workflow/composer-dependency-analyser.php
+2026-10-01T17:11:39.5625309Z
+2026-10-01T17:11:39.5626001Z No composer issues found
+2026-10-01T17:11:39.5626964Z (scanned 29 files in 0.008 s)
+2026-10-01T17:11:39.5627509Z
 2026-10-01T17:11:39.5719396Z ==> packages/tasks
-2026-10-01T17:11:44.9662159Z [37mUsing config[0m /home/runner/work/corex/corex/packages/tasks/composer-dependency-analyser.php
-2026-10-01T17:11:44.9868684Z 
-2026-10-01T17:11:44.9869803Z [32mNo composer issues found[0m
-2026-10-01T17:11:44.9870874Z [37m(scanned[0m 106 [37mfiles in[0m 0.015 [37ms)[0m
-2026-10-01T17:11:44.9871521Z 
+2026-10-01T17:11:44.9662159Z Using config /home/runner/work/corex/corex/packages/tasks/composer-dependency-analyser.php
+2026-10-01T17:11:44.9868684Z
+2026-10-01T17:11:44.9869803Z No composer issues found
+2026-10-01T17:11:44.9870874Z (scanned 106 files in 0.015 s)
+2026-10-01T17:11:44.9871521Z
 2026-10-01T17:11:44.9972574Z ==> packages/tenancy
-2026-10-01T17:11:54.1952713Z [37mUsing config[0m /home/runner/work/corex/corex/packages/tenancy/composer-dependency-analyser.php
-2026-10-01T17:11:54.3499464Z 
-2026-10-01T17:11:54.3500454Z [31mFound 1 shadow dependency![0m
-2026-10-01T17:11:54.3501645Z [37m(those are used, but not listed as dependency in composer.json)[0m
-2026-10-01T17:11:54.3502322Z 
-2026-10-01T17:11:54.3502753Z   • [33mext-redis[0m
-2026-10-01T17:11:54.3503847Z       [37me.g. [0mRedis[37m in packages/tenancy/tests/Feature/RedisAccountMenuConformanceTest.php:72[0m (+ 1 more)
-2026-10-01T17:11:54.3504782Z 
-2026-10-01T17:11:54.3505050Z 
-2026-10-01T17:11:54.3505533Z [37m(scanned[0m 294 [37mfiles in[0m 0.149 [37ms)[0m
-2026-10-01T17:11:54.3506093Z 
+2026-10-01T17:11:54.1952713Z Using config /home/runner/work/corex/corex/packages/tenancy/composer-dependency-analyser.php
+2026-10-01T17:11:54.3499464Z
+2026-10-01T17:11:54.3500454Z Found 1 shadow dependency!
+2026-10-01T17:11:54.3501645Z (those are used, but not listed as dependency in composer.json)
+2026-10-01T17:11:54.3502322Z
+2026-10-01T17:11:54.3502753Z   • ext-redis
+2026-10-01T17:11:54.3503847Z       e.g. Redis in packages/tenancy/tests/Feature/RedisAccountMenuConformanceTest.php:72 (+ 1 more)
+2026-10-01T17:11:54.3504782Z
+2026-10-01T17:11:54.3505050Z
+2026-10-01T17:11:54.3505533Z (scanned 294 files in 0.149 s)
+2026-10-01T17:11:54.3506093Z
 2026-10-01T17:11:54.3606210Z ==> packages/tools
-2026-10-01T17:12:00.8936419Z [37mUsing config[0m /home/runner/work/corex/corex/packages/tools/composer-dependency-analyser.php
-2026-10-01T17:12:00.9129642Z 
-2026-10-01T17:12:00.9130556Z [32mNo composer issues found[0m
-2026-10-01T17:12:00.9137994Z [37m(scanned[0m 46 [37mfiles in[0m 0.013 [37ms)[0m
-2026-10-01T17:12:00.9139214Z 
+2026-10-01T17:12:00.8936419Z Using config /home/runner/work/corex/corex/packages/tools/composer-dependency-analyser.php
+2026-10-01T17:12:00.9129642Z
+2026-10-01T17:12:00.9130556Z No composer issues found
+2026-10-01T17:12:00.9137994Z (scanned 46 files in 0.013 s)
+2026-10-01T17:12:00.9139214Z
 2026-10-01T17:12:00.9233478Z ==> packages/transfer
-2026-10-01T17:12:05.6410104Z [37mUsing config[0m /home/runner/work/corex/corex/packages/transfer/composer-dependency-analyser.php
-2026-10-01T17:12:05.6552463Z 
-2026-10-01T17:12:05.6553070Z [32mNo composer issues found[0m
-2026-10-01T17:12:05.6553948Z [37m(scanned[0m 53 [37mfiles in[0m 0.01 [37ms)[0m
-2026-10-01T17:12:05.6554646Z 
+2026-10-01T17:12:05.6410104Z Using config /home/runner/work/corex/corex/packages/transfer/composer-dependency-analyser.php
+2026-10-01T17:12:05.6552463Z
+2026-10-01T17:12:05.6553070Z No composer issues found
+2026-10-01T17:12:05.6553948Z (scanned 53 files in 0.01 s)
+2026-10-01T17:12:05.6554646Z
 2026-10-01T17:12:05.6654587Z ==> packages/wakeup
-2026-10-01T17:12:09.9817628Z [37mUsing config[0m /home/runner/work/corex/corex/packages/wakeup/composer-dependency-analyser.php
-2026-10-01T17:12:09.9941939Z 
-2026-10-01T17:12:09.9942632Z [32mNo composer issues found[0m
-2026-10-01T17:12:09.9943693Z [37m(scanned[0m 28 [37mfiles in[0m 0.006 [37ms)[0m
-2026-10-01T17:12:09.9944425Z 
+2026-10-01T17:12:09.9817628Z Using config /home/runner/work/corex/corex/packages/wakeup/composer-dependency-analyser.php
+2026-10-01T17:12:09.9941939Z
+2026-10-01T17:12:09.9942632Z No composer issues found
+2026-10-01T17:12:09.9943693Z (scanned 28 files in 0.006 s)
+2026-10-01T17:12:09.9944425Z
 2026-10-01T17:12:10.0044812Z ==> packages/webhooks
-2026-10-01T17:12:15.0621382Z [37mUsing config[0m /home/runner/work/corex/corex/packages/webhooks/composer-dependency-analyser.php
-2026-10-01T17:12:15.0856114Z 
-2026-10-01T17:12:15.0857298Z [32mNo composer issues found[0m
-2026-10-01T17:12:15.0858541Z [37m(scanned[0m 55 [37mfiles in[0m 0.018 [37ms)[0m
-2026-10-01T17:12:15.0859055Z 
+2026-10-01T17:12:15.0621382Z Using config /home/runner/work/corex/corex/packages/webhooks/composer-dependency-analyser.php
+2026-10-01T17:12:15.0856114Z
+2026-10-01T17:12:15.0857298Z No composer issues found
+2026-10-01T17:12:15.0858541Z (scanned 55 files in 0.018 s)
+2026-10-01T17:12:15.0859055Z
 2026-10-01T17:12:15.0951375Z ==> packages/workflow
-2026-10-01T17:12:19.6508795Z [37mUsing config[0m /home/runner/work/corex/corex/packages/workflow/composer-dependency-analyser.php
-2026-10-01T17:12:19.6601403Z 
-2026-10-01T17:12:19.6601952Z [32mNo composer issues found[0m
-2026-10-01T17:12:19.6602859Z [37m(scanned[0m 20 [37mfiles in[0m 0.004 [37ms)[0m
-2026-10-01T17:12:19.6603611Z 
+2026-10-01T17:12:19.6508795Z Using config /home/runner/work/corex/corex/packages/workflow/composer-dependency-analyser.php
+2026-10-01T17:12:19.6601403Z
+2026-10-01T17:12:19.6601952Z No composer issues found
+2026-10-01T17:12:19.6602859Z (scanned 20 files in 0.004 s)
+2026-10-01T17:12:19.6603611Z
 2026-10-01T17:12:19.6696505Z ==> products/flex-crm
-2026-10-01T17:12:26.8774881Z [37mUsing config[0m /home/runner/work/corex/corex/products/flex-crm/composer-dependency-analyser.php
-2026-10-01T17:12:26.9000393Z 
-2026-10-01T17:12:26.9001518Z [32mNo composer issues found[0m
-2026-10-01T17:12:26.9002480Z [37m(scanned[0m 90 [37mfiles in[0m 0.016 [37ms)[0m
-2026-10-01T17:12:26.9003039Z 
+2026-10-01T17:12:26.8774881Z Using config /home/runner/work/corex/corex/products/flex-crm/composer-dependency-analyser.php
+2026-10-01T17:12:26.9000393Z
+2026-10-01T17:12:26.9001518Z No composer issues found
+2026-10-01T17:12:26.9002480Z (scanned 90 files in 0.016 s)
+2026-10-01T17:12:26.9003039Z
 2026-10-01T17:12:26.9106478Z ##[error]Process completed with exit code 1.
 2026-10-01T17:12:26.9276054Z Post job cleanup.
 2026-10-01T17:12:27.0339011Z [command]/usr/bin/git version

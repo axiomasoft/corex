@@ -135,6 +135,38 @@ foreach ($files as $file => $owner) {
     }
 }
 
+// Resolve defaults by the declared options FQN, including cross-package consumers.
+// A property with the same spelling on an unrelated object remains unresolved.
+$optionOwners = [
+    'CoreX\Config\Data\CoreOptions' => 'axiomasoft/corex',
+    'CoreX\Access\Laravel\AuthOptions' => 'axiomasoft/corex-access',
+    'CoreX\CustomFields\Data\AttributeTables' => 'axiomasoft/corex-custom-fields',
+];
+$typedDefaults = [];
+foreach ($optionOwners as $type => $owner) {
+    foreach ($tableDefaults[$owner] ?? [] as $slot => $table) {
+        $typedDefaults[$type.'.'.$slot] = $table;
+    }
+}
+foreach ($trees as $tree) {
+    foreach ($finder->findInstanceOf($tree, Node\Stmt\Class_::class) as $class) {
+        $name = $class->namespacedName?->toString();
+
+        if ($name === null || ! isset($optionOwners[$name])) {
+            continue;
+        }
+        foreach ($class->getMethod('__construct')->params ?? [] as $param) {
+            if ($param->var instanceof Expr\Variable && is_string($param->var->name)
+                && $param->flags !== 0 && $param->default instanceof Node\Scalar\String_) {
+                $typedDefaults[$name.'.'.$param->var->name] = $param->default->value;
+            }
+        }
+    }
+}
+foreach ($files as $owner) {
+    $tableDefaults[$owner] = array_merge($tableDefaults[$owner] ?? [], $typedDefaults);
+}
+
 // Resolve model getTable() only after all package option defaults have been indexed.
 foreach ($trees as $file => $tree) {
     foreach ($finder->findInstanceOf($tree, Node\Stmt\Class_::class) as $class) {
@@ -376,14 +408,45 @@ function tableExpression(?Expr $expr, Node $site, NodeFinder $finder, array $tab
             $sourceType = typeName(enclosingClass($site)?->getMethod($expr->var->name->toString())?->returnType);
         } elseif ($expr->var instanceof Expr\StaticCall && $expr->var->class instanceof Node\Name
             && $expr->var->class->toString() === 'CoreX\Config\Internal\Config' && $expr->var->name instanceof Node\Identifier && $expr->var->name->toString() === 'options') {
-            $sourceType = 'CoreOptions';
+            $sourceType = 'CoreX\Config\Data\CoreOptions';
+        } elseif ($expr->var instanceof Expr\StaticCall && $expr->var->class instanceof Node\Name
+            && $expr->var->class->toString() === 'CoreX\Config\Laravel\CoreOptionsParser'
+            && $expr->var->name instanceof Node\Identifier && $expr->var->name->toString() === 'current') {
+            $sourceType = 'CoreX\Config\Data\CoreOptions';
+        } elseif ($expr->var instanceof Expr\FuncCall && $expr->var->name instanceof Node\Name
+            && $expr->var->name->toString() === 'app' && ($expr->var->args[0]->value ?? null) instanceof Expr\ClassConstFetch
+            && $expr->var->args[0]->value->class instanceof Node\Name
+            && $expr->var->args[0]->value->name instanceof Node\Identifier
+            && $expr->var->args[0]->value->name->toString() === 'class') {
+            $sourceType = $expr->var->args[0]->value->class->toString();
         }
 
-        return in_array($sourceType, ['CoreOptions', 'AuthOptions', 'AttributeTables'], true) ? ($tableDefaults[$slot] ?? '') : '';
+        if ($sourceType !== null) {
+            return $tableDefaults[$sourceType.'.'.$slot] ?? '';
+        }
+
+        if ($expr->var instanceof Expr\Variable && $expr->var->name === 'this') {
+            $class = enclosingClass($site);
+            foreach ($class?->getMethod('__construct')->params ?? [] as $param) {
+                if ($param->var instanceof Expr\Variable && $param->var->name === $slot
+                    && $param->flags !== 0 && $param->default instanceof Expr) {
+                    return tableExpression($param->default, $param, $finder, $tableDefaults, $depth + 1);
+                }
+            }
+            foreach ($finder->findInstanceOf($class?->getMethod('__construct')->stmts ?? [], Expr\Assign::class) as $assignment) {
+                if ($assignment->var instanceof Expr\PropertyFetch && $assignment->var->var instanceof Expr\Variable
+                    && $assignment->var->var->name === 'this' && $assignment->var->name instanceof Node\Identifier
+                    && $assignment->var->name->toString() === $slot) {
+                    return tableExpression($assignment->expr, $assignment, $finder, $tableDefaults, $depth + 1);
+                }
+            }
+        }
+
+        return '';
     }
 
     if ($expr instanceof Expr\StaticCall && $expr->name instanceof Node\Identifier && $expr->class instanceof Node\Name && $expr->class->toString() === 'CoreX\Config\Internal\Config') {
-        return $tableDefaults[$expr->name->toString()] ?? '';
+        return $tableDefaults['CoreX\Config\Data\CoreOptions.'.$expr->name->toString()] ?? '';
     }
 
     if ($expr instanceof Expr\MethodCall && $expr->name instanceof Node\Identifier && $expr->var instanceof Expr\Variable && $expr->var->name === 'this') {
@@ -428,7 +491,7 @@ function typeName(?Node $type): ?string
         return typeName($type->type);
     }
 
-    return $type instanceof Node\Name ? $type->getLast() : null;
+    return $type instanceof Node\Name ? $type->toString() : null;
 }
 
 /** @param array<string,string> $tableDefaults */

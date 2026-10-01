@@ -153,31 +153,31 @@
 2026-10-01T17:10:05.7850526Z   github-token: ***
 2026-10-01T17:10:05.7852090Z ##[endgroup]
 2026-10-01T17:10:05.8294344Z [command]/usr/bin/bash /home/runner/work/_actions/shivammathur/setup-php/f3e473d116dcccaddc5834248c87452386958240/src/scripts/run.sh
-2026-10-01T17:10:05.8744468Z 
-2026-10-01T17:10:05.8746392Z [90;1m==> [0m[37;1mSetup PHP[0m
-2026-10-01T17:10:18.0679069Z [32;1m✓ [0m[34;1mPHP [0m[90;1mInstalled PHP 8.4.26[0m
-2026-10-01T17:10:18.0683508Z 
-2026-10-01T17:10:18.0684261Z [90;1m==> [0m[37;1mSetup Extensions[0m
-2026-10-01T17:10:18.1215365Z [32;1m✓ [0m[34;1mmbstring [0m[90;1mEnabled[0m
-2026-10-01T17:10:18.1246544Z [32;1m✓ [0m[34;1mpdo [0m[90;1mEnabled[0m
-2026-10-01T17:10:18.1280362Z [32;1m✓ [0m[34;1msqlite3 [0m[90;1mEnabled[0m
-2026-10-01T17:10:18.1303664Z [32;1m✓ [0m[34;1mpdo_sqlite [0m[90;1mEnabled[0m
-2026-10-01T17:10:18.1335082Z [32;1m✓ [0m[34;1mbcmath [0m[90;1mEnabled[0m
-2026-10-01T17:10:18.1367897Z [32;1m✓ [0m[34;1mcurl [0m[90;1mEnabled[0m
-2026-10-01T17:10:18.1400551Z [32;1m✓ [0m[34;1mintl [0m[90;1mEnabled[0m
-2026-10-01T17:10:18.1433554Z [32;1m✓ [0m[34;1mzip [0m[90;1mEnabled[0m
-2026-10-01T17:10:18.1464451Z [32;1m✓ [0m[34;1mgd [0m[90;1mEnabled[0m
-2026-10-01T17:10:18.1468232Z 
-2026-10-01T17:10:18.1468967Z [90;1m==> [0m[37;1mSetup Tools[0m
-2026-10-01T17:10:18.4677556Z [32;1m✓ [0m[34;1mcomposer [0m[90;1mAdded composer 2.10.3[0m
-2026-10-01T17:10:18.4682234Z 
-2026-10-01T17:10:18.4698377Z [90;1m==> [0m[37;1mSetup Coverage[0m
-2026-10-01T17:10:18.7065928Z [32;1m✓ [0m[34;1mnone [0m[90;1mDisabled Xdebug and PCOV[0m
-2026-10-01T17:10:18.7077028Z 
-2026-10-01T17:10:18.7090842Z [90;1m==> [0m[37;1mSponsor setup-php[0m
-2026-10-01T17:10:18.7096316Z [32;1m✓ [0m[34;1msetup-php [0m[90;1mhttps://setup-php.com/sponsor[0m
+2026-10-01T17:10:05.8744468Z
+2026-10-01T17:10:05.8746392Z ==> Setup PHP
+2026-10-01T17:10:18.0679069Z ✓ PHP Installed PHP 8.4.26
+2026-10-01T17:10:18.0683508Z
+2026-10-01T17:10:18.0684261Z ==> Setup Extensions
+2026-10-01T17:10:18.1215365Z ✓ mbstring Enabled
+2026-10-01T17:10:18.1246544Z ✓ pdo Enabled
+2026-10-01T17:10:18.1280362Z ✓ sqlite3 Enabled
+2026-10-01T17:10:18.1303664Z ✓ pdo_sqlite Enabled
+2026-10-01T17:10:18.1335082Z ✓ bcmath Enabled
+2026-10-01T17:10:18.1367897Z ✓ curl Enabled
+2026-10-01T17:10:18.1400551Z ✓ intl Enabled
+2026-10-01T17:10:18.1433554Z ✓ zip Enabled
+2026-10-01T17:10:18.1464451Z ✓ gd Enabled
+2026-10-01T17:10:18.1468232Z
+2026-10-01T17:10:18.1468967Z ==> Setup Tools
+2026-10-01T17:10:18.4677556Z ✓ composer Added composer 2.10.3
+2026-10-01T17:10:18.4682234Z
+2026-10-01T17:10:18.4698377Z ==> Setup Coverage
+2026-10-01T17:10:18.7065928Z ✓ none Disabled Xdebug and PCOV
+2026-10-01T17:10:18.7077028Z
+2026-10-01T17:10:18.7090842Z ==> Sponsor setup-php
+2026-10-01T17:10:18.7096316Z ✓ setup-php https://setup-php.com/sponsor
 2026-10-01T17:10:18.7282739Z ##[group]Run python3 scripts/distribution/stage-stancl-providers.py
-2026-10-01T17:10:18.7283337Z [36;1mpython3 scripts/distribution/stage-stancl-providers.py[0m
+2026-10-01T17:10:18.7283337Z python3 scripts/distribution/stage-stancl-providers.py
 2026-10-01T17:10:18.7552705Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:10:18.7553119Z env:
 2026-10-01T17:10:18.7553381Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -186,7 +186,7 @@
 2026-10-01T17:10:18.7554288Z ##[endgroup]
 2026-10-01T17:10:19.3209837Z {"result": "PASS", "repository": "file:///home/runner/work/corex/corex/.composer-provider-staging", "staging": "/home/runner/work/corex/corex/.composer-provider-staging", "registered": ["/home/runner/work/corex/corex", "/home/runner/work/corex/corex/packages/tenancy", "/home/runner/work/corex/corex/packages/access"]}
 2026-10-01T17:10:19.3319510Z ##[group]Run composer update --prefer-dist --no-interaction --no-progress
-2026-10-01T17:10:19.3320109Z [36;1mcomposer update --prefer-dist --no-interaction --no-progress[0m
+2026-10-01T17:10:19.3320109Z composer update --prefer-dist --no-interaction --no-progress
 2026-10-01T17:10:19.3387066Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:10:19.3387326Z env:
 2026-10-01T17:10:19.3387538Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -692,7 +692,7 @@
 2026-10-01T17:10:33.0095983Z > pestphp/pest: ignored
 2026-10-01T17:10:33.0096607Z > phpstan/phpstan-strict-rules: ignored
 2026-10-01T17:10:33.0355644Z ##[group]Run composer audit --locked
-2026-10-01T17:10:33.0356010Z [36;1mcomposer audit --locked[0m
+2026-10-01T17:10:33.0356010Z composer audit --locked
 2026-10-01T17:10:33.0422568Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:10:33.0422853Z env:
 2026-10-01T17:10:33.0423076Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -701,152 +701,152 @@
 2026-10-01T17:10:33.0423875Z ##[endgroup]
 2026-10-01T17:10:33.4981007Z No security vulnerability advisories found.
 2026-10-01T17:10:33.5135647Z ##[group]Run composer test:arch
-2026-10-01T17:10:33.5135962Z [36;1mcomposer test:arch[0m
+2026-10-01T17:10:33.5135962Z composer test:arch
 2026-10-01T17:10:33.5200952Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:10:33.5201204Z env:
 2026-10-01T17:10:33.5201410Z   COMPOSER_PROCESS_TIMEOUT: 0
 2026-10-01T17:10:33.5201929Z   COMPOSER_NO_INTERACTION: 1
 2026-10-01T17:10:33.5202210Z   COMPOSER_NO_AUDIT: 1
 2026-10-01T17:10:33.5202427Z ##[endgroup]
-2026-10-01T17:10:34.2282231Z 
-2026-10-01T17:10:34.2283384Z   [30;42;1m PASS [39;49;22m[39m Tests\Arch\AchievedInvariantTest[39m
-2026-10-01T17:10:34.2343718Z   [32;1m✓[39;22m[90m [39m[90mattributes package does not depend on search or meilisearch (A57)[39m[90m   [39m [90m0.01s[39m  
-2026-10-01T17:10:34.2346200Z   [32;1m✓[39;22m[90m [39m[90mattributes search import probe fails A57 with file path[39m
-2026-10-01T17:10:34.2363171Z   [32;1m✓[39;22m[90m [39m[90msearch provider implementations do not import eloquent (A61)[39m
-2026-10-01T17:10:34.2372719Z   [32;1m✓[39;22m[90m [39m[90msearch contracts are split across dedicated files (A61)[39m
-2026-10-01T17:10:34.2376743Z   [32;1m✓[39;22m[90m [39m[90msearch provider eloquent import probe fails A61 with file path[39m
-2026-10-01T17:10:34.2378346Z   [32;1m✓[39;22m[90m [39m[90mtrusted context resolver does not read tenant id from the request payload (A99)[39m
-2026-10-01T17:10:34.2379948Z   [32;1m✓[39;22m[90m [39m[90mtrusted context resolver tenant_id probe fails A99 with file path[39m
-2026-10-01T17:10:34.2423533Z   [32;1m✓[39;22m[90m [39m[90mtable ownership gate reports no violations on clean tree[39m[90m            [39m [90m0.06s[39m  
-2026-10-01T17:10:34.2449421Z   [32;1m✓[39;22m[90m [39m[90mtable ownership gate reports T1 for uncatalogued create[39m[90m             [39m [90m0.06s[39m  
-2026-10-01T17:10:34.2477485Z   [32;1m✓[39;22m[90m [39m[90mtable ownership gate reports T4 for core cross-package foreign key[39m[90m… [39m [90m0.06s[39m  
-2026-10-01T17:10:35.3789497Z 
-2026-10-01T17:10:35.3790963Z   [30;42;1m PASS [39;49;22m[39m Tests\Arch\ApiContractCompatibilityTest[39m
-2026-10-01T17:10:35.3809884Z   [32;1m✓[39;22m[90m [39m[90mapi contract gate accepts the committed snapshot and additive fixtu[39m[90m…[39m [90m0.18s[39m  
-2026-10-01T17:10:35.3833732Z   [32;1m✓[39;22m[90m [39m[90mapi contract gate rejects each forbidden intra-major delta with dat[39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:10:35.3861186Z   [32;1m✓[39;22m[90m [39m[90mapi contract gate rejects each forbidden intra-major delta with dat[39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:10:35.3884635Z   [32;1m✓[39;22m[90m [39m[90mapi contract gate rejects each forbidden intra-major delta with dat[39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:10:35.3907698Z   [32;1m✓[39;22m[90m [39m[90mapi contract gate rejects each forbidden intra-major delta with dat[39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:10:35.3933219Z   [32;1m✓[39;22m[90m [39m[90mapi contract gate rejects each forbidden intra-major delta with dat[39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:10:35.3957729Z   [32;1m✓[39;22m[90m [39m[90mapi contract gate rejects each forbidden intra-major delta with dat[39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:10:35.3980726Z   [32;1m✓[39;22m[90m [39m[90mapi contract gate rejects each forbidden intra-major delta with dat[39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:10:35.4001454Z   [32;1m✓[39;22m[90m [39m[90mapi contract gate rejects each forbidden intra-major delta with dat[39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:10:35.4024954Z   [32;1m✓[39;22m[90m [39m[90mapi contract gate rejects each forbidden intra-major delta with dat[39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:10:35.4048116Z   [32;1m✓[39;22m[90m [39m[90mapi contract gate rejects each forbidden intra-major delta with dat[39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:10:35.4072431Z   [32;1m✓[39;22m[90m [39m[90mapi contract gate rejects each forbidden intra-major delta with dat[39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:10:35.4095135Z   [32;1m✓[39;22m[90m [39m[90mapi contract gate rejects each forbidden intra-major delta with dat[39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:10:35.4118800Z   [32;1m✓[39;22m[90m [39m[90mapi contract gate rejects each forbidden intra-major delta with dat[39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:10:35.4142266Z   [32;1m✓[39;22m[90m [39m[90mapi contract gate rejects each forbidden intra-major delta with dat[39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:10:35.4165429Z   [32;1m✓[39;22m[90m [39m[90mapi contract gate rejects each forbidden intra-major delta with dat[39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:10:35.4191989Z   [32;1m✓[39;22m[90m [39m[90mapi contract gate rejects each forbidden intra-major delta with dat[39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:10:35.4211958Z   [32;1m✓[39;22m[90m [39m[90mapi contract gate rejects each forbidden intra-major delta with dat[39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:10:35.4235554Z   [32;1m✓[39;22m[90m [39m[90mapi contract gate rejects each forbidden intra-major delta with dat[39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:10:35.4258885Z   [32;1m✓[39;22m[90m [39m[90mapi contract gate rejects each forbidden intra-major delta with dat[39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:10:35.4283123Z   [32;1m✓[39;22m[90m [39m[90mapi contract check refuses to update the baseline[39m[90m                   [39m [90m0.05s[39m  
-2026-10-01T17:10:35.5518890Z 
-2026-10-01T17:10:35.5521144Z   [30;42;1m PASS [39;49;22m[39m Tests\Arch\ApiContractTest[39m
-2026-10-01T17:10:35.5595088Z   [32;1m✓[39;22m[90m [39m[90moperation contract has one compiled authority and one guarded execu[39m[90m…[39m [90m0.07s[39m  
-2026-10-01T17:10:35.5608407Z   [32;1m✓[39;22m[90m [39m[90moperation contract ratchet detects a second registry and a direct H[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:10:35.5643146Z   [32;1m✓[39;22m[90m [39m[90moperation contract ratchet detects a second invoker and tenant hash[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:10:35.5693499Z   [32;1m✓[39;22m[90m [39m[90moperation contract ratchet detects a direct handler path without fi[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:10:35.5727390Z   [32;1m✓[39;22m[90m [39m[90moperation contract ratchet detects GraphQL source, dependency, capa[39m[90m…[39m [90m0.04s[39m  
-2026-10-01T17:10:36.1236469Z 
-2026-10-01T17:10:36.1266863Z   [30;42;1m PASS [39;49;22m[39m Tests\Arch\ConfigCompositionTest[39m
-2026-10-01T17:10:36.1282951Z   [32;1m✓[39;22m[90m [39m[90mconfig composition gate exits 0 on a clean tree[39m[90m                     [39m [90m0.21s[39m  
-2026-10-01T17:10:36.1306716Z   [32;1m✓[39;22m[90m [39m[90mconfig composition gate exits 1 and names the planted file[39m[90m          [39m [90m0.18s[39m  
-2026-10-01T17:10:36.1333513Z   [32;1m✓[39;22m[90m [39m[90mconfig composition gate catches qualified and dynamic calls without[39m[90m…[39m [90m0.18s[39m  
-2026-10-01T17:10:36.1738690Z 
-2026-10-01T17:10:36.1740320Z   [30;42;1m PASS [39;49;22m[39m Tests\Arch\CoreLitmusTest[39m
-2026-10-01T17:10:36.1767383Z   [32;1m✓[39;22m[90m [39m[90mfoundation membership is an explicit constant of the live zone map[39m[90m  [39m [90m0.02s[39m  
-2026-10-01T17:10:36.1770457Z   [32;1m✓[39;22m[90m [39m[90mLITMUS_ELOQUENT is exactly the three identity paths[39m
-2026-10-01T17:10:36.1774329Z   [32;1m✓[39;22m[90m [39m[90mfoundation litmus hard conditions are green on the clean tree[39m
-2026-10-01T17:10:36.1803242Z   [32;1m✓[39;22m[90m [39m[90mcondition 1 below the grep bar warns and does not fail the gate[39m[90m     [39m [90m0.03s[39m  
-2026-10-01T17:10:36.1805658Z   [32;1m✓[39;22m[90m [39m[90mcondition 5 above 200 lines outside Contracts Enums and Data is unresolved[39m
-2026-10-01T17:10:36.1807277Z   [32;1m✓[39;22m[90m [39m[90mR-L3 planting in Foundation RecordRef names the file and Eloquent[39m
-2026-10-01T17:10:36.2212824Z 
-2026-10-01T17:10:36.2214071Z   [30;42;1m PASS [39;49;22m[39m Tests\Arch\CoreZoneTest[39m
-2026-10-01T17:10:36.2240567Z   [32;1m✓[39;22m[90m [39m[90mevery core src file is classified into a zone or composition/testin[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:10:36.2264665Z   [32;1m✓[39;22m[90m [39m[90mzone files import only allowed CoreX zones (R-Z1)[39m[90m                   [39m [90m0.01s[39m  
-2026-10-01T17:10:36.2288609Z   [32;1m✓[39;22m[90m [39m[90mforeign files do not import zone Internal (R-Z2)[39m[90m                    [39m [90m0.01s[39m  
-2026-10-01T17:10:36.2311458Z   [32;1m✓[39;22m[90m [39m[90mR-Z1 planting in Foundation RecordRef names the file and symbol[39m[90m     [39m [90m0.01s[39m  
-2026-10-01T17:10:36.2335080Z   [32;1m✓[39;22m[90m [39m[90mR-Z1 planting in TenancyContracts AccountRef names the file and sym[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:10:36.2358556Z   [32;1m✓[39;22m[90m [39m[90mR-Z2 planting in ActorType names the file and symbol[39m[90m                [39m [90m0.01s[39m  
-2026-10-01T17:10:36.2361614Z   [32;1m✓[39;22m[90m [39m[90mR-Z0 planting of an unclassified error file names the path[39m
-2026-10-01T17:10:36.2365656Z   [32;1m✓[39;22m[90m [39m[90mR-Z0 planting of an unclassified Support file names the file[39m
-2026-10-01T17:10:37.5685402Z 
-2026-10-01T17:10:37.5687047Z   [30;42;1m PASS [39;49;22m[39m Tests\Arch\ErrorContractTest[39m
-2026-10-01T17:10:37.5714625Z   [32;1m✓[39;22m[90m [39m[90mErrorContract package catalogue matches the complete stable fixture[39m[90m [39m [90m1.34s[39m  
-2026-10-01T17:10:37.5717571Z   [32;1m✓[39;22m[90m [39m[90mErrorContract AST gate rejects literals through resolved names with dataset "alias"[39m
-2026-10-01T17:10:37.5720631Z   [32;1m✓[39;22m[90m [39m[90mErrorContract AST gate rejects literals through resolved names with dataset "group import"[39m
-2026-10-01T17:10:37.5724133Z   [32;1m✓[39;22m[90m [39m[90mErrorContract AST gate rejects literals through resolved names with dataset "FQCN"[39m
-2026-10-01T17:10:37.5727356Z   [32;1m✓[39;22m[90m [39m[90mErrorContract AST gate rejects literals through resolved names with dataset "descriptor"[39m
-2026-10-01T17:10:37.6602356Z 
-2026-10-01T17:10:37.6603933Z   [30;42;1m PASS [39;49;22m[39m Tests\Arch\LayerTest[39m
-2026-10-01T17:10:37.6633242Z   [32;1m✓[39;22m[90m [39m[90mfoundation packages do not import flex/* namespaces[39m[90m                 [39m [90m0.03s[39m  
-2026-10-01T17:10:37.6634953Z   [32;1m✓[39;22m[90m [39m[90mfoundation packages declare no upward composer dependencies[39m
-2026-10-01T17:10:37.6643033Z   [32;1m✓[39;22m[90m [39m[90maxiomasoft/corex declares no monorepo package dependencies[39m
-2026-10-01T17:10:37.6663183Z   [32;1m✓[39;22m[90m [39m[90maxiomasoft/corex source imports no sibling package namespace[39m[90m        [39m [90m0.01s[39m  
-2026-10-01T17:10:37.6688994Z   [32;1m✓[39;22m[90m [39m[90mtenant content does not bypass its owning storage adapter[39m[90m           [39m [90m0.01s[39m  
-2026-10-01T17:10:37.6711437Z   [32;1m✓[39;22m[90m [39m[90mfoundation packages carry no flex product literals[39m[90m                  [39m [90m0.05s[39m  
-2026-10-01T17:10:42.5759415Z 
-2026-10-01T17:10:42.5760613Z   [30;42;1m PASS [39;49;22m[39m Tests\Arch\NamingAndConfigGateTest[39m
-2026-10-01T17:10:42.5790453Z   [32;1m✓[39;22m[90m [39m[90mnaming gate reports no violations on clean tree[39m[90m                     [39m [90m2.27s[39m  
-2026-10-01T17:10:42.5813551Z   [32;1m✓[39;22m[90m [39m[90mnaming gate reports N1 for ProbeHelper in core Contracts[39m[90m            [39m [90m2.29s[39m  
-2026-10-01T17:10:42.5838623Z   [32;1m✓[39;22m[90m [39m[90mconfig composition gate is blocking on a clean tree[39m[90m                 [39m [90m0.18s[39m  
-2026-10-01T17:10:42.5863238Z   [32;1m✓[39;22m[90m [39m[90mconfig composition gate names the probe file and exits 1[39m[90m            [39m [90m0.18s[39m  
-2026-10-01T17:10:42.5907470Z 
-2026-10-01T17:10:42.5920831Z   [30;42;1m PASS [39;49;22m[39m Tests\Arch\ObservabilityContractTest[39m
-2026-10-01T17:10:42.5933284Z   [32;1m✓[39;22m[90m [39m[90mP12 observability gate keeps labels bounded and failure payloads re[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:10:42.5944649Z   [32;1m✓[39;22m[90m [39m[90mP12 observability gate rejects an identifier metric label[39m
-2026-10-01T17:10:42.5946602Z   [32;1m✓[39;22m[90m [39m[90mP12 observability gate rejects an arbitrary OpenTelemetry attribute map[39m
-2026-10-01T17:10:42.5948233Z   [32;1m✓[39;22m[90m [39m[90mP12 observability gate rejects raw Throwable logging[39m
-2026-10-01T17:10:50.2633229Z 
-2026-10-01T17:10:50.2634906Z   [30;42;1m PASS [39;49;22m[39m Tests\Arch\PackageDocsTest[39m
-2026-10-01T17:10:50.2660856Z   [32;1m✓[39;22m[90m [39m[90mpackage docs gate reports every cohort package and assigns producer[39m[90m…[39m [90m2.55s[39m  
-2026-10-01T17:10:50.2687715Z   [32;1m✓[39;22m[90m [39m[90mpackage docs gate fails a planted missing heading[39m[90m                   [39m [90m2.53s[39m  
-2026-10-01T17:10:50.2709811Z   [32;1m✓[39;22m[90m [39m[90mpackage docs gate fails a planted Internal example[39m[90m                  [39m [90m2.59s[39m  
-2026-10-01T17:11:36.7759371Z 
-2026-10-01T17:11:36.7761128Z   [30;42;1m PASS [39;49;22m[39m Tests\Arch\PackageGraphTest[39m
-2026-10-01T17:11:36.7791489Z   [32;1m✓[39;22m[90m [39m[90mpackage graph gate reports no violations[39m[90m                            [39m [90m2.43s[39m  
-2026-10-01T17:11:36.7813520Z   [32;1m✓[39;22m[90m [39m[90mpackage graph gate reports R1 when guard content is removed from gu[39m[90m…[39m [90m4.82s[39m  
-2026-10-01T17:11:36.7839764Z   [32;1m✓[39;22m[90m [39m[90mpackage graph gate reports R3 when host defines classes under reser[39m[90m…[39m [90m2.46s[39m  
-2026-10-01T17:11:36.7859355Z   [32;1m✓[39;22m[90m [39m[90mpackage graph gate reports R1 for group-use import (tokenizer graph[39m[90m…[39m [90m4.85s[39m  
-2026-10-01T17:11:36.7882946Z   [32;1m✓[39;22m[90m [39m[90mpackage graph gate reports R1 for FQCN reference without use (token[39m[90m…[39m [90m4.98s[39m  
-2026-10-01T17:11:36.7906182Z   [32;1m✓[39;22m[90m [39m[90mpackage graph gate reports R4 for unknown symbol outside source mem[39m[90m…[39m [90m4.84s[39m  
-2026-10-01T17:11:36.7930061Z   [32;1m✓[39;22m[90m [39m[90mpackage graph gate reports R2 for foreign Internal without R4 wordi[39m[90m…[39m [90m4.82s[39m  
-2026-10-01T17:11:36.7953155Z   [32;1m✓[39;22m[90m [39m[90mpackage graph gate reports R4b for accidental public top-level type[39m[90m [39m [90m4.81s[39m  
-2026-10-01T17:11:36.7976890Z   [32;1m✓[39;22m[90m [39m[90mpackage graph gate reports R5 for foundation importing product name[39m[90m…[39m [90m4.82s[39m  
-2026-10-01T17:11:36.8003376Z   [32;1m✓[39;22m[90m [39m[90mpackage graph gate reports R1 for wakeup import outside Integration[39m[90m…[39m [90m4.91s[39m  
-2026-10-01T17:11:36.8023806Z   [32;1m✓[39;22m[90m [39m[90mextension contract gate classifies registry-like surfaces and rejec[39m[90m…[39m [90m0.37s[39m  
-2026-10-01T17:11:36.8047211Z   [32;1m✓[39;22m[90m [39m[90mpackage graph rejects an invented generated symbol without authoriz[39m[90m…[39m [90m2.40s[39m  
-2026-10-01T17:11:39.7194029Z 
-2026-10-01T17:11:39.7195305Z   [30;42;1m PASS [39;49;22m[39m Tests\Arch\PhpApiBcTest[39m
-2026-10-01T17:11:39.7222675Z   [32;1m✓[39;22m[90m [39m[90mPHP API BC selection preserves revision membership and resolvable I[39m[90m…[39m [90m0.83s[39m  
-2026-10-01T17:11:39.7250046Z   [32;1m✓[39;22m[90m [39m[90mPHP API BC selection preserves revision membership and resolvable I[39m[90m…[39m [90m0.43s[39m  
-2026-10-01T17:11:39.7273235Z   [32;1m✓[39;22m[90m [39m[90mPHP API BC selection preserves revision membership and resolvable I[39m[90m…[39m [90m0.42s[39m  
-2026-10-01T17:11:39.7296954Z   [32;1m✓[39;22m[90m [39m[90mPHP API BC selection preserves revision membership and resolvable I[39m[90m…[39m [90m0.41s[39m  
-2026-10-01T17:11:39.7320021Z   [32;1m✓[39;22m[90m [39m[90mPHP API BC selection preserves revision membership and resolvable I[39m[90m…[39m [90m0.42s[39m  
-2026-10-01T17:11:39.7341039Z   [32;1m✓[39;22m[90m [39m[90mPHP API BC selection preserves revision membership and resolvable I[39m[90m…[39m [90m0.44s[39m  
-2026-10-01T17:11:40.3408219Z 
-2026-10-01T17:11:40.3409191Z   [30;42;1m PASS [39;49;22m[39m Tests\Arch\ProviderSizeTest[39m
-2026-10-01T17:11:40.3467435Z   [32;1m✓[39;22m[90m [39m[90mprovider size gate exits 0 on a clean tree[39m[90m                          [39m [90m0.21s[39m  
-2026-10-01T17:11:40.3470112Z   [32;1m✓[39;22m[90m [39m[90mprovider size gate exits 1 and names the planted provider[39m[90m           [39m [90m0.20s[39m  
-2026-10-01T17:11:40.3492236Z   [32;1m✓[39;22m[90m [39m[90mprovider size gate does not count bindings outside a service provid[39m[90m…[39m [90m0.20s[39m  
-2026-10-01T17:11:40.4185412Z 
-2026-10-01T17:11:40.4186779Z   [30;42;1m PASS [39;49;22m[39m Tests\Arch\SingletonInjectionTest[39m
-2026-10-01T17:11:40.4212895Z   [32;1m✓[39;22m[90m [39m[90msingleton injection gate passes on clean tree with allowlist[39m[90m        [39m [90m0.05s[39m  
-2026-10-01T17:11:40.4236387Z   [32;1m✓[39;22m[90m [39m[90msingleton injection gate names probe provider for application in co[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:11:40.4947061Z 
-2026-10-01T17:11:40.4948542Z   [30;42;1m PASS [39;49;22m[39m Tests\Arch\TestingAutoloadTest[39m
-2026-10-01T17:11:40.4974250Z   [32;1m✓[39;22m[90m [39m[90mCoreX\Testing is dev-autoload only and production src has no harnes[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:11:40.4997344Z   [32;1m✓[39;22m[90m [39m[90mpackage tests do not import another package Testing namespace[39m[90m       [39m [90m0.02s[39m  
-2026-10-01T17:11:40.5021176Z   [32;1m✓[39;22m[90m [39m[90mR-T1 planting in ActorType names the file[39m[90m                           [39m [90m0.02s[39m  
-2026-10-01T17:11:40.5026194Z 
-2026-10-01T17:11:40.5026980Z   [90mTests:[39m    [32;1m101 passed[39;22m[90m (378 assertions)[39m
-2026-10-01T17:11:40.5028401Z   [90mDuration:[39m [39m66.73s[39m
-2026-10-01T17:11:40.5029085Z 
+2026-10-01T17:10:34.2282231Z
+2026-10-01T17:10:34.2283384Z    PASS  Tests\Arch\AchievedInvariantTest
+2026-10-01T17:10:34.2343718Z   ✓ attributes package does not depend on search or meilisearch (A57)    0.01s
+2026-10-01T17:10:34.2346200Z   ✓ attributes search import probe fails A57 with file path
+2026-10-01T17:10:34.2363171Z   ✓ search provider implementations do not import eloquent (A61)
+2026-10-01T17:10:34.2372719Z   ✓ search contracts are split across dedicated files (A61)
+2026-10-01T17:10:34.2376743Z   ✓ search provider eloquent import probe fails A61 with file path
+2026-10-01T17:10:34.2378346Z   ✓ trusted context resolver does not read tenant id from the request payload (A99)
+2026-10-01T17:10:34.2379948Z   ✓ trusted context resolver tenant_id probe fails A99 with file path
+2026-10-01T17:10:34.2423533Z   ✓ table ownership gate reports no violations on clean tree             0.06s
+2026-10-01T17:10:34.2449421Z   ✓ table ownership gate reports T1 for uncatalogued create              0.06s
+2026-10-01T17:10:34.2477485Z   ✓ table ownership gate reports T4 for core cross-package foreign key…  0.06s
+2026-10-01T17:10:35.3789497Z
+2026-10-01T17:10:35.3790963Z    PASS  Tests\Arch\ApiContractCompatibilityTest
+2026-10-01T17:10:35.3809884Z   ✓ api contract gate accepts the committed snapshot and additive fixtu… 0.18s
+2026-10-01T17:10:35.3833732Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.05s
+2026-10-01T17:10:35.3861186Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.05s
+2026-10-01T17:10:35.3884635Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.05s
+2026-10-01T17:10:35.3907698Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.05s
+2026-10-01T17:10:35.3933219Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.05s
+2026-10-01T17:10:35.3957729Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.05s
+2026-10-01T17:10:35.3980726Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.05s
+2026-10-01T17:10:35.4001454Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.05s
+2026-10-01T17:10:35.4024954Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.05s
+2026-10-01T17:10:35.4048116Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.05s
+2026-10-01T17:10:35.4072431Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.05s
+2026-10-01T17:10:35.4095135Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.05s
+2026-10-01T17:10:35.4118800Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.05s
+2026-10-01T17:10:35.4142266Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.05s
+2026-10-01T17:10:35.4165429Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.05s
+2026-10-01T17:10:35.4191989Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.05s
+2026-10-01T17:10:35.4211958Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.05s
+2026-10-01T17:10:35.4235554Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.05s
+2026-10-01T17:10:35.4258885Z   ✓ api contract gate rejects each forbidden intra-major delta with dat… 0.05s
+2026-10-01T17:10:35.4283123Z   ✓ api contract check refuses to update the baseline                    0.05s
+2026-10-01T17:10:35.5518890Z
+2026-10-01T17:10:35.5521144Z    PASS  Tests\Arch\ApiContractTest
+2026-10-01T17:10:35.5595088Z   ✓ operation contract has one compiled authority and one guarded execu… 0.07s
+2026-10-01T17:10:35.5608407Z   ✓ operation contract ratchet detects a second registry and a direct H… 0.02s
+2026-10-01T17:10:35.5643146Z   ✓ operation contract ratchet detects a second invoker and tenant hash… 0.02s
+2026-10-01T17:10:35.5693499Z   ✓ operation contract ratchet detects a direct handler path without fi… 0.03s
+2026-10-01T17:10:35.5727390Z   ✓ operation contract ratchet detects GraphQL source, dependency, capa… 0.04s
+2026-10-01T17:10:36.1236469Z
+2026-10-01T17:10:36.1266863Z    PASS  Tests\Arch\ConfigCompositionTest
+2026-10-01T17:10:36.1282951Z   ✓ config composition gate exits 0 on a clean tree                      0.21s
+2026-10-01T17:10:36.1306716Z   ✓ config composition gate exits 1 and names the planted file           0.18s
+2026-10-01T17:10:36.1333513Z   ✓ config composition gate catches qualified and dynamic calls without… 0.18s
+2026-10-01T17:10:36.1738690Z
+2026-10-01T17:10:36.1740320Z    PASS  Tests\Arch\CoreLitmusTest
+2026-10-01T17:10:36.1767383Z   ✓ foundation membership is an explicit constant of the live zone map   0.02s
+2026-10-01T17:10:36.1770457Z   ✓ LITMUS_ELOQUENT is exactly the three identity paths
+2026-10-01T17:10:36.1774329Z   ✓ foundation litmus hard conditions are green on the clean tree
+2026-10-01T17:10:36.1803242Z   ✓ condition 1 below the grep bar warns and does not fail the gate      0.03s
+2026-10-01T17:10:36.1805658Z   ✓ condition 5 above 200 lines outside Contracts Enums and Data is unresolved
+2026-10-01T17:10:36.1807277Z   ✓ R-L3 planting in Foundation RecordRef names the file and Eloquent
+2026-10-01T17:10:36.2212824Z
+2026-10-01T17:10:36.2214071Z    PASS  Tests\Arch\CoreZoneTest
+2026-10-01T17:10:36.2240567Z   ✓ every core src file is classified into a zone or composition/testin… 0.01s
+2026-10-01T17:10:36.2264665Z   ✓ zone files import only allowed CoreX zones (R-Z1)                    0.01s
+2026-10-01T17:10:36.2288609Z   ✓ foreign files do not import zone Internal (R-Z2)                     0.01s
+2026-10-01T17:10:36.2311458Z   ✓ R-Z1 planting in Foundation RecordRef names the file and symbol      0.01s
+2026-10-01T17:10:36.2335080Z   ✓ R-Z1 planting in TenancyContracts AccountRef names the file and sym… 0.01s
+2026-10-01T17:10:36.2358556Z   ✓ R-Z2 planting in ActorType names the file and symbol                 0.01s
+2026-10-01T17:10:36.2361614Z   ✓ R-Z0 planting of an unclassified error file names the path
+2026-10-01T17:10:36.2365656Z   ✓ R-Z0 planting of an unclassified Support file names the file
+2026-10-01T17:10:37.5685402Z
+2026-10-01T17:10:37.5687047Z    PASS  Tests\Arch\ErrorContractTest
+2026-10-01T17:10:37.5714625Z   ✓ ErrorContract package catalogue matches the complete stable fixture  1.34s
+2026-10-01T17:10:37.5717571Z   ✓ ErrorContract AST gate rejects literals through resolved names with dataset "alias"
+2026-10-01T17:10:37.5720631Z   ✓ ErrorContract AST gate rejects literals through resolved names with dataset "group import"
+2026-10-01T17:10:37.5724133Z   ✓ ErrorContract AST gate rejects literals through resolved names with dataset "FQCN"
+2026-10-01T17:10:37.5727356Z   ✓ ErrorContract AST gate rejects literals through resolved names with dataset "descriptor"
+2026-10-01T17:10:37.6602356Z
+2026-10-01T17:10:37.6603933Z    PASS  Tests\Arch\LayerTest
+2026-10-01T17:10:37.6633242Z   ✓ foundation packages do not import flex/* namespaces                  0.03s
+2026-10-01T17:10:37.6634953Z   ✓ foundation packages declare no upward composer dependencies
+2026-10-01T17:10:37.6643033Z   ✓ axiomasoft/corex declares no monorepo package dependencies
+2026-10-01T17:10:37.6663183Z   ✓ axiomasoft/corex source imports no sibling package namespace         0.01s
+2026-10-01T17:10:37.6688994Z   ✓ tenant content does not bypass its owning storage adapter            0.01s
+2026-10-01T17:10:37.6711437Z   ✓ foundation packages carry no flex product literals                   0.05s
+2026-10-01T17:10:42.5759415Z
+2026-10-01T17:10:42.5760613Z    PASS  Tests\Arch\NamingAndConfigGateTest
+2026-10-01T17:10:42.5790453Z   ✓ naming gate reports no violations on clean tree                      2.27s
+2026-10-01T17:10:42.5813551Z   ✓ naming gate reports N1 for ProbeHelper in core Contracts             2.29s
+2026-10-01T17:10:42.5838623Z   ✓ config composition gate is blocking on a clean tree                  0.18s
+2026-10-01T17:10:42.5863238Z   ✓ config composition gate names the probe file and exits 1             0.18s
+2026-10-01T17:10:42.5907470Z
+2026-10-01T17:10:42.5920831Z    PASS  Tests\Arch\ObservabilityContractTest
+2026-10-01T17:10:42.5933284Z   ✓ P12 observability gate keeps labels bounded and failure payloads re… 0.01s
+2026-10-01T17:10:42.5944649Z   ✓ P12 observability gate rejects an identifier metric label
+2026-10-01T17:10:42.5946602Z   ✓ P12 observability gate rejects an arbitrary OpenTelemetry attribute map
+2026-10-01T17:10:42.5948233Z   ✓ P12 observability gate rejects raw Throwable logging
+2026-10-01T17:10:50.2633229Z
+2026-10-01T17:10:50.2634906Z    PASS  Tests\Arch\PackageDocsTest
+2026-10-01T17:10:50.2660856Z   ✓ package docs gate reports every cohort package and assigns producer… 2.55s
+2026-10-01T17:10:50.2687715Z   ✓ package docs gate fails a planted missing heading                    2.53s
+2026-10-01T17:10:50.2709811Z   ✓ package docs gate fails a planted Internal example                   2.59s
+2026-10-01T17:11:36.7759371Z
+2026-10-01T17:11:36.7761128Z    PASS  Tests\Arch\PackageGraphTest
+2026-10-01T17:11:36.7791489Z   ✓ package graph gate reports no violations                             2.43s
+2026-10-01T17:11:36.7813520Z   ✓ package graph gate reports R1 when guard content is removed from gu… 4.82s
+2026-10-01T17:11:36.7839764Z   ✓ package graph gate reports R3 when host defines classes under reser… 2.46s
+2026-10-01T17:11:36.7859355Z   ✓ package graph gate reports R1 for group-use import (tokenizer graph… 4.85s
+2026-10-01T17:11:36.7882946Z   ✓ package graph gate reports R1 for FQCN reference without use (token… 4.98s
+2026-10-01T17:11:36.7906182Z   ✓ package graph gate reports R4 for unknown symbol outside source mem… 4.84s
+2026-10-01T17:11:36.7930061Z   ✓ package graph gate reports R2 for foreign Internal without R4 wordi… 4.82s
+2026-10-01T17:11:36.7953155Z   ✓ package graph gate reports R4b for accidental public top-level type  4.81s
+2026-10-01T17:11:36.7976890Z   ✓ package graph gate reports R5 for foundation importing product name… 4.82s
+2026-10-01T17:11:36.8003376Z   ✓ package graph gate reports R1 for wakeup import outside Integration… 4.91s
+2026-10-01T17:11:36.8023806Z   ✓ extension contract gate classifies registry-like surfaces and rejec… 0.37s
+2026-10-01T17:11:36.8047211Z   ✓ package graph rejects an invented generated symbol without authoriz… 2.40s
+2026-10-01T17:11:39.7194029Z
+2026-10-01T17:11:39.7195305Z    PASS  Tests\Arch\PhpApiBcTest
+2026-10-01T17:11:39.7222675Z   ✓ PHP API BC selection preserves revision membership and resolvable I… 0.83s
+2026-10-01T17:11:39.7250046Z   ✓ PHP API BC selection preserves revision membership and resolvable I… 0.43s
+2026-10-01T17:11:39.7273235Z   ✓ PHP API BC selection preserves revision membership and resolvable I… 0.42s
+2026-10-01T17:11:39.7296954Z   ✓ PHP API BC selection preserves revision membership and resolvable I… 0.41s
+2026-10-01T17:11:39.7320021Z   ✓ PHP API BC selection preserves revision membership and resolvable I… 0.42s
+2026-10-01T17:11:39.7341039Z   ✓ PHP API BC selection preserves revision membership and resolvable I… 0.44s
+2026-10-01T17:11:40.3408219Z
+2026-10-01T17:11:40.3409191Z    PASS  Tests\Arch\ProviderSizeTest
+2026-10-01T17:11:40.3467435Z   ✓ provider size gate exits 0 on a clean tree                           0.21s
+2026-10-01T17:11:40.3470112Z   ✓ provider size gate exits 1 and names the planted provider            0.20s
+2026-10-01T17:11:40.3492236Z   ✓ provider size gate does not count bindings outside a service provid… 0.20s
+2026-10-01T17:11:40.4185412Z
+2026-10-01T17:11:40.4186779Z    PASS  Tests\Arch\SingletonInjectionTest
+2026-10-01T17:11:40.4212895Z   ✓ singleton injection gate passes on clean tree with allowlist         0.05s
+2026-10-01T17:11:40.4236387Z   ✓ singleton injection gate names probe provider for application in co… 0.03s
+2026-10-01T17:11:40.4947061Z
+2026-10-01T17:11:40.4948542Z    PASS  Tests\Arch\TestingAutoloadTest
+2026-10-01T17:11:40.4974250Z   ✓ CoreX\Testing is dev-autoload only and production src has no harnes… 0.03s
+2026-10-01T17:11:40.4997344Z   ✓ package tests do not import another package Testing namespace        0.02s
+2026-10-01T17:11:40.5021176Z   ✓ R-T1 planting in ActorType names the file                            0.02s
+2026-10-01T17:11:40.5026194Z
+2026-10-01T17:11:40.5026980Z   Tests:    101 passed (378 assertions)
+2026-10-01T17:11:40.5028401Z   Duration: 66.73s
+2026-10-01T17:11:40.5029085Z
 2026-10-01T17:11:40.5267118Z ##[group]Run composer php-api
-2026-10-01T17:11:40.5267441Z [36;1mcomposer php-api[0m
+2026-10-01T17:11:40.5267441Z composer php-api
 2026-10-01T17:11:40.5329841Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:11:40.5330105Z env:
 2026-10-01T17:11:40.5330311Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -80154,7 +80154,7 @@
 2026-10-01T17:11:44.0190304Z     "diagnostics": []
 2026-10-01T17:11:44.0190385Z }
 2026-10-01T17:11:44.0220971Z ##[group]Run composer error-registry
-2026-10-01T17:11:44.0221194Z [36;1mcomposer error-registry[0m
+2026-10-01T17:11:44.0221194Z composer error-registry
 2026-10-01T17:11:44.0282947Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:11:44.0283032Z env:
 2026-10-01T17:11:44.0283132Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -81380,7 +81380,7 @@
 2026-10-01T17:11:45.7555158Z     "diagnostics": []
 2026-10-01T17:11:45.7555361Z }
 2026-10-01T17:11:45.7599778Z ##[group]Run composer api-contract
-2026-10-01T17:11:45.7600350Z [36;1mcomposer api-contract[0m
+2026-10-01T17:11:45.7600350Z composer api-contract
 2026-10-01T17:11:45.7680480Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:11:45.7680927Z env:
 2026-10-01T17:11:45.7681291Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -81389,8 +81389,8 @@
 2026-10-01T17:11:45.7682917Z ##[endgroup]
 2026-10-01T17:11:45.9842838Z api-contract: OK
 2026-10-01T17:11:46.0085031Z ##[group]Run composer module-layout-gate
-2026-10-01T17:11:46.0085667Z [36;1mcomposer module-layout-gate[0m
-2026-10-01T17:11:46.0086520Z [36;1mpython3 -m unittest discover -s scripts/tests -p 'test_module_layout_gate.py'[0m
+2026-10-01T17:11:46.0085667Z composer module-layout-gate
+2026-10-01T17:11:46.0086520Z python3 -m unittest discover -s scripts/tests -p 'test_module_layout_gate.py'
 2026-10-01T17:11:46.0155756Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:11:46.0156183Z env:
 2026-10-01T17:11:46.0156536Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -81402,7 +81402,7 @@
 2026-10-01T17:11:47.2087787Z module-layout: baseline written, 1 entries; R0 0, R1 0, R2 0, R3 1, R4 0, R5 0, R6 0
 2026-10-01T17:11:47.2088871Z ----------------------------------------------------------------------
 2026-10-01T17:11:47.2089782Z Ran 11 tests in 0.176s
-2026-10-01T17:11:47.2090313Z 
+2026-10-01T17:11:47.2090313Z
 2026-10-01T17:11:47.2090615Z OK
 2026-10-01T17:11:47.2097145Z module-layout OK: 10 files, 1 violations, 1 baselined, 0 new, 0 stale; R0 0, R1 0, R2 0, R3 1, R4 0, R5 0, R6 0
 2026-10-01T17:11:47.2098320Z new R5 packages/search/src/Index/Internal/Uses.php CoreX\Search\Internal\Hydrator
@@ -81410,7 +81410,7 @@
 2026-10-01T17:11:47.2100758Z stale R3 packages/search/src/Index/Compiler/Plan.php (remove it from the baseline)
 2026-10-01T17:11:47.2102177Z module-layout FAIL: 9 files, 0 violations, 1 baselined, 0 new, 1 stale; R0 0, R1 0, R2 0, R3 0, R4 0, R5 0, R6 0
 2026-10-01T17:11:47.2230801Z ##[group]Run composer table-write-ownership-gate
-2026-10-01T17:11:47.2231519Z [36;1mcomposer table-write-ownership-gate[0m
+2026-10-01T17:11:47.2231519Z composer table-write-ownership-gate
 2026-10-01T17:11:47.2317317Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:11:47.2317570Z env:
 2026-10-01T17:11:47.2317777Z   COMPOSER_PROCESS_TIMEOUT: 0

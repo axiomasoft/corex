@@ -154,10 +154,19 @@ abstract class TestCase extends Orchestra
     protected function tearDown(): void
     {
         try {
-            DB::disconnect('pgsql');
             DB::connection('pgsql')->statement('CREATE SCHEMA IF NOT EXISTS public');
         } finally {
-            parent::tearDown();
+            try {
+                // Testbench applications can remain reachable until cyclic GC runs.
+                // Release every owned PDO now, including the schema-restoration connection.
+                if ($this->app !== null && $this->app->bound('db')) {
+                    foreach ($this->app->make('db')->getConnections() as $connection) {
+                        $connection->disconnect();
+                    }
+                }
+            } finally {
+                parent::tearDown();
+            }
         }
     }
 

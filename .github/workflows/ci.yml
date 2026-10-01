@@ -827,7 +827,9 @@ jobs:
           python3 -m unittest discover -s scripts/tests -p 'test_module_layout_gate.py'
 
       - name: DATA-003 table write ownership
-        run: composer table-write-ownership-gate
+        run: |
+          composer table-write-ownership-gate
+          python3 -m unittest discover -s scripts/tests -p 'test_table_write_ownership_gate.py'
 
   contract-guard:
     permissions:

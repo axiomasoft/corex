@@ -11,7 +11,13 @@ BASE = '428f47dbbab1ea1663a673f0fa1d6c2709f8e148'
 
 before = json.loads((ARTIFACTS / 'own-ast-before.json').read_text())
 after = json.loads((ARTIFACTS / 'own-ast-after.json').read_text())
-assert before == after, 'Own AST declarations or signatures changed'
+ADDED = {'axiomasoft/corex': {'CoreX\\Messaging\\Laravel\\InboxRetention'}}
+for package, declarations in before.items():
+    additions = set(after[package]) - set(declarations)
+    assert additions == ADDED.get(package, set()), (package, additions)
+    assert declarations == {symbol: after[package][symbol] for symbol in declarations}, 'Existing own declarations/signatures changed'
+    assert set(declarations) <= set(after[package]), 'Own declaration removed'
+
 counts, missing, signature_delta, omissions = {}, [], [], []
 for manifest in sorted(ROOT.glob('packages/*/resources/contracts/php-api.json')):
     current = json.loads(manifest.read_text())
@@ -19,7 +25,8 @@ for manifest in sorted(ROOT.glob('packages/*/resources/contracts/php-api.json'))
         ['git', 'show', f'{BASE}:{manifest.relative_to(ROOT)}'], cwd=ROOT))
     package = current['package']
     declarations = before[package]
-    assert set(declarations) == set(current['symbols']) == set(previous['symbols'])
+    assert set(declarations) == set(previous['symbols'])
+    assert set(current['symbols']) == set(declarations) | ADDED.get(package, set())
     count = 0
     for symbol, categories in declarations.items():
         for category, members in categories.items() if isinstance(categories, dict) else []:
@@ -44,6 +51,8 @@ result = {
     'packages': counts, 'ast_signatures_equal': True, 'missing_members': missing,
     'manifest_signature_delta': signature_delta, 'preexisting_omissions_repaired': omissions,
     'equal': True,
+    'owner_authorized_additions': {p: sorted(v) for p, v in ADDED.items()},
+    'addition_authority': 'decisions/D82-p102-ci-repair-extension.md',
 }
 (ARTIFACTS / 'own-members-diff.json').write_text(json.dumps(result, indent=2) + '\n')
 print(f'own-members: {len(counts)} packages, {sum(c["symbols"] for c in counts.values())} symbols, '

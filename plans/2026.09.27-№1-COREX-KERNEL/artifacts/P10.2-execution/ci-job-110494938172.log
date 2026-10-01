@@ -153,32 +153,32 @@
 2026-10-01T17:27:51.9874679Z   github-token: ***
 2026-10-01T17:27:51.9874938Z ##[endgroup]
 2026-10-01T17:27:52.0351285Z [command]/usr/bin/bash /home/runner/work/_actions/shivammathur/setup-php/f3e473d116dcccaddc5834248c87452386958240/src/scripts/run.sh
-2026-10-01T17:27:52.0901917Z 
-2026-10-01T17:27:52.0905016Z [90;1m==> [0m[37;1mSetup PHP[0m
-2026-10-01T17:27:59.4986732Z [32;1m✓ [0m[34;1mPHP [0m[90;1mInstalled PHP 8.4.26[0m
-2026-10-01T17:27:59.4990559Z 
-2026-10-01T17:27:59.4991270Z [90;1m==> [0m[37;1mSetup Extensions[0m
-2026-10-01T17:27:59.5533925Z [32;1m✓ [0m[34;1mmbstring [0m[90;1mEnabled[0m
-2026-10-01T17:27:59.5569151Z [32;1m✓ [0m[34;1mpdo [0m[90;1mEnabled[0m
-2026-10-01T17:27:59.5603118Z [32;1m✓ [0m[34;1msqlite3 [0m[90;1mEnabled[0m
-2026-10-01T17:27:59.5621100Z [32;1m✓ [0m[34;1mpdo_sqlite [0m[90;1mEnabled[0m
-2026-10-01T17:27:59.5659961Z [32;1m✓ [0m[34;1mbcmath [0m[90;1mEnabled[0m
-2026-10-01T17:27:59.5694147Z [32;1m✓ [0m[34;1mcurl [0m[90;1mEnabled[0m
-2026-10-01T17:27:59.5730009Z [32;1m✓ [0m[34;1mintl [0m[90;1mEnabled[0m
-2026-10-01T17:27:59.5767360Z [32;1m✓ [0m[34;1mzip [0m[90;1mEnabled[0m
-2026-10-01T17:27:59.5797867Z [32;1m✓ [0m[34;1mgd [0m[90;1mEnabled[0m
-2026-10-01T17:27:59.5833204Z [32;1m✓ [0m[34;1mxdebug [0m[90;1mEnabled[0m
-2026-10-01T17:27:59.5835179Z 
-2026-10-01T17:27:59.5835950Z [90;1m==> [0m[37;1mSetup Tools[0m
-2026-10-01T17:28:00.3561858Z [32;1m✓ [0m[34;1mcomposer [0m[90;1mAdded composer 2.10.3[0m
-2026-10-01T17:28:00.3565369Z 
-2026-10-01T17:28:00.3579445Z [90;1m==> [0m[37;1mSetup Coverage[0m
-2026-10-01T17:28:00.4675076Z [32;1m✓ [0m[34;1mxdebug [0m[90;1mXdebug 3.5.3 enabled as coverage driver[0m
-2026-10-01T17:28:00.4684953Z 
-2026-10-01T17:28:00.4698205Z [90;1m==> [0m[37;1mSponsor setup-php[0m
-2026-10-01T17:28:00.4710418Z [32;1m✓ [0m[34;1msetup-php [0m[90;1mhttps://setup-php.com/sponsor[0m
+2026-10-01T17:27:52.0901917Z
+2026-10-01T17:27:52.0905016Z ==> Setup PHP
+2026-10-01T17:27:59.4986732Z ✓ PHP Installed PHP 8.4.26
+2026-10-01T17:27:59.4990559Z
+2026-10-01T17:27:59.4991270Z ==> Setup Extensions
+2026-10-01T17:27:59.5533925Z ✓ mbstring Enabled
+2026-10-01T17:27:59.5569151Z ✓ pdo Enabled
+2026-10-01T17:27:59.5603118Z ✓ sqlite3 Enabled
+2026-10-01T17:27:59.5621100Z ✓ pdo_sqlite Enabled
+2026-10-01T17:27:59.5659961Z ✓ bcmath Enabled
+2026-10-01T17:27:59.5694147Z ✓ curl Enabled
+2026-10-01T17:27:59.5730009Z ✓ intl Enabled
+2026-10-01T17:27:59.5767360Z ✓ zip Enabled
+2026-10-01T17:27:59.5797867Z ✓ gd Enabled
+2026-10-01T17:27:59.5833204Z ✓ xdebug Enabled
+2026-10-01T17:27:59.5835179Z
+2026-10-01T17:27:59.5835950Z ==> Setup Tools
+2026-10-01T17:28:00.3561858Z ✓ composer Added composer 2.10.3
+2026-10-01T17:28:00.3565369Z
+2026-10-01T17:28:00.3579445Z ==> Setup Coverage
+2026-10-01T17:28:00.4675076Z ✓ xdebug Xdebug 3.5.3 enabled as coverage driver
+2026-10-01T17:28:00.4684953Z
+2026-10-01T17:28:00.4698205Z ==> Sponsor setup-php
+2026-10-01T17:28:00.4710418Z ✓ setup-php https://setup-php.com/sponsor
 2026-10-01T17:28:00.4900963Z ##[group]Run python3 scripts/distribution/stage-stancl-providers.py
-2026-10-01T17:28:00.4901567Z [36;1mpython3 scripts/distribution/stage-stancl-providers.py[0m
+2026-10-01T17:28:00.4901567Z python3 scripts/distribution/stage-stancl-providers.py
 2026-10-01T17:28:00.5159389Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:28:00.5159687Z env:
 2026-10-01T17:28:00.5159929Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -187,7 +187,7 @@
 2026-10-01T17:28:00.5160726Z ##[endgroup]
 2026-10-01T17:28:01.5418784Z {"result": "PASS", "repository": "file:///home/runner/work/corex/corex/.composer-provider-staging", "staging": "/home/runner/work/corex/corex/.composer-provider-staging", "registered": ["/home/runner/work/corex/corex", "/home/runner/work/corex/corex/packages/tenancy", "/home/runner/work/corex/corex/packages/access"]}
 2026-10-01T17:28:01.5521267Z ##[group]Run composer update --prefer-dist --no-interaction --no-progress
-2026-10-01T17:28:01.5521861Z [36;1mcomposer update --prefer-dist --no-interaction --no-progress[0m
+2026-10-01T17:28:01.5521861Z composer update --prefer-dist --no-interaction --no-progress
 2026-10-01T17:28:01.5593793Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:28:01.5594266Z env:
 2026-10-01T17:28:01.5594482Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -693,7 +693,7 @@
 2026-10-01T17:28:16.0623825Z > pestphp/pest: ignored
 2026-10-01T17:28:16.0624357Z > phpstan/phpstan-strict-rules: ignored
 2026-10-01T17:28:16.1036057Z ##[group]Run composer audit --locked
-2026-10-01T17:28:16.1036603Z [36;1mcomposer audit --locked[0m
+2026-10-01T17:28:16.1036603Z composer audit --locked
 2026-10-01T17:28:16.1108803Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:28:16.1109349Z env:
 2026-10-01T17:28:16.1109563Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -702,7 +702,7 @@
 2026-10-01T17:28:16.1110286Z ##[endgroup]
 2026-10-01T17:28:16.6917500Z No security vulnerability advisories found.
 2026-10-01T17:28:16.7221953Z ##[group]Run composer --working-dir=packages/access update --prefer-dist --no-interaction --no-progress
-2026-10-01T17:28:16.7223198Z [36;1mcomposer --working-dir=packages/access update --prefer-dist --no-interaction --no-progress[0m
+2026-10-01T17:28:16.7223198Z composer --working-dir=packages/access update --prefer-dist --no-interaction --no-progress
 2026-10-01T17:28:16.7308686Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:28:16.7309078Z env:
 2026-10-01T17:28:16.7309303Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -999,7 +999,7 @@
 2026-10-01T17:28:23.2719363Z 92 packages you are using are looking for funding.
 2026-10-01T17:28:23.2720201Z Use the `composer fund` command to find out more!
 2026-10-01T17:28:23.3040151Z ##[group]Run composer audit --locked --working-dir=packages/access
-2026-10-01T17:28:23.3040938Z [36;1mcomposer audit --locked --working-dir=packages/access[0m
+2026-10-01T17:28:23.3040938Z composer audit --locked --working-dir=packages/access
 2026-10-01T17:28:23.3111590Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:28:23.3111864Z env:
 2026-10-01T17:28:23.3112084Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -1008,7 +1008,7 @@
 2026-10-01T17:28:23.3112843Z ##[endgroup]
 2026-10-01T17:28:23.8527524Z No security vulnerability advisories found.
 2026-10-01T17:28:23.8837421Z ##[group]Run composer test:packages
-2026-10-01T17:28:23.8837750Z [36;1mcomposer test:packages[0m
+2026-10-01T17:28:23.8837750Z composer test:packages
 2026-10-01T17:28:23.8904668Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:28:23.8904927Z env:
 2026-10-01T17:28:23.8905145Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -1016,532 +1016,532 @@
 2026-10-01T17:28:23.8905678Z   COMPOSER_NO_AUDIT: 1
 2026-10-01T17:28:23.8905901Z ##[endgroup]
 2026-10-01T17:28:24.1519969Z ==> packages/access
-2026-10-01T17:28:24.6923341Z 
-2026-10-01T17:28:24.6925072Z   [30;42;1m PASS [39;49;22m[39m Tests\Unit\AuthOptionsTest[39m
-2026-10-01T17:28:24.6987422Z   [32;1m✓[39;22m[90m [39m[90mit rejects an empty panel[39m[90m                                           [39m [90m0.01s[39m  
-2026-10-01T17:28:24.6999210Z   [32;1m✓[39;22m[90m [39m[90mit normalizes an empty workspace scope class to null[39m
-2026-10-01T17:28:24.7005701Z   [32;1m✓[39;22m[90m [39m[90mit accumulates an empty panel and incomplete identity columns in one exception[39m
-2026-10-01T17:28:25.3035542Z 
-2026-10-01T17:28:25.3037653Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\ScopeAvailabilityTest[39m
-2026-10-01T17:28:25.3060814Z   [32;1m✓[39;22m[90m [39m[90mit normalizes to none for an entity_key unknown to the registry[39m[90m     [39m [90m0.19s[39m  
-2026-10-01T17:28:25.3081727Z   [32;1m✓[39;22m[90m [39m[90mit leaves none/account untouched regardless of capability or regist[39m[90m…[39m [90m0.08s[39m  
-2026-10-01T17:28:25.3087968Z   [32;1m✓[39;22m[90m [39m[90mit normalizes own/dept/dept_tree/workspace to account when neither[39m[90m… [39m [90m0.06s[39m  
-2026-10-01T17:28:25.3106772Z   [32;1m✓[39;22m[90m [39m[90mit normalizes own/dept/dept_tree/workspace to account when neither[39m[90m… [39m [90m0.05s[39m  
-2026-10-01T17:28:25.3120389Z   [32;1m✓[39;22m[90m [39m[90mit normalizes own/dept/dept_tree/workspace to account when neither[39m[90m… [39m [90m0.05s[39m  
-2026-10-01T17:28:25.3134936Z   [32;1m✓[39;22m[90m [39m[90mit normalizes own/dept/dept_tree/workspace to account when neither[39m[90m… [39m [90m0.05s[39m  
-2026-10-01T17:28:25.3147436Z   [32;1m✓[39;22m[90m [39m[90mit leaves the scope unchanged once the matching capability is decla[39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:28:25.3163119Z   [32;1m✓[39;22m[90m [39m[90mit throws ScopeCapabilityMismatch when the column exists but the ca[39m[90m…[39m [90m0.06s[39m  
-2026-10-01T17:28:25.5998617Z 
-2026-10-01T17:28:25.6000861Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\PermissionSurfaceTest[39m
-2026-10-01T17:28:25.6015010Z   [32;1m✓[39;22m[90m [39m[90mit returns only account for a non-scopeable declaration[39m[90m             [39m [90m0.07s[39m  
-2026-10-01T17:28:25.6027706Z   [32;1m✓[39;22m[90m [39m[90mit excludes a declaration whose owning module is inactive[39m[90m           [39m [90m0.05s[39m  
-2026-10-01T17:28:25.6040545Z   [32;1m✓[39;22m[90m [39m[90mit lists every declared action with the entity scope set for an act[39m[90m…[39m [90m0.06s[39m  
-2026-10-01T17:28:25.6053157Z   [32;1m✓[39;22m[90m [39m[90mit includes every distinct scope when the entity declares both owna[39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:28:25.6065261Z   [32;1m✓[39;22m[90m [39m[90mit excludes a declaration whose entity is unknown to EntityRegistry[39m[90m [39m [90m0.05s[39m  
-2026-10-01T17:28:25.8312482Z 
-2026-10-01T17:28:25.8314363Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\WorkspaceScopeWiringTest[39m
-2026-10-01T17:28:25.8327583Z   [32;1m✓[39;22m[90m [39m[90mit wires the workspace global scope onto every model whose entity d[39m[90m…[39m [90m0.06s[39m  
-2026-10-01T17:28:25.8340794Z   [32;1m✓[39;22m[90m [39m[90mit does not wire the workspace global scope onto a model without th[39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:28:25.8353156Z   [32;1m✓[39;22m[90m [39m[90mit silently skips wiring when the scope class is null (boxed profil[39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:28:25.8366006Z   [32;1m✓[39;22m[90m [39m[90mit silently skips wiring when the pinned scope class does not exist[39m[90m [39m [90m0.06s[39m  
-2026-10-01T17:28:26.0689506Z 
-2026-10-01T17:28:26.0692213Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\BladeDirectivesTest[39m
-2026-10-01T17:28:26.0706369Z   [32;1m✓[39;22m[90m [39m[90mit compiles @scope to an entity-scoped role check[39m[90m                   [39m [90m0.07s[39m  
-2026-10-01T17:28:26.0719992Z   [32;1m✓[39;22m[90m [39m[90mit compiles @entity to an entity-scoped permission check[39m[90m            [39m [90m0.16s[39m  
-2026-10-01T17:28:27.8197158Z 
-2026-10-01T17:28:27.8198736Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\PrincipalUserProviderTest[39m
-2026-10-01T17:28:27.8209878Z   [32;1m✓[39;22m[90m [39m[90mit works against a table with entirely different column names, driv[39m[90m…[39m [90m0.25s[39m  
-2026-10-01T17:28:27.8220979Z   [32;1m✓[39;22m[90m [39m[90mit returns null from both retrieveByCredentials() and retrieveById([39m[90m…[39m [90m0.16s[39m  
-2026-10-01T17:28:27.8231901Z   [32;1m✓[39;22m[90m [39m[90mit returns null from both retrieveByCredentials() and retrieveById([39m[90m…[39m [90m0.15s[39m  
-2026-10-01T17:28:27.8242537Z   [32;1m✓[39;22m[90m [39m[90mit returns null from retrieveByCredentials() for an unknown email[39m[90m   [39m [90m0.14s[39m  
-2026-10-01T17:28:27.8261228Z   [32;1m✓[39;22m[90m [39m[90mit gives the same class and identity from Auth::attempt() and Auth:[39m[90m…[39m [90m0.22s[39m  
-2026-10-01T17:28:27.8266939Z   [32;1m✓[39;22m[90m [39m[90mit rehashes the password column only when Hash::needsRehash() is tr[39m[90m…[39m [90m0.26s[39m  
-2026-10-01T17:28:27.8278261Z   [32;1m✓[39;22m[90m [39m[90mit logs a PrincipalIdentity(User) in via Auth::attempt() on the rig[39m[90m…[39m [90m0.25s[39m  
-2026-10-01T17:28:27.8289047Z   [32;1m✓[39;22m[90m [39m[90mit returns false from validateCredentials() for a wrong password[39m[90m    [39m [90m0.18s[39m  
-2026-10-01T17:28:27.8299851Z   [32;1m✓[39;22m[90m [39m[90mit makes retrieveByToken() a permanent no-op and updateRememberToke[39m[90m…[39m [90m0.12s[39m  
-2026-10-01T17:28:28.1285545Z 
-2026-10-01T17:28:28.1287360Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\TenantContextGuardTest[39m
-2026-10-01T17:28:28.1300146Z   [32;1m✓[39;22m[90m [39m[90mit returns false for an unknown context type[39m[90m                        [39m [90m0.06s[39m  
-2026-10-01T17:28:28.1312097Z   [32;1m✓[39;22m[90m [39m[90mit grants when the user has the permission scoped to the entity[39m[90m     [39m [90m0.06s[39m  
-2026-10-01T17:28:28.1324417Z   [32;1m✓[39;22m[90m [39m[90mit returns false when the context entity does not exist[39m[90m             [39m [90m0.05s[39m  
-2026-10-01T17:28:28.1336238Z   [32;1m✓[39;22m[90m [39m[90mit denies when the user has neither scoped nor global permission[39m[90m    [39m [90m0.06s[39m  
-2026-10-01T17:28:28.1348041Z   [32;1m✓[39;22m[90m [39m[90mit falls back to a global permission within the panel[39m[90m               [39m [90m0.06s[39m  
-2026-10-01T17:28:29.2609824Z 
-2026-10-01T17:28:29.2610787Z   [30;42;1m PASS [39;49;22m[39m Tests\Feature\ScopeVersionConcurrencyTest[39m
-2026-10-01T17:28:29.2612115Z   [32;1m✓[39;22m[90m [39m[90mit retains every concurrent invalidation even on the non-atomic fil[39m[90m…[39m [90m1.07s[39m  
-2026-10-01T17:28:29.2625701Z   [32;1m✓[39;22m[90m [39m[90mit invalidates the captured tenant even when the active context cha[39m[90m…[39m [90m0.06s[39m  
-2026-10-01T17:28:29.2632599Z 
-2026-10-01T17:28:29.2634462Z   [90mTests:[39m    [32;1m38 passed[39;22m[90m (65 assertions)[39m
-2026-10-01T17:28:29.2636083Z   [90mDuration:[39m [39m4.80s[39m
-2026-10-01T17:28:29.2636946Z   [90mRandom Order Seed:[39m [39m1790875704[39m
-2026-10-01T17:28:29.2637481Z 
+2026-10-01T17:28:24.6923341Z
+2026-10-01T17:28:24.6925072Z    PASS  Tests\Unit\AuthOptionsTest
+2026-10-01T17:28:24.6987422Z   ✓ it rejects an empty panel                                            0.01s
+2026-10-01T17:28:24.6999210Z   ✓ it normalizes an empty workspace scope class to null
+2026-10-01T17:28:24.7005701Z   ✓ it accumulates an empty panel and incomplete identity columns in one exception
+2026-10-01T17:28:25.3035542Z
+2026-10-01T17:28:25.3037653Z    PASS  Tests\Feature\ScopeAvailabilityTest
+2026-10-01T17:28:25.3060814Z   ✓ it normalizes to none for an entity_key unknown to the registry      0.19s
+2026-10-01T17:28:25.3081727Z   ✓ it leaves none/account untouched regardless of capability or regist… 0.08s
+2026-10-01T17:28:25.3087968Z   ✓ it normalizes own/dept/dept_tree/workspace to account when neither…  0.06s
+2026-10-01T17:28:25.3106772Z   ✓ it normalizes own/dept/dept_tree/workspace to account when neither…  0.05s
+2026-10-01T17:28:25.3120389Z   ✓ it normalizes own/dept/dept_tree/workspace to account when neither…  0.05s
+2026-10-01T17:28:25.3134936Z   ✓ it normalizes own/dept/dept_tree/workspace to account when neither…  0.05s
+2026-10-01T17:28:25.3147436Z   ✓ it leaves the scope unchanged once the matching capability is decla… 0.05s
+2026-10-01T17:28:25.3163119Z   ✓ it throws ScopeCapabilityMismatch when the column exists but the ca… 0.06s
+2026-10-01T17:28:25.5998617Z
+2026-10-01T17:28:25.6000861Z    PASS  Tests\Feature\PermissionSurfaceTest
+2026-10-01T17:28:25.6015010Z   ✓ it returns only account for a non-scopeable declaration              0.07s
+2026-10-01T17:28:25.6027706Z   ✓ it excludes a declaration whose owning module is inactive            0.05s
+2026-10-01T17:28:25.6040545Z   ✓ it lists every declared action with the entity scope set for an act… 0.06s
+2026-10-01T17:28:25.6053157Z   ✓ it includes every distinct scope when the entity declares both owna… 0.05s
+2026-10-01T17:28:25.6065261Z   ✓ it excludes a declaration whose entity is unknown to EntityRegistry  0.05s
+2026-10-01T17:28:25.8312482Z
+2026-10-01T17:28:25.8314363Z    PASS  Tests\Feature\WorkspaceScopeWiringTest
+2026-10-01T17:28:25.8327583Z   ✓ it wires the workspace global scope onto every model whose entity d… 0.06s
+2026-10-01T17:28:25.8340794Z   ✓ it does not wire the workspace global scope onto a model without th… 0.05s
+2026-10-01T17:28:25.8353156Z   ✓ it silently skips wiring when the scope class is null (boxed profil… 0.05s
+2026-10-01T17:28:25.8366006Z   ✓ it silently skips wiring when the pinned scope class does not exist  0.06s
+2026-10-01T17:28:26.0689506Z
+2026-10-01T17:28:26.0692213Z    PASS  Tests\Feature\BladeDirectivesTest
+2026-10-01T17:28:26.0706369Z   ✓ it compiles @scope to an entity-scoped role check                    0.07s
+2026-10-01T17:28:26.0719992Z   ✓ it compiles @entity to an entity-scoped permission check             0.16s
+2026-10-01T17:28:27.8197158Z
+2026-10-01T17:28:27.8198736Z    PASS  Tests\Feature\PrincipalUserProviderTest
+2026-10-01T17:28:27.8209878Z   ✓ it works against a table with entirely different column names, driv… 0.25s
+2026-10-01T17:28:27.8220979Z   ✓ it returns null from both retrieveByCredentials() and retrieveById(… 0.16s
+2026-10-01T17:28:27.8231901Z   ✓ it returns null from both retrieveByCredentials() and retrieveById(… 0.15s
+2026-10-01T17:28:27.8242537Z   ✓ it returns null from retrieveByCredentials() for an unknown email    0.14s
+2026-10-01T17:28:27.8261228Z   ✓ it gives the same class and identity from Auth::attempt() and Auth:… 0.22s
+2026-10-01T17:28:27.8266939Z   ✓ it rehashes the password column only when Hash::needsRehash() is tr… 0.26s
+2026-10-01T17:28:27.8278261Z   ✓ it logs a PrincipalIdentity(User) in via Auth::attempt() on the rig… 0.25s
+2026-10-01T17:28:27.8289047Z   ✓ it returns false from validateCredentials() for a wrong password     0.18s
+2026-10-01T17:28:27.8299851Z   ✓ it makes retrieveByToken() a permanent no-op and updateRememberToke… 0.12s
+2026-10-01T17:28:28.1285545Z
+2026-10-01T17:28:28.1287360Z    PASS  Tests\Feature\TenantContextGuardTest
+2026-10-01T17:28:28.1300146Z   ✓ it returns false for an unknown context type                         0.06s
+2026-10-01T17:28:28.1312097Z   ✓ it grants when the user has the permission scoped to the entity      0.06s
+2026-10-01T17:28:28.1324417Z   ✓ it returns false when the context entity does not exist              0.05s
+2026-10-01T17:28:28.1336238Z   ✓ it denies when the user has neither scoped nor global permission     0.06s
+2026-10-01T17:28:28.1348041Z   ✓ it falls back to a global permission within the panel                0.06s
+2026-10-01T17:28:29.2609824Z
+2026-10-01T17:28:29.2610787Z    PASS  Tests\Feature\ScopeVersionConcurrencyTest
+2026-10-01T17:28:29.2612115Z   ✓ it retains every concurrent invalidation even on the non-atomic fil… 1.07s
+2026-10-01T17:28:29.2625701Z   ✓ it invalidates the captured tenant even when the active context cha… 0.06s
+2026-10-01T17:28:29.2632599Z
+2026-10-01T17:28:29.2634462Z   Tests:    38 passed (65 assertions)
+2026-10-01T17:28:29.2636083Z   Duration: 4.80s
+2026-10-01T17:28:29.2636946Z   Random Order Seed: 1790875704
+2026-10-01T17:28:29.2637481Z
 2026-10-01T17:28:29.2955701Z ==> packages/core
-2026-10-01T17:28:29.8512235Z 
-2026-10-01T17:28:29.8514523Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Attributes\AttributesTest[39m
-2026-10-01T17:28:29.8579723Z   [32;1m✓[39;22m[90m [39m[90mit Attributes expose immutable metadata and backed kind roundtrips[39m[90m  [39m [90m0.01s[39m  
-2026-10-01T17:28:29.8587482Z   [32;1m✓[39;22m[90m [39m[90mit Attributes reject a method target at instantiation[39m
-2026-10-01T17:28:31.9480907Z 
-2026-10-01T17:28:31.9490718Z   [30;42;1m PASS [39;49;22m[39m CoreX\Tests\Attributes\SurfaceScannerTest[39m
-2026-10-01T17:28:31.9523666Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner resolves aliases kinds and does not execute sour[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:28:31.9543398Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner resolves native throws without treating exceptio[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:31.9575502Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner checks nested imported aliases and promoted prop[39m[90m…[39m [90m0.13s[39m  
-2026-10-01T17:28:31.9584249Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner diagnostics have location and nested path with data set "unclassified"[39m
-2026-10-01T17:28:31.9592784Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner diagnostics have location and nested path with data set "conflicting"[39m
-2026-10-01T17:28:31.9601298Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner diagnostics have location and nested path with data set "duplicate"[39m
-2026-10-01T17:28:31.9609808Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner diagnostics have location and nested path with data set "kind"[39m
-2026-10-01T17:28:31.9617781Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner diagnostics have location and nested path with data set "version"[39m
-2026-10-01T17:28:31.9626224Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner diagnostics have location and nested path with data set "internal"[39m
-2026-10-01T17:28:31.9634498Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner diagnostics have location and nested path with data set "mutable"[39m
-2026-10-01T17:28:31.9642578Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner diagnostics have location and nested path with data set "untyped array"[39m
-2026-10-01T17:28:31.9650843Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner diagnostics have location and nested path with data set "bare list return"[39m
-2026-10-01T17:28:31.9659443Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner diagnostics have location and nested path with data set "bare non-empty list parameter"[39m
-2026-10-01T17:28:31.9667360Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner diagnostics have location and nested path with data set "bare non-empty array return"[39m
-2026-10-01T17:28:31.9675418Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner diagnostics have location and nested path with data set "nested bare list"[39m
-2026-10-01T17:28:31.9683916Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner diagnostics have location and nested path with data set "nested bare array"[39m
-2026-10-01T17:28:31.9692105Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner diagnostics have location and nested path with data set "mixed"[39m
-2026-10-01T17:28:31.9724201Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner diagnostics have location and nested path with d[39m[90m…[39m [90m0.12s[39m  
-2026-10-01T17:28:31.9733127Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner diagnostics have location and nested path with data set "nested s p i mixed field"[39m
-2026-10-01T17:28:31.9765415Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner diagnostics have location and nested path with d[39m[90m…[39m [90m0.12s[39m  
-2026-10-01T17:28:31.9797837Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner diagnostics have location and nested path with d[39m[90m…[39m [90m0.12s[39m  
-2026-10-01T17:28:31.9806399Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner diagnostics have location and nested path with data set "nested foreign internal"[39m
-2026-10-01T17:28:31.9840032Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner diagnostics have location and nested path with d[39m[90m…[39m [90m0.11s[39m  
-2026-10-01T17:28:31.9872386Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner diagnostics have location and nested path with d[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:31.9904750Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner diagnostics have location and nested path with d[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:31.9914018Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner diagnostics have location and nested path with data set "function loophole"[39m
-2026-10-01T17:28:31.9922682Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner diagnostics have location and nested path with data set "member target"[39m
-2026-10-01T17:28:31.9954899Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner checks all import spellings and product consumer[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:31.9987306Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner captures inherited signature and ignores bodies[39m[90m… [39m [90m0.01s[39m  
-2026-10-01T17:28:32.0020442Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner handles bound templates aliases virtual members[39m[90m… [39m [90m0.01s[39m  
-2026-10-01T17:28:32.0053061Z   [32;1m✓[39;22m[90m [39m[90mattributes cli is deterministic and separates debt from parser erro[39m[90m…[39m [90m0.97s[39m  
-2026-10-01T17:28:32.0085806Z   [32;1m✓[39;22m[90m [39m[90mattributes scanner finds new types without classmap and rejects dup[39m[90m…[39m [90m0.10s[39m  
-2026-10-01T17:28:32.0118544Z   [32;1m✓[39;22m[90m [39m[90mattributes imported alias retains its defining namespace and nested[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:32.0127321Z   [32;1m✓[39;22m[90m [39m[90mattributes property hooks and default changes are snapshot inputs[39m
-2026-10-01T17:28:32.0135886Z   [32;1m✓[39;22m[90m [39m[90mattributes protected inheritance and inherited internal leak[39m
-2026-10-01T17:28:32.0144238Z   [32;1m✓[39;22m[90m [39m[90mattributes nested mixed and nullable object cannot hide payloads[39m
-2026-10-01T17:28:32.0176241Z   [32;1m✓[39;22m[90m [39m[90mattributes typed collection docs remain valid[39m[90m                       [39m [90m0.01s[39m  
-2026-10-01T17:28:32.0208774Z   [32;1m✓[39;22m[90m [39m[90mattributes configuration class strings and spi model documentation[39m[90m… [39m [90m0.12s[39m  
-2026-10-01T17:28:32.0241735Z   [32;1m✓[39;22m[90m [39m[90mattributes composition policy requires the exact existing edge[39m[90m      [39m [90m0.11s[39m  
-2026-10-01T17:28:32.0273849Z   [32;1m✓[39;22m[90m [39m[90mattributes manifest keeps own and local members without expanding e[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:32.0282579Z   [32;1m✓[39;22m[90m [39m[90mattributes public promoted property survives a private constructor[39m
-2026-10-01T17:28:32.1432009Z 
-2026-10-01T17:28:32.1440637Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Unit\ClockTest[39m
-2026-10-01T17:28:32.1469729Z   [32;1m✓[39;22m[90m [39m[90mit returns UTC from system clock[39m[90m                                    [39m [90m0.16s[39m  
-2026-10-01T17:28:32.1510317Z   [32;1m✓[39;22m[90m [39m[90mit advances frozen clock by the given interval[39m[90m                      [39m [90m0.01s[39m  
-2026-10-01T17:28:32.1533054Z   [32;1m✓[39;22m[90m [39m[90mit reads time frozen via travelTo through the default clock binding[39m[90m [39m [90m0.01s[39m  
-2026-10-01T17:28:32.2571336Z 
-2026-10-01T17:28:32.2580758Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Unit\CoreOptionsTest[39m
-2026-10-01T17:28:32.2609237Z   [32;1m✓[39;22m[90m [39m[90mit resolves settings cache ttl by key existence with dataset "missi[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:32.2651433Z   [32;1m✓[39;22m[90m [39m[90mit resolves settings cache ttl by key existence with dataset "missi[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:32.2681168Z   [32;1m✓[39;22m[90m [39m[90mit resolves settings cache ttl by key existence with dataset "expli[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:32.2710740Z   [32;1m✓[39;22m[90m [39m[90mit resolves settings cache ttl by key existence with dataset "zero"[39m[90m [39m [90m0.01s[39m  
-2026-10-01T17:28:32.2739666Z   [32;1m✓[39;22m[90m [39m[90mit resolves settings cache ttl by key existence with dataset "posit[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:32.2772324Z   [32;1m✓[39;22m[90m [39m[90mit accumulates invalid cache ttl and cache store in one exception[39m[90m   [39m [90m0.01s[39m  
-2026-10-01T17:28:32.2804827Z   [32;1m✓[39;22m[90m [39m[90mit redacts a secret from string, dump, json, and serialization[39m[90m      [39m [90m0.02s[39m  
-2026-10-01T17:28:32.3753742Z 
-2026-10-01T17:28:32.3759642Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Unit\DataScopeCodecTest[39m
-2026-10-01T17:28:32.3789391Z   [32;1m✓[39;22m[90m [39m[90mit round-trips encoded payload with and without workspace[39m[90m           [39m [90m0.04s[39m  
-2026-10-01T17:28:32.3820256Z   [32;1m✓[39;22m[90m [39m[90mit rejects unsupported payload version[39m[90m                              [39m [90m0.02s[39m  
-2026-10-01T17:28:32.3851154Z   [32;1m✓[39;22m[90m [39m[90mit rejects missing connection key[39m[90m                                   [39m [90m0.01s[39m  
-2026-10-01T17:28:32.3874764Z   [32;1m✓[39;22m[90m [39m[90mit rejects absent workspace key[39m[90m                                     [39m [90m0.01s[39m  
-2026-10-01T17:28:32.3907651Z   [32;1m✓[39;22m[90m [39m[90mit accepts explicit null workspace key[39m[90m                              [39m [90m0.01s[39m  
-2026-10-01T17:28:32.3940111Z   [32;1m✓[39;22m[90m [39m[90mit rejects malformed boxed value[39m[90m                                    [39m [90m0.01s[39m  
-2026-10-01T17:28:32.8287531Z 
-2026-10-01T17:28:32.8289654Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Unit\ErrorDescriptorTest[39m
-2026-10-01T17:28:32.8325088Z   [32;1m✓[39;22m[90m [39m[90merror category exposes the nine stable values[39m[90m                       [39m [90m0.03s[39m  
-2026-10-01T17:28:32.8357263Z   [32;1m✓[39;22m[90m [39m[90munavailability reason exposes the five stable values[39m[90m                [39m [90m0.01s[39m  
-2026-10-01T17:28:32.8390458Z   [32;1m✓[39;22m[90m [39m[90mdescriptor accepts a root nested and escaped pointer with dataset "[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:32.8422716Z   [32;1m✓[39;22m[90m [39m[90mdescriptor accepts a root nested and escaped pointer with dataset "[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:32.8455537Z   [32;1m✓[39;22m[90m [39m[90mdescriptor accepts a root nested and escaped pointer with dataset "[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:32.8487504Z   [32;1m✓[39;22m[90m [39m[90mdescriptor accepts a root nested and escaped pointer with dataset "[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:32.8520721Z   [32;1m✓[39;22m[90m [39m[90mdescriptor accepts a root nested and escaped pointer with dataset "[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:32.8552556Z   [32;1m✓[39;22m[90m [39m[90mdescriptor accepts a root nested and escaped pointer with dataset "[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:32.8584704Z   [32;1m✓[39;22m[90m [39m[90mdescriptor accepts a null path[39m[90m                                      [39m [90m0.01s[39m  
-2026-10-01T17:28:32.8619441Z   [32;1m✓[39;22m[90m [39m[90mdescriptor rejects an invalid code with dataset "empty"[39m[90m             [39m [90m0.01s[39m  
-2026-10-01T17:28:32.8651386Z   [32;1m✓[39;22m[90m [39m[90mdescriptor rejects an invalid code with dataset "upper"[39m[90m             [39m [90m0.01s[39m  
-2026-10-01T17:28:32.8684367Z   [32;1m✓[39;22m[90m [39m[90mdescriptor rejects an invalid code with dataset "leading digit"[39m[90m     [39m [90m0.01s[39m  
-2026-10-01T17:28:32.8716454Z   [32;1m✓[39;22m[90m [39m[90mdescriptor rejects an invalid code with dataset "double underscore"[39m[90m [39m [90m0.01s[39m  
-2026-10-01T17:28:32.8748748Z   [32;1m✓[39;22m[90m [39m[90mdescriptor rejects an invalid code with dataset "trailing underscor[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:32.8781999Z   [32;1m✓[39;22m[90m [39m[90mdescriptor rejects an invalid code with dataset "hyphen"[39m[90m            [39m [90m0.01s[39m  
-2026-10-01T17:28:32.8812415Z   [32;1m✓[39;22m[90m [39m[90mdescriptor rejects an invalid code with dataset "overlong"[39m[90m          [39m [90m0.02s[39m  
-2026-10-01T17:28:32.8843089Z   [32;1m✓[39;22m[90m [39m[90mdescriptor accepts a code at the byte limit[39m[90m                         [39m [90m0.02s[39m  
-2026-10-01T17:28:32.8874242Z   [32;1m✓[39;22m[90m [39m[90mdescriptor rejects an invalid pointer escape or control character w[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:32.8907761Z   [32;1m✓[39;22m[90m [39m[90mdescriptor rejects an invalid pointer escape or control character w[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:32.8940860Z   [32;1m✓[39;22m[90m [39m[90mdescriptor rejects an invalid pointer escape or control character w[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:32.8972491Z   [32;1m✓[39;22m[90m [39m[90mdescriptor rejects an invalid pointer escape or control character w[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:32.9003954Z   [32;1m✓[39;22m[90m [39m[90mdescriptor rejects a control character in detail[39m[90m                    [39m [90m0.02s[39m  
-2026-10-01T17:28:32.9035025Z   [32;1m✓[39;22m[90m [39m[90mdescriptor rejects an oversize detail[39m[90m                               [39m [90m0.02s[39m  
-2026-10-01T17:28:32.9066433Z   [32;1m✓[39;22m[90m [39m[90mdescriptor rejects a non json detail with dataset "nested list"[39m[90m     [39m [90m0.02s[39m  
-2026-10-01T17:28:32.9097757Z   [32;1m✓[39;22m[90m [39m[90mdescriptor rejects a non json detail with dataset "object"[39m[90m          [39m [90m0.02s[39m  
-2026-10-01T17:28:32.9128821Z   [32;1m✓[39;22m[90m [39m[90mdescriptor rejects a non json detail with dataset "non finite"[39m[90m      [39m [90m0.02s[39m  
-2026-10-01T17:28:32.9160755Z   [32;1m✓[39;22m[90m [39m[90mretryable records only that the same semantic input may succeed lat[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:32.9191540Z   [32;1m✓[39;22m[90m [39m[90mdescribes error returns the same descriptor[39m[90m                         [39m [90m0.02s[39m  
-2026-10-01T17:28:33.0066335Z 
-2026-10-01T17:28:33.0068230Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Unit\MessageContractRegistryTest[39m
-2026-10-01T17:28:33.0110446Z   [32;1m✓[39;22m[90m [39m[90mit finds declared contracts by name and version[39m[90m                     [39m [90m0.11s[39m  
-2026-10-01T17:28:33.0142448Z   [32;1m✓[39;22m[90m [39m[90mit refuses undeclared contracts with MSG-002[39m[90m                        [39m [90m0.01s[39m  
-2026-10-01T17:28:33.0174086Z   [32;1m✓[39;22m[90m [39m[90mit rejects duplicate identities when building the registry[39m[90m          [39m [90m0.01s[39m  
-2026-10-01T17:28:33.0210274Z   [32;1m✓[39;22m[90m [39m[90mit keeps v1 and v2 of the same name separate[39m[90m                        [39m [90m0.01s[39m  
-2026-10-01T17:28:33.0241575Z   [32;1m✓[39;22m[90m [39m[90mit lists all contracts sorted by id[39m[90m                                 [39m [90m0.01s[39m  
-2026-10-01T17:28:33.0272781Z   [32;1m✓[39;22m[90m [39m[90mit binds an empty registry by default in the container[39m[90m              [39m [90m0.01s[39m  
-2026-10-01T17:28:33.2473858Z 
-2026-10-01T17:28:33.2483466Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Unit\MessagingEnvelopeTest[39m
-2026-10-01T17:28:33.2524105Z   [32;1m✓[39;22m[90m [39m[90mit builds a full envelope and exposes contract identity[39m[90m             [39m [90m0.04s[39m  
-2026-10-01T17:28:33.2550478Z   [32;1m✓[39;22m[90m [39m[90mit rejects empty message identity[39m[90m                                   [39m [90m0.01s[39m  
-2026-10-01T17:28:33.2581413Z   [32;1m✓[39;22m[90m [39m[90mit rejects an overlong message source[39m[90m                               [39m [90m0.01s[39m  
-2026-10-01T17:28:33.2620077Z   [32;1m✓[39;22m[90m [39m[90mit rejects a control character in message subject[39m[90m                   [39m [90m0.01s[39m  
-2026-10-01T17:28:33.2644403Z   [32;1m✓[39;22m[90m [39m[90mit rejects an unknown envelope version[39m[90m                              [39m [90m0.01s[39m  
-2026-10-01T17:28:33.2681368Z   [32;1m✓[39;22m[90m [39m[90mit rejects an empty durable scope[39m[90m                                   [39m [90m0.01s[39m  
-2026-10-01T17:28:33.2710271Z   [32;1m✓[39;22m[90m [39m[90mit rejects payload nesting beyond eight levels[39m[90m                      [39m [90m0.01s[39m  
-2026-10-01T17:28:33.2738169Z   [32;1m✓[39;22m[90m [39m[90mit rejects a top-level list payload[39m[90m                                 [39m [90m0.01s[39m  
-2026-10-01T17:28:33.2777438Z   [32;1m✓[39;22m[90m [39m[90mit rejects too many payload keys[39m[90m                                    [39m [90m0.01s[39m  
-2026-10-01T17:28:33.2807684Z   [32;1m✓[39;22m[90m [39m[90mit rejects unsupported payload values[39m[90m                               [39m [90m0.01s[39m  
-2026-10-01T17:28:33.2838444Z   [32;1m✓[39;22m[90m [39m[90mit rejects payload exceeding 64KiB[39m[90m                                  [39m [90m0.01s[39m  
-2026-10-01T17:28:33.2869642Z   [32;1m✓[39;22m[90m [39m[90mit canonicalizes payload keys recursively[39m[90m                           [39m [90m0.01s[39m  
-2026-10-01T17:28:33.2900116Z   [32;1m✓[39;22m[90m [39m[90mit rejects a PHP class name as contract name[39m[90m                        [39m [90m0.01s[39m  
-2026-10-01T17:28:33.2939816Z   [32;1m✓[39;22m[90m [39m[90mit rejects domain events as published contracts[39m[90m                     [39m [90m0.01s[39m  
-2026-10-01T17:28:33.2955843Z   [32;1m✓[39;22m[90m [39m[90mit orders pii class sensitivity for permits[39m[90m                         [39m [90m0.02s[39m  
-2026-10-01T17:28:33.3797958Z 
-2026-10-01T17:28:33.3800240Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Unit\OpenTelemetryBridgeTest[39m
-2026-10-01T17:28:33.3834175Z   [32;1m✓[39;22m[90m [39m[90mit accepts the five metric keys and four retry buckets[39m[90m              [39m [90m0.07s[39m  
-2026-10-01T17:28:33.3873734Z   [32;1m✓[39;22m[90m [39m[90mit rejects forbidden and unbounded metric labels before any exporte[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:33.3904430Z   [32;1m✓[39;22m[90m [39m[90mit runs consumer work once on the null bridge and on adapter fallba[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:33.3930314Z   [32;1m✓[39;22m[90m [39m[90mit links the consumer span to the producer trace and exports five h[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:33.3961379Z   [32;1m✓[39;22m[90m [39m[90mit boots null observer and trace bridge without an OpenTelemetry bi[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:33.4830886Z 
-2026-10-01T17:28:33.4832350Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Unit\OperationObserverTest[39m
-2026-10-01T17:28:33.4865899Z   [32;1m✓[39;22m[90m [39m[90mit keeps one context through start and complete[39m[90m                     [39m [90m0.03s[39m  
-2026-10-01T17:28:33.4897037Z   [32;1m✓[39;22m[90m [39m[90mit keeps one context through start and fail[39m[90m                         [39m [90m0.01s[39m  
-2026-10-01T17:28:33.4928793Z   [32;1m✓[39;22m[90m [39m[90mit rejects invalid identifiers, negative attempt and unknown outcom[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:33.4960435Z   [32;1m✓[39;22m[90m [39m[90mit logs exact static messages and keys[39m[90m                              [39m [90m0.01s[39m  
-2026-10-01T17:28:33.4996298Z   [32;1m✓[39;22m[90m [39m[90mit omits canary secrets from failure logs[39m[90m                           [39m [90m0.01s[39m  
-2026-10-01T17:28:33.5023945Z   [32;1m✓[39;22m[90m [39m[90mit does not throw from the null observer or a failing logger[39m[90m        [39m [90m0.01s[39m  
-2026-10-01T17:28:33.5215259Z 
-2026-10-01T17:28:33.5216349Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Unit\PackageRegistrarTest[39m
-2026-10-01T17:28:33.5248050Z   [32;1m✓[39;22m[90m [39m[90mit records register and boots as a no-op[39m[90m                            [39m [90m0.03s[39m  
-2026-10-01T17:28:33.7914243Z 
-2026-10-01T17:28:33.7915535Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Unit\SupportDataTest[39m
-2026-10-01T17:28:33.7947700Z   [32;1m✓[39;22m[90m [39m[90mit carries only trusted data-boundary context[39m[90m                       [39m [90m0.02s[39m  
-2026-10-01T17:28:33.7979904Z   [32;1m✓[39;22m[90m [39m[90mit derives durable scalars from tenant context[39m[90m                      [39m [90m0.01s[39m  
-2026-10-01T17:28:33.8011650Z   [32;1m✓[39;22m[90m [39m[90mit builds the same scope via fromTenantContext as via scalar constr[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:33.8050882Z   [32;1m✓[39;22m[90m [39m[90mit rejects empty account identity in the scalar constructor[39m[90m         [39m [90m0.01s[39m  
-2026-10-01T17:28:33.8081495Z   [32;1m✓[39;22m[90m [39m[90mit rejects unsupported data scope version[39m[90m                           [39m [90m0.01s[39m  
-2026-10-01T17:28:33.8112541Z   [32;1m✓[39;22m[90m [39m[90mit serializes and unserializes without exceptions[39m[90m                   [39m [90m0.01s[39m  
-2026-10-01T17:28:33.8143459Z   [32;1m✓[39;22m[90m [39m[90mit rejects invalid trusted data-boundary scalar values with dataset[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:33.8170330Z   [32;1m✓[39;22m[90m [39m[90mit rejects invalid trusted data-boundary scalar values with dataset[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:33.8200652Z   [32;1m✓[39;22m[90m [39m[90mit rejects invalid trusted data-boundary scalar values with dataset[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:33.8231051Z   [32;1m✓[39;22m[90m [39m[90mit keeps record references opaque and bounded[39m[90m                       [39m [90m0.01s[39m  
-2026-10-01T17:28:33.8261952Z   [32;1m✓[39;22m[90m [39m[90mit rejects invalid record references with dataset "empty entity"[39m[90m    [39m [90m0.01s[39m  
-2026-10-01T17:28:33.8292603Z   [32;1m✓[39;22m[90m [39m[90mit rejects invalid record references with dataset "empty identifier[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:33.8323357Z   [32;1m✓[39;22m[90m [39m[90mit rejects invalid record references with dataset "oversized identi[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:33.8354455Z   [32;1m✓[39;22m[90m [39m[90mit keeps write tokens opaque and binds them to a canonical payload[39m[90m… [39m [90m0.01s[39m  
-2026-10-01T17:28:33.8385640Z   [32;1m✓[39;22m[90m [39m[90mit rejects invalid write-token values with dataset "empty operation[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:33.8424617Z   [32;1m✓[39;22m[90m [39m[90mit rejects invalid write-token values with dataset "non canonical p[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:33.8448164Z   [32;1m✓[39;22m[90m [39m[90mit rejects invalid write-token values with dataset "empty expected[39m[90m… [39m [90m0.02s[39m  
-2026-10-01T17:28:33.8479950Z   [32;1m✓[39;22m[90m [39m[90mit rejects invalid write-token values with dataset "oversized expec[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:33.9104637Z 
-2026-10-01T17:28:33.9106017Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Unit\TenantContextRestorerTest[39m
-2026-10-01T17:28:33.9140756Z   [32;1m✓[39;22m[90m [39m[90mit returns the active context when it matches the durable scope[39m[90m     [39m [90m0.07s[39m  
-2026-10-01T17:28:33.9172217Z   [32;1m✓[39;22m[90m [39m[90mit rejects a mismatched account with a specific message[39m[90m             [39m [90m0.02s[39m  
-2026-10-01T17:28:33.9203224Z   [32;1m✓[39;22m[90m [39m[90mit rejects a mismatched workspace with a specific message[39m[90m           [39m [90m0.01s[39m  
-2026-10-01T17:28:33.9234422Z   [32;1m✓[39;22m[90m [39m[90mit rejects a mismatched boxed profile with a specific message[39m[90m       [39m [90m0.01s[39m  
-2026-10-01T17:28:34.0698664Z 
-2026-10-01T17:28:34.0700345Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Storage\LocalTenantStorageTest[39m
-2026-10-01T17:28:34.0743918Z   [32;1m✓[39;22m[90m [39m[90mit isolates durable and ephemeral storage by the current account an[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:28:34.0770736Z   [32;1m✓[39;22m[90m [39m[90mit rejects path escape and reports unsupported export explicitly[39m[90m    [39m [90m0.01s[39m  
-2026-10-01T17:28:34.0800705Z   [32;1m✓[39;22m[90m [39m[90mit keeps all relative filesystem operations inside the account root[39m[90m [39m [90m0.02s[39m  
-2026-10-01T17:28:34.0838786Z   [32;1m✓[39;22m[90m [39m[90mit rejects symbolic links within an account root[39m[90m                    [39m [90m0.01s[39m  
-2026-10-01T17:28:34.0863607Z   [32;1m✓[39;22m[90m [39m[90mit rejects encoded backslashes and NUL bytes before the driver sees[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:34.0895476Z   [32;1m✓[39;22m[90m [39m[90mit rejects encoded backslashes and NUL bytes before the driver sees[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:34.0927308Z   [32;1m✓[39;22m[90m [39m[90mit rejects encoded backslashes and NUL bytes before the driver sees[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:34.0959403Z   [32;1m✓[39;22m[90m [39m[90mit rejects encoded backslashes and NUL bytes before the driver sees[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:34.0991224Z   [32;1m✓[39;22m[90m [39m[90mit rejects a replaced account root even when listing without a dire[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:34.1753753Z 
-2026-10-01T17:28:34.1755182Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Feature\InboxClaimTest[39m
-2026-10-01T17:28:34.1788500Z   [32;1m✓[39;22m[90m [39m[90mit refuses claim outside a transaction with MSG-006[39m[90m                 [39m [90m0.05s[39m  
-2026-10-01T17:28:34.1820162Z   [32;1m✓[39;22m[90m [39m[90mit returns true on first claim and false on duplicate consumer and[39m[90m… [39m [90m0.02s[39m  
-2026-10-01T17:28:34.1850887Z   [32;1m✓[39;22m[90m [39m[90mit treats consumers independently for the same message id[39m[90m           [39m [90m0.02s[39m  
-2026-10-01T17:28:34.1881886Z   [32;1m✓[39;22m[90m [39m[90mit stores processed_at from FrozenClock[39m[90m                             [39m [90m0.02s[39m  
-2026-10-01T17:28:34.3057497Z 
-2026-10-01T17:28:34.3059285Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Feature\MessagePublisherTest[39m
-2026-10-01T17:28:34.3070122Z   [32;1m✓[39;22m[90m [39m[90mit admits a durable publisher binding and marks a leased row publis[39m[90m…[39m [90m0.07s[39m  
-2026-10-01T17:28:34.3081263Z   [32;1m✓[39;22m[90m [39m[90mit refuses relay when no durable publisher is bound[39m[90m                 [39m [90m0.02s[39m  
-2026-10-01T17:28:34.3092380Z   [32;1m✓[39;22m[90m [39m[90mit refuses a null-transport publisher before markPublished[39m[90m          [39m [90m0.02s[39m  
-2026-10-01T17:28:34.3103398Z   [32;1m✓[39;22m[90m [39m[90mit refuses a redis-publish publisher before markPublished[39m[90m           [39m [90m0.02s[39m  
-2026-10-01T17:28:34.4151838Z 
-2026-10-01T17:28:34.4152916Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Feature\OutboxAppendTest[39m
-2026-10-01T17:28:34.4250816Z   [32;1m✓[39;22m[90m [39m[90mit refuses append outside a transaction with MSG-008[39m[90m                [39m [90m0.02s[39m  
-2026-10-01T17:28:34.4253125Z   [32;1m✓[39;22m[90m [39m[90mit refuses undeclared contracts inside a transaction with MSG-002[39m[90m   [39m [90m0.02s[39m  
-2026-10-01T17:28:34.4255376Z   [32;1m✓[39;22m[90m [39m[90mit refuses payload personal data above the contract maximum with MS[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:34.4257201Z   [32;1m✓[39;22m[90m [39m[90mit persists a pending row with encoded payload and clock-backed tim[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:34.4259551Z   [32;1m✓[39;22m[90m [39m[90mit injects trace carrier into persisted metadata without changing i[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:34.4261389Z   [32;1m✓[39;22m[90m [39m[90mit uses one clock instant for available_at created_at and updated_a[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:34.5400618Z 
-2026-10-01T17:28:34.5401973Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Feature\ProblemRegistryTest[39m
-2026-10-01T17:28:34.5412754Z   [32;1m✓[39;22m[90m [39m[90mProblemRegistry boots with the isolated kernel and freezes its cata[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:34.5424124Z   [32;1m✓[39;22m[90m [39m[90mProblemRegistry rejects invalid boot contributions with typed diagn[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:34.5435202Z   [32;1m✓[39;22m[90m [39m[90mProblemRegistry rejects invalid boot contributions with typed diagn[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:34.5446430Z   [32;1m✓[39;22m[90m [39m[90mProblemRegistry rejects invalid boot contributions with typed diagn[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:34.5457556Z   [32;1m✓[39;22m[90m [39m[90mProblemRegistry rejects invalid boot contributions with typed diagn[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:34.5468459Z   [32;1m✓[39;22m[90m [39m[90mProblemRegistry rejects invalid boot contributions with typed diagn[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:34.5479502Z   [32;1m✓[39;22m[90m [39m[90mProblemRegistry rejects unknown persisted identities and descriptor[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:34.5490177Z   [32;1m✓[39;22m[90m [39m[90mProblemRegistry constructor types reject dynamic raw strings[39m[90m        [39m [90m0.01s[39m  
-2026-10-01T17:28:34.6563294Z 
-2026-10-01T17:28:34.6564776Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Feature\PruneOutboxTest[39m
-2026-10-01T17:28:34.6575199Z   [32;1m✓[39;22m[90m [39m[90mit prunes published rows older than the published window and keeps[39m[90m… [39m [90m0.03s[39m  
-2026-10-01T17:28:34.6586098Z   [32;1m✓[39;22m[90m [39m[90mit prunes dead rows by the dead window not the published window[39m[90m     [39m [90m0.02s[39m  
-2026-10-01T17:28:34.6597013Z   [32;1m✓[39;22m[90m [39m[90mit never prunes pending or publishing rows[39m[90m                          [39m [90m0.02s[39m  
-2026-10-01T17:28:34.6607887Z   [32;1m✓[39;22m[90m [39m[90mit does not touch sys_inbox_messages[39m[90m                                [39m [90m0.02s[39m  
-2026-10-01T17:28:34.6618648Z   [32;1m✓[39;22m[90m [39m[90mit uses FrozenClock for retention thresholds[39m[90m                        [39m [90m0.02s[39m  
-2026-10-01T17:28:35.3030494Z 
-2026-10-01T17:28:35.3031738Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Feature\PublishIsolationTest[39m
-2026-10-01T17:28:35.3033560Z   [32;1m✓[39;22m[90m [39m[90mit refuses a non-test PostgreSQL database before bootstrapping the[39m[90m… [39m [90m0.26s[39m  
-2026-10-01T17:28:35.3035453Z   [32;1m✓[39;22m[90m [39m[90mit cleans failed publish resources and leaves the next SQLite appli[39m[90m…[39m [90m0.38s[39m  
-2026-10-01T17:28:35.3835781Z 
-2026-10-01T17:28:35.3837525Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Feature\ValidateConfigCommandTest[39m
-2026-10-01T17:28:35.3850405Z   [32;1m✓[39;22m[90m [39m[90mit exits zero on the default test configuration[39m[90m                     [39m [90m0.02s[39m  
-2026-10-01T17:28:35.3861103Z   [32;1m✓[39;22m[90m [39m[90mit prints two option violations in one pass and redacts a planted s[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:35.3874035Z   [32;1m✓[39;22m[90m [39m[90mit warns on the default intl cursor secret without printing it[39m[90m      [39m [90m0.01s[39m  
-2026-10-01T17:28:35.3885988Z   [32;1m✓[39;22m[90m [39m[90mit reports a selected redis adapter without failing when the driver[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:28:35.3898270Z   [32;1m✓[39;22m[90m [39m[90mit does not carry errors or secret warnings into a later run of the[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:35.4091194Z 
-2026-10-01T17:28:35.4092637Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Feature\WorkUnitIsolationTest[39m
-2026-10-01T17:28:35.4104465Z   [32;1m✓[39;22m[90m [39m[90mit isolates consecutive work units when the first pass throws[39m[90m       [39m [90m0.02s[39m  
-2026-10-01T17:28:35.4375699Z 
-2026-10-01T17:28:35.4377165Z   [30;42;1m PASS [39;49;22m[39m CoreX\Testing\Modules\ConfigReportSectionTest[39m
-2026-10-01T17:28:35.4389800Z   [32;1m✓[39;22m[90m [39m[90msection registers in report order and redacts its secrets[39m[90m           [39m [90m0.02s[39m  
-2026-10-01T17:28:35.6289976Z 
-2026-10-01T17:28:35.6291878Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Modules\Feature\CompositionBindingsTest[39m
-2026-10-01T17:28:35.6303560Z   [32;1m✓[39;22m[90m [39m[90mit keeps Registry register bindings on the measured key, concrete a[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:28:35.6315764Z   [32;1m✓[39;22m[90m [39m[90mit keeps Lifecycle register bindings on the measured key, concrete[39m[90m… [39m [90m0.03s[39m  
-2026-10-01T17:28:35.6327895Z   [32;1m✓[39;22m[90m [39m[90mit keeps Settings register bindings on the measured key, concrete a[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:28:35.6339883Z   [32;1m✓[39;22m[90m [39m[90mit resolves ModulesOptions from the composition instance[39m[90m            [39m [90m0.03s[39m  
-2026-10-01T17:28:35.6351750Z   [32;1m✓[39;22m[90m [39m[90mit reads module options from the nested kernel configuration[39m[90m        [39m [90m0.03s[39m  
-2026-10-01T17:28:35.6363439Z   [32;1m✓[39;22m[90m [39m[90mit registers composition modules through PackageRegistrar[39m[90m           [39m [90m0.03s[39m  
-2026-10-01T17:28:35.9755853Z 
-2026-10-01T17:28:35.9757815Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Modules\Feature\RegistryIntrospectionTest[39m
-2026-10-01T17:28:35.9770005Z   [32;1m✓[39;22m[90m [39m[90mit projects the eight extenders and ownership from compiled bytes ([39m[90m…[39m [90m0.04s[39m  
-2026-10-01T17:28:35.9782066Z   [32;1m✓[39;22m[90m [39m[90mit returns the compiled authority fingerprint and ignores activatio[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:28:35.9794202Z   [32;1m✓[39;22m[90m [39m[90mit explains unknown modules and tenant activation without guessing[39m[90m… [39m [90m0.03s[39m  
-2026-10-01T17:28:35.9806348Z   [32;1m✓[39;22m[90m [39m[90mit renders deterministic CLI output and requires account for tenant[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:28:35.9818414Z   [32;1m✓[39;22m[90m [39m[90mit redacts internal class references and sensitive topology (INTRO-[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:28:35.9830877Z   [32;1m✓[39;22m[90m [39m[90mit reports declared constraints with compatibility passport pending[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:28:35.9842739Z   [32;1m✓[39;22m[90m [39m[90mit does not mutate module state while introspecting (INTRO-06)[39m[90m      [39m [90m0.03s[39m  
-2026-10-01T17:28:35.9854596Z   [32;1m✓[39;22m[90m [39m[90mit separates missing input, unknown extenders and stale revisions ([39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:28:35.9866421Z   [32;1m✓[39;22m[90m [39m[90mit reports activation gate denial with tenant verdict (INTRO-02)[39m[90m    [39m [90m0.03s[39m  
-2026-10-01T17:28:35.9878033Z   [32;1m✓[39;22m[90m [39m[90mit resolves RegistryIntrospection from the container[39m[90m                [39m [90m0.03s[39m  
-2026-10-01T17:28:36.1804402Z 
-2026-10-01T17:28:36.1806388Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Modules\Unit\ExtensionContractTest[39m
-2026-10-01T17:28:36.1817559Z   [32;1m✓[39;22m[90m [39m[90mit verifies deterministic compiled extension snapshots and explicit[39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:28:36.1830478Z   [32;1m✓[39;22m[90m [39m[90mit verifies deterministic compiled extension snapshots and explicit[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:28:36.1842589Z   [32;1m✓[39;22m[90m [39m[90mit reports duplicate owners and replacement cycles from scalar fixt[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:28:36.1854677Z   [32;1m✓[39;22m[90m [39m[90mit reports duplicate owners and replacement cycles from scalar fixt[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:28:36.1866415Z   [32;1m✓[39;22m[90m [39m[90mit pins durable replay to exact point id and version while retainin[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:28:36.1878641Z   [32;1m✓[39;22m[90m [39m[90mit reports invalid installed metadata without reading the host inst[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:28:36.3074737Z 
-2026-10-01T17:28:36.3075884Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Modules\Unit\ExtensionMetadataTest[39m
-2026-10-01T17:28:36.3088250Z   [32;1m✓[39;22m[90m [39m[90mit reads installed version metadata and prefers the source referenc[39m[90m…[39m [90m0.04s[39m  
-2026-10-01T17:28:36.3100599Z   [32;1m✓[39;22m[90m [39m[90mit normalizes a missing installed file and a list-shaped manifest[39m[90m   [39m [90m0.03s[39m  
-2026-10-01T17:28:36.3112630Z   [32;1m✓[39;22m[90m [39m[90mit accumulates repeatable replacement directives and rejects empty[39m[90m… [39m [90m0.03s[39m  
-2026-10-01T17:28:36.3124142Z   [32;1m✓[39;22m[90m [39m[90mit round-trips an extension stamp and rejects invalid scalars[39m[90m       [39m [90m0.03s[39m  
-2026-10-01T17:28:36.4360981Z 
-2026-10-01T17:28:36.4362883Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Modules\Unit\ExtensionRemediationTest[39m
-2026-10-01T17:28:36.4374501Z   [32;1m✓[39;22m[90m [39m[90mit resolves module activity once per entity-list operation without[39m[90m… [39m [90m0.03s[39m  
-2026-10-01T17:28:36.4386371Z   [32;1m✓[39;22m[90m [39m[90mit rejects a dependency cycle with its chain before compilation[39m[90m     [39m [90m0.03s[39m  
-2026-10-01T17:28:36.4398745Z   [32;1m✓[39;22m[90m [39m[90mit dispatches compiled manifest listeners once only while their own[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:28:36.4410786Z   [32;1m✓[39;22m[90m [39m[90mit can compile a missing production registry while ordinary console[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:28:36.4732303Z 
-2026-10-01T17:28:36.4733739Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Modules\Unit\FieldCastMapTest[39m
-2026-10-01T17:28:36.4745977Z   [32;1m✓[39;22m[90m [39m[90mit maps package casts with arguments and leaves unknown casts to th[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:28:36.5635470Z 
-2026-10-01T17:28:36.5637378Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Modules\Unit\ModulesOptionsTest[39m
-2026-10-01T17:28:36.5649508Z   [32;1m✓[39;22m[90m [39m[90mit allows a null module connection[39m[90m                                  [39m [90m0.03s[39m  
-2026-10-01T17:28:36.5661737Z   [32;1m✓[39;22m[90m [39m[90mit rejects a zero or negative cache ttl with (0)[39m[90m                    [39m [90m0.03s[39m  
-2026-10-01T17:28:36.5673395Z   [32;1m✓[39;22m[90m [39m[90mit rejects a zero or negative cache ttl with (-1)[39m[90m                   [39m [90m0.03s[39m  
-2026-10-01T17:28:37.0238114Z 
-2026-10-01T17:28:37.0240805Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Modules\Unit\RegistryCompilerDeterminismTest[39m
-2026-10-01T17:28:37.0252446Z   [32;1m✓[39;22m[90m [39m[90mit publishes one fingerprint for shuffled module, declaration and a[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:28:37.0264544Z   [32;1m✓[39;22m[90m [39m[90mit keeps semantic menu order while hashing key-sorted payloads[39m[90m      [39m [90m0.03s[39m  
-2026-10-01T17:28:37.0276628Z   [32;1m✓[39;22m[90m [39m[90mit rejects every replacement error with distinct diagnostics with d[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:28:37.0288570Z   [32;1m✓[39;22m[90m [39m[90mit rejects every replacement error with distinct diagnostics with d[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:28:37.0300671Z   [32;1m✓[39;22m[90m [39m[90mit rejects every replacement error with distinct diagnostics with d[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:28:37.0312401Z   [32;1m✓[39;22m[90m [39m[90mit rejects every replacement error with distinct diagnostics with d[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:28:37.0324534Z   [32;1m✓[39;22m[90m [39m[90mit rejects every replacement error with distinct diagnostics with d[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:28:37.0336464Z   [32;1m✓[39;22m[90m [39m[90mit removes a replaced target from the effective slice and keeps it[39m[90m… [39m [90m0.03s[39m  
-2026-10-01T17:28:37.0348369Z   [32;1m✓[39;22m[90m [39m[90mit rejects a menu missing afterHandle target and a menu cycle with[39m[90m… [39m [90m0.03s[39m  
-2026-10-01T17:28:37.0360390Z   [32;1m✓[39;22m[90m [39m[90mit rejects a menu missing afterHandle target and a menu cycle with[39m[90m… [39m [90m0.03s[39m  
-2026-10-01T17:28:37.0372491Z   [32;1m✓[39;22m[90m [39m[90mit rejects unknown schema, missing fingerprint and hash mismatch wi[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:28:37.0384184Z   [32;1m✓[39;22m[90m [39m[90mit rejects unknown schema, missing fingerprint and hash mismatch wi[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:28:37.0396242Z   [32;1m✓[39;22m[90m [39m[90mit rejects unknown schema, missing fingerprint and hash mismatch wi[39m[90m…[39m [90m0.04s[39m  
-2026-10-01T17:28:37.0408125Z   [32;1m✓[39;22m[90m [39m[90mit rejects unknown schema, missing fingerprint and hash mismatch wi[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:28:37.0419884Z   [32;1m✓[39;22m[90m [39m[90mit does not let a hydrated mutation change authority bytes or finge[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:28:37.1053684Z 
-2026-10-01T17:28:37.1055527Z   [30;42;1m PASS [39;49;22m[39m Packages\core\tests\Modules\Unit\RegistryFreezeTest[39m
-2026-10-01T17:28:37.1067100Z   [32;1m✓[39;22m[90m [39m[90mit rejects duplicate registration before mutating the collector[39m[90m     [39m [90m0.05s[39m  
-2026-10-01T17:28:37.1079433Z   [32;1m✓[39;22m[90m [39m[90mit rejects late registration and leaves collector and morph map unc[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:28:37.1094269Z 
-2026-10-01T17:28:37.1096857Z   [90mTests:[39m    [32;1m238 passed[39;22m[90m (819 assertions)[39m
-2026-10-01T17:28:37.1097877Z   [90mDuration:[39m [39m7.51s[39m
-2026-10-01T17:28:37.1098448Z 
+2026-10-01T17:28:29.8512235Z
+2026-10-01T17:28:29.8514523Z    PASS  Packages\core\tests\Attributes\AttributesTest
+2026-10-01T17:28:29.8579723Z   ✓ it Attributes expose immutable metadata and backed kind roundtrips   0.01s
+2026-10-01T17:28:29.8587482Z   ✓ it Attributes reject a method target at instantiation
+2026-10-01T17:28:31.9480907Z
+2026-10-01T17:28:31.9490718Z    PASS  CoreX\Tests\Attributes\SurfaceScannerTest
+2026-10-01T17:28:31.9523666Z   ✓ attributes scanner resolves aliases kinds and does not execute sour… 0.03s
+2026-10-01T17:28:31.9543398Z   ✓ attributes scanner resolves native throws without treating exceptio… 0.01s
+2026-10-01T17:28:31.9575502Z   ✓ attributes scanner checks nested imported aliases and promoted prop… 0.13s
+2026-10-01T17:28:31.9584249Z   ✓ attributes scanner diagnostics have location and nested path with data set "unclassified"
+2026-10-01T17:28:31.9592784Z   ✓ attributes scanner diagnostics have location and nested path with data set "conflicting"
+2026-10-01T17:28:31.9601298Z   ✓ attributes scanner diagnostics have location and nested path with data set "duplicate"
+2026-10-01T17:28:31.9609808Z   ✓ attributes scanner diagnostics have location and nested path with data set "kind"
+2026-10-01T17:28:31.9617781Z   ✓ attributes scanner diagnostics have location and nested path with data set "version"
+2026-10-01T17:28:31.9626224Z   ✓ attributes scanner diagnostics have location and nested path with data set "internal"
+2026-10-01T17:28:31.9634498Z   ✓ attributes scanner diagnostics have location and nested path with data set "mutable"
+2026-10-01T17:28:31.9642578Z   ✓ attributes scanner diagnostics have location and nested path with data set "untyped array"
+2026-10-01T17:28:31.9650843Z   ✓ attributes scanner diagnostics have location and nested path with data set "bare list return"
+2026-10-01T17:28:31.9659443Z   ✓ attributes scanner diagnostics have location and nested path with data set "bare non-empty list parameter"
+2026-10-01T17:28:31.9667360Z   ✓ attributes scanner diagnostics have location and nested path with data set "bare non-empty array return"
+2026-10-01T17:28:31.9675418Z   ✓ attributes scanner diagnostics have location and nested path with data set "nested bare list"
+2026-10-01T17:28:31.9683916Z   ✓ attributes scanner diagnostics have location and nested path with data set "nested bare array"
+2026-10-01T17:28:31.9692105Z   ✓ attributes scanner diagnostics have location and nested path with data set "mixed"
+2026-10-01T17:28:31.9724201Z   ✓ attributes scanner diagnostics have location and nested path with d… 0.12s
+2026-10-01T17:28:31.9733127Z   ✓ attributes scanner diagnostics have location and nested path with data set "nested s p i mixed field"
+2026-10-01T17:28:31.9765415Z   ✓ attributes scanner diagnostics have location and nested path with d… 0.12s
+2026-10-01T17:28:31.9797837Z   ✓ attributes scanner diagnostics have location and nested path with d… 0.12s
+2026-10-01T17:28:31.9806399Z   ✓ attributes scanner diagnostics have location and nested path with data set "nested foreign internal"
+2026-10-01T17:28:31.9840032Z   ✓ attributes scanner diagnostics have location and nested path with d… 0.11s
+2026-10-01T17:28:31.9872386Z   ✓ attributes scanner diagnostics have location and nested path with d… 0.01s
+2026-10-01T17:28:31.9904750Z   ✓ attributes scanner diagnostics have location and nested path with d… 0.01s
+2026-10-01T17:28:31.9914018Z   ✓ attributes scanner diagnostics have location and nested path with data set "function loophole"
+2026-10-01T17:28:31.9922682Z   ✓ attributes scanner diagnostics have location and nested path with data set "member target"
+2026-10-01T17:28:31.9954899Z   ✓ attributes scanner checks all import spellings and product consumer… 0.01s
+2026-10-01T17:28:31.9987306Z   ✓ attributes scanner captures inherited signature and ignores bodies…  0.01s
+2026-10-01T17:28:32.0020442Z   ✓ attributes scanner handles bound templates aliases virtual members…  0.01s
+2026-10-01T17:28:32.0053061Z   ✓ attributes cli is deterministic and separates debt from parser erro… 0.97s
+2026-10-01T17:28:32.0085806Z   ✓ attributes scanner finds new types without classmap and rejects dup… 0.10s
+2026-10-01T17:28:32.0118544Z   ✓ attributes imported alias retains its defining namespace and nested… 0.01s
+2026-10-01T17:28:32.0127321Z   ✓ attributes property hooks and default changes are snapshot inputs
+2026-10-01T17:28:32.0135886Z   ✓ attributes protected inheritance and inherited internal leak
+2026-10-01T17:28:32.0144238Z   ✓ attributes nested mixed and nullable object cannot hide payloads
+2026-10-01T17:28:32.0176241Z   ✓ attributes typed collection docs remain valid                        0.01s
+2026-10-01T17:28:32.0208774Z   ✓ attributes configuration class strings and spi model documentation…  0.12s
+2026-10-01T17:28:32.0241735Z   ✓ attributes composition policy requires the exact existing edge       0.11s
+2026-10-01T17:28:32.0273849Z   ✓ attributes manifest keeps own and local members without expanding e… 0.01s
+2026-10-01T17:28:32.0282579Z   ✓ attributes public promoted property survives a private constructor
+2026-10-01T17:28:32.1432009Z
+2026-10-01T17:28:32.1440637Z    PASS  Packages\core\tests\Unit\ClockTest
+2026-10-01T17:28:32.1469729Z   ✓ it returns UTC from system clock                                     0.16s
+2026-10-01T17:28:32.1510317Z   ✓ it advances frozen clock by the given interval                       0.01s
+2026-10-01T17:28:32.1533054Z   ✓ it reads time frozen via travelTo through the default clock binding  0.01s
+2026-10-01T17:28:32.2571336Z
+2026-10-01T17:28:32.2580758Z    PASS  Packages\core\tests\Unit\CoreOptionsTest
+2026-10-01T17:28:32.2609237Z   ✓ it resolves settings cache ttl by key existence with dataset "missi… 0.02s
+2026-10-01T17:28:32.2651433Z   ✓ it resolves settings cache ttl by key existence with dataset "missi… 0.01s
+2026-10-01T17:28:32.2681168Z   ✓ it resolves settings cache ttl by key existence with dataset "expli… 0.01s
+2026-10-01T17:28:32.2710740Z   ✓ it resolves settings cache ttl by key existence with dataset "zero"  0.01s
+2026-10-01T17:28:32.2739666Z   ✓ it resolves settings cache ttl by key existence with dataset "posit… 0.01s
+2026-10-01T17:28:32.2772324Z   ✓ it accumulates invalid cache ttl and cache store in one exception    0.01s
+2026-10-01T17:28:32.2804827Z   ✓ it redacts a secret from string, dump, json, and serialization       0.02s
+2026-10-01T17:28:32.3753742Z
+2026-10-01T17:28:32.3759642Z    PASS  Packages\core\tests\Unit\DataScopeCodecTest
+2026-10-01T17:28:32.3789391Z   ✓ it round-trips encoded payload with and without workspace            0.04s
+2026-10-01T17:28:32.3820256Z   ✓ it rejects unsupported payload version                               0.02s
+2026-10-01T17:28:32.3851154Z   ✓ it rejects missing connection key                                    0.01s
+2026-10-01T17:28:32.3874764Z   ✓ it rejects absent workspace key                                      0.01s
+2026-10-01T17:28:32.3907651Z   ✓ it accepts explicit null workspace key                               0.01s
+2026-10-01T17:28:32.3940111Z   ✓ it rejects malformed boxed value                                     0.01s
+2026-10-01T17:28:32.8287531Z
+2026-10-01T17:28:32.8289654Z    PASS  Packages\core\tests\Unit\ErrorDescriptorTest
+2026-10-01T17:28:32.8325088Z   ✓ error category exposes the nine stable values                        0.03s
+2026-10-01T17:28:32.8357263Z   ✓ unavailability reason exposes the five stable values                 0.01s
+2026-10-01T17:28:32.8390458Z   ✓ descriptor accepts a root nested and escaped pointer with dataset "… 0.01s
+2026-10-01T17:28:32.8422716Z   ✓ descriptor accepts a root nested and escaped pointer with dataset "… 0.01s
+2026-10-01T17:28:32.8455537Z   ✓ descriptor accepts a root nested and escaped pointer with dataset "… 0.01s
+2026-10-01T17:28:32.8487504Z   ✓ descriptor accepts a root nested and escaped pointer with dataset "… 0.01s
+2026-10-01T17:28:32.8520721Z   ✓ descriptor accepts a root nested and escaped pointer with dataset "… 0.01s
+2026-10-01T17:28:32.8552556Z   ✓ descriptor accepts a root nested and escaped pointer with dataset "… 0.02s
+2026-10-01T17:28:32.8584704Z   ✓ descriptor accepts a null path                                       0.01s
+2026-10-01T17:28:32.8619441Z   ✓ descriptor rejects an invalid code with dataset "empty"              0.01s
+2026-10-01T17:28:32.8651386Z   ✓ descriptor rejects an invalid code with dataset "upper"              0.01s
+2026-10-01T17:28:32.8684367Z   ✓ descriptor rejects an invalid code with dataset "leading digit"      0.01s
+2026-10-01T17:28:32.8716454Z   ✓ descriptor rejects an invalid code with dataset "double underscore"  0.01s
+2026-10-01T17:28:32.8748748Z   ✓ descriptor rejects an invalid code with dataset "trailing underscor… 0.01s
+2026-10-01T17:28:32.8781999Z   ✓ descriptor rejects an invalid code with dataset "hyphen"             0.01s
+2026-10-01T17:28:32.8812415Z   ✓ descriptor rejects an invalid code with dataset "overlong"           0.02s
+2026-10-01T17:28:32.8843089Z   ✓ descriptor accepts a code at the byte limit                          0.02s
+2026-10-01T17:28:32.8874242Z   ✓ descriptor rejects an invalid pointer escape or control character w… 0.02s
+2026-10-01T17:28:32.8907761Z   ✓ descriptor rejects an invalid pointer escape or control character w… 0.02s
+2026-10-01T17:28:32.8940860Z   ✓ descriptor rejects an invalid pointer escape or control character w… 0.02s
+2026-10-01T17:28:32.8972491Z   ✓ descriptor rejects an invalid pointer escape or control character w… 0.02s
+2026-10-01T17:28:32.9003954Z   ✓ descriptor rejects a control character in detail                     0.02s
+2026-10-01T17:28:32.9035025Z   ✓ descriptor rejects an oversize detail                                0.02s
+2026-10-01T17:28:32.9066433Z   ✓ descriptor rejects a non json detail with dataset "nested list"      0.02s
+2026-10-01T17:28:32.9097757Z   ✓ descriptor rejects a non json detail with dataset "object"           0.02s
+2026-10-01T17:28:32.9128821Z   ✓ descriptor rejects a non json detail with dataset "non finite"       0.02s
+2026-10-01T17:28:32.9160755Z   ✓ retryable records only that the same semantic input may succeed lat… 0.02s
+2026-10-01T17:28:32.9191540Z   ✓ describes error returns the same descriptor                          0.02s
+2026-10-01T17:28:33.0066335Z
+2026-10-01T17:28:33.0068230Z    PASS  Packages\core\tests\Unit\MessageContractRegistryTest
+2026-10-01T17:28:33.0110446Z   ✓ it finds declared contracts by name and version                      0.11s
+2026-10-01T17:28:33.0142448Z   ✓ it refuses undeclared contracts with MSG-002                         0.01s
+2026-10-01T17:28:33.0174086Z   ✓ it rejects duplicate identities when building the registry           0.01s
+2026-10-01T17:28:33.0210274Z   ✓ it keeps v1 and v2 of the same name separate                         0.01s
+2026-10-01T17:28:33.0241575Z   ✓ it lists all contracts sorted by id                                  0.01s
+2026-10-01T17:28:33.0272781Z   ✓ it binds an empty registry by default in the container               0.01s
+2026-10-01T17:28:33.2473858Z
+2026-10-01T17:28:33.2483466Z    PASS  Packages\core\tests\Unit\MessagingEnvelopeTest
+2026-10-01T17:28:33.2524105Z   ✓ it builds a full envelope and exposes contract identity              0.04s
+2026-10-01T17:28:33.2550478Z   ✓ it rejects empty message identity                                    0.01s
+2026-10-01T17:28:33.2581413Z   ✓ it rejects an overlong message source                                0.01s
+2026-10-01T17:28:33.2620077Z   ✓ it rejects a control character in message subject                    0.01s
+2026-10-01T17:28:33.2644403Z   ✓ it rejects an unknown envelope version                               0.01s
+2026-10-01T17:28:33.2681368Z   ✓ it rejects an empty durable scope                                    0.01s
+2026-10-01T17:28:33.2710271Z   ✓ it rejects payload nesting beyond eight levels                       0.01s
+2026-10-01T17:28:33.2738169Z   ✓ it rejects a top-level list payload                                  0.01s
+2026-10-01T17:28:33.2777438Z   ✓ it rejects too many payload keys                                     0.01s
+2026-10-01T17:28:33.2807684Z   ✓ it rejects unsupported payload values                                0.01s
+2026-10-01T17:28:33.2838444Z   ✓ it rejects payload exceeding 64KiB                                   0.01s
+2026-10-01T17:28:33.2869642Z   ✓ it canonicalizes payload keys recursively                            0.01s
+2026-10-01T17:28:33.2900116Z   ✓ it rejects a PHP class name as contract name                         0.01s
+2026-10-01T17:28:33.2939816Z   ✓ it rejects domain events as published contracts                      0.01s
+2026-10-01T17:28:33.2955843Z   ✓ it orders pii class sensitivity for permits                          0.02s
+2026-10-01T17:28:33.3797958Z
+2026-10-01T17:28:33.3800240Z    PASS  Packages\core\tests\Unit\OpenTelemetryBridgeTest
+2026-10-01T17:28:33.3834175Z   ✓ it accepts the five metric keys and four retry buckets               0.07s
+2026-10-01T17:28:33.3873734Z   ✓ it rejects forbidden and unbounded metric labels before any exporte… 0.01s
+2026-10-01T17:28:33.3904430Z   ✓ it runs consumer work once on the null bridge and on adapter fallba… 0.01s
+2026-10-01T17:28:33.3930314Z   ✓ it links the consumer span to the producer trace and exports five h… 0.02s
+2026-10-01T17:28:33.3961379Z   ✓ it boots null observer and trace bridge without an OpenTelemetry bi… 0.01s
+2026-10-01T17:28:33.4830886Z
+2026-10-01T17:28:33.4832350Z    PASS  Packages\core\tests\Unit\OperationObserverTest
+2026-10-01T17:28:33.4865899Z   ✓ it keeps one context through start and complete                      0.03s
+2026-10-01T17:28:33.4897037Z   ✓ it keeps one context through start and fail                          0.01s
+2026-10-01T17:28:33.4928793Z   ✓ it rejects invalid identifiers, negative attempt and unknown outcom… 0.01s
+2026-10-01T17:28:33.4960435Z   ✓ it logs exact static messages and keys                               0.01s
+2026-10-01T17:28:33.4996298Z   ✓ it omits canary secrets from failure logs                            0.01s
+2026-10-01T17:28:33.5023945Z   ✓ it does not throw from the null observer or a failing logger         0.01s
+2026-10-01T17:28:33.5215259Z
+2026-10-01T17:28:33.5216349Z    PASS  Packages\core\tests\Unit\PackageRegistrarTest
+2026-10-01T17:28:33.5248050Z   ✓ it records register and boots as a no-op                             0.03s
+2026-10-01T17:28:33.7914243Z
+2026-10-01T17:28:33.7915535Z    PASS  Packages\core\tests\Unit\SupportDataTest
+2026-10-01T17:28:33.7947700Z   ✓ it carries only trusted data-boundary context                        0.02s
+2026-10-01T17:28:33.7979904Z   ✓ it derives durable scalars from tenant context                       0.01s
+2026-10-01T17:28:33.8011650Z   ✓ it builds the same scope via fromTenantContext as via scalar constr… 0.01s
+2026-10-01T17:28:33.8050882Z   ✓ it rejects empty account identity in the scalar constructor          0.01s
+2026-10-01T17:28:33.8081495Z   ✓ it rejects unsupported data scope version                            0.01s
+2026-10-01T17:28:33.8112541Z   ✓ it serializes and unserializes without exceptions                    0.01s
+2026-10-01T17:28:33.8143459Z   ✓ it rejects invalid trusted data-boundary scalar values with dataset… 0.01s
+2026-10-01T17:28:33.8170330Z   ✓ it rejects invalid trusted data-boundary scalar values with dataset… 0.01s
+2026-10-01T17:28:33.8200652Z   ✓ it rejects invalid trusted data-boundary scalar values with dataset… 0.01s
+2026-10-01T17:28:33.8231051Z   ✓ it keeps record references opaque and bounded                        0.01s
+2026-10-01T17:28:33.8261952Z   ✓ it rejects invalid record references with dataset "empty entity"     0.01s
+2026-10-01T17:28:33.8292603Z   ✓ it rejects invalid record references with dataset "empty identifier… 0.01s
+2026-10-01T17:28:33.8323357Z   ✓ it rejects invalid record references with dataset "oversized identi… 0.01s
+2026-10-01T17:28:33.8354455Z   ✓ it keeps write tokens opaque and binds them to a canonical payload…  0.01s
+2026-10-01T17:28:33.8385640Z   ✓ it rejects invalid write-token values with dataset "empty operation… 0.02s
+2026-10-01T17:28:33.8424617Z   ✓ it rejects invalid write-token values with dataset "non canonical p… 0.02s
+2026-10-01T17:28:33.8448164Z   ✓ it rejects invalid write-token values with dataset "empty expected…  0.02s
+2026-10-01T17:28:33.8479950Z   ✓ it rejects invalid write-token values with dataset "oversized expec… 0.02s
+2026-10-01T17:28:33.9104637Z
+2026-10-01T17:28:33.9106017Z    PASS  Packages\core\tests\Unit\TenantContextRestorerTest
+2026-10-01T17:28:33.9140756Z   ✓ it returns the active context when it matches the durable scope      0.07s
+2026-10-01T17:28:33.9172217Z   ✓ it rejects a mismatched account with a specific message              0.02s
+2026-10-01T17:28:33.9203224Z   ✓ it rejects a mismatched workspace with a specific message            0.01s
+2026-10-01T17:28:33.9234422Z   ✓ it rejects a mismatched boxed profile with a specific message        0.01s
+2026-10-01T17:28:34.0698664Z
+2026-10-01T17:28:34.0700345Z    PASS  Packages\core\tests\Storage\LocalTenantStorageTest
+2026-10-01T17:28:34.0743918Z   ✓ it isolates durable and ephemeral storage by the current account an… 0.03s
+2026-10-01T17:28:34.0770736Z   ✓ it rejects path escape and reports unsupported export explicitly     0.01s
+2026-10-01T17:28:34.0800705Z   ✓ it keeps all relative filesystem operations inside the account root  0.02s
+2026-10-01T17:28:34.0838786Z   ✓ it rejects symbolic links within an account root                     0.01s
+2026-10-01T17:28:34.0863607Z   ✓ it rejects encoded backslashes and NUL bytes before the driver sees… 0.01s
+2026-10-01T17:28:34.0895476Z   ✓ it rejects encoded backslashes and NUL bytes before the driver sees… 0.01s
+2026-10-01T17:28:34.0927308Z   ✓ it rejects encoded backslashes and NUL bytes before the driver sees… 0.01s
+2026-10-01T17:28:34.0959403Z   ✓ it rejects encoded backslashes and NUL bytes before the driver sees… 0.01s
+2026-10-01T17:28:34.0991224Z   ✓ it rejects a replaced account root even when listing without a dire… 0.02s
+2026-10-01T17:28:34.1753753Z
+2026-10-01T17:28:34.1755182Z    PASS  Packages\core\tests\Feature\InboxClaimTest
+2026-10-01T17:28:34.1788500Z   ✓ it refuses claim outside a transaction with MSG-006                  0.05s
+2026-10-01T17:28:34.1820162Z   ✓ it returns true on first claim and false on duplicate consumer and…  0.02s
+2026-10-01T17:28:34.1850887Z   ✓ it treats consumers independently for the same message id            0.02s
+2026-10-01T17:28:34.1881886Z   ✓ it stores processed_at from FrozenClock                              0.02s
+2026-10-01T17:28:34.3057497Z
+2026-10-01T17:28:34.3059285Z    PASS  Packages\core\tests\Feature\MessagePublisherTest
+2026-10-01T17:28:34.3070122Z   ✓ it admits a durable publisher binding and marks a leased row publis… 0.07s
+2026-10-01T17:28:34.3081263Z   ✓ it refuses relay when no durable publisher is bound                  0.02s
+2026-10-01T17:28:34.3092380Z   ✓ it refuses a null-transport publisher before markPublished           0.02s
+2026-10-01T17:28:34.3103398Z   ✓ it refuses a redis-publish publisher before markPublished            0.02s
+2026-10-01T17:28:34.4151838Z
+2026-10-01T17:28:34.4152916Z    PASS  Packages\core\tests\Feature\OutboxAppendTest
+2026-10-01T17:28:34.4250816Z   ✓ it refuses append outside a transaction with MSG-008                 0.02s
+2026-10-01T17:28:34.4253125Z   ✓ it refuses undeclared contracts inside a transaction with MSG-002    0.02s
+2026-10-01T17:28:34.4255376Z   ✓ it refuses payload personal data above the contract maximum with MS… 0.02s
+2026-10-01T17:28:34.4257201Z   ✓ it persists a pending row with encoded payload and clock-backed tim… 0.02s
+2026-10-01T17:28:34.4259551Z   ✓ it injects trace carrier into persisted metadata without changing i… 0.02s
+2026-10-01T17:28:34.4261389Z   ✓ it uses one clock instant for available_at created_at and updated_a… 0.02s
+2026-10-01T17:28:34.5400618Z
+2026-10-01T17:28:34.5401973Z    PASS  Packages\core\tests\Feature\ProblemRegistryTest
+2026-10-01T17:28:34.5412754Z   ✓ ProblemRegistry boots with the isolated kernel and freezes its cata… 0.02s
+2026-10-01T17:28:34.5424124Z   ✓ ProblemRegistry rejects invalid boot contributions with typed diagn… 0.01s
+2026-10-01T17:28:34.5435202Z   ✓ ProblemRegistry rejects invalid boot contributions with typed diagn… 0.01s
+2026-10-01T17:28:34.5446430Z   ✓ ProblemRegistry rejects invalid boot contributions with typed diagn… 0.01s
+2026-10-01T17:28:34.5457556Z   ✓ ProblemRegistry rejects invalid boot contributions with typed diagn… 0.01s
+2026-10-01T17:28:34.5468459Z   ✓ ProblemRegistry rejects invalid boot contributions with typed diagn… 0.01s
+2026-10-01T17:28:34.5479502Z   ✓ ProblemRegistry rejects unknown persisted identities and descriptor… 0.01s
+2026-10-01T17:28:34.5490177Z   ✓ ProblemRegistry constructor types reject dynamic raw strings         0.01s
+2026-10-01T17:28:34.6563294Z
+2026-10-01T17:28:34.6564776Z    PASS  Packages\core\tests\Feature\PruneOutboxTest
+2026-10-01T17:28:34.6575199Z   ✓ it prunes published rows older than the published window and keeps…  0.03s
+2026-10-01T17:28:34.6586098Z   ✓ it prunes dead rows by the dead window not the published window      0.02s
+2026-10-01T17:28:34.6597013Z   ✓ it never prunes pending or publishing rows                           0.02s
+2026-10-01T17:28:34.6607887Z   ✓ it does not touch sys_inbox_messages                                 0.02s
+2026-10-01T17:28:34.6618648Z   ✓ it uses FrozenClock for retention thresholds                         0.02s
+2026-10-01T17:28:35.3030494Z
+2026-10-01T17:28:35.3031738Z    PASS  Packages\core\tests\Feature\PublishIsolationTest
+2026-10-01T17:28:35.3033560Z   ✓ it refuses a non-test PostgreSQL database before bootstrapping the…  0.26s
+2026-10-01T17:28:35.3035453Z   ✓ it cleans failed publish resources and leaves the next SQLite appli… 0.38s
+2026-10-01T17:28:35.3835781Z
+2026-10-01T17:28:35.3837525Z    PASS  Packages\core\tests\Feature\ValidateConfigCommandTest
+2026-10-01T17:28:35.3850405Z   ✓ it exits zero on the default test configuration                      0.02s
+2026-10-01T17:28:35.3861103Z   ✓ it prints two option violations in one pass and redacts a planted s… 0.01s
+2026-10-01T17:28:35.3874035Z   ✓ it warns on the default intl cursor secret without printing it       0.01s
+2026-10-01T17:28:35.3885988Z   ✓ it reports a selected redis adapter without failing when the driver… 0.01s
+2026-10-01T17:28:35.3898270Z   ✓ it does not carry errors or secret warnings into a later run of the… 0.02s
+2026-10-01T17:28:35.4091194Z
+2026-10-01T17:28:35.4092637Z    PASS  Packages\core\tests\Feature\WorkUnitIsolationTest
+2026-10-01T17:28:35.4104465Z   ✓ it isolates consecutive work units when the first pass throws        0.02s
+2026-10-01T17:28:35.4375699Z
+2026-10-01T17:28:35.4377165Z    PASS  CoreX\Testing\Modules\ConfigReportSectionTest
+2026-10-01T17:28:35.4389800Z   ✓ section registers in report order and redacts its secrets            0.02s
+2026-10-01T17:28:35.6289976Z
+2026-10-01T17:28:35.6291878Z    PASS  Packages\core\tests\Modules\Feature\CompositionBindingsTest
+2026-10-01T17:28:35.6303560Z   ✓ it keeps Registry register bindings on the measured key, concrete a… 0.03s
+2026-10-01T17:28:35.6315764Z   ✓ it keeps Lifecycle register bindings on the measured key, concrete…  0.03s
+2026-10-01T17:28:35.6327895Z   ✓ it keeps Settings register bindings on the measured key, concrete a… 0.03s
+2026-10-01T17:28:35.6339883Z   ✓ it resolves ModulesOptions from the composition instance             0.03s
+2026-10-01T17:28:35.6351750Z   ✓ it reads module options from the nested kernel configuration         0.03s
+2026-10-01T17:28:35.6363439Z   ✓ it registers composition modules through PackageRegistrar            0.03s
+2026-10-01T17:28:35.9755853Z
+2026-10-01T17:28:35.9757815Z    PASS  Packages\core\tests\Modules\Feature\RegistryIntrospectionTest
+2026-10-01T17:28:35.9770005Z   ✓ it projects the eight extenders and ownership from compiled bytes (… 0.04s
+2026-10-01T17:28:35.9782066Z   ✓ it returns the compiled authority fingerprint and ignores activatio… 0.03s
+2026-10-01T17:28:35.9794202Z   ✓ it explains unknown modules and tenant activation without guessing…  0.03s
+2026-10-01T17:28:35.9806348Z   ✓ it renders deterministic CLI output and requires account for tenant… 0.03s
+2026-10-01T17:28:35.9818414Z   ✓ it redacts internal class references and sensitive topology (INTRO-… 0.03s
+2026-10-01T17:28:35.9830877Z   ✓ it reports declared constraints with compatibility passport pending… 0.03s
+2026-10-01T17:28:35.9842739Z   ✓ it does not mutate module state while introspecting (INTRO-06)       0.03s
+2026-10-01T17:28:35.9854596Z   ✓ it separates missing input, unknown extenders and stale revisions (… 0.05s
+2026-10-01T17:28:35.9866421Z   ✓ it reports activation gate denial with tenant verdict (INTRO-02)     0.03s
+2026-10-01T17:28:35.9878033Z   ✓ it resolves RegistryIntrospection from the container                 0.03s
+2026-10-01T17:28:36.1804402Z
+2026-10-01T17:28:36.1806388Z    PASS  Packages\core\tests\Modules\Unit\ExtensionContractTest
+2026-10-01T17:28:36.1817559Z   ✓ it verifies deterministic compiled extension snapshots and explicit… 0.05s
+2026-10-01T17:28:36.1830478Z   ✓ it verifies deterministic compiled extension snapshots and explicit… 0.03s
+2026-10-01T17:28:36.1842589Z   ✓ it reports duplicate owners and replacement cycles from scalar fixt… 0.03s
+2026-10-01T17:28:36.1854677Z   ✓ it reports duplicate owners and replacement cycles from scalar fixt… 0.03s
+2026-10-01T17:28:36.1866415Z   ✓ it pins durable replay to exact point id and version while retainin… 0.03s
+2026-10-01T17:28:36.1878641Z   ✓ it reports invalid installed metadata without reading the host inst… 0.03s
+2026-10-01T17:28:36.3074737Z
+2026-10-01T17:28:36.3075884Z    PASS  Packages\core\tests\Modules\Unit\ExtensionMetadataTest
+2026-10-01T17:28:36.3088250Z   ✓ it reads installed version metadata and prefers the source referenc… 0.04s
+2026-10-01T17:28:36.3100599Z   ✓ it normalizes a missing installed file and a list-shaped manifest    0.03s
+2026-10-01T17:28:36.3112630Z   ✓ it accumulates repeatable replacement directives and rejects empty…  0.03s
+2026-10-01T17:28:36.3124142Z   ✓ it round-trips an extension stamp and rejects invalid scalars        0.03s
+2026-10-01T17:28:36.4360981Z
+2026-10-01T17:28:36.4362883Z    PASS  Packages\core\tests\Modules\Unit\ExtensionRemediationTest
+2026-10-01T17:28:36.4374501Z   ✓ it resolves module activity once per entity-list operation without…  0.03s
+2026-10-01T17:28:36.4386371Z   ✓ it rejects a dependency cycle with its chain before compilation      0.03s
+2026-10-01T17:28:36.4398745Z   ✓ it dispatches compiled manifest listeners once only while their own… 0.03s
+2026-10-01T17:28:36.4410786Z   ✓ it can compile a missing production registry while ordinary console… 0.03s
+2026-10-01T17:28:36.4732303Z
+2026-10-01T17:28:36.4733739Z    PASS  Packages\core\tests\Modules\Unit\FieldCastMapTest
+2026-10-01T17:28:36.4745977Z   ✓ it maps package casts with arguments and leaves unknown casts to th… 0.03s
+2026-10-01T17:28:36.5635470Z
+2026-10-01T17:28:36.5637378Z    PASS  Packages\core\tests\Modules\Unit\ModulesOptionsTest
+2026-10-01T17:28:36.5649508Z   ✓ it allows a null module connection                                   0.03s
+2026-10-01T17:28:36.5661737Z   ✓ it rejects a zero or negative cache ttl with (0)                     0.03s
+2026-10-01T17:28:36.5673395Z   ✓ it rejects a zero or negative cache ttl with (-1)                    0.03s
+2026-10-01T17:28:37.0238114Z
+2026-10-01T17:28:37.0240805Z    PASS  Packages\core\tests\Modules\Unit\RegistryCompilerDeterminismTest
+2026-10-01T17:28:37.0252446Z   ✓ it publishes one fingerprint for shuffled module, declaration and a… 0.03s
+2026-10-01T17:28:37.0264544Z   ✓ it keeps semantic menu order while hashing key-sorted payloads       0.03s
+2026-10-01T17:28:37.0276628Z   ✓ it rejects every replacement error with distinct diagnostics with d… 0.03s
+2026-10-01T17:28:37.0288570Z   ✓ it rejects every replacement error with distinct diagnostics with d… 0.03s
+2026-10-01T17:28:37.0300671Z   ✓ it rejects every replacement error with distinct diagnostics with d… 0.03s
+2026-10-01T17:28:37.0312401Z   ✓ it rejects every replacement error with distinct diagnostics with d… 0.03s
+2026-10-01T17:28:37.0324534Z   ✓ it rejects every replacement error with distinct diagnostics with d… 0.03s
+2026-10-01T17:28:37.0336464Z   ✓ it removes a replaced target from the effective slice and keeps it…  0.03s
+2026-10-01T17:28:37.0348369Z   ✓ it rejects a menu missing afterHandle target and a menu cycle with…  0.03s
+2026-10-01T17:28:37.0360390Z   ✓ it rejects a menu missing afterHandle target and a menu cycle with…  0.03s
+2026-10-01T17:28:37.0372491Z   ✓ it rejects unknown schema, missing fingerprint and hash mismatch wi… 0.03s
+2026-10-01T17:28:37.0384184Z   ✓ it rejects unknown schema, missing fingerprint and hash mismatch wi… 0.03s
+2026-10-01T17:28:37.0396242Z   ✓ it rejects unknown schema, missing fingerprint and hash mismatch wi… 0.04s
+2026-10-01T17:28:37.0408125Z   ✓ it rejects unknown schema, missing fingerprint and hash mismatch wi… 0.03s
+2026-10-01T17:28:37.0419884Z   ✓ it does not let a hydrated mutation change authority bytes or finge… 0.03s
+2026-10-01T17:28:37.1053684Z
+2026-10-01T17:28:37.1055527Z    PASS  Packages\core\tests\Modules\Unit\RegistryFreezeTest
+2026-10-01T17:28:37.1067100Z   ✓ it rejects duplicate registration before mutating the collector      0.05s
+2026-10-01T17:28:37.1079433Z   ✓ it rejects late registration and leaves collector and morph map unc… 0.03s
+2026-10-01T17:28:37.1094269Z
+2026-10-01T17:28:37.1096857Z   Tests:    238 passed (819 assertions)
+2026-10-01T17:28:37.1097877Z   Duration: 7.51s
+2026-10-01T17:28:37.1098448Z
 2026-10-01T17:28:37.1423313Z ==> packages/custom-fields
-2026-10-01T17:28:37.6149636Z 
-2026-10-01T17:28:37.6160980Z   [30;42;1m PASS [39;49;22m[39m Packages\customfields\tests\Unit\AttributeDefinitionTest[39m
-2026-10-01T17:28:37.6206325Z   [32;1m✓[39;22m[90m [39m[90mit rejects a new id that is not UUIDv7[39m[90m                              [39m [90m0.01s[39m  
-2026-10-01T17:28:37.6238477Z   [32;1m✓[39;22m[90m [39m[90mit rejects duplicate keys and invalid lifecycle transitions[39m[90m         [39m [90m0.01s[39m  
-2026-10-01T17:28:37.6247280Z   [32;1m✓[39;22m[90m [39m[90mit keeps a stable hash and the pinned id across a key rename[39m
-2026-10-01T17:28:37.6255600Z   [32;1m✓[39;22m[90m [39m[90mit builds the same legacy id for the same entity and key[39m
-2026-10-01T17:28:37.6354933Z 
-2026-10-01T17:28:37.6356293Z   [30;42;1m PASS [39;49;22m[39m Packages\customfields\tests\Unit\AttributeMessageTranslatorTest[39m
-2026-10-01T17:28:37.6389371Z   [32;1m✓[39;22m[90m [39m[90mit translates a mutation into the declared metadata-only contract[39m[90m   [39m [90m0.02s[39m  
-2026-10-01T17:28:37.6398339Z   [32;1m✓[39;22m[90m [39m[90mit declares one additive v1 integration contract[39m
-2026-10-01T17:28:37.6406382Z   [32;1m✓[39;22m[90m [39m[90mit rejects a registry collision[39m
-2026-10-01T17:28:37.6414627Z   [32;1m✓[39;22m[90m [39m[90mit has no search dependency in the integration boundary[39m
-2026-10-01T17:28:37.6583111Z 
-2026-10-01T17:28:37.6584720Z   [30;42;1m PASS [39;49;22m[39m Packages\customfields\tests\Unit\AttributeStoreResolverTest[39m
-2026-10-01T17:28:37.6618091Z   [32;1m✓[39;22m[90m [39m[90mit rejects an entity map that is not jsonb or eav[39m[90m                   [39m [90m0.01s[39m  
-2026-10-01T17:28:37.6626963Z   [32;1m✓[39;22m[90m [39m[90mit rejects a field-level engine declaration before the catalogue is bound[39m
-2026-10-01T17:28:37.6635357Z   [32;1m✓[39;22m[90m [39m[90mit keeps one engine per entity and restores mixed loadMany order[39m
-2026-10-01T17:28:37.7726907Z 
-2026-10-01T17:28:37.7729085Z   [30;42;1m PASS [39;49;22m[39m CoreX\CustomFields\Tests\Unit\AttributeTablesTest[39m
-2026-10-01T17:28:37.7763979Z   [32;1m✓[39;22m[90m [39m[90mit accepts the shipped default table names[39m[90m                          [39m [90m0.08s[39m  
-2026-10-01T17:28:37.7796694Z   [32;1m✓[39;22m[90m [39m[90mit rejects an invalid table identifier at construction time[39m[90m         [39m [90m0.01s[39m  
-2026-10-01T17:28:37.7829447Z   [32;1m✓[39;22m[90m [39m[90mit rejects duplicate configured table names[39m[90m                         [39m [90m0.01s[39m  
-2026-10-01T17:28:37.7861655Z   [32;1m✓[39;22m[90m [39m[90mit rejects invalid table names loaded from provider configuration[39m[90m   [39m [90m0.01s[39m  
-2026-10-01T17:28:37.8012280Z 
-2026-10-01T17:28:37.8013587Z   [30;42;1m PASS [39;49;22m[39m Packages\customfields\tests\Unit\AttributeWriteGuardTest[39m
-2026-10-01T17:28:37.8056136Z   [32;1m✓[39;22m[90m [39m[90mit runs the four authority layers in their fixed order with an opaq[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:28:37.8062144Z   [32;1m✓[39;22m[90m [39m[90mit keeps field absence and hidden-field denial externally indistinguishable[39m
-2026-10-01T17:28:37.8065077Z   [32;1m✓[39;22m[90m [39m[90mit reports every authority layer with a distinct value-free reason with dataset "subject ownership"[39m
-2026-10-01T17:28:37.8073336Z   [32;1m✓[39;22m[90m [39m[90mit reports every authority layer with a distinct value-free reason with dataset "field visibility"[39m
-2026-10-01T17:28:37.8082161Z   [32;1m✓[39;22m[90m [39m[90mit reports every authority layer with a distinct value-free reason with dataset "field write"[39m
-2026-10-01T17:28:37.8090471Z   [32;1m✓[39;22m[90m [39m[90mit reports every authority layer with a distinct value-free reason with dataset "operation mutation"[39m
-2026-10-01T17:28:37.8098678Z   [32;1m✓[39;22m[90m [39m[90mit requires a current schema hash for stale or evolving definitions[39m
-2026-10-01T17:28:37.8107182Z   [32;1m✓[39;22m[90m [39m[90mit separates type validation from required enum length range format and reference constraints[39m
-2026-10-01T17:29:00.3483435Z 
-2026-10-01T17:29:00.3485223Z   [30;42;1m PASS [39;49;22m[39m Packages\customfields\tests\Unit\AttributesArchitectureGateTest[39m
-2026-10-01T17:29:00.3520332Z   [32;1m✓[39;22m[90m [39m[90mit passes the package architecture ratchet on the current source t[39m[90m…[39m [90m22.29s[39m  
-2026-10-01T17:29:00.3551960Z   [32;1m✓[39;22m[90m [39m[90mit rejects each planted architecture violation for its own reason w[39m[90m…[39m [90m0.05s[39m  
-2026-10-01T17:29:00.3582896Z   [32;1m✓[39;22m[90m [39m[90mit rejects each planted architecture violation for its own reason w[39m[90m…[39m [90m0.06s[39m  
-2026-10-01T17:29:00.3614130Z   [32;1m✓[39;22m[90m [39m[90mit rejects each planted architecture violation for its own reason w[39m[90m…[39m [90m0.06s[39m  
-2026-10-01T17:29:00.3646940Z   [32;1m✓[39;22m[90m [39m[90mit rejects each planted architecture violation for its own reason w[39m[90m…[39m [90m0.09s[39m  
-2026-10-01T17:29:00.4047309Z 
-2026-10-01T17:29:00.4049887Z   [30;42;1m PASS [39;49;22m[39m CoreX\CustomFields\Tests\Unit\AttributesServiceProviderTest[39m
-2026-10-01T17:29:00.4085916Z   [32;1m✓[39;22m[90m [39m[90mit resolves a static catalogue without modules[39m[90m                      [39m [90m0.04s[39m  
-2026-10-01T17:29:00.4118693Z   [32;1m✓[39;22m[90m [39m[90mit rejects an invalid source order[39m[90m                                  [39m [90m0.01s[39m  
-2026-10-01T17:29:00.4343447Z 
-2026-10-01T17:29:00.4344778Z   [30;42;1m PASS [39;49;22m[39m Packages\customfields\tests\Unit\CompositeFieldCatalogueTest[39m
-2026-10-01T17:29:00.4381151Z   [32;1m✓[39;22m[90m [39m[90mit rejects the same key owned by different identities[39m[90m               [39m [90m0.01s[39m  
-2026-10-01T17:29:00.4389850Z   [32;1m✓[39;22m[90m [39m[90mit rejects a renamed identity without a migrating alias[39m
-2026-10-01T17:29:00.4398224Z   [32;1m✓[39;22m[90m [39m[90mit rejects different types at the same identity and revision[39m
-2026-10-01T17:29:00.4407043Z   [32;1m✓[39;22m[90m [39m[90mit rejects different flags at the same identity and revision[39m
-2026-10-01T17:29:00.4416033Z   [32;1m✓[39;22m[90m [39m[90mit merges byte-identical definitions once[39m
-2026-10-01T17:29:00.4425102Z   [32;1m✓[39;22m[90m [39m[90mit allows only an exact retirement shadow override[39m
-2026-10-01T17:29:00.4433751Z   [32;1m✓[39;22m[90m [39m[90mit uses a migrating alias to accept a newer renamed revision[39m
-2026-10-01T17:29:00.4470878Z   [32;1m✓[39;22m[90m [39m[90mit fails closed and evicts a malformed cached snapshot[39m[90m              [39m [90m0.01s[39m  
-2026-10-01T17:29:00.4474093Z   [32;1m✓[39;22m[90m [39m[90mit does not reuse a snapshot after the source fingerprint changes[39m
-2026-10-01T17:29:00.4482760Z   [32;1m✓[39;22m[90m [39m[90mit falls back to the authoritative source when cache access fails[39m
-2026-10-01T17:29:00.4648001Z 
-2026-10-01T17:29:00.4649834Z   [30;42;1m PASS [39;49;22m[39m Packages\customfields\tests\Unit\DefinitionEvolutionTest[39m
-2026-10-01T17:29:00.4691857Z   [32;1m✓[39;22m[90m [39m[90mit enforces the closed attribute lifecycle graph with dataset "draf[39m[90m…[39m [90m0.02s[39m  
-2026-10-01T17:29:00.4693743Z   [32;1m✓[39;22m[90m [39m[90mit enforces the closed attribute lifecycle graph with dataset "active to migrating"[39m
-2026-10-01T17:29:00.4701118Z   [32;1m✓[39;22m[90m [39m[90mit enforces the closed attribute lifecycle graph with dataset "deprecated to active"[39m
-2026-10-01T17:29:00.4710200Z   [32;1m✓[39;22m[90m [39m[90mit enforces the closed attribute lifecycle graph with dataset "migrating to deprecated"[39m
-2026-10-01T17:29:00.4718649Z   [32;1m✓[39;22m[90m [39m[90mit enforces the closed attribute lifecycle graph with dataset "active cannot retire directly"[39m
-2026-10-01T17:29:00.4727027Z   [32;1m✓[39;22m[90m [39m[90mit enforces the closed attribute lifecycle graph with dataset "migrating cannot retire"[39m
-2026-10-01T17:29:00.4735557Z   [32;1m✓[39;22m[90m [39m[90mit enforces the closed attribute lifecycle graph with dataset "retired is terminal"[39m
-2026-10-01T17:29:00.4743698Z   [32;1m✓[39;22m[90m [39m[90mit builds expand switch and contract revisions with the required paths[39m
-2026-10-01T17:29:00.4752112Z   [32;1m✓[39;22m[90m [39m[90mit blocks type changes without a transformer and switch or contract without proof[39m
-2026-10-01T17:29:00.4760079Z   [32;1m✓[39;22m[90m [39m[90mit makes both rollback points executable[39m
-2026-10-01T17:29:00.4768090Z   [32;1m✓[39;22m[90m [39m[90mit restores a deprecated source lifecycle when aborting before switch[39m
-2026-10-01T17:29:00.4776456Z   [32;1m✓[39;22m[90m [39m[90mit checks transformer determinism and supports reversible values[39m
-2026-10-01T17:29:00.4863761Z 
-2026-10-01T17:29:00.4865668Z   [30;42;1m PASS [39;49;22m[39m Packages\customfields\tests\Unit\ErrorContractTest[39m
-2026-10-01T17:29:00.4901732Z   [32;1m✓[39;22m[90m [39m[90mit describes an unavailable attributes engine without parsing the m[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:29:00.4910227Z   [32;1m✓[39;22m[90m [39m[90mit describes access denial independently of the human message with dataset "scope"[39m
-2026-10-01T17:29:00.4918811Z   [32;1m✓[39;22m[90m [39m[90mit describes access denial independently of the human message with dataset "connection"[39m
-2026-10-01T17:29:00.4927496Z   [32;1m✓[39;22m[90m [39m[90mit describes access denial independently of the human message with dataset "unrelated"[39m
-2026-10-01T17:29:00.4935838Z   [32;1m✓[39;22m[90m [39m[90mit owns schema conflict constructors without message branching[39m
-2026-10-01T17:29:00.4978324Z 
-2026-10-01T17:29:00.4980015Z   [30;42;1m PASS [39;49;22m[39m Packages\customfields\tests\Unit\FieldValueValidatorTest[39m
-2026-10-01T17:29:00.5016062Z   [32;1m✓[39;22m[90m [39m[90mit accepts all supported typed values from the active registry snap[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:29:00.5024667Z   [32;1m✓[39;22m[90m [39m[90mit rejects an unknown field and floating point money values[39m
-2026-10-01T17:29:00.5068485Z 
-2026-10-01T17:29:00.5070026Z   [30;42;1m PASS [39;49;22m[39m Packages\customfields\tests\Unit\ModuleFieldCatalogueTest[39m
-2026-10-01T17:29:00.5107246Z   [32;1m✓[39;22m[90m [39m[90mit projects active compiled entity fields without creating another[39m[90m… [39m [90m0.01s[39m  
-2026-10-01T17:29:00.5149186Z 
-2026-10-01T17:29:00.5150357Z   [30;42;1m PASS [39;49;22m[39m Packages\customfields\tests\Unit\StaticFieldCatalogueTest[39m
-2026-10-01T17:29:00.5186498Z   [32;1m✓[39;22m[90m [39m[90mit returns an empty snapshot for an entity without static definitio[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:29:00.5194795Z   [32;1m✓[39;22m[90m [39m[90mit projects configured static definitions[39m
-2026-10-01T17:29:00.5228251Z 
-2026-10-01T17:29:00.5229767Z   [30;42;1m PASS [39;49;22m[39m Packages\customfields\tests\Unit\SupportBoundaryTest[39m
-2026-10-01T17:29:00.5265104Z   [32;1m✓[39;22m[90m [39m[90mit rejects malformed immutable boundary values[39m[90m                      [39m [90m0.01s[39m  
-2026-10-01T17:29:00.5350908Z 
-2026-10-01T17:29:00.5352625Z   [30;42;1m PASS [39;49;22m[39m Packages\customfields\tests\Unit\SupportTest[39m
-2026-10-01T17:29:00.5388076Z   [32;1m✓[39;22m[90m [39m[90mit keeps field selections bounded and unique[39m[90m                        [39m [90m0.01s[39m  
-2026-10-01T17:29:00.5396546Z   [32;1m✓[39;22m[90m [39m[90mit keeps record selections bounded and ordered[39m
-2026-10-01T17:29:00.5404781Z   [32;1m✓[39;22m[90m [39m[90mit accepts only canonical schema-bound attribute data[39m
-2026-10-01T17:29:00.5413276Z   [32;1m✓[39;22m[90m [39m[90mit rejects unapproved or oversized schema-change inputs[39m
-2026-10-01T17:29:00.5421618Z   [32;1m✓[39;22m[90m [39m[90mit fails closed while no qualified engine is bound[39m
-2026-10-01T17:29:00.5429878Z   [32;1m✓[39;22m[90m [39m[90mit compiles only structural allowlisted filters[39m
-2026-10-01T17:29:00.5468407Z 
-2026-10-01T17:29:00.5470108Z   [30;42;1m PASS [39;49;22m[39m Packages\customfields\tests\Unit\UnavailableAttributesTest[39m
-2026-10-01T17:29:00.5506179Z   [32;1m✓[39;22m[90m [39m[90mit fails closed consistently when an application has not enabled at[39m[90m…[39m [90m0.01s[39m  
-2026-10-01T17:29:00.5514389Z 
-2026-10-01T17:29:00.5516297Z   [90mTests:[39m    [32;1m70 passed[39;22m[90m (243 assertions)[39m
-2026-10-01T17:29:00.5517890Z   [90mDuration:[39m [39m23.11s[39m
-2026-10-01T17:29:00.5518449Z 
+2026-10-01T17:28:37.6149636Z
+2026-10-01T17:28:37.6160980Z    PASS  Packages\customfields\tests\Unit\AttributeDefinitionTest
+2026-10-01T17:28:37.6206325Z   ✓ it rejects a new id that is not UUIDv7                               0.01s
+2026-10-01T17:28:37.6238477Z   ✓ it rejects duplicate keys and invalid lifecycle transitions          0.01s
+2026-10-01T17:28:37.6247280Z   ✓ it keeps a stable hash and the pinned id across a key rename
+2026-10-01T17:28:37.6255600Z   ✓ it builds the same legacy id for the same entity and key
+2026-10-01T17:28:37.6354933Z
+2026-10-01T17:28:37.6356293Z    PASS  Packages\customfields\tests\Unit\AttributeMessageTranslatorTest
+2026-10-01T17:28:37.6389371Z   ✓ it translates a mutation into the declared metadata-only contract    0.02s
+2026-10-01T17:28:37.6398339Z   ✓ it declares one additive v1 integration contract
+2026-10-01T17:28:37.6406382Z   ✓ it rejects a registry collision
+2026-10-01T17:28:37.6414627Z   ✓ it has no search dependency in the integration boundary
+2026-10-01T17:28:37.6583111Z
+2026-10-01T17:28:37.6584720Z    PASS  Packages\customfields\tests\Unit\AttributeStoreResolverTest
+2026-10-01T17:28:37.6618091Z   ✓ it rejects an entity map that is not jsonb or eav                    0.01s
+2026-10-01T17:28:37.6626963Z   ✓ it rejects a field-level engine declaration before the catalogue is bound
+2026-10-01T17:28:37.6635357Z   ✓ it keeps one engine per entity and restores mixed loadMany order
+2026-10-01T17:28:37.7726907Z
+2026-10-01T17:28:37.7729085Z    PASS  CoreX\CustomFields\Tests\Unit\AttributeTablesTest
+2026-10-01T17:28:37.7763979Z   ✓ it accepts the shipped default table names                           0.08s
+2026-10-01T17:28:37.7796694Z   ✓ it rejects an invalid table identifier at construction time          0.01s
+2026-10-01T17:28:37.7829447Z   ✓ it rejects duplicate configured table names                          0.01s
+2026-10-01T17:28:37.7861655Z   ✓ it rejects invalid table names loaded from provider configuration    0.01s
+2026-10-01T17:28:37.8012280Z
+2026-10-01T17:28:37.8013587Z    PASS  Packages\customfields\tests\Unit\AttributeWriteGuardTest
+2026-10-01T17:28:37.8056136Z   ✓ it runs the four authority layers in their fixed order with an opaq… 0.02s
+2026-10-01T17:28:37.8062144Z   ✓ it keeps field absence and hidden-field denial externally indistinguishable
+2026-10-01T17:28:37.8065077Z   ✓ it reports every authority layer with a distinct value-free reason with dataset "subject ownership"
+2026-10-01T17:28:37.8073336Z   ✓ it reports every authority layer with a distinct value-free reason with dataset "field visibility"
+2026-10-01T17:28:37.8082161Z   ✓ it reports every authority layer with a distinct value-free reason with dataset "field write"
+2026-10-01T17:28:37.8090471Z   ✓ it reports every authority layer with a distinct value-free reason with dataset "operation mutation"
+2026-10-01T17:28:37.8098678Z   ✓ it requires a current schema hash for stale or evolving definitions
+2026-10-01T17:28:37.8107182Z   ✓ it separates type validation from required enum length range format and reference constraints
+2026-10-01T17:29:00.3483435Z
+2026-10-01T17:29:00.3485223Z    PASS  Packages\customfields\tests\Unit\AttributesArchitectureGateTest
+2026-10-01T17:29:00.3520332Z   ✓ it passes the package architecture ratchet on the current source t… 22.29s
+2026-10-01T17:29:00.3551960Z   ✓ it rejects each planted architecture violation for its own reason w… 0.05s
+2026-10-01T17:29:00.3582896Z   ✓ it rejects each planted architecture violation for its own reason w… 0.06s
+2026-10-01T17:29:00.3614130Z   ✓ it rejects each planted architecture violation for its own reason w… 0.06s
+2026-10-01T17:29:00.3646940Z   ✓ it rejects each planted architecture violation for its own reason w… 0.09s
+2026-10-01T17:29:00.4047309Z
+2026-10-01T17:29:00.4049887Z    PASS  CoreX\CustomFields\Tests\Unit\AttributesServiceProviderTest
+2026-10-01T17:29:00.4085916Z   ✓ it resolves a static catalogue without modules                       0.04s
+2026-10-01T17:29:00.4118693Z   ✓ it rejects an invalid source order                                   0.01s
+2026-10-01T17:29:00.4343447Z
+2026-10-01T17:29:00.4344778Z    PASS  Packages\customfields\tests\Unit\CompositeFieldCatalogueTest
+2026-10-01T17:29:00.4381151Z   ✓ it rejects the same key owned by different identities                0.01s
+2026-10-01T17:29:00.4389850Z   ✓ it rejects a renamed identity without a migrating alias
+2026-10-01T17:29:00.4398224Z   ✓ it rejects different types at the same identity and revision
+2026-10-01T17:29:00.4407043Z   ✓ it rejects different flags at the same identity and revision
+2026-10-01T17:29:00.4416033Z   ✓ it merges byte-identical definitions once
+2026-10-01T17:29:00.4425102Z   ✓ it allows only an exact retirement shadow override
+2026-10-01T17:29:00.4433751Z   ✓ it uses a migrating alias to accept a newer renamed revision
+2026-10-01T17:29:00.4470878Z   ✓ it fails closed and evicts a malformed cached snapshot               0.01s
+2026-10-01T17:29:00.4474093Z   ✓ it does not reuse a snapshot after the source fingerprint changes
+2026-10-01T17:29:00.4482760Z   ✓ it falls back to the authoritative source when cache access fails
+2026-10-01T17:29:00.4648001Z
+2026-10-01T17:29:00.4649834Z    PASS  Packages\customfields\tests\Unit\DefinitionEvolutionTest
+2026-10-01T17:29:00.4691857Z   ✓ it enforces the closed attribute lifecycle graph with dataset "draf… 0.02s
+2026-10-01T17:29:00.4693743Z   ✓ it enforces the closed attribute lifecycle graph with dataset "active to migrating"
+2026-10-01T17:29:00.4701118Z   ✓ it enforces the closed attribute lifecycle graph with dataset "deprecated to active"
+2026-10-01T17:29:00.4710200Z   ✓ it enforces the closed attribute lifecycle graph with dataset "migrating to deprecated"
+2026-10-01T17:29:00.4718649Z   ✓ it enforces the closed attribute lifecycle graph with dataset "active cannot retire directly"
+2026-10-01T17:29:00.4727027Z   ✓ it enforces the closed attribute lifecycle graph with dataset "migrating cannot retire"
+2026-10-01T17:29:00.4735557Z   ✓ it enforces the closed attribute lifecycle graph with dataset "retired is terminal"
+2026-10-01T17:29:00.4743698Z   ✓ it builds expand switch and contract revisions with the required paths
+2026-10-01T17:29:00.4752112Z   ✓ it blocks type changes without a transformer and switch or contract without proof
+2026-10-01T17:29:00.4760079Z   ✓ it makes both rollback points executable
+2026-10-01T17:29:00.4768090Z   ✓ it restores a deprecated source lifecycle when aborting before switch
+2026-10-01T17:29:00.4776456Z   ✓ it checks transformer determinism and supports reversible values
+2026-10-01T17:29:00.4863761Z
+2026-10-01T17:29:00.4865668Z    PASS  Packages\customfields\tests\Unit\ErrorContractTest
+2026-10-01T17:29:00.4901732Z   ✓ it describes an unavailable attributes engine without parsing the m… 0.01s
+2026-10-01T17:29:00.4910227Z   ✓ it describes access denial independently of the human message with dataset "scope"
+2026-10-01T17:29:00.4918811Z   ✓ it describes access denial independently of the human message with dataset "connection"
+2026-10-01T17:29:00.4927496Z   ✓ it describes access denial independently of the human message with dataset "unrelated"
+2026-10-01T17:29:00.4935838Z   ✓ it owns schema conflict constructors without message branching
+2026-10-01T17:29:00.4978324Z
+2026-10-01T17:29:00.4980015Z    PASS  Packages\customfields\tests\Unit\FieldValueValidatorTest
+2026-10-01T17:29:00.5016062Z   ✓ it accepts all supported typed values from the active registry snap… 0.01s
+2026-10-01T17:29:00.5024667Z   ✓ it rejects an unknown field and floating point money values
+2026-10-01T17:29:00.5068485Z
+2026-10-01T17:29:00.5070026Z    PASS  Packages\customfields\tests\Unit\ModuleFieldCatalogueTest
+2026-10-01T17:29:00.5107246Z   ✓ it projects active compiled entity fields without creating another…  0.01s
+2026-10-01T17:29:00.5149186Z
+2026-10-01T17:29:00.5150357Z    PASS  Packages\customfields\tests\Unit\StaticFieldCatalogueTest
+2026-10-01T17:29:00.5186498Z   ✓ it returns an empty snapshot for an entity without static definitio… 0.01s
+2026-10-01T17:29:00.5194795Z   ✓ it projects configured static definitions
+2026-10-01T17:29:00.5228251Z
+2026-10-01T17:29:00.5229767Z    PASS  Packages\customfields\tests\Unit\SupportBoundaryTest
+2026-10-01T17:29:00.5265104Z   ✓ it rejects malformed immutable boundary values                       0.01s
+2026-10-01T17:29:00.5350908Z
+2026-10-01T17:29:00.5352625Z    PASS  Packages\customfields\tests\Unit\SupportTest
+2026-10-01T17:29:00.5388076Z   ✓ it keeps field selections bounded and unique                         0.01s
+2026-10-01T17:29:00.5396546Z   ✓ it keeps record selections bounded and ordered
+2026-10-01T17:29:00.5404781Z   ✓ it accepts only canonical schema-bound attribute data
+2026-10-01T17:29:00.5413276Z   ✓ it rejects unapproved or oversized schema-change inputs
+2026-10-01T17:29:00.5421618Z   ✓ it fails closed while no qualified engine is bound
+2026-10-01T17:29:00.5429878Z   ✓ it compiles only structural allowlisted filters
+2026-10-01T17:29:00.5468407Z
+2026-10-01T17:29:00.5470108Z    PASS  Packages\customfields\tests\Unit\UnavailableAttributesTest
+2026-10-01T17:29:00.5506179Z   ✓ it fails closed consistently when an application has not enabled at… 0.01s
+2026-10-01T17:29:00.5514389Z
+2026-10-01T17:29:00.5516297Z   Tests:    70 passed (243 assertions)
+2026-10-01T17:29:00.5517890Z   Duration: 23.11s
+2026-10-01T17:29:00.5518449Z
 2026-10-01T17:29:00.5855257Z ==> packages/intl
-2026-10-01T17:29:01.0300542Z 
-2026-10-01T17:29:01.0302378Z   [30;42;1m PASS [39;49;22m[39m Packages\intl\tests\Address\AddressSuggestTest[39m
-2026-10-01T17:29:01.0363563Z   [32;1m✓[39;22m[90m [39m[90mit OPT-01 keeps offline base valid when address provider is absent[39m[90m  [39m [90m0.01s[39m  
-2026-10-01T17:29:01.0371432Z   [32;1m✓[39;22m[90m [39m[90mit OPT-04 rejects invalid query bounds and enforces response limits[39m
-2026-10-01T17:29:01.0379833Z   [32;1m✓[39;22m[90m [39m[90mit OPT-05 swaps two installed address drivers through the same port[39m
-2026-10-01T17:29:01.0387748Z   [32;1m✓[39;22m[90m [39m[90mit OPT-04 exposes distinct unavailable and rateLimited statuses[39m
-2026-10-01T17:29:01.0396502Z   [32;1m✓[39;22m[90m [39m[90mit OPT-07 address port surface stays read-only suggest without mutation hooks[39m
-2026-10-01T17:29:01.1538140Z 
-2026-10-01T17:29:01.1540266Z   [30;42;1m PASS [39;49;22m[39m CoreX\Intl\Tests\ConfigReportSectionTest[39m
-2026-10-01T17:29:01.1552368Z   [32;1m✓[39;22m[90m [39m[90msection registers in report order and redacts its secrets[39m[90m           [39m [90m0.12s[39m  
-2026-10-01T17:29:01.4909558Z 
-2026-10-01T17:29:01.4911524Z   [30;42;1m PASS [39;49;22m[39m Packages\intl\tests\Locale\LocaleResolutionTest[39m
-2026-10-01T17:29:01.4923733Z   [32;1m✓[39;22m[90m [39m[90mit LOC-01 validates supported allowlist and rejects invalid tags[39m[90m    [39m [90m0.05s[39m  
-2026-10-01T17:29:01.4935584Z   [32;1m✓[39;22m[90m [39m[90mit LOC-02 resolves user settings app and fallback chain explicitly[39m[90m  [39m [90m0.03s[39m  
-2026-10-01T17:29:01.4947637Z   [32;1m✓[39;22m[90m [39m[90mit LOC-03 restores request locale scope without global leakage[39m[90m      [39m [90m0.03s[39m  
-2026-10-01T17:29:01.4959689Z   [32;1m✓[39;22m[90m [39m[90mit LOC-04 builds deterministic policy hash without remote calls[39m[90m     [39m [90m0.03s[39m  
-2026-10-01T17:29:01.4971207Z   [32;1m✓[39;22m[90m [39m[90mit LOC-05 reads translations with explicit fallback order[39m[90m           [39m [90m0.03s[39m  
-2026-10-01T17:29:01.4983011Z   [32;1m✓[39;22m[90m [39m[90mit LOC-06 rejects undeclared localized field without schema hash[39m[90m    [39m [90m0.03s[39m  
-2026-10-01T17:29:01.4994595Z   [32;1m✓[39;22m[90m [39m[90mit LOC-07 uses existing translator adapter without new storage[39m[90m      [39m [90m0.03s[39m  
-2026-10-01T17:29:01.5006304Z   [32;1m✓[39;22m[90m [39m[90mit LOC-08 boots with plain formatting fallback when ICU path unavai[39m[90m…[39m [90m0.04s[39m  
-2026-10-01T17:29:01.5018149Z   [32;1m✓[39;22m[90m [39m[90mit LOC-09 reads localized reference metadata from two providers det[39m[90m…[39m [90m0.04s[39m  
-2026-10-01T17:29:01.8204393Z 
-2026-10-01T17:29:01.8206225Z   [30;42;1m PASS [39;49;22m[39m Packages\intl\tests\Money\MoneyRatesTest[39m
-2026-10-01T17:29:01.8218346Z   [32;1m✓[39;22m[90m [39m[90mit FX-01 returns pinned currency exponents and rejects unknown code[39m[90m…[39m [90m0.04s[39m  
-2026-10-01T17:29:01.8230898Z   [32;1m✓[39;22m[90m [39m[90mit FX-02 stores positive canonical decimal rates with base to quote[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:29:01.8243584Z   [32;1m✓[39;22m[90m [39m[90mit FX-03 imports immutable snapshots idempotently and detects confl[39m[90m…[39m [90m0.04s[39m  
-2026-10-01T17:29:01.8254983Z   [32;1m✓[39;22m[90m [39m[90mit FX-05 distinguishes missing and stale lookup results[39m[90m             [39m [90m0.04s[39m  
-2026-10-01T17:29:01.8266846Z   [32;1m✓[39;22m[90m [39m[90mit FX-06 converts with explicit rounding and deterministic receipts[39m[90m [39m [90m0.03s[39m  
-2026-10-01T17:29:01.8278728Z   [32;1m✓[39;22m[90m [39m[90mit FX-07 preserves same-currency identity without provider lookup[39m[90m   [39m [90m0.03s[39m  
-2026-10-01T17:29:01.8290654Z   [32;1m✓[39;22m[90m [39m[90mit FX-08 converts negative zero and large signed amounts exactly[39m[90m    [39m [90m0.03s[39m  
-2026-10-01T17:29:01.8302252Z   [32;1m✓[39;22m[90m [39m[90mit FX-09 formats with plain exact ISO fallback[39m[90m                      [39m [90m0.03s[39m  
-2026-10-01T17:29:01.8314303Z   [32;1m✓[39;22m[90m [39m[90mit FX-10 keeps old snapshots addressable after corrected import rev[39m[90m…[39m [90m0.04s[39m  
-2026-10-01T17:29:02.1773628Z 
-2026-10-01T17:29:02.1775507Z   [30;42;1m PASS [39;49;22m[39m Packages\intl\tests\Reference\GeographyTest[39m
-2026-10-01T17:29:02.1787281Z   [32;1m✓[39;22m[90m [39m[90mit GEO-01 queries equivalent coverage from two fixture providers[39m[90m    [39m [90m0.05s[39m  
-2026-10-01T17:29:02.1799785Z   [32;1m✓[39;22m[90m [39m[90mit GEO-02 exposes manifest provenance and hashes[39m[90m                    [39m [90m0.03s[39m  
-2026-10-01T17:29:02.1811873Z   [32;1m✓[39;22m[90m [39m[90mit GEO-03 rejects malformed fixture publication and keeps active sn[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:29:02.1823734Z   [32;1m✓[39;22m[90m [39m[90mit GEO-05 pins keyset cursor to snapshot and query hash[39m[90m             [39m [90m0.03s[39m  
-2026-10-01T17:29:02.1835651Z   [32;1m✓[39;22m[90m [39m[90mit GEO-06 normalizes bounded UTF-8 queries without merging ambiguou[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:29:02.1847563Z   [32;1m✓[39;22m[90m [39m[90mit GEO-07 returns multiple timezone candidates for countries withou[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:29:02.1859632Z   [32;1m✓[39;22m[90m [39m[90mit GEO-09 keeps read-only lookup scoped without public write API on[39m[90m…[39m [90m0.03s[39m  
-2026-10-01T17:29:02.1871234Z   [32;1m✓[39;22m[90m [39m[90mit GEO-10 supports exact and prefix modes on sqlite fixtures[39m[90m        [39m [90m0.03s[39m  
-2026-10-01T17:29:02.1883222Z   [32;1m✓[39;22m[90m [39m[90mit GEO-04 publishes fixture dataset through SQL importer[39m[90m            [39m [90m0.04s[39m  
-2026-10-01T17:29:02.1894853Z   [32;1m✓[39;22m[90m [39m[90mit GEO-05 rejects expired snapshot pins[39m[90m                             [39m [90m0.03s[39m  
-2026-10-01T17:29:02.1902058Z 
-2026-10-01T17:29:02.1903946Z   [90mTests:[39m    [32;1m34 passed[39;22m[90m (103 assertions)[39m
-2026-10-01T17:29:02.1905644Z   [90mDuration:[39m [39m1.29s[39m
-2026-10-01T17:29:02.1906267Z 
+2026-10-01T17:29:01.0300542Z
+2026-10-01T17:29:01.0302378Z    PASS  Packages\intl\tests\Address\AddressSuggestTest
+2026-10-01T17:29:01.0363563Z   ✓ it OPT-01 keeps offline base valid when address provider is absent   0.01s
+2026-10-01T17:29:01.0371432Z   ✓ it OPT-04 rejects invalid query bounds and enforces response limits
+2026-10-01T17:29:01.0379833Z   ✓ it OPT-05 swaps two installed address drivers through the same port
+2026-10-01T17:29:01.0387748Z   ✓ it OPT-04 exposes distinct unavailable and rateLimited statuses
+2026-10-01T17:29:01.0396502Z   ✓ it OPT-07 address port surface stays read-only suggest without mutation hooks
+2026-10-01T17:29:01.1538140Z
+2026-10-01T17:29:01.1540266Z    PASS  CoreX\Intl\Tests\ConfigReportSectionTest
+2026-10-01T17:29:01.1552368Z   ✓ section registers in report order and redacts its secrets            0.12s
+2026-10-01T17:29:01.4909558Z
+2026-10-01T17:29:01.4911524Z    PASS  Packages\intl\tests\Locale\LocaleResolutionTest
+2026-10-01T17:29:01.4923733Z   ✓ it LOC-01 validates supported allowlist and rejects invalid tags     0.05s
+2026-10-01T17:29:01.4935584Z   ✓ it LOC-02 resolves user settings app and fallback chain explicitly   0.03s
+2026-10-01T17:29:01.4947637Z   ✓ it LOC-03 restores request locale scope without global leakage       0.03s
+2026-10-01T17:29:01.4959689Z   ✓ it LOC-04 builds deterministic policy hash without remote calls      0.03s
+2026-10-01T17:29:01.4971207Z   ✓ it LOC-05 reads translations with explicit fallback order            0.03s
+2026-10-01T17:29:01.4983011Z   ✓ it LOC-06 rejects undeclared localized field without schema hash     0.03s
+2026-10-01T17:29:01.4994595Z   ✓ it LOC-07 uses existing translator adapter without new storage       0.03s
+2026-10-01T17:29:01.5006304Z   ✓ it LOC-08 boots with plain formatting fallback when ICU path unavai… 0.04s
+2026-10-01T17:29:01.5018149Z   ✓ it LOC-09 reads localized reference metadata from two providers det… 0.04s
+2026-10-01T17:29:01.8204393Z
+2026-10-01T17:29:01.8206225Z    PASS  Packages\intl\tests\Money\MoneyRatesTest
+2026-10-01T17:29:01.8218346Z   ✓ it FX-01 returns pinned currency exponents and rejects unknown code… 0.04s
+2026-10-01T17:29:01.8230898Z   ✓ it FX-02 stores positive canonical decimal rates with base to quote… 0.03s
+2026-10-01T17:29:01.8243584Z   ✓ it FX-03 imports immutable snapshots idempotently and detects confl… 0.04s
+2026-10-01T17:29:01.8254983Z   ✓ it FX-05 distinguishes missing and stale lookup results              0.04s
+2026-10-01T17:29:01.8266846Z   ✓ it FX-06 converts with explicit rounding and deterministic receipts  0.03s
+2026-10-01T17:29:01.8278728Z   ✓ it FX-07 preserves same-currency identity without provider lookup    0.03s
+2026-10-01T17:29:01.8290654Z   ✓ it FX-08 converts negative zero and large signed amounts exactly     0.03s
+2026-10-01T17:29:01.8302252Z   ✓ it FX-09 formats with plain exact ISO fallback                       0.03s
+2026-10-01T17:29:01.8314303Z   ✓ it FX-10 keeps old snapshots addressable after corrected import rev… 0.04s
+2026-10-01T17:29:02.1773628Z
+2026-10-01T17:29:02.1775507Z    PASS  Packages\intl\tests\Reference\GeographyTest
+2026-10-01T17:29:02.1787281Z   ✓ it GEO-01 queries equivalent coverage from two fixture providers     0.05s
+2026-10-01T17:29:02.1799785Z   ✓ it GEO-02 exposes manifest provenance and hashes                     0.03s
+2026-10-01T17:29:02.1811873Z   ✓ it GEO-03 rejects malformed fixture publication and keeps active sn… 0.03s
+2026-10-01T17:29:02.1823734Z   ✓ it GEO-05 pins keyset cursor to snapshot and query hash              0.03s
+2026-10-01T17:29:02.1835651Z   ✓ it GEO-06 normalizes bounded UTF-8 queries without merging ambiguou… 0.03s
+2026-10-01T17:29:02.1847563Z   ✓ it GEO-07 returns multiple timezone candidates for countries withou… 0.03s
+2026-10-01T17:29:02.1859632Z   ✓ it GEO-09 keeps read-only lookup scoped without public write API on… 0.03s
+2026-10-01T17:29:02.1871234Z   ✓ it GEO-10 supports exact and prefix modes on sqlite fixtures         0.03s
+2026-10-01T17:29:02.1883222Z   ✓ it GEO-04 publishes fixture dataset through SQL importer             0.04s
+2026-10-01T17:29:02.1894853Z   ✓ it GEO-05 rejects expired snapshot pins                              0.03s
+2026-10-01T17:29:02.1902058Z
+2026-10-01T17:29:02.1903946Z   Tests:    34 passed (103 assertions)
+2026-10-01T17:29:02.1905644Z   Duration: 1.29s
+2026-10-01T17:29:02.1906267Z
 2026-10-01T17:29:02.2227929Z ==> packages/media
-2026-10-01T17:29:02.5909614Z 
-2026-10-01T17:29:02.5911011Z   [44;1m INFO [49;22m Cannot open bootstrap script "/home/runner/work/corex/corex/packages/media/vendor/autoload.php".
-2026-10-01T17:29:02.5929477Z 
+2026-10-01T17:29:02.5909614Z
+2026-10-01T17:29:02.5911011Z    INFO  Cannot open bootstrap script "/home/runner/work/corex/corex/packages/media/vendor/autoload.php".
+2026-10-01T17:29:02.5929477Z
 2026-10-01T17:29:02.5995808Z Script pest --exclude-group=pg handling the test event returned with error code 2
 2026-10-01T17:29:02.6202980Z Script for p in packages/access packages/core packages/custom-fields packages/intl packages/media packages/notifications packages/operations packages/panels packages/recurrence packages/search packages/search-intl packages/search-meilisearch packages/tasks packages/tasks-workflow packages/tenancy packages/tools packages/transfer packages/wakeup packages/webhooks packages/workflow products/flex-crm; do echo "==> $p" && composer --working-dir="$p" test || exit 1; done handling the test:packages event returned with error code 1
 2026-10-01T17:29:02.6414851Z ##[error]Process completed with exit code 1.

@@ -1,3 +1,7 @@
+## Unreleased — CI ownership and test isolation repair (P10.2)
+
+- Webhook retention delegates inbox deletion to core's public `InboxRetention` API, preserving consumer scoping and delivery tombstones without writing directly to a foreign table.
+
 ## Unreleased — kernel package and API migration
 
 - Breaking (PLAN3.P02–P04, pre-1.0): Extracted webhooks into their own CoreX\Webhooks package and provider; subscription/delivery/transport/signing ports exchange WebhookSubscription, WebhookDelivery and signed-header DTOs. WebhookOptions and package-owned errors define the supported configuration/failure surface.

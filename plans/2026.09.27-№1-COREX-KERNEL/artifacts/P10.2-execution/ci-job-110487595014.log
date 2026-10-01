@@ -153,32 +153,32 @@
 2026-10-01T17:10:07.9541875Z   github-token: ***
 2026-10-01T17:10:07.9542089Z ##[endgroup]
 2026-10-01T17:10:07.9979557Z [command]/usr/bin/bash /home/runner/work/_actions/shivammathur/setup-php/f3e473d116dcccaddc5834248c87452386958240/src/scripts/run.sh
-2026-10-01T17:10:08.0417039Z 
-2026-10-01T17:10:08.0418327Z [90;1m==> [0m[37;1mSetup PHP[0m
-2026-10-01T17:10:15.8060499Z [32;1m✓ [0m[34;1mPHP [0m[90;1mInstalled PHP 8.4.26[0m
-2026-10-01T17:10:15.8061601Z 
-2026-10-01T17:10:15.8062139Z [90;1m==> [0m[37;1mSetup Extensions[0m
-2026-10-01T17:10:15.8601367Z [32;1m✓ [0m[34;1mmbstring [0m[90;1mEnabled[0m
-2026-10-01T17:10:15.8634123Z [32;1m✓ [0m[34;1mpdo [0m[90;1mEnabled[0m
-2026-10-01T17:10:15.8668564Z [32;1m✓ [0m[34;1msqlite3 [0m[90;1mEnabled[0m
-2026-10-01T17:10:15.8692938Z [32;1m✓ [0m[34;1mpdo_sqlite [0m[90;1mEnabled[0m
-2026-10-01T17:10:15.8709553Z [32;1m✓ [0m[34;1mpdo_pgsql [0m[90;1mEnabled[0m
-2026-10-01T17:10:15.8743182Z [32;1m✓ [0m[34;1mbcmath [0m[90;1mEnabled[0m
-2026-10-01T17:10:15.8778185Z [32;1m✓ [0m[34;1mcurl [0m[90;1mEnabled[0m
-2026-10-01T17:10:15.8807292Z [32;1m✓ [0m[34;1mintl [0m[90;1mEnabled[0m
-2026-10-01T17:10:15.8841067Z [32;1m✓ [0m[34;1mzip [0m[90;1mEnabled[0m
-2026-10-01T17:10:15.8876773Z [32;1m✓ [0m[34;1mgd [0m[90;1mEnabled[0m
-2026-10-01T17:10:15.8877529Z 
-2026-10-01T17:10:15.8878059Z [90;1m==> [0m[37;1mSetup Tools[0m
-2026-10-01T17:10:16.2278614Z [32;1m✓ [0m[34;1mcomposer [0m[90;1mAdded composer 2.10.3[0m
-2026-10-01T17:10:16.2293066Z 
-2026-10-01T17:10:16.2300177Z [90;1m==> [0m[37;1mSetup Coverage[0m
-2026-10-01T17:10:16.4824033Z [32;1m✓ [0m[34;1mnone [0m[90;1mDisabled Xdebug and PCOV[0m
-2026-10-01T17:10:16.4827555Z 
-2026-10-01T17:10:16.4835067Z [90;1m==> [0m[37;1mSponsor setup-php[0m
-2026-10-01T17:10:16.4836444Z [32;1m✓ [0m[34;1msetup-php [0m[90;1mhttps://setup-php.com/sponsor[0m
+2026-10-01T17:10:08.0417039Z
+2026-10-01T17:10:08.0418327Z ==> Setup PHP
+2026-10-01T17:10:15.8060499Z ✓ PHP Installed PHP 8.4.26
+2026-10-01T17:10:15.8061601Z
+2026-10-01T17:10:15.8062139Z ==> Setup Extensions
+2026-10-01T17:10:15.8601367Z ✓ mbstring Enabled
+2026-10-01T17:10:15.8634123Z ✓ pdo Enabled
+2026-10-01T17:10:15.8668564Z ✓ sqlite3 Enabled
+2026-10-01T17:10:15.8692938Z ✓ pdo_sqlite Enabled
+2026-10-01T17:10:15.8709553Z ✓ pdo_pgsql Enabled
+2026-10-01T17:10:15.8743182Z ✓ bcmath Enabled
+2026-10-01T17:10:15.8778185Z ✓ curl Enabled
+2026-10-01T17:10:15.8807292Z ✓ intl Enabled
+2026-10-01T17:10:15.8841067Z ✓ zip Enabled
+2026-10-01T17:10:15.8876773Z ✓ gd Enabled
+2026-10-01T17:10:15.8877529Z
+2026-10-01T17:10:15.8878059Z ==> Setup Tools
+2026-10-01T17:10:16.2278614Z ✓ composer Added composer 2.10.3
+2026-10-01T17:10:16.2293066Z
+2026-10-01T17:10:16.2300177Z ==> Setup Coverage
+2026-10-01T17:10:16.4824033Z ✓ none Disabled Xdebug and PCOV
+2026-10-01T17:10:16.4827555Z
+2026-10-01T17:10:16.4835067Z ==> Sponsor setup-php
+2026-10-01T17:10:16.4836444Z ✓ setup-php https://setup-php.com/sponsor
 2026-10-01T17:10:16.5051614Z ##[group]Run python3 scripts/distribution/stage-stancl-providers.py
-2026-10-01T17:10:16.5052549Z [36;1mpython3 scripts/distribution/stage-stancl-providers.py[0m
+2026-10-01T17:10:16.5052549Z python3 scripts/distribution/stage-stancl-providers.py
 2026-10-01T17:10:16.5310353Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:10:16.5310706Z env:
 2026-10-01T17:10:16.5310969Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -187,7 +187,7 @@
 2026-10-01T17:10:16.5311890Z ##[endgroup]
 2026-10-01T17:10:17.1114834Z {"result": "PASS", "repository": "file:///home/runner/work/corex/corex/.composer-provider-staging", "staging": "/home/runner/work/corex/corex/.composer-provider-staging", "registered": ["/home/runner/work/corex/corex", "/home/runner/work/corex/corex/packages/tenancy", "/home/runner/work/corex/corex/packages/access"]}
 2026-10-01T17:10:17.1206484Z ##[group]Run composer update --prefer-dist --no-interaction --no-progress
-2026-10-01T17:10:17.1207055Z [36;1mcomposer update --prefer-dist --no-interaction --no-progress[0m
+2026-10-01T17:10:17.1207055Z composer update --prefer-dist --no-interaction --no-progress
 2026-10-01T17:10:17.1274303Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:10:17.1274851Z env:
 2026-10-01T17:10:17.1275066Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -693,7 +693,7 @@
 2026-10-01T17:10:31.8758122Z > pestphp/pest: ignored
 2026-10-01T17:10:31.8758658Z > phpstan/phpstan-strict-rules: ignored
 2026-10-01T17:10:31.9087580Z ##[group]Run composer audit --locked
-2026-10-01T17:10:31.9087921Z [36;1mcomposer audit --locked[0m
+2026-10-01T17:10:31.9087921Z composer audit --locked
 2026-10-01T17:10:31.9152806Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:10:31.9153067Z env:
 2026-10-01T17:10:31.9153267Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -702,7 +702,7 @@
 2026-10-01T17:10:31.9153976Z ##[endgroup]
 2026-10-01T17:10:32.4246113Z No security vulnerability advisories found.
 2026-10-01T17:10:32.4412017Z ##[group]Run php scripts/ownership-gate.php --strict
-2026-10-01T17:10:32.4413325Z [36;1mphp scripts/ownership-gate.php --strict[0m
+2026-10-01T17:10:32.4413325Z php scripts/ownership-gate.php --strict
 2026-10-01T17:10:32.4506360Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:10:32.4506813Z env:
 2026-10-01T17:10:32.4507168Z   COMPOSER_PROCESS_TIMEOUT: 0
@@ -711,7 +711,7 @@
 2026-10-01T17:10:32.4508429Z ##[endgroup]
 2026-10-01T17:10:32.6738649Z ownership OK: 620 identifiers, 0 baselined
 2026-10-01T17:10:32.6867056Z ##[group]Run php scripts/rename-completeness-gate.php
-2026-10-01T17:10:32.6867511Z [36;1mphp scripts/rename-completeness-gate.php[0m
+2026-10-01T17:10:32.6867511Z php scripts/rename-completeness-gate.php
 2026-10-01T17:10:32.6930655Z shell: /usr/bin/bash -e {0}
 2026-10-01T17:10:32.6930918Z env:
 2026-10-01T17:10:32.6931127Z   COMPOSER_PROCESS_TIMEOUT: 0
