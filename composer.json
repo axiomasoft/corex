@@ -189,7 +189,7 @@
         "contract-guard": "bash scripts/contract-guard.sh",
         "api-contract": "php scripts/check-api-contract.php",
         "bc-check": "bash scripts/bc-check.sh",
-        "test:coverage": "vendor/bin/pest --coverage --min=80",
+        "test:coverage": "bash scripts/run-root-coverage.sh --min=80",
         "lint": "vendor/bin/pint",
         "lint:check": "vendor/bin/pint --test",
         "analyse": "bash scripts/phpstan-packages.sh",
