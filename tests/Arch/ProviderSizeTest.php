@@ -15,7 +15,7 @@ test('provider size gate exits 0 on a clean tree', function (): void {
 
     $joined = implode("\n", $output);
 
-    expect($exitCode)->toBe(0)
+    expect($exitCode)->toBe(0, "gate exit {$exitCode}:\n".implode("\n", $output))
         ->and($joined)->toContain('provider-size-gate: OK')
         ->and($snapshot['ratchet']['packages/tenancy/src/TenancyServiceProvider.php'])->toBe(0)
         ->and($snapshot['ratchet']['packages/core/src/Modules/ModulesServiceProvider.php'])->toBe(0)
@@ -61,7 +61,7 @@ PHP;
 
         $joined = implode("\n", $output);
 
-        expect($exitCode)->toBe(1)
+        expect($exitCode)->toBe(1, "gate exit {$exitCode}:\n".implode("\n", $output))
             ->and($joined)->toContain('packages/core/src/Config/ProviderSizeProbeProvider.php')
             ->and($joined)->toContain('singleton=21')
             ->and($joined)->toContain('total=21')
@@ -110,7 +110,7 @@ PHP;
 
         $joined = implode("\n", $output);
 
-        expect($exitCode)->toBe(0)
+        expect($exitCode)->toBe(0, "gate exit {$exitCode}:\n".implode("\n", $output))
             ->and($joined)->toContain('provider-size-gate: OK')
             ->and($joined)->not->toContain('HelperServiceProvider.php');
     } finally {

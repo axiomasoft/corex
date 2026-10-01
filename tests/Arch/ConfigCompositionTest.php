@@ -14,7 +14,7 @@ test('config composition gate exits 0 on a clean tree', function (): void {
 
     $joined = implode("\n", $output);
 
-    expect($exitCode)->toBe(0)
+    expect($exitCode)->toBe(0, "gate exit {$exitCode}:\n".implode("\n", $output))
         ->and($joined)->toContain('config-composition-gate: OK')
         ->and($joined)->toContain('blocking=true')
         ->and($joined)->toContain('C1 count=0')
@@ -51,7 +51,7 @@ PHP;
 
         $joined = implode("\n", $output);
 
-        expect($exitCode)->toBe(1)
+        expect($exitCode)->toBe(1, "gate exit {$exitCode}:\n".implode("\n", $output))
             ->and($joined)->toContain('ConfigCompositionProbe.php')
             ->and($joined)->toContain('C1');
     } finally {
@@ -95,7 +95,7 @@ PHP;
 
         $joined = implode("\n", $output);
 
-        expect($exitCode)->toBe(1)
+        expect($exitCode)->toBe(1, "gate exit {$exitCode}:\n".implode("\n", $output))
             ->and($joined)->toContain('ConfigCompositionProbe.php')
             ->and($joined)->toContain('C1 count=2');
     } finally {

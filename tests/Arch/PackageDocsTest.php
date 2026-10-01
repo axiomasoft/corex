@@ -43,7 +43,7 @@ test('package docs gate fails a planted missing heading', function (): void {
 
         $joined = implode("\n", $output);
 
-        expect($exitCode)->toBe(1)
+        expect($exitCode)->toBe(1, "gate exit {$exitCode}:\n".implode("\n", $output))
             ->and($joined)->toContain('packages/search-intl/README.md')
             ->and($joined)->toContain('heading=installation')
             ->and($joined)->toContain('producer=P12');
@@ -69,7 +69,7 @@ test('package docs gate fails a planted Internal example', function (): void {
 
         $joined = implode("\n", $output);
 
-        expect($exitCode)->toBe(1)
+        expect($exitCode)->toBe(1, "gate exit {$exitCode}:\n".implode("\n", $output))
             ->and($joined)->toContain('packages/recurrence/README.md')
             ->and($joined)->toContain('CoreX\\Recurrence\\Internal\\HiddenExpander')
             ->and($joined)->toContain('Internal')

@@ -82,7 +82,12 @@ stage_package_vendors() {
     done
   done
 
-  if rg -q 'PHPStan\\' "$work/packages/$dir/src"; then
+  needs_phpstan=0
+  if grep -rqF --include='*.php' 'PHPStan\' "$work/packages/$dir/src"; then
+    needs_phpstan=1
+  fi
+
+  if [[ "$needs_phpstan" == 1 ]]; then
     BC_WORK="$work" bc_php '
 $r=getenv("BC_REPO_ROOT"); $work=getenv("BC_WORK");
 require "$r/vendor/autoload.php";
@@ -110,7 +115,7 @@ foreach(glob("$work/packages/_vendor/*/composer.json")?:[] as $cp){
 
 run_one_package() {
   local dir="$1" pkg_name="$2" stability="$3" work="$4"
-  local base_sha cand_sha roave_exit classified contract_hint=""
+  local base_sha cand_sha roave_exit classified needs_phpstan=0 contract_hint=""
 
   if ! git -C "$REPO_ROOT" cat-file -e "${BC_CHECK_BASE}:packages/${dir}" 2>/dev/null; then
     echo "bc-check: ${pkg_name} (${dir}) |new-package| base missing at ${BC_CHECK_BASE}"
@@ -183,7 +188,7 @@ foreach(glob(getenv("BC_WORK")."/packages/*/composer.json")?:[] as $file){
 
   stage_package_vendors "$dir" "$work"
 
-  BC_WORK="$work" BC_CHECK_TARGET_DIR="$dir" bc_php '
+  BC_WORK="$work" BC_CHECK_TARGET_DIR="$dir" BC_NEEDS_PHPSTAN="$needs_phpstan" bc_php '
 $r=getenv("BC_REPO_ROOT"); $d=getenv("BC_CHECK_TARGET_DIR");
 $archived=getenv("BC_WORK")."/packages/$d/composer.json";
 $pkg=json_decode(file_get_contents(is_file($archived)?$archived:"$r/packages/$d/composer.json"),true);
@@ -236,7 +241,7 @@ if(is_dir($src)){
     }
   }
 }
-if(str_contains($blob??"","PHPStan\\")){$requireDev["phpstan/phpstan"]="@dev";$repos[]=["type"=>"path","url"=>"packages/_vendor/phpstan"]; }
+if(getenv("BC_NEEDS_PHPSTAN")==="1"){$requireDev["phpstan/phpstan"]="@dev";$repos[]=["type"=>"path","url"=>"packages/_vendor/phpstan"]; }
 $root=["name"=>"corex/bc-compare-root","type"=>"project","license"=>"MIT","require"=>$require,"repositories"=>$repos,"autoload"=>[],"minimum-stability"=>"dev","prefer-stable"=>true];
 if($requireDev!==[]){$root["require-dev"]=$requireDev;}
 if(isset($pkg["extra"]["corex"]["public-api"])){$root["extra"]["corex"]["public-api"]=$pkg["extra"]["corex"]["public-api"];}
@@ -280,7 +285,7 @@ foreach(glob(getenv("BC_WORK")."/packages/*/composer.json")?:[] as $file){
 
   stage_package_vendors "$dir" "$work"
 
-  BC_WORK="$work" BC_CHECK_TARGET_DIR="$dir" bc_php '
+  BC_WORK="$work" BC_CHECK_TARGET_DIR="$dir" BC_NEEDS_PHPSTAN="$needs_phpstan" bc_php '
 $r=getenv("BC_REPO_ROOT"); $d=getenv("BC_CHECK_TARGET_DIR");
 $pkg=json_decode(file_get_contents("$r/packages/$d/composer.json"),true);
 $requireDev=[];
@@ -332,7 +337,7 @@ if(is_dir($src)){
     }
   }
 }
-if(str_contains($blob??"","PHPStan\\")){$requireDev["phpstan/phpstan"]="@dev";$repos[]=["type"=>"path","url"=>"packages/_vendor/phpstan"]; }
+if(getenv("BC_NEEDS_PHPSTAN")==="1"){$requireDev["phpstan/phpstan"]="@dev";$repos[]=["type"=>"path","url"=>"packages/_vendor/phpstan"]; }
 $root=["name"=>"corex/bc-compare-root","type"=>"project","license"=>"MIT","require"=>$require,"repositories"=>$repos,"autoload"=>[],"minimum-stability"=>"dev","prefer-stable"=>true];
 if($requireDev!==[]){$root["require-dev"]=$requireDev;}
 if(isset($pkg["extra"]["corex"]["public-api"])){$root["extra"]["corex"]["public-api"]=$pkg["extra"]["corex"]["public-api"];}

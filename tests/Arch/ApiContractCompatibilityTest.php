@@ -20,11 +20,11 @@ test('api contract gate accepts the committed snapshot and additive fixtures', f
         $repoRoot.'/tests/fixtures/api-contract/webhook-allowed-addition',
     );
 
-    expect($committed['exit'])->toBe(0)
+    expect($committed['exit'])->toBe(0, $committed['output'])
         ->and($committed['output'])->toContain('api-contract: OK')
-        ->and($allowed['exit'])->toBe(0)
+        ->and($allowed['exit'])->toBe(0, $allowed['output'])
         ->and($allowed['output'])->toContain('api-contract: OK')
-        ->and($webhookAllowed['exit'])->toBe(0)
+        ->and($webhookAllowed['exit'])->toBe(0, $webhookAllowed['output'])
         ->and($webhookAllowed['output'])->toContain('api-contract: OK');
 });
 
@@ -36,7 +36,7 @@ test('api contract gate rejects each forbidden intra-major delta', function (str
         $repoRoot.'/tests/fixtures/api-contract/'.$candidate,
     );
 
-    expect($result['exit'])->toBe(1)
+    expect($result['exit'])->toBe(1, $result['output'])
         ->and($result['output'])->toContain($rule)
         ->and($result['output'])->toContain($pointer)
         ->and($result['output'])->toContain('api-contract: FAIL');
@@ -70,7 +70,7 @@ test('api contract check refuses to update the baseline', function (): void {
 
     exec($command, $output, $exitCode);
 
-    expect($exitCode)->toBe(2)
+    expect($exitCode)->toBe(2, "gate exit {$exitCode}:\n".implode("\n", $output))
         ->and(implode("\n", $output))->toContain('baseline update is not a check action');
 });
 

@@ -1,3 +1,8 @@
+## Unreleased — kernel package and API migration
+
+- Breaking (PLAN3.P02–P04, pre-1.0): Extracted tools into their own CoreX\Tools package and provider; ToolCatalogue, ToolInvoker, ToolPolicy and schema/execution ports exchange ToolCall, ToolDescriptor and ToolResult DTOs. Execution and schema worker implementations remain Internal.
+- Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.
+
 ## Unreleased
 
 ## Unreleased — PHP surface strict cutover

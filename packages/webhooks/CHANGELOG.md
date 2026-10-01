@@ -1,3 +1,8 @@
+## Unreleased — kernel package and API migration
+
+- Breaking (PLAN3.P02–P04, pre-1.0): Extracted webhooks into their own CoreX\Webhooks package and provider; subscription/delivery/transport/signing ports exchange WebhookSubscription, WebhookDelivery and signed-header DTOs. WebhookOptions and package-owned errors define the supported configuration/failure surface.
+- Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.
+
 ## Unreleased
 
 ## Unreleased — PHP surface strict cutover

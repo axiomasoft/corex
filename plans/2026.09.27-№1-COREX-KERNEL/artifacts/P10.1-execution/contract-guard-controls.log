@@ -1,0 +1,3 @@
+negative: changed snapshot without CHANGELOG -> exit 1
+positive: same snapshot with CHANGELOG -> exit 0
+control: implementation-only change -> exit 0
