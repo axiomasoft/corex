@@ -1,0 +1,364 @@
+{
+  "headers": [
+    "Batch",
+    "Items",
+    "Model class/effort",
+    "Exec",
+    "Review",
+    "Почему"
+  ],
+  "header_line": 134,
+  "rows": [
+    [
+      {
+        "Batch": "B00-A",
+        "Items": "P00.1",
+        "Model class/effort": "frontier/high",
+        "Exec": "manual",
+        "Review": "full",
+        "Почему": "recommended: glossary и карта пакетов/namespace задают имена всего ядра; решения с фактами.",
+        "_items": [
+          "P00.1"
+        ]
+      },
+      136
+    ],
+    [
+      {
+        "Batch": "B00-A",
+        "Items": "P00.2",
+        "Model class/effort": "frontier/high",
+        "Exec": "manual",
+        "Review": "full",
+        "Почему": "recommended: финальная архитектура `research/04-architecture.md` + delta доктрины по glossary P00.1; вторым в B00-A.",
+        "_items": [
+          "P00.2"
+        ]
+      },
+      137
+    ],
+    [
+      {
+        "Batch": "B00-A",
+        "Items": "P00.3",
+        "Model class/effort": "frontier/high",
+        "Exec": "manual",
+        "Review": "light",
+        "Почему": "recommended: перевод PLAN2 в superseded и `plans/ACTIVE.md` — bookkeeping решения D23; третьим в B00-A.",
+        "_items": [
+          "P00.3"
+        ]
+      },
+      138
+    ],
+    [
+      {
+        "Batch": "solo",
+        "Items": "P01.1",
+        "Model class/effort": "implementation/high",
+        "Exec": "manual",
+        "Review": "full",
+        "Почему": "recommended: окружение PHP 8.4 и манифесты — предусловие всех остальных items; owner gates O-1/O-2 проверяются первыми шагами.",
+        "_items": [
+          "P01.1"
+        ]
+      },
+      139
+    ],
+    [
+      {
+        "Batch": "B01-B",
+        "Items": "P01.2",
+        "Model class/effort": "implementation/high",
+        "Exec": "manual",
+        "Review": "full",
+        "Почему": "recommended: golden на зелёном стеке P01.1; общий контекст сетки с P01.3.",
+        "_items": [
+          "P01.2"
+        ]
+      },
+      140
+    ],
+    [
+      {
+        "Batch": "B01-B",
+        "Items": "P01.3",
+        "Model class/effort": "implementation/high",
+        "Exec": "manual",
+        "Review": "full",
+        "Почему": "recommended: ratchet-гейты после golden (анализ `tests/Golden`, anti-weakening правится последовательно); вторым в B01-B.",
+        "_items": [
+          "P01.3"
+        ]
+      },
+      141
+    ],
+    [
+      {
+        "Batch": "solo",
+        "Items": "P01.4",
+        "Model class/effort": "implementation/high",
+        "Exec": "manual",
+        "Review": "full",
+        "Почему": "recommended: CI подключает команды, созданные P01.1–P01.3; отдельная сессия — workflow-hardening и zizmor.",
+        "_items": [
+          "P01.4"
+        ]
+      },
+      142
+    ],
+    [
+      {
+        "Batch": "B02-A",
+        "Items": "P02.1",
+        "Model class/effort": "implementation/high",
+        "Exec": "manual",
+        "Review": "full",
+        "Почему": "recommended: швы ядра на общем инструментарии швов (`check-maps`, `seams`, `golden-delta`); первым в B02-A; старт только после O-3.",
+        "_items": [
+          "P02.1"
+        ]
+      },
+      143
+    ],
+    [
+      {
+        "Batch": "B02-A",
+        "Items": "P02.2",
+        "Model class/effort": "implementation/high",
+        "Exec": "manual",
+        "Review": "full",
+        "Почему": "recommended: швы operations тем же инструментарием и runbook; вторым в B02-A, после зелёного P02.1.",
+        "_items": [
+          "P02.2"
+        ]
+      },
+      144
+    ],
+    [
+      {
+        "Batch": "solo",
+        "Items": "P02.3",
+        "Model class/effort": "implementation/xhigh",
+        "Exec": "manual",
+        "Review": "full",
+        "Почему": "recommended: механический перенос ≥500 файлов с сухим прогоном и полным стеком — отдельная сессия и максимальный effort класса.",
+        "_items": [
+          "P02.3"
+        ]
+      },
+      145
+    ],
+    [
+      {
+        "Batch": "solo",
+        "Items": "P02.4",
+        "Model class/effort": "implementation/high",
+        "Exec": "manual",
+        "Review": "full",
+        "Почему": "recommended: идентификаторы и гейты на перенесённом дереве; отдельная сессия после P02.3.",
+        "_items": [
+          "P02.4"
+        ]
+      },
+      146
+    ],
+    [
+      {
+        "Batch": "solo",
+        "Items": "P03.1",
+        "Model class/effort": "implementation/high",
+        "Exec": "manual",
+        "Review": "full",
+        "Почему": "recommended: гейт раскладки, ретайр гейта tenancy и STR-доктрина — CI/docs-контекст, отдельный от массового переноса; первым в P03.",
+        "_items": [
+          "P03.1"
+        ]
+      },
+      147
+    ],
+    [
+      {
+        "Batch": "solo",
+        "Items": "P03.2",
+        "Model class/effort": "implementation/xhigh",
+        "Exec": "manual",
+        "Review": "full",
+        "Почему": "recommended: механический перенос 278 классов с сухим прогоном, Rector и полным стеком — отдельная сессия и максимальный effort класса, как P02.3; после зелёного P03.1.",
+        "_items": [
+          "P03.2"
+        ]
+      },
+      148
+    ],
+    [
+      {
+        "Batch": "solo",
+        "Items": "P04.1",
+        "Model class/effort": "frontier/high",
+        "Exec": "manual",
+        "Review": "full",
+        "Почему": "recommended: scanner/name-resolution/PHPDoc fixture setup is an independent tooling boundary; validate report semantics before rewriting all consumers.",
+        "_items": [
+          "P04.1"
+        ]
+      },
+      149
+    ],
+    [
+      {
+        "Batch": "solo",
+        "Items": "P04.2",
+        "Model class/effort": "frontier/high",
+        "Exec": "manual",
+        "Review": "full",
+        "Почему": "recommended: 1117 type verdicts, model/transaction DTO seams and R5=91 need a bounded public-contract replay/review context separate from registry boot.",
+        "_items": [
+          "P04.2"
+        ]
+      },
+      150
+    ],
+    [
+      {
+        "Batch": "solo",
+        "Items": "P04.3",
+        "Model class/effort": "frontier/high",
+        "Exec": "manual",
+        "Review": "full",
+        "Почему": "recommended: package error ownership and persisted idempotency reconstruction form a separate boot/failure boundary after the classified surface.",
+        "_items": [
+          "P04.3"
+        ]
+      },
+      151
+    ],
+    [
+      {
+        "Batch": "solo",
+        "Items": "P04.4",
+        "Model class/effort": "implementation/high",
+        "Exec": "manual",
+        "Review": "full",
+        "Почему": "recommended: fixed strict graph/manifest/BC/docs rollout consumes both producer results; route differs from frontier items and cannot share their batch.",
+        "_items": [
+          "P04.4"
+        ]
+      },
+      152
+    ],
+    [
+      {
+        "Batch": "solo",
+        "Items": "P10.1",
+        "Model class/effort": "implementation/high",
+        "Exec": "manual",
+        "Review": "light",
+        "Почему": "recommended: CI-рецепт и скрипты; результат проверяет сам hosted CI, после item отказы читаемы — первым в фазе.",
+        "_items": [
+          "P10.1"
+        ]
+      },
+      153
+    ],
+    [
+      {
+        "Batch": "solo",
+        "Items": "P10.2",
+        "Model class/effort": "implementation/high",
+        "Exec": "manual",
+        "Review": "full",
+        "Почему": "recommended: меняет правило формирования публичного манифеста и раскладку; полноту манифеста CI не видит — независимое ревью (D75).",
+        "_items": [
+          "P10.2"
+        ]
+      },
+      154
+    ],
+    [
+      {
+        "Batch": "solo",
+        "Items": "P10.3",
+        "Model class/effort": "implementation/high",
+        "Exec": "manual",
+        "Review": "full",
+        "Почему": "recommended: граница отказа валидации схем инструментов; fail-closed и завершение процессов на всех ветках проверяются чтением — независимое ревью (D75).",
+        "_items": [
+          "P10.3"
+        ]
+      },
+      155
+    ],
+    [
+      {
+        "Batch": "solo",
+        "Items": "P10.4",
+        "Model class/effort": "implementation/high",
+        "Exec": "manual",
+        "Review": "light",
+        "Почему": "recommended: лейны тестов, покрытие, остаточные отказы матрицы; закрывает фазу полностью зелёным hosted CI.",
+        "_items": [
+          "P10.4"
+        ]
+      },
+      156
+    ],
+    [
+      {
+        "Batch": "B05-A",
+        "Items": "P05.1",
+        "Model class/effort": "implementation/high",
+        "Exec": "manual",
+        "Review": "light",
+        "Почему": "recommended: Options, lazy singleton и удаление static Config правят те же providers, что делит P05.2; первым в B05-A. Review light по D71.",
+        "_items": [
+          "P05.1"
+        ]
+      },
+      157
+    ],
+    [
+      {
+        "Batch": "B05-A",
+        "Items": "P05.2",
+        "Model class/effort": "implementation/high",
+        "Exec": "manual",
+        "Review": "light",
+        "Почему": "recommended: деление providers на registrars по уже переведённым на Options файлам; вторым в B05-A, после зелёного P05.1.",
+        "_items": [
+          "P05.2"
+        ]
+      },
+      158
+    ],
+    [
+      {
+        "Batch": "solo",
+        "Items": "P05.3",
+        "Model class/effort": "implementation/high",
+        "Exec": "manual",
+        "Review": "full",
+        "Почему": "recommended: самый объёмный item (16 пакетов); меняет время жизни зависимостей, ошибки класса «чужой tenant» тесты ловят слабо — отдельная сессия и независимое ревью (D71, D72).",
+        "_items": [
+          "P05.3"
+        ]
+      },
+      159
+    ],
+    [
+      {
+        "Batch": "solo",
+        "Items": "P05.4",
+        "Model class/effort": "implementation/high",
+        "Exec": "manual",
+        "Review": "light",
+        "Почему": "recommended: проверки итога (резидентный режим, config:cache), генератор reference, доктрина и CI — отдельный docs/CI-контекст; закрывает фазу.",
+        "_items": [
+          "P05.4"
+        ]
+      },
+      160
+    ]
+  ],
+  "digest": "05f63d50d7cba2b8ff15f59da5ab49ef5ceaafb13dca23683ed908ff1852c388"
+}

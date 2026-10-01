@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-10-01
-inputs_sha256: 7fc25c9540601b4a39458d30ab33e7c7445ee8cbdf8c009d5498c26aebc53c41
+inputs_sha256: 9f17047d159aba7da1ae0df2517c2ecaf5882eb58750409b71e6a95f11dfdb49
 generated_by: task plan-views status
 -->
 
@@ -262,6 +262,8 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-10-01 | designer/claude-opus-5-5 | plan-design · no-op · Design finalized; execution has not started. |
 | 2026-10-01 | designer/codex/GPT-6 | plan-design · no-op · Design finalized; execution has not started. |
 | 2026-10-01 | designer/codex/GPT-6 | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-01 | auditor/codex/gpt-6.1-sol/xhigh | plan-audit · in-progress · Independent design audit after D76/D78/D79, owner model D80. Delta P05/P10; P00-P04 evidence reused. Product read-only; committed Task runtime ba841d9 used. |
+| 2026-10-01 | auditor/codex/gpt-6.1-sol/xhigh | plan-audit · audit-green · GREEN current finish: 0 Blocker, 0 Major, 1 nonblocking Options-example Minor for P05.1. D76/D78 verified; product/design unchanged. findings/P05-P10-design-reaudit.md. Owner: skip SKM review at execution. |
 
 ## Owner Gates
 

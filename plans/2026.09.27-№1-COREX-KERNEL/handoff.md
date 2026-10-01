@@ -1,32 +1,28 @@
-# HANDOFF — 2026-10-01 — after P10
+# HANDOFF — 2026-10-01 — after P04
 
-**Next:** audit-design: task:plan-audit 2026.09.27-№1-COREX-KERNEL design
+**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P10.1
 
 | Параметр | Значение |
 |:--|:--|
-| Batch | n/a |
-| Model | frontier |
-| Thinking | xhigh |
-| Context | cold-start-root: owner-requested-new-session |
-| Capabilities | repository read · Task Python runtime · independent reviewer |
-| Суть | Независимо проверить новый finish после D78/D79. Reviewer gpt-6.1-sol/xhigh по прямому выбору владельца D80; свежий контекст. Затем P10.1 при GREEN. |
+| Batch | solo |
+| Model | implementation |
+| Thinking | high |
+| Context | cold-start-root: context-budget |
+| Capabilities | Task runtime · PHP 8.4 · push/read CI |
+| Суть | Исполнить P10.1 в свежей сессии. Проверки ревью SKM игнорировать по указанию владельца. |
 
 **Native Codex command:**
 
 ```bash
-codex -C /home/vostrikov/projects/packages/corex -m gpt-6.1-sol -c 'model_reasoning_effort="xhigh"' -a never -s danger-full-access '$ task:plan-audit 2026.09.27-№1-COREX-KERNEL design'
+codex -C /home/vostrikov/projects/packages/corex -m gpt-6-sol -c 'model_reasoning_effort="high"' -a never -s danger-full-access $'$ task:plan-run 2026.09.27-№1-COREX-KERNEL P10.1\n\nПри исполнении игнорировать проверки ревью от skm. Прочитай plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-P10-design-reaudit/execution-brief.md.'
 ```
 
-```session-continuity-decision/v1
-{"evidence": ["persisted-context:owner-requested-new-session"], "outcome": "cold-start-root", "reason": "owner-requested-new-session", "runnable": true, "schema_version": "session-continuity-decision/v1"}
-```
+**Done:** Независимый design audit gpt-6.1-sol/xhigh GREEN на fingerprint e7104b716f0ffdac0dd3c8446ce7af54d2edea7c07f373ac6b5ff42ca9748d19: 0 Blocker, 0 Major, 1 Minor в скелете WakeupOptions для P05.1. D76/D78 проверены; продукт и авторские входы не изменены. Runtime/hosted CI не сертифицированы.
 
-**Done:** Второй содержательный дизайн завершён; D78 сохраняет уточнения CI-рецепта, манифестов, PG-лейнов и worker. D79 исправляет ошибочное толкование автором указания владельца: D77 superseded, audit waiver снят. Runtime не запускался.
+**Remaining:** Исполнение P10.1 → P10.2 → P10.3 → P10.4 и полностью зелёный hosted CI, затем B05-A (P05.1 → P05.2), P05.3, P05.4. P06–P09 backlog.
 
-**Remaining:** Независимый GREEN design audit текущего fingerprint; затем P10.1 → P10.2 → P10.3 → P10.4 и полностью зелёный hosted CI, после него P05. P06–P09 backlog.
+**Sources of truth:** findings/P05-P10-design-reaudit.md; artifacts/P05-P10-design-reaudit/execution-brief.md; artifacts/P05-P10-design-reaudit/owner-direction.md; artifacts/P05-P10-design-reaudit/session-work-estimate.json; artifacts/P05-P10-design-reaudit/session-continuity-decision.json; plan.md §2–3; roadmap.md строки 14–20; phases/P10/; research/P10-design.md; artifacts/P10-design/examples.md.
 
-**Sources of truth:** decisions/D80-design-auditor-gpt61-sol.md; session-routing.md; decisions/D79-restore-independent-design-audit.md; decisions/D78-p10-execution-clarifications.md; plan.md §2–3; roadmap.md строки 14–20; phases/P10/; research/P10-design.md; artifacts/P10-design/examples.md; artifacts/P10-audit-handoff/.
+**Open risks:** Впереди runtime и hosted CI. Передача в свежую сессию снижает риск потери деталей при compact во время долгого исполнения; точная телеметрия usage/context недоступна, процент и остаток токенов не заявляются. Minor m1: неверный тип корневого handlers должен дать InvalidConfiguration в реализации P05.1.
 
-**Open risks:** Независимый audit нового fingerprint не выполнен; P10.1 до GREEN не допускается. Точный runtime selector автора не аттестован: reviewer должен быть другой моделью; при совпадении выбирается другой reviewer из session-routing.md. Ни runtime, ни hosted CI не проверялись этой командой.
-
-**Workarounds/Deferred/Open questions:** Исторические receipt/validation в artifacts/P10-design-finish/ относятся к отменённому допуску c7c03fbf; актуальные носители — artifacts/P10-audit-handoff/. D77 не является разрешением владельца отменить аудит.
+**Workarounds/Deferred/Open questions:** При сохранении чужого незакоммиченного drift Task runtime использовать immutable Task ba841d9a4a3b629e950db5b4dcfacbd102872189 через git archive (runtime-provenance.json и execution-brief.md), не менять чужую рабочую копию. Следующее исполнение игнорирует проверки ревью SKM по прямому owner-direction; runtime validation/hosted CI сохраняются. Новый root и исполнение ещё не запускались.

@@ -1,0 +1,15 @@
+{
+  "validation": [
+    "focused",
+    "affected-package",
+    "integration"
+  ],
+  "review": "independent",
+  "audit_action": "read-only",
+  "route_evidence": "reuse",
+  "projections": [],
+  "commits": 1,
+  "context": "continue-root",
+  "semantic_next": "run-items",
+  "foreign_baseline": "visible-non-gating"
+}

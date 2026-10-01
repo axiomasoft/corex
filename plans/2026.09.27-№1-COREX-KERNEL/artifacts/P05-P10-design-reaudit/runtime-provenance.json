@@ -1,0 +1,6 @@
+{
+  "source_repository": "/home/vostrikov/projects/packages/swissknifeman",
+  "commit": "ba841d9a4a3b629e950db5b4dcfacbd102872189",
+  "method": "git archive HEAD packages/task core packages/skiller/skills/general/plan-protocol",
+  "reason": "Uncommitted runtime translation rejects adopted carrier headings; committed runtime reused without editing foreign worktree."
+}

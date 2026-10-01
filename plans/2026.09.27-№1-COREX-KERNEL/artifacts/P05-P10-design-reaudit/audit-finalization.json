@@ -1,0 +1,21 @@
+{
+  "schema_version": "audit-finalization/v1",
+  "before_fingerprint": "e7104b716f0ffdac0dd3c8446ce7af54d2edea7c07f373ac6b5ff42ca9748d19",
+  "after_fingerprint": "e7104b716f0ffdac0dd3c8446ce7af54d2edea7c07f373ac6b5ff42ca9748d19",
+  "lifecycle_selection": {
+    "validation": [
+      "focused",
+      "affected-package",
+      "integration"
+    ],
+    "review": "independent",
+    "audit_action": "read-only",
+    "route_evidence": "reuse",
+    "projections": [],
+    "commits": 1,
+    "context": "continue-root",
+    "semantic_next": "run-items",
+    "foreign_baseline": "visible-non-gating"
+  },
+  "close_admission": "allow"
+}
