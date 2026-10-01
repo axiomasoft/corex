@@ -36,7 +36,7 @@ fi
 
 fail=0
 for pkg in "${contract_pkgs[@]}"; do
-  if printf '%s\n' "$changed" | grep -qE "^packages/${pkg}/CHANGELOG\.md$"; then
+  if printf '%s\n' "$changed" | grep -E "^packages/${pkg}/CHANGELOG\.md$" >/dev/null; then
     echo "contract-guard: packages/${pkg}/resources/contracts/php-api.json changed WITH CHANGELOG — OK"
   else
     echo "contract-guard: ✗ packages/${pkg}/resources/contracts/php-api.json changed WITHOUT packages/${pkg}/CHANGELOG.md"

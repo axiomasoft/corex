@@ -25,6 +25,10 @@ with tempfile.TemporaryDirectory(prefix="corex-contract-guard-") as copy:
     base = git("rev-parse", "HEAD")
 
     surface.write_text('{"symbols": {}}\n')
+    for index in range(2000):
+        extra = root / f"packages/probe/src/Internal/LongDiffProbe{index:04}.php"
+        extra.parent.mkdir(parents=True, exist_ok=True)
+        extra.write_text("<?php // large range control\n")
     git("add", ".")
     git("commit", "-qm", "surface without announcement")
     result = subprocess.run(["bash", str(gate), base], cwd=root, capture_output=True, text=True)
@@ -42,7 +46,7 @@ with tempfile.TemporaryDirectory(prefix="corex-contract-guard-") as copy:
 
     unchanged = git("rev-parse", "HEAD")
     implementation = root / "packages/probe/src/Internal/Probe.php"
-    implementation.parent.mkdir(parents=True)
+    implementation.parent.mkdir(parents=True, exist_ok=True)
     implementation.write_text("<?php // implementation only\n")
     git("add", ".")
     git("commit", "-qm", "implementation only")
