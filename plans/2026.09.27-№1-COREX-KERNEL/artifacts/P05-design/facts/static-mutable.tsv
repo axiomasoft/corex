@@ -1,0 +1,8 @@
+packages/access/src/Roles/Laravel/SystemRoleImmutable.php	23	private static bool $systemMutationAllowed = false;
+packages/core/src/Config/Internal/Config.php	27	private static ?CoreOptions $bound = null;
+packages/core/src/Config/Internal/Config.php	29	private static ?bool $octaneOptInOverride = null;
+packages/operations/src/Testing/LoadContourModule.php	17	public static int $calls = 0;
+packages/operations/src/Testing/MutatingHandler.php	16	public static int $calls = 0;
+packages/operations/src/Testing/NoteHandler.php	22	public static int $calls = 0;
+packages/operations/src/Testing/ProviderKeyHandler.php	16	public static string $mode = 'timeout';
+packages/tenancy/src/Impersonation/Internal/ImpersonatedModelWriteGuard.php	41	private static bool $allowing = false;

@@ -1,0 +1,4 @@
+packages/core/src/Modules/PHPStan/Rules/NoDirectSystemTableWriteRule.php	156	* Миграции — anonymous `return new class extends Migration {…}` без `namespace`
+packages/operations/src/ApiServiceProvider.php	94	$this->app->bindIf(ReplayAuthorizer::class, static fn (Application $app): ReplayAuthorizer => new class($app->make(ModuleRegistry::class), $app->make(ClientScopeAuthorizer::class), $app->make(OperationAuthorizer::class), $app->make(OperationFieldAuthorizer::class)) implements ReplayAuthorizer
+packages/operations/src/ApiServiceProvider.php	155	return new class($options) implements CursorKeyring
+packages/operations/src/Idempotency/Internal/IdempotentOperationInvoker.php	77	$handlerFailure = new class

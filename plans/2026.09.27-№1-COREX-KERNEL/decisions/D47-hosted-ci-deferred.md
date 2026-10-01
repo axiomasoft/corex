@@ -1,11 +1,11 @@
 ---
 id: D47
 date: 2026-09-28
-status: accepted
+status: superseded
 item: P02
 items: [P01, P02, P02.1, P02.2, P02.3, P02.4, P09]
 supersedes: []
-superseded_by: null
+superseded_by: D73
 ---
 # D47 — Hosted CI отложен до восстановления лимитов
 

@@ -1,0 +1,87 @@
+# ctx7-03 — `config:cache`, `mergeConfigFrom`, `env()`
+
+- Tool: context7 `query-docs` · Library: `/laravel/docs` (13.x) · Date: 2026-10-01
+- Query: "package mergeConfigFrom and configuration caching config:cache: env() only in config files, closures not allowed, behaviour when configuration is cached"
+- Status: provenance.
+
+## Answer (verbatim)
+
+### Cache configuration files using config:cache
+
+Source: https://github.com/laravel/docs/blob/13.x/deployment.md
+
+Combines configuration files into a single cached file to reduce filesystem trips. Ensure the env function is only called from within configuration files, as .env is not loaded once cached.
+
+```shell
+php artisan config:cache
+```
+
+--------------------------------
+
+### Merge default package configuration with mergeConfigFrom
+
+Source: https://github.com/laravel/docs/blob/13.x/packages.md
+
+Call mergeConfigFrom within the register method to merge your package defaults with the application's published configuration copy. This method only merges the first level of the configuration array.
+
+```php
+/**
+ * Register any package services.
+ */
+public function register(): void
+{
+    $this->mergeConfigFrom(
+        __DIR__.'/../config/courier.php', 'courier'
+    );
+}
+```
+
+--------------------------------
+
+### Publish package configuration file via publishes
+
+Source: https://github.com/laravel/docs/blob/13.x/packages.md
+
+Call the publishes method within the boot method to allow users to publish configuration files using the vendor:publish Artisan command. Avoid defining closures in configuration files because they cannot be serialized when running config:cache.
+
+```php
+/**
+ * Bootstrap any package services.
+ */
+public function boot(): void
+{
+    $this->publishes([
+        __DIR__.'/../config/courier.php' => config_path('courier.php'),
+    ]);
+}
+```
+
+### Configuration Caching
+
+Source: https://github.com/laravel/docs/blob/13.x/configuration.md
+
+To give your application a speed boost, you should cache all of your configuration files into a single file using the `config:cache` Artisan command. This will combine all of the configuration options for your application into a single file which can be quickly loaded by the framework.
+
+You should typically run the `php artisan config:cache` command as part of your production deployment process. The command should not be run during local development as configuration options will frequently need to be changed during the course of your application's development.
+
+Once the configuration has been cached, your application's `.env` file will not be loaded by the framework during requests or Artisan commands; therefore, the `env` function will only return external, system level environment variables.
+
+For this reason, you should ensure you are only calling the `env` function from within your application's configuration (`config`) files. You can see many examples of this by examining Laravel's default configuration files. Configuration values may be accessed from anywhere in your application using the `config` function [described above](#accessing-configuration-values).
+
+The `config:clear` command may be used to purge the cached configuration:
+
+> [!WARNING]
+> If you execute the `config:cache` command during your deployment process, you should be sure that you are only calling the `env` function from within your configuration files. Once the configuration has been cached, the `.env` file will not be loaded; therefore, the `env` function will only return external, system level environment variables.
+
+--------------------------------
+
+### Resources > Configuration
+
+Source: https://github.com/laravel/docs/blob/13.x/packages.md
+
+Typically, you will need to publish your package's configuration file to the application's `config` directory. This will allow users of your package to easily override your default configuration options. To allow your configuration files to be published, call the `publishes` method from the `boot` method of your service provider:
+
+Now, when users of your package execute Laravel's `vendor:publish` command, your file will be copied to the specified publish location. Once your configuration has been published, its values may be accessed like any other configuration file:
+
+> [!WARNING]
+> You should not define closures in your configuration files. They cannot be serialized correctly when users execute the `config:cache` Artisan command.

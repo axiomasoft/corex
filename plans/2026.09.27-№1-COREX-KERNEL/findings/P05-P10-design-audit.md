@@ -1,0 +1,114 @@
+# Design audit — P00–P05 + P10 (delta: P10, P05)
+
+Дата: 2026-10-01 · fingerprint finish: `f188df5f5ff304b1ed28672b74c7fee914843f97a6a6cb8a8c0b9d53e698bd0d`
+Аудитор: claude-code / claude-opus-5-5, свежий контекст (`/task:plan-audit … design`, запуск владельцем).
+База кода: `39ae489a` (= `origin/main`). Продукт и входы дизайна не изменялись; проверки — только чтение.
+
+**Вердикт: ATTENTION — 4 Major.** Исполнение строк execution-sheet 14–20 не открыто.
+
+## Независимость
+
+Дизайн P05/P10 и этот аудит выполнены одной моделью (`claude-opus-5-5`). План §2, D24 и handoff требуют другую
+модель. Находки ниже воспроизводимы командами и от модели не зависят; будущий GREEN этого же маршрута условию
+независимости не удовлетворяет — нужен reviewer из пула `session-routing.md` либо owner acceptance (прецедент D66).
+
+## Объём
+
+- `design-gate`: finish записан на текущем fingerprint, аудита нет (`PLAN_DESIGN_AUDIT_MISSING`) — ожидаемое состояние.
+- `plan-lint`: OK, 0 ошибок, 1 историческое предупреждение P04.
+- P00–P04 закрыты и не менялись — прежние доказательства переиспользованы.
+- Routing §3 ↔ execution-sheet 14–20 ↔ D71/D75: группы, маршруты, review, порядок и зависимости согласованы.
+- Inputs/Required Reads P05.x и P10.x: все существующие пути на месте; отсутствуют только объявленные выходы предшественников.
+- Проверены на коде: `ci.yml`, `contract-guard.sh`, `bc-check.sh`, `module-layout-gate.py`, supervisor/worker схем,
+  ссылки на переносимые классы, mutation-реестр (34), composer-скрипты, `configuration.md`, конституция, факты P05/P10.
+
+## Major
+
+### A1 — P10.1: джоб `Remaining cohort package aggregator` не может стать `success` в этом item
+
+Validation P10.1 требует `success` у этого джоба и одновременно запрещает чинить отказы P10.2–P10.4.
+
+- Джоб исполняет `composer test:packages` — цикл по всем пакетам с `|| exit 1` (`.github/workflows/ci.yml:619-649`, `composer.json`).
+- На его пути остаются отказы чужих владельцев (`artifacts/P10-design/facts/repro-root-tests.txt`):
+  `AttributesArchitectureGateTest` custom-fields (H2 → P10.2), 19 тестов `CoreX\Tools\Tests\*` (H5 → P10.3),
+  два PG-теста webhooks (H1 → P10.4).
+- В run `36835915965` джоб падал раньше, на `packages/access`, и скрывал их.
+
+Досье §3.1 п.4 уже даёт достижимый критерий (`==> packages/access` без `error code`); Validation ему противоречит.
+Владелец: P10.1 (Validation, досье §3.1 п.11).
+
+### A2 — P10.2: Files и Scope не покрывают правки, которых требует собственная Validation
+
+1. P10.1 переводит `contract-guard` на триггер `packages/<pkg>/resources/contracts/php-api.json` с прежним требованием
+   CHANGELOG в том же диапазоне (`BASE_SHA = github.event.before`, `ci.yml:826-829`). P10.2 перегенерирует 20 манифестов,
+   а CHANGELOG в его Files/Scope нет (`grep -c CHANGELOG phases/P10/P10.2.md` → 0). Джоб `Contract-snapshot guard`
+   покраснеет на push P10.2 — против строки «джобы, зелёные после P10.1, остаются зелёными».
+2. Validation требует пустой `git grep` по `tests`, но Files не содержит:
+   `tests/Arch/ErrorContractTest.php:7` (`use CoreX\Errors\Internal\ErrorSourceScanner`) и
+   `tests/Arch/CoreZoneTest.php:115,151,154-157` (пути шести переносимых файлов).
+
+То же условно для P05.3: изменение `php-api.json` разрешено, CHANGELOG в Files отсутствует.
+Владелец: P10.2 (Files, Scope, Implementation Rules); P05.3 (Files).
+
+### A3 — `scripts/ci-local.sh` (норма `artifacts/P10-design/examples.md` §2) не выполняет свои проверки
+
+1. Нет переопределения Pest `^4.7` для Laravel 12. Корень требует `pestphp/pest ^5.2`; D42: Pest 5.2 и Laravel 12
+   несовместимы даже с `--with-all-dependencies`. Validation P10.4 `LARAVEL_VERSION='12.*' bash scripts/ci-local.sh → exit 0`
+   недостижима; hosted-лейн этот шаг сохраняет (D74 п.6).
+2. Скрипт вызывает `composer test:hermetic`, который создаёт только P10.4. В P10.1 проверка «доходит до первого гейта»
+   упирается в неопределённый composer-скрипт, а не в гейт.
+
+Владелец: P10.1 (скелет скрипта, Validation); P10.4 (Validation).
+
+### A4 — P05.3: две команды Validation красные на корректном результате
+
+1. Facade-grep: исключение `':!packages/*/src/**/Laravel/**'` без `:(glob)` не покрывает `src/Laravel/**` верхнего уровня.
+   На текущем дереве команда возвращает 42 файла, из них 6 мостовых, исключённых из Scope:
+   `packages/tenancy/src/Laravel/Commands/{IdentitiesReconcile,PendingCreate}Command.php`,
+   `packages/tenancy/src/Laravel/Http/Middleware/{EnforceSessionLifetime,ImpersonationSessionGuard,RequireActiveMembership}.php`,
+   `packages/webhooks/src/Laravel/WebhookRouteRegistrar.php`. С `:(glob)`/`:(exclude,glob)` — 36 (факты: 37).
+   «Нет совпадений» недостижимо без правки моста.
+2. `git diff … | grep -c -E '^\+.*(Connection|ConnectionInterface) \$'` → `0` считает и затронутые существующие строки.
+   Однострочные конструкторы с соединением в классах, обязанных получить часы (`now()` вне моста):
+   `packages/media/src/Internal/MediaOperationStore.php:14`, `packages/media/src/Internal/SqlRelationLookup.php:19`,
+   `packages/search/src/Internal/Index/DurableIndexLane.php:13`, `packages/search/src/Internal/Index/DurableIndexRebuild.php:12`.
+   Добавление зависимости меняет эту строку → счётчик ≥ 1 без нового захвата соединения.
+
+Владелец: P05.3 (Validation).
+
+## Minor (не блокируют; на усмотрение автора)
+
+- m1 — P10.4: ремонт лейнов Laravel 12 / PHP 8.5 и `memoryLimitReached` transfer («причина не разобрана») — открытый
+  продуктовый scope под review `light`; D73 п.7 ждёт независимое ревью там, где меняется поведение продукта.
+- m2 — D73 «все джобы `success`»: джоб `Mutation registry` исполняется только на `pull_request` (`ci.yml:968`), на push
+  он `skipped`; новые mutation-кейсы P10.4/P05.4 hosted CI не проверяет.
+- m3 — P05.1–P05.3 не читают hosted CI; отказы матрицы всплывут в P05.4 (review `light`).
+- m4 — D69 п.1 («Options читают только provider и registrars») против `examples.md` §3: `Internal/DangerousModesCheck`
+  принимает `<Pkg>Options`.
+- m5 — D70 п.1 / досье §3.2 п.6 не называют static-вызов `SavedViewsRegistrar::register`
+  (`packages/panels/src/PanelsServiceProvider.php:26`), а Validation P05.2 требует ноль таких вызовов.
+- m6 — P10-playbook V3 (оставить `require --no-update` в лейне) противоречит Validation P10.1 `grep -c … → 0`.
+
+## Проверено без замечаний
+
+`contract-guard ea0b024` (commit существует); R6 — runtime-ссылок на переносимые классы нет; `schema_unavailable` и
+`schema_limit` уже в маппинге `GuardedToolInvoker`; `WORKER_DEADLINE_MS = 100`; имена джобов в Validation совпадают с
+`ci.yml`; `awk`-проверка `configuration.md` (колонка 10) и grep статей конституции работают на текущем формате;
+`Internal/*Options` без `#[Api]` → 0; PHPStan-исключение в grep P05.2 даёт ровно три ожидаемые находки.
+
+## Не проверялось
+
+Команды с `vendor/`, composer, PHP 8.4, PostgreSQL и hosted CI не запускались. A3.1 опирается на evidence D42,
+A1 — на воспроизведение автора дизайна. Числа инвентаря P05 сверены выборочно.
+
+## Статус исправления
+
+A1–A4 и m1–m6 исправлены по разрешению владельца, решение D76 (`decisions/D76-p10-p05-design-audit-remediation.md`).
+Правка выполнена той же моделью, что аудит и дизайн, и независимо не проверена. Вердикт ниже и выше относится к
+fingerprint `f188df5f…`; после правки нужен новый finish и design audit.
+
+## Продолжение
+
+Правка дизайна A1–A4 автором плана (спеки P10.1, P10.2, P10.4, P05.3; `artifacts/P10-design/examples.md` §2;
+досье P10 §3.1) → `task:plan-design 2026.09.27-№1-COREX-KERNEL finish` → новый design audit независимой моделью
+либо owner acceptance. Исправление меняет fingerprint; этот вердикт привязан к `f188df5f…`.

@@ -1,40 +1,26 @@
-# HANDOFF — 2026-10-01 — after P04.4
+# HANDOFF — 2026-10-01 — after P10
 
-**Next:** design-phase: task:plan-design 2026.09.27-№1-COREX-KERNEL P05
+**Next:** design-finish: task:plan-design 2026.09.27-№1-COREX-KERNEL finish
 
 | Параметр | Значение |
 |:--|:--|
-| Batch | design P05 |
+| Batch | n/a |
 | Model | frontier |
 | Thinking | high |
-| Context | continue-root |
-| Capabilities | repository read/write |
-| Суть | Детализировать typed config/композицию/порты по фактическим результатам закрытой P04. Рекомендация не авторизует запуск. |
+| Context | cold-start-root: owner-requested-new-session |
+| Capabilities | repository read · Task Python runtime · правка носителей плана |
+| Суть | Повторный finish P00–P05 + P10 после правки D76: сверить зависимости и строки execution-sheet 14–20, записать новый fingerprint. Затем design audit независимой моделью либо owner acceptance, затем строка 14 (P10.1). Рекомендация не авторизует запуск. |
 
 ```text
-task:plan-design 2026.09.27-№1-COREX-KERNEL P05
+task:plan-design 2026.09.27-№1-COREX-KERNEL finish
 ```
 
-```session-continuity-decision/v1
-{
-  "outcome": "continue-root",
-  "reason": "authorized-scope-complete",
-  "evidence": [
-    "lifecycle:scope-complete",
-    "checkpoint:artifacts/P04.4-execution/completion.md",
-    "owner:execution-economy-D68"
-  ],
-  "runnable": true,
-  "schema_version": "session-continuity-decision/v1"
-}
-```
+**Done:** Design audit finish `f188df5f…` — ATTENTION, 4 Major (`findings/P05-P10-design-audit.md`). По разрешению владельца A1–A4 и minor m1–m6 исправлены, решение D76: критерий агрегатора в P10.1; CHANGELOG 20 пакетов и arch-тесты в Files P10.2; `test:hermetic` определяется в P10.1, Pest `^4.7` в `ci-local.sh`; две команды Validation P05.3; hosted CI на каждом item P05; независимое ревью продуктовых правок P10.4. Phase finalize P10 и P05 и plan-lint — OK. Маршруты, группы и порядок строк 14–20 не менялись. Runtime не начинался, продукт не менялся.
 
-**Done:** P04.4 и P04 closed GREEN. Strict Api/Spi source authority, 800 supported symbols, 20 manifests/reference, 21 Composer metadata migrations, graph/BC/CI и SemVer/docs. Evidence: artifacts/P04.4-execution/completion.md, final-surface.json, write-sites.json, phase-close-gate.json; phases/P04/P04.closed.md.
+**Remaining:** `task:plan-design … finish` (новый fingerprint; design-gate сейчас `PLAN_DESIGN_FINISH_MISSING`); design audit этого fingerprint независимой моделью либо owner acceptance; затем строки 14–17 (P10.1 → P10.2 → P10.3 → P10.4) до зелёного hosted CI; затем строки 18–20 (B05-A → P05.3 → P05.4). P06–P09 — backlog skeleton (D24).
 
-**Remaining:** В авторизованном P04.4 отсутствует. Следующий scope — дизайн P05 по backlog/ и результатам P04.
+**Sources of truth:** decisions/D76-p10-p05-design-audit-remediation.md; findings/P05-P10-design-audit.md; plan.md §2 и §3 Routing; roadmap.md execution-sheet строки 14–20; phases/P10/ и phases/P05/; research/P10-design.md; research/P05-design.md; artifacts/P10-design/; artifacts/P05-design/; decisions/D69–D75.
 
-**Sources of truth:** P04 item specs, D63/D64/D68, artifacts/P04.4-execution, journal.jsonl и P04 closure; product commit 975cc3f0.
+**Open risks:** Дизайн, аудит и правка D76 выполнены одной моделью (claude-opus-5-5): независимой проверки правки не было — её даёт следующий design audit. Команды с vendor/, composer, PHP 8.4, PostgreSQL и hosted CI не запускались. V1–V3 подтверждает hosted CI; объём недостающего покрытия tools, webhooks, tasks и отказы лейнов Laravel 12 и PHP 8.5 после устранения дедлайна worker неизвестны; отказы transfer под драйвером покрытия не разобраны. Для P05: E1, E2, E8 — VERIFY-AT-EXEC; L2 может каскадно перевести сервисы в scoped.
 
-**Open risks:** BC default base — принятая unpublished поверхность P04.3, explicit release base задаётся BC_CHECK_BASE. Локальные GREEN проверки не доказывают release/hosted CI. Тестовая PostgreSQL corex_test опубликована на host 5434; старый dossier пример 5432 не актуален.
-
-**Workarounds/Deferred/Open questions:** D68 сохраняет важное требование владельца: без лишних SKM ревью/аудитов/широких повторов. Повторять только проверки изменённых входов и фактических сбоев. Historical RED и точный scoped reuse описаны в completion.md. Independent review P04.4 и phase audit не выполнялись; review receipt не выдуман. Завершение generated phase contract carrier — обычное bookkeeping, продукт не меняет.
+**Workarounds/Deferred/Open questions:** Установка из composer.lock в hosted CI и stancl-staging — P07 (D74 п.11). Workflows distribution-proof и remaining-cohort-proof — ручной запуск, P09. packages/tenancy/src/Impersonation/** и 61 захват default-соединения — P07 (D70). operations с ручной регистрацией provider — P06. D68 действует в уточнении D72. Исполнитель и reviewer строк 14–20 назначены по пулу session-routing.md; замена — решением владельца.

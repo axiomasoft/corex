@@ -1,0 +1,11 @@
+packages/core/src/Config/Internal/Commands/ValidateConfigCommand.php	76	$plain = $this->plaintext(config($key));
+packages/core/src/Config/Internal/Commands/ValidateConfigCommand.php	154	$present = $this->plaintext(config($key)) !== null;
+packages/core/src/Config/Internal/Commands/ValidateConfigCommand.php	179	$value = config($key, []);
+packages/core/src/Config/Internal/KernelConfigSection.php	37	$driver = config('corex.pubsub.driver');
+packages/core/src/Config/Internal/KernelConfigSection.php	44	$driver = config('corex.pubsub.driver');
+packages/core/src/Messaging/Internal/SubscribeGuard.php	37	"config(['corex.pubsub.octane_worker_opt_in' => true]) before subscribing.",
+packages/tenancy/src/Laravel/Commands/IdentitiesReconcileCommand.php	28	$centralConnection = (string) config('tenancy.central_connection');
+packages/tenancy/src/Laravel/Commands/PendingCreateCommand.php	28	$centralConnection = (string) config('tenancy.central_connection');
+packages/tenancy/src/Laravel/Support/TenancyConfigSection.php	37	$driver = config('corex-tenancy.wakeup.driver');
+packages/tenancy/src/Laravel/Support/TenancyConfigSection.php	38	$enabled = config('tenancy.oidc.enabled');
+packages/tenancy/src/Laravel/Support/TenancyConfigSection.php	45	$selected = config('corex-tenancy.wakeup.driver') === 'root_registry';

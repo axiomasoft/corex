@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-10-01
-inputs_sha256: 578a3c965d302a1d1eabcd428e0a7472256ea4e01890c4d8b27cb56e7fcf0fbe
+inputs_sha256: c43154045240ef8a7221ead46d6c395327c0c311d61dcf4d1826f7103cba1570
 generated_by: task plan-views status
 -->
 
@@ -16,7 +16,7 @@ generated_by: task plan-views status
 | Поле | Значение |
 |:--|:--|
 | Version | — |
-| Status | 🟢 Done |
+| Status | 🟡 In progress |
 | Last Updated | 2026-10-01 |
 
 ## 4. Phase Index & Status Board
@@ -28,6 +28,8 @@ generated_by: task plan-views status
 | P02 | Vendor, состав пакетов, namespace = путь | 4/4 | 🟢 Done |
 | P03 | Feature modules и `Internal` | 2/2 | 🟢 Done |
 | P04 | Application API, Extension SPI и типизированные ошибки | 4/4 | 🟢 Done |
+| P05 | Typed config, композиция и порты | 0/4 | ⬜ Not started |
+| P10 | Зелёный hosted CI на базе P04 | 0/4 | ⬜ Not started |
 
 ## Phase P00
 
@@ -70,6 +72,24 @@ generated_by: task plan-views status
 | P04.2 | Минимальная API/SPI поверхность, DTO и закрытие Internal-швов | 🟢 Done | 2026-10-01 |
 | P04.3 | Типизированные package errors и compiled ProblemRegistry | 🟢 Done | 2026-10-01 |
 | P04.4 | Strict поверхность, manifests, SemVer и документация | 🟢 Done | 2026-10-01 |
+
+## Phase P05
+
+| ID | Title | Status | Updated |
+|:--|:--|:--|:--|
+| P05.1 | Typed Options, runtime-проверки и удаление static Config | ⬜ Not started | — |
+| P05.2 | Тонкие providers, registrars и именованные классы | ⬜ Not started | — |
+| P05.3 | Порты вместо фасадов, хелперов и static state | ⬜ Not started | — |
+| P05.4 | Резидентный режим, config:cache, reference и доктрина | ⬜ Not started | — |
+
+## Phase P10
+
+| ID | Title | Status | Updated |
+|:--|:--|:--|:--|
+| P10.1 | Герметичный CI-рецепт и диагностируемые гейты | ⬜ Not started | — |
+| P10.2 | Манифесты без чужих членов, dev-tooling вне runtime, объявленные зависимости | ⬜ Not started | — |
+| P10.3 | Worker схем инструментов: дедлайн валидации без учёта старта | ⬜ Not started | — |
+| P10.4 | Лейны тестов, покрытие и зелёный hosted CI | ⬜ Not started | — |
 
 ## 6. Update Log
 
@@ -226,6 +246,20 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-10-01 | executor/codex/gpt-6.1-sol/high | plan-close · in-progress · Inline P04 closure in the owning P04.4 invocation; no approved audit, actual acceptance GREEN. |
 | 2026-10-01 | executor/codex/gpt-6.1-sol/high | plan-close · closed-green · P04 GREEN phase-close-gate.json; inline closure, independent audit not performed.
 write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-01 | designer/claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-01 | designer/claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-01 | designer/claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-01 | designer/claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-01 | designer/claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-01 | designer/claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-01 | designer/claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-01 | designer/claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-01 | designer/claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-01 | designer/claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-01 | designer/claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-01 | auditor/claude-opus-5-5 | plan-audit · audit-attention · ATTENTION: 4 Major A1–A4 (P10.1 aggregator, P10.2 Files/CHANGELOG, ci-local.sh, P05.3 Validation greps). findings/P05-P10-design-audit.md. Same model as designer — not an independent audit. Product and design inputs unchanged. |
+| 2026-10-01 | designer/claude-opus-5-5 | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-01 | designer/claude-opus-5-5 | plan-design · no-op · Design finalized; execution has not started. |
 
 ## Owner Gates
 

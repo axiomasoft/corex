@@ -1,0 +1,55 @@
+packages/access/src/CoreAuthServiceProvider.php	55	$raw = $this->app['config']->get('corex-access', []);
+packages/access/src/CoreAuthServiceProvider.php	122	$config = $this->app['config'];
+packages/core/src/Config/Internal/Config.php	81	$raw = $application->make('config')->get('corex', []);
+packages/core/src/Config/Laravel/CoreOptionsParser.php	34	use Illuminate\Contracts\Config\Repository;
+packages/core/src/CoreServiceProvider.php	62	use Illuminate\Contracts\Config\Repository;
+packages/core/src/CoreServiceProvider.php	99	$raw = $this->app['config']->get('corex', []);
+packages/core/src/Modules/ModulesServiceProvider.php	36	$raw = $this->app['config']->get('corex.modules', []);
+packages/custom-fields/src/Internal/Laravel/AttributeCompositionRegistrar.php	17	$tables = (array) $app['config']->get('corex-custom-fields.tables', []);
+packages/custom-fields/src/Internal/Laravel/AttributeCompositionRegistrar.php	29	$config = (array) $app['config']->get('corex-custom-fields', []);
+packages/intl/src/IntlServiceProvider.php	64	return (new LocalePolicyBuilder)->build(config: (array) $app['config']->get('corex-intl.locale', []));
+packages/intl/src/IntlServiceProvider.php	72	maxTagLength: (int) $app['config']->get('corex-intl.locale.max_tag_length', 128),
+packages/intl/src/IntlServiceProvider.php	82	metadataVersion: (string) $app['config']->get('corex-intl.money.metadata_version', 'brick/1'),
+packages/intl/src/IntlServiceProvider.php	94	batchLimit: (int) $app['config']->get('corex-intl.money.batch_limit', 1000),
+packages/intl/src/IntlServiceProvider.php	102	icuEnabled: (bool) $app['config']->get('corex-intl.formatting.icu_enabled', false),
+packages/intl/src/IntlServiceProvider.php	108	return new ReferenceCursorCodec(secret: (string) $app['config']->get('corex-intl.reference.cursor_secret'));
+packages/intl/src/Territory/Internal/Reference/SqlDatasetImporter.php	18	use Illuminate\Contracts\Config\Repository;
+packages/intl/src/Territory/Internal/Reference/SqlGeographyProvider.php	16	use Illuminate\Contracts\Config\Repository;
+packages/media/src/MediaServiceProvider.php	39	$raw = $this->app['config']->get('corex-media', []);
+packages/notifications/src/NotificationsServiceProvider.php	58	if ((bool) $this->app['config']->get('corex-notifications.digest.enabled')) {
+packages/notifications/src/NotificationsServiceProvider.php	59	$handlers = (array) $this->app['config']->get('corex-wakeup.handlers', []);
+packages/notifications/src/NotificationsServiceProvider.php	63	'accept_legacy_unstamped' => (bool) $this->app['config']->get('corex-notifications.digest.accept_legacy_unstamped', false),
+packages/notifications/src/NotificationsServiceProvider.php	65	$this->app['config']->set('corex-wakeup.handlers', $handlers);
+packages/notifications/src/NotificationsServiceProvider.php	74	claimSeconds: (int) $app['config']->get('corex-notifications.delivery.claim_seconds'),
+packages/notifications/src/NotificationsServiceProvider.php	75	maxAttempts: (int) $app['config']->get('corex-notifications.delivery.max_attempts'),
+packages/notifications/src/NotificationsServiceProvider.php	84	enabled: (bool) $app['config']->get('corex-notifications.digest.enabled'),
+packages/notifications/src/NotificationsServiceProvider.php	93	if ((bool) $this->app['config']->get('corex-notifications.digest.enabled')) {
+packages/operations/src/ApiServiceProvider.php	84	$config = $app['config']->get('corex-operations');
+packages/operations/src/ApiServiceProvider.php	200	$secret = $app['config']->get('app.key');
+packages/operations/src/ApiServiceProvider.php	211	leaseSeconds: (int) $app['config']->get('corex-operations.idempotency.lease_seconds', 30),
+packages/operations/src/ApiServiceProvider.php	212	retentionSeconds: (int) $app['config']->get('corex-operations.idempotency.retention_seconds', 86_400),
+packages/operations/src/Bulk/Laravel/BulkRegistrar.php	34	$config = $app['config']->get('corex-operations.bulk');
+packages/operations/src/Bulk/Laravel/BulkRouteRegistrar.php	22	$prefix = (string) $app['config']->get('corex-operations.routes.prefix', 'api');
+packages/operations/src/Cost/Laravel/CostRegistrar.php	26	$config = $app['config']->get('corex-operations.cost');
+packages/operations/src/Laravel/ApiSchemaRegistrar.php	19	$schema = $app['config']->get('corex-operations.schema');
+packages/panels/src/PanelsServiceProvider.php	32	providers: $app->tagged((string) $app['config']->get('corex-panels.provider_tag')),
+packages/search-intl/src/SearchIntlServiceProvider.php	23	if ($this->app['config']->get('corex-search-intl.enabled') !== true) {
+packages/search-meilisearch/src/MeilisearchServiceProvider.php	46	$host = $app['config']->get('corex-search-meilisearch.host');
+packages/search-meilisearch/src/MeilisearchServiceProvider.php	52	$indexUid = $app['config']->get('corex-search-meilisearch.index_uid');
+packages/search-meilisearch/src/MeilisearchServiceProvider.php	58	$key = $app['config']->get('corex-search-meilisearch.key');
+packages/tasks-workflow/src/Internal/CaptureTaskCompletion.php	16	use Illuminate\Contracts\Config\Repository;
+packages/tasks-workflow/src/Internal/SqlTaskRecurrenceMaterializer.php	33	use Illuminate\Contracts\Config\Repository;
+packages/tasks-workflow/src/TasksWorkflowServiceProvider.php	43	config: $app['config'],
+packages/tenancy/src/Laravel/HttpRegistrar.php	116	$app['config']->set([
+packages/tenancy/src/Laravel/HttpRegistrar.php	123	...$app['config']->get('tenancy.identification.middleware', []),
+packages/tenancy/src/Laravel/RuntimeRegistrar.php	42	$tenancy = $app['config']->get('tenancy', []);
+packages/tenancy/src/Laravel/RuntimeRegistrar.php	43	$corexTenancy = $app['config']->get('corex-tenancy', []);
+packages/tenancy/src/Laravel/RuntimeRegistrar.php	100	$tenancy = $app['config']->get('tenancy', []);
+packages/tenancy/src/Laravel/RuntimeRegistrar.php	134	$app['config']->set([
+packages/tenancy/src/TenancyServiceProvider.php	83	$tenancy = $this->app['config']->get('tenancy', []);
+packages/tenancy/src/TenancyServiceProvider.php	85	$corexTenancy = $this->app['config']->get('corex-tenancy', []);
+packages/wakeup/src/WakeupServiceProvider.php	62	leaseSeconds: (int) $app['config']->get('corex-wakeup.lease_seconds'),
+packages/wakeup/src/WakeupServiceProvider.php	63	maxAttempts: (int) $app['config']->get('corex-wakeup.max_attempts'),
+packages/wakeup/src/WakeupServiceProvider.php	77	foreach ((array) $app['config']->get('corex-wakeup.handlers', []) as $kind => $configured) {
+packages/webhooks/src/Laravel/WebhookRegistrar.php	43	$config = $app['config']->get('corex-webhooks');
+packages/workflow/src/WorkflowServiceProvider.php	36	enforceDeclarations: (bool) $app['config']->get('corex-workflow.enforce_declarations'),

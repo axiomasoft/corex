@@ -1,0 +1,180 @@
+packages/access/tests/Feature/PrincipalUserProviderTest.php	110	config(['auth.providers.users.driver' => 'corex-principal']);
+packages/access/tests/Feature/PrincipalUserProviderTest.php	129	config(['auth.providers.users.driver' => 'corex-principal']);
+packages/access/tests/Feature/ScopeVersionConcurrencyTest.php	32	config(['cache.stores.remediation' => ['driver' => 'file', 'path' => $path], 'corex-access.cache.store' => 'remediation']);
+packages/access/tests/Pg/ScopeResolverTest.php	279	config(['corex-access.workspace_scope_class' => FakeWorkspaceScope::class]);
+packages/core/tests/Feature/AuditImpersonationTest.php	29	config(['database.default' => 'pgsql', 'corex.audit.enabled' => true, 'queue.default' => 'sync', 'queue.connections.sync.after_commit' => false]);
+packages/core/tests/Feature/DeliveryRemediationTest.php	17	config(['database.default' => 'pgsql', 'corex.audit.enabled' => true, 'queue.default' => 'sync', 'queue.connections.sync.after_commit' => false]);
+packages/core/tests/Feature/ValidateConfigCommandTest.php	98	config(['corex' => $corex]);
+packages/core/tests/Modules/Feature/CompositionBindingsTest.php	81	config()->set('corex.modules.connection', 'module-test');
+packages/core/tests/Modules/Feature/CompositionBindingsTest.php	82	config()->set('corex.modules.cache', ['store' => 'array', 'ttl' => 42, 'prefix' => 'module-test']);
+packages/core/tests/Modules/Feature/LifecycleRemediationTest.php	33	config(['database.default' => 'pgsql', 'corex.modules.connection' => 'pgsql']);
+packages/core/tests/Support/CoreXTestCase.php	36	$app['config']->set('app.key', 'base64:'.base64_encode(str_repeat('a', 32)));
+packages/core/tests/Support/CoreXTestCase.php	38	$app['config']->set('database.default', 'testbench');
+packages/core/tests/Support/CoreXTestCase.php	39	$app['config']->set('database.connections.testbench', [
+packages/core/tests/Support/CoreXTestCase.php	47	// config(['database.default' => 'pgsql']). getenv(), not the env()
+packages/core/tests/Support/CoreXTestCase.php	50	$app['config']->set('database.connections.pgsql', [
+packages/core/tests/Support/CoreXTestCase.php	69	// + config(['corex.audit.enabled' => true])).
+packages/core/tests/Support/CoreXTestCase.php	70	$app['config']->set('corex.audit.enabled', false);
+packages/custom-fields/tests/Unit/AttributeTablesTest.php	59	$this->app['config']->set('corex-custom-fields.tables.documents', 'Bad-Name');
+packages/intl/tests/ConfigReportSectionTest.php	27	config(['corex-intl.reference.cursor_secret' => 'a-private-section-secret']);
+packages/intl/tests/ConfigReportSectionTest.php	31	config(['corex-intl.reference.cursor_secret' => null]);
+packages/intl/tests/Locale/LocaleResolutionTest.php	172	config(['corex-intl.formatting.icu_enabled' => false]);
+packages/intl/tests/Support/IntlTestCase.php	48	$app['config']->set('corex.audit.enabled', false);
+packages/notifications/tests/Digest/DisabledDigestTestCase.php	22	$app['config']->set('corex-notifications.digest.enabled', false);
+packages/notifications/tests/Digest/WakeupBridgeTest.php	118	app()['config']->set('corex-wakeup.handlers', [
+packages/notifications/tests/TestCase.php	49	$this->app['config']->set('corex-notifications.digest.enabled', true);
+packages/notifications/tests/TestCase.php	50	$this->app['config']->set('corex-notifications.digest.accept_legacy_unstamped', false);
+packages/notifications/tests/TestCase.php	51	$this->app['config']->set('corex-wakeup.handlers', [
+packages/operations/tests/Feature/ApiRetentionTest.php	397	$this->app['config']->set('corex-operations.schema', [
+packages/operations/tests/Feature/ApiRoutesTest.php	42	$app['config']->set('corex-operations.routes.enabled', self::$routesEnabled);
+packages/operations/tests/Feature/BulkApiTest.php	174	$this->app['config']->set('corex-operations.schema', [
+packages/operations/tests/Feature/BulkResultAccessTest.php	51	$this->app['config']->set('corex-operations.schema', [
+packages/operations/tests/Feature/BulkStoreTest.php	509	$this->app['config']->set('corex-operations.schema', [
+packages/operations/tests/Feature/BulkTransferTest.php	233	$this->app['config']->set('corex-operations.schema', [
+packages/operations/tests/Feature/LoadContourBootTest.php	76	$this->app['config']->set('corex-operations.schema', [
+packages/operations/tests/Feature/LoadSchemaTest.php	188	$this->app['config']->set('corex-operations.schema', [
+packages/operations/tests/Feature/OperationBudgetTest.php	399	$this->app['config']->set('corex-operations.schema', [
+packages/operations/tests/Feature/PlatformTest.php	156	$this->app['config']->set('corex-operations.require_physical_tenancy', false);
+packages/panels/tests/SavedViewsTestCase.php	69	// + config(['corex.audit.enabled' => true])).
+packages/panels/tests/SavedViewsTestCase.php	70	$app['config']->set('corex.audit.enabled', false);
+packages/search-intl/tests/Support/SearchIntlTestCase.php	48	$app['config']->set('corex.audit.enabled', false);
+packages/search-intl/tests/TestCase.php	43	$this->app['config']->set('corex-search-intl.enabled', true);
+packages/search-intl/tests/TestCase.php	53	$app['config']->set('corex-search-intl.enabled', true);
+packages/search-intl/tests/TestCase.php	54	$app['config']->set('corex-intl.locale.supported_tags', ['en', 'ru', 'en-US', 'ru-RU']);
+packages/search-intl/tests/TestCase.php	55	$app['config']->set('corex-intl.locale.app_tag', 'en');
+packages/search-meilisearch/tests/Unit/ConfigReportSectionTest.php	27	config(['corex-search-meilisearch.key' => 'a-private-section-secret']);
+packages/search-meilisearch/tests/Unit/ConfigReportSectionTest.php	31	config(['corex-search-meilisearch.key' => null]);
+packages/search-meilisearch/tests/Unit/MeilisearchServiceProviderTest.php	22	$this->app['config']->set('corex-search.driver', 'meilisearch');
+packages/search-meilisearch/tests/Unit/MeilisearchServiceProviderTest.php	30	$this->app['config']->set('corex-search.driver', 'meilisearch');
+packages/search-meilisearch/tests/Unit/MeilisearchServiceProviderTest.php	31	$this->app['config']->set('corex-search-meilisearch.host', 'http://127.0.0.1:7700');
+packages/search-meilisearch/tests/Unit/MeilisearchServiceProviderTest.php	32	$this->app['config']->set('corex-search-meilisearch.index_uid', 'equipment');
+packages/search-meilisearch/tests/Unit/MeilisearchServiceProviderTest.php	33	$this->app['config']->set('corex-search-meilisearch.key', 'local-test-key');
+packages/search-meilisearch/tests/Unit/MeilisearchServiceProviderTest.php	45	$app['config']->set('corex-search.driver', 'meilisearch');
+packages/search-meilisearch/tests/Unit/MeilisearchServiceProviderTest.php	46	$app['config']->set('corex-search-meilisearch.host', 'http://127.0.0.1:7700');
+packages/search-meilisearch/tests/Unit/MeilisearchServiceProviderTest.php	47	$app['config']->set('corex-search-meilisearch.index_uid', 'equipment');
+packages/search-meilisearch/tests/Unit/MeilisearchServiceProviderTest.php	48	$app['config']->set('corex-search-meilisearch.key', 'local-test-key');
+packages/search/tests/Unit/ConfigReportSectionTest.php	27	config(['corex-search.cursor_secret' => 'a-private-section-secret']);
+packages/search/tests/Unit/ConfigReportSectionTest.php	31	config(['corex-search.cursor_secret' => null]);
+packages/search/tests/Unit/SearchServiceProviderTest.php	30	$this->app['config']->set('corex-search.driver', 'null');
+packages/search/tests/Unit/SearchServiceProviderTest.php	37	$this->app['config']->set('corex-search.driver', 'postgres');
+packages/search/tests/Unit/SearchServiceProviderTest.php	38	$this->app['config']->set('corex-search.cursor_secret', 'short');
+packages/search/tests/Unit/SearchServiceProviderTest.php	46	$this->app['config']->set('corex-search.driver', 'meilisearch');
+packages/search/tests/Unit/SearchServiceProviderTest.php	54	$this->app['config']->set('corex-search.driver', 'postgres');
+packages/search/tests/Unit/SearchServiceProviderTest.php	55	$this->app['config']->set('corex-search.cursor_secret', str_repeat('a', 32));
+packages/tasks-workflow/tests/Feature/TaskCompletionCaptureTest.php	33	config()->set('corex-tasks-workflow.completion_capture.enabled', true);
+packages/tasks-workflow/tests/Feature/TaskCompletionCaptureTest.php	82	config()->set('corex-tasks-workflow.completion_capture.enabled', false);
+packages/tasks-workflow/tests/Pg/MaterializationPgTest.php	134	app()['config']->set('corex-tasks-workflow.wakeup.enabled', true);
+packages/tasks-workflow/tests/Pg/MaterializationPgTest.php	215	app()['config']->set('corex-workflow.enforce_declarations', false);
+packages/tasks-workflow/tests/Pg/MaterializationPgTest.php	216	app()['config']->set('corex-tasks-workflow.completion_capture.enabled', true);
+packages/tasks-workflow/tests/Pg/MaterializationPgTest.php	255	app()['config']->set('corex-wakeup.handlers', [
+packages/tasks-workflow/tests/TestCase.php	91	$app['config']->set('corex.audit.enabled', false);
+packages/tasks/tests/Support/TasksTestCase.php	54	$app['config']->set('corex.audit.enabled', false);
+packages/tenancy/tests/ConfigReportSectionTest.php	27	config(['tenancy.oidc.client_secret' => 'a-private-section-secret']);
+packages/tenancy/tests/ConfigReportSectionTest.php	31	config(['tenancy.oidc.client_secret' => null]);
+packages/tenancy/tests/Feature/AccountLifecycleTest.php	86	config(["database.connections.{$name}" => [
+packages/tenancy/tests/Feature/AccountStatusGateTest.php	35	config([
+packages/tenancy/tests/Feature/DomainTrustTest.php	174	config(['tenancy.domain_trust.enabled' => true]);
+packages/tenancy/tests/Feature/DomainTrustTest.php	263	config(['tenancy.identification.resolvers.'.HostTenantResolver::class => [
+packages/tenancy/tests/Feature/GlobalLogoutTest.php	24	// plain config()->set() in defineEnvironment(), and why this must be reset
+packages/tenancy/tests/Feature/HostResolutionTest.php	36	config(['tenancy.identification.resolvers.'.HostTenantResolver::class => [
+packages/tenancy/tests/Feature/IdentitySyncerTest.php	41	config(['queue.default' => 'sync']);
+packages/tenancy/tests/Feature/IdentitySyncerTest.php	407	config(['database.connections.identity_writer_test' => config('database.connections.pgsql')]);
+packages/tenancy/tests/Feature/ImpersonationTest.php	40	// config()->set() in a test could take effect) — set via the SAME env-var
+packages/tenancy/tests/Feature/ImpersonationTest.php	100	config(['queue.default' => 'sync']);
+packages/tenancy/tests/Feature/ImpersonationTest.php	495	config(['tenancy.oidc.impersonation.require_approved_by' => true]);
+packages/tenancy/tests/Feature/ImpersonationTest.php	745	config(['tenancy.oidc.impersonation.enabled' => false]);
+packages/tenancy/tests/Feature/ImpersonationWriteGuardTest.php	107	config(['queue.default' => 'sync']);
+packages/tenancy/tests/Feature/ManagementIdentityHydratorTest.php	11	config(['database.connections.'.$connection => ['driver' => 'sqlite', 'database' => ':memory:', 'prefix' => '']]);
+packages/tenancy/tests/Feature/MigrationWaveTest.php	71	config(["database.connections.{$name}" => [
+packages/tenancy/tests/Feature/OidcLoginTest.php	30	// this can't be a plain config()->set() in defineEnvironment(). Reset in
+packages/tenancy/tests/Feature/OidcLoginTest.php	59	config(['queue.default' => 'sync']);
+packages/tenancy/tests/Feature/PendingPoolTest.php	65	config(["database.connections.{$name}" => [
+packages/tenancy/tests/Feature/PrincipalWorkspaceTest.php	31	config()->set('database.connections.'.$connection, array_replace(config('database.connections.pgsql'), ['database' => $database]));
+packages/tenancy/tests/Feature/ProviderRemediationTest.php	25	config(['tenancy.provisioning.pipeline' => [RemediationProvisioningStep::class]]);
+packages/tenancy/tests/Feature/ProvisioningTest.php	72	config(["database.connections.{$name}" => [
+packages/tenancy/tests/Feature/ResolveWorkspaceTest.php	45	config(['tenancy.workspace.path_segment' => 'w']);
+packages/tenancy/tests/Feature/ResolveWorkspaceTest.php	331	config(['tenancy.workspace.path_segment' => 'ws']);
+packages/tenancy/tests/Feature/SignupIdempotencyTest.php	39	config(["database.connections.{$name}" => [
+packages/tenancy/tests/Feature/TemplateIntegrityTest.php	47	config(['database.connections.template_integrity' => $configuration]);
+packages/tenancy/tests/Feature/TenancyManagerTest.php	40	config(['session.driver' => 'database']);
+packages/tenancy/tests/Feature/TenantSessionScopeTest.php	37	config(['session.driver' => 'database']);
+packages/tenancy/tests/Feature/TenantStorageTest.php	45	config([
+packages/tenancy/tests/Feature/TenantStorageTest.php	75	config([
+packages/tenancy/tests/Feature/WorkspaceResolverTest.php	293	config(['database.connections.quota_race' => config('database.connections.pgsql')]);
+packages/tenancy/tests/Pg/PhysicalContextConformanceTest.php	48	config(['tenancy.storage.durable_root' => $this->storageRoot.'/durable', 'tenancy.storage.ephemeral_root' => $this->storageRoot.'/ephemeral']);
+packages/tenancy/tests/TestCase.php	84	* CreatesApplication.php` lines 534 vs 543). `config()->set()` in
+packages/tenancy/tests/TestCase.php	105	$app['config']->set('database.default', 'pgsql');
+packages/tenancy/tests/TestCase.php	106	$app['config']->set('database.connections.pgsql', [
+packages/tenancy/tests/TestCase.php	119	$app['config']->set('tenancy.host_identification.enabled', static::$hostIdentificationEnabled);
+packages/tenancy/tests/TestCase.php	126	// long after this method returns) — safe to set via config()->set()
+packages/tenancy/tests/TestCase.php	129	$app['config']->set('tenancy.oidc.issuer', 'https://idp.corex.test');
+packages/tenancy/tests/TestCase.php	130	$app['config']->set('tenancy.oidc.client_id', 'oidc-test-client');
+packages/tenancy/tests/TestCase.php	131	$app['config']->set('tenancy.oidc.client_secret', 'oidc-test-client-secret');
+packages/tenancy/tests/TestCase.php	132	$app['config']->set('tenancy.oidc.redirect_uri', 'https://app.example.test/auth/callback');
+packages/tenancy/tests/TestCase.php	140	$app['config']->set('auth.providers.users.driver', 'oidc-test-stub');
+packages/tenancy/tests/TestCase.php	197	config([
+packages/tools/tests/Feature/ToolCostInvocationTest.php	180	$this->app['config']->set('corex-operations.schema', [
+packages/wakeup/tests/Feature/WakeupSchedulerTest.php	93	app()['config']->set('corex-wakeup.handlers', ['test.reminder' => WakeupTestHandler::class]);
+packages/wakeup/tests/Feature/WakeupSchedulerTest.php	111	app()['config']->set('corex-wakeup.handlers', [
+packages/wakeup/tests/Feature/WakeupSchedulerTest.php	212	app()['config']->set('corex-wakeup.handlers', [
+packages/wakeup/tests/Feature/WakeupSchedulerTest.php	247	app()['config']->set('corex-wakeup.handlers', [
+packages/wakeup/tests/Feature/WakeupSchedulerTest.php	279	app()['config']->set('corex-wakeup.handlers', [
+packages/wakeup/tests/Feature/WakeupSchedulerTest.php	302	app()['config']->set('corex-wakeup.handlers', [
+packages/wakeup/tests/Feature/WakeupSchedulerTest.php	323	app()['config']->set('corex-wakeup.handlers', ['test.reminder' => WakeupTestHandler::class]);
+packages/wakeup/tests/Feature/WakeupSchedulerTest.php	346	app()['config']->set('corex-wakeup.handlers', ['test.failure' => FailingWakeupTestHandler::class]);
+packages/wakeup/tests/Feature/WakeupSchedulerTest.php	369	app()['config']->set('corex-wakeup.handlers', ['test.reminder' => WakeupTestHandler::class]);
+packages/wakeup/tests/Feature/WakeupSchedulerTest.php	395	app()['config']->set('corex-wakeup.handlers', [
+packages/wakeup/tests/Feature/WakeupSchedulerTest.php	428	app()['config']->set('corex-wakeup.handlers', ['test.reminder' => WakeupTestHandler::class]);
+packages/wakeup/tests/Feature/WakeupSchedulerTest.php	481	app()['config']->set('corex-wakeup.handlers', ['test.failure' => FailingWakeupTestHandler::class]);
+packages/wakeup/tests/Feature/WakeupSchedulerTest.php	516	app()['config']->set('corex-wakeup.handlers', ['test.reminder' => WakeupTestHandler::class]);
+packages/wakeup/tests/Feature/WakeupSchedulerTest.php	517	app()['config']->set('corex-wakeup.max_attempts', 5);
+packages/wakeup/tests/Pg/WakeupClaimTest.php	59	app()['config']->set('corex-wakeup.handlers', [
+packages/webhooks/tests/Feature/WebhookApiRetentionTest.php	420	$this->app['config']->set('corex-operations.schema', [
+packages/webhooks/tests/Feature/WebhookConcurrencyTest.php	192	$this->app['config']->set('corex-operations.schema', [
+packages/webhooks/tests/Feature/WebhookDeliveryTest.php	324	$this->app['config']->set('corex-operations.schema', [
+packages/webhooks/tests/Feature/WebhookFanoutTest.php	254	$this->app['config']->set('corex-operations.schema', [
+packages/webhooks/tests/Feature/WebhookLoadContourBootTest.php	38	$this->app['config']->set('corex-webhooks.delivery_enabled', true);
+packages/webhooks/tests/Feature/WebhookLoadContourBootTest.php	39	$this->app['config']->set('corex-webhooks.worker_ready', false);
+packages/webhooks/tests/Feature/WebhookLoadContourIntegrationTest.php	253	$this->app['config']->set('corex-operations.schema', [
+packages/webhooks/tests/Feature/WebhookManagementTest.php	307	$this->app['config']->set('corex-operations.schema', [
+packages/webhooks/tests/Feature/WebhookRedactionTest.php	115	$this->app['config']->set('corex-operations.schema', [
+packages/webhooks/tests/Feature/WebhookReplayTest.php	359	$this->app['config']->set('corex-operations.schema', [
+packages/webhooks/tests/Feature/WebhookReplayTest.php	384	$this->app['config']->set('corex-operations.schema', [
+packages/webhooks/tests/Feature/WebhookSubscriptionTest.php	176	$this->app['config']->set('corex-operations.schema.tenant', [
+packages/webhooks/tests/Feature/WebhookSubscriptionTest.php	280	$this->app['config']->set('corex-operations.schema', [
+packages/webhooks/tests/Feature/WebhooksProviderTest.php	32	$app['config']->set('corex-webhooks.delivery_enabled', true);
+packages/webhooks/tests/Feature/WebhooksProviderTest.php	33	$app['config']->set('corex-webhooks.worker_ready', true);
+packages/webhooks/tests/Feature/WebhooksProviderTest.php	38	$this->app['config']->set('corex-webhooks.delivery_enabled', true);
+packages/webhooks/tests/Feature/WebhooksProviderTest.php	39	$this->app['config']->set('corex-webhooks.worker_ready', true);
+packages/workflow/tests/TestCase.php	60	$app['config']->set('corex-workflow.enforce_declarations', false);
+products/flex-crm/tests/Feature/ApiOperationsTest.php	114	config(['corex.ids.strategy' => IdStrategy::Int]);
+products/flex-crm/tests/Pg/ActivityIdTest.php	21	config(['database.default' => 'pgsql', 'corex.ids.strategy' => $strategy]);
+products/flex-crm/tests/Pg/ActivityIdTest.php	33	config(['database.default' => 'pgsql', 'corex.ids.strategy' => $strategy]);
+products/flex-crm/tests/Pg/ActivityIdTest.php	39	config(['corex.ids.strategy' => IdStrategy::from($strategy)]);
+products/flex-crm/tests/Pg/ModuleLifecycleTest.php	18	config(['database.default' => 'pgsql', 'corex.modules.connection' => 'pgsql']);
+products/flex-crm/tests/Pg/ParityContractTest.php	34	config(['database.default' => 'pgsql', 'corex.ids.strategy' => 'uuid7']);
+products/flex-crm/tests/Support/CrmTestCase.php	63	$app['config']->set('corex.audit.enabled', false);
+tests/Feature/AuditLogTest.php	153	config(['corex.audit.enabled' => true]);
+tests/Feature/AuditLogTest.php	348	config(['corex.audit.enabled' => false]);
+tests/Feature/AuditLogTest.php	368	config(['corex.audit.enabled' => false]);
+tests/Feature/AuditLogTest.php	385	config(['corex.audit.enabled' => false]);
+tests/Feature/ConfigurableIdTest.php	20	config(['corex.ids.strategy' => $strategy]);
+tests/Feature/ConfigurableIdTest.php	34	config(['corex.ids.strategy' => IdStrategy::Ulid]);
+tests/Feature/ConfigurableIdTest.php	37	config(['corex.ids.strategy' => IdStrategy::Uuid]);
+tests/Feature/ConfigurableIdTest.php	40	config(['corex.ids.strategy' => IdStrategy::Uuid7]);
+tests/Feature/ConfigurableIdTest.php	43	config(['corex.ids.strategy' => IdStrategy::Int]);
+tests/Feature/ConfigurableIdTest.php	64	config(['corex.ids' => Arr::except(config('corex.ids', []), ['strategy'])]);
+tests/Feature/ConfigurableIdTest.php	71	config(['corex.ids.strategy' => IdStrategy::Uuid7]);
+tests/Feature/ConfigurableIdTest.php	82	config(['corex.ids.strategy' => IdStrategy::Int]);
+tests/Feature/ConfigurableIdTest.php	103	config(['corex.ids.strategy' => $strategy]);
+tests/Feature/ConfigurableIdTest.php	139	config(['corex.ids.strategy' => IdStrategy::Ulid]);
+tests/Feature/ImpersonationAuditContractTest.php	21	config(['corex.audit.enabled' => true]);
+tests/Feature/ModuleLifecycleTest.php	128	config(['corex.modules.connection' => LIFECYCLE_TEST_CONNECTION]);
+tests/Feature/ModuleRegistryTest.php	454	config()->set('corex.modules.cache.store', 'array');
+tests/Feature/ModuleRegistryTest.php	455	config()->set('corex.modules.cache.prefix', 'cfg-driven');
+tests/Feature/ModuleRegistryTest.php	456	config()->set('corex.modules.cache.ttl', 3600);
+tests/Feature/PubSubTest.php	74	config(['corex.pubsub.driver' => PubSubDriver::Null]);
+tests/Feature/PubSubTest.php	86	config(['corex.pubsub.driver' => PubSubDriver::Null]);
+tests/Feature/PubSubTest.php	96	config(['corex.pubsub.driver' => PubSubDriver::Redis]);
+tests/Feature/PubSubTest.php	106	config(['corex.pubsub.driver' => PubSubDriver::Database]);
+tests/Feature/UlidGenerationTest.php	21	config(['corex.ids.strategy' => IdStrategy::Ulid]);

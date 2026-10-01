@@ -1,0 +1,10 @@
+Reproduction (clean checkout of 39ae489a, stage-stancl-providers + composer update, PHP 8.4):
+  php scripts/php-api.php --write
+  git diff --stat -- packages/*/resources/contracts/php-api.json
+Result: packages/access and packages/core manifests each gain 3 lines:
+  "@throws": [
+      "\\Illuminate\\Database\\ClassMorphViolationException"
+  ]
+on an inherited framework method (signature `string $class` → `string`), i.e. the manifest expands members
+inherited from a vendor type; composer update resolved 30 packages to newer versions than composer.lock.
+Consequence: package-graph-gate reports `[R4b] API-STALE generated surface` for both manifests (exit 1).

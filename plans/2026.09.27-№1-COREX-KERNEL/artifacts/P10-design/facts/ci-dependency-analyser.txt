@@ -1,0 +1,47 @@
+==> packages/access
+==> packages/core
+Found 2 unknown classes!
+  • CoreX\Operations\Errors\Enums\OperationsErrorCode
+    in packages/core/tests/Unit/ErrorDescriptorTest.php:141
+  • Symfony\Component\Filesystem\Filesystem
+    in packages/core/tests/Attributes/SurfaceScannerTest.php:29
+Found 1 shadow dependency!
+  • phpunit/phpunit
+      e.g. PHPUnit\Framework\Attributes\DataProvider in packages/core/tests/Attributes/SurfaceScannerTest.php:141 (+ 1 more)
+Found 3 dev dependencies in production code!
+  • nikic/php-parser
+      e.g. PhpParser\Error in packages/core/src/Attributes/Internal/SurfaceScanner.php:274 (+ 97 more)
+  • phpstan/phpdoc-parser
+      e.g. PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode in packages/core/src/Attributes/Internal/SurfaceScanner.php:799 (+ 29 more)
+  • phpstan/phpstan
+      e.g. PHPStan\Reflection\ClassReflection in packages/core/src/Messaging/Internal/DurablePayloadTypeChecker.php:24 (+ 9 more)
+==> packages/custom-fields
+Found 1 shadow dependency!
+  • symfony/process
+      e.g. Symfony\Component\Process\Process in packages/custom-fields/tests/Unit/AttributesArchitectureGateTest.php:16
+==> packages/intl
+==> packages/media
+==> packages/notifications
+==> packages/operations
+==> packages/panels
+==> packages/recurrence
+Found 1 shadow dependency!
+  • laravel/framework
+      e.g. Illuminate\Support\ServiceProvider in packages/recurrence/src/RecurrenceServiceProvider.php:14
+==> packages/search-intl
+==> packages/search-meilisearch
+==> packages/search
+==> packages/tasks-workflow
+Found 1 unknown class!
+  • JsonDocuments
+    in packages/tasks-workflow/tests/Pg/WorkUnitIsolationPgTest.php:87
+==> packages/tasks
+==> packages/tenancy
+Found 1 shadow dependency!
+  • ext-redis
+      e.g. Redis in packages/tenancy/tests/Feature/RedisAccountMenuConformanceTest.php:68 (+ 1 more)
+==> packages/tools
+==> packages/transfer
+==> packages/wakeup
+==> packages/webhooks
+==> packages/workflow

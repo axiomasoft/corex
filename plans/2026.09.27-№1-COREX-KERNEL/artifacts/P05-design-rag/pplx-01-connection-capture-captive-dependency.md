@@ -1,0 +1,44 @@
+# pplx-01 — captured ConnectionInterface vs resolver; captive dependency под Octane
+
+- Tool: perplexity-web `search` · Date: 2026-10-01
+- Query: "Laravel package refactoring away from facades to constructor injection in a long-lived worker (Octane) with database-per-tenant multi-tenancy: is it safe to inject Illuminate\Database\ConnectionInterface into a singleton or scoped service instead of calling DB::connection() at use time? Difference between ConnectionResolverInterface (late resolution) and captured ConnectionInterface when the default connection is switched per tenant. Also: singleton service depending on a scoped binding (captive dependency) under Octane — how to detect and prevent it. Cite Laravel docs, Octane docs, stancl/tenancy or spatie multitenancy docs."
+- Status: provenance (synthesized answer; not a primary source).
+
+## Answer (verbatim)
+
+Short answer: don’t constructor-inject the active ConnectionInterface into a singleton—or into a scoped service that can be resolved before tenant initialization. That captures a connection object, not a promise to fetch whichever connection is current later. For a tenancy-switchable default connection, inject ConnectionResolverInterface and resolve the connection when the operation runs, or inject a stable, explicitly named connection such as tenant when that is the contract you intend.
+
+## What gets captured
+
+ConnectionResolverInterface exposes connection($name = null), getDefaultConnection(), and setDefaultConnection(). Laravel’s DatabaseManager implements that interface; connection() returns a connection instance, while a null name means use the current default connection. [Laravel API: ConnectionResolverInterface] [Laravel API: DatabaseManager]
+That creates an important timing distinction:
+```
+// Captures a ConnectionInterface now. public function __construct(ConnectionInterface $connection) { $this->connection = $connection; } // Captures the resolver, then asks it for the connection at use time. public function __construct(ConnectionResolverInterface $connections) { $this->connections = $connections; } public function query() { return $this->connections->connection()->table('records'); }
+```
+When tenant initialization switches the default connection name, the resolver’s later connection() call can follow that new default. But a previously injected connection object remains the same object; changing the resolver’s default does not turn it into a different connection. If tenancy instead mutates the configuration for a named connection (for example, a stable tenant connection whose database name changes), resolving that named connection later still returns the same named connection object, which the tenancy package may reconfigure. The safe rule is: distinguish switching the default connection from reconfiguring a named connection, and test the exact package/version and lifecycle you deploy.
+Stancl’s docs say its database bootstrapper constructs the tenant connection and switches the default connection to tenant; explicitly named connections are respected. [Stancl Tenancy bootstrappers] Stancl v4 likewise documents creating a tenant connection and changing the default, with explicit central or tenant connection selection available. [Stancl v4 database bootstrapper] Spatie’s multi-database setup instead documents a named tenant connection whose database name is changed by the configured switch task; models are expected to use the landlord or tenant connection explicitly. [Spatie: multiple databases] [Spatie: switching databases]
+
+## Singleton versus scoped
+
+A singleton holding a connection object is unsafe if that object may be resolved under one tenant and reused under another. Octane keeps the application in memory across requests, and Laravel specifically warns about injecting request-varying objects into long-lived constructors. [Laravel Octane]
+A scoped service is flushed between request/job lifecycles, but that alone does not guarantee safety: if it is first resolved before tenant switching, it can still capture the wrong connection for the rest of that lifecycle. Laravel documents scoped bindings as one instance per request/job lifecycle, flushed at the next lifecycle. [Laravel service container]
+Practical choices:
+- Use ConnectionResolverInterface and call connection() at the point of use when the service should follow Laravel’s current default.
+- Use an explicit connection name when the service must always use a particular connection, such as landlord or tenant.
+- Use a scoped service for tenant-specific state, and ensure it is resolved only after tenancy initialization.
+- Keep a singleton only if it is stateless and does not retain a tenant-specific connection, model, query builder, or other tenant-varying value.
+
+## Detect and prevent captive dependencies
+
+A captive dependency is a longer-lived service retaining a shorter-lived service. For example, a singleton depending on a scoped binding may keep that scoped instance past its intended lifecycle. Laravel’s docs describe the lifetimes, but the cited documentation does not describe a built-in captive-dependency validator. [Laravel service container]
+Prevention and detection:
+- Align lifetimes: make the consumer scoped if it depends on a scoped service; otherwise pass a resolver/factory or stable abstraction instead of the scoped instance.
+- Audit the container graph: inspect singleton registrations and recursively inspect constructor dependencies for scoped bindings. Pay particular attention to package service providers and bindings resolved during provider boot.
+- Add lifecycle tests: resolve the service under tenant A, switch to tenant B, then assert its next operation reaches B’s database; also test central ↔ tenant transitions and the reverse order. Run the same scenario through successive Octane requests or queue jobs.
+- Assert the actual database: verify the connection name/database at the query boundary, or insert distinct sentinel rows into each tenant database and assert the result. This catches a stale connection even when the service container graph looks reasonable.
+For your package, a resolver-injected abstraction is usually the least coupled design: it avoids storing the active connection and lets the host’s tenancy integration determine what “current default” means. If the package requires a particular named tenant connection, make that explicit in configuration rather than silently relying on the default.
+
+## Sources
+
+1. https://laravel.com/framework/docs/12.x/octane
+2. https://laravel.com/framework/docs/12.x/container

@@ -9,7 +9,7 @@
 | Title | План №1 — CoreX Kernel 1.0: архитектурный идеал ядра и чистый API |
 | Layout | v2 |
 | Document Type | Executable Master Plan (катящийся дизайн с немедленным исполнением — D21) |
-| Authoring Model | codex/gpt-6-sol/high (owner-authorized P00–P04 finish, D65, 2026-09-29); codex/gpt-6-sol/high (owner-authorized P04 design, D62, 2026-09-29); codex/gpt-6-sol/xhigh (P03.2 routine input/formatter repair D61, 2026-09-29); claude-opus-5-5/high (initial, P01 design); codex/gpt-6-astra/high (P00 audit remediation, 2026-09-27; P00–P01 finish, 2026-09-28); codex/gpt-6-sol/high (P01 B1–B3 owner-prescribed remediation and finish, 2026-09-28); codex/gpt-6-sol/high (owner-authorized inline audit corrections, 2026-09-28); claude-opus-5-5/high (P02 design, 2026-09-28); codex/gpt-6-sol/high (owner-authorized P02 A1–A4 remediation, 2026-09-28); claude-opus-5-5/high (P03 design, 2026-09-29); codex/gpt-6-astra/high (owner-authorized P03 A1–A5 remediation + finish, D58, 2026-09-29); codex/gpt-6-astra/xhigh (owner-authorized P03 full replay and inline design fixes, D59, 2026-09-29); codex/gpt-6-sol/high (P03.1 historical evidence scan clarification, D60, 2026-09-29) |
+| Authoring Model | claude-opus-5-5 (owner-authorized P10/P05 design audit remediation, D76, 2026-10-01); claude-opus-5-5/high (P05 и P10 design, 2026-10-01); codex/gpt-6-sol/high (owner-authorized P00–P04 finish, D65, 2026-09-29); codex/gpt-6-sol/high (owner-authorized P04 design, D62, 2026-09-29); codex/gpt-6-sol/xhigh (P03.2 routine input/formatter repair D61, 2026-09-29); claude-opus-5-5/high (initial, P01 design); codex/gpt-6-astra/high (P00 audit remediation, 2026-09-27; P00–P01 finish, 2026-09-28); codex/gpt-6-sol/high (P01 B1–B3 owner-prescribed remediation and finish, 2026-09-28); codex/gpt-6-sol/high (owner-authorized inline audit corrections, 2026-09-28); claude-opus-5-5/high (P02 design, 2026-09-28); codex/gpt-6-sol/high (owner-authorized P02 A1–A4 remediation, 2026-09-28); claude-opus-5-5/high (P03 design, 2026-09-29); codex/gpt-6-astra/high (owner-authorized P03 A1–A5 remediation + finish, D58, 2026-09-29); codex/gpt-6-astra/xhigh (owner-authorized P03 full replay and inline design fixes, D59, 2026-09-29); codex/gpt-6-sol/high (P03.1 historical evidence scan clarification, D60, 2026-09-29) |
 | Repository | corex |
 | Related Packages | все `packages/*`, `docs/`, `docs-public/`, CI, `scripts/`, `tests/` |
 | Input | `audits/2026-09-27-perplexity-1.md` (вход, не норматив; вердикты — `findings/00-audit-verification.md`) |
@@ -108,6 +108,9 @@ operations, независимые модули, детерминированн�
   не выполнение на 8.3.
 - Внешние действия (Packagist, split repos, теги, push в чужие репозитории, создание репозиториев) запрещены: публикация —
   owner-gate P09.
+- **Hosted CI — граница приёмки фазы** (D73, заменяет D47): фаза закрывается только при зелёном workflow `CI` на своём
+  финальном commit; падающий тест или гейт не обходится — исправление либо карантин отдельным D# с фазой-владельцем;
+  гейты герметичны; пороги не понижаются.
 - Canonical statuses: `⬜ Not started`, `🟡 In progress`, `🟢 Done`, `🟠 Done with deviations`, `🔴 Blocked`,
   `⛔ Skipped by decision`.
 - Generated carriers (state, status, bundles, decision views, journal) — только через Task tooling.
@@ -123,7 +126,7 @@ operations, независимые модули, детерминированн�
 
 ## 3. Routing
 
-Детализированы: P00, P01, P02, P03, P04. Фазы P05–P09 — skeleton в `backlog/` (D21, D24), детализируются по очереди. Batch — предложение группировки;
+Детализированы: P00, P01, P02, P03, P04, P05, P10. Вставная P10 исполняется до P05 (D73). Фазы P06–P09 — skeleton в `backlog/` (D21, D24), детализируются по очереди. Batch — предложение группировки;
 окончательная — execution-sheet в `roadmap.md`.
 
 | Batch | Items | Model class/effort | Exec | Review | Почему |
@@ -145,15 +148,28 @@ operations, независимые модули, детерминированн�
 | solo | P04.2 | frontier/high | manual | full | recommended: 1117 type verdicts, model/transaction DTO seams and R5=91 need a bounded public-contract replay/review context separate from registry boot. |
 | solo | P04.3 | frontier/high | manual | full | recommended: package error ownership and persisted idempotency reconstruction form a separate boot/failure boundary after the classified surface. |
 | solo | P04.4 | implementation/high | manual | full | recommended: fixed strict graph/manifest/BC/docs rollout consumes both producer results; route differs from frontier items and cannot share their batch. |
+| solo | P10.1 | implementation/high | manual | light | recommended: CI-рецепт и скрипты; результат проверяет сам hosted CI, после item отказы читаемы — первым в фазе. |
+| solo | P10.2 | implementation/high | manual | full | recommended: меняет правило формирования публичного манифеста и раскладку; полноту манифеста CI не видит — независимое ревью (D75). |
+| solo | P10.3 | implementation/high | manual | full | recommended: граница отказа валидации схем инструментов; fail-closed и завершение процессов на всех ветках проверяются чтением — независимое ревью (D75). |
+| solo | P10.4 | implementation/high | manual | light | recommended: лейны тестов, покрытие, остаточные отказы матрицы; закрывает фазу полностью зелёным hosted CI. |
+| B05-A | P05.1 | implementation/high | manual | light | recommended: Options, lazy singleton и удаление static Config правят те же providers, что делит P05.2; первым в B05-A. Review light по D71. |
+| B05-A | P05.2 | implementation/high | manual | light | recommended: деление providers на registrars по уже переведённым на Options файлам; вторым в B05-A, после зелёного P05.1. |
+| solo | P05.3 | implementation/high | manual | full | recommended: самый объёмный item (16 пакетов); меняет время жизни зависимостей, ошибки класса «чужой tenant» тесты ловят слабо — отдельная сессия и независимое ревью (D71, D72). |
+| solo | P05.4 | implementation/high | manual | light | recommended: проверки итога (резидентный режим, config:cache), генератор reference, доктрина и CI — отдельный docs/CI-контекст; закрывает фазу. |
 
 ## 4. Update Log
 
 | Дата | Изменение | Автор |
 |:--|:--|:--|
+| 2026-10-01 | Design audit fingerprint `f188df5f…` — ATTENTION, 4 Major (`findings/P05-P10-design-audit.md`). Правка по разрешению владельца, D76: критерий агрегатора в P10.1; CHANGELOG и arch-тесты в Files P10.2; `test:hermetic` определяется в P10.1, Pest `^4.7` в `ci-local.sh`; две команды Validation P05.3; hosted CI на каждом item P05; независимое ревью продуктовых правок P10.4. Маршруты и порядок строк 14–20 не менялись. Нужны новый finish и design audit независимой моделью; исполнение не начиналось, продукт не менялся. | auditor/designer claude-opus-5-5 |
+| 2026-10-01 | `task:plan-design finish`: сверены зависимости P00–P05 и P10 (P04 → P10.1 → P10.2 → P10.3 → P10.4 → B05-A → P05.3 → P05.4); в execution-sheet записаны строки 14–20 без изменения групп, маршрутов и review из D71/D75; исполнитель и reviewer — по пулу `session-routing.md`. Привязка досье P10 дополнена в Inputs P10.3 и P10.4; заполнен Phase Handoff P04 по evidence закрытия. Новых решений нет. Новый fingerprint ждёт независимого design audit; исполнение не начиналось, продукт не менялся. | designer/claude-opus-5-5/high |
 | 2026-09-29 | Owner D66 accepts GREEN P04 finish and waives another independent design audit for this fingerprint. Legacy gate records explicit owner acceptance; handoff/bundle now point to execution-sheet row 10, P04.1. No independent audit or runtime execution claimed. | designer/codex/gpt-6-sol/high |
 | 2026-09-29 | `task:plan-design finish`: D65 owner-authorized Sol/high; validated P00–P04 dependencies and 13 execution-sheet admissions; confirmed four sequential P04 solo routes/full reviews; reused linked dossiers/captures and seven sealed P04 inputs. New finish fingerprint awaits independent design audit; execution not started. | designer/codex/gpt-6-sol/high |
 | 2026-09-29 | `task:plan-design P04`: D62 owner-authorized Sol/high authoring; D63 symbol surface/DTO/transaction seam; D64 typed error registry and reviewed semantic Golden delta. P04.1–P04.4, all-type/source/85-site maps, dossier/retrieval/examples, proposed solo routes; runtime not executed. | designer/codex/gpt-6-sol/high |
 | 2026-09-29 | P03.2 owning admission repair D61: lossless full-map reading projection and inherited adapter formatting; product scope and gates preserved | executor/codex/gpt-6-sol/xhigh |
+| 2026-10-01 | `task:plan-design P05`: `backlog/P05.md` → `phases/P05/`, items P05.1–P05.4; D69 (config-контракт: Options на config-файл, lazy singleton + boot-валидация, удаление static Config, закрытый список опасных режимов), D70 (registrars, пороги provider, порты = PSR/`Illuminate\Contracts`, baseline Impersonation для P07, сценарий резидентного режима), D71 (implementation/high; review light, для P05.3 — full), D72 (мандат владельца: критерий — качество ядра). Первая редакция D69–D71 пересмотрена до finish по D72 и двум perplexity-capture: Options внутренние, слои валидации с runtime-проверками и поимённым acknowledgement, БД только через resolver, lifetime-гейт L1–L3 со сканом registrars, PG-сценарий смены tenant. Инвентарь перемерен по commit `39ae489a`: skeleton-цифра «41 потребитель Config» устарела. Досье, примеры, факты, три context7- и два perplexity-capture сохранены. Продукт не менялся; проверки автором не запускались (`vendor/` отсутствует). | designer/claude-opus-5-5/high |
+| 2026-10-01 | Корректировка по мандату владельца (D72, D73): только чтением установлено, что hosted CI красный с 2026-07-15 и на commit закрытия P04 падает 21 джоб из 37 — `findings/01-hosted-ci-debt.md`, классы H1–H12. D47 прекращён; вставлена фаза P10 «зелёный hosted CI на базе P04» перед исполнением P05; с P10 фаза закрывается только при зелёном hosted CI. P05 получила зависимость от P10 и hosted CI в приёмке. Продукт не менялся. | designer/claude-opus-5-5/high |
+| 2026-10-01 | `task:plan-design P10`: `backlog/P10.md` → `phases/P10/`, items P10.1–P10.4; D74 (манифесты только из собственных объявлений при прежней схеме `php-api/1`, мост `Tooling/` и R6, объявленные зависимости, протокол готовности worker схем, `test:hermetic`, CI без изменения манифестов, `contract-guard` по манифесту), D75 (implementation/high; review full для P10.2 и P10.3). Причины H2, H5, H7, H11 воспроизведены в чистой копии и записаны в `artifacts/P10-design/facts/`. Items P05 переведены на `test:hermetic`. Продукт не менялся. | designer/claude-opus-5-5/high |
 | 2026-09-27 | План создан: верификация аудита, ресерч, D01–D23, целевая архитектура, P00 детализирована, P01–P09 skeleton (карта фаз — `roadmap.md`) | claude-opus-5-5/high |
 | 2026-09-27 | `task:plan-design P00`: D24 (skeleton P01–P09 → `backlog/`, цикл finish + design audit на фазу); досье P00 дополнено (`research/P00-design-rag.md`, `examples.md`, no-search record); Code Guidance P00.2/P00.3 | claude-opus-5-5/high |
 

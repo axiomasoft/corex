@@ -1,0 +1,109 @@
+# ctx7-01 — Testbench: момент выполнения `defineEnvironment`
+
+- Tool: context7 `query-docs` · Library: `/websites/packages_tools_testbench` · Date: 2026-10-01
+- Query: "When does defineEnvironment / getEnvironmentSetUp run relative to package service providers being registered and booted? Order of application bootstrapping in Testbench"
+- Status: provenance (documentation excerpt; installed-source check — `VERIFY-AT-EXEC`, see `research/P05-design-rag.md` E1).
+
+## Answer (verbatim)
+
+### Define Environment with defineEnvironment()
+
+Source: https://packages.tools/testbench/the-basic/environment
+
+Use the defineEnvironment method to add configurations during the application bootstrapping process.
+
+```php
+use Illuminate\Contracts\Config\Repository; 
+
+class TestCase extends \Orchestra\Testbench\TestCase
+{
+    /**
+     * Define environment setup.
+     *
+     * @param  \Illuminate\Foundation\Application  $app
+     * @return void
+     */
+    protected function defineEnvironment($app) 
+    {
+        // Setup default database to use sqlite :memory:
+        tap($app['config'], function (Repository $config) { 
+            $config->set('database.default', 'testbench'); 
+            $config->set('database.connections.testbench', [ 
+                'driver'   => 'sqlite', 
+                'database' => ':memory:', 
+                'prefix'   => '', 
+            ]); 
+            
+            // Setup queue database connections.
+            $config([ 
+                'queue.batching.database' => 'testbench', 
+                'queue.failed.database' => 'testbench', 
+            ]); 
+        });
+    }
+}
+```
+
+--------------------------------
+
+### Implement defineRoutes() method
+
+Source: https://packages.tools/testbench/the-basic/routes
+
+Use the defineRoutes() method to add routes early in the application bootstrapping process, between registering and booting service providers.
+
+```php
+class TestCase extends \Orchestra\Testbench\TestCase
+{
+    /**
+     * Define routes setup.
+     *
+     * @param  \Illuminate\Routing\Router  $router
+     * @return void
+     */
+    protected function defineRoutes($router) 
+    {
+        // Define routes.
+    }
+}
+```
+
+--------------------------------
+
+### Register Package Service Providers
+
+Source: https://packages.tools/testbench/the-basic
+
+Override the getPackageProviders method to load your package service provider within the test environment.
+
+```php
+class TestCase extends \Orchestra\Testbench\TestCase
+{
+    /**
+     * Get package providers.
+     *
+     * @param  \Illuminate\Foundation\Application  $app
+     * @return array<int, class-string<\Illuminate\Support\ServiceProvider>>
+     */
+    protected function getPackageProviders($app) 
+    {
+        return [
+            'Acme\AcmeServiceProvider',
+        ];
+    }
+}
+```
+
+### Define Environment > `defineEnvironment()` Method
+
+Source: https://packages.tools/testbench/the-basic/environment
+
+If you need to add something early in the application bootstrapping process (which is executed between registering service providers and booting service providers) you could use the `defineEnvironment()` method:
+
+--------------------------------
+
+### Define Routes > `defineRoutes()` Method
+
+Source: https://packages.tools/testbench/the-basic/routes
+
+If you need to add something early in the application bootstrapping process (which is executed between registering service providers and booting service providers) you could use the `defineRoute()` method:
