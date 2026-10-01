@@ -2690,339 +2690,6 @@
         },
         "readonly": true
     },
-    "CoreX\\Attributes\\Internal\\SourceType": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "name",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "owner",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "file",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "product",
-                        "type": "bool",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "node",
-                        "type": "PhpParser\\Node\\Stmt\\ClassLike",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "namespace",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "imports",
-                        "type": "array",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "resolve": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "name",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "string",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": {
-            "file": {
-                "name": "file",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "imports": {
-                "name": "imports",
-                "readonly": true,
-                "static": false,
-                "type": "array"
-            },
-            "name": {
-                "name": "name",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "namespace": {
-                "name": "namespace",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "node": {
-                "name": "node",
-                "readonly": true,
-                "static": false,
-                "type": "PhpParser\\Node\\Stmt\\ClassLike"
-            },
-            "owner": {
-                "name": "owner",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "product": {
-                "name": "product",
-                "readonly": true,
-                "static": false,
-                "type": "bool"
-            }
-        },
-        "readonly": true
-    },
-    "CoreX\\Attributes\\Internal\\SurfaceDiagnostic": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "code",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "file",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "line",
-                        "type": "int",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "symbol",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "path",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "message",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "toArray": {
-                "params": [],
-                "return": "array",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": {
-            "code": {
-                "name": "code",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "file": {
-                "name": "file",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "line": {
-                "name": "line",
-                "readonly": true,
-                "static": false,
-                "type": "int"
-            },
-            "message": {
-                "name": "message",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "path": {
-                "name": "path",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "symbol": {
-                "name": "symbol",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            }
-        },
-        "readonly": true
-    },
-    "CoreX\\Attributes\\Internal\\SurfaceReport": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "manifests",
-                        "type": "array",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "owners",
-                        "type": "array",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "diagnostics",
-                        "type": "array",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "packagePaths",
-                        "type": "array",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "documentation": {
-                "params": [],
-                "return": "string",
-                "static": false
-            },
-            "encode": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "value",
-                        "type": "array",
-                        "variadic": false
-                    }
-                ],
-                "return": "string",
-                "static": true
-            },
-            "json": {
-                "params": [],
-                "return": "string",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": {
-            "diagnostics": {
-                "name": "diagnostics",
-                "readonly": true,
-                "static": false,
-                "type": "array"
-            },
-            "manifests": {
-                "name": "manifests",
-                "readonly": true,
-                "static": false,
-                "type": "array"
-            },
-            "owners": {
-                "name": "owners",
-                "readonly": true,
-                "static": false,
-                "type": "array"
-            },
-            "packagePaths": {
-                "name": "packagePaths",
-                "readonly": true,
-                "static": false,
-                "type": "array"
-            }
-        },
-        "readonly": true
-    },
-    "CoreX\\Attributes\\Internal\\SurfaceScanner": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [],
-                "return": "",
-                "static": false
-            },
-            "scan": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "root",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "CoreX\\Attributes\\Internal\\SurfaceReport",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
     "CoreX\\Attributes\\Spi": {
         "abstract": false,
         "constants": [],
@@ -3141,6 +2808,339 @@
                 "type": "string"
             }
         },
+        "readonly": false
+    },
+    "CoreX\\Attributes\\Tooling\\SourceType": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "owner",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "file",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "product",
+                        "type": "bool",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "node",
+                        "type": "PhpParser\\Node\\Stmt\\ClassLike",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "namespace",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "imports",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "resolve": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "file": {
+                "name": "file",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "imports": {
+                "name": "imports",
+                "readonly": true,
+                "static": false,
+                "type": "array"
+            },
+            "name": {
+                "name": "name",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "namespace": {
+                "name": "namespace",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "node": {
+                "name": "node",
+                "readonly": true,
+                "static": false,
+                "type": "PhpParser\\Node\\Stmt\\ClassLike"
+            },
+            "owner": {
+                "name": "owner",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "product": {
+                "name": "product",
+                "readonly": true,
+                "static": false,
+                "type": "bool"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Attributes\\Tooling\\SurfaceDiagnostic": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "code",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "file",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "line",
+                        "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "symbol",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "path",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "message",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "toArray": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "code": {
+                "name": "code",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "file": {
+                "name": "file",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "line": {
+                "name": "line",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            },
+            "message": {
+                "name": "message",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "path": {
+                "name": "path",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "symbol": {
+                "name": "symbol",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Attributes\\Tooling\\SurfaceReport": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "manifests",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "owners",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "diagnostics",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "packagePaths",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "documentation": {
+                "params": [],
+                "return": "string",
+                "static": false
+            },
+            "encode": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
+            },
+            "json": {
+                "params": [],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "diagnostics": {
+                "name": "diagnostics",
+                "readonly": true,
+                "static": false,
+                "type": "array"
+            },
+            "manifests": {
+                "name": "manifests",
+                "readonly": true,
+                "static": false,
+                "type": "array"
+            },
+            "owners": {
+                "name": "owners",
+                "readonly": true,
+                "static": false,
+                "type": "array"
+            },
+            "packagePaths": {
+                "name": "packagePaths",
+                "readonly": true,
+                "static": false,
+                "type": "array"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Attributes\\Tooling\\SurfaceScanner": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [],
+                "return": "",
+                "static": false
+            },
+            "scan": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "root",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Attributes\\Tooling\\SurfaceReport",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
         "readonly": false
     },
     "CoreX\\Audit\\Contracts\\AuditLogger": {
@@ -14402,49 +14402,6 @@
         "properties": [],
         "readonly": true
     },
-    "CoreX\\Errors\\Internal\\ErrorSourceScanner": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "catalogue": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "repository",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "CoreX\\Errors\\Internal\\CompiledProblemRegistry",
-                "static": false
-            },
-            "diagnostics": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "root",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "registry",
-                        "type": "CoreX\\Errors\\Contracts\\ProblemRegistry",
-                        "variadic": false
-                    }
-                ],
-                "return": "array",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
     "CoreX\\Errors\\Internal\\PackageProblemDefinitions": {
         "abstract": false,
         "constants": [],
@@ -14591,6 +14548,49 @@
                 ],
                 "return": "void",
                 "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Errors\\Tooling\\ErrorSourceScanner": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "catalogue": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "repository",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Errors\\Internal\\CompiledProblemRegistry",
+                "static": false
+            },
+            "diagnostics": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "root",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "registry",
+                        "type": "CoreX\\Errors\\Contracts\\ProblemRegistry",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
             }
         },
         "parent": null,
@@ -24618,97 +24618,6 @@
         "properties": [],
         "readonly": false
     },
-    "CoreX\\Messaging\\Internal\\DurablePayloadTypeChecker": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "buildError": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "className",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "propertyName",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "forbidden",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "line",
-                        "type": "int",
-                        "variadic": false
-                    }
-                ],
-                "return": "PHPStan\\Rules\\IdentifierRuleError",
-                "static": true
-            },
-            "forbiddenInType": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "type",
-                        "type": "PHPStan\\Type\\Type",
-                        "variadic": false
-                    }
-                ],
-                "return": "?string",
-                "static": true
-            },
-            "implementsMarker": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "classReflection",
-                        "type": "PHPStan\\Reflection\\ClassReflection",
-                        "variadic": false
-                    }
-                ],
-                "return": "bool",
-                "static": true
-            },
-            "untypedArrayErrors": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "type",
-                        "type": "PHPStan\\Type\\Type",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "propertyName",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "line",
-                        "type": "int",
-                        "variadic": false
-                    }
-                ],
-                "return": "array",
-                "static": true
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
     "CoreX\\Messaging\\Internal\\NullPubSub": {
         "abstract": false,
         "constants": [],
@@ -25332,6 +25241,97 @@
             "redisAvailable": {
                 "params": [],
                 "return": "bool",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Messaging\\PHPStan\\DurablePayloadTypeChecker": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "buildError": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "className",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "propertyName",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "forbidden",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "line",
+                        "type": "int",
+                        "variadic": false
+                    }
+                ],
+                "return": "PHPStan\\Rules\\IdentifierRuleError",
+                "static": true
+            },
+            "forbiddenInType": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "type",
+                        "type": "PHPStan\\Type\\Type",
+                        "variadic": false
+                    }
+                ],
+                "return": "?string",
+                "static": true
+            },
+            "implementsMarker": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "classReflection",
+                        "type": "PHPStan\\Reflection\\ClassReflection",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": true
+            },
+            "untypedArrayErrors": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "type",
+                        "type": "PHPStan\\Type\\Type",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "propertyName",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "line",
+                        "type": "int",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
                 "static": true
             }
         },
@@ -31839,6 +31839,126 @@
             }
         },
         "readonly": true
+    },
+    "CoreX\\Modules\\Internal\\InMemoryEntityRegistry": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\EntityRegistry"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "moduleActive",
+                        "type": "?Closure",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "activeModules",
+                        "type": "?Closure",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "all": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "ctx",
+                        "type": "?CoreX\\Context\\Data\\TenantContext",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            },
+            "byCapability": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "cap",
+                        "type": "CoreX\\Modules\\Enums\\Capability",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "ctx",
+                        "type": "?CoreX\\Context\\Data\\TenantContext",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            },
+            "forModel": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "modelClass",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "?CoreX\\Modules\\Data\\EntityDefinition",
+                "static": false
+            },
+            "freeze": {
+                "params": [],
+                "return": "void",
+                "static": false
+            },
+            "get": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "handle",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Modules\\Data\\EntityDefinition",
+                "static": false
+            },
+            "has": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "handle",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "definition",
+                        "type": "CoreX\\Modules\\Data\\EntityDefinition",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
     },
     "CoreX\\Modules\\Internal\\Lifecycle\\DatabaseModuleLifecycle": {
         "abstract": false,
@@ -46775,6 +46895,275 @@
         },
         "parent": null,
         "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Operations\\Testing\\CatalogueModuleFixture": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\ModuleRegistry"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "registry",
+                        "type": "CoreX\\Modules\\Data\\CompiledRegistry",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "active": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "ctx",
+                        "type": "CoreX\\Context\\Data\\TenantContext",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            },
+            "all": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "bumpEpoch": {
+                "params": [],
+                "return": "void",
+                "static": false
+            },
+            "compiled": {
+                "params": [],
+                "return": "CoreX\\Modules\\Data\\CompiledRegistry",
+                "static": false
+            },
+            "flush": {
+                "params": [],
+                "return": "void",
+                "static": false
+            },
+            "get": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Modules\\Data\\CompiledModule",
+                "static": false
+            },
+            "isActive": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "ctx",
+                        "type": "CoreX\\Context\\Data\\TenantContext",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "enabled": {
+                "name": "enabled",
+                "readonly": false,
+                "static": false,
+                "type": "bool"
+            },
+            "epoch": {
+                "name": "epoch",
+                "readonly": false,
+                "static": false,
+                "type": "int"
+            },
+            "epochReads": {
+                "name": "epochReads",
+                "readonly": false,
+                "static": false,
+                "type": "array"
+            },
+            "registry": {
+                "name": "registry",
+                "readonly": false,
+                "static": false,
+                "type": "CoreX\\Modules\\Data\\CompiledRegistry"
+            },
+            "visitedAccounts": {
+                "name": "visitedAccounts",
+                "readonly": false,
+                "static": false,
+                "type": "array"
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\Operations\\Testing\\LoadContourModule": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "input",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "parameters",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            },
+            "registry": {
+                "params": [],
+                "return": "CoreX\\Modules\\Data\\CompiledRegistry",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "calls": {
+                "name": "calls",
+                "readonly": false,
+                "static": true,
+                "type": "int"
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\Operations\\Testing\\ModuleFixture": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\ModuleRegistry"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "registry",
+                        "type": "CoreX\\Modules\\Data\\CompiledRegistry",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "active": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "ctx",
+                        "type": "CoreX\\Context\\Data\\TenantContext",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            },
+            "all": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "compiled": {
+                "params": [],
+                "return": "CoreX\\Modules\\Data\\CompiledRegistry",
+                "static": false
+            },
+            "get": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Modules\\Data\\CompiledModule",
+                "static": false
+            },
+            "isActive": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "ctx",
+                        "type": "CoreX\\Context\\Data\\TenantContext",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "enabled": {
+                "name": "enabled",
+                "readonly": false,
+                "static": false,
+                "type": "bool"
+            },
+            "registry": {
+                "name": "registry",
+                "readonly": false,
+                "static": false,
+                "type": "CoreX\\Modules\\Data\\CompiledRegistry"
+            },
+            "visitedAccounts": {
+                "name": "visitedAccounts",
+                "readonly": false,
+                "static": false,
+                "type": "array"
+            }
+        },
         "readonly": false
     },
     "CoreX\\Operations\\Validation\\Data\\JsonObject": {

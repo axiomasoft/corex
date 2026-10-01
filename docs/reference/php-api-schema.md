@@ -1,10 +1,10 @@
 # PHP source surface schema
 
-`CoreX\Attributes\Internal\SurfaceScanner::scan($root)` owns source discovery, ownership,
+`CoreX\Attributes\Tooling\SurfaceScanner::scan($root)` owns source discovery, ownership,
 classification, signatures and diagnostics. It parses production Composer PSR-4/PSR-0/classmap/files
 paths and configuration under `packages/` and `products/`. Products are consumers, without
-package API manifests. Inspected files are never executed. Vendor source supplies inherited
-signatures; PHP internal classes use reflection without application autoload.
+package API manifests. Inspected files are never executed. Vendor source resolves type references for diagnostics. External members are never expanded
+into a package manifest; inheritance and trait members expand only within the same Composer owner.
 
 Runtime metadata has no parser dependency: `#[Api(since: '1.0')]` and
 `#[Spi(kind: SpiKind::Implement|Call, since: '1.0')]`. Exactly one annotation per class,
@@ -35,7 +35,8 @@ nested `path`, and `message`.
 Each `php-api/1` manifest contains `schema`, `package`, sorted `symbols`. Symbol fields:
 
 - `kind`, `layer` (`api`, `spi-call`, `spi-implement`), `since`, `final`, `readonly`, `abstract`;
-- `extends` (including trait sources), `implements`, normalized type-bearing `doc` tags;
+- `extends`, `implements`, `uses`: separate sorted lists of direct FQCN parents, interfaces and traits;
+  normalized type-bearing `doc` tags;
 - `methods`: visibility, static/final/abstract/reference flags, ordered parameters with names,
   types, reference/variadic/optional flags, normalized source defaults, return and PHPDoc;
 - `properties`: type, readonly/visibility/static, default, PHPDoc and hook signatures;
@@ -43,7 +44,8 @@ Each `php-api/1` manifest contains `schema`, `package`, sorted `symbols`. Symbol
 - `enum_backing` and `enum_cases` (case → normalized source value).
 
 Public members appear in every layer; protected members only in SPI Implement. Inheritance
-resolves before filtering. Native types are resolved strings. PHPDoc ASTs resolve nested
+within the package resolves before filtering; an own override keeps its own signature.
+Promoted properties are included independently of constructor visibility. Native types are resolved strings. PHPDoc ASTs resolve nested
 generics, shapes, aliases, templates, virtual members and throws, then render canonical types.
 Diagnostic paths retain nested AST edges. Ordinary prose and method bodies are omitted.
 Unresolved names, malformed tags, cycles and unsupported trait adaptations produce diagnostics.
@@ -60,4 +62,4 @@ body/prose-only changes do not.
 The package graph shares source membership and verifies manifest/document freshness;
 namespace metadata and the old undeclared-surface baseline are retired. Unknown symbols
 cannot be admitted by generated JSON. Module/dependency/ownership gates remain independent.
-`SurfaceReport::artifacts()` owns the output paths and bytes for CLI and graph consumers.
+`SurfaceReport::encode()` and `documentation()` supply the same bytes to CLI and graph consumers.

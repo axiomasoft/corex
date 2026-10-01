@@ -48,11 +48,16 @@
         "orchestra/testbench-core": "^10.12|^11.3",
         "psr/log": "^3.0",
         "symfony/console": "^7.2|^8.0",
-        "symfony/process": "^7.2|^8.0"
+        "symfony/process": "^7.2|^8.0",
+        "symfony/filesystem": "^7.2|^8.0",
+        "phpunit/phpunit": "^12.0"
     },
     "suggest": {
         "open-telemetry/api": "Optional operation and messaging traces. CoreX boots without it.",
-        "psr/log": "Optional PSR-3 projection of operation lifecycle events."
+        "psr/log": "Optional PSR-3 projection of operation lifecycle events.",
+        "nikic/php-parser": "Development tooling for source API and error registry scans.",
+        "phpstan/phpdoc-parser": "Development tooling for source API PHPDoc parsing.",
+        "phpstan/phpstan": "Development tooling for shipped static analysis rules."
     },
     "autoload-dev": {
         "psr-4": {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3451c06f58a5cecb3408b14ab85f79fb",
+    "content-hash": "a008bfc06a5cf0f7cc478b67bd7ab6e4",
     "packages": [
         {
             "name": "axiomasoft/corex",
@@ -12,7 +12,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/core",
-                "reference": "26d90fbf3a96bc0c5a081a5575c88f45158c6bbc"
+                "reference": "964f9187c560a95512573ba1dd16e7d6216488fd"
             },
             "require": {
                 "ext-ctype": "*",
@@ -42,12 +42,17 @@
                 "orchestra/testbench-core": "^10.12|^11.3",
                 "phpstan/phpdoc-parser": "^2.3",
                 "phpstan/phpstan": "^2.2.16",
+                "phpunit/phpunit": "^12.0",
                 "psr/log": "^3.0",
                 "symfony/console": "^7.2|^8.0",
+                "symfony/filesystem": "^7.2|^8.0",
                 "symfony/process": "^7.2|^8.0"
             },
             "suggest": {
+                "nikic/php-parser": "Development tooling for source API and error registry scans.",
                 "open-telemetry/api": "Optional operation and messaging traces. CoreX boots without it.",
+                "phpstan/phpdoc-parser": "Development tooling for source API PHPDoc parsing.",
+                "phpstan/phpstan": "Development tooling for shipped static analysis rules.",
                 "psr/log": "Optional PSR-3 projection of operation lifecycle events."
             },
             "type": "library",
@@ -131,7 +136,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/custom-fields",
-                "reference": "016aec32efd6efb4319be76a2f8a90e5309e479b"
+                "reference": "8448c947d9d123f297c6a4a823dd5f34c32f5f6a"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -146,7 +151,8 @@
             "require-dev": {
                 "mockery/mockery": "^1.6",
                 "orchestra/testbench": "^10.12|^11.3",
-                "orchestra/testbench-core": "^10.12|^11.3"
+                "orchestra/testbench-core": "^10.12|^11.3",
+                "symfony/process": "^7.2|^8.0"
             },
             "suggest": {
                 "axiomasoft/corex": "Provides EntityRegistry and ModuleRegistry for dynamic field definitions; without it SchemaOperations stays unavailable and the static catalogue remains usable."
@@ -604,10 +610,11 @@
             "dist": {
                 "type": "path",
                 "url": "packages/recurrence",
-                "reference": "8bdb67b8b548313459bb2f23e8d09c0c4700f865"
+                "reference": "0ad168321118bca4bf2d3625692e5c5fc2c32503"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
+                "laravel/framework": "^12.0|^13.0",
                 "php": "^8.4",
                 "rlanvin/php-rrule": "^3.0"
             },
@@ -1042,7 +1049,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tenancy",
-                "reference": "bee8055579aebf4b50412657104be9a41d5f85f4"
+                "reference": "71a1d544d9e73d73724243d6d1238acfc7c13c7f"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -1076,6 +1083,7 @@
             },
             "suggest": {
                 "axiomasoft/corex-wakeup": "Install to opt into root_registry wakeup hints; boxed and local_sweep profiles do not require it.",
+                "ext-redis": "Optional Redis account menu cache integration; its conformance tests require this extension.",
                 "league/flysystem-aws-s3-v3": "Install the qualified native S3 adapter to explicitly construct optional ObjectTenantStorage."
             },
             "type": "library",
@@ -8311,7 +8319,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/access",
-                "reference": "7778ad76bc0337d46dfc1f4ed32afe3e28c0e5b2"
+                "reference": "82db6a4fc3b65a9c2ecab756bf7087928c211cda"
             },
             "require": {
                 "axioma-studio/azguard-core": "^0.3",
@@ -17160,6 +17168,6 @@
     "platform": {
         "php": "^8.4"
     },
-    "platform-dev": {},
+    "platform-dev": [],
     "plugin-api-version": "2.6.0"
 }

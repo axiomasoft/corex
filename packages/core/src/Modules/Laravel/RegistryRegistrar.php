@@ -19,11 +19,11 @@ use CoreX\Modules\Internal\Compiler\FieldCastMap;
 use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Modules\Internal\Discovery\ModuleDiscovery;
 use CoreX\Modules\Internal\Gate\AllowAllActivationGate;
+use CoreX\Modules\Internal\InMemoryEntityRegistry;
 use CoreX\Modules\Internal\ReadRegistryIntrospection;
 use CoreX\Modules\Internal\Registry\CompiledModuleRegistry;
 use CoreX\Modules\Internal\Registry\RepositoryModuleRegistryCache;
 use CoreX\Modules\Internal\Support\ModulesOptions;
-use CoreX\Modules\Testing\ArrayEntityRegistry;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\DB;
@@ -47,8 +47,8 @@ final class RegistryRegistrar implements PackageRegistrar
         // predicate is wired to the real ModuleRegistry::isActive
         // — resolved lazily at call time so all(null) at boot never triggers it
         // (and never a DB read).
-        $app->singleton(ArrayEntityRegistry::class, static function (Application $app): ArrayEntityRegistry {
-            return new ArrayEntityRegistry(
+        $app->singleton(InMemoryEntityRegistry::class, static function (Application $app): InMemoryEntityRegistry {
+            return new InMemoryEntityRegistry(
                 moduleActive: static fn (string $module, mixed $ctx): bool => $app
                     ->make(ModuleRegistry::class)
                     ->isActive($module, $ctx),
@@ -56,7 +56,7 @@ final class RegistryRegistrar implements PackageRegistrar
         });
         $app->singleton(
             EntityRegistry::class,
-            static fn (Application $app): ArrayEntityRegistry => $app->make(ArrayEntityRegistry::class),
+            static fn (Application $app): InMemoryEntityRegistry => $app->make(InMemoryEntityRegistry::class),
         );
 
         // No fallback modules by default — real deploys scan installed.json;

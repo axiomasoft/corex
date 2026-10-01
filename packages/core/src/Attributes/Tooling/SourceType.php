@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Attributes\Internal;
+namespace CoreX\Attributes\Tooling;
 
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;

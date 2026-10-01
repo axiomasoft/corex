@@ -13,8 +13,8 @@ use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Modules\Internal\Audit\AuditCapabilityWiring;
 use CoreX\Modules\Internal\Commands\CompileModulesCommand;
 use CoreX\Modules\Internal\Commands\ExplainModuleCommand;
+use CoreX\Modules\Internal\InMemoryEntityRegistry;
 use CoreX\Modules\Internal\Registry\CompiledModuleRegistry;
-use CoreX\Modules\Testing\ArrayEntityRegistry;
 use Illuminate\Console\Application as Console;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -81,7 +81,7 @@ final class ModulesBootRegistrar implements PackageRegistrar
                 return;
             }
 
-            $arrayRegistry = $app->make(ArrayEntityRegistry::class);
+            $arrayRegistry = $app->make(InMemoryEntityRegistry::class);
 
             // Project the persisted compiled registry into the runtime
             // EntityRegistry so module-declared entities reach the app —

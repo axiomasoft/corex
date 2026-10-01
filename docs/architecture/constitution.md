@@ -135,7 +135,7 @@
 **Почему.** Группировка по задаче сохраняет её код в одной границе.
 
 ### STR-003 — Корень пакета — его корневой модуль
-**Правило.** Корень `src/` пакета — его корневой модуль: публичные категории, `Internal/`, `Laravel/`, `Testing/`, `PHPStan/`, provider(ы), `<Pkg>Module.php` и каталоги feature modules; у ядра — только `CoreServiceProvider.php` и модули закрытого списка glossary.
+**Правило.** Корень `src/` пакета — его корневой модуль: публичные категории, `Internal/`, `Laravel/`, `Testing/`, `PHPStan/`, `Tooling/`, provider(ы), `<Pkg>Module.php` и каталоги feature modules; у ядра — только `CoreServiceProvider.php` и модули закрытого списка glossary.
 **Владелец.** Этот документ.
 **Enforcement.** `composer module-layout-gate` → R0–R3 (CI, PLAN3.D57).
 **Исключения.** `scripts/module-layout-baseline.json` — ratchet: новые и устаревшие записи запрещены; P04 сокращает остаток.
@@ -546,3 +546,5 @@
 | NON-020 | Override компонента по alias вместо стабильного handle | доктрина §4, урок October |
 | NON-021 | Рост числа extenders за пределы закрытого набора без RFC | EXT-001, урок Flarum |
 | NON-022 | Runtime-конструктор таблиц в стиле инфоблоков | доктрина §4, урок Битрикса |
+
+Runtime-код не ссылается на dev-мосты `Tooling/`, `PHPStan/`, `Testing/` своего или другого пакета. Гейт `module-layout` R6 проверяет namespace-ссылки; общая runtime-часть размещается в `Internal/`.

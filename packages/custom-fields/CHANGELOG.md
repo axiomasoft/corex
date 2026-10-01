@@ -28,5 +28,9 @@
 
 ## Unreleased
 
+- Declare Symfony Process as a development dependency used by package tests.
+
+- PHP API manifests now record direct inheritance, interfaces and traits separately and include only members declared by this package; external dependency members are omitted without changing the `php-api/1` schema.
+
 - Added owned neutral JSONB/EAV attribute storage, active EntityRegistry field binding, and typed value validation.
 - Added durable schema-operation requests and a restore-safe asynchronous PostgreSQL concurrent-index worker.

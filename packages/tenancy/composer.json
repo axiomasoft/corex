@@ -52,7 +52,8 @@
     },
     "suggest": {
         "league/flysystem-aws-s3-v3": "Install the qualified native S3 adapter to explicitly construct optional ObjectTenantStorage.",
-        "axiomasoft/corex-wakeup": "Install to opt into root_registry wakeup hints; boxed and local_sweep profiles do not require it."
+        "axiomasoft/corex-wakeup": "Install to opt into root_registry wakeup hints; boxed and local_sweep profiles do not require it.",
+        "ext-redis": "Optional Redis account menu cache integration; its conformance tests require this extension."
     },
     "autoload-dev": {
         "psr-4": {

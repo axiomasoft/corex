@@ -1,0 +1,170 @@
+{
+  "schema": "own-members-diff/v1",
+  "base": "428f47dbbab1ea1663a673f0fa1d6c2709f8e148",
+  "source": "own-ast.php over committed base and candidate sources; verify-own-members.py projects each AST own declaration into both manifests",
+  "preimage_sha256": "92d7fdda44e5c9ee0d741204a2b5149f32cea012d62da5f36d00285da14928ec",
+  "candidate_ast_sha256": "92d7fdda44e5c9ee0d741204a2b5149f32cea012d62da5f36d00285da14928ec",
+  "packages": {
+    "axiomasoft/corex-access": {
+      "symbols": 21,
+      "own_members": 75
+    },
+    "axiomasoft/corex": {
+      "symbols": 202,
+      "own_members": 946
+    },
+    "axiomasoft/corex-custom-fields": {
+      "symbols": 28,
+      "own_members": 115
+    },
+    "axiomasoft/corex-intl": {
+      "symbols": 49,
+      "own_members": 203
+    },
+    "axiomasoft/corex-media": {
+      "symbols": 24,
+      "own_members": 107
+    },
+    "axiomasoft/corex-notifications": {
+      "symbols": 31,
+      "own_members": 117
+    },
+    "axiomasoft/corex-operations": {
+      "symbols": 106,
+      "own_members": 485
+    },
+    "axiomasoft/corex-panels": {
+      "symbols": 22,
+      "own_members": 86
+    },
+    "axiomasoft/corex-recurrence": {
+      "symbols": 16,
+      "own_members": 70
+    },
+    "axiomasoft/corex-search": {
+      "symbols": 26,
+      "own_members": 81
+    },
+    "axiomasoft/corex-search-intl": {
+      "symbols": 3,
+      "own_members": 7
+    },
+    "axiomasoft/corex-search-meilisearch": {
+      "symbols": 3,
+      "own_members": 9
+    },
+    "axiomasoft/corex-tasks": {
+      "symbols": 58,
+      "own_members": 207
+    },
+    "axiomasoft/corex-tasks-workflow": {
+      "symbols": 10,
+      "own_members": 39
+    },
+    "axiomasoft/corex-tenancy": {
+      "symbols": 119,
+      "own_members": 400
+    },
+    "axiomasoft/corex-tools": {
+      "symbols": 11,
+      "own_members": 48
+    },
+    "axiomasoft/corex-transfer": {
+      "symbols": 28,
+      "own_members": 116
+    },
+    "axiomasoft/corex-wakeup": {
+      "symbols": 15,
+      "own_members": 47
+    },
+    "axiomasoft/corex-webhooks": {
+      "symbols": 17,
+      "own_members": 100
+    },
+    "axiomasoft/corex-workflow": {
+      "symbols": 11,
+      "own_members": 43
+    }
+  },
+  "ast_signatures_equal": true,
+  "missing_members": [],
+  "manifest_signature_delta": [],
+  "preexisting_omissions_repaired": [
+    [
+      "CoreX\\Modules\\Testing\\ExtensionContract",
+      "properties",
+      "fingerprint"
+    ],
+    [
+      "CoreX\\Settings\\Data\\SettingsScope",
+      "properties",
+      "id"
+    ],
+    [
+      "CoreX\\Settings\\Data\\SettingsScope",
+      "properties",
+      "type"
+    ],
+    [
+      "CoreX\\Operations\\Definition\\Data\\ResourceId",
+      "properties",
+      "strategy"
+    ],
+    [
+      "CoreX\\Operations\\Definition\\Data\\ResourceId",
+      "properties",
+      "type"
+    ],
+    [
+      "CoreX\\Operations\\Definition\\Data\\ResourceId",
+      "properties",
+      "value"
+    ],
+    [
+      "CoreX\\Operations\\Idempotency\\Data\\StoredOperationOutcome",
+      "properties",
+      "data"
+    ],
+    [
+      "CoreX\\Operations\\Idempotency\\Data\\StoredOperationOutcome",
+      "properties",
+      "errorCategory"
+    ],
+    [
+      "CoreX\\Operations\\Idempotency\\Data\\StoredOperationOutcome",
+      "properties",
+      "errorCode"
+    ],
+    [
+      "CoreX\\Operations\\Idempotency\\Data\\StoredOperationOutcome",
+      "properties",
+      "errorDetails"
+    ],
+    [
+      "CoreX\\Operations\\Idempotency\\Data\\StoredOperationOutcome",
+      "properties",
+      "errorMessage"
+    ],
+    [
+      "CoreX\\Operations\\Idempotency\\Data\\StoredOperationOutcome",
+      "properties",
+      "errorPath"
+    ],
+    [
+      "CoreX\\Operations\\Idempotency\\Data\\StoredOperationOutcome",
+      "properties",
+      "errorRetryable"
+    ],
+    [
+      "CoreX\\Operations\\Idempotency\\Data\\StoredOperationOutcome",
+      "properties",
+      "errorStatus"
+    ],
+    [
+      "CoreX\\Operations\\Idempotency\\Data\\StoredOperationOutcome",
+      "properties",
+      "kind"
+    ]
+  ],
+  "equal": true
+}

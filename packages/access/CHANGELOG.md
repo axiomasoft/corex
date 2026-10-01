@@ -31,6 +31,8 @@
 
 ## [Unreleased]
 
+- PHP API manifests now record direct inheritance, interfaces and traits separately and include only members declared by this package; external dependency members are omitted without changing the `php-api/1` schema.
+
 ### Changed
 
 - Password rehash delegates to the identity table owner's `IdentityPasswordRehasher` port with compare-and-swap inputs; auth no longer updates `users` directly.

@@ -28,6 +28,8 @@
 
 ## Unreleased
 
+- PHP API manifests now record direct inheritance, interfaces and traits separately and include only members declared by this package; external dependency members are omitted without changing the `php-api/1` schema.
+
 - Add `corex/tasks-workflow` package with `TaskRecurrenceCommand` materialization (P7.4).
 - Add `corex_task_series`, `corex_task_series_state`, and `corex_task_occurrences` mapping tables.
 - Add MAT-01..09 local conformance suite.

@@ -13,6 +13,8 @@ Scope: every PHP file under `packages/*/src/` (the product keeps its own layout,
   R5  no reference into the `Internal` of another module of the same package, except from a composition root
       (permitted provider/root entry, `Laravel` directly under the module; PLAN3.D58).
 
+  R6  runtime files never reference a Tooling, PHPStan or Testing namespace, in any package.
+
 The package root is itself a module (the package's primary module); its sub-directories that are neither categories nor
 bridges are feature modules. The kernel has no root module. Foreign-package `Internal` references stay with
 `package-graph-gate` R2.
@@ -34,7 +36,8 @@ import sys
 from pathlib import Path
 
 CATEGORIES = ('Contracts', 'Data', 'Enums', 'Events', 'Exceptions')
-BRIDGES = ('Internal', 'Laravel', 'Testing', 'PHPStan')
+BRIDGES = ('Internal', 'Laravel', 'Testing', 'PHPStan', 'Tooling')
+DEV_BRIDGES = ('Tooling', 'PHPStan', 'Testing')
 KERNEL = 'axiomasoft/corex'
 NS_RE = re.compile(r'^\s*namespace\s+([\w\\]+)\s*;', re.M)
 DECL_RE = re.compile(r'^\s*(?:(?:final|abstract|readonly)\s+)*(?:class|interface|trait|enum)\s+(\w+)', re.M)
@@ -141,6 +144,7 @@ def evaluate(files: list[dict], config: dict) -> list[dict]:
     def add(rule, f, detail=''):
         out.append({'rule': rule, 'file': 'packages/' + f['dir'] + '/src/' + '/'.join(f['rel']), 'detail': detail})
 
+    package_namespaces = {f['root_ns'] for f in files}
     owner = {}
     for f in files:
         f['module'], f['inner'] = module_of(f, kernel_modules)
@@ -178,6 +182,10 @@ def evaluate(files: list[dict], config: dict) -> list[dict]:
             add('R4', f, 'nested Internal')
         composition = root_entry or inner[:1] == ('Laravel',)
         for ref in sorted(f['refs']):
+            if (not any(segment in DEV_BRIDGES for segment in dirs)
+                    and any(ref == root_ns or ref.startswith(root_ns + '\\') for root_ns in package_namespaces)
+                    and any(segment in DEV_BRIDGES for segment in ref.split('\\'))):
+                add('R6', f, ref)
             target = owner.get(ref.lower())
             if (target is None or target is f or target['package'] != f['package'] or composition
                     or target['module'] == f['module'] or not target['inner'] or target['inner'][0] != 'Internal'):
@@ -187,7 +195,7 @@ def evaluate(files: list[dict], config: dict) -> list[dict]:
 
 
 def key(v: dict) -> str:
-    return f"{v['rule']} {v['file']} {v['detail']}" if v['rule'] == 'R5' else f"{v['rule']} {v['file']}"
+    return f"{v['rule']} {v['file']} {v['detail']}" if v['rule'] in ('R5', 'R6') else f"{v['rule']} {v['file']}"
 
 
 def main(argv: list[str]) -> int:
@@ -206,7 +214,7 @@ def main(argv: list[str]) -> int:
         project(files, Path(args.project))
     found = evaluate(files, config)
     counts = collections.Counter(v['rule'] for v in found)
-    summary = ', '.join(f'{r} {counts.get(r, 0)}' for r in ('R0', 'R1', 'R2', 'R3', 'R4', 'R5'))
+    summary = ', '.join(f'{r} {counts.get(r, 0)}' for r in ('R0', 'R1', 'R2', 'R3', 'R4', 'R5', 'R6'))
     if args.report:
         for v in found:
             print(f"{v['rule']}\t{v['file']}\t{v['detail']}")

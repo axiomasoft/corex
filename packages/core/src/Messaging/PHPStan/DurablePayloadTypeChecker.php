@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Messaging\Internal;
+namespace CoreX\Messaging\PHPStan;
 
 use CoreX\Messaging\Contracts\DurablePayload;
 use CoreX\Messaging\PHPStan\Rules\DurablePayloadRule;

@@ -63,6 +63,7 @@
     "require-dev": {
         "mockery/mockery": "^1.6",
         "orchestra/testbench": "^10.12|^11.3",
-        "orchestra/testbench-core": "^10.12|^11.3"
+        "orchestra/testbench-core": "^10.12|^11.3",
+        "symfony/process": "^7.2|^8.0"
     }
 }

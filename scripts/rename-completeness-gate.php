@@ -119,7 +119,7 @@ foreach ($files as $file) {
             // PLAN3.D63 reuses only these namespace declarations for API metadata.
             // Every renamed custom-fields class and child namespace remains forbidden.
             if (($fqcn[$bare] ?? null) === 'namespaces'
-                && in_array($bare, ['CoreX\\Attributes', 'CoreX\\Attributes\\Internal'], true)) {
+                && in_array($bare, ['CoreX\\Attributes', 'CoreX\\Attributes\\Tooling'], true)) {
                 continue;
             }
 

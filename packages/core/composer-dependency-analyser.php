@@ -10,6 +10,8 @@ return (new Configuration)
     ->addPathToScan(__DIR__.'/tests', isDev: true)
     ->addPathToScan(__DIR__.'/database', isDev: true)
     ->addPathToScan(__DIR__.'/src/Messaging/PHPStan', isDev: true)
+    ->addPathToScan(__DIR__.'/src/Attributes/Tooling', isDev: true)
+    ->addPathToScan(__DIR__.'/src/Errors/Tooling', isDev: true)
     // discovery: src/Messaging/Commands/RelayOutbox.php extension_loaded guard
     ->ignoreErrorsOnExtension('ext-pcntl', [ErrorType::SHADOW_DEPENDENCY])
     // discovery: composer suggest; guarded optional adapter remains installable without open-telemetry/api

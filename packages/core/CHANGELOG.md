@@ -40,6 +40,10 @@
 
 ## Unreleased
 
+- Public promoted properties are captured even when their constructor is private. Runtime entity registry bindings now use the shared Internal implementation while the Testing SPI keeps its signatures. Parser and analyser dependencies are declared as optional development tooling.
+
+- PHP API manifests now record direct inheritance, interfaces and traits separately and include only members declared by this package; external dependency members are omitted without changing the `php-api/1` schema. Source scanners move to the Attributes/Errors Tooling bridges and the durable payload checker moves to Messaging/PHPStan; runtime references to development bridges are forbidden.
+
 - Added package-contributed configuration reports through `ConfigReportSection` and public messaging test fixtures. Saved Views default bindings now register with panels.
 
 - Added immutable `DataScope`, `RecordRef`, and `WriteToken` boundary DTOs for optional data services.
@@ -48,6 +52,8 @@
 Пакет pre-1.0 — breaking-изменения публичных контрактов легальны в MINOR до 1.0 (D17).
 
 ## [Unreleased]
+
+- PHP API manifests now record direct inheritance, interfaces and traits separately and include only members declared by this package; external dependency members are omitted without changing the `php-api/1` schema. Source scanners move to the Attributes/Errors Tooling bridges and the durable payload checker moves to Messaging/PHPStan; runtime references to development bridges are forbidden.
 
 ### Changed
 

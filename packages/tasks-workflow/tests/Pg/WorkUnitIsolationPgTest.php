@@ -12,6 +12,7 @@ use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\WriteToken;
 use CoreX\Data\Internal\AllowAllDataScopeAuthorizer;
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
 use CoreX\Tasks\Project\Internal\Models\Project;
 use CoreX\Tasks\Task\Data\ActorData;
@@ -21,7 +22,6 @@ use CoreX\Tasks\Task\Internal\Models\Task;
 use CoreX\TasksWorkflow\Tests\PgTestCase;
 
 uses(PgTestCase::class);
-use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\TasksWorkflow\Contracts\TaskRecurrenceCommand;
 use CoreX\TasksWorkflow\Data\MaterializationWindow;

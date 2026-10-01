@@ -12,6 +12,8 @@
 
 ## [Unreleased]
 
+- PHP API manifests now record direct inheritance, interfaces and traits separately and include only members declared by this package; external dependency members are omitted without changing the `php-api/1` schema.
+
 ### Changed
 
 - PLAN3.D57: implementation classes moved to `<Module>\Internal\…`, public types to module categories

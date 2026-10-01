@@ -12,6 +12,8 @@
 
 ## Unreleased
 
+- PHP API manifests now record direct inheritance, interfaces and traits separately and include only members declared by this package; external dependency members are omitted without changing the `php-api/1` schema.
+
 - Added bounded CSV and NDJSON codecs plus typed transfer ports and checkpoint DTOs.
 - Added a fenced local PostgreSQL transfer runner and neutral transfer persistence migration.
 - Added sealed coherent export manifests, verified immutable NDJSON parts, current-policy output

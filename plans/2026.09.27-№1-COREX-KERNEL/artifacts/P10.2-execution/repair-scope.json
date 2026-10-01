@@ -1,0 +1,75 @@
+{
+  "schema": "p10.2-routine-repair-scope/v1",
+  "base": "428f47dbbab1ea1663a673f0fa1d6c2709f8e148",
+  "repairs": [
+    {
+      "signal": "R6 runtime references to Testing registry",
+      "paths": [
+        "packages/core/src/Modules/Internal/InMemoryEntityRegistry.php",
+        "packages/core/src/Modules/Testing/ArrayEntityRegistry.php",
+        "packages/core/src/Modules/Laravel/RegistryRegistrar.php",
+        "packages/core/src/Modules/Laravel/ModulesBootRegistrar.php",
+        "packages/core/tests/Modules/Feature/CompositionBindingsTest.php",
+        "scripts/extension-contract-gate.php"
+      ],
+      "delta": "Shared implementation in Internal; Testing SPI delegates with unchanged own signatures. Runtime container bindings point to Internal implementation. Projection classification updated by identity.",
+      "public_signature_delta": false,
+      "baseline_delta": "Golden + one Internal type; no threshold/allowance increase",
+      "authority": "D74.2 and item Implementation Rules explicitly require shared runtime parts in Internal when R6 finds a conflict."
+    },
+    {
+      "signal": "15 public promoted properties omitted from preimage manifests by private constructor visibility (core 3, operations 12)",
+      "paths": [
+        "packages/core/src/Attributes/Tooling/SurfaceScanner.php",
+        "packages/core/tests/Attributes/SurfaceScannerTest.php"
+      ],
+      "delta": "Capture non-private promoted properties independently of constructor visibility; own AST preimage bound to committed base.",
+      "public_source_delta": false
+    },
+    {
+      "signal": "Dependency analyser framework/support shadow and unused contradiction",
+      "paths": [
+        "packages/recurrence/composer.json",
+        "composer.lock"
+      ],
+      "delta": "Declare laravel/framework, which already supplies Illuminate\\Support\\ServiceProvider through required core package; no added ignore.",
+      "constraints": "^12.0|^13.0 unchanged supported stack",
+      "installed_dependency_set_delta": false
+    },
+    {
+      "signal": "Local fixture enum is not autoloadable by standalone analyser",
+      "paths": [
+        "packages/core/tests/Support/DescriptorFixtureCode.php",
+        "packages/core/tests/Unit/ErrorDescriptorTest.php"
+      ],
+      "delta": "Put enum under existing CoreX\\Testing PSR-4 dev root; no new autoload mapping or ignore."
+    },
+    {
+      "signal": "Checker move extends Foundation litmus discovery prefix",
+      "paths": [
+        "tests/Arch/CoreLitmusTest.php"
+      ],
+      "delta": "Add moved checker to explicit list to match live map; no exemption."
+    },
+    {
+      "signal": "Relocated namespace has CLI/rename-tool consumers",
+      "paths": [
+        "scripts/error-registry.php",
+        "scripts/rename-completeness-gate.php",
+        "tests/Golden/rename-map.json"
+      ],
+      "delta": "Update exact consumers and historical rename destinations; no alias."
+    },
+    {
+      "signal": "Pint reintroduces JsonDocuments import at previous late-use position",
+      "paths": [
+        "packages/tasks-workflow/tests/Pg/WorkUnitIsolationPgTest.php"
+      ],
+      "delta": "Move only the JsonDocuments import above uses(PgTestCase), respecting Pint and keeping other analyser configurations unchanged. Moving all late imports would make five existing suppressions stale; original unaffected imports remain.",
+      "behavior_delta": false
+    }
+  ],
+  "new_analyser_ignores": 0,
+  "threshold_delta": false,
+  "routes_delta": false
+}

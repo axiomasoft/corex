@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Attributes\Internal;
+namespace CoreX\Attributes\Tooling;
 
 use RuntimeException;
 
@@ -37,7 +37,7 @@ final readonly class SurfaceReport
     public function documentation(): string
     {
         $text = "# PHP API surface\n\nGenerated from source by `scripts/php-api.php --write`; schema `php-api/1`.\n";
-        $text .= "\nAttributes own membership. Full member signatures are in each package's `resources/contracts/php-api.json`.\n";
+        $text .= "\nAttributes own membership. Members belong to this package; direct extends/implements/uses identify external sources. Full member signatures are in each package's `resources/contracts/php-api.json`.\n";
         foreach ($this->manifests as $package => $manifest) {
             $path = $this->packagePaths[$package];
             $text .= "\n## {$package}\n\n[Member manifest](../../{$path}/resources/contracts/php-api.json)\n\n";

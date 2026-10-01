@@ -18,6 +18,10 @@
 
 ## Unreleased
 
+- Declare the supported Laravel framework dependency that provides the runtime service provider; its versions remain Laravel 12–13.
+
+- PHP API manifests now record direct inheritance, interfaces and traits separately and include only members declared by this package; external dependency members are omitted without changing the `php-api/1` schema.
+
 - Add frozen `recurrence/1` DTO bundle (`RecurrenceSet`, `RecurrenceWindow`, `ExpansionLimits`, `ExpansionCursor`, `Occurrence`, `OccurrencePage`).
 - Implement bounded `RRuleRecurrenceExpander` over qualified `rlanvin/php-rrule` v3.0.0 with DST gap/fold filtering, EXDATE/RDATE via `RSet`, cursor binding, and budget stops.
 - Cover REC-01..REC-12 with unit and neutral consumer conformance tests.

@@ -21,6 +21,7 @@ if (count($argv) > 1 && ($fixture === null || ! is_file($fixture) || ! str_ends_
  * @var array<string, string>
  */
 $classification = [
+    'CoreX\\Modules\\Internal\\InMemoryEntityRegistry' => 'projection',
     'CoreX\\Errors\\Contracts\\ProblemRegistry' => 'boot-built catalogue',
     'CoreX\\Errors\\Internal\\CompiledProblemRegistry' => 'boot-built catalogue',
     'CoreX\\Operations\\Definition\\Contracts\\OperationRegistry' => 'projection',

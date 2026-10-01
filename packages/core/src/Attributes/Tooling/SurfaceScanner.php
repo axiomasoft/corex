@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Attributes\Internal;
+namespace CoreX\Attributes\Tooling;
 
 use Composer\Autoload\ClassLoader;
 use FilesystemIterator;
@@ -343,7 +343,7 @@ final class SurfaceScanner
                 }
             }
         }
-        $internal = str_contains('\\'.$type->name.'\\', '\\Internal\\');
+        $internal = str_contains('\\'.$type->name.'\\', '\\Internal\\') || ($found === [] && (str_contains('\\'.$type->name.'\\', '\\Tooling\\') || str_contains('\\'.$type->name.'\\', '\\PHPStan\\') || str_contains('\\'.$type->name.'\\', '\\Testing\\')));
 
         if ($found === []) {
             if (! $internal && ! $type->product && $type->owner !== '@vendor') {
@@ -458,6 +458,31 @@ final class SurfaceScanner
         return array_values($parents);
     }
 
+    /** @return list<string> */
+    private function directExtends(SourceType $type): array
+    {
+        $node = $type->node;
+        $extends = $node instanceof Node\Stmt\Interface_ ? array_map(static fn (Node\Name $name): string => $name->toString(), $node->extends) : ($node instanceof Node\Stmt\Class_ && $node->extends !== null ? [$node->extends->toString()] : []);
+        sort($extends);
+
+        return $extends;
+    }
+
+    /** @return list<string> */
+    private function directTraits(SourceType $type): array
+    {
+        $traits = [];
+        foreach ($type->node->getTraitUses() as $use) {
+            foreach ($use->traits as $trait) {
+                $traits[] = $trait->toString();
+            }
+        }
+        $traits = array_values(array_unique($traits));
+        sort($traits);
+
+        return $traits;
+    }
+
     /** @return array<string, mixed> */
     private function record(string $name): array
     {
@@ -482,6 +507,13 @@ final class SurfaceScanner
         $meta = $this->metadata[$name] ?? ['layer' => 'external', 'since' => null];
         $members = ['methods' => [], 'properties' => [], 'constants' => []];
         foreach ($this->parents($type) as $parent) {
+            // External members belong to their own package, whose dependency version may vary.
+            // Local inheritance remains part of this package's observable surface.
+            $parentType = $this->lookup($parent);
+
+            if ($parentType === null || $parentType->owner !== $type->owner) {
+                continue;
+            }
             $inherited = $this->record($parent);
 
             if ($inherited === []) {
@@ -503,6 +535,19 @@ final class SurfaceScanner
             }
         }
         foreach ($node->stmts as $member) {
+            // Constructor visibility does not determine promoted-property visibility.
+            if ($member instanceof Node\Stmt\ClassMethod && $member->isPrivate() && $member->name->toString() === '__construct') {
+                $constructorDoc = $this->doc($type, $member, 'methods.__construct');
+                foreach ($member->params as $param) {
+                    if ($param->flags === 0 || ($param->flags & Modifiers::PRIVATE) !== 0) {
+                        continue;
+                    }
+                    $propertyName = $param->var instanceof Node\Expr\Variable && is_string($param->var->name) ? $param->var->name : '?';
+                    $path = 'properties.'.$propertyName;
+                    $members['properties'][$propertyName] = ['flags' => $param->flags, 'type' => $this->native($type, $param->type, $path), 'readonly' => ($param->flags & Modifiers::READONLY) !== 0 || ($node instanceof Node\Stmt\Class_ && $node->isReadonly()), 'visibility' => ($param->flags & Modifiers::PROTECTED) !== 0 ? 'protected' : 'public', 'static' => false, 'default' => null, 'doc' => array_replace($constructorDoc, $this->doc($type, $param, $path)), 'hooks' => []];
+                }
+            }
+
             if ($member instanceof Node\Stmt\ClassMethod && ! $member->isPrivate()) {
                 $path = 'methods.'.$member->name;
                 $methodDoc = $this->doc($type, $member, $path);
@@ -584,7 +629,7 @@ final class SurfaceScanner
         sort($implements);
         $result = ['kind' => match (true) {
             $node instanceof Node\Stmt\Interface_ => 'interface', $node instanceof Node\Stmt\Trait_ => 'trait', $node instanceof Node\Stmt\Enum_ => 'enum', default => 'class',
-        }, ...$meta, 'final' => $node instanceof Node\Stmt\Class_ && $node->isFinal(), 'readonly' => $node instanceof Node\Stmt\Class_ && $node->isReadonly(), 'abstract' => $node instanceof Node\Stmt\Class_ && $node->isAbstract(), 'extends' => $this->parents($type), 'implements' => $implements, 'doc' => $doc, ...$members, 'enum_backing' => $node instanceof Node\Stmt\Enum_ ? $node->scalarType?->toString() : null, 'enum_cases' => $cases];
+        }, ...$meta, 'final' => $node instanceof Node\Stmt\Class_ && $node->isFinal(), 'readonly' => $node instanceof Node\Stmt\Class_ && $node->isReadonly(), 'abstract' => $node instanceof Node\Stmt\Class_ && $node->isAbstract(), 'extends' => $this->directExtends($type), 'implements' => $implements, 'uses' => $this->directTraits($type), 'doc' => $doc, ...$members, 'enum_backing' => $node instanceof Node\Stmt\Enum_ ? $node->scalarType?->toString() : null, 'enum_cases' => $cases];
         unset($this->resolving[$name]);
 
         return $this->records[$name] = $result;

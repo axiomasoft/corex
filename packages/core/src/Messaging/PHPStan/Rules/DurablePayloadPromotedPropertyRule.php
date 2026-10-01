@@ -6,7 +6,7 @@ namespace CoreX\Messaging\PHPStan\Rules;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Messaging\Internal\DurablePayloadTypeChecker;
+use CoreX\Messaging\PHPStan\DurablePayloadTypeChecker;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;

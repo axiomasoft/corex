@@ -28,6 +28,10 @@
 
 ## Unreleased
 
+- Document optional ext-redis integration and explicitly skip its conformance tests when the extension is unavailable.
+
+- PHP API manifests now record direct inheritance, interfaces and traits separately and include only members declared by this package; external dependency members are omitted without changing the `php-api/1` schema.
+
 - D49 now decorates core's scoped semantic restorer; the identity owner supplies the `users` password rehash writer.
 
 - P9.6 turns `Workspaces` into `Workspace` and keeps DomainTrust/Impersonation/Workspace model and event FQCNs via PSR-4 maps.

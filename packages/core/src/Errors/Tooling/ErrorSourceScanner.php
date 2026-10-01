@@ -2,13 +2,15 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Errors\Internal;
+namespace CoreX\Errors\Tooling;
 
 use CoreX\Errors\Contracts\ErrorCode;
 use CoreX\Errors\Contracts\ProblemDefinitionProvider;
 use CoreX\Errors\Contracts\ProblemRegistry;
 use CoreX\Errors\Data\ErrorDescriptor;
 use CoreX\Errors\Exceptions\ProblemRegistryException;
+use CoreX\Errors\Internal\CompiledProblemRegistry;
+use CoreX\Errors\Internal\ProblemContribution;
 use FilesystemIterator;
 use PhpParser\Node;
 use PhpParser\NodeFinder;

@@ -18,6 +18,7 @@ use CoreX\Tests\Support\SourceScanner;
  * @var list<string>
  */
 const LITMUS_FOUNDATION = [
+    'packages/core/src/Messaging/PHPStan/DurablePayloadTypeChecker.php',
     'packages/core/src/Data/Laravel/SystemDataScopeAuthorization.php',
     'packages/core/src/Messaging/PHPStan/Rules/DurablePayloadPromotedPropertyRule.php',
     'packages/core/src/Data/Data/JsonDocument.php',

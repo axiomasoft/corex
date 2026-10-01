@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Attributes\Internal;
+namespace CoreX\Attributes\Tooling;
 
 /** @internal */
 final readonly class SurfaceDiagnostic

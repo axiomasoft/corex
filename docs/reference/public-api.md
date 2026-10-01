@@ -2,7 +2,7 @@
 
 Generated from source by `scripts/php-api.php --write`; schema `php-api/1`.
 
-Attributes own membership. Full member signatures are in each package's `resources/contracts/php-api.json`.
+Attributes own membership. Members belong to this package; direct extends/implements/uses identify external sources. Full member signatures are in each package's `resources/contracts/php-api.json`.
 
 ## axiomasoft/corex
 

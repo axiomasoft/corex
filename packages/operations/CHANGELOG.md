@@ -33,6 +33,10 @@
 
 ## Unreleased
 
+- Include public promoted resource and stored-outcome fields even when their constructor is private; source signatures stay unchanged.
+
+- PHP API manifests now record direct inheritance, interfaces and traits separately and include only members declared by this package; external dependency members are omitted without changing the `php-api/1` schema.
+
 - Extract webhook provider/config, snapshot section and bounded `corex:webhooks:prune`; the engine uses the snapshot SPI and owns only bulk/budget retention.
 - Add public request-context and invocation testing factories; preserve transport assertions in separately owned test cases.
 

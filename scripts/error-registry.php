@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Errors\Internal;
+namespace CoreX\Errors\Tooling;
 
 use RuntimeException;
 use Throwable;

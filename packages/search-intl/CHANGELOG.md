@@ -16,6 +16,8 @@
 
 ## [Unreleased]
 
+- PHP API manifests now record direct inheritance, interfaces and traits separately and include only members declared by this package; external dependency members are omitted without changing the `php-api/1` schema.
+
 ### Changed
 
 - Hard rename from `corex/intl-search` / `CoreX\IntlSearch\` (P12.6).
