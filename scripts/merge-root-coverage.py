@@ -11,6 +11,7 @@ if len(sys.argv) != 5 or not sys.argv[1].isdigit() or int(sys.argv[1]) < floor:
 minimum = int(sys.argv[1])
 merged = {}
 expected_inventory = None
+denominators = {}
 for directory in map(Path, sys.argv[2:]):
     index = ET.parse(directory / 'index.xml').getroot()
     project = index.find(NS + 'project')
@@ -36,6 +37,7 @@ for directory in map(Path, sys.argv[2:]):
         if name in inventory:
             sys.exit(f'coverage: duplicate file: {name}')
         inventory[name] = (file.attrib['hash'], executable)
+        denominators[name] = max(denominators.get(name, 0), executable)
         lane_executed += len(covered)
         merged.setdefault(name, set()).update(covered)
     if (sum(value[1] for value in inventory.values()) != int(totals.attrib['executable'])
@@ -43,12 +45,16 @@ for directory in map(Path, sys.argv[2:]):
         sys.exit('coverage: incomplete report inventory')
     if expected_inventory is None:
         expected_inventory = inventory
-    elif inventory != expected_inventory:
-        sys.exit('coverage: source files or executable line denominators differ between lanes')
-executable = sum(value[1] for value in expected_inventory.values())
+    elif {name: data[0] for name, data in inventory.items()} != {name: data[0] for name, data in expected_inventory.items()}:
+        changed = sorted(name for name in set(inventory) | set(expected_inventory)
+                         if inventory.get(name, (None,))[0] != expected_inventory.get(name, (None,))[0])
+        sys.exit('coverage: source files or hashes differ between lanes: ' + ', '.join(changed[:5]))
+# Unloaded-file static analysis and Xdebug may differ. Keep the larger per-file
+# denominator, including every unexecuted line; this is conservative versus native merge.
+executable = sum(denominators.values())
 covered = sum(len(lines) for lines in merged.values())
-if executable == 0 or any(len(merged[name]) > count for name, (_, count) in expected_inventory.items()):
+if executable == 0 or any(len(merged[name]) > count for name, count in denominators.items()):
     sys.exit('coverage: invalid merged denominator')
 percentage = 100 * covered / executable
-print(f'Merged root line coverage: {percentage:.1f}% ({covered}/{executable}), minimum {minimum}%')
+print(f'Conservative merged root line coverage: {percentage:.1f}% ({covered}/{executable}), minimum {minimum}%')
 sys.exit(0 if percentage >= minimum else 1)
