@@ -1,0 +1,94 @@
+[
+  {
+    "check": "bc-wrapper-final",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "bc-check"
+    ],
+    "env": {
+      "BC_CHECK_ONLY": "access"
+    },
+    "exit_code": 0,
+    "duration_seconds": 42.78
+  },
+  {
+    "check": "root-workflow-final",
+    "command": [
+      "scripts/php84",
+      "vendor/bin/pest",
+      "--testsuite=TasksWorkflowPackage",
+      "--exclude-group=pg",
+      "--order-by=default"
+    ],
+    "env": {},
+    "exit_code": 0,
+    "duration_seconds": 2.74
+  },
+  {
+    "check": "pg-final",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "test:pg"
+    ],
+    "env": {
+      "PGSQL_PORT": "5434",
+      "PGSQL_DATABASE": "corex_test"
+    },
+    "exit_code": 0,
+    "duration_seconds": 54.47
+  },
+  {
+    "check": "packages-final",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "test:packages"
+    ],
+    "env": {},
+    "exit_code": 0,
+    "duration_seconds": 208.04
+  },
+  {
+    "check": "golden-final",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "golden"
+    ],
+    "env": {},
+    "exit_code": 1,
+    "duration_seconds": 7.28
+  },
+  {
+    "check": "mutation-final",
+    "command": [
+      "scripts/php84",
+      "bash",
+      "scripts/mutation-check.sh",
+      "--all"
+    ],
+    "env": {
+      "PGSQL_PORT": "5434",
+      "PGSQL_DATABASE": "corex_test"
+    },
+    "exit_code": 0,
+    "duration_seconds": 12.82
+  },
+  {
+    "check": "root-analysis-acceptance",
+    "command": [
+      "scripts/php84",
+      "vendor/bin/phpstan",
+      "analyse",
+      "-c",
+      "phpstan.neon",
+      "--memory-limit=2G",
+      "--no-progress"
+    ],
+    "env": {},
+    "exit_code": 0,
+    "duration_seconds": 1.54
+  }
+]

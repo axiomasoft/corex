@@ -1,0 +1,9 @@
+Loading composer repositories with package information
+Updating dependencies
+Lock file operations: 0 installs, 1 update, 0 removals
+  - Upgrading axiomasoft/corex-recurrence (dev-main fe098a0 => dev-main 8bdb67b)
+Writing lock file
+109 packages you are using are looking for funding.
+Use the `composer fund` command to find out more!
+phpstan/extension-installer: Extensions installed
+No security vulnerability advisories found.

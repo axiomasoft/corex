@@ -1,0 +1,25 @@
+> bash scripts/bc-check.sh
+bc-check: BC_CHECK_BASE=76f8bdde496154c0a8901e459175cf306bedd860 (PHP 8.4)
+bc-check: roave 8.22.0
+bc-check: axiomasoft/corex-access (access) |compatible| stability=stable base=2391e70350bc2cb93fc13d5f4a903d8db40b1f97 candidate=2032c6a857bae874521e406011009db786e2d324
+bc-check: axiomasoft/corex (core) |compatible| stability=stable base=2a14f4ee74590c6abc08e571b9637352b36660a1 candidate=dc7a70024f19fa4b9da1db2e2f64fdbd4ea266e1
+bc-check: axiomasoft/corex-custom-fields (custom-fields) |compatible| stability=stable base=41d450fc678db958cc9b46f17724fad92cbfe0e8 candidate=0b17090ffbe8dc603ab10c35c320e9eef0357bcf
+bc-check: axiomasoft/corex-intl (intl) |compatible| stability=stable base=3b6e37002846e155e1872d138a47a324a099ee58 candidate=fee3fa7bfb4be38cbf983acb08ed43951c6cb44a
+bc-check: axiomasoft/corex-media (media) |compatible| stability=stable base=eee4ce7901bee2514ea920e569bb423239a4f270 candidate=04397b8aac17a6a3ff6f9ceaa7ceb14cff1f1bad
+bc-check: axiomasoft/corex-notifications (notifications) |compatible| stability=stable base=2dd67603f4f951500eebab66400ef15d810d7028 candidate=881a3b4bd23aae4932cc93c68a9cf3ac154d1d92
+bc-check: axiomasoft/corex-operations (operations) |compatible| stability=stable base=d85839e184e94a34f5d8a2f80bfc138b03e5654d candidate=4b3b5e22f003a5bbd614d6badb02dab2e11dbd6c
+bc-check: axiomasoft/corex-panels (panels) |compatible| stability=stable base=043c5f07d0e68ad972a48a2253a0fd597cbb1684 candidate=7c5999391389f94d0be6575a81600921509f08d9
+bc-check: axiomasoft/corex-recurrence (recurrence) |compatible| stability=stable base=0e0a55f5fd8dc1c4cc158343cb400578c173c723 candidate=0531aac5fb73fce2a2806a45def981be95949977
+bc-check: axiomasoft/corex-search (search) |compatible| stability=stable base=2c61594dbf4f3c464d73504f9f7d1fb1a30f582e candidate=9bda7218a25456ad33496c8b174828ba8de42c17
+bc-check: axiomasoft/corex-search-intl (search-intl) |compatible| stability=stable base=a2db996c6d0af4ca09da96df0e18b3667d8f599c candidate=ab1d62210bccd6d214f2f1b7bbb0dbd60c9611bc
+bc-check: axiomasoft/corex-search-meilisearch (search-meilisearch) |compatible| stability=stable base=3c578c92348ca19e55d2709f3140421666ee56eb candidate=9b026b364f1a1fe13382cb64b4fc92b30b13bf25
+bc-check: axiomasoft/corex-tasks (tasks) |compatible| stability=stable base=80b96e5de383ff673075b97e37d139ad062b8576 candidate=8a05d27bbfbb98a8452ef85f8d9ca292bca66089
+bc-check: axiomasoft/corex-tasks-workflow (tasks-workflow) |compatible| stability=stable base=019960cd5efd2cb357ce613b1b3602ae295e1fd3 candidate=2b00720502b3155d90eb6532ee0a68e6bc964e53
+bc-check: axiomasoft/corex-tenancy (tenancy) |compatible| stability=stable base=eed6e12c293dc7ef40110f1f8c23fa76e854ee4b candidate=c83496688b573b55cac6cc5e6480868cc8e8526d
+bc-check: axiomasoft/corex-tools (tools) |compatible| stability=stable base=13e7d21616bed37577e60f0308b86390893cf12a candidate=063a3571f9bea94c5dcc03787bf13bf119783440
+bc-check: axiomasoft/corex-transfer (transfer) |compatible| stability=stable base=c62f4253fe80f53e7a730af4c4a454494d4a373c candidate=6ae3c19ae6affe810a2c139f7958f1e9d889cab4
+bc-check: axiomasoft/corex-wakeup (wakeup) |compatible| stability=stable base=743dfc26a927f36a587fc46f7c628f7f15338e0a candidate=c74b351db12e6194fe156a11dc0ce610137879f6
+bc-check: axiomasoft/corex-webhooks (webhooks) |compatible| stability=stable base=bda6ad77e13f0111a1f321527a5640f6cf7ae1a6 candidate=2676456c36a4e97ebbc8cfa2ca9538a0919cf09a
+bc-check: axiomasoft/corex-workflow (workflow) |compatible| stability=stable base=cdd5b88e189e8d5cae765652965bace88e424dbf candidate=d2c03f5e792e720dbbad292add7c0a6197baac17
+scripts/bc-check.sh: line 430: -e: command not found
+Script bash scripts/bc-check.sh handling the bc-check event returned with error code 127

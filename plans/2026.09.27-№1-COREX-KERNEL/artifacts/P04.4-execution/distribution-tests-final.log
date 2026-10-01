@@ -1,0 +1,170 @@
+FEEEEEEEEE
+======================================================================
+ERROR: test_dependency_gap_is_rejected (test_release_candidate.ReleaseCandidateTest.test_dependency_gap_is_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/tests/test_release_candidate.py", line 167, in test_dependency_gap_is_rejected
+    output, candidate = self.build()
+                        ^^^^^^^^^^^^
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/tests/test_release_candidate.py", line 92, in build
+    candidate = MODULE.build_repository(
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/release_candidate.py", line 306, in build_repository
+    packages = derive_cohort(discover_packages(root, commit), policy)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/release_candidate.py", line 152, in derive_cohort
+    raise CandidateError(f'unexpected non-CoreX package set: {foreign}')
+release_candidate.CandidateError: unexpected non-CoreX package set: []
+
+======================================================================
+ERROR: test_two_builds_are_byte_identical_and_package_only (test_release_candidate.ReleaseCandidateTest.test_two_builds_are_byte_identical_and_package_only)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/tests/test_release_candidate.py", line 106, in test_two_builds_are_byte_identical_and_package_only
+    first, candidate = self.build('first')
+                       ^^^^^^^^^^^^^^^^^^^
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/tests/test_release_candidate.py", line 92, in build
+    candidate = MODULE.build_repository(
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/release_candidate.py", line 306, in build_repository
+    packages = derive_cohort(discover_packages(root, commit), policy)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/release_candidate.py", line 152, in derive_cohort
+    raise CandidateError(f'unexpected non-CoreX package set: {foreign}')
+release_candidate.CandidateError: unexpected non-CoreX package set: []
+
+======================================================================
+ERROR: test_verify_rejects_extra_package (test_release_candidate.ReleaseCandidateTest.test_verify_rejects_extra_package)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/tests/test_release_candidate.py", line 136, in test_verify_rejects_extra_package
+    output, candidate = self.build()
+                        ^^^^^^^^^^^^
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/tests/test_release_candidate.py", line 92, in build
+    candidate = MODULE.build_repository(
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/release_candidate.py", line 306, in build_repository
+    packages = derive_cohort(discover_packages(root, commit), policy)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/release_candidate.py", line 152, in derive_cohort
+    raise CandidateError(f'unexpected non-CoreX package set: {foreign}')
+release_candidate.CandidateError: unexpected non-CoreX package set: []
+
+======================================================================
+ERROR: test_verify_rejects_forbidden_archive_member (test_release_candidate.ReleaseCandidateTest.test_verify_rejects_forbidden_archive_member)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/tests/test_release_candidate.py", line 156, in test_verify_rejects_forbidden_archive_member
+    output, candidate = self.build()
+                        ^^^^^^^^^^^^
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/tests/test_release_candidate.py", line 92, in build
+    candidate = MODULE.build_repository(
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/release_candidate.py", line 306, in build_repository
+    packages = derive_cohort(discover_packages(root, commit), policy)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/release_candidate.py", line 152, in derive_cohort
+    raise CandidateError(f'unexpected non-CoreX package set: {foreign}')
+release_candidate.CandidateError: unexpected non-CoreX package set: []
+
+======================================================================
+ERROR: test_verify_rejects_omitted_package (test_release_candidate.ReleaseCandidateTest.test_verify_rejects_omitted_package)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/tests/test_release_candidate.py", line 128, in test_verify_rejects_omitted_package
+    output, candidate = self.build()
+                        ^^^^^^^^^^^^
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/tests/test_release_candidate.py", line 92, in build
+    candidate = MODULE.build_repository(
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/release_candidate.py", line 306, in build_repository
+    packages = derive_cohort(discover_packages(root, commit), policy)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/release_candidate.py", line 152, in derive_cohort
+    raise CandidateError(f'unexpected non-CoreX package set: {foreign}')
+release_candidate.CandidateError: unexpected non-CoreX package set: []
+
+======================================================================
+ERROR: test_verify_rejects_one_byte_archive_drift (test_release_candidate.ReleaseCandidateTest.test_verify_rejects_one_byte_archive_drift)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/tests/test_release_candidate.py", line 203, in test_verify_rejects_one_byte_archive_drift
+    output, _ = self.build()
+                ^^^^^^^^^^^^
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/tests/test_release_candidate.py", line 92, in build
+    candidate = MODULE.build_repository(
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/release_candidate.py", line 306, in build_repository
+    packages = derive_cohort(discover_packages(root, commit), policy)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/release_candidate.py", line 152, in derive_cohort
+    raise CandidateError(f'unexpected non-CoreX package set: {foreign}')
+release_candidate.CandidateError: unexpected non-CoreX package set: []
+
+======================================================================
+ERROR: test_verify_rejects_workspace_path_leakage (test_release_candidate.ReleaseCandidateTest.test_verify_rejects_workspace_path_leakage)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/tests/test_release_candidate.py", line 194, in test_verify_rejects_workspace_path_leakage
+    output, _ = self.build()
+                ^^^^^^^^^^^^
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/tests/test_release_candidate.py", line 92, in build
+    candidate = MODULE.build_repository(
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/release_candidate.py", line 306, in build_repository
+    packages = derive_cohort(discover_packages(root, commit), policy)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/release_candidate.py", line 152, in derive_cohort
+    raise CandidateError(f'unexpected non-CoreX package set: {foreign}')
+release_candidate.CandidateError: unexpected non-CoreX package set: []
+
+======================================================================
+ERROR: test_verify_rejects_wrong_channel (test_release_candidate.ReleaseCandidateTest.test_verify_rejects_wrong_channel)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/tests/test_release_candidate.py", line 148, in test_verify_rejects_wrong_channel
+    output, candidate = self.build()
+                        ^^^^^^^^^^^^
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/tests/test_release_candidate.py", line 92, in build
+    candidate = MODULE.build_repository(
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/release_candidate.py", line 306, in build_repository
+    packages = derive_cohort(discover_packages(root, commit), policy)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/release_candidate.py", line 152, in derive_cohort
+    raise CandidateError(f'unexpected non-CoreX package set: {foreign}')
+release_candidate.CandidateError: unexpected non-CoreX package set: []
+
+======================================================================
+ERROR: test_verify_rejects_wrong_commit (test_release_candidate.ReleaseCandidateTest.test_verify_rejects_wrong_commit)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/tests/test_release_candidate.py", line 211, in test_verify_rejects_wrong_commit
+    output, candidate = self.build()
+                        ^^^^^^^^^^^^
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/tests/test_release_candidate.py", line 92, in build
+    candidate = MODULE.build_repository(
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/release_candidate.py", line 306, in build_repository
+    packages = derive_cohort(discover_packages(root, commit), policy)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/release_candidate.py", line 152, in derive_cohort
+    raise CandidateError(f'unexpected non-CoreX package set: {foreign}')
+release_candidate.CandidateError: unexpected non-CoreX package set: []
+
+======================================================================
+FAIL: test_build_rejects_dirty_package_source (test_release_candidate.ReleaseCandidateTest.test_build_rejects_dirty_package_source)
+----------------------------------------------------------------------
+release_candidate.CandidateError: unexpected non-CoreX package set: []
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/vostrikov/projects/packages/corex/scripts/distribution/tests/test_release_candidate.py", line 124, in test_build_rejects_dirty_package_source
+    with self.assertRaisesRegex(MODULE.CandidateError, 'source is dirty'):
+AssertionError: "source is dirty" does not match "unexpected non-CoreX package set: []"
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.285s
+
+FAILED (failures=1, errors=9)

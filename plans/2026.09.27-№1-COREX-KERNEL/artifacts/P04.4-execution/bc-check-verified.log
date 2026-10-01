@@ -1,0 +1,27 @@
+> bash scripts/bc-check.sh
+bc-check: BC_CHECK_BASE=76f8bdde496154c0a8901e459175cf306bedd860 (PHP 8.4)
+bc-check: roave 8.22.0
+bc-check: axiomasoft/corex-access (access) |compatible| stability=stable base=b3f490635162d20847c8d50016471bd812df1866 candidate=b3909f331ba09c1ff437f7e379c3854b777f7bf7
+bc-check: axiomasoft/corex (core) |bc-break| stability=stable base=17389db4a4aaa3fad874a2beac473fe181a501f6 candidate=6a6366cd4afc343a695f89076d6f18aec7068026
+  - Installing laravel/prompts (v0.3.24): Extracting archive
+  - Installing guzzlehttp/uri-template (v2.0.1): Extracting archive
+  - Installing symfony/polyfill-php82 (v1.43.0): Extracting archive
+  - Installing guzzlehttp/psr7 (3.1.0): Extracting archive
+  - Installing guzzlehttp/promises (3.0.2): Extracting archive
+  - Installing psr/http-client (1.0.3): Extracting archive
+  - Installing guzzlehttp/guzzle (8.2.0): Extracting archive
+  - Installing fruitcake/php-cors (v1.4.0): Extracting archive
+  - Installing dragonmantank/cron-expression (v3.6.0): Extracting archive
+  - Installing doctrine/inflector (2.1.0): Extracting archive
+  - Installing laravel/framework (v13.34.0): Extracting archive
+  - Installing nikic/php-parser (v5.9.0): Extracting archive
+  - Installing phpstan/phpstan (2.2.16): Symlinking from packages/_vendor/phpstan
+52 package suggestions were added by new dependencies, use `composer suggest` to see details.
+54 packages you are using are looking for funding.
+Use the `composer fund` command to find out more!
+No security vulnerability advisories found.
+::error file=/packages/core/src/Audit/Data/AuditEntry.php,line=29,col=223::Unable to compile initializer in class CoreX\Audit\Data\AuditEntry in file /packages/core/src/Audit/Data/AuditEntry.php (line 29)
+::error file=/packages/core/src/Audit/Data/AuditEntry.php,line=29,col=223::Unable to compile initializer in class CoreX\Audit\Data\AuditEntry in file /packages/core/src/Audit/Data/AuditEntry.php (line 29)
+2 backwards-incompatible changes detected
+bc-check: undeclared or stable BC break — axiomasoft/corex
+Script bash scripts/bc-check.sh handling the bc-check event returned with error code 1

@@ -1,0 +1,9 @@
+{
+  "schema": "corex-surface-run-summary/1",
+  "full_report_sha256": "17030c3b3c09427d2c6acd620390c40566c3bc57413da322a505c3f355d11b22",
+  "report_schema": "php-api-report/1",
+  "owners": 1305,
+  "packages": 20,
+  "symbols": 800,
+  "diagnostics": []
+}

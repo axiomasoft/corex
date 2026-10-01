@@ -1,0 +1,203 @@
+{
+  "schema": "corex-final-surface/1",
+  "strict_exit_code": 0,
+  "diagnostics": [],
+  "owners": 1305,
+  "package_count": 20,
+  "supported_symbols": 800,
+  "layers": {
+    "api": 412,
+    "spi-implement": 152,
+    "spi-call": 236
+  },
+  "packages": {
+    "axiomasoft/corex": {
+      "symbols": 202,
+      "layers": {
+        "api": 88,
+        "spi-implement": 51,
+        "spi-call": 63
+      }
+    },
+    "axiomasoft/corex-access": {
+      "symbols": 21,
+      "layers": {
+        "spi-call": 10,
+        "spi-implement": 4,
+        "api": 7
+      }
+    },
+    "axiomasoft/corex-custom-fields": {
+      "symbols": 28,
+      "layers": {
+        "spi-call": 1,
+        "spi-implement": 5,
+        "api": 22
+      }
+    },
+    "axiomasoft/corex-intl": {
+      "symbols": 49,
+      "layers": {
+        "spi-implement": 10,
+        "api": 32,
+        "spi-call": 7
+      }
+    },
+    "axiomasoft/corex-media": {
+      "symbols": 24,
+      "layers": {
+        "spi-implement": 3,
+        "api": 18,
+        "spi-call": 3
+      }
+    },
+    "axiomasoft/corex-notifications": {
+      "symbols": 31,
+      "layers": {
+        "spi-call": 6,
+        "spi-implement": 5,
+        "api": 20
+      }
+    },
+    "axiomasoft/corex-operations": {
+      "symbols": 106,
+      "layers": {
+        "spi-call": 50,
+        "spi-implement": 20,
+        "api": 36
+      }
+    },
+    "axiomasoft/corex-panels": {
+      "symbols": 22,
+      "layers": {
+        "spi-implement": 4,
+        "api": 15,
+        "spi-call": 3
+      }
+    },
+    "axiomasoft/corex-recurrence": {
+      "symbols": 16,
+      "layers": {
+        "spi-implement": 1,
+        "api": 13,
+        "spi-call": 2
+      }
+    },
+    "axiomasoft/corex-search": {
+      "symbols": 26,
+      "layers": {
+        "spi-implement": 5,
+        "spi-call": 4,
+        "api": 17
+      }
+    },
+    "axiomasoft/corex-search-intl": {
+      "symbols": 3,
+      "layers": {
+        "spi-implement": 1,
+        "api": 1,
+        "spi-call": 1
+      }
+    },
+    "axiomasoft/corex-search-meilisearch": {
+      "symbols": 3,
+      "layers": {
+        "api": 2,
+        "spi-call": 1
+      }
+    },
+    "axiomasoft/corex-tasks": {
+      "symbols": 58,
+      "layers": {
+        "spi-implement": 6,
+        "spi-call": 14,
+        "api": 38
+      }
+    },
+    "axiomasoft/corex-tasks-workflow": {
+      "symbols": 10,
+      "layers": {
+        "api": 8,
+        "spi-call": 2
+      }
+    },
+    "axiomasoft/corex-tenancy": {
+      "symbols": 119,
+      "layers": {
+        "api": 49,
+        "spi-call": 57,
+        "spi-implement": 13
+      }
+    },
+    "axiomasoft/corex-tools": {
+      "symbols": 11,
+      "layers": {
+        "api": 6,
+        "spi-implement": 4,
+        "spi-call": 1
+      }
+    },
+    "axiomasoft/corex-transfer": {
+      "symbols": 28,
+      "layers": {
+        "spi-implement": 8,
+        "api": 18,
+        "spi-call": 2
+      }
+    },
+    "axiomasoft/corex-wakeup": {
+      "symbols": 15,
+      "layers": {
+        "spi-implement": 5,
+        "api": 7,
+        "spi-call": 3
+      }
+    },
+    "axiomasoft/corex-webhooks": {
+      "symbols": 17,
+      "layers": {
+        "spi-implement": 5,
+        "api": 8,
+        "spi-call": 4
+      }
+    },
+    "axiomasoft/corex-workflow": {
+      "symbols": 11,
+      "layers": {
+        "spi-implement": 2,
+        "api": 7,
+        "spi-call": 2
+      }
+    }
+  },
+  "artifacts_sha256": {
+    "docs/reference/public-api.md": "9943318c725b6e2f364e2619aa67db9090f19bf6533a08c549ba1a414eb26010",
+    "packages/access/resources/contracts/php-api.json": "2c850455878388099459e4405ef03380677bfc2986e1561361d5968d2cea5f00",
+    "packages/core/resources/contracts/php-api.json": "556a0fbbaef28bf432e0544c873530596fb74e9ad102baa0217d8e26601aad39",
+    "packages/custom-fields/resources/contracts/php-api.json": "0295343ecc759051a48e9557b34cf1abcb1987db4cc8a4aa43f93d7344fc4eec",
+    "packages/intl/resources/contracts/php-api.json": "75733b1f9350f7ad32cf3f5072d1b83bd10f6bcf74548e2be85adbb505317727",
+    "packages/media/resources/contracts/php-api.json": "3d1ce30993061bdee558844cfee6c684760abaa9a67951dbf7465affcee34012",
+    "packages/notifications/resources/contracts/php-api.json": "90d47f1819b9c1d437f35ab207eb3f8902929df43f0c4acdd189b364b095dffa",
+    "packages/operations/resources/contracts/php-api.json": "d8601bdbd9b218b077d4b1d20b2205339c0c0c6a97720363f86933293a591420",
+    "packages/panels/resources/contracts/php-api.json": "8402ffa63b42cc400ed6899c14bd7b91c294595e3f48388e4aa6858549305105",
+    "packages/recurrence/resources/contracts/php-api.json": "5b02326742f584157607a2b954ee0096e136f833ab7f3f5e7c9f9515425d9b5f",
+    "packages/search/resources/contracts/php-api.json": "e1b1a66f939af5ce1712100c319948e15906f1ee8e447229609860b64e56591e",
+    "packages/search-intl/resources/contracts/php-api.json": "3eb6940fab0388983a0761aaaa046f3af875b8b7eb4f88f0cec9cd2eff6dba52",
+    "packages/search-meilisearch/resources/contracts/php-api.json": "8ea2721500995b6ded170f2892fba6d3368e522c9be4c8791b5f07876c728b56",
+    "packages/tasks/resources/contracts/php-api.json": "6c31cf1ec252e6f27272d70f4e0d0c3e4dd209f9b0e53067710c28cd71f1df9c",
+    "packages/tasks-workflow/resources/contracts/php-api.json": "06ffe7237bae37a73872ae19e7a6452248d3dfe8a00d79c5339f2cc3d6fe6fc4",
+    "packages/tenancy/resources/contracts/php-api.json": "b280e038c05b7f046a77d9487bfcb56fc772deb30fbeb174823a377996ffdfc7",
+    "packages/tools/resources/contracts/php-api.json": "a7309baff925ef66237f3c8afe6f4e92130773ff149c9f0137d0095cd979585c",
+    "packages/transfer/resources/contracts/php-api.json": "917953f73701caaf1f951761778dc5794c54bebc23a08ae687582a1fb1ebffa1",
+    "packages/wakeup/resources/contracts/php-api.json": "e72a11f884cf1e8546b41828c621ae0211a9505d7922cd6ee3d4ed316e524348",
+    "packages/webhooks/resources/contracts/php-api.json": "bde16769bb864e6f5d931483fa7d100f5530651bdb9355b4c529350ff9e5303e",
+    "packages/workflow/resources/contracts/php-api.json": "df6f2949801f54b7b9d37a71c38bd6254805417d1b8a8baa88f03057777e3ad7"
+  },
+  "predecessor_reconciliation": {
+    "producer": "P04.2",
+    "rows": 1173,
+    "source_ownership_matches": true,
+    "classification_matches": true,
+    "new_symbols_since_P04.2": 101
+  }
+}

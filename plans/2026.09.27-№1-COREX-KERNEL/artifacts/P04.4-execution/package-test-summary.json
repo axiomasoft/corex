@@ -1,0 +1,225 @@
+[
+  {
+    "package": "packages/access",
+    "test_results": [
+      {
+        "summary": "38 passed (65 assertions)"
+      }
+    ]
+  },
+  {
+    "package": "packages/core",
+    "test_results": [
+      {
+        "tool": "pest",
+        "result": "passed",
+        "tests": 236,
+        "passed": 236,
+        "assertions": 802,
+        "duration_ms": 4691
+      }
+    ]
+  },
+  {
+    "package": "packages/custom-fields",
+    "test_results": [
+      {
+        "tool": "pest",
+        "result": "passed",
+        "tests": 70,
+        "passed": 70,
+        "assertions": 243,
+        "duration_ms": 12280
+      }
+    ]
+  },
+  {
+    "package": "packages/intl",
+    "test_results": [
+      {
+        "tool": "pest",
+        "result": "passed",
+        "tests": 34,
+        "passed": 34,
+        "assertions": 103,
+        "duration_ms": 669
+      }
+    ]
+  },
+  {
+    "package": "packages/media",
+    "test_results": [
+      {
+        "summary": "20 passed (58 assertions)"
+      }
+    ]
+  },
+  {
+    "package": "packages/notifications",
+    "test_results": [
+      {
+        "tool": "pest",
+        "result": "passed",
+        "tests": 19,
+        "passed": 19,
+        "assertions": 73,
+        "duration_ms": 809
+      }
+    ]
+  },
+  {
+    "package": "packages/operations",
+    "test_results": [
+      {
+        "summary": "5 skipped, 158 passed (1110 assertions)"
+      }
+    ]
+  },
+  {
+    "package": "packages/panels",
+    "test_results": [
+      {
+        "summary": "17 passed (73 assertions)"
+      }
+    ]
+  },
+  {
+    "package": "packages/recurrence",
+    "test_results": [
+      {
+        "tool": "pest",
+        "result": "passed",
+        "tests": 13,
+        "passed": 13,
+        "assertions": 28,
+        "duration_ms": 22
+      }
+    ]
+  },
+  {
+    "package": "packages/search",
+    "test_results": [
+      {
+        "tool": "pest",
+        "result": "passed",
+        "tests": 11,
+        "passed": 11,
+        "assertions": 28,
+        "duration_ms": 111
+      }
+    ]
+  },
+  {
+    "package": "packages/search-intl",
+    "test_results": [
+      {
+        "tool": "pest",
+        "result": "passed",
+        "tests": 6,
+        "passed": 6,
+        "assertions": 14,
+        "duration_ms": 208
+      }
+    ]
+  },
+  {
+    "package": "packages/search-meilisearch",
+    "test_results": [
+      {
+        "tool": "pest",
+        "result": "passed",
+        "tests": 4,
+        "passed": 4,
+        "assertions": 10,
+        "duration_ms": 106
+      }
+    ]
+  },
+  {
+    "package": "packages/tasks",
+    "test_results": [
+      {
+        "summary": "33 passed (106 assertions)"
+      }
+    ]
+  },
+  {
+    "package": "packages/tasks-workflow",
+    "test_results": [
+      {
+        "summary": "21 passed (143 assertions)"
+      }
+    ]
+  },
+  {
+    "package": "packages/tenancy",
+    "test_results": [
+      {
+        "summary": "6 skipped, 497 passed (1800 assertions)"
+      }
+    ]
+  },
+  {
+    "package": "packages/tools",
+    "test_results": [
+      {
+        "summary": "60 passed (367 assertions)"
+      }
+    ]
+  },
+  {
+    "package": "packages/transfer",
+    "test_results": [
+      {
+        "tool": "pest",
+        "result": "passed",
+        "tests": 8,
+        "passed": 8,
+        "assertions": 24,
+        "duration_ms": 15
+      }
+    ]
+  },
+  {
+    "package": "packages/wakeup",
+    "test_results": [
+      {
+        "tool": "pest",
+        "result": "passed",
+        "tests": 21,
+        "passed": 21,
+        "assertions": 91,
+        "duration_ms": 403
+      }
+    ]
+  },
+  {
+    "package": "packages/webhooks",
+    "test_results": [
+      {
+        "summary": "6 skipped, 80 passed (410 assertions)"
+      }
+    ]
+  },
+  {
+    "package": "packages/workflow",
+    "test_results": [
+      {
+        "tool": "pest",
+        "result": "passed",
+        "tests": 15,
+        "passed": 15,
+        "assertions": 39,
+        "duration_ms": 231
+      }
+    ]
+  },
+  {
+    "package": "products/flex-crm",
+    "test_results": [
+      {
+        "summary": "35 passed (136 assertions)"
+      }
+    ]
+  }
+]

@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-10-01
-inputs_sha256: c31b86ae06c828179ecb1a9d6dfbc8726f6ec340a3df3b7b8a8f16cab0f7112f
+inputs_sha256: 578a3c965d302a1d1eabcd428e0a7472256ea4e01890c4d8b27cb56e7fcf0fbe
 generated_by: task plan-views status
 -->
 
@@ -16,7 +16,7 @@ generated_by: task plan-views status
 | Поле | Значение |
 |:--|:--|
 | Version | — |
-| Status | 🟡 In progress |
+| Status | 🟢 Done |
 | Last Updated | 2026-10-01 |
 
 ## 4. Phase Index & Status Board
@@ -27,7 +27,7 @@ generated_by: task plan-views status
 | P01 | Окружение, платформа и страховочная сетка | 4/4 | 🟢 Done |
 | P02 | Vendor, состав пакетов, namespace = путь | 4/4 | 🟢 Done |
 | P03 | Feature modules и `Internal` | 2/2 | 🟢 Done |
-| P04 | Application API, Extension SPI и типизированные ошибки | 3/4 | 🟡 In progress |
+| P04 | Application API, Extension SPI и типизированные ошибки | 4/4 | 🟢 Done |
 
 ## Phase P00
 
@@ -69,7 +69,7 @@ generated_by: task plan-views status
 | P04.1 | Атрибуты и report-сканер символной поверхности | 🟢 Done | 2026-09-29 |
 | P04.2 | Минимальная API/SPI поверхность, DTO и закрытие Internal-швов | 🟢 Done | 2026-10-01 |
 | P04.3 | Типизированные package errors и compiled ProblemRegistry | 🟢 Done | 2026-10-01 |
-| P04.4 | Strict поверхность, manifests, SemVer и документация | ⬜ Not started | — |
+| P04.4 | Strict поверхность, manifests, SemVer и документация | 🟢 Done | 2026-10-01 |
 
 ## 6. Update Log
 
@@ -220,6 +220,12 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-10-01 | executor/codex/SOL | plan-run · in-progress · Owner authorizes SOL and waives executor model/route verification. No extra SKM reviews or redundant runs. Source: artifacts/P04.3-execution/owner-instructions.md. No route attestation claimed. |
 | 2026-10-01 | executor/codex/SOL | plan-run · in-progress · Owner authorizes SOL and waives executor model/route verification. No extra SKM reviews or redundant runs. Source: artifacts/P04.3-execution/owner-instructions.md. No route attestation claimed. Append-only identity correction: durable start binds attempt 1 and run_id. |
 | 2026-10-01 | executor/codex/SOL | plan-run · closed-green · note сокращена; полный текст: journal.jsonl:126 |
+| 2026-10-01 | executor/gpt-6 | plan-exec · in-progress · — |
+| 2026-10-01 | executor/codex/gpt-6.1-sol/high | plan-exec · closed-green · P04.4 strict/API/SPI/BC/docs GREEN; completion.md and final-surface.json. Independent review owner-waived D68; no extra audit/replay.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-01 | executor/codex/gpt-6.1-sol/high | plan-close · in-progress · Inline P04 closure in the owning P04.4 invocation; no approved audit, actual acceptance GREEN. |
+| 2026-10-01 | executor/codex/gpt-6.1-sol/high | plan-close · closed-green · P04 GREEN phase-close-gate.json; inline closure, independent audit not performed.
+write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates
 

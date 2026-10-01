@@ -1,0 +1,107 @@
+[
+  {
+    "path": "packages/access/composer.json",
+    "exit_code": 0,
+    "log": "validate-access.log"
+  },
+  {
+    "path": "packages/core/composer.json",
+    "exit_code": 0,
+    "log": "validate-core.log"
+  },
+  {
+    "path": "packages/custom-fields/composer.json",
+    "exit_code": 0,
+    "log": "validate-custom-fields.log"
+  },
+  {
+    "path": "packages/intl/composer.json",
+    "exit_code": 0,
+    "log": "validate-intl.log"
+  },
+  {
+    "path": "packages/media/composer.json",
+    "exit_code": 0,
+    "log": "validate-media.log"
+  },
+  {
+    "path": "packages/notifications/composer.json",
+    "exit_code": 0,
+    "log": "validate-notifications.log"
+  },
+  {
+    "path": "packages/operations/composer.json",
+    "exit_code": 0,
+    "log": "validate-operations.log"
+  },
+  {
+    "path": "packages/panels/composer.json",
+    "exit_code": 0,
+    "log": "validate-panels.log"
+  },
+  {
+    "path": "packages/recurrence/composer.json",
+    "exit_code": 0,
+    "log": "validate-recurrence.log"
+  },
+  {
+    "path": "packages/search/composer.json",
+    "exit_code": 0,
+    "log": "validate-search.log"
+  },
+  {
+    "path": "packages/search-intl/composer.json",
+    "exit_code": 0,
+    "log": "validate-search-intl.log"
+  },
+  {
+    "path": "packages/search-meilisearch/composer.json",
+    "exit_code": 0,
+    "log": "validate-search-meilisearch.log"
+  },
+  {
+    "path": "packages/tasks/composer.json",
+    "exit_code": 0,
+    "log": "validate-tasks.log"
+  },
+  {
+    "path": "packages/tasks-workflow/composer.json",
+    "exit_code": 0,
+    "log": "validate-tasks-workflow.log"
+  },
+  {
+    "path": "packages/tenancy/composer.json",
+    "exit_code": 0,
+    "log": "validate-tenancy.log"
+  },
+  {
+    "path": "packages/tools/composer.json",
+    "exit_code": 0,
+    "log": "validate-tools.log"
+  },
+  {
+    "path": "packages/transfer/composer.json",
+    "exit_code": 0,
+    "log": "validate-transfer.log"
+  },
+  {
+    "path": "packages/wakeup/composer.json",
+    "exit_code": 0,
+    "log": "validate-wakeup.log"
+  },
+  {
+    "path": "packages/webhooks/composer.json",
+    "exit_code": 0,
+    "log": "validate-webhooks.log"
+  },
+  {
+    "path": "packages/workflow/composer.json",
+    "exit_code": 0,
+    "log": "validate-workflow.log"
+  },
+  {
+    "path": "products/flex-crm/composer.json",
+    "exit_code": 0,
+    "log": "validate-flex-crm.log"
+  }
+]

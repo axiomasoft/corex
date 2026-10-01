@@ -1,0 +1,2 @@
+manifests FAIL: 1 violations
+recurrence: path-repo: no path repository ../core for axiomasoft/corex

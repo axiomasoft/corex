@@ -1,0 +1,5 @@
+> bash scripts/bc-check.sh
+bc-check: BC_CHECK_BASE=76f8bdde496154c0a8901e459175cf306bedd860 (PHP 8.4)
+bc-check: roave 8.22.0
+bc-check: axiomasoft/corex-access (access) |compatible| stability=stable base=fb76ea930d9cdaa038820a7dbcdb748a96acf83a candidate=0f1aede01c359261a23458682b98ffdef1190d94
+bc-check: OK

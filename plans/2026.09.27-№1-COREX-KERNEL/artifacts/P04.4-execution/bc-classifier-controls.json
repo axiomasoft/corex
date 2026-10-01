@@ -1,0 +1,72 @@
+[
+  {
+    "exit_code": 0,
+    "errors": [],
+    "classification": "compatible"
+  },
+  {
+    "exit_code": 3,
+    "errors": [
+      {
+        "modificationType": "removed"
+      }
+    ],
+    "classification": "bc-break"
+  },
+  {
+    "exit_code": 3,
+    "errors": [
+      {
+        "modificationType": "skipped"
+      }
+    ],
+    "classification": "infrastructure"
+  },
+  {
+    "exit_code": 3,
+    "errors": [
+      {
+        "modificationType": "changed"
+      },
+      {
+        "modificationType": "skipped"
+      }
+    ],
+    "classification": "infrastructure"
+  },
+  {
+    "exit_code": 0,
+    "errors": [
+      {
+        "modificationType": "removed"
+      }
+    ],
+    "classification": "infrastructure"
+  },
+  {
+    "exit_code": 3,
+    "errors": [],
+    "classification": "infrastructure"
+  },
+  {
+    "exit_code": 1,
+    "errors": [],
+    "classification": "infrastructure"
+  },
+  {
+    "output": "",
+    "classification": "infrastructure"
+  },
+  {
+    "output": "{invalid}",
+    "classification": "infrastructure"
+  },
+  {
+    "output": "{\"errors\":{}}",
+    "classification": "infrastructure"
+  },
+  {
+    "output": "{\"errors\":[{}]}",
+    "classification": "infrastructure"
+  }
+]

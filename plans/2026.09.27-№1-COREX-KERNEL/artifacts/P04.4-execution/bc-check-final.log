@@ -1,0 +1,39 @@
+> bash scripts/bc-check.sh
+bc-check: BC_CHECK_BASE=76f8bdde496154c0a8901e459175cf306bedd860 (PHP 8.4)
+bc-check: roave 8.22.0
+warning: adding embedded git repository: packages/_vendor/azguard-core
+hint: You've added another git repository inside your current repository.
+hint: Clones of the outer repository will not contain the contents of
+hint: the embedded repository and will not know how to obtain it.
+hint: If you meant to add a submodule, use:
+hint: 
+hint: 	git submodule add <url> packages/_vendor/azguard-core
+hint: 
+hint: If you added this path by mistake, you can remove it from the
+hint: index with:
+hint: 
+hint: 	git rm --cached packages/_vendor/azguard-core
+hint: 
+hint: See "git help submodule" for more information.
+bc-check: axiomasoft/corex-access (access) |infrastructure| stability=stable base=c7b97c8a7f7141c24ed6a4d4270681098e8d7cf5 candidate=835f1d4e0af91391a0238b0e04f6c3f408c84494
+
+
+Comparing from c7b97c8a7f7141c24ed6a4d4270681098e8d7cf5 to 835f1d4e0af91391a0238b0e04f6c3f408c84494...
+<warning>No composer.lock file present. Updating dependencies to latest instead of installing from lock file. See https://getcomposer.org/install for more information.</warning>
+Loading composer repositories with package information
+Updating dependencies
+Your requirements could not be resolved to an installable set of packages.
+
+  Problem 1
+    - Root composer.json requires axiomasoft/corex ^1.0@dev, found axiomasoft/corex[dev-master, dev-c7b97c8a7f7141c24ed6a4d4270681098e8d7cf5] but it does not match the constraint.
+
+<warning>Running update with --no-dev does not mean require-dev is ignored, it just means the packages will not be installed. If dev requirements are blocking the update you have to resolve those problems.</warning>
+
+In MissingInstalledJson.php line 15:
+                                                                               
+  Could not locate a "composer/installed.json" file in "/tmp/api-compare-c7b9  
+  7c8a7f7141c24ed6a4d4270681098e8d7cf56abe184309d9d/vendor"                    
+                                                                               
+
+roave-backwards-compatibility-check:assert-backwards-compatible [--from [FROM]] [--to TO] [--format [FORMAT]] [--install-development-dependencies]
+Script bash scripts/bc-check.sh handling the bc-check event returned with error code 1

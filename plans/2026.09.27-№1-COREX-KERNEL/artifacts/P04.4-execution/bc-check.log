@@ -1,0 +1,22 @@
+> bash scripts/bc-check.sh
+bc-check: BC_CHECK_BASE=556c5478f428290a7b60959388783f860f1f29b0 (PHP 8.4)
+bc-check: roave 8.22.0
+warning: adding embedded git repository: packages/_vendor/azguard-core
+hint: You've added another git repository inside your current repository.
+hint: Clones of the outer repository will not contain the contents of
+hint: the embedded repository and will not know how to obtain it.
+hint: If you meant to add a submodule, use:
+hint: 
+hint: 	git submodule add <url> packages/_vendor/azguard-core
+hint: 
+hint: If you added this path by mistake, you can remove it from the
+hint: index with:
+hint: 
+hint: 	git rm --cached packages/_vendor/azguard-core
+hint: 
+hint: See "git help submodule" for more information.
+scripts/bc-check.sh: line 23: /home/vostrikov/projects/packages/corex/build/php84/bin/php: No such file or directory
+scripts/bc-check.sh: line 23: /home/vostrikov/projects/packages/corex/build/php84/bin/php: No such file or directory
+bc-check: axiomasoft/corex-access (access) |infrastructure| stability=stable base=eb0a9e0bf7ab104a6260a63aa8a79e995162ece5 candidate=581ed72c28645785879830158329e0777ae5c071
+scripts/bc-check.sh: line 344: /home/vostrikov/projects/packages/corex/build/php84/bin/php: No such file or directory
+Script bash scripts/bc-check.sh handling the bc-check event returned with error code 1
