@@ -9,6 +9,7 @@ use CoreX\Operations\Validation\Data\JsonValue;
 use CoreX\Operations\Validation\Data\SchemaHandle;
 use CoreX\Operations\Validation\Laravel\SchemaProfile;
 use CoreX\Tools\Internal\ToolSchemaSupervisor;
+use LogicException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -140,6 +141,14 @@ final class ToolSchemaSupervisorTest extends TestCase
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('schema_unavailable');
-        $this->validate(new ToolSchemaSupervisor(phpBinary: $this->directory.'/missing'));
+        set_error_handler(static function (): never {
+            throw new LogicException('Spawn warning escaped the supervisor.');
+        }, E_WARNING);
+
+        try {
+            $this->validate(new ToolSchemaSupervisor(phpBinary: $this->directory.'/missing'));
+        } finally {
+            restore_error_handler();
+        }
     }
 }

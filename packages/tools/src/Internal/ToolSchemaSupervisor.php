@@ -144,7 +144,16 @@ final class ToolSchemaSupervisor implements ToolSchemaValidator
             '-d', 'memory_limit='.intdiv(SchemaProfile::WORKER_MEMORY_BYTES, 1024 * 1024).'M',
             __DIR__.'/ToolSchemaWorker.php',
         ];
-        $process = @proc_open($command, [0 => ['pipe', 'r'], 1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $pipes);
+        // A failed spawn is a typed startup failure even when a host observes suppressed warnings.
+        set_error_handler(static function (): never {
+            throw new RuntimeException('schema_unavailable');
+        }, E_WARNING);
+
+        try {
+            $process = proc_open($command, [0 => ['pipe', 'r'], 1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $pipes);
+        } finally {
+            restore_error_handler();
+        }
 
         if (! is_resource($process)) {
             throw new RuntimeException('schema_unavailable');
