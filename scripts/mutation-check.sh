@@ -26,6 +26,7 @@ cd "$(git rev-parse --show-toplevel)"
 # Реестр кейсов: "<item>-<case>" -> тестовая команда, которая обязана
 # ПОКРАСНЕТЬ под применённым патчем-саботажем.
 declare -A TEST_CMD=(
+    [P10-pg-outside-group]="PGSQL_PORT=1 vendor/bin/pest --exclude-group=pg packages/webhooks/tests/Feature/WebhookFanoutTest.php"
     [API-default-deny]="vendor/bin/pest --exclude-group=pg packages/operations/tests/Feature/PlatformTest.php --filter=test_default_authentication_and_authorization_deny"
     [API-module-activation]="vendor/bin/pest --exclude-group=pg packages/operations/tests/Feature/PlatformTest.php --filter=test_context_and_module_state_are_read_on_every_dispatch"
     [API-physical-context]="vendor/bin/pest --exclude-group=pg packages/operations/tests/Feature/PlatformTest.php --filter=test_missing_boxed_and_disabled_contexts_fail_closed"

@@ -28,6 +28,7 @@ use CoreX\Webhooks\Tests\TestCase;
 use DateTimeImmutable;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\Group;
 
 final class WebhookSubscriptionTest extends TestCase
 {
@@ -144,6 +145,7 @@ final class WebhookSubscriptionTest extends TestCase
         }
     }
 
+    #[Group('pg')]
     public function test_postgresql_subscription_revision_is_optimistic(): void
     {
         $database = getenv('PGSQL_DATABASE') ?: '';

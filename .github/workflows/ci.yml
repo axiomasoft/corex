@@ -370,6 +370,19 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     name: Panels package
+    services:
+      pgsql:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_DB: corex_test
+          POSTGRES_USER: corex
+          POSTGRES_PASSWORD: corex
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U corex -d corex_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -377,7 +390,7 @@ jobs:
       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd, xdebug
+          extensions: mbstring, pdo, pdo_pgsql, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd, xdebug
           coverage: xdebug
       - name: Stage sealed stancl provider candidates
         run: python3 scripts/distribution/stage-stancl-providers.py
@@ -393,8 +406,16 @@ jobs:
 
       - name: Composer audit
         run: composer audit --locked --working-dir=packages/panels
+      - name: Panels SQLite tests
+        run: composer --working-dir=packages/panels test -- --exclude-group=pg
       - name: Panels tests and coverage
         run: composer --working-dir=packages/panels test:coverage
+        env:
+          PGSQL_HOST: 127.0.0.1
+          PGSQL_PORT: 5432
+          PGSQL_DATABASE: corex_test
+          PGSQL_USERNAME: corex
+          PGSQL_PASSWORD: corex
       - name: Panels static analysis
         run: composer --working-dir=packages/panels analyse
 
@@ -723,6 +744,12 @@ jobs:
 
       - name: Tasks coverage (P1.27 compensating gate)
         run: composer --working-dir=packages/tasks test:coverage
+        env:
+          PGSQL_HOST: 127.0.0.1
+          PGSQL_PORT: 5432
+          PGSQL_DATABASE: corex_test
+          PGSQL_USERNAME: corex
+          PGSQL_PASSWORD: corex
 
   auth-tests:
     permissions:

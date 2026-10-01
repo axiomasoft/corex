@@ -30,6 +30,7 @@ use DateTimeImmutable;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
+use PHPUnit\Framework\Attributes\Group;
 use RuntimeException;
 use TypeError;
 
@@ -118,6 +119,7 @@ final class WebhookFanoutTest extends TestCase
         }, $this->fanout(new ExportProjector));
     }
 
+    #[Group('pg')]
     public function test_postgresql_inbox_and_delivery_roll_back_together(): void
     {
         $database = getenv('PGSQL_DATABASE') ?: '';
