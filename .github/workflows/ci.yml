@@ -679,6 +679,15 @@ jobs:
       - name: Composer audit (access)
         run: composer audit --locked --working-dir=packages/access
 
+      - name: Install remaining standalone package harnesses
+        run: |
+          for package in media tasks tasks-workflow panels operations tenancy webhooks tools; do
+            composer --working-dir="packages/$package" update --prefer-dist --no-interaction --no-progress
+            composer audit --locked --working-dir="packages/$package"
+          done
+          composer --working-dir=products/flex-crm update --prefer-dist --no-interaction --no-progress
+          composer audit --locked --working-dir=products/flex-crm
+
       - name: Per-package test aggregator
         run: composer test:packages
 

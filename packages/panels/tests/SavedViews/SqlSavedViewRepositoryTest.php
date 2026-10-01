@@ -186,3 +186,46 @@ function corexSavedViewConnectionProbe(Application $app, ?string $override = nul
         new ViewScope('lab.sample', null, null, null),
     ];
 }
+
+it('updates saved views optimistically and replaces deleted defaults', function (): void {
+    $schema = new ViewSchema('neutral/1', 'lab.sample', [
+        new ViewField('name', 'string', ['eq', 'ne', 'in', 'is_null'], true, true, true, true, 'name'),
+    ]);
+    $schemas = new class($schema) implements ViewSchemaProvider
+    {
+        public function __construct(private readonly ViewSchema $schema) {}
+
+        public function schema(ViewContext $context, string $entityHandle): ViewSchema
+        {
+            return $this->schema;
+        }
+    };
+    $policy = new class implements ViewAccessPolicy
+    {
+        public function allows(ViewContext $context, ViewAction $action, ViewSubject $subject): bool
+        {
+            return true;
+        }
+    };
+    $repository = new SqlSavedViewRepository($schemas, $policy, new ViewConfigValidator);
+    $context = new ViewContext(new TenantContext(new AccountRef('account', 'account', 'active', [], []), boxed: true), 'user', 'actor');
+    $scope = new ViewScope('lab.sample', null, null, null);
+
+    $config = JsonDocuments::capture(['version' => 'saved-view/1', 'filters' => null, 'sorts' => [], 'columns' => ['name'], 'groupBy' => null, 'presentation' => []]);
+    $first = $repository->save($context, new SaveViewInput(null, '', $scope, 'table', ['en' => 'First'], $config));
+    $second = $repository->save($context, new SaveViewInput(null, '', $scope, 'table', ['en' => 'Second'], $config));
+    expect($repository->viewsFor($context, $scope))->toHaveCount(2)->and($second->isDefault)->toBeFalse();
+    $updated = $repository->save($context, new SaveViewInput($first->id, '1', $scope, 'table', ['en' => 'Updated'], $config));
+    expect($updated->revision)->toBe('2');
+    expect(fn () => $repository->save($context, new SaveViewInput($first->id, '1', $scope, 'table', ['en' => 'Stale'], $config)))
+        ->toThrow(RuntimeException::class, 'revision conflict');
+    expect($repository->setDefault($context, $second->id)->isDefault)->toBeTrue();
+    $repository->delete($context, $second->id);
+    $rows = $repository->viewsFor($context, $scope);
+    expect($rows)->toHaveCount(1)->and($rows[0]->isDefault)->toBeTrue();
+    $repository->delete($context, $second->id);
+    $repository->delete($context, $first->id);
+    expect($repository->viewsFor($context, $scope))->toBe([]);
+    expect(fn () => $repository->setDefault($context, $first->id))->toThrow(RuntimeException::class, 'not found');
+    expect(fn () => $repository->compile($context, $first->id))->toThrow(RuntimeException::class, 'not found');
+});

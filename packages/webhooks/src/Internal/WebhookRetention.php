@@ -126,18 +126,18 @@ final readonly class WebhookRetention
             return 0;
         }
 
-        $ids = $this->connection->table($this->inboxTable)
+        $ids = $this->connection->table($this->inboxTable.' as retained_inbox')
             ->where('consumer', self::Consumer)
             ->whereNotExists(function (Builder $query): void {
                 $query->selectRaw('1')->from(self::Deliveries);
 
                 if ($this->connection->getDriverName() === 'pgsql') {
-                    $query->whereRaw(self::Deliveries.'.event_id = '.$this->inboxTable.'.message_id::text');
+                    $query->whereRaw('sys_api_webhook_deliveries.event_id = retained_inbox.message_id::text');
 
                     return;
                 }
 
-                $query->whereColumn(self::Deliveries.'.event_id', $this->inboxTable.'.message_id');
+                $query->whereColumn(self::Deliveries.'.event_id', 'retained_inbox.message_id');
             })
             ->orderBy('message_id')
             ->limit($limit)
