@@ -126,6 +126,9 @@ run_one_package() {
   git -C "$work" init -q
   git -C "$work" config user.email bc-check@corex.local
   git -C "$work" config user.name "bc-check"
+  # Roave clones immediately after commit; background GC can remove loose
+  # objects while that local clone is copying the disposable repository.
+  git -C "$work" config gc.auto 0
 
   mapfile -t dep_dirs < <(BC_CHECK_TARGET_DIR="$dir" bc_php '
 $r=getenv("BC_REPO_ROOT"); $target=getenv("BC_CHECK_TARGET_DIR");

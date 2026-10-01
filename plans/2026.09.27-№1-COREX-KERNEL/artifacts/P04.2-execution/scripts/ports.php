@@ -52,6 +52,6 @@ foreach ($map['moves'] as $row) {
     }file_put_contents($target, $text);
     $source = file_get_contents($row['target_path']);
     $source = preg_replace('/(final (?:readonly )?class '.preg_quote($name, '/').'|final (?:readonly )?class '.preg_quote(basename($row['target_path'], '.php'), '/').')(\s*\{)/', '$1 implements \\'.$port.'$2', $source, 1);
-    file_put_contents($row['target_path'],$source);
+    file_put_contents($row['target_path'], $source);
     echo $port."\n";
 }

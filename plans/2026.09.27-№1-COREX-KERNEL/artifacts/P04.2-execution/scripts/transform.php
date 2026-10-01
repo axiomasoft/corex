@@ -92,6 +92,6 @@ foreach ($files as $file) {
 foreach ($paths as $old => $new) {
     if (! is_dir(dirname($new))) {
         mkdir(dirname($new), 0777, true);
-    }rename($old,$new);
+    }rename($old, $new);
 }
 echo 'AST paths: '.count($paths)."\n";

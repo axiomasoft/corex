@@ -871,9 +871,6 @@ jobs:
       - name: Composer audit
         run: composer audit --locked
 
-      - name: Diagnose runner ripgrep availability
-        run: if command -v rg; then echo has-rg; else echo no-rg; fi
-
       - name: Backward compatibility (bc-check)
         run: bash scripts/bc-check.sh
 
