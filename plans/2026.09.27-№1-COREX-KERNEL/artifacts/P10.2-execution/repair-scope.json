@@ -67,6 +67,30 @@
       ],
       "delta": "Move only the JsonDocuments import above uses(PgTestCase), respecting Pint and keeping other analyser configurations unchanged. Moving all late imports would make five existing suppressions stale; original unaffected imports remain.",
       "behavior_delta": false
+    },
+    {
+      "signal": "Hosted consumer regressions after separating runtime registry from Testing concrete",
+      "paths": [
+        "packages/access/tests/Support/CoreAuthTestCase.php",
+        "products/flex-crm/src/CrmServiceProvider.php",
+        "products/flex-crm/tests/Support/CrmTestCase.php",
+        "products/flex-crm/CHANGELOG.md"
+      ],
+      "delta": "Access explicitly binds the public test fixture; CRM runtime uses declared compiled module entities, with a deploy-artifact fixture after provider boot in Testbench. No new public contract or foreign runtime Internal reference."
+    },
+    {
+      "signal": "Hosted dependency analyser with ext-redis installed reports suggestion-only as shadow dev dependency",
+      "paths": [
+        "packages/tenancy/composer.json"
+      ],
+      "delta": "ext-redis is required for package development, remains optional for runtime consumers; no new analyser ignore."
+    },
+    {
+      "signal": "Hosted rename negative fixture still expects reclaimed Attributes Internal namespace",
+      "paths": [
+        "scripts/tests/test_rename_completeness.py"
+      ],
+      "delta": "Fixture expects moved Tooling namespace; renamed custom-fields tokens still fail."
     }
   ],
   "new_analyser_ignores": 0,

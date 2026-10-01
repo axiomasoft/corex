@@ -6,10 +6,14 @@ namespace Flex\Crm\Tests\Support;
 
 use CoreX\CoreServiceProvider;
 use CoreX\Intl\IntlServiceProvider;
+use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Operations\ApiServiceProvider;
+use Flex\Crm\CrmModule;
 use Flex\Crm\CrmServiceProvider;
 use Illuminate\Foundation\Application;
+use Mockery;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 /**
@@ -42,6 +46,15 @@ abstract class CrmTestCase extends Orchestra
     /** @param Application $app */
     protected function defineEnvironment($app): void
     {
+        // Supply the deploy-time compiled artifact before the runtime morph-map projection.
+        $app->booted(static function (Application $app): void {
+            $compiled = $app->make(RegistryCompiler::class)->compile(manifests: [(new CrmModule)->manifest()], installedPackages: []);
+            $registry = Mockery::mock(ModuleRegistry::class);
+            $registry->shouldReceive('compiled')->andReturn($compiled);
+            $registry->shouldReceive('isActive')->andReturn(true);
+            $app->instance(ModuleRegistry::class, $registry);
+        });
+
         $app['config']->set('app.key', 'base64:'.base64_encode(str_repeat('a', 32)));
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [

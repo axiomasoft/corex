@@ -1049,7 +1049,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/tenancy",
-                "reference": "71a1d544d9e73d73724243d6d1238acfc7c13c7f"
+                "reference": "6ea86f09e7d109fb3107f7adbbeb7359f85abdf5"
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
@@ -1067,6 +1067,7 @@
             "require-dev": {
                 "axiomasoft/corex-wakeup": "^1.0@dev",
                 "ext-pdo": "*",
+                "ext-redis": "*",
                 "ext-tokenizer": "*",
                 "larastan/larastan": "^3.12",
                 "laravel/pint": "^1.32",

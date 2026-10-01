@@ -28,7 +28,7 @@
 
 ## Unreleased
 
-- Document optional ext-redis integration and explicitly skip its conformance tests when the extension is unavailable.
+- Declare ext-redis for package development, keep it optional for runtime consumers, and explicitly skip its conformance tests when the extension is unavailable.
 
 - PHP API manifests now record direct inheritance, interfaces and traits separately and include only members declared by this package; external dependency members are omitted without changing the `php-api/1` schema.
 
