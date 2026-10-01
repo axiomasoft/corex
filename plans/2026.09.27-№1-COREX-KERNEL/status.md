@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-10-01
-inputs_sha256: 3a9cd1987fdc547ed9b8b190e367f41990f128e6733ef715c14dceb6c3c92550
+inputs_sha256: 7fc25c9540601b4a39458d30ab33e7c7445ee8cbdf8c009d5498c26aebc53c41
 generated_by: task plan-views status
 -->
 
@@ -260,6 +260,7 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-10-01 | auditor/claude-opus-5-5 | plan-audit · audit-attention · ATTENTION: 4 Major A1–A4 (P10.1 aggregator, P10.2 Files/CHANGELOG, ci-local.sh, P05.3 Validation greps). findings/P05-P10-design-audit.md. Same model as designer — not an independent audit. Product and design inputs unchanged. |
 | 2026-10-01 | designer/claude-opus-5-5 | plan-design · no-op · Design finalized; execution has not started. |
 | 2026-10-01 | designer/claude-opus-5-5 | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-01 | designer/codex/GPT-6 | plan-design · no-op · Design finalized; execution has not started. |
 | 2026-10-01 | designer/codex/GPT-6 | plan-design · no-op · Design finalized; execution has not started. |
 
 ## Owner Gates

@@ -1,11 +1,11 @@
 ---
 id: D77
 date: 2026-10-01
-status: accepted
+status: superseded
 item: P10
 items: [P10, P05]
 supersedes: []
-superseded_by: null
+superseded_by: D79
 ---
 # D77 — Второй содержательный дизайн Codex; следующий шаг — P10
 

@@ -60,7 +60,7 @@ operations, независимые модули, детерминированн�
   Остаточная ссылка на старое имя — дефект (гейт rename-completeness).
 - **Катящийся дизайн с немедленным исполнением** (D21). Фаза проектируется `task:plan-design <ID> <Pn>` по фактическому коду
   после закрытия предыдущей, проходит phase design check (plan-lint + self-check §Self-check досье → `finish` →
-  `task:plan-audit <ID> design` другой моделью, D24; текущий P04 принят владельцем без повторного audit по D66; текущий finish P10 ведёт прямо к исполнению по указанию владельца D77) и сразу исполняется по execution-sheet. Фазы после текущей хранятся
+  `task:plan-audit <ID> design` другой моделью, D24; текущий P04 принят владельцем без повторного audit по D66; ошибочная отмена аудита в D77 исправлена D79, текущий finish требует независимого GREEN audit) и сразу исполняется по execution-sheet. Фазы после текущей хранятся
   skeleton в `backlog/Pnn.md` (не phase carriers) до своей очереди; design audit охватывает только детализированные фазы,
   дизайн вперёд не делается (владелец, B5; D24).
 - Порядок фаз: механические структурные изменения (P02, P03) — до проектирования API/подсистем (P04+), чтобы не делать
@@ -124,7 +124,7 @@ operations, независимые модули, детерминированн�
   `light` — self-check + affected tests той же сессией.
 - Каждая фаза при дизайне переносит эти правила в Validation своих items (строка «Independent review: …» для `full`).
 
-**Design Audit Waiver:** D77
+**Design Audit:** required
 
 ## 3. Routing
 
@@ -191,6 +191,8 @@ operations, независимые модули, детерминированн�
 | 2026-09-29 | P03.1 execution: D60 clarifies the active-source retirement scan while preserving immutable audits; current baseline and module gate copied unchanged, STR doctrine/CI updated. The unchanged P03.2 helper lint findings remain with their owner. | executor/designer/codex/gpt-6-sol/high |
 
 | 2026-10-01 | `task:plan-design finish`: второй содержательный дизайн P10 по D77; D78 уточняет рецепт установки, манифесты и протокол worker; строки 14–20 сохранены. Новый fingerprint; следующий шаг P10.1; runtime не запускался. | designer/codex/GPT-6 (runtime selector/effort unavailable) |
+
+| 2026-10-01 | D79 исправляет ошибочную интерпретацию D77: владелец не отменял независимый аудит. D78 сохранён; новый finish, handoff на независимый design audit; P10.1 только после GREEN текущего fingerprint. | designer/codex/GPT-6 |
 
 ## 5. Decision Log
 

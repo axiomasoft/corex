@@ -1,7 +1,7 @@
 # P10 — досье дизайна: зелёный hosted CI на базе P04
 
 Дата: 2026-10-01 · база: commit `39ae489a` · автор: designer/claude-opus-5-5/high.
-Второй дизайн: codex/GPT-6, 2026-10-01, уточнения D78; допуск D77.
+Второй дизайн: codex/GPT-6, 2026-10-01, уточнения D78; допуск — независимый GREEN audit по D79.
 Нормы: D73 (граница приёмки), D74 (решения фазы), D72 (критерий). Реестр отказов: `findings/01-hosted-ci-debt.md`.
 Внешние факты: `research/P10-design-rag.md`. Примеры: `artifacts/P10-design/examples.md`.
 
