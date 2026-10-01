@@ -1,0 +1,22 @@
+{
+  "base": "7a5bd4afea309f9c5482f3d39fba084ba241eb7f",
+  "candidate": "5b553ad14a9415dd0f4e8466e1f40b39dd28066c",
+  "files": {
+    "packages/tools/CHANGELOG.md": "0456d03d9ea212b04d12b8e8feb81be72880f2d70d0e4353ec493f6f550e642c",
+    "packages/tools/README.md": "3fd1b8f9bdbb8a45f08ab440b30d56fc5997309f55e985a0b5541d78e3d8e1f0",
+    "packages/tools/phpstan-baseline.neon": "4d34a6c7002a1686e5d330686232e8264c7dd000fe752f9b30fd67d14132c041",
+    "packages/tools/src/Internal/ToolSchemaSupervisor.php": "0b34ebd3fb57432ecc1204afa94f6e5aa62f17d51eb160d79ec7c6ea4ed8f5dd",
+    "packages/tools/src/Internal/ToolSchemaWorker.php": "0ba51b3ac324049d5cdf79d71d18d0ac529369c0c87905438070d342e8cbc9d1",
+    "packages/tools/tests/Stubs/schema-worker.php": "aebb6c8149aa257c3cac0a323edb74c62acd372b382659b821323c77411ac78c",
+    "packages/tools/tests/Unit/ToolSchemaSupervisorTest.php": "b6d7dd2a1fd67cf9c25063a68263d49b4f3b2d215f68961846f6faeb2f4d3959",
+    "tests/Golden/REBASELINE.md": "297e9ee651a9752541e294c6e382728909fd434f00cd8c422cf5825f7e165eae",
+    "tests/Golden/baseline/php-surface.json": "db5a4b93e7fbb8bc09935d1bdea8fcf65e9c406811f39b56f9b12cd99faddee5"
+  },
+  "decisions": [
+    "D81",
+    "D83"
+  ],
+  "initial_product_candidate": "c4e48b69a7a0f2a2dd5d05838a8c69dc46fda0b4",
+  "metadata_repair_candidate": "699310df6bbdd7cb16ca8fdd085874bd51f5c7a1",
+  "final_spawn_repair_candidate": "5b553ad14a9415dd0f4e8466e1f40b39dd28066c"
+}

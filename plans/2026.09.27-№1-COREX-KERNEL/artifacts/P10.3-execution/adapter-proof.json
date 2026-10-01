@@ -1,0 +1,95 @@
+{
+  "schema": "p10.4-parser-repair-proof/v1",
+  "original_error": "/home/vostrikov/projects/packages/corex/scripts/ci-local.sh: section '2' \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u0430",
+  "original_inputs_parser_entries": [
+    "\u00b7 `plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P10-design/examples.md` (\u00a72 \u2014 `scripts/ci-local.sh`, \u0432\u043e\u0441\u043f\u0440\u043e\u0438\u0437\u0432\u0435\u0434\u0435\u043d\u0438\u0435 \u043b\u0435\u0439\u043d\u0430 \u0432 \u0447\u0438\u0441\u0442\u043e\u0439 \u043a\u043e\u043f\u0438\u0438)",
+    "`plans/2026.09.27-\u21161-COREX-KERNEL/decisions/D73-hosted-ci-acceptance-boundary.md`",
+    "`plans/2026.09.27-\u21161-COREX-KERNEL/decisions/D74-p10-hermetic-base.md`",
+    "`plans/2026.09.27-\u21161-COREX-KERNEL/findings/01-hosted-ci-debt.md`",
+    "`plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P10-design/facts/repro-root-tests.txt`",
+    "\u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u044b P10.1\u2013P10.3 (`plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P10.{1,2,3}-execution/completion.md`, \u043f\u043e\u044f\u0432\u043b\u044f\u044e\u0442\u0441\u044f \u043f\u043e\u0441\u043b\u0435 \u0438\u0445 \u0438\u0441\u043f\u043e\u043b\u043d\u0435\u043d\u0438\u044f)"
+  ],
+  "design_fingerprint_unchanged": "e7104b716f0ffdac0dd3c8446ce7af54d2edea7c07f373ac6b5ff42ca9748d19",
+  "design_gate_allowed": true,
+  "spec_sha256_unchanged": "38d1694ffad31edb3ecc8e725e3ff9f3814daa4730d95accf39222d3a060f32f",
+  "all_declared_files_retained": true,
+  "all_predecessor_completions_retained": true,
+  "dossier_and_retrieval_restored": true,
+  "corrected_inputs": {
+    "research/P10-design.md": [
+      [
+        "section",
+        "1"
+      ],
+      [
+        "section",
+        "3.4"
+      ],
+      [
+        "section",
+        "5"
+      ]
+    ],
+    "research/P10-design-rag.md": [
+      [
+        "whole_file",
+        null
+      ]
+    ],
+    "artifacts/P10-design/examples.md": [
+      [
+        "section",
+        "2"
+      ]
+    ],
+    "scripts/ci-local.sh": [
+      [
+        "whole_file",
+        null
+      ]
+    ],
+    "decisions/D73-hosted-ci-acceptance-boundary.md": [
+      [
+        "whole_file",
+        null
+      ]
+    ],
+    "decisions/D74-p10-hermetic-base.md": [
+      [
+        "whole_file",
+        null
+      ]
+    ],
+    "findings/01-hosted-ci-debt.md": [
+      [
+        "whole_file",
+        null
+      ]
+    ],
+    "artifacts/P10-design/facts/repro-root-tests.txt": [
+      [
+        "whole_file",
+        null
+      ]
+    ],
+    "artifacts/P10.1-execution/completion.md": [
+      [
+        "whole_file",
+        null
+      ]
+    ],
+    "artifacts/P10.2-execution/completion.md": [
+      [
+        "whole_file",
+        null
+      ]
+    ],
+    "artifacts/P10.3-execution/completion.md": [
+      [
+        "whole_file",
+        null
+      ]
+    ]
+  },
+  "scope_authority_route_validation_changes": false
+}

@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-10-01
-inputs_sha256: 0046e573def434e6faa85c77bc1fed1ebf07167c41b862f32a991b4d7b5e3c00
+inputs_sha256: c438cedd8dc12df599c3348b0daa2d96e53d089b132e3d2895c89ce2f22db609
 generated_by: task plan-views status
 -->
 
@@ -29,7 +29,7 @@ generated_by: task plan-views status
 | P03 | Feature modules и `Internal` | 2/2 | 🟢 Done |
 | P04 | Application API, Extension SPI и типизированные ошибки | 4/4 | 🟢 Done |
 | P05 | Typed config, композиция и порты | 0/4 | ⬜ Not started |
-| P10 | Зелёный hosted CI на базе P04 | 2/4 | 🟡 In progress |
+| P10 | Зелёный hosted CI на базе P04 | 3/4 | 🟡 In progress |
 
 ## Phase P00
 
@@ -88,7 +88,7 @@ generated_by: task plan-views status
 |:--|:--|:--|:--|
 | P10.1 | Герметичный CI-рецепт и диагностируемые гейты | 🟢 Done | 2026-10-01 |
 | P10.2 | Манифесты без чужих членов, dev-tooling вне runtime, объявленные зависимости | 🟢 Done | 2026-10-01 |
-| P10.3 | Worker схем инструментов: дедлайн валидации без учёта старта | ⬜ Not started | — |
+| P10.3 | Worker схем инструментов: дедлайн валидации без учёта старта | 🟢 Done | 2026-10-01 |
 | P10.4 | Лейны тестов, покрытие и зелёный hosted CI | ⬜ Not started | — |
 
 ## 6. Update Log
@@ -271,6 +271,12 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-10-01 | executor/codex/GPT-6 | plan-run · in-progress · — |
 | 2026-10-01 | executor/codex/GPT-6 | plan-run · local-repair · Owner D81/D82 resolved review/scope: phase-only review; continue CI repair. DATA-003 267 writes pass; tenancy 497 passed/1800 assertions. Same attempt, acceptance pending. Details: artifacts/P10.2-execution/progress.md. |
 | 2026-10-01 | executor/codex/GPT-6 | plan-run · closed-green · P10.2 GREEN: candidate dd94f729, CI 36907048899 required jobs and 22 baseline greens success; overall coverage pending. D81 phase-only review; D82 CI repairs. Evidence: artifacts/P10.2-execution/completion.md. |
+| 2026-10-01 | executor/codex/GPT-6 | plan-run · in-progress · — |
+| 2026-10-01 | executor/codex/GPT-6 | plan-run · closed-green · P10.3 GREEN: candidate 5b553ad1, CI 36912719906, 24 baseline green jobs preserved; seven target jobs have no worker failures. Ten tools runs 81/453; D81 self-check and D83 single Internal Golden delta. Evidence: artifacts/P10.3-execution/completion.md. |
+| 2026-10-01 | executor/codex/GPT-6 | plan-run · no-op · Append-only metadata projection repair; previously recorded evaluation artifacts/P10.2-execution/task-contract-evaluation.json is allow at both sites. No new product execution or acceptance verdict.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-01 | executor/codex/GPT-6 | plan-run · no-op · Append-only metadata projection repair; previously recorded evaluation artifacts/P10.3-execution/task-contract-evaluation.json is allow at both sites. No new product execution or acceptance verdict.
+write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates
 

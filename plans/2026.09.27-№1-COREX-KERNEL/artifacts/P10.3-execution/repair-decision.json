@@ -1,0 +1,77 @@
+{
+  "schema_version": "repair-decision/v1",
+  "plan_id": "2026.09.27-\u21161-COREX-KERNEL",
+  "item_id": "P10.3",
+  "origin": "validation",
+  "original_carrier": {
+    "command": "scripts/php84 composer golden",
+    "digest": "2a33608cb4a4e1c440fd577f21c25847548b6ee52fac098e54b4e64293a9e965",
+    "result": "red"
+  },
+  "baseline": {
+    "reproduced": false,
+    "carrier": null
+  },
+  "candidate": {
+    "delta_proved": true,
+    "evidence_ids": [
+      "artifacts/P10.3-execution/golden-red.log",
+      "artifacts/P10.3-execution/golden-semantic-delta.json",
+      "decisions/D83-p103-internal-constructor-golden.md"
+    ]
+  },
+  "affected_paths": [
+    {
+      "path": "tests/Golden/baseline/php-surface.json",
+      "owner_item": "P10.3",
+      "declared_file": false
+    },
+    {
+      "path": "tests/Golden/REBASELINE.md",
+      "owner_item": "P10.3",
+      "declared_file": false
+    },
+    {
+      "path": "packages/tools/phpstan-baseline.neon",
+      "owner_item": "P10.3",
+      "declared_file": false
+    }
+  ],
+  "bounded_diff": {
+    "files_changed": 3,
+    "max_files": 3,
+    "reversible": true
+  },
+  "material_surface": {
+    "public": false,
+    "frozen": false,
+    "security": false,
+    "schema": false,
+    "dependency": false,
+    "authority": false,
+    "irreversible": false,
+    "product": false,
+    "test_topology": false
+  },
+  "pre_validation": [
+    {
+      "command": "scripts/php84 composer golden",
+      "digest": "2a33608cb4a4e1c440fd577f21c25847548b6ee52fac098e54b4e64293a9e965",
+      "result": "red"
+    }
+  ],
+  "post_validation": [
+    {
+      "command": "scripts/php84 composer golden",
+      "digest": "2a33608cb4a4e1c440fd577f21c25847548b6ee52fac098e54b4e64293a9e965",
+      "result": "green"
+    }
+  ],
+  "evidence_ids": [
+    "decisions/D83-p103-internal-constructor-golden.md",
+    "artifacts/P10.3-execution/golden-semantic-delta.json",
+    "artifacts/P10.3-execution/golden.log",
+    "artifacts/P10.3-execution/baseline-reduction.txt"
+  ],
+  "design": null
+}

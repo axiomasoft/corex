@@ -1,0 +1,43 @@
+Removed seven resolved ToolSchemaSupervisor entries (10 errors), no additions:
+
+		-
+			rawMessage: Cannot cast mixed to string.
+			identifier: cast.string
+			count: 2
+			path: src/Internal/ToolSchemaSupervisor.php
+
+		-
+			rawMessage: Casting to int something that's already int.
+			identifier: cast.useless
+			count: 1
+			path: src/Internal/ToolSchemaSupervisor.php
+
+		-
+			rawMessage: 'Parameter $digest of class CoreX\Operations\Validation\Data\SchemaHandle constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/ToolSchemaSupervisor.php
+
+		-
+			rawMessage: 'Parameter $errors of class CoreX\Operations\Validation\Data\SchemaValidation constructor expects list<array{code: string, pointer: string}>, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/ToolSchemaSupervisor.php
+
+		-
+			rawMessage: 'Parameter $localResources of class CoreX\Operations\Validation\Data\SchemaHandle constructor expects array<string, string>, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/ToolSchemaSupervisor.php
+
+		-
+			rawMessage: 'Parameter $profile of class CoreX\Operations\Validation\Data\SchemaHandle constructor expects string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: src/Internal/ToolSchemaSupervisor.php
+
+		-
+			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
+			identifier: ternary.shortNotAllowed
+			count: 2
+			path: src/Internal/ToolSchemaSupervisor.php
