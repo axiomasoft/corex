@@ -1,6 +1,6 @@
 {
   "adapter_attestation": null,
-  "commit_sha": "c7c03fbf8cc5258d30904edd86db757c82e2116a",
+  "commit_sha": "28339fcb01a19c023fac7399d37b29a61b200a45",
   "continuity": {
     "evidence": [
       "persisted-context:owner-requested-new-session"
@@ -12,7 +12,7 @@
   },
   "digests": {
     "closure": null,
-    "handoff": "sha256:c32d7637342d15da8767f36da13ff3054994152c64707c5dba24e95f838ec4cf",
+    "handoff": "sha256:6adb411d2ffc6fbac88d0667b873d7494ef814831e51b51db44da050d770fb6a",
     "plan": "sha256:d81af66b8b3caf9eb5ba5fbde2789be771eb964f31fc590faeed4d603ef6965c",
     "state": null
   },
@@ -23,7 +23,7 @@
     "open_risks": "Независимый audit нового fingerprint не выполнен; P10.1 до GREEN не допускается. Точный runtime selector автора не аттестован: reviewer должен быть другой моделью; при совпадении выбирается другой reviewer из session-routing.md. Ни runtime, ни hosted CI не проверялись этой командой.",
     "remaining": "Независимый GREEN design audit текущего fingerprint; затем P10.1 → P10.2 → P10.3 → P10.4 и полностью зелёный hosted CI, после него P05. P06–P09 backlog."
   },
-  "recommendation": "**Next:** audit-design: task:plan-audit 2026.09.27-№1-COREX-KERNEL design\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | n/a |\n| Model | frontier |\n| Thinking | xhigh |\n| Context | cold-start-root: owner-requested-new-session |\n| Capabilities | repository read · Task Python runtime · independent reviewer |\n| Суть | Независимо проверить новый finish после D78/D79. Reviewer не автор текущих изменений; свежий контекст. Затем P10.1 при GREEN. |\n\n**Native Codex command:**\n\n```bash\ncodex -C /home/vostrikov/projects/packages/corex -m gpt-6-astra -c 'model_reasoning_effort=\"xhigh\"' -a never -s danger-full-access '$ task:plan-audit 2026.09.27-№1-COREX-KERNEL design'\n```\n\n```session-continuity-decision/v1\n{\"evidence\": [\"persisted-context:owner-requested-new-session\"], \"outcome\": \"cold-start-root\", \"reason\": \"owner-requested-new-session\", \"runnable\": true, \"schema_version\": \"session-continuity-decision/v1\"}\n```",
+  "recommendation": "**Next:** audit-design: task:plan-audit 2026.09.27-№1-COREX-KERNEL design\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | n/a |\n| Model | frontier |\n| Thinking | xhigh |\n| Context | cold-start-root: owner-requested-new-session |\n| Capabilities | repository read · Task Python runtime · independent reviewer |\n| Суть | Независимо проверить новый finish после D78/D79. Reviewer gpt-6.1-sol/xhigh по прямому выбору владельца D80; свежий контекст. Затем P10.1 при GREEN. |\n\n**Native Codex command:**\n\n```bash\ncodex -C /home/vostrikov/projects/packages/corex -m gpt-6.1-sol -c 'model_reasoning_effort=\"xhigh\"' -a never -s danger-full-access '$ task:plan-audit 2026.09.27-№1-COREX-KERNEL design'\n```\n\n```session-continuity-decision/v1\n{\"evidence\": [\"persisted-context:owner-requested-new-session\"], \"outcome\": \"cold-start-root\", \"reason\": \"owner-requested-new-session\", \"runnable\": true, \"schema_version\": \"session-continuity-decision/v1\"}\n```",
   "route": {
     "batch": "n/a",
     "command": null,

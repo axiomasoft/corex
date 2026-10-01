@@ -9,12 +9,12 @@
 | Thinking | xhigh |
 | Context | cold-start-root: owner-requested-new-session |
 | Capabilities | repository read · Task Python runtime · independent reviewer |
-| Суть | Независимо проверить новый finish после D78/D79. Reviewer не автор текущих изменений; свежий контекст. Затем P10.1 при GREEN. |
+| Суть | Независимо проверить новый finish после D78/D79. Reviewer gpt-6.1-sol/xhigh по прямому выбору владельца D80; свежий контекст. Затем P10.1 при GREEN. |
 
 **Native Codex command:**
 
 ```bash
-codex -C /home/vostrikov/projects/packages/corex -m gpt-6-astra -c 'model_reasoning_effort="xhigh"' -a never -s danger-full-access '$ task:plan-audit 2026.09.27-№1-COREX-KERNEL design'
+codex -C /home/vostrikov/projects/packages/corex -m gpt-6.1-sol -c 'model_reasoning_effort="xhigh"' -a never -s danger-full-access '$ task:plan-audit 2026.09.27-№1-COREX-KERNEL design'
 ```
 
 ```session-continuity-decision/v1
@@ -25,7 +25,7 @@ codex -C /home/vostrikov/projects/packages/corex -m gpt-6-astra -c 'model_reason
 
 **Remaining:** Независимый GREEN design audit текущего fingerprint; затем P10.1 → P10.2 → P10.3 → P10.4 и полностью зелёный hosted CI, после него P05. P06–P09 backlog.
 
-**Sources of truth:** decisions/D79-restore-independent-design-audit.md; decisions/D78-p10-execution-clarifications.md; plan.md §2–3; roadmap.md строки 14–20; phases/P10/; research/P10-design.md; artifacts/P10-design/examples.md; artifacts/P10-audit-handoff/.
+**Sources of truth:** decisions/D80-design-auditor-gpt61-sol.md; session-routing.md; decisions/D79-restore-independent-design-audit.md; decisions/D78-p10-execution-clarifications.md; plan.md §2–3; roadmap.md строки 14–20; phases/P10/; research/P10-design.md; artifacts/P10-design/examples.md; artifacts/P10-audit-handoff/.
 
 **Open risks:** Независимый audit нового fingerprint не выполнен; P10.1 до GREEN не допускается. Точный runtime selector автора не аттестован: reviewer должен быть другой моделью; при совпадении выбирается другой reviewer из session-routing.md. Ни runtime, ни hosted CI не проверялись этой командой.
 

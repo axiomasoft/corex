@@ -11,6 +11,7 @@ runbooks (по образцу chatom PLAN2 `session-routing.md`).
 |:--|:--|:--|:--|
 | claude-code | `opus` (claude-opus-5-5) | автор плана: дизайн фаз, frontier-решения P00, ведение процесса (D21) | `high` |
 | codex | `gpt-6-sol` | стандартная implementation и owning auto-fix | из sheet |
+| codex | `gpt-6.1-sol` | текущий независимый design audit после D79, owner override D80 | `xhigh` |
 | codex | `gpt-6-astra` | frontier execution P00 и review/audit | `high`/`xhigh` |
 | cursor | `grok-4.6` | bounded rename/tools/snapshots, ревью механических items | `high` |
 | cursor | `grok-4.7` | frontier execution и API/SPI/transactions/security ревью | `high` |
