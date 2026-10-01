@@ -8,16 +8,21 @@ use CoreX\Attributes\Api;
 use CoreX\Data\Data\JsonDocument;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Errors\Contracts\DescribesError;
+use CoreX\Errors\Contracts\ErrorCode;
 use CoreX\Errors\Data\ErrorDescriptor;
 use CoreX\Errors\Enums\ErrorCategory;
-use RuntimeException;
+use CoreX\Errors\Exceptions\CodedException;
 
 /** Explicit public error. Never pass database or infrastructure exception messages here. */
 #[Api(since: '1.0')]
-final class ApiError extends RuntimeException implements DescribesError
+final class ApiError extends CodedException implements DescribesError
 {
+    public readonly string $errorCode;
+
+    private readonly ErrorCode $errorCodeIdentity;
+
     public function __construct(
-        public readonly string $errorCode,
+        ErrorCode $errorCode,
         public readonly int $status,
         string $message,
         public readonly JsonDocument $details = new JsonDocument('[]'),
@@ -26,13 +31,15 @@ final class ApiError extends RuntimeException implements DescribesError
         public readonly ?string $path = null,
         public readonly ?string $retryAfterPolicy = null,
     ) {
+        $this->errorCodeIdentity = $errorCode;
+        $this->errorCode = $errorCode->value();
         parent::__construct($message);
     }
 
     public function errorDescriptor(): ErrorDescriptor
     {
         return new ErrorDescriptor(
-            code: $this->errorCode,
+            code: $this->errorCodeIdentity,
             category: $this->category ?? $this->categoryFromStatus(),
             retryable: $this->retryable,
             path: $this->path,

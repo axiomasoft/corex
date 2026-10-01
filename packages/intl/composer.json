@@ -57,7 +57,8 @@
                 "CoreX\\Intl\\IntlModule",
                 "CoreX\\Intl\\IntlServiceProvider",
                 "CoreX\\Intl\\Money\\Laravel\\MoneyCast",
-                "CoreX\\Intl\\Locale\\Laravel\\LocalePortBindings"
+                "CoreX\\Intl\\Locale\\Laravel\\LocalePortBindings",
+                "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode"
             ]
         },
         "laravel": {

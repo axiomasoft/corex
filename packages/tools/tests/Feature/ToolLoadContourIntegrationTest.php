@@ -136,7 +136,7 @@ final class ToolLoadContourIntegrationTest extends TestCase
             $estimator->estimate($operation, new CostInput(100, 0, 0, 0, false, 0, 0));
             self::fail('Declared cost accepted an overflow.');
         } catch (ApiError $exception) {
-            self::assertSame('validation_failed', $exception->errorCode);
+            self::assertSame('operations.validation_failed', $exception->errorCode);
         }
     }
 }

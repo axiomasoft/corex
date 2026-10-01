@@ -1232,17 +1232,116 @@
         },
         "readonly": false
     },
+    "CoreX\\Access\\Errors\\Enums\\AccessErrorCode": {
+        "abstract": false,
+        "constants": {
+            "ScopeCapabilityMismatch": {
+                "type": "CoreX\\Access\\Errors\\Enums\\AccessErrorCode",
+                "value": {
+                    "enum": "CoreX\\Access\\Errors\\Enums\\AccessErrorCode",
+                    "case": "ScopeCapabilityMismatch",
+                    "value": "access.scope_capability_mismatch"
+                }
+            }
+        },
+        "final": true,
+        "interfaces": [
+            "BackedEnum",
+            "CoreX\\Errors\\Contracts\\ErrorCode",
+            "UnitEnum"
+        ],
+        "internal": false,
+        "kind": "enum",
+        "methods": {
+            "cases": {
+                "params": [],
+                "return": "array",
+                "static": true
+            },
+            "from": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "static",
+                "static": true
+            },
+            "tryFrom": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "?static",
+                "static": true
+            },
+            "value": {
+                "params": [],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "name": {
+                "name": "name",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "value": {
+                "name": "value",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\Access\\Errors\\Internal\\PackageProblemDefinitions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Errors\\Contracts\\ProblemDefinitionProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "definitions": {
+                "params": [],
+                "return": "iterable",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Access\\Exceptions\\ScopeCapabilityMismatch": {
         "abstract": false,
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
         "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            },
             "forScope": {
                 "params": [
                     {
@@ -1274,7 +1373,7 @@
                 "static": true
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -4890,6 +4989,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -4906,6 +5006,11 @@
                     }
                 ],
                 "return": "",
+                "static": false
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
                 "static": false
             }
         },
@@ -6213,6 +6318,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -6223,9 +6329,14 @@
                 "params": [],
                 "return": "",
                 "static": false
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -6234,12 +6345,18 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
         "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            },
             "forAction": {
                 "params": [
                     {
@@ -6265,7 +6382,7 @@
                 "static": true
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -6274,6 +6391,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -6316,6 +6434,11 @@
                 "return": "self",
                 "static": true
             },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            },
             "profile": {
                 "params": [
                     {
@@ -6347,7 +6470,7 @@
                 "static": true
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -8259,11 +8382,137 @@
         },
         "readonly": true
     },
+    "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode": {
+        "abstract": false,
+        "constants": {
+            "AttributeSchemaConflict": {
+                "type": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
+                "value": {
+                    "enum": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
+                    "case": "AttributeSchemaConflict",
+                    "value": "custom-fields.attribute_schema_conflict"
+                }
+            },
+            "AttributeSchemaRetryExhausted": {
+                "type": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
+                "value": {
+                    "enum": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
+                    "case": "AttributeSchemaRetryExhausted",
+                    "value": "custom-fields.attribute_schema_retry_exhausted"
+                }
+            },
+            "AttributesAccessDenied": {
+                "type": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
+                "value": {
+                    "enum": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
+                    "case": "AttributesAccessDenied",
+                    "value": "custom-fields.attributes_access_denied"
+                }
+            },
+            "AttributesEngineUnavailable": {
+                "type": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
+                "value": {
+                    "enum": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
+                    "case": "AttributesEngineUnavailable",
+                    "value": "custom-fields.attributes_engine_unavailable"
+                }
+            },
+            "InvalidAttributeTables": {
+                "type": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
+                "value": {
+                    "enum": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
+                    "case": "InvalidAttributeTables",
+                    "value": "custom-fields.invalid_attribute_tables"
+                }
+            }
+        },
+        "final": true,
+        "interfaces": [
+            "BackedEnum",
+            "CoreX\\Errors\\Contracts\\ErrorCode",
+            "UnitEnum"
+        ],
+        "internal": false,
+        "kind": "enum",
+        "methods": {
+            "cases": {
+                "params": [],
+                "return": "array",
+                "static": true
+            },
+            "from": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "static",
+                "static": true
+            },
+            "tryFrom": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "?static",
+                "static": true
+            },
+            "value": {
+                "params": [],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "name": {
+                "name": "name",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "value": {
+                "name": "value",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\CustomFields\\Errors\\Internal\\PackageProblemDefinitions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Errors\\Contracts\\ProblemDefinitionProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "definitions": {
+                "params": [],
+                "return": "iterable",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\CustomFields\\Exceptions\\InvalidAttributeTables": {
         "abstract": false,
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -8274,6 +8523,11 @@
                 "params": [],
                 "return": "self",
                 "static": true
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             },
             "invalidIdentifier": {
                 "params": [
@@ -8294,7 +8548,7 @@
                 "static": true
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -11638,12 +11892,18 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
         "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            },
             "missing": {
                 "params": [
                     {
@@ -11669,7 +11929,7 @@
                 "static": true
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -12681,6 +12941,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -12704,9 +12965,14 @@
                 ],
                 "return": "",
                 "static": false
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -12715,6 +12981,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -12738,9 +13005,14 @@
                 ],
                 "return": "",
                 "static": false
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -13079,6 +13351,115 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Errors\\Contracts\\ErrorCode": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "value": {
+                "params": [],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Errors\\Contracts\\ProblemDefinitionProvider": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "definitions": {
+                "params": [],
+                "return": "iterable",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Errors\\Contracts\\ProblemRegistry": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "all": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "assertOccurrence": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "descriptor",
+                        "type": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "status",
+                        "type": "?int",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "fromWire": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "code",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Errors\\Data\\ProblemDefinition",
+                "static": false
+            },
+            "get": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "code",
+                        "type": "CoreX\\Errors\\Contracts\\ErrorCode",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Errors\\Data\\ProblemDefinition",
+                "static": false
+            },
+            "owner": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "code",
+                        "type": "CoreX\\Errors\\Contracts\\ErrorCode",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Errors\\Data\\ErrorDescriptor": {
         "abstract": false,
         "constants": {
@@ -13101,7 +13482,7 @@
                     {
                         "byRef": false,
                         "name": "code",
-                        "type": "string",
+                        "type": "CoreX\\Errors\\Contracts\\ErrorCode",
                         "variadic": false
                     },
                     {
@@ -13156,6 +13537,12 @@
                 "static": false,
                 "type": "array"
             },
+            "errorCode": {
+                "name": "errorCode",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Errors\\Contracts\\ErrorCode"
+            },
             "path": {
                 "name": "path",
                 "readonly": true,
@@ -13170,6 +13557,464 @@
             }
         },
         "readonly": true
+    },
+    "CoreX\\Errors\\Data\\ProblemDefinition": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "code",
+                        "type": "CoreX\\Errors\\Contracts\\ErrorCode",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "type",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "defaultStatus",
+                        "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "title",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "retryable",
+                        "type": "bool",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "category",
+                        "type": "CoreX\\Errors\\Enums\\ErrorCategory",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": [],
+                        "name": "detailKeys",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "category": {
+                "name": "category",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Errors\\Enums\\ErrorCategory"
+            },
+            "code": {
+                "name": "code",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Errors\\Contracts\\ErrorCode"
+            },
+            "defaultStatus": {
+                "name": "defaultStatus",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            },
+            "detailKeys": {
+                "name": "detailKeys",
+                "readonly": true,
+                "static": false,
+                "type": "array"
+            },
+            "retryable": {
+                "name": "retryable",
+                "readonly": true,
+                "static": false,
+                "type": "bool"
+            },
+            "title": {
+                "name": "title",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "type": {
+                "name": "type",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Errors\\Enums\\CoreErrorCode": {
+        "abstract": false,
+        "constants": {
+            "CentralContextException": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "CentralContextException",
+                    "value": "core.central_context_exception"
+                }
+            },
+            "CompilationException": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "CompilationException",
+                    "value": "core.compilation_exception"
+                }
+            },
+            "CrossWorkspaceMoveException": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "CrossWorkspaceMoveException",
+                    "value": "core.cross_workspace_move_exception"
+                }
+            },
+            "DepartmentCycleException": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "DepartmentCycleException",
+                    "value": "core.department_cycle_exception"
+                }
+            },
+            "DuplicateCode": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "DuplicateCode",
+                    "value": "core.duplicate_code"
+                }
+            },
+            "DuplicateType": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "DuplicateType",
+                    "value": "core.duplicate_type"
+                }
+            },
+            "EntityNotFound": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "EntityNotFound",
+                    "value": "core.entity_not_found"
+                }
+            },
+            "ForeignPrefix": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "ForeignPrefix",
+                    "value": "core.foreign_prefix"
+                }
+            },
+            "HasEnabledDependentsException": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "HasEnabledDependentsException",
+                    "value": "core.has_enabled_dependents_exception"
+                }
+            },
+            "ImpersonationRestrictedException": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "ImpersonationRestrictedException",
+                    "value": "core.impersonation_restricted_exception"
+                }
+            },
+            "InboxRefused": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "InboxRefused",
+                    "value": "core.inbox_refused"
+                }
+            },
+            "InternalError": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "InternalError",
+                    "value": "core.internal_error"
+                }
+            },
+            "InvalidConfiguration": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "InvalidConfiguration",
+                    "value": "core.invalid_configuration"
+                }
+            },
+            "InvalidDefinition": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "InvalidDefinition",
+                    "value": "core.invalid_definition"
+                }
+            },
+            "InvalidManifestException": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "InvalidManifestException",
+                    "value": "core.invalid_manifest_exception"
+                }
+            },
+            "InvalidMessage": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "InvalidMessage",
+                    "value": "core.invalid_message"
+                }
+            },
+            "InvalidRegistryPoint": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "InvalidRegistryPoint",
+                    "value": "core.invalid_registry_point"
+                }
+            },
+            "InvalidScopePayload": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "InvalidScopePayload",
+                    "value": "core.invalid_scope_payload"
+                }
+            },
+            "InvalidStateTransitionException": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "InvalidStateTransitionException",
+                    "value": "core.invalid_state_transition_exception"
+                }
+            },
+            "InvalidStatus": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "InvalidStatus",
+                    "value": "core.invalid_status"
+                }
+            },
+            "MissingDependencyException": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "MissingDependencyException",
+                    "value": "core.missing_dependency_exception"
+                }
+            },
+            "ModuleEnableFailedException": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "ModuleEnableFailedException",
+                    "value": "core.module_enable_failed_exception"
+                }
+            },
+            "ModuleNotFound": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "ModuleNotFound",
+                    "value": "core.module_not_found"
+                }
+            },
+            "ModuleUpgradeFailedException": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "ModuleUpgradeFailedException",
+                    "value": "core.module_upgrade_failed_exception"
+                }
+            },
+            "OutboxLeaseLost": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "OutboxLeaseLost",
+                    "value": "core.outbox_lease_lost"
+                }
+            },
+            "OutboxRefused": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "OutboxRefused",
+                    "value": "core.outbox_refused"
+                }
+            },
+            "RegistryFrozen": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "RegistryFrozen",
+                    "value": "core.registry_frozen"
+                }
+            },
+            "RegistryInputUnavailable": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "RegistryInputUnavailable",
+                    "value": "core.registry_input_unavailable"
+                }
+            },
+            "ScopeContextMismatch": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "ScopeContextMismatch",
+                    "value": "core.scope_context_mismatch"
+                }
+            },
+            "SettingValueTooLargeException": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "SettingValueTooLargeException",
+                    "value": "core.setting_value_too_large_exception"
+                }
+            },
+            "StaleRegistryRevision": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "StaleRegistryRevision",
+                    "value": "core.stale_registry_revision"
+                }
+            },
+            "StorageCapabilityUnavailable": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "StorageCapabilityUnavailable",
+                    "value": "core.storage_capability_unavailable"
+                }
+            },
+            "StorageOperationFailed": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "StorageOperationFailed",
+                    "value": "core.storage_operation_failed"
+                }
+            },
+            "UnknownCode": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "UnknownCode",
+                    "value": "core.unknown_code"
+                }
+            },
+            "UnknownMessageContract": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "UnknownMessageContract",
+                    "value": "core.unknown_message_contract"
+                }
+            },
+            "UnsupportedScopeException": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "UnsupportedScopeException",
+                    "value": "core.unsupported_scope_exception"
+                }
+            }
+        },
+        "final": true,
+        "interfaces": [
+            "BackedEnum",
+            "CoreX\\Errors\\Contracts\\ErrorCode",
+            "UnitEnum"
+        ],
+        "internal": false,
+        "kind": "enum",
+        "methods": {
+            "cases": {
+                "params": [],
+                "return": "array",
+                "static": true
+            },
+            "from": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "static",
+                "static": true
+            },
+            "tryFrom": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "?static",
+                "static": true
+            },
+            "value": {
+                "params": [],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "name": {
+                "name": "name",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "value": {
+                "name": "value",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": false
     },
     "CoreX\\Errors\\Enums\\ErrorCategory": {
         "abstract": false,
@@ -13399,6 +14244,357 @@
                 "type": "string"
             }
         },
+        "readonly": false
+    },
+    "CoreX\\Errors\\Exceptions\\CodedException": {
+        "abstract": true,
+        "constants": [],
+        "final": false,
+        "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            }
+        },
+        "parent": "RuntimeException",
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Errors\\Exceptions\\ProblemRegistryException": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "errorCode",
+                        "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "diagnostic",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            }
+        },
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
+        "properties": {
+            "errorCode": {
+                "name": "errorCode",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode"
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\Errors\\Internal\\CompiledProblemRegistry": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Errors\\Contracts\\ProblemRegistry"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "contributions",
+                        "type": "iterable",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "all": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "assertOccurrence": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "descriptor",
+                        "type": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "status",
+                        "type": "?int",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "fromWire": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "code",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Errors\\Data\\ProblemDefinition",
+                "static": false
+            },
+            "get": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "code",
+                        "type": "CoreX\\Errors\\Contracts\\ErrorCode",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Errors\\Data\\ProblemDefinition",
+                "static": false
+            },
+            "owner": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "code",
+                        "type": "CoreX\\Errors\\Contracts\\ErrorCode",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\Errors\\Internal\\ErrorSourceScanner": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "catalogue": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "repository",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Errors\\Internal\\CompiledProblemRegistry",
+                "static": false
+            },
+            "diagnostics": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "root",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "registry",
+                        "type": "CoreX\\Errors\\Contracts\\ProblemRegistry",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Errors\\Internal\\PackageProblemDefinitions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Errors\\Contracts\\ProblemDefinitionProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "definitions": {
+                "params": [],
+                "return": "iterable",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Errors\\Internal\\ProblemContribution": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "owner",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "provider",
+                        "type": "CoreX\\Errors\\Contracts\\ProblemDefinitionProvider",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "package",
+                        "type": "?string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": [],
+                        "name": "sourceRoots",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "owner": {
+                "name": "owner",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "package": {
+                "name": "package",
+                "readonly": true,
+                "static": false,
+                "type": "?string"
+            },
+            "provider": {
+                "name": "provider",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Errors\\Contracts\\ProblemDefinitionProvider"
+            },
+            "sourceRoots": {
+                "name": "sourceRoots",
+                "readonly": true,
+                "static": false,
+                "type": "array"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Errors\\Internal\\ProblemRegistryRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Errors\\Laravel\\ProblemDefinitions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "composerManifest",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "provider",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
         "readonly": false
     },
     "CoreX\\Features\\Contracts\\FeatureFlags": {
@@ -14493,6 +15689,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -14511,9 +15708,14 @@
                 ],
                 "return": "",
                 "static": false
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -14522,6 +15724,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -14540,9 +15743,14 @@
                 ],
                 "return": "",
                 "static": false
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -14924,6 +16132,147 @@
         },
         "readonly": true
     },
+    "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode": {
+        "abstract": false,
+        "constants": {
+            "AccessDeniedException": {
+                "type": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+                "value": {
+                    "enum": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+                    "case": "AccessDeniedException",
+                    "value": "intl.access_denied_exception"
+                }
+            },
+            "InvalidLocaleException": {
+                "type": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+                "value": {
+                    "enum": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+                    "case": "InvalidLocaleException",
+                    "value": "intl.invalid_locale_exception"
+                }
+            },
+            "InvalidRateException": {
+                "type": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+                "value": {
+                    "enum": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+                    "case": "InvalidRateException",
+                    "value": "intl.invalid_rate_exception"
+                }
+            },
+            "OperationConflictException": {
+                "type": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+                "value": {
+                    "enum": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+                    "case": "OperationConflictException",
+                    "value": "intl.operation_conflict_exception"
+                }
+            },
+            "SchemaMismatchException": {
+                "type": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+                "value": {
+                    "enum": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+                    "case": "SchemaMismatchException",
+                    "value": "intl.schema_mismatch_exception"
+                }
+            },
+            "SnapshotExpiredException": {
+                "type": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+                "value": {
+                    "enum": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+                    "case": "SnapshotExpiredException",
+                    "value": "intl.snapshot_expired_exception"
+                }
+            },
+            "UnsupportedFormattingException": {
+                "type": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+                "value": {
+                    "enum": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+                    "case": "UnsupportedFormattingException",
+                    "value": "intl.unsupported_formatting_exception"
+                }
+            }
+        },
+        "final": true,
+        "interfaces": [
+            "BackedEnum",
+            "CoreX\\Errors\\Contracts\\ErrorCode",
+            "UnitEnum"
+        ],
+        "internal": false,
+        "kind": "enum",
+        "methods": {
+            "cases": {
+                "params": [],
+                "return": "array",
+                "static": true
+            },
+            "from": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "static",
+                "static": true
+            },
+            "tryFrom": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "?static",
+                "static": true
+            },
+            "value": {
+                "params": [],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "name": {
+                "name": "name",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "value": {
+                "name": "value",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\Intl\\Errors\\Internal\\PackageProblemDefinitions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Errors\\Contracts\\ProblemDefinitionProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "definitions": {
+                "params": [],
+                "return": "iterable",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Intl\\Formatting\\Contracts\\MoneyFormatter": {
         "abstract": false,
         "constants": [],
@@ -15114,6 +16463,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -15132,9 +16482,14 @@
                 ],
                 "return": "",
                 "static": false
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -15576,6 +16931,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -15594,9 +16950,14 @@
                 ],
                 "return": "",
                 "static": false
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -17008,6 +18369,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -17026,9 +18388,14 @@
                 ],
                 "return": "",
                 "static": false
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -17037,6 +18404,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -17055,9 +18423,14 @@
                 ],
                 "return": "",
                 "static": false
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -17066,6 +18439,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -17084,9 +18458,14 @@
                 ],
                 "return": "",
                 "static": false
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -22726,12 +24105,18 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
         "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            },
             "outsideTransaction": {
                 "params": [
                     {
@@ -22745,7 +24130,7 @@
                 "static": true
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -22754,6 +24139,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -22771,6 +24157,11 @@
                 ],
                 "return": "self",
                 "static": true
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             },
             "identity": {
                 "params": [
@@ -22806,12 +24197,18 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
         "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            },
             "superseded": {
                 "params": [
                     {
@@ -22825,7 +24222,7 @@
                 "static": true
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -22834,12 +24231,18 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
         "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            },
             "outsideTransaction": {
                 "params": [
                     {
@@ -22877,7 +24280,7 @@
                 "static": true
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -22886,6 +24289,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -22903,6 +24307,11 @@
                 ],
                 "return": "self",
                 "static": true
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             },
             "notDeclared": {
                 "params": [
@@ -22923,7 +24332,7 @@
                 "static": true
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -28298,6 +29707,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -28393,6 +29803,11 @@
                 ],
                 "return": "self",
                 "static": true
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             },
             "menuAfterMissing": {
                 "params": [
@@ -28671,7 +30086,7 @@
                 "static": true
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -28680,6 +30095,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -28697,9 +30113,14 @@
                 ],
                 "return": "",
                 "static": false
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -28708,6 +30129,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -28731,9 +30153,14 @@
                 ],
                 "return": "",
                 "static": false
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -28742,6 +30169,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -28777,6 +30205,11 @@
                 ],
                 "return": "self",
                 "static": true
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             },
             "invalidComposerName": {
                 "params": [
@@ -28821,7 +30254,7 @@
                 "static": true
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -28830,12 +30263,18 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
         "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            },
             "unknown": {
                 "params": [
                     {
@@ -28849,7 +30288,7 @@
                 "static": true
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -28858,12 +30297,18 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
         "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            },
             "purgedIsTerminal": {
                 "params": [
                     {
@@ -28904,6 +30349,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -28927,9 +30373,14 @@
                 ],
                 "return": "",
                 "static": false
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -28938,6 +30389,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -28961,9 +30413,14 @@
                 ],
                 "return": "",
                 "static": false
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -28972,6 +30429,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -28989,9 +30447,14 @@
                 ],
                 "return": "",
                 "static": false
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -29000,6 +30463,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -29023,9 +30487,14 @@
                 ],
                 "return": "",
                 "static": false
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -29034,6 +30503,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -29058,6 +30528,11 @@
                 "return": "self",
                 "static": true
             },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            },
             "late": {
                 "params": [
                     {
@@ -29077,7 +30552,7 @@
                 "static": true
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -29086,6 +30561,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -29096,6 +30572,11 @@
                 "params": [],
                 "return": "self",
                 "static": true
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             },
             "missing": {
                 "params": [
@@ -29110,7 +30591,7 @@
                 "static": true
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -29119,12 +30600,18 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
         "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            },
             "mismatch": {
                 "params": [
                     {
@@ -29144,7 +30631,7 @@
                 "static": true
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -34580,6 +36067,107 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Notifications\\Errors\\Enums\\NotificationsErrorCode": {
+        "abstract": false,
+        "constants": {
+            "NotificationAccessDenied": {
+                "type": "CoreX\\Notifications\\Errors\\Enums\\NotificationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Notifications\\Errors\\Enums\\NotificationsErrorCode",
+                    "case": "NotificationAccessDenied",
+                    "value": "notifications.notification_access_denied"
+                }
+            },
+            "NotificationOperationConflict": {
+                "type": "CoreX\\Notifications\\Errors\\Enums\\NotificationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Notifications\\Errors\\Enums\\NotificationsErrorCode",
+                    "case": "NotificationOperationConflict",
+                    "value": "notifications.notification_operation_conflict"
+                }
+            }
+        },
+        "final": true,
+        "interfaces": [
+            "BackedEnum",
+            "CoreX\\Errors\\Contracts\\ErrorCode",
+            "UnitEnum"
+        ],
+        "internal": false,
+        "kind": "enum",
+        "methods": {
+            "cases": {
+                "params": [],
+                "return": "array",
+                "static": true
+            },
+            "from": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "static",
+                "static": true
+            },
+            "tryFrom": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "?static",
+                "static": true
+            },
+            "value": {
+                "params": [],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "name": {
+                "name": "name",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "value": {
+                "name": "value",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\Notifications\\Errors\\Internal\\PackageProblemDefinitions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Errors\\Contracts\\ProblemDefinitionProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "definitions": {
+                "params": [],
+                "return": "iterable",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Notifications\\Inbox\\Contracts\\NotificationCenter": {
         "abstract": false,
         "constants": [],
@@ -35251,13 +36839,20 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
-        "methods": [],
-        "parent": "RuntimeException",
+        "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            }
+        },
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -35266,13 +36861,20 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
-        "methods": [],
-        "parent": "RuntimeException",
+        "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            }
+        },
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -39261,13 +40863,20 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Symfony\\Component\\HttpKernel\\Exception\\HttpExceptionInterface",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
-        "methods": [],
+        "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            }
+        },
         "parent": "Symfony\\Component\\HttpKernel\\Exception\\TooManyRequestsHttpException",
         "properties": [],
         "readonly": false
@@ -39277,13 +40886,20 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
-        "methods": [],
-        "parent": "RuntimeException",
+        "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            }
+        },
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -40888,6 +42504,343 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode": {
+        "abstract": false,
+        "constants": {
+            "AccessDenied": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "AccessDenied",
+                    "value": "operations.access_denied"
+                }
+            },
+            "AccountUnavailable": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "AccountUnavailable",
+                    "value": "operations.account_unavailable"
+                }
+            },
+            "AuthenticationRequired": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "AuthenticationRequired",
+                    "value": "operations.authentication_required"
+                }
+            },
+            "BudgetRateLimited": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "BudgetRateLimited",
+                    "value": "operations.budget_rate_limited"
+                }
+            },
+            "BudgetStoreUnavailable": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "BudgetStoreUnavailable",
+                    "value": "operations.budget_store_unavailable"
+                }
+            },
+            "BulkNotReady": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "BulkNotReady",
+                    "value": "operations.bulk_not_ready"
+                }
+            },
+            "BulkReconciliationRequired": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "BulkReconciliationRequired",
+                    "value": "operations.bulk_reconciliation_required"
+                }
+            },
+            "BulkResultExpired": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "BulkResultExpired",
+                    "value": "operations.bulk_result_expired"
+                }
+            },
+            "CapabilityUnavailable": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "CapabilityUnavailable",
+                    "value": "operations.capability_unavailable"
+                }
+            },
+            "CatalogueLimit": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "CatalogueLimit",
+                    "value": "operations.catalogue_limit"
+                }
+            },
+            "Conflict": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "Conflict",
+                    "value": "operations.conflict"
+                }
+            },
+            "ContextRequired": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "ContextRequired",
+                    "value": "operations.context_required"
+                }
+            },
+            "CursorInvalid": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "CursorInvalid",
+                    "value": "operations.cursor_invalid"
+                }
+            },
+            "Forbidden": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "Forbidden",
+                    "value": "operations.forbidden"
+                }
+            },
+            "IdempotencyConflict": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "IdempotencyConflict",
+                    "value": "operations.idempotency_conflict"
+                }
+            },
+            "IdempotencyContractMismatch": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "IdempotencyContractMismatch",
+                    "value": "operations.idempotency_contract_mismatch"
+                }
+            },
+            "IdempotencyInProgress": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "IdempotencyInProgress",
+                    "value": "operations.idempotency_in_progress"
+                }
+            },
+            "IdempotencyKeyForbidden": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "IdempotencyKeyForbidden",
+                    "value": "operations.idempotency_key_forbidden"
+                }
+            },
+            "IdempotencyKeyInvalid": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "IdempotencyKeyInvalid",
+                    "value": "operations.idempotency_key_invalid"
+                }
+            },
+            "IdempotencyKeyRequired": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "IdempotencyKeyRequired",
+                    "value": "operations.idempotency_key_required"
+                }
+            },
+            "IdempotencyNotSupported": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "IdempotencyNotSupported",
+                    "value": "operations.idempotency_not_supported"
+                }
+            },
+            "InvalidRequest": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "InvalidRequest",
+                    "value": "operations.invalid_request"
+                }
+            },
+            "ModuleUnavailable": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "ModuleUnavailable",
+                    "value": "operations.module_unavailable"
+                }
+            },
+            "NotFound": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "NotFound",
+                    "value": "operations.not_found"
+                }
+            },
+            "OperationNotFound": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "OperationNotFound",
+                    "value": "operations.operation_not_found"
+                }
+            },
+            "OperationUnsupported": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "OperationUnsupported",
+                    "value": "operations.operation_unsupported"
+                }
+            },
+            "OrderingVersionUnsupported": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "OrderingVersionUnsupported",
+                    "value": "operations.ordering_version_unsupported"
+                }
+            },
+            "RateLimited": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "RateLimited",
+                    "value": "operations.rate_limited"
+                }
+            },
+            "ReconciliationRequired": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "ReconciliationRequired",
+                    "value": "operations.reconciliation_required"
+                }
+            },
+            "RequestRejected": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "RequestRejected",
+                    "value": "operations.request_rejected"
+                }
+            },
+            "ResourceNotFound": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "ResourceNotFound",
+                    "value": "operations.resource_not_found"
+                }
+            },
+            "ScopeRequired": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "ScopeRequired",
+                    "value": "operations.scope_required"
+                }
+            },
+            "UnknownMessageContract": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "UnknownMessageContract",
+                    "value": "operations.unknown_message_contract"
+                }
+            },
+            "ValidationFailed": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "ValidationFailed",
+                    "value": "operations.validation_failed"
+                }
+            }
+        },
+        "final": true,
+        "interfaces": [
+            "BackedEnum",
+            "CoreX\\Errors\\Contracts\\ErrorCode",
+            "UnitEnum"
+        ],
+        "internal": false,
+        "kind": "enum",
+        "methods": {
+            "cases": {
+                "params": [],
+                "return": "array",
+                "static": true
+            },
+            "from": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "static",
+                "static": true
+            },
+            "tryFrom": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "?static",
+                "static": true
+            },
+            "value": {
+                "params": [],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "name": {
+                "name": "name",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "value": {
+                "name": "value",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": false
+    },
     "CoreX\\Operations\\Errors\\Exceptions\\ApiError": {
         "abstract": false,
         "constants": [],
@@ -40905,7 +42858,7 @@
                     {
                         "byRef": false,
                         "name": "errorCode",
-                        "type": "string",
+                        "type": "CoreX\\Errors\\Contracts\\ErrorCode",
                         "variadic": false
                     },
                     {
@@ -40970,7 +42923,7 @@
                 "static": false
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": {
             "category": {
                 "name": "category",
@@ -41084,6 +43037,18 @@
         "internal": true,
         "kind": "class",
         "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "problems",
+                        "type": "CoreX\\Errors\\Contracts\\ProblemRegistry",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
             "map": {
                 "params": [
                     {
@@ -41311,6 +43276,26 @@
                     }
                 ],
                 "return": "mixed",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Operations\\Errors\\Internal\\PackageProblemDefinitions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Errors\\Contracts\\ProblemDefinitionProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "definitions": {
+                "params": [],
+                "return": "iterable",
                 "static": false
             }
         },
@@ -41834,7 +43819,14 @@
                 "static": false
             },
             "error": {
-                "params": [],
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "problems",
+                        "type": "CoreX\\Errors\\Contracts\\ProblemRegistry",
+                        "variadic": false
+                    }
+                ],
                 "return": "CoreX\\Operations\\Errors\\Exceptions\\ApiError",
                 "static": false
             },
@@ -41856,6 +43848,12 @@
                         "byRef": false,
                         "name": "json",
                         "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "problems",
+                        "type": "CoreX\\Errors\\Contracts\\ProblemRegistry",
                         "variadic": false
                     }
                 ],
@@ -42081,6 +44079,12 @@
                         "byRef": false,
                         "name": "errors",
                         "type": "CoreX\\Operations\\Errors\\Contracts\\ErrorMapping",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "problems",
+                        "type": "CoreX\\Errors\\Contracts\\ProblemRegistry",
                         "variadic": false
                     },
                     {
@@ -43827,6 +45831,12 @@
                         "name": "modules",
                         "type": "CoreX\\Modules\\Contracts\\ModuleRegistry",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "problems",
+                        "type": "CoreX\\Errors\\Contracts\\ProblemRegistry",
+                        "variadic": false
                     }
                 ],
                 "return": "int",
@@ -43873,6 +45883,12 @@
                         "byRef": false,
                         "name": "profile",
                         "type": "CoreX\\Operations\\Versioning\\Data\\ApiProfile",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "problems",
+                        "type": "CoreX\\Errors\\Contracts\\ProblemRegistry",
                         "variadic": false
                     },
                     {
@@ -48427,17 +50443,125 @@
         },
         "readonly": true
     },
+    "CoreX\\Recurrence\\Errors\\Enums\\RecurrenceErrorCode": {
+        "abstract": false,
+        "constants": {
+            "StaleCursorException": {
+                "type": "CoreX\\Recurrence\\Errors\\Enums\\RecurrenceErrorCode",
+                "value": {
+                    "enum": "CoreX\\Recurrence\\Errors\\Enums\\RecurrenceErrorCode",
+                    "case": "StaleCursorException",
+                    "value": "recurrence.stale_cursor_exception"
+                }
+            },
+            "UnsupportedEnvironmentException": {
+                "type": "CoreX\\Recurrence\\Errors\\Enums\\RecurrenceErrorCode",
+                "value": {
+                    "enum": "CoreX\\Recurrence\\Errors\\Enums\\RecurrenceErrorCode",
+                    "case": "UnsupportedEnvironmentException",
+                    "value": "recurrence.unsupported_environment_exception"
+                }
+            }
+        },
+        "final": true,
+        "interfaces": [
+            "BackedEnum",
+            "CoreX\\Errors\\Contracts\\ErrorCode",
+            "UnitEnum"
+        ],
+        "internal": false,
+        "kind": "enum",
+        "methods": {
+            "cases": {
+                "params": [],
+                "return": "array",
+                "static": true
+            },
+            "from": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "static",
+                "static": true
+            },
+            "tryFrom": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "?static",
+                "static": true
+            },
+            "value": {
+                "params": [],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "name": {
+                "name": "name",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "value": {
+                "name": "value",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\Recurrence\\Errors\\Internal\\PackageProblemDefinitions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Errors\\Contracts\\ProblemDefinitionProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "definitions": {
+                "params": [],
+                "return": "iterable",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Recurrence\\Exceptions\\StaleCursorException": {
         "abstract": false,
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
-        "methods": [],
+        "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            }
+        },
         "parent": "InvalidArgumentException",
         "properties": [],
         "readonly": false
@@ -48447,13 +50571,20 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
-        "methods": [],
-        "parent": "RuntimeException",
+        "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            }
+        },
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -48674,6 +50805,24 @@
             }
         },
         "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Recurrence\\RecurrenceServiceProvider": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "register": {
+                "params": [],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": "Illuminate\\Support\\ServiceProvider",
         "properties": [],
         "readonly": false
     },
@@ -49056,17 +51205,116 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\SearchMeilisearch\\Errors\\Enums\\SearchMeilisearchErrorCode": {
+        "abstract": false,
+        "constants": {
+            "InvalidMeilisearchConfiguration": {
+                "type": "CoreX\\SearchMeilisearch\\Errors\\Enums\\SearchMeilisearchErrorCode",
+                "value": {
+                    "enum": "CoreX\\SearchMeilisearch\\Errors\\Enums\\SearchMeilisearchErrorCode",
+                    "case": "InvalidMeilisearchConfiguration",
+                    "value": "search-meilisearch.invalid_meilisearch_configuration"
+                }
+            }
+        },
+        "final": true,
+        "interfaces": [
+            "BackedEnum",
+            "CoreX\\Errors\\Contracts\\ErrorCode",
+            "UnitEnum"
+        ],
+        "internal": false,
+        "kind": "enum",
+        "methods": {
+            "cases": {
+                "params": [],
+                "return": "array",
+                "static": true
+            },
+            "from": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "static",
+                "static": true
+            },
+            "tryFrom": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "?static",
+                "static": true
+            },
+            "value": {
+                "params": [],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "name": {
+                "name": "name",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "value": {
+                "name": "value",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\SearchMeilisearch\\Errors\\Internal\\PackageProblemDefinitions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Errors\\Contracts\\ProblemDefinitionProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "definitions": {
+                "params": [],
+                "return": "iterable",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\SearchMeilisearch\\Exceptions\\InvalidMeilisearchConfiguration": {
         "abstract": false,
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
         "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            },
             "invalidHost": {
                 "params": [],
                 "return": "self",
@@ -49088,7 +51336,7 @@
                 "static": true
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -50380,17 +52628,116 @@
         },
         "readonly": true
     },
+    "CoreX\\Search\\Errors\\Enums\\SearchErrorCode": {
+        "abstract": false,
+        "constants": {
+            "InvalidSearchConfiguration": {
+                "type": "CoreX\\Search\\Errors\\Enums\\SearchErrorCode",
+                "value": {
+                    "enum": "CoreX\\Search\\Errors\\Enums\\SearchErrorCode",
+                    "case": "InvalidSearchConfiguration",
+                    "value": "search.invalid_search_configuration"
+                }
+            }
+        },
+        "final": true,
+        "interfaces": [
+            "BackedEnum",
+            "CoreX\\Errors\\Contracts\\ErrorCode",
+            "UnitEnum"
+        ],
+        "internal": false,
+        "kind": "enum",
+        "methods": {
+            "cases": {
+                "params": [],
+                "return": "array",
+                "static": true
+            },
+            "from": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "static",
+                "static": true
+            },
+            "tryFrom": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "?static",
+                "static": true
+            },
+            "value": {
+                "params": [],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "name": {
+                "name": "name",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "value": {
+                "name": "value",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\Search\\Errors\\Internal\\PackageProblemDefinitions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Errors\\Contracts\\ProblemDefinitionProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "definitions": {
+                "params": [],
+                "return": "iterable",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Search\\Exceptions\\InvalidSearchConfiguration": {
         "abstract": false,
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
         "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            },
             "missingDatabase": {
                 "params": [],
                 "return": "self",
@@ -50412,7 +52759,7 @@
                 "static": true
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -51548,6 +53895,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -51583,9 +53931,14 @@
                 ],
                 "return": "",
                 "static": false
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -51594,6 +53947,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -51611,9 +53965,14 @@
                 ],
                 "return": "",
                 "static": false
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -52005,13 +54364,20 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
-        "methods": [],
-        "parent": "RuntimeException",
+        "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            }
+        },
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -52020,13 +54386,20 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
-        "methods": [],
-        "parent": "RuntimeException",
+        "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            }
+        },
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -52920,17 +55293,132 @@
         },
         "readonly": true
     },
+    "CoreX\\TasksWorkflow\\Errors\\Enums\\TasksWorkflowErrorCode": {
+        "abstract": false,
+        "constants": {
+            "MaterializationConflict": {
+                "type": "CoreX\\TasksWorkflow\\Errors\\Enums\\TasksWorkflowErrorCode",
+                "value": {
+                    "enum": "CoreX\\TasksWorkflow\\Errors\\Enums\\TasksWorkflowErrorCode",
+                    "case": "MaterializationConflict",
+                    "value": "tasks-workflow.materialization_conflict"
+                }
+            },
+            "StaleMaterialization": {
+                "type": "CoreX\\TasksWorkflow\\Errors\\Enums\\TasksWorkflowErrorCode",
+                "value": {
+                    "enum": "CoreX\\TasksWorkflow\\Errors\\Enums\\TasksWorkflowErrorCode",
+                    "case": "StaleMaterialization",
+                    "value": "tasks-workflow.stale_materialization"
+                }
+            },
+            "UnsupportedMaterialization": {
+                "type": "CoreX\\TasksWorkflow\\Errors\\Enums\\TasksWorkflowErrorCode",
+                "value": {
+                    "enum": "CoreX\\TasksWorkflow\\Errors\\Enums\\TasksWorkflowErrorCode",
+                    "case": "UnsupportedMaterialization",
+                    "value": "tasks-workflow.unsupported_materialization"
+                }
+            }
+        },
+        "final": true,
+        "interfaces": [
+            "BackedEnum",
+            "CoreX\\Errors\\Contracts\\ErrorCode",
+            "UnitEnum"
+        ],
+        "internal": false,
+        "kind": "enum",
+        "methods": {
+            "cases": {
+                "params": [],
+                "return": "array",
+                "static": true
+            },
+            "from": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "static",
+                "static": true
+            },
+            "tryFrom": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "?static",
+                "static": true
+            },
+            "value": {
+                "params": [],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "name": {
+                "name": "name",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "value": {
+                "name": "value",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\TasksWorkflow\\Errors\\Internal\\PackageProblemDefinitions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Errors\\Contracts\\ProblemDefinitionProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "definitions": {
+                "params": [],
+                "return": "iterable",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\TasksWorkflow\\Exceptions\\MaterializationConflict": {
         "abstract": false,
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
         "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            },
             "forGeneration": {
                 "params": [
                     {
@@ -52956,7 +55444,7 @@
                 "static": true
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -52965,6 +55453,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -52982,6 +55471,11 @@
                 ],
                 "return": "self",
                 "static": true
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             },
             "restoreEpoch": {
                 "params": [
@@ -53020,7 +55514,7 @@
                 "static": true
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -53029,6 +55523,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -53047,6 +55542,11 @@
                 "return": "self",
                 "static": true
             },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            },
             "expansion": {
                 "params": [
                     {
@@ -53060,7 +55560,7 @@
                 "static": true
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -54024,12 +56524,18 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
         "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            },
             "forCurrentAccount": {
                 "params": [],
                 "return": "self",
@@ -54254,6 +56760,115 @@
             "context": {
                 "params": [],
                 "return": "CoreX\\Context\\Data\\TenantContext",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Tasks\\Errors\\Enums\\TasksErrorCode": {
+        "abstract": false,
+        "constants": {
+            "InvalidPlanningDraft": {
+                "type": "CoreX\\Tasks\\Errors\\Enums\\TasksErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tasks\\Errors\\Enums\\TasksErrorCode",
+                    "case": "InvalidPlanningDraft",
+                    "value": "tasks.invalid_planning_draft"
+                }
+            },
+            "PlanningConflict": {
+                "type": "CoreX\\Tasks\\Errors\\Enums\\TasksErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tasks\\Errors\\Enums\\TasksErrorCode",
+                    "case": "PlanningConflict",
+                    "value": "tasks.planning_conflict"
+                }
+            },
+            "TasksModuleDisabled": {
+                "type": "CoreX\\Tasks\\Errors\\Enums\\TasksErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tasks\\Errors\\Enums\\TasksErrorCode",
+                    "case": "TasksModuleDisabled",
+                    "value": "tasks.tasks_module_disabled"
+                }
+            }
+        },
+        "final": true,
+        "interfaces": [
+            "BackedEnum",
+            "CoreX\\Errors\\Contracts\\ErrorCode",
+            "UnitEnum"
+        ],
+        "internal": false,
+        "kind": "enum",
+        "methods": {
+            "cases": {
+                "params": [],
+                "return": "array",
+                "static": true
+            },
+            "from": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "static",
+                "static": true
+            },
+            "tryFrom": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "?static",
+                "static": true
+            },
+            "value": {
+                "params": [],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "name": {
+                "name": "name",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "value": {
+                "name": "value",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\Tasks\\Errors\\Internal\\PackageProblemDefinitions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Errors\\Contracts\\ProblemDefinitionProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "definitions": {
+                "params": [],
+                "return": "iterable",
                 "static": false
             }
         },
@@ -54756,12 +57371,18 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
         "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            },
             "forField": {
                 "params": [
                     {
@@ -54790,12 +57411,18 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
         "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            },
             "forRequestKey": {
                 "params": [
                     {
@@ -60092,6 +62719,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -60114,6 +62742,11 @@
                 "params": [],
                 "return": "self",
                 "static": true
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             },
             "impersonationDenied": {
                 "params": [],
@@ -60173,7 +62806,7 @@
                 "static": true
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -61524,13 +64157,20 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
-        "methods": [],
-        "parent": "RuntimeException",
+        "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            }
+        },
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -61539,13 +64179,20 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
-        "methods": [],
-        "parent": "RuntimeException",
+        "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            }
+        },
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -61892,6 +64539,227 @@
                 ],
                 "return": "Illuminate\\Database\\Eloquent\\Relations\\HasMany",
                 "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode": {
+        "abstract": false,
+        "constants": {
+            "CentralProtocolViolation": {
+                "type": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                    "case": "CentralProtocolViolation",
+                    "value": "tenancy.central_protocol_violation"
+                }
+            },
+            "CentralUnauthorized": {
+                "type": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                    "case": "CentralUnauthorized",
+                    "value": "tenancy.central_unauthorized"
+                }
+            },
+            "CentralUnavailable": {
+                "type": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                    "case": "CentralUnavailable",
+                    "value": "tenancy.central_unavailable"
+                }
+            },
+            "ClaimConflict": {
+                "type": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                    "case": "ClaimConflict",
+                    "value": "tenancy.claim_conflict"
+                }
+            },
+            "ClaimUnavailable": {
+                "type": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                    "case": "ClaimUnavailable",
+                    "value": "tenancy.claim_unavailable"
+                }
+            },
+            "CredentialIssuanceDenied": {
+                "type": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                    "case": "CredentialIssuanceDenied",
+                    "value": "tenancy.credential_issuance_denied"
+                }
+            },
+            "DomainTrustDenied": {
+                "type": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                    "case": "DomainTrustDenied",
+                    "value": "tenancy.domain_trust_denied"
+                }
+            },
+            "DomainTrustDisabled": {
+                "type": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                    "case": "DomainTrustDisabled",
+                    "value": "tenancy.domain_trust_disabled"
+                }
+            },
+            "InboxConflict": {
+                "type": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                    "case": "InboxConflict",
+                    "value": "tenancy.inbox_conflict"
+                }
+            },
+            "InvitationNotAcceptableException": {
+                "type": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                    "case": "InvitationNotAcceptableException",
+                    "value": "tenancy.invitation_not_acceptable_exception"
+                }
+            },
+            "NoDefaultWorkspaceException": {
+                "type": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                    "case": "NoDefaultWorkspaceException",
+                    "value": "tenancy.no_default_workspace_exception"
+                }
+            },
+            "OidcAuthenticationException": {
+                "type": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                    "case": "OidcAuthenticationException",
+                    "value": "tenancy.oidc_authentication_exception"
+                }
+            },
+            "PairStoreViolation": {
+                "type": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                    "case": "PairStoreViolation",
+                    "value": "tenancy.pair_store_violation"
+                }
+            },
+            "ProjectionDenied": {
+                "type": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                    "case": "ProjectionDenied",
+                    "value": "tenancy.projection_denied"
+                }
+            },
+            "RevokeUncertain": {
+                "type": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                    "case": "RevokeUncertain",
+                    "value": "tenancy.revoke_uncertain"
+                }
+            },
+            "TemplateIntegrityException": {
+                "type": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                    "case": "TemplateIntegrityException",
+                    "value": "tenancy.template_integrity_exception"
+                }
+            },
+            "TenantCouldNotBeIdentifiedByHostException": {
+                "type": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                    "case": "TenantCouldNotBeIdentifiedByHostException",
+                    "value": "tenancy.tenant_could_not_be_identified_by_host_exception"
+                }
+            }
+        },
+        "final": true,
+        "interfaces": [
+            "BackedEnum",
+            "CoreX\\Errors\\Contracts\\ErrorCode",
+            "UnitEnum"
+        ],
+        "internal": false,
+        "kind": "enum",
+        "methods": {
+            "cases": {
+                "params": [],
+                "return": "array",
+                "static": true
+            },
+            "from": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "static",
+                "static": true
+            },
+            "tryFrom": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "?static",
+                "static": true
+            },
+            "value": {
+                "params": [],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "name": {
+                "name": "name",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "value": {
+                "name": "value",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\Tenancy\\Errors\\Internal\\PackageProblemDefinitions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Errors\\Contracts\\ProblemDefinitionProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "definitions": {
+                "params": [],
+                "return": "iterable",
+                "static": false
             }
         },
         "parent": null,
@@ -67058,13 +69926,20 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
-        "methods": [],
-        "parent": "RuntimeException",
+        "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            }
+        },
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -67073,12 +69948,19 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
-        "methods": [],
+        "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            }
+        },
         "parent": "DomainException",
         "properties": [],
         "readonly": false
@@ -67088,13 +69970,20 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
-        "methods": [],
-        "parent": "RuntimeException",
+        "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            }
+        },
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -67103,13 +69992,20 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
-        "methods": [],
-        "parent": "RuntimeException",
+        "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            }
+        },
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -67118,13 +70014,20 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
-        "methods": [],
-        "parent": "RuntimeException",
+        "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            }
+        },
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -67133,12 +70036,19 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
-        "methods": [],
+        "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            }
+        },
         "parent": "LogicException",
         "properties": [],
         "readonly": false
@@ -67148,13 +70058,20 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
-        "methods": [],
-        "parent": "RuntimeException",
+        "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            }
+        },
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -67163,6 +70080,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -67180,9 +70098,14 @@
                 ],
                 "return": "",
                 "static": false
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
             }
         },
-        "parent": "RuntimeException",
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": {
             "requestId": {
                 "name": "requestId",
@@ -70175,13 +73098,20 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
-        "methods": [],
-        "parent": "RuntimeException",
+        "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            }
+        },
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -70190,13 +73120,20 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
-        "methods": [],
-        "parent": "RuntimeException",
+        "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            }
+        },
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -70205,13 +73142,20 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
-        "methods": [],
-        "parent": "RuntimeException",
+        "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            }
+        },
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -70784,6 +73728,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
@@ -70800,6 +73745,11 @@
                     }
                 ],
                 "return": "",
+                "static": false
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
                 "static": false
             }
         },
@@ -71173,13 +74123,20 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
-        "methods": [],
-        "parent": "RuntimeException",
+        "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            }
+        },
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -71188,13 +74145,20 @@
         "constants": [],
         "final": true,
         "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
             "Stringable",
             "Throwable"
         ],
         "internal": false,
         "kind": "class",
-        "methods": [],
-        "parent": "RuntimeException",
+        "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            }
+        },
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
     },
@@ -77772,6 +80736,155 @@
             }
         },
         "readonly": true
+    },
+    "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode": {
+        "abstract": false,
+        "constants": {
+            "UnknownMessageContract": {
+                "type": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+                    "case": "UnknownMessageContract",
+                    "value": "webhooks.unknown_message_contract"
+                }
+            },
+            "UnknownMessageSchema": {
+                "type": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+                    "case": "UnknownMessageSchema",
+                    "value": "webhooks.unknown_message_schema"
+                }
+            },
+            "WebhookEndpointChanged": {
+                "type": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+                    "case": "WebhookEndpointChanged",
+                    "value": "webhooks.webhook_endpoint_changed"
+                }
+            },
+            "WebhookPayloadTooLarge": {
+                "type": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+                    "case": "WebhookPayloadTooLarge",
+                    "value": "webhooks.webhook_payload_too_large"
+                }
+            },
+            "WebhookReplayExpired": {
+                "type": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+                    "case": "WebhookReplayExpired",
+                    "value": "webhooks.webhook_replay_expired"
+                }
+            },
+            "WebhookSecretDenied": {
+                "type": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+                    "case": "WebhookSecretDenied",
+                    "value": "webhooks.webhook_secret_denied"
+                }
+            },
+            "WebhookSensitiveDenied": {
+                "type": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+                    "case": "WebhookSensitiveDenied",
+                    "value": "webhooks.webhook_sensitive_denied"
+                }
+            },
+            "WebhookSubscriptionCap": {
+                "type": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+                    "case": "WebhookSubscriptionCap",
+                    "value": "webhooks.webhook_subscription_cap"
+                }
+            }
+        },
+        "final": true,
+        "interfaces": [
+            "BackedEnum",
+            "CoreX\\Errors\\Contracts\\ErrorCode",
+            "UnitEnum"
+        ],
+        "internal": false,
+        "kind": "enum",
+        "methods": {
+            "cases": {
+                "params": [],
+                "return": "array",
+                "static": true
+            },
+            "from": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "static",
+                "static": true
+            },
+            "tryFrom": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "?static",
+                "static": true
+            },
+            "value": {
+                "params": [],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "name": {
+                "name": "name",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "value": {
+                "name": "value",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\Webhooks\\Errors\\Internal\\PackageProblemDefinitions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Errors\\Contracts\\ProblemDefinitionProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "definitions": {
+                "params": [],
+                "return": "iterable",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
     },
     "CoreX\\Webhooks\\Internal\\Commands\\DeliverWebhooks": {
         "abstract": false,

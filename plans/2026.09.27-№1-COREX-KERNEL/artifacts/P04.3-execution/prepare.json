@@ -1,0 +1,74 @@
+{
+  "snapshot": {
+    "schema_version": "plan-context-receipt/v1",
+    "item_id": "P04.3",
+    "snapshot_sha256": "08d09498485f1e0df48d59e64fb82a3578a685be076b893d140ed25de1e417df",
+    "members": [
+      {
+        "role": "plan-core",
+        "path": "plan.md",
+        "sha256": "c5b3e23a6dcb72e0667651c2b7cfc414bf30d75b3509008a75856de4ea0cac1e",
+        "bytes": 27647
+      },
+      {
+        "role": "phase-context",
+        "path": "phases/P04/P04.md",
+        "sha256": "d8c9e5bda291e783f0131c882a4f7971f2afd27cd5a238e9f0643512a336a590",
+        "bytes": 6894
+      },
+      {
+        "role": "item-spec",
+        "path": "phases/P04/P04.3.md",
+        "sha256": "cf469451425d1acb08f13d286d5fa014e89354b54657e10dcefdb07660948c5b",
+        "bytes": 6390
+      },
+      {
+        "role": "bundle",
+        "path": "bundles/P04.3.json",
+        "sha256": "21e56f1ff32e2e65fabb0137de1a5f1c1b19b2a38834d4744114aeca3283e6fb",
+        "bytes": 14079
+      },
+      {
+        "role": "item-state",
+        "path": "phases/P04/P04.3.state.md",
+        "sha256": "78d358d1cfa21f215811400ba25378338d6c66f390b26b9afec86688472d3b59",
+        "bytes": 604
+      }
+    ]
+  },
+  "start": {
+    "ts": "2026-10-01T07:00:48Z",
+    "plan_id": "2026.09.27-№1-COREX-KERNEL",
+    "item_id": "P04.3",
+    "command": "plan-run",
+    "session_id": "01a0f641-b183-7bf3-9393-d5654f15d42e",
+    "run_id": "87ccc4db0c51b396eab44498286f4d289f2999ca2f16635c84bfa128eae33a79",
+    "attempt": 1,
+    "actor": "executor/codex/SOL",
+    "friction": [
+      "route-deviation"
+    ],
+    "result": "in-progress",
+    "cost_usd": null,
+    "num_turns": null,
+    "duration_ms": null,
+    "note": "Owner authorizes SOL and waives executor model/route verification. No extra SKM reviews or redundant runs. Source: artifacts/P04.3-execution/owner-instructions.md. No route attestation claimed. Append-only identity correction: durable start binds attempt 1 and run_id.",
+    "batch_receipt": {
+      "schema_version": "batch-receipt/v1",
+      "batch_id": "solo",
+      "membership": [
+        "P04.3"
+      ],
+      "invocation_digest": "c7f37dd7bc138509ca833f1d763f1ab948a790dfe690f4a793e9789a9cc1bbc4",
+      "completed_prefix": [],
+      "routing_digest": "c5b3e23a6dcb72e0667651c2b7cfc414bf30d75b3509008a75856de4ea0cac1e",
+      "spec_digest": "cf469451425d1acb08f13d286d5fa014e89354b54657e10dcefdb07660948c5b",
+      "handoff_digest": "bce6ca2da2d387be73464f846dbf391de741563d95c58c066c0ca8a6fe52c9e6",
+      "stop_disposition": "continue"
+    }
+  },
+  "pre_mutation_raw": "ROUTE-UNVERIFIABLE",
+  "pre_mutation_effective": "allow",
+  "override": "explicit owner instruction; model verification waived",
+  "source_commit": "ef69e78ddbd4cbf0a4b919ec187a7338fb1562d5"
+}

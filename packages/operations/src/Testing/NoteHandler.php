@@ -7,6 +7,7 @@ namespace CoreX\Operations\Testing;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -26,7 +27,7 @@ final class NoteHandler implements OperationHandler
 
         match ($parameters['id'] ?? '') {
             'foreign' => throw new ModelNotFoundException('private table secret'),
-            'conflict' => throw new ApiError('conflict', 409, 'Note already exists.'),
+            'conflict' => throw new ApiError(OperationsErrorCode::Conflict, 409, 'Note already exists.'),
             'broken' => throw new RuntimeException('SQLSTATE secret_password private_table'),
             'hidden' => throw (new AuthorizationException('secret hidden'))->asNotFound(),
             'unauthorized' => throw new AuthorizationException('secret policy'),

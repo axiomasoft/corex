@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Operations\Tests\Feature;
 
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Errors\Contracts\DescribesError;
+use CoreX\Errors\Contracts\ProblemRegistry;
 use CoreX\Errors\Data\ErrorDescriptor;
 use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Errors\Internal\EnvelopeSerializer;
 use CoreX\Operations\Errors\Internal\ErrorMapper;
@@ -14,6 +17,7 @@ use CoreX\Operations\Errors\Internal\OperationErrorBoundary;
 use CoreX\Operations\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Invocation\Laravel\InvocationMetadataFactory;
 use CoreX\Operations\Tests\Support\ErrorBoundaryCountingHandler;
+use CoreX\Operations\Tests\Support\SyntheticErrorCode;
 use CoreX\Operations\Tests\Support\SyntheticPackageFailure;
 use CoreX\Operations\Tests\TestCase;
 use Illuminate\Contracts\Debug\ExceptionHandler;
@@ -27,7 +31,7 @@ final class OperationErrorBoundaryTest extends TestCase
     public function test_old_wire_snapshot_has_no_new_error_fields(): void
     {
         $response = (new EnvelopeSerializer)->error(
-            error: new ApiError('forbidden', 403, 'Operation is not permitted.'),
+            error: new ApiError(OperationsErrorCode::Forbidden, 403, 'Operation is not permitted.'),
             metadata: new InvocationMetadata('req-1', 'v1', '', 'GET', 'corr-1'),
         );
         $payload = $response->getData(true);
@@ -36,7 +40,7 @@ final class OperationErrorBoundaryTest extends TestCase
         $this->assertSame([
             'data' => null,
             'error' => [
-                'code' => 'forbidden',
+                'code' => 'operations.forbidden',
                 'message' => 'Operation is not permitted.',
                 'category' => 'authorization',
                 'path' => null,
@@ -58,10 +62,10 @@ final class OperationErrorBoundaryTest extends TestCase
 
     public function test_four_argument_api_error_still_describes_itself(): void
     {
-        $error = new ApiError('forbidden', 403, 'Operation is not permitted.');
+        $error = new ApiError(OperationsErrorCode::Forbidden, 403, 'Operation is not permitted.');
         $descriptor = $error->errorDescriptor();
 
-        $this->assertSame('forbidden', $descriptor->code);
+        $this->assertSame('operations.forbidden', $descriptor->code);
         $this->assertSame(ErrorCategory::Authorization, $descriptor->category);
         $this->assertFalse($descriptor->retryable);
         $this->assertNull($descriptor->path);
@@ -72,13 +76,13 @@ final class OperationErrorBoundaryTest extends TestCase
     public function test_explicit_api_error_keeps_its_status(): void
     {
         $error = new ApiError(
-            errorCode: 'hidden',
+            errorCode: OperationsErrorCode::Forbidden,
             status: 404,
             message: 'Resource not found.',
             category: ErrorCategory::Authorization,
         );
 
-        $mapped = (new ErrorMapper)->map($error);
+        $mapped = (new ErrorMapper(app(ProblemRegistry::class)))->map($error);
 
         $this->assertSame($error, $mapped);
         $this->assertSame(404, $mapped->status);
@@ -100,10 +104,11 @@ final class OperationErrorBoundaryTest extends TestCase
         ];
 
         $this->assertCount(9, ErrorCategory::cases());
+        $this->app->instance(ProblemRegistry::class, SyntheticErrorCode::registry());
 
         foreach (ErrorCategory::cases() as $category) {
-            $mapped = (new ErrorMapper)->map(new SyntheticPackageFailure(new ErrorDescriptor(
-                code: 'synthetic_'.$category->value,
+            $mapped = (new ErrorMapper(app(ProblemRegistry::class)))->map(new SyntheticPackageFailure(new ErrorDescriptor(
+                code: SyntheticErrorCode::fromCategory($category),
                 category: $category,
                 retryable: $category === ErrorCategory::Unavailable,
                 path: '/field',
@@ -111,7 +116,7 @@ final class OperationErrorBoundaryTest extends TestCase
             )));
 
             $this->assertSame($expected[$category->value], $mapped->status);
-            $this->assertSame('synthetic_'.$category->value, $mapped->errorCode);
+            $this->assertSame('synthetic.'.$category->value, $mapped->errorCode);
             $this->assertSame($category, $mapped->category);
             $this->assertSame($category === ErrorCategory::Unavailable, $mapped->retryable);
             $this->assertSame('/field', $mapped->path);
@@ -125,12 +130,12 @@ final class OperationErrorBoundaryTest extends TestCase
         $reported = [];
         $this->app->instance(ExceptionHandler::class, new ErrorBoundaryCountingHandler($reported));
 
-        $mapped = (new ErrorMapper)->map(new RuntimeException('private SQLSTATE secret'));
+        $mapped = (new ErrorMapper(app(ProblemRegistry::class)))->map(new RuntimeException('private SQLSTATE secret'));
         $this->assertCount(1, $reported);
-        $this->assertSame('internal_error', $mapped->errorCode);
+        $this->assertSame('core.internal_error', $mapped->errorCode);
         $this->assertSame([], JsonDocuments::map($mapped->details));
         $this->assertStringNotContainsString('secret', $mapped->getMessage());
-        $this->assertSame($mapped->errorCode, (new ErrorMapper)->map($mapped)->errorCode);
+        $this->assertSame($mapped->errorCode, (new ErrorMapper(app(ProblemRegistry::class)))->map($mapped)->errorCode);
         $this->assertCount(1, $reported);
 
         $this->app['router']->get('/boom/{version}', static function (): never {
@@ -143,7 +148,7 @@ final class OperationErrorBoundaryTest extends TestCase
             ->assertExactJson([
                 'data' => null,
                 'error' => [
-                    'code' => 'internal_error',
+                    'code' => 'core.internal_error',
                     'message' => 'Operation could not be completed.',
                     'category' => 'internal',
                     'path' => null,
@@ -160,12 +165,28 @@ final class OperationErrorBoundaryTest extends TestCase
         $this->assertStringContainsString('no-store', (string) $response->headers->get('Cache-Control'));
         $this->assertStringNotContainsString('secret', (string) $response->getContent());
         $this->assertStringNotContainsString('SQLSTATE', (string) $response->getContent());
-        $this->assertSame(ErrorCategory::Internal, (new ErrorMapper)->map(new RuntimeException('x'), reportUnexpected: false)->category);
+        $this->assertSame(ErrorCategory::Internal, (new ErrorMapper(app(ProblemRegistry::class)))->map(new RuntimeException('x'), reportUnexpected: false)->category);
+    }
+
+    public function test_a_broken_descriptor_producer_maps_to_the_safe_internal_error(): void
+    {
+        $error = new class extends RuntimeException implements DescribesError
+        {
+            public function errorDescriptor(): ErrorDescriptor
+            {
+                throw new RuntimeException('private descriptor secret');
+            }
+        };
+
+        $mapped = (new ErrorMapper(app(ProblemRegistry::class)))->map($error, reportUnexpected: false);
+        $this->assertSame('core.internal_error', $mapped->errorCode);
+        $this->assertSame(500, $mapped->status);
+        $this->assertStringNotContainsString('secret', $mapped->getMessage());
     }
 
     public function test_framework_fallbacks_stay_safe_and_gain_a_category(): void
     {
-        $mapper = new ErrorMapper;
+        $mapper = new ErrorMapper(app(ProblemRegistry::class));
         $validation = $mapper->map(ValidationException::withMessages(['title' => ['Required.']]));
         $http = $mapper->map(new HttpException(409, 'private secret'));
 
@@ -173,7 +194,7 @@ final class OperationErrorBoundaryTest extends TestCase
         $this->assertSame(ErrorCategory::Validation, $validation->category);
         $this->assertSame(['title' => ['Required.']], JsonDocuments::map($validation->details));
         $this->assertSame(409, $http->status);
-        $this->assertSame('conflict', $http->errorCode);
+        $this->assertSame('operations.conflict', $http->errorCode);
         $this->assertSame(ErrorCategory::Conflict, $http->category);
         $this->assertStringNotContainsString('secret', $http->getMessage());
     }
@@ -181,7 +202,7 @@ final class OperationErrorBoundaryTest extends TestCase
     public function test_boundary_preserves_valid_correlation_internally_without_wire_change(): void
     {
         $this->app['router']->get('/denied/{version}', static function (): never {
-            throw new ApiError('forbidden', 403, 'Operation is not permitted.');
+            throw new ApiError(OperationsErrorCode::Forbidden, 403, 'Operation is not permitted.');
         })->middleware(OperationErrorBoundary::class);
 
         $response = $this->getJson('/denied/v2', [
@@ -200,7 +221,7 @@ final class OperationErrorBoundaryTest extends TestCase
             ->assertExactJson([
                 'data' => null,
                 'error' => [
-                    'code' => 'forbidden',
+                    'code' => 'operations.forbidden',
                     'message' => 'Operation is not permitted.',
                     'category' => 'authorization',
                     'path' => null,

@@ -28,3 +28,10 @@ composer lint:check
 ## Installation
 
 Install with `composer require axiomasoft/corex-recurrence` through the configured Composer channel. The package needs no Laravel provider, database migration or background scheduler. Supply a recurrence set, explicit half-open expansion window and traversal limits to the public expansion port.
+
+## Typed errors
+
+Package error identities use backed enums and a boot compiled kernel registry.
+Error constructors require `ErrorCode`; descriptors keep scoped string wire codes.
+See the monorepo [error contract](../../docs/reference/errors.md) for contributions,
+validated replay and safe mapping.

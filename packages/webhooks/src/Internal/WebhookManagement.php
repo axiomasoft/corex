@@ -12,6 +12,7 @@ use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Enums\OperationMode;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
@@ -118,7 +119,7 @@ final readonly class WebhookManagement
         $this->assertDeliveryFilters($filters);
 
         if ($limit < 1 || $limit > 100) {
-            throw new ApiError('validation_failed', 422, 'Webhook history limit must be between 1 and 100.', category: ErrorCategory::Validation);
+            throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'Webhook history limit must be between 1 and 100.', category: ErrorCategory::Validation);
         }
 
         $cursorFilters = ['client_id' => $clientId, ...$filters];
@@ -190,7 +191,7 @@ final readonly class WebhookManagement
     public function attempts(DataScope $scope, string $id): array
     {
         if ($this->delivery($scope, $id) === null) {
-            throw new ApiError('resource_not_found', 404, 'Webhook delivery does not exist.', category: ErrorCategory::NotFound);
+            throw new ApiError(OperationsErrorCode::ResourceNotFound, 404, 'Webhook delivery does not exist.', category: ErrorCategory::NotFound);
         }
 
         return $this->connection->table('sys_api_webhook_attempts')
@@ -279,16 +280,16 @@ final readonly class WebhookManagement
     private function assertDeliveryFilters(array $filters): void
     {
         if (array_diff(array_keys($filters), ['status', 'subscription_id']) !== []) {
-            throw new ApiError('validation_failed', 422, 'Webhook history filter is not declared.', category: ErrorCategory::Validation);
+            throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'Webhook history filter is not declared.', category: ErrorCategory::Validation);
         }
 
         if (isset($filters['status']) && (! is_string($filters['status'])
             || ! in_array($filters['status'], ['pending', 'sending', 'retry', 'succeeded', 'dead'], true))) {
-            throw new ApiError('validation_failed', 422, 'Webhook status filter is invalid.', category: ErrorCategory::Validation);
+            throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'Webhook status filter is invalid.', category: ErrorCategory::Validation);
         }
 
         if (isset($filters['subscription_id']) && (! is_string($filters['subscription_id']) || $filters['subscription_id'] === '')) {
-            throw new ApiError('validation_failed', 422, 'Webhook subscription filter is invalid.', category: ErrorCategory::Validation);
+            throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'Webhook subscription filter is invalid.', category: ErrorCategory::Validation);
         }
     }
 

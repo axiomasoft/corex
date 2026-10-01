@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Operations\OpenApi\Internal;
 
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Errors\Contracts\ProblemRegistry;
 use CoreX\Operations\Definition\Contracts\OperationRegistry;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\OpenApi\Contracts\ContractSnapshotSection;
@@ -50,6 +51,7 @@ final class ContractSnapshotBuilder
         private readonly OperationRegistry $operations,
         private readonly OpenApiDocumentGenerator $openApi,
         private readonly ApiProfile $profile,
+        private readonly ProblemRegistry $problems,
         iterable $sections = [],
     ) {
         $items = [];
@@ -198,27 +200,19 @@ final class ContractSnapshotBuilder
     /** @return list<array<string, mixed>> */
     private function safeCodes(): array
     {
-        return [
-            $this->safeCode('bulk_not_ready', 'conflict', true),
-            $this->safeCode('bulk_reconciliation_required', 'conflict', false),
-            $this->safeCode('bulk_result_expired', 'not_found', false),
-            $this->safeCode('webhook_endpoint_changed', 'conflict', false),
-            $this->safeCode('webhook_payload_too_large', 'validation', false),
-            $this->safeCode('webhook_replay_expired', 'conflict', false),
-        ];
-    }
+        $rows = [];
+        foreach ($this->problems->all() as $definition) {
+            $rows[] = [
+                'category' => $definition->category->value,
+                'code' => $definition->code->value(),
+                'detail_keys' => $definition->detailKeys,
+                'owner' => $this->problems->owner($definition->code),
+                'path' => null,
+                'retryable' => $definition->retryable,
+            ];
+        }
 
-    /** @return array<string, mixed> */
-    private function safeCode(string $code, string $category, bool $retryable): array
-    {
-        return [
-            'category' => $category,
-            'code' => $code,
-            'detail_keys' => [],
-            'owner' => 'axiomasoft/corex-operations',
-            'path' => null,
-            'retryable' => $retryable,
-        ];
+        return $rows;
     }
 
     /**

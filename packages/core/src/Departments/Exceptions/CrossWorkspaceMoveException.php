@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Departments\Exceptions;
 
 use CoreX\Attributes\Api;
-use RuntimeException;
+use CoreX\Errors\Data\ErrorDescriptor;
+use CoreX\Errors\Enums\CoreErrorCode;
+use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Errors\Exceptions\CodedException;
 
 /**
  * Move-guard, symmetric to the descendant-side filter: the new parent must
@@ -15,7 +18,7 @@ use RuntimeException;
  * subtree is a cross-tenant integrity breach, not a legal move.
  */
 #[Api(since: '1.0')]
-final class CrossWorkspaceMoveException extends RuntimeException
+final class CrossWorkspaceMoveException extends CodedException
 {
     public function __construct(string $departmentId, string $newParentId)
     {
@@ -24,5 +27,10 @@ final class CrossWorkspaceMoveException extends RuntimeException
             $departmentId,
             $newParentId,
         ));
+    }
+
+    public function errorDescriptor(): ErrorDescriptor
+    {
+        return new ErrorDescriptor(CoreErrorCode::CrossWorkspaceMoveException, ErrorCategory::Conflict, retryable: false);
     }
 }

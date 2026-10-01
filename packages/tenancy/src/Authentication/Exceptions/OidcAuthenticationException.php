@@ -6,8 +6,11 @@ namespace CoreX\Tenancy\Authentication\Exceptions;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
+use CoreX\Errors\Data\ErrorDescriptor;
+use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Errors\Exceptions\CodedException;
+use CoreX\Tenancy\Errors\Enums\TenancyErrorCode;
 use Illuminate\Http\Response;
-use RuntimeException;
 
 /**
  * Any OIDC login-flow failure (Discovery, JWKS, token exchange, id_token
@@ -17,7 +20,7 @@ use RuntimeException;
  * (Implementation Rule 8).
  */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
-final class OidcAuthenticationException extends RuntimeException
+final class OidcAuthenticationException extends CodedException
 {
     private function __construct(string $message)
     {
@@ -82,5 +85,10 @@ final class OidcAuthenticationException extends RuntimeException
     public function render(): Response
     {
         return response('', 403);
+    }
+
+    public function errorDescriptor(): ErrorDescriptor
+    {
+        return new ErrorDescriptor(TenancyErrorCode::OidcAuthenticationException, ErrorCategory::Authentication, retryable: false);
     }
 }

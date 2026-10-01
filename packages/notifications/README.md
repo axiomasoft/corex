@@ -26,3 +26,10 @@ Install with `composer require axiomasoft/corex-notifications` through the appro
 ## Extension contracts
 
 Register consumer channel drivers and recipient resolution through the package public contracts. Keep recipient identities and notification authorization application-owned. Channel delivery must preserve the durable intent/delivery identities and report unknown external outcomes for reconciliation.
+
+## Typed errors
+
+Package error identities use backed enums and a boot compiled kernel registry.
+Error constructors require `ErrorCode`; descriptors keep scoped string wire codes.
+See the monorepo [error contract](../../docs/reference/errors.md) for contributions,
+validated replay and safe mapping.

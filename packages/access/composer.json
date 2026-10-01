@@ -68,7 +68,8 @@
                 "CoreX\\Access\\Roles\\Data\\RoleView",
                 "CoreX\\Access\\Roles\\Laravel\\RoleMatrixData",
                 "CoreX\\Access\\Roles\\Laravel\\SystemRoleImmutable",
-                "CoreX\\Access\\Matrix\\Laravel\\MatrixPortBindings"
+                "CoreX\\Access\\Matrix\\Laravel\\MatrixPortBindings",
+                "CoreX\\Access\\Errors\\Enums\\AccessErrorCode"
             ]
         },
         "laravel": {

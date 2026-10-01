@@ -98,7 +98,7 @@ it('denies overflow and absent bounded export', function () use ($schema, $proje
         $estimator->estimate($overflow, $input(pageRows: intdiv(PHP_INT_MAX, 2) + 1));
         expect(false)->toBeTrue('Expected integer overflow denial.');
     } catch (ApiError $error) {
-        expect($error->errorCode)->toBe('validation_failed')
+        expect($error->errorCode)->toBe('operations.validation_failed')
             ->and($error->getMessage())->toBe('Operation cost overflow.');
     }
 

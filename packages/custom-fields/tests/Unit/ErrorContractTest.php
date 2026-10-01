@@ -12,7 +12,7 @@ it('describes an unavailable attributes engine without parsing the message', fun
     $error = new UnsupportedAttributeCapability;
     $descriptor = $error->errorDescriptor();
 
-    expect($descriptor->code)->toBe('attributes_engine_unavailable')
+    expect($descriptor->code)->toBe('custom-fields.attributes_engine_unavailable')
         ->and($descriptor->category)->toBe(ErrorCategory::Unavailable)
         ->and($descriptor->retryable)->toBeFalse()
         ->and($descriptor->details)->toBe(['reason' => UnavailabilityReason::CapabilityUnavailable->value])
@@ -24,7 +24,7 @@ it('describes access denial independently of the human message', function (strin
     $error = new ScopeDenied($message);
     $descriptor = $error->errorDescriptor();
 
-    expect($descriptor->code)->toBe('attributes_access_denied')
+    expect($descriptor->code)->toBe('custom-fields.attributes_access_denied')
         ->and($descriptor->category)->toBe(ErrorCategory::Authorization)
         ->and($descriptor->retryable)->toBeFalse()
         ->and($descriptor->details)->toBe(['reason' => UnavailabilityReason::AccessDenied->value])
@@ -40,14 +40,14 @@ it('owns schema conflict constructors without message branching', function (): v
     $stale = SchemaOperationConflict::staleSnapshot();
     $exhausted = SchemaOperationConflict::retryExhausted();
 
-    expect($notReady->errorDescriptor()->code)->toBe('attribute_schema_conflict')
+    expect($notReady->errorDescriptor()->code)->toBe('custom-fields.attribute_schema_conflict')
         ->and($notReady->errorDescriptor()->category)->toBe(ErrorCategory::Conflict)
         ->and($notReady->errorDescriptor()->retryable)->toBeTrue()
         ->and($notReady->errorDescriptor()->details)->toBe(['reason' => 'not_ready'])
-        ->and($stale->errorDescriptor()->code)->toBe('attribute_schema_conflict')
+        ->and($stale->errorDescriptor()->code)->toBe('custom-fields.attribute_schema_conflict')
         ->and($stale->errorDescriptor()->retryable)->toBeFalse()
         ->and($stale->errorDescriptor()->details)->toBe(['reason' => 'stale_snapshot'])
-        ->and($exhausted->errorDescriptor()->code)->toBe('attribute_schema_retry_exhausted')
+        ->and($exhausted->errorDescriptor()->code)->toBe('custom-fields.attribute_schema_retry_exhausted')
         ->and($exhausted->errorDescriptor()->category)->toBe(ErrorCategory::Conflict)
         ->and($exhausted->errorDescriptor()->retryable)->toBeFalse()
         ->and($exhausted->errorDescriptor()->details)->toBe(['reason' => 'retry_exhausted'])

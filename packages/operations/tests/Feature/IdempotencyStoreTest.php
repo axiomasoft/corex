@@ -113,7 +113,7 @@ final class IdempotencyStoreTest extends TestCase
         self::assertSame(IdempotencyAttempt::ContractMismatch, $mismatch->disposition);
 
         $this->clock->advance(new DateInterval('PT11S'));
-        $failed = JsonCanonical::encode(['error' => ['code' => 'internal_error']]);
+        $failed = JsonCanonical::encode(['error' => ['code' => 'core.internal_error']]);
         $replacement = $this->connection->transaction(function () use ($live, $first, $failed): IdempotencyAttempt {
             $replacement = $this->store->takeover($live);
 

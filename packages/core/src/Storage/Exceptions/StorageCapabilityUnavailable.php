@@ -5,7 +5,16 @@ declare(strict_types=1);
 namespace CoreX\Storage\Exceptions;
 
 use CoreX\Attributes\Api;
-use RuntimeException;
+use CoreX\Errors\Data\ErrorDescriptor;
+use CoreX\Errors\Enums\CoreErrorCode;
+use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Errors\Exceptions\CodedException;
 
 #[Api(since: '1.0')]
-final class StorageCapabilityUnavailable extends RuntimeException {}
+final class StorageCapabilityUnavailable extends CodedException
+{
+    public function errorDescriptor(): ErrorDescriptor
+    {
+        return new ErrorDescriptor(CoreErrorCode::StorageCapabilityUnavailable, ErrorCategory::Unavailable, retryable: false);
+    }
+}

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use CoreX\Audit\Enums\ActorType;
 use CoreX\Errors\Data\ErrorDescriptor;
+use CoreX\Errors\Enums\CoreErrorCode;
 use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Observability\Data\OperationCompleted;
 use CoreX\Observability\Data\OperationContext;
@@ -34,11 +35,11 @@ it('keeps one context through start and fail', function (): void {
     $failed = new OperationFailed(
         context: $context,
         durationMilliseconds: 4,
-        error: new ErrorDescriptor(code: 'upstream_timeout', category: ErrorCategory::Unavailable, retryable: true),
+        error: new ErrorDescriptor(code: CoreErrorCode::StorageOperationFailed, category: ErrorCategory::Unavailable, retryable: true),
     );
 
     expect($started->context)->toBe($failed->context)
-        ->and($failed->error->code)->toBe('upstream_timeout')
+        ->and($failed->error->code)->toBe('core.storage_operation_failed')
         ->and($failed->durationMilliseconds)->toBe(4);
 });
 
@@ -73,7 +74,7 @@ it('logs exact static messages and keys', function (): void {
         context: $context,
         durationMilliseconds: 8,
         error: new ErrorDescriptor(
-            code: 'schema_conflict',
+            code: CoreErrorCode::DepartmentCycleException,
             category: ErrorCategory::Conflict,
             retryable: false,
             path: '/field/name',
@@ -129,7 +130,7 @@ it('omits canary secrets from failure logs', function (): void {
         context: operationContext(),
         durationMilliseconds: 1,
         error: new ErrorDescriptor(
-            code: 'internal_error',
+            code: CoreErrorCode::InternalError,
             category: ErrorCategory::Internal,
             retryable: false,
             path: '/job',
@@ -149,7 +150,7 @@ it('does not throw from the null observer or a failing logger', function (): voi
     $failed = new OperationFailed(
         context: $context,
         durationMilliseconds: 0,
-        error: new ErrorDescriptor(code: 'internal_error', category: ErrorCategory::Internal),
+        error: new ErrorDescriptor(code: CoreErrorCode::InternalError, category: ErrorCategory::Internal),
     );
 
     $null = new NullOperationObserver;

@@ -46,7 +46,8 @@
                 "CoreX\\Search\\Data\\SearchQuery",
                 "CoreX\\Search\\Data\\SearchSnapshot",
                 "CoreX\\Search\\SearchServiceProvider",
-                "CoreX\\Search\\Laravel\\SearchPortBindings"
+                "CoreX\\Search\\Laravel\\SearchPortBindings",
+                "CoreX\\Search\\Errors\\Enums\\SearchErrorCode"
             ]
         },
         "laravel": {

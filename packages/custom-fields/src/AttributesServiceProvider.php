@@ -13,6 +13,7 @@ use CoreX\CustomFields\Contracts\FieldCatalogue;
 use CoreX\CustomFields\Contracts\SchemaOperations;
 use CoreX\CustomFields\Data\AttributeStoragePolicy;
 use CoreX\CustomFields\Data\AttributeTables;
+use CoreX\CustomFields\Errors\Internal\PackageProblemDefinitions;
 use CoreX\CustomFields\Internal\Integration\AttributeMessageTranslator;
 use CoreX\CustomFields\Internal\Laravel\AttributeComposition;
 use CoreX\CustomFields\Internal\Laravel\AttributeCompositionRegistrar;
@@ -27,6 +28,7 @@ use CoreX\CustomFields\Internal\UnavailableAttributes;
 use CoreX\CustomFields\Internal\Values\EavAttributeStore;
 use CoreX\CustomFields\Internal\Values\JsonbAttributeStore;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Messaging\Contracts\Outbox;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
@@ -41,6 +43,8 @@ final class AttributesServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        ProblemDefinitions::register($this->app, __DIR__.'/../composer.json', PackageProblemDefinitions::class);
+
         $this->mergeConfigFrom(__DIR__.'/../config/corex-custom-fields.php', 'corex-custom-fields');
         (new AttributeMessagingRegistrar)->register($this->app);
         (new AttributeCompositionRegistrar)->register($this->app);

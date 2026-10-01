@@ -7,6 +7,7 @@ namespace CoreX\Notifications;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Notifications\Delivery\Contracts\RecipientResolver;
 use CoreX\Notifications\Delivery\Internal\ChannelDrivers;
 use CoreX\Notifications\Delivery\Internal\Commands\SweepNotificationDeliveries;
@@ -21,6 +22,7 @@ use CoreX\Notifications\Digest\Internal\DigestWakeupAdapter;
 use CoreX\Notifications\Digest\Internal\DigestWakeupHandler;
 use CoreX\Notifications\Digest\Internal\NotificationDigestDueSource;
 use CoreX\Notifications\Digest\Internal\SqlDigestBuilder;
+use CoreX\Notifications\Errors\Internal\PackageProblemDefinitions;
 use CoreX\Notifications\Inbox\Contracts\NotificationCenter;
 use CoreX\Notifications\Inbox\Contracts\NotificationPolicy;
 use CoreX\Notifications\Inbox\Internal\DenyNotificationPolicy;
@@ -39,6 +41,8 @@ final class NotificationsServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        ProblemDefinitions::register($this->app, __DIR__.'/../composer.json', PackageProblemDefinitions::class);
+
         DeliveryPortBindings::register($this->app);
 
         $this->mergeConfigFrom(__DIR__.'/../config/corex-notifications.php', 'corex-notifications');

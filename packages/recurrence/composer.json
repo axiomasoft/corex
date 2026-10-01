@@ -34,11 +34,18 @@
                 "CoreX\\Recurrence\\Contracts",
                 "CoreX\\Recurrence\\Data",
                 "CoreX\\Recurrence\\Exceptions",
-                "CoreX\\Recurrence\\Laravel\\RecurrenceFactory"
+                "CoreX\\Recurrence\\Laravel\\RecurrenceFactory",
+                "CoreX\\Recurrence\\Errors\\Enums\\RecurrenceErrorCode",
+                "CoreX\\Recurrence\\RecurrenceServiceProvider"
             ]
         },
         "branch-alias": {
             "dev-main": "1.0.x-dev"
+        },
+        "laravel": {
+            "providers": [
+                "CoreX\\Recurrence\\RecurrenceServiceProvider"
+            ]
         }
     },
     "repositories": []

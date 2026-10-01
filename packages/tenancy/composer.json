@@ -169,7 +169,8 @@
                 "CoreX\\Tenancy\\Workspace\\Contracts\\WorkspaceResolver",
                 "CoreX\\Tenancy\\Workspace\\Exceptions\\InvitationNotAcceptableException",
                 "CoreX\\Tenancy\\Workspace\\Exceptions\\NoDefaultWorkspaceException",
-                "CoreX\\Tenancy\\Laravel\\TenancyPortBindings"
+                "CoreX\\Tenancy\\Laravel\\TenancyPortBindings",
+                "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode"
             ]
         },
         "laravel": {

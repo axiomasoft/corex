@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Modules\Exceptions;
 
 use CoreX\Attributes\Api;
+use CoreX\Errors\Data\ErrorDescriptor;
+use CoreX\Errors\Enums\CoreErrorCode;
+use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Errors\Exceptions\CodedException;
 use CoreX\Modules\Contracts\ModuleLifecycle;
-use RuntimeException;
 use Throwable;
 
 /**
@@ -19,7 +22,7 @@ use Throwable;
  * a clean state.
  */
 #[Api(since: '1.0')]
-final class ModuleEnableFailedException extends RuntimeException
+final class ModuleEnableFailedException extends CodedException
 {
     public function __construct(string $module, Throwable $previous)
     {
@@ -27,5 +30,10 @@ final class ModuleEnableFailedException extends RuntimeException
             sprintf('Enabling module [%s] failed and was rolled back: %s', $module, $previous->getMessage()),
             previous: $previous,
         );
+    }
+
+    public function errorDescriptor(): ErrorDescriptor
+    {
+        return new ErrorDescriptor(CoreErrorCode::ModuleEnableFailedException, ErrorCategory::Internal, retryable: false);
     }
 }

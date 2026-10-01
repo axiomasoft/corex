@@ -104,10 +104,10 @@ it('declares and dispatches company, contact and association operations through 
         ->and($shownContact->getData(true)['data']['id'])->toBe($contactId);
     $forgedOwner = $dispatch('POST', 'companies', ['name' => 'Hidden', 'owner_id' => 'forged']);
     expect($forgedOwner->getStatusCode())->toBe(403)
-        ->and($forgedOwner->getData(true)['error']['code'])->toBe('forbidden');
+        ->and($forgedOwner->getData(true)['error']['code'])->toBe('operations.forbidden');
     $undeclared = $dispatch('POST', 'companies', ['name' => 'Hidden', 'actor' => 'forged']);
     expect($undeclared->getStatusCode())->toBe(422)
-        ->and($undeclared->getData(true)['error']['code'])->toBe('validation_failed');
+        ->and($undeclared->getData(true)['error']['code'])->toBe('operations.validation_failed');
 });
 
 it('normalizes CRM identifiers for the configured ID strategy', function (): void {

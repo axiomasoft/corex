@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace CoreX\TasksWorkflow\Exceptions;
 
 use CoreX\Attributes\Api;
-use RuntimeException;
+use CoreX\Errors\Data\ErrorDescriptor;
+use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Errors\Exceptions\CodedException;
+use CoreX\TasksWorkflow\Errors\Enums\TasksWorkflowErrorCode;
 
 #[Api(since: '1.0')]
-final class UnsupportedMaterialization extends RuntimeException
+final class UnsupportedMaterialization extends CodedException
 {
     public static function connection(string $message): self
     {
@@ -18,5 +21,10 @@ final class UnsupportedMaterialization extends RuntimeException
     public static function expansion(string $status): self
     {
         return new self("Recurrence expansion returned unsupported status [{$status}].");
+    }
+
+    public function errorDescriptor(): ErrorDescriptor
+    {
+        return new ErrorDescriptor(TasksWorkflowErrorCode::UnsupportedMaterialization, ErrorCategory::Unsupported, retryable: false);
     }
 }

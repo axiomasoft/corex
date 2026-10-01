@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Modules\Exceptions;
 
 use CoreX\Attributes\Api;
+use CoreX\Errors\Contracts\DescribesError;
+use CoreX\Errors\Data\ErrorDescriptor;
+use CoreX\Errors\Enums\CoreErrorCode;
+use CoreX\Errors\Enums\ErrorCategory;
 use LogicException;
 
 /**
@@ -14,7 +18,7 @@ use LogicException;
  * `enable` on the dead schema; `upgrade` requires `enabled`.
  */
 #[Api(since: '1.0')]
-final class InvalidStateTransitionException extends LogicException
+final class InvalidStateTransitionException extends LogicException implements DescribesError
 {
     public static function purgedIsTerminal(string $module): self
     {
@@ -32,5 +36,10 @@ final class InvalidStateTransitionException extends LogicException
             $module,
             $state,
         ));
+    }
+
+    public function errorDescriptor(): ErrorDescriptor
+    {
+        return new ErrorDescriptor(CoreErrorCode::InvalidStateTransitionException, ErrorCategory::Conflict, retryable: false);
     }
 }

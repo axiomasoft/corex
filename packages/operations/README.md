@@ -431,3 +431,10 @@ extends the same generator and manifest; planted topic/payload/PII/signature/id/
 changes must fail the compatibility gate. Current commands, input/snapshot/output hashes,
 all 16 threat-matrix rows, repaired failures and limits are recorded in the
 [P14 qualification receipt](../../plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P14-execution-validation.md).
+
+## Typed errors
+
+Package error identities use backed enums and a boot compiled kernel registry.
+Error constructors require `ErrorCode`; descriptors keep scoped string wire codes.
+See the monorepo [error contract](../../docs/reference/errors.md) for contributions,
+validated replay and safe mapping.

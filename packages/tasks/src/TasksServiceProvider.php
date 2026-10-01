@@ -6,12 +6,14 @@ namespace CoreX\Tasks;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
+use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
 use CoreX\Tasks\Access\Contracts\TaskMutationAccess;
 use CoreX\Tasks\Access\Contracts\TaskPlanningAccess;
 use CoreX\Tasks\Access\Internal\DenyTaskAccess;
 use CoreX\Tasks\Access\Internal\DenyTaskMutationAccess;
 use CoreX\Tasks\Access\Internal\DenyTaskPlanningAccess;
+use CoreX\Tasks\Errors\Internal\PackageProblemDefinitions;
 use CoreX\Tasks\Planning\Contracts\TaskPlanningCommand;
 use CoreX\Tasks\Planning\Internal\PlanningOperationsServiceProvider;
 use CoreX\Tasks\Planning\Laravel\PlanningCommand;
@@ -36,6 +38,8 @@ final class TasksServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
+        ProblemDefinitions::register($this->app, __DIR__.'/../composer.json', PackageProblemDefinitions::class);
+
         TaskPortBindings::register($this->app);
 
         $this->app->bind(CreateTaskCommand::class, CreateTask::class);

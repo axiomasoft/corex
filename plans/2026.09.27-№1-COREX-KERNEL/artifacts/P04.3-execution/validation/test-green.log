@@ -1,0 +1,3 @@
+> bash scripts/run-root-tests.sh 
+{"tool":"pest","result":"failed","tests":877,"passed":876,"assertions":3735,"duration_ms":35220,"failed":1,"failures":[{"test":"P\\Tests\\Arch\\PackageGraphTest::__pest_evaluable_package_graph_gate_reports_no_violations","file":"/home/vostrikov/projects/packages/corex/tests/Arch/PackageGraphTest.php","line":15,"message":"Failed asserting that 1 is identical to 0."}]}
+Script bash scripts/run-root-tests.sh @additional_args handling the test event returned with error code 1

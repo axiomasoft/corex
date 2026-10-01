@@ -11,6 +11,7 @@ use CoreX\Operations\Cost\Data\CostInput;
 use CoreX\Operations\Cost\Data\EstimatedCost;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Enums\OperationMode;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 
@@ -66,7 +67,7 @@ final readonly class DeclaredCostEstimator implements OperationCostEstimator
         $exportRows = $input->exportRows;
 
         if ($exportRows === 0 && $recipe['row'] > 0 && in_array($operation->mode, [OperationMode::BulkQuery, OperationMode::BulkCommand], true) && $pageRows === 0) {
-            throw new ApiError('validation_failed', 422, 'Export requires a bounded row count.');
+            throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'Export requires a bounded row count.');
         }
 
         $units = $recipe['base'];
@@ -78,7 +79,7 @@ final readonly class DeclaredCostEstimator implements OperationCostEstimator
         $units = $this->add($units, $this->multiply($recipe['side_effect'], $input->sideEffects));
 
         if ($units > $recipe['max_units']) {
-            throw new ApiError('validation_failed', 422, 'Operation cost exceeds the declared maximum.');
+            throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'Operation cost exceeds the declared maximum.');
         }
 
         return $units;
@@ -100,7 +101,7 @@ final readonly class DeclaredCostEstimator implements OperationCostEstimator
     private function add(int $left, int $right): int
     {
         if ($right > 0 && $left > PHP_INT_MAX - $right) {
-            throw new ApiError('validation_failed', 422, 'Operation cost overflow.');
+            throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'Operation cost overflow.');
         }
 
         return $left + $right;
@@ -113,7 +114,7 @@ final readonly class DeclaredCostEstimator implements OperationCostEstimator
         }
 
         if ($right > 0 && $left > intdiv(PHP_INT_MAX, $right)) {
-            throw new ApiError('validation_failed', 422, 'Operation cost overflow.');
+            throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'Operation cost overflow.');
         }
 
         return $left * $right;

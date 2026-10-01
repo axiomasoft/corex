@@ -57,7 +57,7 @@ if ($fixture !== null) {
     $composer = json_decode((string) file_get_contents($package.'/composer.json'), true);
     $public = $composer['extra']['corex']['public-api'] ?? null;
 
-    if ($public !== ['CoreX\\CustomFields\\Contracts', 'CoreX\\CustomFields\\Data', 'CoreX\\CustomFields\\Exceptions']) {
+    if ($public !== ['CoreX\\CustomFields\\Contracts', 'CoreX\\CustomFields\\Data', 'CoreX\\CustomFields\\Exceptions', 'CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode']) {
         $violations[] = 'A0 public-api roots changed';
     }
 

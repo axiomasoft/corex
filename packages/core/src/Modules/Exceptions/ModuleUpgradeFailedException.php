@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Modules\Exceptions;
 
 use CoreX\Attributes\Api;
+use CoreX\Errors\Data\ErrorDescriptor;
+use CoreX\Errors\Enums\CoreErrorCode;
+use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Errors\Exceptions\CodedException;
 use CoreX\Modules\Contracts\ModuleLifecycle;
-use RuntimeException;
 use Throwable;
 
 /**
@@ -21,7 +24,7 @@ use Throwable;
  * on-disk schema.
  */
 #[Api(since: '1.0')]
-final class ModuleUpgradeFailedException extends RuntimeException
+final class ModuleUpgradeFailedException extends CodedException
 {
     public function __construct(string $module, Throwable $previous)
     {
@@ -29,5 +32,10 @@ final class ModuleUpgradeFailedException extends RuntimeException
             sprintf('Upgrading module [%s] failed and was rolled back: %s', $module, $previous->getMessage()),
             previous: $previous,
         );
+    }
+
+    public function errorDescriptor(): ErrorDescriptor
+    {
+        return new ErrorDescriptor(CoreErrorCode::ModuleUpgradeFailedException, ErrorCategory::Internal, retryable: false);
     }
 }

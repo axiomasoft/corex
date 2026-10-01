@@ -8,12 +8,14 @@ use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Recurrence\Contracts\RecurrenceExpander;
 use CoreX\Recurrence\Laravel\RecurrenceFactory;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
 use CoreX\Tasks\Planning\Contracts\TaskOperationReceipts;
 use CoreX\Tasks\Task\Contracts\CreateTaskCommand;
 use CoreX\TasksWorkflow\Contracts\TaskRecurrenceCommand;
+use CoreX\TasksWorkflow\Errors\Internal\PackageProblemDefinitions;
 use CoreX\TasksWorkflow\Internal\SqlTaskRecurrenceMaterializer;
 use CoreX\TasksWorkflow\Laravel\CompletionBindings;
 use Illuminate\Contracts\Foundation\Application;
@@ -26,6 +28,8 @@ final class TasksWorkflowServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        ProblemDefinitions::register($this->app, __DIR__.'/../composer.json', PackageProblemDefinitions::class);
+
         $this->mergeConfigFrom(__DIR__.'/../config/corex-tasks-workflow.php', 'corex-tasks-workflow');
 
         $this->app->singleton(RecurrenceExpander::class, static fn (): RecurrenceExpander => RecurrenceFactory::create());

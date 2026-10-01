@@ -7,7 +7,9 @@ namespace CoreX\Tenancy;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Config\Contracts\ConfigReportSection;
+use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Modules\Contracts\PackageRegistrar;
+use CoreX\Tenancy\Errors\Internal\PackageProblemDefinitions;
 use CoreX\Tenancy\Laravel\AuthenticationRegistrar;
 use CoreX\Tenancy\Laravel\ConsoleRegistrar;
 use CoreX\Tenancy\Laravel\DatabaseRegistrar;
@@ -32,6 +34,8 @@ final class TenancyServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        ProblemDefinitions::register($this->app, __DIR__.'/../composer.json', PackageProblemDefinitions::class);
+
         TenancyPortBindings::register($this->app);
 
         $this->app->tag([TenancyConfigSection::class], ConfigReportSection::class);

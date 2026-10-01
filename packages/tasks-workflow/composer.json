@@ -47,7 +47,8 @@
                 "CoreX\\TasksWorkflow\\Data",
                 "CoreX\\TasksWorkflow\\Exceptions",
                 "CoreX\\TasksWorkflow\\TasksWorkflowServiceProvider",
-                "CoreX\\TasksWorkflow\\Laravel\\CompletionBindings"
+                "CoreX\\TasksWorkflow\\Laravel\\CompletionBindings",
+                "CoreX\\TasksWorkflow\\Errors\\Enums\\TasksWorkflowErrorCode"
             ]
         },
         "laravel": {

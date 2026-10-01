@@ -79,3 +79,10 @@ receipt без повторов и пропускает отключённую �
 
 `TaskOperationReceipt::resultRef` содержит `JsonDocument`; JSON-представление
 результата восстанавливает `JsonDocuments::map()`.
+
+## Typed errors
+
+Package error identities use backed enums and a boot compiled kernel registry.
+Error constructors require `ErrorCode`; descriptors keep scoped string wire codes.
+See the monorepo [error contract](../../docs/reference/errors.md) for contributions,
+validated replay and safe mapping.

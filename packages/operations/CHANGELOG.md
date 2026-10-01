@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — typed error contract (P04.3)
+
+- Added package owned error enums, definitions and safe coded exception descriptors.
+- Error constructors require enum identities; existing error wire values are scoped.
+- Contributions are validated and frozen at boot; persisted identities use validated lookup.
+
 ## Unreleased — P04.2
 
 - Публичные JSON-поля операций и результатов закрыты JsonDocument; интеграционные парсеры отделены от неизменяемых DTO.

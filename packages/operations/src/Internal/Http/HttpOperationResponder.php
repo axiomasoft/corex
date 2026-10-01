@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Internal\Http;
 
+use CoreX\Errors\Enums\CoreErrorCode;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Enums\OperationMode;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -55,7 +57,7 @@ final class HttpOperationResponder
         $statusUrl = is_array($data) ? ($data['status_url'] ?? null) : null;
 
         if (! is_string($operationId) || $operationId === '' || ! is_string($statusUrl) || preg_match('#\A(?:https://\S+|/[^\s]*)\z#', $statusUrl) !== 1) {
-            throw new ApiError('invalid_request', 422, 'Async acceptance is incomplete.');
+            throw new ApiError(OperationsErrorCode::InvalidRequest, 422, 'Async acceptance is incomplete.');
         }
 
         return $statusUrl;
@@ -66,7 +68,7 @@ final class HttpOperationResponder
         $parsed = DateTimeImmutable::createFromFormat('!Y-m-d', $day, new DateTimeZone('UTC'));
 
         if ($parsed === false || $parsed->format('Y-m-d') !== $day) {
-            throw new ApiError('internal_error', 500, 'Operation could not be completed.');
+            throw new ApiError(CoreErrorCode::InternalError, 500, 'Operation could not be completed.');
         }
 
         return $parsed->format('D, d M Y H:i:s').' GMT';

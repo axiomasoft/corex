@@ -101,7 +101,7 @@ final class WebhookManagementTest extends TestCase
                 $this->management->deliveries($scope, $client, $filters, $first['next'], 1);
                 self::fail('A cursor escaped its declared client/filter scope.');
             } catch (ApiError $error) {
-                self::assertSame('cursor_invalid', $error->errorCode);
+                self::assertSame('operations.cursor_invalid', $error->errorCode);
             }
         }
 
@@ -111,7 +111,7 @@ final class WebhookManagementTest extends TestCase
             $this->management->deliveries($this->scope('account-b'), 'client-a', ['status' => 'dead'], $first['next'], 1);
             self::fail('A cursor escaped its tenant scope.');
         } catch (ApiError $error) {
-            self::assertSame('cursor_invalid', $error->errorCode);
+            self::assertSame('operations.cursor_invalid', $error->errorCode);
         }
     }
 
@@ -196,7 +196,7 @@ final class WebhookManagementTest extends TestCase
                 WebhookRouteRegistrar::assertOperationContract($invalid);
                 self::fail('Unsafe webhook operation metadata was accepted.');
             } catch (ApiError $error) {
-                self::assertSame('internal_error', $error->errorCode);
+                self::assertSame('core.internal_error', $error->errorCode);
             }
         }
     }

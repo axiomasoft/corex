@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace CoreX\Tools\Tests\Feature;
 
 use CoreX\Context\Data\AccountRef;
+use CoreX\CoreServiceProvider;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Data\Api;
 use CoreX\Modules\Data\ModuleManifest;
 use CoreX\Modules\Internal\Compiler\RegistryCompiler;
+use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Operations\ApiServiceProvider;
 use CoreX\Operations\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
@@ -35,7 +37,7 @@ final class ToolGuardConcurrencyTest extends TestCase
 {
     protected function getPackageProviders($app): array
     {
-        return [ApiServiceProvider::class, ToolServiceProvider::class];
+        return [ApiServiceProvider::class, ToolServiceProvider::class, CoreServiceProvider::class, ModulesServiceProvider::class];
     }
 
     protected function setUp(): void

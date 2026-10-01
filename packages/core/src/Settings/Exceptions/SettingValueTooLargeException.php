@@ -5,13 +5,16 @@ declare(strict_types=1);
 namespace CoreX\Settings\Exceptions;
 
 use CoreX\Attributes\Api;
-use RuntimeException;
+use CoreX\Errors\Data\ErrorDescriptor;
+use CoreX\Errors\Enums\CoreErrorCode;
+use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Errors\Exceptions\CodedException;
 
 /**
  * Quota: `sys_settings.value` ≤ 64 KB encoded.
  */
 #[Api(since: '1.0')]
-final class SettingValueTooLargeException extends RuntimeException
+final class SettingValueTooLargeException extends CodedException
 {
     public function __construct(string $namespace, string $key, int $bytes, int $limit)
     {
@@ -22,5 +25,10 @@ final class SettingValueTooLargeException extends RuntimeException
             $bytes,
             $limit,
         ));
+    }
+
+    public function errorDescriptor(): ErrorDescriptor
+    {
+        return new ErrorDescriptor(CoreErrorCode::SettingValueTooLargeException, ErrorCategory::Validation, retryable: false);
     }
 }

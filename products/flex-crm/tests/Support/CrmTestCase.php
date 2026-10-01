@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Flex\Crm\Tests\Support;
 
 use CoreX\CoreServiceProvider;
+use CoreX\Intl\IntlServiceProvider;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Operations\ApiServiceProvider;
 use Flex\Crm\CrmServiceProvider;
@@ -33,6 +34,7 @@ abstract class CrmTestCase extends Orchestra
             CoreServiceProvider::class,
             ModulesServiceProvider::class,
             ApiServiceProvider::class,
+            IntlServiceProvider::class,
             CrmServiceProvider::class,
         ];
     }

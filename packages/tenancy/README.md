@@ -52,3 +52,10 @@ Applications supply the exported workspace resolution, domain trust/authorizatio
 ## Failure semantics
 
 An untrusted or incomplete tenant context must not select an account database. Template provisioning refuses missing/mismatched hashes, manifests and signatures. A failed provisioning claim requires reconciliation of durable state before retry; optional advisory wakeup hints never authorize a connection switch.
+
+## Typed errors
+
+Package error identities use backed enums and a boot compiled kernel registry.
+Error constructors require `ErrorCode`; descriptors keep scoped string wire codes.
+See the monorepo [error contract](../../docs/reference/errors.md) for contributions,
+validated replay and safe mapping.

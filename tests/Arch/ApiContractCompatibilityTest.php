@@ -48,7 +48,7 @@ test('api contract gate rejects each forbidden intra-major delta', function (str
     'type change' => ['type-change', 'type-change', '/operations/notes.read/response_schema/properties/title/type'],
     'nullability change' => ['nullability-change', 'nullability-change', '/operations/notes.read/response_schema/properties/status/nullable'],
     'enum removal' => ['enum-removal', 'enum-removal', '/operations/notes.read/response_schema/properties/status/enum'],
-    'error contract drift' => ['error-contract-drift', 'error-contract-drift', '/errors/axiomasoft~1corex-operations/access_denied/retryable'],
+    'error contract drift' => ['error-contract-drift', 'error-contract-drift', '/errors/axiomasoft~1corex-operations/operations.access_denied/retryable'],
     'pagination reinterpretation' => ['pagination-reinterpretation', 'pagination-reinterpretation', '/operations/notes.list/pagination/ordering'],
     'topic removal' => ['topic-removal', 'topic-removal', '/topics/orders.placed.v1', 'webhook-baseline'],
     'required payload addition' => ['required-payload-addition', 'required-input-addition', '/topics/orders.placed.v1/payload/required', 'webhook-baseline'],

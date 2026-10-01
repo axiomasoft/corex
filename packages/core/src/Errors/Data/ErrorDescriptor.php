@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Errors\Data;
 
 use CoreX\Attributes\Api;
+use CoreX\Errors\Contracts\ErrorCode;
 use CoreX\Errors\Enums\ErrorCategory;
 use InvalidArgumentException;
 
@@ -15,6 +16,10 @@ use InvalidArgumentException;
 #[Api(since: '1.0')]
 final readonly class ErrorDescriptor
 {
+    public string $code;
+
+    public ErrorCode $errorCode;
+
     public const int MAX_CODE_BYTES = 120;
 
     public const int MAX_DETAIL_BYTES = 4096;
@@ -23,13 +28,16 @@ final readonly class ErrorDescriptor
      * @param  array<string, scalar|list<scalar|null>|null>  $details
      */
     public function __construct(
-        public string $code,
+        ErrorCode $code,
         public ErrorCategory $category,
         public bool $retryable = false,
         public ?string $path = null,
         public array $details = [],
     ) {
-        if (preg_match('/\A[a-z][a-z0-9]*(?:_[a-z0-9]+)*\z/D', $code) !== 1 || strlen($code) > self::MAX_CODE_BYTES) {
+        $this->errorCode = $code;
+        $this->code = $code->value();
+
+        if (preg_match('/\A(?:core|[a-z][a-z0-9]*(?:-[a-z0-9]+)*)\.[a-z][a-z0-9]*(?:_[a-z0-9]+)*\z/D', $this->code) !== 1 || strlen($this->code) > self::MAX_CODE_BYTES) {
             throw new InvalidArgumentException('Error code is invalid.');
         }
 

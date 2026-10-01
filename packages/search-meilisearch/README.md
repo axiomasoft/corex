@@ -15,3 +15,10 @@ Use the public search provider/driver boundary of `axiomasoft/corex-search` to s
 ## Failure semantics
 
 An asynchronous task receipt is acceptance, not completed indexing. Reconcile completion or failure before advancing the durable search lane. Missing endpoint/key/index configuration and transport failures must not be converted into an empty successful search or a completed swap.
+
+## Typed errors
+
+Package error identities use backed enums and a boot compiled kernel registry.
+Error constructors require `ErrorCode`; descriptors keep scoped string wire codes.
+See the monorepo [error contract](../../docs/reference/errors.md) for contributions,
+validated replay and safe mapping.

@@ -20,10 +20,10 @@ use Orchestra\Testbench\TestCase;
 uses(TestCase::class);
 
 it('projects tool identity without leaking its handler into introspection', function (): void {
-    $this->app->register(CoreServiceProvider::class);
-    $this->app->register(ModulesServiceProvider::class);
     $this->app->register(ApiServiceProvider::class);
     $this->app->register(ToolServiceProvider::class);
+    $this->app->register(CoreServiceProvider::class);
+    $this->app->register(ModulesServiceProvider::class);
     $manifest = ModuleManifest::make('example/tools')->title('Tools')->tablePrefix('tls')->extends([
         Api::tool('demo.read', StubOperationHandler::class, 'demo.read', ['type' => 'object'], ['type' => 'object'], 'read', 'read-only'),
     ]);

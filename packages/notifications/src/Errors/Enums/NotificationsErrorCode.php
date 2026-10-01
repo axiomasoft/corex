@@ -1,0 +1,20 @@
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Notifications\Errors\Enums;
+
+use CoreX\Attributes\Api;
+use CoreX\Errors\Contracts\ErrorCode;
+
+#[Api(since: '1.0')]
+enum NotificationsErrorCode: string implements ErrorCode
+{
+    case NotificationAccessDenied = 'notifications.notification_access_denied';
+    case NotificationOperationConflict = 'notifications.notification_operation_conflict';
+
+    public function value(): string
+    {
+        return $this->value;
+    }
+}

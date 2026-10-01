@@ -11,12 +11,15 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Errors\Contracts\ProblemRegistry;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Enums\MessageClass;
 use CoreX\Messaging\Enums\PiiClass;
 use CoreX\Messaging\Testing\MessagingFixtures;
 use CoreX\Operations\Errors\Exceptions\ApiError;
+use CoreX\Operations\Errors\Internal\ErrorMapper;
+use CoreX\Operations\Idempotency\Data\StoredOperationOutcome;
 use CoreX\Operations\Laravel\ApiSchemaRegistrar;
 use CoreX\Operations\Pagination\Contracts\CursorKeyring;
 use CoreX\Operations\Pagination\Internal\SignedCursorCodec;
@@ -102,7 +105,7 @@ final class WebhookReplayTest extends TestCase
                 $this->replay->one($this->scope, 'delivery-success', $explicit, $reason);
                 self::fail('Succeeded replay bypassed confirmation or audit reason.');
             } catch (ApiError $error) {
-                self::assertSame('validation_failed', $error->errorCode);
+                self::assertSame('operations.validation_failed', $error->errorCode);
             }
         }
 
@@ -120,23 +123,23 @@ final class WebhookReplayTest extends TestCase
     {
         $this->seedSubscription('subscription-active');
         $this->seedDelivery('delivery-active', 'subscription-active', 'sending', leaseOwner: 'worker-a');
-        $this->assertReplayError('delivery-active', 'conflict');
+        $this->assertReplayError('delivery-active', 'operations.conflict');
 
         $this->seedSubscription('subscription-disabled', status: 'disabled');
         $this->seedDelivery('delivery-disabled', 'subscription-disabled', 'dead');
-        $this->assertReplayError('delivery-disabled', 'webhook_endpoint_changed');
+        $this->assertReplayError('delivery-disabled', 'webhooks.webhook_endpoint_changed');
 
         $this->seedSubscription('subscription-revised', revision: 1);
         $this->seedDelivery('delivery-revised', 'subscription-revised', 'dead', subscriptionRevision: 0);
-        $this->assertReplayError('delivery-revised', 'webhook_endpoint_changed');
+        $this->assertReplayError('delivery-revised', 'webhooks.webhook_endpoint_changed');
 
         $this->seedSubscription('subscription-expired');
         $this->seedDelivery('delivery-expired', 'subscription-expired', 'dead', expiresAt: $this->clock->now());
-        $this->assertReplayError('delivery-expired', 'webhook_replay_expired');
+        $this->assertReplayError('delivery-expired', 'webhooks.webhook_replay_expired');
 
         $this->seedSubscription('subscription-cap');
         $this->seedDelivery('delivery-cap', 'subscription-cap', 'dead', replayCount: 3);
-        $this->assertReplayError('delivery-cap', 'conflict');
+        $this->assertReplayError('delivery-cap', 'operations.conflict');
 
         $this->seedSubscription('subscription-topic');
         $this->seedDelivery('delivery-topic', 'subscription-topic', 'dead');
@@ -153,7 +156,7 @@ final class WebhookReplayTest extends TestCase
             $withoutTopic->one($this->scope, 'delivery-topic', false, null);
             self::fail('Removed topic replay was admitted.');
         } catch (ApiError $error) {
-            self::assertSame('conflict', $error->errorCode);
+            self::assertSame('operations.conflict', $error->errorCode);
         }
     }
 
@@ -191,7 +194,7 @@ final class WebhookReplayTest extends TestCase
                 $this->replay->range($this->scope, 'client-a', 'subscription-range', $start, $end, $max, null, 'range incident');
                 self::fail('An unbounded replay range was admitted.');
             } catch (ApiError $error) {
-                self::assertSame('validation_failed', $error->errorCode);
+                self::assertSame('operations.validation_failed', $error->errorCode);
             }
         }
     }
@@ -258,6 +261,12 @@ final class WebhookReplayTest extends TestCase
             self::fail("Replay [{$delivery}] unexpectedly succeeded.");
         } catch (ApiError $error) {
             self::assertSame($code, $error->errorCode);
+            $problems = app(ProblemRegistry::class);
+            self::assertSame($error, (new ErrorMapper($problems))->map($error, reportUnexpected: false));
+            $restored = StoredOperationOutcome::fromCanonicalJson(StoredOperationOutcome::failure($error)->canonicalJson(), $problems)->error($problems);
+            self::assertSame($error->status, $restored->status);
+            self::assertSame($error->category, $restored->category);
+            self::assertSame($code, $restored->errorCode);
         }
     }
 

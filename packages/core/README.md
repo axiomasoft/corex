@@ -110,3 +110,10 @@ $value = JsonDocuments::map($document);
 `SettingsRepository::get()`/`FeatureFlags::value()` возвращают JSON-документ;
 `SettingsRepository::set()` принимает его. `CoreOptions` — неизменяемый снимок
 текущей конфигурации: новое разрешение из контейнера видит её актуальное состояние.
+
+## Typed errors
+
+Package error identities use backed enums and a boot compiled kernel registry.
+Error constructors require `ErrorCode`; descriptors keep scoped string wire codes.
+See the monorepo [error contract](../../docs/reference/errors.md) for contributions,
+validated replay and safe mapping.

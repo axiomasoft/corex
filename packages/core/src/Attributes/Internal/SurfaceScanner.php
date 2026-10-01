@@ -954,7 +954,7 @@ final class SurfaceScanner
                 $this->error($origin, 'API-INTERNAL-TYPE', $next, $targetName, $reference['line']);
             }
 
-            if (in_array($targetName, ['stdClass', 'DateTime', 'DateTimeInterface'], true) || ($target !== null && $target->owner === '@vendor' && ! $target->node instanceof Node\Stmt\Enum_ && ! str_contains($reference['path'], '@throws')) || $this->isModelOrCollection($targetName, []) || ($target !== null && $target->node instanceof Node\Stmt\Class_ && $target->node->getProperties() !== [] && (! $target->node->isFinal() || ! $target->node->isReadonly()))) {
+            if (in_array($targetName, ['stdClass', 'DateTime', 'DateTimeInterface'], true) || ($target !== null && $target->owner === '@vendor' && ! $target->node instanceof Node\Stmt\Enum_ && ! str_contains($reference['path'], '@throws')) || $this->isModelOrCollection($targetName, []) || ($target !== null && $target->node instanceof Node\Stmt\Class_ && ! $this->isThrowable($targetName, []) && $target->node->getProperties() !== [] && (! $target->node->isFinal() || ! $target->node->isReadonly()))) {
                 $this->error($origin, 'API-PAYLOAD', $next, 'Model, collection or mutable object payload: '.$targetName, $reference['line']);
             }
 

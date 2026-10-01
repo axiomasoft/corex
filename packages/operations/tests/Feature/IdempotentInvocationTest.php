@@ -8,12 +8,14 @@ use Closure;
 use CoreX\Config\Data\SecretRef;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Errors\Contracts\ProblemRegistry;
 use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\ReplayAuthorizer;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Enums\OperationMode;
 use CoreX\Operations\Definition\Laravel\OperationFingerprint;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Errors\Internal\ErrorMapper;
 use CoreX\Operations\Idempotency\Contracts\IdempotencyStore;
@@ -118,7 +120,7 @@ final class IdempotentInvocationTest extends TestCase
             $invoker->invoke($tool);
             self::fail('Current authorization denial did not override the stored success.');
         } catch (ApiError $error) {
-            self::assertSame('forbidden', $error->errorCode);
+            self::assertSame('operations.forbidden', $error->errorCode);
         }
 
         self::assertSame(1, $this->inner->calls);
@@ -128,16 +130,16 @@ final class IdempotentInvocationTest extends TestCase
     {
         $invoker = $this->invoker();
 
-        $this->expectApiError('idempotency_key_required', fn () => $invoker->invoke($this->invocation(key: null)));
-        $this->expectApiError('idempotency_key_forbidden', fn () => $invoker->invoke($this->invocation(
+        $this->expectApiError('operations.idempotency_key_required', fn () => $invoker->invoke($this->invocation(key: null)));
+        $this->expectApiError('operations.idempotency_key_forbidden', fn () => $invoker->invoke($this->invocation(
             operation: $this->operation(idempotency: IdempotencyRequirement::Forbidden, effectMode: null),
         )));
 
         $invoker->invoke($this->invocation(input: ['name' => 'alpha']));
-        $this->expectApiError('idempotency_conflict', fn () => $invoker->invoke($this->invocation(input: ['name' => 'beta'])));
+        $this->expectApiError('operations.idempotency_conflict', fn () => $invoker->invoke($this->invocation(input: ['name' => 'beta'])));
 
         $changedContract = $this->operation(contractHash: hash('sha256', 'changed-contract'));
-        $this->expectApiError('idempotency_contract_mismatch', fn () => $invoker->invoke($this->invocation(operation: $changedContract, input: ['name' => 'alpha'])));
+        $this->expectApiError('operations.idempotency_contract_mismatch', fn () => $invoker->invoke($this->invocation(operation: $changedContract, input: ['name' => 'alpha'])));
 
         $pending = $this->invocation(key: 'pending-key');
         $this->connection->transaction(fn (): IdempotencyAttempt => $this->store->begin(
@@ -146,7 +148,7 @@ final class IdempotentInvocationTest extends TestCase
             OperationFingerprint::request($pending),
             $pending->operation->contractHash,
         ));
-        $this->expectApiError('idempotency_in_progress', fn () => $invoker->invoke($pending));
+        $this->expectApiError('operations.idempotency_in_progress', fn () => $invoker->invoke($pending));
 
         self::assertSame(1, $this->inner->calls);
     }
@@ -156,17 +158,17 @@ final class IdempotentInvocationTest extends TestCase
         $store = new CountingStore($this->store);
         $invoker = $this->invoker($store);
         $this->operationAuthorizer->allow = false;
-        $this->expectApiError('forbidden', fn () => $invoker->invoke($this->invocation(key: 'auth-key')));
+        $this->expectApiError('operations.forbidden', fn () => $invoker->invoke($this->invocation(key: 'auth-key')));
         self::assertSame(0, $store->beginCalls);
         self::assertSame(0, $this->inner->calls);
         self::assertSame(0, $this->connection->table('sys_api_idempotency')->count());
 
         $this->operationAuthorizer->allow = true;
         $this->inner->mode = 'internal';
-        $this->expectApiError('internal_error', fn () => $invoker->invoke($this->invocation(key: 'failure-key')));
+        $this->expectApiError('core.internal_error', fn () => $invoker->invoke($this->invocation(key: 'failure-key')));
         self::assertSame('failed', $this->connection->table('sys_api_idempotency')->value('state'));
 
-        $this->expectApiError('internal_error', fn () => $invoker->invoke($this->invocation(key: 'failure-key')));
+        $this->expectApiError('core.internal_error', fn () => $invoker->invoke($this->invocation(key: 'failure-key')));
         self::assertSame(1, $this->inner->calls);
     }
 
@@ -175,7 +177,7 @@ final class IdempotentInvocationTest extends TestCase
         $store = new FailingCompleteStore($this->store);
         $invoker = $this->invoker($store);
 
-        $this->expectApiError('internal_error', fn () => $invoker->invoke($this->invocation(key: 'rollback-key')));
+        $this->expectApiError('core.internal_error', fn () => $invoker->invoke($this->invocation(key: 'rollback-key')));
         self::assertSame(0, $this->connection->table('idempotent_effects')->count());
         self::assertSame(0, $this->connection->table('sys_api_idempotency')->count());
 
@@ -194,7 +196,7 @@ final class IdempotentInvocationTest extends TestCase
         $invoker = $this->invoker($store, $connection, $inner);
         $connection->failAfterCommit = true;
 
-        $this->expectApiError('reconciliation_required', fn () => $invoker->invoke($this->invocation(key: 'ambiguous-key')));
+        $this->expectApiError('operations.reconciliation_required', fn () => $invoker->invoke($this->invocation(key: 'ambiguous-key')));
         self::assertSame(1, $connection->table('idempotent_effects')->count());
 
         $replay = $invoker->invoke($this->invocation(key: 'ambiguous-key'));
@@ -216,7 +218,8 @@ final class IdempotentInvocationTest extends TestCase
             modules: $this->modules,
             authorizer: $this->operationAuthorizer,
             replayAuthorizer: $this->authorizer,
-            errors: new ErrorMapper,
+            errors: new ErrorMapper(app(ProblemRegistry::class)),
+            problems: app(ProblemRegistry::class),
         );
     }
 
@@ -306,7 +309,7 @@ final class EffectInvokerFixture implements OperationInvoker
         $this->calls++;
 
         if ($this->mode === 'forbidden') {
-            throw new ApiError('forbidden', 403, 'Operation is not permitted.');
+            throw new ApiError(OperationsErrorCode::Forbidden, 403, 'Operation is not permitted.');
         }
 
         if ($this->mode === 'internal') {
@@ -331,7 +334,7 @@ final class ReplayAuthorizerFixture implements ReplayAuthorizer
         bool $replayed,
     ): StoredOperationOutcome {
         if ($this->deny) {
-            throw new ApiError('forbidden', 403, 'Operation is not permitted.');
+            throw new ApiError(OperationsErrorCode::Forbidden, 403, 'Operation is not permitted.');
         }
 
         if ($this->removeSecret && $outcome->kind === 'success') {

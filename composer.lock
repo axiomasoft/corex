@@ -146,7 +146,19 @@
                         "CoreX\\Storage\\Laravel\\ScopedFilesystemFactory",
                         "CoreX\\Time\\Laravel\\LaravelClock",
                         "CoreX\\Time\\Laravel\\SystemClock",
-                        "CoreX\\Time\\Testing\\FrozenClock"
+                        "CoreX\\Time\\Testing\\FrozenClock",
+                        "CoreX\\Errors\\Contracts\\DescribesError",
+                        "CoreX\\Errors\\Contracts\\ErrorCode",
+                        "CoreX\\Errors\\Contracts\\ProblemDefinitionProvider",
+                        "CoreX\\Errors\\Contracts\\ProblemRegistry",
+                        "CoreX\\Errors\\Data\\ErrorDescriptor",
+                        "CoreX\\Errors\\Data\\ProblemDefinition",
+                        "CoreX\\Errors\\Enums\\CoreErrorCode",
+                        "CoreX\\Errors\\Enums\\ErrorCategory",
+                        "CoreX\\Errors\\Enums\\UnavailabilityReason",
+                        "CoreX\\Errors\\Exceptions\\CodedException",
+                        "CoreX\\Errors\\Exceptions\\ProblemRegistryException",
+                        "CoreX\\Errors\\Laravel\\ProblemDefinitions"
                     ]
                 },
                 "laravel": {
@@ -252,7 +264,8 @@
                     "public-api": [
                         "CoreX\\CustomFields\\Contracts",
                         "CoreX\\CustomFields\\Data",
-                        "CoreX\\CustomFields\\Exceptions"
+                        "CoreX\\CustomFields\\Exceptions",
+                        "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode"
                     ]
                 },
                 "laravel": {
@@ -358,7 +371,8 @@
                         "CoreX\\Intl\\IntlModule",
                         "CoreX\\Intl\\IntlServiceProvider",
                         "CoreX\\Intl\\Money\\Laravel\\MoneyCast",
-                        "CoreX\\Intl\\Locale\\Laravel\\LocalePortBindings"
+                        "CoreX\\Intl\\Locale\\Laravel\\LocalePortBindings",
+                        "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode"
                     ]
                 },
                 "laravel": {
@@ -532,7 +546,8 @@
                         "CoreX\\Notifications\\Inbox\\Exceptions\\NotificationOperationConflict",
                         "CoreX\\Notifications\\NotificationsModule",
                         "CoreX\\Notifications\\NotificationsServiceProvider",
-                        "CoreX\\Notifications\\Delivery\\Laravel\\DeliveryPortBindings"
+                        "CoreX\\Notifications\\Delivery\\Laravel\\DeliveryPortBindings",
+                        "CoreX\\Notifications\\Errors\\Enums\\NotificationsErrorCode"
                     ]
                 },
                 "laravel": {
@@ -679,7 +694,10 @@
                         "CoreX\\Operations\\Validation\\Laravel\\SchemaBudget",
                         "CoreX\\Operations\\Validation\\Laravel\\SchemaProfile",
                         "CoreX\\Operations\\Versioning\\Contracts\\ApiProfiles",
-                        "CoreX\\Operations\\Definition\\Laravel\\OperationPortBindings"
+                        "CoreX\\Operations\\Definition\\Laravel\\OperationPortBindings",
+                        "CoreX\\Operations\\Errors\\Contracts\\ErrorMapping",
+                        "CoreX\\Operations\\Errors\\Contracts\\ResponseSerializer",
+                        "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode"
                     ]
                 },
                 "branch-alias": {
@@ -834,11 +852,18 @@
                         "CoreX\\Recurrence\\Contracts",
                         "CoreX\\Recurrence\\Data",
                         "CoreX\\Recurrence\\Exceptions",
-                        "CoreX\\Recurrence\\Laravel\\RecurrenceFactory"
+                        "CoreX\\Recurrence\\Laravel\\RecurrenceFactory",
+                        "CoreX\\Recurrence\\Errors\\Enums\\RecurrenceErrorCode",
+                        "CoreX\\Recurrence\\RecurrenceServiceProvider"
                     ]
                 },
                 "branch-alias": {
                     "dev-main": "1.0.x-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "CoreX\\Recurrence\\RecurrenceServiceProvider"
+                    ]
                 }
             },
             "autoload": {
@@ -916,7 +941,8 @@
                         "CoreX\\Search\\Data\\SearchQuery",
                         "CoreX\\Search\\Data\\SearchSnapshot",
                         "CoreX\\Search\\SearchServiceProvider",
-                        "CoreX\\Search\\Laravel\\SearchPortBindings"
+                        "CoreX\\Search\\Laravel\\SearchPortBindings",
+                        "CoreX\\Search\\Errors\\Enums\\SearchErrorCode"
                     ]
                 },
                 "laravel": {
@@ -1064,7 +1090,8 @@
                     "stability": "stable",
                     "public-api": [
                         "CoreX\\SearchMeilisearch\\Exceptions",
-                        "CoreX\\SearchMeilisearch\\MeilisearchServiceProvider"
+                        "CoreX\\SearchMeilisearch\\MeilisearchServiceProvider",
+                        "CoreX\\SearchMeilisearch\\Errors\\Enums\\SearchMeilisearchErrorCode"
                     ]
                 },
                 "laravel": {
@@ -1166,7 +1193,8 @@
                         "CoreX\\Tasks\\TasksModule",
                         "CoreX\\Tasks\\TasksServiceProvider",
                         "CoreX\\Tasks\\Time\\Laravel\\TimeLogRelations",
-                        "CoreX\\Tasks\\Task\\Laravel\\TaskPortBindings"
+                        "CoreX\\Tasks\\Task\\Laravel\\TaskPortBindings",
+                        "CoreX\\Tasks\\Errors\\Enums\\TasksErrorCode"
                     ]
                 },
                 "laravel": {
@@ -1272,7 +1300,8 @@
                         "CoreX\\TasksWorkflow\\Data",
                         "CoreX\\TasksWorkflow\\Exceptions",
                         "CoreX\\TasksWorkflow\\TasksWorkflowServiceProvider",
-                        "CoreX\\TasksWorkflow\\Laravel\\CompletionBindings"
+                        "CoreX\\TasksWorkflow\\Laravel\\CompletionBindings",
+                        "CoreX\\TasksWorkflow\\Errors\\Enums\\TasksWorkflowErrorCode"
                     ]
                 },
                 "laravel": {
@@ -1469,7 +1498,8 @@
                         "CoreX\\Tenancy\\Workspace\\Contracts\\WorkspaceResolver",
                         "CoreX\\Tenancy\\Workspace\\Exceptions\\InvitationNotAcceptableException",
                         "CoreX\\Tenancy\\Workspace\\Exceptions\\NoDefaultWorkspaceException",
-                        "CoreX\\Tenancy\\Laravel\\TenancyPortBindings"
+                        "CoreX\\Tenancy\\Laravel\\TenancyPortBindings",
+                        "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode"
                     ]
                 },
                 "laravel": {
@@ -8782,7 +8812,9 @@
                         "CoreX\\Access\\Roles\\Data\\RoleMatrixEntry",
                         "CoreX\\Access\\Roles\\Data\\RoleView",
                         "CoreX\\Access\\Roles\\Laravel\\RoleMatrixData",
-                        "CoreX\\Access\\Roles\\Laravel\\SystemRoleImmutable"
+                        "CoreX\\Access\\Roles\\Laravel\\SystemRoleImmutable",
+                        "CoreX\\Access\\Matrix\\Laravel\\MatrixPortBindings",
+                        "CoreX\\Access\\Errors\\Enums\\AccessErrorCode"
                     ]
                 },
                 "laravel": {
@@ -8989,7 +9021,8 @@
                         "CoreX\\Webhooks\\WebhooksServiceProvider",
                         "CoreX\\Webhooks\\Laravel\\WebhookOptionsParser",
                         "CoreX\\Webhooks\\Laravel\\WebhookRegistrar",
-                        "CoreX\\Webhooks\\Laravel\\WebhookRouteRegistrar"
+                        "CoreX\\Webhooks\\Laravel\\WebhookRouteRegistrar",
+                        "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode"
                     ]
                 },
                 "branch-alias": {

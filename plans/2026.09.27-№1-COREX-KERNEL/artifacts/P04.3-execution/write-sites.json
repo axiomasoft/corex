@@ -1,0 +1,11 @@
+{
+  "pre_mutation_raw": "ROUTE-UNVERIFIABLE",
+  "pre_mutation_effective": "allow",
+  "override": "explicit current owner waiver; owner-instructions.md",
+  "route_probe_performed": false,
+  "attested_route_claimed": false,
+  "pre_final_raw": null,
+  "pre_final_effective": "allow",
+  "validation": "validation-result.json",
+  "review": "review-verdict.md"
+}

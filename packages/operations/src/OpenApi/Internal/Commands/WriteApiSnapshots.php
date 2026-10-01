@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\OpenApi\Internal\Commands;
 
+use CoreX\Errors\Contracts\ProblemRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Operations\Definition\Contracts\OperationRegistry;
 use CoreX\Operations\Laravel\Support\ApiOptions;
@@ -27,6 +28,7 @@ final class WriteApiSnapshots extends Command
         ApiProfileFactory $profiles,
         ApiOptions $options,
         ModuleRegistry $modules,
+        ProblemRegistry $problems,
     ): int {
         $sections = [];
 
@@ -38,7 +40,7 @@ final class WriteApiSnapshots extends Command
             $sections[] = $section;
         }
 
-        $builder = new ContractSnapshotBuilder($operations, $openApi, $profiles->make($modules->compiled(), $options), $sections);
+        $builder = new ContractSnapshotBuilder($operations, $openApi, $profiles->make($modules->compiled(), $options), $problems, $sections);
 
         $directory = $this->argument('directory');
         $major = $this->option('major');

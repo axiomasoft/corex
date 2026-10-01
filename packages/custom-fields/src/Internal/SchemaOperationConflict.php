@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Internal;
 
+use CoreX\CustomFields\Errors\Enums\CustomFieldsErrorCode;
 use CoreX\Errors\Contracts\DescribesError;
 use CoreX\Errors\Data\ErrorDescriptor;
 use CoreX\Errors\Enums\ErrorCategory;
@@ -23,7 +24,7 @@ final class SchemaOperationConflict extends RuntimeException implements Describe
         return new self(
             'The schema operation is not ready for execution.',
             new ErrorDescriptor(
-                code: 'attribute_schema_conflict',
+                code: CustomFieldsErrorCode::AttributeSchemaConflict,
                 category: ErrorCategory::Conflict,
                 retryable: true,
                 details: ['reason' => 'not_ready'],
@@ -36,7 +37,7 @@ final class SchemaOperationConflict extends RuntimeException implements Describe
         return new self(
             'The schema operation was requested against a stale field snapshot.',
             new ErrorDescriptor(
-                code: 'attribute_schema_conflict',
+                code: CustomFieldsErrorCode::AttributeSchemaConflict,
                 category: ErrorCategory::Conflict,
                 retryable: false,
                 details: ['reason' => 'stale_snapshot'],
@@ -49,7 +50,7 @@ final class SchemaOperationConflict extends RuntimeException implements Describe
         return new self(
             'The schema operation retry limit is exhausted.',
             new ErrorDescriptor(
-                code: 'attribute_schema_retry_exhausted',
+                code: CustomFieldsErrorCode::AttributeSchemaRetryExhausted,
                 category: ErrorCategory::Conflict,
                 retryable: false,
                 details: ['reason' => 'retry_exhausted'],

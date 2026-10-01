@@ -8,10 +8,12 @@ use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Data\Data\DataScope;
 use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Webhooks\Contracts\WebhookSubscriptionStore;
 use CoreX\Webhooks\Data\WebhookSubscription;
+use CoreX\Webhooks\Errors\Enums\WebhooksErrorCode;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Illuminate\Database\Connection;
@@ -45,12 +47,12 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
         $this->catalogue->admit($topic, $sensitiveAbility, $policyAllows);
 
         if ($subscription->maxPiiClass !== $topic->piiClass || $subscription->major !== $topic->major) {
-            throw new ApiError('unknown_message_contract', 422, 'The subscription does not match the declared topic.', category: ErrorCategory::Validation);
+            throw new ApiError(OperationsErrorCode::UnknownMessageContract, 422, 'The subscription does not match the declared topic.', category: ErrorCategory::Validation);
         }
 
         return $this->connection->transaction(function () use ($subscription): WebhookSubscription {
             if ((int) $this->connection->table(self::Table)->count() >= self::CAP) {
-                throw new ApiError('webhook_subscription_cap', 422, 'The webhook subscription cap is 100.', category: ErrorCategory::Validation);
+                throw new ApiError(WebhooksErrorCode::WebhookSubscriptionCap, 422, 'The webhook subscription cap is 100.', category: ErrorCategory::Validation);
             }
 
             $now = $this->clock->now();
@@ -113,7 +115,7 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
                 ]);
 
             if ($updated !== 1) {
-                throw new ApiError('conflict', 409, 'The webhook subscription revision is stale.', category: ErrorCategory::Conflict);
+                throw new ApiError(OperationsErrorCode::Conflict, 409, 'The webhook subscription revision is stale.', category: ErrorCategory::Conflict);
             }
 
             return $this->requireRow($id);
@@ -148,7 +150,7 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
                 ]);
 
             if ($updated !== 1) {
-                throw new ApiError('conflict', 409, 'The webhook subscription revision is stale.', category: ErrorCategory::Conflict);
+                throw new ApiError(OperationsErrorCode::Conflict, 409, 'The webhook subscription revision is stale.', category: ErrorCategory::Conflict);
             }
 
             return $this->requireRow($id);
@@ -179,7 +181,7 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
         $row = $this->connection->table(self::Table)->where('id', $id)->first();
 
         if ($row === null) {
-            throw new ApiError('not_found', 404, 'The webhook subscription does not exist.', category: ErrorCategory::NotFound);
+            throw new ApiError(OperationsErrorCode::NotFound, 404, 'The webhook subscription does not exist.', category: ErrorCategory::NotFound);
         }
 
         return $this->subscription($row);

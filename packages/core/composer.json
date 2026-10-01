@@ -162,7 +162,19 @@
                 "CoreX\\Storage\\Laravel\\ScopedFilesystemFactory",
                 "CoreX\\Time\\Laravel\\LaravelClock",
                 "CoreX\\Time\\Laravel\\SystemClock",
-                "CoreX\\Time\\Testing\\FrozenClock"
+                "CoreX\\Time\\Testing\\FrozenClock",
+                "CoreX\\Errors\\Contracts\\DescribesError",
+                "CoreX\\Errors\\Contracts\\ErrorCode",
+                "CoreX\\Errors\\Contracts\\ProblemDefinitionProvider",
+                "CoreX\\Errors\\Contracts\\ProblemRegistry",
+                "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "CoreX\\Errors\\Data\\ProblemDefinition",
+                "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "CoreX\\Errors\\Enums\\ErrorCategory",
+                "CoreX\\Errors\\Enums\\UnavailabilityReason",
+                "CoreX\\Errors\\Exceptions\\CodedException",
+                "CoreX\\Errors\\Exceptions\\ProblemRegistryException",
+                "CoreX\\Errors\\Laravel\\ProblemDefinitions"
             ]
         },
         "laravel": {

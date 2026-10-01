@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Exceptions;
 
+use CoreX\Access\Errors\Enums\AccessErrorCode;
 use CoreX\Attributes\Api;
-use RuntimeException;
+use CoreX\Errors\Data\ErrorDescriptor;
+use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Errors\Exceptions\CodedException;
 
 /**
  * An entity's matrix row names a scope (own/dept/dept_tree/workspace) whose
@@ -18,7 +21,7 @@ use RuntimeException;
  * papered over by a wider grant.
  */
 #[Api(since: '1.0')]
-final class ScopeCapabilityMismatch extends RuntimeException
+final class ScopeCapabilityMismatch extends CodedException
 {
     public static function forScope(string $entityKey, string $scope, string $missingCapability, string $column): self
     {
@@ -29,5 +32,10 @@ final class ScopeCapabilityMismatch extends RuntimeException
             $missingCapability,
             $column,
         ));
+    }
+
+    public function errorDescriptor(): ErrorDescriptor
+    {
+        return new ErrorDescriptor(AccessErrorCode::ScopeCapabilityMismatch, ErrorCategory::Unsupported, retryable: false);
     }
 }

@@ -31,3 +31,10 @@ Configure `corex-intl.locale.supported_tags`, `app_tag` and `explicit_fallback_t
 ## Failure semantics
 
 Keep fallback explicit: a missing translation follows the declared locale fallback chain. A currency conversion requires a usable rate snapshot; unavailable data is not a fabricated rate. Reference lookup is bounded and provider-owned; consumer adapters must handle unavailable datasets and invalid cursor/input failures at the application boundary.
+
+## Typed errors
+
+Package error identities use backed enums and a boot compiled kernel registry.
+Error constructors require `ErrorCode`; descriptors keep scoped string wire codes.
+See the monorepo [error contract](../../docs/reference/errors.md) for contributions,
+validated replay and safe mapping.

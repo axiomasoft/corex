@@ -1,5 +1,11 @@
 ## Unreleased
 
+## Unreleased — typed error contract (P04.3)
+
+- Added package owned error enums, definitions and safe coded exception descriptors.
+- Error constructors require enum identities; existing error wire values are scoped.
+- Contributions are validated and frozen at boot; persisted identities use validated lookup.
+
 ### Changed
 
 - PLAN3.D57: implementation classes moved to `<Module>\Internal\…`, public types to module categories

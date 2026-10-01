@@ -6,6 +6,7 @@ namespace CoreX\Tools\Internal;
 
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Modules\Contracts\ModuleRegistry;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
 use CoreX\Tools\Contracts\ToolCatalogue;
@@ -58,7 +59,7 @@ final class CompiledToolCatalogue implements ToolCatalogue
         );
 
         if (count($descriptors) > self::MAX_DESCRIPTORS) {
-            throw new ApiError('catalogue_limit', 403, 'Catalogue descriptor limit exceeded.');
+            throw new ApiError(OperationsErrorCode::CatalogueLimit, 403, 'Catalogue descriptor limit exceeded.');
         }
 
         return new ToolCatalogueView(

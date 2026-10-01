@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Pagination\Internal;
 
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Pagination\Contracts\CursorCodec;
 use CoreX\Operations\Pagination\Contracts\CursorKeyring;
@@ -50,7 +51,7 @@ final readonly class SignedCursorCodec implements CursorCodec
         $ordering = $registry->find($orderingId);
 
         if ($ordering === null) {
-            throw new ApiError('ordering_version_unsupported', 400, 'Ordering version is not supported.');
+            throw new ApiError(OperationsErrorCode::OrderingVersionUnsupported, 400, 'Ordering version is not supported.');
         }
 
         $this->assertValues($values, $ordering['types']);
@@ -97,7 +98,7 @@ final readonly class SignedCursorCodec implements CursorCodec
         $ordering = $registry->find($payload->ordering);
 
         if ($ordering === null) {
-            throw new ApiError('ordering_version_unsupported', 400, 'Ordering version is not supported.');
+            throw new ApiError(OperationsErrorCode::OrderingVersionUnsupported, 400, 'Ordering version is not supported.');
         }
 
         if ($payload->formatVersion !== self::FORMAT_VERSION
@@ -320,6 +321,6 @@ final readonly class SignedCursorCodec implements CursorCodec
     /** @return never */
     private function invalid(): void
     {
-        throw new ApiError('cursor_invalid', 400, 'Cursor is invalid.');
+        throw new ApiError(OperationsErrorCode::CursorInvalid, 400, 'Cursor is invalid.');
     }
 }

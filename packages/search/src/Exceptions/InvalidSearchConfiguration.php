@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace CoreX\Search\Exceptions;
 
 use CoreX\Attributes\Api;
-use RuntimeException;
+use CoreX\Errors\Data\ErrorDescriptor;
+use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Errors\Exceptions\CodedException;
+use CoreX\Search\Errors\Enums\SearchErrorCode;
 
 #[Api(since: '1.0')]
-final class InvalidSearchConfiguration extends RuntimeException
+final class InvalidSearchConfiguration extends CodedException
 {
     public static function missingDriver(): self
     {
@@ -36,5 +39,10 @@ final class InvalidSearchConfiguration extends RuntimeException
         return new self(
             'Database connection must be bound in the container when corex-search.driver is "postgres".',
         );
+    }
+
+    public function errorDescriptor(): ErrorDescriptor
+    {
+        return new ErrorDescriptor(SearchErrorCode::InvalidSearchConfiguration, ErrorCategory::Internal, retryable: false);
     }
 }

@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Settings\Exceptions;
 
 use CoreX\Attributes\Api;
+use CoreX\Errors\Data\ErrorDescriptor;
+use CoreX\Errors\Enums\CoreErrorCode;
+use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Errors\Exceptions\CodedException;
 use CoreX\Settings\Enums\SettingScope;
-use RuntimeException;
 
 /**
  * `sys_settings`'s CHECK constraint accepts only account/workspace/user —
@@ -16,7 +19,7 @@ use RuntimeException;
  * account-level write.
  */
 #[Api(since: '1.0')]
-final class UnsupportedScopeException extends RuntimeException
+final class UnsupportedScopeException extends CodedException
 {
     public function __construct(SettingScope $scope)
     {
@@ -24,5 +27,10 @@ final class UnsupportedScopeException extends RuntimeException
             'SettingsRepository does not support scope "%s" — sys_settings only accepts account/workspace/user (D38).',
             $scope->value,
         ));
+    }
+
+    public function errorDescriptor(): ErrorDescriptor
+    {
+        return new ErrorDescriptor(CoreErrorCode::UnsupportedScopeException, ErrorCategory::Unsupported, retryable: false);
     }
 }

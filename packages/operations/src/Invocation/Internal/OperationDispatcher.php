@@ -10,6 +10,7 @@ use CoreX\Operations\Definition\Contracts\OperationRegistry;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Errors\Contracts\ErrorMapping as ErrorMapper;
 use CoreX\Operations\Errors\Contracts\ResponseSerializer;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\ContextResolver;
 use CoreX\Operations\Invocation\Contracts\OperationInvoker;
@@ -48,7 +49,7 @@ final class OperationDispatcher implements \CoreX\Operations\Invocation\Contract
             [$operation, $parameters] = $this->operations->match($version, $request->method(), '/'.ltrim($path, '/'));
             $metadata = new InvocationMetadata($requestId, $version, $operation->id, $request->method(), $metadata->correlationId, $metadata->accept);
             $principal = $this->principals->resolve($request)
-                ?? throw new ApiError('authentication_required', 401, 'Authentication is required.');
+                ?? throw new ApiError(OperationsErrorCode::AuthenticationRequired, 401, 'Authentication is required.');
             $context = $this->contexts->resolve($request, $principal, $metadata);
             $input = $this->input($request, $operation);
             $previousRequest = $this->container->bound('request') ? $this->container->make('request') : null;
@@ -99,25 +100,25 @@ final class OperationDispatcher implements \CoreX\Operations\Invocation\Contract
             $input = $request->query->all();
         } else {
             if (! $request->isJson() || $request->query->count() !== 0) {
-                throw new ApiError('validation_failed', 422, 'A JSON object body without query parameters is required.');
+                throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'A JSON object body without query parameters is required.');
             }
 
             try {
                 $body = $request->getContent();
                 $input = json_decode($body, associative: true, flags: JSON_THROW_ON_ERROR);
             } catch (JsonException) {
-                throw new ApiError('validation_failed', 422, 'Malformed JSON body.');
+                throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'Malformed JSON body.');
             }
 
             if (! is_array($input) || ! str_starts_with(ltrim($body), '{')) {
-                throw new ApiError('validation_failed', 422, 'A JSON object body is required.');
+                throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'A JSON object body is required.');
             }
         }
 
         $allowed = array_unique(array_map(static fn (string $key): string => explode('.', $key)[0], array_keys($operation->inputRules)));
 
         if (array_diff(array_keys($input), $allowed) !== []) {
-            throw new ApiError('validation_failed', 422, 'Input contains undeclared fields.');
+            throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'Input contains undeclared fields.');
         }
 
         return $this->validation->make($input, $operation->inputRules)->validate();

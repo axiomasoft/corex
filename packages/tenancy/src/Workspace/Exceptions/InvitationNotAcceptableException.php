@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Workspace\Exceptions;
 
 use CoreX\Attributes\Api;
-use RuntimeException;
+use CoreX\Errors\Data\ErrorDescriptor;
+use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Errors\Exceptions\CodedException;
+use CoreX\Tenancy\Errors\Enums\TenancyErrorCode;
 
 /**
  * Thrown by {@see CoreX\Tenancy\Workspace\Internal\Models\Invitation::accept()} for a
@@ -15,4 +18,10 @@ use RuntimeException;
  * scope).
  */
 #[Api(since: '1.0')]
-final class InvitationNotAcceptableException extends RuntimeException {}
+final class InvitationNotAcceptableException extends CodedException
+{
+    public function errorDescriptor(): ErrorDescriptor
+    {
+        return new ErrorDescriptor(TenancyErrorCode::InvitationNotAcceptableException, ErrorCategory::Conflict, retryable: false);
+    }
+}

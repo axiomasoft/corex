@@ -87,6 +87,9 @@ final class LoadContourBootTest extends TestCase
             'CoreX\\Operations\\Validation\\Laravel\\SchemaProfile',
             'CoreX\\Operations\\Versioning\\Contracts\\ApiProfiles',
             'CoreX\\Operations\\Definition\\Laravel\\OperationPortBindings',
+            'CoreX\\Operations\\Errors\\Contracts\\ErrorMapping',
+            'CoreX\\Operations\\Errors\\Contracts\\ResponseSerializer',
+            'CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode',
         ], $composer['extra']['corex']['public-api']);
         self::assertSame(['ext-filter', 'ext-mbstring', 'php', 'axiomasoft/corex', 'illuminate/auth', 'illuminate/console', 'illuminate/contracts', 'illuminate/database', 'illuminate/http', 'illuminate/support', 'illuminate/validation', 'psr/clock', 'symfony/http-kernel'], array_keys($require));
         self::assertSame('^12.0|^13.0', $require['illuminate/http']);
@@ -173,7 +176,7 @@ final class LoadContourBootTest extends TestCase
                 $executor->submit($definition);
                 self::fail('Transfer submit proceeded without the capability.');
             } catch (TransferCapabilityUnavailable $exception) {
-                self::assertSame('capability_unavailable', $exception->errorDescriptor()->code);
+                self::assertSame('operations.capability_unavailable', $exception->errorDescriptor()->code);
             }
         }
 

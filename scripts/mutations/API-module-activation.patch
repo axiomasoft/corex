@@ -1,12 +1,12 @@
 diff --git a/packages/operations/src/Invocation/Internal/DefaultOperationInvoker.php b/packages/operations/src/Invocation/Internal/DefaultOperationInvoker.php
 --- a/packages/operations/src/Invocation/Internal/DefaultOperationInvoker.php
 +++ b/packages/operations/src/Invocation/Internal/DefaultOperationInvoker.php
-@@ -39,7 +39,7 @@
-             throw new ApiError('operation_unsupported', 404, 'Operation is not executable.');
+@@ -43,7 +43,7 @@
+             throw new ApiError(OperationsErrorCode::OperationUnsupported, 404, 'Operation is not executable.');
          }
  
 -        if (! $this->modules->isActive($operation->module, $invocation->context->tenant())) {
 +        if (false && ! $this->modules->isActive($operation->module, $invocation->context->tenant())) {
-             throw new ApiError('module_unavailable', 404, 'Operation not found.');
+             throw new ApiError(OperationsErrorCode::ModuleUnavailable, 404, 'Operation not found.');
          }
  

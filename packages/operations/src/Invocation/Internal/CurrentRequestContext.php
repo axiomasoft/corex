@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Invocation\Internal;
 
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Invocation\Contracts\RequestContextProvider;
@@ -22,6 +23,6 @@ final class CurrentRequestContext implements RequestContextProvider
         $context = $request->attributes->get(RequestContext::class);
 
         return $context instanceof RequestContext ? $context
-            : throw new ApiError('context_required', 403, 'An API operation context is required.');
+            : throw new ApiError(OperationsErrorCode::ContextRequired, 403, 'An API operation context is required.');
     }
 }

@@ -22,6 +22,7 @@ use CoreX\Operations\Authorization\Contracts\ReplayAuthorizer;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Enums\OperationMode;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Idempotency\Data\StoredOperationOutcome;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
@@ -260,7 +261,7 @@ final class ToolIdempotentInvocationReplayAuthorizerFixture implements ReplayAut
         bool $replayed,
     ): StoredOperationOutcome {
         if ($this->deny) {
-            throw new ApiError('forbidden', 403, 'Operation is not permitted.');
+            throw new ApiError(OperationsErrorCode::Forbidden, 403, 'Operation is not permitted.');
         }
 
         if ($this->removeSecret && $outcome->kind === 'success') {

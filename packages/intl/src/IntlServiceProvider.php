@@ -8,6 +8,7 @@ use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Intl\Currency\Contracts\CurrencyConverter;
 use CoreX\Intl\Currency\Contracts\CurrencyMetadata;
 use CoreX\Intl\Currency\Contracts\RateImporter;
@@ -16,6 +17,7 @@ use CoreX\Intl\Currency\Internal\BrickCurrencyConverter;
 use CoreX\Intl\Currency\Internal\BrickCurrencyMetadata;
 use CoreX\Intl\Currency\Internal\SqlRateImporter;
 use CoreX\Intl\Currency\Internal\SqlRateProvider;
+use CoreX\Intl\Errors\Internal\PackageProblemDefinitions;
 use CoreX\Intl\Formatting\Contracts\MoneyFormatter;
 use CoreX\Intl\Formatting\Internal\PlainMoneyFormatter;
 use CoreX\Intl\Internal\IntlConfigSection;
@@ -46,6 +48,8 @@ final class IntlServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        ProblemDefinitions::register($this->app, __DIR__.'/../composer.json', PackageProblemDefinitions::class);
+
         LocalePortBindings::register($this->app);
 
         $this->app->tag([IntlConfigSection::class], ConfigReportSection::class);

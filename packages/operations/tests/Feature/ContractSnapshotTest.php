@@ -44,8 +44,8 @@ final class ContractSnapshotTest extends TestCase
         $this->assertSame('observe', $created['cost']['enforcement']['account']);
         $errors = json_decode($this->files($first)['errors.json'], true);
         $codes = array_column($errors, 'code');
-        $this->assertContains('bulk_not_ready', $codes);
-        $this->assertContains('webhook_replay_expired', $codes);
+        $this->assertContains('operations.bulk_not_ready', $codes);
+        $this->assertContains('webhooks.webhook_replay_expired', $codes);
 
         $this->app->instance(ModuleRegistry::class, new ModuleFixture($this->compile(true)));
         $reversed = sys_get_temp_dir().'/corex-api-snapshot-c-'.bin2hex(random_bytes(4));

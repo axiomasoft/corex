@@ -15,6 +15,7 @@ use CoreX\Access\Access\Internal\WorkspacePermissionLayer;
 use CoreX\Access\Access\Internal\WorkspaceScopeWiring;
 use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Contracts\RoleMatrixCompiler;
+use CoreX\Access\Errors\Internal\PackageProblemDefinitions;
 use CoreX\Access\Extend\Internal\PermissionsMerger;
 use CoreX\Access\Identity\Laravel\PrincipalUserProvider;
 use CoreX\Access\Internal\Support\AccessConfigSection;
@@ -27,6 +28,7 @@ use CoreX\Access\Tenancy\Internal\TenantContextGuard;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Config\Contracts\ConfigReportSection;
+use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Events\ModuleDisabled;
 use CoreX\Modules\Events\ModuleEnabled;
@@ -42,6 +44,8 @@ final class CoreAuthServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        ProblemDefinitions::register($this->app, __DIR__.'/../composer.json', PackageProblemDefinitions::class);
+
         MatrixPortBindings::register($this->app);
 
         $this->app->tag([AccessConfigSection::class], ConfigReportSection::class);

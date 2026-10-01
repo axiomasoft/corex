@@ -46,7 +46,7 @@ it('fails closed consistently when an application has not enabled attributes', f
 
     $descriptor = (new UnsupportedAttributeCapability)->errorDescriptor();
 
-    expect($descriptor->code)->toBe('attributes_engine_unavailable')
+    expect($descriptor->code)->toBe('custom-fields.attributes_engine_unavailable')
         ->and($descriptor->category)->toBe(ErrorCategory::Unavailable)
         ->and($descriptor->retryable)->toBeFalse()
         ->and($descriptor->details)->toBe(['reason' => UnavailabilityReason::CapabilityUnavailable->value]);

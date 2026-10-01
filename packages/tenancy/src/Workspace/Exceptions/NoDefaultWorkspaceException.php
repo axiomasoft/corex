@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Workspace\Exceptions;
 
 use CoreX\Attributes\Api;
-use RuntimeException;
+use CoreX\Errors\Data\ErrorDescriptor;
+use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Errors\Exceptions\CodedException;
+use CoreX\Tenancy\Errors\Enums\TenancyErrorCode;
 
 /**
  * The current user has no default-workspace membership (B-11 §5.4, D132).
@@ -16,4 +19,10 @@ use RuntimeException;
  * `RuntimeException` would render.
  */
 #[Api(since: '1.0')]
-final class NoDefaultWorkspaceException extends RuntimeException {}
+final class NoDefaultWorkspaceException extends CodedException
+{
+    public function errorDescriptor(): ErrorDescriptor
+    {
+        return new ErrorDescriptor(TenancyErrorCode::NoDefaultWorkspaceException, ErrorCategory::NotFound, retryable: false);
+    }
+}

@@ -33,3 +33,10 @@ Install with `composer require axiomasoft/corex-custom-fields` through the confi
 ## Extension contracts
 
 Use the exported `FieldCatalogue`, `AttributeStoreResolver`, `AttributeStore`, `AttributeFilter` and `SchemaOperations` ports. The host supplies its trusted scope and authorization callback. Replace the definition source through the catalogue boundary; storage implementations and worker internals are not extension points.
+
+## Typed errors
+
+Package error identities use backed enums and a boot compiled kernel registry.
+Error constructors require `ErrorCode`; descriptors keep scoped string wire codes.
+See the monorepo [error contract](../../docs/reference/errors.md) for contributions,
+validated replay and safe mapping.

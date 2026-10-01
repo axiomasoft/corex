@@ -5,13 +5,21 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Membership\Exceptions;
 
 use CoreX\Attributes\Api;
-use RuntimeException;
+use CoreX\Errors\Data\ErrorDescriptor;
+use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Errors\Exceptions\CodedException;
+use CoreX\Tenancy\Errors\Enums\TenancyErrorCode;
 
 #[Api(since: '1.0')]
-final class RevokeUncertain extends RuntimeException
+final class RevokeUncertain extends CodedException
 {
     public function __construct(public readonly string $requestId)
     {
         parent::__construct('Central revoke outcome uncertain; retain original request ID and payload.');
+    }
+
+    public function errorDescriptor(): ErrorDescriptor
+    {
+        return new ErrorDescriptor(TenancyErrorCode::RevokeUncertain, ErrorCategory::Unavailable, retryable: true);
     }
 }

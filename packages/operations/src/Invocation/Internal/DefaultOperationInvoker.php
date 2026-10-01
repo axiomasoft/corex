@@ -6,6 +6,7 @@ namespace CoreX\Operations\Invocation\Internal;
 
 use Closure;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Errors\Enums\CoreErrorCode;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
@@ -13,6 +14,7 @@ use CoreX\Operations\Authorization\Contracts\OperationFieldAuthorizer;
 use CoreX\Operations\Authorization\Laravel\DeclaredFieldAuthorizer;
 use CoreX\Operations\Cost\Contracts\BudgetExecution as BudgetAdmission;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\OperationInvoker;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
@@ -38,19 +40,19 @@ final class DefaultOperationInvoker implements OperationInvoker
         $operation = $invocation->operation;
 
         if (! $operation->executionSupported) {
-            throw new ApiError('operation_unsupported', 404, 'Operation is not executable.');
+            throw new ApiError(OperationsErrorCode::OperationUnsupported, 404, 'Operation is not executable.');
         }
 
         if (! $this->modules->isActive($operation->module, $invocation->context->tenant())) {
-            throw new ApiError('module_unavailable', 404, 'Operation not found.');
+            throw new ApiError(OperationsErrorCode::ModuleUnavailable, 404, 'Operation not found.');
         }
 
         if (! $this->clientScopes->allows($operation, $invocation->context)) {
-            throw new ApiError('scope_required', 403, 'The client lacks a required operation scope.');
+            throw new ApiError(OperationsErrorCode::ScopeRequired, 403, 'The client lacks a required operation scope.');
         }
 
         if (! $this->authorizer->allows($operation, $invocation->context)) {
-            throw new ApiError('access_denied', 403, 'Operation is not permitted.');
+            throw new ApiError(OperationsErrorCode::AccessDenied, 403, 'Operation is not permitted.');
         }
 
         $forbiddenWrite = DeclaredFieldAuthorizer::firstForbiddenWrite(
@@ -62,7 +64,7 @@ final class DefaultOperationInvoker implements OperationInvoker
 
         if ($forbiddenWrite !== null) {
             throw new ApiError(
-                errorCode: 'access_denied',
+                errorCode: OperationsErrorCode::AccessDenied,
                 status: 403,
                 message: 'An input field is not writable.',
                 path: $forbiddenWrite,
@@ -77,7 +79,7 @@ final class DefaultOperationInvoker implements OperationInvoker
                 $handler = $this->container->make($invocation->operation->handler);
 
                 if (! $handler instanceof OperationHandler) {
-                    throw new ApiError('internal_error', 500, 'Operation could not be completed.');
+                    throw new ApiError(CoreErrorCode::InternalError, 500, 'Operation could not be completed.');
                 }
 
                 $admitHandler();

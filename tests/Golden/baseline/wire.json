@@ -1,8 +1,304 @@
 {
     "errors": [
         {
+            "category": "authorization",
+            "code": "core.central_context_exception",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "internal",
+            "code": "core.compilation_exception",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
             "category": "conflict",
-            "code": "attribute_schema_conflict",
+            "code": "core.cross_workspace_move_exception",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "core.department_cycle_exception",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "internal",
+            "code": "core.duplicate_code",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "internal",
+            "code": "core.duplicate_type",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "not_found",
+            "code": "core.entity_not_found",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "internal",
+            "code": "core.foreign_prefix",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "core.has_enabled_dependents_exception",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authorization",
+            "code": "core.impersonation_restricted_exception",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "core.inbox_refused",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "internal",
+            "code": "core.internal_error",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "internal",
+            "code": "core.invalid_configuration",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "internal",
+            "code": "core.invalid_definition",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "core.invalid_manifest_exception",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "core.invalid_message",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "core.invalid_registry_point",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "core.invalid_scope_payload",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "core.invalid_state_transition_exception",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "internal",
+            "code": "core.invalid_status",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "core.missing_dependency_exception",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "internal",
+            "code": "core.module_enable_failed_exception",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "not_found",
+            "code": "core.module_not_found",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "internal",
+            "code": "core.module_upgrade_failed_exception",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "core.outbox_lease_lost",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "core.outbox_refused",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "internal",
+            "code": "core.registry_frozen",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "unavailable",
+            "code": "core.registry_input_unavailable",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authorization",
+            "code": "core.scope_context_mismatch",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "core.setting_value_too_large_exception",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "core.stale_registry_revision",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "unavailable",
+            "code": "core.storage_capability_unavailable",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "unavailable",
+            "code": "core.storage_operation_failed",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": true
+        },
+        {
+            "category": "internal",
+            "code": "core.unknown_code",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "core.unknown_message_contract",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "unsupported",
+            "code": "core.unsupported_scope_exception",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "unsupported",
+            "code": "access.scope_capability_mismatch",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-access",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "custom-fields.attribute_schema_conflict",
             "detail_keys": [
                 "reason"
             ],
@@ -12,7 +308,7 @@
         },
         {
             "category": "conflict",
-            "code": "attribute_schema_conflict",
+            "code": "custom-fields.attribute_schema_conflict",
             "detail_keys": [
                 "reason"
             ],
@@ -22,7 +318,7 @@
         },
         {
             "category": "conflict",
-            "code": "attribute_schema_retry_exhausted",
+            "code": "custom-fields.attribute_schema_retry_exhausted",
             "detail_keys": [
                 "reason"
             ],
@@ -32,7 +328,7 @@
         },
         {
             "category": "authorization",
-            "code": "attributes_access_denied",
+            "code": "custom-fields.attributes_access_denied",
             "detail_keys": [
                 "reason"
             ],
@@ -42,7 +338,7 @@
         },
         {
             "category": "unavailable",
-            "code": "attributes_engine_unavailable",
+            "code": "custom-fields.attributes_engine_unavailable",
             "detail_keys": [
                 "reason"
             ],
@@ -51,292 +347,622 @@
             "retryable": false
         },
         {
-            "category": "authorization",
-            "code": "access_denied",
+            "category": "internal",
+            "code": "custom-fields.invalid_attribute_tables",
             "detail_keys": [],
-            "owner": "corex/operations",
+            "owner": "axiomasoft/corex-custom-fields",
             "path": null,
             "retryable": false
         },
         {
             "category": "authorization",
-            "code": "account_unavailable",
+            "code": "intl.access_denied_exception",
             "detail_keys": [],
-            "owner": "corex/operations",
+            "owner": "axiomasoft/corex-intl",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "intl.invalid_locale_exception",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-intl",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "intl.invalid_rate_exception",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-intl",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "intl.operation_conflict_exception",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-intl",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "intl.schema_mismatch_exception",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-intl",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "not_found",
+            "code": "intl.snapshot_expired_exception",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-intl",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "unsupported",
+            "code": "intl.unsupported_formatting_exception",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-intl",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authorization",
+            "code": "notifications.notification_access_denied",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-notifications",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "notifications.notification_operation_conflict",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-notifications",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authorization",
+            "code": "operations.access_denied",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authorization",
+            "code": "operations.account_unavailable",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
             "path": null,
             "retryable": false
         },
         {
             "category": "authentication",
-            "code": "authentication_required",
+            "code": "operations.authentication_required",
             "detail_keys": [],
-            "owner": "corex/operations",
-            "path": null,
-            "retryable": false
-        },
-        {
-            "category": "conflict",
-            "code": "bulk_not_ready",
-            "detail_keys": [],
-            "owner": "corex/operations",
-            "path": null,
-            "retryable": true
-        },
-        {
-            "category": "conflict",
-            "code": "bulk_reconciliation_required",
-            "detail_keys": [],
-            "owner": "corex/operations",
-            "path": null,
-            "retryable": false
-        },
-        {
-            "category": "not_found",
-            "code": "bulk_result_expired",
-            "detail_keys": [],
-            "owner": "corex/operations",
-            "path": null,
-            "retryable": false
-        },
-        {
-            "category": "authorization",
-            "code": "catalogue_limit",
-            "detail_keys": [],
-            "owner": "corex/operations",
-            "path": null,
-            "retryable": false
-        },
-        {
-            "category": "conflict",
-            "code": "conflict",
-            "detail_keys": [],
-            "owner": "corex/operations",
-            "path": null,
-            "retryable": false
-        },
-        {
-            "category": "authorization",
-            "code": "context_required",
-            "detail_keys": [],
-            "owner": "corex/operations",
-            "path": null,
-            "retryable": false
-        },
-        {
-            "category": "validation",
-            "code": "cursor_invalid",
-            "detail_keys": [],
-            "owner": "corex/operations",
-            "path": null,
-            "retryable": false
-        },
-        {
-            "category": "authorization",
-            "code": "forbidden",
-            "detail_keys": [],
-            "owner": "corex/operations",
-            "path": null,
-            "retryable": false
-        },
-        {
-            "category": "conflict",
-            "code": "idempotency_conflict",
-            "detail_keys": [],
-            "owner": "corex/operations",
-            "path": null,
-            "retryable": false
-        },
-        {
-            "category": "conflict",
-            "code": "idempotency_contract_mismatch",
-            "detail_keys": [],
-            "owner": "corex/operations",
-            "path": null,
-            "retryable": false
-        },
-        {
-            "category": "conflict",
-            "code": "idempotency_in_progress",
-            "detail_keys": [],
-            "owner": "corex/operations",
-            "path": null,
-            "retryable": true
-        },
-        {
-            "category": "validation",
-            "code": "idempotency_key_forbidden",
-            "detail_keys": [],
-            "owner": "corex/operations",
-            "path": null,
-            "retryable": false
-        },
-        {
-            "category": "validation",
-            "code": "idempotency_key_invalid",
-            "detail_keys": [],
-            "owner": "corex/operations",
-            "path": null,
-            "retryable": false
-        },
-        {
-            "category": "validation",
-            "code": "idempotency_key_required",
-            "detail_keys": [],
-            "owner": "corex/operations",
-            "path": null,
-            "retryable": false
-        },
-        {
-            "category": "validation",
-            "code": "idempotency_not_supported",
-            "detail_keys": [],
-            "owner": "corex/operations",
-            "path": null,
-            "retryable": false
-        },
-        {
-            "category": "internal",
-            "code": "internal_error",
-            "detail_keys": [],
-            "owner": "corex/operations",
-            "path": null,
-            "retryable": false
-        },
-        {
-            "category": "validation",
-            "code": "invalid_request",
-            "detail_keys": [],
-            "owner": "corex/operations",
-            "path": null,
-            "retryable": false
-        },
-        {
-            "category": "not_found",
-            "code": "module_unavailable",
-            "detail_keys": [],
-            "owner": "corex/operations",
-            "path": null,
-            "retryable": false
-        },
-        {
-            "category": "not_found",
-            "code": "not_found",
-            "detail_keys": [],
-            "owner": "corex/operations",
-            "path": null,
-            "retryable": false
-        },
-        {
-            "category": "not_found",
-            "code": "operation_not_found",
-            "detail_keys": [],
-            "owner": "corex/operations",
-            "path": null,
-            "retryable": false
-        },
-        {
-            "category": "not_found",
-            "code": "operation_unsupported",
-            "detail_keys": [],
-            "owner": "corex/operations",
-            "path": null,
-            "retryable": false
-        },
-        {
-            "category": "validation",
-            "code": "ordering_version_unsupported",
-            "detail_keys": [],
-            "owner": "corex/operations",
+            "owner": "axiomasoft/corex-operations",
             "path": null,
             "retryable": false
         },
         {
             "category": "rate_limit",
-            "code": "rate_limited",
+            "code": "operations.budget_rate_limited",
             "detail_keys": [],
-            "owner": "corex/operations",
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "internal",
+            "code": "operations.budget_store_unavailable",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
             "path": null,
             "retryable": false
         },
         {
             "category": "conflict",
-            "code": "reconciliation_required",
+            "code": "operations.bulk_not_ready",
             "detail_keys": [],
-            "owner": "corex/operations",
+            "owner": "axiomasoft/corex-operations",
             "path": null,
-            "retryable": false
+            "retryable": true
         },
         {
-            "category": "validation",
-            "code": "request_rejected",
+            "category": "conflict",
+            "code": "operations.bulk_reconciliation_required",
             "detail_keys": [],
-            "owner": "corex/operations",
+            "owner": "axiomasoft/corex-operations",
             "path": null,
             "retryable": false
         },
         {
             "category": "not_found",
-            "code": "resource_not_found",
+            "code": "operations.bulk_result_expired",
             "detail_keys": [],
-            "owner": "corex/operations",
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "unavailable",
+            "code": "operations.capability_unavailable",
+            "detail_keys": [
+                "reason"
+            ],
+            "owner": "axiomasoft/corex-operations",
             "path": null,
             "retryable": false
         },
         {
             "category": "authorization",
-            "code": "scope_required",
+            "code": "operations.catalogue_limit",
             "detail_keys": [],
-            "owner": "corex/operations",
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "operations.conflict",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authorization",
+            "code": "operations.context_required",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
             "path": null,
             "retryable": false
         },
         {
             "category": "validation",
-            "code": "unknown_message_contract",
+            "code": "operations.cursor_invalid",
             "detail_keys": [],
-            "owner": "corex/operations",
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authorization",
+            "code": "operations.forbidden",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "operations.idempotency_conflict",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "operations.idempotency_contract_mismatch",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "operations.idempotency_in_progress",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": true
+        },
+        {
+            "category": "validation",
+            "code": "operations.idempotency_key_forbidden",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
             "path": null,
             "retryable": false
         },
         {
             "category": "validation",
-            "code": "validation_failed",
+            "code": "operations.idempotency_key_invalid",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "operations.idempotency_key_required",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "operations.idempotency_not_supported",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "operations.invalid_request",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "not_found",
+            "code": "operations.module_unavailable",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "not_found",
+            "code": "operations.not_found",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "not_found",
+            "code": "operations.operation_not_found",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "not_found",
+            "code": "operations.operation_unsupported",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "operations.ordering_version_unsupported",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "rate_limit",
+            "code": "operations.rate_limited",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "operations.reconciliation_required",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "operations.request_rejected",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "not_found",
+            "code": "operations.resource_not_found",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authorization",
+            "code": "operations.scope_required",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "operations.unknown_message_contract",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "operations.validation_failed",
             "detail_keys": [
                 "*"
             ],
-            "owner": "corex/operations",
+            "owner": "axiomasoft/corex-operations",
             "path": null,
             "retryable": false
         },
         {
-            "category": "conflict",
-            "code": "webhook_endpoint_changed",
+            "category": "internal",
+            "code": "search.invalid_search_configuration",
             "detail_keys": [],
-            "owner": "corex/operations",
+            "owner": "axiomasoft/corex-search",
             "path": null,
             "retryable": false
         },
         {
-            "category": "validation",
-            "code": "webhook_payload_too_large",
+            "category": "internal",
+            "code": "search-meilisearch.invalid_meilisearch_configuration",
             "detail_keys": [],
-            "owner": "corex/operations",
-            "path": null,
-            "retryable": false
-        },
-        {
-            "category": "conflict",
-            "code": "webhook_replay_expired",
-            "detail_keys": [],
-            "owner": "corex/operations",
+            "owner": "axiomasoft/corex-search-meilisearch",
             "path": null,
             "retryable": false
         },
         {
             "category": "validation",
-            "code": "webhook_subscription_cap",
+            "code": "tasks.invalid_planning_draft",
             "detail_keys": [],
-            "owner": "corex/operations",
+            "owner": "axiomasoft/corex-tasks",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "tasks.planning_conflict",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tasks",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "unavailable",
+            "code": "tasks.tasks_module_disabled",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tasks",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "tasks-workflow.materialization_conflict",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tasks-workflow",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "tasks-workflow.stale_materialization",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tasks-workflow",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "unsupported",
+            "code": "tasks-workflow.unsupported_materialization",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tasks-workflow",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "internal",
+            "code": "tenancy.central_protocol_violation",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tenancy",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authorization",
+            "code": "tenancy.central_unauthorized",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tenancy",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "unavailable",
+            "code": "tenancy.central_unavailable",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tenancy",
+            "path": null,
+            "retryable": true
+        },
+        {
+            "category": "conflict",
+            "code": "tenancy.claim_conflict",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tenancy",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "unavailable",
+            "code": "tenancy.claim_unavailable",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tenancy",
+            "path": null,
+            "retryable": true
+        },
+        {
+            "category": "authorization",
+            "code": "tenancy.credential_issuance_denied",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tenancy",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authorization",
+            "code": "tenancy.domain_trust_denied",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tenancy",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "unavailable",
+            "code": "tenancy.domain_trust_disabled",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tenancy",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "tenancy.inbox_conflict",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tenancy",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "tenancy.invitation_not_acceptable_exception",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tenancy",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "not_found",
+            "code": "tenancy.no_default_workspace_exception",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tenancy",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authentication",
+            "code": "tenancy.oidc_authentication_exception",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tenancy",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "internal",
+            "code": "tenancy.pair_store_violation",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tenancy",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authorization",
+            "code": "tenancy.projection_denied",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tenancy",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "unavailable",
+            "code": "tenancy.revoke_uncertain",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tenancy",
+            "path": null,
+            "retryable": true
+        },
+        {
+            "category": "internal",
+            "code": "tenancy.template_integrity_exception",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tenancy",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "not_found",
+            "code": "tenancy.tenant_could_not_be_identified_by_host_exception",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tenancy",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "webhooks.unknown_message_contract",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-webhooks",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "webhooks.unknown_message_schema",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-webhooks",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "webhooks.webhook_endpoint_changed",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-webhooks",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "webhooks.webhook_payload_too_large",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-webhooks",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "webhooks.webhook_replay_expired",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-webhooks",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authorization",
+            "code": "webhooks.webhook_secret_denied",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-webhooks",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authorization",
+            "code": "webhooks.webhook_sensitive_denied",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-webhooks",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "webhooks.webhook_subscription_cap",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-webhooks",
             "path": null,
             "retryable": false
         }
@@ -375,7 +1001,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "corex/operations"
+                    "x-corex-module": "axiomasoft/corex-operations"
                 }
             },
             "/bulk-operations/{id}": {
@@ -405,7 +1031,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "corex/operations"
+                    "x-corex-module": "axiomasoft/corex-operations"
                 }
             },
             "/bulk-operations/{id}/cancel": {
@@ -435,7 +1061,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "corex/operations"
+                    "x-corex-module": "axiomasoft/corex-operations"
                 }
             },
             "/bulk-operations/{id}/failures": {
@@ -465,7 +1091,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "corex/operations"
+                    "x-corex-module": "axiomasoft/corex-operations"
                 }
             },
             "/bulk-operations/{id}/result": {
@@ -495,7 +1121,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "corex/operations"
+                    "x-corex-module": "axiomasoft/corex-operations"
                 }
             },
             "/webhook-deliveries": {
@@ -525,7 +1151,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "corex/operations"
+                    "x-corex-module": "axiomasoft/corex-operations"
                 }
             },
             "/webhook-deliveries/replay": {
@@ -555,7 +1181,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "corex/operations"
+                    "x-corex-module": "axiomasoft/corex-operations"
                 }
             },
             "/webhook-deliveries/{id}": {
@@ -585,7 +1211,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "corex/operations"
+                    "x-corex-module": "axiomasoft/corex-operations"
                 }
             },
             "/webhook-deliveries/{id}/attempts": {
@@ -615,7 +1241,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "corex/operations"
+                    "x-corex-module": "axiomasoft/corex-operations"
                 }
             },
             "/webhook-deliveries/{id}/replay": {
@@ -645,7 +1271,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "corex/operations"
+                    "x-corex-module": "axiomasoft/corex-operations"
                 }
             },
             "/webhook-subscriptions": {
@@ -675,7 +1301,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "corex/operations"
+                    "x-corex-module": "axiomasoft/corex-operations"
                 },
                 "post": {
                     "operationId": "webhook-subscriptions.create",
@@ -703,7 +1329,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "corex/operations"
+                    "x-corex-module": "axiomasoft/corex-operations"
                 }
             },
             "/webhook-subscriptions/{id}": {
@@ -733,7 +1359,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "corex/operations"
+                    "x-corex-module": "axiomasoft/corex-operations"
                 }
             },
             "/webhook-subscriptions/{id}/disable": {
@@ -763,7 +1389,7 @@
                             "side_effect": 0
                         }
                     },
-                    "x-corex-module": "corex/operations"
+                    "x-corex-module": "axiomasoft/corex-operations"
                 }
             }
         },
@@ -798,7 +1424,7 @@
             "idempotency": "required",
             "method": "POST",
             "mode": "async_command",
-            "module": "corex/operations",
+            "module": "axiomasoft/corex-operations",
             "pagination": null,
             "path": "/bulk-operations/{id}/cancel",
             "read_fields": null,
@@ -860,7 +1486,7 @@
             "idempotency": "forbidden",
             "method": "GET",
             "mode": "query",
-            "module": "corex/operations",
+            "module": "axiomasoft/corex-operations",
             "pagination": null,
             "path": "/bulk-operations/{id}/failures",
             "read_fields": null,
@@ -905,7 +1531,7 @@
             "idempotency": "forbidden",
             "method": "GET",
             "mode": "query",
-            "module": "corex/operations",
+            "module": "axiomasoft/corex-operations",
             "pagination": null,
             "path": "/bulk-operations/{id}/result",
             "read_fields": null,
@@ -950,7 +1576,7 @@
             "idempotency": "forbidden",
             "method": "GET",
             "mode": "query",
-            "module": "corex/operations",
+            "module": "axiomasoft/corex-operations",
             "pagination": null,
             "path": "/bulk-operations/{id}",
             "read_fields": null,
@@ -1012,7 +1638,7 @@
             "idempotency": "required",
             "method": "POST",
             "mode": "async_command",
-            "module": "corex/operations",
+            "module": "axiomasoft/corex-operations",
             "pagination": null,
             "path": "/bulk-operations",
             "read_fields": null,
@@ -1078,7 +1704,7 @@
             "idempotency": "forbidden",
             "method": "GET",
             "mode": "query",
-            "module": "corex/operations",
+            "module": "axiomasoft/corex-operations",
             "pagination": null,
             "path": "/webhook-deliveries/{id}/attempts",
             "read_fields": null,
@@ -1123,7 +1749,7 @@
             "idempotency": "forbidden",
             "method": "GET",
             "mode": "query",
-            "module": "corex/operations",
+            "module": "axiomasoft/corex-operations",
             "pagination": null,
             "path": "/webhook-deliveries",
             "read_fields": null,
@@ -1168,7 +1794,7 @@
             "idempotency": "required",
             "method": "POST",
             "mode": "command",
-            "module": "corex/operations",
+            "module": "axiomasoft/corex-operations",
             "pagination": null,
             "path": "/webhook-deliveries/replay",
             "read_fields": null,
@@ -1213,7 +1839,7 @@
             "idempotency": "required",
             "method": "POST",
             "mode": "command",
-            "module": "corex/operations",
+            "module": "axiomasoft/corex-operations",
             "pagination": null,
             "path": "/webhook-deliveries/{id}/replay",
             "read_fields": null,
@@ -1258,7 +1884,7 @@
             "idempotency": "forbidden",
             "method": "GET",
             "mode": "query",
-            "module": "corex/operations",
+            "module": "axiomasoft/corex-operations",
             "pagination": null,
             "path": "/webhook-deliveries/{id}",
             "read_fields": null,
@@ -1303,7 +1929,7 @@
             "idempotency": "required",
             "method": "POST",
             "mode": "command",
-            "module": "corex/operations",
+            "module": "axiomasoft/corex-operations",
             "pagination": null,
             "path": "/webhook-subscriptions",
             "read_fields": null,
@@ -1348,7 +1974,7 @@
             "idempotency": "required",
             "method": "POST",
             "mode": "command",
-            "module": "corex/operations",
+            "module": "axiomasoft/corex-operations",
             "pagination": null,
             "path": "/webhook-subscriptions/{id}/disable",
             "read_fields": null,
@@ -1393,7 +2019,7 @@
             "idempotency": "forbidden",
             "method": "GET",
             "mode": "query",
-            "module": "corex/operations",
+            "module": "axiomasoft/corex-operations",
             "pagination": null,
             "path": "/webhook-subscriptions",
             "read_fields": null,
@@ -1438,7 +2064,7 @@
             "idempotency": "required",
             "method": "PATCH",
             "mode": "command",
-            "module": "corex/operations",
+            "module": "axiomasoft/corex-operations",
             "pagination": null,
             "path": "/webhook-subscriptions/{id}",
             "read_fields": null,

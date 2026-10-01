@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace CoreX\Context\Exceptions;
 
 use CoreX\Attributes\Api;
-use RuntimeException;
+use CoreX\Errors\Data\ErrorDescriptor;
+use CoreX\Errors\Enums\CoreErrorCode;
+use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Errors\Exceptions\CodedException;
 
 #[Api(since: '1.0')]
-final class ScopeContextMismatch extends RuntimeException
+final class ScopeContextMismatch extends CodedException
 {
     public static function account(string $expected, string $actual): self
     {
@@ -34,5 +37,10 @@ final class ScopeContextMismatch extends RuntimeException
         return new self($expectedBoxed
             ? 'Data scope was produced by a boxed profile but the active context is not boxed.'
             : 'Data scope was produced by a tenant profile but the active context is boxed.');
+    }
+
+    public function errorDescriptor(): ErrorDescriptor
+    {
+        return new ErrorDescriptor(CoreErrorCode::ScopeContextMismatch, ErrorCategory::Authorization, retryable: false);
     }
 }

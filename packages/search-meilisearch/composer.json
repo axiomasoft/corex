@@ -29,7 +29,8 @@
             "stability": "stable",
             "public-api": [
                 "CoreX\\SearchMeilisearch\\Exceptions",
-                "CoreX\\SearchMeilisearch\\MeilisearchServiceProvider"
+                "CoreX\\SearchMeilisearch\\MeilisearchServiceProvider",
+                "CoreX\\SearchMeilisearch\\Errors\\Enums\\SearchMeilisearchErrorCode"
             ]
         },
         "laravel": {

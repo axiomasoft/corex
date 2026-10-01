@@ -84,7 +84,8 @@
                 "CoreX\\Webhooks\\WebhooksServiceProvider",
                 "CoreX\\Webhooks\\Laravel\\WebhookOptionsParser",
                 "CoreX\\Webhooks\\Laravel\\WebhookRegistrar",
-                "CoreX\\Webhooks\\Laravel\\WebhookRouteRegistrar"
+                "CoreX\\Webhooks\\Laravel\\WebhookRouteRegistrar",
+                "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode"
             ]
         },
         "branch-alias": {

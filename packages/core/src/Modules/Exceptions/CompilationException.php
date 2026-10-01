@@ -5,13 +5,16 @@ declare(strict_types=1);
 namespace CoreX\Modules\Exceptions;
 
 use CoreX\Attributes\Api;
-use RuntimeException;
+use CoreX\Errors\Data\ErrorDescriptor;
+use CoreX\Errors\Enums\CoreErrorCode;
+use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Errors\Exceptions\CodedException;
 
 /**
  * Compilation validation failure: always a deploy failure, never a warning.
  */
 #[Api(since: '1.0')]
-final class CompilationException extends RuntimeException
+final class CompilationException extends CodedException
 {
     public static function duplicateTablePrefix(string $prefix, string $firstModule, string $secondModule): self
     {
@@ -197,5 +200,10 @@ final class CompilationException extends RuntimeException
             'Compiled registry artifact is stale or corrupt (%s). Rerun corex:modules:compile.',
             $reason,
         ));
+    }
+
+    public function errorDescriptor(): ErrorDescriptor
+    {
+        return new ErrorDescriptor(CoreErrorCode::CompilationException, ErrorCategory::Internal, retryable: false);
     }
 }

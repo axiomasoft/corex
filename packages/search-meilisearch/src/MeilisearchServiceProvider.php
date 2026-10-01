@@ -7,9 +7,11 @@ namespace CoreX\SearchMeilisearch;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Config\Contracts\ConfigReportSection;
+use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Search\Contracts\SearchDriverRegistry;
 use CoreX\Search\Contracts\SearchProvider;
 use CoreX\Search\SearchServiceProvider;
+use CoreX\SearchMeilisearch\Errors\Internal\PackageProblemDefinitions;
 use CoreX\SearchMeilisearch\Exceptions\InvalidMeilisearchConfiguration;
 use CoreX\SearchMeilisearch\Internal\MeilisearchConfigSection;
 use CoreX\SearchMeilisearch\Internal\MeilisearchSearchProvider;
@@ -24,6 +26,8 @@ final class MeilisearchServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        ProblemDefinitions::register($this->app, __DIR__.'/../composer.json', PackageProblemDefinitions::class);
+
         if (! $this->app->bound(SearchDriverRegistry::class)) {
             $this->app->register(SearchServiceProvider::class);
         }

@@ -140,12 +140,12 @@ final class PlatformTest extends TestCase
     {
         $this->allow();
         $this->tenants->end();
-        self::assertSame('context_required', $this->dispatch()->getData(true)['error']['code']);
+        self::assertSame('operations.context_required', $this->dispatch()->getData(true)['error']['code']);
         $this->tenants->value = new TenantContext($this->account('A'), boxed: true);
         self::assertSame(403, $this->dispatch()->getStatusCode());
         $this->tenants->initialize($this->account('A'));
         $this->modules->enabled = false;
-        self::assertSame('module_unavailable', $this->dispatch()->getData(true)['error']['code']);
+        self::assertSame('operations.module_unavailable', $this->dispatch()->getData(true)['error']['code']);
         self::assertSame(0, NoteHandler::$calls);
     }
 
@@ -292,7 +292,7 @@ final class PlatformTest extends TestCase
     {
         $this->allow();
         $this->tenants->initialize(new AccountRef('A', 'a', 'suspended', [], []));
-        self::assertSame('account_unavailable', $this->dispatch()->getData(true)['error']['code']);
+        self::assertSame('operations.account_unavailable', $this->dispatch()->getData(true)['error']['code']);
         self::assertSame(0, NoteHandler::$calls);
     }
 

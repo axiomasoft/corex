@@ -1,7 +1,7 @@
 {
     "contract_fingerprint": "baseline",
     "files": {
-        "errors.json": "0",
+        "errors.json": "852a4bff7befc205b3be7505f88e24100d861b20c9e3a01da396f4cd80721053",
         "openapi.json": "0",
         "operations.json": "0"
     },

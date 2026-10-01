@@ -1,7 +1,7 @@
 [
     {
         "category": "authorization",
-        "code": "access_denied",
+        "code": "operations.access_denied",
         "detail_keys": [
             "reason"
         ],

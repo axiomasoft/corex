@@ -24,6 +24,7 @@ use CoreX\Operations\Definition\Contracts\OperationHandler;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Data\ResourceId;
 use CoreX\Operations\Definition\Laravel\OperationFactory;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Idempotency\Data\StoredOperationOutcome;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
@@ -206,10 +207,10 @@ final class AuthorizationLayersTest extends TestCase
         self::assertSame(0, AuthorizationHandler::$calls);
 
         $this->clientScopes->allow = false;
-        $this->assertApiError('scope_required', fn () => $authorizer->authorize($this->invocation(), $outcome, true));
+        $this->assertApiError('operations.scope_required', fn () => $authorizer->authorize($this->invocation(), $outcome, true));
         $this->clientScopes->allow = true;
         $this->actors->allow = false;
-        $this->assertApiError('access_denied', fn () => $authorizer->authorize($this->invocation(), $outcome, true));
+        $this->assertApiError('operations.access_denied', fn () => $authorizer->authorize($this->invocation(), $outcome, true));
         self::assertSame(0, AuthorizationHandler::$calls);
     }
 
@@ -221,11 +222,11 @@ final class AuthorizationLayersTest extends TestCase
         $migration->up();
 
         $this->clientScopes->allow = false;
-        self::assertSame('scope_required', $this->dispatch($this->validInput(), 'scope-denied')->getData(true)['error']['code']);
+        self::assertSame('operations.scope_required', $this->dispatch($this->validInput(), 'scope-denied')->getData(true)['error']['code']);
         self::assertSame(0, DB::table('sys_api_idempotency')->count());
 
         $this->clientScopes->allow = true;
-        self::assertSame('access_denied', $this->dispatch(
+        self::assertSame('operations.access_denied', $this->dispatch(
             [...$this->validInput(), 'secret' => 'must-not-be-stored'],
             'field-denied',
         )->getData(true)['error']['code']);
@@ -386,7 +387,7 @@ final class AuthorizationHandler implements OperationHandler
 
         if ($resource->toString() === AuthorizationLayersTest::ForeignTenantResource
             || $input['owner'] !== $context->principal()->id()) {
-            throw new ApiError('resource_not_found', 404, 'Resource not found.');
+            throw new ApiError(OperationsErrorCode::ResourceNotFound, 404, 'Resource not found.');
         }
 
         return [

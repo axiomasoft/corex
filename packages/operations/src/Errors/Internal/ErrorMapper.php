@@ -7,8 +7,11 @@ namespace CoreX\Operations\Errors\Internal;
 use CoreX\Context\Exceptions\CentralContextException;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Errors\Contracts\DescribesError;
+use CoreX\Errors\Contracts\ProblemRegistry;
+use CoreX\Errors\Enums\CoreErrorCode;
 use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Operations\Errors\Contracts\ErrorMapping;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -20,18 +23,32 @@ use Throwable;
 /** @internal Shares safe normalization between dispatch and the surrounding middleware pipeline. */
 final class ErrorMapper implements ErrorMapping
 {
+    public function __construct(private readonly ProblemRegistry $problems) {}
+
     public function map(Throwable $error, bool $reportUnexpected = true): ApiError
     {
         if ($error instanceof ApiError) {
+            try {
+                $this->problems->assertOccurrence($error->errorDescriptor(), $error->status);
+            } catch (Throwable) {
+                return $this->unexpected($error, $reportUnexpected);
+            }
+
             return $error;
         }
 
         if ($error instanceof DescribesError) {
-            $descriptor = $error->errorDescriptor();
+            try {
+                $descriptor = $error->errorDescriptor();
+                $this->problems->assertOccurrence($descriptor);
+                $definition = $this->problems->get($descriptor->errorCode);
+            } catch (Throwable) {
+                return $this->unexpected($error, $reportUnexpected);
+            }
 
             return new ApiError(
-                errorCode: $descriptor->code,
-                status: $this->statusFor($descriptor->category),
+                errorCode: $definition->code,
+                status: $definition->defaultStatus,
                 message: $this->messageFor($descriptor->category),
                 details: JsonDocuments::capture($descriptor->details),
                 category: $descriptor->category,
@@ -42,7 +59,7 @@ final class ErrorMapper implements ErrorMapping
 
         if ($error instanceof ValidationException) {
             return new ApiError(
-                errorCode: 'validation_failed',
+                errorCode: OperationsErrorCode::ValidationFailed,
                 status: 422,
                 message: 'Input validation failed.',
                 details: JsonDocuments::capture($error->errors()),
@@ -52,7 +69,7 @@ final class ErrorMapper implements ErrorMapping
 
         if ($error instanceof CentralContextException) {
             return new ApiError(
-                errorCode: 'context_required',
+                errorCode: OperationsErrorCode::ContextRequired,
                 status: 403,
                 message: 'An initialized account context is required.',
                 category: ErrorCategory::Authorization,
@@ -67,18 +84,18 @@ final class ErrorMapper implements ErrorMapping
             default => 500,
         };
         [$code, $message] = match ($status) {
-            401 => ['authentication_required', 'Authentication is required.'],
-            403 => ['forbidden', 'Operation is not permitted.'],
-            404 => ['resource_not_found', 'Resource not found.'],
-            409 => ['conflict', 'Operation conflicts with current state.'],
-            422 => ['validation_failed', 'Input validation failed.'],
-            429 => ['rate_limited', 'Too many requests.'],
+            401 => [OperationsErrorCode::AuthenticationRequired, 'Authentication is required.'],
+            403 => [OperationsErrorCode::Forbidden, 'Operation is not permitted.'],
+            404 => [OperationsErrorCode::ResourceNotFound, 'Resource not found.'],
+            409 => [OperationsErrorCode::Conflict, 'Operation conflicts with current state.'],
+            422 => [OperationsErrorCode::ValidationFailed, 'Input validation failed.'],
+            429 => [OperationsErrorCode::RateLimited, 'Too many requests.'],
             default => $status >= 400 && $status < 500
-                ? ['request_rejected', 'Request could not be completed.']
-                : ['internal_error', 'Operation could not be completed.'],
+                ? [OperationsErrorCode::RequestRejected, 'Request could not be completed.']
+                : [CoreErrorCode::InternalError, 'Operation could not be completed.'],
         };
 
-        if ($code === 'internal_error') {
+        if ($code === CoreErrorCode::InternalError) {
             if ($reportUnexpected) {
                 report($error);
             }
@@ -93,19 +110,13 @@ final class ErrorMapper implements ErrorMapping
         );
     }
 
-    private function statusFor(ErrorCategory $category): int
+    private function unexpected(Throwable $error, bool $reportUnexpected): ApiError
     {
-        return match ($category) {
-            ErrorCategory::Authentication => 401,
-            ErrorCategory::Authorization => 403,
-            ErrorCategory::Validation => 422,
-            ErrorCategory::Conflict => 409,
-            ErrorCategory::NotFound => 404,
-            ErrorCategory::RateLimit => 429,
-            ErrorCategory::Unsupported => 422,
-            ErrorCategory::Unavailable => 503,
-            ErrorCategory::Internal => 500,
-        };
+        if ($reportUnexpected) {
+            report($error);
+        }
+
+        return new ApiError(CoreErrorCode::InternalError, 500, 'Operation could not be completed.', category: ErrorCategory::Internal);
     }
 
     private function messageFor(ErrorCategory $category): string

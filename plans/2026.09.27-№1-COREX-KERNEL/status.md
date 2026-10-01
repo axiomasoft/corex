@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-10-01
-inputs_sha256: 80b898ca0148c8aa41b63e0f2fc2ee3550136f4d626272efc5642c3a15375262
+inputs_sha256: c31b86ae06c828179ecb1a9d6dfbc8726f6ec340a3df3b7b8a8f16cab0f7112f
 generated_by: task plan-views status
 -->
 
@@ -27,7 +27,7 @@ generated_by: task plan-views status
 | P01 | Окружение, платформа и страховочная сетка | 4/4 | 🟢 Done |
 | P02 | Vendor, состав пакетов, namespace = путь | 4/4 | 🟢 Done |
 | P03 | Feature modules и `Internal` | 2/2 | 🟢 Done |
-| P04 | Application API, Extension SPI и типизированные ошибки | 2/4 | 🟡 In progress |
+| P04 | Application API, Extension SPI и типизированные ошибки | 3/4 | 🟡 In progress |
 
 ## Phase P00
 
@@ -68,7 +68,7 @@ generated_by: task plan-views status
 |:--|:--|:--|:--|
 | P04.1 | Атрибуты и report-сканер символной поверхности | 🟢 Done | 2026-09-29 |
 | P04.2 | Минимальная API/SPI поверхность, DTO и закрытие Internal-швов | 🟢 Done | 2026-10-01 |
-| P04.3 | Типизированные package errors и compiled ProblemRegistry | ⬜ Not started | — |
+| P04.3 | Типизированные package errors и compiled ProblemRegistry | 🟢 Done | 2026-10-01 |
 | P04.4 | Strict поверхность, manifests, SemVer и документация | ⬜ Not started | — |
 
 ## 6. Update Log
@@ -217,6 +217,9 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-10-01 | reviewer/codex/gpt-6 | plan-run · closed-green · note сокращена; полный текст: journal.jsonl:122 |
 | 2026-10-01 | reviewer/codex/gpt-6 | plan-run · no-op · Format correction: effective pre_mutation allow uses the existing owner route waiver; raw ROUTE-UNVERIFIABLE remains in write-sites.json. Actual pre_final allow uses validation receipts.
 write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-01 | executor/codex/SOL | plan-run · in-progress · Owner authorizes SOL and waives executor model/route verification. No extra SKM reviews or redundant runs. Source: artifacts/P04.3-execution/owner-instructions.md. No route attestation claimed. |
+| 2026-10-01 | executor/codex/SOL | plan-run · in-progress · Owner authorizes SOL and waives executor model/route verification. No extra SKM reviews or redundant runs. Source: artifacts/P04.3-execution/owner-instructions.md. No route attestation claimed. Append-only identity correction: durable start binds attempt 1 and run_id. |
+| 2026-10-01 | executor/codex/SOL | plan-run · closed-green · note сокращена; полный текст: journal.jsonl:126 |
 
 ## Owner Gates
 

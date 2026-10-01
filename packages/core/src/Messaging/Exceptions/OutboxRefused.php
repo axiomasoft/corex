@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace CoreX\Messaging\Exceptions;
 
 use CoreX\Attributes\Api;
-use RuntimeException;
+use CoreX\Errors\Data\ErrorDescriptor;
+use CoreX\Errors\Enums\CoreErrorCode;
+use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Errors\Exceptions\CodedException;
 
 #[Api(since: '1.0')]
-final class OutboxRefused extends RuntimeException
+final class OutboxRefused extends CodedException
 {
     public static function outsideTransaction(string $contract): self
     {
@@ -24,5 +27,10 @@ final class OutboxRefused extends RuntimeException
             "Message [{$contract}] declares a maximum personal-data class of [{$declared}] but carries "
             ."[{$actual}] (MSG-007).",
         );
+    }
+
+    public function errorDescriptor(): ErrorDescriptor
+    {
+        return new ErrorDescriptor(CoreErrorCode::OutboxRefused, ErrorCategory::Conflict, retryable: false);
     }
 }

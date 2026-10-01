@@ -8,6 +8,7 @@ use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Exceptions\CentralContextException;
 use CoreX\Operations\Authorization\Contracts\Principal;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\ContextResolver;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
@@ -30,16 +31,16 @@ final class TrustedContextResolver implements ContextResolver
         try {
             $tenant = $this->tenants->current();
         } catch (CentralContextException) {
-            throw new ApiError('context_required', 403, 'An initialized account context is required.');
+            throw new ApiError(OperationsErrorCode::ContextRequired, 403, 'An initialized account context is required.');
         }
 
         if ($this->requirePhysicalTenancy && ($tenant->isBoxed() || ! $this->manager->initialized()
             || $this->manager->context() != $tenant)) {
-            throw new ApiError('context_required', 403, 'An initialized physical account context is required.');
+            throw new ApiError(OperationsErrorCode::ContextRequired, 403, 'An initialized physical account context is required.');
         }
 
         if ($tenant->account->status !== 'active') {
-            throw new ApiError('account_unavailable', 403, 'Account is unavailable.');
+            throw new ApiError(OperationsErrorCode::AccountUnavailable, 403, 'Account is unavailable.');
         }
 
         return new ResolvedContext($tenant, $principal, $metadata);

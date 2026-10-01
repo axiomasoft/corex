@@ -69,14 +69,14 @@ final class WebhookSubscriptionTest extends TestCase
             $this->catalogue->get('orders.placed', 2);
             self::fail('Unknown version was accepted.');
         } catch (ApiError $error) {
-            self::assertSame('unknown_message_contract', $error->errorCode);
+            self::assertSame('webhooks.unknown_message_contract', $error->errorCode);
         }
 
         try {
             $this->catalogue->assertSchema('orders.placed', 1, ['id' => 'string', 'extra' => 'string']);
             self::fail('Unknown schema was accepted.');
         } catch (ApiError $error) {
-            self::assertSame('unknown_message_schema', $error->errorCode);
+            self::assertSame('webhooks.unknown_message_schema', $error->errorCode);
         }
 
         $this->expectException(InvalidArgumentException::class);
@@ -91,7 +91,7 @@ final class WebhookSubscriptionTest extends TestCase
             $this->catalogue->admit($personal, false, true);
             self::fail('Sensitive topic was admitted without an ability.');
         } catch (ApiError $error) {
-            self::assertSame('webhook_sensitive_denied', $error->errorCode);
+            self::assertSame('webhooks.webhook_sensitive_denied', $error->errorCode);
             self::assertSame(403, $error->status);
         }
 
@@ -118,7 +118,7 @@ final class WebhookSubscriptionTest extends TestCase
             $this->store->update($this->scope, 'sub-1', 0, 'https://hooks.example/stale', ['current'], true, true);
             self::fail('Stale revision was accepted.');
         } catch (ApiError $error) {
-            self::assertSame('conflict', $error->errorCode);
+            self::assertSame('operations.conflict', $error->errorCode);
         }
 
         self::assertSame('https://hooks.example/next', $this->store->find($this->scope, 'sub-1')?->endpointUrl);
@@ -140,7 +140,7 @@ final class WebhookSubscriptionTest extends TestCase
             $this->store->create($this->scope, $this->subscription('sub-101', 'billing.issued', 'none'), false, false);
             self::fail('Subscription cap was exceeded.');
         } catch (ApiError $error) {
-            self::assertSame('webhook_subscription_cap', $error->errorCode);
+            self::assertSame('webhooks.webhook_subscription_cap', $error->errorCode);
         }
     }
 

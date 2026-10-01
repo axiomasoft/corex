@@ -375,7 +375,7 @@ final class WebhookApiRetentionTest extends TestCase
             $replay->one($this->scope, $deliveryId, true, 'retention check');
             self::fail("Replay [{$deliveryId}] succeeded after body expiry.");
         } catch (ApiError $error) {
-            self::assertSame('webhook_replay_expired', $error->errorCode);
+            self::assertSame('webhooks.webhook_replay_expired', $error->errorCode);
         }
     }
 

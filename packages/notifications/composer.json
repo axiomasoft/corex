@@ -47,7 +47,8 @@
                 "CoreX\\Notifications\\Inbox\\Exceptions\\NotificationOperationConflict",
                 "CoreX\\Notifications\\NotificationsModule",
                 "CoreX\\Notifications\\NotificationsServiceProvider",
-                "CoreX\\Notifications\\Delivery\\Laravel\\DeliveryPortBindings"
+                "CoreX\\Notifications\\Delivery\\Laravel\\DeliveryPortBindings",
+                "CoreX\\Notifications\\Errors\\Enums\\NotificationsErrorCode"
             ]
         },
         "laravel": {

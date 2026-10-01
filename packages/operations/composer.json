@@ -131,7 +131,10 @@
                 "CoreX\\Operations\\Validation\\Laravel\\SchemaBudget",
                 "CoreX\\Operations\\Validation\\Laravel\\SchemaProfile",
                 "CoreX\\Operations\\Versioning\\Contracts\\ApiProfiles",
-                "CoreX\\Operations\\Definition\\Laravel\\OperationPortBindings"
+                "CoreX\\Operations\\Definition\\Laravel\\OperationPortBindings",
+                "CoreX\\Operations\\Errors\\Contracts\\ErrorMapping",
+                "CoreX\\Operations\\Errors\\Contracts\\ResponseSerializer",
+                "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode"
             ]
         },
         "branch-alias": {

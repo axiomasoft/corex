@@ -7,6 +7,7 @@ namespace CoreX\Operations\Invocation\Internal;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
 use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\ContextResolver;
 use CoreX\Operations\Invocation\Contracts\EffectiveCapabilities;
@@ -41,7 +42,7 @@ final class CapabilityResolver implements EffectiveCapabilities
         $version = $request->route('version');
         $metadata = InvocationMetadataFactory::fromRequest($request, is_string($version) ? $version : $this->options->defaultMajor);
         $principal = $this->principals->resolve($request)
-            ?? throw new ApiError('authentication_required', 401, 'Authentication is required.');
+            ?? throw new ApiError(OperationsErrorCode::AuthenticationRequired, 401, 'Authentication is required.');
         $context = $this->contexts->resolve($request, $principal, $metadata);
         $profile = $this->profile();
         $modules = [];

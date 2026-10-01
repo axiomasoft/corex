@@ -6,8 +6,10 @@ namespace CoreX\Webhooks\Laravel;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
+use CoreX\Errors\Enums\CoreErrorCode;
 use CoreX\Operations\Definition\Contracts\OperationRegistry;
 use CoreX\Operations\Definition\Data\Operation;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use CoreX\Operations\Invocation\Contracts\OperationDispatcher;
@@ -52,7 +54,7 @@ final readonly class WebhookRouteRegistrar
         $offset = str_starts_with($path, $marker) ? 0 : strpos($path, '/'.$marker);
 
         if ($offset === false) {
-            throw new ApiError('operation_not_found', 404, 'Operation not found.');
+            throw new ApiError(OperationsErrorCode::OperationNotFound, 404, 'Operation not found.');
         }
 
         $relative = substr($path, $offset + strlen($marker) + ($offset === 0 ? 0 : 1));
@@ -73,7 +75,7 @@ final readonly class WebhookRouteRegistrar
             || $operation->requiredScopes !== [$scope]
             || $operation->idempotency !== $idempotency
             || $operation->effectMode !== $effect) {
-            throw new ApiError('internal_error', 500, 'Webhook operation contract is unavailable.');
+            throw new ApiError(CoreErrorCode::InternalError, 500, 'Webhook operation contract is unavailable.');
         }
     }
 }

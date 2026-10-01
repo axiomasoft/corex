@@ -1,7 +1,7 @@
 [
     {
         "category": "authorization",
-        "code": "access_denied",
+        "code": "operations.access_denied",
         "detail_keys": [
             "reason",
             "actor"
@@ -12,7 +12,7 @@
     },
     {
         "category": "conflict",
-        "code": "note_locked",
+        "code": "operations.note_locked",
         "detail_keys": [],
         "owner": "axiomasoft/corex-operations",
         "path": null,

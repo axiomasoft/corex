@@ -19,3 +19,10 @@ Configure explicit topics and payload projectors in `corex-webhooks`. Bind the p
 ## Failure handling
 
 Unavailable transport or signing capability refuses delivery. URL policy, subscription scope, replay horizon and lease checks remain mandatory. Failed attempts retain their recorded outcome; resolve the cause before replaying through the supported API.
+
+## Typed errors
+
+Package error identities use backed enums and a boot compiled kernel registry.
+Error constructors require `ErrorCode`; descriptors keep scoped string wire codes.
+See the monorepo [error contract](../../docs/reference/errors.md) for contributions,
+validated replay and safe mapping.

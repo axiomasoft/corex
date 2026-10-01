@@ -241,7 +241,7 @@ final class CursorCodecTest extends TestCase
             $callback();
             $this->fail('Expected cursor_invalid.');
         } catch (ApiError $error) {
-            $this->assertSame('cursor_invalid', $error->errorCode);
+            $this->assertSame('operations.cursor_invalid', $error->errorCode);
         }
     }
 
@@ -251,7 +251,7 @@ final class CursorCodecTest extends TestCase
             $callback();
             $this->fail('Expected ordering_version_unsupported.');
         } catch (ApiError $error) {
-            $this->assertSame('ordering_version_unsupported', $error->errorCode);
+            $this->assertSame('operations.ordering_version_unsupported', $error->errorCode);
         }
     }
 

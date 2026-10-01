@@ -1,26 +1,40 @@
-# HANDOFF — 2026-10-01 — after P04.2
+# HANDOFF — 2026-10-01 — after P04.3
 
-**Next:** exec-items: task:plan-exec 2026.09.27-№1-COREX-KERNEL P04.3
+**Next:** exec-items: task:plan-exec 2026.09.27-№1-COREX-KERNEL P04.4
 
 | Параметр | Значение |
 |:--|:--|
 | Batch | solo |
-| Model | frontier |
+| Model | implementation |
 | Thinking | high |
-| Context | cold-start-root: owner-requested-new-session |
+| Context | continue-root |
 | Capabilities | repository write · PHP8.4 · isolated test DB |
-| Суть | Следующий готовый item по Routing; рекомендация не авторизует его запуск. |
+| Суть | Строгие gates/manifest/BC/docs по результатам P04.2/P04.3. Рекомендация не авторизует запуск. |
 
 ```text
-task:plan-exec 2026.09.27-№1-COREX-KERNEL P04.3
+task:plan-exec 2026.09.27-№1-COREX-KERNEL P04.4
 ```
 
-**Done:** P04.2: независимое ревью GREEN; три исправленных замечания; финальные обязательные проверки и sealed replay GREEN. Доказательства: artifacts/P04.2-execution/completion.md, review-verdict.md, validation-final-result.json, replay-equality-final.json.
+```session-continuity-decision/v1
+{
+  "outcome": "continue-root",
+  "reason": "authorized-scope-complete",
+  "evidence": [
+    "lifecycle:scope-complete",
+    "checkpoint:artifacts/P04.3-execution/completion.md",
+    "owner:executor-route-verification-waived; no attestation claimed"
+  ],
+  "runnable": true,
+  "schema_version": "session-continuity-decision/v1"
+}
+```
 
-**Remaining:** В рамках P04.2 — отсутствует. P04.3 не начат. Push/release не выполнялись.
+**Done:** P04.3 — 120 typed codes, 13 package contributions, все 85 constructors и 69 exceptions; compiled frozen ProblemRegistry, safe replay/mapper, AST gate, согласованные docs/snapshots. Обязательное независимое review GREEN. Source: artifacts/P04.3-execution/completion.md, validation-result.json, review-verdict.md, golden-semantic-delta.json.
 
-**Sources of truth:** immutable phases/P04/P04.2.md; D63/D64/D67; artifacts/P04.2-execution/completion.md; journal.jsonl.
+**Remaining:** В авторизованном P04.3 — отсутствует. P04.4 не выполнялся. Push/release не выполнялись.
 
-**Open risks:** Общий plan-lint обнаруживает read-budget превышение следующего P04.3 bundle: 288416 оценочных токенов; classification-result.tsv — 247314. Это граница будущего запуска, не незавершённая проверка реализации P04.2; P04.3 не запускать до отдельного решения по компактной передаче. Локальная валидация не является hosted CI или fresh-install evidence. Прежние RED/предыдущие replay receipts сохранены отдельно. Route probing остаётся отменённым владельцем; attested route не заявлен.
+**Sources of truth:** phases/P04/P04.3.md; D10/D64; artifacts/P04.3-execution; journal.jsonl. Следующий scope: phases/P04/P04.4.md и generated bundles/P04.4.json.
 
-**Workarounds/Deferred/Open questions:** Предпочтение владельца: при реализации больших задач завершать код с лёгкими проверками; финальное ревью — в свежей сессии; не добавлять циклы SKM или повторные полные прогоны без изменённых входов/подтверждённого дефекта. Пакетная валидация переиспользует GREEN prefix и продолжает с исправленного operations.
+**Open risks:** Scoped wire codes и typed constructor signatures — осознанный pre-1.0 contract delta D64. Нет data migration/legacy aliases. Локальные GREEN проверки не являются hosted CI. Исторические RED сохранены; окончательное coverage/reuse записано явно. Модель/route probing отменены владельцем; аттестация не заявляется.
+
+**Workarounds/Deferred/Open questions:** Указания владельца — artifacts/P04.3-execution/owner-instructions.md: SOL разрешён, без проверки модели, без лишних SKM reviews/широких повторов. Повторять только changed-input/confirmed-defect checks. Проверки с временными source probes выполнять последовательно. P04.4 имеет собственный scope и routing; эта передача их не меняет.

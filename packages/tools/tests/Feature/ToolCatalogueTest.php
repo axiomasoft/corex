@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace CoreX\Tools\Tests\Feature;
 
 use CoreX\Context\Data\AccountRef;
+use CoreX\CoreServiceProvider;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Data\Api;
 use CoreX\Modules\Data\CompiledRegistry;
 use CoreX\Modules\Data\ModuleManifest;
 use CoreX\Modules\Internal\Compiler\RegistryCompiler;
+use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Operations\ApiServiceProvider;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
@@ -43,7 +45,7 @@ final class ToolCatalogueTest extends TestCase
 
     protected function getPackageProviders($app): array
     {
-        return [ApiServiceProvider::class, ToolServiceProvider::class];
+        return [ApiServiceProvider::class, ToolServiceProvider::class, CoreServiceProvider::class, ModulesServiceProvider::class];
     }
 
     protected function setUp(): void
@@ -211,7 +213,7 @@ final class ToolCatalogueTest extends TestCase
             $catalogue->discover($this->context());
             self::fail('Expected catalogue_limit.');
         } catch (ApiError $error) {
-            self::assertSame('catalogue_limit', $error->errorCode);
+            self::assertSame('operations.catalogue_limit', $error->errorCode);
         }
 
         $this->modules->registry = $this->compile(array_slice($tools, 0, 1000));

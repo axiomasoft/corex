@@ -104,6 +104,19 @@ const CORE_ZONE_EXACT_IMPORTS = [
  * @var list<string>
  */
 const CORE_ZONE_FOUNDATION_SUPPORT = [
+    'Errors/Contracts/ErrorCode.php',
+    'Errors/Contracts/ProblemDefinitionProvider.php',
+    'Errors/Contracts/ProblemRegistry.php',
+    'Errors/Data/ProblemDefinition.php',
+    'Errors/Enums/CoreErrorCode.php',
+    'Errors/Exceptions/CodedException.php',
+    'Errors/Exceptions/ProblemRegistryException.php',
+    'Errors/Internal/CompiledProblemRegistry.php',
+    'Errors/Internal/ErrorSourceScanner.php',
+    'Errors/Internal/PackageProblemDefinitions.php',
+    'Errors/Internal/ProblemContribution.php',
+    'Errors/Internal/ProblemRegistryRegistrar.php',
+    'Errors/Laravel/ProblemDefinitions.php',
     'Config/Laravel/ConfigurationValidator.php',
     'Config/Exceptions/InvalidConfiguration.php',
     'Config/Data/SecretRef.php',

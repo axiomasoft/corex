@@ -1,0 +1,2730 @@
+{
+  "php-surface": {
+    "preimage_sha256": "10ab5d7c26d35a20e83c02541fa3ffc0a17eeaacf6a330247b3cd5c2866b6173",
+    "candidate_sha256": "8b7d10829a80ad65b7a8ae1e4bd04f7f9063f5990843576c098377fd373c19d1",
+    "added": [
+      "CoreX\\Access\\Errors\\Enums\\AccessErrorCode",
+      "CoreX\\Access\\Errors\\Internal\\PackageProblemDefinitions",
+      "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
+      "CoreX\\CustomFields\\Errors\\Internal\\PackageProblemDefinitions",
+      "CoreX\\Errors\\Contracts\\ErrorCode",
+      "CoreX\\Errors\\Contracts\\ProblemDefinitionProvider",
+      "CoreX\\Errors\\Contracts\\ProblemRegistry",
+      "CoreX\\Errors\\Data\\ProblemDefinition",
+      "CoreX\\Errors\\Enums\\CoreErrorCode",
+      "CoreX\\Errors\\Exceptions\\CodedException",
+      "CoreX\\Errors\\Exceptions\\ProblemRegistryException",
+      "CoreX\\Errors\\Internal\\CompiledProblemRegistry",
+      "CoreX\\Errors\\Internal\\ErrorSourceScanner",
+      "CoreX\\Errors\\Internal\\PackageProblemDefinitions",
+      "CoreX\\Errors\\Internal\\ProblemContribution",
+      "CoreX\\Errors\\Internal\\ProblemRegistryRegistrar",
+      "CoreX\\Errors\\Laravel\\ProblemDefinitions",
+      "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+      "CoreX\\Intl\\Errors\\Internal\\PackageProblemDefinitions",
+      "CoreX\\Notifications\\Errors\\Enums\\NotificationsErrorCode",
+      "CoreX\\Notifications\\Errors\\Internal\\PackageProblemDefinitions",
+      "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+      "CoreX\\Operations\\Errors\\Internal\\PackageProblemDefinitions",
+      "CoreX\\Recurrence\\Errors\\Enums\\RecurrenceErrorCode",
+      "CoreX\\Recurrence\\Errors\\Internal\\PackageProblemDefinitions",
+      "CoreX\\Recurrence\\RecurrenceServiceProvider",
+      "CoreX\\SearchMeilisearch\\Errors\\Enums\\SearchMeilisearchErrorCode",
+      "CoreX\\SearchMeilisearch\\Errors\\Internal\\PackageProblemDefinitions",
+      "CoreX\\Search\\Errors\\Enums\\SearchErrorCode",
+      "CoreX\\Search\\Errors\\Internal\\PackageProblemDefinitions",
+      "CoreX\\TasksWorkflow\\Errors\\Enums\\TasksWorkflowErrorCode",
+      "CoreX\\TasksWorkflow\\Errors\\Internal\\PackageProblemDefinitions",
+      "CoreX\\Tasks\\Errors\\Enums\\TasksErrorCode",
+      "CoreX\\Tasks\\Errors\\Internal\\PackageProblemDefinitions",
+      "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+      "CoreX\\Tenancy\\Errors\\Internal\\PackageProblemDefinitions",
+      "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+      "CoreX\\Webhooks\\Errors\\Internal\\PackageProblemDefinitions"
+    ],
+    "removed": [],
+    "changed": [
+      "CoreX\\Access\\Exceptions\\ScopeCapabilityMismatch",
+      "CoreX\\Config\\Exceptions\\InvalidConfiguration",
+      "CoreX\\Context\\Exceptions\\CentralContextException",
+      "CoreX\\Context\\Exceptions\\ImpersonationRestrictedException",
+      "CoreX\\Context\\Exceptions\\ScopeContextMismatch",
+      "CoreX\\CustomFields\\Exceptions\\InvalidAttributeTables",
+      "CoreX\\Data\\Exceptions\\InvalidScopePayload",
+      "CoreX\\Departments\\Exceptions\\CrossWorkspaceMoveException",
+      "CoreX\\Departments\\Exceptions\\DepartmentCycleException",
+      "CoreX\\Errors\\Data\\ErrorDescriptor",
+      "CoreX\\Intl\\Currency\\Exceptions\\InvalidRateException",
+      "CoreX\\Intl\\Currency\\Exceptions\\SnapshotExpiredException",
+      "CoreX\\Intl\\Formatting\\Exceptions\\UnsupportedFormattingException",
+      "CoreX\\Intl\\Locale\\Exceptions\\InvalidLocaleException",
+      "CoreX\\Intl\\Territory\\Exceptions\\AccessDeniedException",
+      "CoreX\\Intl\\Territory\\Exceptions\\OperationConflictException",
+      "CoreX\\Intl\\Territory\\Exceptions\\SchemaMismatchException",
+      "CoreX\\Messaging\\Exceptions\\InboxRefused",
+      "CoreX\\Messaging\\Exceptions\\InvalidMessage",
+      "CoreX\\Messaging\\Exceptions\\OutboxLeaseLost",
+      "CoreX\\Messaging\\Exceptions\\OutboxRefused",
+      "CoreX\\Messaging\\Exceptions\\UnknownMessageContract",
+      "CoreX\\Modules\\Exceptions\\CompilationException",
+      "CoreX\\Modules\\Exceptions\\EntityNotFound",
+      "CoreX\\Modules\\Exceptions\\HasEnabledDependentsException",
+      "CoreX\\Modules\\Exceptions\\InvalidManifestException",
+      "CoreX\\Modules\\Exceptions\\InvalidRegistryPoint",
+      "CoreX\\Modules\\Exceptions\\InvalidStateTransitionException",
+      "CoreX\\Modules\\Exceptions\\MissingDependencyException",
+      "CoreX\\Modules\\Exceptions\\ModuleEnableFailedException",
+      "CoreX\\Modules\\Exceptions\\ModuleNotFound",
+      "CoreX\\Modules\\Exceptions\\ModuleUpgradeFailedException",
+      "CoreX\\Modules\\Exceptions\\RegistryFrozen",
+      "CoreX\\Modules\\Exceptions\\RegistryInputUnavailable",
+      "CoreX\\Modules\\Exceptions\\StaleRegistryRevision",
+      "CoreX\\Notifications\\Inbox\\Exceptions\\NotificationAccessDenied",
+      "CoreX\\Notifications\\Inbox\\Exceptions\\NotificationOperationConflict",
+      "CoreX\\Operations\\Cost\\Exceptions\\BudgetRateLimited",
+      "CoreX\\Operations\\Cost\\Exceptions\\BudgetStoreUnavailable",
+      "CoreX\\Operations\\Errors\\Exceptions\\ApiError",
+      "CoreX\\Operations\\Errors\\Internal\\ErrorMapper",
+      "CoreX\\Operations\\Idempotency\\Data\\StoredOperationOutcome",
+      "CoreX\\Operations\\Idempotency\\Internal\\IdempotentOperationInvoker",
+      "CoreX\\Operations\\OpenApi\\Internal\\Commands\\WriteApiSnapshots",
+      "CoreX\\Operations\\OpenApi\\Internal\\ContractSnapshotBuilder",
+      "CoreX\\Recurrence\\Exceptions\\StaleCursorException",
+      "CoreX\\Recurrence\\Exceptions\\UnsupportedEnvironmentException",
+      "CoreX\\SearchMeilisearch\\Exceptions\\InvalidMeilisearchConfiguration",
+      "CoreX\\Search\\Exceptions\\InvalidSearchConfiguration",
+      "CoreX\\Settings\\Exceptions\\SettingValueTooLargeException",
+      "CoreX\\Settings\\Exceptions\\UnsupportedScopeException",
+      "CoreX\\Storage\\Exceptions\\StorageCapabilityUnavailable",
+      "CoreX\\Storage\\Exceptions\\StorageOperationFailed",
+      "CoreX\\TasksWorkflow\\Exceptions\\MaterializationConflict",
+      "CoreX\\TasksWorkflow\\Exceptions\\StaleMaterialization",
+      "CoreX\\TasksWorkflow\\Exceptions\\UnsupportedMaterialization",
+      "CoreX\\Tasks\\Access\\Exceptions\\TasksModuleDisabled",
+      "CoreX\\Tasks\\Planning\\Exceptions\\InvalidPlanningDraft",
+      "CoreX\\Tasks\\Planning\\Exceptions\\PlanningConflict",
+      "CoreX\\Tenancy\\Authentication\\Exceptions\\OidcAuthenticationException",
+      "CoreX\\Tenancy\\DomainTrust\\Exceptions\\DomainTrustDenied",
+      "CoreX\\Tenancy\\DomainTrust\\Exceptions\\DomainTrustDisabled",
+      "CoreX\\Tenancy\\Membership\\Exceptions\\CentralProtocolViolation",
+      "CoreX\\Tenancy\\Membership\\Exceptions\\CentralUnauthorized",
+      "CoreX\\Tenancy\\Membership\\Exceptions\\CentralUnavailable",
+      "CoreX\\Tenancy\\Membership\\Exceptions\\CredentialIssuanceDenied",
+      "CoreX\\Tenancy\\Membership\\Exceptions\\InboxConflict",
+      "CoreX\\Tenancy\\Membership\\Exceptions\\PairStoreViolation",
+      "CoreX\\Tenancy\\Membership\\Exceptions\\ProjectionDenied",
+      "CoreX\\Tenancy\\Membership\\Exceptions\\RevokeUncertain",
+      "CoreX\\Tenancy\\Provisioning\\Exceptions\\ClaimConflict",
+      "CoreX\\Tenancy\\Provisioning\\Exceptions\\ClaimUnavailable",
+      "CoreX\\Tenancy\\Provisioning\\Exceptions\\TemplateIntegrityException",
+      "CoreX\\Tenancy\\Runtime\\Exceptions\\TenantCouldNotBeIdentifiedByHostException",
+      "CoreX\\Tenancy\\Workspace\\Exceptions\\InvitationNotAcceptableException",
+      "CoreX\\Tenancy\\Workspace\\Exceptions\\NoDefaultWorkspaceException"
+    ],
+    "record_reasons": {
+      "CoreX\\Access\\Errors\\Enums\\AccessErrorCode": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Access\\Errors\\Internal\\PackageProblemDefinitions": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\CustomFields\\Errors\\Internal\\PackageProblemDefinitions": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Errors\\Contracts\\ErrorCode": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Errors\\Contracts\\ProblemDefinitionProvider": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Errors\\Contracts\\ProblemRegistry": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Errors\\Data\\ProblemDefinition": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Errors\\Enums\\CoreErrorCode": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Errors\\Exceptions\\CodedException": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Errors\\Exceptions\\ProblemRegistryException": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Errors\\Internal\\CompiledProblemRegistry": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Errors\\Internal\\ErrorSourceScanner": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Errors\\Internal\\PackageProblemDefinitions": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Errors\\Internal\\ProblemContribution": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Errors\\Internal\\ProblemRegistryRegistrar": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Errors\\Laravel\\ProblemDefinitions": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Intl\\Errors\\Internal\\PackageProblemDefinitions": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Notifications\\Errors\\Enums\\NotificationsErrorCode": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Notifications\\Errors\\Internal\\PackageProblemDefinitions": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Operations\\Errors\\Internal\\PackageProblemDefinitions": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Recurrence\\Errors\\Enums\\RecurrenceErrorCode": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Recurrence\\Errors\\Internal\\PackageProblemDefinitions": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Recurrence\\RecurrenceServiceProvider": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\SearchMeilisearch\\Errors\\Enums\\SearchMeilisearchErrorCode": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\SearchMeilisearch\\Errors\\Internal\\PackageProblemDefinitions": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Search\\Errors\\Enums\\SearchErrorCode": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Search\\Errors\\Internal\\PackageProblemDefinitions": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\TasksWorkflow\\Errors\\Enums\\TasksWorkflowErrorCode": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\TasksWorkflow\\Errors\\Internal\\PackageProblemDefinitions": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Tasks\\Errors\\Enums\\TasksErrorCode": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Tasks\\Errors\\Internal\\PackageProblemDefinitions": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Tenancy\\Errors\\Internal\\PackageProblemDefinitions": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Webhooks\\Errors\\Internal\\PackageProblemDefinitions": "D64 package-owned error registry and enums; new typed declarations",
+      "CoreX\\Access\\Exceptions\\ScopeCapabilityMismatch": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Config\\Exceptions\\InvalidConfiguration": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Context\\Exceptions\\CentralContextException": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Context\\Exceptions\\ImpersonationRestrictedException": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Context\\Exceptions\\ScopeContextMismatch": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\CustomFields\\Exceptions\\InvalidAttributeTables": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Data\\Exceptions\\InvalidScopePayload": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Departments\\Exceptions\\CrossWorkspaceMoveException": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Departments\\Exceptions\\DepartmentCycleException": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Errors\\Data\\ErrorDescriptor": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Intl\\Currency\\Exceptions\\InvalidRateException": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Intl\\Currency\\Exceptions\\SnapshotExpiredException": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Intl\\Formatting\\Exceptions\\UnsupportedFormattingException": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Intl\\Locale\\Exceptions\\InvalidLocaleException": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Intl\\Territory\\Exceptions\\AccessDeniedException": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Intl\\Territory\\Exceptions\\OperationConflictException": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Intl\\Territory\\Exceptions\\SchemaMismatchException": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Messaging\\Exceptions\\InboxRefused": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Messaging\\Exceptions\\InvalidMessage": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Messaging\\Exceptions\\OutboxLeaseLost": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Messaging\\Exceptions\\OutboxRefused": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Messaging\\Exceptions\\UnknownMessageContract": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Modules\\Exceptions\\CompilationException": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Modules\\Exceptions\\EntityNotFound": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Modules\\Exceptions\\HasEnabledDependentsException": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Modules\\Exceptions\\InvalidManifestException": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Modules\\Exceptions\\InvalidRegistryPoint": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Modules\\Exceptions\\InvalidStateTransitionException": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Modules\\Exceptions\\MissingDependencyException": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Modules\\Exceptions\\ModuleEnableFailedException": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Modules\\Exceptions\\ModuleNotFound": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Modules\\Exceptions\\ModuleUpgradeFailedException": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Modules\\Exceptions\\RegistryFrozen": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Modules\\Exceptions\\RegistryInputUnavailable": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Modules\\Exceptions\\StaleRegistryRevision": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Notifications\\Inbox\\Exceptions\\NotificationAccessDenied": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Notifications\\Inbox\\Exceptions\\NotificationOperationConflict": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Operations\\Cost\\Exceptions\\BudgetRateLimited": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Operations\\Cost\\Exceptions\\BudgetStoreUnavailable": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Operations\\Errors\\Exceptions\\ApiError": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Operations\\Errors\\Internal\\ErrorMapper": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Operations\\Idempotency\\Data\\StoredOperationOutcome": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Operations\\Idempotency\\Internal\\IdempotentOperationInvoker": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Operations\\OpenApi\\Internal\\Commands\\WriteApiSnapshots": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Operations\\OpenApi\\Internal\\ContractSnapshotBuilder": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Recurrence\\Exceptions\\StaleCursorException": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Recurrence\\Exceptions\\UnsupportedEnvironmentException": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\SearchMeilisearch\\Exceptions\\InvalidMeilisearchConfiguration": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Search\\Exceptions\\InvalidSearchConfiguration": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Settings\\Exceptions\\SettingValueTooLargeException": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Settings\\Exceptions\\UnsupportedScopeException": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Storage\\Exceptions\\StorageCapabilityUnavailable": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Storage\\Exceptions\\StorageOperationFailed": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\TasksWorkflow\\Exceptions\\MaterializationConflict": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\TasksWorkflow\\Exceptions\\StaleMaterialization": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\TasksWorkflow\\Exceptions\\UnsupportedMaterialization": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Tasks\\Access\\Exceptions\\TasksModuleDisabled": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Tasks\\Planning\\Exceptions\\InvalidPlanningDraft": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Tasks\\Planning\\Exceptions\\PlanningConflict": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Tenancy\\Authentication\\Exceptions\\OidcAuthenticationException": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Tenancy\\DomainTrust\\Exceptions\\DomainTrustDenied": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Tenancy\\DomainTrust\\Exceptions\\DomainTrustDisabled": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Tenancy\\Membership\\Exceptions\\CentralProtocolViolation": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Tenancy\\Membership\\Exceptions\\CentralUnauthorized": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Tenancy\\Membership\\Exceptions\\CentralUnavailable": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Tenancy\\Membership\\Exceptions\\CredentialIssuanceDenied": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Tenancy\\Membership\\Exceptions\\InboxConflict": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Tenancy\\Membership\\Exceptions\\PairStoreViolation": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Tenancy\\Membership\\Exceptions\\ProjectionDenied": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Tenancy\\Membership\\Exceptions\\RevokeUncertain": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Tenancy\\Provisioning\\Exceptions\\ClaimConflict": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Tenancy\\Provisioning\\Exceptions\\ClaimUnavailable": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Tenancy\\Provisioning\\Exceptions\\TemplateIntegrityException": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Tenancy\\Runtime\\Exceptions\\TenantCouldNotBeIdentifiedByHostException": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Tenancy\\Workspace\\Exceptions\\InvitationNotAcceptableException": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required",
+      "CoreX\\Tenancy\\Workspace\\Exceptions\\NoDefaultWorkspaceException": "D64 typed error contracts / coded exception descriptor; original constructor arguments and domain parents retained where required"
+    },
+    "preserved_promoted_fixtures": "13 unchanged Operations Testing records stay in promoted-fixtures.json; exact equality verified before removal from baseline candidate",
+    "record_changes": {
+      "CoreX\\Access\\Exceptions\\ScopeCapabilityMismatch": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Config\\Exceptions\\InvalidConfiguration": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        }
+      ],
+      "CoreX\\Context\\Exceptions\\CentralContextException": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Context\\Exceptions\\ImpersonationRestrictedException": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Context\\Exceptions\\ScopeContextMismatch": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\CustomFields\\Exceptions\\InvalidAttributeTables": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Data\\Exceptions\\InvalidScopePayload": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Departments\\Exceptions\\CrossWorkspaceMoveException": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Departments\\Exceptions\\DepartmentCycleException": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Errors\\Data\\ErrorDescriptor": [
+        {
+          "field": "/methods/__construct/params",
+          "before": [
+            {
+              "byRef": false,
+              "name": "code",
+              "type": "string",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "category",
+              "type": "CoreX\\Errors\\Enums\\ErrorCategory",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "default": false,
+              "name": "retryable",
+              "type": "bool",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "default": null,
+              "name": "path",
+              "type": "?string",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "default": [],
+              "name": "details",
+              "type": "array",
+              "variadic": false
+            }
+          ],
+          "after": [
+            {
+              "byRef": false,
+              "name": "code",
+              "type": "CoreX\\Errors\\Contracts\\ErrorCode",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "category",
+              "type": "CoreX\\Errors\\Enums\\ErrorCategory",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "default": false,
+              "name": "retryable",
+              "type": "bool",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "default": null,
+              "name": "path",
+              "type": "?string",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "default": [],
+              "name": "details",
+              "type": "array",
+              "variadic": false
+            }
+          ]
+        },
+        {
+          "field": "/properties/errorCode",
+          "before": null,
+          "after": {
+            "name": "errorCode",
+            "readonly": true,
+            "static": false,
+            "type": "CoreX\\Errors\\Contracts\\ErrorCode"
+          }
+        }
+      ],
+      "CoreX\\Intl\\Currency\\Exceptions\\InvalidRateException": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Intl\\Currency\\Exceptions\\SnapshotExpiredException": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Intl\\Formatting\\Exceptions\\UnsupportedFormattingException": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Intl\\Locale\\Exceptions\\InvalidLocaleException": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Intl\\Territory\\Exceptions\\AccessDeniedException": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Intl\\Territory\\Exceptions\\OperationConflictException": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Intl\\Territory\\Exceptions\\SchemaMismatchException": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Messaging\\Exceptions\\InboxRefused": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Messaging\\Exceptions\\InvalidMessage": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        }
+      ],
+      "CoreX\\Messaging\\Exceptions\\OutboxLeaseLost": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Messaging\\Exceptions\\OutboxRefused": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Messaging\\Exceptions\\UnknownMessageContract": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Modules\\Exceptions\\CompilationException": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Modules\\Exceptions\\EntityNotFound": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Modules\\Exceptions\\HasEnabledDependentsException": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Modules\\Exceptions\\InvalidManifestException": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Modules\\Exceptions\\InvalidRegistryPoint": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Modules\\Exceptions\\InvalidStateTransitionException": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        }
+      ],
+      "CoreX\\Modules\\Exceptions\\MissingDependencyException": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Modules\\Exceptions\\ModuleEnableFailedException": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Modules\\Exceptions\\ModuleNotFound": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Modules\\Exceptions\\ModuleUpgradeFailedException": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Modules\\Exceptions\\RegistryFrozen": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Modules\\Exceptions\\RegistryInputUnavailable": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Modules\\Exceptions\\StaleRegistryRevision": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Notifications\\Inbox\\Exceptions\\NotificationAccessDenied": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods",
+          "before": [],
+          "after": {
+            "errorDescriptor": {
+              "params": [],
+              "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+              "static": false
+            }
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Notifications\\Inbox\\Exceptions\\NotificationOperationConflict": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods",
+          "before": [],
+          "after": {
+            "errorDescriptor": {
+              "params": [],
+              "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+              "static": false
+            }
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Operations\\Cost\\Exceptions\\BudgetRateLimited": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Symfony\\Component\\HttpKernel\\Exception\\HttpExceptionInterface",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Symfony\\Component\\HttpKernel\\Exception\\HttpExceptionInterface",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods",
+          "before": [],
+          "after": {
+            "errorDescriptor": {
+              "params": [],
+              "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+              "static": false
+            }
+          }
+        }
+      ],
+      "CoreX\\Operations\\Cost\\Exceptions\\BudgetStoreUnavailable": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods",
+          "before": [],
+          "after": {
+            "errorDescriptor": {
+              "params": [],
+              "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+              "static": false
+            }
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Operations\\Errors\\Exceptions\\ApiError": [
+        {
+          "field": "/methods/__construct/params",
+          "before": [
+            {
+              "byRef": false,
+              "name": "errorCode",
+              "type": "string",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "status",
+              "type": "int",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "message",
+              "type": "string",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "default": {
+                "class": "CoreX\\Data\\Data\\JsonDocument",
+                "properties": {
+                  "canonicalJson": "[]"
+                }
+              },
+              "name": "details",
+              "type": "CoreX\\Data\\Data\\JsonDocument",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "default": null,
+              "name": "category",
+              "type": "?CoreX\\Errors\\Enums\\ErrorCategory",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "default": false,
+              "name": "retryable",
+              "type": "bool",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "default": null,
+              "name": "path",
+              "type": "?string",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "default": null,
+              "name": "retryAfterPolicy",
+              "type": "?string",
+              "variadic": false
+            }
+          ],
+          "after": [
+            {
+              "byRef": false,
+              "name": "errorCode",
+              "type": "CoreX\\Errors\\Contracts\\ErrorCode",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "status",
+              "type": "int",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "message",
+              "type": "string",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "default": {
+                "class": "CoreX\\Data\\Data\\JsonDocument",
+                "properties": {
+                  "canonicalJson": "[]"
+                }
+              },
+              "name": "details",
+              "type": "CoreX\\Data\\Data\\JsonDocument",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "default": null,
+              "name": "category",
+              "type": "?CoreX\\Errors\\Enums\\ErrorCategory",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "default": false,
+              "name": "retryable",
+              "type": "bool",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "default": null,
+              "name": "path",
+              "type": "?string",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "default": null,
+              "name": "retryAfterPolicy",
+              "type": "?string",
+              "variadic": false
+            }
+          ]
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Operations\\Errors\\Internal\\ErrorMapper": [
+        {
+          "field": "/methods/__construct",
+          "before": null,
+          "after": {
+            "params": [
+              {
+                "byRef": false,
+                "name": "problems",
+                "type": "CoreX\\Errors\\Contracts\\ProblemRegistry",
+                "variadic": false
+              }
+            ],
+            "return": "",
+            "static": false
+          }
+        }
+      ],
+      "CoreX\\Operations\\Idempotency\\Data\\StoredOperationOutcome": [
+        {
+          "field": "/methods/error/params",
+          "before": [],
+          "after": [
+            {
+              "byRef": false,
+              "name": "problems",
+              "type": "CoreX\\Errors\\Contracts\\ProblemRegistry",
+              "variadic": false
+            }
+          ]
+        },
+        {
+          "field": "/methods/fromCanonicalJson/params",
+          "before": [
+            {
+              "byRef": false,
+              "name": "json",
+              "type": "string",
+              "variadic": false
+            }
+          ],
+          "after": [
+            {
+              "byRef": false,
+              "name": "json",
+              "type": "string",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "problems",
+              "type": "CoreX\\Errors\\Contracts\\ProblemRegistry",
+              "variadic": false
+            }
+          ]
+        }
+      ],
+      "CoreX\\Operations\\Idempotency\\Internal\\IdempotentOperationInvoker": [
+        {
+          "field": "/methods/__construct/params",
+          "before": [
+            {
+              "byRef": false,
+              "name": "inner",
+              "type": "CoreX\\Operations\\Invocation\\Contracts\\OperationInvoker",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "store",
+              "type": "Closure",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "connection",
+              "type": "Illuminate\\Database\\Connection",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "modules",
+              "type": "CoreX\\Modules\\Contracts\\ModuleRegistry",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "authorizer",
+              "type": "CoreX\\Operations\\Authorization\\Contracts\\OperationAuthorizer",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "replayAuthorizer",
+              "type": "CoreX\\Operations\\Authorization\\Contracts\\ReplayAuthorizer",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "errors",
+              "type": "CoreX\\Operations\\Errors\\Contracts\\ErrorMapping",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "default": null,
+              "name": "budget",
+              "type": "?CoreX\\Operations\\Cost\\Contracts\\BudgetExecution",
+              "variadic": false
+            }
+          ],
+          "after": [
+            {
+              "byRef": false,
+              "name": "inner",
+              "type": "CoreX\\Operations\\Invocation\\Contracts\\OperationInvoker",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "store",
+              "type": "Closure",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "connection",
+              "type": "Illuminate\\Database\\Connection",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "modules",
+              "type": "CoreX\\Modules\\Contracts\\ModuleRegistry",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "authorizer",
+              "type": "CoreX\\Operations\\Authorization\\Contracts\\OperationAuthorizer",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "replayAuthorizer",
+              "type": "CoreX\\Operations\\Authorization\\Contracts\\ReplayAuthorizer",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "errors",
+              "type": "CoreX\\Operations\\Errors\\Contracts\\ErrorMapping",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "problems",
+              "type": "CoreX\\Errors\\Contracts\\ProblemRegistry",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "default": null,
+              "name": "budget",
+              "type": "?CoreX\\Operations\\Cost\\Contracts\\BudgetExecution",
+              "variadic": false
+            }
+          ]
+        }
+      ],
+      "CoreX\\Operations\\OpenApi\\Internal\\Commands\\WriteApiSnapshots": [
+        {
+          "field": "/methods/handle/params",
+          "before": [
+            {
+              "byRef": false,
+              "name": "operations",
+              "type": "CoreX\\Operations\\Definition\\Contracts\\OperationRegistry",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "openApi",
+              "type": "CoreX\\Operations\\OpenApi\\Internal\\OpenApiDocumentGenerator",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "profiles",
+              "type": "CoreX\\Operations\\Versioning\\Contracts\\ApiProfiles",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "options",
+              "type": "CoreX\\Operations\\Laravel\\Support\\ApiOptions",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "modules",
+              "type": "CoreX\\Modules\\Contracts\\ModuleRegistry",
+              "variadic": false
+            }
+          ],
+          "after": [
+            {
+              "byRef": false,
+              "name": "operations",
+              "type": "CoreX\\Operations\\Definition\\Contracts\\OperationRegistry",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "openApi",
+              "type": "CoreX\\Operations\\OpenApi\\Internal\\OpenApiDocumentGenerator",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "profiles",
+              "type": "CoreX\\Operations\\Versioning\\Contracts\\ApiProfiles",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "options",
+              "type": "CoreX\\Operations\\Laravel\\Support\\ApiOptions",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "modules",
+              "type": "CoreX\\Modules\\Contracts\\ModuleRegistry",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "problems",
+              "type": "CoreX\\Errors\\Contracts\\ProblemRegistry",
+              "variadic": false
+            }
+          ]
+        }
+      ],
+      "CoreX\\Operations\\OpenApi\\Internal\\ContractSnapshotBuilder": [
+        {
+          "field": "/methods/__construct/params",
+          "before": [
+            {
+              "byRef": false,
+              "name": "operations",
+              "type": "CoreX\\Operations\\Definition\\Contracts\\OperationRegistry",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "openApi",
+              "type": "CoreX\\Operations\\OpenApi\\Internal\\OpenApiDocumentGenerator",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "profile",
+              "type": "CoreX\\Operations\\Versioning\\Data\\ApiProfile",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "default": [],
+              "name": "sections",
+              "type": "iterable",
+              "variadic": false
+            }
+          ],
+          "after": [
+            {
+              "byRef": false,
+              "name": "operations",
+              "type": "CoreX\\Operations\\Definition\\Contracts\\OperationRegistry",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "openApi",
+              "type": "CoreX\\Operations\\OpenApi\\Internal\\OpenApiDocumentGenerator",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "profile",
+              "type": "CoreX\\Operations\\Versioning\\Data\\ApiProfile",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "name": "problems",
+              "type": "CoreX\\Errors\\Contracts\\ProblemRegistry",
+              "variadic": false
+            },
+            {
+              "byRef": false,
+              "default": [],
+              "name": "sections",
+              "type": "iterable",
+              "variadic": false
+            }
+          ]
+        }
+      ],
+      "CoreX\\Recurrence\\Exceptions\\StaleCursorException": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods",
+          "before": [],
+          "after": {
+            "errorDescriptor": {
+              "params": [],
+              "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+              "static": false
+            }
+          }
+        }
+      ],
+      "CoreX\\Recurrence\\Exceptions\\UnsupportedEnvironmentException": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods",
+          "before": [],
+          "after": {
+            "errorDescriptor": {
+              "params": [],
+              "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+              "static": false
+            }
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\SearchMeilisearch\\Exceptions\\InvalidMeilisearchConfiguration": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Search\\Exceptions\\InvalidSearchConfiguration": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Settings\\Exceptions\\SettingValueTooLargeException": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Settings\\Exceptions\\UnsupportedScopeException": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Storage\\Exceptions\\StorageCapabilityUnavailable": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods",
+          "before": [],
+          "after": {
+            "errorDescriptor": {
+              "params": [],
+              "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+              "static": false
+            }
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Storage\\Exceptions\\StorageOperationFailed": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods",
+          "before": [],
+          "after": {
+            "errorDescriptor": {
+              "params": [],
+              "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+              "static": false
+            }
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\TasksWorkflow\\Exceptions\\MaterializationConflict": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\TasksWorkflow\\Exceptions\\StaleMaterialization": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\TasksWorkflow\\Exceptions\\UnsupportedMaterialization": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Tasks\\Access\\Exceptions\\TasksModuleDisabled": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        }
+      ],
+      "CoreX\\Tasks\\Planning\\Exceptions\\InvalidPlanningDraft": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        }
+      ],
+      "CoreX\\Tasks\\Planning\\Exceptions\\PlanningConflict": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        }
+      ],
+      "CoreX\\Tenancy\\Authentication\\Exceptions\\OidcAuthenticationException": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Tenancy\\DomainTrust\\Exceptions\\DomainTrustDenied": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods",
+          "before": [],
+          "after": {
+            "errorDescriptor": {
+              "params": [],
+              "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+              "static": false
+            }
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Tenancy\\DomainTrust\\Exceptions\\DomainTrustDisabled": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods",
+          "before": [],
+          "after": {
+            "errorDescriptor": {
+              "params": [],
+              "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+              "static": false
+            }
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Tenancy\\Membership\\Exceptions\\CentralProtocolViolation": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods",
+          "before": [],
+          "after": {
+            "errorDescriptor": {
+              "params": [],
+              "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+              "static": false
+            }
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Tenancy\\Membership\\Exceptions\\CentralUnauthorized": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods",
+          "before": [],
+          "after": {
+            "errorDescriptor": {
+              "params": [],
+              "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+              "static": false
+            }
+          }
+        }
+      ],
+      "CoreX\\Tenancy\\Membership\\Exceptions\\CentralUnavailable": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods",
+          "before": [],
+          "after": {
+            "errorDescriptor": {
+              "params": [],
+              "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+              "static": false
+            }
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Tenancy\\Membership\\Exceptions\\CredentialIssuanceDenied": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods",
+          "before": [],
+          "after": {
+            "errorDescriptor": {
+              "params": [],
+              "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+              "static": false
+            }
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Tenancy\\Membership\\Exceptions\\InboxConflict": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods",
+          "before": [],
+          "after": {
+            "errorDescriptor": {
+              "params": [],
+              "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+              "static": false
+            }
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Tenancy\\Membership\\Exceptions\\PairStoreViolation": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods",
+          "before": [],
+          "after": {
+            "errorDescriptor": {
+              "params": [],
+              "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+              "static": false
+            }
+          }
+        }
+      ],
+      "CoreX\\Tenancy\\Membership\\Exceptions\\ProjectionDenied": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods",
+          "before": [],
+          "after": {
+            "errorDescriptor": {
+              "params": [],
+              "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+              "static": false
+            }
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Tenancy\\Membership\\Exceptions\\RevokeUncertain": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Tenancy\\Provisioning\\Exceptions\\ClaimConflict": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods",
+          "before": [],
+          "after": {
+            "errorDescriptor": {
+              "params": [],
+              "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+              "static": false
+            }
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Tenancy\\Provisioning\\Exceptions\\ClaimUnavailable": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods",
+          "before": [],
+          "after": {
+            "errorDescriptor": {
+              "params": [],
+              "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+              "static": false
+            }
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Tenancy\\Provisioning\\Exceptions\\TemplateIntegrityException": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods",
+          "before": [],
+          "after": {
+            "errorDescriptor": {
+              "params": [],
+              "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+              "static": false
+            }
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Tenancy\\Runtime\\Exceptions\\TenantCouldNotBeIdentifiedByHostException": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods/errorDescriptor",
+          "before": null,
+          "after": {
+            "params": [],
+            "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+            "static": false
+          }
+        }
+      ],
+      "CoreX\\Tenancy\\Workspace\\Exceptions\\InvitationNotAcceptableException": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods",
+          "before": [],
+          "after": {
+            "errorDescriptor": {
+              "params": [],
+              "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+              "static": false
+            }
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ],
+      "CoreX\\Tenancy\\Workspace\\Exceptions\\NoDefaultWorkspaceException": [
+        {
+          "field": "/interfaces",
+          "before": [
+            "Stringable",
+            "Throwable"
+          ],
+          "after": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+          ]
+        },
+        {
+          "field": "/methods",
+          "before": [],
+          "after": {
+            "errorDescriptor": {
+              "params": [],
+              "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+              "static": false
+            }
+          }
+        },
+        {
+          "field": "/parent",
+          "before": "RuntimeException",
+          "after": "CoreX\\Errors\\Exceptions\\CodedException"
+        }
+      ]
+    },
+    "new_type_count": 38,
+    "changed_type_count": 76
+  },
+  "routes": {
+    "preimage_sha256": "cb16a39748b25bc62ac2a567c44925197a1ccba76a4b251e1de363de84ac3ce7",
+    "candidate_sha256": "cb16a39748b25bc62ac2a567c44925197a1ccba76a4b251e1de363de84ac3ce7",
+    "semantic_delta": [],
+    "normalization": "existing Golden rename-map; equality proved by actual existing normalizer",
+    "baseline_preserved": true
+  },
+  "events": {
+    "preimage_sha256": "9968778cdd94c68b00c78c7aa6e4ae7e569da9e8e611f024f10289c1daa62f5d",
+    "candidate_sha256": "9968778cdd94c68b00c78c7aa6e4ae7e569da9e8e611f024f10289c1daa62f5d",
+    "added": [],
+    "removed": [],
+    "changed": [],
+    "semantic_delta": [],
+    "normalization": "existing Golden rename-map; equality proved by actual existing normalizer",
+    "baseline_preserved": true
+  },
+  "wire": {
+    "preimage_sha256": "c9fd37492a835c21318fe77e32d1177d5f0e1d6db61c315e890ebcfdc6d314a2",
+    "candidate_sha256": "80c37f4460c365130edc2d220340054ee58b2fa8fbba91776bc1ef584bea848d",
+    "added": [],
+    "removed": [],
+    "changed": [
+      "errors",
+      "openapi",
+      "operations"
+    ],
+    "semantic_changed": [
+      "errors"
+    ],
+    "unchanged_after_existing_rename_map": [
+      "openapi",
+      "operations",
+      "webhooks"
+    ]
+  }
+}

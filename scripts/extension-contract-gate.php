@@ -21,6 +21,8 @@ if (count($argv) > 1 && ($fixture === null || ! is_file($fixture) || ! str_ends_
  * @var array<string, string>
  */
 $classification = [
+    'CoreX\\Errors\\Contracts\\ProblemRegistry' => 'boot-built catalogue',
+    'CoreX\\Errors\\Internal\\CompiledProblemRegistry' => 'boot-built catalogue',
     'CoreX\\Operations\\Definition\\Contracts\\OperationRegistry' => 'projection',
     'CoreX\\Operations\\Pagination\\Contracts\\OrderingRegistry' => 'projection',
     'CoreX\\Search\\Contracts\\SearchDriverRegistry' => 'driver factory',

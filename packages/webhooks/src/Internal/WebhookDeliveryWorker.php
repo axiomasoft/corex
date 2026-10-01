@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Webhooks\Internal;
 
 use CoreX\Data\Data\DataScope;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Webhooks\Contracts\WebhookHttpTransport;
 use CoreX\Webhooks\Contracts\WebhookSigner;
@@ -45,7 +46,7 @@ final readonly class WebhookDeliveryWorker
             $topic = $this->topics->get($delivery->topic, $delivery->topicVersion);
 
             if ($topic->major !== $delivery->major) {
-                throw new ApiError('unknown_message_contract', 422, 'Webhook topic major changed.');
+                throw new ApiError(OperationsErrorCode::UnknownMessageContract, 422, 'Webhook topic major changed.');
             }
         } catch (ApiError) {
             return $this->finish($scope, $delivery, new WebhookHttpResult(

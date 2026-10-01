@@ -6,7 +6,10 @@ namespace CoreX\Context\Exceptions;
 
 use CoreX\Attributes\Api;
 use CoreX\Context\Enums\ImpersonationRestrictedAction;
-use RuntimeException;
+use CoreX\Errors\Data\ErrorDescriptor;
+use CoreX\Errors\Enums\CoreErrorCode;
+use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Errors\Exceptions\CodedException;
 
 /**
  * Thrown by any of the three read-only-invariant layers (D141) when an
@@ -17,7 +20,7 @@ use RuntimeException;
  * guesswork.
  */
 #[Api(since: '1.0')]
-final class ImpersonationRestrictedException extends RuntimeException
+final class ImpersonationRestrictedException extends CodedException
 {
     private function __construct(string $message)
     {
@@ -39,5 +42,10 @@ final class ImpersonationRestrictedException extends RuntimeException
         return new self(
             "Action restricted under impersonation: {$action->name} (B-11 §5.9 п.3).",
         );
+    }
+
+    public function errorDescriptor(): ErrorDescriptor
+    {
+        return new ErrorDescriptor(CoreErrorCode::ImpersonationRestrictedException, ErrorCategory::Authorization, retryable: false);
     }
 }

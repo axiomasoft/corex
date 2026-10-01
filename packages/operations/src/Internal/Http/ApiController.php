@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Operations\Internal\Http;
 
 use CoreX\Operations\Definition\Contracts\OperationRegistry;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\OperationDispatcher;
 use Illuminate\Http\JsonResponse;
@@ -24,7 +25,7 @@ final class ApiController
         $path = $request->route('path');
 
         if (! is_string($version) || ($path !== null && ! is_string($path))) {
-            throw new ApiError('operation_not_found', 404, 'Operation not found.');
+            throw new ApiError(OperationsErrorCode::OperationNotFound, 404, 'Operation not found.');
         }
 
         $response = $this->dispatcher->dispatch($request, $version, $path ?? '');

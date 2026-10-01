@@ -8,6 +8,7 @@ use CoreX\Data\Data\DataScope;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Operations\Bulk\Data\BulkOperation;
 use CoreX\Operations\Bulk\Enums\BulkOperationStatus;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use DateTimeImmutable;
 
 /** @internal Typed bulk result projection. It does not read transfer tables itself. */
@@ -28,15 +29,15 @@ final readonly class BulkResultReader
     public function read(DataScope $scope, BulkOperation $operation, DateTimeImmutable $now): array
     {
         if ($operation->expiresAt !== null && $operation->expiresAt <= $now) {
-            return ['status' => 410, 'body' => ['code' => 'bulk_result_expired'], 'code' => 'bulk_result_expired'];
+            return ['status' => 410, 'body' => ['code' => OperationsErrorCode::BulkResultExpired->value], 'code' => OperationsErrorCode::BulkResultExpired->value];
         }
 
         if ($operation->status !== BulkOperationStatus::Completed || JsonDocuments::optionalMap($operation->resultRef) === null) {
-            return ['status' => 409, 'body' => ['code' => 'bulk_not_ready'], 'code' => 'bulk_not_ready'];
+            return ['status' => 409, 'body' => ['code' => OperationsErrorCode::BulkNotReady->value], 'code' => OperationsErrorCode::BulkNotReady->value];
         }
 
         if (! ($this->fieldAccess)($scope, $operation)) {
-            return ['status' => 404, 'body' => ['code' => 'not_found'], 'code' => 'not_found'];
+            return ['status' => 404, 'body' => ['code' => OperationsErrorCode::NotFound->value], 'code' => OperationsErrorCode::NotFound->value];
         }
 
         return [

@@ -6,7 +6,10 @@ namespace CoreX\Context\Exceptions;
 
 use CoreX\Attributes\Api;
 use CoreX\Context\Contracts\TenantContextResolver;
-use RuntimeException;
+use CoreX\Errors\Data\ErrorDescriptor;
+use CoreX\Errors\Enums\CoreErrorCode;
+use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Errors\Exceptions\CodedException;
 
 /**
  * Thrown by {@see TenantContextResolver::current()}
@@ -17,10 +20,15 @@ use RuntimeException;
  * context, always "initialized").
  */
 #[Api(since: '1.0')]
-final class CentralContextException extends RuntimeException
+final class CentralContextException extends CodedException
 {
     public function __construct()
     {
         parent::__construct('No tenant context is active — this call must run inside an initialized tenant (not the central/root scope).');
+    }
+
+    public function errorDescriptor(): ErrorDescriptor
+    {
+        return new ErrorDescriptor(CoreErrorCode::CentralContextException, ErrorCategory::Authorization, retryable: false);
     }
 }

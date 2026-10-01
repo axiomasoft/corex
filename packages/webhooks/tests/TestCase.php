@@ -16,14 +16,12 @@ abstract class TestCase extends Orchestra
     protected function setUp(): void
     {
         parent::setUp();
-        $this->app->register(CoreServiceProvider::class);
-        $this->app->register(ModulesServiceProvider::class);
     }
 
     /** @param Application $app */
     protected function getPackageProviders($app): array
     {
-        return [ApiServiceProvider::class, WebhooksServiceProvider::class];
+        return [ApiServiceProvider::class, WebhooksServiceProvider::class, CoreServiceProvider::class, ModulesServiceProvider::class];
     }
 
     /** @param Application $app */

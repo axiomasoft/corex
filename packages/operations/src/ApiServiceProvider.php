@@ -10,6 +10,8 @@ use CoreX\Config\Data\SecretRef;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Errors\Contracts\ProblemRegistry;
+use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Modules\Contracts\ManifestSectionCompiler;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Operations\Authorization\Contracts\ClientScopeAuthorizer;
@@ -31,9 +33,11 @@ use CoreX\Operations\Definition\Internal\OperationRegistry;
 use CoreX\Operations\Definition\Internal\OperationSectionCompiler;
 use CoreX\Operations\Definition\Laravel\OperationPortBindings;
 use CoreX\Operations\Errors\Contracts\ResponseSerializer;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Errors\Internal\ErrorMapper;
 use CoreX\Operations\Errors\Internal\NegotiatingResponseSerializer;
+use CoreX\Operations\Errors\Internal\PackageProblemDefinitions;
 use CoreX\Operations\Idempotency\Contracts\IdempotencyStore;
 use CoreX\Operations\Idempotency\Data\StoredOperationOutcome;
 use CoreX\Operations\Idempotency\Internal\IdempotentOperationInvoker;
@@ -69,6 +73,8 @@ final class ApiServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        ProblemDefinitions::register($this->app, __DIR__.'/../composer.json', PackageProblemDefinitions::class);
+
         OperationPortBindings::register($this->app);
 
         $this->app->tag([OperationSectionCompiler::class], ManifestSectionCompiler::class);
@@ -101,15 +107,15 @@ final class ApiServiceProvider extends ServiceProvider
                 bool $replayed,
             ): StoredOperationOutcome {
                 if ($replayed && ! $this->modules->isActive($invocation->operation->module, $invocation->context->tenant())) {
-                    throw new ApiError('module_unavailable', 404, 'Operation not found.');
+                    throw new ApiError(OperationsErrorCode::ModuleUnavailable, 404, 'Operation not found.');
                 }
 
                 if ($replayed && ! $this->clientScopes->allows($invocation->operation, $invocation->context)) {
-                    throw new ApiError('scope_required', 403, 'The client lacks a required operation scope.');
+                    throw new ApiError(OperationsErrorCode::ScopeRequired, 403, 'The client lacks a required operation scope.');
                 }
 
                 if ($replayed && ! $this->authorizer->allows($invocation->operation, $invocation->context)) {
-                    throw new ApiError('access_denied', 403, 'Operation is not permitted.');
+                    throw new ApiError(OperationsErrorCode::AccessDenied, 403, 'Operation is not permitted.');
                 }
 
                 if ($replayed && $outcome->kind === 'success' && JsonDocuments::optionalArray($outcome->data) !== null) {
@@ -134,6 +140,7 @@ final class ApiServiceProvider extends ServiceProvider
                 authorizer: $app->make(OperationAuthorizer::class),
                 replayAuthorizer: $app->make(ReplayAuthorizer::class),
                 errors: $app->make(ErrorMapper::class),
+                problems: $app->make(ProblemRegistry::class),
             ));
         $this->app->bindIf(ResponseSerializer::class, NegotiatingResponseSerializer::class);
         $this->app->bindIf(SchemaContributor::class, DeclaredSchemaContributor::class);

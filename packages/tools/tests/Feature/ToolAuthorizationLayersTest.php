@@ -23,6 +23,7 @@ use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Data\ResourceId;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Invocation\Data\InvocationMetadata;
@@ -186,28 +187,28 @@ final class ToolAuthorizationLayersTest extends TestCase
     public function test_client_actor_record_field_and_tenant_layers_deny_independently(): void
     {
         $this->clientScopes->allow = false;
-        $this->assertHttpError('scope_required', $this->validInput());
+        $this->assertHttpError('operations.scope_required', $this->validInput());
         self::assertSame(0, ToolAuthorizationLayersAuthorizationHandler::$calls);
 
         $this->clientScopes->allow = true;
         $this->actors->allow = false;
-        $this->assertHttpError('access_denied', $this->validInput());
+        $this->assertHttpError('operations.access_denied', $this->validInput());
         self::assertSame(0, ToolAuthorizationLayersAuthorizationHandler::$calls);
 
         $this->actors->allow = true;
         $forbiddenInput = [...$this->validInput(), 'secret' => 'must-not-reach-handler'];
-        $this->assertHttpError('access_denied', $forbiddenInput);
+        $this->assertHttpError('operations.access_denied', $forbiddenInput);
         $toolDenied = $this->app->make(ToolInvoker::class)->invoke(
             $this->context(),
             $this->toolCall($forbiddenInput),
         );
-        self::assertSame('access_denied', $toolDenied->errorCode);
+        self::assertSame('operations.access_denied', $toolDenied->errorCode);
         self::assertSame(0, ToolAuthorizationLayersAuthorizationHandler::$calls);
 
-        $this->assertHttpError('resource_not_found', $this->validInput(owner: 'foreign-user'));
+        $this->assertHttpError('operations.resource_not_found', $this->validInput(owner: 'foreign-user'));
         self::assertSame(1, ToolAuthorizationLayersAuthorizationHandler::$calls);
 
-        $this->assertHttpError('resource_not_found', $this->validInput(resourceId: self::ForeignTenantResource));
+        $this->assertHttpError('operations.resource_not_found', $this->validInput(resourceId: self::ForeignTenantResource));
         self::assertSame(2, ToolAuthorizationLayersAuthorizationHandler::$calls);
     }
 
@@ -359,7 +360,7 @@ final class ToolAuthorizationLayersAuthorizationHandler implements OperationHand
 
         if ($resource->toString() === ToolAuthorizationLayersTest::ForeignTenantResource
             || $input['owner'] !== $context->principal()->id()) {
-            throw new ApiError('resource_not_found', 404, 'Resource not found.');
+            throw new ApiError(OperationsErrorCode::ResourceNotFound, 404, 'Resource not found.');
         }
 
         return [

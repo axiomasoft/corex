@@ -1,0 +1,1521 @@
+{
+    "errors": [
+        {
+            "category": "conflict",
+            "code": "attribute_schema_conflict",
+            "detail_keys": [
+                "reason"
+            ],
+            "owner": "axiomasoft/corex-custom-fields",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "attribute_schema_conflict",
+            "detail_keys": [
+                "reason"
+            ],
+            "owner": "axiomasoft/corex-custom-fields",
+            "path": null,
+            "retryable": true
+        },
+        {
+            "category": "conflict",
+            "code": "attribute_schema_retry_exhausted",
+            "detail_keys": [
+                "reason"
+            ],
+            "owner": "axiomasoft/corex-custom-fields",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authorization",
+            "code": "attributes_access_denied",
+            "detail_keys": [
+                "reason"
+            ],
+            "owner": "axiomasoft/corex-custom-fields",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "unavailable",
+            "code": "attributes_engine_unavailable",
+            "detail_keys": [
+                "reason"
+            ],
+            "owner": "axiomasoft/corex-custom-fields",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authorization",
+            "code": "access_denied",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authorization",
+            "code": "account_unavailable",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authentication",
+            "code": "authentication_required",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "bulk_not_ready",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": true
+        },
+        {
+            "category": "conflict",
+            "code": "bulk_reconciliation_required",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "not_found",
+            "code": "bulk_result_expired",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authorization",
+            "code": "catalogue_limit",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "conflict",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authorization",
+            "code": "context_required",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "cursor_invalid",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authorization",
+            "code": "forbidden",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "idempotency_conflict",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "idempotency_contract_mismatch",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "idempotency_in_progress",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": true
+        },
+        {
+            "category": "validation",
+            "code": "idempotency_key_forbidden",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "idempotency_key_invalid",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "idempotency_key_required",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "idempotency_not_supported",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "internal",
+            "code": "internal_error",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "invalid_request",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "not_found",
+            "code": "module_unavailable",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "not_found",
+            "code": "not_found",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "not_found",
+            "code": "operation_not_found",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "not_found",
+            "code": "operation_unsupported",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "ordering_version_unsupported",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "rate_limit",
+            "code": "rate_limited",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "reconciliation_required",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "request_rejected",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "not_found",
+            "code": "resource_not_found",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authorization",
+            "code": "scope_required",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "unknown_message_contract",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "validation_failed",
+            "detail_keys": [
+                "*"
+            ],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "webhook_endpoint_changed",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "webhook_payload_too_large",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "webhook_replay_expired",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "webhook_subscription_cap",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        }
+    ],
+    "openapi": {
+        "info": {
+            "title": "Module API",
+            "version": "v1"
+        },
+        "openapi": "3.1.0",
+        "paths": {
+            "/bulk-operations": {
+                "post": {
+                    "operationId": "bulk-operations.submit",
+                    "responses": {
+                        "202": {
+                            "description": "Success"
+                        }
+                    },
+                    "x-corex-ability": "bulk.manage",
+                    "x-corex-cost": {
+                        "enforcement": {
+                            "account": "observe",
+                            "actor": "observe",
+                            "client": "observe",
+                            "global": "enforce"
+                        },
+                        "recipe": {
+                            "attribute_filter": 0,
+                            "base": 1,
+                            "field": 0,
+                            "highlight": 0,
+                            "max_units": 10000,
+                            "relation": 0,
+                            "row": 0,
+                            "side_effect": 0
+                        }
+                    },
+                    "x-corex-module": "axiomasoft/corex-operations"
+                }
+            },
+            "/bulk-operations/{id}": {
+                "get": {
+                    "operationId": "bulk-operations.show",
+                    "responses": {
+                        "200": {
+                            "description": "Success"
+                        }
+                    },
+                    "x-corex-ability": "bulk.manage",
+                    "x-corex-cost": {
+                        "enforcement": {
+                            "account": "observe",
+                            "actor": "observe",
+                            "client": "observe",
+                            "global": "enforce"
+                        },
+                        "recipe": {
+                            "attribute_filter": 0,
+                            "base": 1,
+                            "field": 0,
+                            "highlight": 0,
+                            "max_units": 10000,
+                            "relation": 0,
+                            "row": 0,
+                            "side_effect": 0
+                        }
+                    },
+                    "x-corex-module": "axiomasoft/corex-operations"
+                }
+            },
+            "/bulk-operations/{id}/cancel": {
+                "post": {
+                    "operationId": "bulk-operations.cancel",
+                    "responses": {
+                        "202": {
+                            "description": "Success"
+                        }
+                    },
+                    "x-corex-ability": "bulk.manage",
+                    "x-corex-cost": {
+                        "enforcement": {
+                            "account": "observe",
+                            "actor": "observe",
+                            "client": "observe",
+                            "global": "enforce"
+                        },
+                        "recipe": {
+                            "attribute_filter": 0,
+                            "base": 1,
+                            "field": 0,
+                            "highlight": 0,
+                            "max_units": 10000,
+                            "relation": 0,
+                            "row": 0,
+                            "side_effect": 0
+                        }
+                    },
+                    "x-corex-module": "axiomasoft/corex-operations"
+                }
+            },
+            "/bulk-operations/{id}/failures": {
+                "get": {
+                    "operationId": "bulk-operations.failures",
+                    "responses": {
+                        "200": {
+                            "description": "Success"
+                        }
+                    },
+                    "x-corex-ability": "bulk.manage",
+                    "x-corex-cost": {
+                        "enforcement": {
+                            "account": "observe",
+                            "actor": "observe",
+                            "client": "observe",
+                            "global": "enforce"
+                        },
+                        "recipe": {
+                            "attribute_filter": 0,
+                            "base": 1,
+                            "field": 0,
+                            "highlight": 0,
+                            "max_units": 10000,
+                            "relation": 0,
+                            "row": 0,
+                            "side_effect": 0
+                        }
+                    },
+                    "x-corex-module": "axiomasoft/corex-operations"
+                }
+            },
+            "/bulk-operations/{id}/result": {
+                "get": {
+                    "operationId": "bulk-operations.result",
+                    "responses": {
+                        "200": {
+                            "description": "Success"
+                        }
+                    },
+                    "x-corex-ability": "bulk.manage",
+                    "x-corex-cost": {
+                        "enforcement": {
+                            "account": "observe",
+                            "actor": "observe",
+                            "client": "observe",
+                            "global": "enforce"
+                        },
+                        "recipe": {
+                            "attribute_filter": 0,
+                            "base": 1,
+                            "field": 0,
+                            "highlight": 0,
+                            "max_units": 10000,
+                            "relation": 0,
+                            "row": 0,
+                            "side_effect": 0
+                        }
+                    },
+                    "x-corex-module": "axiomasoft/corex-operations"
+                }
+            },
+            "/webhook-deliveries": {
+                "get": {
+                    "operationId": "webhook-deliveries.list",
+                    "responses": {
+                        "200": {
+                            "description": "Success"
+                        }
+                    },
+                    "x-corex-ability": "webhooks.manage",
+                    "x-corex-cost": {
+                        "enforcement": {
+                            "account": "observe",
+                            "actor": "observe",
+                            "client": "observe",
+                            "global": "enforce"
+                        },
+                        "recipe": {
+                            "attribute_filter": 0,
+                            "base": 1,
+                            "field": 0,
+                            "highlight": 0,
+                            "max_units": 10000,
+                            "relation": 0,
+                            "row": 0,
+                            "side_effect": 0
+                        }
+                    },
+                    "x-corex-module": "axiomasoft/corex-operations"
+                }
+            },
+            "/webhook-deliveries/replay": {
+                "post": {
+                    "operationId": "webhook-deliveries.range-replay",
+                    "responses": {
+                        "200": {
+                            "description": "Success"
+                        }
+                    },
+                    "x-corex-ability": "webhooks.replay",
+                    "x-corex-cost": {
+                        "enforcement": {
+                            "account": "observe",
+                            "actor": "observe",
+                            "client": "observe",
+                            "global": "enforce"
+                        },
+                        "recipe": {
+                            "attribute_filter": 0,
+                            "base": 1,
+                            "field": 0,
+                            "highlight": 0,
+                            "max_units": 10000,
+                            "relation": 0,
+                            "row": 0,
+                            "side_effect": 0
+                        }
+                    },
+                    "x-corex-module": "axiomasoft/corex-operations"
+                }
+            },
+            "/webhook-deliveries/{id}": {
+                "get": {
+                    "operationId": "webhook-deliveries.show",
+                    "responses": {
+                        "200": {
+                            "description": "Success"
+                        }
+                    },
+                    "x-corex-ability": "webhooks.manage",
+                    "x-corex-cost": {
+                        "enforcement": {
+                            "account": "observe",
+                            "actor": "observe",
+                            "client": "observe",
+                            "global": "enforce"
+                        },
+                        "recipe": {
+                            "attribute_filter": 0,
+                            "base": 1,
+                            "field": 0,
+                            "highlight": 0,
+                            "max_units": 10000,
+                            "relation": 0,
+                            "row": 0,
+                            "side_effect": 0
+                        }
+                    },
+                    "x-corex-module": "axiomasoft/corex-operations"
+                }
+            },
+            "/webhook-deliveries/{id}/attempts": {
+                "get": {
+                    "operationId": "webhook-deliveries.attempts",
+                    "responses": {
+                        "200": {
+                            "description": "Success"
+                        }
+                    },
+                    "x-corex-ability": "webhooks.manage",
+                    "x-corex-cost": {
+                        "enforcement": {
+                            "account": "observe",
+                            "actor": "observe",
+                            "client": "observe",
+                            "global": "enforce"
+                        },
+                        "recipe": {
+                            "attribute_filter": 0,
+                            "base": 1,
+                            "field": 0,
+                            "highlight": 0,
+                            "max_units": 10000,
+                            "relation": 0,
+                            "row": 0,
+                            "side_effect": 0
+                        }
+                    },
+                    "x-corex-module": "axiomasoft/corex-operations"
+                }
+            },
+            "/webhook-deliveries/{id}/replay": {
+                "post": {
+                    "operationId": "webhook-deliveries.replay",
+                    "responses": {
+                        "200": {
+                            "description": "Success"
+                        }
+                    },
+                    "x-corex-ability": "webhooks.replay",
+                    "x-corex-cost": {
+                        "enforcement": {
+                            "account": "observe",
+                            "actor": "observe",
+                            "client": "observe",
+                            "global": "enforce"
+                        },
+                        "recipe": {
+                            "attribute_filter": 0,
+                            "base": 1,
+                            "field": 0,
+                            "highlight": 0,
+                            "max_units": 10000,
+                            "relation": 0,
+                            "row": 0,
+                            "side_effect": 0
+                        }
+                    },
+                    "x-corex-module": "axiomasoft/corex-operations"
+                }
+            },
+            "/webhook-subscriptions": {
+                "get": {
+                    "operationId": "webhook-subscriptions.list",
+                    "responses": {
+                        "200": {
+                            "description": "Success"
+                        }
+                    },
+                    "x-corex-ability": "webhooks.manage",
+                    "x-corex-cost": {
+                        "enforcement": {
+                            "account": "observe",
+                            "actor": "observe",
+                            "client": "observe",
+                            "global": "enforce"
+                        },
+                        "recipe": {
+                            "attribute_filter": 0,
+                            "base": 1,
+                            "field": 0,
+                            "highlight": 0,
+                            "max_units": 10000,
+                            "relation": 0,
+                            "row": 0,
+                            "side_effect": 0
+                        }
+                    },
+                    "x-corex-module": "axiomasoft/corex-operations"
+                },
+                "post": {
+                    "operationId": "webhook-subscriptions.create",
+                    "responses": {
+                        "201": {
+                            "description": "Success"
+                        }
+                    },
+                    "x-corex-ability": "webhooks.manage",
+                    "x-corex-cost": {
+                        "enforcement": {
+                            "account": "observe",
+                            "actor": "observe",
+                            "client": "observe",
+                            "global": "enforce"
+                        },
+                        "recipe": {
+                            "attribute_filter": 0,
+                            "base": 1,
+                            "field": 0,
+                            "highlight": 0,
+                            "max_units": 10000,
+                            "relation": 0,
+                            "row": 0,
+                            "side_effect": 0
+                        }
+                    },
+                    "x-corex-module": "axiomasoft/corex-operations"
+                }
+            },
+            "/webhook-subscriptions/{id}": {
+                "patch": {
+                    "operationId": "webhook-subscriptions.update",
+                    "responses": {
+                        "200": {
+                            "description": "Success"
+                        }
+                    },
+                    "x-corex-ability": "webhooks.manage",
+                    "x-corex-cost": {
+                        "enforcement": {
+                            "account": "observe",
+                            "actor": "observe",
+                            "client": "observe",
+                            "global": "enforce"
+                        },
+                        "recipe": {
+                            "attribute_filter": 0,
+                            "base": 1,
+                            "field": 0,
+                            "highlight": 0,
+                            "max_units": 10000,
+                            "relation": 0,
+                            "row": 0,
+                            "side_effect": 0
+                        }
+                    },
+                    "x-corex-module": "axiomasoft/corex-operations"
+                }
+            },
+            "/webhook-subscriptions/{id}/disable": {
+                "post": {
+                    "operationId": "webhook-subscriptions.disable",
+                    "responses": {
+                        "200": {
+                            "description": "Success"
+                        }
+                    },
+                    "x-corex-ability": "webhooks.manage",
+                    "x-corex-cost": {
+                        "enforcement": {
+                            "account": "observe",
+                            "actor": "observe",
+                            "client": "observe",
+                            "global": "enforce"
+                        },
+                        "recipe": {
+                            "attribute_filter": 0,
+                            "base": 1,
+                            "field": 0,
+                            "highlight": 0,
+                            "max_units": 10000,
+                            "relation": 0,
+                            "row": 0,
+                            "side_effect": 0
+                        }
+                    },
+                    "x-corex-module": "axiomasoft/corex-operations"
+                }
+            }
+        },
+        "servers": []
+    },
+    "operations": [
+        {
+            "ability": "bulk.manage",
+            "capabilities": [],
+            "cost": {
+                "enforcement": {
+                    "account": "observe",
+                    "actor": "observe",
+                    "client": "observe",
+                    "global": "enforce"
+                },
+                "recipe": {
+                    "attribute_filter": 0,
+                    "base": 1,
+                    "field": 0,
+                    "highlight": 0,
+                    "max_units": 10000,
+                    "relation": 0,
+                    "row": 0,
+                    "side_effect": 0
+                }
+            },
+            "deprecation": null,
+            "effect_mode": "tenant_transactional",
+            "execution_supported": true,
+            "id": "bulk-operations.cancel",
+            "idempotency": "required",
+            "method": "POST",
+            "mode": "async_command",
+            "module": "axiomasoft/corex-operations",
+            "pagination": null,
+            "path": "/bulk-operations/{id}/cancel",
+            "read_fields": null,
+            "request_schema": {
+                "type": "object"
+            },
+            "required_scopes": [
+                "bulk.manage"
+            ],
+            "response_schema": {
+                "properties": {
+                    "status": {
+                        "enum": [
+                            "cancelled",
+                            "cancelling",
+                            "completed",
+                            "expired",
+                            "failed",
+                            "pending",
+                            "running"
+                        ],
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "status"
+                ],
+                "type": "object"
+            },
+            "success_status": 202,
+            "version": "v1",
+            "write_fields": null
+        },
+        {
+            "ability": "bulk.manage",
+            "capabilities": [],
+            "cost": {
+                "enforcement": {
+                    "account": "observe",
+                    "actor": "observe",
+                    "client": "observe",
+                    "global": "enforce"
+                },
+                "recipe": {
+                    "attribute_filter": 0,
+                    "base": 1,
+                    "field": 0,
+                    "highlight": 0,
+                    "max_units": 10000,
+                    "relation": 0,
+                    "row": 0,
+                    "side_effect": 0
+                }
+            },
+            "deprecation": null,
+            "effect_mode": null,
+            "execution_supported": true,
+            "id": "bulk-operations.failures",
+            "idempotency": "forbidden",
+            "method": "GET",
+            "mode": "query",
+            "module": "axiomasoft/corex-operations",
+            "pagination": null,
+            "path": "/bulk-operations/{id}/failures",
+            "read_fields": null,
+            "request_schema": {
+                "type": "object"
+            },
+            "required_scopes": [
+                "bulk.manage"
+            ],
+            "response_schema": {
+                "type": "object"
+            },
+            "success_status": 200,
+            "version": "v1",
+            "write_fields": null
+        },
+        {
+            "ability": "bulk.manage",
+            "capabilities": [],
+            "cost": {
+                "enforcement": {
+                    "account": "observe",
+                    "actor": "observe",
+                    "client": "observe",
+                    "global": "enforce"
+                },
+                "recipe": {
+                    "attribute_filter": 0,
+                    "base": 1,
+                    "field": 0,
+                    "highlight": 0,
+                    "max_units": 10000,
+                    "relation": 0,
+                    "row": 0,
+                    "side_effect": 0
+                }
+            },
+            "deprecation": null,
+            "effect_mode": null,
+            "execution_supported": true,
+            "id": "bulk-operations.result",
+            "idempotency": "forbidden",
+            "method": "GET",
+            "mode": "query",
+            "module": "axiomasoft/corex-operations",
+            "pagination": null,
+            "path": "/bulk-operations/{id}/result",
+            "read_fields": null,
+            "request_schema": {
+                "type": "object"
+            },
+            "required_scopes": [
+                "bulk.manage"
+            ],
+            "response_schema": {
+                "type": "object"
+            },
+            "success_status": 200,
+            "version": "v1",
+            "write_fields": null
+        },
+        {
+            "ability": "bulk.manage",
+            "capabilities": [],
+            "cost": {
+                "enforcement": {
+                    "account": "observe",
+                    "actor": "observe",
+                    "client": "observe",
+                    "global": "enforce"
+                },
+                "recipe": {
+                    "attribute_filter": 0,
+                    "base": 1,
+                    "field": 0,
+                    "highlight": 0,
+                    "max_units": 10000,
+                    "relation": 0,
+                    "row": 0,
+                    "side_effect": 0
+                }
+            },
+            "deprecation": null,
+            "effect_mode": null,
+            "execution_supported": true,
+            "id": "bulk-operations.show",
+            "idempotency": "forbidden",
+            "method": "GET",
+            "mode": "query",
+            "module": "axiomasoft/corex-operations",
+            "pagination": null,
+            "path": "/bulk-operations/{id}",
+            "read_fields": null,
+            "request_schema": {
+                "type": "object"
+            },
+            "required_scopes": [
+                "bulk.manage"
+            ],
+            "response_schema": {
+                "properties": {
+                    "status": {
+                        "enum": [
+                            "cancelled",
+                            "cancelling",
+                            "completed",
+                            "expired",
+                            "failed",
+                            "pending",
+                            "running"
+                        ],
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "status"
+                ],
+                "type": "object"
+            },
+            "success_status": 200,
+            "version": "v1",
+            "write_fields": null
+        },
+        {
+            "ability": "bulk.manage",
+            "capabilities": [],
+            "cost": {
+                "enforcement": {
+                    "account": "observe",
+                    "actor": "observe",
+                    "client": "observe",
+                    "global": "enforce"
+                },
+                "recipe": {
+                    "attribute_filter": 0,
+                    "base": 1,
+                    "field": 0,
+                    "highlight": 0,
+                    "max_units": 10000,
+                    "relation": 0,
+                    "row": 0,
+                    "side_effect": 0
+                }
+            },
+            "deprecation": null,
+            "effect_mode": "tenant_transactional",
+            "execution_supported": true,
+            "id": "bulk-operations.submit",
+            "idempotency": "required",
+            "method": "POST",
+            "mode": "async_command",
+            "module": "axiomasoft/corex-operations",
+            "pagination": null,
+            "path": "/bulk-operations",
+            "read_fields": null,
+            "request_schema": {
+                "type": "object"
+            },
+            "required_scopes": [
+                "bulk.manage"
+            ],
+            "response_schema": {
+                "properties": {
+                    "operation_id": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "enum": [
+                            "cancelled",
+                            "cancelling",
+                            "completed",
+                            "expired",
+                            "failed",
+                            "pending",
+                            "running"
+                        ],
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "operation_id",
+                    "status"
+                ],
+                "type": "object"
+            },
+            "success_status": 202,
+            "version": "v1",
+            "write_fields": null
+        },
+        {
+            "ability": "webhooks.manage",
+            "capabilities": [],
+            "cost": {
+                "enforcement": {
+                    "account": "observe",
+                    "actor": "observe",
+                    "client": "observe",
+                    "global": "enforce"
+                },
+                "recipe": {
+                    "attribute_filter": 0,
+                    "base": 1,
+                    "field": 0,
+                    "highlight": 0,
+                    "max_units": 10000,
+                    "relation": 0,
+                    "row": 0,
+                    "side_effect": 0
+                }
+            },
+            "deprecation": null,
+            "effect_mode": null,
+            "execution_supported": true,
+            "id": "webhook-deliveries.attempts",
+            "idempotency": "forbidden",
+            "method": "GET",
+            "mode": "query",
+            "module": "axiomasoft/corex-operations",
+            "pagination": null,
+            "path": "/webhook-deliveries/{id}/attempts",
+            "read_fields": null,
+            "request_schema": {
+                "type": "object"
+            },
+            "required_scopes": [
+                "webhooks.manage"
+            ],
+            "response_schema": {
+                "type": "object"
+            },
+            "success_status": 200,
+            "version": "v1",
+            "write_fields": null
+        },
+        {
+            "ability": "webhooks.manage",
+            "capabilities": [],
+            "cost": {
+                "enforcement": {
+                    "account": "observe",
+                    "actor": "observe",
+                    "client": "observe",
+                    "global": "enforce"
+                },
+                "recipe": {
+                    "attribute_filter": 0,
+                    "base": 1,
+                    "field": 0,
+                    "highlight": 0,
+                    "max_units": 10000,
+                    "relation": 0,
+                    "row": 0,
+                    "side_effect": 0
+                }
+            },
+            "deprecation": null,
+            "effect_mode": null,
+            "execution_supported": true,
+            "id": "webhook-deliveries.list",
+            "idempotency": "forbidden",
+            "method": "GET",
+            "mode": "query",
+            "module": "axiomasoft/corex-operations",
+            "pagination": null,
+            "path": "/webhook-deliveries",
+            "read_fields": null,
+            "request_schema": {
+                "type": "object"
+            },
+            "required_scopes": [
+                "webhooks.manage"
+            ],
+            "response_schema": {
+                "type": "object"
+            },
+            "success_status": 200,
+            "version": "v1",
+            "write_fields": null
+        },
+        {
+            "ability": "webhooks.replay",
+            "capabilities": [],
+            "cost": {
+                "enforcement": {
+                    "account": "observe",
+                    "actor": "observe",
+                    "client": "observe",
+                    "global": "enforce"
+                },
+                "recipe": {
+                    "attribute_filter": 0,
+                    "base": 1,
+                    "field": 0,
+                    "highlight": 0,
+                    "max_units": 10000,
+                    "relation": 0,
+                    "row": 0,
+                    "side_effect": 0
+                }
+            },
+            "deprecation": null,
+            "effect_mode": "tenant_transactional",
+            "execution_supported": true,
+            "id": "webhook-deliveries.range-replay",
+            "idempotency": "required",
+            "method": "POST",
+            "mode": "command",
+            "module": "axiomasoft/corex-operations",
+            "pagination": null,
+            "path": "/webhook-deliveries/replay",
+            "read_fields": null,
+            "request_schema": {
+                "type": "object"
+            },
+            "required_scopes": [
+                "webhooks.replay"
+            ],
+            "response_schema": {
+                "type": "object"
+            },
+            "success_status": 200,
+            "version": "v1",
+            "write_fields": null
+        },
+        {
+            "ability": "webhooks.replay",
+            "capabilities": [],
+            "cost": {
+                "enforcement": {
+                    "account": "observe",
+                    "actor": "observe",
+                    "client": "observe",
+                    "global": "enforce"
+                },
+                "recipe": {
+                    "attribute_filter": 0,
+                    "base": 1,
+                    "field": 0,
+                    "highlight": 0,
+                    "max_units": 10000,
+                    "relation": 0,
+                    "row": 0,
+                    "side_effect": 0
+                }
+            },
+            "deprecation": null,
+            "effect_mode": "tenant_transactional",
+            "execution_supported": true,
+            "id": "webhook-deliveries.replay",
+            "idempotency": "required",
+            "method": "POST",
+            "mode": "command",
+            "module": "axiomasoft/corex-operations",
+            "pagination": null,
+            "path": "/webhook-deliveries/{id}/replay",
+            "read_fields": null,
+            "request_schema": {
+                "type": "object"
+            },
+            "required_scopes": [
+                "webhooks.replay"
+            ],
+            "response_schema": {
+                "type": "object"
+            },
+            "success_status": 200,
+            "version": "v1",
+            "write_fields": null
+        },
+        {
+            "ability": "webhooks.manage",
+            "capabilities": [],
+            "cost": {
+                "enforcement": {
+                    "account": "observe",
+                    "actor": "observe",
+                    "client": "observe",
+                    "global": "enforce"
+                },
+                "recipe": {
+                    "attribute_filter": 0,
+                    "base": 1,
+                    "field": 0,
+                    "highlight": 0,
+                    "max_units": 10000,
+                    "relation": 0,
+                    "row": 0,
+                    "side_effect": 0
+                }
+            },
+            "deprecation": null,
+            "effect_mode": null,
+            "execution_supported": true,
+            "id": "webhook-deliveries.show",
+            "idempotency": "forbidden",
+            "method": "GET",
+            "mode": "query",
+            "module": "axiomasoft/corex-operations",
+            "pagination": null,
+            "path": "/webhook-deliveries/{id}",
+            "read_fields": null,
+            "request_schema": {
+                "type": "object"
+            },
+            "required_scopes": [
+                "webhooks.manage"
+            ],
+            "response_schema": {
+                "type": "object"
+            },
+            "success_status": 200,
+            "version": "v1",
+            "write_fields": null
+        },
+        {
+            "ability": "webhooks.manage",
+            "capabilities": [],
+            "cost": {
+                "enforcement": {
+                    "account": "observe",
+                    "actor": "observe",
+                    "client": "observe",
+                    "global": "enforce"
+                },
+                "recipe": {
+                    "attribute_filter": 0,
+                    "base": 1,
+                    "field": 0,
+                    "highlight": 0,
+                    "max_units": 10000,
+                    "relation": 0,
+                    "row": 0,
+                    "side_effect": 0
+                }
+            },
+            "deprecation": null,
+            "effect_mode": "tenant_transactional",
+            "execution_supported": true,
+            "id": "webhook-subscriptions.create",
+            "idempotency": "required",
+            "method": "POST",
+            "mode": "command",
+            "module": "axiomasoft/corex-operations",
+            "pagination": null,
+            "path": "/webhook-subscriptions",
+            "read_fields": null,
+            "request_schema": {
+                "type": "object"
+            },
+            "required_scopes": [
+                "webhooks.manage"
+            ],
+            "response_schema": {
+                "type": "object"
+            },
+            "success_status": 201,
+            "version": "v1",
+            "write_fields": null
+        },
+        {
+            "ability": "webhooks.manage",
+            "capabilities": [],
+            "cost": {
+                "enforcement": {
+                    "account": "observe",
+                    "actor": "observe",
+                    "client": "observe",
+                    "global": "enforce"
+                },
+                "recipe": {
+                    "attribute_filter": 0,
+                    "base": 1,
+                    "field": 0,
+                    "highlight": 0,
+                    "max_units": 10000,
+                    "relation": 0,
+                    "row": 0,
+                    "side_effect": 0
+                }
+            },
+            "deprecation": null,
+            "effect_mode": "tenant_transactional",
+            "execution_supported": true,
+            "id": "webhook-subscriptions.disable",
+            "idempotency": "required",
+            "method": "POST",
+            "mode": "command",
+            "module": "axiomasoft/corex-operations",
+            "pagination": null,
+            "path": "/webhook-subscriptions/{id}/disable",
+            "read_fields": null,
+            "request_schema": {
+                "type": "object"
+            },
+            "required_scopes": [
+                "webhooks.manage"
+            ],
+            "response_schema": {
+                "type": "object"
+            },
+            "success_status": 200,
+            "version": "v1",
+            "write_fields": null
+        },
+        {
+            "ability": "webhooks.manage",
+            "capabilities": [],
+            "cost": {
+                "enforcement": {
+                    "account": "observe",
+                    "actor": "observe",
+                    "client": "observe",
+                    "global": "enforce"
+                },
+                "recipe": {
+                    "attribute_filter": 0,
+                    "base": 1,
+                    "field": 0,
+                    "highlight": 0,
+                    "max_units": 10000,
+                    "relation": 0,
+                    "row": 0,
+                    "side_effect": 0
+                }
+            },
+            "deprecation": null,
+            "effect_mode": null,
+            "execution_supported": true,
+            "id": "webhook-subscriptions.list",
+            "idempotency": "forbidden",
+            "method": "GET",
+            "mode": "query",
+            "module": "axiomasoft/corex-operations",
+            "pagination": null,
+            "path": "/webhook-subscriptions",
+            "read_fields": null,
+            "request_schema": {
+                "type": "object"
+            },
+            "required_scopes": [
+                "webhooks.manage"
+            ],
+            "response_schema": {
+                "type": "object"
+            },
+            "success_status": 200,
+            "version": "v1",
+            "write_fields": null
+        },
+        {
+            "ability": "webhooks.manage",
+            "capabilities": [],
+            "cost": {
+                "enforcement": {
+                    "account": "observe",
+                    "actor": "observe",
+                    "client": "observe",
+                    "global": "enforce"
+                },
+                "recipe": {
+                    "attribute_filter": 0,
+                    "base": 1,
+                    "field": 0,
+                    "highlight": 0,
+                    "max_units": 10000,
+                    "relation": 0,
+                    "row": 0,
+                    "side_effect": 0
+                }
+            },
+            "deprecation": null,
+            "effect_mode": "tenant_transactional",
+            "execution_supported": true,
+            "id": "webhook-subscriptions.update",
+            "idempotency": "required",
+            "method": "PATCH",
+            "mode": "command",
+            "module": "axiomasoft/corex-operations",
+            "pagination": null,
+            "path": "/webhook-subscriptions/{id}",
+            "read_fields": null,
+            "request_schema": {
+                "type": "object"
+            },
+            "required_scopes": [
+                "webhooks.manage"
+            ],
+            "response_schema": {
+                "type": "object"
+            },
+            "success_status": 200,
+            "version": "v1",
+            "write_fields": null
+        }
+    ],
+    "webhooks": {
+        "bulk": {
+            "failure_page_max": 100,
+            "result_ttl_seconds": 86400,
+            "states": [
+                "cancelled",
+                "cancelling",
+                "completed",
+                "expired",
+                "failed",
+                "pending",
+                "running"
+            ],
+            "tombstone_ttl_seconds": 2592000
+        },
+        "delivery": {
+            "guarantee": "at-least-once",
+            "ordering": "none"
+        },
+        "payload_limit_bytes": 20480,
+        "pii": {
+            "classes": [
+                "none",
+                "pseudonymous",
+                "personal",
+                "restricted",
+                "secret"
+            ],
+            "secret_subscribable": false
+        },
+        "replay": {
+            "body_retention_seconds": 604800,
+            "horizon_seconds": 604800,
+            "max_count": 3,
+            "range_max": 100,
+            "range_window_seconds": 86400
+        },
+        "retry": {
+            "attempts": 12,
+            "horizon_seconds": 259200,
+            "lease_seconds": 30,
+            "maximum_delay_seconds": 3600,
+            "minimum_delay_seconds": 1
+        },
+        "rotation": {
+            "algorithm": "hmac-sha256",
+            "content": "delivery-id.timestamp.raw-body",
+            "headers": [
+                "webhook-id",
+                "webhook-timestamp",
+                "webhook-signature"
+            ],
+            "id_semantics": "delivery-id",
+            "max_active_keys": 2,
+            "prefix": "whsec_",
+            "secret_bytes": 32,
+            "signature": "v1",
+            "timestamp_window_seconds": 300
+        },
+        "schema": "corex-webhook-contract/1",
+        "topics": []
+    }
+}

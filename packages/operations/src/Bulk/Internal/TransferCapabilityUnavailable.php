@@ -8,6 +8,7 @@ use CoreX\Errors\Contracts\DescribesError;
 use CoreX\Errors\Data\ErrorDescriptor;
 use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Errors\Enums\UnavailabilityReason;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use RuntimeException;
 
 /** @internal Fail-closed before a transfer bulk row exists. */
@@ -21,7 +22,7 @@ final class TransferCapabilityUnavailable extends RuntimeException implements De
     public function errorDescriptor(): ErrorDescriptor
     {
         return new ErrorDescriptor(
-            code: 'capability_unavailable',
+            code: OperationsErrorCode::CapabilityUnavailable,
             category: ErrorCategory::Unavailable,
             retryable: false,
             details: ['reason' => UnavailabilityReason::CapabilityUnavailable->value],

@@ -798,6 +798,9 @@ jobs:
       - name: Source API surface report (classification debt is reported)
         run: composer php-api:report
 
+      - name: Typed package error registry and literal gate
+        run: composer error-registry
+
       - name: API contract compatibility
         run: composer api-contract
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Internal;
 
+use CoreX\CustomFields\Errors\Enums\CustomFieldsErrorCode;
 use CoreX\Errors\Contracts\DescribesError;
 use CoreX\Errors\Data\ErrorDescriptor;
 use CoreX\Errors\Enums\ErrorCategory;
@@ -20,7 +21,7 @@ final class UnsupportedAttributeCapability extends RuntimeException implements D
     public function errorDescriptor(): ErrorDescriptor
     {
         return new ErrorDescriptor(
-            code: 'attributes_engine_unavailable',
+            code: CustomFieldsErrorCode::AttributesEngineUnavailable,
             category: ErrorCategory::Unavailable,
             retryable: false,
             details: ['reason' => UnavailabilityReason::CapabilityUnavailable->value],

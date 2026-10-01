@@ -15,12 +15,14 @@ use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Enums\OperationMode;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Pagination\Contracts\CursorCodec;
 use CoreX\Operations\Pagination\Contracts\OrderingRegistry;
 use CoreX\Operations\Pagination\Laravel\OrderingFactory;
+use CoreX\Webhooks\Errors\Enums\WebhooksErrorCode;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Illuminate\Database\Connection;
@@ -56,7 +58,7 @@ final readonly class WebhookReplay
             $row = $this->scopedDeliveries($scope)->where('id', $deliveryId)->lockForUpdate()->first();
 
             if ($row === null) {
-                throw new ApiError('resource_not_found', 404, 'Webhook delivery does not exist.', category: ErrorCategory::NotFound);
+                throw new ApiError(OperationsErrorCode::ResourceNotFound, 404, 'Webhook delivery does not exist.', category: ErrorCategory::NotFound);
             }
 
             return $this->replayLocked($scope, $row, $explicit, $auditReason);
@@ -175,28 +177,28 @@ final readonly class WebhookReplay
         $status = (string) $row->status;
 
         if ($status === 'sending' && $row->lease_until !== null && $this->instant($row->lease_until) > $now) {
-            throw new ApiError('conflict', 409, 'Webhook delivery has an active lease.', category: ErrorCategory::Conflict);
+            throw new ApiError(OperationsErrorCode::Conflict, 409, 'Webhook delivery has an active lease.', category: ErrorCategory::Conflict);
         }
 
         if (! in_array($status, ['dead', 'succeeded'], true)) {
-            throw new ApiError('conflict', 409, 'Only a terminal webhook delivery can be replayed.', category: ErrorCategory::Conflict);
+            throw new ApiError(OperationsErrorCode::Conflict, 409, 'Only a terminal webhook delivery can be replayed.', category: ErrorCategory::Conflict);
         }
 
         if ((int) $row->replay_count >= 3) {
-            throw new ApiError('conflict', 409, 'Webhook replay cycle limit is three.', category: ErrorCategory::Conflict);
+            throw new ApiError(OperationsErrorCode::Conflict, 409, 'Webhook replay cycle limit is three.', category: ErrorCategory::Conflict);
         }
 
         if ($this->instant($row->expires_at) <= $now
             || $this->instant($row->created_at)->modify('+7 days') <= $now) {
-            throw new ApiError('webhook_replay_expired', 410, 'Webhook replay body has expired.', category: ErrorCategory::Conflict);
+            throw new ApiError(WebhooksErrorCode::WebhookReplayExpired, 410, 'Webhook replay body has expired.', category: ErrorCategory::Conflict);
         }
 
         if ($status === 'succeeded' && (! $explicit || ! $this->validReason($auditReason))) {
-            throw new ApiError('validation_failed', 422, 'Succeeded replay requires explicit confirmation and an audit reason.', category: ErrorCategory::Validation);
+            throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'Succeeded replay requires explicit confirmation and an audit reason.', category: ErrorCategory::Validation);
         }
 
         if ($auditReason !== null && ! $this->validReason($auditReason)) {
-            throw new ApiError('validation_failed', 422, 'Webhook replay audit reason is invalid.', category: ErrorCategory::Validation);
+            throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'Webhook replay audit reason is invalid.', category: ErrorCategory::Validation);
         }
 
         $subscription = $this->connection->table('sys_api_webhook_subscriptions')
@@ -210,17 +212,17 @@ final readonly class WebhookReplay
             || ! hash_equals((string) $subscription->topic, (string) $row->topic)
             || (int) $subscription->topic_version !== (int) $row->topic_version
             || ! hash_equals((string) $subscription->major, (string) $row->major)) {
-            throw new ApiError('webhook_endpoint_changed', 409, 'Webhook destination is no longer current.', category: ErrorCategory::Conflict);
+            throw new ApiError(WebhooksErrorCode::WebhookEndpointChanged, 409, 'Webhook destination is no longer current.', category: ErrorCategory::Conflict);
         }
 
         try {
             $topic = $this->topics->get((string) $row->topic, (int) $row->topic_version);
 
             if (! hash_equals($topic->major, (string) $row->major)) {
-                throw new ApiError('conflict', 409, 'Webhook topic is no longer available.', category: ErrorCategory::Conflict);
+                throw new ApiError(OperationsErrorCode::Conflict, 409, 'Webhook topic is no longer available.', category: ErrorCategory::Conflict);
             }
         } catch (ApiError) {
-            throw new ApiError('conflict', 409, 'Webhook topic is no longer available.', category: ErrorCategory::Conflict);
+            throw new ApiError(OperationsErrorCode::Conflict, 409, 'Webhook topic is no longer available.', category: ErrorCategory::Conflict);
         }
 
         $changed = $this->connection->table('sys_api_webhook_deliveries')
@@ -239,7 +241,7 @@ final readonly class WebhookReplay
             ]);
 
         if ($changed !== 1) {
-            throw new ApiError('conflict', 409, 'Webhook replay lost its compare-and-swap fence.', category: ErrorCategory::Conflict);
+            throw new ApiError(OperationsErrorCode::Conflict, 409, 'Webhook replay lost its compare-and-swap fence.', category: ErrorCategory::Conflict);
         }
 
         $context = [
@@ -286,7 +288,7 @@ final readonly class WebhookReplay
         if ($clientId === '' || strlen($clientId) > 128 || $subscriptionId === '' || strlen($subscriptionId) > 64
             || $from->getOffset() !== 0 || $to->getOffset() !== 0 || $seconds <= 0 || $seconds > 86_400
             || $max < 1 || $max > 100 || ! $this->validReason($auditReason)) {
-            throw new ApiError('validation_failed', 422, 'Webhook replay range is invalid.', category: ErrorCategory::Validation);
+            throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'Webhook replay range is invalid.', category: ErrorCategory::Validation);
         }
     }
 

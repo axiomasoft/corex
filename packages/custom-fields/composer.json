@@ -37,7 +37,8 @@
             "public-api": [
                 "CoreX\\CustomFields\\Contracts",
                 "CoreX\\CustomFields\\Data",
-                "CoreX\\CustomFields\\Exceptions"
+                "CoreX\\CustomFields\\Exceptions",
+                "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode"
             ]
         },
         "laravel": {

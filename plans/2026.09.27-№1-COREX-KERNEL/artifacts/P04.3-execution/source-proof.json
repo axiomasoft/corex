@@ -1,0 +1,9 @@
+{
+  "schema": "p04.3-source-proof/v1",
+  "constructors": 85,
+  "exceptions": 69,
+  "codes": 120,
+  "owner_packages": 13,
+  "typed_site_map_sha256": "e327837182014305fb846d152927d7df93c9d19711a7c0108d19fb565cb0e6c4",
+  "final_adapter_fix": "ErrorMapper catches descriptor producer failure; preserved 410 Conflict/Validation status projections remain admissible."
+}

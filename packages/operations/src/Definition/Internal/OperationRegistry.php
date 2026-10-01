@@ -7,6 +7,7 @@ namespace CoreX\Operations\Definition\Internal;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Laravel\OperationFactory;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use LogicException;
 
@@ -71,6 +72,6 @@ final class OperationRegistry implements \CoreX\Operations\Definition\Contracts\
             }
         }
 
-        throw new ApiError('operation_not_found', 404, 'Operation not found.');
+        throw new ApiError(OperationsErrorCode::OperationNotFound, 404, 'Operation not found.');
     }
 }

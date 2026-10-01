@@ -21,10 +21,10 @@ use stdClass;
 uses(TestCase::class);
 
 beforeEach(function (): void {
-    $this->app->register(CoreServiceProvider::class);
-    $this->app->register(ModulesServiceProvider::class);
     $this->app->register(ApiServiceProvider::class);
     $this->app->register(ToolServiceProvider::class);
+    $this->app->register(CoreServiceProvider::class);
+    $this->app->register(ModulesServiceProvider::class);
 });
 
 $objectSchema = static fn (): array => [

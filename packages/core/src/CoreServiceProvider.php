@@ -25,6 +25,9 @@ use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Internal\ArrayDataScopeCodec;
 use CoreX\Departments\Contracts\DepartmentRepository;
+use CoreX\Errors\Internal\PackageProblemDefinitions;
+use CoreX\Errors\Internal\ProblemRegistryRegistrar;
+use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Features\Contracts\FeatureFlags;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
@@ -81,6 +84,10 @@ final class CoreServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        ProblemDefinitions::register($this->app, __DIR__.'/../composer.json', PackageProblemDefinitions::class);
+
+        ProblemRegistryRegistrar::register($this->app);
+
         $this->app->bind(TracePropagation::class, static fn (Application $app): TracePropagation => $app->make(OpenTelemetryBridge::class));
 
         $this->app->singleton(CoreOptionsParser::class);

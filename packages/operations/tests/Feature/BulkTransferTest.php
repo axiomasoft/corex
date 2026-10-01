@@ -74,7 +74,7 @@ final class BulkTransferTest extends TestCase
                 $executor->submit($this->definition('bulk-missing', 'submission-missing'));
                 self::fail('Transfer submit proceeded without the capability.');
             } catch (TransferCapabilityUnavailable $exception) {
-                self::assertSame('capability_unavailable', $exception->errorDescriptor()->code);
+                self::assertSame('operations.capability_unavailable', $exception->errorDescriptor()->code);
             }
         }
 

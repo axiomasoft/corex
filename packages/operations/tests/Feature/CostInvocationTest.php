@@ -9,6 +9,7 @@ use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Errors\Contracts\ProblemRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Data\Api;
 use CoreX\Modules\Data\ModuleManifest;
@@ -108,7 +109,8 @@ final class CostInvocationTest extends TestCase
             modules: $modules,
             authorizer: $this->operationAuthorizer(),
             replayAuthorizer: new AllowReplayAuthorizer,
-            errors: new ErrorMapper,
+            errors: new ErrorMapper(app(ProblemRegistry::class)),
+            problems: app(ProblemRegistry::class),
             budget: $admission,
         );
         $invocation = $this->invocation($this->operation(idempotency: IdempotencyRequirement::Required), 'shared-key');
@@ -164,8 +166,8 @@ final class CostInvocationTest extends TestCase
             $invoker->invoke($this->invocation($this->operation()));
             self::fail('A missing budget authority must fail closed.');
         } catch (BudgetStoreUnavailable $error) {
-            $mapped = (new ErrorMapper)->map($error, reportUnexpected: false);
-            self::assertSame('internal_error', $mapped->errorCode);
+            $mapped = (new ErrorMapper(app(ProblemRegistry::class)))->map($error, reportUnexpected: false);
+            self::assertSame('operations.budget_store_unavailable', $mapped->errorCode);
             self::assertSame(500, $mapped->status);
         }
 
@@ -176,7 +178,7 @@ final class CostInvocationTest extends TestCase
             $preHandler->invoke($this->invocation($this->operation(handler: NonOperationHandler::class)));
             self::fail('An invalid handler should fail after reserve but before admission.');
         } catch (ApiError $error) {
-            self::assertSame('internal_error', $error->errorCode);
+            self::assertSame('core.internal_error', $error->errorCode);
         }
 
         self::assertSame(1, $preHandlerBudget->rejected);
@@ -210,10 +212,10 @@ final class CostInvocationTest extends TestCase
         $unavailable = $this->app->make(OperationDispatcher::class)->dispatch($request(), 'v1', 'notes');
 
         self::assertSame(429, $limited->getStatusCode());
-        self::assertSame('rate_limited', $limited->getData(true)['error']['code']);
+        self::assertSame('operations.rate_limited', $limited->getData(true)['error']['code']);
         self::assertSame('7', $limited->headers->get('Retry-After'));
         self::assertSame(500, $unavailable->getStatusCode());
-        self::assertSame('internal_error', $unavailable->getData(true)['error']['code']);
+        self::assertSame('operations.budget_store_unavailable', $unavailable->getData(true)['error']['code']);
         self::assertNull($unavailable->headers->get('Retry-After'));
     }
 

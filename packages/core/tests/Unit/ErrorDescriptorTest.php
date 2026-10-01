@@ -3,9 +3,11 @@
 declare(strict_types=1);
 
 use CoreX\Errors\Contracts\DescribesError;
+use CoreX\Errors\Contracts\ErrorCode;
 use CoreX\Errors\Data\ErrorDescriptor;
 use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Errors\Enums\UnavailabilityReason;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 
 test('error category exposes the nine stable values', function (): void {
     expect(array_map(
@@ -39,7 +41,7 @@ test('unavailability reason exposes the five stable values', function (): void {
 
 test('descriptor accepts a root nested and escaped pointer', function (string $path): void {
     $descriptor = new ErrorDescriptor(
-        code: 'field_invalid',
+        code: descriptorTestCode('core.field_invalid'),
         category: ErrorCategory::Validation,
         path: $path,
     );
@@ -58,7 +60,7 @@ test('descriptor accepts a root nested and escaped pointer', function (string $p
 
 test('descriptor accepts a null path', function (): void {
     $descriptor = new ErrorDescriptor(
-        code: 'field_invalid',
+        code: descriptorTestCode('core.field_invalid'),
         category: ErrorCategory::Validation,
         path: null,
     );
@@ -68,7 +70,7 @@ test('descriptor accepts a null path', function (): void {
 
 test('descriptor rejects an invalid code', function (string $code): void {
     expect(fn (): ErrorDescriptor => new ErrorDescriptor(
-        code: $code,
+        code: descriptorTestCode($code),
         category: ErrorCategory::Internal,
     ))->toThrow(InvalidArgumentException::class, 'Error code is invalid.');
 })->with([
@@ -82,14 +84,14 @@ test('descriptor rejects an invalid code', function (string $code): void {
 ]);
 
 test('descriptor accepts a code at the byte limit', function (): void {
-    $code = str_repeat('a', 120);
+    $code = 'core.'.str_repeat('a', 115);
 
-    expect(new ErrorDescriptor(code: $code, category: ErrorCategory::Internal)->code)->toBe($code);
+    expect(new ErrorDescriptor(code: descriptorTestCode($code), category: ErrorCategory::Internal)->code)->toBe($code);
 });
 
 test('descriptor rejects an invalid pointer escape or control character', function (string $path): void {
     expect(fn (): ErrorDescriptor => new ErrorDescriptor(
-        code: 'field_invalid',
+        code: descriptorTestCode('core.field_invalid'),
         category: ErrorCategory::Validation,
         path: $path,
     ))->toThrow(InvalidArgumentException::class, 'Error path is not an RFC 6901 JSON Pointer.');
@@ -102,7 +104,7 @@ test('descriptor rejects an invalid pointer escape or control character', functi
 
 test('descriptor rejects a control character in detail', function (): void {
     expect(fn (): ErrorDescriptor => new ErrorDescriptor(
-        code: 'field_invalid',
+        code: descriptorTestCode('core.field_invalid'),
         category: ErrorCategory::Validation,
         details: ['note' => "line\nbreak"],
     ))->toThrow(InvalidArgumentException::class, 'Error detail is not a bounded JSON value.');
@@ -110,7 +112,7 @@ test('descriptor rejects a control character in detail', function (): void {
 
 test('descriptor rejects an oversize detail', function (): void {
     expect(fn (): ErrorDescriptor => new ErrorDescriptor(
-        code: 'field_invalid',
+        code: descriptorTestCode('core.field_invalid'),
         category: ErrorCategory::Validation,
         details: ['note' => str_repeat('a', ErrorDescriptor::MAX_DETAIL_BYTES)],
     ))->toThrow(InvalidArgumentException::class, 'Error detail exceeds 4096 bytes.');
@@ -118,7 +120,7 @@ test('descriptor rejects an oversize detail', function (): void {
 
 test('descriptor rejects a non json detail', function (array $details): void {
     expect(fn (): ErrorDescriptor => new ErrorDescriptor(
-        code: 'field_invalid',
+        code: descriptorTestCode('core.field_invalid'),
         category: ErrorCategory::Validation,
         details: $details,
     ))->toThrow(InvalidArgumentException::class, 'Error detail is not a bounded JSON value.');
@@ -130,13 +132,13 @@ test('descriptor rejects a non json detail', function (array $details): void {
 
 test('retryable records only that the same semantic input may succeed later', function (): void {
     $retryable = new ErrorDescriptor(
-        code: 'engine_unavailable',
+        code: descriptorTestCode('core.engine_unavailable'),
         category: ErrorCategory::Unavailable,
         retryable: true,
         details: ['attempt' => 1, 'tags' => ['primary', null]],
     );
     $terminal = new ErrorDescriptor(
-        code: 'access_denied',
+        code: OperationsErrorCode::AccessDenied,
         category: ErrorCategory::Authorization,
         retryable: false,
     );
@@ -148,7 +150,7 @@ test('retryable records only that the same semantic input may succeed later', fu
 
 test('describes error returns the same descriptor', function (): void {
     $descriptor = new ErrorDescriptor(
-        code: 'field_invalid',
+        code: descriptorTestCode('core.field_invalid'),
         category: ErrorCategory::Validation,
     );
     $failure = new class($descriptor) implements DescribesError
@@ -163,3 +165,16 @@ test('describes error returns the same descriptor', function (): void {
 
     expect($failure->errorDescriptor())->toBe($descriptor);
 });
+
+function descriptorTestCode(string $value): ErrorCode
+{
+    return new class($value) implements ErrorCode
+    {
+        public function __construct(private string $code) {}
+
+        public function value(): string
+        {
+            return $this->code;
+        }
+    };
+}

@@ -7,11 +7,15 @@ namespace CoreX\Operations\Idempotency\Data;
 use CoreX\Attributes\Api;
 use CoreX\Data\Data\JsonDocument;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Errors\Contracts\ProblemRegistry;
+use CoreX\Errors\Enums\CoreErrorCode;
 use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Errors\Exceptions\ProblemRegistryException;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Data\OperationResult;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use InvalidArgumentException;
+use ValueError;
 
 /** Canonical transport-neutral operation result persisted for semantic replay. */
 #[Api(since: '1.0')]
@@ -54,7 +58,7 @@ final readonly class StoredOperationOutcome
         );
     }
 
-    public static function fromCanonicalJson(string $json): self
+    public static function fromCanonicalJson(string $json, ProblemRegistry $problems): self
     {
         $payload = JsonCanonical::decodeObject($json);
 
@@ -97,6 +101,14 @@ final readonly class StoredOperationOutcome
             throw new InvalidArgumentException('Stored operation error has an invalid shape.');
         }
 
+        try {
+            $identity = $problems->fromWire($code)->code;
+            $occurrence = new ApiError($identity, $status, $message, JsonDocuments::capture($details), ErrorCategory::from($category), $retryable, $path);
+            $problems->assertOccurrence($occurrence->errorDescriptor(), $status);
+        } catch (ProblemRegistryException|InvalidArgumentException|ValueError) {
+            return self::failure(new ApiError(CoreErrorCode::InternalError, 500, 'Operation could not be completed.', category: ErrorCategory::Internal));
+        }
+
         return new self(
             kind: 'error',
             data: JsonDocuments::nullable(null),
@@ -137,7 +149,7 @@ final readonly class StoredOperationOutcome
         return new OperationResult(data: JsonDocuments::capture($this->data), replayed: $replayed);
     }
 
-    public function error(): ApiError
+    public function error(ProblemRegistry $problems): ApiError
     {
         if ($this->kind !== 'error' || $this->errorCode === null || $this->errorStatus === null
             || $this->errorMessage === null || $this->errorCategory === null) {
@@ -145,7 +157,7 @@ final readonly class StoredOperationOutcome
         }
 
         return new ApiError(
-            errorCode: $this->errorCode,
+            errorCode: $problems->fromWire($this->errorCode)->code,
             status: $this->errorStatus,
             message: $this->errorMessage,
             details: JsonDocuments::capture($this->errorDetails),

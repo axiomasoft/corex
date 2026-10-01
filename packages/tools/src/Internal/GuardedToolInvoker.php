@@ -11,6 +11,7 @@ use CoreX\Modules\Data\Api;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Laravel\OperationFactory;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Contracts\OperationInvoker;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
@@ -232,7 +233,7 @@ final class GuardedToolInvoker implements ToolInvoker
             }
         }
 
-        throw new ApiError('operation_not_found', 404, 'Operation not found.');
+        throw new ApiError(OperationsErrorCode::OperationNotFound, 404, 'Operation not found.');
     }
 
     /**

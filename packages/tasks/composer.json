@@ -72,7 +72,8 @@
                 "CoreX\\Tasks\\TasksModule",
                 "CoreX\\Tasks\\TasksServiceProvider",
                 "CoreX\\Tasks\\Time\\Laravel\\TimeLogRelations",
-                "CoreX\\Tasks\\Task\\Laravel\\TaskPortBindings"
+                "CoreX\\Tasks\\Task\\Laravel\\TaskPortBindings",
+                "CoreX\\Tasks\\Errors\\Enums\\TasksErrorCode"
             ]
         },
         "laravel": {
