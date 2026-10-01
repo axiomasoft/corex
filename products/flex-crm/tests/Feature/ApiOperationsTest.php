@@ -99,6 +99,10 @@ it('declares and dispatches company, contact and association operations through 
     $companies = $dispatch('GET', 'companies');
     expect($companies->getStatusCode())->toBe(200)
         ->and($companies->getData(true)['data']['items'])->toHaveCount(1);
+    $contacts = $dispatch('GET', 'contacts', ['limit' => 1]);
+    expect($contacts->getStatusCode())->toBe(200)
+        ->and($contacts->getData(true)['data']['items'])->toHaveCount(1)
+        ->and($contacts->getData(true)['data']['items'][0]['id'])->toBe($contactId);
     $shownContact = $dispatch('GET', 'contacts/'.$contactId);
     expect($shownContact->getStatusCode())->toBe(200)
         ->and($shownContact->getData(true)['data']['id'])->toBe($contactId);

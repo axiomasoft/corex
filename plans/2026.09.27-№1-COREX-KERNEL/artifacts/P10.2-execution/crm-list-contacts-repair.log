@@ -1,0 +1,10 @@
+> pest --exclude-group=pg '--filter=ApiOperationsTest'
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\ApiOperationsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit declares and dispatches company, contact and association operati[39m[90m…[39m [90m0.59s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit normalizes CRM identifiers for the configured ID strategy[39m[90m        [39m [90m0.19s[39m  
+
+  [90mTests:[39m    [32;1m2 passed[39;22m[90m (25 assertions)[39m
+  [90mDuration:[39m [39m0.86s[39m
+  [90mRandom Order Seed:[39m [39m1790879564[39m
+

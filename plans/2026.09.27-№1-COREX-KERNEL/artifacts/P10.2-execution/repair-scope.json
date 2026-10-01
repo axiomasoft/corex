@@ -91,6 +91,20 @@
         "scripts/tests/test_rename_completeness.py"
       ],
       "delta": "Fixture expects moved Tooling namespace; renamed custom-fields tokens still fail."
+    },
+    {
+      "signal": "Hosted access PG subclass skips parent environment setup",
+      "paths": [
+        "packages/access/tests/PgTestCase.php"
+      ],
+      "delta": "Call parent before selecting the PG connection, retaining the shared test fixture. Local full PG suite 112 tests/293 assertions passes in dedicated corex_p102_access_2ebafa81_test on postgres16, removed after execution."
+    },
+    {
+      "signal": "Removal of duplicated provider entity registrations exposes CRM contact-list coverage gap",
+      "paths": [
+        "products/flex-crm/tests/Feature/ApiOperationsTest.php"
+      ],
+      "delta": "Assert the public list-contacts operation returns the seeded contact under the existing trusted request context and bounded limit. Full CRM coverage 95.7%, threshold stays 95%. Separate corex_p102_crm_2ebafa81_test removed after execution."
     }
   ],
   "new_analyser_ignores": 0,

@@ -1,0 +1,47 @@
+> bash scripts/phpstan-packages.sh
+==> packages/access/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/core/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/custom-fields/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/intl/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/media/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/notifications/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/operations/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/panels/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/recurrence/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/search-intl/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/search-meilisearch/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/search/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/tasks-workflow/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/tasks/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/tenancy/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/tools/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/transfer/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/wakeup/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/webhooks/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/workflow/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> products/flex-crm/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> phpstan.neon
+{"tool":"phpstan","result":"failed","errors":16,"error_details":{"/home/vostrikov/projects/packages/corex/scripts/error-registry.php":[{"line":18,"message":"Instantiated class CoreX\\Errors\\Internal\\ErrorSourceScanner not found.","identifier":"class.notFound","tip":"Learn more at https://phpstan.org/user-guide/discovering-symbols"},{"line":19,"message":"Call to method catalogue() on an unknown class CoreX\\Errors\\Internal\\ErrorSourceScanner.","identifier":"class.notFound","tip":"Learn more at https://phpstan.org/user-guide/discovering-symbols"},{"line":20,"message":"Call to method diagnostics() on an unknown class CoreX\\Errors\\Internal\\ErrorSourceScanner.","identifier":"class.notFound","tip":"Learn more at https://phpstan.org/user-guide/discovering-symbols"},{"line":22,"message":"Argument of an invalid type mixed supplied for foreach, only iterables are supported.","identifier":"foreach.nonIterable"},{"line":22,"message":"Cannot call method all() on mixed.","identifier":"method.nonObject"},{"line":24,"message":"Cannot access property $code on mixed.","identifier":"property.nonObject"},{"line":24,"message":"Cannot call method value() on mixed.","identifier":"method.nonObject"},{"line":25,"message":"Cannot access constant class on mixed.","identifier":"classConstant.nonObject"},{"line":25,"message":"Cannot access property $code on mixed.","identifier":"property.nonObject"},{"line":26,"message":"Cannot access property $type on mixed.","identifier":"property.nonObject"},{"line":27,"message":"Cannot access property $defaultStatus on mixed.","identifier":"property.nonObject"},{"line":28,"message":"Cannot access property $title on mixed.","identifier":"property.nonObject"},{"line":29,"message":"Cannot access property $category on mixed.","identifier":"property.nonObject"},{"line":29,"message":"Cannot access property $value on mixed.","identifier":"property.nonObject"},{"line":30,"message":"Cannot access property $retryable on mixed.","identifier":"property.nonObject"},{"line":31,"message":"Cannot access property $detailKeys on mixed.","identifier":"property.nonObject"}]},"instructions":"Each error has an associated identifier, like `argument.type` or `return.missing`. Each error identifier has documentation at URL https://phpstan.org/error-identifiers/<identifier>, which contains a code example, explanation why it is an error, and instructions on how to fix it. Before fixing the error, fetch the documentation page for its identifier. The error usually indicates a real bug or incorrect type in the code. Fix the underlying cause, do not just make the error go away. Do not add `@phpstan-ignore` comments, `@phpstan-ignore-next-line` comments, or baseline entries to suppress the error. Do not use assert() or inline @var PHPDoc tag to override PHPStan's inferred type. Do not add type casts just to silence errors. Do not widen parameter or return types just to make the error go away."}
+ceilings OK
+Script bash scripts/phpstan-packages.sh handling the analyse event returned with error code 1

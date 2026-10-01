@@ -1,0 +1,132 @@
+> pest --group=pg
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Pg\PermissionsMergerTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit returns a warning and creates no matrix row for a declaration wi[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit recompiles on ModuleDisabled too — both lifecycle events are wir[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit recompiles keys through the full enable -> disable -> re-enable[39m[90m… [39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit gives out no key while the owning module has never been reported[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit returns no warning for a declaration whose entity is known to En[39m[90m…[39m [90m0.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Pg\ScopeResolverTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit a context row narrows the builder scope for its own context only[39m[90m [39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit account scope lifts exactly the pinned workspace scope class, ne[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit agent principals degrade own/dept/dept_tree to none on the build[39m[90m…[39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit agent principals degrade own/dept/dept_tree to none on the build[39m[90m…[39m [90m0.59s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit agent principals degrade own/dept/dept_tree to none on the build[39m[90m…[39m [90m0.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit agent principals degrade own/dept/dept_tree to none on the build[39m[90m…[39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit workspace scope on the builder shows only the context workspace'[39m[90m…[39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies dept/dept_tree on the builder when the principal has no d[39m[90m…[39m [90m0.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies dept/dept_tree on the builder when the principal has no d[39m[90m…[39m [90m0.60s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit workspace scope shows only account-wide rows when no workspace i[39m[90m…[39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is NOT monotone in general — dept_tree can include a record outs[39m[90m…[39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies dept/dept_tree on the builder when users/sys_departments[39m[90m… [39m [90m0.61s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies dept/dept_tree on the builder when users/sys_departments[39m[90m… [39m [90m0.64s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit dept scope on the builder narrows to rows owned by users in the[39m[90m… [39m [90m0.59s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit dept_tree scope on the builder narrows via the department subtre[39m[90m…[39m [90m0.58s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit matches real department records to the same IDs through ScopeRes[39m[90m…[39m [90m0.59s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit matches real department records to the same IDs through ScopeRes[39m[90m…[39m [90m0.59s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves the max weight across multiple roles held by the same p[39m[90m…[39m [90m0.64s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit own scope on the builder narrows to only the rows the principal[39m[90m… [39m [90m0.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit own ⊆ dept ⊆ dept_tree ⊆ workspace ⊆ account on a fixture where[39m[90m… [39m [90m0.47s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit cascade_view off hides child-workspace rows; on shows them[39m[90m       [39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.60s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.74s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.79s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.74s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.55s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.64s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit apply() and canOnRecord() agree for every scope across every pri[39m[90m…[39m [90m0.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit MatrixValidator warns when a matrix row names a scope the entity[39m[90m…[39m [90m0.57s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Pg\AutSchemaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit applies the tenant/ aut_* migrations on a clean schema without u[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit matches DB_SCHEMA §3.5 aut_role_matrix column-by-column[39m[90m          [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit adds both cross-package FKs only via the tenant-cloud migration[39m[90m  [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit matches DB_SCHEMA §3.5 aut_roles column-by-column[39m[90m                [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit matches DB_SCHEMA §3.5 aut_role_assignments column-by-column[39m[90m     [39m [90m0.19s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Pg\AccessCheckerTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit grants canOnRecord via an active AzGuard direct grant with no ma[39m[90m…[39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit grants canOnRecord for account scope regardless of ownership[39m[90m     [39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit does not extend owner-wildcard capability to a non-system clone[39m[90m… [39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit grants canOnRecord for own scope only when the record belongs to[39m[90m…[39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit grants department scopes only for real same-department and desce[39m[90m…[39m [90m0.56s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit grants department scopes only for real same-department and desce[39m[90m…[39m [90m0.67s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves allowed() through the real AzGuard round-trip for a sco[39m[90m…[39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit does not reuse scope memo when a connection switch exposes ident[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit lets a principal with the active system owner role pass any allo[39m[90m…[39m [90m0.56s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit grants allowed() inside the workspace the role was assigned to[39m[90m   [39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit lets a context row override, and narrow, the base scope for its[39m[90m… [39m [90m0.55s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit excludes deleted broad roles when a live narrow role still grant[39m[90m…[39m [90m0.60s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies allowed() outside the workspace the role was assigned to[39m[90m  [39m [90m0.55s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves each of the six scope values from a single matching mat[39m[90m…[39m [90m0.55s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves each of the six scope values from a single matching mat[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves each of the six scope values from a single matching mat[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves each of the six scope values from a single matching mat[39m[90m…[39m [90m0.56s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves each of the six scope values from a single matching mat[39m[90m…[39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves each of the six scope values from a single matching mat[39m[90m…[39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies department scopes through AccessChecker when department t[39m[90m…[39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies department scopes through AccessChecker when department t[39m[90m…[39m [90m0.56s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies canOnRecord for a record whose model is not registered in[39m[90m…[39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit without WorkspacePermissionLayer, a cached grant leaks across a[39m[90m… [39m [90m0.55s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit with WorkspacePermissionLayer, a workspace switch gets a fresh,[39m[90m… [39m [90m0.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies every department scope to non-user principals through Acc[39m[90m…[39m [90m0.55s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies every department scope to non-user principals through Acc[39m[90m…[39m [90m0.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies every department scope to non-user principals through Acc[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies every department scope to non-user principals through Acc[39m[90m…[39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit uses identical fail-closed capability normalization for record a[39m[90m…[39m [90m0.57s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves the max weight across multiple roles held by the same p[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit recomputes scope after replacing an assignment with an equally v[39m[90m…[39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit matches workspace scope against the active tenancy context, and[39m[90m… [39m [90m0.52s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Pg\RoleMatrixCompilerTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit recompiles the key once the owning module becomes active again ([39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit excludes a matrix row whose owning module is inactive, keeping t[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit recompileAll is idempotent across repeated runs[39m[90m                  [39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit returns no warning for a user-only role using own/dept scope[39m[90m     [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit invalidates matrix scope only after the outer commit and never a[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit exposes compiled keys through MatrixPermissionCatalogBuilder for[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit warns (does not throw) when a role assignable to agent uses own/[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit compiles matrix rows with scope != none into panel-prefixed AzGu[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit deduplicates identical keys produced by a base row and its conte[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit does not compile a key for an entity_key unknown to EntityRegist[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit excludes catalog keys whose owning module is inactive[39m[90m            [39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit leaves no new keys and no version bump when compilation fails mi[39m[90m…[39m [90m0.35s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Pg\SystemRolesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit does not grant owner-wildcard capability to a clone of owner[39m[90m     [39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit clones a system role into an editable copy with cloned_from_id a[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit throws when saving a matrix row that belongs to a system role, u[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit throws when saving an existing system role through the normal pa[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit allows editing a system role through the flagged path[39m[90m            [39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is idempotent — running the seeder twice does not duplicate role[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit seeds exactly the 3 system roles with an empty matrix[39m[90m            [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit cannot clear system status to bypass role and related matrix gua[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit throws when deleting a system role[39m[90m                               [39m [90m0.28s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Pg\PrincipalTypesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit resolves allowed() for an api_key principal with no users row[39m[90m    [39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit excludes an expired assignment from allowed() and scopeFor()[39m[90m     [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit degrades own/dept/dept_tree to none for an agent principal, but[39m[90m… [39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit degrades own/dept/dept_tree to none for an agent principal, but[39m[90m… [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit degrades own/dept/dept_tree to none for an agent principal, but[39m[90m… [39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit leaves workspace and account scope untouched for an agent princi[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit leaves workspace and account scope untouched for an agent princi[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit honours a not-yet-expired assignment in allowed() and scopeFor()[39m[90m [39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves allowed()/scopeFor() for an agent principal with no use[39m[90m…[39m [90m0.24s[39m  
+
+  [90mTests:[39m    [32;1m112 passed[39;22m[90m (293 assertions)[39m
+  [90mDuration:[39m [39m47.85s[39m
+  [90mRandom Order Seed:[39m [39m1790879563[39m
+

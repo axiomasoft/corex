@@ -1,0 +1,48 @@
+> pest --exclude-group=pg '--filter=TenantContextGuardTest'
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\TenantContextGuardTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies when the user has neither scoped nor global permission[39m[90m    [39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit returns false for an unknown context type[39m[90m                        [39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit grants when the user has the permission scoped to the entity[39m[90m     [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit returns false when the context entity does not exist[39m[90m             [39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit falls back to a global permission within the panel[39m[90m               [39m [90m0.05s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\TenantContextGuardTest[22m [90m>[39m it grants when the user ha…   
+[39;1m  Failed asserting that false is true.[39;22m
+
+  at [32mtests/Feature/TenantContextGuardTest.php[39m:[32m42[39m
+     38▕ it('grants when the user has the permission scoped to the entity', function (): void {
+     39▕     $project = Project::create(['name' => 'p']);
+     40▕     $user = new ContextUser(scoped: true);
+     41▕ 
+  ➜  42▕     expect($this->guard->checkInContext($user, 'project', $project->id, 'crm.deal.view', 'app'))->toBeTrue();
+     43▕ });
+     44▕ 
+     45▕ it('falls back to a global permission within the panel', function (): void {
+     46▕     $project = Project::create(['name' => 'p']);
+
+  [33m1   [39m[39;1mtests/Feature/TenantContextGuardTest.php[39;22m:[39;1m42[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\TenantContextGuardTest[22m [90m>[39m it falls back to a global…    
+[39;1m  Failed asserting that false is true.[39;22m
+
+  at [32mtests/Feature/TenantContextGuardTest.php[39m:[32m49[39m
+     45▕ it('falls back to a global permission within the panel', function (): void {
+     46▕     $project = Project::create(['name' => 'p']);
+     47▕     $user = new ContextUser(global: true);
+     48▕ 
+  ➜  49▕     expect($this->guard->checkInContext($user, 'project', $project->id, 'crm.deal.view', 'app'))->toBeTrue();
+     50▕ });
+     51▕ 
+     52▕ it('denies when the user has neither scoped nor global permission', function (): void {
+     53▕     $project = Project::create(['name' => 'p']);
+
+  [33m1   [39m[39;1mtests/Feature/TenantContextGuardTest.php[39;22m:[39;1m49[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m3 passed[39;22m[90m (5 assertions)[39m
+  [90mDuration:[39m [39m0.52s[39m
+  [90mRandom Order Seed:[39m [39m1790878475[39m
+
+Script pest --exclude-group=pg handling the test event returned with error code 1
