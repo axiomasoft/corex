@@ -27,6 +27,10 @@ final class ToolSchemaWorker
 {
     public static function runCli(): void
     {
+        $validator = new OpisToolSchemaValidator;
+        echo "ready\n";
+        fflush(STDOUT);
+
         $input = stream_get_contents(STDIN);
 
         if ($input === false || trim($input) === '') {
@@ -38,7 +42,6 @@ final class ToolSchemaWorker
         try {
             /** @var array<string, mixed> $request */
             $request = json_decode($input, true, 512, JSON_THROW_ON_ERROR);
-            $validator = new OpisToolSchemaValidator;
             $action = $request['action'] ?? '';
 
             if ($action === 'admit') {

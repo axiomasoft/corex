@@ -5,6 +5,8 @@
 
 ## Unreleased
 
+- Schema workers signal readiness after initialization, so slow PHP startup no longer consumes the unchanged 100 ms validation deadline or changes the 64 MiB memory limit. Startup failures report `schema_unavailable`; validation transport, response, deadline and memory failures report `schema_limit`. All subprocesses are terminated and reaped.
+
 - PHP API manifests now record direct inheritance, interfaces and traits separately and include only members declared by this package; external dependency members are omitted without changing the `php-api/1` schema.
 
 ## Unreleased — PHP surface strict cutover

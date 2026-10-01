@@ -18,4 +18,4 @@ Declare tools through the existing module `Api::tool()` extender and compile the
 
 ## Failure handling
 
-Unknown tools and rejected authorization fail before handler execution. Missing schema capability returns `schema_unavailable`; schema workers enforce memory and deadline bounds. Correct the capability or declaration before retrying.
+Unknown tools and rejected authorization fail before handler execution. Missing schema capability or a worker that cannot become ready within its 5-second startup budget returns `schema_unavailable`. After readiness, each validation has a separate 100 ms deadline, including request transfer, and a 64 MiB worker memory limit; exceeding either bound returns `schema_limit`. Malformed worker responses fail closed, and workers are terminated and reaped on success and failure. Correct the capability or declaration before retrying.

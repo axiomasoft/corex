@@ -76245,6 +76245,13 @@
                         "name": "phpBinary",
                         "type": "?string",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "startupMs",
+                        "type": "?int",
+                        "variadic": false
                     }
                 ],
                 "return": "",
