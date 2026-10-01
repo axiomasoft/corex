@@ -1,0 +1,13 @@
+{
+  "outcome": "continue-root",
+  "reason": "authorized-scope-complete",
+  "evidence": [
+    "batch:aeed7fd4e04e59c4c615185525c9552e9fe75e6addaefc60c3898413d074ffe3",
+    "loaded-inputs:reusable",
+    "cold-start-cost:0",
+    "lifecycle:scope-complete",
+    "checkpoint:artifacts/P10.4-execution/completion.md"
+  ],
+  "runnable": true,
+  "schema_version": "session-continuity-decision/v1"
+}

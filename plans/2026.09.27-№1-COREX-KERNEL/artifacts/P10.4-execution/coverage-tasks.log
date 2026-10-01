@@ -1,0 +1,169 @@
+> pest --coverage --min=92
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Pg\TasksPgSchemaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit matches the approved PostgreSQL table, column, constraint and in[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses to rewrite a non-empty legacy Tasks schema[39m[90m               [39m [90m0.34s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Pg\PlanningConcurrencyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit serializes concurrent time-log totals and deduplicates repeated[39m[90m… [39m [90m0.40s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\TasksContractTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit rolls an update back with its outer tenant transaction[39m[90m           [39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit completes a task atomically and does not emit a duplicate event[39m[90m  [39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit changes a task project through the public command and resets pro[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ships a deny-by-default host authorization seam[39m[90m                  [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a stage from another project without a partial write[39m[90m     [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a project outside the task workspace during update[39m[90m       [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit updates dates description and nullable fields and emits no event[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit moves only within the task project and applies the stage status[39m[90m  [39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit participates in an outer tenant transaction[39m[90m                      [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves task project stage parent and child relationships on th[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit cannot move a task id that is absent from the current account da[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit creates a UUIDv7 task and portable target references through the[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit authorizes mutations against the task inside its locking transac[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects invalid updates without changing the persisted task with[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects invalid updates without changing the persisted task with[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects invalid updates without changing the persisted task with[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects invalid updates without changing the persisted task with[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects invalid updates without changing the persisted task with[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects invalid updates without changing the persisted task with[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects invalid updates without changing the persisted task with[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects invalid updates without changing the persisted task with[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects invalid updates without changing the persisted task with[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enforces completion authorization when moving to a Done stage[39m[90m    [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies commands when the module is inactive[39m[90m                      [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit cannot complete a cancelled task by moving it[39m[90m                    [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit publishes the lifecycle manifest instead of loading migrations f[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit does not complete a cancelled task[39m[90m                               [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit updates editable task fields through the public command[39m[90m          [39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a workspace outside the narrowed tenant context[39m[90m          [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit completes once through move and preserves the completion time on[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects invalid task drafts atomically with dataset "duplicate t[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects invalid task drafts atomically with dataset "unknown pro[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects invalid task drafts atomically with dataset "negative es[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects invalid task drafts atomically with dataset "unknown aut[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects invalid task drafts atomically with dataset "unknown par[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects invalid task drafts atomically with dataset "reversed da[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects invalid task drafts atomically with dataset "long title"[39m[90m [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects invalid task drafts atomically with dataset "missing wor[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects invalid task drafts atomically with dataset "invalid tar[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects invalid task drafts atomically with dataset "blank title[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects invalid task drafts atomically with dataset "unknown spr[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit cannot move a task from another narrowed workspace[39m[90m               [39m [90m0.17s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\TasksSchemaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit does not add columns outside the approved task contract[39m[90m          [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit creates exactly the eight approved Tasks tables[39m[90m                  [39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\PlanningCommandsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit keeps canonical task tables and adds only the neutral operation[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies a project in another narrowed workspace[39m[90m                   [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps existing create and complete commands byte-compatible[39m[90m      [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit preserves existing completion policy without new workflow owners[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit supports boxed null workspace context for planning subjects[39m[90m      [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit replays sprint creation without creating a second sprint[39m[90m         [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed planning tokens before writes with dataset "ma[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed planning tokens before writes with dataset "em[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed planning tokens before writes with dataset "di[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed planning tokens before writes with dataset "lo[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit creates maintenance project sprint and time log through the neut[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ships deny-by-default planning authorization[39m[90m                     [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit creates a project in the trusted workspace context[39m[90m               [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit validates sprint parent and date ordering before writes[39m[90m          [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit records time atomically with spent totals and operation receipts[39m[90m [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit replays the same project request key and rejects changed payload[39m[90m…[39m [90m0.09s[39m  
+
+  [90mTests:[39m    [32;1m63 passed[39;22m[90m (202 assertions)[39m
+  [90mDuration:[39m [39m10.03s[39m
+  [90mRandom Order Seed:[39m [39m1790887895[39m
+
+  Access/Contracts/TaskAccess [90m.........................................[39m [32m100.0%[39m  
+  Access/Contracts/TaskModuleContext [90m..................................[39m [32m100.0%[39m  
+  Access/Contracts/TaskMutationAccess [90m.................................[39m [32m100.0%[39m  
+  Access/Contracts/TaskPlanningAccess [90m.................................[39m [32m100.0%[39m  
+  Access/Exceptions/TasksModuleDisabled [90m...........................[39m [33m24[39m[33m [39m[90m/[39m[33m 50.0%[39m  
+  Access/Internal/DenyTaskAccess [90m..............................[39m [33m24..29[39m[33m [39m[90m/[39m[33m 33.3%[39m  
+  Access/Internal/DenyTaskMutationAccess [90m..........................[39m [33m18[39m[33m [39m[90m/[39m[33m 50.0%[39m  
+  Access/Internal/DenyTaskPlanningAccess [90m..............................[39m [32m100.0%[39m  
+  Access/Internal/TaskModuleGuard [90m.....................................[39m [32m100.0%[39m  
+  Errors/Enums/TasksErrorCode [90m.........................................[39m [32m100.0%[39m  
+  Errors/Internal/PackageProblemDefinitions [90m...........................[39m [32m100.0%[39m  
+  Planning/Contracts/TaskOperationReceipts [90m............................[39m [32m100.0%[39m  
+  Planning/Contracts/TaskPlanningCommand [90m..............................[39m [32m100.0%[39m  
+  Planning/Data/PlanningOperation [90m.....................................[39m [32m100.0%[39m  
+  Planning/Data/PlanningSubject [90m.......................................[39m [32m100.0%[39m  
+  Planning/Data/PlanningToken [90m.........................................[39m [32m100.0%[39m  
+  Planning/Data/TaskOperationKind [90m.....................................[39m [32m100.0%[39m  
+  Planning/Data/TaskOperationReceipt [90m..................................[39m [32m100.0%[39m  
+  Planning/Exceptions/InvalidPlanningDraft [90m............................[39m [32m100.0%[39m  
+  Planning/Exceptions/PlanningConflict [90m............................[39m [33m24[39m[33m [39m[90m/[39m[33m 50.0%[39m  
+  Planning/Internal/DatabaseTaskOperationReceipts [90m.................[39m [33m31[39m[33m [39m[90m/[39m[33m 95.0%[39m  
+  Planning/Internal/OperationStore [90m............................[39m [33m71..79[39m[33m [39m[90m/[39m[33m 79.3%[39m  
+  Planning/Internal/PlanningHasher [90m....................................[39m [32m100.0%[39m  
+  Planning/Internal/PlanningOperationsServiceProvider [90m.................[39m [32m100.0%[39m  
+  Planning/Laravel/PlanningCommand  [33m96, 245, 302, 316, 330, 334, 338, 342, 349, 356, 365, 375, 406..420[39m[33m [39m[90m/[39m[33m 92.4%[39m  
+  Project/Contracts/ProjectRead [90m.......................................[39m [32m100.0%[39m  
+  Project/Data/ProjectDraft [90m...........................................[39m [32m100.0%[39m  
+  Project/Data/ProjectReference [90m.......................................[39m [32m100.0%[39m  
+  Project/Data/ProjectView [90m............................................[39m [32m100.0%[39m  
+  Project/Enums/ProjectStatus [90m.........................................[39m [32m100.0%[39m  
+  Project/Internal/Models/Project [90m.....................................[39m [32m100.0%[39m  
+  Project/Internal/ProjectReferenceFactory [90m............................[39m [32m100.0%[39m  
+  Project/Internal/SqlProjectRead [90m.....................................[39m [32m100.0%[39m  
+  Project/Laravel/ProjectRelations [90m....................................[39m [32m100.0%[39m  
+  Sprint/Contracts/SprintRead [90m.........................................[39m [32m100.0%[39m  
+  Sprint/Data/SprintDraft [90m.............................................[39m [32m100.0%[39m  
+  Sprint/Data/SprintReference [90m.........................................[39m [32m100.0%[39m  
+  Sprint/Data/SprintView [90m..............................................[39m [32m100.0%[39m  
+  Sprint/Enums/SprintStatus [90m...........................................[39m [32m100.0%[39m  
+  Sprint/Internal/Models/Sprint [90m.......................................[39m [32m100.0%[39m  
+  Sprint/Internal/SprintReferenceFactory [90m..............................[39m [32m100.0%[39m  
+  Sprint/Internal/SqlSprintRead [90m.......................................[39m [32m100.0%[39m  
+  Sprint/Laravel/SprintRelations [90m......................................[39m [32m100.0%[39m  
+  Task/Contracts/CompleteTaskCommand [90m..................................[39m [32m100.0%[39m  
+  Task/Contracts/CreateTaskCommand [90m....................................[39m [32m100.0%[39m  
+  Task/Contracts/MoveTaskToStageCommand [90m...............................[39m [32m100.0%[39m  
+  Task/Contracts/TaskCompletionCapture [90m................................[39m [32m100.0%[39m  
+  Task/Contracts/UpdateTaskCommand [90m....................................[39m [32m100.0%[39m  
+  Task/Data/ActorData [90m.................................................[39m [32m100.0%[39m  
+  Task/Data/CompleteTaskData [90m..........................................[39m [32m100.0%[39m  
+  Task/Data/EntityReference [90m...........................................[39m [32m100.0%[39m  
+  Task/Data/MoveTaskToStageData [90m.......................................[39m [32m100.0%[39m  
+  Task/Data/StageView [90m.................................................[39m [32m100.0%[39m  
+  Task/Data/TaskCompletionCandidate [90m...................................[39m [32m100.0%[39m  
+  Task/Data/TaskDraft [90m.................................................[39m [32m100.0%[39m  
+  Task/Data/TaskReference [90m.............................................[39m [32m100.0%[39m  
+  Task/Data/TaskView [90m..................................................[39m [32m100.0%[39m  
+  Task/Data/UpdateTaskData [90m............................................[39m [32m100.0%[39m  
+  Task/Enums/TaskPriority [90m.............................................[39m [32m100.0%[39m  
+  Task/Enums/TaskStatus [90m...............................................[39m [32m100.0%[39m  
+  Task/Events/TaskCompleted [90m...........................................[39m [32m100.0%[39m  
+  Task/Events/TaskCreated [90m.............................................[39m [32m100.0%[39m  
+  Task/Events/TaskMovedToStage [90m........................................[39m [32m100.0%[39m  
+  Task/Events/TaskUpdated [90m.............................................[39m [32m100.0%[39m  
+  Task/Internal/Actions/CompleteTask [90m......................[39m [33m48, 52, 67[39m[33m [39m[90m/[39m[33m 85.7%[39m  
+  Task/Internal/Actions/CreateTask [90m....................................[39m [32m100.0%[39m  
+  Task/Internal/Actions/MoveTaskToStage [90m...............[39m [33m69, 76, 87..88[39m[33m [39m[90m/[39m[33m 89.5%[39m  
+  Task/Internal/Actions/UpdateTask [90m...........................[39m [33m58, 182[39m[33m [39m[90m/[39m[33m 97.5%[39m  
+  Task/Internal/Models/Stage [90m..........................................[39m [32m100.0%[39m  
+  Task/Internal/Models/Task [90m...........................................[39m [32m100.0%[39m  
+  Task/Internal/Models/TaskTarget [90m.......................................[39m [31m0.0%[39m  
+  Task/Internal/Models/TaskWatcher [90m......................................[39m [31m0.0%[39m  
+  Task/Internal/TaskCompletion [90m........................................[39m [32m100.0%[39m  
+  Task/Internal/TaskReferenceFactory [90m..................................[39m [32m100.0%[39m  
+  Task/Internal/TaskSnapshot [90m..........................................[39m [32m100.0%[39m  
+  Task/Laravel/StageRelations [90m.........................................[39m [32m100.0%[39m  
+  Task/Laravel/TaskPortBindings [90m.......................................[39m [32m100.0%[39m  
+  Task/Laravel/TaskRelations [90m..................................[39m [33m38..40[39m[33m [39m[90m/[39m[33m 50.0%[39m  
+  TasksModule [90m.........................................................[39m [32m100.0%[39m  
+  TasksServiceProvider [90m........................................[39m [33m68..71[39m[33m [39m[90m/[39m[33m 88.0%[39m  
+  Time/Data/TimeLogDraft [90m..............................................[39m [32m100.0%[39m  
+  Time/Data/TimeLogReference [90m..........................................[39m [32m100.0%[39m  
+  Time/Enums/TimeLogSource [90m............................................[39m [32m100.0%[39m  
+  Time/Internal/Models/TimeLog [90m....................................[39m [33m34[39m[33m [39m[90m/[39m[33m 50.0%[39m  
+  Time/Internal/Models/Timer [90m............................................[39m [31m0.0%[39m  
+  Time/Internal/TimeLogReferenceFactory [90m...............................[39m [32m100.0%[39m  
+  Time/Laravel/TimeLogRelations [90m.......................................[39m [32m100.0%[39m  
+  [90m────────────────────────────────────────────────────────────────────────────[39m  
+                                                                 [1mTotal: 93.3 %[22m  
+

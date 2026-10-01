@@ -1,0 +1,2 @@
+> vendor/bin/phpstan analyse -c phpstan-tests-lint.neon --memory-limit=1G
+{"tool":"phpstan","result":"passed","errors":0}

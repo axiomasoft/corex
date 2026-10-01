@@ -1,0 +1,149 @@
+> pest --coverage --min=80
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Feature\InstalledToolContractTest[39m
+  [32;1m✓[39;22m[90m [39m[90mboxed archive boots with explicit policy and cross account guard in[39m[90m…[39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdirect and mcp projection share descriptor and result semantics ins[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mtool provider mounts no routes and rejects unknown or unguarded mut[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mlab cohort remains disjoint from archive after install inst 02 and[39m[90m… [39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Feature\ToolAuthorizationLayersTest[39m
+  [32;1m✓[39;22m[90m [39m[90mclient actor record field and tenant layers deny independently[39m[90m      [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhttp and tool apply the same recursive read policy without trusting[39m[90m…[39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Feature\ToolCatalogueTest[39m
+  [32;1m✓[39;22m[90m [39m[90mdiscovery filters activation policy and per tool deny metadata cat[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdefault policy denies without breaking boot cat 02[39m[90m                  [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdiscover allow does not grant invoke cat 03[39m[90m                         [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mpolicy reads trusted context not payload metadata cat 04[39m[90m            [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90maccount changes re read activation and policy without stale state c[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mepoch and activation changes are visible on next discover cat 06[39m[90m    [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcatalogue is deterministic sorted and caps at one thousand cat 07[39m[90m   [39m [90m0.63s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcontract hash tracks current compiled bytes cat 08[39m[90m                  [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mentity capabilities are not permission grants and metadata is not l[39m[90m…[39m [90m0.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Feature\ToolContributionsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mexternal control plane tools never tenant exposed contrib 01[39m[90m        [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mselected p3 receipts map to actual mechanics contrib 02[39m[90m             [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90monly approved p4 receipts add finite contributions contrib 03[39m[90m       [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mselected p5 wakeup binding without control plane edge contrib 04[39m[90m    [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mp6 search import limits bound without bypass contrib 05[39m[90m             [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mp7 utilities keep optional semantics contrib 06[39m[90m                     [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90marchive and lab cohorts are independent contrib 07[39m[90m                  [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mincluded rows have exact tuple and hash receipt contrib 08[39m[90m          [39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Feature\ToolCostInvocationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mhttp and exposed tool share cost metadata without scope keys[39m[90m        [39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Feature\ToolGuardConcurrencyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mequal key requests replay under row lock without duplicate effects[39m[90m  [39m [90m0.24s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Feature\ToolIdempotentInvocationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mhttp key and exposed tool operation key share one effect[39m[90m            [39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Feature\ToolInvocationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mread transport and direct call share catalogue policy and handler i[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90minvalid input rejected before handler invoke 02[39m[90m                     [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mmutation default guard denies and client hints cannot bypass invoke[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mconsumer guard binds approval to principal scope hash and args invo[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdomain key idempotency replays equal requests and conflicts on mism[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstale resource version denies before effect invoke 06[39m[90m               [39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mprovider key timeout keeps unknown outcome and stable operation key[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90moutput schema mismatch rolls back local transaction invoke 08[39m[90m       [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mreplay requires current visibility invoke 09[39m[90m                        [39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdraft and irreversible receive guarded treatment and read cannot mu[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90munexpected exceptions produce safe error without secrets invoke 11[39m[90m  [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhandler reuses verified context and http provider requires wrapper[39m[90m… [39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstale contract hash rejected invoke revision[39m[90m                        [39m [90m0.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Feature\ToolLoadContourIntegrationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mhttp and tool share one handler and declared cost clamps[39m[90m            [39m [90m0.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Feature\ToolOperationParityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mhttp and exposed tool share one handler call[39m[90m                        [39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Unit\OpisToolSchemaValidatorTest[39m
+  [32;1m✓[39;22m[90m [39m[90moffline adapter accepts valid values and reports nested error point[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90madapter rejects unsupported profiles[39m
+  [32;1m✓[39;22m[90m [39m[90mvalidation requires an admitted root[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\ToolDeclarationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit compiles explicit tool declarations into the existing API slice[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit does not expose unannotated operations as tools (DESC-02)[39m[90m        [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps stable tool tuple and contract hash across declaration ord[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects invalid canonical namespaces and wire collisions (DESC-0[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects duplicate tuples, foreign operation refs and invalid han[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit compiles exposeTool against a same-module operation without addi[39m[90m…[39m [90m0.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Unit\ToolNameTest[39m
+  [32;1m✓[39;22m[90m [39m[90mwire name projects canonical code and version[39m[90m                       [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mrejects invalid canonical codes[39m
+  [32;1m✓[39;22m[90m [39m[90mrejects reserved version suffix in verb[39m
+  [32;1m✓[39;22m[90m [39m[90mrejects invalid versions[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\ToolRegistryIntrospectionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit projects tool identity without leaking its handler into introspe[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Unit\ToolSchemaSupervisorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mslow start does not consume validation deadline[39m[90m                     [39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mready framing and stderr drain with data set #0[39m[90m                     [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mready framing and stderr drain with data set #1[39m[90m                     [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mready framing and stderr drain with data set #2[39m[90m                     [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #0[39m[90m           [39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #1[39m[90m           [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #2[39m[90m           [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #3[39m[90m           [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #4[39m[90m           [39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #5[39m[90m           [39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #6[39m[90m           [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #7[39m[90m           [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #8[39m[90m           [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #9[39m[90m           [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #10[39m[90m          [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #11[39m[90m          [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #12[39m[90m          [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #13[39m[90m          [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mfailures are closed and processes reaped with data set #14[39m[90m          [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mmalformed handle is rejected[39m[90m                                        [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mmissing executable is unavailable[39m
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Tools\Tests\Unit\ToolSchemaTest[39m
+  [32;1m✓[39;22m[90m [39m[90madmits draft2020 12 schema closure offline[39m[90m                          [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mrejects remote refs and dynamic keywords[39m[90m                            [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mpreserves object vs array and safe integers[39m[90m                         [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mrejects duplicate object keys[39m[90m                                       [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mrejects dynamic schema keywords[39m[90m                                     [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90madditional properties same subschema semantics[39m[90m                      [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mresource budget exhaustion rejects before handler[39m[90m                   [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mvalidates instance with bounded errors[39m[90m                              [39m [90m0.12s[39m  
+
+  [90mTests:[39m    [32;1m84 passed[39;22m[90m (463 assertions)[39m
+  [90mDuration:[39m [39m7.73s[39m
+
+  Contracts/ToolCatalogue [90m.............................................[39m [32m100.0%[39m  
+  Contracts/ToolExecutionGuard [90m........................................[39m [32m100.0%[39m  
+  Contracts/ToolInvoker [90m...............................................[39m [32m100.0%[39m  
+  Contracts/ToolPolicy [90m................................................[39m [32m100.0%[39m  
+  Contracts/ToolRequestContext [90m........................................[39m [32m100.0%[39m  
+  Contracts/ToolSchemaValidator [90m.......................................[39m [32m100.0%[39m  
+  Data/ToolCall [90m.......................................................[39m [32m100.0%[39m  
+  Data/ToolCatalogueView [90m..............................................[39m [32m100.0%[39m  
+  Data/ToolDescriptor [90m.................................................[39m [32m100.0%[39m  
+  Data/ToolResult [90m.....................................................[39m [32m100.0%[39m  
+  Internal/ApiToolValidator  [33m24, 34, 38, 42, 46, 50, 54, 62..63, 76, 80, 86, 99, 112, 123, 127[39m[33m [39m[90m/[39m[33m 66.7%[39m  
+  Internal/CompiledToolCatalogue [90m......................................[39m [32m100.0%[39m  
+  Internal/DenyToolPolicy [90m.............................................[39m [32m100.0%[39m  
+  Internal/GuardedToolInvoker  [33m69, 109, 91, 138..144, 176..180, 190, 236, 256, 286..292[39m[33m [39m[90m/[39m[33m 86.7%[39m  
+  Internal/McpToolsProjection [90m.........................................[39m [32m100.0%[39m  
+  Internal/OpisToolSchemaValidator [90m....................[39m [33m34, 40, 56, 88[39m[33m [39m[90m/[39m[33m 92.0%[39m  
+  Internal/ReadOnlyToolExecutionGuard [90m.................................[39m [32m100.0%[39m  
+  Internal/ToolContractHasher [90m.........................................[39m [32m100.0%[39m  
+  Internal/ToolDescriptorFactory [90m..................................[39m [33m18[39m[33m [39m[90m/[39m[33m 85.7%[39m  
+  Internal/ToolName [90m...................................................[39m [32m100.0%[39m  
+  Internal/ToolRequestContext [90m.....................................[39m [33m37[39m[33m [39m[90m/[39m[33m 83.3%[39m  
+  Internal/ToolSchemaSupervisor [90m.[39m [33m33, 65, 110, 159, 204, 231, 256, 262[39m[33m [39m[90m/[39m[33m 94.5%[39m  
+  Internal/ToolSchemaWorker [90m.............................................[39m [31m0.0%[39m  
+  Internal/ToolSectionCompiler [90m................................[39m [33m58, 64[39m[33m [39m[90m/[39m[33m 95.2%[39m  
+  ToolServiceProvider [90m.................................................[39m [32m100.0%[39m  
+  [90m────────────────────────────────────────────────────────────────────────────[39m  
+                                                                 [1mTotal: 82.8 %[22m  
+

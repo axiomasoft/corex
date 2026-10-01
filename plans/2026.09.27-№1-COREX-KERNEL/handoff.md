@@ -1,26 +1,24 @@
-# HANDOFF — 2026-10-01 — after P10.3
+# HANDOFF — 2026-10-02 — after P10.4
 
-**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P10.4
+**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P05.1 P05.2
 
 | Параметр | Значение |
 |:--|:--|
-| Batch | solo |
+| Batch | B05-A |
 | Model | implementation |
 | Thinking | high |
 | Context | continue-root |
-| Capabilities | Task runtime · PHP 8.4 · push/read CI |
-| Суть | P10.3 GREEN; следующий отдельный item P10.4 рекомендован, автоматически не запускался. |
 
-**Done:** P10.3 ready protocol, separate startup/validation budgets, fail-closed response checks and process cleanup. Final candidate 5b553ad14a9415dd0f4e8466e1f40b39dd28066c; CI 36912719906. All 24 P10.2-green jobs preserved; root/coverage/tools worker failures gone. Tools Laravel 12/13: 81/453 without warnings. D81 focused self-check; D83 exactly one planned Internal constructor parameter in Golden. Public manifests, profile limits and all other Golden records/layers unchanged.
+**Done:** P10.4 и P10 GREEN; whole CI 36923853013, product 4522e2b3f1ac741518387d24d1dd83248e97cc34, 36 success / 1 event skip / 0 failure. PG grouping, hermetic SQLite, package coverage and remaining CI debt repaired. Owner D84: review/audit and duplicate local replay omitted explicitly.
 
-**Remaining:** P10.4 PG grouping/hermetic tests, coverage and remaining installation/matrix failures, then one whole-P10 review per D81 and GREEN hosted CI before phase closure (D73). Root SQLite lanes still contain the two Webhooks PG failures; tools coverage 77.6%/75.9%, floor 80%. Overall CI is not GREEN. After P10: B05-A → P05.3 → P05.4. Solo P10.4 requires owner invocation.
+**Remaining:** Recommended B05-A only, not executed. Route codex/gpt-6-sol/high per roadmap row 18. P05.1 → P05.2, then P05.3 and P05.4. No authorization to execute successor inferred.
 
-**Sources of truth:** artifacts/P10.3-execution/completion.md; ci-final-assessment.json; ci-final-jobs.json; ci-worker-witnesses.json; repeat-tests.json; source-binding.json; golden-semantic-delta.json; self-check.md; decisions/D81-p10-phase-review-only.md; decisions/D83-p103-internal-constructor-golden.md; phases/P10/P10.4.md.
+**Open risks:** — within P10 acceptance. Coverage source inventory and line denominator are preserved. CI event skip Mutation registry is backed by 35/35 local mutation controls.
 
-**Runtime parsing:** use the committed `artifacts/P10.3-execution/task-runtime-adapter.py` with `--runtime-root /tmp/corex-design-audit-task-ba841d9/packages/task` for P10.4 prepare/finalize/lint/delivery, passing the normal Task arguments. This exact digest-pinned adapter retains all Inputs and fixes incidental section/list parsing; see adapter-check.py and adapter-proof.json. P10.4 specification and GREEN design fingerprint remain byte-identical.
+**Sources of truth:** artifacts/P10.4-execution/completion.md; ci-final-jobs.json; ci-final-assessment.json; closure-evidence.json; validation-map.json; task-contract-evaluation.json; source-binding.json; findings/01-hosted-ci-debt.md; phases/P10/P10.closed.md; decisions/D84-p10-4-validation-economy.md; roadmap.md row 18.
 
-**Runtime:** Task immutable ba841d9 via /tmp/corex-design-audit-task-ba841d9/packages/task; PYTHONPATH includes checkout root and package lib. Current installed Task runtime is incompatible; do not repeat prepare/start for the closed P10.3 attempt. Initial metadata omission and hosted proc_open warning were repaired in this attempt, with red witnesses retained. Unrelated CLAUDE.md/CLAUDE.md.bak preserved. Exact context telemetry unavailable; no context percentages claimed.
+**Runtime:** Task ba841d9 at /tmp/corex-design-audit-task-ba841d9/packages/task with artifacts/P10.3-execution/task-runtime-adapter.py. Exact context telemetry unavailable; typed continuity uses the actual completed scope. Unrelated CLAUDE.md and CLAUDE.md.bak preserved.
 
 ```session-continuity-decision/v1
-{"outcome": "continue-root", "reason": "authorized-scope-complete", "evidence": ["batch:38d1694ffad31edb3ecc8e725e3ff9f3814daa4730d95accf39222d3a060f32f", "loaded-inputs:reusable", "cold-start-cost:0", "lifecycle:scope-complete", "checkpoint:artifacts/P10.3-execution/completion.md"], "runnable": true, "schema_version": "session-continuity-decision/v1"}
+{"outcome": "continue-root", "reason": "authorized-scope-complete", "evidence": ["batch:aeed7fd4e04e59c4c615185525c9552e9fe75e6addaefc60c3898413d074ffe3", "loaded-inputs:reusable", "cold-start-cost:0", "lifecycle:scope-complete", "checkpoint:artifacts/P10.4-execution/completion.md"], "runnable": true, "schema_version": "session-continuity-decision/v1"}
 ```

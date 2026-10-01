@@ -56,3 +56,28 @@ Manifest policy, Workflow supply chain security, Anti-weakening gate.
 - Отказы transfer (`memoryLimitReached`) под драйвером покрытия: причина не разобрана, владелец — P10.4.
 - Воспроизведено автором в чистой копии без PostgreSQL (`artifacts/P10-design/facts/`): H1, H2, H5, H7, H11. Исправления не запускались.
 - Workflows `distribution-proof.yml` и `remaining-cohort-proof.yml`: их запуски не анализировались.
+
+## Закрытие
+
+2026-10-02 · executor/codex/gpt-6.1-sol/high. Финальный продуктовый SHA `4522e2b3f1ac741518387d24d1dd83248e97cc34`, [hosted CI 36923853013](https://github.com/axiomasoft/corex/actions/runs/36923853013): **success**, 36 success / 0 failure / 1 event skip (`Mutation registry`, полный локальный реестр 35/35). Все четыре PHP 8.4/8.5 × Laravel 12/13 лейна, PG, Remaining cohort package aggregator, Layer, Golden, анализ, BC и coverage зелёные.
+
+| Класс | Исправление | Item | Commit | Зелёный CI |
+|:--|:--|:--|:--|:--|
+| H1 | PG methods outside pg / wrong port | P10.4 | `f204341e / 26fc080d` | `36923853013` |
+| H2 | framework-independent manifests / architecture gates | P10.2 | `dd94f729` | `36923853013` |
+| H3 | temporary Laravel constraints preserve package manifests | P10.1 | `0d1baedf` | `36923853013` |
+| H4 | PGDG client 18 matches tenancy server | P10.1 | `0d1baedf` | `36923853013` |
+| H5 | worker protocol/budgets + instrumented process memory isolation | P10.3 / P10.4 | `5b553ad1 / 4522e2b3` | `36923853013` |
+| H6 | tools/webhooks/tasks behavioral coverage | P10.4 | `f204341e` | `36923853013` |
+| H7 | standalone analysis harnesses and extension/config alignment | P10.1 | `0d1baedf` | `36923853013` |
+| H8 | standalone declarations / runtime-tooling boundaries | P10.2 | `dd94f729` | `36923853013` |
+| H9 | all changed package contracts documented | P10.1 | `0d1baedf` | `36923853013` |
+| H10 | BC runner independent of rg / sealed providers | P10.1 | `0d1baedf` | `36923853013` |
+| H11 | standalone aggregator vendors / SQLite routing | P10.1 / P10.4 | `0d1baedf / d4f8dc07 / c35a46fe / c8fc74a1` | `36923853013` |
+| H12 | explicit PG healthcheck user/database | P10.1 | `0d1baedf` | `36923853013` |
+| H13 | panels behavioral coverage and PG service | P10.4 | `d4f8dc07` | `36923853013` |
+| H14 | Laravel 12 stale raw-SQL baseline / stable retention alias | P10.4 | `d4f8dc07` | `36923853013` |
+| H15 | inherited tenancy PG setup + nested core double registration | P10.4 | `26fc080d / c8fc74a1` | `36923853013` |
+| H16 | portable coverage merger; static/Xdebug denominator conservation | P10.4 | `cd007298 / 4522e2b3` | `36923853013` |
+
+Покрытие: tools 82.8% (floor 80), webhooks 81.9% (80), tasks 93.3% (92), panels 86.5% (80), root conservative union 86.6% (80). Пороги/потолки не ослаблены, тесты не удалены и не пропущены. D84 явно отменяет review/audit и заменяет повторные широкие локальные установки/прогоны соответствующими hosted-джобами; пропущенные команды не заявляются как исполненные. Evidence: `artifacts/P10.4-execution/completion.md`, `ci-final-jobs.json`, `ci-final-assessment.json`, `validation-map.json`, `source-binding.json`, `closure-evidence.json`. P10 closed GREEN; этот раздел — вход P05.1.

@@ -1,0 +1,63 @@
+{
+  "adapter_attestation": {
+    "canonical_command_sha256": "sha256:4f80d5b70dea003557f17bfebdb247a31c5eedb2fe3219ecd1a6367280f21967",
+    "command_id": "task:plan-run",
+    "package": "task",
+    "version": "0.25.2"
+  },
+  "commit_sha": "4522e2b3f1ac741518387d24d1dd83248e97cc34",
+  "continuity": {
+    "evidence": [
+      "persisted-context:continue-root"
+    ],
+    "outcome": "continue-root",
+    "reason": "compatible-active-work",
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": "sha256:66928530c47184789c91cfa8da2ab0b7b2550b6a9cce5c2198c26b3205860456",
+    "handoff": "sha256:765d7ed732d22fde35a6b2c44cd98216f7cadbba7e188d569cbec653204ba244",
+    "plan": "sha256:d81af66b8b3caf9eb5ba5fbde2789be771eb964f31fc590faeed4d603ef6965c",
+    "state": "sha256:cab452ff70c37e3aaf41308e02333666b2705a93eb322bab73c897ee9263e77a"
+  },
+  "journal": {
+    "batch_receipt": {
+      "batch_id": "solo",
+      "completed_prefix": [
+        "P10.4"
+      ],
+      "handoff_digest": "7180572ff395a8273e7747e6fd83af32990acd35772895ffb23c53a87fcce757",
+      "invocation_digest": "4f86a1496de848d1a31dbb2c9b31c1c40d12db1fd9c46793bb370e8b44625d5c",
+      "membership": [
+        "P10.4"
+      ],
+      "routing_digest": "d81af66b8b3caf9eb5ba5fbde2789be771eb964f31fc590faeed4d603ef6965c",
+      "schema_version": "batch-receipt/v1",
+      "spec_digest": "38d1694ffad31edb3ecc8e725e3ff9f3814daa4730d95accf39222d3a060f32f",
+      "stop_disposition": "continue"
+    },
+    "command": "plan-run",
+    "line": 161,
+    "result": "closed-green",
+    "run_id": "60400ab92e26275361c03ea46e3dfefbbf840046ac0f6fdbdb14133b31cd4ad5",
+    "sha256": "sha256:3153ec9f99d001e44d3bf5e25cd8c67e620ad5cac6779fa547ce4b36aa2a3ecf"
+  },
+  "next_exact": "run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P05.1 P05.2",
+  "plan_id": "2026.09.27-№1-COREX-KERNEL",
+  "rationale": {
+    "open_risks": "— within P10 acceptance. Coverage source inventory and line denominator are preserved. CI event skip Mutation registry is backed by 35/35 local mutation controls.",
+    "remaining": "Recommended B05-A only, not executed. Route codex/gpt-6-sol/high per roadmap row 18. P05.1 → P05.2, then P05.3 and P05.4. No authorization to execute successor inferred."
+  },
+  "recommendation": "**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P05.1 P05.2\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | B05-A |\n| Model | implementation |\n| Thinking | high |\n| Context | continue-root |",
+  "route": {
+    "batch": "B05-A",
+    "command": null,
+    "context": "continue-root",
+    "model": "implementation",
+    "thinking": "high"
+  },
+  "schema_version": "terminal-delivery-receipt/v1",
+  "status": "🟢 Done",
+  "subject": "P10.4"
+}

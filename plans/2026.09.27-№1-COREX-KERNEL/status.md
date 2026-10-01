@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-10-01
-inputs_sha256: c438cedd8dc12df599c3348b0daa2d96e53d089b132e3d2895c89ce2f22db609
+inputs_sha256: b21f8886e20ff3d8e87152a7da394e0647dd75998e70c9cd7b1ac3b9f1c9854a
 generated_by: task plan-views status
 -->
 
@@ -29,7 +29,7 @@ generated_by: task plan-views status
 | P03 | Feature modules и `Internal` | 2/2 | 🟢 Done |
 | P04 | Application API, Extension SPI и типизированные ошибки | 4/4 | 🟢 Done |
 | P05 | Typed config, композиция и порты | 0/4 | ⬜ Not started |
-| P10 | Зелёный hosted CI на базе P04 | 3/4 | 🟡 In progress |
+| P10 | Зелёный hosted CI на базе P04 | 4/4 | 🟢 Done |
 
 ## Phase P00
 
@@ -89,7 +89,7 @@ generated_by: task plan-views status
 | P10.1 | Герметичный CI-рецепт и диагностируемые гейты | 🟢 Done | 2026-10-01 |
 | P10.2 | Манифесты без чужих членов, dev-tooling вне runtime, объявленные зависимости | 🟢 Done | 2026-10-01 |
 | P10.3 | Worker схем инструментов: дедлайн валидации без учёта старта | 🟢 Done | 2026-10-01 |
-| P10.4 | Лейны тестов, покрытие и зелёный hosted CI | ⬜ Not started | — |
+| P10.4 | Лейны тестов, покрытие и зелёный hosted CI | 🟢 Done | 2026-10-01 |
 
 ## 6. Update Log
 
@@ -276,6 +276,11 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-10-01 | executor/codex/GPT-6 | plan-run · no-op · Append-only metadata projection repair; previously recorded evaluation artifacts/P10.2-execution/task-contract-evaluation.json is allow at both sites. No new product execution or acceptance verdict.
 write-site: pre_mutation: allow · pre_final: allow |
 | 2026-10-01 | executor/codex/GPT-6 | plan-run · no-op · Append-only metadata projection repair; previously recorded evaluation artifacts/P10.3-execution/task-contract-evaluation.json is allow at both sites. No new product execution or acceptance verdict.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-01 | codex/GPT-6 | plan-run · in-progress · — |
+| 2026-10-01 | executor/codex/gpt-6.1-sol/high | plan-run · closed-green · P10.4 GREEN; product 4522e2b3; CI 36923853013: 36 success / 0 failure / 1 event skip. See artifacts/P10.4-execution/completion.md and validation-map.json. D84: no reviews or duplicate local replay.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-01 | executor/codex/gpt-6.1-sol/high | plan-close · closed-green · Inline phase closure within P10.4 invocation. Hosted CI 36923853013 on 4522e2b3f1ac741518387d24d1dd83248e97cc34: success, zero failures; closure-evidence.json. Owner D84: no review/audit.
 write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates
