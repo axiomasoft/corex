@@ -1,0 +1,15 @@
+> bash scripts/bc-check.sh
+bc-check: BC_CHECK_BASE=76f8bdde496154c0a8901e459175cf306bedd860 (PHP 8.4)
+bc-check: roave 8.22.0
+bc-check: axiomasoft/corex-access (access) |compatible| stability=stable base=364fa26b0b1efc6a35d0fc9fb480e3b44d6a2cff candidate=bca30d82681a946c607273a767614cc169977566
+bc-check: axiomasoft/corex (core) |compatible| stability=stable base=4d7e9956c9d13d756fa70bb485f247ccb4596e27 candidate=a7f9a29b2983cc6de46dfb708f7e125f9e678352
+bc-check: axiomasoft/corex-custom-fields (custom-fields) |compatible| stability=stable base=53c24c20acbaa1af46d489b563ceb7493e743d4c candidate=d181827796ade05a5bb77aec074d62e11edd51d4
+bc-check: axiomasoft/corex-intl (intl) |compatible| stability=stable base=a3d1ab0952134254d634e6a8368d9b6e8cdfa7a4 candidate=04c796b7e5b48c16dd0280b0104b08c3af17f482
+bc-check: axiomasoft/corex-media (media) |compatible| stability=stable base=92bb04c4ff77614c7655989179b0eea61c37305e candidate=afccb707cf1aad0fbaff745e5693bca0cc38b702
+bc-check: axiomasoft/corex-notifications (notifications) |compatible| stability=stable base=a6789be6339d9823d4b553a1b52f3707d5e852a0 candidate=c6ae7d89b1a2f33f8fa9ae6cae09d7fa38fa37f5
+bc-check: axiomasoft/corex-operations (operations) |compatible| stability=stable base=2b1d31d7331234e7b442e208b5998beb5020a0f1 candidate=8646da40fb4fc1765e061d79ecc286b5e51619c1
+bc-check: axiomasoft/corex-panels (panels) |compatible| stability=stable base=104c8e56292f40bad891c5ac8ac669102fe6324c candidate=ec04939ec740dceaa35491e5652d03bea773c9fd
+bc-check: axiomasoft/corex-recurrence (recurrence) |compatible| stability=stable base=eca3be71134eab43a88f9822abd9603939e3adef candidate=168e0fac853722f69311dd334a514803ee77d6a3
+bc-check: axiomasoft/corex-search-intl (search-intl) |compatible| stability=stable base=c071ecb2fa36bd7f12c06fbb23a1d2f04b07aada candidate=50b2961558059fafd12b908af75290be1d0aaa0b
+bc-check: axiomasoft/corex-search-meilisearch (search-meilisearch) |compatible| stability=stable base=af9f3313397790666343ed3d8f92af15dbc24601 candidate=8da2e19cfbeb7eb61e2c90ce62621ee4579d3790
+bc-check: axiomasoft/corex-search (search) |compatible| stability=stable base=99187130f160f15766e1c9599fabceb5ed57b6b2 candidate=a17f4cfa624cc60eafebb4e5e7560a83e7256e6c

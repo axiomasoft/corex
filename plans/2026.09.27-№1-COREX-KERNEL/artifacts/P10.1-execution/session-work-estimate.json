@@ -1,0 +1,17 @@
+{
+  "route_attested": true,
+  "capabilities_attested": true,
+  "capabilities_sufficient": true,
+  "context_attested": false,
+  "context_health": "unavailable",
+  "batch_receipt_valid": true,
+  "remaining_batch_digest": "cf77fe6d61029c70d1362a177790942003e5fd6126e0184dbe6a64df96ea0603",
+  "loaded_inputs_reusable": true,
+  "cold_start_cost": 0,
+  "lifecycle": "scope-complete",
+  "isolated_review": false,
+  "reviewer_task": null,
+  "checkpoint": "artifacts/P10.1-execution/completion.md",
+  "external_pause": null,
+  "schema_version": "session-work-estimate/v1"
+}

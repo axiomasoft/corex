@@ -1,28 +1,26 @@
-# HANDOFF — 2026-10-01 — after P04
+# HANDOFF — 2026-10-01 — after P10.1
 
-**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P10.1
+**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P10.2
 
 | Параметр | Значение |
 |:--|:--|
 | Batch | solo |
 | Model | implementation |
 | Thinking | high |
-| Context | cold-start-root: context-budget |
+| Context | continue-root |
 | Capabilities | Task runtime · PHP 8.4 · push/read CI |
-| Суть | Исполнить P10.1 в свежей сессии. Проверки ревью SKM игнорировать по указанию владельца. |
+| Суть | P10.1 закрыт GREEN; P10.2 рекомендуемый отдельный item, автоматически не запускался. |
 
-**Native Codex command:**
+**Done:** P10.1: рецепт Composer/PG/access, BC и contract guard, arch diagnostics, changelogs, clean-copy ci:local. Финальный продуктовый commit 0d1baedfa525fc310f2d462920c471f98fa4bd7f; hosted CI 36877605003: 22 success / 14 failure / 1 skipped. Все targets P10.1 зелёные, полный BC без rg exit 0. review: self-check GREEN. SKM review checks пропущены по указанию владельца, независимое ревью не заявлено.
 
-```bash
-codex -C /home/vostrikov/projects/packages/corex -m gpt-6-sol -c 'model_reasoning_effort="high"' -a never -s danger-full-access $'$ task:plan-run 2026.09.27-№1-COREX-KERNEL P10.1\n\nПри исполнении игнорировать проверки ревью от skm. Прочитай plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-P10-design-reaudit/execution-brief.md.'
+**Remaining:** P10.2 (API manifests/tooling/dependencies) → P10.3 (schema worker) → P10.4 (lanes/coverage), затем B05-A (P05.1 → P05.2), P05.3/P05.4. P06–P09 backlog.
+
+**Sources of truth:** artifacts/P10.1-execution/completion.md; ci-final-jobs.json; hosted-failure-classification.json; validation-receipts.json; write-sites.json; recipe-repair-decision.json; phases/P10/P10.2.md; research/P10-design.md; decisions/D73-hosted-ci-acceptance-boundary.md; decisions/D74-p10-hermetic-base.md.
+
+**Open risks:** Overall hosted CI failure сохранён только по причинам P10.2–P10.4: H1/H2/H5/H6/H8. Coverage transfer/tasks-workflow failures совпадают с baseline-coverage.log. Точная context telemetry недоступна; проценты/остаток токенов не заявляются. После closure меняется только bookkeeping, product evidence привязан к candidate SHA.
+
+**Workarounds/Deferred/Open questions:** Task runtime immutable ba841d9a4a3b629e950db5b4dcfacbd102872189 из execution-brief.md. Дополнительный bounded PHPStan recipe repair сохранил все 8 extensions полного анализа; два точных DATA fixtures excluded только из tests-lint, отрицательный контроль реального нарушения red. Два старых plan PHP helper files лишь отформатированы, preimages сохранены. P10.2 не исполнять без owner invocation.
+
+```session-continuity-decision/v1
+{"evidence": ["batch:cf77fe6d61029c70d1362a177790942003e5fd6126e0184dbe6a64df96ea0603", "loaded-inputs:reusable", "cold-start-cost:0", "lifecycle:scope-complete", "checkpoint:artifacts/P10.1-execution/completion.md"], "outcome": "continue-root", "reason": "authorized-scope-complete", "runnable": true, "schema_version": "session-continuity-decision/v1"}
 ```
-
-**Done:** Независимый design audit gpt-6.1-sol/xhigh GREEN на fingerprint e7104b716f0ffdac0dd3c8446ce7af54d2edea7c07f373ac6b5ff42ca9748d19: 0 Blocker, 0 Major, 1 Minor в скелете WakeupOptions для P05.1. D76/D78 проверены; продукт и авторские входы не изменены. Runtime/hosted CI не сертифицированы.
-
-**Remaining:** Исполнение P10.1 → P10.2 → P10.3 → P10.4 и полностью зелёный hosted CI, затем B05-A (P05.1 → P05.2), P05.3, P05.4. P06–P09 backlog.
-
-**Sources of truth:** findings/P05-P10-design-reaudit.md; artifacts/P05-P10-design-reaudit/execution-brief.md; artifacts/P05-P10-design-reaudit/owner-direction.md; artifacts/P05-P10-design-reaudit/session-work-estimate.json; artifacts/P05-P10-design-reaudit/session-continuity-decision.json; plan.md §2–3; roadmap.md строки 14–20; phases/P10/; research/P10-design.md; artifacts/P10-design/examples.md.
-
-**Open risks:** Впереди runtime и hosted CI. Передача в свежую сессию снижает риск потери деталей при compact во время долгого исполнения; точная телеметрия usage/context недоступна, процент и остаток токенов не заявляются. Minor m1: неверный тип корневого handlers должен дать InvalidConfiguration в реализации P05.1.
-
-**Workarounds/Deferred/Open questions:** При сохранении чужого незакоммиченного drift Task runtime использовать immutable Task ba841d9a4a3b629e950db5b4dcfacbd102872189 через git archive (runtime-provenance.json и execution-brief.md), не менять чужую рабочую копию. Следующее исполнение игнорирует проверки ревью SKM по прямому owner-direction; runtime validation/hosted CI сохраняются. Новый root и исполнение ещё не запускались.
