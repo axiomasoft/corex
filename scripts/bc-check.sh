@@ -72,11 +72,12 @@ stage_package_vendors() {
   local ns pkgpath leaf
 
   for ns in axioma-studio axiomasoft; do
-    local root="$REPO_ROOT/packages/${dir}/vendor/${ns}"
-    [[ -d "$root" ]] || continue
-    for pkgpath in "${root}"/*; do
+    for pkgpath in "$REPO_ROOT/vendor/${ns}"/* "$REPO_ROOT/packages/${dir}/vendor/${ns}"/*; do
       [[ -f "${pkgpath}/composer.json" ]] || continue
       leaf="$(basename "${pkgpath}")"
+      # Monorepo packages are already archived separately; only private
+      # upstream providers need a local path repository for Roave.
+      [[ "$leaf" == stancl-* || "$leaf" == azguard-core ]] || continue
       mkdir -p "${work}/packages/_vendor/${leaf}"
       rsync -a --exclude=.git "${pkgpath}/" "${work}/packages/_vendor/${leaf}/"
     done

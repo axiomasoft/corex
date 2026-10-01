@@ -1,0 +1,12 @@
+# Explicit full-analysis extensions. Tests-lint declares its own smaller set.
+# Automatic Composer extension loading is disabled so source/path mirrors
+# cannot register the same core rules twice or inject strict rules into tests.
+includes:
+    - packages/core/extension.neon
+    - packages/tenancy/extension.neon
+    - vendor/composer/composer/phpstan/rules.neon
+    - vendor/composer/pcre/extension.neon
+    - vendor/larastan/larastan/extension.neon
+    - vendor/nesbot/carbon/extension.neon
+    - vendor/pestphp/pest/extension.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon

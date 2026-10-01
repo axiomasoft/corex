@@ -20,6 +20,7 @@
 
 includes:
     - packages/core/extension.neon
+    - vendor/pestphp/pest/extension.neon
 
 parameters:
     tmpDir: build/phpstan-tests-lint
@@ -57,6 +58,8 @@ parameters:
             # не пинилось бы). Анализировать их этим же прогоном — категориальная
             # ошибка: 7 гарантированно-красных строк, ничего не измеряющих.
             - tests/PHPStan/data
+            - tests/fixtures/package-graph/tenancy-wakeup-foreign-context.php
+            - tests/fixtures/table-write-ownership/foreign-table-write.php
 
     ignoreErrors:
         # ────────────────────────────────────────────────────────────────────────

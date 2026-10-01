@@ -145,6 +145,20 @@
             }
         }
     ],
+    "extra": {
+        "phpstan/extension-installer": {
+            "ignore": [
+                "axiomasoft/corex",
+                "axiomasoft/corex-tenancy",
+                "composer/composer",
+                "composer/pcre",
+                "larastan/larastan",
+                "nesbot/carbon",
+                "pestphp/pest",
+                "phpstan/phpstan-strict-rules"
+            ]
+        }
+    },
     "minimum-stability": "stable",
     "prefer-stable": true,
     "config": {
