@@ -77,16 +77,7 @@
         "corex": {
             "schema-version": 1,
             "package-type": "capability",
-            "stability": "stable",
-            "public-api": [
-                "CoreX\\Webhooks\\Contracts",
-                "CoreX\\Webhooks\\Data",
-                "CoreX\\Webhooks\\WebhooksServiceProvider",
-                "CoreX\\Webhooks\\Laravel\\WebhookOptionsParser",
-                "CoreX\\Webhooks\\Laravel\\WebhookRegistrar",
-                "CoreX\\Webhooks\\Laravel\\WebhookRouteRegistrar",
-                "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode"
-            ]
+            "stability": "stable"
         },
         "branch-alias": {
             "dev-main": "1.0.x-dev"

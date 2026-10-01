@@ -36,30 +36,7 @@
             "schema-version": 1,
             "module": "CoreX\\Intl\\IntlModule",
             "package-type": "capability",
-            "stability": "stable",
-            "public-api": [
-                "CoreX\\Intl\\Currency\\Contracts",
-                "CoreX\\Intl\\Currency\\Data",
-                "CoreX\\Intl\\Currency\\Exceptions",
-                "CoreX\\Intl\\Formatting\\Contracts",
-                "CoreX\\Intl\\Formatting\\Data",
-                "CoreX\\Intl\\Formatting\\Exceptions",
-                "CoreX\\Intl\\Locale\\Contracts",
-                "CoreX\\Intl\\Locale\\Data",
-                "CoreX\\Intl\\Locale\\Exceptions",
-                "CoreX\\Intl\\Territory\\Contracts",
-                "CoreX\\Intl\\Territory\\Data",
-                "CoreX\\Intl\\Territory\\Exceptions",
-                "CoreX\\Intl\\Translation\\Contracts",
-                "CoreX\\Intl\\Translation\\Data",
-                "CoreX\\Intl\\Currency\\Laravel\\ConversionPolicy",
-                "CoreX\\Intl\\Currency\\Laravel\\ConversionReceipt",
-                "CoreX\\Intl\\IntlModule",
-                "CoreX\\Intl\\IntlServiceProvider",
-                "CoreX\\Intl\\Money\\Laravel\\MoneyCast",
-                "CoreX\\Intl\\Locale\\Laravel\\LocalePortBindings",
-                "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode"
-            ]
+            "stability": "stable"
         },
         "laravel": {
             "providers": [

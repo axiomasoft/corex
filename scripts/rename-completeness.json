@@ -979,8 +979,8 @@
                 "match": "fqcn"
             },
             {
-                "old": "CoreX\\Recurrence\\Internal\\RRuleRecurrenceExpander",
-                "new": "CoreX\\Recurrence\\RRuleRecurrenceExpander",
+                "old": "CoreX\\Recurrence\\RRuleRecurrenceExpander",
+                "new": "CoreX\\Recurrence\\Internal\\RRuleRecurrenceExpander",
                 "match": "fqcn"
             },
             {

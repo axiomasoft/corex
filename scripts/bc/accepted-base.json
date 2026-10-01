@@ -1,0 +1,6 @@
+{
+    "schema": "corex-bc-base/1",
+    "revision": "76f8bdde496154c0a8901e459175cf306bedd860",
+    "decisions": ["PLAN3.D01", "PLAN3.D63", "PLAN3.D64"],
+    "reason": "Accepted unpublished P04.2/P04.3 source surface before strict cutover; no compatibility with superseded pre-kernel names. Stable changes after this anchor must pass Roave. BC_CHECK_BASE can select a release revision explicitly."
+}

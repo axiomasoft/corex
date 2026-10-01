@@ -41,15 +41,7 @@
             "schema-version": 1,
             "module": "CoreX\\TasksWorkflow\\Internal\\TaskWorkflowIntegration",
             "package-type": "integration",
-            "stability": "stable",
-            "public-api": [
-                "CoreX\\TasksWorkflow\\Contracts",
-                "CoreX\\TasksWorkflow\\Data",
-                "CoreX\\TasksWorkflow\\Exceptions",
-                "CoreX\\TasksWorkflow\\TasksWorkflowServiceProvider",
-                "CoreX\\TasksWorkflow\\Laravel\\CompletionBindings",
-                "CoreX\\TasksWorkflow\\Errors\\Enums\\TasksWorkflowErrorCode"
-            ]
+            "stability": "stable"
         },
         "laravel": {
             "providers": [

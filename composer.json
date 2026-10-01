@@ -184,6 +184,7 @@
         "golden": "vendor/bin/pest --testsuite=Golden",
         "ownership-gate": "php scripts/ownership-gate.php --strict",
         "quality:ceilings": "php scripts/quality-ceiling-guard.php",
-        "deps:analyse": "bash scripts/dependency-analyser.sh --all"
+        "deps:analyse": "bash scripts/dependency-analyser.sh --all",
+        "php-api": "php scripts/php-api.php --strict --check"
     }
 }

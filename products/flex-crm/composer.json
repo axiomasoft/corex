@@ -50,27 +50,7 @@
             "schema-version": 1,
             "module": "Flex\\Crm\\CrmModule",
             "package-type": "product",
-            "stability": "experimental",
-            "public-api": [
-                "Flex\\Crm\\Activity\\Enums",
-                "Flex\\Crm\\Activity\\Events",
-                "Flex\\Crm\\Activity\\Models",
-                "Flex\\Crm\\Company\\Data",
-                "Flex\\Crm\\Company\\Events",
-                "Flex\\Crm\\Company\\Models",
-                "Flex\\Crm\\Contact\\Data",
-                "Flex\\Crm\\Contact\\Events",
-                "Flex\\Crm\\Contact\\Models",
-                "Flex\\Crm\\Context\\Contracts",
-                "Flex\\Crm\\Context\\Data",
-                "Flex\\Crm\\Context\\Models",
-                "Flex\\Crm\\Deal\\Enums",
-                "Flex\\Crm\\Deal\\Events",
-                "Flex\\Crm\\Deal\\Models",
-                "Flex\\Crm\\Lead\\Enums",
-                "Flex\\Crm\\Lead\\Events",
-                "Flex\\Crm\\Lead\\Models"
-            ]
+            "stability": "experimental"
         },
         "laravel": {
             "providers": [

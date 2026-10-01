@@ -35,62 +35,10 @@ final class LoadContourBootTest extends TestCase
         $composer = json_decode((string) file_get_contents(dirname(__DIR__, 2).'/composer.json'), true);
         $require = $composer['require'];
 
-        self::assertSame([
-            'CoreX\\Operations\\Authorization\\Contracts',
-            'CoreX\\Operations\\Bulk\\Contracts',
-            'CoreX\\Operations\\Bulk\\Data',
-            'CoreX\\Operations\\Cost\\Contracts',
-            'CoreX\\Operations\\Cost\\Data',
-            'CoreX\\Operations\\Definition\\Contracts',
-            'CoreX\\Operations\\Definition\\Data',
-            'CoreX\\Operations\\Definition\\Enums\\OperationMode',
-            'CoreX\\Operations\\Definition\\Data\\Operation',
-            'CoreX\\Operations\\Errors\\Exceptions\\ApiError',
-            'CoreX\\Operations\\Errors\\Contracts',
-            'CoreX\\Operations\\Idempotency\\Contracts',
-            'CoreX\\Operations\\Idempotency\\Data',
-            'CoreX\\Operations\\Idempotency\\Enums\\IdempotencyRequirement',
-            'CoreX\\Operations\\Invocation\\Contracts',
-            'CoreX\\Operations\\Invocation\\Data',
-            'CoreX\\Operations\\Invocation\\Data\\InvocationMetadata',
-            'CoreX\\Operations\\Laravel\\ApiSchemaRegistrar',
-            'CoreX\\Operations\\Laravel\\Support\\ApiOptions',
-            'CoreX\\Operations\\OpenApi\\Contracts',
-            'CoreX\\Operations\\Pagination\\Contracts',
-            'CoreX\\Operations\\Pagination\\Data',
-            'CoreX\\Operations\\Testing',
-            'CoreX\\Operations\\Validation\\Data',
-            'CoreX\\Operations\\Validation\\Laravel\\JsonCanonical',
-            'CoreX\\Operations\\Versioning\\Data',
-            'CoreX\\Operations\\ApiServiceProvider',
-            'CoreX\\Operations\\Authorization\\Laravel\\DeclaredFieldAuthorizer',
-            'CoreX\\Operations\\Bulk\\Enums\\BulkOperationStatus',
-            'CoreX\\Operations\\Bulk\\Laravel\\BulkOptionsParser',
-            'CoreX\\Operations\\Bulk\\Laravel\\BulkRegistrar',
-            'CoreX\\Operations\\Bulk\\Laravel\\BulkRouteRegistrar',
-            'CoreX\\Operations\\Cost\\Exceptions\\BudgetRateLimited',
-            'CoreX\\Operations\\Cost\\Exceptions\\BudgetStoreUnavailable',
-            'CoreX\\Operations\\Cost\\Laravel\\CostOptionsParser',
-            'CoreX\\Operations\\Cost\\Laravel\\CostRegistrar',
-            'CoreX\\Operations\\Definition\\Laravel\\OperationFactory',
-            'CoreX\\Operations\\Definition\\Laravel\\OperationFingerprint',
-            'CoreX\\Operations\\Errors\\Laravel\\AcceptNegotiation',
-            'CoreX\\Operations\\Invocation\\Laravel\\InvocationMetadataFactory',
-            'CoreX\\Operations\\Invocation\\Laravel\\ResolvedContexts',
-            'CoreX\\Operations\\Laravel\\Commands\\PruneApiOperations',
-            'CoreX\\Operations\\Laravel\\InvocationFixtures',
-            'CoreX\\Operations\\Pagination\\Laravel\\CursorPageBuilder',
-            'CoreX\\Operations\\Pagination\\Laravel\\OrderingFactory',
-            'CoreX\\Operations\\Validation\\Laravel\\JsonObjectFactory',
-            'CoreX\\Operations\\Validation\\Laravel\\JsonValueFactory',
-            'CoreX\\Operations\\Validation\\Laravel\\SchemaBudget',
-            'CoreX\\Operations\\Validation\\Laravel\\SchemaProfile',
-            'CoreX\\Operations\\Versioning\\Contracts\\ApiProfiles',
-            'CoreX\\Operations\\Definition\\Laravel\\OperationPortBindings',
-            'CoreX\\Operations\\Errors\\Contracts\\ErrorMapping',
-            'CoreX\\Operations\\Errors\\Contracts\\ResponseSerializer',
-            'CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode',
-        ], $composer['extra']['corex']['public-api']);
+        self::assertArrayNotHasKey('public-api', $composer['extra']['corex']);
+        $surface = json_decode((string) file_get_contents(dirname(__DIR__, 2).'/resources/contracts/php-api.json'), true, flags: JSON_THROW_ON_ERROR);
+        self::assertArrayHasKey('CoreX\\Operations\\ApiServiceProvider', $surface['symbols']);
+        self::assertSame('spi-call', $surface['symbols']['CoreX\\Operations\\ApiServiceProvider']['layer']);
         self::assertSame(['ext-filter', 'ext-mbstring', 'php', 'axiomasoft/corex', 'illuminate/auth', 'illuminate/console', 'illuminate/contracts', 'illuminate/database', 'illuminate/http', 'illuminate/support', 'illuminate/validation', 'psr/clock', 'symfony/http-kernel'], array_keys($require));
         self::assertSame('^12.0|^13.0', $require['illuminate/http']);
         self::assertSame('^12.0|^13.0', $require['illuminate/support']);

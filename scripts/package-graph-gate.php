@@ -3,6 +3,18 @@
 
 declare(strict_types=1);
 
+namespace CoreX\Tooling\PackageGraph;
+
+use CoreX\Attributes\Internal\SurfaceReport;
+use CoreX\Attributes\Internal\SurfaceScanner;
+use FilesystemIterator;
+use RecursiveCallbackFilterIterator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use RuntimeException;
+use SplFileInfo;
+use Throwable;
+
 /**
  * Executable package dependency graph gate (P12.3 · D41).
  *
@@ -11,8 +23,8 @@ declare(strict_types=1);
  *   R1 undeclared cross-package dependency
  *   R2 foreign Internal namespace import
  *   R3 namespace ownership (with reservations + legacy splits from config)
- *   R4 import outside owner public-api namespace surface
- *   R4b undeclared public surface (top-level type)
+ *   R4 import outside source Api/Spi membership
+ *   R4b source classification/type diagnostics and stale manifests
  *   R5 package-type dependency direction
  */
 const EXIT_OK = 0;
@@ -40,17 +52,22 @@ const PACKAGE_TYPES_SKIP_R5 = ['tooling', 'fixture'];
 
 $repoRoot = dirname(__DIR__);
 $configPath = $repoRoot.'/scripts/package-graph-gate.json';
-$surfaceSnapshotPath = $repoRoot.'/scripts/package-graph-undeclared-surface.json';
 $reportPath = $repoRoot.'/artifacts/P12-package-graph/report.json';
 
-if (PHP_SAPI === 'cli' && ($argv[1] ?? '') === '--emit-baseline') {
-    emitPackageGraphBaseline($repoRoot, $configPath);
-    exit(EXIT_OK);
-}
+// The whole-monorepo AST/ownership graph exceeds PHP's 128 MiB CLI default.
+ini_set('memory_limit', '1G');
+require $repoRoot.'/vendor/autoload.php';
 
 $config = loadConfig($configPath, $repoRoot);
 $packages = discoverPackages($repoRoot);
-$classIndex = buildClassIndex($repoRoot, $packages);
+
+try {
+    $surface = (new SurfaceScanner)->scan($repoRoot);
+} catch (Throwable $error) {
+    fwrite(STDERR, 'package-graph-gate: API-CONFIG '.$error->getMessage()."\n");
+    exit(EXIT_CONFIG);
+}
+$classIndex = $surface->owners;
 
 $violations = [];
 $legacySplits = [];
@@ -108,14 +125,9 @@ foreach ($packages as $dirName => $meta) {
                 );
             }
 
-            $r4Message = violatesPublicApi($import, $meta['name'], $ownerPackage, $packages);
+            $r4Message = violatesPublicApi($import, $meta['name'], $ownerPackage, $surface->manifests);
 
-            if ($r4Message !== null && ! isPublicApiException(
-                $meta['name'],
-                $ownerPackage,
-                $relativeFile,
-                $config['public_api_exceptions'],
-            )) {
+            if ($r4Message !== null) {
                 $violations[] = violation(
                     rule: 'R4',
                     file: $relativeFile,
@@ -142,27 +154,25 @@ foreach ($packages as $dirName => $meta) {
     }
 }
 
-$surfaceSnapshot = loadUndeclaredSurfaceSnapshot($surfaceSnapshotPath);
+foreach ($surface->diagnostics as $diagnostic) {
+    $rule = match ($diagnostic->code) {
+        'API-IMPORT' => 'R4',
+        'API-INTERNAL-TYPE' => 'R2',
+        default => 'R4b',
+    };
+    $violations[] = violation($rule, $diagnostic->file, $diagnostic->line, $diagnostic->symbol,
+        $surface->owners[$diagnostic->symbol] ?? '', $diagnostic->code.' '.$diagnostic->message);
+}
+$surfaceArtifacts = ['docs/reference/public-api.md' => $surface->documentation()];
+foreach ($surface->manifests as $package => $manifest) {
+    $surfaceArtifacts[$surface->packagePaths[$package].'/resources/contracts/php-api.json'] = SurfaceReport::encode($manifest);
+}
+foreach ($surfaceArtifacts as $relativeFile => $bytes) {
+    $path = $repoRoot.'/'.$relativeFile;
 
-foreach (collectTopLevelTypes($repoRoot, $packages) as $type) {
-    if (! isUndeclaredSurfaceType($type['fqcn'], $type['docblock'], $packages[$type['dir']])) {
-        continue;
+    if (! is_file($path) || file_get_contents($path) !== $bytes) {
+        $violations[] = violation('R4b', $relativeFile, 1, '', '', 'API-STALE generated surface');
     }
-
-    $snapshotKey = $type['dir'].'|'.$type['fqcn'];
-
-    if (in_array($snapshotKey, $surfaceSnapshot, true)) {
-        continue;
-    }
-
-    $violations[] = violation(
-        rule: 'R4b',
-        file: $type['file'],
-        line: $type['line'],
-        import: $type['fqcn'],
-        owner: $packages[$type['dir']]['name'],
-        message: 'undeclared public surface',
-    );
 }
 
 foreach (evaluateReservations($classIndex, $packages, $config['reservations']) as $evaluation) {
@@ -360,8 +370,7 @@ function loadConfig(string $path, string $repoRoot): array
  *     require: list<string>,
  *     psr4: array<string, string>,
  *     package_type: string,
- *     stability: string,
- *     public_api: list<string>
+ *     stability: string
  * }>
  */
 function discoverPackages(string $repoRoot): array
@@ -376,9 +385,29 @@ function discoverPackages(string $repoRoot): array
             continue;
         }
 
+        if (! is_string($composer['name'])) {
+            throw new RuntimeException('Invalid package name');
+        }
+        $autoload = $composer['autoload'] ?? [];
+        $rawPsr4 = is_array($autoload) ? ($autoload['psr-4'] ?? []) : [];
+        $requirements = $composer['require'] ?? [];
+
+        if (! is_array($rawPsr4) || ! is_array($requirements)) {
+            throw new RuntimeException('Invalid package autoload/requirements');
+        }
         $psr4 = [];
-        foreach ($composer['autoload']['psr-4'] ?? [] as $prefix => $relativeDir) {
+        foreach ($rawPsr4 as $prefix => $relativeDir) {
+            if (! is_string($prefix) || ! is_string($relativeDir)) {
+                throw new RuntimeException('Invalid package PSR-4 mapping');
+            }
             $psr4[rtrim($prefix, '\\').'\\'] = $relativeDir;
+        }
+        $requires = [];
+        foreach ($requirements as $name => $constraint) {
+            if (! is_string($name) || ! is_string($constraint)) {
+                throw new RuntimeException('Invalid package requirement');
+            }
+            $requires[] = $name;
         }
 
         $corex = parseExtraCorex($composer, $composerPath);
@@ -387,11 +416,10 @@ function discoverPackages(string $repoRoot): array
             'path' => substr(dirname($composerPath), strlen($repoRoot) + 1),
             'name' => (string) $composer['name'],
             'dir' => $dirName,
-            'require' => array_keys($composer['require'] ?? []),
+            'require' => $requires,
             'psr4' => $psr4,
             'package_type' => $corex['package_type'],
             'stability' => $corex['stability'],
-            'public_api' => $corex['public_api'],
         ];
     }
 
@@ -400,48 +428,7 @@ function discoverPackages(string $repoRoot): array
     return $packages;
 }
 
-/**
- * @param  array<string, array{name: string, dir: string, path: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}>  $packages
- * @return array<string, string>
- */
-function buildClassIndex(string $repoRoot, array $packages): array
-{
-    $index = [];
-
-    foreach ($packages as $dirName => $meta) {
-        $srcDir = $repoRoot.'/'.$meta['path'].'/src';
-
-        if (! is_dir($srcDir)) {
-            continue;
-        }
-
-        foreach (walkPhpFiles($srcDir) as $file) {
-            $contents = (string) file_get_contents($file);
-
-            if (! preg_match('/^\s*namespace\s+([^;]+);/m', $contents, $namespaceMatch)) {
-                continue;
-            }
-
-            $namespace = trim($namespaceMatch[1]).'\\';
-
-            if (! preg_match_all('/\b(?:class|interface|trait|enum)\s+([A-Za-z_][A-Za-z0-9_]*)\b/', $contents, $typeMatches)) {
-                continue;
-            }
-
-            foreach ($typeMatches[1] as $shortName) {
-                $index[$namespace.$shortName] = $meta['name'];
-            }
-        }
-    }
-
-    ksort($index);
-
-    return $index;
-}
-
-/**
- * @return list<string>
- */
+/** @return list<string> */
 function walkPhpFiles(string $dir): array
 {
     $files = [];
@@ -703,7 +690,8 @@ function readUseEntry(array $tokens, int &$i, string $prefix): array
  */
 function readHierarchyNames(array $tokens, int $keywordIndex): array
 {
-    $line = $tokens[$keywordIndex][2];
+    $keyword = $tokens[$keywordIndex];
+    $line = is_array($keyword) ? $keyword[2] : 0;
     $i = skipWhitespace($tokens, $keywordIndex + 1);
     $names = [];
 
@@ -935,7 +923,7 @@ function isClosureUse(array $tokens, int $useIndex): bool
 }
 
 /**
- * @param  array<string, array{name: string, dir: string, path: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}>  $packages
+ * @param  array<string, array{name: string, dir: string, path: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string}>  $packages
  * @param  array<string, string>  $classIndex
  */
 function resolveOwner(string $import, array $packages, array $classIndex): ?string
@@ -977,7 +965,8 @@ function violatesForeignInternal(string $import, string $fromPackage, string $ow
 }
 
 /**
- * @return array{package_type: string, stability: string, public_api: list<string>}
+ * @param  array<mixed>  $composer
+ * @return array{package_type: string, stability: string}
  */
 function parseExtraCorex(array $composer, string $composerPath): array
 {
@@ -1012,103 +1001,24 @@ function parseExtraCorex(array $composer, string $composerPath): array
         exit(EXIT_CONFIG);
     }
 
-    $publicApi = $corex['public-api'] ?? null;
-
-    if (! is_array($publicApi)) {
-        fwrite(STDERR, "package-graph-gate: invalid extra.corex.public-api in {$relativePath}\n");
-        exit(EXIT_CONFIG);
-    }
-
-    $normalizedPublicApi = [];
-
-    foreach ($publicApi as $prefix) {
-        if (! is_string($prefix) || $prefix === '') {
-            fwrite(STDERR, "package-graph-gate: invalid extra.corex.public-api entry in {$relativePath}\n");
-            exit(EXIT_CONFIG);
-        }
-
-        $normalizedPublicApi[] = $prefix;
-    }
-
     return [
         'package_type' => $packageType,
         'stability' => $stability,
-        'public_api' => $normalizedPublicApi,
     ];
 }
 
-/**
- * @param  array<string, array{name: string, dir: string, path: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}>  $packages
- */
-function violatesPublicApi(string $import, string $fromPackage, string $ownerPackage, array $packages): ?string
+/** @param array<string, array{schema: string, package: string, symbols: array<string, array<string, mixed>>}> $manifests */
+function violatesPublicApi(string $import, string $fromPackage, string $ownerPackage, array $manifests): ?string
 {
-    if ($fromPackage === $ownerPackage) {
+    if ($fromPackage === $ownerPackage || violatesForeignInternal($import, $fromPackage, $ownerPackage)) {
         return null;
     }
 
-    if (violatesForeignInternal($import, $fromPackage, $ownerPackage)) {
-        return null;
-    }
-
-    $ownerMeta = null;
-
-    foreach ($packages as $meta) {
-        if ($meta['name'] === $ownerPackage) {
-            $ownerMeta = $meta;
-
-            break;
-        }
-    }
-
-    if ($ownerMeta === null) {
-        return null;
-    }
-
-    if (namespaceCoveredByPublicApi($import, $ownerMeta['public_api'])) {
-        return null;
-    }
-
-    return 'non-public namespace';
+    return isset($manifests[$ownerPackage]['symbols'][$import]) ? null : 'non-public symbol';
 }
 
 /**
- * @param  list<string>  $publicApiPrefixes
- */
-function namespaceCoveredByPublicApi(string $symbol, array $publicApiPrefixes): bool
-{
-    foreach ($publicApiPrefixes as $prefix) {
-        if ($symbol === $prefix || str_starts_with($symbol, $prefix.'\\')) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-/**
- * @param  list<array<string, string>>  $exceptions
- */
-function isPublicApiException(string $fromPackage, string $toPackage, string $relativeFile, array $exceptions): bool
-{
-    foreach ($exceptions as $entry) {
-        if (($entry['from'] ?? '') !== $fromPackage) {
-            continue;
-        }
-
-        if (($entry['to'] ?? '') !== $toPackage) {
-            continue;
-        }
-
-        if (($entry['import_file'] ?? '') === $relativeFile) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-/**
- * @param  array<string, array{name: string, dir: string, path: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}>  $packages
+ * @param  array<string, array{name: string, dir: string, path: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string}>  $packages
  */
 function violatesPackageTypeDirection(string $fromPackage, string $toPackage, array $packages): ?string
 {
@@ -1154,169 +1064,7 @@ function violatesPackageTypeDirection(string $fromPackage, string $toPackage, ar
 }
 
 /**
- * @return list<string>
- */
-function loadUndeclaredSurfaceSnapshot(string $path): array
-{
-    if (! is_file($path)) {
-        fwrite(STDERR, "package-graph-gate: missing surface snapshot {$path}\n");
-        exit(EXIT_CONFIG);
-    }
-
-    $decoded = json_decode((string) file_get_contents($path), true);
-
-    if (! is_array($decoded)) {
-        fwrite(STDERR, "package-graph-gate: invalid JSON in {$path}\n");
-        exit(EXIT_CONFIG);
-    }
-
-    $entries = $decoded['entries'] ?? null;
-
-    if (! is_array($entries)) {
-        fwrite(STDERR, "package-graph-gate: invalid surface snapshot schema in {$path}\n");
-        exit(EXIT_CONFIG);
-    }
-
-    $normalized = [];
-
-    foreach ($entries as $entry) {
-        if (! is_string($entry) || $entry === '') {
-            fwrite(STDERR, "package-graph-gate: invalid surface snapshot entry in {$path}\n");
-            exit(EXIT_CONFIG);
-        }
-
-        $normalized[] = $entry;
-    }
-
-    sort($normalized);
-
-    return $normalized;
-}
-
-/**
- * @param  array<string, array{name: string, dir: string, path: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}>  $packages
- * @return list<array{dir: string, file: string, line: int, fqcn: string, docblock: string}>
- */
-function collectTopLevelTypes(string $repoRoot, array $packages): array
-{
-    $types = [];
-
-    foreach ($packages as $dirName => $meta) {
-        $srcDir = $repoRoot.'/'.$meta['path'].'/src';
-
-        if (! is_dir($srcDir)) {
-            continue;
-        }
-
-        foreach (walkPhpFiles($srcDir) as $file) {
-            $relativeFile = substr($file, strlen($repoRoot) + 1);
-            $contents = (string) file_get_contents($file);
-            $tokens = token_get_all($contents, TOKEN_PARSE);
-            $namespace = '';
-            $count = count($tokens);
-
-            for ($i = 0; $i < $count; $i++) {
-                $token = $tokens[$i];
-
-                if (! is_array($token)) {
-                    continue;
-                }
-
-                if ($token[0] === T_NAMESPACE) {
-                    $namespace = readName($tokens, $i);
-
-                    continue;
-                }
-
-                if (! in_array($token[0], [T_CLASS, T_INTERFACE, T_TRAIT, T_ENUM], true)) {
-                    continue;
-                }
-
-                if ($i > 0 && is_array($tokens[$i - 1]) && $tokens[$i - 1][0] === T_DOUBLE_COLON) {
-                    continue;
-                }
-
-                if ($i > 0 && is_array($tokens[$i - 1]) && $tokens[$i - 1][0] === T_NEW) {
-                    continue;
-                }
-
-                $j = $i + 1;
-
-                while ($j < $count && is_array($tokens[$j]) && $tokens[$j][0] === T_WHITESPACE) {
-                    $j++;
-                }
-
-                if ($j >= $count || ! is_array($tokens[$j]) || $tokens[$j][0] !== T_STRING) {
-                    continue;
-                }
-
-                $shortName = $tokens[$j][1];
-                $docblock = docblockBeforeIndex($tokens, $i);
-
-                $types[] = [
-                    'dir' => $dirName,
-                    'file' => $relativeFile,
-                    'line' => $token[2],
-                    'fqcn' => $namespace.'\\'.$shortName,
-                    'docblock' => $docblock,
-                ];
-            }
-        }
-    }
-
-    usort($types, static fn (array $a, array $b): int => [$a['dir'], $a['fqcn']] <=> [$b['dir'], $b['fqcn']]);
-
-    return $types;
-}
-
-/**
- * @param  array<int, array{0: int, 1: string, 2: int}|string>  $tokens
- */
-function docblockBeforeIndex(array $tokens, int $typeIndex): string
-{
-    // Class modifiers sit between a class-level docblock and T_CLASS. Skipping
-    // them keeps @internal on `final`/`abstract`/`readonly` types visible to R4b.
-    $classModifiers = [T_ABSTRACT, T_FINAL, T_READONLY];
-
-    for ($k = $typeIndex - 1; $k >= 0; $k--) {
-        $token = $tokens[$k];
-
-        if (is_array($token) && ($token[0] === T_WHITESPACE || in_array($token[0], $classModifiers, true))) {
-            continue;
-        }
-
-        if (is_array($token) && $token[0] === T_DOC_COMMENT) {
-            return $token[1];
-        }
-
-        break;
-    }
-
-    return '';
-}
-
-/**
- * @param  array{name: string, dir: string, path: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}  $ownerMeta
- */
-function isUndeclaredSurfaceType(string $fqcn, string $docblock, array $ownerMeta): bool
-{
-    if (namespaceCoveredByPublicApi($fqcn, $ownerMeta['public_api'])) {
-        return false;
-    }
-
-    if (preg_match('/\\\\Internal\\\\/', $fqcn) === 1) {
-        return false;
-    }
-
-    if (str_contains($docblock, '@internal')) {
-        return false;
-    }
-
-    return true;
-}
-
-/**
- * @param  array{name: string, dir: string, path: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}  $fromMeta
+ * @param  array{name: string, dir: string, path: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string}  $fromMeta
  * @param  list<array<string, mixed>>  $allowlist
  * @param  list<array<string, string>>  $exceptions
  */
@@ -1429,7 +1177,7 @@ function allowlistGuardIsValid(array $entry, string $repoRoot): bool
 
 /**
  * @param  array<string, string>  $classIndex
- * @param  array<string, array{name: string, dir: string, path: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}>  $packages
+ * @param  array<string, array{name: string, dir: string, path: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string}>  $packages
  * @param  list<array<string, string>>  $reservations
  * @return list<array<string, mixed>>
  */
@@ -1443,10 +1191,10 @@ function evaluateReservations(array $classIndex, array $packages, array $reserva
     }
 
     foreach ($reservations as $reservation) {
-        $prefix = (string) ($reservation['prefix'] ?? '');
-        $host = (string) ($reservation['host'] ?? '');
-        $owner = (string) ($reservation['owner'] ?? '');
-        $reason = (string) ($reservation['reason'] ?? '');
+        $prefix = $reservation['prefix'] ?? '';
+        $host = $reservation['host'] ?? '';
+        $owner = $reservation['owner'] ?? '';
+        $reason = $reservation['reason'] ?? '';
         $hostMeta = $packageByName[$host] ?? null;
         $ownerMeta = $packageByName[$owner] ?? null;
 
@@ -1510,7 +1258,7 @@ function evaluateReservations(array $classIndex, array $packages, array $reserva
 
 /**
  * @param  array<string, string>  $classIndex
- * @param  array<string, array{name: string, dir: string, path: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}>  $packages
+ * @param  array<string, array{name: string, dir: string, path: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string}>  $packages
  * @param  array{
  *     allowlist: list<array<string, mixed>>,
  *     undeclared_dependency_exceptions: list<array<string, string>>,
@@ -1758,77 +1506,6 @@ function writeReport(string $path, array $report): void
         $path,
         json_encode($report, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)."\n",
     );
-}
-
-function emitPackageGraphBaseline(string $repoRoot, string $configPath): void
-{
-    $packages = discoverPackages($repoRoot);
-    $classIndex = buildClassIndex($repoRoot, $packages);
-    $publicApiExceptions = [];
-    $seenPublicApi = [];
-
-    foreach ($packages as $dirName => $meta) {
-        $srcDir = $repoRoot.'/'.$meta['path'].'/src';
-
-        if (! is_dir($srcDir)) {
-            continue;
-        }
-
-        foreach (walkPhpFiles($srcDir) as $file) {
-            $relativeFile = substr($file, strlen($repoRoot) + 1);
-
-            foreach (extractReferences($file) as $ref) {
-                $import = $ref['import'];
-                $ownerPackage = resolveOwner($import, $packages, $classIndex);
-
-                if ($ownerPackage === null || $ownerPackage === $meta['name']) {
-                    continue;
-                }
-
-                if (violatesPublicApi($import, $meta['name'], $ownerPackage, $packages) === null) {
-                    continue;
-                }
-
-                $key = $meta['name'].'|'.$ownerPackage.'|'.$relativeFile;
-
-                if (isset($seenPublicApi[$key])) {
-                    continue;
-                }
-
-                $seenPublicApi[$key] = true;
-                $publicApiExceptions[] = [
-                    'from' => $meta['name'],
-                    'to' => $ownerPackage,
-                    'import_file' => $relativeFile,
-                    'adr' => 'P3.3',
-                    'expires_when' => 'import removed or target symbol promoted to public-api',
-                    'reason' => 'Frozen R4 baseline at P3.3 (API-003 debt).',
-                ];
-            }
-        }
-    }
-
-    usort($publicApiExceptions, static fn (array $a, array $b): int => [$a['from'], $a['to'], $a['import_file']] <=> [$b['from'], $b['to'], $b['import_file']]);
-
-    $surfaceEntries = [];
-
-    foreach (collectTopLevelTypes($repoRoot, $packages) as $type) {
-        if (! isUndeclaredSurfaceType($type['fqcn'], $type['docblock'], $packages[$type['dir']])) {
-            continue;
-        }
-
-        $surfaceEntries[] = $type['dir'].'|'.$type['fqcn'];
-    }
-
-    sort($surfaceEntries);
-
-    fwrite(STDOUT, json_encode([
-        'public_api_exceptions' => $publicApiExceptions,
-        'undeclared_surface' => [
-            'schema' => 'package-graph-undeclared-surface/1',
-            'entries' => $surfaceEntries,
-        ],
-    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)."\n");
 }
 
 /**

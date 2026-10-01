@@ -27,14 +27,7 @@
             "schema-version": 1,
             "module": "CoreX\\Wakeup\\WakeupModule",
             "package-type": "capability",
-            "stability": "stable",
-            "public-api": [
-                "CoreX\\Wakeup\\Contracts",
-                "CoreX\\Wakeup\\Data",
-                "CoreX\\Wakeup\\Testing",
-                "CoreX\\Wakeup\\WakeupModule",
-                "CoreX\\Wakeup\\WakeupServiceProvider"
-            ]
+            "stability": "stable"
         },
         "laravel": {
             "providers": [

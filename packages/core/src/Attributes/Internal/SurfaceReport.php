@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Attributes\Internal;
 
+use RuntimeException;
+
 /** @internal One source-derived result shared by CLI, documentation and graph consumers. */
 final readonly class SurfaceReport
 {
     /**
-     * @param  array<string, array<string, mixed>>  $manifests
+     * @param  array<string, array{schema: string, package: string, symbols: array<string, array<string, mixed>>}>  $manifests
      * @param  array<string, string>  $owners
      * @param  list<SurfaceDiagnostic>  $diagnostics
      * @param  array<string, string>  $packagePaths
@@ -35,8 +37,20 @@ final readonly class SurfaceReport
     public function documentation(): string
     {
         $text = "# PHP API surface\n\nGenerated from source by `scripts/php-api.php --write`; schema `php-api/1`.\n";
+        $text .= "\nAttributes own membership. Full member signatures are in each package's `resources/contracts/php-api.json`.\n";
         foreach ($this->manifests as $package => $manifest) {
-            $text .= "\n## {$package}\n\n```json\n".self::encode($manifest)."```\n";
+            $path = $this->packagePaths[$package];
+            $text .= "\n## {$package}\n\n[Member manifest](../../{$path}/resources/contracts/php-api.json)\n\n";
+            $text .= "| Symbol | Layer | Since |\n|:--|:--|:--|\n";
+            foreach ($manifest['symbols'] as $symbol => $record) {
+                $layer = $record['layer'] ?? null;
+                $since = $record['since'] ?? null;
+
+                if (! is_string($layer) || ! is_string($since)) {
+                    throw new RuntimeException('Invalid source surface record: '.$symbol);
+                }
+                $text .= "| `{$symbol}` | {$layer} | {$since} |\n";
+            }
         }
 
         return $text;

@@ -8,6 +8,8 @@ namespace CoreX\Attributes\Internal;
 use RuntimeException;
 use Throwable;
 
+// The whole-monorepo AST/ownership graph exceeds PHP's 128 MiB CLI default.
+ini_set('memory_limit', '1G');
 require dirname(__DIR__).'/vendor/autoload.php';
 
 try {
@@ -47,11 +49,13 @@ try {
     $stale = [];
 
     if (isset($options['write']) || isset($options['check'])) {
-        $files = [$root.'/docs/reference/public-api.md' => $report->documentation()];
+        $artifacts = ['docs/reference/public-api.md' => $report->documentation()];
         foreach ($report->manifests as $package => $manifest) {
-            $files[$root.'/'.$report->packagePaths[$package].'/php-api.json'] = SurfaceReport::encode($manifest);
+            $artifacts[$report->packagePaths[$package].'/resources/contracts/php-api.json'] = SurfaceReport::encode($manifest);
         }
-        foreach ($files as $file => $bytes) {
+        foreach ($artifacts as $relativeFile => $bytes) {
+            $file = $root.'/'.$relativeFile;
+
             if (isset($options['write'])) {
                 if (! is_dir(dirname($file)) && ! mkdir(dirname($file), 0777, true)) {
                     throw new RuntimeException('Cannot create output directory');

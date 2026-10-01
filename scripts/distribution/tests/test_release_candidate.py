@@ -30,7 +30,7 @@ class ReleaseCandidateTest(unittest.TestCase):
         self.write('LICENSE', 'fixture license\n')
         self.write_package('alpha', 'corex/alpha', {'corex/beta': '@dev', 'vendor/exact': '1.2.3'})
         self.write_package('beta', 'corex/beta', {})
-        self.write_package('crm', 'flex/crm', {'corex/alpha': '@dev'}, package_type='product')
+        self.write_package('flex-crm', 'flex/crm', {'corex/alpha': '@dev'}, package_type='product')
         self.git('add', '-A')
         self.git('commit', '-qm', 'fixture')
         self.commit = self.git('rev-parse', 'HEAD').strip()
@@ -78,14 +78,14 @@ class ReleaseCandidateTest(unittest.TestCase):
                     'schema-version': 1,
                     'package-type': package_type,
                     'stability': 'experimental',
-                    'public-api': [f"Fixture\\{path.title()}\\Contracts"],
                 },
             },
         }
-        self.write(f'packages/{path}/composer.json', json.dumps(composer, indent=2) + '\n')
-        self.write(f'packages/{path}/README.md', f'# {name}\n')
-        self.write(f'packages/{path}/src/Example.php', '<?php\n')
-        self.write(f'packages/{path}/tests/Excluded.php', '<?php\n')
+        package_root = 'products' if package_type == 'product' else 'packages'
+        self.write(f'{package_root}/{path}/composer.json', json.dumps(composer, indent=2) + '\n')
+        self.write(f'{package_root}/{path}/README.md', f'# {name}\n')
+        self.write(f'{package_root}/{path}/src/Example.php', '<?php\n')
+        self.write(f'{package_root}/{path}/tests/Excluded.php', '<?php\n')
 
     def build(self, name: str = 'candidate') -> tuple[Path, dict]:
         output = self.root / name

@@ -190,6 +190,9 @@ final class SurfaceScanner
             $owners[$name] = $type->owner;
 
             if (! $type->product && in_array($this->metadata[$name]['layer'], ['api', 'spi-call', 'spi-implement'], true)) {
+                if (! isset($output[$type->owner])) {
+                    throw new RuntimeException('Missing manifest owner: '.$type->owner);
+                }
                 $record = $this->records[$name];
 
                 if ($this->metadata[$name]['layer'] !== 'spi-implement') {

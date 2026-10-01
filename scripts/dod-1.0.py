@@ -594,7 +594,7 @@ def judge_live(row: dict, root: Path) -> tuple[str, str, int, str]:
     diagnostic = "nonzero command"
     if row["id"] == "DOD-25" and "heading" in lowered:
         diagnostic = "README contract incomplete"
-    elif "missing api symbol" in lowered or "outside extra.corex.public-api" in lowered:
+    elif "missing api symbol" in lowered or "outside source Api/Spi surface" in lowered:
         diagnostic = "missing API symbol"
     elif "internal" in lowered and ("import" in lowered or "forbidden" in lowered):
         diagnostic = "foreign Internal import"

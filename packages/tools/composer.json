@@ -76,12 +76,7 @@
         "corex": {
             "schema-version": 1,
             "package-type": "capability",
-            "stability": "stable",
-            "public-api": [
-                "CoreX\\Tools\\Contracts",
-                "CoreX\\Tools\\Data",
-                "CoreX\\Tools\\ToolServiceProvider"
-            ]
+            "stability": "stable"
         },
         "branch-alias": {
             "dev-main": "1.0.x-dev"

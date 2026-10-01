@@ -22,7 +22,7 @@ scripts/php84 php scripts/php-api.php --strict --check
 
 `--root=DIR` selects a source tree. Report exits 0 with classification debt; strict exits 1
 on diagnostics. Check exits 1 on stale manifests/docs. Malformed PHP, invalid configuration
-and duplicate ownership exit 2 in every mode. Write changes only per-package `php-api.json`
+and duplicate ownership exit 2 in every mode. Write changes only per-package `resources/contracts/php-api.json`
 and `docs/reference/public-api.md`; it never labels declarations or proves strict success.
 Write and check are mutually exclusive.
 
@@ -54,9 +54,10 @@ JSON uses UTF-8, stable ordering and a final LF. No timestamp, absolute path, Gi
 whole-source hash enters a manifest. Names, defaults, enum values and types affect snapshots;
 body/prose-only changes do not.
 
-## Migration enforcement
+## Strict enforcement
 
-Report is evidence of debt, not strict admission. Existing namespace package graph checks
-and finite composition policy remain until PLAN3.P04.4. The scanner checks uncovered types,
-invalid metadata, foreign Internal/unclassified references, external implementation of Api,
-payload leaks and immutable data. Module, dependency, ownership and behavior gates remain.
+`composer php-api` runs `--strict --check` in CI. Report remains diagnostic-only.
+The package graph shares source membership and verifies manifest/document freshness;
+namespace metadata and the old undeclared-surface baseline are retired. Unknown symbols
+cannot be admitted by generated JSON. Module/dependency/ownership gates remain independent.
+`SurfaceReport::artifacts()` owns the output paths and bytes for CLI and graph consumers.

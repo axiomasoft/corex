@@ -28,6 +28,7 @@ declare(strict_types=1);
 
 namespace CoreX\Settings\Contracts;
 
+#[\CoreX\Attributes\Api]
 final class ProbeHelper
 {
 }

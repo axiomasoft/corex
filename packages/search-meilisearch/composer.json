@@ -26,12 +26,7 @@
         "corex": {
             "schema-version": 1,
             "package-type": "integration",
-            "stability": "stable",
-            "public-api": [
-                "CoreX\\SearchMeilisearch\\Exceptions",
-                "CoreX\\SearchMeilisearch\\MeilisearchServiceProvider",
-                "CoreX\\SearchMeilisearch\\Errors\\Enums\\SearchMeilisearchErrorCode"
-            ]
+            "stability": "stable"
         },
         "laravel": {
             "providers": [

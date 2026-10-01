@@ -2,10 +2,18 @@
 <?php
 
 declare(strict_types=1);
+
+namespace CoreX\Tooling\AttributesArchitecture;
+
+use CoreX\Attributes\Internal\SurfaceScanner;
 use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\CustomFields\Internal\Laravel\AttributeComposition;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use Symfony\Component\Process\Process;
 
+// The whole-monorepo AST/ownership graph exceeds PHP's 128 MiB CLI default.
+ini_set('memory_limit', '1G');
 $root = dirname(__DIR__);
 $package = $root.'/packages/custom-fields';
 $fixture = ($argv[1] ?? null) === '--fixture' ? ($argv[2] ?? null) : null;
@@ -54,11 +62,13 @@ if ($fixture !== null) {
         }
     }
 
-    $composer = json_decode((string) file_get_contents($package.'/composer.json'), true);
-    $public = $composer['extra']['corex']['public-api'] ?? null;
-
-    if ($public !== ['CoreX\\CustomFields\\Contracts', 'CoreX\\CustomFields\\Data', 'CoreX\\CustomFields\\Exceptions', 'CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode']) {
-        $violations[] = 'A0 public-api roots changed';
+    require $root.'/vendor/autoload.php';
+    $surface = (new SurfaceScanner)->scan($root);
+    $symbols = $surface->manifests['axiomasoft/corex-custom-fields']['symbols'] ?? [];
+    foreach (['AttributeStore', 'AttributeFilter', 'FieldCatalogue', 'SchemaOperations', 'AttributeStoreResolver'] as $port) {
+        if (! isset($symbols['CoreX\\CustomFields\\Contracts\\'.$port])) {
+            $violations[] = 'A0 missing source API/SPI contract '.$port;
+        }
     }
 
     foreach ($sources as $file) {

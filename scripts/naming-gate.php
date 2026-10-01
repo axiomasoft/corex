@@ -3,10 +3,20 @@
 
 declare(strict_types=1);
 
+namespace CoreX\Tooling\Naming;
+
+use CoreX\Attributes\Internal\SurfaceScanner;
+use FilesystemIterator;
+use RecursiveCallbackFilterIterator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use RuntimeException;
+use SplFileInfo;
+
 /**
  * Public API naming gate (P3.6 · P1-design §5.3).
  *
- * Blocks *new* generic short names in extra.corex public-api namespaces.
+ * Blocks *new* generic short names in source-derived Api/Spi symbols.
  * Existing matches are frozen in naming-gate-grandfather.json.
  */
 const EXIT_OK = 0;
@@ -37,6 +47,10 @@ const FORBIDDEN_SUFFIXES = [
 ];
 
 $repoRoot = dirname(__DIR__);
+// The whole-monorepo AST/ownership graph exceeds PHP's 128 MiB CLI default.
+ini_set('memory_limit', '1G');
+require $repoRoot.'/vendor/autoload.php';
+
 $grandfatherPath = $repoRoot.'/scripts/naming-gate-grandfather.json';
 
 if (PHP_SAPI === 'cli' && ($argv[1] ?? '') === '--emit-grandfather') {
@@ -213,13 +227,7 @@ function isForbiddenShortName(string $shortName): bool
  */
 function namespaceCoveredByPublicApi(string $symbol, array $publicApiPrefixes): bool
 {
-    foreach ($publicApiPrefixes as $prefix) {
-        if ($symbol === $prefix || str_starts_with($symbol, $prefix.'\\')) {
-            return true;
-        }
-    }
-
-    return false;
+    return in_array($symbol, $publicApiPrefixes, true);
 }
 
 function lineOfTypeDeclaration(string $contents, string $shortName): int
@@ -264,6 +272,7 @@ function walkPhpFiles(string $dir): array
 function discoverPackages(string $repoRoot): array
 {
     $packages = [];
+    $surface = (new SurfaceScanner)->scan($repoRoot);
 
     foreach (glob($repoRoot.'/packages/*/composer.json') ?: [] as $composerPath) {
         $dirName = basename(dirname($composerPath));
@@ -287,23 +296,12 @@ function discoverPackages(string $repoRoot): array
             exit(EXIT_CONFIG);
         }
 
-        $publicApi = $corex['public-api'] ?? null;
+        $name = $composer['name'];
 
-        if (! is_array($publicApi)) {
-            fwrite(STDERR, "naming-gate: invalid public-api in packages/{$dirName}/composer.json\n");
-            exit(EXIT_CONFIG);
+        if (! is_string($name)) {
+            throw new RuntimeException('Invalid package owner');
         }
-
-        $normalizedPublicApi = [];
-
-        foreach ($publicApi as $prefix) {
-            if (! is_string($prefix) || $prefix === '') {
-                fwrite(STDERR, "naming-gate: invalid public-api entry in packages/{$dirName}/composer.json\n");
-                exit(EXIT_CONFIG);
-            }
-
-            $normalizedPublicApi[] = $prefix;
-        }
+        $normalizedPublicApi = array_keys($surface->manifests[$name]['symbols'] ?? []);
 
         $packages[$dirName] = [
             'name' => (string) $composer['name'],

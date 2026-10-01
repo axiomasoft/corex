@@ -32,26 +32,7 @@
             "schema-version": 1,
             "module": "CoreX\\Panels\\PanelsModule",
             "package-type": "capability",
-            "stability": "stable",
-            "public-api": [
-                "CoreX\\Panels\\Contracts",
-                "CoreX\\Panels\\Data",
-                "CoreX\\Panels\\SavedViews\\Contracts\\SavedViewRepository",
-                "CoreX\\Panels\\SavedViews\\Contracts\\ViewAccessPolicy",
-                "CoreX\\Panels\\SavedViews\\Contracts\\ViewSchemaProvider",
-                "CoreX\\Panels\\PanelsModule",
-                "CoreX\\Panels\\PanelsServiceProvider",
-                "CoreX\\Panels\\SavedViews\\Data\\SaveViewInput",
-                "CoreX\\Panels\\SavedViews\\Data\\SavedQuery",
-                "CoreX\\Panels\\SavedViews\\Data\\SavedViewRef",
-                "CoreX\\Panels\\SavedViews\\Data\\ViewAction",
-                "CoreX\\Panels\\SavedViews\\Data\\ViewContext",
-                "CoreX\\Panels\\SavedViews\\Data\\ViewField",
-                "CoreX\\Panels\\SavedViews\\Data\\ViewSchema",
-                "CoreX\\Panels\\SavedViews\\Data\\ViewScope",
-                "CoreX\\Panels\\SavedViews\\Data\\ViewSubject",
-                "CoreX\\Panels\\SavedViews\\Laravel\\SavedViewsRegistrar"
-            ]
+            "stability": "stable"
         },
         "laravel": {
             "providers": [

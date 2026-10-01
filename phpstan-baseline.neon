@@ -1,30 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			rawMessage: 'Call to static method fromArray() of internal class CoreX\CustomFields\Internal\Laravel\AttributeComposition from outside its root namespace CoreX.'
-			identifier: staticMethod.internalClass
-			count: 1
-			path: scripts/attributes-architecture-gate.php
-
-		-
-			rawMessage: Cannot access offset 'corex' on mixed.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: scripts/attributes-architecture-gate.php
-
-		-
-			rawMessage: Cannot access offset 'extra' on mixed.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: scripts/attributes-architecture-gate.php
-
-		-
-			rawMessage: Cannot access offset 'public-api' on mixed.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: scripts/attributes-architecture-gate.php
-
-		-
 			rawMessage: 'Cannot call method getExtension() on mixed.'
 			identifier: method.nonObject
 			count: 1
@@ -43,7 +19,7 @@ parameters:
 			path: scripts/attributes-architecture-gate.php
 
 		-
-			rawMessage: 'Function phpFiles() should return list<string> but returns list.'
+			rawMessage: 'Function CoreX\Tooling\AttributesArchitecture\phpFiles() should return list<string> but returns list.'
 			identifier: return.type
 			count: 1
 			path: scripts/attributes-architecture-gate.php
@@ -53,18 +29,6 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: scripts/attributes-architecture-gate.php
-
-		-
-			rawMessage: 'Parameter #1 $fromProperty of callable Roave\BackwardCompatibility\DetectChanges\BCBreak\PropertyBased\PropertyDefaultValueChanged expects Roave\BetterReflection\Reflection\ReflectionProperty, Roave\BetterReflection\Reflection\ReflectionProperty|null given.'
-			identifier: argument.type
-			count: 2
-			path: scripts/bc/test-property-default.php
-
-		-
-			rawMessage: 'Parameter #2 $toProperty of callable Roave\BackwardCompatibility\DetectChanges\BCBreak\PropertyBased\PropertyDefaultValueChanged expects Roave\BetterReflection\Reflection\ReflectionProperty, Roave\BetterReflection\Reflection\ReflectionProperty|null given.'
-			identifier: argument.type
-			count: 2
-			path: scripts/bc/test-property-default.php
 
 		-
 			rawMessage: 'Argument of an invalid type mixed supplied for foreach, only iterables are supported.'
@@ -295,12 +259,6 @@ parameters:
 			path: scripts/distribution/extension_fixture_probe.php
 
 		-
-			rawMessage: Cannot access offset 'public-api' on mixed.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: scripts/distribution/extension_fixture_probe.php
-
-		-
 			rawMessage: Cannot access property $name on mixed.
 			identifier: property.nonObject
 			count: 1
@@ -363,12 +321,6 @@ parameters:
 		-
 			rawMessage: 'Parameter #2 $callback of method Illuminate\Support\Manager::extend() expects bindable closure, static closure given.'
 			identifier: argument.staticClosure
-			count: 1
-			path: scripts/distribution/extension_fixture_probe.php
-
-		-
-			rawMessage: 'Parameter #2 $prefixes of function covered expects list<string>, array<mixed, mixed> given.'
-			identifier: argument.type
 			count: 1
 			path: scripts/distribution/extension_fixture_probe.php
 
@@ -782,7 +734,7 @@ parameters:
 		-
 			rawMessage: Cannot access offset 'corex' on mixed.
 			identifier: offsetAccess.nonOffsetAccessible
-			count: 4
+			count: 2
 			path: scripts/package-docs-gate.php
 
 		-
@@ -840,12 +792,6 @@ parameters:
 			path: scripts/package-docs-gate.php
 
 		-
-			rawMessage: Cannot access offset 'public-api' on mixed.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 2
-			path: scripts/package-docs-gate.php
-
-		-
 			rawMessage: Cannot access offset 'symbol' on mixed.
 			identifier: offsetAccess.nonOffsetAccessible
 			count: 1
@@ -876,21 +822,9 @@ parameters:
 			path: scripts/package-docs-gate.php
 
 		-
-			rawMessage: 'Function cohortPublicApiMaps() should return array<string, list<string>> but returns array<mixed, mixed>.'
+			rawMessage: 'Function CoreX\Tooling\PackageDocs\loadCohort() should return list<array{name: string, path: string, dir: string, composer: array<string, mixed>}> but returns list<array{name: non-empty-string, path: non-empty-string, dir: string, composer: array<mixed, mixed>}>.'
 			identifier: return.type
 			count: 1
-			path: scripts/package-docs-gate.php
-
-		-
-			rawMessage: 'Function loadCohort() should return list<array{name: string, path: string, dir: string, composer: array<string, mixed>}> but returns list<array{name: non-empty-string, path: non-empty-string, dir: string, composer: array<mixed, mixed>}>.'
-			identifier: return.type
-			count: 1
-			path: scripts/package-docs-gate.php
-
-		-
-			rawMessage: 'Function violation invoked with 7 parameters, 6 required.'
-			identifier: arguments.count
-			count: 4
 			path: scripts/package-docs-gate.php
 
 		-
@@ -906,12 +840,6 @@ parameters:
 			path: scripts/package-docs-gate.php
 
 		-
-			rawMessage: 'Parameter #1 $callback of function array_map expects (callable(mixed): mixed)|null, ''strval'' given.'
-			identifier: argument.type
-			count: 2
-			path: scripts/package-docs-gate.php
-
-		-
 			rawMessage: 'Parameter #1 $filename of function file_get_contents expects string, mixed given.'
 			identifier: argument.type
 			count: 1
@@ -924,21 +852,9 @@ parameters:
 			path: scripts/package-docs-gate.php
 
 		-
-			rawMessage: 'Parameter #1 $rule of function violation expects string, array<string, array<string, mixed>|string> given.'
-			identifier: argument.type
-			count: 6
-			path: scripts/package-docs-gate.php
-
-		-
 			rawMessage: 'Parameter #2 ...$values of function sprintf expects bool|float|int|string|null, mixed given.'
 			identifier: argument.type
 			count: 1
-			path: scripts/package-docs-gate.php
-
-		-
-			rawMessage: 'Parameter #3 $line of function violation expects int, string given.'
-			identifier: argument.type
-			count: 6
 			path: scripts/package-docs-gate.php
 
 		-
@@ -954,7 +870,7 @@ parameters:
 			path: scripts/package-docs-gate.php
 
 		-
-			rawMessage: 'Parameter #5 $violations of function packageResult expects list<array<string, mixed>>, list<mixed> given.'
+			rawMessage: 'Parameter #5 $violations of function CoreX\Tooling\PackageDocs\packageResult expects list<array<string, mixed>>, list<mixed> given.'
 			identifier: argument.type
 			count: 1
 			path: scripts/package-docs-gate.php
@@ -984,19 +900,7 @@ parameters:
 			path: scripts/package-docs-gate.php
 
 		-
-			rawMessage: 'Argument of an invalid type mixed supplied for foreach, only iterables are supported.'
-			identifier: foreach.nonIterable
-			count: 1
-			path: scripts/package-graph-gate.php
-
-		-
 			rawMessage: Cannot access offset 'corex' on mixed.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: scripts/package-graph-gate.php
-
-		-
-			rawMessage: Cannot access offset 'psr-4' on mixed.
 			identifier: offsetAccess.nonOffsetAccessible
 			count: 1
 			path: scripts/package-graph-gate.php
@@ -1004,78 +908,42 @@ parameters:
 		-
 			rawMessage: Cannot cast mixed to string.
 			identifier: cast.string
-			count: 14
+			count: 13
 			path: scripts/package-graph-gate.php
 
 		-
 			rawMessage: Casting to string something that's already string.
 			identifier: cast.useless
-			count: 14
+			count: 11
 			path: scripts/package-graph-gate.php
 
 		-
-			rawMessage: 'Function discoverPackages() should return array<string, array{name: string, dir: string, path: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string, public_api: list<string>}> but returns array<string, array{path: string, name: string, dir: string, require: list<int|string>, psr4: array<non-falsy-string, mixed>, package_type: string, stability: string, public_api: list<string>}>.'
-			identifier: return.type
-			count: 1
-			path: scripts/package-graph-gate.php
-
-		-
-			rawMessage: 'Function formatViolationLine() has parameter $violation with no value type specified in iterable type array.'
+			rawMessage: 'Function CoreX\Tooling\PackageGraph\formatViolationLine() has parameter $violation with no value type specified in iterable type array.'
 			identifier: missingType.iterableValue
 			count: 1
 			path: scripts/package-graph-gate.php
 
 		-
-			rawMessage: 'Function parseExtraCorex() has parameter $composer with no value type specified in iterable type array.'
+			rawMessage: 'Function CoreX\Tooling\PackageGraph\resolveName() has parameter $useTable with no value type specified in iterable type array.'
 			identifier: missingType.iterableValue
 			count: 1
 			path: scripts/package-graph-gate.php
 
 		-
-			rawMessage: 'Function readHierarchyNames() should return list<array{name: string, line: int}> but returns list<array{name: non-empty-string|null, line: int|non-empty-string}>.'
+			rawMessage: 'Function CoreX\Tooling\PackageGraph\resolveName() should return string but returns mixed.'
 			identifier: return.type
 			count: 1
 			path: scripts/package-graph-gate.php
 
 		-
-			rawMessage: 'Function resolveName() has parameter $useTable with no value type specified in iterable type array.'
+			rawMessage: 'Function CoreX\Tooling\PackageGraph\uniqueRefs() should return list<array{import: string, line: int, via: ''extends''|''fqcn''|''use''}> but returns list<array{import: string, line: int, via: string}>.'
+			identifier: return.type
+			count: 1
+			path: scripts/package-graph-gate.php
+
+		-
+			rawMessage: 'Function CoreX\Tooling\PackageGraph\writeReport() has parameter $report with no value type specified in iterable type array.'
 			identifier: missingType.iterableValue
-			count: 1
-			path: scripts/package-graph-gate.php
-
-		-
-			rawMessage: 'Function resolveName() should return string but returns mixed.'
-			identifier: return.type
-			count: 1
-			path: scripts/package-graph-gate.php
-
-		-
-			rawMessage: 'Function uniqueRefs() should return list<array{import: string, line: int, via: ''extends''|''fqcn''|''use''}> but returns list<array{import: string, line: int, via: string}>.'
-			identifier: return.type
-			count: 1
-			path: scripts/package-graph-gate.php
-
-		-
-			rawMessage: 'Function writeReport() has parameter $report with no value type specified in iterable type array.'
-			identifier: missingType.iterableValue
-			count: 1
-			path: scripts/package-graph-gate.php
-
-		-
-			rawMessage: 'Only booleans are allowed in a negated boolean, int<0, max>|false given.'
-			identifier: booleanNot.exprNotBoolean
-			count: 1
-			path: scripts/package-graph-gate.php
-
-		-
-			rawMessage: 'Only booleans are allowed in a negated boolean, int|false given.'
-			identifier: booleanNot.exprNotBoolean
-			count: 1
-			path: scripts/package-graph-gate.php
-
-		-
-			rawMessage: 'Parameter #1 $array of function array_keys expects array, mixed given.'
-			identifier: argument.type
 			count: 1
 			path: scripts/package-graph-gate.php
 
@@ -1083,30 +951,6 @@ parameters:
 			rawMessage: 'Parameter #1 $array of function array_values expects array<T>, mixed given.'
 			identifier: argument.type
 			count: 2
-			path: scripts/package-graph-gate.php
-
-		-
-			rawMessage: 'Parameter #1 $string of function ltrim expects string, string|null given.'
-			identifier: argument.type
-			count: 1
-			path: scripts/package-graph-gate.php
-
-		-
-			rawMessage: 'Parameter #1 $string of function rtrim expects string, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: scripts/package-graph-gate.php
-
-		-
-			rawMessage: 'Parameter #1 $string of function rtrim expects string, string|null given.'
-			identifier: argument.type
-			count: 1
-			path: scripts/package-graph-gate.php
-
-		-
-			rawMessage: 'Parameter #1 $tokens of function readQualifiedName expects list<mixed>, array<int, array{int, string, int}|string> given.'
-			identifier: argument.type
-			count: 3
 			path: scripts/package-graph-gate.php
 
 		-
@@ -1119,12 +963,6 @@ parameters:
 			rawMessage: 'Parameter #2 ...$values of function sprintf expects bool|float|int|string|null, mixed given.'
 			identifier: argument.type
 			count: 3
-			path: scripts/package-graph-gate.php
-
-		-
-			rawMessage: 'Parameter #3 $prefix of function readUseEntry expects string, string|null given.'
-			identifier: argument.type
-			count: 2
 			path: scripts/package-graph-gate.php
 
 		-
@@ -1164,31 +1002,31 @@ parameters:
 			path: scripts/package-graph-gate.php
 
 		-
-			rawMessage: 'Parameter $file of function violation expects string, mixed given.'
+			rawMessage: 'Parameter $file of function CoreX\Tooling\PackageGraph\violation expects string, mixed given.'
 			identifier: argument.type
 			count: 2
 			path: scripts/package-graph-gate.php
 
 		-
-			rawMessage: 'Parameter $import of function violation expects string, mixed given.'
+			rawMessage: 'Parameter $import of function CoreX\Tooling\PackageGraph\violation expects string, mixed given.'
 			identifier: argument.type
 			count: 2
 			path: scripts/package-graph-gate.php
 
 		-
-			rawMessage: 'Parameter $line of function violation expects int, mixed given.'
+			rawMessage: 'Parameter $line of function CoreX\Tooling\PackageGraph\violation expects int, mixed given.'
 			identifier: argument.type
 			count: 2
 			path: scripts/package-graph-gate.php
 
 		-
-			rawMessage: 'Parameter $message of function violation expects string, mixed given.'
+			rawMessage: 'Parameter $message of function CoreX\Tooling\PackageGraph\violation expects string, mixed given.'
 			identifier: argument.type
 			count: 2
 			path: scripts/package-graph-gate.php
 
 		-
-			rawMessage: 'Parameter $owner of function violation expects string, mixed given.'
+			rawMessage: 'Parameter $owner of function CoreX\Tooling\PackageGraph\violation expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: scripts/package-graph-gate.php

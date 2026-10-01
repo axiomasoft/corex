@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use CoreX\Attributes\Api;
+use CoreX\Attributes\Spi;
 use CoreX\Modules\Testing\ExtensionContract;
 use CoreX\Search\Internal\SearchManager;
 use Illuminate\Config\Repository;
@@ -96,17 +98,19 @@ function allowedSymbols(string $vendor): array
     $queue = [];
 
     foreach ($packages as $package) {
-        $prefixes = $package['extra']['corex']['public-api'] ?? null;
-
-        if (! is_array($prefixes)) {
+        if (! isset($package['extra']['corex'])) {
             continue;
         }
-
         $root = $vendor.'/composer/'.($package['install-path'] ?? '');
-
         foreach (phpFiles($root) as $file) {
             foreach (declaredSymbols($file) as $symbol) {
-                if (covered($symbol, $prefixes)) {
+                if (! (class_exists($symbol) || interface_exists($symbol) || trait_exists($symbol) || enum_exists($symbol))) {
+                    continue;
+                }
+                $reflection = new ReflectionClass($symbol);
+
+                if ($reflection->getAttributes(Api::class) !== []
+                    || $reflection->getAttributes(Spi::class) !== []) {
                     $queue[] = $symbol;
                 }
             }

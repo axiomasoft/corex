@@ -5,11 +5,12 @@
 # Per live package: disposable git repo with explicit base/candidate commits;
 # comparison Composer root autoloads only that package (production paths).
 #
-# Exit 0 on PHP 8.3 (skip). Roave exit 3 = BC break (report-only if experimental).
+# Unsupported PHP and skipped Roave checks are infrastructure RED.
+# Roave exit 3 with only real changes = BC break; experimental requires a declared changelog delta.
 # Any other Roave outcome = infrastructure RED.
 #
 # Env:
-#   BC_CHECK_BASE          — git ref for package base tree (default: merge-base origin/main)
+#   BC_CHECK_BASE          — git ref (default: accepted unpublished kernel baseline)
 #   BC_CHECK_FORCE_STABLE  — composer package name treated as stable (validation probe)
 #   BC_CHECK_PROBE_INFRA   — if set, corrupt comparison composer.json for core (probe)
 #   BC_CHECK_ONLY          — single package dir (debug)
@@ -24,8 +25,8 @@ bc_php() {
 }
 
 if [[ "$PHP_MM" != "8.4" && "$PHP_MM" != "8.5" ]]; then
-  echo "bc-check: skip — roave/backward-compatibility-check ^8.22 requires PHP 8.4 or 8.5 (current: ${PHP_MM})"
-  exit 0
+  echo "bc-check: infrastructure RED — roave/backward-compatibility-check ^8.22 requires PHP 8.4 or 8.5 (current: ${PHP_MM})"
+  exit 1
 fi
 
 if [[ ! -x "$ROAVE_BIN" ]]; then
@@ -35,7 +36,9 @@ fi
 
 BC_CHECK_BASE="${BC_CHECK_BASE:-}"
 if [[ -z "$BC_CHECK_BASE" ]]; then
-  if git -C "$REPO_ROOT" rev-parse --verify origin/main^{commit} >/dev/null 2>&1; then
+  if [[ -f "$REPO_ROOT/scripts/bc/accepted-base.json" ]]; then
+    BC_CHECK_BASE="$(bc_php '$j=json_decode(file_get_contents(getenv("BC_REPO_ROOT")."/scripts/bc/accepted-base.json"),true,flags:JSON_THROW_ON_ERROR); if(($j["schema"]??null)!=="corex-bc-base/1"||!is_string($j["revision"]??null)){throw new RuntimeException("Invalid accepted BC base");} echo $j["revision"];')"
+  elif git -C "$REPO_ROOT" rev-parse --verify origin/main^{commit} >/dev/null 2>&1; then
     BC_CHECK_BASE="$(git -C "$REPO_ROOT" merge-base HEAD origin/main)"
   else
     BC_CHECK_BASE="$(git -C "$REPO_ROOT" rev-parse HEAD)"
@@ -51,13 +54,18 @@ roave_ver="$(composer --working-dir="$REPO_ROOT" show roave/backward-compatibili
 echo "bc-check: BC_CHECK_BASE=${BC_CHECK_BASE} (PHP ${PHP_MM})"
 echo "bc-check: roave ${roave_ver}"
 
-mapfile -t PACKAGE_DIRS < <(bc_php '
+package_listing="$(bc_php '
 $r=getenv("BC_REPO_ROOT");
-$c=json_decode(file_get_contents("$r/composer.json"),true);
-$s=$c["scripts"]["test:packages"]??"";
-if(!preg_match("/for p in (.+?); do/s",$s,$m)){fwrite(STDERR,"bc-check: cannot parse test:packages\n");exit(1);}
-foreach(array_filter(explode(" ",trim($m[1]))) as $d){if($d!=="import-export") echo "$d\n";}
-')
+$paths=glob("$r/packages/*/composer.json")?:[];
+if($paths===[]){throw new RuntimeException("Missing BC package cohort");}
+sort($paths);
+foreach($paths as $path){
+  $j=json_decode(file_get_contents($path),true,flags:JSON_THROW_ON_ERROR);
+  if(!is_array($j)||!is_string($j["name"]??null)){throw new RuntimeException("Invalid BC package manifest");}
+  echo basename(dirname($path))."\n";
+}
+')"
+mapfile -t PACKAGE_DIRS <<< "$package_listing"
 
 stage_package_vendors() {
   local dir="$1" work="$2"
@@ -70,7 +78,7 @@ stage_package_vendors() {
       [[ -f "${pkgpath}/composer.json" ]] || continue
       leaf="$(basename "${pkgpath}")"
       mkdir -p "${work}/packages/_vendor/${leaf}"
-      rsync -a "${pkgpath}/" "${work}/packages/_vendor/${leaf}/"
+      rsync -a --exclude=.git "${pkgpath}/" "${work}/packages/_vendor/${leaf}/"
     done
   done
 
@@ -129,7 +137,6 @@ $walk=function(string $d) use (&$walk,&$seen,&$q,$r,$map){
   if(!is_file($path)) return;
   $j=json_decode(file_get_contents($path),true);
   foreach(array_keys(array_merge($j["require"]??[],$j["require-dev"]??[])) as $req){
-    if(!str_starts_with($req,"corex/")&&!str_starts_with($req,"flex/")) continue;
     if(!isset($map[$req])) continue;
     $dep=$map[$req];
     $q[]=$dep;
@@ -140,7 +147,7 @@ $walk($target);
 $q[]=$target;
 $q=array_values(array_unique($q));
 sort($q);
-foreach($q as $d) echo "$d\n";
+foreach($q as $d) echo basename($d)."\n";
 ')
 
   # Uncommitted D89/D90 renames are absent at BC_CHECK_BASE. Archive the predecessor
@@ -166,6 +173,14 @@ foreach($q as $d) echo "$d\n";
     archive_base_package "$dep" || return 1
   done
 
+  BC_WORK="$work" bc_php '
+foreach(glob(getenv("BC_WORK")."/packages/*/composer.json")?:[] as $file){
+  $j=json_decode(file_get_contents($file),true,flags:JSON_THROW_ON_ERROR);
+  $j["version"]="1.0.x-dev";
+  file_put_contents($file,json_encode($j,JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES)."\n");
+}
+'
+
   stage_package_vendors "$dir" "$work"
 
   BC_WORK="$work" BC_CHECK_TARGET_DIR="$dir" bc_php '
@@ -174,7 +189,7 @@ $archived=getenv("BC_WORK")."/packages/$d/composer.json";
 $pkg=json_decode(file_get_contents(is_file($archived)?$archived:"$r/packages/$d/composer.json"),true);
 $requireDev=[];
 foreach($pkg["require-dev"]??[] as $name=>$constraint){
-  if(str_starts_with($name,"corex/")||str_starts_with($name,"flex/")){$requireDev[$name]=$constraint;}
+  if(str_starts_with($name,"axiomasoft/corex")||str_starts_with($name,"corex/")||str_starts_with($name,"flex/")){$requireDev[$name]=$constraint;}
 }
 $src=getenv("BC_WORK")."/packages/$d/src";
 if(is_dir($src)&&isset($pkg["require-dev"]["orchestra/testbench"])){
@@ -224,6 +239,7 @@ if(is_dir($src)){
 if(str_contains($blob??"","PHPStan\\")){$requireDev["phpstan/phpstan"]="@dev";$repos[]=["type"=>"path","url"=>"packages/_vendor/phpstan"]; }
 $root=["name"=>"corex/bc-compare-root","type"=>"project","license"=>"MIT","require"=>$require,"repositories"=>$repos,"autoload"=>[],"minimum-stability"=>"dev","prefer-stable"=>true];
 if($requireDev!==[]){$root["require-dev"]=$requireDev;}
+if(isset($pkg["extra"]["corex"]["public-api"])){$root["extra"]["corex"]["public-api"]=$pkg["extra"]["corex"]["public-api"];}
 foreach($pkg["autoload"]["psr-4"]??[] as $prefix=>$rel){
   $paths=is_array($rel)?$rel:[$rel];
   $mapped=[];
@@ -251,8 +267,16 @@ echo json_encode($root,JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES)."\n";
   rm -rf "${work}/packages/api" "${work}/packages/auth"
   for dep in "${dep_dirs[@]}"; do
     mkdir -p "${work}/packages/${dep}"
-    rsync -a --delete "${REPO_ROOT}/packages/${dep}/" "${work}/packages/${dep}/"
+    rsync -a --delete --exclude=/vendor --exclude=/tests "${REPO_ROOT}/packages/${dep}/" "${work}/packages/${dep}/"
   done
+
+  BC_WORK="$work" bc_php '
+foreach(glob(getenv("BC_WORK")."/packages/*/composer.json")?:[] as $file){
+  $j=json_decode(file_get_contents($file),true,flags:JSON_THROW_ON_ERROR);
+  $j["version"]="1.0.x-dev";
+  file_put_contents($file,json_encode($j,JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES)."\n");
+}
+'
 
   stage_package_vendors "$dir" "$work"
 
@@ -261,7 +285,7 @@ $r=getenv("BC_REPO_ROOT"); $d=getenv("BC_CHECK_TARGET_DIR");
 $pkg=json_decode(file_get_contents("$r/packages/$d/composer.json"),true);
 $requireDev=[];
 foreach($pkg["require-dev"]??[] as $name=>$constraint){
-  if(str_starts_with($name,"corex/")||str_starts_with($name,"flex/")){$requireDev[$name]=$constraint;}
+  if(str_starts_with($name,"axiomasoft/corex")||str_starts_with($name,"corex/")||str_starts_with($name,"flex/")){$requireDev[$name]=$constraint;}
 }
 $src=getenv("BC_WORK")."/packages/$d/src";
 if(is_dir($src)&&isset($pkg["require-dev"]["orchestra/testbench"])){
@@ -311,6 +335,7 @@ if(is_dir($src)){
 if(str_contains($blob??"","PHPStan\\")){$requireDev["phpstan/phpstan"]="@dev";$repos[]=["type"=>"path","url"=>"packages/_vendor/phpstan"]; }
 $root=["name"=>"corex/bc-compare-root","type"=>"project","license"=>"MIT","require"=>$require,"repositories"=>$repos,"autoload"=>[],"minimum-stability"=>"dev","prefer-stable"=>true];
 if($requireDev!==[]){$root["require-dev"]=$requireDev;}
+if(isset($pkg["extra"]["corex"]["public-api"])){$root["extra"]["corex"]["public-api"]=$pkg["extra"]["corex"]["public-api"];}
 foreach($pkg["autoload"]["psr-4"]??[] as $prefix=>$rel){
   $paths=is_array($rel)?$rel:[$rel];
   $mapped=[];
@@ -334,7 +359,7 @@ echo json_encode($root,JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES)."\n";
   git -C "$work" commit -q -m "candidate"
   cand_sha="$(git -C "$work" rev-parse HEAD)"
 
-  roave_flags=(--from="${base_sha}" --to="${cand_sha}" --format=github-actions)
+  roave_flags=(--from="${base_sha}" --to="${cand_sha}" --format=json)
   if grep -q '"require-dev"' "${work}/composer.json"; then
     roave_flags+=(--install-development-dependencies)
   fi
@@ -344,13 +369,7 @@ echo json_encode($root,JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES)."\n";
   roave_exit=$?
   set -e
 
-  if [[ $roave_exit -eq 0 ]]; then
-    classified="compatible"
-  elif [[ $roave_exit -eq 3 ]]; then
-    classified="bc-break"
-  else
-    classified="infrastructure"
-  fi
+  classified="$(printf '%s\n' "$roave_out" | python3 "$REPO_ROOT/scripts/bc/classify.py" "$roave_exit")"
 
   if [[ "$classified" == "bc-break" ]]; then
     contract_hint="$(printf '%s\n' "$roave_out" | grep -oE "packages/${dir}/src/Contracts/[^\"']+" | head -1 || true)"
@@ -367,8 +386,12 @@ echo json_encode($root,JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES)."\n";
   if [[ "$classified" == "infrastructure" ]]; then
     return 1
   fi
-  if [[ "$classified" == "bc-break" && "$stability" == "stable" ]]; then
-    return 1
+  if [[ "$classified" == "bc-break" ]]; then
+    if [[ "$stability" != "experimental" ]] || ! grep -Eq 'Breaking.*PLAN3[.]P04|PLAN3[.]P04.*[Bb]reaking' "$REPO_ROOT/packages/$dir/CHANGELOG.md"; then
+      echo "bc-check: undeclared or stable BC break — ${pkg_name}" >&2
+      return 1
+    fi
+    echo "bc-check: declared pre-1.0 delta in packages/$dir/CHANGELOG.md"
   fi
   return 0
 }

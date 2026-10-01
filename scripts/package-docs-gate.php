@@ -3,6 +3,15 @@
 
 declare(strict_types=1);
 
+namespace CoreX\Tooling\PackageDocs;
+
+use CoreX\Attributes\Internal\SurfaceReport;
+use CoreX\Attributes\Internal\SurfaceScanner;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use RuntimeException;
+use ZipArchive;
+
 /**
  * P17.8 — README topic contract, PHP example compile, public-API import check.
  *
@@ -38,6 +47,9 @@ const PRODUCER_PHASE = [
 const TOPICS = ['installation', 'configuration', 'extension', 'failure'];
 
 $repoRoot = dirname(__DIR__);
+// The whole-monorepo AST/ownership graph exceeds PHP's 128 MiB CLI default.
+ini_set('memory_limit', '1G');
+require $repoRoot.'/vendor/autoload.php';
 $argvList = array_slice($argv, 1);
 $wantJson = in_array('--json', $argvList, true);
 $pristine = in_array('--pristine', $argvList, true);
@@ -374,8 +386,6 @@ function inspectPhpBlock(string $repoRoot, array $package, string $readmePath, i
     }
 
     $symbols = extractCorexSymbols($wrapped);
-    $publicApi = $package['composer']['extra']['corex']['public-api'] ?? [];
-    $publicApi = is_array($publicApi) ? array_values(array_map('strval', $publicApi)) : [];
     $foreignMaps = cohortPublicApiMaps($repoRoot);
 
     foreach ($symbols as $symbol) {
@@ -393,14 +403,14 @@ function inspectPhpBlock(string $repoRoot, array $package, string $readmePath, i
             continue;
         }
 
-        if (! coveredByPublicApi($symbol, $publicApi) && ! coveredByAnyPublicApi($symbol, $foreignMaps)) {
+        if (! coveredByAnyPublicApi($symbol, $foreignMaps)) {
             $violations[] = violation(
                 $package,
                 $readmePath,
                 'example',
                 '',
                 $symbol,
-                'example symbol is outside extra.corex.public-api',
+                'example symbol is outside source Api/Spi surface',
                 $label,
             );
         }
@@ -497,29 +507,20 @@ function extractCorexSymbols(string $code): array
 /** @param  list<string>  $publicApi */
 function coveredByPublicApi(string $fqcn, array $publicApi): bool
 {
-    foreach ($publicApi as $prefix) {
-        $normalized = rtrim($prefix, '\\');
-
-        if ($fqcn === $normalized || str_starts_with($fqcn, $normalized.'\\')) {
-            return true;
-        }
-    }
-
-    return false;
+    return in_array($fqcn, $publicApi, true);
 }
 
 /** @return array<string, list<string>> */
 function cohortPublicApiMaps(string $repoRoot): array
 {
-    static $maps = null;
+    static $surface = null;
 
-    if (is_array($maps)) {
-        return $maps;
+    if (! $surface instanceof SurfaceReport) {
+        $surface = (new SurfaceScanner)->scan($repoRoot);
     }
     $maps = [];
-    foreach (loadCohort($repoRoot) as $package) {
-        $publicApi = $package['composer']['extra']['corex']['public-api'] ?? [];
-        $maps[$package['name']] = is_array($publicApi) ? array_values(array_map('strval', $publicApi)) : [];
+    foreach ($surface->manifests as $name => $manifest) {
+        $maps[$name] = array_keys($manifest['symbols']);
     }
 
     return $maps;

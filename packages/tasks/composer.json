@@ -45,36 +45,7 @@
             "schema-version": 1,
             "module": "CoreX\\Tasks\\TasksModule",
             "package-type": "capability",
-            "stability": "stable",
-            "public-api": [
-                "CoreX\\Tasks\\Access\\Contracts",
-                "CoreX\\Tasks\\Access\\Exceptions",
-                "CoreX\\Tasks\\Planning\\Contracts",
-                "CoreX\\Tasks\\Planning\\Data",
-                "CoreX\\Tasks\\Planning\\Exceptions",
-                "CoreX\\Tasks\\Project\\Data",
-                "CoreX\\Tasks\\Project\\Enums",
-                "CoreX\\Tasks\\Sprint\\Data",
-                "CoreX\\Tasks\\Sprint\\Enums",
-                "CoreX\\Tasks\\Task\\Contracts",
-                "CoreX\\Tasks\\Task\\Data",
-                "CoreX\\Tasks\\Task\\Enums",
-                "CoreX\\Tasks\\Task\\Events",
-                "CoreX\\Tasks\\Time\\Data",
-                "CoreX\\Tasks\\Time\\Enums",
-                "CoreX\\Tasks\\Planning\\Laravel\\PlanningCommand",
-                "CoreX\\Tasks\\Project\\Contracts\\ProjectRead",
-                "CoreX\\Tasks\\Project\\Laravel\\ProjectRelations",
-                "CoreX\\Tasks\\Sprint\\Contracts\\SprintRead",
-                "CoreX\\Tasks\\Sprint\\Laravel\\SprintRelations",
-                "CoreX\\Tasks\\Task\\Laravel\\StageRelations",
-                "CoreX\\Tasks\\Task\\Laravel\\TaskRelations",
-                "CoreX\\Tasks\\TasksModule",
-                "CoreX\\Tasks\\TasksServiceProvider",
-                "CoreX\\Tasks\\Time\\Laravel\\TimeLogRelations",
-                "CoreX\\Tasks\\Task\\Laravel\\TaskPortBindings",
-                "CoreX\\Tasks\\Errors\\Enums\\TasksErrorCode"
-            ]
+            "stability": "stable"
         },
         "laravel": {
             "providers": [

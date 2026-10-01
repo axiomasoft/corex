@@ -50,27 +50,7 @@
         "corex": {
             "schema-version": 1,
             "package-type": "capability",
-            "stability": "stable",
-            "public-api": [
-                "CoreX\\Access\\Contracts",
-                "CoreX\\Access\\Enums",
-                "CoreX\\Access\\Exceptions",
-                "CoreX\\Access\\Access\\Laravel\\PrincipalIdentity",
-                "CoreX\\Access\\CoreAuthServiceProvider",
-                "CoreX\\Access\\Data\\RecordContext",
-                "CoreX\\Access\\Identity\\Laravel\\PrincipalUserProvider",
-                "CoreX\\Access\\Laravel\\AuthOptions",
-                "CoreX\\Access\\Laravel\\ScopeResolver",
-                "CoreX\\Access\\Matrix\\Contracts\\EntityActivity",
-                "CoreX\\Access\\Matrix\\Contracts\\ScopeMapVersions",
-                "CoreX\\Access\\Matrix\\Laravel\\AzGuardRoleModel",
-                "CoreX\\Access\\Roles\\Data\\RoleMatrixEntry",
-                "CoreX\\Access\\Roles\\Data\\RoleView",
-                "CoreX\\Access\\Roles\\Laravel\\RoleMatrixData",
-                "CoreX\\Access\\Roles\\Laravel\\SystemRoleImmutable",
-                "CoreX\\Access\\Matrix\\Laravel\\MatrixPortBindings",
-                "CoreX\\Access\\Errors\\Enums\\AccessErrorCode"
-            ]
+            "stability": "stable"
         },
         "laravel": {
             "providers": [

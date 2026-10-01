@@ -109,10 +109,10 @@ def git_file(root: Path, ref: str, path: str) -> bytes:
 
 
 def discover_packages(root: Path, ref: str) -> list[PackageSource]:
-    names = git_bytes(root, 'ls-tree', '-r', '--name-only', ref, '--', 'packages').decode().splitlines()
+    names = git_bytes(root, 'ls-tree', '-r', '--name-only', ref, '--', 'packages', 'products').decode().splitlines()
     composer_paths = sorted(
         path for path in names
-        if re.fullmatch(r'packages/[^/]+/composer\.json', path)
+        if re.fullmatch(r'(?:packages|products)/[^/]+/composer\.json', path)
     )
     packages: list[PackageSource] = []
     seen: set[str] = set()
@@ -141,9 +141,8 @@ def validate_corex_metadata(package: PackageSource) -> None:
         raise CandidateError(f'{package.name}: invalid extra.corex.package-type')
     if corex.get('stability') not in {'experimental', 'stable'}:
         raise CandidateError(f'{package.name}: invalid extra.corex.stability')
-    public_api = corex.get('public-api')
-    if not isinstance(public_api, list) or not public_api:
-        raise CandidateError(f'{package.name}: extra.corex.public-api must be non-empty')
+    if 'public-api' in corex:
+        raise CandidateError(f'{package.name}: namespace public-api metadata is retired; use source Api/Spi')
 
 
 def derive_cohort(packages: list[PackageSource], policy: dict[str, Any]) -> list[PackageSource]:

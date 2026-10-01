@@ -796,7 +796,7 @@ jobs:
         run: composer test:arch
 
       - name: Source API surface report (classification debt is reported)
-        run: composer php-api:report
+        run: composer php-api
 
       - name: Typed package error registry and literal gate
         run: composer error-registry

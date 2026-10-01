@@ -29,15 +29,7 @@
         "corex": {
             "schema-version": 1,
             "package-type": "capability",
-            "stability": "stable",
-            "public-api": [
-                "CoreX\\Recurrence\\Contracts",
-                "CoreX\\Recurrence\\Data",
-                "CoreX\\Recurrence\\Exceptions",
-                "CoreX\\Recurrence\\Laravel\\RecurrenceFactory",
-                "CoreX\\Recurrence\\Errors\\Enums\\RecurrenceErrorCode",
-                "CoreX\\Recurrence\\RecurrenceServiceProvider"
-            ]
+            "stability": "stable"
         },
         "branch-alias": {
             "dev-main": "1.0.x-dev"
@@ -48,5 +40,10 @@
             ]
         }
     },
-    "repositories": []
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../core"
+        }
+    ]
 }

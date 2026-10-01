@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace Roave\BackwardCompatibility\DetectChanges\BCBreak\PropertyBased;
 
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Name;
 use PhpParser\PrettyPrinter\Standard;
 use Roave\BackwardCompatibility\Change;
 use Roave\BackwardCompatibility\Changes;
 use Roave\BackwardCompatibility\Formatter\ReflectionPropertyName;
 use Roave\BetterReflection\NodeCompiler\Exception\UnableToCompileNode;
+use Roave\BetterReflection\Reflection\ReflectionNamedType;
 use Roave\BetterReflection\Reflection\ReflectionProperty;
 
 /** Roave 8.22 property counterpart of its parameter-default expression fallback. */
@@ -24,12 +27,30 @@ final class PropertyDefaultValueChanged implements PropertyBased
             $fromExpression = $fromProperty->getDefaultValueExpression();
             $toExpression = $toProperty->getDefaultValueExpression();
 
-            // Only enum-case compiler limitations qualify. Missing dependencies,
-            // arbitrary expressions and unresolved constants still fail closed.
-            if (! str_contains($error->getMessage(), 'An enum expression ')
-                || ! $fromExpression instanceof ClassConstFetch
-                || ! $toExpression instanceof ClassConstFetch) {
+            $enum = str_contains($error->getMessage(), 'An enum expression ')
+                && $fromExpression instanceof ClassConstFetch && $toExpression instanceof ClassConstFetch;
+            $initializer = str_contains($error->getMessage(), 'Unable to compile initializer ')
+                && $fromExpression instanceof New_ && $toExpression instanceof New_;
+
+            if (! $enum && ! $initializer) {
                 throw $error;
+            }
+
+            if ($initializer) {
+                // Resolve the declared dependency before the AST fallback. Missing
+                // classes and unsupported/untyped initializers remain infrastructure RED.
+                foreach ([[$fromProperty, $fromExpression], [$toProperty, $toExpression]] as [$property, $expression]) {
+                    $type = $property->getType();
+
+                    if (! $type instanceof ReflectionNamedType || $type->isBuiltin()) {
+                        throw $error;
+                    }
+
+                    if (! $expression->class instanceof Name
+                        || ltrim($expression->class->toString(), '\\') !== $type->getClass()->getName()) {
+                        throw $error;
+                    }
+                }
             }
             $printer = new Standard;
             $from = $printer->prettyPrintExpr($fromExpression);

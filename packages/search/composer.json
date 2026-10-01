@@ -25,30 +25,7 @@
         "corex": {
             "schema-version": 1,
             "package-type": "capability",
-            "stability": "stable",
-            "public-api": [
-                "CoreX\\Search\\Contracts",
-                "CoreX\\Search\\Exceptions",
-                "CoreX\\Search\\Testing",
-                "CoreX\\Search\\Data\\Candidate",
-                "CoreX\\Search\\Data\\CandidatePage",
-                "CoreX\\Search\\Data\\CurrentSearchRecord",
-                "CoreX\\Search\\Data\\DocumentBatch",
-                "CoreX\\Search\\Data\\DocumentCursor",
-                "CoreX\\Search\\Data\\IndexBatch",
-                "CoreX\\Search\\Data\\IndexClaim",
-                "CoreX\\Search\\Data\\IndexOutcome",
-                "CoreX\\Search\\Data\\IndexSubmission",
-                "CoreX\\Search\\Data\\IndexSwap",
-                "CoreX\\Search\\Data\\SearchCapabilities",
-                "CoreX\\Search\\Data\\SearchFilter",
-                "CoreX\\Search\\Data\\SearchPage",
-                "CoreX\\Search\\Data\\SearchQuery",
-                "CoreX\\Search\\Data\\SearchSnapshot",
-                "CoreX\\Search\\SearchServiceProvider",
-                "CoreX\\Search\\Laravel\\SearchPortBindings",
-                "CoreX\\Search\\Errors\\Enums\\SearchErrorCode"
-            ]
+            "stability": "stable"
         },
         "laravel": {
             "providers": [

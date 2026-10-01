@@ -208,7 +208,7 @@ final class SurfaceScannerTest extends TestCase
         self::assertSame(0, $this->cli('--report')->getExitCode());
         self::assertSame(1, $this->cli('--strict')->getExitCode());
         self::assertSame(0, $this->cli('--write')->getExitCode());
-        $file = $this->root.'/packages/demo/php-api.json';
+        $file = $this->root.'/packages/demo/resources/contracts/php-api.json';
         $bytes = file_get_contents($file);
         self::assertSame(0, $this->cli('--write')->getExitCode());
         self::assertSame($bytes, file_get_contents($file));

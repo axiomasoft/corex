@@ -16,6 +16,16 @@ php artisan migrate --database=<tenant>
 `corex-panels-migrations-tenant`; конфигурация access — `corex-access`, env — `COREX_ACCESS_*`.
 Tenancy использует env `COREX_TENANCY_*`, а конфиг движка остаётся `tenancy.php`.
 
+## PHP API и расширение
+
+Поддерживаемые символы размечены `Api` или `Spi(Implement|Call)` в исходниках.
+[Generated surface](../docs/reference/public-api.md) и per-package
+`resources/contracts/php-api.json` описывают конкретные слои и сигнатуры.
+Api разрешает вызов/чтение/catch; реализация контракта требует Spi Implement.
+Internal не импортируется чужим пакетом. `composer php-api` проверяет source и
+свежесть snapshots; [SemVer policy](../docs/architecture/semver-policy.md)
+определяет совместимость. `since` не означает, что релиз уже опубликован.
+
 ## Синхронизация документации
 
 Двусторонний синк с `docs-public/` код-репозитория. Репозиторий ещё не создан:

@@ -172,7 +172,7 @@ PHP;
     }
 });
 
-test('package graph gate reports R4 for import outside owner public-api', function (): void {
+test('package graph gate reports R4 for unknown symbol outside source membership', function (): void {
     $repoRoot = dirname(__DIR__, 2);
     $probePath = $repoRoot.'/packages/core/src/Config/PublicApiR4Probe.php';
     $probeContents = <<<'PHP'
@@ -378,4 +378,24 @@ test('extension contract gate classifies registry-like surfaces and rejects a ne
     exec($gate.' --fixture '.escapeshellarg($root.'/tests/fixtures/extension-contract/unclassified.php').' 2>&1', $output, $status);
     expect($status)->toBe(1)
         ->and(implode("\n", $output))->toContain('unclassified CoreX\\Fixture\\SurpriseRegistry');
+});
+
+test('package graph rejects an invented generated symbol without authorizing its import', function (): void {
+    $root = dirname(__DIR__, 2);
+    $manifest = $root.'/packages/tenancy/resources/contracts/php-api.json';
+    $original = file_get_contents($manifest);
+    $probe = $root.'/packages/core/src/Config/StaleMembershipProbe.php';
+
+    try {
+        $snapshot = json_decode($original, true, flags: JSON_THROW_ON_ERROR);
+        $snapshot['symbols']['CoreX\\Tenancy\\Support\\DoesNotExist'] = ['layer' => 'api'];
+        file_put_contents($manifest, json_encode($snapshot, JSON_THROW_ON_ERROR));
+        file_put_contents($probe, '<?php namespace CoreX\\Config; use CoreX\\Tenancy\\Support\\DoesNotExist; final class StaleMembershipProbe {}');
+        exec(escapeshellarg(PHP_BINARY).' '.escapeshellarg($root.'/scripts/package-graph-gate.php').' 2>&1', $output, $status);
+        expect($status)->toBe(1)
+            ->and(implode("\n", $output))->toContain('[R4]', '[R4b]', 'API-STALE', 'DoesNotExist');
+    } finally {
+        file_put_contents($manifest, $original);
+        @unlink($probe);
+    }
 });
