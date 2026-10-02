@@ -12,7 +12,7 @@ superseded_by: null
 **Actor:** author-choice (claude-opus-5-5/high, `task:plan-design … P02`) по мандату владельца B6.
 **Evidence:** RAG:— `artifacts/P02-design/facts/identifier-map.tsv` (62 строки), `php scripts/ownership-gate.php --report`, `packages/tenancy/config/tenancy.php`, `php scripts/p15-rename-completeness-gate.php` (9 нарушений на `d2e84a1`, не в CI).
 
-## Решение
+## Solution
 
 1. **Идентификаторы** (D33) — ровно `facts/identifier-map.tsv`: config-файлы `corex-auth|corex-attributes|corex-api|corex-intl-search|corex-task-recurrence` → имя пакета; `corex-modules` → раздел `corex.modules` (файл вливается в `config/corex.php` ключом `modules`); теги по префиксу пакета, `corex-api-migrations-tenant` и `corex-api-tenant-migrations` → один тег `corex-operations-migrations-tenant`, `corex-modules-migrations[-tenant]` → `corex-migrations[-tenant]`, `corex-modules-config` удаляется; команды `corex:messaging:prune-pubsub`, `corex:operations:{prune,snapshot,bulk-work}`, `corex:tenancy:{migrate,pending-create,pending-clear,reconcile-identities,wakeup-root-sweep}`; env `COREX_AUTH_*`→`COREX_ACCESS_*`, `COREX_INTL_SEARCH_ENABLED`→`COREX_SEARCH_INTL_ENABLED`, `TENANCY_*`→`COREX_TENANCY_*`. Имена маршрутов, событий, таблиц и wire не меняются (P06/P08).
 2. **Config-ключ `tenancy` сохраняется до P07:** файл читает движок stancl (`tenant_model`, `id_generator`, bootstrappers); `scripts/ownership-map.json` получает `upstream_config: ["tenancy"]` для `axiomasoft/corex-tenancy`, ownership-гейт пропускает только этот ключ (негативный контроль — любой другой ключ). P07 удаляет исключение вместе с заменой движка (D13).
@@ -21,7 +21,7 @@ superseded_by: null
 5. **Компилятор реестра** (D32) — SPI `CoreX\Modules\Contracts\ManifestSectionCompiler` (`mode()`, `phase()`, `compile()`, `normalize()`); тексты `CompilationException` сохраняются; декларация режима без зарегистрированного компилятора — `CompilationException('No compiler for API declaration mode: <mode>')`.
 6. **Гейт полноты переименований** — `scripts/rename-completeness-gate.php` + `scripts/rename-completeness.json` (генерирует `p02-transfer.py manifest` до переноса): точные FQCN, префиксы исчезающих корней glossary, composer-имена, пути, идентификаторы; исключения — `plans/`, `audits/`, `CHANGELOG.md`, `docs/history/`, `docs/architecture/rename-registry.md`, `tests/Golden/rename-map.json`, сам манифест. Устаревший `scripts/p15-rename-completeness-gate.php` (+ манифест, composer-скрипт) удаляется: он красный на `main`, не подключён к CI и запрещает `CoreX\Data\DataScopeAccessDecision`, который D29 делает каноническим.
 
-## Почему
+## Why
 
 - D33/N7: идентификатор определяет пакет; ownership `--strict` = 0 — критерий закрытия P02 (D39).
 - Порядок разделов сохраняет наблюдаемый вывод команды при инверсии зависимости (D32 «без изменения поведения»).

@@ -12,7 +12,7 @@ superseded_by: null
 **Actor:** author-choice (designer/claude-opus-5-5/high) по D72/D73; п.1 в части версии схемы — указание владельца (сообщение в сессии дизайна P10: «php api надо сделать 1, потому что пакет еще не закончен и нигде не используется»).
 **Evidence:** RAG:— `findings/01-hosted-ci-debt.md`; `artifacts/P10-design/facts/` (run `36835915965`; воспроизведение в чистой копии `39ae489a`: `repro-package-graph-gate.txt`, `manifest-drift.txt`, `repro-root-tests.txt`, `repro-tests-lint.txt`, `ci-dependency-analyser.txt`); `packages/operations/src/Validation/Laravel/SchemaProfile.php:32`; `packages/tools/src/Internal/ToolSchemaSupervisor.php:92-140`; `scripts/contract-guard.sh`; RAG:✅ `artifacts/P10-design-rag/local-01-composer-with.md`.
 
-## Решение
+## Solution
 
 1. **Манифест `php-api.json` описывает только собственные объявления пакета.** Члены, унаследованные от типов вне пакета (vendor и другие пакеты), не разворачиваются: у символа записываются FQCN родителя, интерфейсов и трейтов. Идентификатор схемы остаётся `php-api/1`: пакеты не опубликованы и не имеют потребителей (D01), формат меняется на месте, переходного режима и второй версии нет; описание схемы `docs/reference/php-api-schema.md` обновляется в том же item. Манифест, сгенерированный на любых разрешённых версиях зависимостей (Laravel 12 и 13, любой patch), байт-идентичен. Уточняет D63; BC-проверка (Roave) читает исходники и не затрагивается.
 2. **Dev-tooling не живёт в runtime-коде.** Вводится четвёртая dev-категория моста `Tooling/` (дополнение D57 п.1: мосты — `Internal`, `Laravel`, `Testing`, `PHPStan`, `Tooling`). Переносы: `core/src/Attributes/Internal/{SourceType,SurfaceDiagnostic,SurfaceReport,SurfaceScanner}` → `Attributes/Tooling/`; `core/src/Errors/Internal/ErrorSourceScanner` → `Errors/Tooling/`; `core/src/Messaging/Internal/DurablePayloadTypeChecker` → `Messaging/PHPStan/`. Зависимости dev-мостов — `require-dev` + `suggest`. Гейт раскладки получает R6: файл вне `Tooling|PHPStan|Testing` не ссылается на эти namespace ни одного пакета. Конфиги dependency-analyser помечают `src/**/Tooling` как dev-путь.
@@ -26,7 +26,7 @@ superseded_by: null
 10. **Пороги покрытия не меняются** (tools 80, webhooks 80, tasks 92): недостающее покрытие добирается тестами. Покрытие пакета измеряется на тех лейнах, которые джоб реально поднимает.
 11. **Вне P10:** воспроизводимая установка из `composer.lock` в hosted CI — пока stancl-staging изменяет манифесты перед установкой (P07, D13); workflows `distribution-proof` и `remaining-cohort-proof` (ручной запуск, P09).
 
-## Почему
+## Why
 
 - п.1: гейт графа красный в CI из-за трёх строк `@throws` унаследованного метода фреймворка — манифест зависел от patch-версии Laravel. В матрице Laravel 12/13 свежим он не может быть одновременно в двух лейнах, пока разворачивает чужие члены.
 - п.2: анализатор зависимостей находит `nikic/php-parser`, `phpstan/phpdoc-parser`, `phpstan/phpstan` в production-коде ядра. Объявить их в `require` — заставить каждый хост ставить парсеры ради runtime, которому они не нужны. Пометить `Internal/` dev-путём — скрытое знание без защиты. Категория моста даёт структурную гарантию и существующий образец (`PHPStan/`, `Testing/`).

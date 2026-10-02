@@ -1,0 +1,707 @@
+{
+  "schema_version": "task-contract/v1",
+  "contract_id": "2026.09.27-№1-corex-kernel-p05-1",
+  "version": {
+    "revision": 1,
+    "content_hash": "4322082862932e1ec822076098187b3d2a277182c6c0de8c1637057ada115728",
+    "supersedes": null
+  },
+  "goal": {
+    "outcome": "Дать каждому пакету с config-файлом типизированный immutable Options, который читается один раз и проверяется по форме при загрузке; вынести проверки, требующие runtime-окружения, в отдельный слой, срабатывающий до приёма работы процессом; удалить static `CoreX\\Config\\Internal\\Config` и закрыть чтение config вне границы composition.",
+    "non_goals": [
+      "Деление providers, фабрики и анонимные классы (P05.2)",
+      "фасады, хелперы, время жизни биндингов (P05.3)",
+      "генерация `configuration.md`, `config:cache`, конституция (P05.4)",
+      "перенос существующих Options",
+      "имена таблиц и миграционная схема (P08)",
+      "`tenancy` Impersonation (P07)."
+    ]
+  },
+  "must": [
+    {
+      "id": "M1",
+      "requirement": "11 новых внутренних `<Pkg>Options` (D69 п.1) с тестами формы",
+      "source_ref": "phases/P05.md:7"
+    },
+    {
+      "id": "M2",
+      "requirement": "lazy `singleton` и резолв в `boot()` для всех Options",
+      "source_ref": "phases/P05.md:7"
+    },
+    {
+      "id": "M3",
+      "requirement": "значения в конструкторы сервисов вместо repository (4 runtime-читателя, 2 tenancy-команды)",
+      "source_ref": "phases/P05.md:7"
+    },
+    {
+      "id": "M4",
+      "requirement": "поля `ApiOptions` и `CoreOptions::acknowledgedDangerousModes`",
+      "source_ref": "phases/P05.md:7"
+    },
+    {
+      "id": "M5",
+      "requirement": "`RuntimeConfigCheck`, `RuntimeConfigGate`, проверки опасных режимов четырёх пакетов и наличия секретов",
+      "source_ref": "phases/P05.md:7"
+    },
+    {
+      "id": "M6",
+      "requirement": "расширение `corex:config:validate`",
+      "source_ref": "phases/P05.md:7"
+    },
+    {
+      "id": "M7",
+      "requirement": "удаление `Config.php` и замена 134 ссылок",
+      "source_ref": "phases/P05.md:7"
+    },
+    {
+      "id": "M8",
+      "requirement": "гейт `config-composition` C1–C4, `OptionsSingletonTest`, `BuildStageBootTest`",
+      "source_ref": "phases/P05.md:7"
+    },
+    {
+      "id": "M9",
+      "requirement": "правка `table-write-ownership-gate` и mutation-патча",
+      "source_ref": "phases/P05.md:7"
+    },
+    {
+      "id": "M10",
+      "requirement": "Golden delta.",
+      "source_ref": "phases/P05.md:7"
+    }
+  ],
+  "never": [
+    {
+      "id": "N1",
+      "prohibition": "Деление providers, фабрики и анонимные классы (P05.2)",
+      "source_ref": "phases/P05.md:9"
+    },
+    {
+      "id": "N2",
+      "prohibition": "фасады, хелперы, время жизни биндингов (P05.3)",
+      "source_ref": "phases/P05.md:9"
+    },
+    {
+      "id": "N3",
+      "prohibition": "генерация `configuration.md`, `config:cache`, конституция (P05.4)",
+      "source_ref": "phases/P05.md:9"
+    },
+    {
+      "id": "N4",
+      "prohibition": "перенос существующих Options",
+      "source_ref": "phases/P05.md:9"
+    },
+    {
+      "id": "N5",
+      "prohibition": "имена таблиц и миграционная схема (P08)",
+      "source_ref": "phases/P05.md:9"
+    },
+    {
+      "id": "N6",
+      "prohibition": "`tenancy` Impersonation (P07).",
+      "source_ref": "phases/P05.md:9"
+    }
+  ],
+  "done": {
+    "public_acceptance": [
+      {
+        "id": "A1",
+        "predicate": "11 внутренних Options с тестами; слой runtime-проверок (`RuntimeConfigCheck`, `RuntimeConfigGate`, проверки пакетов); дерево без static `Config`; гейт C1–C4 и негативные контроли; `OptionsSingletonTest`, `BuildStageBootTest`; обновлённые манифесты php-api и Golden baseline с delta; `artifacts/P05.1-execution/completion.md` (числа гейта до и после, результат VERIFY-AT-EXEC, перечень перенесённых проверок секретов, перечень delta).",
+        "scope": "public",
+        "check": "- На входе: P10 закрыта GREEN, раздел «Закрытие» реестра `findings/01-hosted-ci-debt.md` записан P10.4; `gh run list --workflow CI --branch main --limit 1 --json conclusion,headSha` → `success` на базовом commit item (D73). Иначе item не стартует.",
+        "evidence_ref": "E19"
+      },
+      {
+        "id": "A2",
+        "predicate": "11 внутренних Options с тестами; слой runtime-проверок (`RuntimeConfigCheck`, `RuntimeConfigGate`, проверки пакетов); дерево без static `Config`; гейт C1–C4 и негативные контроли; `OptionsSingletonTest`, `BuildStageBootTest`; обновлённые манифесты php-api и Golden baseline с delta; `artifacts/P05.1-execution/completion.md` (числа гейта до и после, результат VERIFY-AT-EXEC, перечень перенесённых проверок секретов, перечень delta).",
+        "scope": "public",
+        "check": "- `scripts/php84 --check` → exit 0; VERIFY-AT-EXEC E1, E2, E8 выполнены, результат записан в Completion Notes.",
+        "evidence_ref": "E20"
+      },
+      {
+        "id": "A3",
+        "predicate": "11 внутренних Options с тестами; слой runtime-проверок (`RuntimeConfigCheck`, `RuntimeConfigGate`, проверки пакетов); дерево без static `Config`; гейт C1–C4 и негативные контроли; `OptionsSingletonTest`, `BuildStageBootTest`; обновлённые манифесты php-api и Golden baseline с delta; `artifacts/P05.1-execution/completion.md` (числа гейта до и после, результат VERIFY-AT-EXEC, перечень перенесённых проверок секретов, перечень delta).",
+        "scope": "public",
+        "check": "- `git grep -n -E 'CoreX\\\\Config\\\\Internal\\\\Config\\b' -- packages products tests scripts` → нет совпадений (Git exit 1); файл `packages/core/src/Config/Internal/Config.php` отсутствует.",
+        "evidence_ref": "E21"
+      },
+      {
+        "id": "A4",
+        "predicate": "11 внутренних Options с тестами; слой runtime-проверок (`RuntimeConfigCheck`, `RuntimeConfigGate`, проверки пакетов); дерево без static `Config`; гейт C1–C4 и негативные контроли; `OptionsSingletonTest`, `BuildStageBootTest`; обновлённые манифесты php-api и Golden baseline с delta; `artifacts/P05.1-execution/completion.md` (числа гейта до и после, результат VERIFY-AT-EXEC, перечень перенесённых проверок секретов, перечень delta).",
+        "scope": "public",
+        "check": "- `php scripts/config-composition-gate.php` → `C1 count=0 C2 count=0 C3 count=0 C4 count=0`, `config-composition-gate: OK`, exit 0.",
+        "evidence_ref": "E22"
+      },
+      {
+        "id": "A5",
+        "predicate": "11 внутренних Options с тестами; слой runtime-проверок (`RuntimeConfigCheck`, `RuntimeConfigGate`, проверки пакетов); дерево без static `Config`; гейт C1–C4 и негативные контроли; `OptionsSingletonTest`, `BuildStageBootTest`; обновлённые манифесты php-api и Golden baseline с delta; `artifacts/P05.1-execution/completion.md` (числа гейта до и после, результат VERIFY-AT-EXEC, перечень перенесённых проверок секретов, перечень delta).",
+        "scope": "public",
+        "check": "- `scripts/php84 vendor/bin/pest tests/Arch/ConfigCompositionTest.php` → exit 0; пробы C1, C2, C3, C4 дают exit 1 гейта с именем файла-пробы, затем дерево чистое.",
+        "evidence_ref": "E23"
+      },
+      {
+        "id": "A6",
+        "predicate": "11 внутренних Options с тестами; слой runtime-проверок (`RuntimeConfigCheck`, `RuntimeConfigGate`, проверки пакетов); дерево без static `Config`; гейт C1–C4 и негативные контроли; `OptionsSingletonTest`, `BuildStageBootTest`; обновлённые манифесты php-api и Golden baseline с delta; `artifacts/P05.1-execution/completion.md` (числа гейта до и после, результат VERIFY-AT-EXEC, перечень перенесённых проверок секретов, перечень delta).",
+        "scope": "public",
+        "check": "- `scripts/php84 vendor/bin/pest tests/Arch/OptionsSingletonTest.php` → exit 0: для каждого `*Options` из `packages/*/src` два `make()` возвращают один экземпляр; проба-provider с `bind(ProbeOptions::class, …)` делает тест красным.",
+        "evidence_ref": "E24"
+      },
+      {
+        "id": "A7",
+        "predicate": "11 внутренних Options с тестами; слой runtime-проверок (`RuntimeConfigCheck`, `RuntimeConfigGate`, проверки пакетов); дерево без static `Config`; гейт C1–C4 и негативные контроли; `OptionsSingletonTest`, `BuildStageBootTest`; обновлённые манифесты php-api и Golden baseline с delta; `artifacts/P05.1-execution/completion.md` (числа гейта до и после, результат VERIFY-AT-EXEC, перечень перенесённых проверок секретов, перечень delta).",
+        "scope": "public",
+        "check": "- `scripts/php84 vendor/bin/pest tests/Feature/BuildStageBootTest.php` → exit 0: все семь строк таблицы поведения `examples.md` §3, включая boot всех providers на пустом окружении и отказ на шаблон в `acknowledged_dangerous_modes`.",
+        "evidence_ref": "E25"
+      },
+      {
+        "id": "A8",
+        "predicate": "11 внутренних Options с тестами; слой runtime-проверок (`RuntimeConfigCheck`, `RuntimeConfigGate`, проверки пакетов); дерево без static `Config`; гейт C1–C4 и негативные контроли; `OptionsSingletonTest`, `BuildStageBootTest`; обновлённые манифесты php-api и Golden baseline с delta; `artifacts/P05.1-execution/completion.md` (числа гейта до и после, результат VERIFY-AT-EXEC, перечень перенесённых проверок секретов, перечень delta).",
+        "scope": "public",
+        "check": "- 11 новых `*OptionsTest` зелёные; `git grep -l '#\\[Api' -- packages | grep -c 'Internal/[A-Za-z]*Options\\.php'` → `0` (новые Options не публичны).",
+        "evidence_ref": "E26"
+      },
+      {
+        "id": "A9",
+        "predicate": "11 внутренних Options с тестами; слой runtime-проверок (`RuntimeConfigCheck`, `RuntimeConfigGate`, проверки пакетов); дерево без static `Config`; гейт C1–C4 и негативные контроли; `OptionsSingletonTest`, `BuildStageBootTest`; обновлённые манифесты php-api и Golden baseline с delta; `artifacts/P05.1-execution/completion.md` (числа гейта до и после, результат VERIFY-AT-EXEC, перечень перенесённых проверок секретов, перечень delta).",
+        "scope": "public",
+        "check": "- `scripts/php84 vendor/bin/pest packages/core/tests/Feature/ValidateConfigCommandTest.php` → exit 0, дополнен тремя случаями `corex:config:validate`: нарушение runtime-проверки → exit 1 и путь в выводе; подтверждённый режим → раздел предупреждений; `require_physical_tenancy=false` → уведомление, exit 0.",
+        "evidence_ref": "E27"
+      },
+      {
+        "id": "A10",
+        "predicate": "11 внутренних Options с тестами; слой runtime-проверок (`RuntimeConfigCheck`, `RuntimeConfigGate`, проверки пакетов); дерево без static `Config`; гейт C1–C4 и негативные контроли; `OptionsSingletonTest`, `BuildStageBootTest`; обновлённые манифесты php-api и Golden baseline с delta; `artifacts/P05.1-execution/completion.md` (числа гейта до и после, результат VERIFY-AT-EXEC, перечень перенесённых проверок секретов, перечень delta).",
+        "scope": "public",
+        "check": "- `php scripts/table-write-ownership-gate.php` → exit 0; `bash scripts/mutation-check.sh P1.14 pg-lane-split` → кейс краснеет под патчем, дерево восстановлено.",
+        "evidence_ref": "E28"
+      },
+      {
+        "id": "A11",
+        "predicate": "11 внутренних Options с тестами; слой runtime-проверок (`RuntimeConfigCheck`, `RuntimeConfigGate`, проверки пакетов); дерево без static `Config`; гейт C1–C4 и негативные контроли; `OptionsSingletonTest`, `BuildStageBootTest`; обновлённые манифесты php-api и Golden baseline с delta; `artifacts/P05.1-execution/completion.md` (числа гейта до и после, результат VERIFY-AT-EXEC, перечень перенесённых проверок секретов, перечень delta).",
+        "scope": "public",
+        "check": "- `scripts/php84 php scripts/php-api.php --write` дважды → байт-идентично; `scripts/php84 composer php-api` → exit 0; `scripts/php84 composer bc-check` → exit 0 с объявленными pre-1.0 deltas.",
+        "evidence_ref": "E29"
+      },
+      {
+        "id": "A12",
+        "predicate": "11 внутренних Options с тестами; слой runtime-проверок (`RuntimeConfigCheck`, `RuntimeConfigGate`, проверки пакетов); дерево без static `Config`; гейт C1–C4 и негативные контроли; `OptionsSingletonTest`, `BuildStageBootTest`; обновлённые манифесты php-api и Golden baseline с delta; `artifacts/P05.1-execution/completion.md` (числа гейта до и после, результат VERIFY-AT-EXEC, перечень перенесённых проверок секретов, перечень delta).",
+        "scope": "public",
+        "check": "- `composer module-layout-gate` → R0–R5 = 0.",
+        "evidence_ref": "E30"
+      },
+      {
+        "id": "A13",
+        "predicate": "11 внутренних Options с тестами; слой runtime-проверок (`RuntimeConfigCheck`, `RuntimeConfigGate`, проверки пакетов); дерево без static `Config`; гейт C1–C4 и негативные контроли; `OptionsSingletonTest`, `BuildStageBootTest`; обновлённые манифесты php-api и Golden baseline с delta; `artifacts/P05.1-execution/completion.md` (числа гейта до и после, результат VERIFY-AT-EXEC, перечень перенесённых проверок секретов, перечень delta).",
+        "scope": "public",
+        "check": "- `scripts/php84 composer lint:check`, `scripts/php84 composer analyse` → exit 0; `php scripts/quality-ceiling-guard.php` → `ceilings OK`.",
+        "evidence_ref": "E31"
+      },
+      {
+        "id": "A14",
+        "predicate": "11 внутренних Options с тестами; слой runtime-проверок (`RuntimeConfigCheck`, `RuntimeConfigGate`, проверки пакетов); дерево без static `Config`; гейт C1–C4 и негативные контроли; `OptionsSingletonTest`, `BuildStageBootTest`; обновлённые манифесты php-api и Golden baseline с delta; `artifacts/P05.1-execution/completion.md` (числа гейта до и после, результат VERIFY-AT-EXEC, перечень перенесённых проверок секретов, перечень delta).",
+        "scope": "public",
+        "check": "- Один раз на финальном кандидате: `scripts/php84 composer test:hermetic`, `PGSQL_PORT=5434 scripts/php84 composer test:pg`, `scripts/php84 composer test:packages`, `scripts/php84 composer test:arch` → exit 0; preflight изолированной `_test` БД до PG-тестов.",
+        "evidence_ref": "E32"
+      },
+      {
+        "id": "A15",
+        "predicate": "11 внутренних Options с тестами; слой runtime-проверок (`RuntimeConfigCheck`, `RuntimeConfigGate`, проверки пакетов); дерево без static `Config`; гейт C1–C4 и негативные контроли; `OptionsSingletonTest`, `BuildStageBootTest`; обновлённые манифесты php-api и Golden baseline с delta; `artifacts/P05.1-execution/completion.md` (числа гейта до и после, результат VERIFY-AT-EXEC, перечень перенесённых проверок секретов, перечень delta).",
+        "scope": "public",
+        "check": "- `scripts/php84 composer golden` → проходит без `GOLDEN_UPDATE`; delta P05.1 (досье §4) записана поимённо; routes байт-идентичны preimage.",
+        "evidence_ref": "E33"
+      },
+      {
+        "id": "A16",
+        "predicate": "11 внутренних Options с тестами; слой runtime-проверок (`RuntimeConfigCheck`, `RuntimeConfigGate`, проверки пакетов); дерево без static `Config`; гейт C1–C4 и негативные контроли; `OptionsSingletonTest`, `BuildStageBootTest`; обновлённые манифесты php-api и Golden baseline с delta; `artifacts/P05.1-execution/completion.md` (числа гейта до и после, результат VERIFY-AT-EXEC, перечень перенесённых проверок секретов, перечень delta).",
+        "scope": "public",
+        "check": "- `php scripts/package-docs-gate.php`, `bash scripts/anti-weakening-gate.sh` → exit 0.",
+        "evidence_ref": "E34"
+      },
+      {
+        "id": "A17",
+        "predicate": "11 внутренних Options с тестами; слой runtime-проверок (`RuntimeConfigCheck`, `RuntimeConfigGate`, проверки пакетов); дерево без static `Config`; гейт C1–C4 и негативные контроли; `OptionsSingletonTest`, `BuildStageBootTest`; обновлённые манифесты php-api и Golden baseline с delta; `artifacts/P05.1-execution/completion.md` (числа гейта до и после, результат VERIFY-AT-EXEC, перечень перенесённых проверок секретов, перечень delta).",
+        "scope": "public",
+        "check": "- Hosted CI (D73 п.4, D76): commit item отправлен в `origin`; `gh run view <id> --json jobs -q '[.jobs[] | select(.conclusion==\"failure\")] | length'` → `0`; красный джоб чинится в этом item; id запуска и sha — в Completion Notes.",
+        "evidence_ref": "E35"
+      },
+      {
+        "id": "A18",
+        "predicate": "11 внутренних Options с тестами; слой runtime-проверок (`RuntimeConfigCheck`, `RuntimeConfigGate`, проверки пакетов); дерево без static `Config`; гейт C1–C4 и негативные контроли; `OptionsSingletonTest`, `BuildStageBootTest`; обновлённые манифесты php-api и Golden baseline с delta; `artifacts/P05.1-execution/completion.md` (числа гейта до и после, результат VERIFY-AT-EXEC, перечень перенесённых проверок секретов, перечень delta).",
+        "scope": "public",
+        "check": "- Review `light` (D71): self-check по досье §6 + перечисленные проверки; строка `review: self-check GREEN` в Completion Notes.",
+        "evidence_ref": "E36"
+      }
+    ]
+  },
+  "authority": {
+    "class": "routine",
+    "granted": true,
+    "granted_by": "phases/P05/P05.1.md:P05.1",
+    "auto_allowed": [
+      "write the item's declared Files",
+      "run the item's Validation",
+      "close the item with the two-commit topology"
+    ],
+    "stop_boundaries": [
+      "tag/push/release",
+      "fleet rollout",
+      "consumer repositories",
+      "FOREMAN outward parts"
+    ],
+    "loop_budget": {
+      "audit_rounds_max": 2,
+      "same_finding_max": 2
+    },
+    "observed_rounds": 0,
+    "audit_cap_remediation": false
+  },
+  "next": {
+    "form": "run-items",
+    "carrier": "task:plan-run 2026.09.27-№1-COREX-KERNEL P05.1",
+    "context": "continue-root",
+    "origin": "approved-goal",
+    "changed_by": null
+  },
+  "route": {
+    "required": {
+      "model_class": "implementation",
+      "effort": "high"
+    },
+    "actual": {
+      "model_class": "implementation",
+      "effort": "high"
+    },
+    "capabilities": []
+  },
+  "evidence": [
+    {
+      "id": "E1",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P05-design.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E2",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P05-design-rag.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E3",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/examples.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E4",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D69-p05-config-contract.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E5",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/facts/static-config-refs.tsv",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E6",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/facts/static-config-getter-map.tsv",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E7",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/facts/config-repository-access.tsv",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E8",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/facts/config-mutating-tests.tsv",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E9",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/facts/options-inventory.tsv",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E10",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/findings/01-hosted-ci-debt.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E11",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D69-p05-config-contract.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E12",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P05-design.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E13",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/examples.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E14",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P05-design-rag.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E15",
+      "path": "packages/core/src/CoreServiceProvider.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E16",
+      "path": "packages/media/src/Internal/Support/MediaOptions.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E17",
+      "path": "scripts/config-composition-gate.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E18",
+      "path": "packages/core/src/Config/Internal/Config.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E19",
+      "path": "- На входе: P10 закрыта GREEN, раздел «Закрытие» реестра `findings/01-hosted-ci-debt.md` записан P10.4; `gh run list --workflow CI --branch main --limit 1 --json conclusion,headSha` → `success` на базовом commit item (D73). Иначе item не стартует.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E20",
+      "path": "- `scripts/php84 --check` → exit 0; VERIFY-AT-EXEC E1, E2, E8 выполнены, результат записан в Completion Notes.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E21",
+      "path": "- `git grep -n -E 'CoreX\\\\Config\\\\Internal\\\\Config\\b' -- packages products tests scripts` → нет совпадений (Git exit 1); файл `packages/core/src/Config/Internal/Config.php` отсутствует.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E22",
+      "path": "- `php scripts/config-composition-gate.php` → `C1 count=0 C2 count=0 C3 count=0 C4 count=0`, `config-composition-gate: OK`, exit 0.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E23",
+      "path": "- `scripts/php84 vendor/bin/pest tests/Arch/ConfigCompositionTest.php` → exit 0; пробы C1, C2, C3, C4 дают exit 1 гейта с именем файла-пробы, затем дерево чистое.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E24",
+      "path": "- `scripts/php84 vendor/bin/pest tests/Arch/OptionsSingletonTest.php` → exit 0: для каждого `*Options` из `packages/*/src` два `make()` возвращают один экземпляр; проба-provider с `bind(ProbeOptions::class, …)` делает тест красным.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E25",
+      "path": "- `scripts/php84 vendor/bin/pest tests/Feature/BuildStageBootTest.php` → exit 0: все семь строк таблицы поведения `examples.md` §3, включая boot всех providers на пустом окружении и отказ на шаблон в `acknowledged_dangerous_modes`.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E26",
+      "path": "- 11 новых `*OptionsTest` зелёные; `git grep -l '#\\[Api' -- packages | grep -c 'Internal/[A-Za-z]*Options\\.php'` → `0` (новые Options не публичны).",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E27",
+      "path": "- `scripts/php84 vendor/bin/pest packages/core/tests/Feature/ValidateConfigCommandTest.php` → exit 0, дополнен тремя случаями `corex:config:validate`: нарушение runtime-проверки → exit 1 и путь в выводе; подтверждённый режим → раздел предупреждений; `require_physical_tenancy=false` → уведомление, exit 0.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E28",
+      "path": "- `php scripts/table-write-ownership-gate.php` → exit 0; `bash scripts/mutation-check.sh P1.14 pg-lane-split` → кейс краснеет под патчем, дерево восстановлено.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E29",
+      "path": "- `scripts/php84 php scripts/php-api.php --write` дважды → байт-идентично; `scripts/php84 composer php-api` → exit 0; `scripts/php84 composer bc-check` → exit 0 с объявленными pre-1.0 deltas.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E30",
+      "path": "- `composer module-layout-gate` → R0–R5 = 0.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E31",
+      "path": "- `scripts/php84 composer lint:check`, `scripts/php84 composer analyse` → exit 0; `php scripts/quality-ceiling-guard.php` → `ceilings OK`.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E32",
+      "path": "- Один раз на финальном кандидате: `scripts/php84 composer test:hermetic`, `PGSQL_PORT=5434 scripts/php84 composer test:pg`, `scripts/php84 composer test:packages`, `scripts/php84 composer test:arch` → exit 0; preflight изолированной `_test` БД до PG-тестов.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E33",
+      "path": "- `scripts/php84 composer golden` → проходит без `GOLDEN_UPDATE`; delta P05.1 (досье §4) записана поимённо; routes байт-идентичны preimage.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E34",
+      "path": "- `php scripts/package-docs-gate.php`, `bash scripts/anti-weakening-gate.sh` → exit 0.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E35",
+      "path": "- Hosted CI (D73 п.4, D76): commit item отправлен в `origin`; `gh run view <id> --json jobs -q '[.jobs[] | select(.conclusion==\"failure\")] | length'` → `0`; красный джоб чинится в этом item; id запуска и sha — в Completion Notes.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E36",
+      "path": "- Review `light` (D71): self-check по досье §6 + перечисленные проверки; строка `review: self-check GREEN` в Completion Notes.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    }
+  ],
+  "portability": {
+    "tier": "committed-bundle",
+    "execution_inputs": [
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P05-design.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/research/P05-design.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/research/P05-design.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P05-design-rag.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/research/P05-design-rag.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/research/P05-design-rag.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/examples.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/examples.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/examples.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D69-p05-config-contract.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D69-p05-config-contract.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D69-p05-config-contract.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/facts/static-config-refs.tsv",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/facts/static-config-refs.tsv",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/facts/static-config-refs.tsv",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/facts/static-config-getter-map.tsv",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/facts/static-config-getter-map.tsv",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/facts/static-config-getter-map.tsv",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/facts/config-repository-access.tsv",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/facts/config-repository-access.tsv",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/facts/config-repository-access.tsv",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/facts/config-mutating-tests.tsv",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/facts/config-mutating-tests.tsv",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/facts/config-mutating-tests.tsv",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/facts/options-inventory.tsv",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/facts/options-inventory.tsv",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/facts/options-inventory.tsv",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/findings/01-hosted-ci-debt.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/findings/01-hosted-ci-debt.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/findings/01-hosted-ci-debt.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D69-p05-config-contract.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D69-p05-config-contract.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D69-p05-config-contract.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P05-design.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/research/P05-design.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/research/P05-design.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/examples.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/examples.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/examples.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P05-design-rag.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/research/P05-design-rag.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/research/P05-design-rag.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "packages/core/src/CoreServiceProvider.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "packages/core/src/CoreServiceProvider.php",
+        "normalized": "packages/core/src/CoreServiceProvider.php",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "packages/media/src/Internal/Support/MediaOptions.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "packages/media/src/Internal/Support/MediaOptions.php",
+        "normalized": "packages/media/src/Internal/Support/MediaOptions.php",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "scripts/config-composition-gate.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "scripts/config-composition-gate.php",
+        "normalized": "scripts/config-composition-gate.php",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "packages/core/src/Config/Internal/Config.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "packages/core/src/Config/Internal/Config.php",
+        "normalized": "packages/core/src/Config/Internal/Config.php",
+        "path_kind": "internal",
+        "rejection": null
+      }
+    ],
+    "provenance_only": [],
+    "privacy": {
+      "minimized": true,
+      "excluded_classes": [
+        "chain-of-thought",
+        "raw-transcript-bodies",
+        "secrets",
+        "tool-payloads"
+      ]
+    },
+    "semantic_carrier": "task:plan-run",
+    "provider_renderers": {
+      "claude": "/task:plan-run 2026.09.27-№1-COREX-KERNEL P05.1",
+      "codex": "$ task:plan-run 2026.09.27-№1-COREX-KERNEL P05.1"
+    }
+  },
+  "conflicts": [],
+  "slice": {
+    "subagent_keys": [
+      "goal",
+      "must",
+      "never",
+      "done",
+      "authority",
+      "next",
+      "route",
+      "version"
+    ],
+    "root_only_keys": [
+      "evidence",
+      "portability",
+      "conflicts"
+    ]
+  },
+  "cold_start": {
+    "plan_id": "2026.09.27-№1-COREX-KERNEL",
+    "item_id": "P05.1",
+    "reads": [
+      "E11",
+      "E12",
+      "E13",
+      "E14",
+      "E15",
+      "E16",
+      "E17",
+      "E18"
+    ],
+    "carrier": "task:plan-run 2026.09.27-№1-COREX-KERNEL P05.1"
+  }
+}

@@ -14,7 +14,7 @@ superseded_by: null
 **Evidence:** RAG:— `findings/design-audit-autofix-2026-09-28-check.py`; current source declarations,
 `scripts/anti-weakening-gate.sh`, `WriteApiSnapshots::contracts`, `ContractSnapshotBuilder::documents`.
 
-## Решение
+## Solution
 
 1. Correct executable P01 examples inline, preserving P00 and package architecture; seal the final candidate
    with the existing finish operation. No extra design phase or successor execution is authorized.
@@ -32,7 +32,7 @@ superseded_by: null
 6. Keep independent review by another model as a completion requirement; the fixing root does not certify
    its own changes. Review is bounded to the current candidate and reuses unchanged P00 evidence.
 
-## Почему
+## Why
 
 Path-derived FQCNs reproduce a redeclaration fatal before baseline generation; the old wire command omits
 its mandatory fixture. Baseline creation also conflicted with existing anti-weakening rules. These are

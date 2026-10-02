@@ -12,11 +12,11 @@ superseded_by: null
 **Actor:** owner 2026-09-27 (`brief/00-brief.md` REPOSITORY-OWNER-MESSAGE)
 **Evidence:** RAG:— `findings/00-audit-verification.md`, `artifacts/P00-design/facts/`; RAG:✅ `research/01-external-research.md`, `artifacts/research-rag/`
 
-## Решение
+## Solution
 
 Принципы chatom PLAN2 `research/02-target-architecture.md` §1 (core не знает о пакетах-расширениях; один владелец на FQCN/таблицу/config-ключ/tag/команду/wire-type; пакет самодостаточен; публичное — только объявленное `#[Api]/#[Spi]`; инварианты не конфигурируются; compile at boot → immutable runtime; схема детерминирована; стандарты вместо изобретений; без алиасов до 1.0) — нормы PLAN3 без изменения смысла. Расхождения экосистемы фиксируются в `research/02-target-architecture.md` §12 «Сверка с chatom» и решаются новым D# в обоих планах.
 
-## Почему
+## Why
 
 Владелец: «они оба будут из одной экосистемы, поэтому принципы должны быть общими» (B3).
 

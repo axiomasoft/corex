@@ -12,11 +12,11 @@ superseded_by: null
 **Actor:** author-choice (claude-opus-5-5/high, Claude Code, 2026-09-28) по мандату владельца «есть идеальное решение — утверждай» (`brief/00-brief.md` B6); frontier-вердикт P00.1 в пределах `research/P00-design.md` §2.
 **Evidence:** RAG:— `artifacts/P00-design/facts/{import-matrix.txt,zone-consumers.tsv}`, `packages/*/composer.json`, `artifacts/P00/*.tsv`; `check-maps.py` (default/`--dependencies`) exit 0 на `b624936`+P00.1.
 
-## Решение
+## Solution
 
 Рёбра ядро→пакет, найденные `--dependencies`, разрываются в P02: (1) `modules/Compiler/RegistryCompiler`→валидаторы секций api/tools — `ApiOperationValidator` → `CoreX\Operations\Definition\` (публичен для tools), `ApiToolValidator` → `CoreX\Tools\Internal\`; ядро экспортирует SPI `CoreX\Modules\Contracts\ManifestSectionCompiler` (#[Spi(Implement)]), operations/tools компилируют свои секции; (2) `corex:config:validate` (`ValidateConfigCommand`→`AuthOptions/MediaOptions/TenancyOptions/WakeupServiceProvider` и строковые ключи `corex-tenancy.*`, `tenancy.*`, `corex-intl.*`, `corex-search.*`, `corex-search-meilisearch.*`, константа `INTL_CURSOR_SECRET_DEFAULT`) — invert через SPI `CoreX\Config\Contracts\ConfigReportSection` (tag): пакет вносит свой раздел, свои secret-ключи и предупреждения о дефолтах; ядро не называет чужие ключи; `ValidateConfigCommandTest` проверяет только разделы ядра; тесты секций api/tools (`ApiOperationContractTest`, `ApiOperationCostTest`, `ToolDeclarationTest`) уходят с валидаторами; (3) `tenancy/ImpersonatedModelWriteGuard` строкой называет `CoreX\Audit\Internal\AuditLog` — move: исключение аудита публикует `CoreX\Context\ImpersonationGuard`.
 
-## Почему
+## Why
 
 - Принцип «ядро ничего не знает о пакетах» (`research/02` §1.1): без разрыва `kernel-dependency` access/media/operations/tenancy/tools/wakeup.
 - Имена SPI следуют словарю суффиксов `naming.md` (Compiler, Registry); `Section` — единица вклада.

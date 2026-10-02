@@ -12,11 +12,11 @@ superseded_by: null
 **Actor:** author-choice (claude-opus-5-5/high) по мандату владельца «есть идеальное решение — утверждай» (`brief/00-brief.md` B6)
 **Evidence:** RAG:— `findings/00-audit-verification.md`, `artifacts/P00-design/facts/`; RAG:✅ `research/01-external-research.md`, `artifacts/research-rag/`
 
-## Решение
+## Solution
 
 PHPStan level max + `phpstan-strict-rules` + bleedingEdge на всех пакетах, пустой baseline к rc; Rector (PHP 8.4 + Laravel sets) чистый; Pint; все классы `final`, кроме `#[Spi]`-баз; `readonly` DTO; именованные аргументы; комментарии только «почему»; mutation MSI: security/authz/tenancy ≥95%, operations/idempotency/messaging ≥90%, прочее ≥75%; Roave BC per package — блокирующий с `1.0.0-rc.1`; API-манифест-гейт; `unused-public`/dependency-analyser.
 
-## Почему
+## Why
 
 F00 X6 (level 6), A13.1; chatom PLAN2 §11 — та же планка экосистемы; `pplx-09`, `pplx-10`.
 

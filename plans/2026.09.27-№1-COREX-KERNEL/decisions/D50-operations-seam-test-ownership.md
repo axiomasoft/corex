@@ -12,7 +12,7 @@ superseded_by: null
 **Actor:** executor/codex/gpt-6-sol/high, routine author-choice по plan.md §2.
 **Evidence:** RAG:— `artifacts/P02.2-execution/`; D31/D35 и examples §2.3.
 
-## Решение
+## Solution
 
 - Все три кейса LoadContourIntegrationTest проверяют tool/webhook поведение: один переносится в ToolLoadContourIntegrationTest, два — в WebhookLoadContourIntegrationTest. Пустой engine файл удаляется; исходные утверждения и PG group сохранены.
 - Смешанный кейс client/actor/field/tenant authorization также принадлежит tools, поскольку проверяет отказ ToolInvoker. HTTP assertions остаются в том же кейсе через публичный transport.
@@ -22,7 +22,7 @@ superseded_by: null
 - Новые файлы получают точные строки карты. Package Testbench и Golden читают дополнительные providers из operations composer manifest, поэтому удаление manifest provider обнаруживается golden routes. Существующий engine TestCase не получает статического обратного ребра к webhooks.
 - WebhookRouteRegistrar использует ApiOptions и существующую Route facade; три obsolete baseline записи старого raw-config чтения удалены, потолки не увеличены.
 
-## Почему
+## Why
 
 Реальное разделение обнаружило дополнительные shared test-support edges и кейсы с tool/webhook assertions, которые невозможно сохранить в engine после split. Точное владение, публичные Testing фабрики и прямой Testbench сохраняют поведение и нулевое число blocking seams без новых исключений графа.
 

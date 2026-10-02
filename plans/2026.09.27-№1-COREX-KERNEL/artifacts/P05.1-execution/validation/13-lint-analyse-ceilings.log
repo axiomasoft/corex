@@ -1,0 +1,6 @@
+$ scripts/php84 composer lint:check 2>&1 | tail -2; scripts/php84 composer analyse:tests-lint 2>&1 | tail -2; php scripts/quality-ceiling-guard.php
+> vendor/bin/pint --test
+{"tool":"pint","result":"passed"}> vendor/bin/phpstan analyse -c phpstan-tests-lint.neon --memory-limit=1G
+{"tool":"phpstan","result":"passed","errors":0}
+ceilings OK
+exit=0

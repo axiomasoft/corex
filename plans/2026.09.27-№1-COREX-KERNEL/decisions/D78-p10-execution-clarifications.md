@@ -12,7 +12,7 @@ superseded_by: null
 **Actor:** author-choice designer/codex/GPT-6 в разрешённом finish (D77, plan §2 B6).
 **Evidence:** RAG:— `phpstan-tests-lint.neon:48`; `.github/workflows/ci.yml` quality/auth-tests/packages-tests; `scripts/php84`; `scripts/run-root-tests.sh`; `packages/core/src/Attributes/Internal/{SourceType,SurfaceScanner}.php`; `packages/tools/src/Internal/{ToolSchemaSupervisor,ToolSchemaWorker}.php`; досье/примеры P10. Исследования D74/D76 переиспользованы, новых внешних решений нет.
 
-## Решение
+## Solution
 
 1. **Один локальный рецепт установки.** `ci-local.sh` ставит root и `packages/access` после stancl staging, применяет Pest `^4.7` для Laravel 12, передаёт `--with` массивом Bash. Без аргументов исполняет объявленные гейты; аргументы — конкретная команда в той же чистой копии. P10.2 проверяет манифесты в обоих Laravel-лейнах через этот рецепт, без частичной установки, забывающей D42. Проверяется committed HEAD: кандидат коммитится перед прогоном; cleanup удаляет worktree, stash не используется.
 2. **Герметичная проверка без управления общей БД.** `test:hermetic` задаёт `PGSQL_HOST=127.0.0.1`, `PGSQL_PORT=1`, `PGSQL_DATABASE=corex_test`: PG недоступен этому процессу и пропуск по отсутствующему имени *_test не маскирует ошибку группы. Останавливать общую PostgreSQL не требуется. Перенос теста в `pg` сохраняет его фактическое исполнение PG-лейном.
@@ -23,7 +23,7 @@ superseded_by: null
 
 7. **Закрытые развилки.** JsonDocuments в tasks-workflow вызывается полным FQCN (поздний use убирается); ext-redis объявляется в suggest с extension guard существующего isolated Redis теста. PG-методы webhooks остаются в текущих файлах и получают #[Group("pg")]; root test:pg доказывает их исполнение. Сохранённый H2 RED переиспользуется: изменяемое число находок до ремонта не является входным acceptance threshold.
 
-## Почему
+## Why
 
 Рецепт без access не воспроизводит tests-lint; частичная установка Laravel 12 теряет известный Pest override. Сравнение манифеста с vendor-членами не доказывает полноту собственных деклараций. Неопределённые framing/cleanup оставляют worker риск зависания и неверного успеха. Уточнения закрывают эти конкретные риски без новых фаз.
 

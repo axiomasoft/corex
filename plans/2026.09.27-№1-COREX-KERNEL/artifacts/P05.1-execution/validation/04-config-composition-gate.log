@@ -1,0 +1,5 @@
+$ php scripts/config-composition-gate.php
+config-composition-gate: blocking=true
+config-composition-gate: C1 count=0 C2 count=0 C3 count=0 C4 count=0
+config-composition-gate: OK
+exit=0

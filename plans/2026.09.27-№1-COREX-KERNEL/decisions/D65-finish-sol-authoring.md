@@ -15,7 +15,7 @@ superseded_by: null
 Provider turn_context текущей сессии `01a0ed6e-3c14-7533-9458-d468c893e910`:
 `gpt-6-sol`, effort `high`, cwd `corex`. RAG:—.
 
-## Решение
+## Solution
 
 Разрешён только текущий design finish P00–P04 на codex/gpt-6-sol/high вместо
 command default frontier/high. D62 остаётся разрешением на предшествующий дизайн
@@ -29,7 +29,7 @@ frontier/high, последняя implementation/high; все reviews full. Но
 не требуется: scanner, DTO/transaction replay, error boot/replay и strict rollout
 имеют разные acceptance/review границы. P05–P09 остаются backlog по D24.
 
-## Почему
+## Why
 
 Владелец явно разрешил authoring route после воспроизведения ограничения Task.
 Дизайн и runtime execution имеют разные границы; provenance должен показывать

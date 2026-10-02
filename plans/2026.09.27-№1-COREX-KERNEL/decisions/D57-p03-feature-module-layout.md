@@ -12,7 +12,7 @@ superseded_by: null
 **Actor:** author-choice (claude-opus-5-5/high, `task:plan-design … P03`) по мандату владельца B6 («есть идеальное решение — утверждай»); вариант выбран по фактам облачного скана.
 **Evidence:** RAG:— облачный скан `artifacts/P03-design/cloud/` (`1350c1c`, воспроизведён байт в байт на `52446de`), `research/P03-design.md` §2 F1–F9; дизайн-прогоны `p03-module-map.py` (1168 файлов, 278 переносов, 68 остаются, 0 коллизий), `p03-transfer.py plan` (0 problems), `apply --no-rector` + `verify` в scratch-worktree (0 problems), `module-layout-gate.py` на перенесённом дереве = проекции (R3 68, R5 91). RAG:✅ `research/P03-design-rag.md` E1 (Pest arch не выражает раскладку → свой гейт), E2 (PHPStan `@internal` по первому сегменту).
 
-## Решение
+## Solution
 
 1. **Норма раскладки (заменяет D05).** Пакет `CoreX\<Pkg>\` — это его **корневой модуль**: в `src/` лежат публичные категории `Contracts|Data|Enums|Events|Exceptions`, мосты `Internal|Laravel|Testing|PHPStan`, provider(ы), `<Pkg>Module.php` и каталоги **feature modules** с тем же набором (категории и мосты ровно на уровень ниже модуля; provider модуля — прямо в модуле). Ядро `CoreX\` корневого модуля не имеет: только `CoreServiceProvider.php` и модули закрытого списка glossary. Слоевые каталоги (`Support`, `Models`, `Commands`, `Jobs`, `Concerns`, `Http`, …) на любом уровне модуля запрещены — их файлы уходят в категорию по роли или в `<Module>\Internal\<Bucket>\…` (имя корзины сохраняется группой внутри `Internal`). S1 (корзины single-feature пакетов остаются) отклонён — сохраняет корзины; S2 (всегда явный модуль) отклонён — `CoreX\Webhooks\Webhooks\…`, 664 переноса против 278.
 2. **Карта** — `artifacts/P03/module-map.tsv` из `p03-module-map.py` (вход — облачный скан, `--check` — свежесть). Interface → `Contracts`, enum → `Enums`, исключение → `Exceptions`, data-класс → `Data`, остальная реализация → `Internal`; файлы в категориях и мостах, provider(ы) и `*Module.php` не двигаются; крупные модули (`Modules`, `Membership`, `Messaging`) в P03 не делятся.
@@ -24,7 +24,7 @@ superseded_by: null
 8. **Строки в БД и очереди.** Morph map строится из алиасов сущностей модулей; модели без алиаса и jobs хранят FQCN в `*_type`/payload очереди. По D01 миграции данных и алиасов нет; перенос моделей/jobs в `Internal` фиксируется в CHANGELOG пакетов («очистить очереди перед обновлением; существующие `*_type` со старым FQCN не резолвятся»).
 9. **Ретайр `tenancy-structure-gate`.** `scripts/tenancy-structure-gate.py` (P9 прежнего плана: ratchet совместимости FQCN tenancy) красный на `main` уже после P02 и противоречит D01 и этой раскладке; P03.1 удаляет его, composer-скрипт и шаг CI, заменяя гейтом п.5. STR-001…STR-006 constitution, `structure-profiles.md` и исключения `exceptions/STR-003`, `exceptions/STR-005` переписываются под эту норму (строки `artifacts/P00/doctrine-delta.md`).
 
-## Почему
+## Why
 
 «Корень пакета — модуль» — наименьший перенос (278 против 420/664), без коллизий и без `X\X\…`, при этом корзины уровня пакета исчезают и граница public/internal читается по пути. Реализация, которую уже используют снаружи, не прячется в `Internal` до классификации P04 — иначе P03 создал бы нарушения R2 и сломал бы опубликованный конфиг. Свой гейт — потому что Pest arch/PHPStan не выражают «категория ровно под модулем» и «тот же модуль» (E1, E2).
 

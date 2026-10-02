@@ -13,7 +13,7 @@ superseded_by: null
 **Evidence:** `artifacts/P04-design/facts/source-inventory.json`,
 `classification.tsv`, `public-by-usage-verdicts.tsv`, `research/P04-design-rag.md`. RAG:— / RAG:✅.
 
-## Решение
+## Solution
 
 1. Единственный source owner публичности — атрибут на объявлении типа. Api/Spi —
 `final readonly`, `Attribute::TARGET_CLASS`, без повторения и наследования метки;
@@ -78,7 +78,7 @@ namespace, заданного glossary; остальные публичные he
 не является strict admission. Новый scanner/index — один reusable owner для graph,
 manifest и reference docs. Нельзя считать arbitrary generated JSON источником доверия.
 
-## Почему
+## Why
 
 Namespace allowlists не классифицируют символы и не видят вложенные payload types. Полная поимённая таблица и source scanner закрывают долг P03, сохраняя package/module boundary и транзакции.
 

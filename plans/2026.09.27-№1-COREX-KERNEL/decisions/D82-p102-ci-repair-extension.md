@@ -12,7 +12,7 @@ superseded_by: null
 **Actor:** repository owner; запись executor/codex/GPT-6.
 **Evidence:** на вопрос о ремонте 49 DATA-003 вне первоначального scope P10.2 владелец ответил: «CI пока делаем, нет лимитов на использование». Сигнал: hosted run 36900690930; `artifacts/P10.2-execution/DATA-003-base-repro.log` воспроизводит все 49 нарушений на base 428f47db.
 
-## Решение
+## Solution
 
 Продолжить необходимые bounded CI repairs в текущем P10.2, включая DATA-003, согласование каталога таблиц с фактическими владельцами миграций и изоляцию PG-подключений тестов. Не откладывать объявленные красные гейты и не снижать пороги. Лимиты использования не служат основанием прекращения работы. Уже зелёные checks повторять при изменении их входов; flaky failure сохранять, а не скрывать повтором.
 
@@ -22,6 +22,6 @@ superseded_by: null
 
 После исправления разрешения Options осталось одно нарушение: `WebhookRetention` удалял строки core inbox напрямую. Для сохранения существующего поведения очистки эффект переносится в additive callable SPI владельца `CoreX\Messaging\Laravel\InboxRetention::forget(consumer, messageIds)`. Старые API/SPI signatures не меняются, новые permissions каталога и bypass DATA-003 не добавляются. Это необходимый ремонт выявленной CI-причины; manifests/CHANGELOG/Golden отражают один новый поддерживаемый callable SPI. Добавление ограничено удалением явно выбранных ID одного consumer; политика retention и tombstones webhooks прежняя.
 
-## Почему
+## Why
 
 Декларируемая hosted приёмка P10.2 не закрывается с красным Layer gate. Владелец разрешил продолжить необходимые CI repairs, а сохранённый preimage доказывает происхождение находок; ослабление gates не требуется.

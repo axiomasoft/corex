@@ -16,7 +16,7 @@ superseded_by: null
 D58 explicitly preserves the original audit artifacts. Active source references disappear
 with the gate's retirement. No package, rule, baseline entry or test is waived.
 
-## Решение
+## Solution
 
 P03.1's retirement scan excludes both `plans/` and `audits/`:
 `git grep -n "tenancy-structure" -- ':!plans' ':!audits'` must be empty (Git exit 1).
@@ -31,7 +31,7 @@ remain visible in `artifacts/P03.1-execution/lint.log`. P03.1's declared Validat
 must pass. P03.2 owns formatting that helper before its full lint check; no lint config or rule
 is relaxed and no baseline/tool artifact is silently reformatted in this item.
 
-## Почему
+## Why
 
 The retirement check proves the absence of live consumers. An immutable pre-change snapshot
 necessarily names the retired files and is owned by the audit, so its historical mentions

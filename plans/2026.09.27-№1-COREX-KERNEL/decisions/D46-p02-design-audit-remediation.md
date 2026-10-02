@@ -13,7 +13,7 @@ superseded_by: null
 **Evidence:** RAG:— `findings/P02-design-audit.md`, исходный fingerprint `83f9a46c53c7e2b70d55bddf263bf3d179e66f728cbe93a1201ec9f9d9ffed4d`;
 `artifacts/P02-design-audit/preimage/`; `artifacts/P02-design-remediation/{check.py,results.json}`.
 
-## Решение
+## Solution
 
 1. P02.4: пять config-ренеймов включают basename `.php` во всех provider/publish/doc ссылках.
    `p02-identifiers.py` и PHP rename-completeness распознают точные config-basename после `/`;
@@ -25,7 +25,7 @@ superseded_by: null
 4. P02.3 проверяет неизменность только `tests/Golden/baseline/` и `tests/Golden/rename-map.json`.
    Код Golden получает обязательные FQCN из карты. Baseline/map-дрейф остаётся RED; `composer golden` 4 passed сохраняется.
 
-## Почему
+## Why
 
 Это уточняет реализацию D44/D45 и устраняет четыре воспроизведённых дефекта готовности.
 Golden-защита не ослабляется: запрещённые к изменению данные остаются frozen,

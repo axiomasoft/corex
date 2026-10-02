@@ -1,12 +1,12 @@
-# 2026.09.27-№1-COREX-KERNEL — План №1 — CoreX Kernel 1.0: архитектурный идеал ядра и чистый API
+# 2026.09.27-№1-COREX-KERNEL — Plan №1 — CoreX Kernel 1.0: архитектурный идеал ядра и чистый API
 
 ## 0. Meta
 
-| Поле | Значение |
+| Field | Meaning |
 |:--|:--|
 | Plan ID | 2026.09.27-№1-COREX-KERNEL |
 | Short ID | PLAN3 |
-| Title | План №1 — CoreX Kernel 1.0: архитектурный идеал ядра и чистый API |
+| Title | Plan №1 — CoreX Kernel 1.0: архитектурный идеал ядра и чистый API |
 | Layout | v2 |
 | Document Type | Executable Master Plan (катящийся дизайн с немедленным исполнением — D21) |
 | Authoring Model | codex/GPT-6 (owner-directed P10 finish, D77/D78, 2026-10-01; exact runtime selector/effort unavailable); claude-opus-5-5 (owner-authorized P10/P05 design audit remediation, D76, 2026-10-01); claude-opus-5-5/high (P05 и P10 design, 2026-10-01); codex/gpt-6-sol/high (owner-authorized P00–P04 finish, D65, 2026-09-29); codex/gpt-6-sol/high (owner-authorized P04 design, D62, 2026-09-29); codex/gpt-6-sol/xhigh (P03.2 routine input/formatter repair D61, 2026-09-29); claude-opus-5-5/high (initial, P01 design); codex/gpt-6-astra/high (P00 audit remediation, 2026-09-27; P00–P01 finish, 2026-09-28); codex/gpt-6-sol/high (P01 B1–B3 owner-prescribed remediation and finish, 2026-09-28); codex/gpt-6-sol/high (owner-authorized inline audit corrections, 2026-09-28); claude-opus-5-5/high (P02 design, 2026-09-28); codex/gpt-6-sol/high (owner-authorized P02 A1–A4 remediation, 2026-09-28); claude-opus-5-5/high (P03 design, 2026-09-29); codex/gpt-6-astra/high (owner-authorized P03 A1–A5 remediation + finish, D58, 2026-09-29); codex/gpt-6-astra/xhigh (owner-authorized P03 full replay and inline design fixes, D59, 2026-09-29); codex/gpt-6-sol/high (P03.1 historical evidence scan clarification, D60, 2026-09-29) |
@@ -126,12 +126,14 @@ operations, независимые модули, детерминированн�
 
 **Design Audit:** required
 
+**Design Audit Waiver:** D86
+
 ## 3. Routing
 
 Детализированы: P00, P01, P02, P03, P04, P05, P10. Вставная P10 исполняется до P05 (D73). Фазы P06–P09 — skeleton в `backlog/` (D21, D24), детализируются по очереди. Batch — предложение группировки;
 окончательная — execution-sheet в `roadmap.md`.
 
-| Batch | Items | Model class/effort | Exec | Review | Почему |
+| Batch | Items | Model class/effort | Exec | Review | Why |
 |:--|:--|:--|:--|:--|:--|
 | B00-A | P00.1 | frontier/high | manual | full | recommended: glossary и карта пакетов/namespace задают имена всего ядра; решения с фактами. |
 | B00-A | P00.2 | frontier/high | manual | full | recommended: финальная архитектура `research/04-architecture.md` + delta доктрины по glossary P00.1; вторым в B00-A. |
@@ -163,6 +165,7 @@ operations, независимые модули, детерминированн�
 
 | Дата | Изменение | Автор |
 |:--|:--|:--|
+| 2026-10-02 | Ручная правка по прямому указанию владельца (D86): заголовок Routing `Почему` → `Why` (Task 0.26.2 принимает только `Why`; содержимое строк, группы, маршруты и review не менялись) и выбор `design-audit-waiver/v1`: повторный whole-plan audit из-за одной ячейки заголовка не назначается. Новый finish записан; продукт не менялся. | editor/claude-code/claude-sonnet-5-5/high |
 | 2026-10-01 | Design audit fingerprint `f188df5f…` — ATTENTION, 4 Major (`findings/P05-P10-design-audit.md`). Правка по разрешению владельца, D76: критерий агрегатора в P10.1; CHANGELOG и arch-тесты в Files P10.2; `test:hermetic` определяется в P10.1, Pest `^4.7` в `ci-local.sh`; две команды Validation P05.3; hosted CI на каждом item P05; независимое ревью продуктовых правок P10.4. Маршруты и порядок строк 14–20 не менялись. Нужны новый finish и design audit независимой моделью; исполнение не начиналось, продукт не менялся. | auditor/designer claude-opus-5-5 |
 | 2026-10-01 | `task:plan-design finish`: сверены зависимости P00–P05 и P10 (P04 → P10.1 → P10.2 → P10.3 → P10.4 → B05-A → P05.3 → P05.4); в execution-sheet записаны строки 14–20 без изменения групп, маршрутов и review из D71/D75; исполнитель и reviewer — по пулу `session-routing.md`. Привязка досье P10 дополнена в Inputs P10.3 и P10.4; заполнен Phase Handoff P04 по evidence закрытия. Новых решений нет. Новый fingerprint ждёт независимого design audit; исполнение не начиналось, продукт не менялся. | designer/claude-opus-5-5/high |
 | 2026-09-29 | Owner D66 accepts GREEN P04 finish and waives another independent design audit for this fingerprint. Legacy gate records explicit owner acceptance; handoff/bundle now point to execution-sheet row 10, P04.1. No independent audit or runtime execution claimed. | designer/codex/gpt-6-sol/high |
@@ -202,14 +205,14 @@ operations, независимые модули, детерминированн�
 
 ### Exported
 
-| Контракт | Версия | Статус | Потребители | Уведомлены |
+| Contract | Version | Status | Consumers | Notified |
 |:--|:--|:--|:--|:--|
 | `research/03-glossary.md` + `research/04-architecture.md` (имена и границы ядра) | P00 | draft | все фазы PLAN3, chatom (сверка D22) | — |
 | `packages/*/resources/contracts/php-api.json` (Application API + Extension SPI) | P04 | draft | приложения, пакеты экосистемы | — |
 
 ### Consumed
 
-| Контракт | Донор-план | Pinned | Замечено | Реакция |
+| Contract | Donor plan | Pinned | Spotted | Reaction |
 |:--|:--|:--|:--|:--|
 | Кандидат релиза PLAN2 (P17) | `corex:PLAN2` | `ea0b024` | 2026-09-27 | Исходная точка; совместимость не обязательна (D01); PLAN2 superseded (D23). |
 | Принципы экосистемы, `#[Api]/#[Spi]`, wire-стандарты | `chatom:PLAN2` (`research/02-target-architecture.md`) | 2026-09-27 | 2026-09-27 | Приняты как нормы (D22); расхождения — §12 `research/02`. |

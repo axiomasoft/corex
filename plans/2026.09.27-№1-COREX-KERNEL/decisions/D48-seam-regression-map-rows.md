@@ -13,7 +13,7 @@ superseded_by: null
 **Evidence:** RAG:— `phases/P02/P02.1.md`, `artifacts/P02-design/examples.md` §1.2;
 фактическое разделение RegistryCompilerDeterminismTest и RegistryIntrospectionTest.
 
-## Решение
+## Solution
 
 В карту P00 добавить точные строки `packages/operations/tests/Unit/OperationRegistryDeterminismTest.php`
 → operations и `packages/operations/tests/Unit/ToolRegistryIntrospectionTest.php` → tools.
@@ -24,7 +24,7 @@ superseded_by: null
 строкой тестов CRM. Фактические колонки zone-consumers регенерируются после швов,
 вердикты сохраняются; появившаяся зона Contracts? с новым SPI имеет verdict keep.
 
-## Почему
+## Why
 
 Выделение секций не должно оставлять тесты ядра зависимыми от tools. Эти строки
 фиксируют владельцев дополнительных регрессий для последующего механического

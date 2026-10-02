@@ -2,33 +2,33 @@
 projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
-through: 2026-10-01
-inputs_sha256: b21f8886e20ff3d8e87152a7da394e0647dd75998e70c9cd7b1ac3b9f1c9854a
+through: 2026-10-02
+inputs_sha256: 3d97ce92849e8767bf9c84dde17a5fb465a189e7b240186050b71b5c606ce364
 generated_by: task plan-views status
 -->
 
-# Статус плана
+# Plan status
 
-> Не править руками: это генерируемый вид.
+> Do not manipulate by hand: this is a generated view.
 
 ## 0. Meta
 
-| Поле | Значение |
+| Field | Meaning |
 |:--|:--|
 | Version | — |
 | Status | 🟡 In progress |
-| Last Updated | 2026-10-01 |
+| Last Updated | 2026-10-02 |
 
 ## 4. Phase Index & Status Board
 
-| Phase | Title | Items 🟢/всего | Status |
+| Phase | Title | Items 🟢/total | Status |
 |:--|:--|:--|:--|
 | P00 | Glossary, карта пакетов/namespace, финальная архитектура | 3/3 | 🟢 Done |
 | P01 | Окружение, платформа и страховочная сетка | 4/4 | 🟢 Done |
 | P02 | Vendor, состав пакетов, namespace = путь | 4/4 | 🟢 Done |
 | P03 | Feature modules и `Internal` | 2/2 | 🟢 Done |
 | P04 | Application API, Extension SPI и типизированные ошибки | 4/4 | 🟢 Done |
-| P05 | Typed config, композиция и порты | 0/4 | ⬜ Not started |
+| P05 | Typed config, композиция и порты | 1/4 | 🟡 In progress |
 | P10 | Зелёный hosted CI на базе P04 | 4/4 | 🟢 Done |
 
 ## Phase P00
@@ -77,7 +77,7 @@ generated_by: task plan-views status
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P05.1 | Typed Options, runtime-проверки и удаление static Config | ⬜ Not started | — |
+| P05.1 | Typed Options, runtime-проверки и удаление static Config | 🟢 Done | 2026-10-02 |
 | P05.2 | Тонкие providers, registrars и именованные классы | ⬜ Not started | — |
 | P05.3 | Порты вместо фасадов, хелперов и static state | ⬜ Not started | — |
 | P05.4 | Резидентный режим, config:cache, reference и доктрина | ⬜ Not started | — |
@@ -93,7 +93,7 @@ generated_by: task plan-views status
 
 ## 6. Update Log
 
-| Дата | Кто (role/model) | Что |
+| Date | Who (role/model) | What |
 |:--|:--|:--|
 | 2026-09-27 | claude-opus-5-5/high | plan-design · no-op · top layer authored: D01-D24, P00 detailed, P01-P09 skeletons in backlog/ (D24) |
 | 2026-09-27 | claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
@@ -148,7 +148,7 @@ write-site: pre_mutation: allow · pre_final: block:VALIDATION_RECEIPT_MISSING |
 | 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · no-op · write-site: pre_mutation: allow · pre_final: allow
 Final typed evaluation: artifacts/P01.1-execution/write-site-final.json; receipts and validation context retained. |
 | 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · in-progress · — |
-| 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · closed-green · note сокращена; полный текст: journal.jsonl:49 |
+| 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · closed-green · note abbreviated; full text: journal.jsonl:49 |
 | 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · no-op · write-site: pre_mutation: allow · pre_final: allow
 Canonical standalone boundary line; typed evaluation retained in artifacts/P01.2-execution/write-site-final.json. |
 | 2026-09-28 | executor/codex/gpt-6-sol/high | plan-design · no-op · Design finalized; execution has not started. |
@@ -181,7 +181,7 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · closed-green · 9cabf10; seams89→18; sqlite821+10/PG240/package20 GREEN. review: cursor/grok-4.7 GREEN. Proof: artifacts/P02.2-execution/completion.md. D47: CI deferred.
 write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-29 | codex/gpt-6-sol/xhigh | plan-run · in-progress · — |
-| 2026-09-29 | codex/gpt-6-sol/xhigh | plan-run · closed-green · note сокращена; полный текст: journal.jsonl:75 |
+| 2026-09-29 | codex/gpt-6-sol/xhigh | plan-run · closed-green · note abbreviated; full text: journal.jsonl:75 |
 | 2026-09-29 | codex/gpt-6-sol/high | plan-run · in-progress · — |
 | 2026-09-29 | codex/gpt-6-sol/high | plan-run · closed-green · b335462; 60 rules/93 files; ownership524/0, rename528; SQLite832/PG240/pkg852/Golden4; literal lines:none; mutation34; review: cursor/grok-4.6 GREEN. Proof: artifacts/P02.4-execution/completion.md. D47 CI deferred.
 write-site: pre_mutation: allow · pre_final: allow |
@@ -234,12 +234,12 @@ write-site: pre_mutation: allow · pre_final: allow |
 write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-30 | executor/codex/gpt-6.1-sol | plan-run · in-progress · Owner authorizes GPT-6.1 Sol and explicitly waives executor-route verification; Validation and independent result review remain required. |
 | 2026-09-30 | executor/codex/gpt-6.1-sol | plan-run · no-op · D67: implementation saved; owner stopped all checks and moved review/validation to a new session. Item remains In progress. Checkpoint: artifacts/P04.2-execution/implementation-handoff.md; final validation pending. |
-| 2026-10-01 | reviewer/codex/gpt-6 | plan-run · closed-green · note сокращена; полный текст: journal.jsonl:122 |
+| 2026-10-01 | reviewer/codex/gpt-6 | plan-run · closed-green · note abbreviated; full text: journal.jsonl:122 |
 | 2026-10-01 | reviewer/codex/gpt-6 | plan-run · no-op · Format correction: effective pre_mutation allow uses the existing owner route waiver; raw ROUTE-UNVERIFIABLE remains in write-sites.json. Actual pre_final allow uses validation receipts.
 write-site: pre_mutation: allow · pre_final: allow |
 | 2026-10-01 | executor/codex/SOL | plan-run · in-progress · Owner authorizes SOL and waives executor model/route verification. No extra SKM reviews or redundant runs. Source: artifacts/P04.3-execution/owner-instructions.md. No route attestation claimed. |
 | 2026-10-01 | executor/codex/SOL | plan-run · in-progress · Owner authorizes SOL and waives executor model/route verification. No extra SKM reviews or redundant runs. Source: artifacts/P04.3-execution/owner-instructions.md. No route attestation claimed. Append-only identity correction: durable start binds attempt 1 and run_id. |
-| 2026-10-01 | executor/codex/SOL | plan-run · closed-green · note сокращена; полный текст: journal.jsonl:126 |
+| 2026-10-01 | executor/codex/SOL | plan-run · closed-green · note abbreviated; full text: journal.jsonl:126 |
 | 2026-10-01 | executor/gpt-6 | plan-exec · in-progress · — |
 | 2026-10-01 | executor/codex/gpt-6.1-sol/high | plan-exec · closed-green · P04.4 strict/API/SPI/BC/docs GREEN; completion.md and final-surface.json. Independent review owner-waived D68; no extra audit/replay.
 write-site: pre_mutation: allow · pre_final: allow |
@@ -281,6 +281,11 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-10-01 | executor/codex/gpt-6.1-sol/high | plan-run · closed-green · P10.4 GREEN; product 4522e2b3; CI 36923853013: 36 success / 0 failure / 1 event skip. See artifacts/P10.4-execution/completion.md and validation-map.json. D84: no reviews or duplicate local replay.
 write-site: pre_mutation: allow · pre_final: allow |
 | 2026-10-01 | executor/codex/gpt-6.1-sol/high | plan-close · closed-green · Inline phase closure within P10.4 invocation. Hosted CI 36923853013 on 4522e2b3f1ac741518387d24d1dd83248e97cc34: success, zero failures; closure-evidence.json. Owner D84: no review/audit.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-02 | editor/claude-code/claude-sonnet-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-02 | executor/claude-code/claude-sonnet-5-5/high | plan-run · in-progress · — |
+| 2026-10-02 | executor/claude-code/claude-sonnet-5-5/high | plan-run · closed-green · P05.1 GREEN: products 5911120c, 2c625e4d. Mirror CI 37029892294 success (36/0/1 skip); origin 37027169858 not started (billing). Local stack green. See artifacts/P05.1-execution/completion.md. review: self-check GREEN. |
+| 2026-10-02 | executor/claude-code/claude-sonnet-5-5/high | plan-run · no-op · Append-only metadata projection repair; artifacts/P05.1-execution/task-contract-evaluation.json (18 validation receipts) is allow at both sites. No new product execution or acceptance verdict.
 write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates

@@ -12,7 +12,7 @@ superseded_by: null
 **Actor:** author-choice (claude-opus-5-5/high, Claude Code, `task:plan-design … P01`, 2026-09-28) по мандату владельца «есть идеальное решение — утверждай» (`brief/00-brief.md` B6).
 **Evidence:** RAG:— `artifacts/P01-design/facts/README.md` F2 (`composer validate --strict` → 16× «unbound version constraints (@dev)»), F3 (прототип Composer: `branch-alias` + `^1.0@dev` + `minimum-stability: stable` валиден в root и standalone; транзитивный пакет без флага в корне → «does not match your minimum-stability»).
 
-## Решение
+## Solution
 
 1. Каждый пакет `packages/*/composer.json`: `extra.branch-alias = {"dev-main": "1.0.x-dev"}`; межпакетные ссылки — `^1.0@dev` (вместо `@dev`).
 2. `minimum-stability: stable` + `prefer-stable: true` в root **и** в каждом пакете; каждый installable корень (root и каждый пакет для standalone-установки) перечисляет всё транзитивное замыкание монорепо-пакетов с `^1.0@dev` и `repositories` path на каждый из них.
@@ -20,7 +20,7 @@ superseded_by: null
 4. `composer validate --strict --no-check-lock` для каждого `composer.json` — exit 0. Root lock — dev-окружение монорепо, CI делает `composer update`; свежесть lock не гейт (`--no-check-lock`), `composer audit --locked` проверяет lock, разрешённый в той же job (D39).
 5. P02 при переименовании в `axiomasoft/corex-*` сохраняет форму ограничений; P09 при split заменяет `^1.0@dev` на релизный lockstep-диапазон.
 
-## Почему
+## Why
 
 - `@dev` без границы — предупреждение, ломающее `validate --strict` (D18); `branch-alias` даёт границу мажора без тегов.
 - Флаги стабильности действуют только в корне (F3) — без явного замыкания stable-корень не разрешается.

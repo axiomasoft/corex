@@ -12,7 +12,7 @@ superseded_by: null
 **Actor:** author-choice (claude-opus-5-5/high, Claude Code, `task:plan-design … P01`, 2026-09-28) по мандату B6; уточняет D03 (VERIFY-AT-EXEC версий), D16 (анализатор), D17 (baseline-guard).
 **Evidence:** RAG:✅ `artifacts/P01-design-rag/http-01-packagist-versions.md`, `http-02-releases-postgres.md`, `pplx-01-composer-dependency-analyser.md`, `pplx-02-pest5-phpunit13.md`; RAG:— `artifacts/P01-design/facts/README.md` F1, F4, F6.
 
-## Решение
+## Solution
 
 1. **Тест-стек:** `pestphp/pest ^5.2` (PHPUnit `^13.3` транзитивно) для основного дерева и Laravel 13; Laravel 12 test/CI-лейн переопределяет dev requirement на Pest `^4.7` / PHPUnit 12 по D42, `orchestra/testbench ^10.12|^11.3`, `laravel/pint ^1.32`, `phpstan/phpstan ^2.2.16`, `larastan/larastan ^3.12`, `phpstan/phpstan-strict-rules ^2.0.12`, `phpstan/extension-installer ^1.4.3`, `rector/rector ^2.6` + `driftingly/rector-laravel ^2.6`, `shipmonk/composer-dependency-analyser ^1.8.4`, `roave/backward-compatibility-check ^8.22`. `brick/money` не трогается (переезд — P02/D27).
 2. **PHPStan per package:** `packages/<p>/phpstan.neon` — level `max`, strict-rules и bleedingEdge, baseline `packages/<p>/phpstan-baseline.neon`; расширения — через `phpstan/extension-installer` и `extra.phpstan.includes` в `composer.json` core/modules/tenancy (без относительных путей к vendor — переживает split). Запуск из корня: `vendor/bin/phpstan analyse -c packages/<p>/phpstan.neon`.
@@ -21,7 +21,7 @@ superseded_by: null
 5. **PostgreSQL:** поддержка 16+; CI: основной PG-лейн — матрица `16`, `18` (текущий мажор и новейший), пакетные PG-jobs — `18`; локально — системный PG 16 хоста (порт 5432) через `PGSQL_PORT=5432`.
 6. **CI-матрица:** PHP `8.4`, `8.5` × Laravel `12.*`, `13.*`; PHP 8.3 и шаг «Boxed profile» удаляются. Roave остаётся report-only до `1.0.0-rc.1` (D17, P09).
 
-## Почему
+## Why
 
 - Pest 5 требует PHP 8.4 и PHPUnit 13. Проверка исполнения выявила конфликт Symfony Process 8.1 с Laravel 12 (Process 7.x); принят owner-approved D42: Pest 4.7 только для L12, Pest 5.2 для L13. Testbench acceptance PHPUnit 13 не доказывает совместимость всего Pest dependency graph.
 - Ratchet по счётчику имени-независим: P02 переносит файлы и перегенерирует baseline, потолок не может вырасти.

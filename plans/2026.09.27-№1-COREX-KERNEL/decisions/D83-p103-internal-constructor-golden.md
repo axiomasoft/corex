@@ -12,12 +12,12 @@ superseded_by: null
 **Actor:** author-choice executor/codex/GPT-6; Execution Rules разрешают очевидную локальную правку без эскалации. Owner invocation P10.3 и уточнение «работай без большого ревью, только оптимальные проверки»; D81 уже отменяет item independent review.
 **Evidence:** RAG:— `phases/P10/P10.3.md` Scope/Code Guidance; `artifacts/P10-design/examples.md` §5; `tests/Golden/Support/GoldenSnapshot.php::phpSurface`; `artifacts/P10.3-execution/golden-red.log`; `artifacts/P10.3-execution/surface-golden-invariants.json`.
 
-## Решение
+## Solution
 
 P10.3 явно требует optional `?int $startupMs = null` в конструкторе Internal ToolSchemaSupervisor. Golden перечисляет public PHP methods также у Internal-классов; поэтому запрет изменения всего baseline несовместим с этим объявленным изменением. Исправляется ровно запись конструктора `CoreX\Tools\Internal\ToolSchemaSupervisor`: добавляется запланированный optional parameter, и больше ничего. `GOLDEN_UPDATE` не используется. Сохраняются preimage и semantic diff; машинная проверка удаляет только новый параметр из candidate и требует полного равенства preimage. Остальные php-surface records и слои routes/events/wire неизменны. Свежий `composer golden` обязан пройти без update.
 
 Это не новая публичная сигнатура: класс Internal и не входит в `php-api.json`; все 20 публичных манифестов остаются byte-identical. Дополнительно удаляются семь полностью погашенных записей tools PHPStan baseline (10 errors), без новых исключений и изменения потолков. Эффективная Validation P10.3: Golden GREEN с единственной предписанной Internal-дельтой вместо невыполнимого blanket byte equality. Фокусированный self-check и behavior tests исполняются; независимый item verdict не заявляется (D81, текущая owner instruction). Ревью всей P10 по D81 остаётся у P10.4.
 
-## Почему
+## Why
 
 Отказ от параметра нарушил бы Scope P10.3. Скрыть его в scanner/normalizer или добавить общий baseline update ослабило бы Golden. Узкая проверенная ожидаемая дельта сохраняет защиту и объявленное поведение.

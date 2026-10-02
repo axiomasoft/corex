@@ -14,7 +14,7 @@ superseded_by: null
 если green то подбей план, чтобы этого ограничения не было и могли стартоваать».
 Проверки finish: `artifacts/P04-design-finish/validation.json`; RAG:—.
 
-## Решение
+## Solution
 
 1. Для текущего P04 владелец принимает GREEN design finish P00–P04 и отменяет
    обязательный повторный независимый design audit перед стартом. Это явное
@@ -33,7 +33,7 @@ superseded_by: null
    item Validation, full independent reviews, маршруты P04.1–P04.4 и внешние
    authority gates остаются обязательными. Runtime P04 не запускался этим изменением.
 
-## Почему
+## Why
 
 Владелец явно снял процедурный блок после GREEN проверки finish. Его решение
 приоритетнее требований локального skill; ещё один audit не нужен для допуска.
