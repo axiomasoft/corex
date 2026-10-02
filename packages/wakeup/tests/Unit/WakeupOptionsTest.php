@@ -4,15 +4,9 @@ declare(strict_types=1);
 
 use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Config\Laravel\CoreOptionsParser;
-use CoreX\Wakeup\Contracts\DueWakeupHandler;
-use CoreX\Wakeup\Data\WakeupDelivery;
 use CoreX\Wakeup\Internal\DangerousModesCheck;
 use CoreX\Wakeup\Internal\WakeupOptions;
-
-final class OptionsProbeHandler implements DueWakeupHandler
-{
-    public function handle(WakeupDelivery $delivery): void {}
-}
+use CoreX\Wakeup\Tests\Support\OptionsProbeHandler;
 
 it('passes on an empty environment with the shipped defaults', function (): void {
     $options = WakeupOptions::fromArray([]);

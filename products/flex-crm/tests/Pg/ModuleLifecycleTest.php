@@ -6,6 +6,7 @@ use CoreX\Modules\Contracts\ModuleLifecycle;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Enums\DisableReason;
 use CoreX\Modules\Internal\Discovery\ModuleDiscovery;
+use CoreX\Modules\Internal\Support\ModulesOptions;
 use Flex\Crm\CrmModule;
 use Flex\Crm\Tests\Support\AccountFixture;
 use Illuminate\Support\Facades\DB;
@@ -16,6 +17,7 @@ uses()->group('pg');
 
 it('discovers CRM composer metadata and manages its schema through the standard lifecycle', function (): void {
     config(['database.default' => 'pgsql', 'corex.modules.connection' => 'pgsql']);
+    app()->forgetInstance(ModulesOptions::class);
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     AccountFixture::migrate();

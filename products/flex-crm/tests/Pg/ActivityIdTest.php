@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Database\Enums\IdStrategy;
 use Flex\Crm\Activity\Actions\LogActivity;
 use Flex\Crm\Activity\Enums\ActivityType;
@@ -19,6 +20,7 @@ uses()->group('pg');
 
 it('stores and resolves activity subjects on PostgreSQL for the configured ID strategy', function (string $strategy): void {
     config(['database.default' => 'pgsql', 'corex.ids.strategy' => $strategy]);
+    app()->forgetInstance(CoreOptions::class);
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     AccountFixture::migrate();
@@ -31,12 +33,14 @@ it('stores and resolves activity subjects on PostgreSQL for the configured ID st
 
 it('converts with canonical deal associations under enum configured IDs', function (string $strategy): void {
     config(['database.default' => 'pgsql', 'corex.ids.strategy' => $strategy]);
+    app()->forgetInstance(CoreOptions::class);
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     AccountFixture::migrate();
     $this->artisan('migrate', ['--path' => realpath(__DIR__.'/../../database/migrations'), '--realpath' => true, '--force' => true])->assertSuccessful();
     TestContext::seed('pgsql');
     config(['corex.ids.strategy' => IdStrategy::from($strategy)]);
+    app()->forgetInstance(CoreOptions::class);
     $pipeline = Pipeline::create(['entity_type' => 'crm.deal', 'code' => 'sales', 'name' => ['en' => 'Sales']]);
     Stage::create(['pipeline_id' => $pipeline->id, 'code' => 'open', 'name' => ['en' => 'Open']]);
     $lead = app(CreateLead::class)->handle(title: 'Inquiry', contactName: 'Jane');
