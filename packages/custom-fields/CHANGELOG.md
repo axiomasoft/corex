@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — typed Options and runtime configuration checks (P05.1)
+
+- Added internal `CustomFieldsOptions`, a lazy singleton resolved in `boot()` that carries the validated composition and table map; `AttributeTables` and the composition are built from it.
+
 ## Unreleased — kernel package and API migration
 
 - Breaking (PLAN3.P02–P04, pre-1.0): AttributeStore, FieldCatalogue and SchemaOperations expose AttributeId, AttributeDefinition, FieldSelection and write-result DTOs; physical attribute storage and catalogue implementation are Internal.

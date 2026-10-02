@@ -522,15 +522,3 @@ parameters:
 			identifier: offsetAccess.invalidOffset
 			count: 2
 			path: src/Internal/WebhookUrlPolicy.php
-
-		-
-			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Laravel/WebhookRegistrar.php
-
-		-
-			rawMessage: 'Cannot call method get() on mixed.'
-			identifier: method.nonObject
-			count: 1
-			path: src/Laravel/WebhookRegistrar.php

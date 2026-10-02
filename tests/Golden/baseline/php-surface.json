@@ -4420,6 +4420,31 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Config\\Contracts\\RuntimeConfigCheck": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "violations": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "production",
+                        "type": "bool",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Config\\Data\\CoreOptions": {
         "abstract": false,
         "constants": [],
@@ -4675,6 +4700,13 @@
                         "name": "messagingInboxRetention",
                         "type": "?string",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": [],
+                        "name": "acknowledgedDangerousModes",
+                        "type": "array",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -4683,6 +4715,12 @@
         },
         "parent": null,
         "properties": {
+            "acknowledgedDangerousModes": {
+                "name": "acknowledgedDangerousModes",
+                "readonly": true,
+                "static": false,
+                "type": "array"
+            },
             "auditEnabled": {
                 "name": "auditEnabled",
                 "readonly": true,
@@ -5045,241 +5083,6 @@
         "properties": [],
         "readonly": false
     },
-    "CoreX\\Config\\Internal\\Config": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "auditEnabled": {
-                "params": [],
-                "return": "bool",
-                "static": true
-            },
-            "auditLoggerClass": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "auditLogsTable": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "bind": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "options",
-                        "type": "CoreX\\Config\\Data\\CoreOptions",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
-                "static": true
-            },
-            "dataScopeAuthorizerClass": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "departmentRepositoryClass": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "departmentUserTable": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "departmentsTable": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "enableOctaneWorkerOptIn": {
-                "params": [],
-                "return": "void",
-                "static": true
-            },
-            "featureFlagsClass": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "featureFlagsTable": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "featureOverridesTable": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "idStrategy": {
-                "params": [],
-                "return": "CoreX\\Database\\Enums\\IdStrategy",
-                "static": true
-            },
-            "impersonationServiceClass": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "inboxMessagesTable": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "messagingBackoffCapSeconds": {
-                "params": [],
-                "return": "int",
-                "static": true
-            },
-            "messagingBatchSize": {
-                "params": [],
-                "return": "int",
-                "static": true
-            },
-            "messagingDeadRetention": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "messagingInboxRetention": {
-                "params": [],
-                "return": "?string",
-                "static": true
-            },
-            "messagingLeaseSeconds": {
-                "params": [],
-                "return": "int",
-                "static": true
-            },
-            "messagingMaxAttempts": {
-                "params": [],
-                "return": "int",
-                "static": true
-            },
-            "messagingOutboxRetention": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "options": {
-                "params": [],
-                "return": "CoreX\\Config\\Data\\CoreOptions",
-                "static": true
-            },
-            "outboxMessagesTable": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "pubsubCursorsTable": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "pubsubDriver": {
-                "params": [],
-                "return": "CoreX\\Messaging\\Enums\\PubSubDriver",
-                "static": true
-            },
-            "pubsubMessagesTable": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "pubsubOctaneWorkerOptIn": {
-                "params": [],
-                "return": "bool",
-                "static": true
-            },
-            "pubsubPollIntervalMicroseconds": {
-                "params": [],
-                "return": "int",
-                "static": true
-            },
-            "pubsubRetention": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "savedViewScopesTable": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "savedViewsTable": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "settingDefaultsProviderClass": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "settingsCachePrefix": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "settingsCacheStore": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "settingsCacheTtl": {
-                "params": [],
-                "return": "?int",
-                "static": true
-            },
-            "settingsRepositoryClass": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "settingsTable": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "storageDurableRoot": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "storageEphemeralRoot": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "tenancyManagerClass": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "tenantContextResolverClass": {
-                "params": [],
-                "return": "string",
-                "static": true
-            },
-            "unbind": {
-                "params": [],
-                "return": "void",
-                "static": true
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
     "CoreX\\Config\\Internal\\KernelConfigSection": {
         "abstract": false,
         "constants": [],
@@ -5384,6 +5187,85 @@
                     }
                 ],
                 "return": "CoreX\\Config\\Data\\CoreOptions",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Config\\Laravel\\RuntimeConfigGate": {
+        "abstract": false,
+        "constants": {
+            "BUILD_COMMANDS": {
+                "type": "array",
+                "value": [
+                    "package:discover",
+                    "config:cache",
+                    "config:clear",
+                    "optimize",
+                    "optimize:clear",
+                    "route:cache",
+                    "route:clear",
+                    "view:cache",
+                    "view:clear",
+                    "event:cache",
+                    "event:clear",
+                    "vendor:publish",
+                    "key:generate",
+                    "storage:link",
+                    "list",
+                    "help",
+                    "about",
+                    "corex:config:validate"
+                ]
+            }
+        },
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "assert": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": true
+            },
+            "install": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": true
+            },
+            "violations": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "production",
+                        "type": "bool",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
                 "static": true
             }
         },
@@ -6758,6 +6640,11 @@
         "internal": false,
         "kind": "class",
         "methods": {
+            "boot": {
+                "params": [],
+                "return": "void",
+                "static": false
+            },
             "register": {
                 "params": [],
                 "return": "void",
@@ -8551,6 +8438,62 @@
         "parent": "CoreX\\Errors\\Exceptions\\CodedException",
         "properties": [],
         "readonly": false
+    },
+    "CoreX\\CustomFields\\Internal\\CustomFieldsOptions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "composition",
+                        "type": "CoreX\\CustomFields\\Internal\\Laravel\\AttributeComposition",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "tables",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "fromArray": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "config",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "composition": {
+                "name": "composition",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\CustomFields\\Internal\\Laravel\\AttributeComposition"
+            },
+            "tables": {
+                "name": "tables",
+                "readonly": true,
+                "static": false,
+                "type": "array"
+            }
+        },
+        "readonly": true
     },
     "CoreX\\CustomFields\\Internal\\Integration\\AttributeMessageContractRegistry": {
         "abstract": false,
@@ -16589,6 +16532,223 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Intl\\Internal\\IntlOptions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "localeSupportedTags",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "localeAppTag",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "localeExplicitFallbackTags",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "localeAllowParent",
+                        "type": "bool",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "localeSettingsNamespace",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "localeSettingsKey",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "localeMaxSupportedTags",
+                        "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "localeMaxTagLength",
+                        "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "moneyMetadataVersion",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "moneyDefaultSource",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "moneyBatchLimit",
+                        "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "referenceDatasetKey",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "referenceCursorSecret",
+                        "type": "CoreX\\Config\\Data\\SecretRef",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "referenceProviders",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "formattingIcuEnabled",
+                        "type": "bool",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "fromArray": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "config",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            },
+            "localePolicyConfig": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "formattingIcuEnabled": {
+                "name": "formattingIcuEnabled",
+                "readonly": true,
+                "static": false,
+                "type": "bool"
+            },
+            "localeAllowParent": {
+                "name": "localeAllowParent",
+                "readonly": true,
+                "static": false,
+                "type": "bool"
+            },
+            "localeAppTag": {
+                "name": "localeAppTag",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "localeExplicitFallbackTags": {
+                "name": "localeExplicitFallbackTags",
+                "readonly": true,
+                "static": false,
+                "type": "array"
+            },
+            "localeMaxSupportedTags": {
+                "name": "localeMaxSupportedTags",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            },
+            "localeMaxTagLength": {
+                "name": "localeMaxTagLength",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            },
+            "localeSettingsKey": {
+                "name": "localeSettingsKey",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "localeSettingsNamespace": {
+                "name": "localeSettingsNamespace",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "localeSupportedTags": {
+                "name": "localeSupportedTags",
+                "readonly": true,
+                "static": false,
+                "type": "array"
+            },
+            "moneyBatchLimit": {
+                "name": "moneyBatchLimit",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            },
+            "moneyDefaultSource": {
+                "name": "moneyDefaultSource",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "moneyMetadataVersion": {
+                "name": "moneyMetadataVersion",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "referenceCursorSecret": {
+                "name": "referenceCursorSecret",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Config\\Data\\SecretRef"
+            },
+            "referenceDatasetKey": {
+                "name": "referenceDatasetKey",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "referenceProviders": {
+                "name": "referenceProviders",
+                "readonly": true,
+                "static": false,
+                "type": "array"
+            }
+        },
+        "readonly": true
+    },
     "CoreX\\Intl\\IntlModule": {
         "abstract": false,
         "constants": [],
@@ -19010,8 +19170,8 @@
                     },
                     {
                         "byRef": false,
-                        "name": "config",
-                        "type": "Illuminate\\Contracts\\Config\\Repository",
+                        "name": "datasetKey",
+                        "type": "string",
                         "variadic": false
                     },
                     {
@@ -19079,8 +19239,8 @@
                     },
                     {
                         "byRef": false,
-                        "name": "config",
-                        "type": "Illuminate\\Contracts\\Config\\Repository",
+                        "name": "datasetKey",
+                        "type": "string",
                         "variadic": false
                     },
                     {
@@ -22880,6 +23040,11 @@
         "internal": false,
         "kind": "class",
         "methods": {
+            "boot": {
+                "params": [],
+                "return": "void",
+                "static": false
+            },
             "register": {
                 "params": [],
                 "return": "void",
@@ -25071,6 +25236,13 @@
                         },
                         "name": "traces",
                         "type": "CoreX\\Messaging\\Contracts\\TraceContextBridge",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": "sys_outbox_messages",
+                        "name": "table",
+                        "type": "string",
                         "variadic": false
                     }
                 ],
@@ -37204,6 +37376,136 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Notifications\\Internal\\DangerousModesCheck": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Config\\Contracts\\RuntimeConfigCheck"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\Notifications\\Internal\\NotificationsOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "core",
+                        "type": "CoreX\\Config\\Data\\CoreOptions",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "violations": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "production",
+                        "type": "bool",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\Notifications\\Internal\\NotificationsOptions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "digestEnabled",
+                        "type": "bool",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "digestAcceptLegacyUnstamped",
+                        "type": "bool",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "deliveryClaimSeconds",
+                        "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "deliveryMaxAttempts",
+                        "type": "int",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "dangerousModes": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "fromArray": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "config",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "deliveryClaimSeconds": {
+                "name": "deliveryClaimSeconds",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            },
+            "deliveryMaxAttempts": {
+                "name": "deliveryMaxAttempts",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            },
+            "digestAcceptLegacyUnstamped": {
+                "name": "digestAcceptLegacyUnstamped",
+                "readonly": true,
+                "static": false,
+                "type": "bool"
+            },
+            "digestEnabled": {
+                "name": "digestEnabled",
+                "readonly": true,
+                "static": false,
+                "type": "bool"
+            }
+        },
+        "readonly": true
+    },
     "CoreX\\Notifications\\NotificationsModule": {
         "abstract": false,
         "constants": [],
@@ -37230,6 +37532,11 @@
         "internal": false,
         "kind": "class",
         "methods": {
+            "boot": {
+                "params": [],
+                "return": "void",
+                "static": false
+            },
             "register": {
                 "params": [],
                 "return": "void",
@@ -44425,6 +44732,45 @@
         "properties": [],
         "readonly": true
     },
+    "CoreX\\Operations\\Internal\\AppKeyCheck": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Config\\Contracts\\RuntimeConfigCheck"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "appKey",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "violations": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "production",
+                        "type": "bool",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
     "CoreX\\Operations\\Internal\\Http\\ApiController": {
         "abstract": false,
         "constants": [],
@@ -48792,6 +49138,50 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Panels\\Internal\\PanelsOptions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "providerTag",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "fromArray": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "config",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "providerTag": {
+                "name": "providerTag",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": true
+    },
     "CoreX\\Panels\\PanelsModule": {
         "abstract": false,
         "constants": [],
@@ -48818,6 +49208,11 @@
         "internal": false,
         "kind": "class",
         "methods": {
+            "boot": {
+                "params": [],
+                "return": "void",
+                "static": false
+            },
             "register": {
                 "params": [],
                 "return": "void",
@@ -51527,6 +51922,50 @@
         "properties": [],
         "readonly": true
     },
+    "CoreX\\SearchIntl\\Internal\\SearchIntlOptions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "enabled",
+                        "type": "bool",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "fromArray": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "config",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "enabled": {
+                "name": "enabled",
+                "readonly": true,
+                "static": false,
+                "type": "bool"
+            }
+        },
+        "readonly": true
+    },
     "CoreX\\SearchIntl\\Internal\\SqlSavedViewLabelReader": {
         "abstract": false,
         "constants": [],
@@ -51891,6 +52330,74 @@
         },
         "parent": null,
         "properties": [],
+        "readonly": true
+    },
+    "CoreX\\SearchMeilisearch\\Internal\\MeilisearchOptions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "host",
+                        "type": "?string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "indexUid",
+                        "type": "?string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "key",
+                        "type": "?CoreX\\Config\\Data\\SecretRef",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "fromArray": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "config",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "host": {
+                "name": "host",
+                "readonly": true,
+                "static": false,
+                "type": "?string"
+            },
+            "indexUid": {
+                "name": "indexUid",
+                "readonly": true,
+                "static": false,
+                "type": "?string"
+            },
+            "key": {
+                "name": "key",
+                "readonly": true,
+                "static": false,
+                "type": "?CoreX\\Config\\Data\\SecretRef"
+            }
+        },
         "readonly": true
     },
     "CoreX\\SearchMeilisearch\\Internal\\MeilisearchSearchProvider": {
@@ -53736,6 +54243,86 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Search\\Internal\\SearchOptions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "driver",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "cursorSecret",
+                        "type": "?CoreX\\Config\\Data\\SecretRef",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "textSearchConfig",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "scanBudget",
+                        "type": "int",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "fromArray": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "config",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "cursorSecret": {
+                "name": "cursorSecret",
+                "readonly": true,
+                "static": false,
+                "type": "?CoreX\\Config\\Data\\SecretRef"
+            },
+            "driver": {
+                "name": "driver",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "scanBudget": {
+                "name": "scanBudget",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            },
+            "textSearchConfig": {
+                "name": "textSearchConfig",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": true
+    },
     "CoreX\\Search\\Internal\\Support\\SearchConfigSection": {
         "abstract": false,
         "constants": [],
@@ -53852,6 +54439,11 @@
         "internal": false,
         "kind": "class",
         "methods": {
+            "boot": {
+                "params": [],
+                "return": "void",
+                "static": false
+            },
             "register": {
                 "params": [],
                 "return": "void",
@@ -56023,8 +56615,20 @@
                     },
                     {
                         "byRef": false,
-                        "name": "config",
-                        "type": "Illuminate\\Contracts\\Config\\Repository",
+                        "name": "enabled",
+                        "type": "bool",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "definitionRef",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "versionRef",
+                        "type": "string",
                         "variadic": false
                     },
                     {
@@ -56053,6 +56657,51 @@
         "parent": null,
         "properties": [],
         "readonly": false
+    },
+    "CoreX\\TasksWorkflow\\Internal\\DangerousModesCheck": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Config\\Contracts\\RuntimeConfigCheck"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\TasksWorkflow\\Internal\\TasksWorkflowOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "core",
+                        "type": "CoreX\\Config\\Data\\CoreOptions",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "violations": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "production",
+                        "type": "bool",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
     },
     "CoreX\\TasksWorkflow\\Internal\\MaterializationHasher": {
         "abstract": false,
@@ -56630,8 +57279,14 @@
                     },
                     {
                         "byRef": false,
-                        "name": "config",
-                        "type": "Illuminate\\Contracts\\Config\\Repository",
+                        "name": "wakeupEnabled",
+                        "type": "bool",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "wakeupHandlerKind",
+                        "type": "string",
                         "variadic": false
                     },
                     {
@@ -56714,6 +57369,139 @@
         "parent": "CoreX\\Modules\\Contracts\\ModuleDefinition",
         "properties": [],
         "readonly": false
+    },
+    "CoreX\\TasksWorkflow\\Internal\\TasksWorkflowOptions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "wakeupEnabled",
+                        "type": "bool",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "wakeupHandlerKind",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "wakeupHandlerVersion",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "wakeupHandler",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "wakeupAcceptLegacyUnstamped",
+                        "type": "bool",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "completionCaptureEnabled",
+                        "type": "bool",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "completionCaptureDefinitionRef",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "completionCaptureVersionRef",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "dangerousModes": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "fromArray": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "config",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "completionCaptureDefinitionRef": {
+                "name": "completionCaptureDefinitionRef",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "completionCaptureEnabled": {
+                "name": "completionCaptureEnabled",
+                "readonly": true,
+                "static": false,
+                "type": "bool"
+            },
+            "completionCaptureVersionRef": {
+                "name": "completionCaptureVersionRef",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "wakeupAcceptLegacyUnstamped": {
+                "name": "wakeupAcceptLegacyUnstamped",
+                "readonly": true,
+                "static": false,
+                "type": "bool"
+            },
+            "wakeupEnabled": {
+                "name": "wakeupEnabled",
+                "readonly": true,
+                "static": false,
+                "type": "bool"
+            },
+            "wakeupHandler": {
+                "name": "wakeupHandler",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "wakeupHandlerKind": {
+                "name": "wakeupHandlerKind",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "wakeupHandlerVersion": {
+                "name": "wakeupHandlerVersion",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": true
     },
     "CoreX\\TasksWorkflow\\Laravel\\CompletionBindings": {
         "abstract": false,
@@ -66900,6 +67688,13 @@
                         "name": "syncer",
                         "type": "CoreX\\Tenancy\\Identity\\Contracts\\IdentitySyncer",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "options",
+                        "type": "?CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
+                        "variadic": false
                     }
                 ],
                 "return": "int",
@@ -66953,6 +67748,13 @@
                         "byRef": false,
                         "name": "pool",
                         "type": "CoreX\\Tenancy\\Account\\Internal\\PendingPool",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "options",
+                        "type": "?CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
                         "variadic": false
                     }
                 ],
@@ -78481,6 +79283,74 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Transfer\\Internal\\TransferOptions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "limitsMaxRecordBytes",
+                        "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "limitsMaxFields",
+                        "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "limitsBatchRows",
+                        "type": "int",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "fromArray": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "config",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "limitsBatchRows": {
+                "name": "limitsBatchRows",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            },
+            "limitsMaxFields": {
+                "name": "limitsMaxFields",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            },
+            "limitsMaxRecordBytes": {
+                "name": "limitsMaxRecordBytes",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            }
+        },
+        "readonly": true
+    },
     "CoreX\\Transfer\\Internal\\Transfer\\ExecutionGuard": {
         "abstract": false,
         "constants": [],
@@ -78889,6 +79759,11 @@
         "internal": false,
         "kind": "class",
         "methods": {
+            "boot": {
+                "params": [],
+                "return": "void",
+                "static": false
+            },
             "register": {
                 "params": [],
                 "return": "void",
@@ -79609,6 +80484,51 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Wakeup\\Internal\\DangerousModesCheck": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Config\\Contracts\\RuntimeConfigCheck"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\Wakeup\\Internal\\WakeupOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "core",
+                        "type": "CoreX\\Config\\Data\\CoreOptions",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "violations": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "production",
+                        "type": "bool",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
     "CoreX\\Wakeup\\Internal\\SqlWakeupScheduler": {
         "abstract": false,
         "constants": [],
@@ -79925,6 +80845,79 @@
         "properties": [],
         "readonly": true
     },
+    "CoreX\\Wakeup\\Internal\\WakeupOptions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "leaseSeconds",
+                        "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "maxAttempts",
+                        "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "handlers",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "dangerousModes": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "fromArray": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "config",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "handlers": {
+                "name": "handlers",
+                "readonly": true,
+                "static": false,
+                "type": "array"
+            },
+            "leaseSeconds": {
+                "name": "leaseSeconds",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            },
+            "maxAttempts": {
+                "name": "maxAttempts",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            }
+        },
+        "readonly": true
+    },
     "CoreX\\Wakeup\\Testing\\WakeupFixtures": {
         "abstract": false,
         "constants": {
@@ -79983,6 +80976,11 @@
         "internal": false,
         "kind": "class",
         "methods": {
+            "boot": {
+                "params": [],
+                "return": "void",
+                "static": false
+            },
             "register": {
                 "params": [],
                 "return": "void",
@@ -83649,6 +84647,51 @@
         },
         "readonly": true
     },
+    "CoreX\\Workflow\\Internal\\DangerousModesCheck": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Config\\Contracts\\RuntimeConfigCheck"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\Workflow\\Internal\\WorkflowOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "core",
+                        "type": "CoreX\\Config\\Data\\CoreOptions",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "violations": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "production",
+                        "type": "bool",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
     "CoreX\\Workflow\\Internal\\SqlWorkflowBinding": {
         "abstract": false,
         "constants": [],
@@ -83966,6 +85009,55 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Workflow\\Internal\\WorkflowOptions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "enforceDeclarations",
+                        "type": "bool",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "dangerousModes": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "fromArray": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "config",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "enforceDeclarations": {
+                "name": "enforceDeclarations",
+                "readonly": true,
+                "static": false,
+                "type": "bool"
+            }
+        },
+        "readonly": true
+    },
     "CoreX\\Workflow\\WorkflowModule": {
         "abstract": false,
         "constants": [],
@@ -83992,6 +85084,11 @@
         "internal": false,
         "kind": "class",
         "methods": {
+            "boot": {
+                "params": [],
+                "return": "void",
+                "static": false
+            },
             "register": {
                 "params": [],
                 "return": "void",

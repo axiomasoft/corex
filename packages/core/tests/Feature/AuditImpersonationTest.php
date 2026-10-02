@@ -8,6 +8,7 @@ use CoreX\Audit\Enums\ActorType;
 use CoreX\Audit\Internal\AuditObserver;
 use CoreX\Audit\Internal\QueuedAuditLogger;
 use CoreX\Audit\Internal\RecordAuditEntry;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
@@ -27,6 +28,7 @@ uses()->group('pg');
 
 beforeEach(function (): void {
     config(['database.default' => 'pgsql', 'corex.audit.enabled' => true, 'queue.default' => 'sync', 'queue.connections.sync.after_commit' => false]);
+    app()->forgetInstance(CoreOptions::class);
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     $this->artisan('migrate', ['--path' => realpath(__DIR__.'/../../database/migrations/pg'), '--realpath' => true, '--force' => true])->assertSuccessful();

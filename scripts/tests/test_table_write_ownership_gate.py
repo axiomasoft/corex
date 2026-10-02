@@ -39,10 +39,7 @@ class TableWriteOwnershipTest(unittest.TestCase):
             return result.returncode, result.stdout + result.stderr
 
     def test_own_options_and_provider_calls_resolve(self):
-        expressions = [r"$this->options->settingsTable", r"app(\CoreX\Config\Data\CoreOptions::class)->settingsTable",
-                       r"\CoreX\Config\Laravel\CoreOptionsParser::current()->settingsTable",
-                       r"\CoreX\Config\Internal\Config::options()->settingsTable",
-                       r"\CoreX\Config\Internal\Config::settingsTable()"]
+        expressions = [r"$this->options->settingsTable", r"app(\CoreX\Config\Data\CoreOptions::class)->settingsTable"]
         for expression in expressions:
             with self.subTest(expression=expression):
                 code, output = self.run_gate(r'''namespace Demo;

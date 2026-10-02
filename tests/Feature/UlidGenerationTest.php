@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Database\Enums\IdStrategy;
 use CoreX\Tests\Stubs\Widget;
 use Illuminate\Support\Facades\Schema;
@@ -19,6 +20,7 @@ use Illuminate\Support\Str;
 // catch this on PG).
 beforeEach(function (): void {
     config(['corex.ids.strategy' => IdStrategy::Ulid]);
+    app()->forgetInstance(CoreOptions::class);
 
     Schema::dropIfExists('widgets');
     (require __DIR__.'/../database/migrations/2026_06_14_100000_create_widgets_table.php')->up();

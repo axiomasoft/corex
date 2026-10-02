@@ -25,6 +25,7 @@ use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use CoreX\Wakeup\Data\WakeupDelivery;
 use CoreX\Wakeup\Data\WakeupRequest;
 use CoreX\Wakeup\Data\WakeupWindow;
+use CoreX\Wakeup\Internal\WakeupOptions;
 use CoreX\Wakeup\Testing\WakeupFixtures;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -122,6 +123,7 @@ it('admits an explicit bounded legacy fixture for this definition only', functio
             'accept_legacy_unstamped' => true,
         ],
     ]);
+    app()->forgetInstance(WakeupOptions::class);
     bindRecordingDigestAdapter($seen);
     insertLegacyDigestWakeup(requestKey: 'legacy-admitted', payload: ['run_id' => 'legacy-run']);
 

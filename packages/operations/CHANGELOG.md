@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — typed Options and runtime configuration checks (P05.1)
+
+- `ApiOptions`, `BulkOptions` and `CostOptions` are lazy shared singletons resolved in `boot()`; the idempotency store takes lease and retention from `ApiOptions`. Added a `RuntimeConfigCheck` that requires `app.key` in `production`.
+
 ## Unreleased — kernel package and API migration
 
 - Breaking (PLAN3.P02–P04, pre-1.0): The package uses CoreX\Operations as its sole PSR-4 root; authorization, operation catalogue, bulk execution and validation expose feature-owned ports and typed inputs/results. Extracted tools, webhooks, custom fields and transfer APIs belong to their own packages.

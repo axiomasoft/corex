@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — typed Options and runtime configuration checks (P05.1)
+
+- Added internal `TransferOptions`, a lazy singleton resolved in `boot()`.
+
 ## Unreleased — kernel package and API migration
 
 - Breaking (PLAN3.P02–P04, pre-1.0): Extracted transfer into its own CoreX\Transfer package and provider; transfer/export ports expose canonical records, checkpoints, conflict rules and sealed export manifests, while codecs and persistence are Internal.

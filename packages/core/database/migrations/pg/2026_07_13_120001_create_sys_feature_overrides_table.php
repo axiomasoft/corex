@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Internal\Config;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Database\Laravel\IdColumns;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -18,11 +18,11 @@ return new class extends Migration
 {
     public function up(): void
     {
-        $table = Config::featureOverridesTable();
+        $table = app(CoreOptions::class)->featureOverridesTable;
 
         Schema::create($table, function (Blueprint $table): void {
             IdColumns::primary($table);
-            IdColumns::foreign($table, 'flag_id')->constrained(Config::featureFlagsTable())->cascadeOnDelete();
+            IdColumns::foreign($table, 'flag_id')->constrained(app(CoreOptions::class)->featureFlagsTable)->cascadeOnDelete();
             $table->string('scope_type', 16);
             IdColumns::reference($table, 'scope_id');
             $table->boolean('is_enabled');
@@ -37,6 +37,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists(Config::featureOverridesTable());
+        Schema::dropIfExists(app(CoreOptions::class)->featureOverridesTable);
     }
 };

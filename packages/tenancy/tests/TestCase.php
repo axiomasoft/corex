@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Tests;
 
 use CoreX\CoreServiceProvider;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Provisioning\Internal\Database\SchemaCatalogueSerializer;
 use CoreX\Tenancy\TenancyServiceProvider;
 use CoreX\Tenancy\Tests\Stubs\StubIdentityProvider;
@@ -213,5 +214,6 @@ abstract class TestCase extends Orchestra
                 ],
             ],
         ]);
+        app()->forgetInstance(TenancyOptions::class);
     }
 }

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Tests\Feature;
 
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Config\Data\SecretRef;
-use CoreX\Config\Internal\Config;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
@@ -122,7 +122,7 @@ final class WebhookLoadContourIntegrationTest extends TestCase
             $migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_webhook_tables.php';
             $migration->up();
             $connection = DB::connection('api_p1420_tenant');
-            $connection->getSchemaBuilder()->create(Config::inboxMessagesTable(), function (Blueprint $table): void {
+            $connection->getSchemaBuilder()->create(app(CoreOptions::class)->inboxMessagesTable, function (Blueprint $table): void {
                 $table->string('consumer', 120);
                 $table->uuid('message_id');
                 $table->string('name', 160);

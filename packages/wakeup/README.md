@@ -20,7 +20,7 @@ Install with `composer require axiomasoft/corex-wakeup`. Apply the package-owned
 
 ## Extension contracts
 
-Register exported `DueWakeupHandler` implementations in `corex-wakeup.handlers` with an exact version. Feature packages can tag bounded `DueWakeupSource` implementations for the same sweeper. Keep handler effects transactional; external delivery belongs in an outbox.
+Register exported `DueWakeupHandler` implementations in `corex-wakeup.handlers` with an exact version. Feature packages can tag bounded `DueWakeupSource` implementations for the same sweeper. Each handler is an array with `handler`, an exact `version` and an optional boolean `accept_legacy_unstamped`; the former scalar `kind => class` form is rejected as an invalid configuration. `accept_legacy_unstamped=true` is a dangerous mode: production starts only when `corex.acknowledged_dangerous_modes` lists `corex-wakeup.handlers.<kind>.accept_legacy_unstamped`. Keep handler effects transactional; external delivery belongs in an outbox.
 
 ## Failure semantics
 

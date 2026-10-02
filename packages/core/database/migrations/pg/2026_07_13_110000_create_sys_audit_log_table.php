@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Internal\Config;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Database\Laravel\IdColumns;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -31,7 +31,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        $table = Config::auditLogsTable();
+        $table = app(CoreOptions::class)->auditLogsTable;
 
         Schema::create($table, function (Blueprint $table): void {
             IdColumns::primary($table);
@@ -62,6 +62,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists(Config::auditLogsTable());
+        Schema::dropIfExists(app(CoreOptions::class)->auditLogsTable);
     }
 };

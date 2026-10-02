@@ -12,6 +12,7 @@ use CoreX\Audit\Internal\NullAuditRetention;
 use CoreX\Audit\Internal\QueuedAuditLogger;
 use CoreX\Audit\Internal\RecordAuditEntry;
 use CoreX\Audit\Laravel\HasAuditLog;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
@@ -151,6 +152,7 @@ beforeEach(function (): void {
     // CoreXTestCase disables audit by default (missing-table guard for the
     // sqlite lane, see its defineEnvironment) — this suite opts back in.
     config(['corex.audit.enabled' => true]);
+    app()->forgetInstance(CoreOptions::class);
 
     // D12: sys_audit_log is PG-only (jsonb/CHECK/BRIN). Reset to a clean
     // public schema so each test starts with no migration history (mirrors
@@ -346,6 +348,7 @@ it('masks a fillable sensitive field in both old and new on update (A17)', funct
 
 it('killswitch silences the capability path, not only the trait (A60)', function (): void {
     config(['corex.audit.enabled' => false]);
+    app()->forgetInstance(CoreOptions::class);
 
     Schema::create('stub_auditable_things', function ($table): void {
         $table->uuid('id')->primary();
@@ -366,6 +369,7 @@ it('killswitch silences the capability path, not only the trait (A60)', function
 
 it('killswitch silences a direct AuditLogger::record() at the write seam, not only the observer (D63/D66 defense-in-depth)', function (): void {
     config(['corex.audit.enabled' => false]);
+    app()->forgetInstance(CoreOptions::class);
 
     // Bypass the observer entirely — call the AuditLogger contract directly, as
     // any caller resolving it could. AuditObserver::record()'s guard (A60) does
@@ -383,6 +387,7 @@ it('killswitch silences a direct AuditLogger::record() at the write seam, not on
 
 it('killswitch aborts in the observer itself — an unconditional logger stays untouched (P1.21 observer isolation)', function (): void {
     config(['corex.audit.enabled' => false]);
+    app()->forgetInstance(CoreOptions::class);
 
     Schema::create('stub_auditable_things', function ($table): void {
         $table->uuid('id')->primary();

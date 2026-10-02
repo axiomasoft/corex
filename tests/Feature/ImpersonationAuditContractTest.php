@@ -7,6 +7,7 @@ use CoreX\Audit\Data\AuditEntry;
 use CoreX\Audit\Enums\ActorType;
 use CoreX\Audit\Internal\QueuedAuditLogger;
 use CoreX\Audit\Internal\RecordAuditEntry;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\Queue;
 test('P12 stamps a direct AuditLogger call with authoritative impersonation provenance', function (): void {
     Queue::fake();
     config(['corex.audit.enabled' => true]);
+    app()->forgetInstance(CoreOptions::class);
 
     $state = new ImpersonationState('grant-p12', 'staff-p12', 'target-p12', new DateTimeImmutable('+1 hour'), 'support case 42');
     app()->instance(ImpersonationService::class, new P12FixedImpersonationService($state));

@@ -12,6 +12,7 @@ use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Identity\Internal\Models\User;
 use CoreX\Tenancy\Laravel\Http\Middleware\ResolveWorkspace;
 use CoreX\Tenancy\Laravel\Scopes\WorkspaceScope;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Workspace\Internal\Models\Workspace;
 use CoreX\Tenancy\Workspace\Internal\Models\WorkspaceMember;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -43,6 +44,7 @@ beforeEach(function (): void {
     ])->run();
 
     config(['tenancy.workspace.path_segment' => 'w']);
+    app()->forgetInstance(TenancyOptions::class);
 });
 
 afterEach(function (): void {
@@ -329,6 +331,7 @@ it('л: маркер глубже в пути → тот же результат
 
 it('м: кастомный маркер path_segment=ws — /ws/{slug} резолвит, /w/{slug} трактуется как «без маркера» (default)', function (): void {
     config(['tenancy.workspace.path_segment' => 'ws']);
+    app()->forgetInstance(TenancyOptions::class);
 
     initializedAccountRW();
     $workspace = makeWorkspaceRW();

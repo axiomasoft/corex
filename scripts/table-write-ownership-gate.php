@@ -406,13 +406,6 @@ function tableExpression(?Expr $expr, Node $site, NodeFinder $finder, array $tab
             $sourceType = promotedPropertyType(enclosingClass($site), $expr->var->name->toString());
         } elseif ($expr->var instanceof Expr\MethodCall && $expr->var->var instanceof Expr\Variable && $expr->var->var->name === 'this' && $expr->var->name instanceof Node\Identifier) {
             $sourceType = typeName(enclosingClass($site)?->getMethod($expr->var->name->toString())?->returnType);
-        } elseif ($expr->var instanceof Expr\StaticCall && $expr->var->class instanceof Node\Name
-            && $expr->var->class->toString() === 'CoreX\Config\Internal\Config' && $expr->var->name instanceof Node\Identifier && $expr->var->name->toString() === 'options') {
-            $sourceType = 'CoreX\Config\Data\CoreOptions';
-        } elseif ($expr->var instanceof Expr\StaticCall && $expr->var->class instanceof Node\Name
-            && $expr->var->class->toString() === 'CoreX\Config\Laravel\CoreOptionsParser'
-            && $expr->var->name instanceof Node\Identifier && $expr->var->name->toString() === 'current') {
-            $sourceType = 'CoreX\Config\Data\CoreOptions';
         } elseif ($expr->var instanceof Expr\FuncCall && $expr->var->name instanceof Node\Name
             && $expr->var->name->toString() === 'app' && ($expr->var->args[0]->value ?? null) instanceof Expr\ClassConstFetch
             && $expr->var->args[0]->value->class instanceof Node\Name
@@ -443,10 +436,6 @@ function tableExpression(?Expr $expr, Node $site, NodeFinder $finder, array $tab
         }
 
         return '';
-    }
-
-    if ($expr instanceof Expr\StaticCall && $expr->name instanceof Node\Identifier && $expr->class instanceof Node\Name && $expr->class->toString() === 'CoreX\Config\Internal\Config') {
-        return $tableDefaults['CoreX\Config\Data\CoreOptions.'.$expr->name->toString()] ?? '';
     }
 
     if ($expr instanceof Expr\MethodCall && $expr->name instanceof Node\Identifier && $expr->var instanceof Expr\Variable && $expr->var->name === 'this') {

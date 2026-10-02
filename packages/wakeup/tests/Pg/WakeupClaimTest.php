@@ -9,6 +9,7 @@ use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use CoreX\Wakeup\Contracts\WakeupScheduler;
 use CoreX\Wakeup\Data\WakeupDelivery;
 use CoreX\Wakeup\Data\WakeupRequest;
+use CoreX\Wakeup\Internal\WakeupOptions;
 use CoreX\Wakeup\Tests\PgTestCase;
 use Illuminate\Support\Facades\DB;
 
@@ -62,6 +63,7 @@ it('persists and dispatches a versioned wakeup envelope on PostgreSQL', function
             'version' => 'pg-versioned/1',
         ],
     ]);
+    app()->forgetInstance(WakeupOptions::class);
     app()->forgetScopedInstances();
     $context = app(TenantContextResolver::class)->current();
 

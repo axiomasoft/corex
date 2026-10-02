@@ -49,12 +49,6 @@ parameters:
 			path: src/Internal/WorkflowDefinitionStamp.php
 
 		-
-			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/WorkflowServiceProvider.php
-
-		-
 			rawMessage: Cannot access offset 'db' on Illuminate\Contracts\Foundation\Application.
 			identifier: offsetAccess.nonOffsetAccessible
 			count: 1
@@ -62,12 +56,6 @@ parameters:
 
 		-
 			rawMessage: 'Cannot call method connection() on mixed.'
-			identifier: method.nonObject
-			count: 1
-			path: src/WorkflowServiceProvider.php
-
-		-
-			rawMessage: 'Cannot call method get() on mixed.'
 			identifier: method.nonObject
 			count: 1
 			path: src/WorkflowServiceProvider.php

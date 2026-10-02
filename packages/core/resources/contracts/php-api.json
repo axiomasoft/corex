@@ -825,6 +825,48 @@
             "enum_backing": null,
             "enum_cases": []
         },
+        "CoreX\\Config\\Contracts\\RuntimeConfigCheck": {
+            "kind": "interface",
+            "layer": "spi-implement",
+            "since": "1.0",
+            "final": false,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "violations": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": true,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "production",
+                            "type": "bool",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "array",
+                    "doc": {
+                        "@return": [
+                            "list<string>"
+                        ]
+                    }
+                }
+            },
+            "properties": [],
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
         "CoreX\\Config\\Data\\CoreOptions": {
             "kind": "class",
             "layer": "api",
@@ -1212,6 +1254,15 @@
                             "optional": false,
                             "default": null,
                             "flags": 1
+                        },
+                        {
+                            "name": "acknowledgedDangerousModes",
+                            "type": "array",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "[]",
+                            "flags": 1
                         }
                     ],
                     "return": null,
@@ -1226,12 +1277,37 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     }
                 }
             },
             "properties": {
+                "acknowledgedDangerousModes": {
+                    "flags": 1,
+                    "type": "array",
+                    "readonly": true,
+                    "visibility": "public",
+                    "static": false,
+                    "default": null,
+                    "doc": {
+                        "@param": [
+                            "class-string<\\CoreX\\Audit\\Contracts\\AuditLogger> $auditLogger",
+                            "class-string<\\CoreX\\Audit\\Contracts\\AuditRetention> $auditRetention",
+                            "class-string<\\CoreX\\Context\\Contracts\\ImpersonationService> $impersonationService",
+                            "class-string<\\CoreX\\Context\\Contracts\\TenancyManager> $tenancyManager",
+                            "class-string<\\CoreX\\Context\\Contracts\\TenantContextResolver> $tenantContextResolver",
+                            "class-string<\\CoreX\\Data\\Contracts\\DataScopeAuthorizer> $dataScopeAuthorizer",
+                            "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
+                            "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
+                        ]
+                    },
+                    "hooks": []
+                },
                 "auditEnabled": {
                     "flags": 1,
                     "type": "bool",
@@ -1250,7 +1326,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1273,7 +1350,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1296,7 +1374,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1319,7 +1398,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1342,7 +1422,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1365,7 +1446,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1388,7 +1470,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1411,7 +1494,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1434,7 +1518,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1457,7 +1542,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1480,7 +1566,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1503,7 +1590,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1526,7 +1614,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1549,7 +1638,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1572,7 +1662,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1595,7 +1686,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1618,7 +1710,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1641,7 +1734,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1664,7 +1758,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1687,7 +1782,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1710,7 +1806,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1733,7 +1830,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1756,7 +1854,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1779,7 +1878,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1802,7 +1902,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1825,7 +1926,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1848,7 +1950,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1871,7 +1974,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1894,7 +1998,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1917,7 +2022,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1940,7 +2046,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1963,7 +2070,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -1986,7 +2094,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -2009,7 +2118,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -2032,7 +2142,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -2055,7 +2166,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -2078,7 +2190,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -2101,7 +2214,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -2124,7 +2238,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -2147,7 +2262,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -2170,7 +2286,8 @@
                             "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
                             "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
                             "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository"
+                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
+                            "list<string> $acknowledgedDangerousModes"
                         ]
                     },
                     "hooks": []
@@ -2426,7 +2543,11 @@
                     "by_reference": false,
                     "parameters": [],
                     "return": "CoreX\\Config\\Data\\CoreOptions",
-                    "doc": []
+                    "doc": {
+                        "@deprecated": [
+                            ""
+                        ]
+                    }
                 },
                 "fromArray": {
                     "visibility": "public",
@@ -2455,6 +2576,109 @@
             },
             "properties": [],
             "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
+        "CoreX\\Config\\Laravel\\RuntimeConfigGate": {
+            "kind": "class",
+            "layer": "spi-call",
+            "since": "1.0",
+            "final": true,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "assert": {
+                    "visibility": "public",
+                    "static": true,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "app",
+                            "type": "Illuminate\\Contracts\\Foundation\\Application",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "void",
+                    "doc": {
+                        "@throws": [
+                            "\\CoreX\\Config\\Exceptions\\InvalidConfiguration"
+                        ]
+                    }
+                },
+                "install": {
+                    "visibility": "public",
+                    "static": true,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "app",
+                            "type": "Illuminate\\Contracts\\Foundation\\Application",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "void",
+                    "doc": []
+                },
+                "violations": {
+                    "visibility": "public",
+                    "static": true,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "app",
+                            "type": "Illuminate\\Contracts\\Foundation\\Application",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "production",
+                            "type": "bool",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "array",
+                    "doc": {
+                        "@return": [
+                            "list<string>"
+                        ]
+                    }
+                }
+            },
+            "properties": [],
+            "constants": {
+                "BUILD_COMMANDS": {
+                    "type": "array",
+                    "value": "['package:discover', 'config:cache', 'config:clear', 'optimize', 'optimize:clear', 'route:cache', 'route:clear', 'view:cache', 'view:clear', 'event:cache', 'event:clear', 'vendor:publish', 'key:generate', 'storage:link', 'list', 'help', 'about', 'corex:config:validate']",
+                    "visibility": "public",
+                    "final": false,
+                    "doc": []
+                }
+            },
             "enum_backing": null,
             "enum_cases": []
         },

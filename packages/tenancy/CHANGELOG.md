@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — typed Options and runtime configuration checks (P05.1)
+
+- `TenancyOptions` is a lazy shared singleton; `IdentitiesReconcileCommand` and `PendingCreateCommand` read the central connection from it (the new `handle()` parameter is optional).
+
 ## Unreleased — CI ownership and test isolation repair (P10.2)
 
 - Testbench teardown disconnects every remaining database connection after restoring the public schema, preventing retained application cycles from exhausting PostgreSQL's connection limit.

@@ -8,6 +8,7 @@ use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Exceptions\CentralContextException;
 use CoreX\Storage\Contracts\TenantStorage;
 use CoreX\Storage\Exceptions\StorageOperationFailed;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Support\Facades\File;
 
 final class TenantStorageContextResolverForP22 implements TenantContextResolver
@@ -47,6 +48,7 @@ it('keeps local and fake-cloud durable storage semantically identical', function
         'tenancy.storage.durable_root' => $this->storageRoot.'/durable',
         'tenancy.storage.ephemeral_root' => $this->storageRoot.'/ephemeral',
     ]);
+    app()->forgetInstance(TenancyOptions::class);
     app()->forgetScopedInstances();
 
     $storage = app(TenantStorage::class);
@@ -77,6 +79,7 @@ it('rejects traversal and a retained worker handle after tenancy clears', functi
         'tenancy.storage.durable_root' => $this->storageRoot.'/durable',
         'tenancy.storage.ephemeral_root' => $this->storageRoot.'/ephemeral',
     ]);
+    app()->forgetInstance(TenancyOptions::class);
     app()->forgetScopedInstances();
 
     $storage = app(TenantStorage::class);

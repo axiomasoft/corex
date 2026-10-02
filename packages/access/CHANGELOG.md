@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — typed Options and runtime configuration checks (P05.1)
+
+- `AuthOptions` is a lazy shared singleton resolved in `boot()`; it is no longer bound with `instance()` while the provider registers.
+
 ## Unreleased — kernel package and API migration
 
 - Breaking (PLAN3.P02–P04, pre-1.0): Authorization now exposes Principal, RecordContext and AccessChecker ports plus typed AuthOptions and matrix registration; AzGuard identities and permission storage remain implementation details.

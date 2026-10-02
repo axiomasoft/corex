@@ -285,7 +285,7 @@ parameters:
 		-
 			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
 			identifier: offsetAccess.nonOffsetAccessible
-			count: 8
+			count: 2
 			path: src/NotificationsServiceProvider.php
 
 		-
@@ -303,19 +303,13 @@ parameters:
 		-
 			rawMessage: 'Cannot call method get() on mixed.'
 			identifier: method.nonObject
-			count: 7
+			count: 1
 			path: src/NotificationsServiceProvider.php
 
 		-
 			rawMessage: 'Cannot call method set() on mixed.'
 			identifier: method.nonObject
 			count: 1
-			path: src/NotificationsServiceProvider.php
-
-		-
-			rawMessage: Cannot cast mixed to int.
-			identifier: cast.int
-			count: 2
 			path: src/NotificationsServiceProvider.php
 
 		-

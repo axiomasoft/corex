@@ -30,7 +30,6 @@ use CoreX\Wakeup\Contracts\WakeupScheduler;
 use CoreX\Wakeup\Data\WakeupRequest;
 use DateInterval;
 use DateTimeImmutable;
-use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Database\Connection;
 use Override;
@@ -44,7 +43,8 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
         private readonly RecurrenceExpander $expander,
         private readonly CreateTaskCommand $createTask,
         private readonly TaskAccess $taskAccess,
-        private readonly Repository $config,
+        private readonly bool $wakeupEnabled,
+        private readonly string $wakeupHandlerKind,
         private readonly Container $container,
         private readonly DataScopeAuthorizer $authorizer,
         private readonly TenantContextRestorer $contexts,
@@ -423,11 +423,11 @@ final class SqlTaskRecurrenceMaterializer implements TaskRecurrenceCommand
 
     private function scheduleWakeup(TenantContext $context, SeriesReference $series, MaterializationWindow $window): void
     {
-        if (! $this->config->get('corex-tasks-workflow.wakeup.enabled', false) || ! $this->container->bound(WakeupScheduler::class)) {
+        if (! $this->wakeupEnabled || ! $this->container->bound(WakeupScheduler::class)) {
             return;
         }
 
-        $kind = (string) $this->config->get('corex-tasks-workflow.wakeup.handler_kind', MaterializationHasher::HANDLER_KIND);
+        $kind = $this->wakeupHandlerKind;
         $fireAt = (new DateTimeImmutable($window->end))->sub(new DateInterval('P1D'));
 
         $this->container->make(WakeupScheduler::class)->schedule(new WakeupRequest(

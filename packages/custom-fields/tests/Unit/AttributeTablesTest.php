@@ -7,6 +7,7 @@ namespace CoreX\CustomFields\Tests\Unit;
 use CoreX\CustomFields\AttributesServiceProvider;
 use CoreX\CustomFields\Data\AttributeTables;
 use CoreX\CustomFields\Exceptions\InvalidAttributeTables;
+use CoreX\CustomFields\Internal\CustomFieldsOptions;
 use Orchestra\Testbench\TestCase;
 use Override;
 
@@ -57,6 +58,7 @@ final class AttributeTablesTest extends TestCase
     public function test_it_rejects_invalid_table_names_loaded_from_provider_configuration(): void
     {
         $this->app['config']->set('corex-custom-fields.tables.documents', 'Bad-Name');
+        $this->app->forgetInstance(CustomFieldsOptions::class);
 
         expect(fn (): AttributeTables => $this->app->make(AttributeTables::class))
             ->toThrow(InvalidAttributeTables::class);

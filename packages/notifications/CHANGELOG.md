@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — typed Options and runtime configuration checks (P05.1)
+
+- Added internal `NotificationsOptions` and a `RuntimeConfigCheck`: in `production`, `corex-notifications.digest.accept_legacy_unstamped=true` stops the process unless that exact path is listed in `corex.acknowledged_dangerous_modes`.
+
 ## Unreleased — kernel package and API migration
 
 - Breaking (PLAN3.P02–P04, pre-1.0): Delivery, digest and preference features expose recipient references, delivery outcomes and digest DTOs through declared ports; channel execution and persistence are Internal.

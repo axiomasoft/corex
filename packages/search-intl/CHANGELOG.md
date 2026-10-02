@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — typed Options and runtime configuration checks (P05.1)
+
+- Added internal `SearchIntlOptions`, a lazy singleton resolved in `boot()`.
+
 ## Unreleased — kernel package and API migration
 
 - Breaking (PLAN3.P02–P04, pre-1.0): The bridge exposes SavedViewLabelReader and LocalizedFieldBinding with its own provider; label decoration is separate from the host search and localization implementations.

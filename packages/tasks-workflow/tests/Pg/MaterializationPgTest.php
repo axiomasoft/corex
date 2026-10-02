@@ -23,13 +23,16 @@ use CoreX\TasksWorkflow\Data\SeriesReference;
 use CoreX\TasksWorkflow\Exceptions\UnsupportedMaterialization;
 use CoreX\TasksWorkflow\Internal\MaterializationHasher;
 use CoreX\TasksWorkflow\Internal\MaterializationWakeupHandler;
+use CoreX\TasksWorkflow\Internal\TasksWorkflowOptions;
 use CoreX\TasksWorkflow\Tests\PgTestCase;
 use CoreX\TasksWorkflow\Tests\Support\SeriesSeeder;
 use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use CoreX\Wakeup\Contracts\WakeupScheduler;
 use CoreX\Wakeup\Data\WakeupRequest;
+use CoreX\Wakeup\Internal\WakeupOptions;
 use CoreX\Wakeup\Testing\WakeupFixtures;
 use CoreX\Wakeup\WakeupServiceProvider;
+use CoreX\Workflow\Internal\WorkflowOptions;
 use CoreX\Workflow\WorkflowServiceProvider;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -132,6 +135,7 @@ it('MAT-06 schedules a stamped complete payload and materializes through the han
     registerMaterializationWakeup();
     expect($this->migrateWakeup())->toBe(0);
     app()['config']->set('corex-tasks-workflow.wakeup.enabled', true);
+    app()->forgetInstance(TasksWorkflowOptions::class);
     app()->forgetScopedInstances();
 
     $set = SeriesSeeder::dailySet('series-pg-06', 'rev-1', 1);
@@ -213,7 +217,9 @@ it('MAT-07 captures workflow completion inside the task transaction when enabled
     app()->register(WorkflowServiceProvider::class);
     expect($this->migrateWorkflow())->toBe(0);
     app()['config']->set('corex-workflow.enforce_declarations', false);
+    app()->forgetInstance(WorkflowOptions::class);
     app()['config']->set('corex-tasks-workflow.completion_capture.enabled', true);
+    app()->forgetInstance(TasksWorkflowOptions::class);
     app()->forgetScopedInstances();
 
     $set = SeriesSeeder::dailySet('series-pg-07', 'rev-1', 1);
@@ -259,6 +265,7 @@ function registerMaterializationWakeup(): void
             'accept_legacy_unstamped' => false,
         ],
     ]);
+    app()->forgetInstance(WakeupOptions::class);
     app()->forgetInstance(WakeupFixtures::registryClass());
     app()->forgetScopedInstances();
 }

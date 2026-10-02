@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Notifications\Tests\Digest;
 
+use CoreX\Notifications\Internal\NotificationsOptions;
 use CoreX\Notifications\NotificationsServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Override;
@@ -20,5 +21,6 @@ abstract class DisabledDigestTestCase extends Orchestra
     protected function defineEnvironment($app): void
     {
         $app['config']->set('corex-notifications.digest.enabled', false);
+        $app->forgetInstance(NotificationsOptions::class);
     }
 }

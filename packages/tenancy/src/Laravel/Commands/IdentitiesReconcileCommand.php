@@ -7,6 +7,7 @@ namespace CoreX\Tenancy\Laravel\Commands;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Tenancy\Identity\Contracts\IdentitySyncer;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -23,9 +24,9 @@ final class IdentitiesReconcileCommand extends Command
 
     protected $description = 'Re-sync failed, pending, and stale identity projections into their account users tables.';
 
-    public function handle(IdentitySyncer $syncer): int
+    public function handle(IdentitySyncer $syncer, ?TenancyOptions $options = null): int
     {
-        $centralConnection = (string) config('tenancy.central_connection');
+        $centralConnection = ($options ?? $this->laravel->make(TenancyOptions::class))->centralConnection;
 
         $rows = DB::connection($centralConnection)
             ->table('root_identity_accounts as ria')

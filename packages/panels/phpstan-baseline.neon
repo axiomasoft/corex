@@ -1,24 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/PanelsServiceProvider.php
-
-		-
-			rawMessage: 'Cannot call method get() on mixed.'
-			identifier: method.nonObject
-			count: 1
-			path: src/PanelsServiceProvider.php
-
-		-
-			rawMessage: Cannot cast mixed to string.
-			identifier: cast.string
-			count: 1
-			path: src/PanelsServiceProvider.php
-
-		-
 			rawMessage: 'Parameter $providers of class CoreX\Panels\Internal\ModulePanelCatalogue constructor expects iterable<CoreX\Panels\Contracts\PanelProvider>, iterable given.'
 			identifier: argument.type
 			count: 1

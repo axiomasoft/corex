@@ -25,6 +25,7 @@ use CoreX\Modules\Internal\Registry\CompiledModuleRegistry;
 use CoreX\Modules\Internal\Registry\RepositoryModuleRegistryCache;
 use CoreX\Modules\Internal\Support\ModulesOptions;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -38,6 +39,9 @@ final class RegistryRegistrar implements PackageRegistrar
     #[Override]
     public function register(Application $app): void
     {
+        $app->singleton(ModulesOptions::class, static fn (Application $app): ModulesOptions => ModulesOptions::fromArray(
+            (array) $app->make(Repository::class)->get('corex.modules', []),
+        ));
         $app->singleton(FieldCastRegistry::class, FieldCastMap::class);
         $app->when(RegistryCompiler::class)->needs('$sections')->giveTagged(ManifestSectionCompiler::class);
 

@@ -3,7 +3,7 @@ parameters:
 		-
 			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
 			identifier: offsetAccess.nonOffsetAccessible
-			count: 4
+			count: 1
 			path: src/ApiServiceProvider.php
 
 		-
@@ -15,24 +15,12 @@ parameters:
 		-
 			rawMessage: 'Cannot call method get() on mixed.'
 			identifier: method.nonObject
-			count: 4
+			count: 1
 			path: src/ApiServiceProvider.php
 
 		-
 			rawMessage: 'Cannot call method has() on mixed.'
 			identifier: method.nonObject
-			count: 1
-			path: src/ApiServiceProvider.php
-
-		-
-			rawMessage: Cannot cast mixed to int.
-			identifier: cast.int
-			count: 2
-			path: src/ApiServiceProvider.php
-
-		-
-			rawMessage: 'Parameter #1 $config of static method CoreX\Operations\Laravel\Support\ApiOptions::fromArray() expects array<string, mixed>, array<mixed> given.'
-			identifier: argument.type
 			count: 1
 			path: src/ApiServiceProvider.php
 
@@ -238,18 +226,6 @@ parameters:
 			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
 			identifier: offsetAccess.nonOffsetAccessible
 			count: 1
-			path: src/Bulk/Laravel/BulkRegistrar.php
-
-		-
-			rawMessage: 'Cannot call method get() on mixed.'
-			identifier: method.nonObject
-			count: 1
-			path: src/Bulk/Laravel/BulkRegistrar.php
-
-		-
-			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
 			path: src/Bulk/Laravel/BulkRouteRegistrar.php
 
 		-
@@ -329,18 +305,6 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: src/Cost/Internal/SqlOperationBudget.php
-
-		-
-			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Cost/Laravel/CostRegistrar.php
-
-		-
-			rawMessage: 'Cannot call method get() on mixed.'
-			identifier: method.nonObject
-			count: 1
-			path: src/Cost/Laravel/CostRegistrar.php
 
 		-
 			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.

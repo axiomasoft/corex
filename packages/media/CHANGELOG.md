@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — typed Options and runtime configuration checks (P05.1)
+
+- `MediaOptions` is a lazy shared singleton resolved in `boot()`.
+
 ## Unreleased — kernel package and API migration
 
 - Breaking (PLAN3.P02–P04, pre-1.0): MediaLibrary, MediaPolicy and ConversionDriver expose attachment, conversion and deletion DTOs; Eloquent media rows and conversion persistence are Internal.

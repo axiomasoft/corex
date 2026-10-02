@@ -11,10 +11,11 @@ use CoreX\Audit\Contracts\AuditRetention;
 use CoreX\Audit\Internal\PruneAuditLog;
 use CoreX\Config\Contracts\ConfigReportSection;
 use CoreX\Config\Data\CoreOptions;
+use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Config\Internal\Commands\ValidateConfigCommand;
-use CoreX\Config\Internal\Config;
 use CoreX\Config\Internal\KernelConfigSection;
 use CoreX\Config\Laravel\CoreOptionsParser;
+use CoreX\Config\Laravel\RuntimeConfigGate;
 use CoreX\Context\Contracts\ImpersonationGuard;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Contracts\TenancyManager;
@@ -96,30 +97,25 @@ final class CoreServiceProvider extends ServiceProvider
 
         $this->mergeConfigFrom(__DIR__.'/../config/corex.php', 'corex');
 
-        $raw = $this->app['config']->get('corex', []);
-        $options = CoreOptionsParser::fromArray(is_array($raw) ? $raw : []);
-        $this->app->bind(CoreOptions::class, static function (Application $app): CoreOptions {
-            $raw = $app->make(Repository::class)->get('corex', []);
+        $this->app->singleton(CoreOptions::class, static fn (Application $app): CoreOptions => CoreOptionsParser::fromArray(
+            (array) $app->make(Repository::class)->get('corex', []),
+        ));
 
-            return CoreOptionsParser::fromArray(is_array($raw) ? $raw : []);
-        });
-        Config::bind($options);
+        $this->app->singleton(SettingDefaultsProvider::class, static fn (Application $app): SettingDefaultsProvider => self::configured($app, SettingDefaultsProvider::class, $app->make(CoreOptions::class)->settingDefaultsProvider));
+        $this->app->singleton(SettingsRepository::class, static fn (Application $app): SettingsRepository => self::configured($app, SettingsRepository::class, $app->make(CoreOptions::class)->settingsRepository));
+        $this->app->singleton(AuditLogger::class, static fn (Application $app): AuditLogger => self::configured($app, AuditLogger::class, $app->make(CoreOptions::class)->auditLogger));
+        $this->app->singleton(AuditRetention::class, static fn (Application $app): AuditRetention => self::configured($app, AuditRetention::class, $app->make(CoreOptions::class)->auditRetention));
 
-        $this->app->singleton(SettingDefaultsProvider::class, $options->settingDefaultsProvider);
-        $this->app->singleton(SettingsRepository::class, $options->settingsRepository);
-        $this->app->singleton(AuditLogger::class, $options->auditLogger);
-        $this->app->singleton(AuditRetention::class, $options->auditRetention);
-
-        $this->app->singleton(TenantContextResolver::class, $options->tenantContextResolver);
+        $this->app->singleton(TenantContextResolver::class, static fn (Application $app): TenantContextResolver => self::configured($app, TenantContextResolver::class, $app->make(CoreOptions::class)->tenantContextResolver));
         $this->app->scoped(
             TenantContextRestorer::class,
-            static fn ($app): GuardedTenantContextRestorer => new GuardedTenantContextRestorer(
+            static fn (Application $app): GuardedTenantContextRestorer => new GuardedTenantContextRestorer(
                 resolver: $app->make(TenantContextResolver::class),
             ),
         );
-        $this->app->singleton(TenancyManager::class, $options->tenancyManager);
-        $this->app->singleton(ImpersonationService::class, $options->impersonationService);
-        $this->app->singleton(DataScopeAuthorizer::class, $options->dataScopeAuthorizer);
+        $this->app->singleton(TenancyManager::class, static fn (Application $app): TenancyManager => self::configured($app, TenancyManager::class, $app->make(CoreOptions::class)->tenancyManager));
+        $this->app->singleton(ImpersonationService::class, static fn (Application $app): ImpersonationService => self::configured($app, ImpersonationService::class, $app->make(CoreOptions::class)->impersonationService));
+        $this->app->singleton(DataScopeAuthorizer::class, static fn (Application $app): DataScopeAuthorizer => self::configured($app, DataScopeAuthorizer::class, $app->make(CoreOptions::class)->dataScopeAuthorizer));
         $this->app->singleton(DataScopeCodec::class, ArrayDataScopeCodec::class);
         $this->app->singleton(
             MessageContractRegistry::class,
@@ -129,57 +125,61 @@ final class CoreServiceProvider extends ServiceProvider
         $this->app->instance(TraceContextBridge::class, new NullTraceContextBridge);
         $this->app->scoped(
             Outbox::class,
-            static fn ($app): SqlOutbox => new SqlOutbox(
+            static fn (Application $app): SqlOutbox => new SqlOutbox(
                 connection: $app->make(ConnectionInterface::class),
                 contracts: $app->make(MessageContractRegistry::class),
                 clock: $app->make(ClockInterface::class),
                 traces: $app->make(TraceContextBridge::class),
+                table: $app->make(CoreOptions::class)->outboxMessagesTable,
             ),
         );
         $this->app->scoped(
             OutboxRelay::class,
-            static fn ($app): SqlOutboxRelay => new SqlOutboxRelay(
+            static fn (Application $app): SqlOutboxRelay => new SqlOutboxRelay(
                 connection: $app->make(Connection::class),
                 clock: $app->make(ClockInterface::class),
-                leaseSeconds: app(CoreOptions::class)->messagingLeaseSeconds,
-                maxAttempts: app(CoreOptions::class)->messagingMaxAttempts,
-                backoffCapSeconds: app(CoreOptions::class)->messagingBackoffCapSeconds,
+                leaseSeconds: $app->make(CoreOptions::class)->messagingLeaseSeconds,
+                maxAttempts: $app->make(CoreOptions::class)->messagingMaxAttempts,
+                backoffCapSeconds: $app->make(CoreOptions::class)->messagingBackoffCapSeconds,
             ),
         );
         $this->app->scoped(
             Inbox::class,
-            static fn ($app): SqlInbox => new SqlInbox(
+            static fn (Application $app): SqlInbox => new SqlInbox(
                 connection: $app->make(ConnectionInterface::class),
                 clock: $app->make(ClockInterface::class),
             ),
         );
         $this->app->scoped(
             SqlDeliveryHealth::class,
-            static fn ($app): SqlDeliveryHealth => new SqlDeliveryHealth(
+            static fn (Application $app): SqlDeliveryHealth => new SqlDeliveryHealth(
                 connection: $app->make(ConnectionInterface::class),
                 clock: $app->make(ClockInterface::class),
             ),
         );
-        $this->app->singleton(ClockInterface::class, static fn ($app): LaravelClock => new LaravelClock(
+        $this->app->singleton(ClockInterface::class, static fn (Application $app): LaravelClock => new LaravelClock(
             dates: $app->make(DateFactory::class),
         ));
         $this->app->singleton(ModuleRegistrar::class, ServiceProviderModuleRegistrar::class);
-        $this->app->singleton(FeatureFlags::class, $options->featureFlags);
-        $this->app->singleton(DepartmentRepository::class, $options->departmentRepository);
+        $this->app->singleton(FeatureFlags::class, static fn (Application $app): FeatureFlags => self::configured($app, FeatureFlags::class, $app->make(CoreOptions::class)->featureFlags));
+        $this->app->singleton(DepartmentRepository::class, static fn (Application $app): DepartmentRepository => self::configured($app, DepartmentRepository::class, $app->make(CoreOptions::class)->departmentRepository));
         $this->app->singleton(PubSub::class, PubSubManager::class);
         $this->app->singleton(WorkerRuntime::class, DefaultWorkerRuntime::class);
-        $this->app->scoped(TenantStorage::class, function ($app): LocalTenantStorage {
+        $this->app->scoped(TenantStorage::class, static function (Application $app): LocalTenantStorage {
             return new LocalTenantStorage(
                 contexts: $app->make(TenantContextResolver::class),
                 filesystems: new FilesystemManager($app),
-                durableRoot: app(CoreOptions::class)->storageDurableRoot,
-                ephemeralRoot: app(CoreOptions::class)->storageEphemeralRoot,
+                durableRoot: $app->make(CoreOptions::class)->storageDurableRoot,
+                ephemeralRoot: $app->make(CoreOptions::class)->storageEphemeralRoot,
             );
         });
     }
 
     public function boot(): void
     {
+        $this->app->make(CoreOptions::class);
+        RuntimeConfigGate::install($this->app);
+
         if ($this->app->runningInConsole()) {
             $this->commands([
                 PruneAuditLog::class,
@@ -213,5 +213,25 @@ final class CoreServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/corex.php' => config_path('corex.php'),
         ], 'corex-config');
+    }
+
+    /**
+     * Resolves the implementation selected by configuration and enforces the contract it was selected for.
+     *
+     * @template T of object
+     *
+     * @param  class-string<T>  $contract
+     * @param  class-string<T>  $implementation
+     * @return T
+     */
+    private static function configured(Application $app, string $contract, string $implementation): object
+    {
+        $resolved = $app->make($implementation);
+
+        if (! $resolved instanceof $contract) {
+            throw new InvalidConfiguration([$implementation.': must implement '.$contract]);
+        }
+
+        return $resolved;
     }
 }

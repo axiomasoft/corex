@@ -21,6 +21,7 @@ use CoreX\Intl\Errors\Internal\PackageProblemDefinitions;
 use CoreX\Intl\Formatting\Contracts\MoneyFormatter;
 use CoreX\Intl\Formatting\Internal\PlainMoneyFormatter;
 use CoreX\Intl\Internal\IntlConfigSection;
+use CoreX\Intl\Internal\IntlOptions;
 use CoreX\Intl\Locale\Contracts\LocaleResolver;
 use CoreX\Intl\Locale\Data\LocalePolicy;
 use CoreX\Intl\Locale\Internal\Bcp47Validator;
@@ -38,7 +39,9 @@ use CoreX\Intl\Territory\Internal\Reference\SqlGeographyProvider;
 use CoreX\Intl\Translation\Contracts\TranslationReader;
 use CoreX\Intl\Translation\Internal\LaravelTranslationReader;
 use CoreX\Modules\Contracts\FieldCastRegistry;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Database\Connection;
 use Illuminate\Support\ServiceProvider;
 use Override;
 
@@ -59,9 +62,12 @@ final class IntlServiceProvider extends ServiceProvider
         });
 
         $this->mergeConfigFrom(__DIR__.'/../config/corex-intl.php', 'corex-intl');
+        $this->app->singleton(IntlOptions::class, static fn (Application $app): IntlOptions => IntlOptions::fromArray(
+            (array) $app->make(Repository::class)->get('corex-intl', []),
+        ));
 
         $this->app->scoped(LocalePolicy::class, function (Application $app): LocalePolicy {
-            return (new LocalePolicyBuilder)->build(config: (array) $app['config']->get('corex-intl.locale', []));
+            return (new LocalePolicyBuilder)->build(config: $app->make(IntlOptions::class)->localePolicyConfig());
         });
 
         $this->app->scoped(Bcp47Validator::class, function (Application $app): Bcp47Validator {
@@ -69,7 +75,7 @@ final class IntlServiceProvider extends ServiceProvider
 
             return new Bcp47Validator(
                 supportedTags: $policy->supportedTags,
-                maxTagLength: (int) $app['config']->get('corex-intl.locale.max_tag_length', 128),
+                maxTagLength: $app->make(IntlOptions::class)->localeMaxTagLength,
             );
         });
 
@@ -79,7 +85,7 @@ final class IntlServiceProvider extends ServiceProvider
 
         $this->app->scoped(CurrencyMetadata::class, function (Application $app): CurrencyMetadata {
             return new BrickCurrencyMetadata(
-                metadataVersion: (string) $app['config']->get('corex-intl.money.metadata_version', 'brick/1'),
+                metadataVersion: $app->make(IntlOptions::class)->moneyMetadataVersion,
             );
         });
 
@@ -91,7 +97,7 @@ final class IntlServiceProvider extends ServiceProvider
             return new SqlRateImporter(
                 connection: $app['db']->connection(),
                 authorizer: $app->make(DataScopeAuthorizer::class),
-                batchLimit: (int) $app['config']->get('corex-intl.money.batch_limit', 1000),
+                batchLimit: $app->make(IntlOptions::class)->moneyBatchLimit,
             );
         });
 
@@ -99,21 +105,33 @@ final class IntlServiceProvider extends ServiceProvider
 
         $this->app->scoped(MoneyFormatter::class, function (Application $app): MoneyFormatter {
             return new PlainMoneyFormatter(
-                icuEnabled: (bool) $app['config']->get('corex-intl.formatting.icu_enabled', false),
+                icuEnabled: $app->make(IntlOptions::class)->formattingIcuEnabled,
             );
         });
 
         $this->app->scoped(FixtureReferenceNormalizer::class);
         $this->app->scoped(ReferenceCursorCodec::class, function (Application $app): ReferenceCursorCodec {
-            return new ReferenceCursorCodec(secret: (string) $app['config']->get('corex-intl.reference.cursor_secret'));
+            return new ReferenceCursorCodec(secret: $app->make(IntlOptions::class)->referenceCursorSecret->reveal());
         });
 
-        $this->app->scoped(GeographyProvider::class, SqlGeographyProvider::class);
-        $this->app->scoped(DatasetImporter::class, SqlDatasetImporter::class);
+        $this->app->scoped(GeographyProvider::class, static fn (Application $app): SqlGeographyProvider => new SqlGeographyProvider(
+            connection: $app->make(Connection::class),
+            datasetKey: $app->make(IntlOptions::class)->referenceDatasetKey,
+            normalizer: $app->make(FixtureReferenceNormalizer::class),
+            cursors: $app->make(ReferenceCursorCodec::class),
+        ));
+        $this->app->scoped(DatasetImporter::class, static fn (Application $app): SqlDatasetImporter => new SqlDatasetImporter(
+            connection: $app->make(Connection::class),
+            datasetKey: $app->make(IntlOptions::class)->referenceDatasetKey,
+            normalizer: $app->make(FixtureReferenceNormalizer::class),
+            authorizer: $app->make(DataScopeAuthorizer::class),
+        ));
     }
 
     public function boot(): void
     {
+        $this->app->make(IntlOptions::class);
+
         $this->publishes([
             __DIR__.'/../config/corex-intl.php' => config_path('corex-intl.php'),
         ], 'corex-intl-config');

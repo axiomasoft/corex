@@ -1,3 +1,7 @@
+## Unreleased — typed Options and runtime configuration checks (P05.1)
+
+- `WebhookOptions` is a lazy shared singleton resolved in `boot()`; `WebhookUrlPolicy` is built from it on first use.
+
 ## Unreleased — CI ownership and test isolation repair (P10.2)
 
 - Webhook retention delegates inbox deletion to core's public `InboxRetention` API, preserving consumer scoping and delivery tombstones without writing directly to a foreign table.

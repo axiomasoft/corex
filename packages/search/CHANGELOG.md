@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — typed Options and runtime configuration checks (P05.1)
+
+- Added internal `SearchOptions`, a lazy singleton resolved in `boot()` that validates the shape of `corex-search`.
+
 ## Unreleased — kernel package and API migration
 
 - Breaking (PLAN3.P02–P04, pre-1.0): SearchDocuments, SearchHydrator, SearchSchema and IndexDriver expose candidate/document/index DTOs; driver registry registration is explicit and search persistence stays Internal.

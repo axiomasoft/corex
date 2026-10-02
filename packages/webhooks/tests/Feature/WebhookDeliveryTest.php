@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Tests\Feature;
 
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Config\Data\SecretRef;
-use CoreX\Config\Internal\Config;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\Data\Data\DataScope;
@@ -59,7 +59,7 @@ final class WebhookDeliveryTest extends TestCase
         $this->connection = DB::connection('api_tenant');
         $migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_webhook_tables.php';
         $migration->up();
-        $this->connection->getSchemaBuilder()->create(Config::inboxMessagesTable(), function (Blueprint $table): void {
+        $this->connection->getSchemaBuilder()->create(app(CoreOptions::class)->inboxMessagesTable, function (Blueprint $table): void {
             $table->string('consumer', 120);
             $table->string('message_id', 64);
             $table->string('name', 160);

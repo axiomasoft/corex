@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — typed Options and runtime configuration checks (P05.1)
+
+- Added internal `WakeupOptions` and a `RuntimeConfigCheck`. Breaking (pre-1.0, PLAN3.D01): the scalar `kind => class` handler form is rejected with an invalid-configuration error; configure `handler` and `version`. In `production`, `accept_legacy_unstamped=true` of any handler stops the process unless `corex-wakeup.handlers.<kind>.accept_legacy_unstamped` is acknowledged.
+
 ## Unreleased — kernel package and API migration
 
 - Breaking (PLAN3.P02–P04, pre-1.0): WakeupScheduler and due-work ports exchange WakeupRequest, WakeupDelivery and schedule/cancel/sweep result DTOs; WakeupHandlerDefinition declares registrations and durable storage remains Internal.

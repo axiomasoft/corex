@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Internal\Config;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Database\Laravel\IdColumns;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -18,7 +18,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create(Config::featureFlagsTable(), function (Blueprint $table): void {
+        Schema::create(app(CoreOptions::class)->featureFlagsTable, function (Blueprint $table): void {
             IdColumns::primary($table);
             $table->string('key', 128)->unique();
             $table->string('module', 190)->nullable();
@@ -31,6 +31,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists(Config::featureFlagsTable());
+        Schema::dropIfExists(app(CoreOptions::class)->featureFlagsTable);
     }
 };

@@ -15,6 +15,7 @@ use CoreX\Operations\Cost\Internal\BudgetRetention;
 use CoreX\Operations\Cost\Internal\DeclaredCostEstimator;
 use CoreX\Operations\Cost\Internal\SqlOperationBudget;
 use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Psr\Clock\ClockInterface;
 
@@ -23,36 +24,39 @@ final readonly class CostRegistrar
 {
     public static function register(Application $app): void
     {
-        $config = $app['config']->get('corex-operations.cost');
-        $options = CostOptionsParser::fromArray(is_array($config) ? $config : []);
-        $app->instance(CostOptions::class, $options);
+        // Registration below depends on enabled flags; this one-off read does not cache Options before boot.
+        $options = CostOptionsParser::fromArray((array) $app->make(Repository::class)->get('corex-operations.cost', []));
+
+        $app->singleton(CostOptions::class, static fn (Application $app): CostOptions => CostOptionsParser::fromArray(
+            (array) $app->make(Repository::class)->get('corex-operations.cost', []),
+        ));
         $app->singleton(OperationCostEstimator::class, DeclaredCostEstimator::class);
         $app->singleton(BudgetRetention::class, static fn (Application $app): BudgetRetention => new BudgetRetention(
             connection: $app->make(ApiSchemaRegistrar::class)->budget(),
             clock: $app->make(ClockInterface::class),
-            terminalRetentionSeconds: $options->terminalRetentionSeconds,
+            terminalRetentionSeconds: $app->make(CostOptions::class)->terminalRetentionSeconds,
         ));
 
         if (! $options->enabled) {
             return;
         }
 
-        $app->singleton(OperationBudget::class, static function (Application $app) use ($options): SqlOperationBudget {
+        $app->singleton(OperationBudget::class, static function (Application $app): SqlOperationBudget {
             return new SqlOperationBudget(
                 connection: $app->make(ApiSchemaRegistrar::class)->budget(),
                 clock: $app->make(ClockInterface::class),
-                scopeHmacSecret: $options->scopeHmacSecret,
-                capacity: $options->capacity,
-                restoreRate: $options->restoreRate,
-                enforcedLevels: $options->enforcedLevels,
-                reservationTtlSeconds: $options->reservationTtlSeconds,
+                scopeHmacSecret: $app->make(CostOptions::class)->scopeHmacSecret,
+                capacity: $app->make(CostOptions::class)->capacity,
+                restoreRate: $app->make(CostOptions::class)->restoreRate,
+                enforcedLevels: $app->make(CostOptions::class)->enforcedLevels,
+                reservationTtlSeconds: $app->make(CostOptions::class)->reservationTtlSeconds,
             );
         });
         $app->bind(BudgetExecution::class, static fn (Application $app): BudgetExecution => $app->make(BudgetAdmission::class));
         $app->singleton(BudgetAdmission::class, static fn (Application $app): BudgetAdmission => new BudgetAdmission(
             budget: $app->make(OperationBudget::class),
             estimator: $app->make(OperationCostEstimator::class),
-            installationId: $options->installationId,
+            installationId: $app->make(CostOptions::class)->installationId,
         ));
     }
 }

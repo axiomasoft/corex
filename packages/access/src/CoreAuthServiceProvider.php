@@ -32,6 +32,8 @@ use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Events\ModuleDisabled;
 use CoreX\Modules\Events\ModuleEnabled;
+use Illuminate\Contracts\Config\Repository;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Event;
@@ -52,9 +54,12 @@ final class CoreAuthServiceProvider extends ServiceProvider
 
         $this->mergeConfigFrom(__DIR__.'/../config/corex-access.php', 'corex-access');
 
-        $raw = $this->app['config']->get('corex-access', []);
-        $options = AuthOptions::fromArray(is_array($raw) ? $raw : []);
-        $this->app->instance(AuthOptions::class, $options);
+        $this->app->singleton(AuthOptions::class, static fn (Application $app): AuthOptions => AuthOptions::fromArray(
+            (array) $app->make(Repository::class)->get('corex-access', []),
+        ));
+
+        // The wiring below decides what to register, so it needs the shape at register time; this one-off read does not cache Options before boot.
+        $options = AuthOptions::fromArray((array) $this->app->make(Repository::class)->get('corex-access', []));
 
         // Provide AzGuard's optional ContextGuard binding (ADR-009): contextual
         // checks (hasPermissionIn) resolve entities via axiomasoft/corex's registry.
@@ -90,6 +95,8 @@ final class CoreAuthServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        $this->app->make(AuthOptions::class);
+
         $this->registerBladeDirectives();
         $this->registerPublishing();
         $this->registerIdentityProvider();

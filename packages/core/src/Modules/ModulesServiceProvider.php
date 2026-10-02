@@ -33,10 +33,6 @@ final class ModulesServiceProvider extends ServiceProvider
     {
         $this->app->tag([ModulesConfigSection::class], ConfigReportSection::class);
 
-        $raw = $this->app['config']->get('corex.modules', []);
-        $options = ModulesOptions::fromArray(is_array($raw) ? $raw : []);
-        $this->app->instance(ModulesOptions::class, $options);
-
         foreach ($this->registrars() as $registrar) {
             $registrar->register($this->app);
         }
@@ -44,6 +40,8 @@ final class ModulesServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        $this->app->make(ModulesOptions::class);
+
         // NOT loadMigrationsFrom: mod_* is PG-only DDL (CHECK
         // constraints, advisory locks) and this provider is registered by
         // every consumer, including sqlite-backed suites (Crm/Tasks). The

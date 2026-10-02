@@ -13,7 +13,6 @@ use CoreX\Intl\Territory\Data\GeographyQuery;
 use CoreX\Intl\Territory\Data\ReferenceCursor;
 use CoreX\Intl\Territory\Data\ReferencePage;
 use DateTimeImmutable;
-use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Connection;
 use InvalidArgumentException;
 use Override;
@@ -23,7 +22,7 @@ final class SqlGeographyProvider implements GeographyProvider
 {
     public function __construct(
         private readonly Connection $connection,
-        private readonly Repository $config,
+        private readonly string $datasetKey,
         private readonly FixtureReferenceNormalizer $normalizer,
         private readonly ReferenceCursorCodec $cursors,
     ) {}
@@ -31,7 +30,7 @@ final class SqlGeographyProvider implements GeographyProvider
     #[Override]
     public function describe(DataScope $scope): DatasetManifest
     {
-        $datasetKey = (string) $this->config->get('corex-intl.reference.dataset_key', 'geography');
+        $datasetKey = $this->datasetKey;
         $current = $this->connection->table('corex_reference_current')
             ->where('dataset_key', $datasetKey)
             ->first();
@@ -55,7 +54,7 @@ final class SqlGeographyProvider implements GeographyProvider
     #[Override]
     public function query(DataScope $scope, GeographyQuery $query, ?ReferenceCursor $after = null): ReferencePage
     {
-        $datasetKey = (string) $this->config->get('corex-intl.reference.dataset_key', 'geography');
+        $datasetKey = $this->datasetKey;
         $snapshotId = $query->snapshotId;
 
         if ($snapshotId === null) {

@@ -6,6 +6,7 @@ namespace CoreX\TasksWorkflow;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
+use CoreX\Config\Contracts\RuntimeConfigCheck;
 use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Errors\Laravel\ProblemDefinitions;
@@ -16,8 +17,11 @@ use CoreX\Tasks\Planning\Contracts\TaskOperationReceipts;
 use CoreX\Tasks\Task\Contracts\CreateTaskCommand;
 use CoreX\TasksWorkflow\Contracts\TaskRecurrenceCommand;
 use CoreX\TasksWorkflow\Errors\Internal\PackageProblemDefinitions;
+use CoreX\TasksWorkflow\Internal\DangerousModesCheck;
 use CoreX\TasksWorkflow\Internal\SqlTaskRecurrenceMaterializer;
+use CoreX\TasksWorkflow\Internal\TasksWorkflowOptions;
 use CoreX\TasksWorkflow\Laravel\CompletionBindings;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Override;
@@ -32,6 +36,11 @@ final class TasksWorkflowServiceProvider extends ServiceProvider
 
         $this->mergeConfigFrom(__DIR__.'/../config/corex-tasks-workflow.php', 'corex-tasks-workflow');
 
+        $this->app->singleton(TasksWorkflowOptions::class, static fn (Application $app): TasksWorkflowOptions => TasksWorkflowOptions::fromArray(
+            (array) $app->make(Repository::class)->get('corex-tasks-workflow', []),
+        ));
+        $this->app->tag([DangerousModesCheck::class], RuntimeConfigCheck::class);
+
         $this->app->singleton(RecurrenceExpander::class, static fn (): RecurrenceExpander => RecurrenceFactory::create());
 
         $this->app->scoped(TaskRecurrenceCommand::class, function (Application $app): SqlTaskRecurrenceMaterializer {
@@ -40,7 +49,8 @@ final class TasksWorkflowServiceProvider extends ServiceProvider
                 expander: $app->make(RecurrenceExpander::class),
                 createTask: $app->make(CreateTaskCommand::class),
                 taskAccess: $app->make(TaskAccess::class),
-                config: $app['config'],
+                wakeupEnabled: $app->make(TasksWorkflowOptions::class)->wakeupEnabled,
+                wakeupHandlerKind: $app->make(TasksWorkflowOptions::class)->wakeupHandlerKind,
                 container: $app,
                 authorizer: $app->make(DataScopeAuthorizer::class),
                 contexts: $app->make(TenantContextRestorer::class),
@@ -51,7 +61,8 @@ final class TasksWorkflowServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        CompletionBindings::register($this->app);
+        $this->app->make(TasksWorkflowOptions::class);
 
+        CompletionBindings::register($this->app);
     }
 }

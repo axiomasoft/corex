@@ -5,6 +5,7 @@ declare(strict_types=1);
 use CoreX\Audit\Data\AuditEntry;
 use CoreX\Audit\Enums\ActorType;
 use CoreX\Audit\Internal\QueuedAuditLogger;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Features\Data\FeatureFlagDefinition;
 use CoreX\Features\Internal\DatabaseFeatureFlags;
 use CoreX\Messaging\Internal\DatabasePollPubSub;
@@ -15,6 +16,7 @@ uses()->group('pg');
 
 beforeEach(function (): void {
     config(['database.default' => 'pgsql', 'corex.audit.enabled' => true, 'queue.default' => 'sync', 'queue.connections.sync.after_commit' => false]);
+    app()->forgetInstance(CoreOptions::class);
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     $this->artisan('migrate', ['--path' => realpath(__DIR__.'/../../database/migrations/pg'), '--realpath' => true, '--force' => true])->assertSuccessful();

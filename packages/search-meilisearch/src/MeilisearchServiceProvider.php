@@ -14,7 +14,9 @@ use CoreX\Search\SearchServiceProvider;
 use CoreX\SearchMeilisearch\Errors\Internal\PackageProblemDefinitions;
 use CoreX\SearchMeilisearch\Exceptions\InvalidMeilisearchConfiguration;
 use CoreX\SearchMeilisearch\Internal\MeilisearchConfigSection;
+use CoreX\SearchMeilisearch\Internal\MeilisearchOptions;
 use CoreX\SearchMeilisearch\Internal\MeilisearchSearchProvider;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Meilisearch\Client;
@@ -34,28 +36,35 @@ final class MeilisearchServiceProvider extends ServiceProvider
         $this->app->tag([MeilisearchConfigSection::class], ConfigReportSection::class);
 
         $this->mergeConfigFrom(__DIR__.'/../config/corex-search-meilisearch.php', 'corex-search-meilisearch');
+
+        $this->app->singleton(MeilisearchOptions::class, static fn (Application $app): MeilisearchOptions => MeilisearchOptions::fromArray(
+            (array) $app->make(Repository::class)->get('corex-search-meilisearch', []),
+        ));
     }
 
     public function boot(): void
     {
+        $this->app->make(MeilisearchOptions::class);
+
         $this->app->make(SearchDriverRegistry::class)->register('meilisearch', function (Application $app): SearchProvider {
             if (! class_exists(Client::class)) {
                 throw InvalidMeilisearchConfiguration::missingSdk();
             }
 
-            $host = $app['config']->get('corex-search-meilisearch.host');
+            $options = $app->make(MeilisearchOptions::class);
+            $host = $options->host;
 
             if (! is_string($host) || filter_var($host, FILTER_VALIDATE_URL) === false) {
                 throw InvalidMeilisearchConfiguration::invalidHost();
             }
 
-            $indexUid = $app['config']->get('corex-search-meilisearch.index_uid');
+            $indexUid = $options->indexUid;
 
             if (! is_string($indexUid) || $indexUid === '') {
                 throw InvalidMeilisearchConfiguration::invalidIndexUid();
             }
 
-            $key = $app['config']->get('corex-search-meilisearch.key');
+            $key = $options->key?->reveal();
 
             if (! is_string($key) || $key === '') {
                 throw InvalidMeilisearchConfiguration::invalidKey();

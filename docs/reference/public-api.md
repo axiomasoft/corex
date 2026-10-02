@@ -23,11 +23,13 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Audit\Laravel\AuditWriteExemption` | spi-call | 1.0 |
 | `CoreX\Audit\Laravel\HasAuditLog` | spi-call | 1.0 |
 | `CoreX\Config\Contracts\ConfigReportSection` | spi-implement | 1.0 |
+| `CoreX\Config\Contracts\RuntimeConfigCheck` | spi-implement | 1.0 |
 | `CoreX\Config\Data\CoreOptions` | api | 1.0 |
 | `CoreX\Config\Data\SecretRef` | api | 1.0 |
 | `CoreX\Config\Exceptions\InvalidConfiguration` | api | 1.0 |
 | `CoreX\Config\Laravel\ConfigurationValidator` | spi-call | 1.0 |
 | `CoreX\Config\Laravel\CoreOptionsParser` | spi-call | 1.0 |
+| `CoreX\Config\Laravel\RuntimeConfigGate` | spi-call | 1.0 |
 | `CoreX\Context\Contracts\AccountConnectionResolver` | spi-implement | 1.0 |
 | `CoreX\Context\Contracts\IdentityPasswordRehasher` | spi-implement | 1.0 |
 | `CoreX\Context\Contracts\ImpersonationGuard` | spi-call | 1.0 |

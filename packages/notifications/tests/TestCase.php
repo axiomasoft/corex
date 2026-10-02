@@ -9,7 +9,9 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Notifications\Digest\Internal\DigestWakeupAdapter;
 use CoreX\Notifications\Digest\Internal\NotificationDigestDueSource;
+use CoreX\Notifications\Internal\NotificationsOptions;
 use CoreX\Notifications\NotificationsServiceProvider;
+use CoreX\Wakeup\Internal\WakeupOptions;
 use CoreX\Wakeup\WakeupServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -47,7 +49,9 @@ abstract class TestCase extends Orchestra
         parent::setUp();
         $this->app->instance(TenantContextResolver::class, new NotificationTenantContextResolver);
         $this->app['config']->set('corex-notifications.digest.enabled', true);
+        $this->app->forgetInstance(NotificationsOptions::class);
         $this->app['config']->set('corex-notifications.digest.accept_legacy_unstamped', false);
+        $this->app->forgetInstance(NotificationsOptions::class);
         $this->app['config']->set('corex-wakeup.handlers', [
             'notification.digest.v1' => [
                 'handler' => DigestWakeupAdapter::class,
@@ -55,6 +59,7 @@ abstract class TestCase extends Orchestra
                 'accept_legacy_unstamped' => false,
             ],
         ]);
+        $this->app->forgetInstance(WakeupOptions::class);
         $this->app->tag(NotificationDigestDueSource::class, 'corex.wakeup.due-sources');
         $this->app->forgetScopedInstances();
     }

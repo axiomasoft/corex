@@ -22,6 +22,7 @@ use CoreX\Media\Internal\SqlRelationLookup;
 use CoreX\Media\Internal\Support\MediaConfigSection;
 use CoreX\Media\Internal\Support\MediaOptions;
 use CoreX\Storage\Contracts\TenantStorage;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Override;
@@ -36,9 +37,12 @@ final class MediaServiceProvider extends ServiceProvider
 
         $this->mergeConfigFrom(__DIR__.'/../config/corex-media.php', 'corex-media');
 
-        $raw = $this->app['config']->get('corex-media', []);
-        $options = MediaOptions::fromArray(is_array($raw) ? $raw : []);
-        $this->app->instance(MediaOptions::class, $options);
+        $this->app->singleton(MediaOptions::class, static fn (Application $app): MediaOptions => MediaOptions::fromArray(
+            (array) $app->make(Repository::class)->get('corex-media', []),
+        ));
+
+        // The conversion driver tag is needed to register drivers now; this one-off read does not cache Options before boot.
+        $options = MediaOptions::fromArray((array) $this->app->make(Repository::class)->get('corex-media', []));
 
         $this->app->singleton(MediaPolicy::class, DenyMediaPolicy::class);
         $this->app->scoped(MediaOperationStore::class, static fn (Application $app): MediaOperationStore => new MediaOperationStore($app['db']->connection()));
@@ -66,5 +70,10 @@ final class MediaServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([SweepMediaOperations::class]);
         }
+    }
+
+    public function boot(): void
+    {
+        $this->app->make(MediaOptions::class);
     }
 }

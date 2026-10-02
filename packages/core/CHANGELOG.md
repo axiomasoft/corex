@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — typed Options and runtime configuration checks (P05.1)
+
+- Removed the static `CoreX\Config\Internal\Config` holder: `CoreOptions` is a lazy shared singleton read once at boot (`app(CoreOptions::class)` in migrations and tests; call `forgetInstance(CoreOptions::class)` after writing `corex` config in a booted test). Added `CoreOptions::$acknowledgedDangerousModes` (`corex.acknowledged_dangerous_modes`, exact config paths only), the `RuntimeConfigCheck` SPI and `RuntimeConfigGate`: checks run when the HTTP application finishes booting or a console command starts, except build commands. `corex:config:validate` runs them too, accepts `--production`, lists acknowledged dangerous modes as warnings and reports the `corex-operations.require_physical_tenancy=false` opt-out as a notice. `CoreOptionsParser::current()` is deprecated and returns the shared `CoreOptions`.
+
 ## Unreleased — CI ownership and test isolation repair (P10.2)
 
 - Added `Messaging\Laravel\InboxRetention` for explicit cleanup of a consumer's selected inbox message IDs. Other consumers and IDs remain retained; callers must establish that the selected messages cannot be replayed.

@@ -1044,7 +1044,7 @@
                     "return": "self(CoreX\\Access\\Laravel\\AuthOptions)",
                     "doc": {
                         "@param": [
-                            "array<string, mixed> $config"
+                            "array<array-key, mixed> $config"
                         ]
                     }
                 }

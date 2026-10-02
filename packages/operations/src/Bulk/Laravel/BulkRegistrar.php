@@ -23,6 +23,7 @@ use CoreX\Operations\Bulk\Internal\SqlBulkOperationStore;
 use CoreX\Operations\Bulk\Internal\TransferBulkExecutor;
 use CoreX\Operations\Bulk\Internal\TransferCapabilityUnavailable;
 use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Psr\Clock\ClockInterface;
 
@@ -31,17 +32,20 @@ final readonly class BulkRegistrar
 {
     public static function register(Application $app): void
     {
-        $config = $app['config']->get('corex-operations.bulk');
-        $options = BulkOptionsParser::fromArray(is_array($config) ? $config : []);
-        $app->instance(BulkOptions::class, $options);
+        // Registration below depends on enabled flags; this one-off read does not cache Options before boot.
+        $options = BulkOptionsParser::fromArray((array) $app->make(Repository::class)->get('corex-operations.bulk', []));
+
+        $app->singleton(BulkOptions::class, static fn (Application $app): BulkOptions => BulkOptionsParser::fromArray(
+            (array) $app->make(Repository::class)->get('corex-operations.bulk', []),
+        ));
         $app->singleton(BulkRetention::class, static fn (Application $app): BulkRetention => new BulkRetention(
             connection: $app->make(ApiSchemaRegistrar::class)->tenant(),
             scopeCodec: $app->make(DataScopeCodec::class),
             contexts: $app->make(TenantContextRestorer::class),
             clock: $app->make(ClockInterface::class),
-            resultRetentionSeconds: $options->resultRetentionSeconds,
-            metadataRetentionSeconds: $options->metadataRetentionSeconds,
-            idempotencyRetentionSeconds: $options->idempotencyRetentionSeconds,
+            resultRetentionSeconds: $app->make(BulkOptions::class)->resultRetentionSeconds,
+            metadataRetentionSeconds: $app->make(BulkOptions::class)->metadataRetentionSeconds,
+            idempotencyRetentionSeconds: $app->make(BulkOptions::class)->idempotencyRetentionSeconds,
         ));
 
         if (! $options->enabled) {
@@ -53,22 +57,22 @@ final readonly class BulkRegistrar
             scopeCodec: $app->make(DataScopeCodec::class),
             contexts: $app->make(TenantContextRestorer::class),
             clock: $app->make(ClockInterface::class),
-            leaseSeconds: $options->leaseSeconds,
-            resultRetentionSeconds: $options->resultRetentionSeconds,
+            leaseSeconds: $app->make(BulkOptions::class)->leaseSeconds,
+            resultRetentionSeconds: $app->make(BulkOptions::class)->resultRetentionSeconds,
         ));
         $app->singleton(TransferBulkExecutor::class, static fn (Application $app): TransferBulkExecutor => new TransferBulkExecutor(
             factory: self::factory($app),
             store: $app->make(BulkOperationStore::class),
             clock: $app->make(ClockInterface::class),
             transferInstalled: interface_exists('CoreX\\Transfer\\Contracts\\TransferRunner'),
-            retrySeconds: $options->retrySeconds,
+            retrySeconds: $app->make(BulkOptions::class)->retrySeconds,
             scopes: $app->make(DataScopeCodec::class),
         ));
         $app->singleton(BulkWorker::class, static fn (Application $app): BulkWorker => new BulkWorker(
             store: $app->make(BulkOperationStore::class),
             executor: $app->make(TransferBulkExecutor::class),
             clock: $app->make(ClockInterface::class),
-            worker: $options->worker,
+            worker: $app->make(BulkOptions::class)->worker,
         ));
         $app->singleton(BulkResultReader::class, static fn (Application $app): BulkResultReader => new BulkResultReader(
             // The host must replace this reader with its current field-policy check.

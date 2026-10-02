@@ -31,6 +31,7 @@ use CoreX\Webhooks\Internal\WebhookRetention;
 use CoreX\Webhooks\Internal\WebhookRetryPolicy;
 use CoreX\Webhooks\Internal\WebhookTopicCatalogue;
 use CoreX\Webhooks\Internal\WebhookUrlPolicy;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
@@ -40,16 +41,18 @@ final readonly class WebhookRegistrar
 {
     public static function register(Application $app): void
     {
-        $config = $app['config']->get('corex-webhooks');
-        $options = WebhookOptionsParser::fromArray(is_array($config) ? $config : []);
-        $urlPolicy = new WebhookUrlPolicy(organizationDeniedCidrs: $options->organizationDeniedCidrs);
-        $app->instance(WebhookOptions::class, $options);
-        $app->instance(WebhookUrlPolicy::class, $urlPolicy);
+        // Registration below depends on enabled flags; this one-off read does not cache Options before boot.
+        $options = WebhookOptionsParser::fromArray((array) $app->make(Repository::class)->get('corex-webhooks', []));
+
+        $app->singleton(WebhookOptions::class, static fn (Application $app): WebhookOptions => WebhookOptionsParser::fromArray(
+            (array) $app->make(Repository::class)->get('corex-webhooks', []),
+        ));
+        $app->singleton(WebhookUrlPolicy::class, static fn (Application $app): WebhookUrlPolicy => new WebhookUrlPolicy(organizationDeniedCidrs: $app->make(WebhookOptions::class)->organizationDeniedCidrs));
         $app->singleton(WebhookRetryPolicy::class, WebhookRetryPolicy::class);
         $app->singleton(WebhookTopicCatalogue::class, static fn (Application $app): WebhookTopicCatalogue => new WebhookTopicCatalogue(
             contracts: $app->make(MessageContractRegistry::class),
-            topics: $options->topics,
-            projectors: self::projectors($app, $options),
+            topics: $app->make(WebhookOptions::class)->topics,
+            projectors: self::projectors($app, $app->make(WebhookOptions::class)),
         ));
         $app->singleton(WebhookSubscriptionStore::class, static fn (Application $app): SqlWebhookSubscriptionStore => new SqlWebhookSubscriptionStore(
             connection: $app->make(ApiSchemaRegistrar::class)->tenant(),
@@ -57,7 +60,7 @@ final readonly class WebhookRegistrar
             catalogue: $app->make(WebhookTopicCatalogue::class),
             clock: $app->make(ClockInterface::class),
         ));
-        $app->singleton(WebhookDeliveryStore::class, static fn (Application $app): SqlWebhookDeliveryStore => self::deliveryStore($app, $options));
+        $app->singleton(WebhookDeliveryStore::class, static fn (Application $app): SqlWebhookDeliveryStore => self::deliveryStore($app, $app->make(WebhookOptions::class)));
         $app->singleton(WebhookManagement::class, static fn (Application $app): WebhookManagement => new WebhookManagement(
             connection: $app->make(ApiSchemaRegistrar::class)->tenant(),
             contexts: $app->make(TenantContextRestorer::class),
@@ -76,22 +79,22 @@ final readonly class WebhookRegistrar
             connection: $app->make(ApiSchemaRegistrar::class)->tenant(),
             inbox: $app->make(Inbox::class),
             catalogue: $app->make(WebhookTopicCatalogue::class),
-            projectors: self::projectors($app, $options),
+            projectors: self::projectors($app, $app->make(WebhookOptions::class)),
             clock: $app->make(ClockInterface::class),
         ));
         $app->singleton(WebhookRetention::class, static fn (Application $app): WebhookRetention => new WebhookRetention(
             connection: $app->make(ApiSchemaRegistrar::class)->tenant(),
             contexts: $app->make(TenantContextRestorer::class),
             clock: $app->make(ClockInterface::class),
-            bodyRetentionSeconds: $options->bodyRetentionSeconds,
-            historyRetentionSeconds: $options->historyRetentionSeconds,
-            replayHorizonSeconds: $options->replayHorizonSeconds,
+            bodyRetentionSeconds: $app->make(WebhookOptions::class)->bodyRetentionSeconds,
+            historyRetentionSeconds: $app->make(WebhookOptions::class)->historyRetentionSeconds,
+            replayHorizonSeconds: $app->make(WebhookOptions::class)->replayHorizonSeconds,
         ));
-        $app->singleton(WebhookDeliveryWorker::class, static function (Application $app) use ($options): WebhookDeliveryWorker {
-            self::assertDeliveryReady($app, $options);
+        $app->singleton(WebhookDeliveryWorker::class, static function (Application $app): WebhookDeliveryWorker {
+            self::assertDeliveryReady($app, $app->make(WebhookOptions::class));
 
             return new WebhookDeliveryWorker(
-                store: self::deliveryStore($app, $options),
+                store: self::deliveryStore($app, $app->make(WebhookOptions::class)),
                 signer: $app->make(WebhookSigner::class),
                 urlPolicy: $app->make(WebhookUrlPolicy::class),
                 transport: $app->make(WebhookHttpTransport::class),

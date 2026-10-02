@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Database\Enums\IdStrategy;
 use CoreX\Modules\Contracts\ModuleRegistry;
@@ -116,6 +117,7 @@ it('declares and dispatches company, contact and association operations through 
 
 it('normalizes CRM identifiers for the configured ID strategy', function (): void {
     config(['corex.ids.strategy' => IdStrategy::Int]);
+    app()->forgetInstance(CoreOptions::class);
 
     expect(CrmIdentifier::fromPath('7'))->toBe(7)
         ->and(CrmIdentifier::fromInput(8))->toBe(8)

@@ -6,19 +6,22 @@ namespace CoreX\Wakeup;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
+use CoreX\Config\Contracts\RuntimeConfigCheck;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Wakeup\Contracts\DueWakeupSource;
 use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use CoreX\Wakeup\Contracts\WakeupScheduleHint;
 use CoreX\Wakeup\Contracts\WakeupScheduler;
-use CoreX\Wakeup\Data\WakeupHandlerDefinition;
 use CoreX\Wakeup\Internal\Commands\SweepWakeups;
 use CoreX\Wakeup\Internal\Commands\ValidateWakeupStamps;
+use CoreX\Wakeup\Internal\DangerousModesCheck;
 use CoreX\Wakeup\Internal\SqlWakeupScheduler;
 use CoreX\Wakeup\Internal\SweepRunner;
 use CoreX\Wakeup\Internal\SystemClock;
 use CoreX\Wakeup\Internal\WakeupHandlerRegistry;
+use CoreX\Wakeup\Internal\WakeupOptions;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Override;
@@ -32,6 +35,10 @@ final class WakeupServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/corex-wakeup.php', 'corex-wakeup');
+        $this->app->singleton(WakeupOptions::class, static fn (Application $app): WakeupOptions => WakeupOptions::fromArray(
+            (array) $app->make(Repository::class)->get('corex-wakeup', []),
+        ));
+        $this->app->tag([DangerousModesCheck::class], RuntimeConfigCheck::class);
 
         if (! $this->app->bound(ClockInterface::class)) {
             $this->app->singleton(ClockInterface::class, static fn (): SystemClock => new SystemClock);
@@ -39,7 +46,7 @@ final class WakeupServiceProvider extends ServiceProvider
         $this->app->singleton(
             WakeupHandlerRegistry::class,
             fn (Application $app): WakeupHandlerRegistry => WakeupHandlerRegistry::compile(
-                definitions: $this->handlerDefinitions($app),
+                definitions: $app->make(WakeupOptions::class)->handlers,
                 resolve: fn (string $handler) => $app->make($handler),
                 registryFingerprint: $this->registryFingerprint($app),
             ),
@@ -59,8 +66,8 @@ final class WakeupServiceProvider extends ServiceProvider
             contexts: $app->make(TenantContextResolver::class),
             handlers: $app->make(WakeupHandlerRegistry::class),
             dueSources: $this->dueSources($app),
-            leaseSeconds: (int) $app['config']->get('corex-wakeup.lease_seconds'),
-            maxAttempts: (int) $app['config']->get('corex-wakeup.max_attempts'),
+            leaseSeconds: $app->make(WakeupOptions::class)->leaseSeconds,
+            maxAttempts: $app->make(WakeupOptions::class)->maxAttempts,
             clock: $app->make(ClockInterface::class),
         ));
 
@@ -69,46 +76,9 @@ final class WakeupServiceProvider extends ServiceProvider
         }
     }
 
-    /** @return list<WakeupHandlerDefinition> */
-    private function handlerDefinitions(Application $app): array
+    public function boot(): void
     {
-        $definitions = [];
-
-        foreach ((array) $app['config']->get('corex-wakeup.handlers', []) as $kind => $configured) {
-            if (! is_string($kind)) {
-                throw new RuntimeException('Wakeup handler definitions must be keyed by kind.');
-            }
-
-            if (is_string($configured)) {
-                trigger_error(
-                    "Scalar wakeup handler config [{$kind}] is deprecated; configure handler and version explicitly.",
-                    E_USER_DEPRECATED,
-                );
-                $definitions[] = new WakeupHandlerDefinition(
-                    kind: $kind,
-                    version: 'legacy-class/1:'.hash('sha256', $configured),
-                    handler: $configured,
-                );
-
-                continue;
-            }
-
-            if (! is_array($configured)
-                || ! is_string($configured['handler'] ?? null)
-                || ! is_string($configured['version'] ?? null)
-                || (isset($configured['accept_legacy_unstamped']) && ! is_bool($configured['accept_legacy_unstamped']))) {
-                throw new RuntimeException('Wakeup handler definitions require handler, version and an optional boolean accept_legacy_unstamped.');
-            }
-
-            $definitions[] = new WakeupHandlerDefinition(
-                kind: $kind,
-                version: $configured['version'],
-                handler: $configured['handler'],
-                acceptLegacyUnstamped: $configured['accept_legacy_unstamped'] ?? false,
-            );
-        }
-
-        return $definitions;
+        $this->app->make(WakeupOptions::class);
     }
 
     private function registryFingerprint(Application $app): string

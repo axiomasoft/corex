@@ -6,6 +6,7 @@ namespace CoreX\Operations;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
+use CoreX\Config\Contracts\RuntimeConfigCheck;
 use CoreX\Config\Data\SecretRef;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
@@ -26,6 +27,7 @@ use CoreX\Operations\Authorization\Laravel\DeclaredFieldAuthorizer;
 use CoreX\Operations\Bulk\Data\BulkOptions;
 use CoreX\Operations\Bulk\Internal\Commands\WorkBulkOperations;
 use CoreX\Operations\Bulk\Laravel\BulkRegistrar;
+use CoreX\Operations\Cost\Data\CostOptions;
 use CoreX\Operations\Cost\Laravel\CostRegistrar;
 use CoreX\Operations\Definition\Contracts\SchemaContributor;
 use CoreX\Operations\Definition\Internal\DeclaredSchemaContributor;
@@ -42,6 +44,7 @@ use CoreX\Operations\Idempotency\Contracts\IdempotencyStore;
 use CoreX\Operations\Idempotency\Data\StoredOperationOutcome;
 use CoreX\Operations\Idempotency\Internal\IdempotentOperationInvoker;
 use CoreX\Operations\Idempotency\Internal\SqlIdempotencyStore;
+use CoreX\Operations\Internal\AppKeyCheck;
 use CoreX\Operations\Invocation\Contracts\ContextResolver;
 use CoreX\Operations\Invocation\Contracts\OperationInvoker;
 use CoreX\Operations\Invocation\Contracts\RequestContextProvider;
@@ -58,6 +61,7 @@ use CoreX\Operations\Pagination\Contracts\CursorKeyring;
 use CoreX\Operations\Pagination\Internal\OrderingRegistry;
 use CoreX\Operations\Pagination\Internal\SignedCursorCodec;
 use CoreX\Time\Laravel\SystemClock;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\Route;
@@ -80,11 +84,11 @@ final class ApiServiceProvider extends ServiceProvider
         $this->app->tag([OperationSectionCompiler::class], ManifestSectionCompiler::class);
 
         $this->mergeConfigFrom(__DIR__.'/../config/corex-operations.php', 'corex-operations');
-        $this->app->bind(ApiOptions::class, static function (Application $app): ApiOptions {
-            $config = $app['config']->get('corex-operations');
-
-            return ApiOptions::fromArray(is_array($config) ? $config : []);
-        });
+        $this->app->singleton(ApiOptions::class, static fn (Application $app): ApiOptions => ApiOptions::fromArray(
+            (array) $app->make(Repository::class)->get('corex-operations', []),
+        ));
+        $this->app->bind(AppKeyCheck::class, static fn (Application $app): AppKeyCheck => new AppKeyCheck($app->make(Repository::class)->get('app.key')));
+        $this->app->tag([AppKeyCheck::class], RuntimeConfigCheck::class);
         $this->app->bindIf(PrincipalResolver::class, DenyPrincipalResolver::class);
         $this->app->bindIf(RequestContextProvider::class, CurrentRequestContext::class);
         $this->app->bindIf(ClientScopeAuthorizer::class, DenyClientScopeAuthorizer::class);
@@ -208,8 +212,8 @@ final class ApiServiceProvider extends ServiceProvider
                 contexts: $app->make(TenantContextResolver::class),
                 clock: $app->make(ClockInterface::class),
                 keyHmacSecret: new SecretRef($secret),
-                leaseSeconds: (int) $app['config']->get('corex-operations.idempotency.lease_seconds', 30),
-                retentionSeconds: (int) $app['config']->get('corex-operations.idempotency.retention_seconds', 86_400),
+                leaseSeconds: $app->make(ApiOptions::class)->idempotencyLeaseSeconds,
+                retentionSeconds: $app->make(ApiOptions::class)->idempotencyRetentionSeconds,
             );
         });
 
@@ -239,6 +243,7 @@ final class ApiServiceProvider extends ServiceProvider
         }
 
         $options = $this->app->make(ApiOptions::class);
+        $this->app->make(CostOptions::class);
 
         if ($options->routesEnabled && ! $this->app['router']->has('corex.api.discovery')) {
             BulkRegistrar::boot($this->app);

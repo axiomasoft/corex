@@ -25,6 +25,7 @@ use CoreX\Operations\Internal\Http\ApiController;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Invocation\Contracts\RequestContextProvider;
 use CoreX\Operations\Invocation\Internal\OperationDispatcher;
+use CoreX\Operations\Laravel\Support\ApiOptions;
 use CoreX\Operations\OpenApi\Internal\OpenApiDocumentGenerator;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
@@ -154,6 +155,7 @@ final class PlatformTest extends TestCase
         $this->allow();
         $this->tenants->value = new TenantContext($this->account('A'), boxed: true);
         $this->app['config']->set('corex-operations.require_physical_tenancy', false);
+        $this->app->forgetInstance(ApiOptions::class);
         self::assertSame(201, $this->dispatch()->getStatusCode());
     }
 

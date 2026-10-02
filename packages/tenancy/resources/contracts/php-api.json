@@ -2981,6 +2981,15 @@
                             "optional": false,
                             "default": null,
                             "flags": 0
+                        },
+                        {
+                            "name": "options",
+                            "type": "?CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "null",
+                            "flags": 0
                         }
                     ],
                     "return": "int",
@@ -3060,6 +3069,15 @@
                             "variadic": false,
                             "optional": false,
                             "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "options",
+                            "type": "?CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "null",
                             "flags": 0
                         }
                     ],

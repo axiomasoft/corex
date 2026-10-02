@@ -15,7 +15,6 @@ use CoreX\Intl\Territory\Exceptions\OperationConflictException;
 use CoreX\Intl\Territory\Exceptions\SchemaMismatchException;
 use DateTimeImmutable;
 use DateTimeZone;
-use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Connection;
 use Override;
 
@@ -23,7 +22,7 @@ final class SqlDatasetImporter implements DatasetImporter
 {
     public function __construct(
         private readonly Connection $connection,
-        private readonly Repository $config,
+        private readonly string $datasetKey,
         private readonly FixtureReferenceNormalizer $normalizer,
         private readonly DataScopeAuthorizer $authorizer,
     ) {}
@@ -48,7 +47,7 @@ final class SqlDatasetImporter implements DatasetImporter
             throw new SchemaMismatchException('Dataset candidate normalized hash does not match the fixture contents.');
         }
 
-        $datasetKey = (string) $this->config->get('corex-intl.reference.dataset_key', 'geography');
+        $datasetKey = $this->datasetKey;
         $snapshotId = $candidate->manifest->snapshotId;
 
         return $this->connection->transaction(function () use ($datasetKey, $snapshotId, $candidate, $expected, $parsed): DatasetReceipt {

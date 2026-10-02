@@ -18,6 +18,8 @@ explicit UTC half-open window. The shared local wakeup runner admits a separate 
 its durable SQL due source recreates residual and late closed-window batches after a restart,
 without mutating a completed wakeup request key. Current cancellation and preference state is
 checked before admission. Once admitted, the delivery is an immutable effect.
+`corex-notifications.digest.accept_legacy_unstamped=true` is a dangerous mode: production starts only when
+`corex.acknowledged_dangerous_modes` lists that exact path.
 
 ## Installation
 

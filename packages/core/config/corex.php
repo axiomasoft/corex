@@ -178,6 +178,17 @@ return [
         'inbox_retention' => null,
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Acknowledged dangerous modes
+    |--------------------------------------------------------------------------
+    | Exact config paths of dangerous package modes the operator accepts in
+    | `production` (for example `corex-workflow.enforce_declarations`). An
+    | enabled dangerous mode that is not listed here blocks process start;
+    | patterns and "acknowledge everything" are not supported.
+    */
+    'acknowledged_dangerous_modes' => [],
+
     'modules' => [
         /*
         |--------------------------------------------------------------------------

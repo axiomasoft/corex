@@ -133,12 +133,6 @@ parameters:
 			path: src/Internal/WakeupHandlerRegistry.php
 
 		-
-			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 3
-			path: src/WakeupServiceProvider.php
-
-		-
 			rawMessage: Cannot access offset 'db' on Illuminate\Contracts\Foundation\Application.
 			identifier: offsetAccess.nonOffsetAccessible
 			count: 2
@@ -147,18 +141,6 @@ parameters:
 		-
 			rawMessage: 'Cannot call method connection() on mixed.'
 			identifier: method.nonObject
-			count: 2
-			path: src/WakeupServiceProvider.php
-
-		-
-			rawMessage: 'Cannot call method get() on mixed.'
-			identifier: method.nonObject
-			count: 3
-			path: src/WakeupServiceProvider.php
-
-		-
-			rawMessage: Cannot cast mixed to int.
-			identifier: cast.int
 			count: 2
 			path: src/WakeupServiceProvider.php
 

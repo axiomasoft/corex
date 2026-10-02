@@ -25,12 +25,6 @@ parameters:
 			path: scripts/attributes-architecture-gate.php
 
 		-
-			rawMessage: 'Parameter #1 $config of static method CoreX\CustomFields\Internal\Laravel\AttributeComposition::fromArray() expects array<string, mixed>, array<mixed, mixed> given.'
-			identifier: argument.type
-			count: 1
-			path: scripts/attributes-architecture-gate.php
-
-		-
 			rawMessage: 'Argument of an invalid type mixed supplied for foreach, only iterables are supported.'
 			identifier: foreach.nonIterable
 			count: 2

@@ -34,9 +34,9 @@ final class RuntimeRegistrar implements PackageRegistrar
     #[Override]
     public function register(Application $app): void
     {
-        // bind(), not instance(): each make() re-reads config. Materializing
-        // TenancyOptions here would validate OIDC before Testbench fills it.
-        $app->bind(
+        // Lazy singleton, never instance(): materializing TenancyOptions here would
+        // validate OIDC before Testbench fills it; the provider resolves it in boot().
+        $app->singleton(
             TenancyOptions::class,
             static function (Application $app): TenancyOptions {
                 $tenancy = $app['config']->get('tenancy', []);
@@ -93,7 +93,7 @@ final class RuntimeRegistrar implements PackageRegistrar
             ),
         );
 
-        // TenancyOptions stays bind()-lazy (P7.2): materializing it here would
+        // TenancyOptions stays lazy (P7.2): materializing it here would
         // validate OIDC before Testbench defineEnvironment fills issuer fields.
         // bootstrapper_order is read from the already-merged composition config,
         // same source the provider used before this move.

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — typed Options and runtime configuration checks (P05.1)
+
+- Added internal `MeilisearchOptions`; host, index and key stay runtime requirements of the `meilisearch` driver.
+
 ## Unreleased — kernel package and API migration
 
 - Breaking (PLAN3.P02–P04, pre-1.0): The bridge owns CoreX\SearchMeilisearch and MeilisearchServiceProvider; configuration failures have package-owned typed codes and the concrete search driver is Internal.

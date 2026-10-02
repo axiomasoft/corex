@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — typed Options and runtime configuration checks (P05.1)
+
+- Added internal `WorkflowOptions` and a `RuntimeConfigCheck`: in `production`, `corex-workflow.enforce_declarations=false` stops the process unless that exact path is listed in `corex.acknowledged_dangerous_modes`.
+
 ## Unreleased — kernel package and API migration
 
 - Breaking (PLAN3.P02–P04, pre-1.0): EngineAdapter and WorkflowBinding use typed TriggerRequest, StartResult, SignalRequest/SignalResult and transition DTOs; workflow trigger persistence is Internal and the provider owns composition.

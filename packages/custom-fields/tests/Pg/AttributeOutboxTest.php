@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Internal\Config;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\CustomFields\Contracts\AttributeStore;
 use CoreX\CustomFields\Data\ValuePatch;
 use CoreX\CustomFields\Internal\Integration\AttributeMessageContracts;
@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Schema;
 uses(PgTestCase::class)->group('pg');
 
 beforeEach(function (): void {
-    Schema::dropIfExists(Config::outboxMessagesTable());
+    Schema::dropIfExists(app(CoreOptions::class)->outboxMessagesTable);
     $migration = require __DIR__.'/../../../core/database/migrations/pg/2026_09_20_100000_create_sys_outbox_messages_table.php';
     $migration->up();
 });
@@ -68,7 +68,7 @@ it('commits one metadata-only outbox row and appends nothing on replay', functio
     $store = p107Store($engine);
     $first = p107Write($store, $engine);
     $replay = p107Write($store, $engine);
-    $rows = DB::table(Config::outboxMessagesTable())->get();
+    $rows = DB::table(app(CoreOptions::class)->outboxMessagesTable)->get();
 
     expect($first->status)->toBe('applied')
         ->and($replay->status)->toBe('replayed')
@@ -97,7 +97,7 @@ it('rolls back the mutation and token when outbox admission fails', function (st
     expect(fn (): mixed => p107Write(p107Store($engine, declareContract: false), $engine))
         ->toThrow(UnknownMessageContract::class, 'MSG-002');
 
-    expect(DB::table(Config::outboxMessagesTable())->count())->toBe(0)
+    expect(DB::table(app(CoreOptions::class)->outboxMessagesTable)->count())->toBe(0)
         ->and(DB::table('sys_attribute_documents')->count())->toBe(0)
         ->and(DB::table('sys_attribute_eav_values')->count())->toBe(0)
         ->and(DB::table('sys_attribute_eav_records')->count())->toBe(0)

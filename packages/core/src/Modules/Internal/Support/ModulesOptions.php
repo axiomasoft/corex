@@ -16,7 +16,7 @@ final readonly class ModulesOptions
         public string $cachePrefix,
     ) {}
 
-    /** @param  array<string, mixed>  $config */
+    /** @param  array<array-key, mixed>  $config */
     public static function fromArray(array $config): self
     {
         $violations = new ConfigurationValidator;

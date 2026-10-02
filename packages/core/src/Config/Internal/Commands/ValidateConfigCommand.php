@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Config\Internal\Commands;
 
 use CoreX\Config\Contracts\ConfigReportSection;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Config\Data\SecretRef;
 use CoreX\Config\Exceptions\InvalidConfiguration;
+use CoreX\Config\Laravel\RuntimeConfigGate;
 use Illuminate\Console\Command;
 use Throwable;
 use UnexpectedValueException;
@@ -21,7 +23,7 @@ final class ValidateConfigCommand extends Command
     /** @var list<ConfigReportSection> */
     private array $sections = [];
 
-    protected $signature = 'corex:config:validate {--format=text}';
+    protected $signature = 'corex:config:validate {--format=text} {--production : Evaluate runtime checks as the production environment}';
 
     protected $description = 'Validate bound Options, print effective drivers and adapter availability, and never print secret values.';
 
@@ -62,6 +64,7 @@ final class ValidateConfigCommand extends Command
         $this->writeDrivers();
         $this->writeAdapters();
         $this->writeSecrets();
+        $this->writeRuntimeChecks();
 
         foreach ($this->errors as $error) {
             $this->writeError($error);
@@ -146,6 +149,25 @@ final class ValidateConfigCommand extends Command
     private function optionSources(): array
     {
         return array_merge([], ...array_map(static fn (ConfigReportSection $section): array => $section->options(), $this->sections));
+    }
+
+    private function writeRuntimeChecks(): void
+    {
+        $production = $this->option('production') === true || $this->laravel->environment('production');
+
+        foreach (RuntimeConfigGate::violations($this->laravel, $production) as $violation) {
+            $this->errors[] = $violation;
+        }
+
+        if ($this->laravel->bound(CoreOptions::class)) {
+            foreach ($this->laravel->make(CoreOptions::class)->acknowledgedDangerousModes as $path) {
+                $this->writeWarning('WARNING [dangerous-mode-acknowledged] '.$path);
+            }
+        }
+
+        if (config('corex-operations.require_physical_tenancy') === false) {
+            $this->writeLine('NOTICE [opt-out] corex-operations.require_physical_tenancy=false');
+        }
     }
 
     private function writeSecrets(): void

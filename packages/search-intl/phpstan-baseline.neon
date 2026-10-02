@@ -5,15 +5,3 @@ parameters:
 			identifier: instanceof.alwaysTrue
 			count: 1
 			path: src/Internal/LocalizedSearchSchema.php
-
-		-
-			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/SearchIntlServiceProvider.php
-
-		-
-			rawMessage: 'Cannot call method get() on mixed.'
-			identifier: method.nonObject
-			count: 1
-			path: src/SearchIntlServiceProvider.php

@@ -25,7 +25,7 @@ trait HasAuditLog
     public static function bootHasAuditLog(): void
     {
         // Observers are registered UNCONDITIONALLY — the killswitch
-        // (Config::auditEnabled) is evaluated at write time in
+        // (CoreOptions::auditEnabled) is evaluated at write time in
         // AuditObserver::record(), not here (A60): model boot happens once and
         // is cached across the process, so a boot-time skip would never
         // re-enable when the config flips (and the capability path never saw

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Internal\Config;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Database\Enums\IdStrategy;
 use CoreX\Database\Laravel\IdColumns;
@@ -18,6 +18,7 @@ use Illuminate\Support\Str;
 
 it('model key behaviour follows config(corex.ids.strategy)', function (IdStrategy $strategy, string $keyType, bool $incrementing): void {
     config(['corex.ids.strategy' => $strategy]);
+    app()->forgetInstance(CoreOptions::class);
 
     $widget = new Widget;
 
@@ -32,15 +33,19 @@ it('model key behaviour follows config(corex.ids.strategy)', function (IdStrateg
 
 it('generates the id kind matching the strategy', function (): void {
     config(['corex.ids.strategy' => IdStrategy::Ulid]);
+    app()->forgetInstance(CoreOptions::class);
     expect(Str::isUlid((new Widget)->newUniqueId()))->toBeTrue();
 
     config(['corex.ids.strategy' => IdStrategy::Uuid]);
+    app()->forgetInstance(CoreOptions::class);
     expect(Str::isUuid((new Widget)->newUniqueId()))->toBeTrue();
 
     config(['corex.ids.strategy' => IdStrategy::Uuid7]);
+    app()->forgetInstance(CoreOptions::class);
     expect(Str::isUuid((new Widget)->newUniqueId()))->toBeTrue();
 
     config(['corex.ids.strategy' => IdStrategy::Int]);
+    app()->forgetInstance(CoreOptions::class);
     expect((new Widget)->uniqueIds())->toBe([]);
 });
 
@@ -48,27 +53,29 @@ it('config/corex.php declares the uuid7 strategy', function (): void {
     expect(config('corex.ids.strategy'))->toBe(IdStrategy::Uuid7);
 });
 
-// A22: Config::idStrategy() must fall back to the SAME default as
+// A22: app(CoreOptions::class)->idStrategy must fall back to the SAME default as
 // config/corex.php. A host app that publishes the config file with a
 // mergeConfigFrom() flat-array replace (no 'ids.strategy' key at all) hits
-// Config::idStrategy()'s own default, not the package config file's — the
+// app(CoreOptions::class)->idStrategy's own default, not the package config file's — the
 // two must not diverge. Simulate a genuinely missing key (offsetUnset), not
 // a config('corex.ids.strategy', ...) read that would just echo whatever the
 // package config file already merged in.
-it('Config::idStrategy() defaults to uuid7 when the key is entirely absent', function (): void {
+it('app(CoreOptions::class)->idStrategy defaults to uuid7 when the key is entirely absent', function (): void {
     // Repository::offsetUnset() on a dot key only nulls the leaf (Arr::set
     // semantics), it does not remove it — has() would still report the key
     // present. Replace the whole 'corex.ids' node with one that never had
     // 'strategy' in it, so the key is genuinely absent, the way a host app's
     // mergeConfigFrom() flat-array replace (A22) would leave it.
     config(['corex.ids' => Arr::except(config('corex.ids', []), ['strategy'])]);
+    app()->forgetInstance(CoreOptions::class);
 
     expect(config()->has('corex.ids.strategy'))->toBeFalse()
-        ->and(Config::idStrategy())->toBe(IdStrategy::Uuid7);
+        ->and(app(CoreOptions::class)->idStrategy)->toBe(IdStrategy::Uuid7);
 });
 
 it('uuid7 ids are time-sortable (monotonic across successive generations)', function (): void {
     config(['corex.ids.strategy' => IdStrategy::Uuid7]);
+    app()->forgetInstance(CoreOptions::class);
 
     $widget = new Widget;
     $ids = array_map(static fn () => $widget->newUniqueId(), range(1, 5));
@@ -80,6 +87,7 @@ it('uuid7 ids are time-sortable (monotonic across successive generations)', func
 
 it('IdColumns emits integer key columns under the int strategy', function (): void {
     config(['corex.ids.strategy' => IdStrategy::Int]);
+    app()->forgetInstance(CoreOptions::class);
 
     Schema::create('id_cols_probe', function (Blueprint $table): void {
         IdColumns::primary($table);
@@ -101,6 +109,7 @@ it('IdColumns emits integer key columns under the int strategy', function (): vo
 // read here straight from information_schema.columns.data_type.
 it('IdColumns emits the id-strategy-correct native column type on PG (information_schema)', function (IdStrategy $strategy, string $expectedDataType): void {
     config(['corex.ids.strategy' => $strategy]);
+    app()->forgetInstance(CoreOptions::class);
 
     Schema::connection('pgsql')->dropIfExists('id_cols_pg_probe');
     Schema::connection('pgsql')->create('id_cols_pg_probe', function (Blueprint $table): void {
@@ -137,6 +146,7 @@ it('IdColumns emits the id-strategy-correct native column type on PG (informatio
 // regression (mutation-check: restore uuid('id') in sys_settings → this reds).
 it('core tables build and accept a settings row under the ulid id strategy', function (): void {
     config(['corex.ids.strategy' => IdStrategy::Ulid]);
+    app()->forgetInstance(CoreOptions::class);
 
     DB::connection('pgsql')->statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::connection('pgsql')->statement('CREATE SCHEMA public');

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Internal\Config;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Database\Laravel\IdColumns;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -19,10 +19,10 @@ return new class extends Migration
 {
     public function up(): void
     {
-        $table = Config::departmentUserTable();
+        $table = app(CoreOptions::class)->departmentUserTable;
 
         Schema::create($table, function (Blueprint $table): void {
-            IdColumns::foreign($table, 'department_id')->constrained(Config::departmentsTable())->cascadeOnDelete();
+            IdColumns::foreign($table, 'department_id')->constrained(app(CoreOptions::class)->departmentsTable)->cascadeOnDelete();
             IdColumns::reference($table, 'user_id');
             $table->string('role', 16)->default('member');
             $table->boolean('is_primary')->default(false);
@@ -38,6 +38,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists(Config::departmentUserTable());
+        Schema::dropIfExists(app(CoreOptions::class)->departmentUserTable);
     }
 };

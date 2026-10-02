@@ -49,24 +49,6 @@ parameters:
 			path: src/Internal/Laravel/AttributeComposition.php
 
 		-
-			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 2
-			path: src/Internal/Laravel/AttributeCompositionRegistrar.php
-
-		-
-			rawMessage: 'Cannot call method get() on mixed.'
-			identifier: method.nonObject
-			count: 2
-			path: src/Internal/Laravel/AttributeCompositionRegistrar.php
-
-		-
-			rawMessage: Cannot cast mixed to string.
-			identifier: cast.string
-			count: 5
-			path: src/Internal/Laravel/AttributeCompositionRegistrar.php
-
-		-
 			rawMessage: Cannot access property $QUERY PLAN on mixed.
 			identifier: property.nonObject
 			count: 1

@@ -20,6 +20,7 @@ use CoreX\Tenancy\DomainTrust\Exceptions\DomainTrustDenied;
 use CoreX\Tenancy\DomainTrust\Exceptions\DomainTrustDisabled;
 use CoreX\Tenancy\DomainTrust\Internal\DomainTrustCoordinator;
 use CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
@@ -172,6 +173,7 @@ function domainTrustCoordinatorDT(): array
     $authorizer = new FakeDomainTrustAuthorizerDT;
 
     config(['tenancy.domain_trust.enabled' => true]);
+    app()->forgetInstance(TenancyOptions::class);
     app()->instance(DomainTrustPolicy::class, $policy);
     app()->instance(DomainChallengeStore::class, $store);
     app()->instance(DomainOwnershipProofVerifier::class, $verifier);
@@ -265,6 +267,7 @@ it('denies verification and rolls back trusted state when resolver-cache invalid
         'cache_ttl' => 300,
         'cache_store' => null,
     ]]);
+    app()->forgetInstance(TenancyOptions::class);
     app()->instance('globalCache', new class
     {
         public function store(?string $name): never

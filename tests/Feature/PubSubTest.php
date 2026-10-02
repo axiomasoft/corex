@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Messaging\Contracts\PubSub;
 use CoreX\Messaging\Contracts\WorkerRuntime;
 use CoreX\Messaging\Enums\PubSubDriver;
@@ -72,6 +73,7 @@ it('delivers a publish()ed payload to a subscribe()d handler on the null driver'
 
 it('(е) publish → subscribe delivers through app(PubSub::class) on the null driver', function (): void {
     config(['corex.pubsub.driver' => PubSubDriver::Null]);
+    app()->forgetInstance(CoreOptions::class);
     $received = [];
 
     app(PubSub::class)->subscribe('module.enabled', function (array $payload) use (&$received): void {
@@ -84,6 +86,7 @@ it('(е) publish → subscribe delivers through app(PubSub::class) on the null d
 
 it('AC-25(b)/(в) PubSubManager delegates publish() to the null driver selected by corex.pubsub.driver — behavioral, no reflection', function (): void {
     config(['corex.pubsub.driver' => PubSubDriver::Null]);
+    app()->forgetInstance(CoreOptions::class);
     $spy = new RecordingPubSub;
     app()->instance(NullPubSub::class, $spy);
 
@@ -94,6 +97,7 @@ it('AC-25(b)/(в) PubSubManager delegates publish() to the null driver selected 
 
 it('AC-25(b)/(в) PubSubManager delegates publish() to the redis driver selected by corex.pubsub.driver — behavioral, no live Redis call', function (): void {
     config(['corex.pubsub.driver' => PubSubDriver::Redis]);
+    app()->forgetInstance(CoreOptions::class);
     $spy = new RecordingPubSub;
     app()->instance(RedisPubSub::class, $spy);
 
@@ -104,6 +108,7 @@ it('AC-25(b)/(в) PubSubManager delegates publish() to the redis driver selected
 
 it('AC-25(b)/(в) PubSubManager delegates publish() to the database driver selected by corex.pubsub.driver — behavioral, no live DB call', function (): void {
     config(['corex.pubsub.driver' => PubSubDriver::Database]);
+    app()->forgetInstance(CoreOptions::class);
     $spy = new RecordingPubSub;
     app()->instance(DatabasePollPubSub::class, $spy);
 

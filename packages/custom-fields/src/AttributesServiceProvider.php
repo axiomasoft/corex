@@ -14,6 +14,7 @@ use CoreX\CustomFields\Contracts\SchemaOperations;
 use CoreX\CustomFields\Data\AttributeStoragePolicy;
 use CoreX\CustomFields\Data\AttributeTables;
 use CoreX\CustomFields\Errors\Internal\PackageProblemDefinitions;
+use CoreX\CustomFields\Internal\CustomFieldsOptions;
 use CoreX\CustomFields\Internal\Integration\AttributeMessageTranslator;
 use CoreX\CustomFields\Internal\Laravel\AttributeComposition;
 use CoreX\CustomFields\Internal\Laravel\AttributeCompositionRegistrar;
@@ -139,5 +140,10 @@ final class AttributesServiceProvider extends ServiceProvider
 
             return $catalogue;
         });
+    }
+
+    public function boot(): void
+    {
+        $this->app->make(CustomFieldsOptions::class);
     }
 }

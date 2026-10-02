@@ -6954,7 +6954,7 @@
                     "return": "self(CoreX\\Operations\\Laravel\\Support\\ApiOptions)",
                     "doc": {
                         "@param": [
-                            "array<string, mixed> $config"
+                            "array<array-key, mixed> $config"
                         ]
                     }
                 },

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — typed Options and runtime configuration checks (P05.1)
+
+- Added internal `IntlOptions` (lazy singleton, resolved in `boot()`); `SqlGeographyProvider` and `SqlDatasetImporter` receive the dataset key instead of the config repository.
+
 ## Unreleased — kernel package and API migration
 
 - Breaking (PLAN3.P02–P04, pre-1.0): Currency/rate lookup and import ports return CurrencyInfo, RateBatch, RateSnapshot and receipt DTOs; translation and locale services use feature-owned namespaces and explicit Api/Spi declarations.
