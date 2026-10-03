@@ -130,7 +130,11 @@
             "extends": [],
             "implements": [],
             "uses": [],
-            "doc": [],
+            "doc": {
+                "@phpstan-import-type": [
+                    "EventData from CloudEventCodec"
+                ]
+            },
             "methods": {
                 "project": {
                     "visibility": "public",
@@ -161,7 +165,7 @@
                     "return": "array",
                     "doc": {
                         "@return": [
-                            "array{event_id: string, type: string, version: int, occurred_at: string, data: array<string, string>, correlation_id: (string | null)}"
+                            "array<string, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string)>)>)>)>)>)>)>)>"
                         ]
                     }
                 }

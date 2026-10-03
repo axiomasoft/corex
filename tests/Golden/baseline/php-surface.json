@@ -24042,6 +24042,61 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Messaging\\Contracts\\CloudEventCodec": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "decode": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "json",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Messaging\\Data\\MessageEnvelope",
+                "static": false
+            },
+            "encode": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "message",
+                        "type": "CoreX\\Messaging\\Data\\MessageEnvelope",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": false
+            },
+            "encodeExternal": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "message",
+                        "type": "CoreX\\Messaging\\Data\\MessageEnvelope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "data",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Messaging\\Contracts\\DurableMessagePublisher": {
         "abstract": false,
         "constants": [],
@@ -24596,6 +24651,13 @@
                         "name": "channel",
                         "type": "string",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "dataSchema",
+                        "type": "?string",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -24620,6 +24682,12 @@
                 "readonly": true,
                 "static": false,
                 "type": "CoreX\\Messaging\\Enums\\MessageClass"
+            },
+            "dataSchema": {
+                "name": "dataSchema",
+                "readonly": true,
+                "static": false,
+                "type": "?string"
             },
             "maxPiiClass": {
                 "name": "maxPiiClass",
@@ -24755,6 +24823,18 @@
             "contract": {
                 "params": [],
                 "return": "string",
+                "static": false
+            },
+            "withPayload": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "payload",
+                        "type": "CoreX\\Messaging\\Data\\MessagePayload",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
                 "static": false
             }
         },
@@ -25814,6 +25894,75 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Messaging\\Internal\\JsonCloudEventCodec": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Messaging\\Contracts\\CloudEventCodec"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "contracts",
+                        "type": "CoreX\\Messaging\\Contracts\\MessageContractRegistry",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "decode": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "json",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Messaging\\Data\\MessageEnvelope",
+                "static": false
+            },
+            "encode": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "message",
+                        "type": "CoreX\\Messaging\\Data\\MessageEnvelope",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": false
+            },
+            "encodeExternal": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "message",
+                        "type": "CoreX\\Messaging\\Data\\MessageEnvelope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "data",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
     "CoreX\\Messaging\\Internal\\NullPubSub": {
         "abstract": false,
         "constants": [],
@@ -26411,6 +26560,43 @@
                     }
                 ],
                 "return": "void",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Messaging\\Internal\\UriReference": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "isAbsolute": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": true
+            },
+            "isValid": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
                 "static": true
             }
         },
@@ -86356,6 +86542,12 @@
                         "byRef": false,
                         "name": "clock",
                         "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "codec",
+                        "type": "CoreX\\Messaging\\Contracts\\CloudEventCodec",
                         "variadic": false
                     }
                 ],

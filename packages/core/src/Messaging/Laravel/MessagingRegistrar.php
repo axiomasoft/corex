@@ -8,6 +8,7 @@ use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Config\Data\CoreOptions;
 use CoreX\Config\Internal\ApplicationLocator;
+use CoreX\Messaging\Contracts\CloudEventCodec;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Messaging\Contracts\Outbox;
@@ -19,6 +20,7 @@ use CoreX\Messaging\Enums\PubSubDriver;
 use CoreX\Messaging\Internal\ArrayMessageContractRegistry;
 use CoreX\Messaging\Internal\DatabasePollPubSub;
 use CoreX\Messaging\Internal\DefaultWorkerRuntime;
+use CoreX\Messaging\Internal\JsonCloudEventCodec;
 use CoreX\Messaging\Internal\NullPubSub;
 use CoreX\Messaging\Internal\NullTraceContextBridge;
 use CoreX\Messaging\Internal\RedisPubSub;
@@ -44,6 +46,9 @@ final class MessagingRegistrar implements PackageRegistrar
             MessageContractRegistry::class,
             static fn (): ArrayMessageContractRegistry => new ArrayMessageContractRegistry(contracts: []),
         );
+        $app->scoped(CloudEventCodec::class, static fn (Application $app): JsonCloudEventCodec => new JsonCloudEventCodec(
+            contracts: $app->make(MessageContractRegistry::class),
+        ));
         $app->instance(TraceContextBridge::class, new NullTraceContextBridge);
         $app->scoped(
             Outbox::class,

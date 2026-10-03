@@ -1,3 +1,7 @@
+## Unreleased — CloudEvents wire (P06.3)
+
+- Breaking pre-1.0: WebhookPayloadProjector returns public data only; fan-out wraps it in external CloudEvents JSON without internal metadata or dataschema. HTTP Content-Type is application/cloudevents+json; Standard Webhooks signatures still cover saved body bytes (PLAN3.D90/D92).
+
 ## Unreleased — thin providers and registrars (P05.2)
 
 - `WebhooksServiceProvider` uses `WebhookBindingsRegistrar` and `WebhookHttpRegistrar`; `WebhookRegistrar` and `WebhookRouteRegistrar::register()` stay as deprecated shims.

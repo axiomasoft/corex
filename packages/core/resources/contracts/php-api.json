@@ -8224,6 +8224,109 @@
             "enum_backing": null,
             "enum_cases": []
         },
+        "CoreX\\Messaging\\Contracts\\CloudEventCodec": {
+            "kind": "interface",
+            "layer": "api",
+            "since": "1.0",
+            "final": false,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": {
+                "@phpstan-type": [
+                    "EventData array<string, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string)>)>)>)>)>)>)>)>",
+                    "EventLevel0 (null | bool | int | float | string)",
+                    "EventLevel1 (null | bool | int | float | string | array<array-key, (null | bool | int | float | string)>)",
+                    "EventLevel2 (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string)>)>)",
+                    "EventLevel3 (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string)>)>)>)",
+                    "EventLevel4 (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string)>)>)>)>)",
+                    "EventLevel5 (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string)>)>)>)>)>)",
+                    "EventLevel6 (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string)>)>)>)>)>)>)",
+                    "EventLevel7 (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string)>)>)>)>)>)>)>)"
+                ]
+            },
+            "methods": {
+                "decode": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": true,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "json",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "CoreX\\Messaging\\Data\\MessageEnvelope",
+                    "doc": []
+                },
+                "encode": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": true,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "message",
+                            "type": "CoreX\\Messaging\\Data\\MessageEnvelope",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "string",
+                    "doc": []
+                },
+                "encodeExternal": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": true,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "message",
+                            "type": "CoreX\\Messaging\\Data\\MessageEnvelope",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "data",
+                            "type": "array",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "string",
+                    "doc": {
+                        "@param": [
+                            "array<string, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string | array<array-key, (null | bool | int | float | string)>)>)>)>)>)>)>)> $data"
+                        ]
+                    }
+                }
+            },
+            "properties": [],
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
         "CoreX\\Messaging\\Contracts\\DurableMessagePublisher": {
             "kind": "interface",
             "layer": "spi-implement",
@@ -9177,6 +9280,15 @@
                             "optional": false,
                             "default": null,
                             "flags": 1
+                        },
+                        {
+                            "name": "dataSchema",
+                            "type": "?string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "null",
+                            "flags": 1
                         }
                     ],
                     "return": null,
@@ -9207,6 +9319,16 @@
                 "class": {
                     "flags": 1,
                     "type": "CoreX\\Messaging\\Enums\\MessageClass",
+                    "readonly": true,
+                    "visibility": "public",
+                    "static": false,
+                    "default": null,
+                    "doc": [],
+                    "hooks": []
+                },
+                "dataSchema": {
+                    "flags": 1,
+                    "type": "?string",
                     "readonly": true,
                     "visibility": "public",
                     "static": false,
@@ -9414,6 +9536,26 @@
                     "by_reference": false,
                     "parameters": [],
                     "return": "string",
+                    "doc": []
+                },
+                "withPayload": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "payload",
+                            "type": "CoreX\\Messaging\\Data\\MessagePayload",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "self(CoreX\\Messaging\\Data\\MessageEnvelope)",
                     "doc": []
                 }
             },

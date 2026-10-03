@@ -8,6 +8,7 @@ use CoreX\Attributes\Api;
 use CoreX\Messaging\Enums\MessageClass;
 use CoreX\Messaging\Enums\PiiClass;
 use CoreX\Messaging\Exceptions\InvalidMessage;
+use CoreX\Messaging\Internal\UriReference;
 
 /**
  * Объявление опубликованного контракта сообщения.
@@ -25,8 +26,13 @@ final readonly class MessageContract
         public string $owner,
         public PiiClass $maxPiiClass,
         public string $channel,
+        public ?string $dataSchema = null,
     ) {
         self::assertContractName($name);
+
+        if ($dataSchema !== null && ! UriReference::isAbsolute($dataSchema)) {
+            throw InvalidMessage::identity('contract data schema');
+        }
 
         if ($version < 1) {
             throw InvalidMessage::identity("contract version [{$version}]");

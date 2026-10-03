@@ -15,11 +15,9 @@ use CoreX\Messaging\Data\MessageEnvelope;
  * переживающий offline consumer (D99). Реализация идемпотентна по messageId или
  * терпит повтор; окно дублей остаётся at-least-once.
  *
- * Wire-массив, который durable-реализации передают потребителю (P10, P14), содержит
- * ровно двенадцать ключей в объявленном порядке; `contract` — строка `name.vN`,
- * `occurredAt` — RFC 3339 с долями секунды. Перестановка ключей — ломающее изменение,
- * а не форматирование (как `ArrayDataScopeCodec`, P4.8). Канал публикации берётся из
- * объявления контракта в реестре, а не из полей конверта.
+ * Публикует байты CloudEventCodec::encode() — CloudEvents 1.0 structured JSON
+ * с media type application/cloudevents+json. Отображение — message-policy.md.
+ * Канал публикации берётся из объявления контракта в реестре.
  */
 #[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface MessagePublisher

@@ -19,6 +19,7 @@ use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Data\MessagePayload;
 use CoreX\Messaging\Enums\MessageClass;
 use CoreX\Messaging\Enums\PiiClass;
+use CoreX\Messaging\Internal\JsonCloudEventCodec;
 use CoreX\Messaging\Testing\MessagingFixtures;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\ModulesServiceProvider;
@@ -131,7 +132,7 @@ final class WebhookLoadContourIntegrationTest extends TestCase
             });
             $clock = new FrozenClock(new DateTimeImmutable('2026-09-26T12:00:00.000000+00:00'));
             $catalogue = $this->catalogue();
-            $fanout = new WebhookFanout($connection, MessagingFixtures::inbox($connection, $clock), $catalogue, ['orders.placed' => new WebhookLoadContourIntegrationLoadContourProjector], $clock);
+            $fanout = new WebhookFanout($connection, MessagingFixtures::inbox($connection, $clock), $catalogue, ['orders.placed' => new WebhookLoadContourIntegrationLoadContourProjector], $clock, new JsonCloudEventCodec(MessagingFixtures::contracts([new MessageContract('orders.placed', 1, MessageClass::IntegrationEvent, 'orders/api', PiiClass::Personal, 'webhooks')])));
             $now = $clock->now();
             $connection->table('sys_api_webhook_subscriptions')->insert([
                 'id' => 'sub-local',
@@ -314,13 +315,6 @@ final class WebhookLoadContourIntegrationLoadContourProjector implements Webhook
 {
     public function project(MessageEnvelope $message, WebhookTopic $topic): array
     {
-        return [
-            'event_id' => $message->messageId,
-            'type' => $message->name,
-            'version' => $message->contractVersion,
-            'occurred_at' => '2026-09-26T12:00:00+00:00',
-            'data' => ['id' => 'order-1'],
-            'correlation_id' => $message->correlationId,
-        ];
+        return ['id' => 'order-1'];
     }
 }

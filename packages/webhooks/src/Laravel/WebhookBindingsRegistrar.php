@@ -8,6 +8,7 @@ use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Audit\Contracts\AuditLogger;
 use CoreX\Context\Contracts\TenantContextRestorer;
+use CoreX\Messaging\Contracts\CloudEventCodec;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Modules\Contracts\PackageRegistrar;
@@ -85,6 +86,7 @@ final class WebhookBindingsRegistrar implements PackageRegistrar
             catalogue: $app->make(WebhookTopicCatalogue::class),
             projectors: self::projectors($app, $app->make(WebhookOptions::class)),
             clock: $app->make(ClockInterface::class),
+            codec: $app->make(CloudEventCodec::class),
         ));
         $app->scoped(WebhookRetention::class, static fn (Application $app): WebhookRetention => new WebhookRetention(
             connection: $app->make(ApiSchemaRegistrar::class)->tenant(),

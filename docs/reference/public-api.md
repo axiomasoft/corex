@@ -96,6 +96,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Features\Events\FeatureFlagToggled` | spi-call | 1.0 |
 | `CoreX\Features\Laravel\FeaturesRegistrar` | spi-call | 1.0 |
 | `CoreX\Messaging\Contracts\Cancellable` | spi-implement | 1.0 |
+| `CoreX\Messaging\Contracts\CloudEventCodec` | api | 1.0 |
 | `CoreX\Messaging\Contracts\DurableMessagePublisher` | spi-implement | 1.0 |
 | `CoreX\Messaging\Contracts\DurablePayload` | spi-implement | 1.0 |
 | `CoreX\Messaging\Contracts\Inbox` | spi-implement | 1.0 |

@@ -13,7 +13,7 @@ Symfony» — не запись; «заморозка контейнера до 
 | Shopware | Жизненный цикл расширения install/activate/deactivate/uninstall | EXT-003 |
 | Shopify | Эксклюзивное владение данными компонента; связь через границу — нарушение; машинная проверка вместо соглашения | DATA-001, DATA-003 |
 | Spring Modulith | Модульная граница кода не делает базу приватной сама по себе | §7 `data-ownership-policy.md` |
-| CloudEvents | Обязательные атрибуты конверта; `type` как стабильное публичное имя контракта | MSG-003, MSG-004 |
+| [CloudEvents 1.0.2](https://github.com/cloudevents/spec/tree/v1.0.2/cloudevents) | Structured JSON; `type` как стабильное публичное имя; внутренний/внешний профили в message-policy.md | MSG-003, MSG-004 |
 | Standard Webhooks | Идентификатор доставки, подпись, защита от повтора, мультиподпись при ротации | P14 |
 | Stripe | Семантика ключа идемпотентности и конфликт при том же ключе с другими параметрами | P13 |
 | Atlassian | Additive-first; клиент запрашивает capability, а не выводит её из версии | API-006, D2 |

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — CloudEvents wire (P06.3)
+
+- CloudEvents 1.0 structured JSON codec with internal/external profiles; MessageContract dataSchema, MessageEnvelope source URI-reference validation and withPayload. MessagePublisher wire uses application/cloudevents+json (PLAN3.D90/D92).
+
 ## Unreleased — ports instead of facades, helpers and static state (P05.3)
 
 - Runtime code outside the Laravel bridge takes `ConnectionResolverInterface`, `ClockInterface`, `Dispatcher` and the other `Illuminate\Contracts` ports through constructors instead of facades, global helpers and static clocks; `Messaging\Internal\PubSubManager` is gone (the `PubSub` binding selects the driver from `CoreOptions::pubsubDriver`). Added the `CoreX\Database\Laravel\ResolvesCoreOptions` SPI trait for migrations and models that read `CoreOptions` through the container bridge.
@@ -68,6 +72,8 @@
 Пакет pre-1.0 — breaking-изменения публичных контрактов легальны в MINOR до 1.0 (D17).
 
 ## [Unreleased]
+
+- CloudEvents 1.0 structured JSON codec with internal/external profiles; MessageContract dataSchema, MessageEnvelope source URI-reference validation and withPayload; MessagePublisher wire now uses application/cloudevents+json (PLAN3.D90/D92, P06.3).
 
 - PHP API manifests now record direct inheritance, interfaces and traits separately and include only members declared by this package; external dependency members are omitted without changing the `php-api/1` schema. Source scanners move to the Attributes/Errors Tooling bridges and the durable payload checker moves to Messaging/PHPStan; runtime references to development bridges are forbidden.
 

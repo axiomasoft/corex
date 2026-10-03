@@ -1213,6 +1213,17 @@ return [
             ],
         ],
         72 => [
+            'code' => 'operations.input_envelope_invalid',
+            'enum' => 'CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode',
+            'type' => 'urn:corex:problem:operations.input_envelope_invalid',
+            'status' => 422,
+            'title' => 'Input envelope is invalid.',
+            'category' => 'validation',
+            'retryable' => false,
+            'detail_keys' => [
+            ],
+        ],
+        73 => [
             'code' => 'operations.invalid_request',
             'enum' => 'CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode',
             'type' => 'urn:corex:problem:operations.invalid_request',
@@ -1223,7 +1234,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        73 => [
+        74 => [
             'code' => 'operations.module_unavailable',
             'enum' => 'CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode',
             'type' => 'urn:corex:problem:operations.module_unavailable',
@@ -1234,7 +1245,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        74 => [
+        75 => [
             'code' => 'operations.not_found',
             'enum' => 'CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode',
             'type' => 'urn:corex:problem:operations.not_found',
@@ -1245,7 +1256,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        75 => [
+        76 => [
             'code' => 'operations.operation_not_found',
             'enum' => 'CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode',
             'type' => 'urn:corex:problem:operations.operation_not_found',
@@ -1256,7 +1267,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        76 => [
+        77 => [
             'code' => 'operations.operation_unsupported',
             'enum' => 'CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode',
             'type' => 'urn:corex:problem:operations.operation_unsupported',
@@ -1267,7 +1278,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        77 => [
+        78 => [
             'code' => 'operations.ordering_version_unsupported',
             'enum' => 'CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode',
             'type' => 'urn:corex:problem:operations.ordering_version_unsupported',
@@ -1278,7 +1289,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        78 => [
+        79 => [
             'code' => 'operations.rate_limited',
             'enum' => 'CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode',
             'type' => 'urn:corex:problem:operations.rate_limited',
@@ -1289,7 +1300,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        79 => [
+        80 => [
             'code' => 'operations.reconciliation_required',
             'enum' => 'CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode',
             'type' => 'urn:corex:problem:operations.reconciliation_required',
@@ -1300,7 +1311,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        80 => [
+        81 => [
             'code' => 'operations.request_rejected',
             'enum' => 'CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode',
             'type' => 'urn:corex:problem:operations.request_rejected',
@@ -1311,7 +1322,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        81 => [
+        82 => [
             'code' => 'operations.resource_not_found',
             'enum' => 'CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode',
             'type' => 'urn:corex:problem:operations.resource_not_found',
@@ -1322,7 +1333,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        82 => [
+        83 => [
             'code' => 'operations.scope_required',
             'enum' => 'CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode',
             'type' => 'urn:corex:problem:operations.scope_required',
@@ -1333,7 +1344,19 @@ return [
             'detail_keys' => [
             ],
         ],
-        83 => [
+        84 => [
+            'code' => 'operations.undeclared_fields',
+            'enum' => 'CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode',
+            'type' => 'urn:corex:problem:operations.undeclared_fields',
+            'status' => 422,
+            'title' => 'Input contains undeclared fields.',
+            'category' => 'validation',
+            'retryable' => false,
+            'detail_keys' => [
+                0 => 'fields',
+            ],
+        ],
+        85 => [
             'code' => 'operations.unknown_message_contract',
             'enum' => 'CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode',
             'type' => 'urn:corex:problem:operations.unknown_message_contract',
@@ -1344,7 +1367,18 @@ return [
             'detail_keys' => [
             ],
         ],
-        84 => [
+        86 => [
+            'code' => 'operations.unsupported_media_type',
+            'enum' => 'CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode',
+            'type' => 'urn:corex:problem:operations.unsupported_media_type',
+            'status' => 415,
+            'title' => 'Unsupported media type.',
+            'category' => 'validation',
+            'retryable' => false,
+            'detail_keys' => [
+            ],
+        ],
+        87 => [
             'code' => 'operations.validation_failed',
             'enum' => 'CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode',
             'type' => 'urn:corex:problem:operations.validation_failed',
@@ -1356,7 +1390,7 @@ return [
                 0 => '*',
             ],
         ],
-        85 => [
+        88 => [
             'code' => 'recurrence.stale_cursor_exception',
             'enum' => 'CoreX\\Recurrence\\Errors\\Enums\\RecurrenceErrorCode',
             'type' => 'urn:corex:problem:recurrence.stale_cursor_exception',
@@ -1367,7 +1401,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        86 => [
+        89 => [
             'code' => 'recurrence.unsupported_environment_exception',
             'enum' => 'CoreX\\Recurrence\\Errors\\Enums\\RecurrenceErrorCode',
             'type' => 'urn:corex:problem:recurrence.unsupported_environment_exception',
@@ -1378,7 +1412,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        87 => [
+        90 => [
             'code' => 'search-meilisearch.invalid_meilisearch_configuration',
             'enum' => 'CoreX\\SearchMeilisearch\\Errors\\Enums\\SearchMeilisearchErrorCode',
             'type' => 'urn:corex:problem:search-meilisearch.invalid_meilisearch_configuration',
@@ -1389,7 +1423,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        88 => [
+        91 => [
             'code' => 'search.invalid_search_configuration',
             'enum' => 'CoreX\\Search\\Errors\\Enums\\SearchErrorCode',
             'type' => 'urn:corex:problem:search.invalid_search_configuration',
@@ -1400,7 +1434,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        89 => [
+        92 => [
             'code' => 'tasks-workflow.materialization_conflict',
             'enum' => 'CoreX\\TasksWorkflow\\Errors\\Enums\\TasksWorkflowErrorCode',
             'type' => 'urn:corex:problem:tasks-workflow.materialization_conflict',
@@ -1411,7 +1445,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        90 => [
+        93 => [
             'code' => 'tasks-workflow.stale_materialization',
             'enum' => 'CoreX\\TasksWorkflow\\Errors\\Enums\\TasksWorkflowErrorCode',
             'type' => 'urn:corex:problem:tasks-workflow.stale_materialization',
@@ -1422,7 +1456,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        91 => [
+        94 => [
             'code' => 'tasks-workflow.unsupported_materialization',
             'enum' => 'CoreX\\TasksWorkflow\\Errors\\Enums\\TasksWorkflowErrorCode',
             'type' => 'urn:corex:problem:tasks-workflow.unsupported_materialization',
@@ -1433,7 +1467,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        92 => [
+        95 => [
             'code' => 'tasks.invalid_planning_draft',
             'enum' => 'CoreX\\Tasks\\Errors\\Enums\\TasksErrorCode',
             'type' => 'urn:corex:problem:tasks.invalid_planning_draft',
@@ -1444,7 +1478,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        93 => [
+        96 => [
             'code' => 'tasks.planning_conflict',
             'enum' => 'CoreX\\Tasks\\Errors\\Enums\\TasksErrorCode',
             'type' => 'urn:corex:problem:tasks.planning_conflict',
@@ -1455,7 +1489,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        94 => [
+        97 => [
             'code' => 'tasks.tasks_module_disabled',
             'enum' => 'CoreX\\Tasks\\Errors\\Enums\\TasksErrorCode',
             'type' => 'urn:corex:problem:tasks.tasks_module_disabled',
@@ -1466,7 +1500,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        95 => [
+        98 => [
             'code' => 'tenancy.central_protocol_violation',
             'enum' => 'CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode',
             'type' => 'urn:corex:problem:tenancy.central_protocol_violation',
@@ -1477,7 +1511,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        96 => [
+        99 => [
             'code' => 'tenancy.central_unauthorized',
             'enum' => 'CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode',
             'type' => 'urn:corex:problem:tenancy.central_unauthorized',
@@ -1488,7 +1522,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        97 => [
+        100 => [
             'code' => 'tenancy.central_unavailable',
             'enum' => 'CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode',
             'type' => 'urn:corex:problem:tenancy.central_unavailable',
@@ -1499,7 +1533,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        98 => [
+        101 => [
             'code' => 'tenancy.claim_conflict',
             'enum' => 'CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode',
             'type' => 'urn:corex:problem:tenancy.claim_conflict',
@@ -1510,7 +1544,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        99 => [
+        102 => [
             'code' => 'tenancy.claim_unavailable',
             'enum' => 'CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode',
             'type' => 'urn:corex:problem:tenancy.claim_unavailable',
@@ -1521,7 +1555,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        100 => [
+        103 => [
             'code' => 'tenancy.credential_issuance_denied',
             'enum' => 'CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode',
             'type' => 'urn:corex:problem:tenancy.credential_issuance_denied',
@@ -1532,7 +1566,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        101 => [
+        104 => [
             'code' => 'tenancy.domain_trust_denied',
             'enum' => 'CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode',
             'type' => 'urn:corex:problem:tenancy.domain_trust_denied',
@@ -1543,7 +1577,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        102 => [
+        105 => [
             'code' => 'tenancy.domain_trust_disabled',
             'enum' => 'CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode',
             'type' => 'urn:corex:problem:tenancy.domain_trust_disabled',
@@ -1554,7 +1588,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        103 => [
+        106 => [
             'code' => 'tenancy.inbox_conflict',
             'enum' => 'CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode',
             'type' => 'urn:corex:problem:tenancy.inbox_conflict',
@@ -1565,7 +1599,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        104 => [
+        107 => [
             'code' => 'tenancy.invitation_not_acceptable_exception',
             'enum' => 'CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode',
             'type' => 'urn:corex:problem:tenancy.invitation_not_acceptable_exception',
@@ -1576,7 +1610,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        105 => [
+        108 => [
             'code' => 'tenancy.no_default_workspace_exception',
             'enum' => 'CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode',
             'type' => 'urn:corex:problem:tenancy.no_default_workspace_exception',
@@ -1587,7 +1621,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        106 => [
+        109 => [
             'code' => 'tenancy.oidc_authentication_exception',
             'enum' => 'CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode',
             'type' => 'urn:corex:problem:tenancy.oidc_authentication_exception',
@@ -1598,7 +1632,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        107 => [
+        110 => [
             'code' => 'tenancy.pair_store_violation',
             'enum' => 'CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode',
             'type' => 'urn:corex:problem:tenancy.pair_store_violation',
@@ -1609,7 +1643,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        108 => [
+        111 => [
             'code' => 'tenancy.projection_denied',
             'enum' => 'CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode',
             'type' => 'urn:corex:problem:tenancy.projection_denied',
@@ -1620,7 +1654,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        109 => [
+        112 => [
             'code' => 'tenancy.revoke_uncertain',
             'enum' => 'CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode',
             'type' => 'urn:corex:problem:tenancy.revoke_uncertain',
@@ -1631,7 +1665,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        110 => [
+        113 => [
             'code' => 'tenancy.template_integrity_exception',
             'enum' => 'CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode',
             'type' => 'urn:corex:problem:tenancy.template_integrity_exception',
@@ -1642,7 +1676,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        111 => [
+        114 => [
             'code' => 'tenancy.tenant_could_not_be_identified_by_host_exception',
             'enum' => 'CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode',
             'type' => 'urn:corex:problem:tenancy.tenant_could_not_be_identified_by_host_exception',
@@ -1653,7 +1687,150 @@ return [
             'detail_keys' => [
             ],
         ],
-        112 => [
+        115 => [
+            'code' => 'tools.approval_invalid',
+            'enum' => 'CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode',
+            'type' => 'urn:corex:problem:tools.approval_invalid',
+            'status' => 403,
+            'title' => 'Tool approval is invalid.',
+            'category' => 'authorization',
+            'retryable' => false,
+            'detail_keys' => [
+            ],
+        ],
+        116 => [
+            'code' => 'tools.approval_required',
+            'enum' => 'CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode',
+            'type' => 'urn:corex:problem:tools.approval_required',
+            'status' => 403,
+            'title' => 'Tool approval is required.',
+            'category' => 'authorization',
+            'retryable' => false,
+            'detail_keys' => [
+            ],
+        ],
+        117 => [
+            'code' => 'tools.forbidden',
+            'enum' => 'CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode',
+            'type' => 'urn:corex:problem:tools.forbidden',
+            'status' => 403,
+            'title' => 'Tool invocation is forbidden.',
+            'category' => 'authorization',
+            'retryable' => false,
+            'detail_keys' => [
+            ],
+        ],
+        118 => [
+            'code' => 'tools.idempotency_conflict',
+            'enum' => 'CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode',
+            'type' => 'urn:corex:problem:tools.idempotency_conflict',
+            'status' => 409,
+            'title' => 'Tool idempotency conflict.',
+            'category' => 'conflict',
+            'retryable' => false,
+            'detail_keys' => [
+            ],
+        ],
+        119 => [
+            'code' => 'tools.input_invalid',
+            'enum' => 'CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode',
+            'type' => 'urn:corex:problem:tools.input_invalid',
+            'status' => 422,
+            'title' => 'Tool input is invalid.',
+            'category' => 'validation',
+            'retryable' => false,
+            'detail_keys' => [
+            ],
+        ],
+        120 => [
+            'code' => 'tools.internal_error',
+            'enum' => 'CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode',
+            'type' => 'urn:corex:problem:tools.internal_error',
+            'status' => 500,
+            'title' => 'Internal tool error.',
+            'category' => 'internal',
+            'retryable' => false,
+            'detail_keys' => [
+            ],
+        ],
+        121 => [
+            'code' => 'tools.output_contract_failed',
+            'enum' => 'CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode',
+            'type' => 'urn:corex:problem:tools.output_contract_failed',
+            'status' => 500,
+            'title' => 'Tool output contract failed.',
+            'category' => 'internal',
+            'retryable' => false,
+            'detail_keys' => [
+            ],
+        ],
+        122 => [
+            'code' => 'tools.rate_limited',
+            'enum' => 'CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode',
+            'type' => 'urn:corex:problem:tools.rate_limited',
+            'status' => 429,
+            'title' => 'Tool rate limit exceeded.',
+            'category' => 'rate_limit',
+            'retryable' => true,
+            'detail_keys' => [
+            ],
+        ],
+        123 => [
+            'code' => 'tools.schema_limit',
+            'enum' => 'CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode',
+            'type' => 'urn:corex:problem:tools.schema_limit',
+            'status' => 422,
+            'title' => 'Tool schema limit exceeded.',
+            'category' => 'validation',
+            'retryable' => false,
+            'detail_keys' => [
+            ],
+        ],
+        124 => [
+            'code' => 'tools.schema_unavailable',
+            'enum' => 'CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode',
+            'type' => 'urn:corex:problem:tools.schema_unavailable',
+            'status' => 503,
+            'title' => 'Tool schema is unavailable.',
+            'category' => 'unavailable',
+            'retryable' => true,
+            'detail_keys' => [
+            ],
+        ],
+        125 => [
+            'code' => 'tools.tool_revision_conflict',
+            'enum' => 'CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode',
+            'type' => 'urn:corex:problem:tools.tool_revision_conflict',
+            'status' => 409,
+            'title' => 'Tool revision conflict.',
+            'category' => 'conflict',
+            'retryable' => false,
+            'detail_keys' => [
+            ],
+        ],
+        126 => [
+            'code' => 'tools.tool_unavailable',
+            'enum' => 'CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode',
+            'type' => 'urn:corex:problem:tools.tool_unavailable',
+            'status' => 404,
+            'title' => 'Tool is unavailable.',
+            'category' => 'not_found',
+            'retryable' => false,
+            'detail_keys' => [
+            ],
+        ],
+        127 => [
+            'code' => 'tools.unknown_effect',
+            'enum' => 'CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode',
+            'type' => 'urn:corex:problem:tools.unknown_effect',
+            'status' => 500,
+            'title' => 'Tool effect outcome is unknown.',
+            'category' => 'internal',
+            'retryable' => false,
+            'detail_keys' => [
+            ],
+        ],
+        128 => [
             'code' => 'webhooks.unknown_message_contract',
             'enum' => 'CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode',
             'type' => 'urn:corex:problem:webhooks.unknown_message_contract',
@@ -1664,7 +1841,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        113 => [
+        129 => [
             'code' => 'webhooks.unknown_message_schema',
             'enum' => 'CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode',
             'type' => 'urn:corex:problem:webhooks.unknown_message_schema',
@@ -1675,7 +1852,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        114 => [
+        130 => [
             'code' => 'webhooks.webhook_endpoint_changed',
             'enum' => 'CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode',
             'type' => 'urn:corex:problem:webhooks.webhook_endpoint_changed',
@@ -1686,7 +1863,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        115 => [
+        131 => [
             'code' => 'webhooks.webhook_payload_too_large',
             'enum' => 'CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode',
             'type' => 'urn:corex:problem:webhooks.webhook_payload_too_large',
@@ -1697,7 +1874,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        116 => [
+        132 => [
             'code' => 'webhooks.webhook_replay_expired',
             'enum' => 'CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode',
             'type' => 'urn:corex:problem:webhooks.webhook_replay_expired',
@@ -1708,7 +1885,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        117 => [
+        133 => [
             'code' => 'webhooks.webhook_secret_denied',
             'enum' => 'CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode',
             'type' => 'urn:corex:problem:webhooks.webhook_secret_denied',
@@ -1719,7 +1896,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        118 => [
+        134 => [
             'code' => 'webhooks.webhook_sensitive_denied',
             'enum' => 'CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode',
             'type' => 'urn:corex:problem:webhooks.webhook_sensitive_denied',
@@ -1730,7 +1907,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        119 => [
+        135 => [
             'code' => 'webhooks.webhook_subscription_cap',
             'enum' => 'CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode',
             'type' => 'urn:corex:problem:webhooks.webhook_subscription_cap',

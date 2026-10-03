@@ -164,7 +164,7 @@ final class WebhookTransportTest extends TestCase
         $this->assertSame('https://hooks.example.com/deliver', $options[CURLOPT_URL]);
         $this->assertSame('{"event":"created"}', $options[CURLOPT_POSTFIELDS]);
         $this->assertSame([
-            'Content-Type: application/json',
+            'Content-Type: application/cloudevents+json',
             'Webhook-Id: delivery_123',
             'Webhook-Timestamp: 1700000000',
             'Webhook-Signature: v1,YWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWE=',
@@ -294,7 +294,7 @@ PHP;
                 CURLOPT_POST => true,
                 CURLOPT_POSTFIELDS => '{"event":"created"}',
                 CURLOPT_HTTPHEADER => [
-                    'Content-Type: application/json',
+                    'Content-Type: application/cloudevents+json',
                     'Webhook-Id: delivery_123',
                 ],
                 CURLOPT_CONNECT_TO => ["hooks.example.com:443:127.0.0.1:{$port}"],

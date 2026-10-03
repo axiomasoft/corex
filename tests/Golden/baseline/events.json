@@ -25,6 +25,7 @@
                 "enum": "CoreX\\Messaging\\Enums\\MessageClass",
                 "value": "integration-event"
             },
+            "dataSchema": null,
             "maxPiiClass": {
                 "case": "Pseudonymous",
                 "enum": "CoreX\\Messaging\\Enums\\PiiClass",

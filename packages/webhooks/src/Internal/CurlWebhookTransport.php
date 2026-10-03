@@ -140,7 +140,7 @@ final class CurlWebhookTransport implements WebhookHttpTransport
     private function requestHeaders(ValidatedWebhookRequest $request): array
     {
         return [
-            'Content-Type: application/json',
+            'Content-Type: application/cloudevents+json',
             'Webhook-Id: '.$request->signatureHeaders['webhook-id'],
             'Webhook-Timestamp: '.$request->signatureHeaders['webhook-timestamp'],
             'Webhook-Signature: '.$request->signatureHeaders['webhook-signature'],

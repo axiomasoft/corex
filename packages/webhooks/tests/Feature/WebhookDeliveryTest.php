@@ -370,13 +370,6 @@ final class DeliveryProjector implements WebhookPayloadProjector
 {
     public function project(MessageEnvelope $message, WebhookTopic $topic): array
     {
-        return [
-            'event_id' => $message->messageId,
-            'type' => $message->name,
-            'version' => $message->contractVersion,
-            'occurred_at' => $message->occurredAt->format(DateTimeImmutable::ATOM),
-            'data' => [],
-            'correlation_id' => $message->correlationId,
-        ];
+        return [];
     }
 }

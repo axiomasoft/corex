@@ -315,14 +315,7 @@ final class ManagementProjector implements WebhookPayloadProjector
 {
     public function project(MessageEnvelope $message, WebhookTopic $topic): array
     {
-        return [
-            'event_id' => $message->messageId,
-            'type' => $topic->name,
-            'version' => $topic->version,
-            'occurred_at' => $message->occurredAt->format(DATE_ATOM),
-            'data' => [],
-            'correlation_id' => $message->correlationId,
-        ];
+        return [];
     }
 }
 

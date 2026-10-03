@@ -213,15 +213,8 @@ final class WebhookSubscriptionTest extends TestCase
         );
         $projected = (new AllowListProjector)->project($envelope, $topic);
 
-        self::assertSame([
-            'event_id' => 'message-1',
-            'type' => 'orders.placed',
-            'version' => 1,
-            'occurred_at' => '2026-09-25T12:00:00+00:00',
-            'data' => ['id' => 'order-1'],
-            'correlation_id' => 'correlation-1',
-        ], $projected);
-        self::assertArrayNotHasKey('secret', $projected['data']);
+        self::assertSame(['id' => 'order-1'], $projected);
+        self::assertArrayNotHasKey('secret', $projected);
     }
 
     private function catalogue(bool $secret = false): WebhookTopicCatalogue
@@ -302,13 +295,6 @@ final class AllowListProjector implements WebhookPayloadProjector
             $data[$field] = $value;
         }
 
-        return [
-            'event_id' => $message->messageId,
-            'type' => $message->name,
-            'version' => $message->contractVersion,
-            'occurred_at' => $message->occurredAt->format(DateTimeImmutable::ATOM),
-            'data' => $data,
-            'correlation_id' => $message->correlationId,
-        ];
+        return $data;
     }
 }
