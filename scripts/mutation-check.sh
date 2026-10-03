@@ -136,8 +136,19 @@ run_case() {
     cat "$SNAPSHOT_DIR/test.log"
     set -e
 
-    if rg -q 'No tests found|"tests"[[:space:]]*:[[:space:]]*0([,}])' "$SNAPSHOT_DIR/test.log"; then
+    # rg is not required. A missing grep or an unreadable log is exit 2, same as
+    # a carrier that matched nothing (Pest prints "No tests found" and exits 0).
+    local guard_status
+    set +e
+    command grep -Eq 'No tests found|"tests"[[:space:]]*:[[:space:]]*0([,}])' "$SNAPSHOT_DIR/test.log"
+    guard_status=$?
+    set -e
+    if [ "$guard_status" -eq 0 ]; then
         echo "mutation-check[$KEY]: FAIL — carrier executed no tests" >&2
+        return 2
+    fi
+    if [ "$guard_status" -ne 1 ]; then
+        echo "mutation-check[$KEY]: FAIL — test-log guard failed (grep exit=$guard_status)" >&2
         return 2
     fi
 
