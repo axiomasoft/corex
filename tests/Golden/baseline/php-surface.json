@@ -84643,6 +84643,37 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Webhooks\\Contracts\\WebhookEgressPolicy": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "allows": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Data\\Data\\DataScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "destination",
+                        "type": "CoreX\\Webhooks\\Data\\WebhookDestination",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Webhooks\\Contracts\\WebhookHttpTransport": {
         "abstract": false,
         "constants": [],
@@ -85240,6 +85271,86 @@
         },
         "readonly": true
     },
+    "CoreX\\Webhooks\\Data\\WebhookDestination": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "scheme",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "host",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "port",
+                        "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "path",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "fromUrl": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "url",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "host": {
+                "name": "host",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "path": {
+                "name": "path",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "port": {
+                "name": "port",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            },
+            "scheme": {
+                "name": "scheme",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": true
+    },
     "CoreX\\Webhooks\\Data\\WebhookHttpResult": {
         "abstract": false,
         "constants": [],
@@ -85265,7 +85376,7 @@
                     {
                         "byRef": false,
                         "name": "errorCode",
-                        "type": "?string",
+                        "type": "?CoreX\\Webhooks\\Enums\\WebhookFailureReason",
                         "variadic": false
                     },
                     {
@@ -85291,7 +85402,7 @@
                 "name": "errorCode",
                 "readonly": true,
                 "static": false,
-                "type": "?string"
+                "type": "?CoreX\\Webhooks\\Enums\\WebhookFailureReason"
             },
             "retryAfter": {
                 "name": "retryAfter",
@@ -85371,6 +85482,18 @@
                         "name": "projectors",
                         "type": "array",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "maxAttempts",
+                        "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "retryHorizonSeconds",
+                        "type": "int",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -85403,6 +85526,12 @@
                 "static": false,
                 "type": "int"
             },
+            "maxAttempts": {
+                "name": "maxAttempts",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            },
             "organizationDeniedCidrs": {
                 "name": "organizationDeniedCidrs",
                 "readonly": true,
@@ -85417,6 +85546,12 @@
             },
             "replayHorizonSeconds": {
                 "name": "replayHorizonSeconds",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            },
+            "retryHorizonSeconds": {
+                "name": "retryHorizonSeconds",
                 "readonly": true,
                 "static": false,
                 "type": "int"
@@ -85784,6 +85919,247 @@
         },
         "readonly": true
     },
+    "CoreX\\Webhooks\\Enums\\WebhookFailureReason": {
+        "abstract": false,
+        "constants": {
+            "AckUnknown": {
+                "type": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                    "case": "AckUnknown",
+                    "value": "ack_unknown"
+                }
+            },
+            "AddressNotAllowed": {
+                "type": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                    "case": "AddressNotAllowed",
+                    "value": "address_not_allowed"
+                }
+            },
+            "DnsUnavailable": {
+                "type": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                    "case": "DnsUnavailable",
+                    "value": "dns_unavailable"
+                }
+            },
+            "EgressDenied": {
+                "type": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                    "case": "EgressDenied",
+                    "value": "egress_denied"
+                }
+            },
+            "EndpointChanged": {
+                "type": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                    "case": "EndpointChanged",
+                    "value": "webhook_endpoint_changed"
+                }
+            },
+            "EndpointGone": {
+                "type": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                    "case": "EndpointGone",
+                    "value": "endpoint_gone"
+                }
+            },
+            "Http408": {
+                "type": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                    "case": "Http408",
+                    "value": "http_408"
+                }
+            },
+            "Http425": {
+                "type": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                    "case": "Http425",
+                    "value": "http_425"
+                }
+            },
+            "Http429": {
+                "type": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                    "case": "Http429",
+                    "value": "http_429"
+                }
+            },
+            "Http5xx": {
+                "type": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                    "case": "Http5xx",
+                    "value": "http_5xx"
+                }
+            },
+            "HttpPermanent": {
+                "type": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                    "case": "HttpPermanent",
+                    "value": "http_permanent"
+                }
+            },
+            "NetworkFailure": {
+                "type": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                    "case": "NetworkFailure",
+                    "value": "network_failure"
+                }
+            },
+            "PayloadTooLarge": {
+                "type": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                    "case": "PayloadTooLarge",
+                    "value": "payload_too_large"
+                }
+            },
+            "RedirectForbidden": {
+                "type": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                    "case": "RedirectForbidden",
+                    "value": "redirect_forbidden"
+                }
+            },
+            "RetryExhausted": {
+                "type": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                    "case": "RetryExhausted",
+                    "value": "retry_exhausted"
+                }
+            },
+            "RetryHorizonExhausted": {
+                "type": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                    "case": "RetryHorizonExhausted",
+                    "value": "retry_horizon_exhausted"
+                }
+            },
+            "SigningUnavailable": {
+                "type": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                    "case": "SigningUnavailable",
+                    "value": "signing_unavailable"
+                }
+            },
+            "TopicUnavailable": {
+                "type": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                    "case": "TopicUnavailable",
+                    "value": "topic_unavailable"
+                }
+            },
+            "TransportFailure": {
+                "type": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                    "case": "TransportFailure",
+                    "value": "transport_failure"
+                }
+            },
+            "UrlForbidden": {
+                "type": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Enums\\WebhookFailureReason",
+                    "case": "UrlForbidden",
+                    "value": "url_forbidden"
+                }
+            }
+        },
+        "final": true,
+        "interfaces": [
+            "BackedEnum",
+            "UnitEnum"
+        ],
+        "internal": false,
+        "kind": "enum",
+        "methods": {
+            "cases": {
+                "params": [],
+                "return": "array",
+                "static": true
+            },
+            "from": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "static",
+                "static": true
+            },
+            "fromHttpStatus": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "status",
+                        "type": "int",
+                        "variadic": false
+                    }
+                ],
+                "return": "?self",
+                "static": true
+            },
+            "isPermanent": {
+                "params": [],
+                "return": "bool",
+                "static": false
+            },
+            "isTerminal": {
+                "params": [],
+                "return": "bool",
+                "static": false
+            },
+            "tryFrom": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "?static",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "name": {
+                "name": "name",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "value": {
+                "name": "value",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": false
+    },
     "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode": {
         "abstract": false,
         "constants": {
@@ -85801,6 +86177,14 @@
                     "enum": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
                     "case": "UnknownMessageSchema",
                     "value": "webhooks.unknown_message_schema"
+                }
+            },
+            "WebhookEgressDenied": {
+                "type": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+                "value": {
+                    "enum": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+                    "case": "WebhookEgressDenied",
+                    "value": "webhooks.webhook_egress_denied"
                 }
             },
             "WebhookEndpointChanged": {
@@ -86071,6 +86455,39 @@
         "properties": [],
         "readonly": true
     },
+    "CoreX\\Webhooks\\Internal\\PermitPublicEgressPolicy": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Webhooks\\Contracts\\WebhookEgressPolicy"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "allows": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Data\\Data\\DataScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "destination",
+                        "type": "CoreX\\Webhooks\\Data\\WebhookDestination",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
     "CoreX\\Webhooks\\Internal\\SqlWebhookDeliveryStore": {
         "abstract": false,
         "constants": [],
@@ -86252,6 +86669,12 @@
                         "byRef": false,
                         "name": "clock",
                         "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "egress",
+                        "type": "CoreX\\Webhooks\\Contracts\\WebhookEgressPolicy",
                         "variadic": false
                     }
                 ],
@@ -86466,6 +86889,18 @@
                         "byRef": false,
                         "name": "clock",
                         "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "egress",
+                        "type": "CoreX\\Webhooks\\Contracts\\WebhookEgressPolicy",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "scopeCodec",
+                        "type": "CoreX\\Data\\Contracts\\DataScopeCodec",
                         "variadic": false
                     }
                 ],
@@ -87274,6 +87709,12 @@
                 "params": [
                     {
                         "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\Webhooks\\Data\\WebhookOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
                         "default": null,
                         "name": "random",
                         "type": "?callable",
@@ -87281,6 +87722,24 @@
                     }
                 ],
                 "return": "",
+                "static": false
+            },
+            "budgetFailure": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "delivery",
+                        "type": "CoreX\\Webhooks\\Data\\WebhookDelivery",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "instant",
+                        "type": "DateTimeImmutable",
+                        "variadic": false
+                    }
+                ],
+                "return": "?CoreX\\Webhooks\\Enums\\WebhookFailureReason",
                 "static": false
             },
             "decide": {

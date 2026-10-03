@@ -235,7 +235,7 @@ final class WebhookFanoutTest extends TestCase
             name: 'orders.placed',
             contractVersion: 1,
             occurredAt: new DateTimeImmutable('2026-09-25T12:00:00+00:00'),
-            scope: ['account_id' => 'account-1'],
+            scope: ['account' => 'account-1'],
             payload: new MessagePayload(['id' => 'order-1', 'secret' => 'hidden']),
             piiClass: PiiClass::Personal,
             correlationId: 'correlation-1',

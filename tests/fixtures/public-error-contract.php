@@ -1853,6 +1853,17 @@ return [
             ],
         ],
         130 => [
+            'code' => 'webhooks.webhook_egress_denied',
+            'enum' => 'CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode',
+            'type' => 'urn:corex:problem:webhooks.webhook_egress_denied',
+            'status' => 422,
+            'title' => 'Webhook destination is denied by tenant egress policy.',
+            'category' => 'validation',
+            'retryable' => false,
+            'detail_keys' => [
+            ],
+        ],
+        131 => [
             'code' => 'webhooks.webhook_endpoint_changed',
             'enum' => 'CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode',
             'type' => 'urn:corex:problem:webhooks.webhook_endpoint_changed',
@@ -1863,7 +1874,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        131 => [
+        132 => [
             'code' => 'webhooks.webhook_payload_too_large',
             'enum' => 'CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode',
             'type' => 'urn:corex:problem:webhooks.webhook_payload_too_large',
@@ -1874,7 +1885,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        132 => [
+        133 => [
             'code' => 'webhooks.webhook_replay_expired',
             'enum' => 'CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode',
             'type' => 'urn:corex:problem:webhooks.webhook_replay_expired',
@@ -1885,7 +1896,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        133 => [
+        134 => [
             'code' => 'webhooks.webhook_secret_denied',
             'enum' => 'CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode',
             'type' => 'urn:corex:problem:webhooks.webhook_secret_denied',
@@ -1896,7 +1907,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        134 => [
+        135 => [
             'code' => 'webhooks.webhook_sensitive_denied',
             'enum' => 'CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode',
             'type' => 'urn:corex:problem:webhooks.webhook_sensitive_denied',
@@ -1907,7 +1918,7 @@ return [
             'detail_keys' => [
             ],
         ],
-        135 => [
+        136 => [
             'code' => 'webhooks.webhook_subscription_cap',
             'enum' => 'CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode',
             'type' => 'urn:corex:problem:webhooks.webhook_subscription_cap',

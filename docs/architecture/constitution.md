@@ -462,7 +462,7 @@
 **Правило.** Набор механизмов расширения закрыт; новый механизм и девятый extender вводятся только
   через RFC/ADR
 **Владелец.** ../dev-doctrine.md §4 (ADR-011, ADR-014)
-**Enforcement.** `packages/core/src/Modules/Contracts/Extender.php` (докблок закрытого набора) + ревью
+**Enforcement.** `packages/core/src/Modules/Contracts/Extender.php` (докблок закрытого набора) + ревью; webhook outgoing-call enforcement: `WebhookEgressPolicyTest`, mutation `P06-egress-skip-on-delivery`, [webhooks threat model](webhooks-threat-model.md)
 **Исключения.** —
 **Почему.** См. решения и политики, названные во владельце.
 

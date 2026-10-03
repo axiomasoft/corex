@@ -25,6 +25,8 @@ final readonly class WebhookOptions
         public array $organizationDeniedCidrs,
         public array $topics,
         public array $projectors,
+        public int $maxAttempts,
+        public int $retryHorizonSeconds,
     ) {}
 
 }

@@ -7,6 +7,8 @@ return [
     'delivery_enabled' => false,
     'worker_ready' => false,
     'lease_seconds' => 30,
+    'max_attempts' => 12,
+    'retry_horizon_seconds' => 259200,
     'body_retention_seconds' => 604800,
     'history_retention_seconds' => 2592000,
     'replay_horizon_seconds' => 604800,

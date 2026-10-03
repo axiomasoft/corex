@@ -6,14 +6,13 @@ namespace CoreX\Webhooks\Internal;
 
 use Closure;
 use CoreX\Webhooks\Data\ValidatedWebhookRequest;
+use CoreX\Webhooks\Data\WebhookDestination;
 use CoreX\Webhooks\Data\WebhookSignedHeaders;
 use InvalidArgumentException;
 use RuntimeException;
 
 final readonly class WebhookUrlPolicy
 {
-    private const MAX_URL_BYTES = 2048;
-
     private const MAX_DNS_RECORDS = 64;
 
     private const MAX_CNAME_DEPTH = 8;
@@ -70,7 +69,9 @@ final readonly class WebhookUrlPolicy
         WebhookSignedHeaders $signedHeaders,
         int $timeoutSeconds = 10,
     ): ValidatedWebhookRequest {
-        [$canonicalHost, $canonicalUrl] = $this->canonicalEndpoint($url);
+        $destination = WebhookDestination::fromUrl($url);
+        $canonicalHost = $destination->host;
+        $canonicalUrl = $destination->scheme.'://'.$canonicalHost.$destination->path;
         $addresses = ($this->resolver)($canonicalHost);
 
         if ($addresses === []) {
@@ -141,49 +142,6 @@ final readonly class WebhookUrlPolicy
         }
 
         return true;
-    }
-
-    /** @return array{string, string} */
-    private function canonicalEndpoint(string $url): array
-    {
-        if ($url === ''
-            || strlen($url) > self::MAX_URL_BYTES
-            || preg_match('/[^\x21-\x7e]/', $url) === 1
-            || str_contains($url, '\\')
-            || preg_match('/%(?:00|0a|0d)/i', $url) === 1) {
-            throw new InvalidArgumentException('webhook_url_forbidden');
-        }
-
-        $parts = parse_url($url);
-
-        if ($parts === false
-            || strtolower((string) ($parts['scheme'] ?? '')) !== 'https'
-            || ! isset($parts['host'])
-            || isset($parts['user'])
-            || isset($parts['pass'])
-            || isset($parts['query'])
-            || isset($parts['fragment'])
-            || (($parts['port'] ?? 443) !== 443)) {
-            throw new InvalidArgumentException('webhook_url_forbidden');
-        }
-
-        $host = strtolower($parts['host']);
-
-        if (! self::isCanonicalDnsName($host) || @inet_pton($host) !== false) {
-            throw new InvalidArgumentException('webhook_url_forbidden');
-        }
-
-        $path = $parts['path'] ?? '/';
-
-        if ($path === '') {
-            $path = '/';
-        }
-
-        if (! str_starts_with($path, '/')) {
-            throw new InvalidArgumentException('webhook_url_forbidden');
-        }
-
-        return [$host, 'https://'.$host.$path];
     }
 
     private static function isCanonicalDnsName(string $host): bool

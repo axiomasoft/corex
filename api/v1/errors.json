@@ -656,6 +656,14 @@
         "retryable": false
     },
     {
+        "category": "validation",
+        "code": "webhooks.webhook_egress_denied",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-webhooks",
+        "path": null,
+        "retryable": false
+    },
+    {
         "category": "conflict",
         "code": "webhooks.webhook_endpoint_changed",
         "detail_keys": [],

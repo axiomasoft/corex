@@ -953,17 +953,20 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | Symbol | Layer | Since |
 |:--|:--|:--|
 | `CoreX\Webhooks\Contracts\WebhookDeliveryStore` | spi-implement | 1.0 |
+| `CoreX\Webhooks\Contracts\WebhookEgressPolicy` | spi-implement | 1.0 |
 | `CoreX\Webhooks\Contracts\WebhookHttpTransport` | spi-implement | 1.0 |
 | `CoreX\Webhooks\Contracts\WebhookPayloadProjector` | spi-implement | 1.0 |
 | `CoreX\Webhooks\Contracts\WebhookSigner` | spi-implement | 1.0 |
 | `CoreX\Webhooks\Contracts\WebhookSubscriptionStore` | spi-implement | 1.0 |
 | `CoreX\Webhooks\Data\ValidatedWebhookRequest` | api | 1.0 |
 | `CoreX\Webhooks\Data\WebhookDelivery` | api | 1.0 |
+| `CoreX\Webhooks\Data\WebhookDestination` | api | 1.0 |
 | `CoreX\Webhooks\Data\WebhookHttpResult` | api | 1.0 |
 | `CoreX\Webhooks\Data\WebhookOptions` | api | 1.0 |
 | `CoreX\Webhooks\Data\WebhookSignedHeaders` | api | 1.0 |
 | `CoreX\Webhooks\Data\WebhookSubscription` | api | 1.0 |
 | `CoreX\Webhooks\Data\WebhookTopic` | api | 1.0 |
+| `CoreX\Webhooks\Enums\WebhookFailureReason` | api | 1.0 |
 | `CoreX\Webhooks\Errors\Enums\WebhooksErrorCode` | api | 1.0 |
 | `CoreX\Webhooks\Laravel\WebhookBindingsRegistrar` | spi-call | 1.0 |
 | `CoreX\Webhooks\Laravel\WebhookHttpRegistrar` | spi-call | 1.0 |

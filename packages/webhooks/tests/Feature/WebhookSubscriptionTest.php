@@ -22,6 +22,7 @@ use CoreX\Time\Testing\FrozenClock;
 use CoreX\Webhooks\Contracts\WebhookPayloadProjector;
 use CoreX\Webhooks\Data\WebhookSubscription;
 use CoreX\Webhooks\Data\WebhookTopic;
+use CoreX\Webhooks\Internal\PermitPublicEgressPolicy;
 use CoreX\Webhooks\Internal\SqlWebhookSubscriptionStore;
 use CoreX\Webhooks\Internal\WebhookTopicCatalogue;
 use CoreX\Webhooks\Tests\TestCase;
@@ -53,7 +54,7 @@ final class WebhookSubscriptionTest extends TestCase
         $connection = DB::connection('api_tenant');
         $this->clock = new FrozenClock(new DateTimeImmutable('2026-09-25T12:00:00.000000+00:00'));
         $this->catalogue = $this->catalogue();
-        $this->store = new SqlWebhookSubscriptionStore($connection, new GuardedTenantContextRestorer($contexts), $this->catalogue, $this->clock);
+        $this->store = new SqlWebhookSubscriptionStore($connection, new GuardedTenantContextRestorer($contexts), $this->catalogue, $this->clock, new PermitPublicEgressPolicy);
         $this->scope = new DataScope('account-1', null, $connection->getDriverName().':'.$connection->getDatabaseName(), 'actor-1', hash('sha256', 'epoch'));
     }
 
@@ -186,7 +187,7 @@ final class WebhookSubscriptionTest extends TestCase
             $connection = DB::connection('api_pg_tenant');
             $contexts = new ContextFixture;
             $contexts->initialize(new AccountRef('account-1', 'account', 'active', [], []));
-            $store = new SqlWebhookSubscriptionStore($connection, new GuardedTenantContextRestorer($contexts), $this->catalogue, $this->clock);
+            $store = new SqlWebhookSubscriptionStore($connection, new GuardedTenantContextRestorer($contexts), $this->catalogue, $this->clock, new PermitPublicEgressPolicy);
             $scope = new DataScope('account-1', null, 'pgsql:'.$database, 'actor-1', hash('sha256', 'epoch'));
             $created = $store->create($scope, $this->subscription('sub-pg'), true, true);
 
@@ -206,7 +207,7 @@ final class WebhookSubscriptionTest extends TestCase
             name: 'orders.placed',
             contractVersion: 1,
             occurredAt: new DateTimeImmutable('2026-09-25T12:00:00+00:00'),
-            scope: ['account_id' => 'account-1'],
+            scope: ['account' => 'account-1'],
             payload: new MessagePayload(['id' => 'order-1', 'secret' => 'hidden']),
             piiClass: PiiClass::Personal,
             correlationId: 'correlation-1',

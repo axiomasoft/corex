@@ -33,7 +33,7 @@ final class LocalWebhookReceiver implements WebhookHttpTransport
         $presented = (string) ($request->signatureHeaders['webhook-signature'] ?? '');
 
         if (! $this->authentic($id, $timestamp, $request->body, $presented)) {
-            return new WebhookHttpResult(401, null, 'signature_invalid', 0);
+            return new WebhookHttpResult(401, null, null, 0);
         }
 
         if (isset($this->seen[$id])) {

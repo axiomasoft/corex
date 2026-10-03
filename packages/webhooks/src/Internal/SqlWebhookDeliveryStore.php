@@ -11,6 +11,7 @@ use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Webhooks\Contracts\WebhookDeliveryStore;
 use CoreX\Webhooks\Data\WebhookDelivery;
 use CoreX\Webhooks\Data\WebhookHttpResult;
+use CoreX\Webhooks\Enums\WebhookFailureReason;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -150,7 +151,7 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
                 || ! hash_equals((string) $subscription->endpoint_url, $delivery->endpointSnapshot)
                 || ! hash_equals((string) $subscription->topic, $delivery->topic)
                 || (int) $subscription->topic_version !== $delivery->topicVersion) {
-                $this->rejectClaim($delivery, 'webhook_endpoint_changed', $now);
+                $this->rejectClaim($delivery, WebhookFailureReason::EndpointChanged, $now);
 
                 return null;
             }
@@ -159,7 +160,7 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
 
             if (! is_array($decoded) || $decoded === [] || count($decoded) > 2
                 || array_filter($decoded, is_string(...)) !== $decoded) {
-                $this->rejectClaim($delivery, 'signing_unavailable', $now);
+                $this->rejectClaim($delivery, WebhookFailureReason::SigningUnavailable, $now);
 
                 return null;
             }
@@ -205,7 +206,7 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
                     'lease_until' => null,
                     'next_attempt_at' => $decision['next'],
                     'finished_at' => $terminal ? $now : null,
-                    'last_error' => $decision['error'],
+                    'last_error' => $decision['error']?->value,
                 ]);
 
             if ($changed !== 1) {
@@ -244,9 +245,9 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
 
         foreach ($query->get() as $row) {
             $delivery = $this->delivery($row);
-            $horizon = $delivery->createdAt->add(new DateInterval('PT72H'));
-            $dead = $delivery->attempt >= 12 || $now >= $horizon;
-            $error = $dead ? 'retry_exhausted' : 'ack_unknown';
+            $failure = $this->retry->budgetFailure($delivery, $now);
+            $dead = $failure !== null;
+            $error = $failure ?? WebhookFailureReason::AckUnknown;
             $this->connection->table('sys_api_webhook_attempts')
                 ->where('delivery_id', $delivery->id)
                 ->where('attempt', $delivery->attempt)
@@ -255,7 +256,7 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
                 ->update([
                     'finished_at' => $now,
                     'outcome' => 'unknown',
-                    'error_code' => 'ack_unknown',
+                    'error_code' => WebhookFailureReason::AckUnknown->value,
                 ]);
             $this->connection->table(self::Table)
                 ->where('id', $delivery->id)
@@ -269,12 +270,12 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
                     'lease_until' => null,
                     'next_attempt_at' => $now,
                     'finished_at' => $dead ? $now : null,
-                    'last_error' => $error,
+                    'last_error' => $error->value,
                 ]);
         }
     }
 
-    private function rejectClaim(WebhookDelivery $delivery, string $error, DateTimeImmutable $now): void
+    private function rejectClaim(WebhookDelivery $delivery, WebhookFailureReason $error, DateTimeImmutable $now): void
     {
         $this->connection->table(self::Table)
             ->where('id', $delivery->id)
@@ -286,7 +287,7 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
                 'lease_owner' => null,
                 'lease_until' => null,
                 'finished_at' => $now,
-                'last_error' => $error,
+                'last_error' => $error->value,
             ]);
         $this->connection->table('sys_api_webhook_attempts')
             ->where('delivery_id', $delivery->id)
@@ -296,7 +297,7 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
             ->update([
                 'finished_at' => $now,
                 'outcome' => 'dead',
-                'error_code' => $error,
+                'error_code' => $error->value,
             ]);
     }
 
@@ -304,7 +305,7 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
         WebhookDelivery $delivery,
         WebhookHttpResult $result,
         string $outcome,
-        ?string $error,
+        ?WebhookFailureReason $error,
         DateTimeImmutable $now,
     ): void {
         $this->connection->table('sys_api_webhook_attempts')
@@ -317,7 +318,7 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
                 'outcome' => $outcome,
                 'http_status' => $result->status,
                 'duration_ms' => $result->durationMs,
-                'error_code' => $error,
+                'error_code' => $error?->value,
             ]);
     }
 
@@ -337,7 +338,7 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
             ->update([
                 'status' => 'dead',
                 'finished_at' => $now,
-                'last_error' => 'endpoint_gone',
+                'last_error' => WebhookFailureReason::EndpointGone->value,
             ]);
     }
 

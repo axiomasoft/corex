@@ -128,9 +128,11 @@
 | corex-webhooks.delivery_enabled | axiomasoft/corex-webhooks | bool | false | no | product-policy | unobserved | unobserved | WebhookOptions::$deliveryEnabled |  |  |
 | corex-webhooks.history_retention_seconds | axiomasoft/corex-webhooks | int | 2592000 | no | product-policy | unobserved | unobserved | WebhookOptions::$historyRetentionSeconds |  |  |
 | corex-webhooks.lease_seconds | axiomasoft/corex-webhooks | int | 30 | no | product-policy | unobserved | unobserved | WebhookOptions::$leaseSeconds |  |  |
+| corex-webhooks.max_attempts | axiomasoft/corex-webhooks | int | 12 | no | product-policy | unobserved | boot | WebhookOptions::$maxAttempts |  |  |
 | corex-webhooks.organization_denied_cidrs | axiomasoft/corex-webhooks | array | [] | no | product-policy | unobserved | unobserved | WebhookOptions::$organizationDeniedCidrs |  |  |
 | corex-webhooks.projectors | axiomasoft/corex-webhooks | array | [] | no | product-policy | unobserved | unobserved | WebhookOptions::$projectors |  |  |
 | corex-webhooks.replay_horizon_seconds | axiomasoft/corex-webhooks | int | 604800 | no | product-policy | unobserved | unobserved | WebhookOptions::$replayHorizonSeconds |  |  |
+| corex-webhooks.retry_horizon_seconds | axiomasoft/corex-webhooks | int | 259200 | no | product-policy | unobserved | boot | WebhookOptions::$retryHorizonSeconds |  |  |
 | corex-webhooks.topics | axiomasoft/corex-webhooks | array | [] | no | product-policy | unobserved | unobserved | WebhookOptions::$topics |  |  |
 | corex-webhooks.worker_ready | axiomasoft/corex-webhooks | bool | false | no | deployment | no | unobserved | WebhookOptions::$workerReady |  |  |
 | corex-workflow.enforce_declarations | axiomasoft/corex-workflow | bool | true | no | product-policy | unobserved | unobserved | WorkflowOptions::$enforceDeclarations |  |  |

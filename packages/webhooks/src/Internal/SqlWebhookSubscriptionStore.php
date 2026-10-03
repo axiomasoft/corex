@@ -11,7 +11,9 @@ use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Webhooks\Contracts\WebhookEgressPolicy;
 use CoreX\Webhooks\Contracts\WebhookSubscriptionStore;
+use CoreX\Webhooks\Data\WebhookDestination;
 use CoreX\Webhooks\Data\WebhookSubscription;
 use CoreX\Webhooks\Errors\Enums\WebhooksErrorCode;
 use DateTimeImmutable;
@@ -33,6 +35,7 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
         private TenantContextRestorer $contexts,
         private WebhookTopicCatalogue $catalogue,
         private ClockInterface $clock,
+        private WebhookEgressPolicy $egress,
     ) {}
 
     #[Override]
@@ -49,6 +52,8 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
         if ($subscription->maxPiiClass !== $topic->piiClass || $subscription->major !== $topic->major) {
             throw new ApiError(OperationsErrorCode::UnknownMessageContract, 422, 'The subscription does not match the declared topic.', category: ErrorCategory::Validation);
         }
+
+        $this->assertEgress($scope, $subscription->endpointUrl);
 
         return $this->connection->transaction(function () use ($subscription): WebhookSubscription {
             if ((int) $this->connection->table(self::Table)->count() >= self::CAP) {
@@ -103,6 +108,8 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
             updatedAt: $current->updatedAt,
         );
 
+        $this->assertEgress($scope, $replacement->endpointUrl);
+
         return $this->connection->transaction(function () use ($id, $expectedRevision, $replacement): WebhookSubscription {
             $updated = $this->connection->table(self::Table)
                 ->where('id', $id)
@@ -155,6 +162,13 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
 
             return $this->requireRow($id);
         }, $this->transactionAttempts());
+    }
+
+    private function assertEgress(DataScope $scope, string $url): void
+    {
+        if (! $this->egress->allows($scope, WebhookDestination::fromUrl($url))) {
+            throw new ApiError(WebhooksErrorCode::WebhookEgressDenied, 422, 'Webhook destination is denied by tenant egress policy.', category: ErrorCategory::Validation);
+        }
     }
 
     private function assertScope(DataScope $scope): void

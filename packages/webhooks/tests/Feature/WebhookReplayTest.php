@@ -299,7 +299,7 @@ final class WebhookReplayTest extends TestCase
             'id' => $id, 'subscription_id' => $subscription, 'subscription_revision' => $subscriptionRevision,
             'event_id' => 'event-'.$id, 'topic' => 'orders.placed', 'topic_version' => 1, 'major' => 'v1',
             'endpoint_snapshot' => 'https://hooks.example/receiver',
-            'scope' => JsonCanonical::encode(['account_id' => 'account-a', 'workspace_id' => null]),
+            'scope' => JsonCanonical::encode(['account' => 'account-a', 'workspace' => null]),
             'body' => $body, 'body_hash' => hash('sha256', $body), 'status' => $status, 'attempt' => $attempt,
             'replay_count' => $replayCount, 'lease_owner' => $leaseOwner,
             'lease_until' => $leaseOwner === null ? null : $this->clock->now()->add(new DateInterval('PT30S')),

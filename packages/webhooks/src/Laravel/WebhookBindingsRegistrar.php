@@ -8,6 +8,7 @@ use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Audit\Contracts\AuditLogger;
 use CoreX\Context\Contracts\TenantContextRestorer;
+use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Messaging\Contracts\CloudEventCodec;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
@@ -15,6 +16,7 @@ use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Operations\Laravel\ApiSchemaRegistrar;
 use CoreX\Operations\Pagination\Contracts\CursorCodec;
 use CoreX\Webhooks\Contracts\WebhookDeliveryStore;
+use CoreX\Webhooks\Contracts\WebhookEgressPolicy;
 use CoreX\Webhooks\Contracts\WebhookHttpTransport;
 use CoreX\Webhooks\Contracts\WebhookPayloadProjector;
 use CoreX\Webhooks\Contracts\WebhookSigner;
@@ -22,6 +24,7 @@ use CoreX\Webhooks\Contracts\WebhookSubscriptionStore;
 use CoreX\Webhooks\Data\WebhookOptions;
 use CoreX\Webhooks\Internal\CurlWebhookTransport;
 use CoreX\Webhooks\Internal\HmacWebhookSigner;
+use CoreX\Webhooks\Internal\PermitPublicEgressPolicy;
 use CoreX\Webhooks\Internal\SqlWebhookDeliveryStore;
 use CoreX\Webhooks\Internal\SqlWebhookSubscriptionStore;
 use CoreX\Webhooks\Internal\WebhookDeliveryWorker;
@@ -53,7 +56,8 @@ final class WebhookBindingsRegistrar implements PackageRegistrar
             (array) $app->make(Repository::class)->get('corex-webhooks', []),
         ));
         $app->singleton(WebhookUrlPolicy::class, static fn (Application $app): WebhookUrlPolicy => new WebhookUrlPolicy(organizationDeniedCidrs: $app->make(WebhookOptions::class)->organizationDeniedCidrs));
-        $app->singleton(WebhookRetryPolicy::class, WebhookRetryPolicy::class);
+        $app->singletonIf(WebhookEgressPolicy::class, PermitPublicEgressPolicy::class);
+        $app->singleton(WebhookRetryPolicy::class, static fn (Application $app): WebhookRetryPolicy => new WebhookRetryPolicy($app->make(WebhookOptions::class)));
         $app->singleton(WebhookTopicCatalogue::class, static fn (Application $app): WebhookTopicCatalogue => new WebhookTopicCatalogue(
             contracts: $app->make(MessageContractRegistry::class),
             topics: $app->make(WebhookOptions::class)->topics,
@@ -64,6 +68,7 @@ final class WebhookBindingsRegistrar implements PackageRegistrar
             contexts: $app->make(TenantContextRestorer::class),
             catalogue: $app->make(WebhookTopicCatalogue::class),
             clock: $app->make(ClockInterface::class),
+            egress: $app->make(WebhookEgressPolicy::class),
         ));
         $app->scoped(WebhookDeliveryStore::class, static fn (Application $app): SqlWebhookDeliveryStore => self::deliveryStore($app, $app->make(WebhookOptions::class)));
         $app->scoped(WebhookManagement::class, static fn (Application $app): WebhookManagement => new WebhookManagement(
@@ -171,6 +176,8 @@ final class WebhookBindingsRegistrar implements PackageRegistrar
             transport: $app->make(WebhookHttpTransport::class),
             topics: $app->make(WebhookTopicCatalogue::class),
             clock: $app->make(ClockInterface::class),
+            egress: $app->make(WebhookEgressPolicy::class),
+            scopeCodec: $app->make(DataScopeCodec::class),
         );
     }
 

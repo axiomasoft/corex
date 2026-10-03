@@ -505,11 +505,6 @@ parameters:
 			count: 1
 			path: src/Internal/WebhookUrlPolicy.php
 
-		-
-			rawMessage: Casting to string something that's already string.
-			identifier: cast.useless
-			count: 1
-			path: src/Internal/WebhookUrlPolicy.php
 
 		-
 			rawMessage: 'Parameter #1 $hostname of function dns_get_record expects string, mixed given.'

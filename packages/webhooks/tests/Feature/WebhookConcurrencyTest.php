@@ -14,6 +14,7 @@ use CoreX\Time\Testing\FrozenClock;
 use CoreX\Webhooks\Data\WebhookHttpResult;
 use CoreX\Webhooks\Internal\SqlWebhookDeliveryStore;
 use CoreX\Webhooks\Internal\WebhookRetryPolicy;
+use CoreX\Webhooks\Laravel\WebhookOptionsParser;
 use CoreX\Webhooks\Tests\TestCase;
 use DateInterval;
 use DateTimeImmutable;
@@ -143,7 +144,7 @@ final class WebhookConcurrencyTest extends TestCase
             $connection,
             new GuardedTenantContextRestorer($contexts),
             $clock,
-            new WebhookRetryPolicy(static fn (int $min, int $max): int => $max),
+            new WebhookRetryPolicy(WebhookOptionsParser::fromArray([]), static fn (int $min, int $max): int => $max),
             30,
         );
     }
@@ -160,7 +161,7 @@ final class WebhookConcurrencyTest extends TestCase
             'id' => 'delivery-pg', 'subscription_id' => 'subscription-pg', 'subscription_revision' => 0,
             'event_id' => 'event-pg', 'topic' => 'orders.placed', 'topic_version' => 1, 'major' => 'v1',
             'endpoint_snapshot' => 'https://hooks.example/receiver',
-            'scope' => JsonCanonical::encode(['account_id' => 'account-1']), 'body' => $body,
+            'scope' => JsonCanonical::encode(['account' => 'account-1']), 'body' => $body,
             'body_hash' => hash('sha256', $body), 'status' => 'pending', 'attempt' => 0, 'replay_count' => 0,
             'lease_owner' => null, 'lease_until' => null, 'next_attempt_at' => $now, 'created_at' => $now,
             'finished_at' => null, 'expires_at' => $now->add(new DateInterval('P7D')), 'last_error' => null,

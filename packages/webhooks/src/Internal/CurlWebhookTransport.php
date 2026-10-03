@@ -7,6 +7,7 @@ namespace CoreX\Webhooks\Internal;
 use CoreX\Webhooks\Contracts\WebhookHttpTransport;
 use CoreX\Webhooks\Data\ValidatedWebhookRequest;
 use CoreX\Webhooks\Data\WebhookHttpResult;
+use CoreX\Webhooks\Enums\WebhookFailureReason;
 use Throwable;
 
 final class CurlWebhookTransport implements WebhookHttpTransport
@@ -20,17 +21,17 @@ final class CurlWebhookTransport implements WebhookHttpTransport
         $startedAt = hrtime(true);
 
         if (! function_exists('curl_init')) {
-            return $this->failure('capability_unavailable', $startedAt);
+            return $this->failure(WebhookFailureReason::TransportFailure, $startedAt);
         }
 
         if (! WebhookUrlPolicy::allowsPublicAddress($request->address)) {
-            return $this->failure('address_not_allowed', $startedAt);
+            return $this->failure(WebhookFailureReason::AddressNotAllowed, $startedAt);
         }
 
         $handle = curl_init();
 
         if ($handle === false) {
-            return $this->failure('capability_unavailable', $startedAt);
+            return $this->failure(WebhookFailureReason::TransportFailure, $startedAt);
         }
 
         $responseBodyBytes = 0;
@@ -100,7 +101,7 @@ final class CurlWebhookTransport implements WebhookHttpTransport
             ]);
 
             if (! $configured) {
-                return $this->failure('transport_unavailable', $startedAt);
+                return $this->failure(WebhookFailureReason::TransportFailure, $startedAt);
             }
 
             $executed = curl_exec($handle);
@@ -108,11 +109,11 @@ final class CurlWebhookTransport implements WebhookHttpTransport
             $peerAddress = curl_getinfo($handle, CURLINFO_PRIMARY_IP);
 
             if ($bodyOverflow) {
-                return $this->failure('response_body_too_large', $startedAt, $status);
+                return $this->failure(WebhookFailureReason::PayloadTooLarge, $startedAt, $status);
             }
 
             if ($headerOverflow) {
-                return $this->failure('response_headers_too_large', $startedAt, $status);
+                return $this->failure(WebhookFailureReason::PayloadTooLarge, $startedAt, $status);
             }
 
             if ($executed === false) {
@@ -120,7 +121,7 @@ final class CurlWebhookTransport implements WebhookHttpTransport
             }
 
             if (! $this->sameAddress($peerAddress, $request->address)) {
-                return $this->failure('peer_address_mismatch', $startedAt, $status);
+                return $this->failure(WebhookFailureReason::AddressNotAllowed, $startedAt, $status);
             }
 
             return new WebhookHttpResult(
@@ -130,7 +131,7 @@ final class CurlWebhookTransport implements WebhookHttpTransport
                 durationMs: $this->durationMs($startedAt),
             );
         } catch (Throwable) {
-            return $this->failure('transport_failure', $startedAt);
+            return $this->failure(WebhookFailureReason::TransportFailure, $startedAt);
         } finally {
             curl_close($handle);
         }
@@ -147,13 +148,13 @@ final class CurlWebhookTransport implements WebhookHttpTransport
         ];
     }
 
-    private function curlErrorCode(int $errno): string
+    private function curlErrorCode(int $errno): WebhookFailureReason
     {
         return match ($errno) {
-            CURLE_OPERATION_TIMEDOUT => 'network_timeout',
-            CURLE_COULDNT_CONNECT, CURLE_COULDNT_RESOLVE_HOST => 'network_unavailable',
-            CURLE_SSL_CONNECT_ERROR, CURLE_SSL_CACERT => 'tls_failed',
-            default => 'network_error',
+            CURLE_OPERATION_TIMEDOUT => WebhookFailureReason::NetworkFailure,
+            CURLE_COULDNT_CONNECT, CURLE_COULDNT_RESOLVE_HOST => WebhookFailureReason::NetworkFailure,
+            CURLE_SSL_CONNECT_ERROR, CURLE_SSL_CACERT => WebhookFailureReason::NetworkFailure,
+            default => WebhookFailureReason::NetworkFailure,
         };
     }
 
@@ -167,7 +168,7 @@ final class CurlWebhookTransport implements WebhookHttpTransport
             && hash_equals($expectedPacked, $actualPacked);
     }
 
-    private function failure(string $errorCode, int $startedAt, ?int $status = null): WebhookHttpResult
+    private function failure(WebhookFailureReason $errorCode, int $startedAt, ?int $status = null): WebhookHttpResult
     {
         return new WebhookHttpResult(
             status: $status !== null && $status > 0 ? $status : null,

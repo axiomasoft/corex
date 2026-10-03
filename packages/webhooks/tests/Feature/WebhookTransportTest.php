@@ -123,6 +123,7 @@ function curl_close(CurlHandle|FakeCurlHandle $handle): void
 namespace CoreX\Webhooks\Tests\Feature;
 
 use CoreX\Webhooks\Data\ValidatedWebhookRequest;
+use CoreX\Webhooks\Enums\WebhookFailureReason;
 use CoreX\Webhooks\Internal\CurlRuntimeFixture;
 use CoreX\Webhooks\Internal\CurlWebhookTransport;
 use CoreX\Webhooks\Tests\TestCase;
@@ -363,7 +364,7 @@ PHP;
 
         $bodyResult = (new CurlWebhookTransport)->send($this->request());
 
-        $this->assertSame('response_body_too_large', $bodyResult->errorCode);
+        $this->assertSame(WebhookFailureReason::PayloadTooLarge, $bodyResult->errorCode);
 
         CurlRuntimeFixture::reset();
         CurlRuntimeFixture::$responseHeaders = [
@@ -374,7 +375,7 @@ PHP;
 
         $headerResult = (new CurlWebhookTransport)->send($this->request());
 
-        $this->assertSame('response_headers_too_large', $headerResult->errorCode);
+        $this->assertSame(WebhookFailureReason::PayloadTooLarge, $headerResult->errorCode);
     }
 
     public function test_socket_peer_must_equal_the_prevalidated_pin(): void
@@ -383,7 +384,7 @@ PHP;
 
         $result = (new CurlWebhookTransport)->send($this->request());
 
-        $this->assertSame('peer_address_mismatch', $result->errorCode);
+        $this->assertSame(WebhookFailureReason::AddressNotAllowed, $result->errorCode);
     }
 
     public function test_missing_curl_fails_closed_without_attempting_dns_or_network(): void
@@ -391,6 +392,7 @@ PHP;
         $root = dirname(__DIR__, 2);
         $script = <<<'PHP'
 require $argv[1].'/src/Data/ValidatedWebhookRequest.php';
+require $argv[1].'/src/Enums/WebhookFailureReason.php';
 require $argv[1].'/src/Data/WebhookHttpResult.php';
 require $argv[1].'/src/Contracts/WebhookHttpTransport.php';
 require $argv[1].'/src/Internal/WebhookUrlPolicy.php';
@@ -402,7 +404,7 @@ $request = new CoreX\Webhooks\Data\ValidatedWebhookRequest(
     '{}',
     ['webhook-id' => 'delivery_123', 'webhook-timestamp' => '1700000000', 'webhook-signature' => 'v1,YWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWE='],
 );
-echo (new CoreX\Webhooks\Internal\CurlWebhookTransport)->send($request)->errorCode;
+echo (new CoreX\Webhooks\Internal\CurlWebhookTransport)->send($request)->errorCode->value;
 PHP;
         $process = proc_open(
             [PHP_BINARY, '-d', 'disable_functions=curl_init', '-r', $script, $root],
@@ -418,7 +420,7 @@ PHP;
         $exitCode = proc_close($process);
 
         $this->assertSame(0, $exitCode, $stderr);
-        $this->assertSame('capability_unavailable', $stdout);
+        $this->assertSame('transport_failure', $stdout);
     }
 
     private function request(): ValidatedWebhookRequest

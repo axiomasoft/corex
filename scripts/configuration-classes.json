@@ -1150,6 +1150,15 @@
             "deprecated_aliases": "",
             "notes": ""
         },
+        "corex-webhooks.max_attempts": {
+            "owner": "axiomasoft/corex-webhooks",
+            "secret": "no",
+            "mode": "product-policy",
+            "reloadable": "unobserved",
+            "validation": "boot",
+            "deprecated_aliases": "",
+            "notes": ""
+        },
         "corex-webhooks.organization_denied_cidrs": {
             "owner": "axiomasoft/corex-webhooks",
             "secret": "no",
@@ -1174,6 +1183,15 @@
             "mode": "product-policy",
             "reloadable": "unobserved",
             "validation": "unobserved",
+            "deprecated_aliases": "",
+            "notes": ""
+        },
+        "corex-webhooks.retry_horizon_seconds": {
+            "owner": "axiomasoft/corex-webhooks",
+            "secret": "no",
+            "mode": "product-policy",
+            "reloadable": "unobserved",
+            "validation": "boot",
             "deprecated_aliases": "",
             "notes": ""
         },
