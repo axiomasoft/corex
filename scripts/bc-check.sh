@@ -396,11 +396,14 @@ echo json_encode($root,JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES)."\n";
     return 1
   fi
   if [[ "$classified" == "bc-break" ]]; then
-    if [[ "$stability" != "experimental" ]] || ! grep -Eq 'Breaking.*PLAN3[.]P04|PLAN3[.]P04.*[Bb]reaking' "$REPO_ROOT/packages/$dir/CHANGELOG.md"; then
+    if printf '%s\n' "$roave_out" | python3 "$REPO_ROOT/scripts/bc/approved-delta.py" --root "$REPO_ROOT" --package "$pkg_name" --base "$(git -C "$REPO_ROOT" rev-parse "${BC_CHECK_BASE}^{commit}")"; then
+      echo "bc-check: exact decision-bound unpublished delta — ${pkg_name}"
+    elif [[ "$stability" == "experimental" ]] && grep -Eq 'Breaking.*PLAN3[.]P04|PLAN3[.]P04.*[Bb]reaking' "$REPO_ROOT/packages/$dir/CHANGELOG.md"; then
+      echo "bc-check: declared pre-1.0 delta in packages/$dir/CHANGELOG.md"
+    else
       echo "bc-check: undeclared or stable BC break — ${pkg_name}" >&2
       return 1
     fi
-    echo "bc-check: declared pre-1.0 delta in packages/$dir/CHANGELOG.md"
   fi
   return 0
 }

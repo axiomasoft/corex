@@ -1,0 +1,50 @@
+{
+    "schema": "corex-bc-approved-deltas/1",
+    "packages": {
+        "axiomasoft/corex-operations": {
+            "base_revision": "76f8bdde496154c0a8901e459175cf306bedd860",
+            "decisions": [
+                {
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D90-p06-wire-contract.md",
+                    "sha256": "48de99cb1572fa290b975ccdc6ee6d95e85d4c44c5a68fbd710956cdea3d281a"
+                },
+                {
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D92-p06-design-audit-remediation.md",
+                    "sha256": "f57b0685ddf78671924891d30736b10e979278789c2023436387157698225415"
+                }
+            ],
+            "changes": [
+                {
+                    "description": "Case CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode::InputEnvelopeInvalid was added",
+                    "path": "/packages/operations/src/Errors/Enums/OperationsErrorCode.php",
+                    "modificationType": "added"
+                },
+                {
+                    "description": "Case CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode::UndeclaredFields was added",
+                    "path": "/packages/operations/src/Errors/Enums/OperationsErrorCode.php",
+                    "modificationType": "added"
+                },
+                {
+                    "description": "Case CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode::UnsupportedMediaType was added",
+                    "path": "/packages/operations/src/Errors/Enums/OperationsErrorCode.php",
+                    "modificationType": "added"
+                },
+                {
+                    "description": "Class CoreX\\Operations\\Errors\\Laravel\\AcceptNegotiation has been deleted",
+                    "path": null,
+                    "modificationType": "removed"
+                },
+                {
+                    "description": "Property CoreX\\Operations\\Laravel\\Support\\ApiOptions#$problemTypeBase was removed",
+                    "path": "/packages/operations/src/Laravel/Support/ApiOptions.php",
+                    "modificationType": "removed"
+                },
+                {
+                    "description": "The parameter $problemTypeBase of CoreX\\Operations\\Laravel\\Support\\ApiOptions#__construct() changed from string to a non-contravariant array",
+                    "path": "/packages/operations/src/Laravel/Support/ApiOptions.php",
+                    "modificationType": "changed"
+                }
+            ]
+        }
+    }
+}
