@@ -1,25 +1,25 @@
-# HANDOFF — 2026-10-02 — after P05.1
+# HANDOFF — 2026-10-02 — after P05.2
 
-**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P05.2
+**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P05.3
 
 | Параметр | Значение |
 |:--|:--|
-| Batch | B05-A |
+| Batch | solo |
 | Model | implementation |
-| Executor | Sonnet 5.5 · claude-code/claude-sonnet-5-5/high |
+| Executor | cursor/grok-4.7/high · fresh (roadmap row 19) |
 | Thinking | high |
 | Context | continue-root |
 
-**Done:** P05.1 GREEN: 11 internal Options, lazy shared singletons for all Options, `RuntimeConfigCheck`/`RuntimeConfigGate` and dangerous-mode checks, static `Config` removed, gate `config-composition` C1–C4. Products 5911120c and 2c625e4d; hosted CI on the mirror academici/corex-mirror run 37029892294 success (36 success / 0 failure / 1 skipped); origin run 37027169858 did not start (account billing). Local stack, Golden delta and bc-check GREEN.
+**Done:** P05.1 and P05.2 GREEN (batch B05-A, owner D85). P05.2: provider-size gate S1–S3 (max 8 bindings, no anonymous classes, single-return closures) with negative controls; lifetime gate scans registrars; providers of core, access, custom-fields, intl, media, notifications, operations, panels, wakeup, webhooks delegate to `PackageRegistrar` services; three named classes replace anonymous ones; `CoreServiceProvider` is the only public kernel provider. Product aea83241; hosted CI on the mirror academici/corex-mirror run 37091757720 success (36 success / 0 failure / 1 skipped); origin Actions cannot start jobs (account billing).
 
-**Remaining:** P05.2 (second item of the owner-requested B05-A workset), then P05.3 and P05.4. P05.2 starts from provider-size ratchet numbers raised by P05.1 and replaces them with S1–S3.
+**Remaining:** P05.3 (solo, review `full`, independent reviewer per roadmap row 19) and P05.4. P05.3 is a recommendation outside the completed owner-authorized B05-A scope; no successor execution is inferred.
 
-**Open risks:** Hosted CI for P05.2 runs on the mirror until the origin billing is fixed. `CoreOptionsParser::current()` stays deprecated; its `app()` helper is a P05.3 G2 baseline concern inside the `Laravel/` bridge only.
+**Open risks:** Legacy static registrars (`SavedViewsRegistrar`, `CostRegistrar`, `BulkRegistrar`, `WebhookRegistrar`, `ApiSchemaRegistrar`, route registrars) stay as deprecated shims because stable packages cannot take a static→instance break; their removal is a P06+/1.0 decision. `ModulesServiceProvider` registers after the kernel bindings (a binding registered later wins). P05.3 owns the `SingletonInjectionGate` L2/L3 rules and the empty allowlist; `CoreOptionsParser::current()` uses `app()` inside the `Laravel/` bridge. Hosted CI runs on the mirror until the origin billing is fixed.
 
-**Sources of truth:** artifacts/P05.1-execution/completion.md; golden-semantic-delta.json; validation/; decisions/D85-p05-1-2-sonnet55.md; decisions/D86-routing-header-english-waiver.md; phases/P05/P05.2.md; roadmap.md row 18.
+**Sources of truth:** artifacts/P05.2-execution/completion.md; golden-semantic-delta.json; validation/; artifacts/P05.1-execution/completion.md; phases/P05/P05.3.md; decisions/D70-p05-composition-and-ports.md; decisions/D85-p05-1-2-sonnet55.md; decisions/D86-routing-header-english-waiver.md; roadmap.md row 19.
 
-**Runtime:** Task 0.26.2 (bundle `core/a783b98f091e/packages/task`); `plan-work.py` needs an absolute `--plan-dir`. Unrelated CLAUDE.md and CLAUDE.md.bak preserved.
+**Runtime:** Task 0.26.2 (bundle `core/a783b98f091e/packages/task`); `plan-work.py` needs an absolute `--plan-dir`; a continuation of a batch needs `--request <remaining items> --batch-receipt <file> --actual-route <file>`. Unrelated CLAUDE.md and CLAUDE.md.bak preserved.
 
 ```session-continuity-decision/v1
-{"outcome": "continue-root", "reason": "context-telemetry-unavailable", "evidence": ["batch:55ef46ef1c411651a3a7a78ab8d1195f5689f4928ec7323dfe0123ed35b51ba4", "loaded-inputs:reusable", "cold-start-cost:0"], "runnable": true, "schema_version": "session-continuity-decision/v1"}
+{"outcome": "continue-root", "reason": "authorized-scope-complete", "evidence": ["batch:55ef46ef1c411651a3a7a78ab8d1195f5689f4928ec7323dfe0123ed35b51ba4", "loaded-inputs:reusable", "cold-start-cost:0", "lifecycle:scope-complete", "checkpoint:artifacts/P05.2-execution/completion.md"], "runnable": true, "schema_version": "session-continuity-decision/v1"}
 ```

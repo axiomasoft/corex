@@ -2,8 +2,8 @@
 projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
-through: 2026-10-02
-inputs_sha256: 3d97ce92849e8767bf9c84dde17a5fb465a189e7b240186050b71b5c606ce364
+through: 2026-10-03
+inputs_sha256: 5b596a3d684e17e5c219a6846bd63a61de9af4420f68cb7270d16d95142d4b49
 generated_by: task plan-views status
 -->
 
@@ -17,7 +17,7 @@ generated_by: task plan-views status
 |:--|:--|
 | Version | — |
 | Status | 🟡 In progress |
-| Last Updated | 2026-10-02 |
+| Last Updated | 2026-10-03 |
 
 ## 4. Phase Index & Status Board
 
@@ -28,7 +28,7 @@ generated_by: task plan-views status
 | P02 | Vendor, состав пакетов, namespace = путь | 4/4 | 🟢 Done |
 | P03 | Feature modules и `Internal` | 2/2 | 🟢 Done |
 | P04 | Application API, Extension SPI и типизированные ошибки | 4/4 | 🟢 Done |
-| P05 | Typed config, композиция и порты | 1/4 | 🟡 In progress |
+| P05 | Typed config, композиция и порты | 2/4 | 🟡 In progress |
 | P10 | Зелёный hosted CI на базе P04 | 4/4 | 🟢 Done |
 
 ## Phase P00
@@ -78,7 +78,7 @@ generated_by: task plan-views status
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
 | P05.1 | Typed Options, runtime-проверки и удаление static Config | 🟢 Done | 2026-10-02 |
-| P05.2 | Тонкие providers, registrars и именованные классы | ⬜ Not started | — |
+| P05.2 | Тонкие providers, registrars и именованные классы | 🟢 Done | 2026-10-03 |
 | P05.3 | Порты вместо фасадов, хелперов и static state | ⬜ Not started | — |
 | P05.4 | Резидентный режим, config:cache, reference и доктрина | ⬜ Not started | — |
 
@@ -286,6 +286,12 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-10-02 | executor/claude-code/claude-sonnet-5-5/high | plan-run · in-progress · — |
 | 2026-10-02 | executor/claude-code/claude-sonnet-5-5/high | plan-run · closed-green · P05.1 GREEN: products 5911120c, 2c625e4d. Mirror CI 37029892294 success (36/0/1 skip); origin 37027169858 not started (billing). Local stack green. See artifacts/P05.1-execution/completion.md. review: self-check GREEN. |
 | 2026-10-02 | executor/claude-code/claude-sonnet-5-5/high | plan-run · no-op · Append-only metadata projection repair; artifacts/P05.1-execution/task-contract-evaluation.json (18 validation receipts) is allow at both sites. No new product execution or acceptance verdict.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-02 | executor/claude-code/claude-sonnet-5-5/high | plan-run · in-progress · — |
+| 2026-10-03 | executor/claude-code/claude-sonnet-5-5/high | plan-run · closed-green · P05.2 GREEN: product aea83241. Mirror CI 37091757720 success (36/0/1 skip); origin CI blocked by billing. Gate S1-S3, thin providers, bc-check and local stack green. See artifacts/P05.2-execution/completion.md. review: self-check GREEN. |
+| 2026-10-03 | executor/claude-code/claude-sonnet-5-5/high | plan-run · no-op · Append-only metadata projection repair; artifacts/P05.2-execution/task-contract-evaluation.json (16 validation receipts) is allow at both sites. No new product execution or acceptance verdict.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-03 | executor/claude-code/claude-sonnet-5-5/high | plan-run · no-op · Correction: previous metadata note counted 16 validation receipts; validation-receipts.json holds 15 (E16-E30), all exit 0, evaluation allow at both sites. No product change.
 write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates

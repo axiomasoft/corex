@@ -1,0 +1,4 @@
+$ git grep -n -E 'new (readonly )?class' -- 'packages/*/src/*' ':!packages/*/src/**/PHPStan/**'; echo anon-exit=$?; git grep -n -E 'Registrar::(register|boot)\(' -- 'packages/*/src/*'; echo static-exit=$?
+anon-exit=1
+static-exit=1
+exit=0

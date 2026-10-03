@@ -1,0 +1,10 @@
+$ scripts/php84 composer module-layout-gate; php scripts/package-graph-gate.php | tail -2; php scripts/config-composition-gate.php
+> python3 scripts/module-layout-gate.py
+module-layout OK: 1313 files, 0 violations, 0 baselined, 0 new, 0 stale; R0 0, R1 0, R2 0, R3 0, R4 0, R5 0, R6 0
+HOST-RESERVED NAMESPACE: CoreX\SearchMeilisearch\ host=axiomasoft/corex-search owner=axiomasoft/corex-search-meilisearch — host-reserved adapter namespace; host defines zero classes under the prefix; class_counts={"axiomasoft/corex-search":0,"axiomasoft/corex-search-meilisearch":9}
+UNDECLARED DEPENDENCY EXCEPTION: axiomasoft/corex-tasks-workflow -> axiomasoft/corex-wakeup in packages/tasks-workflow/src/Internal/MaterializationWakeupHandler.php — ADR P12.1; expires when: handler registration guarded in TasksWorkflowServiceProvider or axiomasoft/corex-wakeup promoted to require
+package-graph-gate: OK
+config-composition-gate: blocking=true
+config-composition-gate: C1 count=0 C2 count=0 C3 count=0 C4 count=0
+config-composition-gate: OK
+exit=0

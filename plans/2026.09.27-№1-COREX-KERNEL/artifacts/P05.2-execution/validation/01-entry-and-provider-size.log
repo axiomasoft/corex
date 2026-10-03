@@ -1,0 +1,4 @@
+$ php scripts/provider-size-gate.php; python3 -c "import json;d=json.load(open('scripts/provider-size.json'));print('max_bindings',d['max_bindings'],'note' in d)"
+provider-size-gate: OK
+max_bindings 8 False
+exit=0
