@@ -169,6 +169,7 @@ foreach ($files as $owner) {
 
 // Trait and inherited methods are not on Class_::getMethod(). Index return types
 // so `$this->coreOptions()->settingsTable` resolves like a promoted Options property.
+/** @var array<string, string> $methodReturnTypes */
 $methodReturnTypes = [];
 foreach ($trees as $tree) {
     foreach ($finder->findInstanceOf($tree, Node\Stmt\ClassLike::class) as $classLike) {
@@ -429,7 +430,7 @@ function tableExpression(?Expr $expr, Node $site, NodeFinder $finder, array $tab
         } elseif ($expr->var instanceof Expr\Variable && is_string($expr->var->name) && $expr->var->name !== 'this') {
             $scope = enclosingFunction($site);
 
-            if ($scope !== null) {
+            if ($scope instanceof Node\Stmt\ClassMethod || $scope instanceof Node\Stmt\Function_ || $scope instanceof Expr\Closure) {
                 foreach ($scope->params as $param) {
                     if ($param->var instanceof Expr\Variable && $param->var->name === $expr->var->name) {
                         $sourceType = typeName($param->type);
@@ -517,6 +518,7 @@ function typeName(?Node $type): ?string
 
 function methodReturnType(?Node\Stmt\Class_ $class, string $method): ?string
 {
+    /** @var array<string, string> $methodReturnTypes */
     global $methodReturnTypes;
 
     if ($class === null) {
