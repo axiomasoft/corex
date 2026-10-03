@@ -1,4 +1,4 @@
-# HANDOFF — 2026-10-02 — after P05.2
+# HANDOFF — 2026-10-03 — after P05.3
 
 **Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P05.3
 
@@ -6,20 +6,22 @@
 |:--|:--|
 | Batch | solo |
 | Model | implementation |
-| Executor | cursor/grok-4.7/high · fresh (roadmap row 19) |
+| Executor | any pool model for `implementation/high`; the remaining work is the hosted-CI carrier, no product change |
 | Thinking | high |
 | Context | continue-root |
 
-**Done:** P05.1 and P05.2 GREEN (batch B05-A, owner D85). P05.2: provider-size gate S1–S3 (max 8 bindings, no anonymous classes, single-return closures) with negative controls; lifetime gate scans registrars; providers of core, access, custom-fields, intl, media, notifications, operations, panels, wakeup, webhooks delegate to `PackageRegistrar` services; three named classes replace anonymous ones; `CoreServiceProvider` is the only public kernel provider. Product aea83241; hosted CI on the mirror academici/corex-mirror run 37091757720 success (36 success / 0 failure / 1 skipped); origin Actions cannot start jobs (account billing).
+**Done:** P05.3 implemented in product commit `a59c38b2` (local, not pushed): `runtime-globals` gate G1–G5 = 0 outside a 25-finding baseline that sits in `packages/tenancy/src/Impersonation/` (P07 zone); `SingletonInjectionGate` L2/L3 with an empty allowlist; 16 packages on constructor ports; 31 bindings moved to scoped; `PubSubManager` removed. Local Validation green (hermetic 987, pg 242, arch 135, golden 4, packages, bc-check, analyse, lint). Independent review `codex/gpt-6.1-sol` findings:5 then findings:3, all fixed; the round-2 fixes are not re-verified (D71 two-round limit).
 
-**Remaining:** P05.3 (solo, review `full`, independent reviewer per roadmap row 19) and P05.4. P05.3 is a recommendation outside the completed owner-authorized B05-A scope; no successor execution is inferred.
+**Open:** the hosted-CI carrier of P05.3 (E32). By owner decision D87 hosted CI is configured after P05.4, and `plan-lint` (D76) forbids closing an item on a non-allow `pre_final`, so P05.3 stays **In progress**. It closes when a green hosted run on a commit containing `a59c38b2` is recorded, or when the owner amends the carrier (new decision + design-audit waiver, because the design fingerprint covers the item spec).
 
-**Open risks:** Legacy static registrars (`SavedViewsRegistrar`, `CostRegistrar`, `BulkRegistrar`, `WebhookRegistrar`, `ApiSchemaRegistrar`, route registrars) stay as deprecated shims because stable packages cannot take a static→instance break; their removal is a P06+/1.0 decision. `ModulesServiceProvider` registers after the kernel bindings (a binding registered later wins). P05.3 owns the `SingletonInjectionGate` L2/L3 rules and the empty allowlist; `CoreOptionsParser::current()` uses `app()` inside the `Laravel/` bridge. Hosted CI runs on the mirror until the origin billing is fixed.
+**Owner decision pending:** the owner starts P05.4 in a separate session, but P05.4 depends on P05.3 GREEN. Either run the hosted CI for the P05.3 commit first, or amend the dependency/carrier before `plan-work prepare` for P05.4.
 
-**Sources of truth:** artifacts/P05.2-execution/completion.md; golden-semantic-delta.json; validation/; artifacts/P05.1-execution/completion.md; phases/P05/P05.3.md; decisions/D70-p05-composition-and-ports.md; decisions/D85-p05-1-2-sonnet55.md; decisions/D86-routing-header-english-waiver.md; roadmap.md row 19.
+**Remaining:** close P05.3; P05.4 (solo, review `light`).
 
-**Runtime:** Task 0.26.2 (bundle `core/a783b98f091e/packages/task`); `plan-work.py` needs an absolute `--plan-dir`; a continuation of a batch needs `--request <remaining items> --batch-receipt <file> --actual-route <file>`. Unrelated CLAUDE.md and CLAUDE.md.bak preserved.
+**Open risks:** Tests that rebind a service after a scoped consumer was resolved must reset the consumer. The `runtime-globals` baseline must reach zero in P07. Legacy static registrar shims stay until P06+/1.0. The root disk was full during P05.3: `bc-check` needs `TMPDIR` on a volume with free space (`/dev/shm` worked). The Task plugin cache moved to 0.27.0 during the session: `plan-work.py` needs `PYTHONPATH` to a directory that contains the `core` package (`/home/vostrikov/projects/packages/swissknifeman` worked).
+
+**Sources of truth:** artifacts/P05.3-execution/completion.md; golden-semantic-delta.json; task-contract-evaluation.json; validation/; decisions/D87-p05-3-hosted-ci-after-p05-4.md; phases/P05/P05.3.md; phases/P05/P05.4.md. Unrelated CLAUDE.md, CLAUDE.md.bak and artifacts/P12-package-graph/report.json preserved.
 
 ```session-continuity-decision/v1
-{"outcome": "continue-root", "reason": "authorized-scope-complete", "evidence": ["batch:55ef46ef1c411651a3a7a78ab8d1195f5689f4928ec7323dfe0123ed35b51ba4", "loaded-inputs:reusable", "cold-start-cost:0", "lifecycle:scope-complete", "checkpoint:artifacts/P05.2-execution/completion.md"], "runnable": true, "schema_version": "session-continuity-decision/v1"}
+{"outcome": "waiting-owner", "reason": "owner-wait", "evidence": ["batch:f8810e5152afda15f6a2699005bc55ef0892b8900cb9fd50dd90347cb036db5a", "decision:D87", "checkpoint:artifacts/P05.3-execution/completion.md"], "runnable": false, "schema_version": "session-continuity-decision/v1"}
 ```

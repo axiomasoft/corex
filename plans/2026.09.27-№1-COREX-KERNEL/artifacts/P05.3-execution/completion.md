@@ -95,4 +95,4 @@ Unresolved after round 2 (named for the owner): none known; the three round-2 fi
 
 ## Hosted CI
 
-Not run yet. Validation names `origin`; `origin` cannot start jobs (billing, see P05.1) and the owner redirected hosted CI to the mirror `academici/corex-mirror`. Pushing is an outward action, so it waits for the owner's explicit go-ahead. The item stays open until a green mirror run is recorded here.
+Deferred by the owner (D87, `owner-direction.md`): commit `a59c38b2` was not pushed and no hosted run exists. The contract evaluation (`task-contract-evaluation.json`) has `pre_final: block:VALIDATION_RECEIPT_MISSING` for exactly one carrier, E32 (hosted CI); with a receipt for it the predicate returns `allow`. `plan-lint` (D76) forbids closing on a non-allow `pre_final`, so the item is **not closed**: the journal carries two superseded `closed-deviations` rows (lines 172-173, appended before that rule was checked) and a reopening `in-progress` row (attempt 2). The item closes when E32 has a receipt (green hosted run on a commit containing `a59c38b2`) or when the owner amends that carrier. P05.4 is executed by the owner in a separate session.

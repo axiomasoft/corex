@@ -1,0 +1,9 @@
+## runtime-globals --report at HEAD f812a587 (base tree extract)
+runtime-globals-gate: report G1 46, G2 232, G3 20, G4 2, G5 0 files=95
+## entry report now
+runtime-globals-gate: report G1 2, G2 20, G3 2, G4 1, G5 0 files=3
+## gate
+runtime-globals-gate: G1 0, G2 0, G3 0, G4 0, G5 0 outside baseline
+runtime-globals-gate: baseline files=3 findings=25 (prefix packages/tenancy/src/Impersonation/)
+runtime-globals-gate: OK
+exit 0

@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-10-03
-inputs_sha256: 5b596a3d684e17e5c219a6846bd63a61de9af4420f68cb7270d16d95142d4b49
+inputs_sha256: a3958321533d204b4e341b91388cf0a102663e27aceb275e85be95de46f30efd
 generated_by: task plan-views status
 -->
 
@@ -79,7 +79,7 @@ generated_by: task plan-views status
 |:--|:--|:--|:--|
 | P05.1 | Typed Options, runtime-проверки и удаление static Config | 🟢 Done | 2026-10-02 |
 | P05.2 | Тонкие providers, registrars и именованные классы | 🟢 Done | 2026-10-03 |
-| P05.3 | Порты вместо фасадов, хелперов и static state | ⬜ Not started | — |
+| P05.3 | Порты вместо фасадов, хелперов и static state | 🟡 In progress | 2026-10-03 |
 | P05.4 | Резидентный режим, config:cache, reference и доктрина | ⬜ Not started | — |
 
 ## Phase P10
@@ -293,7 +293,12 @@ write-site: pre_mutation: allow · pre_final: allow |
 write-site: pre_mutation: allow · pre_final: allow |
 | 2026-10-03 | executor/claude-code/claude-sonnet-5-5/high | plan-run · no-op · Correction: previous metadata note counted 16 validation receipts; validation-receipts.json holds 15 (E16-E30), all exit 0, evaluation allow at both sites. No product change.
 write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-03 | claude-code/claude-sonnet-5-5/high | plan-run · in-progress · — |
+| 2026-10-03 | claude-code/claude-sonnet-5-5/high | plan-run · closed-deviations · P05.3 closed with deviations: product a59c38b2, local Validation green, independent review codex/gpt-6.1-sol 5+3 findings fixed, hosted CI deferred by owner to after P05.4 (D87). See completion.md. |
+| 2026-10-03 | claude-code/claude-sonnet-5-5/high | plan-run · closed-deviations · P05.3 closed with deviations: hosted CI deferred by owner (D87), product a59c38b2 not pushed. Local Validation green; review codex/gpt-6.1-sol 5+3 findings fixed. See completion.md.
+write-site: pre_mutation: allow · pre_final: block:VALIDATION_RECEIPT_MISSING |
+| 2026-10-03 | claude-code/claude-sonnet-5-5/high | plan-run · in-progress · note abbreviated; full text: journal.jsonl:174 |
 
 ## Owner Gates
 
-- —
+- P05.3: known deviation
