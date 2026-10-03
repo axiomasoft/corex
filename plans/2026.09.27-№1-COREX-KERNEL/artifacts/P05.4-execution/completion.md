@@ -57,7 +57,7 @@ Executor `grok-4.7/high`. Product commits after `f444568a`, pushed only to `mirr
 
 Green hosted run: `37123316791` on `0c7f7e84819e8730815afdc93e2256c13ab0f0cd`, conclusion `success`, 36 success / 0 failure / 1 skipped (mutation registry is `pull_request`-only). `phase_audit_policy` for P05 is `PHASE_DIRECT_CLOSE_ASSURED` (`audit_required` false, `close_allowed` true). No phase audit was admitted or run.
 
-The phase journal event and delivery receipt were not written. `task.plan_closure` in task 0.27.0 finds the phase contract only on a line matching `> **Phase Contract`. `phases/P05/P05.md` says `> **Контракт фазы.**`, the same heading as P00–P04 and P10. Replacing that heading changes `design_snapshot` and leaves the D89 waiver (`be4962cced9497af358502806c8b666e9c3466f81339bcd9e9dcefa182285f5d`) stale. That edit was not made. `P05.md` is unchanged from `0c7f7e84`.
+The owner then permitted the contract heading change. `phases/P05/P05.md` now starts the contract with `> **Phase Contract.**`; the contract text after the heading is unchanged. `plan_closure` wrote `phases/P05/P05.closed.md`. Journal `plan-close` for P05 is `closed-green` (run id `e9e41291d68088bb39e904a5453de1d4da5e501a681a9e91dcd9877deef3da21`). `plan-work finalize --item P05.4` built `terminal-delivery-receipt/v1` with status `🟢 Done` and Next `design-phase: task:plan-design 2026.09.27-№1-COREX-KERNEL P06` (`artifacts/P05.4-execution/terminal-receipt.json`). `plan-lint` OK. The D89 waiver fingerprint is no longer the current `design_snapshot`; D89 itself was not rewritten.
 
 Recorded and not repaired:
 

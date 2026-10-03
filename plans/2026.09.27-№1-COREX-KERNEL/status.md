@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-10-03
-inputs_sha256: a067e320df9ba63503ee08fa16b4a3cc6ad42bf1365f7b1e68efbc54583c1473
+inputs_sha256: a03ba8202a5adc7863c46c0435a8a64b1a5f8c589e4856ff1c4321091c75a975
 generated_by: task plan-views status
 -->
 
@@ -305,6 +305,8 @@ write-site: pre_mutation: allow · pre_final: block:VALIDATION_RECEIPT_MISSING |
 | 2026-10-03 | claude-code/claude-sonnet-5-5/high | plan-run · closed-green · P05.4 GREEN: product 6bf07d9a, local, not pushed; local Validation green; review self-check GREEN. Hosted-CI carrier left the item (D89): phase P05 stays open on D73; gpt-6.1-sol review not run here. See completion.md. |
 | 2026-10-03 | claude-code/claude-sonnet-5-5/high | plan-run · no-op · Boundary codes of the P05.4 close-green write sites.
 write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-03 | executor/grok-4.7/high | plan-close · in-progress · Owner permitted the Phase Contract heading so plan_closure can emit the P05 digest. |
+| 2026-10-03 | executor/grok-4.7/high | plan-close · closed-green · P05 closed on mirror CI 37123316791 sha 0c7f7e84819e8730815afdc93e2256c13ab0f0cd: success, 36 success / 0 failure / 1 skipped. PHASE_DIRECT_CLOSE_ASSURED. Evidence artifacts/P05.4-execution/hosted-ci.md. |
 
 ## Owner Gates
 

@@ -1,0 +1,61 @@
+{
+  "schema_version": "terminal-delivery-receipt/v1",
+  "plan_id": "2026.09.27-№1-COREX-KERNEL",
+  "subject": "P05.4",
+  "status": "🟢 Done",
+  "next_exact": "design-phase: task:plan-design 2026.09.27-№1-COREX-KERNEL P06",
+  "recommendation": "**Next:** design-phase: task:plan-design 2026.09.27-№1-COREX-KERNEL P06\n\n| Parameter | Meaning |\n|:--|:--|\n| Batch | n/a |\n| Model class | frontier |\n| Effort | high |\n| Capabilities | — |\n| Context | continue-root |\n| Essence | Detail skeleton P06 after P05 closed on green hosted CI (D73). |\n\n**Provider-native command:**\n\n```text\ntask:plan-design 2026.09.27-№1-COREX-KERNEL P06\n```",
+  "route": {
+    "batch": "n/a",
+    "model": null,
+    "thinking": null,
+    "context": "continue-root",
+    "command": null
+  },
+  "continuity": {
+    "outcome": "continue-root",
+    "reason": "compatible-active-work",
+    "evidence": [
+      "persisted-context:continue-root"
+    ],
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "rationale": {
+    "remaining": "Independent review of P0 and P05.4 is still for `codex/gpt-6.1-sol` (read-only, not started). Foreign bundles P00.1–P00.3 and P01.1 stay stale (glossary digest; `WriteApiSnapshots.php` unresolvable). P07 design follows P06.",
+    "open_risks": "`typed_options_field` for `tenancy.stancl.*` is `(reference)` and for `tenancy.identification.middleware` `(registrar-read)`. 61 config keys missing from the old registry were classified by key name in P05.4. The scope-map file lock now polls every 50 ms; the 5 s deadline is unchanged (pre-P05 flake, repaired because the cohort job was red). `runtime-globals` baseline must reach zero in P07. The D89 design-audit waiver fingerprint is no longer the current `design_snapshot`."
+  },
+  "commit_sha": "2a58a0dc5eccf5928774a0a74af04a012d695161",
+  "journal": {
+    "line": 179,
+    "sha256": "sha256:a5f7b4e16d61fcbaade78047de41c9346f827902fb761df25cc338334f9b0475",
+    "run_id": "47536990eeee4ec143eabeb5f13d0d80b891d3ee6f77cf54a2847e0d78238756",
+    "result": "closed-green",
+    "command": "plan-run",
+    "batch_receipt": {
+      "batch_id": "solo",
+      "completed_prefix": [],
+      "handoff_digest": "da93f6114988dec72f21063e55f78c9f0e15297c40200a945d9179f73e5a455e",
+      "invocation_digest": "ec109f2285d28c9b606a0f5afb6d4139bf94d17d6ae195d856fb99dde8c92e6b",
+      "membership": [
+        "P05.4"
+      ],
+      "routing_digest": "d9add8968ceed6cd4e762b52a10cc2fa8ccbce08889beb259e4359942f1d2b81",
+      "schema_version": "batch-receipt/v1",
+      "spec_digest": "a4ec00c5fa03b5130c252a0c00577c6ee022da48d119641e74c9919b1c9add91",
+      "stop_disposition": "continue"
+    }
+  },
+  "adapter_attestation": {
+    "package": "task",
+    "version": "0.27.0",
+    "command_id": "task:plan-run",
+    "canonical_command_sha256": "sha256:29f62c38acf16cc8167730ba7fec4c70acbd1e7c8434c918084eeaf28c23a20f"
+  },
+  "digests": {
+    "plan": "sha256:d9add8968ceed6cd4e762b52a10cc2fa8ccbce08889beb259e4359942f1d2b81",
+    "handoff": "sha256:5dd6f165aba89614e7730316d18142d60a0afbf2ae0002c767e87e462b81b563",
+    "state": "sha256:1aa92c8c48b76fb4278bf537bd269a7bfe68141ccd8c58d7d515c048a6155c42",
+    "closure": "sha256:26f92175a4d5e92197cbd4ec8c54e035f89e5e16d9a396eca6f7296fa3cbeb32"
+  }
+}
