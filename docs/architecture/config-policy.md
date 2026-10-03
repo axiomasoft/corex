@@ -19,9 +19,12 @@
 1. Отнести ключ к одному классу.
 2. Задать значение по умолчанию, при котором установка работает.
 3. Объявить ключ в типизированном объекте опций пакета, а не читать по строке в сервисе.
-4. Описать ключ в реестре конфигурации (создаётся отдельной фазой): имя, класс, тип,
-   значение по умолчанию, владелец, влияние, способ проверки, что он применился.
-5. Для `secret` — добавить в перечень скрываемых при выводе значений.
+4. Завести строку в `scripts/configuration-classes.json` (`rows`: owner, secret, mode, reloadable,
+   validation, deprecated_aliases, notes) и выполнить `php scripts/configuration-reference.php --write`:
+   `docs/architecture/configuration.md` генерируется, руками не правится. Ключ, который не принимает ни одно
+   поле Options-класса, — ошибка генератора; не-runtime ключ (pin Composer) помечается явно как
+   `(reference)`, чтение в registrar без поля Options — `(registrar-read)`.
+5. Для `secret` — значение по умолчанию в реестре печатается как `***`.
 
 ## Где допустим вызов конфигурации
 
@@ -34,3 +37,34 @@
 
 Невалидная конфигурация обязана обнаруживаться при загрузке приложения. Проверка, срабатывающая
 в момент первого использования, превращает ошибку администратора в инцидент пользователя.
+
+### Слои
+
+1. **Форма** — `<Pkg>Options::fromArray()`: типы, диапазоны, допустимые значения, `class-string`. Дефолты
+   живут здесь; `fromArray` на пустой конфигурации без переменных окружения обязан пройти. Публичный provider
+   резолвит свой Options в `boot()`, поэтому ошибка формы — ошибка загрузки.
+2. **Runtime-проверки** — теги `RuntimeConfigCheck` (`violations(bool $production)`): наличие секрета у
+   включённой функции и опасные режимы. Они запускаются до приёма работы процессом (HTTP — после boot,
+   console — на `CommandStarting`), но не при сборке образа: `package:discover`, `config:cache` и другие
+   build-команды секретов не требуют. Секрет формой не проверяется — иначе сборка образа потребовала бы
+   продовые секреты.
+3. **Deploy-gate** — `php artisan corex:config:validate --production` выполняет те же проверки всегда.
+
+### Опасные режимы и подтверждение
+
+Список закрыт: `corex-workflow.enforce_declarations = false`; `accept_legacy_unstamped = true`
+(`corex-notifications.digest`, `corex-tasks-workflow.wakeup`, любой `corex-wakeup.handlers.<kind>`).
+В `production` включённый опасный режим останавливает старт (`InvalidConfiguration`), если его точный
+путь не перечислен в `corex.acknowledged_dangerous_modes`. Шаблоны и «подтвердить всё» не
+поддерживаются; подтверждённый режим виден в `corex:config:validate` как предупреждение.
+`corex-operations.require_physical_tenancy = false` в список не входит: это явный opt-out штатного
+boxed-режима, отчёт показывает его как уведомление.
+
+### Кэш конфигурации и резидентный режим
+
+`php artisan config:cache` сериализует конфигурацию через `var_export`: в config-файле нет замыканий и
+объектов, кроме case'ов enum. Это проверяет `composer config-cache-check` (`tests/Feature/ConfigCacheTest.php`):
+каждый `packages/*/config/*.php` переживает `var_export` → `eval` без потерь, а приложение загружается из
+кэшированного репозитория. Options — ленивые singleton'ы, не зависящие от запроса; всё, что держит состояние
+tenant или соединение, — `scoped` (границу задаёт `Application::forgetScopedInstances()`), что доказывают
+`ResidentLifecycleTest` и `ResidentTenantSwitchPgTest` (статья RUN-005).

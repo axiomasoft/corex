@@ -1,8 +1,6 @@
-diff --git a/packages/core/src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php b/packages/core/src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
-index 55c2847..8f99209 100644
 --- a/packages/core/src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 +++ b/packages/core/src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
-@@ -184,10 +184,6 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
+@@ -245,10 +245,6 @@
                  'updated_at' => $this->timestamp(),
              ]);
  
@@ -10,6 +8,6 @@ index 55c2847..8f99209 100644
 -                'reason' => $reason->value,
 -            ]);
 -
-             $this->db()->afterCommit(static fn () => event(new ModuleDisabled($module, $reason)));
+             $this->db()->afterCommit(fn () => $this->events->dispatch(new ModuleDisabled($module, $reason)));
          });
      }

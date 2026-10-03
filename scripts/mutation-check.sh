@@ -61,6 +61,7 @@ declare -A TEST_CMD=(
     [P1.25-null-provider-binding]="vendor/bin/pest --group=pg tests/Feature/SettingsTest.php --filter='resolves a manifest-declared DefaultSettingDefinition'"
     [P1.29-upgrade-swallow]="vendor/bin/pest --group=pg tests/Feature/ModuleLifecycleTest.php --filter='catch-up migration fails'"
     [P1.29-move-parent-workspace]="vendor/bin/pest --group=pg tests/Feature/DepartmentTest.php --filter='in ANOTHER workspace is rejected'"
+    [P05-scoped-to-singleton]="vendor/bin/pest --exclude-group=pg tests/Feature/ResidentLifecycleTest.php"
 )
 
 if [ "${1:-}" = "--list" ]; then

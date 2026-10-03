@@ -22,6 +22,9 @@ if (( $# )); then
 else
     scripts/php84 composer test:hermetic
     scripts/php84 composer test:arch
+    scripts/php84 composer runtime-globals-gate
+    scripts/php84 composer config-cache-check
+    scripts/php84 composer configuration-reference
     scripts/php84 composer php-api
     scripts/php84 composer deps:analyse
     scripts/php84 composer analyse:tests-lint

@@ -64,6 +64,15 @@ jobs:
       - name: Tests
         run: composer test
 
+      - name: Runtime globals gate
+        run: composer runtime-globals-gate
+
+      - name: Config cache check
+        run: composer config-cache-check
+
+      - name: Configuration reference
+        run: composer configuration-reference
+
   tests-pg:
     permissions:
       contents: read

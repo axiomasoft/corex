@@ -1,8 +1,6 @@
-diff --git a/packages/core/src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php b/packages/core/src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
-index 96da474..39835a4 100644
 --- a/packages/core/src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
 +++ b/packages/core/src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php
-@@ -291,32 +291,23 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
+@@ -310,32 +310,23 @@
              $migration = $this->runModuleMigrations($module);
              $codeVersion = $this->codeVersion($module);
  
@@ -35,10 +33,10 @@ index 96da474..39835a4 100644
 +                'error' => $migration['error']?->getMessage(),
              ]);
  
--            $this->db()->afterCommit(static fn () => event(new ModuleUpgraded($module, $fromVersion, $codeVersion, $migration['ran'])));
+-            $this->db()->afterCommit(fn () => $this->events->dispatch(new ModuleUpgraded($module, $fromVersion, $codeVersion, $migration['ran'])));
 +            if ($migration['error'] === null) {
 +                $fromVersion = $current->version;
-+                $this->db()->afterCommit(static fn () => event(new ModuleUpgraded($module, $fromVersion, $codeVersion, $migration['ran'])));
++                $this->db()->afterCommit(fn () => $this->events->dispatch(new ModuleUpgraded($module, $fromVersion, $codeVersion, $migration['ran'])));
 +            }
          });
      }
