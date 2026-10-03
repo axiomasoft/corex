@@ -1,0 +1,1671 @@
+Independent Grok 4.7 review of PLAN3.P06.4. All source needed to review the delivery/security delta is included below. NO TOOL CALLS: do not request more files, shell, search, subagents or omitted sections. Input is a compact source/diff packet, not repository navigation. Return Verdict: GREEN or RED and only concrete correctness/security defects (path, line, reproduction, impact). No style nits or design expansion. Reviewer is independent from the executor. Max two review/fix rounds. Success/HTTP permanent precedence and current HTTP boundaries are frozen by D92. Egress must run before DNS/every send, create/update/replay; default returns true but URL policy is always mandatory. No tests are to be run by you. Acceptance: all139 webhooks tests including PG GREEN, 20 enum causes covered, retry/recovery equality/attempt-first boundary tests GREEN, egress create/update/retry/replay/dns+send counters GREEN, mutation removing allows makes two revocation tests RED; all mutation cases GREEN. PHPStan all21 packages/root GREEN, strict API/registry/config/docs GREEN. SQL scope repair aligns management/replay/retention with canonical DataScopeCodec keys account/workspace instead of legacy account_id/workspace_id. Ignore baseline-only defects; identify regressions or violated explicit scope.
+
+### P06.4 — Контракт доставки вебхуков, egress арендатора и модель угроз
+
+**Intent:** Формализовать контракт доставки вебхуков — публичные причины отказа с признаком постоянства, бюджет ретраев в options, dead-letter и replay — и добавить проверяемую политику egress арендатора на подписке, каждой попытке и replay; описать модель угроз с исполнимым доказательством на каждую угрозу.
+
+**Why:** D90 п.5; skeleton P06 (retry budget, dead-letter, transient vs permanent, tenant allowlist egress, threat model). Сейчас 18 строк причин классифицируются `in_array`, бюджет — константы `WebhookRetryPolicy` и отдельные 12/PT72H в `SqlWebhookDeliveryStore::recoverExpired()`, ограничения адресатов на уровне арендатора нет (`artifacts/P06-design/facts/webhook-failure-literals.txt`). Повторная проверка на каждой доставке и replay закрывает TOCTOU и отзыв разрешения; 410 и 3xx — постоянные отказы (`research/P06-design-rag.md` W11–W12).
+
+**Scope Included:** `CoreX\Webhooks\Enums\WebhookFailureReason` (`#[Api]`, 20 case (D92), `isPermanent()`, `isTerminal()`, `fromHttpStatus()`); `WebhookHttpResult::$errorCode` типа `?WebhookFailureReason`; миграция Curl transport/worker/store producer/consumer; `SqlWebhookDeliveryStore` (recovery, claim rejection и persisted enum values); `WebhookRetryPolicy` на общем бюджете из `WebhookOptions` (`maxAttempts`, `retryHorizonSeconds`, парсер и config); `CoreX\Webhooks\Data\WebhookDestination` (`#[Api]`) с каноникализацией из `WebhookUrlPolicy`; SPI `CoreX\Webhooks\Contracts\WebhookEgressPolicy` и Internal `PermitPublicEgressPolicy`; вызовы политики при create/update подписки и в `WebhookDeliveryWorker` до проверки адреса; код `webhooks.webhook_egress_denied`; тесты `WebhookFailureReasonTest`, `WebhookRetryBudgetTest`, `WebhookEgressPolicyTest`; mutation-кейс `P06-egress-skip-on-delivery`; `docs/architecture/webhooks-threat-model.md`, Enforcement статьи EXT конституции, README пакета webhooks; регенерация `configuration.md`; Golden delta P06.4.
+
+**Scope Excluded:** Изменение SSRF-проверок `WebhookUrlPolicy`, DNS pinning и подписи; хранилище списков разрешённых хостов (реализация SPI — у хоста); сетевой egress-прокси; новые статусы доставки и схема таблиц (P08); `WebHook-Request-Origin` handshake.
+
+**Inputs:** `plans/2026.09.27-№1-COREX-KERNEL/decisions/D92-p06-design-audit-remediation.md` · `plans/2026.09.27-№1-COREX-KERNEL/research/P06-design.md` (§1, §3.4, §4, §5) · `plans/2026.09.27-№1-COREX-KERNEL/research/P06-design-rag.md` (W11–W12) · `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/examples.md` (§7, §8) · `plans/2026.09.27-№1-COREX-KERNEL/decisions/D90-p06-wire-contract.md` · `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design-rag/pplx-04-webhook-ssrf-threat-model.md` · результат P06.3 (`plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06.3-execution/completion.md`, появляется после его исполнения)
+
+**Files:** `packages/webhooks/CHANGELOG.md`; `packages/webhooks/src/Enums/WebhookFailureReason.php`, `packages/webhooks/src/Data/WebhookDestination.php`, `packages/webhooks/src/Contracts/WebhookEgressPolicy.php`, `packages/webhooks/src/Internal/PermitPublicEgressPolicy.php` (новые); `packages/webhooks/src/Internal/{WebhookRetryPolicy,WebhookDeliveryWorker,WebhookUrlPolicy,WebhookFanout,SqlWebhookSubscriptionStore,SqlWebhookDeliveryStore,CurlWebhookTransport}.php`; `packages/webhooks/src/Data/{WebhookOptions,WebhookHttpResult}.php`; `packages/webhooks/src/Laravel/{WebhookOptionsParser,WebhookBindingsRegistrar}.php`; `packages/webhooks/config/corex-webhooks.php`; `packages/webhooks/src/Errors/{Enums/WebhooksErrorCode,Internal/PackageProblemDefinitions}.php`; `packages/webhooks/tests/Fixtures/LocalWebhookReceiver.php`; `packages/webhooks/tests/{Unit,Feature}/**` (три новых теста, правка тестов, читающих строки причин); `scripts/mutations/P06-egress-skip-on-delivery.patch` (новый), `scripts/mutation-check.sh` (реестр); `docs/architecture/webhooks-threat-model.md` (новый), `docs/architecture/constitution.md`, `docs/architecture/configuration.md`, `scripts/configuration-classes.json`, `packages/webhooks/README.md`; `packages/webhooks/resources/contracts/php-api.json`; `tests/Golden/baseline/*` (строки P06.4 из §4); `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06.4-execution/**`.
+
+**Required Reads:** 1) `plans/2026.09.27-№1-COREX-KERNEL/research/P06-design.md` §3.4, §4, §5; 2) `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/examples.md` §7, §8; 3) `packages/webhooks/src/Internal/WebhookRetryPolicy.php`; 4) `packages/webhooks/src/Internal/WebhookDeliveryWorker.php`; 5) `packages/webhooks/src/Internal/WebhookUrlPolicy.php` (стр. 60–190); 6) `packages/webhooks/src/Internal/SqlWebhookSubscriptionStore.php` (стр. 30–120); 7) `packages/webhooks/src/Laravel/WebhookOptionsParser.php`; 8) `packages/webhooks/src/Internal/SqlWebhookDeliveryStore.php` (`finish`, `recoverExpired`, `rejectClaim`, `finishAttempt`, `signingKeyRefs`) и `packages/webhooks/src/Internal/CurlWebhookTransport.php`; реестр mutation-кейсов — Code Guidance `scripts/mutation-check.sh`.
+
+**Implementation Rules:** D92 — обязательное уточнение D90. Manifest и changelog меняются вместе в одном продуктовом commit; исходный SHA сохраняется до правок, candidate SHA — в completion (§4 досье). Границы классификации HTTP-статусов переносятся без изменения (examples §7b). Формула backoff и потолок `Retry-After` сохраняются; меняется только источник бюджета. Общая `budgetFailure(delivery, instant)` применяется в decide и recovery; границы/приоритет — D92 п.5. В DTO и внутренних результатах/методах причины — enum; на границе SQL last_error/error_code пишется только `?->value`. Recovery сохраняет outcome unknown/ack_unknown для попытки; у доставки исчерпание получает правильную причину бюджета. EndpointChanged permanent, AckUnknown transient; rejectClaim сохраняет dead/fencing. Все constructors WebhookHttpResult правятся вместе; receiver fixture bad-signature → HTTP401/errorCode:null, load-contour assertion → 401/null с сохранением tampered-body/effects проверок; test-only network_timeout → NetworkFailure; BC delta перечислен в §4. Egress проверяется до DNS и до отправки на каждой попытке, включая replay; отказ на попытке — `dead` без вызова транспорта. Привязка по умолчанию разрешает публичные адреса; SSRF-политика не ослабляется. Каждая строка «Доказательство» модели угроз указывает на существующий тест или гейт. Диапазоны бюджета — D90 п.5, без расширения.
+
+**Code Guidance:** Досье §3.4 шаги 1–9; examples §7 (enum, таблица статусов, бюджет, SPI, mutation-кейс), §8 (скелет модели угроз). Статья EXT: `grep -n '^### EXT' docs/architecture/constitution.md` — выбрать статью об исходящих вызовах, добавить в Enforcement тесты egress и модель угроз.
+
+
+FILE packages/webhooks/src/Enums/WebhookFailureReason.php
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Webhooks\Enums;
+
+use CoreX\Attributes\Api;
+
+#[Api(since: '1.0')]
+enum WebhookFailureReason: string
+{
+    case EndpointChanged = 'webhook_endpoint_changed';
+    case AckUnknown = 'ack_unknown';
+    case EndpointGone = 'endpoint_gone';
+    case RedirectForbidden = 'redirect_forbidden';
+    case HttpPermanent = 'http_permanent';
+    case UrlForbidden = 'url_forbidden';
+    case AddressNotAllowed = 'address_not_allowed';
+    case EgressDenied = 'egress_denied';
+    case TopicUnavailable = 'topic_unavailable';
+    case PayloadTooLarge = 'payload_too_large';
+    case Http429 = 'http_429';
+    case Http5xx = 'http_5xx';
+    case Http408 = 'http_408';
+    case Http425 = 'http_425';
+    case DnsUnavailable = 'dns_unavailable';
+    case NetworkFailure = 'network_failure';
+    case TransportFailure = 'transport_failure';
+    case SigningUnavailable = 'signing_unavailable';
+    case RetryExhausted = 'retry_exhausted';
+    case RetryHorizonExhausted = 'retry_horizon_exhausted';
+
+    public function isPermanent(): bool
+    {
+        return match ($this) {
+            self::EndpointChanged, self::EndpointGone, self::RedirectForbidden,
+            self::HttpPermanent, self::UrlForbidden, self::AddressNotAllowed,
+            self::EgressDenied, self::TopicUnavailable, self::PayloadTooLarge => true,
+            default => false,
+        };
+    }
+
+    public function isTerminal(): bool
+    {
+        return $this->isPermanent()
+            || $this === self::RetryExhausted
+            || $this === self::RetryHorizonExhausted;
+    }
+
+    public static function fromHttpStatus(int $status): ?self
+    {
+        return match (true) {
+            $status >= 200 && $status < 300 => null,
+            $status === 410 => self::EndpointGone,
+            $status >= 300 && $status < 400 => self::RedirectForbidden,
+            $status === 408 => self::Http408,
+            $status === 425 => self::Http425,
+            $status === 429 => self::Http429,
+            $status >= 400 && $status < 500 => self::HttpPermanent,
+            $status >= 500 => self::Http5xx,
+            default => null,
+        };
+    }
+}
+
+FILE packages/webhooks/src/Data/WebhookDestination.php
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Webhooks\Data;
+
+use CoreX\Attributes\Api;
+use InvalidArgumentException;
+
+/** Canonical HTTPS destination shared by URL admission and host egress policies. */
+#[Api(since: '1.0')]
+final readonly class WebhookDestination
+{
+    private const MAX_URL_BYTES = 2048;
+
+    public function __construct(
+        public string $scheme,
+        public string $host,
+        public int $port,
+        public string $path,
+    ) {}
+
+    public static function fromUrl(string $url): self
+    {
+        if ($url === ''
+            || strlen($url) > self::MAX_URL_BYTES
+            || preg_match('/[^\x21-\x7e]/', $url) === 1
+            || str_contains($url, '\\')
+            || preg_match('/%(?:00|0a|0d)/i', $url) === 1) {
+            throw new InvalidArgumentException('webhook_url_forbidden');
+        }
+
+        $parts = parse_url($url);
+
+        if ($parts === false
+            || strtolower($parts['scheme'] ?? '') !== 'https'
+            || ! isset($parts['host'])
+            || isset($parts['user'])
+            || isset($parts['pass'])
+            || isset($parts['query'])
+            || isset($parts['fragment'])
+            || (($parts['port'] ?? 443) !== 443)) {
+            throw new InvalidArgumentException('webhook_url_forbidden');
+        }
+
+        $host = strtolower($parts['host']);
+
+        if (! self::isCanonicalDnsName($host) || @inet_pton($host) !== false) {
+            throw new InvalidArgumentException('webhook_url_forbidden');
+        }
+
+        $path = $parts['path'] ?? '/';
+
+        if ($path === '') {
+            $path = '/';
+        }
+
+        if (! str_starts_with($path, '/')) {
+            throw new InvalidArgumentException('webhook_url_forbidden');
+        }
+
+        return new self('https', $host, 443, $path);
+    }
+
+    private static function isCanonicalDnsName(string $host): bool
+    {
+        if ($host === ''
+            || strlen($host) > 253
+            || $host !== strtolower($host)
+            || str_ends_with($host, '.')
+            || preg_match('/\A[0-9.]+\z/D', $host) === 1) {
+            return false;
+        }
+
+        $labels = explode('.', $host);
+
+        if (count($labels) < 2) {
+            return false;
+        }
+
+        foreach ($labels as $label) {
+            if (preg_match('/\A[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\z/D', $label) !== 1) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
+
+FILE packages/webhooks/src/Internal/WebhookRetryPolicy.php
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Webhooks\Internal;
+
+use Closure;
+use CoreX\Webhooks\Data\WebhookDelivery;
+use CoreX\Webhooks\Data\WebhookHttpResult;
+use CoreX\Webhooks\Data\WebhookOptions;
+use CoreX\Webhooks\Enums\WebhookFailureReason;
+use DateInterval;
+use DateTimeImmutable;
+use Throwable;
+
+/** @internal Pure finite retry policy; no durable state is changed here. */
+final readonly class WebhookRetryPolicy
+{
+    private const int MaxRetryAfterSeconds = 86_400;
+
+    /** @var Closure(int, int): int */
+    private Closure $random;
+
+    /** @param null|callable(int, int): int $random */
+    public function __construct(private WebhookOptions $options, ?callable $random = null)
+    {
+        $this->random = $random === null
+            ? static fn (int $min, int $max): int => random_int($min, $max)
+            : Closure::fromCallable($random);
+    }
+
+    /**
+     * @return array{status: 'succeeded'|'retry'|'dead', next: DateTimeImmutable, error: WebhookFailureReason|null}
+     */
+    public function decide(
+        WebhookDelivery $delivery,
+        WebhookHttpResult $result,
+        DateTimeImmutable $now,
+    ): array {
+        $classification = $this->classification($result);
+
+        if ($classification['status'] !== 'retry') {
+            return [
+                'status' => $classification['status'],
+                'next' => $now,
+                'error' => $classification['error'],
+            ];
+        }
+
+        if (($failure = $this->budgetFailure($delivery, $now)) !== null) {
+            return ['status' => 'dead', 'next' => $now, 'error' => $failure];
+        }
+
+        $cap = min(3_600, 5 * (2 ** min(10, max(0, $delivery->attempt - 1))));
+        $jitter = max(1, ($this->random)(0, $cap));
+        $retryAfter = $this->retryAfterSeconds($result->retryAfter, $now);
+        $delay = max($jitter, $retryAfter ?? 0);
+        $next = $now->add(new DateInterval("PT{$delay}S"));
+
+        if (($failure = $this->budgetFailure($delivery, $next)) !== null) {
+            return ['status' => 'dead', 'next' => $now, 'error' => $failure];
+        }
+
+        return ['status' => 'retry', 'next' => $next, 'error' => $classification['error']];
+    }
+
+    public function budgetFailure(WebhookDelivery $delivery, DateTimeImmutable $instant): ?WebhookFailureReason
+    {
+        if ($delivery->attempt >= $this->options->maxAttempts) {
+            return WebhookFailureReason::RetryExhausted;
+        }
+
+        $horizon = $delivery->createdAt->add(new DateInterval('PT'.$this->options->retryHorizonSeconds.'S'));
+
+        return $instant >= $horizon ? WebhookFailureReason::RetryHorizonExhausted : null;
+    }
+
+    /** @return array{status: 'succeeded'|'retry'|'dead', error: WebhookFailureReason|null} */
+    private function classification(WebhookHttpResult $result): array
+    {
+        if ($result->status !== null && $result->status >= 200 && $result->status < 300) {
+            return ['status' => 'succeeded', 'error' => null];
+        }
+
+        $error = ($result->status !== null ? WebhookFailureReason::fromHttpStatus($result->status) : null)
+            ?? $result->errorCode
+            ?? WebhookFailureReason::TransportFailure;
+
+        return ['status' => $error->isTerminal() ? 'dead' : 'retry', 'error' => $error];
+    }
+
+    private function retryAfterSeconds(?string $value, DateTimeImmutable $now): ?int
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        if (preg_match('/\A(?:0|[1-9][0-9]{0,9})\z/D', $value) === 1) {
+            return min(self::MaxRetryAfterSeconds, (int) $value);
+        }
+
+        try {
+            $instant = new DateTimeImmutable($value);
+        } catch (Throwable) {
+            return null;
+        }
+
+        return min(
+            self::MaxRetryAfterSeconds,
+            max(0, $instant->getTimestamp() - $now->getTimestamp()),
+        );
+    }
+}
+
+FILE packages/webhooks/src/Internal/WebhookDeliveryWorker.php
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Webhooks\Internal;
+
+use CoreX\Data\Contracts\DataScopeCodec;
+use CoreX\Data\Data\DataScope;
+use CoreX\Operations\Errors\Enums\OperationsErrorCode;
+use CoreX\Operations\Errors\Exceptions\ApiError;
+use CoreX\Webhooks\Contracts\WebhookEgressPolicy;
+use CoreX\Webhooks\Contracts\WebhookHttpTransport;
+use CoreX\Webhooks\Contracts\WebhookSigner;
+use CoreX\Webhooks\Data\WebhookDelivery;
+use CoreX\Webhooks\Data\WebhookDestination;
+use CoreX\Webhooks\Data\WebhookHttpResult;
+use CoreX\Webhooks\Enums\WebhookFailureReason;
+use InvalidArgumentException;
+use Psr\Clock\ClockInterface;
+use RuntimeException;
+use Throwable;
+
+/** @internal Performs one network delivery after the durable claim transaction commits. */
+final readonly class WebhookDeliveryWorker
+{
+    public function __construct(
+        private SqlWebhookDeliveryStore $store,
+        private WebhookSigner $signer,
+        private WebhookUrlPolicy $urlPolicy,
+        private WebhookHttpTransport $transport,
+        private WebhookTopicCatalogue $topics,
+        private ClockInterface $clock,
+        private WebhookEgressPolicy $egress,
+        private DataScopeCodec $scopeCodec,
+    ) {}
+
+    public function workOnce(DataScope $scope, string $worker): ?WebhookDelivery
+    {
+        $delivery = $this->store->claim($scope, $worker);
+
+        if ($delivery === null) {
+            return null;
+        }
+
+        $keyRefs = $this->store->signingKeyRefs($scope, $delivery);
+
+        if ($keyRefs === null) {
+            return $this->store->find($scope, $delivery->id) ?? $delivery;
+        }
+
+        try {
+            $topic = $this->topics->get($delivery->topic, $delivery->topicVersion);
+
+            if ($topic->major !== $delivery->major) {
+                throw new ApiError(OperationsErrorCode::UnknownMessageContract, 422, 'Webhook topic major changed.');
+            }
+        } catch (ApiError) {
+            return $this->finish($scope, $delivery, new WebhookHttpResult(
+                status: null,
+                retryAfter: null,
+                errorCode: WebhookFailureReason::TopicUnavailable,
+                durationMs: 0,
+            ));
+        }
+
+        try {
+            $signed = $this->signer->sign(
+                deliveryId: $delivery->id,
+                timestamp: $this->clock->now()->getTimestamp(),
+                rawBody: $delivery->body,
+                secretRefs: $keyRefs,
+            );
+        } catch (Throwable) {
+            return $this->finish($scope, $delivery, new WebhookHttpResult(
+                status: null,
+                retryAfter: null,
+                errorCode: WebhookFailureReason::SigningUnavailable,
+                durationMs: 0,
+            ));
+        }
+
+        try {
+            $destination = WebhookDestination::fromUrl($delivery->endpointSnapshot);
+
+            if (! $this->egress->allows($this->scopeCodec->decode($delivery->scope), $destination)) {
+                return $this->finish($scope, $delivery, new WebhookHttpResult(
+                    status: null,
+                    retryAfter: null,
+                    errorCode: WebhookFailureReason::EgressDenied,
+                    durationMs: 0,
+                ));
+            }
+
+            $request = $this->urlPolicy->validate(
+                url: $delivery->endpointSnapshot,
+                body: $delivery->body,
+                signedHeaders: $signed,
+            );
+        } catch (InvalidArgumentException) {
+            return $this->finish($scope, $delivery, new WebhookHttpResult(
+                status: null,
+                retryAfter: null,
+                errorCode: WebhookFailureReason::UrlForbidden,
+                durationMs: 0,
+            ));
+        } catch (RuntimeException) {
+            return $this->finish($scope, $delivery, new WebhookHttpResult(
+                status: null,
+                retryAfter: null,
+                errorCode: WebhookFailureReason::DnsUnavailable,
+                durationMs: 0,
+            ));
+        }
+
+        try {
+            $result = $this->transport->send($request);
+        } catch (Throwable) {
+            $result = new WebhookHttpResult(
+                status: null,
+                retryAfter: null,
+                errorCode: WebhookFailureReason::NetworkFailure,
+                durationMs: 0,
+            );
+        }
+
+        return $this->finish($scope, $delivery, $result);
+    }
+
+    private function finish(
+        DataScope $scope,
+        WebhookDelivery $delivery,
+        WebhookHttpResult $result,
+    ): WebhookDelivery {
+        $this->store->finish($delivery, $result);
+
+        return $this->store->find($scope, $delivery->id) ?? $delivery;
+    }
+}
+
+FILE packages/webhooks/src/Internal/SqlWebhookDeliveryStore.php
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Webhooks\Internal;
+
+use CoreX\Context\Contracts\TenantContextRestorer;
+use CoreX\Context\Exceptions\ScopeContextMismatch;
+use CoreX\Data\Data\DataScope;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Webhooks\Contracts\WebhookDeliveryStore;
+use CoreX\Webhooks\Data\WebhookDelivery;
+use CoreX\Webhooks\Data\WebhookHttpResult;
+use CoreX\Webhooks\Enums\WebhookFailureReason;
+use DateInterval;
+use DateTimeImmutable;
+use DateTimeInterface;
+use Illuminate\Database\Connection;
+use Illuminate\Database\Query\Builder;
+use InvalidArgumentException;
+use Override;
+use Psr\Clock\ClockInterface;
+use RuntimeException;
+
+/** @internal Tenant-local webhook delivery rows. Network send stays outside this store. */
+final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
+{
+    private const string Table = 'sys_api_webhook_deliveries';
+
+    public function __construct(
+        private Connection $connection,
+        private TenantContextRestorer $contexts,
+        private ClockInterface $clock,
+        private WebhookRetryPolicy $retry,
+        private int $leaseSeconds = 30,
+    ) {
+        if ($leaseSeconds < 11) {
+            throw new InvalidArgumentException('Webhook lease must exceed the ten-second HTTP timeout.');
+        }
+    }
+
+    #[Override]
+    public function find(DataScope $scope, string $id): ?WebhookDelivery
+    {
+        $this->assertScope($scope);
+        $row = $this->connection->table(self::Table)->where('id', $id)->first();
+
+        return $row === null ? null : $this->delivery($row);
+    }
+
+    #[Override]
+    public function forEvent(DataScope $scope, string $eventId): array
+    {
+        $this->assertScope($scope);
+        $rows = $this->connection->table(self::Table)->where('event_id', $eventId)->orderBy('id')->get();
+        $deliveries = [];
+
+        foreach ($rows as $row) {
+            $deliveries[] = $this->delivery($row);
+        }
+
+        return $deliveries;
+    }
+
+    public function claim(DataScope $scope, string $worker): ?WebhookDelivery
+    {
+        $this->assertScope($scope);
+        $this->assertIdentifier($worker, 'worker');
+
+        return $this->connection->transaction(function () use ($worker): ?WebhookDelivery {
+            $now = $this->clock->now();
+            $this->recoverExpired($now);
+            $query = $this->connection->table(self::Table)
+                ->whereIn('status', ['pending', 'retry'])
+                ->where('next_attempt_at', '<=', $now)
+                ->whereNull('lease_owner')
+                ->orderBy('next_attempt_at')
+                ->orderBy('created_at')
+                ->orderBy('id')
+                ->limit(1);
+            $this->lockClaimQuery($query);
+            $row = $query->first();
+
+            if ($row === null) {
+                return null;
+            }
+
+            $attempt = (int) $row->attempt + 1;
+            $leaseUntil = $now->add(new DateInterval("PT{$this->leaseSeconds}S"));
+            $changed = $this->connection->table(self::Table)
+                ->where('id', (string) $row->id)
+                ->where('status', (string) $row->status)
+                ->where('attempt', (int) $row->attempt)
+                ->whereNull('lease_owner')
+                ->update([
+                    'status' => 'sending',
+                    'attempt' => $attempt,
+                    'lease_owner' => $worker,
+                    'lease_until' => $leaseUntil,
+                    'last_error' => null,
+                ]);
+
+            if ($changed !== 1) {
+                throw new RuntimeException('Webhook claim lost its compare-and-swap fence.');
+            }
+
+            $this->connection->table('sys_api_webhook_attempts')->insert([
+                'id' => substr(hash('sha256', $row->id.'|'.$attempt), 0, 32),
+                'delivery_id' => $row->id,
+                'attempt' => $attempt,
+                'lease_owner' => $worker,
+                'started_at' => $now,
+                'finished_at' => null,
+                'outcome' => 'pending',
+                'http_status' => null,
+                'duration_ms' => null,
+                'error_code' => null,
+            ]);
+
+            return $this->delivery($this->requiredRow((string) $row->id));
+        }, $this->transactionAttempts());
+    }
+
+    /** @return list<string>|null */
+    public function signingKeyRefs(DataScope $scope, WebhookDelivery $delivery): ?array
+    {
+        $this->assertScope($scope);
+
+        return $this->connection->transaction(function () use ($delivery): ?array {
+            $now = $this->clock->now();
+            $row = $this->connection->table(self::Table)
+                ->where('id', $delivery->id)
+                ->where('status', 'sending')
+                ->where('lease_owner', $delivery->leaseOwner)
+                ->where('attempt', $delivery->attempt)
+                ->where('lease_until', '>', $now)
+                ->lockForUpdate()
+                ->first();
+
+            if ($row === null) {
+                return null;
+            }
+
+            $subscription = $this->connection->table('sys_api_webhook_subscriptions')
+                ->where('id', $delivery->subscriptionId)
+                ->first();
+
+            if ($subscription === null
+                || (string) $subscription->status !== 'active'
+                || (int) $subscription->revision !== $delivery->subscriptionRevision
+                || ! hash_equals((string) $subscription->endpoint_url, $delivery->endpointSnapshot)
+                || ! hash_equals((string) $subscription->topic, $delivery->topic)
+                || (int) $subscription->topic_version !== $delivery->topicVersion) {
+                $this->rejectClaim($delivery, WebhookFailureReason::EndpointChanged, $now);
+
+                return null;
+            }
+
+            $decoded = JsonCanonical::decode((string) $subscription->key_refs);
+
+            if (! is_array($decoded) || $decoded === [] || count($decoded) > 2
+                || array_filter($decoded, is_string(...)) !== $decoded) {
+                $this->rejectClaim($delivery, WebhookFailureReason::SigningUnavailable, $now);
+
+                return null;
+            }
+
+            /** @var list<string> $decoded */
+            return $decoded;
+        }, $this->transactionAttempts());
+    }
+
+    public function finish(WebhookDelivery $delivery, WebhookHttpResult $result): bool
+    {
+        if ($delivery->leaseOwner === null) {
+            throw new InvalidArgumentException('Webhook finish requires a leased delivery.');
+        }
+
+        return $this->connection->transaction(function () use ($delivery, $result): bool {
+            $now = $this->clock->now();
+            $row = $this->connection->table(self::Table)
+                ->where('id', $delivery->id)
+                ->where('status', 'sending')
+                ->where('lease_owner', $delivery->leaseOwner)
+                ->where('attempt', $delivery->attempt)
+                ->where('lease_until', '>', $now)
+                ->lockForUpdate()
+                ->first();
+
+            if ($row === null) {
+                return false;
+            }
+
+            $current = $this->delivery($row);
+            $decision = $this->retry->decide($current, $result, $now);
+            $terminal = $decision['status'] !== 'retry';
+            $changed = $this->connection->table(self::Table)
+                ->where('id', $delivery->id)
+                ->where('status', 'sending')
+                ->where('lease_owner', $delivery->leaseOwner)
+                ->where('attempt', $delivery->attempt)
+                ->where('lease_until', '>', $now)
+                ->update([
+                    'status' => $decision['status'],
+                    'lease_owner' => null,
+                    'lease_until' => null,
+                    'next_attempt_at' => $decision['next'],
+                    'finished_at' => $terminal ? $now : null,
+                    'last_error' => $decision['error']?->value,
+                ]);
+
+            if ($changed !== 1) {
+                return false;
+            }
+
+            $this->finishAttempt($delivery, $result, $decision['status'], $decision['error'], $now);
+
+            if ($result->status === 410) {
+                $this->disableGoneSubscription($delivery, $now);
+            }
+
+            return true;
+        }, $this->transactionAttempts());
+    }
+
+    private function assertScope(DataScope $scope): void
+    {
+        $context = $this->contexts->restore($scope);
+        $actual = $context->isBoxed()
+            ? 'boxed:'.$context->account->id
+            : $this->connection->getDriverName().':'.$this->connection->getDatabaseName();
+
+        if (! hash_equals($scope->connectionIdentity, $actual) || ! hash_equals($scope->accountId, $context->account->id)) {
+            throw ScopeContextMismatch::connection(expected: $scope->connectionIdentity, actual: $actual);
+        }
+    }
+
+    private function recoverExpired(DateTimeImmutable $now): void
+    {
+        $query = $this->connection->table(self::Table)
+            ->where('status', 'sending')
+            ->where('lease_until', '<=', $now)
+            ->orderBy('id');
+        $query->lockForUpdate();
+
+        foreach ($query->get() as $row) {
+            $delivery = $this->delivery($row);
+            $failure = $this->retry->budgetFailure($delivery, $now);
+            $dead = $failure !== null;
+            $error = $failure ?? WebhookFailureReason::AckUnknown;
+            $this->connection->table('sys_api_webhook_attempts')
+                ->where('delivery_id', $delivery->id)
+                ->where('attempt', $delivery->attempt)
+                ->where('lease_owner', $delivery->leaseOwner)
+                ->where('outcome', 'pending')
+                ->update([
+                    'finished_at' => $now,
+                    'outcome' => 'unknown',
+                    'error_code' => WebhookFailureReason::AckUnknown->value,
+                ]);
+            $this->connection->table(self::Table)
+                ->where('id', $delivery->id)
+                ->where('status', 'sending')
+                ->where('lease_owner', $delivery->leaseOwner)
+                ->where('attempt', $delivery->attempt)
+                ->where('lease_until', '<=', $now)
+                ->update([
+                    'status' => $dead ? 'dead' : 'retry',
+                    'lease_owner' => null,
+                    'lease_until' => null,
+                    'next_attempt_at' => $now,
+                    'finished_at' => $dead ? $now : null,
+                    'last_error' => $error->value,
+                ]);
+        }
+    }
+
+    private function rejectClaim(WebhookDelivery $delivery, WebhookFailureReason $error, DateTimeImmutable $now): void
+    {
+        $this->connection->table(self::Table)
+            ->where('id', $delivery->id)
+            ->where('status', 'sending')
+            ->where('lease_owner', $delivery->leaseOwner)
+            ->where('attempt', $delivery->attempt)
+            ->update([
+                'status' => 'dead',
+                'lease_owner' => null,
+                'lease_until' => null,
+                'finished_at' => $now,
+                'last_error' => $error->value,
+            ]);
+        $this->connection->table('sys_api_webhook_attempts')
+            ->where('delivery_id', $delivery->id)
+            ->where('attempt', $delivery->attempt)
+            ->where('lease_owner', $delivery->leaseOwner)
+            ->where('outcome', 'pending')
+            ->update([
+                'finished_at' => $now,
+                'outcome' => 'dead',
+                'error_code' => $error->value,
+            ]);
+    }
+
+    private function finishAttempt(
+        WebhookDelivery $delivery,
+        WebhookHttpResult $result,
+        string $outcome,
+        ?WebhookFailureReason $error,
+        DateTimeImmutable $now,
+    ): void {
+        $this->connection->table('sys_api_webhook_attempts')
+            ->where('delivery_id', $delivery->id)
+            ->where('attempt', $delivery->attempt)
+            ->where('lease_owner', $delivery->leaseOwner)
+            ->where('outcome', 'pending')
+            ->update([
+                'finished_at' => $now,
+                'outcome' => $outcome,
+                'http_status' => $result->status,
+                'duration_ms' => $result->durationMs,
+                'error_code' => $error?->value,
+            ]);
+    }
+
+    private function disableGoneSubscription(WebhookDelivery $delivery, DateTimeImmutable $now): void
+    {
+        $this->connection->table('sys_api_webhook_subscriptions')
+            ->where('id', $delivery->subscriptionId)
+            ->where('status', 'active')
+            ->update([
+                'status' => 'disabled',
+                'revision' => $this->connection->raw('revision + 1'),
+                'updated_at' => $now,
+            ]);
+        $this->connection->table(self::Table)
+            ->where('subscription_id', $delivery->subscriptionId)
+            ->whereIn('status', ['pending', 'retry'])
+            ->update([
+                'status' => 'dead',
+                'finished_at' => $now,
+                'last_error' => WebhookFailureReason::EndpointGone->value,
+            ]);
+    }
+
+    private function lockClaimQuery(Builder $query): void
+    {
+        if ($this->connection->getDriverName() === 'pgsql') {
+            $query->lock('for update skip locked');
+
+            return;
+        }
+
+        $query->lockForUpdate();
+    }
+
+    private function requiredRow(string $id): object
+    {
+        return $this->connection->table(self::Table)->where('id', $id)->first()
+            ?? throw new RuntimeException('Webhook delivery disappeared during a locked transition.');
+    }
+
+    private function assertIdentifier(string $value, string $name): void
+    {
+        if ($value === '' || strlen($value) > 64 || preg_match('/[\x00-\x1f\x7f]/', $value) === 1) {
+            throw new InvalidArgumentException("Webhook {$name} is invalid.");
+        }
+    }
+
+    private function transactionAttempts(): int
+    {
+        return $this->connection->getDriverName() === 'pgsql' ? 3 : 1;
+    }
+
+    private function delivery(object $row): WebhookDelivery
+    {
+        /** @var array<string, scalar|null> $scope */
+        $scope = JsonCanonical::decode((string) $row->scope);
+
+        return new WebhookDelivery(
+            id: (string) $row->id,
+            subscriptionId: (string) $row->subscription_id,
+            subscriptionRevision: (int) $row->subscription_revision,
+            eventId: (string) $row->event_id,
+            topic: (string) $row->topic,
+            topicVersion: (int) $row->topic_version,
+            major: (string) $row->major,
+            endpointSnapshot: (string) $row->endpoint_snapshot,
+            scope: $scope,
+            body: (string) $row->body,
+            bodyHash: (string) $row->body_hash,
+            status: (string) $row->status,
+            attempt: (int) $row->attempt,
+            replayCount: (int) $row->replay_count,
+            leaseOwner: $row->lease_owner !== null ? (string) $row->lease_owner : null,
+            leaseUntil: $row->lease_until !== null ? $this->instant($row->lease_until) : null,
+            nextAttemptAt: $this->instant($row->next_attempt_at),
+            createdAt: $this->instant($row->created_at),
+            finishedAt: $row->finished_at !== null ? $this->instant($row->finished_at) : null,
+            expiresAt: $this->instant($row->expires_at),
+            lastError: $row->last_error !== null ? (string) $row->last_error : null,
+        );
+    }
+
+    private function instant(mixed $value): DateTimeImmutable
+    {
+        if ($value instanceof DateTimeImmutable) {
+            return $value;
+        }
+
+        if ($value instanceof DateTimeInterface) {
+            return DateTimeImmutable::createFromInterface($value);
+        }
+
+        return new DateTimeImmutable((string) $value);
+    }
+}
+
+FILE packages/webhooks/src/Internal/CurlWebhookTransport.php
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Webhooks\Internal;
+
+use CoreX\Webhooks\Contracts\WebhookHttpTransport;
+use CoreX\Webhooks\Data\ValidatedWebhookRequest;
+use CoreX\Webhooks\Data\WebhookHttpResult;
+use CoreX\Webhooks\Enums\WebhookFailureReason;
+use Throwable;
+
+final class CurlWebhookTransport implements WebhookHttpTransport
+{
+    private const MAX_RESPONSE_BODY_BYTES = 64 * 1024;
+
+    private const MAX_RESPONSE_HEADER_BYTES = 16 * 1024;
+
+    public function send(ValidatedWebhookRequest $request): WebhookHttpResult
+    {
+        $startedAt = hrtime(true);
+
+        if (! function_exists('curl_init')) {
+            return $this->failure(WebhookFailureReason::TransportFailure, $startedAt);
+        }
+
+        if (! WebhookUrlPolicy::allowsPublicAddress($request->address)) {
+            return $this->failure(WebhookFailureReason::AddressNotAllowed, $startedAt);
+        }
+
+        $handle = curl_init();
+
+        if ($handle === false) {
+            return $this->failure(WebhookFailureReason::TransportFailure, $startedAt);
+        }
+
+        $responseBodyBytes = 0;
+        $responseHeaderBytes = 0;
+        $bodyOverflow = false;
+        $headerOverflow = false;
+        $retryAfter = null;
+
+        $write = static function (mixed $handle, string $chunk) use (&$responseBodyBytes, &$bodyOverflow): int {
+            $responseBodyBytes += strlen($chunk);
+
+            if ($responseBodyBytes > self::MAX_RESPONSE_BODY_BYTES) {
+                $bodyOverflow = true;
+
+                return 0;
+            }
+
+            return strlen($chunk);
+        };
+        $headers = static function (mixed $handle, string $line) use (&$responseHeaderBytes, &$headerOverflow, &$retryAfter): int {
+            $responseHeaderBytes += strlen($line);
+
+            if ($responseHeaderBytes > self::MAX_RESPONSE_HEADER_BYTES) {
+                $headerOverflow = true;
+
+                return 0;
+            }
+
+            if (str_starts_with(strtolower($line), 'retry-after:')) {
+                $candidate = trim(substr($line, strlen('retry-after:')));
+
+                if ($candidate !== ''
+                    && strlen($candidate) <= 255
+                    && preg_match('/[\x00-\x1f\x7f]/', $candidate) !== 1) {
+                    $retryAfter = $candidate;
+                }
+            }
+
+            return strlen($line);
+        };
+        $address = str_contains($request->address, ':')
+            ? '['.$request->address.']'
+            : $request->address;
+
+        try {
+            $configured = curl_setopt_array($handle, [
+                CURLOPT_URL => $request->url,
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => $request->body,
+                CURLOPT_HTTPHEADER => $this->requestHeaders($request),
+                CURLOPT_RESOLVE => ["{$request->canonicalHost}:443:{$address}"],
+                CURLOPT_FOLLOWLOCATION => false,
+                CURLOPT_MAXREDIRS => 0,
+                CURLOPT_PROTOCOLS => CURLPROTO_HTTPS,
+                CURLOPT_REDIR_PROTOCOLS => CURLPROTO_HTTPS,
+                CURLOPT_PROXY => '',
+                CURLOPT_NOPROXY => '*',
+                CURLOPT_SSL_VERIFYPEER => true,
+                CURLOPT_SSL_VERIFYHOST => 2,
+                CURLOPT_CONNECTTIMEOUT_MS => 3000,
+                CURLOPT_TIMEOUT_MS => $request->timeoutSeconds * 1000,
+                CURLOPT_NOSIGNAL => true,
+                CURLOPT_RETURNTRANSFER => false,
+                CURLOPT_HEADER => false,
+                CURLOPT_WRITEFUNCTION => $write,
+                CURLOPT_HEADERFUNCTION => $headers,
+            ]);
+
+            if (! $configured) {
+                return $this->failure(WebhookFailureReason::TransportFailure, $startedAt);
+            }
+
+            $executed = curl_exec($handle);
+            $status = curl_getinfo($handle, CURLINFO_RESPONSE_CODE);
+            $peerAddress = curl_getinfo($handle, CURLINFO_PRIMARY_IP);
+
+            if ($bodyOverflow) {
+                return $this->failure(WebhookFailureReason::PayloadTooLarge, $startedAt, $status);
+            }
+
+            if ($headerOverflow) {
+                return $this->failure(WebhookFailureReason::PayloadTooLarge, $startedAt, $status);
+            }
+
+            if ($executed === false) {
+                return $this->failure($this->curlErrorCode(curl_errno($handle)), $startedAt);
+            }
+
+            if (! $this->sameAddress($peerAddress, $request->address)) {
+                return $this->failure(WebhookFailureReason::AddressNotAllowed, $startedAt, $status);
+            }
+
+            return new WebhookHttpResult(
+                status: $status > 0 ? $status : null,
+                retryAfter: $retryAfter,
+                errorCode: null,
+                durationMs: $this->durationMs($startedAt),
+            );
+        } catch (Throwable) {
+            return $this->failure(WebhookFailureReason::TransportFailure, $startedAt);
+        } finally {
+            curl_close($handle);
+        }
+    }
+
+    /** @return list<string> */
+    private function requestHeaders(ValidatedWebhookRequest $request): array
+    {
+        return [
+            'Content-Type: application/cloudevents+json',
+            'Webhook-Id: '.$request->signatureHeaders['webhook-id'],
+            'Webhook-Timestamp: '.$request->signatureHeaders['webhook-timestamp'],
+            'Webhook-Signature: '.$request->signatureHeaders['webhook-signature'],
+        ];
+    }
+
+    private function curlErrorCode(int $errno): WebhookFailureReason
+    {
+        return match ($errno) {
+            CURLE_OPERATION_TIMEDOUT => WebhookFailureReason::NetworkFailure,
+            CURLE_COULDNT_CONNECT, CURLE_COULDNT_RESOLVE_HOST => WebhookFailureReason::NetworkFailure,
+            CURLE_SSL_CONNECT_ERROR, CURLE_SSL_CACERT => WebhookFailureReason::NetworkFailure,
+            default => WebhookFailureReason::NetworkFailure,
+        };
+    }
+
+    private function sameAddress(string $actual, string $expected): bool
+    {
+        $actualPacked = @inet_pton($actual);
+        $expectedPacked = @inet_pton($expected);
+
+        return $actualPacked !== false
+            && $expectedPacked !== false
+            && hash_equals($expectedPacked, $actualPacked);
+    }
+
+    private function failure(WebhookFailureReason $errorCode, int $startedAt, ?int $status = null): WebhookHttpResult
+    {
+        return new WebhookHttpResult(
+            status: $status !== null && $status > 0 ? $status : null,
+            retryAfter: null,
+            errorCode: $errorCode,
+            durationMs: $this->durationMs($startedAt),
+        );
+    }
+
+    private function durationMs(int $startedAt): int
+    {
+        return max(0, (int) floor((hrtime(true) - $startedAt) / 1_000_000));
+    }
+}
+
+FILE packages/webhooks/src/Laravel/WebhookOptionsParser.php
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Webhooks\Laravel;
+
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+use CoreX\Config\Laravel\ConfigurationValidator;
+use CoreX\Operations\Validation\Laravel\JsonCanonical;
+use CoreX\Webhooks\Data\WebhookOptions;
+use CoreX\Webhooks\Data\WebhookTopic;
+use InvalidArgumentException;
+
+/** Immutable webhook activation policy; it never contains secret material. */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
+final class WebhookOptionsParser
+{
+    /** @param array<array-key, mixed> $config */
+    public static function fromArray(array $config): WebhookOptions
+    {
+        $violations = new ConfigurationValidator;
+        $deliveryEnabled = self::bool($violations, 'delivery_enabled', $config['delivery_enabled'] ?? false);
+        $workerReady = self::bool($violations, 'worker_ready', $config['worker_ready'] ?? false);
+        $lease = self::positiveInt($violations, 'lease_seconds', $config['lease_seconds'] ?? 30);
+        $bodyRetention = self::positiveInt($violations, 'body_retention_seconds', $config['body_retention_seconds'] ?? 604_800);
+        $historyRetention = self::positiveInt($violations, 'history_retention_seconds', $config['history_retention_seconds'] ?? 2_592_000);
+        $replayHorizon = self::positiveInt($violations, 'replay_horizon_seconds', $config['replay_horizon_seconds'] ?? 604_800);
+        $maxAttempts = self::positiveInt($violations, 'max_attempts', $config['max_attempts'] ?? 12);
+        $retryHorizon = self::positiveInt($violations, 'retry_horizon_seconds', $config['retry_horizon_seconds'] ?? 259_200);
+        $deniedCidrs = self::stringList($violations, 'organization_denied_cidrs', $config['organization_denied_cidrs'] ?? []);
+        $projectors = self::projectors($violations, $config['projectors'] ?? []);
+        $topics = self::topics($violations, $config['topics'] ?? []);
+        $topicIds = array_map(static fn (WebhookTopic $topic): string => $topic->id(), $topics);
+
+        if ($deliveryEnabled && ! $workerReady) {
+            $violations->add('worker_ready', 'must be true before remote delivery is enabled');
+        }
+
+        if ($lease <= 10) {
+            $violations->add('lease_seconds', 'must exceed the ten-second HTTP timeout');
+        }
+
+        if ($bodyRetention > $historyRetention) {
+            $violations->add('body_retention_seconds', 'must not exceed history_retention_seconds');
+        }
+
+        if ($replayHorizon !== $bodyRetention) {
+            $violations->add('replay_horizon_seconds', 'must equal body_retention_seconds');
+        }
+
+        if ($maxAttempts > 20) {
+            $violations->add('max_attempts', 'must be between 1 and 20');
+        }
+
+        if ($retryHorizon < 3600 || $retryHorizon > 604_800 || $retryHorizon > $replayHorizon) {
+            $violations->add('retry_horizon_seconds', 'must be between 3600 and 604800 and not exceed replay_horizon_seconds');
+        }
+
+        foreach ($topics as $index => $topic) {
+            if (! array_key_exists($topic->projectorService, $projectors)) {
+                $violations->add('topics.'.$index.'.projector_service', 'must name an installed projector mapping');
+            }
+        }
+
+        if (count(array_unique($topicIds)) !== count($topicIds)) {
+            $violations->add('topics', 'must not declare the same topic version twice');
+        }
+
+        $violations->failIfAny();
+
+        return new WebhookOptions(
+            deliveryEnabled: $deliveryEnabled,
+            workerReady: $workerReady,
+            leaseSeconds: $lease,
+            bodyRetentionSeconds: $bodyRetention,
+            historyRetentionSeconds: $historyRetention,
+            replayHorizonSeconds: $replayHorizon,
+            organizationDeniedCidrs: $deniedCidrs,
+            topics: $topics,
+            projectors: $projectors,
+            maxAttempts: $maxAttempts,
+            retryHorizonSeconds: $retryHorizon,
+        );
+    }
+
+    private static function bool(ConfigurationValidator $violations, string $path, mixed $value): bool
+    {
+        if (is_bool($value)) {
+            return $value;
+        }
+
+        $violations->add($path, 'must be a boolean');
+
+        return false;
+    }
+
+    private static function positiveInt(ConfigurationValidator $violations, string $path, mixed $value): int
+    {
+        if (is_int($value) && $value > 0) {
+            return $value;
+        }
+
+        $violations->add($path, 'must be a positive integer');
+
+        return 1;
+    }
+
+    /** @return list<string> */
+    private static function stringList(ConfigurationValidator $violations, string $path, mixed $value): array
+    {
+        if (! is_array($value) || ! array_is_list($value)) {
+            $violations->add($path, 'must be a list of non-empty strings');
+
+            return [];
+        }
+
+        $resolved = [];
+
+        foreach ($value as $index => $entry) {
+            if (! is_string($entry) || $entry === '') {
+                $violations->add($path.'.'.$index, 'must be a non-empty string');
+
+                continue;
+            }
+
+            $resolved[] = $entry;
+        }
+
+        return $resolved;
+    }
+
+    /** @return array<string, string> */
+    private static function projectors(ConfigurationValidator $violations, mixed $value): array
+    {
+        if (! is_array($value) || array_is_list($value) && $value !== []) {
+            $violations->add('projectors', 'must be a service-id map');
+
+            return [];
+        }
+
+        $resolved = [];
+
+        foreach ($value as $id => $service) {
+            if (! is_string($id)
+                || preg_match('/\A[a-z][a-z0-9]*(?:\.[a-z][a-z0-9]*)*\z/D', $id) !== 1
+                || ! is_string($service)
+                || $service === '') {
+                $violations->add('projectors', 'must map safe ids to non-empty container services');
+
+                continue;
+            }
+
+            $resolved[$id] = $service;
+        }
+
+        ksort($resolved);
+
+        return $resolved;
+    }
+
+    /** @return list<WebhookTopic> */
+    private static function topics(ConfigurationValidator $violations, mixed $value): array
+    {
+        if (! is_array($value) || ! array_is_list($value)) {
+            $violations->add('topics', 'must be a list of webhook topic declarations');
+
+            return [];
+        }
+
+        $topics = [];
+
+        foreach ($value as $index => $row) {
+            if ($row instanceof WebhookTopic) {
+                $topics[] = $row;
+
+                continue;
+            }
+
+            if (! is_array($row)) {
+                $violations->add('topics.'.$index, 'must be a WebhookTopic or declaration map');
+
+                continue;
+            }
+
+            $schema = is_array($row['schema'] ?? null) ? $row['schema'] : [];
+
+            try {
+                foreach ($schema as $key => $type) {
+                    if (! is_string($key) || ! is_string($type)) {
+                        throw new InvalidArgumentException('Topic schema must contain named scalar type declarations.');
+                    }
+                }
+                /** @var array<string, string> $schema */
+                $topics[] = new WebhookTopic(
+                    name: is_string($row['name'] ?? null) ? $row['name'] : '',
+                    version: is_int($row['version'] ?? null) ? $row['version'] : 0,
+                    major: is_string($row['major'] ?? null) ? $row['major'] : '',
+                    schema: $schema,
+                    schemaHash: is_string($row['schema_hash'] ?? null)
+                        ? $row['schema_hash']
+                        : hash('sha256', JsonCanonical::encode($schema)),
+                    piiClass: is_string($row['pii_class'] ?? null) ? $row['pii_class'] : '',
+                    projectorService: is_string($row['projector_service'] ?? null) ? $row['projector_service'] : '',
+                );
+            } catch (InvalidArgumentException $exception) {
+                $violations->add('topics.'.$index, $exception->getMessage());
+            }
+        }
+
+        return $topics;
+    }
+}
+
+FILE packages/webhooks/src/Data/WebhookOptions.php
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Webhooks\Data;
+
+use CoreX\Attributes\Api;
+
+/** Immutable webhook activation policy; it never contains secret material. */
+#[Api(since: '1.0')]
+final readonly class WebhookOptions
+{
+    /**
+     * @param  list<string>  $organizationDeniedCidrs
+     * @param  list<WebhookTopic>  $topics
+     * @param  array<string, string>  $projectors
+     */
+    public function __construct(
+        public bool $deliveryEnabled,
+        public bool $workerReady,
+        public int $leaseSeconds,
+        public int $bodyRetentionSeconds,
+        public int $historyRetentionSeconds,
+        public int $replayHorizonSeconds,
+        public array $organizationDeniedCidrs,
+        public array $topics,
+        public array $projectors,
+        public int $maxAttempts,
+        public int $retryHorizonSeconds,
+    ) {}
+
+}
+
+FILE packages/webhooks/src/Data/WebhookHttpResult.php
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Webhooks\Data;
+
+use CoreX\Attributes\Api;
+use CoreX\Webhooks\Enums\WebhookFailureReason;
+use InvalidArgumentException;
+
+#[Api(since: '1.0')]
+final readonly class WebhookHttpResult
+{
+    public function __construct(
+        public ?int $status,
+        public ?string $retryAfter,
+        public ?WebhookFailureReason $errorCode,
+        public int $durationMs,
+    ) {
+        if ($status !== null && ($status < 100 || $status > 599)) {
+            throw new InvalidArgumentException('Webhook HTTP status is invalid.');
+        }
+
+        if ($retryAfter !== null
+            && ($retryAfter === ''
+                || strlen($retryAfter) > 255
+                || preg_match('/[\x00-\x1f\x7f]/', $retryAfter) === 1)) {
+            throw new InvalidArgumentException('Webhook Retry-After value is invalid.');
+        }
+
+        if ($status === null && $errorCode === null) {
+            throw new InvalidArgumentException('Webhook result must contain a status or a safe error code.');
+        }
+
+        if ($durationMs < 0) {
+            throw new InvalidArgumentException('Webhook duration must be non-negative.');
+        }
+    }
+}
+
+FILE packages/webhooks/src/Contracts/WebhookEgressPolicy.php
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Webhooks\Contracts;
+
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+use CoreX\Data\Data\DataScope;
+use CoreX\Webhooks\Data\WebhookDestination;
+
+#[Spi(kind: SpiKind::Implement, since: '1.0')]
+interface WebhookEgressPolicy
+{
+    /** Called on subscription create/update and before every attempt, including replays. */
+    public function allows(DataScope $scope, WebhookDestination $destination): bool;
+}
+
+FILE packages/webhooks/src/Internal/PermitPublicEgressPolicy.php
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Webhooks\Internal;
+
+use CoreX\Data\Data\DataScope;
+use CoreX\Webhooks\Contracts\WebhookEgressPolicy;
+use CoreX\Webhooks\Data\WebhookDestination;
+use Override;
+
+/** @internal Host restrictions are opt-in; the separate URL policy always enforces public IPs. */
+final readonly class PermitPublicEgressPolicy implements WebhookEgressPolicy
+{
+    #[Override]
+    public function allows(DataScope $scope, WebhookDestination $destination): bool
+    {
+        return true;
+    }
+}
+
+diff --git a/packages/webhooks/src/Internal/SqlWebhookSubscriptionStore.php b/packages/webhooks/src/Internal/SqlWebhookSubscriptionStore.php
+index 73dd1abd..86bb5706 100644
+--- a/packages/webhooks/src/Internal/SqlWebhookSubscriptionStore.php
++++ b/packages/webhooks/src/Internal/SqlWebhookSubscriptionStore.php
+@@ -11,7 +11,9 @@ use CoreX\Errors\Enums\ErrorCategory;
+ use CoreX\Operations\Errors\Enums\OperationsErrorCode;
+ use CoreX\Operations\Errors\Exceptions\ApiError;
+ use CoreX\Operations\Validation\Laravel\JsonCanonical;
++use CoreX\Webhooks\Contracts\WebhookEgressPolicy;
+ use CoreX\Webhooks\Contracts\WebhookSubscriptionStore;
++use CoreX\Webhooks\Data\WebhookDestination;
+ use CoreX\Webhooks\Data\WebhookSubscription;
+ use CoreX\Webhooks\Errors\Enums\WebhooksErrorCode;
+ use DateTimeImmutable;
+@@ -33,6 +35,7 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
+         private TenantContextRestorer $contexts,
+         private WebhookTopicCatalogue $catalogue,
+         private ClockInterface $clock,
++        private WebhookEgressPolicy $egress,
+     ) {}
+ 
+     #[Override]
+@@ -50,6 +53,8 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
+             throw new ApiError(OperationsErrorCode::UnknownMessageContract, 422, 'The subscription does not match the declared topic.', category: ErrorCategory::Validation);
+         }
+ 
++        $this->assertEgress($scope, $subscription->endpointUrl);
++
+         return $this->connection->transaction(function () use ($subscription): WebhookSubscription {
+             if ((int) $this->connection->table(self::Table)->count() >= self::CAP) {
+                 throw new ApiError(WebhooksErrorCode::WebhookSubscriptionCap, 422, 'The webhook subscription cap is 100.', category: ErrorCategory::Validation);
+@@ -103,6 +108,8 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
+             updatedAt: $current->updatedAt,
+         );
+ 
++        $this->assertEgress($scope, $replacement->endpointUrl);
++
+         return $this->connection->transaction(function () use ($id, $expectedRevision, $replacement): WebhookSubscription {
+             $updated = $this->connection->table(self::Table)
+                 ->where('id', $id)
+@@ -157,6 +164,13 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
+         }, $this->transactionAttempts());
+     }
+ 
++    private function assertEgress(DataScope $scope, string $url): void
++    {
++        if (! $this->egress->allows($scope, WebhookDestination::fromUrl($url))) {
++            throw new ApiError(WebhooksErrorCode::WebhookEgressDenied, 422, 'Webhook destination is denied by tenant egress policy.', category: ErrorCategory::Validation);
++        }
++    }
++
+     private function assertScope(DataScope $scope): void
+     {
+         $context = $this->contexts->restore($scope);
+diff --git a/packages/webhooks/src/Internal/WebhookFanout.php b/packages/webhooks/src/Internal/WebhookFanout.php
+index e1b0267c..4eff81e2 100644
+--- a/packages/webhooks/src/Internal/WebhookFanout.php
++++ b/packages/webhooks/src/Internal/WebhookFanout.php
+@@ -9,6 +9,7 @@ use CoreX\Messaging\Contracts\Inbox;
+ use CoreX\Messaging\Data\MessageEnvelope;
+ use CoreX\Operations\Validation\Laravel\JsonCanonical;
+ use CoreX\Webhooks\Contracts\WebhookPayloadProjector;
++use CoreX\Webhooks\Enums\WebhookFailureReason;
+ use DateInterval;
+ use Illuminate\Database\Connection;
+ use Psr\Clock\ClockInterface;
+@@ -61,7 +62,7 @@ final readonly class WebhookFanout
+             $projected = $projector->project($message, $topic);
+             $encoded = $this->codec->encodeExternal($message, $projected);
+             $oversize = strlen($encoded) > self::BodyLimit;
+-            $body = $oversize ? $this->codec->encodeExternal($message, ['error' => 'payload_too_large']) : $encoded;
++            $body = $oversize ? $this->codec->encodeExternal($message, ['error' => WebhookFailureReason::PayloadTooLarge->value]) : $encoded;
+             $now = $this->clock->now();
+ 
+             foreach ($rows as $row) {
+@@ -86,7 +87,7 @@ final readonly class WebhookFanout
+                     'created_at' => $now,
+                     'finished_at' => $oversize ? $now : null,
+                     'expires_at' => $now->add(new DateInterval('P7D')),
+-                    'last_error' => $oversize ? 'payload_too_large' : null,
++                    'last_error' => $oversize ? WebhookFailureReason::PayloadTooLarge->value : null,
+                 ]);
+             }
+         });
+diff --git a/packages/webhooks/src/Internal/WebhookManagement.php b/packages/webhooks/src/Internal/WebhookManagement.php
+index a7fb2b73..ab67a46a 100644
+--- a/packages/webhooks/src/Internal/WebhookManagement.php
++++ b/packages/webhooks/src/Internal/WebhookManagement.php
+@@ -241,11 +241,11 @@ final readonly class WebhookManagement
+     {
+         $query = $this->connection->table('sys_api_webhook_deliveries');
+         $accountPath = $this->connection->getDriverName() === 'pgsql'
+-            ? "scope->>'account_id'"
+-            : "json_extract(scope, '$.account_id')";
++            ? "scope->>'account'"
++            : "json_extract(scope, '$.account')";
+         $workspacePath = $this->connection->getDriverName() === 'pgsql'
+-            ? "scope->>'workspace_id'"
+-            : "json_extract(scope, '$.workspace_id')";
++            ? "scope->>'workspace'"
++            : "json_extract(scope, '$.workspace')";
+         $query->whereRaw("{$accountPath} = ?", [$scope->accountId]);
+ 
+         if ($scope->workspaceId === null) {
+diff --git a/packages/webhooks/src/Internal/WebhookReplay.php b/packages/webhooks/src/Internal/WebhookReplay.php
+index e25ff9fe..15d5d4b6 100644
+--- a/packages/webhooks/src/Internal/WebhookReplay.php
++++ b/packages/webhooks/src/Internal/WebhookReplay.php
+@@ -314,11 +314,11 @@ final readonly class WebhookReplay
+     {
+         $query = $this->connection->table('sys_api_webhook_deliveries');
+         $accountPath = $this->connection->getDriverName() === 'pgsql'
+-            ? "scope->>'account_id'"
+-            : "json_extract(scope, '$.account_id')";
++            ? "scope->>'account'"
++            : "json_extract(scope, '$.account')";
+         $workspacePath = $this->connection->getDriverName() === 'pgsql'
+-            ? "scope->>'workspace_id'"
+-            : "json_extract(scope, '$.workspace_id')";
++            ? "scope->>'workspace'"
++            : "json_extract(scope, '$.workspace')";
+         $query->whereRaw("{$accountPath} = ?", [$scope->accountId]);
+ 
+         if ($scope->workspaceId === null) {
+diff --git a/packages/webhooks/src/Internal/WebhookRetention.php b/packages/webhooks/src/Internal/WebhookRetention.php
+index 065f7320..6f4b86a3 100644
+--- a/packages/webhooks/src/Internal/WebhookRetention.php
++++ b/packages/webhooks/src/Internal/WebhookRetention.php
+@@ -187,11 +187,11 @@ final readonly class WebhookRetention
+     {
+         $query = $this->connection->table(self::Deliveries);
+         $accountPath = $this->connection->getDriverName() === 'pgsql'
+-            ? "scope->>'account_id'"
+-            : "json_extract(scope, '$.account_id')";
++            ? "scope->>'account'"
++            : "json_extract(scope, '$.account')";
+         $workspacePath = $this->connection->getDriverName() === 'pgsql'
+-            ? "scope->>'workspace_id'"
+-            : "json_extract(scope, '$.workspace_id')";
++            ? "scope->>'workspace'"
++            : "json_extract(scope, '$.workspace')";
+         $query->whereRaw($accountPath.' = ?', [$scope->accountId]);
+ 
+         if ($scope->workspaceId === null) {
+diff --git a/packages/webhooks/src/Laravel/WebhookBindingsRegistrar.php b/packages/webhooks/src/Laravel/WebhookBindingsRegistrar.php
+index a67d6b12..ca81857d 100644
+--- a/packages/webhooks/src/Laravel/WebhookBindingsRegistrar.php
++++ b/packages/webhooks/src/Laravel/WebhookBindingsRegistrar.php
+@@ -8,6 +8,7 @@ use CoreX\Attributes\Spi;
+ use CoreX\Attributes\SpiKind;
+ use CoreX\Audit\Contracts\AuditLogger;
+ use CoreX\Context\Contracts\TenantContextRestorer;
++use CoreX\Data\Contracts\DataScopeCodec;
+ use CoreX\Messaging\Contracts\CloudEventCodec;
+ use CoreX\Messaging\Contracts\Inbox;
+ use CoreX\Messaging\Contracts\MessageContractRegistry;
+@@ -15,6 +16,7 @@ use CoreX\Modules\Contracts\PackageRegistrar;
+ use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+ use CoreX\Operations\Pagination\Contracts\CursorCodec;
+ use CoreX\Webhooks\Contracts\WebhookDeliveryStore;
++use CoreX\Webhooks\Contracts\WebhookEgressPolicy;
+ use CoreX\Webhooks\Contracts\WebhookHttpTransport;
+ use CoreX\Webhooks\Contracts\WebhookPayloadProjector;
+ use CoreX\Webhooks\Contracts\WebhookSigner;
+@@ -22,6 +24,7 @@ use CoreX\Webhooks\Contracts\WebhookSubscriptionStore;
+ use CoreX\Webhooks\Data\WebhookOptions;
+ use CoreX\Webhooks\Internal\CurlWebhookTransport;
+ use CoreX\Webhooks\Internal\HmacWebhookSigner;
++use CoreX\Webhooks\Internal\PermitPublicEgressPolicy;
+ use CoreX\Webhooks\Internal\SqlWebhookDeliveryStore;
+ use CoreX\Webhooks\Internal\SqlWebhookSubscriptionStore;
+ use CoreX\Webhooks\Internal\WebhookDeliveryWorker;
+@@ -53,7 +56,8 @@ final class WebhookBindingsRegistrar implements PackageRegistrar
+             (array) $app->make(Repository::class)->get('corex-webhooks', []),
+         ));
+         $app->singleton(WebhookUrlPolicy::class, static fn (Application $app): WebhookUrlPolicy => new WebhookUrlPolicy(organizationDeniedCidrs: $app->make(WebhookOptions::class)->organizationDeniedCidrs));
+-        $app->singleton(WebhookRetryPolicy::class, WebhookRetryPolicy::class);
++        $app->singletonIf(WebhookEgressPolicy::class, PermitPublicEgressPolicy::class);
++        $app->singleton(WebhookRetryPolicy::class, static fn (Application $app): WebhookRetryPolicy => new WebhookRetryPolicy($app->make(WebhookOptions::class)));
+         $app->singleton(WebhookTopicCatalogue::class, static fn (Application $app): WebhookTopicCatalogue => new WebhookTopicCatalogue(
+             contracts: $app->make(MessageContractRegistry::class),
+             topics: $app->make(WebhookOptions::class)->topics,
+@@ -64,6 +68,7 @@ final class WebhookBindingsRegistrar implements PackageRegistrar
+             contexts: $app->make(TenantContextRestorer::class),
+             catalogue: $app->make(WebhookTopicCatalogue::class),
+             clock: $app->make(ClockInterface::class),
++            egress: $app->make(WebhookEgressPolicy::class),
+         ));
+         $app->scoped(WebhookDeliveryStore::class, static fn (Application $app): SqlWebhookDeliveryStore => self::deliveryStore($app, $app->make(WebhookOptions::class)));
+         $app->scoped(WebhookManagement::class, static fn (Application $app): WebhookManagement => new WebhookManagement(
+@@ -171,6 +176,8 @@ final class WebhookBindingsRegistrar implements PackageRegistrar
+             transport: $app->make(WebhookHttpTransport::class),
+             topics: $app->make(WebhookTopicCatalogue::class),
+             clock: $app->make(ClockInterface::class),
++            egress: $app->make(WebhookEgressPolicy::class),
++            scopeCodec: $app->make(DataScopeCodec::class),
+         );
+     }
+ 
+
+Canonical scope codec:
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Data\Internal;
+
+use CoreX\Data\Contracts\DataScopeCodec;
+use CoreX\Data\Data\DataScope;
+use CoreX\Data\Exceptions\InvalidScopePayload;
+use Override;
+
+final readonly class ArrayDataScopeCodec implements DataScopeCodec
+{
+    /**
+     * Порядок ключей фиксирован и является частью контракта: по этому массиву
+     * считаются отпечатки идемпотентности, поэтому перестановка ключей — ломающее
+     * изменение, а не форматирование.
+     *
+     * @return array<string, scalar|null>
+     */
+    #[Override]
+    public function encode(DataScope $scope): array
+    {
+        return [
+            'version' => $scope->version,
+            'account' => $scope->accountId,
+            'workspace' => $scope->workspaceId,
+            'connection' => $scope->connectionIdentity,
+            'actor' => $scope->actorId,
+            'restoreEpoch' => $scope->restoreEpoch,
+            'boxed' => $scope->boxed,
+        ];
+    }
+
+    /** @param array<string, mixed> $payload */
+    #[Override]
+    public function decode(array $payload): DataScope
+    {
+        $version = $payload['version'] ?? null;
+
+        if (! is_int($version)) {
+            throw InvalidScopePayload::missing('version');
+        }
+
+        if ($version !== DataScope::VERSION) {
+            throw InvalidScopePayload::unsupportedVersion($version);
+        }
+
+        return new DataScope(
+            accountId: self::requireString($payload, 'account'),
+            workspaceId: self::optionalString($payload, 'workspace'),
+            connectionIdentity: self::requireString($payload, 'connection'),
+            actorId: self::requireString($payload, 'actor'),
+            restoreEpoch: self::requireString($payload, 'restoreEpoch'),
+            boxed: self::requireBool($payload, 'boxed'),
+            version: $version,
+        );
+    }
+
+    /** @param array<string, mixed> $payload */
+    private static function requireString(array $payload, string $key): string
+    {
+        $value = $payload[$key] ?? null;
+
+        if (! is_string($value)) {
+            throw InvalidScopePayload::missing($key);
+        }
+
+        return $value;
+    }
+
+    /** @param array<string, mixed> $payload */
+    private static function optionalString(array $payload, string $key): ?string
+    {
+        if (! array_key_exists($key, $payload)) {
+            throw InvalidScopePayload::missing($key);
+        }
+
+        $value = $payload[$key];
+
+        if ($value !== null && ! is_string($value)) {
+            throw InvalidScopePayload::missing($key);
+        }
+
+        return $value;
+    }
+
+    /** @param array<string, mixed> $payload */
+    private static function requireBool(array $payload, string $key): bool
+    {
+        $value = $payload[$key] ?? null;
+
+        if (! is_bool($value)) {
+            throw InvalidScopePayload::missing($key);
+        }
+
+        return $value;
+    }
+}

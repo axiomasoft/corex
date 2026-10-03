@@ -1,0 +1,7 @@
+{
+  "action": "repair-in-current-attempt",
+  "terminal_allowed": false,
+  "reason_code": "BOUNDED_NONMATERIAL_REPAIR",
+  "repair_digest": "29e1121783a2a5c9327379796d7bb2607c5cff00b0b56aa9748ecad44759db0c",
+  "post_validation_required": true
+}

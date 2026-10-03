@@ -1,0 +1,9 @@
+{
+  "prior_full_cohort": "plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P06.3-execution/bc-check.log",
+  "prior_full_cohort_sha256": "93071d8b8729d2da66ceb455342038979e14b7775a916c1d45aba26e6508a1b6",
+  "package_delta_since_prior_candidate": [],
+  "affected_package": "webhooks",
+  "unchanged_packages": "Every other package source/manifest byte identical to prior GREEN cohort; exact git diff base..candidate packages proof",
+  "method": "retain completed unchanged package evidence; stop redundant full cohort after completed GREEN packages and run affected webhooks gate",
+  "stopped_pid": 798859
+}

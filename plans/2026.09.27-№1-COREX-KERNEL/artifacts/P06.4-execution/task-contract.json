@@ -1,0 +1,603 @@
+{
+  "schema_version": "task-contract/v1",
+  "contract_id": "2026.09.27-№1-corex-kernel-p06-4",
+  "version": {
+    "revision": 1,
+    "content_hash": "d1754fa0e2f50a52a9d3a7c52976d4827625dcbdc84ce791b7a583d4e3747456",
+    "supersedes": null
+  },
+  "goal": {
+    "outcome": "Формализовать контракт доставки вебхуков — публичные причины отказа с признаком постоянства, бюджет ретраев в options, dead-letter и replay — и добавить проверяемую политику egress арендатора на подписке, каждой попытке и replay; описать модель угроз с исполнимым доказательством на каждую угрозу.",
+    "non_goals": [
+      "Изменение SSRF-проверок `WebhookUrlPolicy`, DNS pinning и подписи",
+      "хранилище списков разрешённых хостов (реализация SPI — у хоста)",
+      "сетевой egress-прокси",
+      "новые статусы доставки и схема таблиц (P08)",
+      "`WebHook-Request-Origin` handshake."
+    ]
+  },
+  "must": [
+    {
+      "id": "M1",
+      "requirement": "`CoreX\\Webhooks\\Enums\\WebhookFailureReason` (`#[Api]`, 20 case (D92), `isPermanent()`, `isTerminal()`, `fromHttpStatus()`)",
+      "source_ref": "phases/P06.md:7"
+    },
+    {
+      "id": "M2",
+      "requirement": "`WebhookHttpResult::$errorCode` типа `?WebhookFailureReason`",
+      "source_ref": "phases/P06.md:7"
+    },
+    {
+      "id": "M3",
+      "requirement": "миграция Curl transport/worker/store producer/consumer",
+      "source_ref": "phases/P06.md:7"
+    },
+    {
+      "id": "M4",
+      "requirement": "`SqlWebhookDeliveryStore` (recovery, claim rejection и persisted enum values)",
+      "source_ref": "phases/P06.md:7"
+    },
+    {
+      "id": "M5",
+      "requirement": "`WebhookRetryPolicy` на общем бюджете из `WebhookOptions` (`maxAttempts`, `retryHorizonSeconds`, парсер и config)",
+      "source_ref": "phases/P06.md:7"
+    },
+    {
+      "id": "M6",
+      "requirement": "`CoreX\\Webhooks\\Data\\WebhookDestination` (`#[Api]`) с каноникализацией из `WebhookUrlPolicy`",
+      "source_ref": "phases/P06.md:7"
+    },
+    {
+      "id": "M7",
+      "requirement": "SPI `CoreX\\Webhooks\\Contracts\\WebhookEgressPolicy` и Internal `PermitPublicEgressPolicy`",
+      "source_ref": "phases/P06.md:7"
+    },
+    {
+      "id": "M8",
+      "requirement": "вызовы политики при create/update подписки и в `WebhookDeliveryWorker` до проверки адреса",
+      "source_ref": "phases/P06.md:7"
+    },
+    {
+      "id": "M9",
+      "requirement": "код `webhooks.webhook_egress_denied`",
+      "source_ref": "phases/P06.md:7"
+    },
+    {
+      "id": "M10",
+      "requirement": "тесты `WebhookFailureReasonTest`, `WebhookRetryBudgetTest`, `WebhookEgressPolicyTest`",
+      "source_ref": "phases/P06.md:7"
+    },
+    {
+      "id": "M11",
+      "requirement": "mutation-кейс `P06-egress-skip-on-delivery`",
+      "source_ref": "phases/P06.md:7"
+    },
+    {
+      "id": "M12",
+      "requirement": "`docs/architecture/webhooks-threat-model.md`, Enforcement статьи EXT конституции, README пакета webhooks",
+      "source_ref": "phases/P06.md:7"
+    },
+    {
+      "id": "M13",
+      "requirement": "регенерация `configuration.md`",
+      "source_ref": "phases/P06.md:7"
+    },
+    {
+      "id": "M14",
+      "requirement": "Golden delta P06.4.",
+      "source_ref": "phases/P06.md:7"
+    }
+  ],
+  "never": [
+    {
+      "id": "N1",
+      "prohibition": "Изменение SSRF-проверок `WebhookUrlPolicy`, DNS pinning и подписи",
+      "source_ref": "phases/P06.md:9"
+    },
+    {
+      "id": "N2",
+      "prohibition": "хранилище списков разрешённых хостов (реализация SPI — у хоста)",
+      "source_ref": "phases/P06.md:9"
+    },
+    {
+      "id": "N3",
+      "prohibition": "сетевой egress-прокси",
+      "source_ref": "phases/P06.md:9"
+    },
+    {
+      "id": "N4",
+      "prohibition": "новые статусы доставки и схема таблиц (P08)",
+      "source_ref": "phases/P06.md:9"
+    },
+    {
+      "id": "N5",
+      "prohibition": "`WebHook-Request-Origin` handshake.",
+      "source_ref": "phases/P06.md:9"
+    }
+  ],
+  "done": {
+    "public_acceptance": [
+      {
+        "id": "A1",
+        "predicate": "Package changelog(s), `artifacts/P06.4-execution/base-commit.txt` и точный candidate SHA в completion; `WebhookFailureReason`, `WebhookDestination`, `WebhookEgressPolicy` и привязка по умолчанию; бюджет в `WebhookOptions`; три теста и mutation-кейс; `docs/architecture/webhooks-threat-model.md` и Enforcement статьи EXT; Golden delta P06.4; `artifacts/P06.4-execution/completion.md`.",
+        "scope": "public",
+        "check": "- После продуктового commit: `bash scripts/contract-guard.sh` и `bash scripts/contract-guard.sh \"$(cat plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06.4-execution/base-commit.txt)\"` → exit 0; в Unreleased каждого изменённого пакета описан объявленный API/wire delta.",
+        "evidence_ref": "E16"
+      },
+      {
+        "id": "A2",
+        "predicate": "Package changelog(s), `artifacts/P06.4-execution/base-commit.txt` и точный candidate SHA в completion; `WebhookFailureReason`, `WebhookDestination`, `WebhookEgressPolicy` и привязка по умолчанию; бюджет в `WebhookOptions`; три теста и mutation-кейс; `docs/architecture/webhooks-threat-model.md` и Enforcement статьи EXT; Golden delta P06.4; `artifacts/P06.4-execution/completion.md`.",
+        "scope": "public",
+        "check": "- `grep -rn -E \"'(retry_exhausted|retry_horizon_exhausted|endpoint_gone|redirect_forbidden|http_permanent|http_429|http_5xx|address_not_allowed|topic_unavailable|signing_unavailable|dns_unavailable|network_failure|transport_failure|payload_too_large|ack_unknown|webhook_endpoint_changed|url_forbidden|egress_denied|http_408|http_425)'\" packages/webhooks/src | grep -v Enums/WebhookFailureReason.php` → пусто.",
+        "evidence_ref": "E17"
+      },
+      {
+        "id": "A3",
+        "predicate": "Package changelog(s), `artifacts/P06.4-execution/base-commit.txt` и точный candidate SHA в completion; `WebhookFailureReason`, `WebhookDestination`, `WebhookEgressPolicy` и привязка по умолчанию; бюджет в `WebhookOptions`; три теста и mutation-кейс; `docs/architecture/webhooks-threat-model.md` и Enforcement статьи EXT; Golden delta P06.4; `artifacts/P06.4-execution/completion.md`.",
+        "scope": "public",
+        "check": "- `scripts/php84 composer --working-dir=packages/webhooks test -- --filter='WebhookFailureReason|WebhookRetryBudget|WebhookEgressPolicy|WebhookLoadContourIntegration'` → exit 0: таблица examples §7b, бюджет decide/recovery (max=3/attempt=3 dead, max=20/attempt=12 retry; horizon=3600 и age=3599/3600/7200; next=horizon dead; совпавшие лимиты → retry_exhausted); outcome unknown и persisted строки ack_unknown/EndpointChanged/finish без TypeError; bad-signature receiver даёт 401/null без TypeError и без effects, DeliveryTest timeout использует NetworkFailure; отказ egress при создании (422 `webhooks.webhook_egress_denied`), при попытке и при replay (`dead`, `egress_denied`, транспорт не вызван).",
+        "evidence_ref": "E18"
+      },
+      {
+        "id": "A4",
+        "predicate": "Package changelog(s), `artifacts/P06.4-execution/base-commit.txt` и точный candidate SHA в completion; `WebhookFailureReason`, `WebhookDestination`, `WebhookEgressPolicy` и привязка по умолчанию; бюджет в `WebhookOptions`; три теста и mutation-кейс; `docs/architecture/webhooks-threat-model.md` и Enforcement статьи EXT; Golden delta P06.4; `artifacts/P06.4-execution/completion.md`.",
+        "scope": "public",
+        "check": "- `bash scripts/mutation-check.sh P06 egress-skip-on-delivery` → кейс краснеет под патчем, дерево восстановлено; `bash scripts/mutation-check.sh --all` → exit 0, прежние кейсы сохранены.",
+        "evidence_ref": "E19"
+      },
+      {
+        "id": "A5",
+        "predicate": "Package changelog(s), `artifacts/P06.4-execution/base-commit.txt` и точный candidate SHA в completion; `WebhookFailureReason`, `WebhookDestination`, `WebhookEgressPolicy` и привязка по умолчанию; бюджет в `WebhookOptions`; три теста и mutation-кейс; `docs/architecture/webhooks-threat-model.md` и Enforcement статьи EXT; Golden delta P06.4; `artifacts/P06.4-execution/completion.md`.",
+        "scope": "public",
+        "check": "- `scripts/php84 composer --working-dir=packages/webhooks test` → exit 0; `PGSQL_PORT=5434 scripts/php84 composer test:pg` → exit 0.",
+        "evidence_ref": "E20"
+      },
+      {
+        "id": "A6",
+        "predicate": "Package changelog(s), `artifacts/P06.4-execution/base-commit.txt` и точный candidate SHA в completion; `WebhookFailureReason`, `WebhookDestination`, `WebhookEgressPolicy` и привязка по умолчанию; бюджет в `WebhookOptions`; три теста и mutation-кейс; `docs/architecture/webhooks-threat-model.md` и Enforcement статьи EXT; Golden delta P06.4; `artifacts/P06.4-execution/completion.md`.",
+        "scope": "public",
+        "check": "- Для каждого имени теста в столбце «Доказательство» `docs/architecture/webhooks-threat-model.md`: `git ls-files | grep -c \"/<Name>.php$\"` → ≥ 1 (цикл и вывод — в Completion Notes).",
+        "evidence_ref": "E21"
+      },
+      {
+        "id": "A7",
+        "predicate": "Package changelog(s), `artifacts/P06.4-execution/base-commit.txt` и точный candidate SHA в completion; `WebhookFailureReason`, `WebhookDestination`, `WebhookEgressPolicy` и привязка по умолчанию; бюджет в `WebhookOptions`; три теста и mutation-кейс; `docs/architecture/webhooks-threat-model.md` и Enforcement статьи EXT; Golden delta P06.4; `artifacts/P06.4-execution/completion.md`.",
+        "scope": "public",
+        "check": "- `scripts/php84 composer error-registry` → exit 0; `scripts/php84 php scripts/configuration-reference.php --check` → exit 0; `php scripts/package-docs-gate.php` → exit 0.",
+        "evidence_ref": "E22"
+      },
+      {
+        "id": "A8",
+        "predicate": "Package changelog(s), `artifacts/P06.4-execution/base-commit.txt` и точный candidate SHA в completion; `WebhookFailureReason`, `WebhookDestination`, `WebhookEgressPolicy` и привязка по умолчанию; бюджет в `WebhookOptions`; три теста и mutation-кейс; `docs/architecture/webhooks-threat-model.md` и Enforcement статьи EXT; Golden delta P06.4; `artifacts/P06.4-execution/completion.md`.",
+        "scope": "public",
+        "check": "- `scripts/php84 php scripts/php-api.php --write` дважды → идентично; `scripts/php84 composer php-api`, `scripts/php84 composer bc-check` → exit 0; diff baseline Golden содержит только строки P06.4 из досье §4.",
+        "evidence_ref": "E23"
+      },
+      {
+        "id": "A9",
+        "predicate": "Package changelog(s), `artifacts/P06.4-execution/base-commit.txt` и точный candidate SHA в completion; `WebhookFailureReason`, `WebhookDestination`, `WebhookEgressPolicy` и привязка по умолчанию; бюджет в `WebhookOptions`; три теста и mutation-кейс; `docs/architecture/webhooks-threat-model.md` и Enforcement статьи EXT; Golden delta P06.4; `artifacts/P06.4-execution/completion.md`.",
+        "scope": "public",
+        "check": "- Итог фазы на финальном кандидате: `scripts/php84 composer test:hermetic`, `PGSQL_PORT=5434 scripts/php84 composer test:pg`, `scripts/php84 composer test:packages`, `scripts/php84 composer test:arch`, `scripts/php84 composer golden` → exit 0.",
+        "evidence_ref": "E24"
+      },
+      {
+        "id": "A10",
+        "predicate": "Package changelog(s), `artifacts/P06.4-execution/base-commit.txt` и точный candidate SHA в completion; `WebhookFailureReason`, `WebhookDestination`, `WebhookEgressPolicy` и привязка по умолчанию; бюджет в `WebhookOptions`; три теста и mutation-кейс; `docs/architecture/webhooks-threat-model.md` и Enforcement статьи EXT; Golden delta P06.4; `artifacts/P06.4-execution/completion.md`.",
+        "scope": "public",
+        "check": "- `scripts/php84 composer lint:check`, `scripts/php84 composer analyse` → exit 0; `php scripts/quality-ceiling-guard.php` → `ceilings OK`; `bash scripts/anti-weakening-gate.sh` → exit 0.",
+        "evidence_ref": "E25"
+      },
+      {
+        "id": "A11",
+        "predicate": "Package changelog(s), `artifacts/P06.4-execution/base-commit.txt` и точный candidate SHA в completion; `WebhookFailureReason`, `WebhookDestination`, `WebhookEgressPolicy` и привязка по умолчанию; бюджет в `WebhookOptions`; три теста и mutation-кейс; `docs/architecture/webhooks-threat-model.md` и Enforcement статьи EXT; Golden delta P06.4; `artifacts/P06.4-execution/completion.md`.",
+        "scope": "public",
+        "check": "- Review `light` (D91): self-check по досье §6; строка `review: self-check GREEN` в Completion Notes.",
+        "evidence_ref": "E26"
+      }
+    ]
+  },
+  "authority": {
+    "class": "routine",
+    "granted": true,
+    "granted_by": "phases/P06/P06.4.md:P06.4",
+    "auto_allowed": [
+      "write the item's declared Files",
+      "run the item's Validation",
+      "close the item with the two-commit topology"
+    ],
+    "stop_boundaries": [
+      "tag/push/release",
+      "fleet rollout",
+      "consumer repositories",
+      "FOREMAN outward parts"
+    ],
+    "loop_budget": {
+      "audit_rounds_max": 2,
+      "same_finding_max": 2
+    },
+    "observed_rounds": 0,
+    "audit_cap_remediation": false
+  },
+  "next": {
+    "form": "run-items",
+    "carrier": "task:plan-run 2026.09.27-№1-COREX-KERNEL P06.4",
+    "context": "continue-root",
+    "origin": "approved-goal",
+    "changed_by": null
+  },
+  "route": {
+    "required": {
+      "model_class": "implementation",
+      "effort": "high"
+    },
+    "actual": {
+      "model_class": "frontier",
+      "effort": "high"
+    },
+    "capabilities": []
+  },
+  "evidence": [
+    {
+      "id": "E1",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D92-p06-design-audit-remediation.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E2",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P06-design.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E3",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P06-design-rag.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E4",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/examples.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E5",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D90-p06-wire-contract.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E6",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design-rag/pplx-04-webhook-ssrf-threat-model.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E7",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06.3-execution/completion.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E8",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P06-design.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E9",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/examples.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E10",
+      "path": "packages/webhooks/src/Internal/WebhookRetryPolicy.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E11",
+      "path": "packages/webhooks/src/Internal/WebhookDeliveryWorker.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E12",
+      "path": "packages/webhooks/src/Internal/WebhookUrlPolicy.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E13",
+      "path": "packages/webhooks/src/Internal/SqlWebhookSubscriptionStore.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E14",
+      "path": "packages/webhooks/src/Laravel/WebhookOptionsParser.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E15",
+      "path": "packages/webhooks/src/Internal/SqlWebhookDeliveryStore.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E16",
+      "path": "- После продуктового commit: `bash scripts/contract-guard.sh` и `bash scripts/contract-guard.sh \"$(cat plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06.4-execution/base-commit.txt)\"` → exit 0; в Unreleased каждого изменённого пакета описан объявленный API/wire delta.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E17",
+      "path": "- `grep -rn -E \"'(retry_exhausted|retry_horizon_exhausted|endpoint_gone|redirect_forbidden|http_permanent|http_429|http_5xx|address_not_allowed|topic_unavailable|signing_unavailable|dns_unavailable|network_failure|transport_failure|payload_too_large|ack_unknown|webhook_endpoint_changed|url_forbidden|egress_denied|http_408|http_425)'\" packages/webhooks/src | grep -v Enums/WebhookFailureReason.php` → пусто.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E18",
+      "path": "- `scripts/php84 composer --working-dir=packages/webhooks test -- --filter='WebhookFailureReason|WebhookRetryBudget|WebhookEgressPolicy|WebhookLoadContourIntegration'` → exit 0: таблица examples §7b, бюджет decide/recovery (max=3/attempt=3 dead, max=20/attempt=12 retry; horizon=3600 и age=3599/3600/7200; next=horizon dead; совпавшие лимиты → retry_exhausted); outcome unknown и persisted строки ack_unknown/EndpointChanged/finish без TypeError; bad-signature receiver даёт 401/null без TypeError и без effects, DeliveryTest timeout использует NetworkFailure; отказ egress при создании (422 `webhooks.webhook_egress_denied`), при попытке и при replay (`dead`, `egress_denied`, транспорт не вызван).",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E19",
+      "path": "- `bash scripts/mutation-check.sh P06 egress-skip-on-delivery` → кейс краснеет под патчем, дерево восстановлено; `bash scripts/mutation-check.sh --all` → exit 0, прежние кейсы сохранены.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E20",
+      "path": "- `scripts/php84 composer --working-dir=packages/webhooks test` → exit 0; `PGSQL_PORT=5434 scripts/php84 composer test:pg` → exit 0.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E21",
+      "path": "- Для каждого имени теста в столбце «Доказательство» `docs/architecture/webhooks-threat-model.md`: `git ls-files | grep -c \"/<Name>.php$\"` → ≥ 1 (цикл и вывод — в Completion Notes).",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E22",
+      "path": "- `scripts/php84 composer error-registry` → exit 0; `scripts/php84 php scripts/configuration-reference.php --check` → exit 0; `php scripts/package-docs-gate.php` → exit 0.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E23",
+      "path": "- `scripts/php84 php scripts/php-api.php --write` дважды → идентично; `scripts/php84 composer php-api`, `scripts/php84 composer bc-check` → exit 0; diff baseline Golden содержит только строки P06.4 из досье §4.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E24",
+      "path": "- Итог фазы на финальном кандидате: `scripts/php84 composer test:hermetic`, `PGSQL_PORT=5434 scripts/php84 composer test:pg`, `scripts/php84 composer test:packages`, `scripts/php84 composer test:arch`, `scripts/php84 composer golden` → exit 0.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E25",
+      "path": "- `scripts/php84 composer lint:check`, `scripts/php84 composer analyse` → exit 0; `php scripts/quality-ceiling-guard.php` → `ceilings OK`; `bash scripts/anti-weakening-gate.sh` → exit 0.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E26",
+      "path": "- Review `light` (D91): self-check по досье §6; строка `review: self-check GREEN` в Completion Notes.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    }
+  ],
+  "portability": {
+    "tier": "committed-bundle",
+    "execution_inputs": [
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D92-p06-design-audit-remediation.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D92-p06-design-audit-remediation.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D92-p06-design-audit-remediation.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P06-design.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/research/P06-design.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/research/P06-design.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P06-design-rag.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/research/P06-design-rag.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/research/P06-design-rag.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/examples.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/examples.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/examples.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D90-p06-wire-contract.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D90-p06-wire-contract.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D90-p06-wire-contract.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design-rag/pplx-04-webhook-ssrf-threat-model.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design-rag/pplx-04-webhook-ssrf-threat-model.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design-rag/pplx-04-webhook-ssrf-threat-model.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06.3-execution/completion.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06.3-execution/completion.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06.3-execution/completion.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P06-design.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/research/P06-design.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/research/P06-design.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/examples.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/examples.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/examples.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "packages/webhooks/src/Internal/WebhookRetryPolicy.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "packages/webhooks/src/Internal/WebhookRetryPolicy.php",
+        "normalized": "packages/webhooks/src/Internal/WebhookRetryPolicy.php",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "packages/webhooks/src/Internal/WebhookDeliveryWorker.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "packages/webhooks/src/Internal/WebhookDeliveryWorker.php",
+        "normalized": "packages/webhooks/src/Internal/WebhookDeliveryWorker.php",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "packages/webhooks/src/Internal/WebhookUrlPolicy.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "packages/webhooks/src/Internal/WebhookUrlPolicy.php",
+        "normalized": "packages/webhooks/src/Internal/WebhookUrlPolicy.php",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "packages/webhooks/src/Internal/SqlWebhookSubscriptionStore.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "packages/webhooks/src/Internal/SqlWebhookSubscriptionStore.php",
+        "normalized": "packages/webhooks/src/Internal/SqlWebhookSubscriptionStore.php",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "packages/webhooks/src/Laravel/WebhookOptionsParser.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "packages/webhooks/src/Laravel/WebhookOptionsParser.php",
+        "normalized": "packages/webhooks/src/Laravel/WebhookOptionsParser.php",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "packages/webhooks/src/Internal/SqlWebhookDeliveryStore.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "packages/webhooks/src/Internal/SqlWebhookDeliveryStore.php",
+        "normalized": "packages/webhooks/src/Internal/SqlWebhookDeliveryStore.php",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "packages/webhooks/src/Internal/CurlWebhookTransport.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "packages/webhooks/src/Internal/CurlWebhookTransport.php",
+        "normalized": "packages/webhooks/src/Internal/CurlWebhookTransport.php",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "scripts/mutation-check.sh",
+        "kind": "committed",
+        "producer": null,
+        "original": "scripts/mutation-check.sh",
+        "normalized": "scripts/mutation-check.sh",
+        "path_kind": "internal",
+        "rejection": null
+      }
+    ],
+    "provenance_only": [],
+    "privacy": {
+      "minimized": true,
+      "excluded_classes": [
+        "chain-of-thought",
+        "raw-transcript-bodies",
+        "secrets",
+        "tool-payloads"
+      ]
+    },
+    "semantic_carrier": "task:plan-run",
+    "provider_renderers": {
+      "claude": "/task:plan-run 2026.09.27-№1-COREX-KERNEL P06.4",
+      "codex": "$ task:plan-run 2026.09.27-№1-COREX-KERNEL P06.4"
+    }
+  },
+  "conflicts": [],
+  "slice": {
+    "subagent_keys": [
+      "goal",
+      "must",
+      "never",
+      "done",
+      "authority",
+      "next",
+      "route",
+      "version"
+    ],
+    "root_only_keys": [
+      "evidence",
+      "portability",
+      "conflicts"
+    ]
+  },
+  "cold_start": {
+    "plan_id": "2026.09.27-№1-COREX-KERNEL",
+    "item_id": "P06.4",
+    "reads": [
+      "E8",
+      "E9",
+      "E10",
+      "E11",
+      "E12",
+      "E13",
+      "E14",
+      "E15"
+    ],
+    "carrier": "task:plan-run 2026.09.27-№1-COREX-KERNEL P06.4"
+  }
+}

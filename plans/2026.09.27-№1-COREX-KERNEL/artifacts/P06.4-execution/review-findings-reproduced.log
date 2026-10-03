@@ -1,0 +1,96 @@
+> pest '--filter=transport_rejections|denial_persistence_failure|spi_failure|wrong_peer_takes'
+
+  [39;41;1m FAIL [39;49;22m[39m CoreX\Webhooks\Tests\Feature\WebhookEgressPolicyTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mdenial persistence failure is not reclassified as dns retry[39m[90m         [39m [90m0.07s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mspi failure stops before dns and is not reclassified[39m[90m                [39m [90m0.02s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m CoreX\Webhooks\Tests\Feature\WebhookRetryBudgetTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mtransport rejections override untrusted http status without disabli[39m[90m…[39m [90m0.02s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m CoreX\Webhooks\Tests\Feature\WebhookTransportTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mwrong peer takes precedence over response overflow[39m[90m                  [39m [90m0.01s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mCoreX\Webhooks\Tests\Feature\WebhookEgressPolicyTest[22m [90m>[39m denial per…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'simulated persistence failure'[39m[39;1m
+  [39;22m[32m+'Persistence failure was hidden.'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/WebhookEgressPolicyTest.php[39m:[32m135[39m
+    131▕         try {
+    132▕             $worker->workOnce($this->scope, 'worker');
+    133▕             self::fail('Persistence failure was hidden.');
+    134▕         } catch (RuntimeException $error) {
+  ➜ 135▕             self::assertSame('simulated persistence failure', $error->getMessage());
+    136▕         }
+    137▕         self::assertSame('sending', $this->connection->table('sys_api_webhook_deliveries')->where('id', 'delivery')->value('status'));
+    138▕         self::assertNull($this->connection->table('sys_api_webhook_deliveries')->where('id', 'delivery')->value('last_error'));
+    139▕         self::assertSame('pending', $this->connection->table('sys_api_webhook_attempts')->where('delivery_id', 'delivery')->value('outcome'));
+
+  [33m1   [39m[39;1mtests/Feature/WebhookEgressPolicyTest.php[39;22m:[39;1m135[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mCoreX\Webhooks\Tests\Feature\WebhookEgressPolicyTest[22m [90m>[39m spi failur…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'policy unavailable'[39m[39;1m
+  [39;22m[32m+'SPI failure was hidden.'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/WebhookEgressPolicyTest.php[39m:[32m160[39m
+    156▕         try {
+    157▕             $worker->workOnce($this->scope, 'worker');
+    158▕             self::fail('SPI failure was hidden.');
+    159▕         } catch (RuntimeException $error) {
+  ➜ 160▕             self::assertSame('policy unavailable', $error->getMessage());
+    161▕         }
+    162▕         self::assertSame(0, $dns);
+    163▕         self::assertSame(0, $transport->sends);
+    164▕         self::assertSame('pending', $this->connection->table('sys_api_webhook_attempts')->where('delivery_id', 'delivery')->value('outcome'));
+
+  [33m1   [39m[39;1mtests/Feature/WebhookEgressPolicyTest.php[39;22m:[39;1m160[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mCoreX\Webhooks\Tests\Feature\WebhookRetryBudgetTest[22m [90m>[39m transport r…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'dead'[39m[39;1m
+  [39;22m[32m+'succeeded'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/WebhookRetryBudgetTest.php[39m:[32m115[39m
+    111▕                 $store = $this->budgetStore(20);
+    112▕                 $claim = $store->claim($this->scope, 'worker');
+    113▕                 self::assertNotNull($claim);
+    114▕                 self::assertTrue($store->finish($claim, new WebhookHttpResult($http, null, $reason, 1)));
+  ➜ 115▕                 self::assertSame('dead', $store->find($this->scope, $id)?->status);
+    116▕                 self::assertSame($reason->value, $store->find($this->scope, $id)?->lastError);
+    117▕                 self::assertSame('active', $this->connection->table('sys_api_webhook_subscriptions')->where('id', 'subscription-'.$id)->value('status'));
+    118▕             }
+    119▕         }
+
+  [33m1   [39m[39;1mtests/Feature/WebhookRetryBudgetTest.php[39;22m:[39;1m115[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mCoreX\Webhooks\Tests\Feature\WebhookTransportTest[22m [90m>[39m wrong peer ta…   
+[39;1m  Failed asserting that two variables reference the same object.
+  [39;22m[31m-CoreX\Webhooks\Enums\WebhookFailureReason Enum #721 (AddressNotAllowed, 'address_not_allowed')[39m[39;1m
+  [39;22m[32m+CoreX\Webhooks\Enums\WebhookFailureReason Enum #883 (PayloadTooLarge, 'payload_too_large')[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/WebhookTransportTest.php[39m:[32m394[39m
+    390▕     public function test_wrong_peer_takes_precedence_over_response_overflow(): void
+    391▕     {
+    392▕         CurlRuntimeFixture::$peerAddress = '93.184.216.35';
+    393▕         CurlRuntimeFixture::$responseBody = str_repeat('x', 64 * 1024 + 1);
+  ➜ 394▕         $this->assertSame(WebhookFailureReason::AddressNotAllowed, (new CurlWebhookTransport)->send($this->request())->errorCode);
+    395▕     }
+    396▕ 
+    397▕     public function test_missing_curl_fails_closed_without_attempting_dns_or_network(): void
+    398▕     {
+
+  [33m1   [39m[39;1mtests/Feature/WebhookTransportTest.php[39;22m:[39;1m394[39;22m
+
+
+  [90mTests:[39m    [31;1m4 failed[39;22m[90m (8 assertions)[39m
+  [90mDuration:[39m [39m0.19s[39m
+
+Script pest handling the test event returned with error code 1

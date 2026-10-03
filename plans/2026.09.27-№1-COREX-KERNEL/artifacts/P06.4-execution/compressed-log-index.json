@@ -1,0 +1,37 @@
+[
+  {
+    "log": "php-api-write-2.log",
+    "compressed": "php-api-write-2.log.gz",
+    "raw_sha256": "91e6539b9281df969b53506c1fb2c536aa90ec7c77ef79cd54d2c305fee868a6",
+    "raw_bytes": 3907477,
+    "gzip_bytes": 115515
+  },
+  {
+    "log": "php-api-final.log",
+    "compressed": "php-api-final.log.gz",
+    "raw_sha256": "5a7063079b232a3d60808fc03d8f1e6450581383eec7ca43fa0fa2f381489682",
+    "raw_bytes": 3907520,
+    "gzip_bytes": 115541
+  },
+  {
+    "log": "php-api.log",
+    "compressed": "php-api.log.gz",
+    "raw_sha256": "5a7063079b232a3d60808fc03d8f1e6450581383eec7ca43fa0fa2f381489682",
+    "raw_bytes": 3907520,
+    "gzip_bytes": 115541
+  },
+  {
+    "log": "php-api-write-3.log",
+    "compressed": "php-api-write-3.log.gz",
+    "raw_sha256": "91e6539b9281df969b53506c1fb2c536aa90ec7c77ef79cd54d2c305fee868a6",
+    "raw_bytes": 3907477,
+    "gzip_bytes": 115515
+  },
+  {
+    "log": "php-api-write-1.log",
+    "compressed": "php-api-write-1.log.gz",
+    "raw_sha256": "91e6539b9281df969b53506c1fb2c536aa90ec7c77ef79cd54d2c305fee868a6",
+    "raw_bytes": 3907477,
+    "gzip_bytes": 115515
+  }
+]

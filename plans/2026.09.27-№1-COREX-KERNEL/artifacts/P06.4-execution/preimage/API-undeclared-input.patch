@@ -1,0 +1,12 @@
+diff --git a/packages/operations/src/Invocation/Internal/OperationDispatcher.php b/packages/operations/src/Invocation/Internal/OperationDispatcher.php
+--- a/packages/operations/src/Invocation/Internal/OperationDispatcher.php
++++ b/packages/operations/src/Invocation/Internal/OperationDispatcher.php
+@@ -117,7 +117,7 @@
+ 
+         $allowed = array_unique(array_map(static fn (string $key): string => explode('.', $key)[0], array_keys($operation->inputRules)));
+ 
+-        if (array_diff(array_keys($input), $allowed) !== []) {
++        if (false && array_diff(array_keys($input), $allowed) !== []) {
+             throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'Input contains undeclared fields.');
+         }
+ 

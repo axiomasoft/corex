@@ -1,0 +1,19 @@
+{
+  "wire.json": {
+    "errors": "changed"
+  },
+  "events.json": {},
+  "php-surface.json": {
+    "CoreX\\Webhooks\\Internal\\WebhookDeliveryWorker": "changed",
+    "CoreX\\Webhooks\\Enums\\WebhookFailureReason": "added",
+    "CoreX\\Webhooks\\Internal\\PermitPublicEgressPolicy": "added",
+    "CoreX\\Webhooks\\Data\\WebhookHttpResult": "changed",
+    "CoreX\\Webhooks\\Internal\\SqlWebhookSubscriptionStore": "changed",
+    "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode": "changed",
+    "CoreX\\Webhooks\\Data\\WebhookDestination": "added",
+    "CoreX\\Webhooks\\Internal\\WebhookRetryPolicy": "changed",
+    "CoreX\\Webhooks\\Data\\WebhookOptions": "changed",
+    "CoreX\\Webhooks\\Contracts\\WebhookEgressPolicy": "added"
+  },
+  "routes.json": "identical"
+}

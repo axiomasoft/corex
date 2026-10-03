@@ -1,0 +1,38 @@
+{
+  "model": "grok-4.7",
+  "effort": "low",
+  "requested_session_id": "a4a00f9b-36f7-48f4-955b-a37709c352fc",
+  "packet_sha256": "4437e0a3f8d07f36ca58481f053e7dd1356dfe0b782cf98f9c0ffefb77530488",
+  "source_sha256": {
+    "packages/webhooks/src/Internal/WebhookRetryPolicy.php": "5cceed1eb24347608e51f6f5de47c4b9345ac2221f5bb4e76b6db30af0316f61",
+    "packages/webhooks/src/Internal/WebhookDeliveryWorker.php": "3b56c11339c425fecddafa7e8982b1ef47442260350f1c3cdea0afe907610141",
+    "packages/webhooks/src/Internal/SqlWebhookDeliveryStore.php": "13720a240ea7d6f76c461aa7979b8e2fdb4fc52cb3825bc368b9d1e38e898073",
+    "packages/webhooks/src/Internal/CurlWebhookTransport.php": "3f9a48b624ef5d70d4f01c2b05f5ef8d9b479fd01f08ed1d3f43bfbbc9f63012"
+  },
+  "actual_session_id": "a4a00f9b-36f7-48f4-955b-a37709c352fc",
+  "verdict": "GREEN",
+  "final_candidate": "2a0265d57c93514f518ace028999debe52a4df2d",
+  "byte_delta": {
+    "packages/webhooks/src/Internal/WebhookRetryPolicy.php": {
+      "reviewed": "5cceed1eb24347608e51f6f5de47c4b9345ac2221f5bb4e76b6db30af0316f61",
+      "final": "eb7685fcd32eec6169089a861b09438c1a1bd558f4bbdf94142f5fa48fbf0589",
+      "delta": "if (?bool) becomes if (?bool === true), matching PHPStan strict boolean rule",
+      "risk_delta": "none; null/false both refuse branch, true enters; classification and effects identical"
+    }
+  },
+  "unchanged_initial_review_bytes": {
+    "packages/webhooks/src/Enums/WebhookFailureReason.php": "971d61158e9e398da8af44a1f116d6f1f45c80e35584ba77bb4f771c27c71264",
+    "packages/webhooks/src/Data/WebhookDestination.php": "873f8b2122a972538c041e20258c26a86e5e22ce0115d75b9decc97df918a267",
+    "packages/webhooks/src/Laravel/WebhookOptionsParser.php": "a2902dc950a9227e88d3c98f180c7853c7241d69387b3ab9a9873c74f5f7805a",
+    "packages/webhooks/src/Data/WebhookOptions.php": "aaee67e50acbc069489ae9911cfcbbadc7998674007ef385c413f2caf39bf6de",
+    "packages/webhooks/src/Data/WebhookHttpResult.php": "e2cef36fd8e05f95e6a1837e69730df3a09bec988fdbd34c4524a5d89b76653b",
+    "packages/webhooks/src/Contracts/WebhookEgressPolicy.php": "a447a7a8d06d53e426f52d2842f4a1f6fdc6b9835aaf849cae6644d76d6a2f20",
+    "packages/webhooks/src/Internal/PermitPublicEgressPolicy.php": "413cdb2405f4bf49f251e29c6c47f3563b7ceed731cb16d159063f884ffc1a79",
+    "packages/webhooks/src/Internal/SqlWebhookSubscriptionStore.php": "58fb64e0580e822344c9d0373ceff0db46fc9f1633b64a641a17ebaaa7ef95d7",
+    "packages/webhooks/src/Internal/WebhookFanout.php": "ab76e94ab3ab2c73212cfe8992d9eabe9ee06d84c702121721919926982e096e",
+    "packages/webhooks/src/Laravel/WebhookBindingsRegistrar.php": "6a15ef2af6b4d4220f12a309188ec2eba5699707191d89ee3a198b2c81bed8ac",
+    "packages/webhooks/src/Internal/WebhookManagement.php": "739e35c354aa3487f1b6fca86fd22216bac6ea5962e79ac721600554d9066e9b",
+    "packages/webhooks/src/Internal/WebhookReplay.php": "0e5df5ea25a12c1d67ebc68208c1533c37479eb4cba0368dfd7e2dee9e05d8fb",
+    "packages/webhooks/src/Internal/WebhookRetention.php": "03ab09d7c2e58a0fb917d125d556c699f74931d0478a22215268e62530c415e6"
+  }
+}
