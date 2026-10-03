@@ -7,6 +7,7 @@ namespace CoreX\Tools\Internal;
 use CoreX\Operations\Validation\Data\JsonObject;
 use CoreX\Operations\Validation\Data\JsonValue;
 use CoreX\Operations\Validation\Data\SchemaHandle;
+use CoreX\Tools\Errors\Enums\ToolsErrorCode;
 
 foreach ([
     __DIR__.'/../../vendor/autoload.php',
@@ -85,11 +86,10 @@ final class ToolSchemaWorker
             }
 
             self::respond(['ok' => false, 'error' => 'unknown_action']);
-        } catch (Throwable $exception) {
-            self::respond([
-                'ok' => false,
-                'error' => $exception->getMessage(),
-            ]);
+        } catch (ToolSchemaFailure $exception) {
+            self::respond(['ok' => false, 'error' => $exception->errorCode->value]);
+        } catch (Throwable) {
+            self::respond(['ok' => false, 'error' => ToolsErrorCode::SchemaLimit->value]);
         }
     }
 

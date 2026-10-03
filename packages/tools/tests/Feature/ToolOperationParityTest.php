@@ -33,6 +33,7 @@ use CoreX\Tools\Contracts\ToolInvoker;
 use CoreX\Tools\Contracts\ToolPolicy;
 use CoreX\Tools\Data\ToolCall;
 use CoreX\Tools\Data\ToolDescriptor;
+use CoreX\Tools\Data\ToolOutcome;
 use CoreX\Tools\Data\ToolResult;
 use CoreX\Tools\Internal\ToolDescriptorFactory;
 use CoreX\Tools\ToolServiceProvider;
@@ -107,7 +108,7 @@ final class ToolOperationParityTest extends TestCase
         $tool = $this->app->make(ToolInvoker::class)->invoke($this->context(), $this->toolCall());
 
         self::assertSame(200, $http->getStatusCode());
-        self::assertSame('committed', $tool->outcome);
+        self::assertSame(ToolOutcome::Committed, $tool->outcome);
         self::assertSame(2, NoteHandler::$calls);
         self::assertSame($http->getData(true)['data']['actor'], json_decode((string) $tool->structuredData?->canonicalJson, true)['actor']);
         self::assertSame($http->getData(true)['data']['account'], json_decode((string) $tool->structuredData?->canonicalJson, true)['account']);

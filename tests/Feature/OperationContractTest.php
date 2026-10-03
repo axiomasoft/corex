@@ -34,6 +34,7 @@ use CoreX\Tools\Contracts\ToolInvoker;
 use CoreX\Tools\Contracts\ToolPolicy;
 use CoreX\Tools\Data\ToolCall;
 use CoreX\Tools\Data\ToolDescriptor;
+use CoreX\Tools\Data\ToolOutcome;
 use CoreX\Tools\Data\ToolResult;
 use CoreX\Tools\Internal\ToolDescriptorFactory;
 use CoreX\Tools\ToolServiceProvider;
@@ -169,7 +170,7 @@ final class OperationContractTest extends TestCase
             new ResolvedContext($this->tenants->current(), $this->identity, new InvocationMetadata('p13-export-tool', 'v1', 'notes.export', 'POST')),
             new ToolCall('notes.export', 'v1', ToolDescriptorFactory::fromDeclaration($asyncDeclaration)->contractHash, new JsonObject('{}'), 'p13-export-tool', operationKey: 'p13-export-1'),
         );
-        self::assertSame(ToolResult::OUTCOME_COMMITTED, $asyncTool->outcome, (string) $asyncTool->errorCode);
+        self::assertSame(ToolOutcome::Committed, $asyncTool->outcome, (string) $asyncTool->errorCode);
         self::assertTrue($asyncTool->replayed);
         self::assertSame($async->json('data'), json_decode((string) $asyncTool->structuredData?->canonicalJson, true));
 
@@ -180,7 +181,7 @@ final class OperationContractTest extends TestCase
             'notes.create', 'v1', $descriptor->contractHash,
             new JsonObject(JsonCanonical::encode(['title' => 'Tool'])), 'p13-tool', operationKey: 'p13-tool-1',
         ));
-        self::assertSame(ToolResult::OUTCOME_COMMITTED, $tool->outcome, (string) $tool->errorCode);
+        self::assertSame(ToolOutcome::Committed, $tool->outcome, (string) $tool->errorCode);
         self::assertSame('account-a', json_decode((string) $tool->structuredData?->canonicalJson, true)['account']);
         self::assertSame(1, P13QueryHandler::$calls);
         self::assertSame(2, P13CommandHandler::$calls);

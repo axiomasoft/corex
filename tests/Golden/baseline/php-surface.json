@@ -79393,22 +79393,92 @@
         },
         "readonly": true
     },
-    "CoreX\\Tools\\Data\\ToolResult": {
+    "CoreX\\Tools\\Data\\ToolOutcome": {
         "abstract": false,
         "constants": {
-            "OUTCOME_COMMITTED": {
-                "type": "string",
-                "value": "committed"
+            "Committed": {
+                "type": "CoreX\\Tools\\Data\\ToolOutcome",
+                "value": {
+                    "enum": "CoreX\\Tools\\Data\\ToolOutcome",
+                    "case": "Committed",
+                    "value": "committed"
+                }
             },
-            "OUTCOME_NOT_EXECUTED": {
-                "type": "string",
-                "value": "not-executed"
+            "NotExecuted": {
+                "type": "CoreX\\Tools\\Data\\ToolOutcome",
+                "value": {
+                    "enum": "CoreX\\Tools\\Data\\ToolOutcome",
+                    "case": "NotExecuted",
+                    "value": "not-executed"
+                }
             },
-            "OUTCOME_UNKNOWN": {
-                "type": "string",
-                "value": "unknown"
+            "Unknown": {
+                "type": "CoreX\\Tools\\Data\\ToolOutcome",
+                "value": {
+                    "enum": "CoreX\\Tools\\Data\\ToolOutcome",
+                    "case": "Unknown",
+                    "value": "unknown"
+                }
             }
         },
+        "final": true,
+        "interfaces": [
+            "BackedEnum",
+            "UnitEnum"
+        ],
+        "internal": false,
+        "kind": "enum",
+        "methods": {
+            "cases": {
+                "params": [],
+                "return": "array",
+                "static": true
+            },
+            "from": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "static",
+                "static": true
+            },
+            "tryFrom": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "?static",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "name": {
+                "name": "name",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "value": {
+                "name": "value",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\Tools\\Data\\ToolResult": {
+        "abstract": false,
+        "constants": [],
         "final": true,
         "interfaces": [],
         "internal": false,
@@ -79419,7 +79489,7 @@
                     {
                         "byRef": false,
                         "name": "outcome",
-                        "type": "string",
+                        "type": "CoreX\\Tools\\Data\\ToolOutcome",
                         "variadic": false
                     },
                     {
@@ -79487,7 +79557,7 @@
                 "name": "outcome",
                 "readonly": true,
                 "static": false,
-                "type": "string"
+                "type": "CoreX\\Tools\\Data\\ToolOutcome"
             },
             "replayed": {
                 "name": "replayed",
@@ -79503,6 +79573,195 @@
             }
         },
         "readonly": true
+    },
+    "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode": {
+        "abstract": false,
+        "constants": {
+            "ApprovalInvalid": {
+                "type": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+                    "case": "ApprovalInvalid",
+                    "value": "tools.approval_invalid"
+                }
+            },
+            "ApprovalRequired": {
+                "type": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+                    "case": "ApprovalRequired",
+                    "value": "tools.approval_required"
+                }
+            },
+            "Forbidden": {
+                "type": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+                    "case": "Forbidden",
+                    "value": "tools.forbidden"
+                }
+            },
+            "IdempotencyConflict": {
+                "type": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+                    "case": "IdempotencyConflict",
+                    "value": "tools.idempotency_conflict"
+                }
+            },
+            "InputInvalid": {
+                "type": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+                    "case": "InputInvalid",
+                    "value": "tools.input_invalid"
+                }
+            },
+            "InternalError": {
+                "type": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+                    "case": "InternalError",
+                    "value": "tools.internal_error"
+                }
+            },
+            "OutputContractFailed": {
+                "type": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+                    "case": "OutputContractFailed",
+                    "value": "tools.output_contract_failed"
+                }
+            },
+            "RateLimited": {
+                "type": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+                    "case": "RateLimited",
+                    "value": "tools.rate_limited"
+                }
+            },
+            "SchemaLimit": {
+                "type": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+                    "case": "SchemaLimit",
+                    "value": "tools.schema_limit"
+                }
+            },
+            "SchemaUnavailable": {
+                "type": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+                    "case": "SchemaUnavailable",
+                    "value": "tools.schema_unavailable"
+                }
+            },
+            "ToolRevisionConflict": {
+                "type": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+                    "case": "ToolRevisionConflict",
+                    "value": "tools.tool_revision_conflict"
+                }
+            },
+            "ToolUnavailable": {
+                "type": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+                    "case": "ToolUnavailable",
+                    "value": "tools.tool_unavailable"
+                }
+            },
+            "UnknownEffect": {
+                "type": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+                    "case": "UnknownEffect",
+                    "value": "tools.unknown_effect"
+                }
+            }
+        },
+        "final": true,
+        "interfaces": [
+            "BackedEnum",
+            "CoreX\\Errors\\Contracts\\ErrorCode",
+            "UnitEnum"
+        ],
+        "internal": false,
+        "kind": "enum",
+        "methods": {
+            "cases": {
+                "params": [],
+                "return": "array",
+                "static": true
+            },
+            "from": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "static",
+                "static": true
+            },
+            "tryFrom": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "?static",
+                "static": true
+            },
+            "value": {
+                "params": [],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "name": {
+                "name": "name",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "value": {
+                "name": "value",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\Tools\\Errors\\Internal\\PackageProblemDefinitions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Errors\\Contracts\\ProblemDefinitionProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "definitions": {
+                "params": [],
+                "return": "iterable",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
     },
     "CoreX\\Tools\\Internal\\ApiToolValidator": {
         "abstract": false,
@@ -80116,6 +80375,51 @@
         "parent": null,
         "properties": [],
         "readonly": true
+    },
+    "CoreX\\Tools\\Internal\\ToolSchemaFailure": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "Stringable",
+            "Throwable"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "errorCode",
+                        "type": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "limit": {
+                "params": [],
+                "return": "self",
+                "static": true
+            },
+            "unavailable": {
+                "params": [],
+                "return": "self",
+                "static": true
+            }
+        },
+        "parent": "RuntimeException",
+        "properties": {
+            "errorCode": {
+                "name": "errorCode",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode"
+            }
+        },
+        "readonly": false
     },
     "CoreX\\Tools\\Internal\\ToolSchemaSupervisor": {
         "abstract": false,

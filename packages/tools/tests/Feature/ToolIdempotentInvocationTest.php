@@ -42,6 +42,7 @@ use CoreX\Tools\Contracts\ToolInvoker;
 use CoreX\Tools\Contracts\ToolPolicy;
 use CoreX\Tools\Data\ToolCall;
 use CoreX\Tools\Data\ToolDescriptor;
+use CoreX\Tools\Data\ToolOutcome;
 use CoreX\Tools\Data\ToolResult;
 use CoreX\Tools\Internal\ToolDescriptorFactory;
 use CoreX\Tools\ToolServiceProvider;
@@ -184,7 +185,7 @@ final class ToolIdempotentInvocationTest extends TestCase
 
         self::assertSame(200, $http->getStatusCode());
         self::assertSame(200, $httpReplay->getStatusCode());
-        self::assertSame(ToolResult::OUTCOME_COMMITTED, $tool->outcome);
+        self::assertSame(ToolOutcome::Committed, $tool->outcome);
         self::assertTrue($tool->replayed);
         self::assertSame(['name' => 'alpha'], json_decode((string) $tool->structuredData?->canonicalJson, true, flags: JSON_THROW_ON_ERROR));
         self::assertSame(1, ToolIdempotentInvocationIdempotentHttpHandler::$calls);

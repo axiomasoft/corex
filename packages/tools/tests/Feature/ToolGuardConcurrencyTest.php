@@ -23,7 +23,7 @@ use CoreX\Tools\Contracts\ToolExecutionGuard;
 use CoreX\Tools\Contracts\ToolInvoker;
 use CoreX\Tools\Contracts\ToolPolicy;
 use CoreX\Tools\Data\ToolCall;
-use CoreX\Tools\Data\ToolResult;
+use CoreX\Tools\Data\ToolOutcome;
 use CoreX\Tools\Internal\ToolDescriptorFactory;
 use CoreX\Tools\Tests\Support\ToolGuardFixture;
 use CoreX\Tools\Tests\Support\ToolPolicyFixture;
@@ -128,7 +128,7 @@ final class ToolGuardConcurrencyTest extends TestCase
         $first = $invoker->invoke($context, $call);
         $second = $invoker->invoke($context, $call);
 
-        self::assertSame(ToolResult::OUTCOME_COMMITTED, $first->outcome);
+        self::assertSame(ToolOutcome::Committed, $first->outcome);
         self::assertTrue($second->replayed);
         self::assertSame(1, MutatingHandler::$calls);
         self::assertSame(1, DB::table('tool_effects')->count());

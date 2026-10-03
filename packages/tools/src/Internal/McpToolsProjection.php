@@ -12,7 +12,9 @@ use CoreX\Tools\Contracts\ToolCatalogue;
 use CoreX\Tools\Contracts\ToolInvoker;
 use CoreX\Tools\Data\ToolCall;
 use CoreX\Tools\Data\ToolDescriptor;
+use CoreX\Tools\Data\ToolOutcome;
 use CoreX\Tools\Data\ToolResult;
+use CoreX\Tools\Errors\Enums\ToolsErrorCode;
 
 /** Fake in-memory MCP2025-11-25 tools/list and tools/call parity adapter. */
 final class McpToolsProjection
@@ -115,7 +117,7 @@ final class McpToolsProjection
      */
     private function mapResult(ToolResult $result): array
     {
-        if ($result->outcome === ToolResult::OUTCOME_COMMITTED && $result->structuredData !== null) {
+        if ($result->outcome === ToolOutcome::Committed && $result->structuredData !== null) {
             return [
                 'isError' => false,
                 'structuredContent' => JsonCanonical::decodeObject($result->structuredData->canonicalJson),
@@ -127,8 +129,8 @@ final class McpToolsProjection
         return [
             'isError' => true,
             'structuredContent' => [
-                'errorCode' => $result->errorCode ?? 'internal_error',
-                'outcome' => $result->outcome,
+                'errorCode' => $result->errorCode ?? ToolsErrorCode::InternalError->value,
+                'outcome' => $result->outcome->value,
                 'operationKey' => $result->operationKey,
                 'replayed' => $result->replayed,
             ],

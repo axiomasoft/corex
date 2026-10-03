@@ -12,7 +12,9 @@ use CoreX\Operations\Validation\Laravel\JsonObjectFactory;
 use CoreX\Tools\Contracts\ToolExecutionGuard;
 use CoreX\Tools\Data\ToolCall;
 use CoreX\Tools\Data\ToolDescriptor;
+use CoreX\Tools\Data\ToolOutcome;
 use CoreX\Tools\Data\ToolResult;
+use CoreX\Tools\Errors\Enums\ToolsErrorCode;
 use CoreX\Tools\Internal\ToolSchemaSupervisor;
 use Illuminate\Support\Facades\DB;
 use LogicException;
@@ -41,7 +43,7 @@ final class ToolGuardFixture implements ToolExecutionGuard
     public function execute(ToolDescriptor $tool, RequestContext $context, ToolCall $call, Closure $effect): ToolResult
     {
         if ($this->visibilityRevoked) {
-            return $this->denied('forbidden', $call);
+            return $this->denied(errorCode: ToolsErrorCode::Forbidden, call: $call);
         }
 
         $binding = $this->bindingDigest(tool: $tool, context: $context, call: $call);
@@ -101,22 +103,22 @@ final class ToolGuardFixture implements ToolExecutionGuard
             $this->effectCount++;
             $result = $effect();
 
-            if ($result->outcome === ToolResult::OUTCOME_COMMITTED) {
+            if ($result->outcome === ToolOutcome::Committed) {
                 return $result;
             }
 
             return new ToolResult(
-                outcome: ToolResult::OUTCOME_UNKNOWN,
+                outcome: ToolOutcome::Unknown,
                 structuredData: null,
-                errorCode: 'unknown_effect',
+                errorCode: ToolsErrorCode::UnknownEffect->value,
                 operationKey: $operationKey,
                 replayed: false,
             );
         } catch (Throwable) {
             return new ToolResult(
-                outcome: ToolResult::OUTCOME_UNKNOWN,
+                outcome: ToolOutcome::Unknown,
                 structuredData: null,
-                errorCode: 'unknown_effect',
+                errorCode: ToolsErrorCode::UnknownEffect->value,
                 operationKey: $operationKey,
                 replayed: false,
             );
@@ -140,13 +142,13 @@ final class ToolGuardFixture implements ToolExecutionGuard
 
             if ($existing !== null) {
                 if ($existing->binding_digest !== $binding) {
-                    return $this->denied('idempotency_conflict', $call);
+                    return $this->denied(errorCode: ToolsErrorCode::IdempotencyConflict, call: $call);
                 }
 
                 $payload = json_decode((string) $existing->result_json, true, 512, JSON_THROW_ON_ERROR);
 
                 return new ToolResult(
-                    outcome: ToolResult::OUTCOME_COMMITTED,
+                    outcome: ToolOutcome::Committed,
                     structuredData: JsonObjectFactory::fromArray($payload),
                     errorCode: null,
                     operationKey: $operationKey,
@@ -162,7 +164,7 @@ final class ToolGuardFixture implements ToolExecutionGuard
 
             $result = $this->finalize(tool: $tool, call: $call, effect: $effect);
 
-            if ($result->outcome !== ToolResult::OUTCOME_COMMITTED || $result->structuredData === null) {
+            if ($result->outcome !== ToolOutcome::Committed || $result->structuredData === null) {
                 return $result;
             }
 
@@ -181,14 +183,14 @@ final class ToolGuardFixture implements ToolExecutionGuard
     private function finalize(ToolDescriptor $tool, ToolCall $call, Closure $effect): ToolResult
     {
         if ($this->requiredResourceVersion !== $this->resourceVersion) {
-            return $this->denied('approval_invalid', $call);
+            return $this->denied(errorCode: ToolsErrorCode::ApprovalInvalid, call: $call);
         }
 
         if ($this->enforceOutputInTransaction && ! $this->simulateExternalCommit) {
             $runner = function () use ($tool, $call, $effect): ToolResult {
                 $result = $effect();
 
-                if ($result->outcome !== ToolResult::OUTCOME_COMMITTED || $result->structuredData === null) {
+                if ($result->outcome !== ToolOutcome::Committed || $result->structuredData === null) {
                     return $result;
                 }
 
@@ -201,14 +203,10 @@ final class ToolGuardFixture implements ToolExecutionGuard
                     );
 
                     if (! $validation->valid) {
-                        throw new RuntimeException('output_contract_failed');
+                        return $this->denied(errorCode: ToolsErrorCode::OutputContractFailed, call: $call);
                     }
-                } catch (RuntimeException $exception) {
-                    if ($exception->getMessage() === 'output_contract_failed') {
-                        return $this->denied('output_contract_failed', $call);
-                    }
-
-                    return $this->denied('internal_error', $call);
+                } catch (RuntimeException) {
+                    return $this->denied(errorCode: ToolsErrorCode::InternalError, call: $call);
                 }
 
                 return $result;
@@ -223,11 +221,11 @@ final class ToolGuardFixture implements ToolExecutionGuard
 
         $result = $effect();
 
-        if ($this->simulateExternalCommit && $result->errorCode === 'output_contract_failed') {
+        if ($this->simulateExternalCommit && $result->errorCode === ToolsErrorCode::OutputContractFailed->value) {
             return new ToolResult(
-                outcome: ToolResult::OUTCOME_COMMITTED,
+                outcome: ToolOutcome::Committed,
                 structuredData: null,
-                errorCode: 'output_contract_failed',
+                errorCode: ToolsErrorCode::OutputContractFailed->value,
                 operationKey: $call->operationKey,
                 replayed: false,
             );
@@ -239,26 +237,26 @@ final class ToolGuardFixture implements ToolExecutionGuard
     private function assertApproval(string $binding, ToolCall $call): ?ToolResult
     {
         if ($this->approvedProofDigest !== null && $this->approvedProofDigest !== $binding) {
-            return $this->denied('approval_invalid', $call);
+            return $this->denied(errorCode: ToolsErrorCode::ApprovalInvalid, call: $call);
         }
 
         if ($call->clientProof !== null && $call->clientProof !== $binding) {
-            return $this->denied('approval_invalid', $call);
+            return $this->denied(errorCode: ToolsErrorCode::ApprovalInvalid, call: $call);
         }
 
         if ($this->revokeBeforeEffect) {
-            return $this->denied('approval_invalid', $call);
+            return $this->denied(errorCode: ToolsErrorCode::ApprovalInvalid, call: $call);
         }
 
         return null;
     }
 
-    private function denied(string $errorCode, ToolCall $call): ToolResult
+    private function denied(ToolsErrorCode $errorCode, ToolCall $call): ToolResult
     {
         return new ToolResult(
-            outcome: ToolResult::OUTCOME_NOT_EXECUTED,
+            outcome: ToolOutcome::NotExecuted,
             structuredData: null,
-            errorCode: $errorCode,
+            errorCode: $errorCode->value,
             operationKey: $call->operationKey,
             replayed: false,
         );

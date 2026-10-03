@@ -1,3 +1,10 @@
+## Unreleased — tool error taxonomy
+
+- Breaking (PLAN3.P06.2, D90/D92/D93, pre-1.0): tool runtime and guard refusals use thirteen registered `tools.*` codes, including approval, visibility, idempotency and unknown-effect refusals. Forwarded operations codes retain their namespace; MCP serializes the registered code.
+- Breaking (PLAN3.P06.2): `ToolResult::$outcome` and its constructor now require `ToolOutcome` (`NotExecuted`, `Committed`, `Unknown`); the three former string constants are removed. MCP retains the same three wire outcome strings.
+- Schema startup and resource failures carry typed `ToolSchemaFailure::$errorCode`; diagnostic exception text no longer determines tool errors. Guard policy, effect count, approval checks and replay semantics remain unchanged.
+- PHP API manifest and Golden records declare the enum additions and DTO type change.
+
 ## Unreleased — kernel package and API migration
 
 - Breaking (PLAN3.P02–P04, pre-1.0): Extracted tools into their own CoreX\Tools package and provider; ToolCatalogue, ToolInvoker, ToolPolicy and schema/execution ports exchange ToolCall, ToolDescriptor and ToolResult DTOs. Execution and schema worker implementations remain Internal.

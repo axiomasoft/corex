@@ -40,6 +40,7 @@ use CoreX\Tools\Contracts\ToolInvoker;
 use CoreX\Tools\Contracts\ToolPolicy;
 use CoreX\Tools\Data\ToolCall;
 use CoreX\Tools\Data\ToolDescriptor;
+use CoreX\Tools\Data\ToolOutcome;
 use CoreX\Tools\Data\ToolResult;
 use CoreX\Tools\Internal\ToolDescriptorFactory;
 use CoreX\Tools\ToolServiceProvider;
@@ -223,7 +224,7 @@ final class ToolAuthorizationLayersTest extends TestCase
         $toolData = JsonCanonical::decodeObject((string) $tool->structuredData?->canonicalJson);
 
         self::assertSame(200, $http->getStatusCode());
-        self::assertSame(ToolResult::OUTCOME_COMMITTED, $tool->outcome);
+        self::assertSame(ToolOutcome::Committed, $tool->outcome);
         self::assertSame('account-a', $httpData['account']);
         self::assertSame('account-a', $toolData['account']);
         self::assertArrayNotHasKey('owner', $httpData);

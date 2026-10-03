@@ -44,6 +44,7 @@ use CoreX\Tools\Contracts\ToolInvoker;
 use CoreX\Tools\Contracts\ToolPolicy;
 use CoreX\Tools\Data\ToolCall;
 use CoreX\Tools\Data\ToolDescriptor;
+use CoreX\Tools\Data\ToolOutcome;
 use CoreX\Tools\Data\ToolResult;
 use CoreX\Tools\Internal\ToolDescriptorFactory;
 use CoreX\Tools\ToolServiceProvider;
@@ -138,7 +139,7 @@ final class ToolCostInvocationTest extends TestCase
         $httpCost = $http->getData(true)['meta']['cost'];
         $toolCost = JsonDocuments::map($tool->metadata)['cost'];
         self::assertSame(200, $http->getStatusCode());
-        self::assertSame(ToolResult::OUTCOME_COMMITTED, $tool->outcome);
+        self::assertSame(ToolOutcome::Committed, $tool->outcome);
         self::assertSame(2, ToolCostInvocationCostInvocationHandler::$calls);
         self::assertSame(['requested', 'actual', 'mode', 'throttle'], array_keys($httpCost));
         self::assertSame(array_keys($httpCost), array_keys($toolCost));

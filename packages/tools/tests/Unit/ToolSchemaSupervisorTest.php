@@ -8,11 +8,12 @@ use CoreX\Operations\Validation\Data\JsonObject;
 use CoreX\Operations\Validation\Data\JsonValue;
 use CoreX\Operations\Validation\Data\SchemaHandle;
 use CoreX\Operations\Validation\Laravel\SchemaProfile;
+use CoreX\Tools\Errors\Enums\ToolsErrorCode;
+use CoreX\Tools\Internal\ToolSchemaFailure;
 use CoreX\Tools\Internal\ToolSchemaSupervisor;
 use LogicException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 
 final class ToolSchemaSupervisorTest extends TestCase
 {
@@ -90,15 +91,15 @@ final class ToolSchemaSupervisorTest extends TestCase
     }
 
     #[DataProvider('failedWorkers')]
-    public function test_failures_are_closed_and_processes_reaped(string $mode, string $error): void
+    public function test_failures_are_closed_and_processes_reaped(string $mode, ToolsErrorCode $error): void
     {
         $supervisor = $this->supervisor($mode, startupMs: $mode === 'no-ready' ? 200 : null);
 
         try {
             $this->validate($supervisor, $mode === 'blocked-input' ? '"'.str_repeat('x', 256 * 1024).'"' : '{}');
             self::fail('Worker failure admitted a result.');
-        } catch (RuntimeException $exception) {
-            self::assertSame($error, $exception->getMessage());
+        } catch (ToolSchemaFailure $exception) {
+            self::assertSame($error, $exception->errorCode);
         }
         $this->assertWorkerStopped();
     }
@@ -106,21 +107,21 @@ final class ToolSchemaSupervisorTest extends TestCase
     public static function failedWorkers(): array
     {
         return [
-            ['no-ready', 'schema_unavailable'],
-            ['bad-ready', 'schema_unavailable'],
-            ['eof', 'schema_unavailable'],
-            ['timeout', 'schema_limit'],
-            ['ignore-terminate', 'schema_limit'],
-            ['blocked-input', 'schema_limit'],
-            ['memory', 'schema_limit'],
-            ['malformed', 'schema_limit'],
-            ['truncated', 'schema_limit'],
-            ['wrong-shape', 'schema_limit'],
-            ['wrong-errors', 'schema_limit'],
-            ['missing-errors', 'schema_limit'],
-            ['contradictory', 'schema_limit'],
-            ['trailing', 'schema_limit'],
-            ['failed', 'schema_limit'],
+            ['no-ready', ToolsErrorCode::SchemaUnavailable],
+            ['bad-ready', ToolsErrorCode::SchemaUnavailable],
+            ['eof', ToolsErrorCode::SchemaUnavailable],
+            ['timeout', ToolsErrorCode::SchemaLimit],
+            ['ignore-terminate', ToolsErrorCode::SchemaLimit],
+            ['blocked-input', ToolsErrorCode::SchemaLimit],
+            ['memory', ToolsErrorCode::SchemaLimit],
+            ['malformed', ToolsErrorCode::SchemaLimit],
+            ['truncated', ToolsErrorCode::SchemaLimit],
+            ['wrong-shape', ToolsErrorCode::SchemaLimit],
+            ['wrong-errors', ToolsErrorCode::SchemaLimit],
+            ['missing-errors', ToolsErrorCode::SchemaLimit],
+            ['contradictory', ToolsErrorCode::SchemaLimit],
+            ['trailing', ToolsErrorCode::SchemaLimit],
+            ['failed', ToolsErrorCode::SchemaLimit],
         ];
     }
 
@@ -131,16 +132,16 @@ final class ToolSchemaSupervisorTest extends TestCase
         try {
             $supervisor->admit(new JsonObject('{"type":"object"}'), SchemaProfile::TOOL_SCHEMA_V1);
             self::fail('Malformed handle admitted.');
-        } catch (RuntimeException $exception) {
-            self::assertSame('schema_limit', $exception->getMessage());
+        } catch (ToolSchemaFailure $exception) {
+            self::assertSame(ToolsErrorCode::SchemaLimit, $exception->errorCode);
         }
         $this->assertWorkerStopped();
     }
 
     public function test_missing_executable_is_unavailable(): void
     {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('schema_unavailable');
+        $this->expectException(ToolSchemaFailure::class);
+        $this->expectExceptionMessage(ToolsErrorCode::SchemaUnavailable->value);
         set_error_handler(static function (): never {
             throw new LogicException('Spawn warning escaped the supervisor.');
         }, E_WARNING);

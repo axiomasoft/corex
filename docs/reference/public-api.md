@@ -882,7 +882,9 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Tools\Data\ToolCall` | api | 1.0 |
 | `CoreX\Tools\Data\ToolCatalogueView` | api | 1.0 |
 | `CoreX\Tools\Data\ToolDescriptor` | api | 1.0 |
+| `CoreX\Tools\Data\ToolOutcome` | api | 1.0 |
 | `CoreX\Tools\Data\ToolResult` | api | 1.0 |
+| `CoreX\Tools\Errors\Enums\ToolsErrorCode` | api | 1.0 |
 | `CoreX\Tools\ToolServiceProvider` | spi-call | 1.0 |
 
 ## axiomasoft/corex-transfer

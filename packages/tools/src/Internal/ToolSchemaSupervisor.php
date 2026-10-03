@@ -10,9 +10,9 @@ use CoreX\Operations\Validation\Data\SchemaHandle;
 use CoreX\Operations\Validation\Data\SchemaValidation;
 use CoreX\Operations\Validation\Laravel\SchemaProfile;
 use CoreX\Tools\Contracts\ToolSchemaValidator;
+use CoreX\Tools\Errors\Enums\ToolsErrorCode;
 use JsonException;
 use Override;
-use RuntimeException;
 
 /** Subprocess supervisor enforcing validation-only memory and deadline bounds. */
 final class ToolSchemaSupervisor implements ToolSchemaValidator
@@ -30,7 +30,7 @@ final class ToolSchemaSupervisor implements ToolSchemaValidator
     public function admit(JsonObject $schema, string $profile): SchemaHandle
     {
         if (! OpisToolSchemaValidator::isAvailable()) {
-            throw new RuntimeException('schema_unavailable');
+            throw ToolSchemaFailure::unavailable();
         }
 
         $response = $this->dispatch([
@@ -42,13 +42,13 @@ final class ToolSchemaSupervisor implements ToolSchemaValidator
         if (! isset($response['ok']) || $response['ok'] !== true) {
             $error = $response['error'] ?? null;
 
-            throw new RuntimeException(is_string($error) ? $error : 'schema_limit');
+            throw new ToolSchemaFailure(errorCode: $error === ToolsErrorCode::SchemaUnavailable->value ? ToolsErrorCode::SchemaUnavailable : ToolsErrorCode::SchemaLimit);
         }
 
         $handle = $response['handle'] ?? null;
 
         if (! $this->validHandle($handle)) {
-            throw new RuntimeException('schema_limit');
+            throw ToolSchemaFailure::limit();
         }
 
         return new SchemaHandle(
@@ -62,7 +62,7 @@ final class ToolSchemaSupervisor implements ToolSchemaValidator
     public function validate(SchemaHandle $schema, JsonValue $value): SchemaValidation
     {
         if (! OpisToolSchemaValidator::isAvailable()) {
-            throw new RuntimeException('schema_unavailable');
+            throw ToolSchemaFailure::unavailable();
         }
 
         $response = $this->dispatch([
@@ -78,13 +78,13 @@ final class ToolSchemaSupervisor implements ToolSchemaValidator
         if (! isset($response['ok']) || $response['ok'] !== true) {
             $error = $response['error'] ?? null;
 
-            throw new RuntimeException(is_string($error) ? $error : 'schema_limit');
+            throw new ToolSchemaFailure(errorCode: $error === ToolsErrorCode::SchemaUnavailable->value ? ToolsErrorCode::SchemaUnavailable : ToolsErrorCode::SchemaLimit);
         }
 
         $validation = $response['validation'] ?? null;
 
         if (! $this->validValidation($validation)) {
-            throw new RuntimeException('schema_limit');
+            throw ToolSchemaFailure::limit();
         }
 
         return new SchemaValidation(
@@ -146,7 +146,7 @@ final class ToolSchemaSupervisor implements ToolSchemaValidator
         ];
         // A failed spawn is a typed startup failure even when a host observes suppressed warnings.
         set_error_handler(static function (): never {
-            throw new RuntimeException('schema_unavailable');
+            throw ToolSchemaFailure::unavailable();
         }, E_WARNING);
 
         try {
@@ -156,10 +156,10 @@ final class ToolSchemaSupervisor implements ToolSchemaValidator
         }
 
         if (! is_resource($process)) {
-            throw new RuntimeException('schema_unavailable');
+            throw ToolSchemaFailure::unavailable();
         }
 
-        $failure = 'schema_unavailable';
+        $failure = ToolsErrorCode::SchemaUnavailable;
 
         try {
             foreach ($pipes as $pipe) {
@@ -175,7 +175,7 @@ final class ToolSchemaSupervisor implements ToolSchemaValidator
 
                 if ($newline !== false) {
                     if (substr($stdout, 0, $newline) !== 'ready') {
-                        throw new RuntimeException($failure);
+                        throw new ToolSchemaFailure(errorCode: $failure);
                     }
                     $stdout = substr($stdout, $newline + 1);
 
@@ -184,12 +184,12 @@ final class ToolSchemaSupervisor implements ToolSchemaValidator
 
                 // Reject a bad frame as soon as it cannot become the ready line.
                 if (! str_starts_with("ready\n", $stdout) || feof($pipes[1])) {
-                    throw new RuntimeException($failure);
+                    throw new ToolSchemaFailure(errorCode: $failure);
                 }
                 $this->waitForIO($pipes);
             }
 
-            $failure = 'schema_limit';
+            $failure = ToolsErrorCode::SchemaLimit;
             // Request encoding and pipe backpressure consume the validation budget too.
             $deadline = hrtime(true) / 1_000_000 + SchemaProfile::WORKER_DEADLINE_MS;
             $input = json_encode($request, JSON_THROW_ON_ERROR);
@@ -201,7 +201,7 @@ final class ToolSchemaSupervisor implements ToolSchemaValidator
                     $written = @fwrite($pipes[0], substr($input, $offset, 65_536));
 
                     if ($written === false) {
-                        throw new RuntimeException($failure);
+                        throw new ToolSchemaFailure(errorCode: $failure);
                     }
                     $offset += $written;
 
@@ -215,7 +215,7 @@ final class ToolSchemaSupervisor implements ToolSchemaValidator
 
                 if (! $status['running'] && feof($pipes[1])) {
                     if ($status['exitcode'] !== 0 || isset($pipes[0])) {
-                        throw new RuntimeException($failure);
+                        throw new ToolSchemaFailure(errorCode: $failure);
                     }
 
                     break;
@@ -228,38 +228,38 @@ final class ToolSchemaSupervisor implements ToolSchemaValidator
 
             if (! is_array($decoded) || ! is_bool($decoded['ok'] ?? null)
                 || (! $decoded['ok'] && (! is_string($decoded['error'] ?? null) || $decoded['error'] === ''))) {
-                throw new RuntimeException($failure);
+                throw new ToolSchemaFailure(errorCode: $failure);
             }
 
             return $decoded;
         } catch (JsonException) {
-            throw new RuntimeException($failure);
+            throw new ToolSchemaFailure(errorCode: $failure);
         } finally {
             $this->cleanup($process, $pipes);
         }
     }
 
-    private function checkDeadline(float $deadline, string $failure): void
+    private function checkDeadline(float $deadline, ToolsErrorCode $failure): void
     {
         if (hrtime(true) / 1_000_000 >= $deadline) {
-            throw new RuntimeException($failure);
+            throw new ToolSchemaFailure(errorCode: $failure);
         }
     }
 
     /** @param array<int, resource> $pipes */
-    private function readOutput(array $pipes, string &$stdout, string $failure): void
+    private function readOutput(array $pipes, string &$stdout, ToolsErrorCode $failure): void
     {
         $chunk = @fread($pipes[1], 65_536);
         $stderr = @fread($pipes[2], 65_536);
 
         if ($chunk === false || $stderr === false) {
-            throw new RuntimeException($failure);
+            throw new ToolSchemaFailure(errorCode: $failure);
         }
         $stdout .= $chunk;
 
         // Stderr is drained and discarded; neither pipe can grow the parent without bound.
         if (strlen($stdout) > SchemaProfile::WORKER_MEMORY_BYTES) {
-            throw new RuntimeException($failure);
+            throw new ToolSchemaFailure(errorCode: $failure);
         }
     }
 

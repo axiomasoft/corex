@@ -923,6 +923,27 @@
             "enum_backing": null,
             "enum_cases": []
         },
+        "CoreX\\Tools\\Data\\ToolOutcome": {
+            "kind": "enum",
+            "layer": "api",
+            "since": "1.0",
+            "final": false,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": [],
+            "properties": [],
+            "constants": [],
+            "enum_backing": "string",
+            "enum_cases": {
+                "Committed": "'committed'",
+                "NotExecuted": "'not-executed'",
+                "Unknown": "'unknown'"
+            }
+        },
         "CoreX\\Tools\\Data\\ToolResult": {
             "kind": "class",
             "layer": "api",
@@ -944,7 +965,7 @@
                     "parameters": [
                         {
                             "name": "outcome",
-                            "type": "string",
+                            "type": "CoreX\\Tools\\Data\\ToolOutcome",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -1034,7 +1055,7 @@
                 },
                 "outcome": {
                     "flags": 1,
-                    "type": "string",
+                    "type": "CoreX\\Tools\\Data\\ToolOutcome",
                     "readonly": true,
                     "visibility": "public",
                     "static": false,
@@ -1063,31 +1084,53 @@
                     "hooks": []
                 }
             },
-            "constants": {
-                "OUTCOME_COMMITTED": {
-                    "type": null,
-                    "value": "'committed'",
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
+        "CoreX\\Tools\\Errors\\Enums\\ToolsErrorCode": {
+            "kind": "enum",
+            "layer": "api",
+            "since": "1.0",
+            "final": false,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [
+                "CoreX\\Errors\\Contracts\\ErrorCode"
+            ],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "value": {
                     "visibility": "public",
+                    "static": false,
                     "final": false,
-                    "doc": []
-                },
-                "OUTCOME_NOT_EXECUTED": {
-                    "type": null,
-                    "value": "'not-executed'",
-                    "visibility": "public",
-                    "final": false,
-                    "doc": []
-                },
-                "OUTCOME_UNKNOWN": {
-                    "type": null,
-                    "value": "'unknown'",
-                    "visibility": "public",
-                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [],
+                    "return": "string",
                     "doc": []
                 }
             },
-            "enum_backing": null,
-            "enum_cases": []
+            "properties": [],
+            "constants": [],
+            "enum_backing": "string",
+            "enum_cases": {
+                "ApprovalInvalid": "'tools.approval_invalid'",
+                "ApprovalRequired": "'tools.approval_required'",
+                "Forbidden": "'tools.forbidden'",
+                "IdempotencyConflict": "'tools.idempotency_conflict'",
+                "InputInvalid": "'tools.input_invalid'",
+                "InternalError": "'tools.internal_error'",
+                "OutputContractFailed": "'tools.output_contract_failed'",
+                "RateLimited": "'tools.rate_limited'",
+                "SchemaLimit": "'tools.schema_limit'",
+                "SchemaUnavailable": "'tools.schema_unavailable'",
+                "ToolRevisionConflict": "'tools.tool_revision_conflict'",
+                "ToolUnavailable": "'tools.tool_unavailable'",
+                "UnknownEffect": "'tools.unknown_effect'"
+            }
         },
         "CoreX\\Tools\\ToolServiceProvider": {
             "kind": "class",

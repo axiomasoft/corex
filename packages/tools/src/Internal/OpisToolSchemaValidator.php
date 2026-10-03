@@ -14,7 +14,6 @@ use CoreX\Operations\Validation\Laravel\SchemaProfile;
 use InvalidArgumentException;
 use Opis\JsonSchema\Errors\ValidationError;
 use Opis\JsonSchema\Validator;
-use RuntimeException;
 
 /** Qualified Opis adapter for offline tool-schema/1 validation. */
 final class OpisToolSchemaValidator
@@ -31,7 +30,7 @@ final class OpisToolSchemaValidator
         }
 
         if (! self::isAvailable()) {
-            throw new RuntimeException('schema_unavailable');
+            throw ToolSchemaFailure::unavailable();
         }
 
         $decoded = JsonCanonical::decode($schema->canonicalJson);
@@ -53,7 +52,7 @@ final class OpisToolSchemaValidator
     public function validate(SchemaHandle $schema, JsonValue $value): SchemaValidation
     {
         if (! self::isAvailable()) {
-            throw new RuntimeException('schema_unavailable');
+            throw ToolSchemaFailure::unavailable();
         }
 
         $decoded = JsonCanonical::decode($value->canonicalJson);

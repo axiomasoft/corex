@@ -35,6 +35,7 @@ use CoreX\Tools\Contracts\ToolInvoker;
 use CoreX\Tools\Contracts\ToolPolicy;
 use CoreX\Tools\Data\ToolCall;
 use CoreX\Tools\Data\ToolDescriptor;
+use CoreX\Tools\Data\ToolOutcome;
 use CoreX\Tools\Data\ToolResult;
 use CoreX\Tools\Internal\ToolDescriptorFactory;
 use CoreX\Tools\ToolServiceProvider;
@@ -127,7 +128,7 @@ final class ToolLoadContourIntegrationTest extends TestCase
         $estimator = InvocationFixtures::declaredCosts();
 
         self::assertSame(200, $http->getStatusCode());
-        self::assertSame('committed', $tool->outcome);
+        self::assertSame(ToolOutcome::Committed, $tool->outcome);
         self::assertSame(2, LoadContourModule::$calls);
         self::assertSame('Hello', $http->getData(true)['data']['title']);
         self::assertSame(2, $estimator->estimate($operation, new CostInput(1, 0, 0, 0, false, 0, 0))->units);

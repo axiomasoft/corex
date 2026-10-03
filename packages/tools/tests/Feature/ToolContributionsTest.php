@@ -21,7 +21,7 @@ use CoreX\Tools\Contracts\ToolInvoker;
 use CoreX\Tools\Contracts\ToolPolicy;
 use CoreX\Tools\Data\ToolCall;
 use CoreX\Tools\Data\ToolDescriptor;
-use CoreX\Tools\Data\ToolResult;
+use CoreX\Tools\Data\ToolOutcome;
 use CoreX\Tools\Internal\ReadOnlyToolExecutionGuard;
 use CoreX\Tools\Tests\Support\ArchiveToolModule;
 use CoreX\Tools\Tests\Support\CountingHandler;
@@ -237,7 +237,7 @@ final class ToolContributionsTest extends TestCase
             requestId: 'req-archive-read',
         );
         $readResult = $this->app->make(ToolInvoker::class)->invoke($this->context(), $readCall);
-        self::assertSame(ToolResult::OUTCOME_COMMITTED, $readResult->outcome);
+        self::assertSame(ToolOutcome::Committed, $readResult->outcome);
 
         $this->app->instance(ModuleRegistry::class, new LabToolModule(LabToolModule::compile()));
         $guard = new ToolGuardFixture;
@@ -254,7 +254,7 @@ final class ToolContributionsTest extends TestCase
         );
         $guard->approvedProofDigest = $guard->bindingDigest($writeDescriptor, $this->context(), $writeCall);
         $writeResult = $this->app->make(ToolInvoker::class)->invoke($this->context(), $writeCall);
-        self::assertSame(ToolResult::OUTCOME_COMMITTED, $writeResult->outcome);
+        self::assertSame(ToolOutcome::Committed, $writeResult->outcome);
     }
 
     public function test_included_rows_have_exact_tuple_and_hash_receipt_contrib_08(): void
