@@ -133,9 +133,11 @@ packages/<name>/
 
 ## 7. Конфигурация и композиция (D08, D09, D33)
 
-- `config/corex-<name>.php` → `<Name>Options::fromArray()` (immutable, typed, `ViolationList::failIfAny()`) в `register()` →
-  `instance(Options)`; runtime получает Options конструктором. Static `Config` удалён. Ядро — `config/corex.php`
-  (раздел `modules` — бывший `corex-modules`).
+- `config/corex-<name>.php` → `<Name>Options::fromArray()` (immutable, typed, `ViolationList::failIfAny()`);
+  биндинг — `singleton(Options, fn => Options::fromArray(config-key))` в `register()` (D69 п.3), публичный provider
+  резолвит свой Options в `boot()`; runtime получает значения конструктором. Static `Config` удалён. Ядро —
+  `config/corex.php` (раздел `modules` — бывший `corex-modules`). Реестр ключей и их полей Options —
+  `docs/architecture/configuration.md`, генерируется `scripts/configuration-reference.php`.
 - Идентификаторы: config `corex-<kebab>`, publish-tags `corex-<kebab>-{config,migrations[-<scope>]}`, env
   `COREX_<UPPER_SNAKE>_*`, artisan `corex:<kebab>:<verb>`; ядро — `corex`, `COREX_<MODULE>_*`, `corex:<module>:<verb>`.
 - Один публичный provider → внутренние providers по обязанностям; без анонимных классов и логики в providers; фасады —

@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-10-03
-inputs_sha256: 6a8f35991ec1425d49409e5e6a8304a1cdf321f9df081e872801731cbc0e68f2
+inputs_sha256: a067e320df9ba63503ee08fa16b4a3cc6ad42bf1365f7b1e68efbc54583c1473
 generated_by: task plan-views status
 -->
 
@@ -16,7 +16,7 @@ generated_by: task plan-views status
 | Field | Meaning |
 |:--|:--|
 | Version | — |
-| Status | 🟡 In progress |
+| Status | 🟢 Done |
 | Last Updated | 2026-10-03 |
 
 ## 4. Phase Index & Status Board
@@ -28,7 +28,7 @@ generated_by: task plan-views status
 | P02 | Vendor, состав пакетов, namespace = путь | 4/4 | 🟢 Done |
 | P03 | Feature modules и `Internal` | 2/2 | 🟢 Done |
 | P04 | Application API, Extension SPI и типизированные ошибки | 4/4 | 🟢 Done |
-| P05 | Typed config, композиция и порты | 3/4 | 🟡 In progress |
+| P05 | Typed config, композиция и порты | 4/4 | 🟢 Done |
 | P10 | Зелёный hosted CI на базе P04 | 4/4 | 🟢 Done |
 
 ## Phase P00
@@ -80,7 +80,7 @@ generated_by: task plan-views status
 | P05.1 | Typed Options, runtime-проверки и удаление static Config | 🟢 Done | 2026-10-02 |
 | P05.2 | Тонкие providers, registrars и именованные классы | 🟢 Done | 2026-10-03 |
 | P05.3 | Порты вместо фасадов, хелперов и static state | 🟢 Done | 2026-10-03 |
-| P05.4 | Резидентный режим, config:cache, reference и доктрина | ⬜ Not started | — |
+| P05.4 | Резидентный режим, config:cache, reference и доктрина | 🟢 Done | 2026-10-03 |
 
 ## Phase P10
 
@@ -300,6 +300,11 @@ write-site: pre_mutation: allow · pre_final: block:VALIDATION_RECEIPT_MISSING |
 | 2026-10-03 | claude-code/claude-sonnet-5-5/high | plan-run · in-progress · note abbreviated; full text: journal.jsonl:174 |
 | 2026-10-03 | editor/claude-code/claude-sonnet-5-5/high | plan-design · no-op · Design amended by owner direction D88 (hosted-CI carrier of P05.3 moves to P05.4); waiver D88 binds this fingerprint; no execution started by this event. |
 | 2026-10-03 | claude-code/claude-sonnet-5-5/high | plan-run · closed-green · note abbreviated; full text: journal.jsonl:176 |
+| 2026-10-03 | claude-code/claude-sonnet-5-5/high | plan-run · in-progress · — |
+| 2026-10-03 | editor/claude-code/claude-sonnet-5-5/high | plan-design · no-op · Design amended by owner direction D89 (hosted-CI carrier leaves P05.4); waiver D89 binds this fingerprint; no execution started by this event. |
+| 2026-10-03 | claude-code/claude-sonnet-5-5/high | plan-run · closed-green · P05.4 GREEN: product 6bf07d9a, local, not pushed; local Validation green; review self-check GREEN. Hosted-CI carrier left the item (D89): phase P05 stays open on D73; gpt-6.1-sol review not run here. See completion.md. |
+| 2026-10-03 | claude-code/claude-sonnet-5-5/high | plan-run · no-op · Boundary codes of the P05.4 close-green write sites.
+write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates
 

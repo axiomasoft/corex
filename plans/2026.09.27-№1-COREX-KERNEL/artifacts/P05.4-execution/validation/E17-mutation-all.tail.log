@@ -1,0 +1,40 @@
+mutation-check[P1.23-move-workspace-filter]: гоняю: vendor/bin/pest --group=pg tests/Feature/DepartmentTest.php --filter='never a same-path row'
+{"tool":"pest","result":"failed","tests":1,"passed":0,"assertions":1,"duration_ms":555,"failed":1,"failures":[{"test":"P\\Tests\\Feature\\DepartmentTest::__pest_evaluable_it_AC_24__workspace_scope___m
+scripts/mutation-check.sh: line 139: rg: command not found
+mutation-check[P1.23-move-workspace-filter]: OK — тест покраснел под патчем-саботажем (exit=1), граница пинится
+mutation-check[P1.23-stale-read]: применяю scripts/mutations/P1.23-stale-read.patch
+mutation-check[P1.23-stale-read]: гоняю: vendor/bin/pest --group=pg tests/Feature/DepartmentTest.php --filter='re-read guard'
+{"tool":"pest","result":"failed","tests":1,"passed":0,"assertions":1,"duration_ms":510,"failed":1,"failures":[{"test":"P\\Tests\\Feature\\DepartmentTest::__pest_evaluable_it_AC_24__re_read_guard___mov
+scripts/mutation-check.sh: line 139: rg: command not found
+mutation-check[P1.23-stale-read]: OK — тест покраснел под патчем-саботажем (exit=1), граница пинится
+mutation-check[P1.24-bare-runninginconsole-guard]: применяю scripts/mutations/P1.24-bare-runninginconsole-guard.patch
+mutation-check[P1.24-bare-runninginconsole-guard]: гоняю: vendor/bin/pest --exclude-group=pg tests/Feature/PubSubTest.php --filter='refuses a faked Octane runtime'
+{"tool":"pest","result":"failed","tests":1,"passed":0,"assertions":2,"duration_ms":83,"failed":1,"failures":[{"test":"P\\Tests\\Feature\\PubSubTest::__pest_evaluable_it__a__P1_24_A29__subscribe___refu
+scripts/mutation-check.sh: line 139: rg: command not found
+mutation-check[P1.24-bare-runninginconsole-guard]: OK — тест покраснел под патчем-саботажем (exit=1), граница пинится
+mutation-check[P1.24-cursor-start-zero]: применяю scripts/mutations/P1.24-cursor-start-zero.patch
+mutation-check[P1.24-cursor-start-zero]: гоняю: vendor/bin/pest --group=pg tests/Feature/PubSubDatabasePollTest.php --filter='does NOT replay pre-existing history'
+{"tool":"pest","result":"failed","tests":1,"passed":0,"assertions":1,"duration_ms":480,"failed":1,"failures":[{"test":"P\\Tests\\Feature\\PubSubDatabasePollTest::__pest_evaluable_it__\u0433__D44__a_ne
+scripts/mutation-check.sh: line 139: rg: command not found
+mutation-check[P1.24-cursor-start-zero]: OK — тест покраснел под патчем-саботажем (exit=1), граница пинится
+mutation-check[P1.25-domainevent-drop]: применяю scripts/mutations/P1.25-domainevent-drop.patch
+mutation-check[P1.25-domainevent-drop]: гоняю: vendor/bin/pest --group=pg tests/Feature/ModuleLifecycleTest.php --filter='carries a UUIDv7'
+{"tool":"pest","result":"failed","tests":1,"passed":0,"assertions":1,"duration_ms":247,"failed":1,"failures":[{"test":"P\\Tests\\Feature\\ModuleLifecycleTest::__pest_evaluable_it_carries_a_UUIDv7_even
+scripts/mutation-check.sh: line 139: rg: command not found
+mutation-check[P1.25-domainevent-drop]: OK — тест покраснел под патчем-саботажем (exit=1), граница пинится
+mutation-check[P1.25-null-provider-binding]: применяю scripts/mutations/P1.25-null-provider-binding.patch
+mutation-check[P1.25-null-provider-binding]: гоняю: vendor/bin/pest --group=pg tests/Feature/SettingsTest.php --filter='resolves a manifest-declared DefaultSettingDefinition'
+{"tool":"pest","result":"failed","tests":1,"passed":0,"assertions":1,"duration_ms":723,"failed":1,"failures":[{"test":"P\\Tests\\Feature\\SettingsTest::__pest_evaluable_it_resolves_a_manifest_declared
+scripts/mutation-check.sh: line 139: rg: command not found
+mutation-check[P1.25-null-provider-binding]: OK — тест покраснел под патчем-саботажем (exit=1), граница пинится
+mutation-check[P1.29-move-parent-workspace]: применяю scripts/mutations/P1.29-move-parent-workspace.patch
+mutation-check[P1.29-move-parent-workspace]: гоняю: vendor/bin/pest --group=pg tests/Feature/DepartmentTest.php --filter='in ANOTHER workspace is rejected'
+{"tool":"pest","result":"failed","tests":1,"passed":0,"assertions":1,"duration_ms":456,"failed":1,"failures":[{"test":"P\\Tests\\Feature\\DepartmentTest::__pest_evaluable_it_AC_24__workspace_scope___m
+scripts/mutation-check.sh: line 139: rg: command not found
+mutation-check[P1.29-move-parent-workspace]: OK — тест покраснел под патчем-саботажем (exit=1), граница пинится
+mutation-check[P1.29-upgrade-swallow]: применяю scripts/mutations/P1.29-upgrade-swallow.patch
+mutation-check[P1.29-upgrade-swallow]: гоняю: vendor/bin/pest --group=pg tests/Feature/ModuleLifecycleTest.php --filter='catch-up migration fails'
+{"tool":"pest","result":"failed","tests":1,"passed":0,"assertions":1,"duration_ms":294,"failed":1,"failures":[{"test":"P\\Tests\\Feature\\ModuleLifecycleTest::__pest_evaluable_it_rolls_the_upgrade_bac
+scripts/mutation-check.sh: line 139: rg: command not found
+mutation-check[P1.29-upgrade-swallow]: OK — тест покраснел под патчем-саботажем (exit=1), граница пинится
+mutation-check --all: все 36 кейса(ов) покраснели под саботажем — OK

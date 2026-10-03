@@ -2,8 +2,8 @@
 projection: decision-archive
 projection_version: v1
 source_scope: decisions/
-through: 2026-10-03/D88
-inputs_sha256: 0a0e2198e42161cd3b1d4602880532f9f19d7524800d0df8d252476e3ba8ae61
+through: 2026-10-03/D89
+inputs_sha256: 6429213caa8b4c3167d0bc9c0aa0324ae1b1e71b5a6c90f0f8bd83835f6433a9
 generated_by: task plan-views decisions
 -->
 
