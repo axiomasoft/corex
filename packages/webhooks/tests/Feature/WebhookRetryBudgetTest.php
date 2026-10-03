@@ -102,6 +102,23 @@ final class WebhookRetryBudgetTest extends TestCase
         }
     }
 
+    public function test_transport_rejections_override_untrusted_http_status_without_disabling_subscription(): void
+    {
+        foreach ([200, 410, 429, 503] as $http) {
+            foreach ([WebhookFailureReason::AddressNotAllowed, WebhookFailureReason::PayloadTooLarge] as $reason) {
+                $id = $http.'-'.$reason->name;
+                $this->seedDelivery($id, 'subscription-'.$id);
+                $store = $this->budgetStore(20);
+                $claim = $store->claim($this->scope, 'worker');
+                self::assertNotNull($claim);
+                self::assertTrue($store->finish($claim, new WebhookHttpResult($http, null, $reason, 1)));
+                self::assertSame('dead', $store->find($this->scope, $id)?->status);
+                self::assertSame($reason->value, $store->find($this->scope, $id)?->lastError);
+                self::assertSame('active', $this->connection->table('sys_api_webhook_subscriptions')->where('id', 'subscription-'.$id)->value('status'));
+            }
+        }
+    }
+
     public function test_options_reject_invalid_attempt_and_horizon_ranges(): void
     {
         foreach ([['max_attempts' => 0], ['max_attempts' => 21], ['max_attempts' => '3'], ['retry_horizon_seconds' => 3599], ['retry_horizon_seconds' => 604801], ['retry_horizon_seconds' => '3600'], ['body_retention_seconds' => 3600, 'replay_horizon_seconds' => 3600, 'retry_horizon_seconds' => 3601]] as $config) {

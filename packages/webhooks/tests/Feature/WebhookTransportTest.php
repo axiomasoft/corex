@@ -387,6 +387,13 @@ PHP;
         $this->assertSame(WebhookFailureReason::AddressNotAllowed, $result->errorCode);
     }
 
+    public function test_wrong_peer_takes_precedence_over_response_overflow(): void
+    {
+        CurlRuntimeFixture::$peerAddress = '93.184.216.35';
+        CurlRuntimeFixture::$responseBody = str_repeat('x', 64 * 1024 + 1);
+        $this->assertSame(WebhookFailureReason::AddressNotAllowed, (new CurlWebhookTransport)->send($this->request())->errorCode);
+    }
+
     public function test_missing_curl_fails_closed_without_attempting_dns_or_network(): void
     {
         $root = dirname(__DIR__, 2);

@@ -215,7 +215,7 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
 
             $this->finishAttempt($delivery, $result, $decision['status'], $decision['error'], $now);
 
-            if ($result->status === 410) {
+            if ($result->status === 410 && $decision['error'] === WebhookFailureReason::EndpointGone) {
                 $this->disableGoneSubscription($delivery, $now);
             }
 

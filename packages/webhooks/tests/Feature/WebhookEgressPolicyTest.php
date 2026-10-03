@@ -28,6 +28,7 @@ use CoreX\Webhooks\Laravel\WebhookBindingsRegistrar;
 use CoreX\Webhooks\Laravel\WebhookOptionsParser;
 use CoreX\Webhooks\Tests\TestCase;
 use DateInterval;
+use RuntimeException;
 
 final class WebhookEgressPolicyTest extends TestCase
 {
@@ -114,6 +115,55 @@ final class WebhookEgressPolicyTest extends TestCase
         self::assertSame(1, $transport->sends);
     }
 
+    public function test_denial_persistence_failure_is_not_reclassified_as_dns_retry(): void
+    {
+        $this->seedDelivery('delivery', 'subscription');
+        $policy = new RevocableEgressPolicy;
+        $policy->allowed = false;
+        $this->connection->beforeExecuting(static function (string $query, array $bindings): void {
+            if (str_starts_with($query, 'update') && in_array('egress_denied', $bindings, true)) {
+                throw new RuntimeException('simulated persistence failure');
+            }
+        });
+        $transport = new EgressRecordingTransport;
+        $worker = new WebhookDeliveryWorker(new SqlWebhookDeliveryStore($this->connection, new GuardedTenantContextRestorer($this->contexts), $this->clock, new WebhookRetryPolicy(WebhookOptionsParser::fromArray([]))), $this->signer(), $this->urlPolicy(), $transport, $this->topics(), $this->clock, $policy, app(DataScopeCodec::class));
+
+        try {
+            $worker->workOnce($this->scope, 'worker');
+            self::fail('Persistence failure was hidden.');
+        } catch (RuntimeException $error) {
+            self::assertSame('simulated persistence failure', $error->getMessage());
+        }
+        self::assertSame('sending', $this->connection->table('sys_api_webhook_deliveries')->where('id', 'delivery')->value('status'));
+        self::assertNull($this->connection->table('sys_api_webhook_deliveries')->where('id', 'delivery')->value('last_error'));
+        self::assertSame('pending', $this->connection->table('sys_api_webhook_attempts')->where('delivery_id', 'delivery')->value('outcome'));
+        self::assertSame(0, $transport->sends);
+    }
+
+    public function test_spi_failure_stops_before_dns_and_is_not_reclassified(): void
+    {
+        $this->seedDelivery('delivery', 'subscription');
+        $policy = new RevocableEgressPolicy;
+        $policy->failure = new RuntimeException('policy unavailable');
+        $transport = new EgressRecordingTransport;
+        $dns = 0;
+        $worker = new WebhookDeliveryWorker(new SqlWebhookDeliveryStore($this->connection, new GuardedTenantContextRestorer($this->contexts), $this->clock, new WebhookRetryPolicy(WebhookOptionsParser::fromArray([]))), $this->signer(), new WebhookUrlPolicy(static function () use (&$dns): array {
+            $dns++;
+
+            return ['93.184.216.34'];
+        }), $transport, $this->topics(), $this->clock, $policy, app(DataScopeCodec::class));
+
+        try {
+            $worker->workOnce($this->scope, 'worker');
+            self::fail('SPI failure was hidden.');
+        } catch (RuntimeException $error) {
+            self::assertSame('policy unavailable', $error->getMessage());
+        }
+        self::assertSame(0, $dns);
+        self::assertSame(0, $transport->sends);
+        self::assertSame('pending', $this->connection->table('sys_api_webhook_attempts')->where('delivery_id', 'delivery')->value('outcome'));
+    }
+
     public function test_default_binding_is_permissive_and_host_binding_is_preserved(): void
     {
         self::assertInstanceOf(PermitPublicEgressPolicy::class, app(WebhookEgressPolicy::class));
@@ -150,6 +200,8 @@ final class RevocableEgressPolicy implements WebhookEgressPolicy
 {
     public bool $allowed = true;
 
+    public ?RuntimeException $failure = null;
+
     /** @var list<WebhookDestination> */
     public array $destinations = [];
 
@@ -158,6 +210,10 @@ final class RevocableEgressPolicy implements WebhookEgressPolicy
 
     public function allows(DataScope $scope, WebhookDestination $destination): bool
     {
+        if ($this->failure !== null) {
+            throw $this->failure;
+        }
+
         $this->destinations[] = $destination;
         $this->scopes[] = $scope;
 

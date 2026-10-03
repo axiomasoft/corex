@@ -108,6 +108,10 @@ final class CurlWebhookTransport implements WebhookHttpTransport
             $status = curl_getinfo($handle, CURLINFO_RESPONSE_CODE);
             $peerAddress = curl_getinfo($handle, CURLINFO_PRIMARY_IP);
 
+            if ($peerAddress !== '' && ! $this->sameAddress($peerAddress, $request->address)) {
+                return $this->failure(WebhookFailureReason::AddressNotAllowed, $startedAt, $status);
+            }
+
             if ($bodyOverflow) {
                 return $this->failure(WebhookFailureReason::PayloadTooLarge, $startedAt, $status);
             }

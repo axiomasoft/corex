@@ -78,6 +78,11 @@ final readonly class WebhookRetryPolicy
     /** @return array{status: 'succeeded'|'retry'|'dead', error: WebhookFailureReason|null} */
     private function classification(WebhookHttpResult $result): array
     {
+        // A rejected transport response is not a trustworthy HTTP acknowledgement.
+        if ($result->errorCode?->isTerminal() === true) {
+            return ['status' => 'dead', 'error' => $result->errorCode];
+        }
+
         if ($result->status !== null && $result->status >= 200 && $result->status < 300) {
             return ['status' => 'succeeded', 'error' => null];
         }

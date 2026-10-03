@@ -81,16 +81,27 @@ final readonly class WebhookDeliveryWorker
 
         try {
             $destination = WebhookDestination::fromUrl($delivery->endpointSnapshot);
+        } catch (InvalidArgumentException) {
+            return $this->finish($scope, $delivery, new WebhookHttpResult(
+                status: null,
+                retryAfter: null,
+                errorCode: WebhookFailureReason::UrlForbidden,
+                durationMs: 0,
+            ));
+        }
 
-            if (! $this->egress->allows($this->scopeCodec->decode($delivery->scope), $destination)) {
-                return $this->finish($scope, $delivery, new WebhookHttpResult(
-                    status: null,
-                    retryAfter: null,
-                    errorCode: WebhookFailureReason::EgressDenied,
-                    durationMs: 0,
-                ));
-            }
+        $deliveryScope = $this->scopeCodec->decode($delivery->scope);
 
+        if (! $this->egress->allows($deliveryScope, $destination)) {
+            return $this->finish($scope, $delivery, new WebhookHttpResult(
+                status: null,
+                retryAfter: null,
+                errorCode: WebhookFailureReason::EgressDenied,
+                durationMs: 0,
+            ));
+        }
+
+        try {
             $request = $this->urlPolicy->validate(
                 url: $delivery->endpointSnapshot,
                 body: $delivery->body,
