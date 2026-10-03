@@ -1,11 +1,11 @@
 ---
 id: D87
 date: 2026-10-03
-status: accepted
+status: superseded
 item: P05.3
 items: [P05.3]
 supersedes: []
-superseded_by: null
+superseded_by: D88
 ---
 # D87 — Hosted CI for P05.3 is configured after P05.4
 

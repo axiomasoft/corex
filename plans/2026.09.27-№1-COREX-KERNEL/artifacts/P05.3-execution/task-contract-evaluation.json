@@ -1,14 +1,10 @@
 {
   "pre_mutation": "allow",
-  "pre_final": "block:VALIDATION_RECEIPT_MISSING",
+  "pre_final": "allow",
   "reason_codes": {
     "pre_mutation": null,
-    "pre_final": {
-      "code": "evidence-missing",
-      "internal_code": "VALIDATION_RECEIPT_MISSING",
-      "message": "Produce the required evidence before retrying."
-    }
+    "pre_final": null
   },
-  "content_hash": "f591c8a4c498d7877479a706332f277bb9d08118cc2352d8486dfbd3dc35dad7",
-  "note": "pre_mutation is the durable-start admission (plan-work prepare, validation disposition allow). pre_final blocks only on E32, the hosted-CI carrier deferred by the owner (D87); with a receipt for E32 the predicate returns allow."
+  "content_hash": "9fd19f6b1b924c6d472da3a8cbcf79ceecd84aa211afbbf78208475d3f724448",
+  "note": "pre_mutation is the durable-start admission of plan-work prepare (validation disposition allow); pre_final evaluated by task_contract.pre_final over one receipt per shell-command carrier after the hosted-CI carrier moved to P05.4 (D88)."
 }

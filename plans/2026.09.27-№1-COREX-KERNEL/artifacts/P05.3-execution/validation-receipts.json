@@ -1,8 +1,8 @@
 {
   "context": {
     "schema_version": "validation-context/v1",
-    "spec_sha256": "3ca4014bb943ffd8102b893548a9d7b4c83b053c68aaa5f038fa42773c3e6979",
-    "head": "a59c38b23b2bea848138e2323532cc23b6c0ebe1",
+    "spec_sha256": "3f43c20845fd9743fc0c815f638d37ddd167f57ab1c79fb5b25081836c7e3616",
+    "head": "56dd5ec7e072c676252e4e8763789fbf007ffea5",
     "tree": "f9668341049bdf1cf87709a6ca36c8e878cd65ecdfbc51e6da44f8fceaf72b9f",
     "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16"
   },
@@ -11,181 +11,181 @@
       "schema_version": "validation-receipt/v1",
       "evidence_id": "E18",
       "command": "- На входе: `php scripts/runtime-globals-gate.php --report` → exit 0; исходные числа G1–G5 и L2/L3 записаны в Completion Notes.",
-      "contract_sha256": "f591c8a4c498d7877479a706332f277bb9d08118cc2352d8486dfbd3dc35dad7",
-      "spec_sha256": "3ca4014bb943ffd8102b893548a9d7b4c83b053c68aaa5f038fa42773c3e6979",
-      "head": "a59c38b23b2bea848138e2323532cc23b6c0ebe1",
+      "contract_sha256": "9fd19f6b1b924c6d472da3a8cbcf79ceecd84aa211afbbf78208475d3f724448",
+      "spec_sha256": "3f43c20845fd9743fc0c815f638d37ddd167f57ab1c79fb5b25081836c7e3616",
+      "head": "56dd5ec7e072c676252e4e8763789fbf007ffea5",
       "tree": "f9668341049bdf1cf87709a6ca36c8e878cd65ecdfbc51e6da44f8fceaf72b9f",
       "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
       "exit_code": 0,
-      "executed_at": "2026-10-03T12:07:34Z"
+      "executed_at": "2026-10-03T12:15:33Z"
     },
     {
       "schema_version": "validation-receipt/v1",
       "evidence_id": "E19",
       "command": "- `php scripts/runtime-globals-gate.php` → `G1 0, G2 0, G3 0, G4 0, G5 0 outside baseline`, `runtime-globals-gate: OK`, exit 0.",
-      "contract_sha256": "f591c8a4c498d7877479a706332f277bb9d08118cc2352d8486dfbd3dc35dad7",
-      "spec_sha256": "3ca4014bb943ffd8102b893548a9d7b4c83b053c68aaa5f038fa42773c3e6979",
-      "head": "a59c38b23b2bea848138e2323532cc23b6c0ebe1",
+      "contract_sha256": "9fd19f6b1b924c6d472da3a8cbcf79ceecd84aa211afbbf78208475d3f724448",
+      "spec_sha256": "3f43c20845fd9743fc0c815f638d37ddd167f57ab1c79fb5b25081836c7e3616",
+      "head": "56dd5ec7e072c676252e4e8763789fbf007ffea5",
       "tree": "f9668341049bdf1cf87709a6ca36c8e878cd65ecdfbc51e6da44f8fceaf72b9f",
       "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
       "exit_code": 0,
-      "executed_at": "2026-10-03T12:07:34Z"
+      "executed_at": "2026-10-03T12:15:33Z"
     },
     {
       "schema_version": "validation-receipt/v1",
       "evidence_id": "E20",
       "command": "- `python3 -c \"import json,sys; d=json.load(open('scripts/runtime-globals-baseline.json')); sys.exit(0 if all(k.startswith('packages/tenancy/src/Impersonation/') for k in d) else 1)\"` → exit 0.",
-      "contract_sha256": "f591c8a4c498d7877479a706332f277bb9d08118cc2352d8486dfbd3dc35dad7",
-      "spec_sha256": "3ca4014bb943ffd8102b893548a9d7b4c83b053c68aaa5f038fa42773c3e6979",
-      "head": "a59c38b23b2bea848138e2323532cc23b6c0ebe1",
+      "contract_sha256": "9fd19f6b1b924c6d472da3a8cbcf79ceecd84aa211afbbf78208475d3f724448",
+      "spec_sha256": "3f43c20845fd9743fc0c815f638d37ddd167f57ab1c79fb5b25081836c7e3616",
+      "head": "56dd5ec7e072c676252e4e8763789fbf007ffea5",
       "tree": "f9668341049bdf1cf87709a6ca36c8e878cd65ecdfbc51e6da44f8fceaf72b9f",
       "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
       "exit_code": 0,
-      "executed_at": "2026-10-03T12:07:34Z"
+      "executed_at": "2026-10-03T12:15:33Z"
     },
     {
       "schema_version": "validation-receipt/v1",
       "evidence_id": "E21",
       "command": "- `scripts/php84 vendor/bin/pest tests/Arch/RuntimeGlobalsTest.php` → exit 0: пробы G1–G5 дают exit 1 с именем файла-пробы; проба «baseline вырос» → exit 1 `baseline exceeded`; путь baseline вне префикса → exit 2.",
-      "contract_sha256": "f591c8a4c498d7877479a706332f277bb9d08118cc2352d8486dfbd3dc35dad7",
-      "spec_sha256": "3ca4014bb943ffd8102b893548a9d7b4c83b053c68aaa5f038fa42773c3e6979",
-      "head": "a59c38b23b2bea848138e2323532cc23b6c0ebe1",
+      "contract_sha256": "9fd19f6b1b924c6d472da3a8cbcf79ceecd84aa211afbbf78208475d3f724448",
+      "spec_sha256": "3f43c20845fd9743fc0c815f638d37ddd167f57ab1c79fb5b25081836c7e3616",
+      "head": "56dd5ec7e072c676252e4e8763789fbf007ffea5",
       "tree": "f9668341049bdf1cf87709a6ca36c8e878cd65ecdfbc51e6da44f8fceaf72b9f",
       "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
       "exit_code": 0,
-      "executed_at": "2026-10-03T12:07:34Z"
+      "executed_at": "2026-10-03T12:15:33Z"
     },
     {
       "schema_version": "validation-receipt/v1",
       "evidence_id": "E22",
       "command": "- `scripts/php84 vendor/bin/pest tests/Arch/SingletonInjectionTest.php` → exit 0: нарушений L1–L3 нет; пробы L2 и L3 называются в выводе; `python3 -c \"import json,sys; sys.exit(0 if json.load(open('scripts/singleton-injection-allowlist.json'))['entries']==[] else 1)\"` → exit 0.",
-      "contract_sha256": "f591c8a4c498d7877479a706332f277bb9d08118cc2352d8486dfbd3dc35dad7",
-      "spec_sha256": "3ca4014bb943ffd8102b893548a9d7b4c83b053c68aaa5f038fa42773c3e6979",
-      "head": "a59c38b23b2bea848138e2323532cc23b6c0ebe1",
+      "contract_sha256": "9fd19f6b1b924c6d472da3a8cbcf79ceecd84aa211afbbf78208475d3f724448",
+      "spec_sha256": "3f43c20845fd9743fc0c815f638d37ddd167f57ab1c79fb5b25081836c7e3616",
+      "head": "56dd5ec7e072c676252e4e8763789fbf007ffea5",
       "tree": "f9668341049bdf1cf87709a6ca36c8e878cd65ecdfbc51e6da44f8fceaf72b9f",
       "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
       "exit_code": 0,
-      "executed_at": "2026-10-03T12:07:34Z"
+      "executed_at": "2026-10-03T12:15:33Z"
     },
     {
       "schema_version": "validation-receipt/v1",
       "evidence_id": "E23",
       "command": "- `join -t: -a2 -e0 -o 0,1.2,2.2 <(git grep -c -E '(Connection|ConnectionInterface) \\$' <базовый commit item> -- ':(glob)packages/*/src/**' | sed 's/^[^:]*://' | sort) <(git grep -c -E '(Connection|ConnectionInterface) \\$' -- ':(glob)packages/*/src/**' | sort) | awk -F: '$3>$2' | wc -l` → `0`: ни в одном файле число строк с параметром или свойством типа `Connection|ConnectionInterface` не выросло, новых файлов с таким типом нет (`ConnectionResolverInterface` под шаблон не попадает; правка существующей строки счётчик не меняет).",
-      "contract_sha256": "f591c8a4c498d7877479a706332f277bb9d08118cc2352d8486dfbd3dc35dad7",
-      "spec_sha256": "3ca4014bb943ffd8102b893548a9d7b4c83b053c68aaa5f038fa42773c3e6979",
-      "head": "a59c38b23b2bea848138e2323532cc23b6c0ebe1",
+      "contract_sha256": "9fd19f6b1b924c6d472da3a8cbcf79ceecd84aa211afbbf78208475d3f724448",
+      "spec_sha256": "3f43c20845fd9743fc0c815f638d37ddd167f57ab1c79fb5b25081836c7e3616",
+      "head": "56dd5ec7e072c676252e4e8763789fbf007ffea5",
       "tree": "f9668341049bdf1cf87709a6ca36c8e878cd65ecdfbc51e6da44f8fceaf72b9f",
       "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
       "exit_code": 0,
-      "executed_at": "2026-10-03T12:07:34Z"
+      "executed_at": "2026-10-03T12:15:33Z"
     },
     {
       "schema_version": "validation-receipt/v1",
       "evidence_id": "E24",
       "command": "- `git grep -n 'Illuminate\\\\Support\\\\Facades' -- ':(glob)packages/*/src/**' ':(exclude,glob)packages/*/src/**/Laravel/**' ':(exclude,glob)packages/*/src/**/*ServiceProvider.php' ':(exclude,glob)packages/tenancy/src/Impersonation/**'` → нет совпадений (Git exit 1; `:(glob)` обязателен — без него `**` не исключает `src/Laravel/**` верхнего уровня); файл `packages/core/src/Messaging/Internal/PubSubManager.php` отсутствует.",
-      "contract_sha256": "f591c8a4c498d7877479a706332f277bb9d08118cc2352d8486dfbd3dc35dad7",
-      "spec_sha256": "3ca4014bb943ffd8102b893548a9d7b4c83b053c68aaa5f038fa42773c3e6979",
-      "head": "a59c38b23b2bea848138e2323532cc23b6c0ebe1",
+      "contract_sha256": "9fd19f6b1b924c6d472da3a8cbcf79ceecd84aa211afbbf78208475d3f724448",
+      "spec_sha256": "3f43c20845fd9743fc0c815f638d37ddd167f57ab1c79fb5b25081836c7e3616",
+      "head": "56dd5ec7e072c676252e4e8763789fbf007ffea5",
       "tree": "f9668341049bdf1cf87709a6ca36c8e878cd65ecdfbc51e6da44f8fceaf72b9f",
       "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
       "exit_code": 0,
-      "executed_at": "2026-10-03T12:07:34Z"
+      "executed_at": "2026-10-03T12:15:33Z"
     },
     {
       "schema_version": "validation-receipt/v1",
       "evidence_id": "E25",
       "command": "- `php scripts/provider-size-gate.php` → `provider-size-gate: OK`; `php scripts/config-composition-gate.php` → `config-composition-gate: OK`.",
-      "contract_sha256": "f591c8a4c498d7877479a706332f277bb9d08118cc2352d8486dfbd3dc35dad7",
-      "spec_sha256": "3ca4014bb943ffd8102b893548a9d7b4c83b053c68aaa5f038fa42773c3e6979",
-      "head": "a59c38b23b2bea848138e2323532cc23b6c0ebe1",
+      "contract_sha256": "9fd19f6b1b924c6d472da3a8cbcf79ceecd84aa211afbbf78208475d3f724448",
+      "spec_sha256": "3f43c20845fd9743fc0c815f638d37ddd167f57ab1c79fb5b25081836c7e3616",
+      "head": "56dd5ec7e072c676252e4e8763789fbf007ffea5",
       "tree": "f9668341049bdf1cf87709a6ca36c8e878cd65ecdfbc51e6da44f8fceaf72b9f",
       "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
       "exit_code": 0,
-      "executed_at": "2026-10-03T12:07:34Z"
+      "executed_at": "2026-10-03T12:15:33Z"
     },
     {
       "schema_version": "validation-receipt/v1",
       "evidence_id": "E26",
       "command": "- `composer module-layout-gate` → R0–R5 = 0; `php scripts/package-graph-gate.php` → exit 0; `scripts/php84 composer deps:analyse` → exit 0.",
-      "contract_sha256": "f591c8a4c498d7877479a706332f277bb9d08118cc2352d8486dfbd3dc35dad7",
-      "spec_sha256": "3ca4014bb943ffd8102b893548a9d7b4c83b053c68aaa5f038fa42773c3e6979",
-      "head": "a59c38b23b2bea848138e2323532cc23b6c0ebe1",
+      "contract_sha256": "9fd19f6b1b924c6d472da3a8cbcf79ceecd84aa211afbbf78208475d3f724448",
+      "spec_sha256": "3f43c20845fd9743fc0c815f638d37ddd167f57ab1c79fb5b25081836c7e3616",
+      "head": "56dd5ec7e072c676252e4e8763789fbf007ffea5",
       "tree": "f9668341049bdf1cf87709a6ca36c8e878cd65ecdfbc51e6da44f8fceaf72b9f",
       "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
       "exit_code": 0,
-      "executed_at": "2026-10-03T12:07:34Z"
+      "executed_at": "2026-10-03T12:15:33Z"
     },
     {
       "schema_version": "validation-receipt/v1",
       "evidence_id": "E27",
       "command": "- `scripts/php84 composer php-api`, `scripts/php84 composer bc-check` → exit 0.",
-      "contract_sha256": "f591c8a4c498d7877479a706332f277bb9d08118cc2352d8486dfbd3dc35dad7",
-      "spec_sha256": "3ca4014bb943ffd8102b893548a9d7b4c83b053c68aaa5f038fa42773c3e6979",
-      "head": "a59c38b23b2bea848138e2323532cc23b6c0ebe1",
+      "contract_sha256": "9fd19f6b1b924c6d472da3a8cbcf79ceecd84aa211afbbf78208475d3f724448",
+      "spec_sha256": "3f43c20845fd9743fc0c815f638d37ddd167f57ab1c79fb5b25081836c7e3616",
+      "head": "56dd5ec7e072c676252e4e8763789fbf007ffea5",
       "tree": "f9668341049bdf1cf87709a6ca36c8e878cd65ecdfbc51e6da44f8fceaf72b9f",
       "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
       "exit_code": 0,
-      "executed_at": "2026-10-03T12:07:34Z"
+      "executed_at": "2026-10-03T12:15:33Z"
     },
     {
       "schema_version": "validation-receipt/v1",
       "evidence_id": "E28",
       "command": "- `scripts/php84 composer lint:check`, `scripts/php84 composer analyse` → exit 0; `php scripts/quality-ceiling-guard.php` → `ceilings OK`.",
-      "contract_sha256": "f591c8a4c498d7877479a706332f277bb9d08118cc2352d8486dfbd3dc35dad7",
-      "spec_sha256": "3ca4014bb943ffd8102b893548a9d7b4c83b053c68aaa5f038fa42773c3e6979",
-      "head": "a59c38b23b2bea848138e2323532cc23b6c0ebe1",
+      "contract_sha256": "9fd19f6b1b924c6d472da3a8cbcf79ceecd84aa211afbbf78208475d3f724448",
+      "spec_sha256": "3f43c20845fd9743fc0c815f638d37ddd167f57ab1c79fb5b25081836c7e3616",
+      "head": "56dd5ec7e072c676252e4e8763789fbf007ffea5",
       "tree": "f9668341049bdf1cf87709a6ca36c8e878cd65ecdfbc51e6da44f8fceaf72b9f",
       "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
       "exit_code": 0,
-      "executed_at": "2026-10-03T12:07:34Z"
+      "executed_at": "2026-10-03T12:15:33Z"
     },
     {
       "schema_version": "validation-receipt/v1",
       "evidence_id": "E29",
       "command": "- Один раз на финальном кандидате: `scripts/php84 composer test:hermetic`, `PGSQL_PORT=5434 scripts/php84 composer test:pg`, `scripts/php84 composer test:packages`, `scripts/php84 composer test:arch` → exit 0.",
-      "contract_sha256": "f591c8a4c498d7877479a706332f277bb9d08118cc2352d8486dfbd3dc35dad7",
-      "spec_sha256": "3ca4014bb943ffd8102b893548a9d7b4c83b053c68aaa5f038fa42773c3e6979",
-      "head": "a59c38b23b2bea848138e2323532cc23b6c0ebe1",
+      "contract_sha256": "9fd19f6b1b924c6d472da3a8cbcf79ceecd84aa211afbbf78208475d3f724448",
+      "spec_sha256": "3f43c20845fd9743fc0c815f638d37ddd167f57ab1c79fb5b25081836c7e3616",
+      "head": "56dd5ec7e072c676252e4e8763789fbf007ffea5",
       "tree": "f9668341049bdf1cf87709a6ca36c8e878cd65ecdfbc51e6da44f8fceaf72b9f",
       "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
       "exit_code": 0,
-      "executed_at": "2026-10-03T12:07:34Z"
+      "executed_at": "2026-10-03T12:15:33Z"
     },
     {
       "schema_version": "validation-receipt/v1",
       "evidence_id": "E30",
       "command": "- `scripts/php84 composer golden` → без `GOLDEN_UPDATE`; routes байт-идентичны; delta — только поимённые строки по досье §4.",
-      "contract_sha256": "f591c8a4c498d7877479a706332f277bb9d08118cc2352d8486dfbd3dc35dad7",
-      "spec_sha256": "3ca4014bb943ffd8102b893548a9d7b4c83b053c68aaa5f038fa42773c3e6979",
-      "head": "a59c38b23b2bea848138e2323532cc23b6c0ebe1",
+      "contract_sha256": "9fd19f6b1b924c6d472da3a8cbcf79ceecd84aa211afbbf78208475d3f724448",
+      "spec_sha256": "3f43c20845fd9743fc0c815f638d37ddd167f57ab1c79fb5b25081836c7e3616",
+      "head": "56dd5ec7e072c676252e4e8763789fbf007ffea5",
       "tree": "f9668341049bdf1cf87709a6ca36c8e878cd65ecdfbc51e6da44f8fceaf72b9f",
       "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
       "exit_code": 0,
-      "executed_at": "2026-10-03T12:07:34Z"
+      "executed_at": "2026-10-03T12:15:33Z"
     },
     {
       "schema_version": "validation-receipt/v1",
       "evidence_id": "E31",
       "command": "- `bash scripts/anti-weakening-gate.sh` → exit 0.",
-      "contract_sha256": "f591c8a4c498d7877479a706332f277bb9d08118cc2352d8486dfbd3dc35dad7",
-      "spec_sha256": "3ca4014bb943ffd8102b893548a9d7b4c83b053c68aaa5f038fa42773c3e6979",
-      "head": "a59c38b23b2bea848138e2323532cc23b6c0ebe1",
+      "contract_sha256": "9fd19f6b1b924c6d472da3a8cbcf79ceecd84aa211afbbf78208475d3f724448",
+      "spec_sha256": "3f43c20845fd9743fc0c815f638d37ddd167f57ab1c79fb5b25081836c7e3616",
+      "head": "56dd5ec7e072c676252e4e8763789fbf007ffea5",
       "tree": "f9668341049bdf1cf87709a6ca36c8e878cd65ecdfbc51e6da44f8fceaf72b9f",
       "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
       "exit_code": 0,
-      "executed_at": "2026-10-03T12:07:34Z"
+      "executed_at": "2026-10-03T12:15:33Z"
     },
     {
       "schema_version": "validation-receipt/v1",
-      "evidence_id": "E33",
+      "evidence_id": "E32",
       "command": "- Independent review (D71, `full`): reviewer и effort из строки execution-sheet, свежий контекст, модель ≠ исполнитель; вход — item-spec, diff, вывод Validation, таблица L2/L3 «до → после». Фокус: каждая смена времени жизни биндинга; отсутствие новых захватов соединения; места бывшей мутации времени; изменённые сигнатуры `#[Api]/#[Spi]`. Строка `review: <provider>/<model> <GREEN|findings:N>` в Completion Notes; не более двух раундов fix/recheck, затем эскалация с конкретным нерешённым пунктом.",
-      "contract_sha256": "f591c8a4c498d7877479a706332f277bb9d08118cc2352d8486dfbd3dc35dad7",
-      "spec_sha256": "3ca4014bb943ffd8102b893548a9d7b4c83b053c68aaa5f038fa42773c3e6979",
-      "head": "a59c38b23b2bea848138e2323532cc23b6c0ebe1",
+      "contract_sha256": "9fd19f6b1b924c6d472da3a8cbcf79ceecd84aa211afbbf78208475d3f724448",
+      "spec_sha256": "3f43c20845fd9743fc0c815f638d37ddd167f57ab1c79fb5b25081836c7e3616",
+      "head": "56dd5ec7e072c676252e4e8763789fbf007ffea5",
       "tree": "f9668341049bdf1cf87709a6ca36c8e878cd65ecdfbc51e6da44f8fceaf72b9f",
       "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
       "exit_code": 0,
-      "executed_at": "2026-10-03T12:07:34Z"
+      "executed_at": "2026-10-03T12:15:33Z"
     }
   ]
 }

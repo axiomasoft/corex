@@ -126,7 +126,7 @@ operations, независимые модули, детерминированн�
 
 **Design Audit:** required
 
-**Design Audit Waiver:** D86
+**Design Audit Waiver:** D88
 
 ## 3. Routing
 
@@ -165,6 +165,7 @@ operations, независимые модули, детерминированн�
 
 | Дата | Изменение | Автор |
 |:--|:--|:--|
+| 2026-10-03 | Правка по прямому указанию владельца (D88): из спеки P05.3 удалён carrier hosted CI (его покрывает carrier P05.4 на финальном commit фазы, D73); `design-audit-waiver/v1` D88 заменяет D86 для нового fingerprint, повторный whole-plan audit не назначается. Маршруты, порядок и review не менялись. | editor/claude-code/claude-sonnet-5-5/high |
 | 2026-10-02 | Ручная правка по прямому указанию владельца (D86): заголовок Routing `Почему` → `Why` (Task 0.26.2 принимает только `Why`; содержимое строк, группы, маршруты и review не менялись) и выбор `design-audit-waiver/v1`: повторный whole-plan audit из-за одной ячейки заголовка не назначается. Новый finish записан; продукт не менялся. | editor/claude-code/claude-sonnet-5-5/high |
 | 2026-10-01 | Design audit fingerprint `f188df5f…` — ATTENTION, 4 Major (`findings/P05-P10-design-audit.md`). Правка по разрешению владельца, D76: критерий агрегатора в P10.1; CHANGELOG и arch-тесты в Files P10.2; `test:hermetic` определяется в P10.1, Pest `^4.7` в `ci-local.sh`; две команды Validation P05.3; hosted CI на каждом item P05; независимое ревью продуктовых правок P10.4. Маршруты и порядок строк 14–20 не менялись. Нужны новый finish и design audit независимой моделью; исполнение не начиналось, продукт не менялся. | auditor/designer claude-opus-5-5 |
 | 2026-10-01 | `task:plan-design finish`: сверены зависимости P00–P05 и P10 (P04 → P10.1 → P10.2 → P10.3 → P10.4 → B05-A → P05.3 → P05.4); в execution-sheet записаны строки 14–20 без изменения групп, маршрутов и review из D71/D75; исполнитель и reviewer — по пулу `session-routing.md`. Привязка досье P10 дополнена в Inputs P10.3 и P10.4; заполнен Phase Handoff P04 по evidence закрытия. Новых решений нет. Новый fingerprint ждёт независимого design audit; исполнение не начиналось, продукт не менялся. | designer/claude-opus-5-5/high |

@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-10-03
-inputs_sha256: a3958321533d204b4e341b91388cf0a102663e27aceb275e85be95de46f30efd
+inputs_sha256: 6a8f35991ec1425d49409e5e6a8304a1cdf321f9df081e872801731cbc0e68f2
 generated_by: task plan-views status
 -->
 
@@ -28,7 +28,7 @@ generated_by: task plan-views status
 | P02 | Vendor, состав пакетов, namespace = путь | 4/4 | 🟢 Done |
 | P03 | Feature modules и `Internal` | 2/2 | 🟢 Done |
 | P04 | Application API, Extension SPI и типизированные ошибки | 4/4 | 🟢 Done |
-| P05 | Typed config, композиция и порты | 2/4 | 🟡 In progress |
+| P05 | Typed config, композиция и порты | 3/4 | 🟡 In progress |
 | P10 | Зелёный hosted CI на базе P04 | 4/4 | 🟢 Done |
 
 ## Phase P00
@@ -79,7 +79,7 @@ generated_by: task plan-views status
 |:--|:--|:--|:--|
 | P05.1 | Typed Options, runtime-проверки и удаление static Config | 🟢 Done | 2026-10-02 |
 | P05.2 | Тонкие providers, registrars и именованные классы | 🟢 Done | 2026-10-03 |
-| P05.3 | Порты вместо фасадов, хелперов и static state | 🟡 In progress | 2026-10-03 |
+| P05.3 | Порты вместо фасадов, хелперов и static state | 🟢 Done | 2026-10-03 |
 | P05.4 | Резидентный режим, config:cache, reference и доктрина | ⬜ Not started | — |
 
 ## Phase P10
@@ -298,7 +298,9 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-10-03 | claude-code/claude-sonnet-5-5/high | plan-run · closed-deviations · P05.3 closed with deviations: hosted CI deferred by owner (D87), product a59c38b2 not pushed. Local Validation green; review codex/gpt-6.1-sol 5+3 findings fixed. See completion.md.
 write-site: pre_mutation: allow · pre_final: block:VALIDATION_RECEIPT_MISSING |
 | 2026-10-03 | claude-code/claude-sonnet-5-5/high | plan-run · in-progress · note abbreviated; full text: journal.jsonl:174 |
+| 2026-10-03 | editor/claude-code/claude-sonnet-5-5/high | plan-design · no-op · Design amended by owner direction D88 (hosted-CI carrier of P05.3 moves to P05.4); waiver D88 binds this fingerprint; no execution started by this event. |
+| 2026-10-03 | claude-code/claude-sonnet-5-5/high | plan-run · closed-green · note abbreviated; full text: journal.jsonl:176 |
 
 ## Owner Gates
 
-- P05.3: known deviation
+- —

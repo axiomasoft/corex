@@ -3,7 +3,7 @@
   "contract_id": "2026.09.27-№1-corex-kernel-p05-3",
   "version": {
     "revision": 1,
-    "content_hash": "f591c8a4c498d7877479a706332f277bb9d08118cc2352d8486dfbd3dc35dad7",
+    "content_hash": "9fd19f6b1b924c6d472da3a8cbcf79ceecd84aa211afbbf78208475d3f724448",
     "supersedes": null
   },
   "goal": {
@@ -15,7 +15,8 @@
       "новые `CoreX`-порты поверх `Illuminate\\Contracts`",
       "замена Eloquent",
       "`products/flex-crm`",
-      "подключение гейта к CI (P05.4)."
+      "подключение гейта к CI (P05.4)",
+      "hosted CI — carrier P05.4 на финальном commit фазы (D88)."
     ]
   },
   "must": [
@@ -93,7 +94,12 @@
     },
     {
       "id": "N7",
-      "prohibition": "подключение гейта к CI (P05.4).",
+      "prohibition": "подключение гейта к CI (P05.4)",
+      "source_ref": "phases/P05.md:9"
+    },
+    {
+      "id": "N8",
+      "prohibition": "hosted CI — carrier P05.4 на финальном commit фазы (D88).",
       "source_ref": "phases/P05.md:9"
     }
   ],
@@ -201,15 +207,8 @@
         "id": "A15",
         "predicate": "Гейт `runtime-globals` с конфигом, baseline (только Impersonation) и шестью негативными контролями; lifetime-гейт L1–L3 с пустым allowlist; runtime 16 пакетов на конструкторных зависимостях; `SystemRoleMutationScope`; `artifacts/P05.3-execution/completion.md` (числа G1–G5 и L2/L3 до и после, таблица смен времени жизни, состав baseline для P07, перечень изменённых публичных сигнатур либо «нет», результат ревью).",
         "scope": "public",
-        "check": "- Hosted CI (D73 п.4, D76): commit item отправлен в `origin`; `gh run view <id> --json jobs -q '[.jobs[] | select(.conclusion==\"failure\")] | length'` → `0`; красный джоб чинится в этом item; id запуска и sha — в Completion Notes.",
-        "evidence_ref": "E32"
-      },
-      {
-        "id": "A16",
-        "predicate": "Гейт `runtime-globals` с конфигом, baseline (только Impersonation) и шестью негативными контролями; lifetime-гейт L1–L3 с пустым allowlist; runtime 16 пакетов на конструкторных зависимостях; `SystemRoleMutationScope`; `artifacts/P05.3-execution/completion.md` (числа G1–G5 и L2/L3 до и после, таблица смен времени жизни, состав baseline для P07, перечень изменённых публичных сигнатур либо «нет», результат ревью).",
-        "scope": "public",
         "check": "- Independent review (D71, `full`): reviewer и effort из строки execution-sheet, свежий контекст, модель ≠ исполнитель; вход — item-spec, diff, вывод Validation, таблица L2/L3 «до → после». Фокус: каждая смена времени жизни биндинга; отсутствие новых захватов соединения; места бывшей мутации времени; изменённые сигнатуры `#[Api]/#[Spi]`. Строка `review: <provider>/<model> <GREEN|findings:N>` в Completion Notes; не более двух раундов fix/recheck, затем эскалация с конкретным нерешённым пунктом.",
-        "evidence_ref": "E33"
+        "evidence_ref": "E32"
       }
     ]
   },
@@ -442,12 +441,6 @@
     },
     {
       "id": "E32",
-      "path": "- Hosted CI (D73 п.4, D76): commit item отправлен в `origin`; `gh run view <id> --json jobs -q '[.jobs[] | select(.conclusion==\"failure\")] | length'` → `0`; красный джоб чинится в этом item; id запуска и sha — в Completion Notes.",
-      "proof_class": "declared",
-      "algorithm": "shell-command"
-    },
-    {
-      "id": "E33",
       "path": "- Independent review (D71, `full`): reviewer и effort из строки execution-sheet, свежий контекст, модель ≠ исполнитель; вход — item-spec, diff, вывод Validation, таблица L2/L3 «до → после». Фокус: каждая смена времени жизни биндинга; отсутствие новых захватов соединения; места бывшей мутации времени; изменённые сигнатуры `#[Api]/#[Spi]`. Строка `review: <provider>/<model> <GREEN|findings:N>` в Completion Notes; не более двух раундов fix/recheck, затем эскалация с конкретным нерешённым пунктом.",
       "proof_class": "declared",
       "algorithm": "shell-command"
