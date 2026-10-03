@@ -92,7 +92,6 @@
 | corex-operations.discovery | axiomasoft/corex-operations | string | public | no | product-policy | unobserved | unobserved | ApiOptions::$discovery |  |  |
 | corex-operations.idempotency.lease_seconds | axiomasoft/corex-operations | int | 30 | no | product-policy | unobserved | unobserved | ApiOptions::$idempotencyLeaseSeconds |  |  |
 | corex-operations.idempotency.retention_seconds | axiomasoft/corex-operations | int | 86400 | no | product-policy | unobserved | unobserved | ApiOptions::$idempotencyRetentionSeconds |  |  |
-| corex-operations.problem_type_base | axiomasoft/corex-operations | string | https://corex.dev/problems/ | no | product-policy | unobserved | unobserved | ApiOptions::$problemTypeBase |  |  |
 | corex-operations.product | axiomasoft/corex-operations | string | corex | no | product-policy | unobserved | unobserved | ApiOptions::$product |  |  |
 | corex-operations.require_physical_tenancy | axiomasoft/corex-operations | bool | true | no | product-policy | unobserved | unobserved | ApiOptions::$requirePhysicalTenancy |  |  |
 | corex-operations.routes.enabled | axiomasoft/corex-operations | bool | true | no | deployment | no | unobserved | ApiOptions::$routesEnabled |  |  |

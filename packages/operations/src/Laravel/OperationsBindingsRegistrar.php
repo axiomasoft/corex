@@ -25,7 +25,7 @@ use CoreX\Operations\Definition\Internal\DeclaredSchemaContributor;
 use CoreX\Operations\Definition\Internal\OperationSectionCompiler;
 use CoreX\Operations\Definition\Laravel\OperationPortBindings;
 use CoreX\Operations\Errors\Contracts\ResponseSerializer;
-use CoreX\Operations\Errors\Internal\NegotiatingResponseSerializer;
+use CoreX\Operations\Errors\Internal\HttpResponseSerializer;
 use CoreX\Operations\Idempotency\Internal\DefaultReplayAuthorizer;
 use CoreX\Operations\Internal\AppKeyCheck;
 use CoreX\Operations\Invocation\Contracts\OperationInvoker;
@@ -66,7 +66,7 @@ final class OperationsBindingsRegistrar implements PackageRegistrar
             $app->make(OperationAuthorizer::class),
             $app->make(OperationFieldAuthorizer::class),
         ));
-        $app->bindIf(ResponseSerializer::class, NegotiatingResponseSerializer::class);
+        $app->bindIf(ResponseSerializer::class, HttpResponseSerializer::class);
         $app->bindIf(SchemaContributor::class, DeclaredSchemaContributor::class);
 
         if (! $app->bound(ClockInterface::class)) {

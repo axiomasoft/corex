@@ -256,7 +256,7 @@ final class ToolAuthorizationLayersTest extends TestCase
     /** @param array<string, mixed> $input */
     private function assertHttpError(string $code, array $input): void
     {
-        self::assertSame($code, $this->dispatch($input)->getData(true)['error']['code']);
+        self::assertSame($code, $this->dispatch($input)->getData(true)['code']);
     }
 
     /** @return array<string, string> */

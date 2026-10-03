@@ -56,6 +56,5 @@ return [
     ],
 
     'discovery' => 'public',
-    'problem_type_base' => 'https://corex.dev/problems/',
     'capabilities' => [],
 ];

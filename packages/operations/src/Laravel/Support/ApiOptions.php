@@ -38,7 +38,6 @@ final readonly class ApiOptions
         public string $cursorKeyId,
         public array $cursorKeyring,
         public string $discovery,
-        public string $problemTypeBase,
         public array $capabilities,
     ) {}
 
@@ -68,12 +67,6 @@ final readonly class ApiOptions
 
         if (! in_array($discovery, ['public', 'authenticated'], true)) {
             $violations->add('discovery', 'must be public or authenticated');
-        }
-
-        $problemTypeBase = self::nonEmpty($violations, 'problem_type_base', $config['problem_type_base'] ?? 'https://corex.dev/problems/');
-
-        if (preg_match('#\Ahttps://#', $problemTypeBase) !== 1) {
-            $violations->add('problem_type_base', 'must be an absolute https URI');
         }
 
         $keyId = self::nonEmpty($violations, 'cursor.current_key_id', $cursor['current_key_id'] ?? 'primary');
@@ -117,7 +110,6 @@ final readonly class ApiOptions
             cursorKeyId: $keyId,
             cursorKeyring: $keyring,
             discovery: $discovery,
-            problemTypeBase: $problemTypeBase,
             capabilities: $capabilities,
         );
     }
@@ -137,7 +129,6 @@ final readonly class ApiOptions
                 'lease_seconds' => $this->idempotencyLeaseSeconds,
                 'retention_seconds' => $this->idempotencyRetentionSeconds,
             ],
-            'problem_type_base' => $this->problemTypeBase,
             'product' => $this->product,
             'routes' => [
                 'enabled' => $this->routesEnabled,

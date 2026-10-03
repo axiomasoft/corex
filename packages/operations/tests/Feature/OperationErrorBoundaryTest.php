@@ -9,9 +9,9 @@ use CoreX\Errors\Contracts\DescribesError;
 use CoreX\Errors\Contracts\ProblemRegistry;
 use CoreX\Errors\Data\ErrorDescriptor;
 use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Operations\Errors\Contracts\ResponseSerializer;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
-use CoreX\Operations\Errors\Internal\EnvelopeSerializer;
 use CoreX\Operations\Errors\Internal\ErrorMapper;
 use CoreX\Operations\Errors\Internal\OperationErrorBoundary;
 use CoreX\Operations\Invocation\Data\InvocationMetadata;
@@ -28,9 +28,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 final class OperationErrorBoundaryTest extends TestCase
 {
-    public function test_old_wire_snapshot_has_no_new_error_fields(): void
+    public function test_problem_wire_snapshot_has_registry_identity_and_no_envelope(): void
     {
-        $response = (new EnvelopeSerializer)->error(
+        $response = $this->app->make(ResponseSerializer::class)->error(
             error: new ApiError(OperationsErrorCode::Forbidden, 403, 'Operation is not permitted.'),
             metadata: new InvocationMetadata('req-1', 'v1', '', 'GET', 'corr-1'),
         );
@@ -38,23 +38,20 @@ final class OperationErrorBoundaryTest extends TestCase
         $json = $response->getContent();
 
         $this->assertSame([
-            'data' => null,
-            'error' => [
-                'code' => 'operations.forbidden',
-                'message' => 'Operation is not permitted.',
-                'category' => 'authorization',
-                'path' => null,
-                'retryable' => false,
-                'details' => [],
-            ],
-            'meta' => [
-                'request_id' => 'req-1',
-                'correlation_id' => 'corr-1',
-                'api_version' => 'v1',
-            ],
+            'type' => 'urn:corex:problem:operations.forbidden',
+            'title' => 'Forbidden.',
+            'status' => 403,
+            'detail' => 'Operation is not permitted.',
+            'code' => 'operations.forbidden',
+            'category' => 'authorization',
+            'retryable' => false,
+            'details' => [],
+            'request_id' => 'req-1',
+            'correlation_id' => 'corr-1',
+            'api_version' => 'v1',
         ], $payload);
         $this->assertSame('req-1', $response->headers->get('X-Request-ID'));
-        $this->assertSame('Accept', $response->headers->get('Vary'));
+        $this->assertNull($response->headers->get('Vary'));
         $this->assertStringContainsString('no-store', (string) $response->headers->get('Cache-Control'));
         $this->assertIsString($json);
         $this->assertArrayNotHasKey('X-Correlation-ID', $response->headers->all());
@@ -146,20 +143,17 @@ final class OperationErrorBoundaryTest extends TestCase
 
         $response->assertStatus(500)
             ->assertExactJson([
-                'data' => null,
-                'error' => [
-                    'code' => 'core.internal_error',
-                    'message' => 'Operation could not be completed.',
-                    'category' => 'internal',
-                    'path' => null,
-                    'retryable' => false,
-                    'details' => [],
-                ],
-                'meta' => [
-                    'request_id' => 'req-boom',
-                    'correlation_id' => 'req-boom',
-                    'api_version' => 'v1',
-                ],
+                'type' => 'urn:corex:problem:core.internal_error',
+                'title' => 'Internal error.',
+                'status' => 500,
+                'detail' => 'Operation could not be completed.',
+                'code' => 'core.internal_error',
+                'category' => 'internal',
+                'retryable' => false,
+                'details' => [],
+                'request_id' => 'req-boom',
+                'correlation_id' => 'req-boom',
+                'api_version' => 'v1',
             ])
             ->assertHeader('X-Request-ID', 'req-boom');
         $this->assertStringContainsString('no-store', (string) $response->headers->get('Cache-Control'));
@@ -219,23 +213,20 @@ final class OperationErrorBoundaryTest extends TestCase
 
         $response->assertForbidden()
             ->assertExactJson([
-                'data' => null,
-                'error' => [
-                    'code' => 'operations.forbidden',
-                    'message' => 'Operation is not permitted.',
-                    'category' => 'authorization',
-                    'path' => null,
-                    'retryable' => false,
-                    'details' => [],
-                ],
-                'meta' => [
-                    'request_id' => 'req-123',
-                    'correlation_id' => 'corr-456',
-                    'api_version' => 'v2',
-                ],
+                'type' => 'urn:corex:problem:operations.forbidden',
+                'title' => 'Forbidden.',
+                'status' => 403,
+                'detail' => 'Operation is not permitted.',
+                'code' => 'operations.forbidden',
+                'category' => 'authorization',
+                'retryable' => false,
+                'details' => [],
+                'request_id' => 'req-123',
+                'correlation_id' => 'corr-456',
+                'api_version' => 'v2',
             ]);
         $this->assertSame('corr-456', $metadata->correlationId);
         $this->assertNull($response->headers->get('X-Correlation-ID'));
-        $this->assertSame('Accept', $response->headers->get('Vary'));
+        $this->assertNull($response->headers->get('Vary'));
     }
 }

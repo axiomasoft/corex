@@ -16,12 +16,12 @@ use CoreX\Operations\Invocation\Contracts\ContextResolver;
 use CoreX\Operations\Invocation\Contracts\OperationInvoker;
 use CoreX\Operations\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Invocation\Data\OperationInvocation;
+use CoreX\Operations\Invocation\Enums\InputEnvelope;
 use CoreX\Operations\Invocation\Laravel\InvocationMetadataFactory;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Validation\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use JsonException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
@@ -96,29 +96,19 @@ final class OperationDispatcher implements \CoreX\Operations\Invocation\Contract
     /** @return array<string, mixed> */
     private function input(Request $request, Operation $operation): array
     {
-        if ($request->method() === 'GET') {
-            $input = $request->query->all();
-        } else {
-            if (! $request->isJson() || $request->query->count() !== 0) {
-                throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'A JSON object body without query parameters is required.');
-            }
-
-            try {
-                $body = $request->getContent();
-                $input = json_decode($body, associative: true, flags: JSON_THROW_ON_ERROR);
-            } catch (JsonException) {
-                throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'Malformed JSON body.');
-            }
-
-            if (! is_array($input) || ! str_starts_with(ltrim($body), '{')) {
-                throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'A JSON object body is required.');
-            }
-        }
+        $input = match ($operation->inputEnvelope) {
+            InputEnvelope::Query => (new QueryEnvelopeReader)->read($request),
+            InputEnvelope::JsonObject => (new JsonObjectEnvelopeReader)->read($request),
+        };
 
         $allowed = array_unique(array_map(static fn (string $key): string => explode('.', $key)[0], array_keys($operation->inputRules)));
 
-        if (array_diff(array_keys($input), $allowed) !== []) {
-            throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'Input contains undeclared fields.');
+        $undeclared = array_values(array_diff(array_keys($input), $allowed));
+
+        if ($undeclared !== []) {
+            sort($undeclared);
+
+            throw new ApiError(errorCode: OperationsErrorCode::UndeclaredFields, status: 422, message: 'Input contains undeclared fields.', details: JsonDocuments::capture(['fields' => $undeclared]));
         }
 
         return $this->validation->make($input, $operation->inputRules)->validate();

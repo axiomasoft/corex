@@ -45,6 +45,10 @@ enum OperationsErrorCode: string implements ErrorCode
     case UnknownMessageContract = 'operations.unknown_message_contract';
     case ValidationFailed = 'operations.validation_failed';
 
+    case InputEnvelopeInvalid = 'operations.input_envelope_invalid';
+    case UndeclaredFields = 'operations.undeclared_fields';
+    case UnsupportedMediaType = 'operations.unsupported_media_type';
+
     public function value(): string
     {
         return $this->value;

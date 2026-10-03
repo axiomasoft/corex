@@ -10,6 +10,7 @@ use CoreX\Data\Data\JsonDocument;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
 use CoreX\Operations\Definition\Enums\OperationMode;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
+use CoreX\Operations\Invocation\Enums\InputEnvelope;
 
 /** Immutable runtime projection of one compiled declaration. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
@@ -50,6 +51,7 @@ final readonly class Operation
         public ?string $effectMode = null,
         public bool $executionSupported = true,
         public ?array $cost = null,
+        public InputEnvelope $inputEnvelope = InputEnvelope::JsonObject,
     ) {}
 
 }

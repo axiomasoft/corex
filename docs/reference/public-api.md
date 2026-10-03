@@ -483,7 +483,6 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Operations\Errors\Contracts\ResponseSerializer` | spi-implement | 1.0 |
 | `CoreX\Operations\Errors\Enums\OperationsErrorCode` | api | 1.0 |
 | `CoreX\Operations\Errors\Exceptions\ApiError` | api | 1.0 |
-| `CoreX\Operations\Errors\Laravel\AcceptNegotiation` | spi-call | 1.0 |
 | `CoreX\Operations\Idempotency\Contracts\IdempotencyStore` | spi-implement | 1.0 |
 | `CoreX\Operations\Idempotency\Data\IdempotencyAttempt` | api | 1.0 |
 | `CoreX\Operations\Idempotency\Data\IdempotencyScope` | api | 1.0 |
@@ -498,6 +497,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Operations\Invocation\Data\InvocationMetadata` | api | 1.0 |
 | `CoreX\Operations\Invocation\Data\OperationInvocation` | api | 1.0 |
 | `CoreX\Operations\Invocation\Data\OperationResult` | api | 1.0 |
+| `CoreX\Operations\Invocation\Enums\InputEnvelope` | api | 1.0 |
 | `CoreX\Operations\Invocation\Laravel\InvocationMetadataFactory` | spi-call | 1.0 |
 | `CoreX\Operations\Invocation\Laravel\ResolvedContexts` | spi-call | 1.0 |
 | `CoreX\Operations\Laravel\ApiSchemaBindingsRegistrar` | spi-call | 1.0 |

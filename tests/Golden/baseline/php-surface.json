@@ -43622,6 +43622,17 @@
                         "name": "cost",
                         "type": "?array",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": {
+                            "enum": "CoreX\\Operations\\Invocation\\Enums\\InputEnvelope",
+                            "case": "JsonObject",
+                            "value": "json-object"
+                        },
+                        "name": "inputEnvelope",
+                        "type": "CoreX\\Operations\\Invocation\\Enums\\InputEnvelope",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -43689,6 +43700,12 @@
                 "readonly": true,
                 "static": false,
                 "type": "CoreX\\Operations\\Idempotency\\Enums\\IdempotencyRequirement"
+            },
+            "inputEnvelope": {
+                "name": "inputEnvelope",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Operations\\Invocation\\Enums\\InputEnvelope"
             },
             "inputRules": {
                 "name": "inputRules",
@@ -44593,6 +44610,14 @@
                     "value": "operations.idempotency_not_supported"
                 }
             },
+            "InputEnvelopeInvalid": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "InputEnvelopeInvalid",
+                    "value": "operations.input_envelope_invalid"
+                }
+            },
             "InvalidRequest": {
                 "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
                 "value": {
@@ -44681,12 +44706,28 @@
                     "value": "operations.scope_required"
                 }
             },
+            "UndeclaredFields": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "UndeclaredFields",
+                    "value": "operations.undeclared_fields"
+                }
+            },
             "UnknownMessageContract": {
                 "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
                 "value": {
                     "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
                     "case": "UnknownMessageContract",
                     "value": "operations.unknown_message_contract"
+                }
+            },
+            "UnsupportedMediaType": {
+                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                "value": {
+                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                    "case": "UnsupportedMediaType",
+                    "value": "operations.unsupported_media_type"
                 }
             },
             "ValidationFailed": {
@@ -44892,30 +44933,10 @@
         "abstract": false,
         "constants": [],
         "final": true,
-        "interfaces": [
-            "CoreX\\Operations\\Errors\\Contracts\\ResponseSerializer"
-        ],
+        "interfaces": [],
         "internal": true,
         "kind": "class",
         "methods": {
-            "error": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "error",
-                        "type": "CoreX\\Operations\\Errors\\Exceptions\\ApiError",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "metadata",
-                        "type": "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata",
-                        "variadic": false
-                    }
-                ],
-                "return": "Illuminate\\Http\\JsonResponse",
-                "static": false
-            },
             "success": {
                 "params": [
                     {
@@ -45024,24 +45045,6 @@
                 "return": "array",
                 "static": true
             },
-            "instance": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "problemTypeBase",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "requestId",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "string",
-                "static": true
-            },
             "meta": {
                 "params": [
                     {
@@ -45053,31 +45056,13 @@
                 ],
                 "return": "array",
                 "static": true
-            },
-            "type": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "problemTypeBase",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "code",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "string",
-                "static": true
             }
         },
         "parent": null,
         "properties": [],
         "readonly": false
     },
-    "CoreX\\Operations\\Errors\\Internal\\NegotiatingResponseSerializer": {
+    "CoreX\\Operations\\Errors\\Internal\\HttpResponseSerializer": {
         "abstract": false,
         "constants": [],
         "final": true,
@@ -45099,12 +45084,6 @@
                         "byRef": false,
                         "name": "problems",
                         "type": "CoreX\\Operations\\Errors\\Internal\\ProblemDetailsSerializer",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "errors",
-                        "type": "CoreX\\Operations\\Errors\\Internal\\ErrorMapper",
                         "variadic": false
                     }
                 ],
@@ -45239,8 +45218,8 @@
                 "params": [
                     {
                         "byRef": false,
-                        "name": "options",
-                        "type": "CoreX\\Operations\\Laravel\\Support\\ApiOptions",
+                        "name": "problems",
+                        "type": "CoreX\\Errors\\Contracts\\ProblemRegistry",
                         "variadic": false
                     }
                 ],
@@ -45293,40 +45272,6 @@
                     }
                 ],
                 "return": "?int",
-                "static": true
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
-    "CoreX\\Operations\\Errors\\Laravel\\AcceptNegotiation": {
-        "abstract": false,
-        "constants": {
-            "JSON": {
-                "type": "string",
-                "value": "application/json"
-            },
-            "PROBLEM": {
-                "type": "string",
-                "value": "application/problem+json"
-            }
-        },
-        "final": true,
-        "interfaces": [],
-        "internal": false,
-        "kind": "class",
-        "methods": {
-            "select": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "header",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "?string",
                 "static": true
             }
         },
@@ -46864,6 +46809,93 @@
         },
         "readonly": true
     },
+    "CoreX\\Operations\\Invocation\\Enums\\InputEnvelope": {
+        "abstract": false,
+        "constants": {
+            "JsonObject": {
+                "type": "CoreX\\Operations\\Invocation\\Enums\\InputEnvelope",
+                "value": {
+                    "enum": "CoreX\\Operations\\Invocation\\Enums\\InputEnvelope",
+                    "case": "JsonObject",
+                    "value": "json-object"
+                }
+            },
+            "Query": {
+                "type": "CoreX\\Operations\\Invocation\\Enums\\InputEnvelope",
+                "value": {
+                    "enum": "CoreX\\Operations\\Invocation\\Enums\\InputEnvelope",
+                    "case": "Query",
+                    "value": "query"
+                }
+            }
+        },
+        "final": true,
+        "interfaces": [
+            "BackedEnum",
+            "UnitEnum"
+        ],
+        "internal": false,
+        "kind": "enum",
+        "methods": {
+            "cases": {
+                "params": [],
+                "return": "array",
+                "static": true
+            },
+            "forMethod": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "method",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            },
+            "from": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "static",
+                "static": true
+            },
+            "tryFrom": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "?static",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "name": {
+                "name": "name",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "value": {
+                "name": "value",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": false
+    },
     "CoreX\\Operations\\Invocation\\Internal\\CapabilityResolver": {
         "abstract": false,
         "constants": [],
@@ -47040,6 +47072,58 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Operations\\Invocation\\Internal\\InputEnvelopeReader": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": true,
+        "kind": "interface",
+        "methods": {
+            "read": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "request",
+                        "type": "Illuminate\\Http\\Request",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Operations\\Invocation\\Internal\\JsonObjectEnvelopeReader": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Operations\\Invocation\\Internal\\InputEnvelopeReader"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "read": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "request",
+                        "type": "Illuminate\\Http\\Request",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Operations\\Invocation\\Internal\\OperationDispatcher": {
         "abstract": false,
         "constants": [],
@@ -47126,6 +47210,33 @@
                     }
                 ],
                 "return": "Illuminate\\Http\\JsonResponse",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Operations\\Invocation\\Internal\\QueryEnvelopeReader": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Operations\\Invocation\\Internal\\InputEnvelopeReader"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "read": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "request",
+                        "type": "Illuminate\\Http\\Request",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
                 "static": false
             }
         },
@@ -47879,12 +47990,6 @@
                     },
                     {
                         "byRef": false,
-                        "name": "problemTypeBase",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
                         "name": "capabilities",
                         "type": "array",
                         "variadic": false
@@ -47971,12 +48076,6 @@
                 "readonly": true,
                 "static": false,
                 "type": "int"
-            },
-            "problemTypeBase": {
-                "name": "problemTypeBase",
-                "readonly": true,
-                "static": false,
-                "type": "string"
             },
             "product": {
                 "name": "product",

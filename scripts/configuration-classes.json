@@ -826,15 +826,6 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-operations.problem_type_base": {
-            "owner": "axiomasoft/corex-operations",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "unobserved",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
         "corex-operations.product": {
             "owner": "axiomasoft/corex-operations",
             "secret": "no",
