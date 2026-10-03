@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-10-03
-inputs_sha256: 6ed1343bacebaafd97a842f1d67e5cc76b4b8988bb485c6cc21ced8992bbb5af
+inputs_sha256: e6a12f9137a4c4742bdb8eb631df27ec45a010df27f6b19640cdf3f22740fb15
 generated_by: task plan-views status
 -->
 
@@ -16,7 +16,7 @@ generated_by: task plan-views status
 | Field | Meaning |
 |:--|:--|
 | Version | — |
-| Status | 🟡 In progress |
+| Status | 🟠 Done with deviations |
 | Last Updated | 2026-10-03 |
 
 ## 4. Phase Index & Status Board
@@ -29,7 +29,7 @@ generated_by: task plan-views status
 | P03 | Feature modules и `Internal` | 2/2 | 🟢 Done |
 | P04 | Application API, Extension SPI и типизированные ошибки | 4/4 | 🟢 Done |
 | P05 | Typed config, композиция и порты | 4/4 | 🟢 Done |
-| P06 | Operations, tools, webhooks и wire | 4/5 | 🟡 In progress |
+| P06 | Operations, tools, webhooks и wire | 4/5 | 🟠 Done with deviations |
 | P10 | Зелёный hosted CI на базе P04 | 4/4 | 🟢 Done |
 
 ## Phase P00
@@ -91,7 +91,7 @@ generated_by: task plan-views status
 | P06.2 | Таксономия кодов и исходы tool runtime | 🟢 Done | 2026-10-03 |
 | P06.3 | Конверт CloudEvents для сообщений и тела вебхуков | 🟢 Done | 2026-10-03 |
 | P06.4 | Контракт доставки вебхуков, egress арендатора и модель угроз | 🟢 Done | 2026-10-03 |
-| P06.5 | Review P06 | ⬜ Not started | — |
+| P06.5 | Review P06 | 🟠 Done with deviations | 2026-10-03 |
 
 ## Phase P10
 
@@ -341,7 +341,10 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-10-03 | codex/gpt-6.1-sol/high | plan-run · closed-green · Candidate 2a0265d57c93514f518ace028999debe52a4df2d; plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06.4-execution/completion.md; Grok 4.7 GREEN after two bounded fixes; pre_mutation: allow · pre_final: allow; retain unchanged validation plus affected reruns. |
 | 2026-10-03 | codex/gpt-6.1-sol/high | plan-run · no-op · Bookkeeping: persist already evaluated write-site result in exact generated-state format.
 write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-03 | reviewer/codex/GPT-6 | plan-run · in-progress · Owner explicitly authorizes Sol and waives model-route verification; P06.5 only, no extra reviewer. Read-only product review at 3f568ddd..2a0265d5. No provider model/effort attestation claimed. |
+| 2026-10-03 | reviewer/codex/GPT-6 | plan-run · closed-deviations · Verdict GREEN, findings 0; tests139, registry/full BC GREEN. Deviation: owner-selected Sol, route check waived. Phase remains open. See artifacts/P06.5-review/verdict.md.
+write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates
 
-- —
+- P06.5: known deviation

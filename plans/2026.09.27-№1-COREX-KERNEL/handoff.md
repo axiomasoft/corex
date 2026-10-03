@@ -1,24 +1,24 @@
-# HANDOFF — 2026-10-03 — after P06.4
+# HANDOFF — 2026-10-04 — after P06.5
 
-**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P06.5
+**Next:** manual: Полное ревью фазы P06 и подтверждение финального hosted CI перед закрытием фазы.
 
 | Parameter | Meaning |
 |:--|:--|
-| Batch | solo |
-| Model | Grok 4.7 |
-| Thinking | high |
+| Batch | n/a |
+| Model | owner-selected |
+| Thinking | owner-selected |
 | Context | continue-root |
 
-```session-continuity-decision/v1
-{"outcome": "continue-root", "reason": "authorized-scope-complete", "evidence": ["batch:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945", "loaded-inputs:reusable", "cold-start-cost:0", "lifecycle:scope-complete", "checkpoint:artifacts/P06.4-execution/completion.md"], "runnable": true, "schema_version": "session-continuity-decision/v1"}
+```text
+Полное ревью фазы P06 и подтверждение финального hosted CI перед закрытием фазы.
 ```
 
-**Done:** P06.1–P06.4 GREEN. Final P06.4 product candidate 2a0265d57c93514f518ace028999debe52a4df2d; typed failure reasons, shared delivery/recovery budget, tenant egress SPI on subscription and every delivery/replay, executable threat model. Grok 4.7 GREEN after two reproduced and repaired findings. Exact checks, candidate binding, bounded repairs and evidence reuse are in artifacts/P06.4-execution/completion.md, pre-final.json and validation-reuse.json.
+**Done:** P06.1–P06.4 GREEN; P06.5 review verdict GREEN, findings 0, 139 tests / 1658 assertions, error registry and full 20-package BC check exit 0. Read-only review at 3f568ddd53520693cd94a7bc3761e9b5ac2412d0..2a0265d57c93514f518ace028999debe52a4df2d. Item P06.5 is Done with deviations only for the owner's explicit Sol/model-route-verification waiver; no fabricated frontier/high or Grok attestation. Product and owner dirt are unchanged.
 
-**Remaining:** P06.5 is the independent read-only review of P06.1–P06.4. Owner selected Grok 4.7 and requested no heavy internal reviews. This is a recommendation beyond the completed solo P06.4 authorization. P06 remains open until its review and final hosted-CI obligations are satisfied. Lifecycle scope-complete; the current root context is reusable.
+**Remaining:** Owner selected a later full phase review. Hosted CI and phase close are separate from P06.5 by its Scope Excluded and D91 p.4; P06 acceptance remains open and no phase closure/audit was issued. This invocation authorizes only P06.5. No next scope is started; the current root remains reusable.
 
-**Open risks:** P06.5 phase consistency review and final hosted CI remain. No skipped P06.4 acceptance. Preexisting untracked PHP prototypes, owner CLAUDE/config/gitignore changes and the generated graph report remain outside our commits.
+**Sources of truth:** artifacts/P06.5-review/verdict.md; phases/P06/P06.5.md and generated state; journal.jsonl; decisions/D90/D92/D93; research/P06-design.md; artifacts/P06.1-execution/completion.md through artifacts/P06.4-execution/completion.md. Exact reviewed candidate 2a0265d57c93514f518ace028999debe52a4df2d.
 
-**Sources of truth:** phases/P06/, decisions/D90/D92/D93; artifacts/P06.1-execution/completion.md through artifacts/P06.4-execution/completion.md; product-manifest.json, review-final-binding.json, raw Grok results, validation proofs and journal.
+**Open risks:** Final hosted CI and the later owner-selected full phase review have no evidence in this invocation. Production egress implementations and deployment were not exercised. No reproduced product finding remains from this review.
 
-**Workarounds/Deferred/Open questions:** Reviewed immutable source packets through native Grok 4.7 CLI. Retained unchanged full-cohort evidence and reran the affected scope after review fixes, as documented in validation-reuse.json and bc-reuse.json. Exact product archive lint excludes unrelated historical untracked PHP prototypes. No push or release.
+**Workarounds/Deferred/Open questions:** Model-route verification was explicitly waived by the owner. Technical Validation remains mandatory and passed. Preexisting CLAUDE/config/gitignore changes, .grok, untracked historical PHP proofs and generated graph dirt remain outside our commit. No product edits, push, release or extra reviewer.
