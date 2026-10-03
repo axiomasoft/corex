@@ -15,9 +15,9 @@ use Illuminate\Foundation\Exceptions\Handler;
 use Illuminate\Support\DefaultProviders;
 
 /**
- * `php artisan config:cache` serialises the merged configuration with var_export, so every
- * value must survive var_export -> eval byte-for-byte: no closures, no objects other than enum
- * cases (CFG-004). Package configs are loaded the way config:cache loads them (a plain require).
+ * `php artisan config:cache` serialises the merged configuration with var_export into a PHP
+ * file, so every value must survive that file being included: no closures, no objects other
+ * than enum cases (CFG-004). Package configs are loaded the way config:cache loads them (a plain require).
  *
  * @return array<string, array<array-key, mixed>> config file name => array
  */
@@ -42,8 +42,19 @@ function configCacheRoundTrip(array $config, string $label): array
 {
     configCacheAssertSerialisable($config, $label);
 
-    // config:cache writes exactly this shape: `<?php return var_export(...);`.
-    return eval('return '.var_export($config, true).';');
+    // config:cache writes exactly this shape: `<?php return var_export(...);` and the
+    // application includes that file.
+    $path = sys_get_temp_dir().'/corex-config-cache-'.bin2hex(random_bytes(8)).'.php';
+    file_put_contents($path, '<?php return '.var_export($config, true).';');
+
+    try {
+        /** @var array<array-key, mixed> $loaded */
+        $loaded = include $path;
+    } finally {
+        unlink($path);
+    }
+
+    return $loaded;
 }
 
 /** @param  array<array-key, mixed>  $config */

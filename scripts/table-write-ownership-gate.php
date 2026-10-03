@@ -167,6 +167,26 @@ foreach ($files as $owner) {
     $tableDefaults[$owner] = array_merge($tableDefaults[$owner] ?? [], $typedDefaults);
 }
 
+// Trait and inherited methods are not on Class_::getMethod(). Index return types
+// so `$this->coreOptions()->settingsTable` resolves like a promoted Options property.
+$methodReturnTypes = [];
+foreach ($trees as $tree) {
+    foreach ($finder->findInstanceOf($tree, Node\Stmt\ClassLike::class) as $classLike) {
+        $typeName = $classLike->namespacedName?->toString();
+
+        if ($typeName === null) {
+            continue;
+        }
+        foreach ($classLike->getMethods() as $method) {
+            $returnType = typeName($method->returnType);
+
+            if ($returnType !== null) {
+                $methodReturnTypes[$typeName.'::'.$method->name->toString()] = $returnType;
+            }
+        }
+    }
+}
+
 // Resolve model getTable() only after all package option defaults have been indexed.
 foreach ($trees as $file => $tree) {
     foreach ($finder->findInstanceOf($tree, Node\Stmt\Class_::class) as $class) {
@@ -405,7 +425,19 @@ function tableExpression(?Expr $expr, Node $site, NodeFinder $finder, array $tab
         if ($expr->var instanceof Expr\PropertyFetch && $expr->var->var instanceof Expr\Variable && $expr->var->var->name === 'this' && $expr->var->name instanceof Node\Identifier) {
             $sourceType = promotedPropertyType(enclosingClass($site), $expr->var->name->toString());
         } elseif ($expr->var instanceof Expr\MethodCall && $expr->var->var instanceof Expr\Variable && $expr->var->var->name === 'this' && $expr->var->name instanceof Node\Identifier) {
-            $sourceType = typeName(enclosingClass($site)?->getMethod($expr->var->name->toString())?->returnType);
+            $sourceType = methodReturnType(enclosingClass($site), $expr->var->name->toString());
+        } elseif ($expr->var instanceof Expr\Variable && is_string($expr->var->name) && $expr->var->name !== 'this') {
+            $scope = enclosingFunction($site);
+
+            if ($scope !== null) {
+                foreach ($scope->params as $param) {
+                    if ($param->var instanceof Expr\Variable && $param->var->name === $expr->var->name) {
+                        $sourceType = typeName($param->type);
+
+                        break;
+                    }
+                }
+            }
         } elseif ($expr->var instanceof Expr\FuncCall && $expr->var->name instanceof Node\Name
             && $expr->var->name->toString() === 'app' && ($expr->var->args[0]->value ?? null) instanceof Expr\ClassConstFetch
             && $expr->var->args[0]->value->class instanceof Node\Name
@@ -481,6 +513,39 @@ function typeName(?Node $type): ?string
     }
 
     return $type instanceof Node\Name ? $type->toString() : null;
+}
+
+function methodReturnType(?Node\Stmt\Class_ $class, string $method): ?string
+{
+    global $methodReturnTypes;
+
+    if ($class === null) {
+        return null;
+    }
+
+    $declared = typeName($class->getMethod($method)?->returnType);
+
+    if ($declared !== null) {
+        return $declared;
+    }
+
+    $own = $class->namespacedName?->toString();
+
+    if ($own !== null && isset($methodReturnTypes[$own.'::'.$method])) {
+        return $methodReturnTypes[$own.'::'.$method];
+    }
+
+    foreach ($class->getTraitUses() as $use) {
+        foreach ($use->traits as $trait) {
+            $found = $methodReturnTypes[$trait->toString().'::'.$method] ?? null;
+
+            if ($found !== null) {
+                return $found;
+            }
+        }
+    }
+
+    return null;
 }
 
 /** @param array<string,string> $tableDefaults */

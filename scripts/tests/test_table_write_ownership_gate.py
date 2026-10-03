@@ -83,6 +83,36 @@ class Writer {
             "public function write() { $this->db->table($this->table)->delete(); }}", package="core")
         self.assertEqual(0, code, output)
 
+    def test_parameter_and_trait_method_resolve(self):
+        body = r'''namespace Demo;
+trait Resolves {
+    protected function coreOptions(): \CoreX\Config\Data\CoreOptions { throw new \RuntimeException('unused'); }
+}
+class Model {
+    use Resolves;
+    public function getTable(): string { return $this->coreOptions()->settingsTable; }
+    public function write() { $this->db->table($this->getTable())->delete(); }
+}
+class Command {
+    public function handle(\CoreX\Config\Data\CoreOptions $options) {
+        $table = $options->settingsTable;
+        $this->db->table($table)->delete();
+    }
+}'''
+        code, output = self.run_gate(body, package="core")
+        self.assertEqual(0, code, output)
+        self.assertIn("2 statically resolved writes", output)
+
+    def test_unrelated_parameter_stays_dynamic(self):
+        code, output = self.run_gate(r'''namespace Demo;
+class Command {
+    public function handle(\Other\CoreOptions $options) {
+        $this->db->table($options->settingsTable)->delete();
+    }
+}''')
+        self.assertEqual(1, code, output)
+        self.assertIn("dynamic table name on write", output)
+
     def test_attribute_tables_promoted_defaults_resolve(self):
         source = r'''namespace CoreX\CustomFields\Data;
 class AttributeTables { public function __construct(public string $definitions = 'sys_settings') {} }'''

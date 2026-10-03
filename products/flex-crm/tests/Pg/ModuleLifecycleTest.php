@@ -36,7 +36,9 @@ it('discovers CRM composer metadata and manages its schema through the standard 
     $this->app->setBasePath($consumer);
     $this->app->useDatabasePath($databasePath);
     $this->app->useBootstrapPath($bootstrapPath);
-    $discovered = (new ModuleDiscovery)->discover();
+    // P05.3 reads installed.json from the path bound on the container, not from base_path() inside discovery.
+    $this->app->forgetInstance(ModuleDiscovery::class);
+    $discovered = $this->app->make(ModuleDiscovery::class)->discover();
     expect($discovered)->toHaveCount(1)->and($discovered[0]->composerName)->toBe('flex/crm')
         ->and($metadata['extra']['corex']['module'])->toBe(CrmModule::class);
     $this->artisan('corex:modules:compile')->assertSuccessful();
