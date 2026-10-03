@@ -27,9 +27,9 @@ def admitted(root, package, base, errors):
         if '\nstatus: accepted\n' not in source:
             return False
     def signature(row):
-        return (row['description'], row['path'], row['modificationType'])
+        return (hashlib.sha256(row['description'].encode()).hexdigest(), row['path'], row['modificationType'])
     actual = {signature(row) for row in errors}
-    approved = {signature(row) for row in rule.get('changes', [])}
+    approved = {(row['description_sha256'], row['path'], row['modificationType']) for row in rule.get('changes', [])}
     return bool(actual) and actual == approved
 
 

@@ -15,34 +15,34 @@
             ],
             "changes": [
                 {
-                    "description": "Case CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode::InputEnvelopeInvalid was added",
                     "path": "/packages/operations/src/Errors/Enums/OperationsErrorCode.php",
-                    "modificationType": "added"
+                    "modificationType": "added",
+                    "description_sha256": "026637290f44294865d5b4e995be26a5ff842ed507847444d3b4b6abc3906aed"
                 },
                 {
-                    "description": "Case CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode::UndeclaredFields was added",
                     "path": "/packages/operations/src/Errors/Enums/OperationsErrorCode.php",
-                    "modificationType": "added"
+                    "modificationType": "added",
+                    "description_sha256": "2fc0bbeadf132e25ad71a7bff20e0ccf484b82356d8a9d89775cfe3690e7fc56"
                 },
                 {
-                    "description": "Case CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode::UnsupportedMediaType was added",
                     "path": "/packages/operations/src/Errors/Enums/OperationsErrorCode.php",
-                    "modificationType": "added"
+                    "modificationType": "added",
+                    "description_sha256": "93c760e810b8e6788d5a080661ee64366d5f03d4637297092e0710ad4f384530"
                 },
                 {
-                    "description": "Class CoreX\\Operations\\Errors\\Laravel\\AcceptNegotiation has been deleted",
                     "path": null,
-                    "modificationType": "removed"
+                    "modificationType": "removed",
+                    "description_sha256": "bb85bff60faa99cd23724e6a1b827a00d8925796b0af5caea81c7a642d40c344"
                 },
                 {
-                    "description": "Property CoreX\\Operations\\Laravel\\Support\\ApiOptions#$problemTypeBase was removed",
                     "path": "/packages/operations/src/Laravel/Support/ApiOptions.php",
-                    "modificationType": "removed"
+                    "modificationType": "removed",
+                    "description_sha256": "2ca6d2e8724dbd6a746fc0f0808b03493ddfacbca49919c21d44f490335f41df"
                 },
                 {
-                    "description": "The parameter $problemTypeBase of CoreX\\Operations\\Laravel\\Support\\ApiOptions#__construct() changed from string to a non-contravariant array",
                     "path": "/packages/operations/src/Laravel/Support/ApiOptions.php",
-                    "modificationType": "changed"
+                    "modificationType": "changed",
+                    "description_sha256": "ec4319067d760bb5c6daba7f407871e13f19c5a4500e81cf84053c06e3aaa145"
                 }
             ]
         }
