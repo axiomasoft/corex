@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — ports instead of facades, helpers and static state (P05.3)
+
+- Planning services take `ConnectionResolverInterface` and `ClockInterface` through constructors instead of facades and helpers. `Planning\Laravel\PlanningCommand` accepts an optional trailing `TaskOperationReceipts` (resolved from the container when absent).
+
 ## Unreleased — thin providers and registrars (P05.2)
 
 - The task-saving listener is a named method instead of a multi-statement closure.

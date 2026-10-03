@@ -48,10 +48,10 @@ beforeEach(function (): void {
 
 function pollingPubSub(): DatabasePollPubSub
 {
-    return new DatabasePollPubSub(
-        connection: PUBSUB_DB_POLL_TEST_CONNECTION,
-        runtime: new WorkerConsoleRuntime,
-    );
+    return app()->make(DatabasePollPubSub::class, [
+        'connection' => PUBSUB_DB_POLL_TEST_CONNECTION,
+        'runtime' => new WorkerConsoleRuntime,
+    ]);
 }
 
 it('AC-25(a)/(б) publish→subscribe delivers the payload via the poll cursor, from a console worker context', function (): void {

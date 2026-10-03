@@ -23,7 +23,7 @@ beforeEach(function (): void {
 });
 
 it('records committed audit only after the outer transaction succeeds', function (): void {
-    $logger = new QueuedAuditLogger('pgsql');
+    $logger = app()->make(QueuedAuditLogger::class, ['connection' => 'pgsql']);
     foreach ([false, true] as $commit) {
         DB::beginTransaction();
         DB::transaction(fn () => $logger->record(new AuditEntry(action: 'changed', actorType: ActorType::System)));
@@ -38,8 +38,8 @@ it('serializes publishers so a cursor cannot overtake an uncommitted message', f
     $other = DB::connection('publisher_test');
     $other->beginTransaction();
     $other->statement("SET LOCAL lock_timeout = '50ms'");
-    $first = new DatabasePollPubSub('pgsql');
-    $second = new DatabasePollPubSub('publisher_test');
+    $first = app()->make(DatabasePollPubSub::class, ['connection' => 'pgsql']);
+    $second = app()->make(DatabasePollPubSub::class, ['connection' => 'publisher_test']);
     DB::beginTransaction();
 
     try {

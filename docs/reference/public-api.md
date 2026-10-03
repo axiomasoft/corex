@@ -69,6 +69,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Database\Laravel\BaseModel` | spi-implement | 1.0 |
 | `CoreX\Database\Laravel\HasConfiguredId` | spi-call | 1.0 |
 | `CoreX\Database\Laravel\IdColumns` | spi-call | 1.0 |
+| `CoreX\Database\Laravel\ResolvesCoreOptions` | spi-call | 1.0 |
 | `CoreX\Departments\Contracts\DepartmentRepository` | api | 1.0 |
 | `CoreX\Departments\Data\Department` | api | 1.0 |
 | `CoreX\Departments\Events\DepartmentMoved` | spi-call | 1.0 |

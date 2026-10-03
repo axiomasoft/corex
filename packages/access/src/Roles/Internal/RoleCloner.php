@@ -6,7 +6,7 @@ namespace CoreX\Access\Roles\Internal;
 
 use CoreX\Access\Roles\Internal\Models\Role;
 use CoreX\Access\Roles\Internal\Models\RoleMatrixRow;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\ConnectionResolverInterface;
 
 /**
  * Customization path for a system role (AC-21): creates an editable,
@@ -19,9 +19,11 @@ use Illuminate\Support\Facades\DB;
  */
 final readonly class RoleCloner
 {
+    public function __construct(private ConnectionResolverInterface $connections) {}
+
     public function clone(Role $source, string $slug, ?string $name = null): Role
     {
-        return DB::transaction(function () use ($source, $slug, $name): Role {
+        return $this->connections->connection()->transaction(function () use ($source, $slug, $name): Role {
             $clone = Role::query()->create([
                 'slug' => $slug,
                 'name' => $name ?? $source->name,

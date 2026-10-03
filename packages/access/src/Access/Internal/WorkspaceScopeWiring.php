@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Access\Internal;
 
+use Closure;
 use CoreX\Access\CoreAuthServiceProvider;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Enums\Capability;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Scope;
 
 /**
  * Auto-registers the workspace global scope on every model whose entity
@@ -33,7 +35,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 final class WorkspaceScopeWiring
 {
-    public static function wire(EntityRegistry $registry, ?string $scopeClass): void
+    /** @param  Closure(class-string): Scope<Model>  $make  builds the scope instance (the caller owns the container). */
+    public static function wire(EntityRegistry $registry, ?string $scopeClass, Closure $make): void
     {
         if ($scopeClass === null || ! class_exists($scopeClass)) {
             return;
@@ -43,7 +46,7 @@ final class WorkspaceScopeWiring
             /** @var class-string<Model> $model */
             $model = $definition->model;
 
-            $model::addGlobalScope(app($scopeClass));
+            $model::addGlobalScope($make($scopeClass));
         }
     }
 }

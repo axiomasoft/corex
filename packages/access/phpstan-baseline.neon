@@ -97,12 +97,6 @@ parameters:
 			path: src/Access/Internal/ScopePredicate.php
 
 		-
-			rawMessage: 'Parameter #1 $scope of static method Illuminate\Database\Eloquent\Model::addGlobalScope() expects (Closure(Illuminate\Database\Eloquent\Builder<Illuminate\Database\Eloquent\Model>): mixed)|Illuminate\Database\Eloquent\Scope|string, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/Access/Internal/WorkspaceScopeWiring.php
-
-		-
 			rawMessage: Cannot cast mixed to string.
 			identifier: cast.string
 			count: 1

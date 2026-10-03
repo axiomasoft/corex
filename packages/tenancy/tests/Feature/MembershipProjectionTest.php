@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
+use CoreX\Tenancy\Account\Contracts\AccountRead;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Contracts\CentralApiClient;
 use CoreX\Tenancy\Identity\Internal\Membership\ApplyMembershipProjection;
@@ -15,6 +16,8 @@ use CoreX\Tenancy\Membership\Data\RevokeMembershipRequest;
 use CoreX\Tenancy\Membership\Enums\MembershipState;
 use CoreX\Tenancy\Membership\Exceptions\CentralUnavailable;
 use CoreX\Tenancy\Tests\Stubs\StubIdentity;
+use Illuminate\Contracts\Cache\Factory as CacheFactory;
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Session\ArraySessionHandler;
@@ -200,6 +203,9 @@ it('deactivates and clears sessions only in the target account', function (): vo
         centralConnection: 'pgsql',
         centralApi: $client,
         tenancy: $manager,
+        accounts: app(AccountRead::class),
+        connections: app(ConnectionResolverInterface::class),
+        cache: app(CacheFactory::class),
     );
 
     refreshMembershipProjection(projection: $projection, identityId: $identityId, accountId: $accountA->id);
@@ -261,6 +267,9 @@ it('does not restore a deleted session when an active membership is regranted', 
         centralConnection: 'pgsql',
         centralApi: $client,
         tenancy: $manager,
+        accounts: app(AccountRead::class),
+        connections: app(ConnectionResolverInterface::class),
+        cache: app(CacheFactory::class),
     );
 
     refreshMembershipProjection(projection: $projection, identityId: $identityId, accountId: $account->id);
@@ -321,6 +330,9 @@ it('does not let a delayed grant hint re-enable a revoked membership', function 
         centralConnection: 'pgsql',
         centralApi: $client,
         tenancy: $manager,
+        accounts: app(AccountRead::class),
+        connections: app(ConnectionResolverInterface::class),
+        cache: app(CacheFactory::class),
     );
 
     refreshMembershipProjection(projection: $projection, identityId: $identityId, accountId: $account->id);
@@ -375,6 +387,9 @@ it('fails closed and clears target sessions when central authority is unavailabl
         centralConnection: 'pgsql',
         centralApi: $client,
         tenancy: $manager,
+        accounts: app(AccountRead::class),
+        connections: app(ConnectionResolverInterface::class),
+        cache: app(CacheFactory::class),
     );
 
     refreshMembershipProjection(projection: $projection, identityId: $identityId, accountId: $account->id);
@@ -427,6 +442,9 @@ it('fails closed when the central client raises an unexpected read failure', fun
         centralConnection: 'pgsql',
         centralApi: $client,
         tenancy: $manager,
+        accounts: app(AccountRead::class),
+        connections: app(ConnectionResolverInterface::class),
+        cache: app(CacheFactory::class),
     );
 
     refreshMembershipProjection(projection: $projection, identityId: $identityId, accountId: $account->id);

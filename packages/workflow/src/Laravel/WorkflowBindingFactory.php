@@ -14,6 +14,7 @@ use CoreX\Workflow\Internal\UnavailableEngineAdapter;
 use CoreX\Workflow\Internal\WorkflowOptions;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\DatabaseManager;
+use Psr\Clock\ClockInterface;
 
 /** Builds the workflow binding from the container; the engine adapter and module registry are optional. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
@@ -31,6 +32,7 @@ final class WorkflowBindingFactory
             engine: $engine,
             modules: $app->bound(ModuleRegistry::class) ? $app->make(ModuleRegistry::class) : null,
             enforceDeclarations: $app->make(WorkflowOptions::class)->enforceDeclarations,
+            clock: $app->make(ClockInterface::class),
         );
     }
 }

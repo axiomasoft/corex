@@ -8,6 +8,7 @@ use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Audit\Contracts\Auditable;
 use CoreX\Audit\Internal\AuditObserver;
+use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -65,7 +66,7 @@ trait HasAuditLog
     private static function recordAudit(Model $model, string $action): null
     {
         if ($model instanceof Auditable) {
-            AuditObserver::record($model, $action);
+            Container::getInstance()->make(AuditObserver::class)->record($model, $action);
         }
 
         return null;

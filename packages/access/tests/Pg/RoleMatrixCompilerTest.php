@@ -5,7 +5,6 @@ declare(strict_types=1);
 use AzGuard\Models\RolePermission;
 use CoreX\Access\Database\Seeders\SystemRolesSeeder;
 use CoreX\Access\Enums\PrincipalType;
-use CoreX\Access\Laravel\AuthOptions;
 use CoreX\Access\Matrix\Internal\DatabaseRoleMatrixCompiler;
 use CoreX\Access\Matrix\Internal\MatrixPermissionCatalogBuilder;
 use CoreX\Access\Matrix\Internal\MatrixValidator;
@@ -68,7 +67,7 @@ beforeEach(function (): void {
 
 function makeCompiler(): DatabaseRoleMatrixCompiler
 {
-    return new DatabaseRoleMatrixCompiler(App::make(ScopeMapVersion::class), App::make(AuthOptions::class));
+    return App::make(DatabaseRoleMatrixCompiler::class);
 }
 
 // AC-22 — matrix row (scope ≠ none) compiles to exactly the D100 key grammar.
@@ -133,7 +132,7 @@ it('leaves no new keys and no version bump when compilation fails mid-transactio
         }
     });
 
-    expect(fn () => (new DatabaseRoleMatrixCompiler($scopeMapVersion, App::make(AuthOptions::class)))->compile($role->id))
+    expect(fn () => (app()->make(DatabaseRoleMatrixCompiler::class))->compile($role->id))
         ->toThrow(RuntimeException::class, 'injected mid-compile failure');
 
     $azguardRole = AzGuardRoleModel::query()->where('name', $role->slug)->first();
@@ -175,7 +174,7 @@ it('warns (does not throw) when a role assignable to agent uses own/dept scope',
 
     RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'own']);
 
-    $warnings = (new MatrixValidator)->validate(RoleMatrixData::role((string) $role->getKey()));
+    $warnings = (app(MatrixValidator::class))->validate(RoleMatrixData::role((string) $role->getKey()));
 
     expect($warnings)->not->toBeEmpty()
         ->and($warnings[0])->toContain('agent');
@@ -191,7 +190,7 @@ it('returns no warning for a user-only role using own/dept scope', function (): 
 
     RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'own']);
 
-    expect((new MatrixValidator)->validate(RoleMatrixData::role((string) $role->getKey())))->toBeEmpty();
+    expect((app(MatrixValidator::class))->validate(RoleMatrixData::role((string) $role->getKey())))->toBeEmpty();
 });
 
 // findings/P2.8-azguard-inventory-2026-07-26.md §7 — compiled keys are reachable through AzGuard's own catalog builder.
@@ -206,7 +205,7 @@ it('exposes compiled keys through MatrixPermissionCatalogBuilder for the configu
     RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'account']);
     RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'delete', 'scope' => 'none']);
 
-    $builder = new MatrixPermissionCatalogBuilder(App::make(AuthOptions::class));
+    $builder = App::make(MatrixPermissionCatalogBuilder::class);
 
     expect($builder->supports('app'))->toBeTrue()
         ->and($builder->supports('admin'))->toBeFalse();
@@ -300,7 +299,7 @@ it('excludes catalog keys whose owning module is inactive', function (): void {
 
     $keys = array_map(
         static fn ($definition): string => $definition->key(),
-        (new MatrixPermissionCatalogBuilder(App::make(AuthOptions::class)))->build('app'),
+        (App::make(MatrixPermissionCatalogBuilder::class))->build('app'),
     );
 
     expect($keys)->not->toContain('app.crm.deal.read');

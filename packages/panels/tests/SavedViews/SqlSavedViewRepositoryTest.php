@@ -17,6 +17,7 @@ use CoreX\Panels\SavedViews\Data\ViewScope;
 use CoreX\Panels\SavedViews\Data\ViewSubject;
 use CoreX\Panels\SavedViews\Internal\SqlSavedViewRepository;
 use CoreX\Panels\SavedViews\Internal\ViewConfigValidator;
+use CoreX\Time\Laravel\SystemClock;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Application;
@@ -69,7 +70,7 @@ it('persists only a validated AST and compiles it without SQL or identifiers', f
             return true;
         }
     };
-    $repository = new SqlSavedViewRepository($schemas, $policy, new ViewConfigValidator);
+    $repository = new SqlSavedViewRepository($schemas, $policy, new ViewConfigValidator, CoreOptionsParser::fromArray([]), app('db'), new SystemClock);
     $context = new ViewContext(new TenantContext(new AccountRef('account', 'account', 'active', [], []), boxed: true), 'user', 'actor');
     $scope = new ViewScope('lab.sample', null, null, null);
 
@@ -177,6 +178,7 @@ function corexSavedViewConnectionProbe(Application $app, ?string $override = nul
         validator: new ViewConfigValidator,
         options: $options,
         database: $manager,
+        clock: new SystemClock,
     );
 
     return [
@@ -207,7 +209,7 @@ it('updates saved views optimistically and replaces deleted defaults', function 
             return true;
         }
     };
-    $repository = new SqlSavedViewRepository($schemas, $policy, new ViewConfigValidator);
+    $repository = new SqlSavedViewRepository($schemas, $policy, new ViewConfigValidator, CoreOptionsParser::fromArray([]), app('db'), new SystemClock);
     $context = new ViewContext(new TenantContext(new AccountRef('account', 'account', 'active', [], []), boxed: true), 'user', 'actor');
     $scope = new ViewScope('lab.sample', null, null, null);
 

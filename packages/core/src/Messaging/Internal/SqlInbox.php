@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Internal;
 
-use CoreX\Config\Data\CoreOptions;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Exceptions\InboxRefused;
 use Illuminate\Database\ConnectionInterface;
@@ -16,6 +15,7 @@ final readonly class SqlInbox implements Inbox
     public function __construct(
         private ConnectionInterface $connection,
         private ClockInterface $clock,
+        private string $table = 'sys_inbox_messages',
     ) {}
 
     #[Override]
@@ -27,7 +27,7 @@ final readonly class SqlInbox implements Inbox
 
         // insertOrIgnore компилируется в INSERT ... ON CONFLICT DO NOTHING на pgsql.
         // Предварительный SELECT здесь был бы гонкой, а не защитой (P5-Q2).
-        $inserted = $this->connection->table(app(CoreOptions::class)->inboxMessagesTable)->insertOrIgnore([
+        $inserted = $this->connection->table($this->table)->insertOrIgnore([
             'consumer' => $consumer,
             'message_id' => $messageId,
             'name' => $name,

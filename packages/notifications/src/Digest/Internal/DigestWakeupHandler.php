@@ -9,6 +9,7 @@ use CoreX\Notifications\Inbox\Data\NotificationContext;
 use CoreX\Notifications\Preferences\Contracts\PreferenceRepository;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Str;
+use Psr\Clock\ClockInterface;
 use RuntimeException;
 
 final class DigestWakeupHandler
@@ -16,6 +17,7 @@ final class DigestWakeupHandler
     public function __construct(
         private readonly ConnectionInterface $connection,
         private readonly PreferenceRepository $preferences,
+        private readonly ClockInterface $clock,
     ) {}
 
     public function __invoke(DigestTick $tick): void
@@ -85,7 +87,7 @@ final class DigestWakeupHandler
                 'state' => 'pending',
                 'claim_epoch' => '0',
                 'attempts' => 0,
-                'next_attempt' => now(),
+                'next_attempt' => $this->clock->now(),
                 'lease_until' => null,
                 'admitted_revision' => '1',
                 'provider_ref' => null,

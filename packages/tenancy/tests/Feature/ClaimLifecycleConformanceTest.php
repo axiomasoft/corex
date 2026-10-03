@@ -11,6 +11,8 @@ use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycle;
 use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycleFsm;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Account\Internal\PendingPool;
+use CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver;
+use CoreX\Tenancy\Laravel\Support\AccountLifecyclePolicy;
 use CoreX\Tenancy\Provisioning\Data\ClaimRequest;
 use CoreX\Tenancy\Provisioning\Exceptions\ClaimUnavailable;
 use CoreX\Tenancy\Provisioning\Exceptions\TemplateIntegrityException;
@@ -18,12 +20,15 @@ use CoreX\Tenancy\Provisioning\Internal\ClaimAccountSignup;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Provisioning\Internal\StanclTenantDatabaseLifecycle;
 use CoreX\Tenancy\Tests\TestCase;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Connectors\ConnectionFactory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Psr\Clock\ClockInterface;
 
 uses()->group('pg');
 
@@ -71,6 +76,7 @@ function p32ArchiveCommand(array $command, string $path, bool $input = false): v
 function p32Lifecycle(StanclTenantDatabaseLifecycle $database): AccountLifecycle
 {
     return new AccountLifecycle(
+        lifecycle: app(AccountLifecyclePolicy::class), connections: app(ConnectionResolverInterface::class), clock: app(ClockInterface::class), events: app(Dispatcher::class), connectionFactory: app(ConnectionFactory::class), hostResolver: app(HostTenantResolver::class),
         centralConnection: 'pgsql',
         pendingPool: app(PendingPool::class),
         fsm: new AccountLifecycleFsm,
@@ -140,7 +146,7 @@ final class P32ArchiveFixture
 
     public function adapter(): StanclTenantDatabaseLifecycle
     {
-        return new StanclTenantDatabaseLifecycle(centralConnection: 'pgsql', writer: $this->write(...), verifier: $this->verify(...));
+        return new StanclTenantDatabaseLifecycle(connections: app(ConnectionResolverInterface::class), clock: app(ClockInterface::class), events: app(Dispatcher::class), centralConnection: 'pgsql', writer: $this->write(...), verifier: $this->verify(...));
     }
 }
 
@@ -197,7 +203,7 @@ afterEach(function (): void {
 
 it('refuses size-only archives without a qualified integrity verifier', function (): void {
     $account = $this->p32Accounts[0];
-    $adapter = new StanclTenantDatabaseLifecycle(centralConnection: 'pgsql', writer: $this->p32Archive->write(...));
+    $adapter = new StanclTenantDatabaseLifecycle(connections: app(ConnectionResolverInterface::class), clock: app(ClockInterface::class), events: app(Dispatcher::class), centralConnection: 'pgsql', writer: $this->p32Archive->write(...));
     expect(fn () => p32Lifecycle($adapter)->requestExport($account))->toThrow(RuntimeException::class, 'verifier');
     expect(DB::table('root_account_exports')->where('status', 'ready')->count())->toBe(0);
     expect(fn () => p32Lifecycle($adapter)->purge($account))->toThrow(ValidationException::class);
@@ -297,7 +303,7 @@ it('a newer interrupted export wins even when export timestamps are equal', func
 
 it('refuses exhausted soft-deleted pools and a physically tampered signed template before reserving', function (): void {
     $request = new ClaimRequest(requestKey: 'pool-denial', clusterId: $this->p32Cluster, templateId: $this->p32Template, requestDigest: hash('sha256', 'pool'));
-    $claim = new ClaimAccountSignup(centralConnection: 'pgsql', templateIntegrity: app(TemplateIntegrityVerifier::class));
+    $claim = new ClaimAccountSignup(connections: app(ConnectionResolverInterface::class), centralConnection: 'pgsql', templateIntegrity: app(TemplateIntegrityVerifier::class));
     expect(fn () => $claim->claim($request))->toThrow(ClaimUnavailable::class);
     DB::table('root_accounts')->where('id', $this->p32Accounts[1]->id)->update(['status' => 'pending', 'deleted_at' => now()]);
     expect(fn () => $claim->claim($request))->toThrow(ClaimUnavailable::class);

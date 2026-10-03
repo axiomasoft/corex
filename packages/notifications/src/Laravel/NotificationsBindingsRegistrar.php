@@ -30,6 +30,7 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\DatabaseManager;
 use Override;
+use Psr\Clock\ClockInterface;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class NotificationsBindingsRegistrar implements PackageRegistrar
@@ -52,10 +53,12 @@ final class NotificationsBindingsRegistrar implements PackageRegistrar
             connection: $app->make(DatabaseManager::class)->connection(),
             claimSeconds: $app->make(NotificationsOptions::class)->deliveryClaimSeconds,
             maxAttempts: $app->make(NotificationsOptions::class)->deliveryMaxAttempts,
+            clock: $app->make(ClockInterface::class),
         ));
         $app->scoped(NotificationCenter::class, static fn (Application $app): SqlNotificationCenter => new SqlNotificationCenter(
             connection: $app->make(DatabaseManager::class)->connection(),
             policy: $app->make(NotificationPolicy::class),
+            clock: $app->make(ClockInterface::class),
         ));
         $app->scoped(PreferenceRepository::class, static fn (Application $app): SettingsPreferenceRepository => new SettingsPreferenceRepository(
             connection: $app->make(DatabaseManager::class)->connection(),

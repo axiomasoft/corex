@@ -11,6 +11,7 @@ use CoreX\Context\Data\TenantContext;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Tasks\Access\Contracts\TaskModuleContext as TaskModuleGuard;
 use CoreX\Tasks\Access\Contracts\TaskPlanningAccess;
+use CoreX\Tasks\Planning\Contracts\TaskOperationReceipts;
 use CoreX\Tasks\Planning\Contracts\TaskPlanningCommand;
 use CoreX\Tasks\Planning\Data\PlanningOperation;
 use CoreX\Tasks\Planning\Data\PlanningSubject;
@@ -34,6 +35,7 @@ use CoreX\Tasks\Time\Data\TimeLogReference;
 use CoreX\Tasks\Time\Internal\Models\TimeLog;
 use CoreX\Tasks\Time\Internal\TimeLogReferenceFactory;
 use DateTimeImmutable;
+use Illuminate\Container\Container;
 use Illuminate\Database\Connection;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
@@ -47,6 +49,7 @@ final class PlanningCommand implements TaskPlanningCommand
     public function __construct(
         private readonly TaskModuleGuard $moduleGuard,
         private readonly TaskPlanningAccess $access,
+        private readonly ?TaskOperationReceipts $receipts = null,
     ) {}
 
     public function createProject(ProjectDraft $draft, PlanningToken $token): ProjectReference
@@ -73,7 +76,7 @@ final class PlanningCommand implements TaskPlanningCommand
 
         return $connection->transaction(
             callback: function () use ($draft, $token, $context, $name, $subject, $connection): ProjectReference {
-                $store = new OperationStore($connection);
+                $store = new OperationStore($connection, $this->receipts());
                 $restoreEpoch = PlanningHasher::restoreEpoch($context);
                 $replay = $store->claimOrReplay(
                     operation: PlanningOperation::CreateProject,
@@ -143,7 +146,7 @@ final class PlanningCommand implements TaskPlanningCommand
 
         return $connection->transaction(
             callback: function () use ($draft, $token, $context, $name, $startDate, $endDate, $subject, $connection, $project): SprintReference {
-                $store = new OperationStore($connection);
+                $store = new OperationStore($connection, $this->receipts());
                 $restoreEpoch = PlanningHasher::restoreEpoch($context);
                 $replay = $store->claimOrReplay(
                     operation: PlanningOperation::CreateSprint,
@@ -195,7 +198,7 @@ final class PlanningCommand implements TaskPlanningCommand
         return $this->transactionWithRetry(
             connection: $connection,
             callback: function () use ($draft, $token, $context, $connection): TimeLogReference {
-                $store = new OperationStore($connection);
+                $store = new OperationStore($connection, $this->receipts());
                 $restoreEpoch = PlanningHasher::restoreEpoch($context);
                 $replay = $store->claimOrReplay(
                     operation: PlanningOperation::RecordTime,
@@ -424,5 +427,11 @@ final class PlanningCommand implements TaskPlanningCommand
     private function invalid(string $field, string $message): void
     {
         throw ValidationException::withMessages([$field => [$message]]);
+    }
+
+    /** The port is optional so the constructor stays source-compatible; the container bridge fills it when absent. */
+    private function receipts(): TaskOperationReceipts
+    {
+        return $this->receipts ?? Container::getInstance()->make(TaskOperationReceipts::class);
     }
 }

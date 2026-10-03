@@ -10,7 +10,9 @@ use CoreX\Tenancy\Provisioning\Exceptions\TemplateIntegrityException;
 use CoreX\Tenancy\Provisioning\Internal\ClusterAccountConnectionResolver;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Tests\TestCase;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -171,6 +173,7 @@ it('provisions a database by cloning the golden template via STRATEGY WAL_LOG, w
     trackDatabase($targetDb);
 
     (new StanclTenantDatabaseProvisioner(
+        events: app(Dispatcher::class),
         centralConnection: 'pgsql',
         templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
     ))->provision(new ProvisionParams(
@@ -211,6 +214,7 @@ it('re-provisioning an already-created database is idempotent (replayable pipeli
     trackDatabase($targetDb);
 
     $provisioner = new StanclTenantDatabaseProvisioner(
+        events: app(Dispatcher::class),
         centralConnection: 'pgsql',
         templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
     );
@@ -236,6 +240,7 @@ it('refuses to clone a template that is not ready (template-parity gate, D24)', 
     $accountId = makeAccountRow($clusterId, ['template_version' => 2]);
 
     expect(fn () => (new StanclTenantDatabaseProvisioner(
+        events: app(Dispatcher::class),
         centralConnection: 'pgsql',
         templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
     ))->provision(new ProvisionParams(
@@ -263,6 +268,7 @@ it('rejects an untrusted template before changing provisioning parameters or dis
     $targetDb = DB::table('root_accounts')->where('id', $accountId)->value('db_name');
 
     expect(fn () => (new StanclTenantDatabaseProvisioner(
+        events: app(Dispatcher::class),
         centralConnection: 'pgsql',
         templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
     ))->provision(new ProvisionParams(
@@ -294,6 +300,7 @@ it('fixes embedding_model/dim and other provisioning params onto the account row
     trackDatabase(DB::table('root_accounts')->where('id', $accountId)->value('db_name'));
 
     (new StanclTenantDatabaseProvisioner(
+        events: app(Dispatcher::class),
         centralConnection: 'pgsql',
         templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
     ))->provision(new ProvisionParams(
@@ -319,7 +326,7 @@ it('resolves the tenant connection from root_clusters+db_name and follows cluste
     $clusterB = makeClusterRow(['pgbouncer_host' => 'pgbouncer-b.local']);
     $accountId = makeAccountRow($clusterA);
 
-    $resolver = new ClusterAccountConnectionResolver('pgsql');
+    $resolver = new ClusterAccountConnectionResolver(connections: app(ConnectionResolverInterface::class), centralConnection: 'pgsql');
     $accountRef = new AccountRef(
         id: $accountId,
         slug: 'irrelevant',

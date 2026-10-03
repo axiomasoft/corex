@@ -48,6 +48,7 @@ final class RegistryCompiler implements ModuleCompilation
         private readonly CompilationValidator $validator = new CompilationValidator,
         private readonly FieldCastRegistry $casts = new FieldCastMap,
         iterable $sections = [],
+        private readonly ?string $installedJsonPath = null,
     ) {
         $collected = [];
         foreach ($sections as $section) {
@@ -78,13 +79,13 @@ final class RegistryCompiler implements ModuleCompilation
         $this->validator->validateRequiredFields($manifests);
         $this->validator->validateExtenderSet($manifests);
         $this->validator->validateTablePrefixes($manifests);
-        $this->validator->validateRequires($manifests, $installedPackages ?? InstalledPackages::discover());
+        $this->validator->validateRequires($manifests, $installedPackages ?? InstalledPackages::discover($this->installedJsonPath));
         $this->validator->validateComponents($manifests);
         $this->validator->validateDependencyGraph($manifests);
 
         usort($manifests, static fn (ModuleManifest $left, ModuleManifest $right): int => $left->composerName <=> $right->composerName);
 
-        $versions = $installedVersions ?? InstalledPackages::discoverVersions();
+        $versions = $installedVersions ?? InstalledPackages::discoverVersions($this->installedJsonPath);
         $normalized = $this->normalize($manifests, $versions);
         $this->validator->validateNormalizedIdentities($normalized);
         $applied = $this->validator->applyReplacements($normalized, $manifests);

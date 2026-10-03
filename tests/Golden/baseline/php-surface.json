@@ -16,6 +16,18 @@
                         "name": "tenancyManager",
                         "type": "CoreX\\Context\\Contracts\\TenancyManager",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -95,6 +107,18 @@
                         "byRef": false,
                         "name": "options",
                         "type": "CoreX\\Access\\Laravel\\AuthOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
                         "variadic": false
                     }
                 ],
@@ -373,6 +397,12 @@
                         "name": "entities",
                         "type": "CoreX\\Modules\\Contracts\\EntityRegistry",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -421,6 +451,12 @@
                         "byRef": false,
                         "name": "options",
                         "type": "CoreX\\Access\\Laravel\\AuthOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
                         "variadic": false
                     }
                 ],
@@ -563,6 +599,12 @@
                         "byRef": false,
                         "name": "scopeClass",
                         "type": "?string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "make",
+                        "type": "Closure",
                         "variadic": false
                     }
                 ],
@@ -2001,9 +2043,14 @@
                     },
                     {
                         "byRef": false,
-                        "default": null,
                         "name": "activeEntities",
-                        "type": "?CoreX\\Access\\Matrix\\Internal\\ActiveEntityFilter",
+                        "type": "CoreX\\Access\\Matrix\\Internal\\ActiveEntityFilter",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
                         "variadic": false
                     }
                 ],
@@ -2052,9 +2099,8 @@
                     },
                     {
                         "byRef": false,
-                        "default": null,
                         "name": "activeEntities",
-                        "type": "?CoreX\\Access\\Matrix\\Internal\\ActiveEntityFilter",
+                        "type": "CoreX\\Access\\Matrix\\Internal\\ActiveEntityFilter",
                         "variadic": false
                     }
                 ],
@@ -2102,9 +2148,14 @@
                 "params": [
                     {
                         "byRef": false,
-                        "default": null,
                         "name": "entities",
-                        "type": "?CoreX\\Modules\\Contracts\\EntityRegistry",
+                        "type": "CoreX\\Modules\\Contracts\\EntityRegistry",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
                         "variadic": false
                     }
                 ],
@@ -2556,6 +2607,18 @@
         "internal": true,
         "kind": "class",
         "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
             "clone": {
                 "params": [
                     {
@@ -2585,6 +2648,49 @@
         "parent": null,
         "properties": [],
         "readonly": true
+    },
+    "CoreX\\Access\\Roles\\Internal\\SystemRoleMutationScope": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "allow": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "model",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "callback",
+                        "type": "Closure",
+                        "variadic": false
+                    }
+                ],
+                "return": "mixed",
+                "static": false
+            },
+            "isAllowed": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "model",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
     },
     "CoreX\\Access\\Roles\\Laravel\\RoleMatrixData": {
         "abstract": false,
@@ -3650,6 +3756,30 @@
         "internal": true,
         "kind": "class",
         "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\Config\\Data\\CoreOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "logger",
+                        "type": "CoreX\\Audit\\Contracts\\AuditLogger",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "actor",
+                        "type": "CoreX\\Audit\\Internal\\CurrentActor",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
             "created": {
                 "params": [
                     {
@@ -3702,7 +3832,7 @@
                     }
                 ],
                 "return": "void",
-                "static": true
+                "static": false
             },
             "restored": {
                 "params": [
@@ -3741,19 +3871,61 @@
         "internal": true,
         "kind": "class",
         "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "auth",
+                        "type": "Illuminate\\Contracts\\Auth\\Factory",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "impersonation",
+                        "type": "CoreX\\Context\\Contracts\\ImpersonationService",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "request",
+                        "type": "Closure",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
             "context": {
                 "params": [],
                 "return": "array",
-                "static": true
+                "static": false
             },
             "id": {
                 "params": [],
                 "return": "?string",
-                "static": true
+                "static": false
             },
             "type": {
                 "params": [],
                 "return": "CoreX\\Audit\\Enums\\ActorType",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Audit\\Internal\\CurrentActorResolver": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "current": {
+                "params": [],
+                "return": "CoreX\\Audit\\Internal\\CurrentActor",
                 "static": true
             }
         },
@@ -3822,16 +3994,33 @@
                 "params": [
                     {
                         "byRef": false,
-                        "default": null,
-                        "name": "connection",
-                        "type": "?string",
+                        "name": "options",
+                        "type": "CoreX\\Config\\Data\\CoreOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "impersonation",
+                        "type": "CoreX\\Context\\Contracts\\ImpersonationService",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "tenantContext",
+                        "type": "CoreX\\Context\\Contracts\\TenantContextResolver",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
                         "variadic": false
                     },
                     {
                         "byRef": false,
                         "default": null,
-                        "name": "tenantContext",
-                        "type": "?CoreX\\Context\\Contracts\\TenantContextResolver",
+                        "name": "connection",
+                        "type": "?string",
                         "variadic": false
                     }
                 ],
@@ -4140,7 +4329,14 @@
                 "static": false
             },
             "handle": {
-                "params": [],
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    }
+                ],
                 "return": "void",
                 "static": false
             },
@@ -5178,6 +5374,24 @@
                 "type": "array"
             }
         },
+        "readonly": false
+    },
+    "CoreX\\Config\\Internal\\ApplicationLocator": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "current": {
+                "params": [],
+                "return": "Illuminate\\Contracts\\Foundation\\Application",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
         "readonly": false
     },
     "CoreX\\Config\\Internal\\Commands\\ValidateConfigCommand": {
@@ -9363,6 +9577,12 @@
                         "name": "operations",
                         "type": "CoreX\\CustomFields\\Contracts\\SchemaOperations",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -10324,6 +10544,12 @@
                         "byRef": false,
                         "name": "authorizer",
                         "type": "CoreX\\Data\\Contracts\\DataScopeAuthorizer",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
                         "variadic": false
                     }
                 ],
@@ -13059,6 +13285,18 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Database\\Laravel\\ResolvesCoreOptions": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "trait",
+        "methods": [],
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Departments\\Contracts\\DepartmentRepository": {
         "abstract": false,
         "constants": [],
@@ -13384,6 +13622,24 @@
         "methods": {
             "__construct": {
                 "params": [
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\Config\\Data\\CoreOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "events",
+                        "type": "Illuminate\\Contracts\\Events\\Dispatcher",
+                        "variadic": false
+                    },
                     {
                         "byRef": false,
                         "default": null,
@@ -16364,6 +16620,12 @@
                         "byRef": false,
                         "name": "authorizer",
                         "type": "CoreX\\Data\\Contracts\\DataScopeAuthorizer",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
                         "variadic": false
                     },
                     {
@@ -19793,6 +20055,12 @@
                         "name": "authorizer",
                         "type": "CoreX\\Data\\Contracts\\DataScopeAuthorizer",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -21705,6 +21973,12 @@
                         "name": "options",
                         "type": "CoreX\\Media\\Internal\\Support\\MediaOptions",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -23039,6 +23313,12 @@
                         "name": "connection",
                         "type": "Illuminate\\Database\\ConnectionInterface",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -23266,6 +23546,12 @@
                         "name": "options",
                         "type": "CoreX\\Media\\Internal\\Support\\MediaOptions",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -23376,6 +23662,12 @@
                         "byRef": false,
                         "name": "policy",
                         "type": "CoreX\\Media\\Contracts\\MediaPolicy",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
                         "variadic": false
                     }
                 ],
@@ -25258,6 +25550,18 @@
                         "name": "clock",
                         "type": "Psr\\Clock\\ClockInterface",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\Config\\Data\\CoreOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
                     }
                 ],
                 "return": "int",
@@ -25290,6 +25594,12 @@
                         "byRef": false,
                         "name": "publisher",
                         "type": "CoreX\\Messaging\\Contracts\\DurableMessagePublisher",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\Config\\Data\\CoreOptions",
                         "variadic": false
                     }
                 ],
@@ -25342,6 +25652,30 @@
                 "params": [
                     {
                         "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\Config\\Data\\CoreOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "runtime",
+                        "type": "CoreX\\Messaging\\Contracts\\WorkerRuntime",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
                         "default": null,
                         "name": "connection",
                         "type": "?string",
@@ -25352,16 +25686,6 @@
                         "default": null,
                         "name": "pollIntervalMicroseconds",
                         "type": "?int",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": {
-                            "class": "CoreX\\Messaging\\Internal\\DefaultWorkerRuntime",
-                            "properties": []
-                        },
-                        "name": "runtime",
-                        "type": "CoreX\\Messaging\\Contracts\\WorkerRuntime",
                         "variadic": false
                     }
                 ],
@@ -25440,6 +25764,18 @@
         "internal": true,
         "kind": "class",
         "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "application",
+                        "type": "Closure",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
             "isOctane": {
                 "params": [],
                 "return": "bool",
@@ -25449,6 +25785,29 @@
                 "params": [],
                 "return": "bool",
                 "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Messaging\\Internal\\DomainEventDefaults": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "now": {
+                "params": [],
+                "return": "DateTimeImmutable",
+                "static": true
+            },
+            "tenant": {
+                "params": [],
+                "return": "CoreX\\Context\\Data\\TenantContext",
+                "static": true
             }
         },
         "parent": null,
@@ -25631,75 +25990,31 @@
         "kind": "class",
         "methods": {
             "handle": {
-                "params": [],
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\Config\\Data\\CoreOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    }
+                ],
                 "return": "int",
                 "static": false
             }
         },
         "parent": "Illuminate\\Console\\Command",
-        "properties": [],
-        "readonly": false
-    },
-    "CoreX\\Messaging\\Internal\\PubSubManager": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "CoreX\\Messaging\\Contracts\\PubSub"
-        ],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "app",
-                        "type": "Illuminate\\Contracts\\Foundation\\Application",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "publish": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "channel",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "payload",
-                        "type": "array",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
-                "static": false
-            },
-            "subscribe": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "channel",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "handler",
-                        "type": "Closure",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
-                "static": false
-            }
-        },
-        "parent": null,
         "properties": [],
         "readonly": false
     },
@@ -25717,19 +26032,27 @@
                 "params": [
                     {
                         "byRef": false,
-                        "default": null,
-                        "name": "connection",
-                        "type": "?string",
+                        "name": "redis",
+                        "type": "Illuminate\\Contracts\\Redis\\Factory",
                         "variadic": false
                     },
                     {
                         "byRef": false,
-                        "default": {
-                            "class": "CoreX\\Messaging\\Internal\\DefaultWorkerRuntime",
-                            "properties": []
-                        },
+                        "name": "options",
+                        "type": "CoreX\\Config\\Data\\CoreOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
                         "name": "runtime",
                         "type": "CoreX\\Messaging\\Contracts\\WorkerRuntime",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "connection",
+                        "type": "?string",
                         "variadic": false
                     }
                 ],
@@ -25798,6 +26121,13 @@
                         "name": "clock",
                         "type": "Psr\\Clock\\ClockInterface",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": "sys_outbox_messages",
+                        "name": "table",
+                        "type": "string",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -25835,6 +26165,13 @@
                         "byRef": false,
                         "name": "clock",
                         "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": "sys_inbox_messages",
+                        "name": "table",
+                        "type": "string",
                         "variadic": false
                     }
                 ],
@@ -25978,6 +26315,13 @@
                         "byRef": false,
                         "name": "backoffCapSeconds",
                         "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": "sys_outbox_messages",
+                        "name": "table",
+                        "type": "string",
                         "variadic": false
                     }
                 ],
@@ -32046,6 +32390,13 @@
                         "name": "sections",
                         "type": "iterable",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "installedJsonPath",
+                        "type": "?string",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -32964,6 +33315,24 @@
                     },
                     {
                         "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "events",
+                        "type": "Illuminate\\Contracts\\Events\\Dispatcher",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
                         "default": [],
                         "name": "codeVersions",
                         "type": "array",
@@ -33112,6 +33481,12 @@
                 "params": [
                     {
                         "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
                         "default": null,
                         "name": "connection",
                         "type": "?string",
@@ -33150,6 +33525,18 @@
         "methods": {
             "__construct": {
                 "params": [
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
                     {
                         "byRef": false,
                         "default": null,
@@ -33265,6 +33652,13 @@
                         "default": false,
                         "name": "failIfMissing",
                         "type": "bool",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "installedJsonPath",
+                        "type": "?string",
                         "variadic": false
                     }
                 ],
@@ -33388,7 +33782,12 @@
     },
     "CoreX\\Modules\\Internal\\Registry\\CompiledModuleRegistry": {
         "abstract": false,
-        "constants": [],
+        "constants": {
+            "CACHE_PATH": {
+                "type": "string",
+                "value": "bootstrap/cache/corex_modules.php"
+            }
+        },
         "final": true,
         "interfaces": [
             "CoreX\\Modules\\Contracts\\ModuleRegistry"
@@ -33454,11 +33853,6 @@
                 "params": [],
                 "return": "CoreX\\Modules\\Data\\CompiledRegistry",
                 "static": false
-            },
-            "defaultCachePath": {
-                "params": [],
-                "return": "string",
-                "static": true
             },
             "flush": {
                 "params": [],
@@ -33596,8 +33990,8 @@
                 "params": [
                     {
                         "byRef": false,
-                        "name": "app",
-                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "name": "application",
+                        "type": "Closure",
                         "variadic": false
                     }
                 ],
@@ -35493,6 +35887,12 @@
                         "name": "maxAttempts",
                         "type": "int",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -36499,6 +36899,12 @@
                         "name": "preferences",
                         "type": "CoreX\\Notifications\\Preferences\\Contracts\\PreferenceRepository",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -37157,6 +37563,12 @@
                         "byRef": false,
                         "name": "enabled",
                         "type": "bool",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
                         "variadic": false
                     }
                 ],
@@ -38058,6 +38470,12 @@
                         "byRef": false,
                         "name": "policy",
                         "type": "CoreX\\Notifications\\Inbox\\Contracts\\NotificationPolicy",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
                         "variadic": false
                     }
                 ],
@@ -44544,6 +44962,12 @@
                         "name": "problems",
                         "type": "CoreX\\Errors\\Contracts\\ProblemRegistry",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "exceptions",
+                        "type": "Illuminate\\Contracts\\Debug\\ExceptionHandler",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -48691,6 +49115,45 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Operations\\Testing\\BrokenHandler": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "input",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "parameters",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Operations\\Testing\\CatalogueModuleFixture": {
         "abstract": false,
         "constants": [],
@@ -48807,6 +49270,188 @@
                 "readonly": false,
                 "static": false,
                 "type": "array"
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\Operations\\Testing\\ContextFixture": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Context\\Contracts\\TenancyManager",
+            "CoreX\\Context\\Contracts\\TenantContextResolver"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "context": {
+                "params": [],
+                "return": "?CoreX\\Context\\Data\\TenantContext",
+                "static": false
+            },
+            "current": {
+                "params": [],
+                "return": "CoreX\\Context\\Data\\TenantContext",
+                "static": false
+            },
+            "end": {
+                "params": [],
+                "return": "void",
+                "static": false
+            },
+            "initialize": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "account",
+                        "type": "CoreX\\Context\\Data\\AccountRef",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "initialized": {
+                "params": [],
+                "return": "bool",
+                "static": false
+            },
+            "runFor": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "account",
+                        "type": "CoreX\\Context\\Data\\AccountRef",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "workspace",
+                        "type": "?CoreX\\Context\\Data\\WorkspaceRef",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "callback",
+                        "type": "Closure",
+                        "variadic": false
+                    }
+                ],
+                "return": "mixed",
+                "static": false
+            },
+            "setWorkspace": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "workspace",
+                        "type": "?CoreX\\Context\\Data\\WorkspaceRef",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "value": {
+                "name": "value",
+                "readonly": false,
+                "static": false,
+                "type": "?CoreX\\Context\\Data\\TenantContext"
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\Operations\\Testing\\HttpDependentHandler": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "contexts",
+                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContextProvider",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "input",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "parameters",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Operations\\Testing\\IdentityFixture": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Operations\\Authorization\\Contracts\\Principal",
+            "CoreX\\Operations\\Authorization\\Contracts\\PrincipalResolver"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "id": {
+                "params": [],
+                "return": "string",
+                "static": false
+            },
+            "resolve": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "request",
+                        "type": "Illuminate\\Http\\Request",
+                        "variadic": false
+                    }
+                ],
+                "return": "?CoreX\\Operations\\Authorization\\Contracts\\Principal",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "authenticated": {
+                "name": "authenticated",
+                "readonly": false,
+                "static": false,
+                "type": "bool"
             }
         },
         "readonly": false
@@ -48958,6 +49603,279 @@
                 "type": "array"
             }
         },
+        "readonly": false
+    },
+    "CoreX\\Operations\\Testing\\MutatingHandler": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "input",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "parameters",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "calls": {
+                "name": "calls",
+                "readonly": false,
+                "static": true,
+                "type": "int"
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\Operations\\Testing\\NoteHandler": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "input",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "parameters",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "calls": {
+                "name": "calls",
+                "readonly": false,
+                "static": true,
+                "type": "int"
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\Operations\\Testing\\OutputMismatchHandler": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "input",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "parameters",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Operations\\Testing\\ProviderKeyHandler": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "input",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "parameters",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "mode": {
+                "name": "mode",
+                "readonly": false,
+                "static": true,
+                "type": "string"
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\Operations\\Testing\\StubOperationHandler": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "input",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "parameters",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Operations\\Testing\\StubToolHandler": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Operations\\Definition\\Contracts\\OperationHandler"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Operations\\Invocation\\Contracts\\RequestContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "input",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "parameters",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
         "readonly": false
     },
     "CoreX\\Operations\\Validation\\Data\\JsonObject": {
@@ -51593,16 +52511,20 @@
                     },
                     {
                         "byRef": false,
-                        "default": null,
                         "name": "options",
-                        "type": "?CoreX\\Config\\Data\\CoreOptions",
+                        "type": "CoreX\\Config\\Data\\CoreOptions",
                         "variadic": false
                     },
                     {
                         "byRef": false,
-                        "default": null,
                         "name": "database",
-                        "type": "?Illuminate\\Database\\DatabaseManager",
+                        "type": "Illuminate\\Database\\DatabaseManager",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
                         "variadic": false
                     }
                 ],
@@ -55250,6 +56172,12 @@
                         "name": "connection",
                         "type": "Illuminate\\Database\\ConnectionInterface",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -55382,6 +56310,12 @@
                         "byRef": false,
                         "name": "connection",
                         "type": "Illuminate\\Database\\ConnectionInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
                         "variadic": false
                     }
                 ],
@@ -56549,6 +57483,24 @@
                         "byRef": false,
                         "name": "defaults",
                         "type": "CoreX\\Settings\\Contracts\\SettingDefaultsProvider",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "events",
+                        "type": "Illuminate\\Contracts\\Events\\Dispatcher",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "encrypter",
+                        "type": "Illuminate\\Contracts\\Encryption\\StringEncrypter",
                         "variadic": false
                     },
                     {
@@ -58240,6 +59192,19 @@
                         "name": "receipts",
                         "type": "CoreX\\Tasks\\Planning\\Contracts\\TaskOperationReceipts",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "contexts",
+                        "type": "CoreX\\Context\\Contracts\\TenantContextResolver",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "workflow",
+                        "type": "?CoreX\\Workflow\\Contracts\\WorkflowBinding",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -58700,6 +59665,12 @@
                         "byRef": false,
                         "name": "contexts",
                         "type": "CoreX\\Context\\Contracts\\TenantContextResolver",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
                         "variadic": false
                     }
                 ],
@@ -60281,6 +61252,18 @@
         "internal": true,
         "kind": "class",
         "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
             "find": {
                 "params": [
                     {
@@ -60360,6 +61343,12 @@
                         "byRef": false,
                         "name": "connection",
                         "type": "Illuminate\\Database\\Connection",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "receipts",
+                        "type": "CoreX\\Tasks\\Planning\\Contracts\\TaskOperationReceipts",
                         "variadic": false
                     }
                 ],
@@ -60533,6 +61522,13 @@
                         "byRef": false,
                         "name": "access",
                         "type": "CoreX\\Tasks\\Access\\Contracts\\TaskPlanningAccess",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "receipts",
+                        "type": "?CoreX\\Tasks\\Planning\\Contracts\\TaskOperationReceipts",
                         "variadic": false
                     }
                 ],
@@ -62967,6 +63963,18 @@
                         "name": "access",
                         "type": "CoreX\\Tasks\\Access\\Contracts\\TaskMutationAccess",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "events",
+                        "type": "Illuminate\\Contracts\\Events\\Dispatcher",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -63011,6 +64019,24 @@
                         "byRef": false,
                         "name": "access",
                         "type": "CoreX\\Tasks\\Access\\Contracts\\TaskAccess",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "projects",
+                        "type": "CoreX\\Tasks\\Project\\Contracts\\ProjectRead",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "sprints",
+                        "type": "CoreX\\Tasks\\Sprint\\Contracts\\SprintRead",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "events",
+                        "type": "Illuminate\\Contracts\\Events\\Dispatcher",
                         "variadic": false
                     }
                 ],
@@ -63060,9 +64086,20 @@
                     },
                     {
                         "byRef": false,
-                        "default": null,
                         "name": "completion",
-                        "type": "?CoreX\\Tasks\\Task\\Internal\\TaskCompletion",
+                        "type": "CoreX\\Tasks\\Task\\Internal\\TaskCompletion",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "projects",
+                        "type": "CoreX\\Tasks\\Project\\Contracts\\ProjectRead",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "events",
+                        "type": "Illuminate\\Contracts\\Events\\Dispatcher",
                         "variadic": false
                     }
                 ],
@@ -63108,6 +64145,18 @@
                         "byRef": false,
                         "name": "access",
                         "type": "CoreX\\Tasks\\Access\\Contracts\\TaskMutationAccess",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "projects",
+                        "type": "CoreX\\Tasks\\Project\\Contracts\\ProjectRead",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "events",
+                        "type": "Illuminate\\Contracts\\Events\\Dispatcher",
                         "variadic": false
                     }
                 ],
@@ -63346,6 +64395,12 @@
                         "byRef": false,
                         "name": "access",
                         "type": "CoreX\\Tasks\\Access\\Contracts\\TaskMutationAccess",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
                         "variadic": false
                     }
                 ],
@@ -64887,9 +65942,38 @@
                     },
                     {
                         "byRef": false,
-                        "default": null,
                         "name": "lifecycle",
-                        "type": "?CoreX\\Tenancy\\Laravel\\Support\\AccountLifecyclePolicy",
+                        "type": "CoreX\\Tenancy\\Laravel\\Support\\AccountLifecyclePolicy",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "events",
+                        "type": "Illuminate\\Contracts\\Events\\Dispatcher",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connectionFactory",
+                        "type": "Illuminate\\Database\\Connectors\\ConnectionFactory",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "hostResolver",
+                        "type": "CoreX\\Tenancy\\Laravel\\Resolvers\\HostTenantResolver",
                         "variadic": false
                     }
                 ],
@@ -65246,6 +66330,12 @@
                         "name": "templateIntegrityVerifier",
                         "type": "CoreX\\Tenancy\\Provisioning\\Contracts\\TemplateIntegrityChecks",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -65388,6 +66478,12 @@
                         "byRef": false,
                         "name": "templateIntegrityVerifier",
                         "type": "CoreX\\Tenancy\\Provisioning\\Contracts\\TemplateIntegrityChecks",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "events",
+                        "type": "Illuminate\\Contracts\\Events\\Dispatcher",
                         "variadic": false
                     }
                 ],
@@ -65653,6 +66749,24 @@
                 "params": [
                     {
                         "byRef": false,
+                        "name": "auth",
+                        "type": "Illuminate\\Contracts\\Auth\\Factory",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
                         "name": "options",
                         "type": "CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
                         "variadic": false
@@ -65728,6 +66842,24 @@
                         "byRef": false,
                         "name": "options",
                         "type": "CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "auth",
+                        "type": "Illuminate\\Contracts\\Auth\\Factory",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
                         "variadic": false
                     }
                 ],
@@ -65848,6 +66980,18 @@
                 "params": [
                     {
                         "byRef": false,
+                        "name": "http",
+                        "type": "Illuminate\\Http\\Client\\Factory",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "cache",
+                        "type": "Illuminate\\Contracts\\Cache\\Factory",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
                         "name": "cacheStore",
                         "type": "?string",
                         "variadic": false
@@ -65914,6 +67058,12 @@
         "methods": {
             "__construct": {
                 "params": [
+                    {
+                        "byRef": false,
+                        "name": "http",
+                        "type": "Illuminate\\Http\\Client\\Factory",
+                        "variadic": false
+                    },
                     {
                         "byRef": false,
                         "name": "discovery",
@@ -65987,6 +67137,18 @@
         "methods": {
             "__construct": {
                 "params": [
+                    {
+                        "byRef": false,
+                        "name": "http",
+                        "type": "Illuminate\\Http\\Client\\Factory",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "cache",
+                        "type": "Illuminate\\Contracts\\Cache\\Factory",
+                        "variadic": false
+                    },
                     {
                         "byRef": false,
                         "name": "issuer",
@@ -67069,6 +68231,12 @@
                     },
                     {
                         "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
                         "name": "challengeTtlSeconds",
                         "type": "int",
                         "variadic": false
@@ -67194,6 +68362,24 @@
         "methods": {
             "__construct": {
                 "params": [
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "events",
+                        "type": "Illuminate\\Contracts\\Events\\Dispatcher",
+                        "variadic": false
+                    },
                     {
                         "byRef": false,
                         "name": "centralConnection",
@@ -67755,6 +68941,30 @@
                         "byRef": false,
                         "name": "tenancy",
                         "type": "CoreX\\Context\\Contracts\\TenancyManager",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "accounts",
+                        "type": "CoreX\\Tenancy\\Account\\Contracts\\AccountRead",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "events",
+                        "type": "Illuminate\\Contracts\\Events\\Dispatcher",
                         "variadic": false
                     }
                 ],
@@ -68406,6 +69616,24 @@
                         "name": "tenancy",
                         "type": "CoreX\\Context\\Contracts\\TenancyManager",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "accounts",
+                        "type": "CoreX\\Tenancy\\Account\\Contracts\\AccountRead",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "cache",
+                        "type": "Illuminate\\Contracts\\Cache\\Factory",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -68456,6 +69684,12 @@
         "methods": {
             "__construct": {
                 "params": [
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
                     {
                         "byRef": false,
                         "name": "centralConnection",
@@ -69042,8 +70276,26 @@
                 "params": [
                     {
                         "byRef": false,
-                        "name": "root",
-                        "type": "Illuminate\\Database\\Connection",
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "rootConnection",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "logger",
+                        "type": "Psr\\Log\\LoggerInterface",
                         "variadic": false
                     }
                 ],
@@ -69085,8 +70337,26 @@
                 "params": [
                     {
                         "byRef": false,
-                        "name": "root",
-                        "type": "Illuminate\\Database\\Connection",
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "rootConnection",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "hint",
+                        "type": "CoreX\\Tenancy\\Integration\\Internal\\Wakeup\\RootRegistryWakeupHint",
                         "variadic": false
                     },
                     {
@@ -75297,6 +76567,12 @@
                 "params": [
                     {
                         "byRef": false,
+                        "name": "http",
+                        "type": "Illuminate\\Http\\Client\\Factory",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
                         "name": "binding",
                         "type": "?CoreX\\Tenancy\\Membership\\Internal\\Transport\\ChannelBinding",
                         "variadic": false
@@ -76027,6 +77303,12 @@
                         "name": "templateIntegrity",
                         "type": "CoreX\\Tenancy\\Contracts\\TemplateIntegrityVerifier",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -76065,6 +77347,12 @@
                         "byRef": false,
                         "name": "centralConnection",
                         "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
                         "variadic": false
                     }
                 ],
@@ -76152,9 +77440,20 @@
                 "params": [
                     {
                         "byRef": false,
-                        "default": null,
                         "name": "options",
-                        "type": "?CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
+                        "type": "CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "integrity",
+                        "type": "CoreX\\Tenancy\\Provisioning\\Internal\\Database\\TemplateIntegrityVerifier",
                         "variadic": false
                     }
                 ],
@@ -76242,9 +77541,20 @@
                     },
                     {
                         "byRef": false,
-                        "default": null,
                         "name": "options",
-                        "type": "?CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
+                        "type": "CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connectionFactory",
+                        "type": "Illuminate\\Database\\Connectors\\ConnectionFactory",
                         "variadic": false
                     }
                 ],
@@ -76471,6 +77781,24 @@
                     },
                     {
                         "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "events",
+                        "type": "Illuminate\\Contracts\\Events\\Dispatcher",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
                         "default": null,
                         "name": "writer",
                         "type": "?Closure",
@@ -76663,6 +77991,12 @@
                         "byRef": false,
                         "name": "tenancy",
                         "type": "Stancl\\Tenancy\\Tenancy",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "accounts",
+                        "type": "CoreX\\Tenancy\\Account\\Contracts\\AccountRead",
                         "variadic": false
                     }
                 ],
@@ -77018,6 +78352,18 @@
         "internal": true,
         "kind": "class",
         "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "auth",
+                        "type": "Illuminate\\Contracts\\Auth\\Factory",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
             "resolve": {
                 "params": [
                     {
@@ -81179,6 +82525,12 @@
                     },
                     {
                         "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
                         "default": {
                             "class": "CoreX\\Transfer\\Internal\\Transfer\\NeverCancelled",
                             "properties": []
@@ -82339,26 +83691,6 @@
                     }
                 ],
                 "return": "CoreX\\Wakeup\\Data\\SweepResult",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
-    "CoreX\\Wakeup\\Internal\\SystemClock": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "Psr\\Clock\\ClockInterface"
-        ],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "now": {
-                "params": [],
-                "return": "DateTimeImmutable",
                 "static": false
             }
         },
@@ -86492,6 +87824,12 @@
                         "byRef": false,
                         "name": "enforceDeclarations",
                         "type": "bool",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
                         "variadic": false
                     }
                 ],

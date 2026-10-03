@@ -14,16 +14,23 @@ use CoreX\Tenancy\DomainTrust\Enums\DomainTrustChangeReason;
 use CoreX\Tenancy\DomainTrust\Events\DomainTrustChanged;
 use CoreX\Tenancy\DomainTrust\Exceptions\DomainTrustDenied;
 use CoreX\Tenancy\DomainTrust\Internal\Models\Domain;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Psr\Clock\ClockInterface;
 use Throwable;
 
 final class DomainTrustStateWriter
 {
-    public function __construct(private readonly string $centralConnection) {}
+    public function __construct(
+        private readonly ConnectionResolverInterface $connections,
+        private readonly ClockInterface $clock,
+        private readonly Dispatcher $events,
+        private readonly string $centralConnection,
+    ) {}
 
     public function generationFor(string $accountId, NormalizedHost $host): int
     {
@@ -67,7 +74,7 @@ final class DomainTrustStateWriter
                     throw new DomainTrustDenied('The ownership proof was rejected.');
                 }
 
-                $occurredAt = CarbonImmutable::now();
+                $occurredAt = $this->clock->now();
                 $domain ??= new Domain([
                     'id' => (string) Str::uuid7(),
                     'account_id' => $accountId,
@@ -77,7 +84,7 @@ final class DomainTrustStateWriter
                     'tls_status' => 'none',
                 ]);
                 $domain->setConnection($this->centralConnection);
-                $domain->verified_at = $occurredAt;
+                $domain->verified_at = CarbonImmutable::instance($occurredAt);
                 $domain->verification_generation = $oldGeneration + 1;
                 $this->saveDomain($domain);
 
@@ -108,7 +115,7 @@ final class DomainTrustStateWriter
                 throw new DomainTrustDenied('The host is not owned by this account.');
             }
 
-            $occurredAt = CarbonImmutable::now();
+            $occurredAt = $this->clock->now();
             $oldGeneration = $domain->verification_generation;
             $domain->verified_at = null;
             $domain->verification_generation = $oldGeneration + 1;
@@ -138,7 +145,7 @@ final class DomainTrustStateWriter
                 throw new DomainTrustDenied('The host is not owned by the source account.');
             }
 
-            $occurredAt = CarbonImmutable::now();
+            $occurredAt = $this->clock->now();
             $oldGeneration = $domain->verification_generation;
             $domain->verified_at = null;
             $domain->account_id = $toAccountId;
@@ -162,7 +169,10 @@ final class DomainTrustStateWriter
 
     private function connection(): Connection
     {
-        return DB::connection(name: $this->centralConnection);
+        /** @var Connection */
+        $connection = $this->connections->connection(name: $this->centralConnection);
+
+        return $connection;
     }
 
     /** @return Builder<Domain> */
@@ -183,7 +193,7 @@ final class DomainTrustStateWriter
     private function dispatchChange(DomainTrustTransition $transition): void
     {
         $this->connection()->afterCommit(
-            callback: static fn (): mixed => event(new DomainTrustChanged(transition: $transition)),
+            callback: fn (): mixed => $this->events->dispatch(new DomainTrustChanged(transition: $transition)),
         );
     }
 

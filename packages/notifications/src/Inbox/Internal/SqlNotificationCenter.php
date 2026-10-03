@@ -24,12 +24,14 @@ use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
 use JsonException;
+use Psr\Clock\ClockInterface;
 
 final class SqlNotificationCenter implements NotificationCenter
 {
     public function __construct(
         private readonly ConnectionInterface $connection,
         private readonly NotificationPolicy $policy,
+        private readonly ClockInterface $clock,
     ) {}
 
     public function notify(NotificationContext $context, NotificationInput $input): NotificationRef
@@ -74,7 +76,7 @@ final class SqlNotificationCenter implements NotificationCenter
                     'related' => $related,
                 ];
                 $messageJson = $this->json($message);
-                $now = now();
+                $now = $this->clock->now();
 
                 $this->connection->table('ntf_notifications')->insert([
                     'id' => $id,
@@ -160,7 +162,7 @@ final class SqlNotificationCenter implements NotificationCenter
                 return new CancelResult(cancelled: false, alreadyDispatched: $this->dispatchedChannels($notificationId));
             }
 
-            $now = now();
+            $now = $this->clock->now();
             $this->connection->table('ntf_notifications')->where('id', $notificationId)->update([
                 'cancelled_at' => $now,
                 'revision' => (string) ((int) $notification->revision + 1),
@@ -190,9 +192,9 @@ final class SqlNotificationCenter implements NotificationCenter
 
             if ($notification->read_at === null) {
                 $this->connection->table('ntf_notifications')->where('id', $notificationId)->update([
-                    'read_at' => now(),
+                    'read_at' => $this->clock->now(),
                     'revision' => (string) ((int) $notification->revision + 1),
-                    'updated_at' => now(),
+                    'updated_at' => $this->clock->now(),
                 ]);
             }
         });

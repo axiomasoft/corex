@@ -17,6 +17,7 @@ use CoreX\Tasks\Task\Internal\Models\Task;
 use CoreX\Tasks\Task\Internal\TaskReferenceFactory;
 use CoreX\Tasks\Task\Internal\TaskSnapshot;
 use DateTimeImmutable;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -26,6 +27,8 @@ final class UpdateTask implements UpdateTaskCommand
     public function __construct(
         private readonly TaskModuleGuard $moduleGuard,
         private readonly TaskMutationAccess $access,
+        private readonly ProjectRead $projects,
+        private readonly Dispatcher $events,
     ) {}
 
     public function handle(UpdateTaskData $data): TaskReference
@@ -137,7 +140,7 @@ final class UpdateTask implements UpdateTaskCommand
 
         if ($changed !== []) {
             $task->save();
-            event(new TaskUpdated(TaskSnapshot::fromTask($task), $changed));
+            $this->events->dispatch(new TaskUpdated(TaskSnapshot::fromTask($task), $changed));
         }
 
         return TaskReferenceFactory::fromTask($task);
@@ -163,7 +166,7 @@ final class UpdateTask implements UpdateTaskCommand
         }
 
         /** @var ProjectView|null $project */
-        $project = app(ProjectRead::class)->find($id, $connectionName);
+        $project = $this->projects->find($id, $connectionName);
 
         if ($project === null || $project->workspaceId !== $workspaceId) {
             $this->invalid('project_id', 'Проект не найден в рабочем пространстве задачи.');

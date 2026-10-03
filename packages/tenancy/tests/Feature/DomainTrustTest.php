@@ -189,9 +189,9 @@ it('keeps custom-domain verification disabled without consumer port bindings', f
 
 it('issues and consumes a proof once, persisting only trusted state and notification metadata', function (): void {
     $accountId = domainTrustAccountDT();
+    Event::fake([DomainTrustChanged::class]);
     [$coordinator, $store, $verifier] = domainTrustCoordinatorDT();
     $actor = new DomainTrustActor(id: 'actor-a');
-    Event::fake([DomainTrustChanged::class]);
 
     $issued = $coordinator->issue(actor: $actor, accountId: $accountId, host: 'SHOP.EXAMPLE.TEST');
     $verifier->token = $issued->token;
@@ -212,9 +212,9 @@ it('issues and consumes a proof once, persisting only trusted state and notifica
 
 it('dispatches the lifecycle notification only after an enclosing transaction commits', function (): void {
     $accountId = domainTrustAccountDT();
+    Event::fake([DomainTrustChanged::class]);
     [$coordinator, , $verifier] = domainTrustCoordinatorDT();
     $actor = new DomainTrustActor(id: 'actor-a');
-    Event::fake([DomainTrustChanged::class]);
 
     DB::transaction(function () use ($coordinator, $verifier, $actor, $accountId): void {
         $issued = $coordinator->issue(actor: $actor, accountId: $accountId, host: 'after-commit.example.test');

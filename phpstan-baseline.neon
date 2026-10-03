@@ -1692,12 +1692,6 @@ parameters:
 			path: tests/Support/SingletonInjectionGate.php
 
 		-
-			rawMessage: Right side of && is always true.
-			identifier: booleanAnd.rightAlwaysTrue
-			count: 1
-			path: tests/Support/SingletonInjectionGate.php
-
-		-
 			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
 			identifier: ternary.shortNotAllowed
 			count: 1

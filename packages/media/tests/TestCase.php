@@ -7,6 +7,7 @@ namespace CoreX\Media\Tests;
 use CoreX\Media\Contracts\MediaPolicy;
 use CoreX\Media\MediaServiceProvider;
 use CoreX\Storage\Contracts\TenantStorage;
+use CoreX\Time\Laravel\TimeRegistrar;
 use Illuminate\Support\Facades\Storage;
 use Mockery;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -37,6 +38,7 @@ abstract class TestCase extends Orchestra
     {
         parent::setUp();
 
+        (new TimeRegistrar)->register($this->app);
         Storage::fake('media');
         $storage = Mockery::mock(TenantStorage::class);
         $storage->shouldReceive('disk')->andReturn(Storage::disk('media'));

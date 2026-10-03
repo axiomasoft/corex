@@ -33,6 +33,7 @@ use CoreX\Webhooks\Internal\WebhookTopicCatalogue;
 use CoreX\Webhooks\Tests\TestCase;
 use DateInterval;
 use DateTimeImmutable;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Group;
@@ -262,7 +263,7 @@ final class WebhookReplayTest extends TestCase
         } catch (ApiError $error) {
             self::assertSame($code, $error->errorCode);
             $problems = app(ProblemRegistry::class);
-            self::assertSame($error, (new ErrorMapper($problems))->map($error, reportUnexpected: false));
+            self::assertSame($error, (new ErrorMapper($problems, app(ExceptionHandler::class)))->map($error, reportUnexpected: false));
             $restored = StoredOperationOutcome::fromCanonicalJson(StoredOperationOutcome::failure($error)->canonicalJson(), $problems)->error($problems);
             self::assertSame($error->status, $restored->status);
             self::assertSame($error->category, $restored->category);

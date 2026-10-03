@@ -13,10 +13,10 @@ use CoreX\Intl\Territory\Data\DatasetReceipt;
 use CoreX\Intl\Territory\Exceptions\AccessDeniedException;
 use CoreX\Intl\Territory\Exceptions\OperationConflictException;
 use CoreX\Intl\Territory\Exceptions\SchemaMismatchException;
-use DateTimeImmutable;
 use DateTimeZone;
 use Illuminate\Database\Connection;
 use Override;
+use Psr\Clock\ClockInterface;
 
 final class SqlDatasetImporter implements DatasetImporter
 {
@@ -25,6 +25,7 @@ final class SqlDatasetImporter implements DatasetImporter
         private readonly string $datasetKey,
         private readonly FixtureReferenceNormalizer $normalizer,
         private readonly DataScopeAuthorizer $authorizer,
+        private readonly ClockInterface $clock,
     ) {}
 
     #[Override]
@@ -112,7 +113,7 @@ final class SqlDatasetImporter implements DatasetImporter
                 'raw_hash' => $candidate->manifest->rawHash,
                 'normalized_hash' => $candidate->manifest->normalizedHash,
                 'state' => 'published',
-                'created_at' => (new DateTimeImmutable('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s'),
+                'created_at' => $this->clock->now()->setTimezone(new DateTimeZone('UTC'))->format('Y-m-d H:i:s'),
             ]);
 
             foreach ($parsed['records'] as $record) {

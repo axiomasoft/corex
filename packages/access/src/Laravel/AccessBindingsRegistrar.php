@@ -15,6 +15,7 @@ use CoreX\Access\Contracts\RoleMatrixCompiler;
 use CoreX\Access\Extend\Internal\PermissionsMerger;
 use CoreX\Access\Matrix\Internal\DatabaseRoleMatrixCompiler;
 use CoreX\Access\Matrix\Laravel\MatrixPortBindings;
+use CoreX\Access\Roles\Internal\SystemRoleMutationScope;
 use CoreX\Access\Tenancy\Internal\TenantContextGuard;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
@@ -52,6 +53,7 @@ final class AccessBindingsRegistrar implements PackageRegistrar
         // query — binding it keeps that one ScopeAvailability instance (and
         // its memo) shared across every apply() call within one request.
         $app->scoped(ScopeAvailability::class);
+        $app->scoped(SystemRoleMutationScope::class);
         $app->scoped(ScopeResolver::class, DefaultScopeResolver::class);
 
         // P2.21: PermissionsMerger's lifecycle listener needs this resolved

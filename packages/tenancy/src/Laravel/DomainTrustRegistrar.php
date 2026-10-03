@@ -16,8 +16,11 @@ use CoreX\Tenancy\DomainTrust\Exceptions\DomainTrustDisabled;
 use CoreX\Tenancy\DomainTrust\Internal\DomainTrustCoordinator;
 use CoreX\Tenancy\DomainTrust\Internal\DomainTrustStateWriter;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Database\ConnectionResolverInterface;
 use Override;
+use Psr\Clock\ClockInterface;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class DomainTrustRegistrar implements PackageRegistrar
@@ -30,6 +33,9 @@ final class DomainTrustRegistrar implements PackageRegistrar
         $app->scoped(
             DomainTrustStateWriter::class,
             static fn (Application $app): DomainTrustStateWriter => new DomainTrustStateWriter(
+                connections: $app->make(ConnectionResolverInterface::class),
+                clock: $app->make(ClockInterface::class),
+                events: $app->make(Dispatcher::class),
                 centralConnection: $app->make(TenancyOptions::class)->centralConnection,
             ),
         );
@@ -50,6 +56,7 @@ final class DomainTrustRegistrar implements PackageRegistrar
             proofVerifier: $app->make(DomainOwnershipProofVerifier::class),
             authorizer: $app->make(DomainTrustAuthorizer::class),
             stateWriter: $app->make(DomainTrustStateWriter::class),
+            clock: $app->make(ClockInterface::class),
             challengeTtlSeconds: $options->domainTrustChallengeTtlSeconds,
         );
     }

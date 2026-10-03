@@ -15,14 +15,18 @@ use CoreX\Tasks\Task\Internal\Models\Task;
 use CoreX\Tasks\Task\Internal\TaskCompletion;
 use CoreX\Tasks\Task\Internal\TaskReferenceFactory;
 use CoreX\Tasks\Task\Internal\TaskSnapshot;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
 use Illuminate\Validation\ValidationException;
+use Psr\Clock\ClockInterface;
 
 final class CompleteTask implements CompleteTaskCommand
 {
     public function __construct(
         private readonly TaskModuleGuard $moduleGuard,
         private readonly TaskMutationAccess $access,
+        private readonly ClockInterface $clock,
+        private readonly Dispatcher $events,
     ) {}
 
     public function handle(CompleteTaskData $data): TaskReference
@@ -52,11 +56,11 @@ final class CompleteTask implements CompleteTaskCommand
             $this->invalid('task_id', 'Задача не принадлежит текущему рабочему пространству.');
         }
 
-        if (! (new TaskCompletion($this->access))->apply($task, $data, $context)) {
+        if (! (new TaskCompletion($this->access, $this->clock))->apply($task, $data, $context)) {
             return TaskReferenceFactory::fromTask($task);
         }
         $task->save();
-        event(new TaskCompleted(TaskSnapshot::fromTask($task)));
+        $this->events->dispatch(new TaskCompleted(TaskSnapshot::fromTask($task)));
 
         return TaskReferenceFactory::fromTask($task);
     }

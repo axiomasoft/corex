@@ -12,10 +12,8 @@ use CoreX\Access\Database\Seeders\SystemRolesSeeder;
 use CoreX\Access\Enums\PrincipalType;
 use CoreX\Access\Enums\Scope;
 use CoreX\Access\Exceptions\ScopeCapabilityMismatch;
-use CoreX\Access\Laravel\AuthOptions;
 use CoreX\Access\Laravel\ScopeResolver;
 use CoreX\Access\Matrix\Internal\DatabaseRoleMatrixCompiler;
-use CoreX\Access\Matrix\Internal\ScopeMapVersion;
 use CoreX\Access\Roles\Internal\Models\Role;
 use CoreX\Access\Roles\Internal\Models\RoleAssignment;
 use CoreX\Access\Roles\Internal\Models\RoleMatrixRow;
@@ -153,7 +151,7 @@ beforeEach(function (): void {
     app()->instance(ModuleRegistry::class, new FakeModuleRegistry(['corex/access-tests']));
 
     $this->compileRole = function (string $roleId): void {
-        (new DatabaseRoleMatrixCompiler(app(ScopeMapVersion::class), app(AuthOptions::class)))->compile($roleId);
+        app(DatabaseRoleMatrixCompiler::class)->compile($roleId);
     };
 
     $this->newRole = function (array $overrides = []): Role {
@@ -426,7 +424,7 @@ it('lets a principal with the active system owner role pass any allowed() check 
 it('does not extend owner-wildcard capability to a non-system clone of owner', function (): void {
     Role::withSystemMutationAllowed(fn () => (new SystemRolesSeeder)->run());
     $owner = Role::query()->where('slug', 'owner')->firstOrFail();
-    $clone = (new RoleCloner)->clone($owner, 'owner-custom-'.Str::uuid7());
+    $clone = (app(RoleCloner::class))->clone($owner, 'owner-custom-'.Str::uuid7());
 
     $principalId = (string) Str::uuid7();
     RoleAssignment::query()->create(['role_id' => $clone->id, 'principal_type' => 'user', 'principal_id' => $principalId]);

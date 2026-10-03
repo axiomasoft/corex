@@ -7,7 +7,7 @@ namespace CoreX\Modules\Internal\Lifecycle;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Modules\Contracts\ModuleStateReader;
 use CoreX\Modules\Enums\ModuleState;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\ConnectionResolverInterface;
 
 /**
  * DB-backed {@see ModuleStateReader}: reads the enabled set straight from
@@ -21,12 +21,15 @@ use Illuminate\Support\Facades\DB;
  */
 final class DatabaseModuleStateReader implements ModuleStateReader
 {
-    public function __construct(private readonly ?string $connection = null) {}
+    public function __construct(
+        private readonly ConnectionResolverInterface $connections,
+        private readonly ?string $connection = null,
+    ) {}
 
     /** @return array<string, array{state: string, edition: string}> */
     public function enabledFor(TenantContext $ctx): array
     {
-        return DB::connection($this->connection)->table('mod_modules')
+        return $this->connections->connection($this->connection)->table('mod_modules')
             ->where('state', ModuleState::Enabled->value)
             ->get(['name', 'state', 'edition'])
             ->mapWithKeys(static fn (object $row): array => [

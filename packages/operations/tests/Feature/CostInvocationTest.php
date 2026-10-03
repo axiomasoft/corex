@@ -109,7 +109,7 @@ final class CostInvocationTest extends TestCase
             modules: $modules,
             authorizer: $this->operationAuthorizer(),
             replayAuthorizer: new AllowReplayAuthorizer,
-            errors: new ErrorMapper(app(ProblemRegistry::class)),
+            errors: app(ErrorMapper::class),
             problems: app(ProblemRegistry::class),
             budget: $admission,
         );
@@ -166,7 +166,7 @@ final class CostInvocationTest extends TestCase
             $invoker->invoke($this->invocation($this->operation()));
             self::fail('A missing budget authority must fail closed.');
         } catch (BudgetStoreUnavailable $error) {
-            $mapped = (new ErrorMapper(app(ProblemRegistry::class)))->map($error, reportUnexpected: false);
+            $mapped = (app(ErrorMapper::class))->map($error, reportUnexpected: false);
             self::assertSame('operations.budget_store_unavailable', $mapped->errorCode);
             self::assertSame(500, $mapped->status);
         }

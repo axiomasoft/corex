@@ -36,6 +36,8 @@ final class RegistryRegistrar implements PackageRegistrar
 {
     use RegistersNothingOnBoot;
 
+    private const string INSTALLED_JSON = 'vendor/composer/installed.json';
+
     #[Override]
     public function register(Application $app): void
     {
@@ -44,6 +46,7 @@ final class RegistryRegistrar implements PackageRegistrar
         ));
         $app->singleton(FieldCastRegistry::class, FieldCastMap::class);
         $app->when(RegistryCompiler::class)->needs('$sections')->giveTagged(ManifestSectionCompiler::class);
+        $app->when(RegistryCompiler::class)->needs('$installedJsonPath')->give(static fn (Application $app): string => $app->basePath(self::INSTALLED_JSON));
 
         // Bind the concrete singleton first so module providers can resolve
         // it directly to call register() (not part of the read-only contract),
@@ -65,7 +68,7 @@ final class RegistryRegistrar implements PackageRegistrar
 
         // No fallback modules by default — real deploys scan installed.json;
         // tests/testbench rebind this with an injected class list.
-        $app->singleton(ModuleDiscovery::class);
+        $app->singleton(ModuleDiscovery::class, static fn (Application $app): ModuleDiscovery => new ModuleDiscovery(installedJsonPath: $app->basePath(self::INSTALLED_JSON)));
 
         // Boxed default: the cloud billing gate is an application concern.
         $app->singleton(ModuleActivationGate::class, AllowAllActivationGate::class);
@@ -79,7 +82,7 @@ final class RegistryRegistrar implements PackageRegistrar
 
         $app->singleton(ModuleRegistry::class, function (Application $app): CompiledModuleRegistry {
             return new CompiledModuleRegistry(
-                cachePath: CompiledModuleRegistry::defaultCachePath(),
+                cachePath: $app->basePath(CompiledModuleRegistry::CACHE_PATH),
                 stateReader: $app->make(ModuleStateReader::class),
                 cache: $app->make(ModuleRegistryCache::class),
                 // Epoch: monotonic per-account registry version read from
@@ -97,8 +100,9 @@ final class RegistryRegistrar implements PackageRegistrar
             return new ReadRegistryIntrospection(
                 registry: $app->make(ModuleRegistry::class),
                 activationGate: $app->make(ModuleActivationGate::class),
-                cachePath: CompiledModuleRegistry::defaultCachePath(),
+                cachePath: $app->basePath(CompiledModuleRegistry::CACHE_PATH),
                 failIfMissing: $app->environment('production'),
+                installedJsonPath: $app->basePath(self::INSTALLED_JSON),
             );
         });
     }

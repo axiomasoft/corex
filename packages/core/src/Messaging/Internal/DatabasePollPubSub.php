@@ -9,8 +9,9 @@ use CoreX\Config\Data\CoreOptions;
 use CoreX\Messaging\Contracts\PubSub;
 use CoreX\Messaging\Contracts\WorkerRuntime;
 use Illuminate\Database\ConnectionInterface;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\ConnectionResolverInterface;
 use Override;
+use Psr\Clock\ClockInterface;
 
 /**
  * Boxed fallback driver for installs without Redis — polls
@@ -42,15 +43,18 @@ use Override;
 final class DatabasePollPubSub implements PubSub
 {
     public function __construct(
+        private readonly ConnectionResolverInterface $connections,
+        private readonly CoreOptions $options,
+        private readonly ClockInterface $clock,
+        private readonly WorkerRuntime $runtime,
         private readonly ?string $connection = null,
         private readonly ?int $pollIntervalMicroseconds = null,
-        private readonly WorkerRuntime $runtime = new DefaultWorkerRuntime,
     ) {}
 
     #[Override]
     public function publish(string $channel, array $payload): void
     {
-        $connection = DB::connection($this->connection);
+        $connection = $this->connections->connection($this->connection);
 
         $connection->transaction(function () use ($channel, $payload, $connection): void {
             $connection->select(
@@ -58,10 +62,10 @@ final class DatabasePollPubSub implements PubSub
                 bindings: ['corex-pubsub:'.$channel],
             );
 
-            $connection->table(app(CoreOptions::class)->pubsubMessagesTable)->insert([
+            $connection->table($this->options->pubsubMessagesTable)->insert([
                 'channel' => $channel,
                 'payload' => json_encode($payload, JSON_THROW_ON_ERROR),
-                'created_at' => now(),
+                'created_at' => $this->clock->now(),
             ]);
         });
     }
@@ -86,11 +90,11 @@ final class DatabasePollPubSub implements PubSub
         string $subscriber = 'default',
         bool $replayBacklog = false,
     ): void {
-        SubscribeGuard::assert($this->runtime, app(CoreOptions::class)->pubsubOctaneWorkerOptIn, self::class);
+        SubscribeGuard::assert($this->runtime, $this->options->pubsubOctaneWorkerOptIn, self::class);
 
-        $connection = DB::connection($this->connection);
-        $messagesTable = app(CoreOptions::class)->pubsubMessagesTable;
-        $cursorsTable = app(CoreOptions::class)->pubsubCursorsTable;
+        $connection = $this->connections->connection($this->connection);
+        $messagesTable = $this->options->pubsubMessagesTable;
+        $cursorsTable = $this->options->pubsubCursorsTable;
 
         $cursor = $this->loadOrBootstrapCursor($connection, $cursorsTable, $messagesTable, $channel, $subscriber, $replayBacklog);
         $polls = 0;
@@ -114,7 +118,7 @@ final class DatabasePollPubSub implements PubSub
             $polls++;
 
             if ($maxPolls === null || $polls < $maxPolls) {
-                usleep($this->pollIntervalMicroseconds ?? app(CoreOptions::class)->pubsubPollIntervalMicroseconds);
+                usleep($this->pollIntervalMicroseconds ?? $this->options->pubsubPollIntervalMicroseconds);
             }
         }
     }
@@ -154,7 +158,7 @@ final class DatabasePollPubSub implements PubSub
     ): void {
         $connection->table($cursorsTable)->updateOrInsert(
             ['channel' => $channel, 'subscriber' => $subscriber],
-            ['position' => $position, 'updated_at' => now()],
+            ['position' => $position, 'updated_at' => $this->clock->now()],
         );
     }
 }

@@ -42,38 +42,44 @@ final class AuditObserver
      */
     private const ALWAYS_EXCLUDED = ['password', 'remember_token'];
 
+    public function __construct(
+        private readonly CoreOptions $options,
+        private readonly AuditLogger $logger,
+        private readonly CurrentActor $actor,
+    ) {}
+
     public function created(Model $model): void
     {
-        self::record($model, 'created');
+        $this->record($model, 'created');
     }
 
     public function updated(Model $model): void
     {
-        self::record($model, 'updated');
+        $this->record($model, 'updated');
     }
 
     public function deleted(Model $model): void
     {
-        self::record($model, 'deleted');
+        $this->record($model, 'deleted');
     }
 
     public function restored(Model $model): void
     {
-        self::record($model, 'restored');
+        $this->record($model, 'restored');
     }
 
     public function forceDeleted(Model $model): void
     {
-        self::record($model, 'forceDeleted');
+        $this->record($model, 'forceDeleted');
     }
 
-    public static function record(Model $model, string $action): void
+    public function record(Model $model, string $action): void
     {
         // Killswitch is checked HERE (runtime, single write path), not in
         // HasAuditLog::boot: a boot-time skip never re-enables when the
         // config flips, and the capability path (::observe) never saw the flag
         // at all — a disabled audit still wrote through byCapability(Auditable).
-        if (! app(CoreOptions::class)->auditEnabled) {
+        if (! $this->options->auditEnabled) {
             return;
         }
 
@@ -125,14 +131,14 @@ final class AuditObserver
             }
         }
 
-        app(AuditLogger::class)->record(new AuditEntry(
+        $this->logger->record(new AuditEntry(
             action: $action,
-            actorType: CurrentActor::type(),
-            actorId: CurrentActor::id(),
+            actorType: $this->actor->type(),
+            actorId: $this->actor->id(),
             entityType: $model->getMorphClass(),
             entityId: (string) $model->getKey(),
             changes: JsonDocuments::nullable($changes === [] ? null : json_decode(json_encode($changes, JSON_THROW_ON_ERROR), true, 512, JSON_THROW_ON_ERROR)),
-            context: JsonDocuments::capture(CurrentActor::context()),
+            context: JsonDocuments::capture($this->actor->context()),
         ));
     }
 

@@ -14,7 +14,6 @@ use CoreX\Access\Laravel\AuthOptions;
 use CoreX\Access\Laravel\ScopeResolver;
 use CoreX\Access\Matrix\Internal\DatabaseRoleMatrixCompiler;
 use CoreX\Access\Matrix\Internal\MatrixValidator;
-use CoreX\Access\Matrix\Internal\ScopeMapVersion;
 use CoreX\Access\Roles\Internal\Models\Role;
 use CoreX\Access\Roles\Internal\Models\RoleAssignment;
 use CoreX\Access\Roles\Internal\Models\RoleMatrixRow;
@@ -25,7 +24,6 @@ use CoreX\Access\Tests\Stubs\FakeTenancyManager;
 use CoreX\Access\Tests\Stubs\FakeWorkspaceScope;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\WorkspaceRef;
-use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Data\EntityDefinition;
 use CoreX\Modules\Enums\Capability;
@@ -66,7 +64,7 @@ beforeEach(function (): void {
     app()->instance(ModuleRegistry::class, new FakeModuleRegistry(['corex/access-tests']));
 
     $this->compileRole = function (string $roleId): void {
-        (new DatabaseRoleMatrixCompiler(app(ScopeMapVersion::class), app(AuthOptions::class)))->compile($roleId);
+        app(DatabaseRoleMatrixCompiler::class)->compile($roleId);
     };
 
     $this->newRole = function (array $overrides = []): Role {
@@ -557,7 +555,7 @@ it('MatrixValidator warns when a matrix row names a scope the entity is missing 
     $role = ($this->newRole)();
     RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.drift', 'action' => 'read', 'scope' => 'own']);
 
-    $warnings = (new MatrixValidator(app(EntityRegistry::class)))->validate(RoleMatrixData::role((string) $role->getKey()));
+    $warnings = (app(MatrixValidator::class))->validate(RoleMatrixData::role((string) $role->getKey()));
 
     expect($warnings)->not->toBeEmpty()
         ->and($warnings[0])->toContain('crm.drift')

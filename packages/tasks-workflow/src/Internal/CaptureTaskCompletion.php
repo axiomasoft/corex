@@ -23,6 +23,8 @@ final class CaptureTaskCompletion implements TaskCompletionCapture
         private readonly string $definitionRef,
         private readonly string $versionRef,
         private readonly TaskOperationReceipts $receipts,
+        private readonly TenantContextResolver $contexts,
+        private readonly ?WorkflowBinding $workflow = null,
     ) {}
 
     public function capture(TaskCompletionCandidate $candidate): void
@@ -35,12 +37,10 @@ final class CaptureTaskCompletion implements TaskCompletionCapture
             return;
         }
 
-        if (! interface_exists(WorkflowBinding::class)
-            || ! app()->bound(WorkflowBinding::class)) {
+        if ($this->workflow === null) {
             return;
         }
 
-        $workflowBinding = app()->make(WorkflowBinding::class);
         $restoreEpoch = str_repeat('0', 64);
         $requestKey = hash('sha256', 'completion-capture/1'."\0".$candidate->taskId."\0".$restoreEpoch);
         $payload = [
@@ -55,8 +55,8 @@ final class CaptureTaskCompletion implements TaskCompletionCapture
             return;
         }
 
-        $workflowBinding->capture(new TriggerRequest(
-            context: app(TenantContextResolver::class)->current(),
+        $this->workflow->capture(new TriggerRequest(
+            context: $this->contexts->current(),
             module: 'axiomasoft/corex-tasks-workflow',
             entityHandle: 'tsk.task',
             eventId: 'task:'.$candidate->taskId,

@@ -15,6 +15,7 @@ use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -23,7 +24,10 @@ use Throwable;
 /** @internal Shares safe normalization between dispatch and the surrounding middleware pipeline. */
 final class ErrorMapper implements ErrorMapping
 {
-    public function __construct(private readonly ProblemRegistry $problems) {}
+    public function __construct(
+        private readonly ProblemRegistry $problems,
+        private readonly ExceptionHandler $exceptions,
+    ) {}
 
     public function map(Throwable $error, bool $reportUnexpected = true): ApiError
     {
@@ -97,7 +101,7 @@ final class ErrorMapper implements ErrorMapping
 
         if ($code === CoreErrorCode::InternalError) {
             if ($reportUnexpected) {
-                report($error);
+                $this->exceptions->report($error);
             }
             $status = 500;
         }
@@ -113,7 +117,7 @@ final class ErrorMapper implements ErrorMapping
     private function unexpected(Throwable $error, bool $reportUnexpected): ApiError
     {
         if ($reportUnexpected) {
-            report($error);
+            $this->exceptions->report($error);
         }
 
         return new ApiError(CoreErrorCode::InternalError, 500, 'Operation could not be completed.', category: ErrorCategory::Internal);

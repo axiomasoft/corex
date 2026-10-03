@@ -14,7 +14,10 @@ use CoreX\Tenancy\Integration\Internal\Wakeup\SweepRootWakeups;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Console\Application as Artisan;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Database\ConnectionResolverInterface;
 use Override;
+use Psr\Clock\ClockInterface;
+use Psr\Log\LoggerInterface;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class WakeupRegistrar implements PackageRegistrar
@@ -27,14 +30,20 @@ final class WakeupRegistrar implements PackageRegistrar
         $app->singleton(
             RootRegistryWakeupHint::class,
             static fn (Application $app): RootRegistryWakeupHint => new RootRegistryWakeupHint(
-                root: $app['db']->connection($app->make(TenancyOptions::class)->wakeupRootConnection),
+                connections: $app->make(ConnectionResolverInterface::class),
+                rootConnection: $app->make(TenancyOptions::class)->wakeupRootConnection,
+                clock: $app->make(ClockInterface::class),
+                logger: $app->make(LoggerInterface::class),
             ),
         );
         $app->tag(RootRegistryWakeupHint::class, 'corex.wakeup.hints');
-        $app->singleton(
+        $app->scoped(
             RootWakeupReconciler::class,
             static fn (Application $app): RootWakeupReconciler => new RootWakeupReconciler(
-                root: $app['db']->connection($app->make(TenancyOptions::class)->wakeupRootConnection),
+                connections: $app->make(ConnectionResolverInterface::class),
+                rootConnection: $app->make(TenancyOptions::class)->wakeupRootConnection,
+                clock: $app->make(ClockInterface::class),
+                hint: $app->make(RootRegistryWakeupHint::class),
                 tenancy: $app->make(TenancyManager::class),
                 sweeper: $app->make(self::WAKEUP_SWEEPER),
                 leaseSeconds: $app->make(TenancyOptions::class)->wakeupLeaseSeconds,

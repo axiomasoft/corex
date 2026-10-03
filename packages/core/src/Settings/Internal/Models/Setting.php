@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Settings\Internal\Models;
 
-use CoreX\Config\Data\CoreOptions;
 use CoreX\Database\Laravel\HasConfiguredId;
+use CoreX\Database\Laravel\ResolvesCoreOptions;
 use Illuminate\Database\Eloquent\Model;
 use Override;
 
@@ -20,6 +20,7 @@ use Override;
 final class Setting extends Model
 {
     use HasConfiguredId;
+    use ResolvesCoreOptions;
 
     protected $guarded = [];
 
@@ -31,6 +32,6 @@ final class Setting extends Model
     #[Override]
     public function getTable(): string
     {
-        return app(CoreOptions::class)->settingsTable;
+        return $this->coreOptions()->settingsTable;
     }
 }

@@ -8,6 +8,7 @@ use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Data\WriteToken;
 use CoreX\Data\Internal\CallableDataScopeAuthorizer;
+use CoreX\Time\Laravel\SystemClock;
 use CoreX\Transfer\Contracts\RecordMapper;
 use CoreX\Transfer\Contracts\TransferSink;
 use CoreX\Transfer\Contracts\TransferSource;
@@ -221,6 +222,7 @@ function limitRunner(SourceManifest $manifest, object $calls, int $rows, Transfe
         new ConflictRule('create-only'),
         $limits,
         new CallableDataScopeAuthorizer(static fn (): bool => true),
+        new SystemClock,
         guard: $guard,
     );
 }

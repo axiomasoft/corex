@@ -20,7 +20,8 @@
         "ext-mbstring": "*",
         "php": "^8.4",
         "axiomasoft/corex": "^1.0@dev",
-        "laravel/framework": "^12.0|^13.0"
+        "laravel/framework": "^12.0|^13.0",
+        "psr/clock": "^1.0"
     },
     "require-dev": {
         "larastan/larastan": "^3.12",

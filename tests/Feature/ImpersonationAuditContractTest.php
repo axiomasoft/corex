@@ -24,7 +24,7 @@ test('P12 stamps a direct AuditLogger call with authoritative impersonation prov
 
     $state = new ImpersonationState('grant-p12', 'staff-p12', 'target-p12', new DateTimeImmutable('+1 hour'), 'support case 42');
     app()->instance(ImpersonationService::class, new P12FixedImpersonationService($state));
-    app()->instance(AuditLogger::class, new QueuedAuditLogger(tenantContext: new P12FixedTenantContextResolver('workspace-p12')));
+    app()->instance(AuditLogger::class, app()->make(QueuedAuditLogger::class, ['tenantContext' => new P12FixedTenantContextResolver('workspace-p12')]));
 
     app(AuditLogger::class)->record(new AuditEntry(
         action: 'direct-contract-proof',

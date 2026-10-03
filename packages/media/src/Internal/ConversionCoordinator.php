@@ -11,6 +11,7 @@ use CoreX\Media\Data\MediaConversionRef;
 use CoreX\Media\Internal\Support\MediaOptions;
 use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Database\ConnectionInterface;
+use Psr\Clock\ClockInterface;
 use Throwable;
 
 final class ConversionCoordinator
@@ -21,6 +22,7 @@ final class ConversionCoordinator
         private readonly ConversionProfiles $profiles,
         private readonly MediaOperationStore $operations,
         private readonly MediaOptions $options,
+        private readonly ClockInterface $clock,
     ) {}
 
     public function request(string $fileId, string $profileKey): ?MediaConversionRef
@@ -56,8 +58,8 @@ final class ConversionCoordinator
                 'profile_digest' => $digest,
                 'source_version' => $file->version,
                 'state' => 'pending',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => $this->clock->now(),
+                'updated_at' => $this->clock->now(),
             ]);
             $this->operations->enqueueConversion(fileId: $fileId, profileKey: $profile->key, profileDigest: $digest, sourceVersion: (int) $file->version);
 

@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Identity\Internal\Membership;
 
-use Carbon\CarbonImmutable;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Tenancy\Identity\Internal\Models\User;
+use DateTimeImmutable;
 use DomainException;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\ConnectionResolverInterface;
 use Throwable;
 
 /** @internal Unregistered management-only reference; never a membership grant. */
 final readonly class ManagementIdentityHydrator
 {
     public function __construct(
+        private ConnectionResolverInterface $connections,
         private string $centralConnection,
         private TenancyManager $tenancy,
         private string $managementScope,
@@ -26,7 +27,7 @@ final readonly class ManagementIdentityHydrator
         $this->assertManagement();
         $this->assertUuid($identityId);
         $this->assertUuid($accountId);
-        $root = DB::connection($this->centralConnection);
+        $root = $this->connections->connection($this->centralConnection);
         $account = $root->table('root_accounts')->where('id', $accountId)->first();
 
         if ($account === null) {
@@ -55,7 +56,7 @@ final readonly class ManagementIdentityHydrator
                     return;
                 }
 
-                DB::connection()->transaction(function () use ($identityId, $identity): void {
+                $this->connections->connection()->transaction(function () use ($identityId, $identity): void {
                     $existing = User::withTrashed()->lockForUpdate()->find($identityId);
 
                     if ($existing?->trashed()) {
@@ -65,9 +66,9 @@ final readonly class ManagementIdentityHydrator
                         return;
                     }
 
-                    $sourceTime = CarbonImmutable::parse($identity->updated_at);
+                    $sourceTime = new DateTimeImmutable((string) $identity->updated_at);
 
-                    if ($existing?->synced_at !== null && $sourceTime->lessThanOrEqualTo($existing->synced_at)) {
+                    if ($existing?->synced_at !== null && $sourceTime <= $existing->synced_at) {
                         return;
                     }
 
@@ -103,7 +104,7 @@ final readonly class ManagementIdentityHydrator
     {
         $this->assertManagement();
         $this->assertUuid($identityId);
-        $ids = DB::connection($this->centralConnection)->table('root_identity_accounts')
+        $ids = $this->connections->connection($this->centralConnection)->table('root_identity_accounts')
             ->where('identity_id', $identityId)->pluck('account_id');
 
         foreach ($ids as $id) {
@@ -118,7 +119,7 @@ final readonly class ManagementIdentityHydrator
     private function bookkeep(string $identityId, string $accountId, string $status): void
     {
         $this->assertManagement();
-        DB::connection($this->centralConnection)->table('root_identity_accounts')
+        $this->connections->connection($this->centralConnection)->table('root_identity_accounts')
             ->where('identity_id', $identityId)->where('account_id', $accountId)
             ->update(['sync_status' => $status]);
     }

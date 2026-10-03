@@ -42,7 +42,9 @@ use CoreX\Tests\Stubs\Lifecycle\StubFkModule;
 use Illuminate\Auth\GenericUser;
 use Illuminate\Cache\ArrayStore;
 use Illuminate\Cache\Repository as CacheRepository;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -50,6 +52,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+use Psr\Clock\ClockInterface;
 
 uses()->group('pg');
 
@@ -79,9 +82,9 @@ function lifecycleFor(array $migrationPaths = [], array $codeVersions = []): Dat
     return new DatabaseModuleLifecycle(
         registry: app(ModuleRegistry::class),
         discovery: app(ModuleDiscovery::class),
-        records: new DatabaseRecordsRegistrar(connection: LIFECYCLE_TEST_CONNECTION),
+        records: app()->make(DatabaseRecordsRegistrar::class, ['connection' => LIFECYCLE_TEST_CONNECTION]),
         container: app(),
-        tenantContextResolver: app(TenantContextResolver::class),
+        tenantContextResolver: app(TenantContextResolver::class), connections: app(ConnectionResolverInterface::class), events: app(Dispatcher::class), clock: app(ClockInterface::class),
         codeVersions: $codeVersions,
         migrationPaths: $migrationPaths,
         connection: LIFECYCLE_TEST_CONNECTION,
@@ -168,7 +171,7 @@ function lifecycleModuleRegistry(string $path, ?ModuleRegistryCache $cache = nul
 {
     return new CompiledModuleRegistry(
         cachePath: $path,
-        stateReader: new DatabaseModuleStateReader(connection: LIFECYCLE_TEST_CONNECTION),
+        stateReader: app()->make(DatabaseModuleStateReader::class, ['connection' => LIFECYCLE_TEST_CONNECTION]),
         cache: $cache ?? new RepositoryModuleRegistryCache(
             Cache::store(),
             ModulesOptions::fromArray(['cache' => ['ttl' => 3600, 'prefix' => 'corex.modules']]),
@@ -358,7 +361,12 @@ it('purges every owned object in reverse creation order — FK child before pare
         ->where('module_name', 'corex/stub-fk')
         ->update(['created_at' => '2026-07-15 12:00:00+00']);
 
+    // The dispatcher is injected into the lifecycle: build the one under test after faking events.
     Event::fake();
+    $lifecycle = lifecycleFor(migrationPaths: [
+        'corex/stub-base' => lifecycleStubsPath('base'),
+        'corex/stub-fk' => lifecycleStubsPath('fk'),
+    ]);
     $lifecycle->uninstall('corex/stub-fk', keepData: false);
 
     // Zero orphaned objects of the module (D41): tables, borrowed column, index.
@@ -728,7 +736,7 @@ it('resolves ModuleStateReader from the registered ModulesOptions connection, no
     expect(app(ModulesOptions::class)->connection)->toBe(LIFECYCLE_TEST_CONNECTION);
     app()->forgetInstance(ModuleStateReader::class);
 
-    // NO manual `new DatabaseModuleStateReader(connection: ...)` override —
+    // NO manual `app()->make(DatabaseModuleStateReader::class, ['connection' => ...])` override —
     // resolve straight from the container, exactly as CompiledModuleRegistry does.
     $reader = app(ModuleStateReader::class);
 

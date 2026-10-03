@@ -44,7 +44,6 @@ $classification = [
     'CoreX\\CustomFields\\Internal\\Values\\AttributeValueTransformerRegistry' => 'boot-built catalogue',
     'CoreX\\Messaging\\Contracts\\MessageContractRegistry' => 'authority',
     'CoreX\\Messaging\\Internal\\ArrayMessageContractRegistry' => 'authority',
-    'CoreX\\Messaging\\Internal\\PubSubManager' => 'driver factory',
     'CoreX\\Context\\Contracts\\TenancyManager' => 'runtime manager',
     'CoreX\Context\Internal\NullTenancyManager' => 'runtime manager',
     'CoreX\Modules\Data\CompiledRegistry' => 'authority',

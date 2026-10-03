@@ -19,8 +19,13 @@ use CoreX\Tenancy\Identity\Contracts\IdentitySyncer;
 use CoreX\Tenancy\Impersonation\Internal\DatabaseImpersonationService;
 use CoreX\Tenancy\Laravel\Support\ImpersonationPolicy;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
+use Illuminate\Contracts\Auth\Factory as AuthFactory;
+use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Database\ConnectionResolverInterface;
+use Illuminate\Http\Client\Factory as HttpFactory;
 use Override;
+use Psr\Clock\ClockInterface;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class AuthenticationRegistrar implements PackageRegistrar
@@ -33,6 +38,8 @@ final class AuthenticationRegistrar implements PackageRegistrar
         $app->singleton(
             OidcDiscovery::class,
             static fn (Application $app): OidcDiscovery => new OidcDiscovery(
+                http: $app->make(HttpFactory::class),
+                cache: $app->make(CacheFactory::class),
                 issuer: (string) $app->make(TenancyOptions::class)->oidcIssuer,
                 cacheStore: $app->make(TenancyOptions::class)->oidcDiscoveryCacheStore,
                 cacheTtl: $app->make(TenancyOptions::class)->oidcDiscoveryCacheTtl,
@@ -42,6 +49,8 @@ final class AuthenticationRegistrar implements PackageRegistrar
         $app->singleton(
             JwksKeySet::class,
             static fn (Application $app): JwksKeySet => new JwksKeySet(
+                http: $app->make(HttpFactory::class),
+                cache: $app->make(CacheFactory::class),
                 cacheStore: $app->make(TenancyOptions::class)->oidcJwksCacheStore,
                 cacheTtl: $app->make(TenancyOptions::class)->oidcJwksCacheTtl,
                 refetchCooldownSeconds: $app->make(TenancyOptions::class)->oidcJwksRefetchCooldownSeconds,
@@ -62,6 +71,7 @@ final class AuthenticationRegistrar implements PackageRegistrar
         $app->singleton(
             OidcClient::class,
             static fn (Application $app): OidcClient => new OidcClient(
+                http: $app->make(HttpFactory::class),
                 discovery: $app->make(OidcDiscovery::class),
                 clientId: (string) $app->make(TenancyOptions::class)->oidcClientId,
                 clientSecret: $app->make(TenancyOptions::class)->oidcClientSecret?->reveal(),
@@ -72,10 +82,13 @@ final class AuthenticationRegistrar implements PackageRegistrar
         $app->singleton(
             LogoutController::class,
             static fn (Application $app): LogoutController => new LogoutController(
+                auth: $app->make(AuthFactory::class),
+                connections: $app->make(ConnectionResolverInterface::class),
+                clock: $app->make(ClockInterface::class),
                 options: $app->make(TenancyOptions::class),
             ),
         );
-        $app->singleton(
+        $app->scoped(
             OidcLoginController::class,
             static fn (Application $app): OidcLoginController => new OidcLoginController(
                 discovery: $app->make(OidcDiscovery::class),
@@ -85,6 +98,9 @@ final class AuthenticationRegistrar implements PackageRegistrar
                 impersonation: $app->make(ImpersonationService::class),
                 impersonationPolicy: $app->make(ImpersonationPolicy::class),
                 options: $app->make(TenancyOptions::class),
+                auth: $app->make(AuthFactory::class),
+                connections: $app->make(ConnectionResolverInterface::class),
+                clock: $app->make(ClockInterface::class),
             ),
         );
 

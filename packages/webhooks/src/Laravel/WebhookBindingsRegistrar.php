@@ -58,20 +58,20 @@ final class WebhookBindingsRegistrar implements PackageRegistrar
             topics: $app->make(WebhookOptions::class)->topics,
             projectors: self::projectors($app, $app->make(WebhookOptions::class)),
         ));
-        $app->singleton(WebhookSubscriptionStore::class, static fn (Application $app): SqlWebhookSubscriptionStore => new SqlWebhookSubscriptionStore(
+        $app->scoped(WebhookSubscriptionStore::class, static fn (Application $app): SqlWebhookSubscriptionStore => new SqlWebhookSubscriptionStore(
             connection: $app->make(ApiSchemaRegistrar::class)->tenant(),
             contexts: $app->make(TenantContextRestorer::class),
             catalogue: $app->make(WebhookTopicCatalogue::class),
             clock: $app->make(ClockInterface::class),
         ));
-        $app->singleton(WebhookDeliveryStore::class, static fn (Application $app): SqlWebhookDeliveryStore => self::deliveryStore($app, $app->make(WebhookOptions::class)));
-        $app->singleton(WebhookManagement::class, static fn (Application $app): WebhookManagement => new WebhookManagement(
+        $app->scoped(WebhookDeliveryStore::class, static fn (Application $app): SqlWebhookDeliveryStore => self::deliveryStore($app, $app->make(WebhookOptions::class)));
+        $app->scoped(WebhookManagement::class, static fn (Application $app): WebhookManagement => new WebhookManagement(
             connection: $app->make(ApiSchemaRegistrar::class)->tenant(),
             contexts: $app->make(TenantContextRestorer::class),
             subscriptions: $app->make(WebhookSubscriptionStore::class),
             cursors: $app->make(CursorCodec::class),
         ));
-        $app->singleton(WebhookReplay::class, static fn (Application $app): WebhookReplay => new WebhookReplay(
+        $app->scoped(WebhookReplay::class, static fn (Application $app): WebhookReplay => new WebhookReplay(
             connection: $app->make(ApiSchemaRegistrar::class)->tenant(),
             contexts: $app->make(TenantContextRestorer::class),
             topics: $app->make(WebhookTopicCatalogue::class),
@@ -79,14 +79,14 @@ final class WebhookBindingsRegistrar implements PackageRegistrar
             cursors: $app->make(CursorCodec::class),
             audit: $app->make(AuditLogger::class),
         ));
-        $app->singleton(WebhookFanout::class, static fn (Application $app): WebhookFanout => new WebhookFanout(
+        $app->scoped(WebhookFanout::class, static fn (Application $app): WebhookFanout => new WebhookFanout(
             connection: $app->make(ApiSchemaRegistrar::class)->tenant(),
             inbox: $app->make(Inbox::class),
             catalogue: $app->make(WebhookTopicCatalogue::class),
             projectors: self::projectors($app, $app->make(WebhookOptions::class)),
             clock: $app->make(ClockInterface::class),
         ));
-        $app->singleton(WebhookRetention::class, static fn (Application $app): WebhookRetention => new WebhookRetention(
+        $app->scoped(WebhookRetention::class, static fn (Application $app): WebhookRetention => new WebhookRetention(
             connection: $app->make(ApiSchemaRegistrar::class)->tenant(),
             contexts: $app->make(TenantContextRestorer::class),
             clock: $app->make(ClockInterface::class),
@@ -94,7 +94,7 @@ final class WebhookBindingsRegistrar implements PackageRegistrar
             historyRetentionSeconds: $app->make(WebhookOptions::class)->historyRetentionSeconds,
             replayHorizonSeconds: $app->make(WebhookOptions::class)->replayHorizonSeconds,
         ));
-        $app->singleton(WebhookDeliveryWorker::class, static fn (Application $app): WebhookDeliveryWorker => self::deliveryWorker($app));
+        $app->scoped(WebhookDeliveryWorker::class, static fn (Application $app): WebhookDeliveryWorker => self::deliveryWorker($app));
 
         if (! $options->deliveryEnabled) {
             return;

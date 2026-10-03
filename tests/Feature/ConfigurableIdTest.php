@@ -163,10 +163,10 @@ it('core tables build and accept a settings row under the ulid id strategy', fun
     // — a hardcoded uuid('id') regression would report 'uuid' here.
     expect(Schema::connection('pgsql')->getColumnType('sys_settings', 'id'))->toBe('bpchar');
 
-    $repository = new DatabaseSettingsRepository(
-        defaults: new StubSettingDefaultsProvider([]),
-        connection: 'pgsql',
-    );
+    $repository = app()->make(DatabaseSettingsRepository::class, [
+        'defaults' => new StubSettingDefaultsProvider([]),
+        'connection' => 'pgsql',
+    ]);
 
     $repository->set('crm', 'theme', JsonDocuments::capture('dark'), SettingsScope::account());
 

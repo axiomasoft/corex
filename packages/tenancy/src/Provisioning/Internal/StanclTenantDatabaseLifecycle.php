@@ -9,8 +9,11 @@ use CoreX\Context\Contracts\TenantDatabaseLifecycle;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Tenancy\Account\Events\AccountPurged;
 use CoreX\Tenancy\Account\Events\ExportReady;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Support\Str;
+use Psr\Clock\ClockInterface;
 use RuntimeException;
 
 /**
@@ -31,6 +34,9 @@ final class StanclTenantDatabaseLifecycle implements TenantDatabaseLifecycle
      */
     public function __construct(
         private readonly string $centralConnection,
+        private readonly ConnectionResolverInterface $connections,
+        private readonly ClockInterface $clock,
+        private readonly Dispatcher $events,
         private readonly ?Closure $writer = null,
         private readonly ?Closure $verifier = null,
     ) {}
@@ -44,43 +50,43 @@ final class StanclTenantDatabaseLifecycle implements TenantDatabaseLifecycle
 
         $exportId = (string) Str::uuid7();
 
-        DB::connection($this->centralConnection)->table('root_account_exports')->insert([
+        $this->db()->table('root_account_exports')->insert([
             'id' => $exportId,
             'account_id' => $account->id,
             'kind' => $kind,
             'status' => 'pending',
             'formats' => json_encode(['pg_dump', 'csv'], JSON_THROW_ON_ERROR),
-            'purge_after' => now()->addDays(30),
-            'url_expires_at' => now()->addDays(14),
-            'created_at' => now(),
-            'updated_at' => now(),
+            'purge_after' => $this->clock->now()->modify('+30 days'),
+            'url_expires_at' => $this->clock->now()->modify('+14 days'),
+            'created_at' => $this->clock->now(),
+            'updated_at' => $this->clock->now(),
         ]);
 
-        DB::connection($this->centralConnection)->table('root_account_exports')
+        $this->db()->table('root_account_exports')
             ->where('id', $exportId)
-            ->update(['status' => 'running', 'updated_at' => now()]);
+            ->update(['status' => 'running', 'updated_at' => $this->clock->now()]);
 
         $writer = $this->writer;
         $result = $writer($account, $exportId);
         $this->verifyArchive($result['storage_path'], $result['size_bytes']);
 
-        DB::connection($this->centralConnection)->table('root_account_exports')
+        $this->db()->table('root_account_exports')
             ->where('id', $exportId)
             ->update([
                 'status' => 'ready',
                 'storage_path' => $result['storage_path'],
                 'size_bytes' => $result['size_bytes'],
-                'updated_at' => now(),
+                'updated_at' => $this->clock->now(),
             ]);
 
-        event(new ExportReady(account: $account, exportId: $exportId));
+        $this->events->dispatch(new ExportReady(account: $account, exportId: $exportId));
 
         return $exportId;
     }
 
     public function drop(AccountRef $account): void
     {
-        $latestExport = DB::connection($this->centralConnection)->table('root_account_exports')
+        $latestExport = $this->db()->table('root_account_exports')
             ->where('account_id', $account->id)
             ->orderByDesc('created_at')
             ->orderByDesc('id')
@@ -94,7 +100,7 @@ final class StanclTenantDatabaseLifecycle implements TenantDatabaseLifecycle
 
         $this->verifyArchive((string) $latestExport->storage_path, (int) $latestExport->size_bytes);
 
-        $dbName = DB::connection($this->centralConnection)->table('root_accounts')
+        $dbName = $this->db()->table('root_accounts')
             ->where('id', $account->id)
             ->value('db_name');
 
@@ -102,9 +108,9 @@ final class StanclTenantDatabaseLifecycle implements TenantDatabaseLifecycle
             throw new RuntimeException('Invalid account database name; refusing DROP.');
         }
 
-        DB::connection($this->centralConnection)->statement('DROP DATABASE IF EXISTS "'.$dbName.'"');
+        $this->db()->statement('DROP DATABASE IF EXISTS "'.$dbName.'"');
 
-        event(new AccountPurged($account));
+        $this->events->dispatch(new AccountPurged($account));
     }
 
     private function verifyArchive(string $path, int $size): void
@@ -120,5 +126,13 @@ final class StanclTenantDatabaseLifecycle implements TenantDatabaseLifecycle
     private function archiveVerifier(): Closure
     {
         return $this->verifier ?? throw new RuntimeException('A qualified tenant archive integrity verifier is required; refusing ready/DROP.');
+    }
+
+    private function db(): Connection
+    {
+        /** @var Connection */
+        $connection = $this->connections->connection($this->centralConnection);
+
+        return $connection;
     }
 }

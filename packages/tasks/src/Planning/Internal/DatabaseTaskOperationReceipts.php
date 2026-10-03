@@ -11,11 +11,14 @@ use CoreX\Tasks\Planning\Data\TaskOperationReceipt;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Str;
 use Override;
+use Psr\Clock\ClockInterface;
 use UnexpectedValueException;
 
 /** @internal SQL representation of the tasks-owned operation ledger. */
 final class DatabaseTaskOperationReceipts implements TaskOperationReceipts
 {
+    public function __construct(private readonly ClockInterface $clock) {}
+
     #[Override]
     public function find(Connection $connection, string $requestKey): ?TaskOperationReceipt
     {
@@ -49,7 +52,7 @@ final class DatabaseTaskOperationReceipts implements TaskOperationReceipts
             'kind' => $kind->value,
             'result_ref' => json_encode($resultRef, JSON_THROW_ON_ERROR),
             'restore_epoch' => $restoreEpoch,
-            'created_at' => now(),
+            'created_at' => $this->clock->now(),
         ]);
     }
 }

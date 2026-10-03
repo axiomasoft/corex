@@ -25,6 +25,7 @@ use CoreX\Transfer\Data\TransferReceipt;
 use CoreX\Transfer\Data\TransferRef;
 use Illuminate\Database\ConnectionInterface;
 use Override;
+use Psr\Clock\ClockInterface;
 use Throwable;
 
 final readonly class SqlTransferExecutor implements TransferRunner
@@ -38,6 +39,7 @@ final readonly class SqlTransferExecutor implements TransferRunner
         private ConflictRule $conflictRule,
         private TransferLimits $limits,
         private DataScopeAuthorizer $authorizer,
+        private ClockInterface $clock,
         private CancellationSignal $cancellation = new NeverCancelled,
         private ?ExecutionGuard $guard = null,
     ) {}
@@ -138,7 +140,7 @@ final readonly class SqlTransferExecutor implements TransferRunner
                             'cursor' => json_encode(['ordinal' => $next->ordinal, 'boundaryByteOffset' => $next->boundaryByteOffset], JSON_THROW_ON_ERROR),
                             'stats' => json_encode($stats, JSON_THROW_ON_ERROR),
                             'state' => $state,
-                            'updated_at' => now(),
+                            'updated_at' => $this->clock->now(),
                         ]);
 
                     if ($changed !== 1) {
@@ -168,7 +170,7 @@ final readonly class SqlTransferExecutor implements TransferRunner
         if (! $dryRun) {
             $this->connection->table('corex_transfer_jobs')->where('id', $jobId)->update([
                 'state' => 'cancelled',
-                'updated_at' => now(),
+                'updated_at' => $this->clock->now(),
             ]);
         }
 
@@ -251,7 +253,7 @@ final readonly class SqlTransferExecutor implements TransferRunner
             'id' => (string) str()->uuid(), 'job_id' => $jobId, 'entity' => $record->entity,
             'external_system' => $record->externalSystem, 'external_id' => $record->externalId,
             'source_revision' => $record->sourceRevision, 'source_updated_at' => $record->sourceUpdatedAt,
-            'payload_hash' => $record->payloadHash, 'state' => 'running', 'created_at' => now(), 'updated_at' => now(),
+            'payload_hash' => $record->payloadHash, 'state' => 'running', 'created_at' => $this->clock->now(), 'updated_at' => $this->clock->now(),
         ]);
 
         if ($inserted === 1) {
@@ -276,7 +278,7 @@ final readonly class SqlTransferExecutor implements TransferRunner
     {
         $this->connection->table('corex_transfer_refs')
             ->where('entity', $record->entity)->where('external_system', $record->externalSystem)->where('external_id', $record->externalId)
-            ->update(['target_id' => $result->target?->id, 'payload_hash' => $record->payloadHash, 'source_revision' => $record->sourceRevision, 'source_updated_at' => $record->sourceUpdatedAt, 'state' => $result->status, 'result' => json_encode(['status' => $result->status], JSON_THROW_ON_ERROR), 'updated_at' => now()]);
+            ->update(['target_id' => $result->target?->id, 'payload_hash' => $record->payloadHash, 'source_revision' => $record->sourceRevision, 'source_updated_at' => $record->sourceUpdatedAt, 'state' => $result->status, 'result' => json_encode(['status' => $result->status], JSON_THROW_ON_ERROR), 'updated_at' => $this->clock->now()]);
     }
 
     private function saveRow(string $jobId, string $ordinal, string $result, string $payloadHash, string $epoch, ?string $errorCode, ?string $providerTask = null): void

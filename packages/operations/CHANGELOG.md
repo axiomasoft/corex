@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — ports instead of facades, helpers and static state (P05.3)
+
+- Services take `ConnectionResolverInterface` and `ClockInterface` through constructors instead of facades and helpers. `Testing\MutatingHandler` now needs a connection resolver and a clock.
+
 ## Unreleased — thin providers and registrars (P05.2)
 
 - `ApiServiceProvider` delegates to `OperationsBindingsRegistrar`, `IdempotencyRegistrar`, `PaginationRegistrar`, `HttpRegistrar`, `ApiSchemaBindingsRegistrar`, `CostBindingsRegistrar` and `BulkBindingsRegistrar`. The anonymous replay authorizer, cursor keyring and handler-failure holder are named classes (`DefaultReplayAuthorizer`, `ConfiguredCursorKeyring`, `HandlerFailure`); the idempotency store is built by `IdempotencyStoreFactory`. `ApiSchemaRegistrar`, `CostRegistrar` and `BulkRegistrar` keep their static entry points as deprecated shims over the new registrars.

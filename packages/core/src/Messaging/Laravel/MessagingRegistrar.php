@@ -7,6 +7,7 @@ namespace CoreX\Messaging\Laravel;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Config\Data\CoreOptions;
+use CoreX\Config\Internal\ApplicationLocator;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Messaging\Contracts\Outbox;
@@ -14,10 +15,13 @@ use CoreX\Messaging\Contracts\OutboxRelay;
 use CoreX\Messaging\Contracts\PubSub;
 use CoreX\Messaging\Contracts\TraceContextBridge;
 use CoreX\Messaging\Contracts\WorkerRuntime;
+use CoreX\Messaging\Enums\PubSubDriver;
 use CoreX\Messaging\Internal\ArrayMessageContractRegistry;
+use CoreX\Messaging\Internal\DatabasePollPubSub;
 use CoreX\Messaging\Internal\DefaultWorkerRuntime;
+use CoreX\Messaging\Internal\NullPubSub;
 use CoreX\Messaging\Internal\NullTraceContextBridge;
-use CoreX\Messaging\Internal\PubSubManager;
+use CoreX\Messaging\Internal\RedisPubSub;
 use CoreX\Messaging\Internal\SqlDeliveryHealth;
 use CoreX\Messaging\Internal\SqlInbox;
 use CoreX\Messaging\Internal\SqlOutbox;
@@ -59,6 +63,7 @@ final class MessagingRegistrar implements PackageRegistrar
                 leaseSeconds: $app->make(CoreOptions::class)->messagingLeaseSeconds,
                 maxAttempts: $app->make(CoreOptions::class)->messagingMaxAttempts,
                 backoffCapSeconds: $app->make(CoreOptions::class)->messagingBackoffCapSeconds,
+                table: $app->make(CoreOptions::class)->outboxMessagesTable,
             ),
         );
         $app->scoped(
@@ -66,6 +71,7 @@ final class MessagingRegistrar implements PackageRegistrar
             static fn (Application $app): SqlInbox => new SqlInbox(
                 connection: $app->make(ConnectionInterface::class),
                 clock: $app->make(ClockInterface::class),
+                table: $app->make(CoreOptions::class)->inboxMessagesTable,
             ),
         );
         $app->scoped(
@@ -73,10 +79,15 @@ final class MessagingRegistrar implements PackageRegistrar
             static fn (Application $app): SqlDeliveryHealth => new SqlDeliveryHealth(
                 connection: $app->make(ConnectionInterface::class),
                 clock: $app->make(ClockInterface::class),
+                table: $app->make(CoreOptions::class)->outboxMessagesTable,
             ),
         );
-        $app->singleton(PubSub::class, PubSubManager::class);
-        $app->singleton(WorkerRuntime::class, DefaultWorkerRuntime::class);
+        $app->singleton(PubSub::class, static fn (Application $app): PubSub => $app->make(match ($app->make(CoreOptions::class)->pubsubDriver) {
+            PubSubDriver::Redis => RedisPubSub::class,
+            PubSubDriver::Database => DatabasePollPubSub::class,
+            PubSubDriver::Null => NullPubSub::class,
+        }));
+        $app->singleton(WorkerRuntime::class, static fn (): DefaultWorkerRuntime => new DefaultWorkerRuntime(ApplicationLocator::current(...)));
     }
 
     #[Override]

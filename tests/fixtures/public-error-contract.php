@@ -411,7 +411,7 @@ return [
             'owner' => 'axiomasoft/corex-operations',
             'source' => 'packages/operations/src/Errors/Internal/ErrorMapper.php',
             'adapter' => 'descriptor-and-framework-status-map',
-            'sha256' => 'e9a0aea65fcbe2f245cea7802e1ae7c3a35629105a9af8217c651c922f46fac0',
+            'sha256' => '7685ad91186e249dd243b85fb7e70ad76da1cbd0d513343b5cfc9e949e562dd1',
         ],
     ],
     'definitions' => [

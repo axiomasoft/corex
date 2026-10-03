@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use CoreX\Audit\Contracts\CurrentActor;
 use CoreX\Audit\Enums\ActorType;
+use CoreX\Audit\Internal\CurrentActor as InternalCurrentActor;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Data\ImpersonationState;
 use CoreX\Context\Internal\NullImpersonationService;
@@ -128,6 +129,7 @@ it('sys_audit_actor_ck accepts support after the widening migration (D137)', fun
     $staffId = (string) Str::uuid7();
     $state = new ImpersonationState((string) Str::uuid7(), $staffId, (string) Str::uuid7(), new DateTimeImmutable('+1 hour'));
     app()->instance(ImpersonationService::class, new FakeImpersonationService($state));
+    app()->forgetInstance(InternalCurrentActor::class); // the scoped actor of this cycle captured the previous service
 
     DB::connection('pgsql')->table('sys_audit_log')->insert([
         'id' => (string) Str::uuid7(),
@@ -176,6 +178,7 @@ it('mod_ll_actor_ck accepts support after the widening migration — CurrentActo
     $staffId = (string) Str::uuid7();
     $state = new ImpersonationState((string) Str::uuid7(), $staffId, (string) Str::uuid7(), new DateTimeImmutable('+1 hour'));
     app()->instance(ImpersonationService::class, new FakeImpersonationService($state));
+    app()->forgetInstance(InternalCurrentActor::class); // the scoped actor of this cycle captured the previous service
 
     DB::connection('pgsql')->table('mod_lifecycle_log')->insert([
         'id' => (string) Str::uuid7(),

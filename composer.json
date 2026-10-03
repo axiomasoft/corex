@@ -185,6 +185,7 @@
         "naming-gate": "bash scripts/ci-deferred-guard.sh php scripts/naming-gate.php",
         "rename-completeness": "php scripts/rename-completeness-gate.php",
         "config-composition-gate": "bash scripts/ci-deferred-guard.sh php scripts/config-composition-gate.php",
+        "runtime-globals-gate": "php scripts/runtime-globals-gate.php",
         "table-ownership-gate": "bash scripts/ci-deferred-guard.sh php scripts/table-ownership-gate.php",
         "contract-guard": "bash scripts/contract-guard.sh",
         "api-contract": "php scripts/check-api-contract.php",

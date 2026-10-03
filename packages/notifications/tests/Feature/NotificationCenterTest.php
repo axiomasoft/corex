@@ -180,6 +180,19 @@ it('rejects a stale delivery completion after a newer claim epoch', function ():
         ->and(DB::table('ntf_deliveries')->where('id', $id)->value('provider_ref'))->toBe('new');
 });
 
+it('does not claim a delivery before its next attempt time', function (): void {
+    allowNotifications();
+    $notification = app(NotificationCenter::class)->notify(notificationContext(), notificationInput('next-attempt'));
+    $id = DB::table('ntf_deliveries')->where('notification_id', $notification->id)->value('id');
+    $deliveries = app(DeliveryStore::class);
+
+    DB::table('ntf_deliveries')->where('id', $id)->update(['next_attempt' => now()->addHour()]);
+    expect($deliveries->claim($id))->toBeNull();
+
+    DB::table('ntf_deliveries')->where('id', $id)->update(['next_attempt' => now()->subMinute()]);
+    expect($deliveries->claim($id))->not->toBeNull();
+});
+
 it('adapts per-recipient preferences through Settings with an optimistic revision', function (): void {
     $preferences = notificationPreferences();
     $context = notificationContext();
@@ -223,7 +236,7 @@ it('freezes at most one hundred notifications in a half-open digest window', fun
 
     $digest = app(DigestBuilder::class)->build(notificationContext(), new DigestWindow(
         start: $now->modify('-1 minute'),
-        end: $now->modify('+1 minute'),
+        end: $now->add(new DateInterval('PT1M')),
         period: 'hourly',
     ));
 

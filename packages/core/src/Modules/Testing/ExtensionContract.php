@@ -13,6 +13,7 @@ use CoreX\Modules\Data\ModuleManifest;
 use CoreX\Modules\Exceptions\CompilationException;
 use CoreX\Modules\Exceptions\RegistryFrozen;
 use CoreX\Modules\Internal\Compiler\RegistryCompiler;
+use Illuminate\Container\Container;
 use InvalidArgumentException;
 use Throwable;
 
@@ -39,7 +40,8 @@ final readonly class ExtensionContract
     {
         try {
             [$names, $versions] = self::installedInput($installedPackages);
-            $compiler = app(RegistryCompiler::class);
+            // A static test entry point has no constructor to carry the compiler: it is taken from the running application.
+            $compiler = Container::getInstance()->make(RegistryCompiler::class);
             $first = $compiler->compile(
                 manifests: $manifests,
                 installedPackages: $names,

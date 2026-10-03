@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Authentication\Internal\Http\Controllers;
 
-use Carbon\CarbonImmutable;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
+use Illuminate\Contracts\Auth\Factory as AuthFactory;
+use Illuminate\Contracts\Auth\StatefulGuard;
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use LogicException;
+use Psr\Clock\ClockInterface;
 
 /**
  * Global logout (AC-15): revokes every unrevoked `root_idp_sessions` row of
@@ -22,18 +24,22 @@ use Illuminate\Support\Facades\DB;
 final class LogoutController
 {
     public function __construct(
+        private readonly AuthFactory $auth,
+        private readonly ConnectionResolverInterface $connections,
+        private readonly ClockInterface $clock,
         private readonly TenancyOptions $options,
     ) {}
 
     public function logout(Request $request): RedirectResponse
     {
-        $identityId = Auth::guard($this->guard())->id();
+        $guard = $this->statefulGuard();
+        $identityId = $guard->id();
 
         if (is_string($identityId) && $identityId !== '') {
             $this->revokeIdentitySessions($identityId);
         }
 
-        Auth::guard($this->guard())->logout();
+        $guard->logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
@@ -43,9 +49,9 @@ final class LogoutController
 
     private function revokeIdentitySessions(string $identityId): void
     {
-        $now = CarbonImmutable::now();
+        $now = $this->clock->now();
 
-        $sessionIds = DB::connection($this->options->centralConnection)
+        $sessionIds = $this->connections->connection($this->options->centralConnection)
             ->table('root_idp_sessions')
             ->where('identity_id', $identityId)
             ->whereNull('revoked_at')
@@ -55,17 +61,28 @@ final class LogoutController
             return;
         }
 
-        DB::connection($this->options->centralConnection)
+        $this->connections->connection($this->options->centralConnection)
             ->table('root_idp_sessions')
             ->where('identity_id', $identityId)
             ->whereNull('revoked_at')
             ->update(['revoked_at' => $now]);
 
-        DB::connection($this->options->centralConnection)
+        $this->connections->connection($this->options->centralConnection)
             ->table('root_oauth_refresh_tokens')
             ->whereIn('session_id', $sessionIds)
             ->whereNull('revoked_at')
             ->update(['revoked_at' => $now]);
+    }
+
+    private function statefulGuard(): StatefulGuard
+    {
+        $guard = $this->auth->guard($this->guard());
+
+        if (! $guard instanceof StatefulGuard) {
+            throw new LogicException("Auth guard [{$this->guard()}] must be stateful to end a session.");
+        }
+
+        return $guard;
     }
 
     private function guard(): string

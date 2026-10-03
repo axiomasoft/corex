@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Modules\Internal\Lifecycle;
 
 use CoreX\Modules\Contracts\RecordsRegistrar;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\ConnectionResolverInterface;
+use Psr\Clock\ClockInterface;
 
 /**
  * DB-backed {@see RecordsRegistrar} over `mod_records`. `$connection` is
@@ -17,7 +18,11 @@ use Illuminate\Support\Facades\DB;
  */
 final class DatabaseRecordsRegistrar implements RecordsRegistrar
 {
-    public function __construct(private readonly ?string $connection = null) {}
+    public function __construct(
+        private readonly ConnectionResolverInterface $connections,
+        private readonly ClockInterface $clock,
+        private readonly ?string $connection = null,
+    ) {}
 
     /** @param  array<string, mixed>  $meta */
     public function claim(string $module, string $recordType, string $reference, array $meta = []): void
@@ -26,9 +31,9 @@ final class DatabaseRecordsRegistrar implements RecordsRegistrar
         // by the monotonic bigserial `seq` (auto-assigned on insert), not
         // by this column, so two claims in the same second stay correctly
         // orderable regardless of clock precision.
-        $now = now()->format('Y-m-d H:i:s.u');
+        $now = $this->clock->now()->format('Y-m-d H:i:s.u');
         $identity = ['module_name' => $module, 'record_type' => $recordType, 'reference' => $reference];
-        $table = DB::connection($this->connection)->table('mod_records');
+        $table = $this->connections->connection($this->connection)->table('mod_records');
 
         // Re-claiming is idempotent (EnableHook retries): update meta in
         // place, keep the original created_at so purge order stays stable.
@@ -51,7 +56,7 @@ final class DatabaseRecordsRegistrar implements RecordsRegistrar
 
     public function release(string $module, string $recordType, string $reference): void
     {
-        DB::connection($this->connection)->table('mod_records')
+        $this->connections->connection($this->connection)->table('mod_records')
             ->where('module_name', $module)
             ->where('record_type', $recordType)
             ->where('reference', $reference)

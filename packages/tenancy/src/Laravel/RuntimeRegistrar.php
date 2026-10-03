@@ -11,17 +11,20 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Storage\Contracts\TenantStorage;
+use CoreX\Tenancy\Account\Contracts\AccountRead;
 use CoreX\Tenancy\Laravel\Bootstrappers\WorkspaceContextBootstrapper;
 use CoreX\Tenancy\Laravel\Support\AccountLifecyclePolicy;
 use CoreX\Tenancy\Laravel\Support\ImpersonationPolicy;
 use CoreX\Tenancy\Laravel\Support\StatusGatePolicy;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateClonePostgreSQLManager;
+use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Runtime\Internal\ConnectionGuardedTenantContextRestorer;
 use CoreX\Tenancy\Runtime\Internal\StanclTenancyManager;
 use CoreX\Tenancy\Runtime\Internal\Storage\ContextTenantStorage;
 use CoreX\Tenancy\Runtime\Internal\TenancyManagerContextResolver;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Filesystem\FilesystemManager;
 use Override;
@@ -60,6 +63,7 @@ final class RuntimeRegistrar implements PackageRegistrar
             StanclTenancyManager::class,
             static fn (Application $app): StanclTenancyManager => new StanclTenancyManager(
                 $app->make(Stancl::class),
+                $app->make(AccountRead::class),
             ),
         );
         $app->singleton(
@@ -115,6 +119,8 @@ final class RuntimeRegistrar implements PackageRegistrar
             TemplateClonePostgreSQLManager::class,
             static fn (Application $app): TemplateClonePostgreSQLManager => new TemplateClonePostgreSQLManager(
                 options: $app->make(TenancyOptions::class),
+                connections: $app->make(ConnectionResolverInterface::class),
+                integrity: $app->make(TemplateIntegrityVerifier::class),
             ),
         );
     }

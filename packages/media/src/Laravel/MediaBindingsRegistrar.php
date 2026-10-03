@@ -24,6 +24,7 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\DatabaseManager;
 use Override;
+use Psr\Clock\ClockInterface;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class MediaBindingsRegistrar implements PackageRegistrar
@@ -38,7 +39,7 @@ final class MediaBindingsRegistrar implements PackageRegistrar
             (array) $app->make(Repository::class)->get('corex-media', []),
         ));
         $app->singleton(MediaPolicy::class, DenyMediaPolicy::class);
-        $app->scoped(MediaOperationStore::class, static fn (Application $app): MediaOperationStore => new MediaOperationStore($app->make(DatabaseManager::class)->connection()));
+        $app->scoped(MediaOperationStore::class, static fn (Application $app): MediaOperationStore => new MediaOperationStore($app->make(DatabaseManager::class)->connection(), $app->make(ClockInterface::class)));
 
         if (extension_loaded('gd')) {
             $app->singleton(GdThumbnailDriver::class, static fn (Application $app): GdThumbnailDriver => (new GdThumbnailDriverFactory)->make($app));
@@ -46,9 +47,9 @@ final class MediaBindingsRegistrar implements PackageRegistrar
         }
 
         $app->scoped(ConversionProfiles::class, static fn (Application $app): ConversionProfiles => new ConversionProfiles(self::conversionDrivers($app)));
-        $app->scoped(ConversionCoordinator::class, static fn (Application $app): ConversionCoordinator => new ConversionCoordinator($app->make(DatabaseManager::class)->connection(), $app->make(TenantStorage::class), $app->make(ConversionProfiles::class), $app->make(MediaOperationStore::class), $app->make(MediaOptions::class)));
-        $app->scoped(RelationLookup::class, static fn (Application $app): SqlRelationLookup => new SqlRelationLookup($app->make(DatabaseManager::class)->connection(), $app->make(MediaPolicy::class)));
-        $app->scoped(MediaLibrary::class, static fn (Application $app): SqlMediaLibrary => new SqlMediaLibrary($app->make(DatabaseManager::class)->connection(), $app->make(TenantStorage::class), $app->make(MediaPolicy::class), $app->make(MediaOperationStore::class), $app->make(ConversionCoordinator::class), $app->make(MediaOptions::class)));
+        $app->scoped(ConversionCoordinator::class, static fn (Application $app): ConversionCoordinator => new ConversionCoordinator($app->make(DatabaseManager::class)->connection(), $app->make(TenantStorage::class), $app->make(ConversionProfiles::class), $app->make(MediaOperationStore::class), $app->make(MediaOptions::class), $app->make(ClockInterface::class)));
+        $app->scoped(RelationLookup::class, static fn (Application $app): SqlRelationLookup => new SqlRelationLookup($app->make(DatabaseManager::class)->connection(), $app->make(MediaPolicy::class), $app->make(ClockInterface::class)));
+        $app->scoped(MediaLibrary::class, static fn (Application $app): SqlMediaLibrary => new SqlMediaLibrary($app->make(DatabaseManager::class)->connection(), $app->make(TenantStorage::class), $app->make(MediaPolicy::class), $app->make(MediaOperationStore::class), $app->make(ConversionCoordinator::class), $app->make(MediaOptions::class), $app->make(ClockInterface::class)));
     }
 
     #[Override]

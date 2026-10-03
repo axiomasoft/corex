@@ -19,18 +19,6 @@ parameters:
 			path: src/Audit/Internal/CurrentActor.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Contracts\Auth\Guard::check().'
-			identifier: staticMethod.dynamicCall
-			count: 1
-			path: src/Audit/Internal/CurrentActor.php
-
-		-
-			rawMessage: 'Dynamic call to static method Illuminate\Contracts\Auth\Guard::user().'
-			identifier: staticMethod.dynamicCall
-			count: 1
-			path: src/Audit/Internal/CurrentActor.php
-
-		-
 			rawMessage: 'Construct empty() is not allowed. Use more strict comparison.'
 			identifier: empty.notAllowed
 			count: 1
@@ -767,12 +755,6 @@ parameters:
 			identifier: method.dynamicName
 			count: 1
 			path: src/Observability/Internal/OpenTelemetryBridge.php
-
-		-
-			rawMessage: 'Parameter #1 $payload of static method Illuminate\Support\Facades\Crypt::decryptString() expects string, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/Settings/Internal/DatabaseSettingsRepository.php
 
 		-
 			rawMessage: 'Construct empty() is not allowed. Use more strict comparison.'

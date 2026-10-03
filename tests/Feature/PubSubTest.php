@@ -119,14 +119,14 @@ it('AC-25(b)/(в) PubSubManager delegates publish() to the database driver selec
 
 it('(a) P1.24/A29: subscribe() refuses a faked Octane runtime without explicit opt-in (negative guard test)', function (): void {
     Redis::shouldReceive('connection')->never();
-    $pubsub = new RedisPubSub(runtime: new FakeWorkerRuntime(octane: true, console: true));
+    $pubsub = app()->make(RedisPubSub::class, ['runtime' => new FakeWorkerRuntime(octane: true, console: true)]);
 
     expect(fn () => $pubsub->subscribe('module.enabled', function (): void {}))
         ->toThrow(LogicException::class, 'Octane runtime');
 });
 
 it('P1.24: subscribe() refuses a non-console, non-Octane runtime (HTTP request cycle)', function (): void {
-    $pubsub = new RedisPubSub(runtime: new FakeWorkerRuntime(octane: false, console: false));
+    $pubsub = app()->make(RedisPubSub::class, ['runtime' => new FakeWorkerRuntime(octane: false, console: false)]);
 
     expect(fn () => $pubsub->subscribe('module.enabled', function (): void {}))
         ->toThrow(LogicException::class, 'never inside an HTTP request cycle');

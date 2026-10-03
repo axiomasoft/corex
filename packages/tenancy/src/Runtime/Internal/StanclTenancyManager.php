@@ -28,6 +28,7 @@ final class StanclTenancyManager implements TenancyManager
 
     public function __construct(
         private readonly Stancl $tenancy,
+        private readonly AccountRead $accounts,
     ) {}
 
     public function context(): ?TenantContext
@@ -88,7 +89,7 @@ final class StanclTenancyManager implements TenancyManager
         /** @var StanclTenant&Account $tenant */
         $tenant = $this->tenancy->tenant;
 
-        $account = app(AccountRead::class)->find((string) $tenant->getTenantKey());
+        $account = $this->accounts->find((string) $tenant->getTenantKey());
 
         if ($account === null) {
             throw new RuntimeException('Current tenant account is missing.');

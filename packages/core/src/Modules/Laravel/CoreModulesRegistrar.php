@@ -6,6 +6,7 @@ namespace CoreX\Modules\Laravel;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
+use CoreX\Config\Internal\ApplicationLocator;
 use CoreX\Modules\Contracts\ModuleRegistrar;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Modules\Internal\ServiceProviderModuleRegistrar;
@@ -19,7 +20,7 @@ final class CoreModulesRegistrar implements PackageRegistrar
     #[Override]
     public function register(Application $app): void
     {
-        $app->singleton(ModuleRegistrar::class, ServiceProviderModuleRegistrar::class);
+        $app->singleton(ModuleRegistrar::class, static fn (): ServiceProviderModuleRegistrar => new ServiceProviderModuleRegistrar(ApplicationLocator::current(...)));
     }
 
     #[Override]

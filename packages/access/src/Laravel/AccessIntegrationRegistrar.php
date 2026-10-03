@@ -17,9 +17,12 @@ use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Modules\Events\ModuleDisabled;
 use CoreX\Modules\Events\ModuleEnabled;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Scope;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Event;
+use InvalidArgumentException;
 use Override;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
@@ -41,10 +44,23 @@ final class AccessIntegrationRegistrar implements PackageRegistrar
         WorkspaceScopeWiring::wire(
             $app->make(EntityRegistry::class),
             $app->make(AuthOptions::class)->workspaceScopeClass,
+            static fn (string $class): Scope => self::workspaceScope($app, $class),
         );
 
         Event::listen(ModuleEnabled::class, PermissionsMerger::class);
         Event::listen(ModuleDisabled::class, PermissionsMerger::class);
+    }
+
+    /** @return Scope<Model> */
+    private static function workspaceScope(Application $app, string $class): Scope
+    {
+        $scope = $app->make($class);
+
+        if (! $scope instanceof Scope) {
+            throw new InvalidArgumentException("Workspace scope class [{$class}] must implement ".Scope::class.'.');
+        }
+
+        return $scope;
     }
 
     /**

@@ -10,6 +10,7 @@ use CoreX\Tenancy\Workspace\Contracts\WorkspaceResolver;
 use CoreX\Tenancy\Workspace\Exceptions\NoDefaultWorkspaceException;
 use CoreX\Tenancy\Workspace\Internal\Models\Workspace;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Override;
 
@@ -23,10 +24,12 @@ use Override;
  */
 final class DatabaseWorkspaceResolver implements PrincipalWorkspaceResolver, WorkspaceResolver
 {
+    public function __construct(private readonly AuthFactory $auth) {}
+
     #[Override]
     public function resolve(?string $slug): WorkspaceRef
     {
-        $userId = auth()->id();
+        $userId = $this->auth->guard()->id();
 
         if (! is_string($userId) && ! is_int($userId)) {
             throw new AuthorizationException('Authentication required to resolve a workspace.');

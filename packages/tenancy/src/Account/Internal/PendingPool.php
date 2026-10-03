@@ -9,7 +9,8 @@ use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Provisioning\Contracts\TemplateIntegrityChecks;
 use CoreX\Tenancy\Provisioning\Data\TemplateAccountView;
 use DateTimeInterface;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Support\Str;
 use LogicException;
 use RuntimeException;
@@ -37,6 +38,7 @@ final class PendingPool
         private readonly string $centralConnection,
         private readonly StanclTenantDatabaseProvisioner $provisioner,
         private readonly TemplateIntegrityChecks $templateIntegrityVerifier,
+        private readonly ConnectionResolverInterface $connections,
     ) {}
 
     /**
@@ -64,7 +66,7 @@ final class PendingPool
      */
     public function pendingCount(?string $clusterId = null): int
     {
-        $query = DB::connection($this->centralConnection)
+        $query = $this->db()
             ->table('root_accounts')
             ->where('status', 'pending');
 
@@ -82,8 +84,8 @@ final class PendingPool
      */
     public function pullPending(): Account
     {
-        $claimedId = DB::connection($this->centralConnection)->transaction(function (): ?string {
-            $candidate = DB::connection($this->centralConnection)
+        $claimedId = $this->db()->transaction(function (): ?string {
+            $candidate = $this->db()
                 ->table('root_accounts as ra')
                 ->join('root_clusters as rc', 'rc.id', '=', 'ra.cluster_id')
                 ->where('ra.status', 'pending')
@@ -103,7 +105,7 @@ final class PendingPool
             }
             $this->templateIntegrityVerifier->verifyAccount(new TemplateAccountView($account->template_version, $account->cluster_id, $account->db_name));
 
-            DB::connection($this->centralConnection)
+            $this->db()
                 ->table('root_accounts')
                 ->where('id', $candidate->id)
                 ->update(['status' => 'provisioning']);
@@ -131,11 +133,11 @@ final class PendingPool
             throw new RuntimeException('pending-clear requires --template-version and/or --older-than.');
         }
 
-        if (DB::connection($this->centralConnection)->transactionLevel() !== 0) {
+        if ($this->db()->transactionLevel() !== 0) {
             throw new RuntimeException('Pending cleanup must run outside a transaction.');
         }
 
-        $query = DB::connection($this->centralConnection)
+        $query = $this->db()
             ->table('root_accounts')
             ->where(fn ($query) => $query->where('status', 'pending')
                 ->orWhere(fn ($query) => $query->where('status', 'provisioning')->where('data->pool_cleanup', true)));
@@ -154,20 +156,20 @@ final class PendingPool
         foreach ($stale as $row) {
             // A committed claim removes the row from signup selection before external DDL.
             // The marker makes a failed DROP recoverable by the next cleanup run.
-            $claimed = DB::connection($this->centralConnection)->table('root_accounts')
+            $claimed = $this->db()->table('root_accounts')
                 ->where('id', $row->id)
                 ->where(fn ($query) => $query->where('status', 'pending')
                     ->orWhere(fn ($query) => $query->where('status', 'provisioning')->where('data->pool_cleanup', true)))
-                ->update(['status' => 'provisioning', 'data' => DB::raw("jsonb_set(CASE WHEN jsonb_typeof(data) = 'object' THEN data ELSE '{}'::jsonb END, '{pool_cleanup}', 'true')")]);
+                ->update(['status' => 'provisioning', 'data' => $this->db()->raw("jsonb_set(CASE WHEN jsonb_typeof(data) = 'object' THEN data ELSE '{}'::jsonb END, '{pool_cleanup}', 'true')")]);
 
             if ($claimed !== 1) {
                 continue;
             }
 
-            DB::connection($this->centralConnection)->statement('DROP DATABASE IF EXISTS "'.$row->db_name.'"');
+            $this->db()->statement('DROP DATABASE IF EXISTS "'.$row->db_name.'"');
 
-            DB::connection($this->centralConnection)->transaction(function () use ($row, &$cleared): void {
-                $deleted = DB::connection($this->centralConnection)
+            $this->db()->transaction(function () use ($row, &$cleared): void {
+                $deleted = $this->db()
                     ->table('root_accounts')
                     ->where('id', $row->id)
                     ->where('status', 'provisioning')
@@ -178,7 +180,7 @@ final class PendingPool
                     return;
                 }
 
-                DB::connection($this->centralConnection)
+                $this->db()
                     ->table('root_clusters')
                     ->where('id', $row->cluster_id)
                     ->decrement('db_count');
@@ -223,11 +225,11 @@ final class PendingPool
             embeddingDim: (int) $template->embedding_dim,
         ));
 
-        DB::connection($this->centralConnection)->transaction(function () use ($cluster, $id, $status): void {
-            DB::connection($this->centralConnection)->table('root_accounts')
+        $this->db()->transaction(function () use ($cluster, $id, $status): void {
+            $this->db()->table('root_accounts')
                 ->where('id', $id)->update(['status' => $status]);
 
-            DB::connection($this->centralConnection)
+            $this->db()
                 ->table('root_clusters')
                 ->where('id', $cluster->id)
                 ->increment('db_count');
@@ -238,7 +240,7 @@ final class PendingPool
 
     private function clusterRow(string $clusterId): object
     {
-        $cluster = DB::connection($this->centralConnection)
+        $cluster = $this->db()
             ->table('root_clusters')
             ->where('id', $clusterId)
             ->first();
@@ -252,7 +254,7 @@ final class PendingPool
 
     private function leastLoadedActiveCluster(): object
     {
-        $cluster = DB::connection($this->centralConnection)
+        $cluster = $this->db()
             ->table('root_clusters')
             ->where('status', 'active')
             ->orderBy('db_count')
@@ -267,7 +269,7 @@ final class PendingPool
 
     private function readyTemplateFor(int $version): object
     {
-        $template = DB::connection($this->centralConnection)
+        $template = $this->db()
             ->table('root_templates')
             ->where('version', $version)
             ->first();
@@ -277,5 +279,13 @@ final class PendingPool
         }
 
         return $template;
+    }
+
+    private function db(): Connection
+    {
+        /** @var Connection */
+        $connection = $this->connections->connection($this->centralConnection);
+
+        return $connection;
     }
 }

@@ -42,7 +42,7 @@ final class BulkBindingsRegistrar implements PackageRegistrar
         $app->singleton(BulkOptions::class, static fn (Application $app): BulkOptions => BulkOptionsParser::fromArray(
             (array) $app->make(Repository::class)->get('corex-operations.bulk', []),
         ));
-        $app->singleton(BulkRetention::class, static fn (Application $app): BulkRetention => new BulkRetention(
+        $app->scoped(BulkRetention::class, static fn (Application $app): BulkRetention => new BulkRetention(
             connection: $app->make(ApiSchemaRegistrar::class)->tenant(),
             scopeCodec: $app->make(DataScopeCodec::class),
             contexts: $app->make(TenantContextRestorer::class),
@@ -56,7 +56,7 @@ final class BulkBindingsRegistrar implements PackageRegistrar
             return;
         }
 
-        $app->singleton(BulkOperationStore::class, static fn (Application $app): SqlBulkOperationStore => new SqlBulkOperationStore(
+        $app->scoped(BulkOperationStore::class, static fn (Application $app): SqlBulkOperationStore => new SqlBulkOperationStore(
             connection: $app->make(ApiSchemaRegistrar::class)->tenant(),
             scopeCodec: $app->make(DataScopeCodec::class),
             contexts: $app->make(TenantContextRestorer::class),
@@ -64,7 +64,7 @@ final class BulkBindingsRegistrar implements PackageRegistrar
             leaseSeconds: $app->make(BulkOptions::class)->leaseSeconds,
             resultRetentionSeconds: $app->make(BulkOptions::class)->resultRetentionSeconds,
         ));
-        $app->singleton(TransferBulkExecutor::class, static fn (Application $app): TransferBulkExecutor => new TransferBulkExecutor(
+        $app->scoped(TransferBulkExecutor::class, static fn (Application $app): TransferBulkExecutor => new TransferBulkExecutor(
             factory: self::factory($app),
             store: $app->make(BulkOperationStore::class),
             clock: $app->make(ClockInterface::class),
@@ -72,21 +72,21 @@ final class BulkBindingsRegistrar implements PackageRegistrar
             retrySeconds: $app->make(BulkOptions::class)->retrySeconds,
             scopes: $app->make(DataScopeCodec::class),
         ));
-        $app->singleton(BulkWorker::class, static fn (Application $app): BulkWorker => new BulkWorker(
+        $app->scoped(BulkWorker::class, static fn (Application $app): BulkWorker => new BulkWorker(
             store: $app->make(BulkOperationStore::class),
             executor: $app->make(TransferBulkExecutor::class),
             clock: $app->make(ClockInterface::class),
             worker: $app->make(BulkOptions::class)->worker,
         ));
-        $app->singleton(BulkResultReader::class, static fn (Application $app): BulkResultReader => new BulkResultReader(
+        $app->scoped(BulkResultReader::class, static fn (Application $app): BulkResultReader => new BulkResultReader(
             // The host must replace this reader with its current field-policy check.
             fieldAccess: static fn (): bool => false,
             manifest: static fn (DataScope $scope, BulkOperation $operation): array => self::manifest($app, $scope, $operation),
         ));
-        $app->singleton(BulkFailureReader::class, static fn (Application $app): BulkFailureReader => new BulkFailureReader(
+        $app->scoped(BulkFailureReader::class, static fn (Application $app): BulkFailureReader => new BulkFailureReader(
             static fn (DataScope $scope, BulkOperation $operation, ?string $after, int $limit): array => self::failures($app, $scope, $operation, $after, $limit),
         ));
-        $app->singleton(BulkOperations::class, static fn (Application $app): BulkOperations => new BulkOperations(
+        $app->scoped(BulkOperations::class, static fn (Application $app): BulkOperations => new BulkOperations(
             store: $app->make(BulkOperationStore::class),
             executor: $app->make(TransferBulkExecutor::class),
             results: $app->make(BulkResultReader::class),

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — ports instead of facades, helpers and static state (P05.3)
+
+- Runtime code outside the Laravel bridge takes `ConnectionResolverInterface`, `ClockInterface`, `Dispatcher` and the other `Illuminate\Contracts` ports through constructors instead of facades, global helpers and static clocks; `Messaging\Internal\PubSubManager` is gone (the `PubSub` binding selects the driver from `CoreOptions::pubsubDriver`). Added the `CoreX\Database\Laravel\ResolvesCoreOptions` SPI trait for migrations and models that read `CoreOptions` through the container bridge.
+
 ## Unreleased — thin providers and registrars (P05.2)
 
 - `CoreServiceProvider` is the only public provider of the kernel: it registers `ModulesServiceProvider` itself (after the kernel bindings, so module-aware services refine them) and delegates bindings to per-module registrars (`Config`, `Context`, `Data`, `Messaging`, `Settings`, `Audit`, `Features`, `Departments`, `Storage`, `Time`, `Observability`, `Errors`, modules). Apps no longer need to list `ModulesServiceProvider` separately. `corex:modules:repair` is a regular command class.

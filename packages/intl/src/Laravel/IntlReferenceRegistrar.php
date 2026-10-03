@@ -18,6 +18,7 @@ use CoreX\Modules\Contracts\PackageRegistrar;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Connection;
 use Override;
+use Psr\Clock\ClockInterface;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class IntlReferenceRegistrar implements PackageRegistrar
@@ -40,6 +41,7 @@ final class IntlReferenceRegistrar implements PackageRegistrar
             datasetKey: $app->make(IntlOptions::class)->referenceDatasetKey,
             normalizer: $app->make(FixtureReferenceNormalizer::class),
             authorizer: $app->make(DataScopeAuthorizer::class),
+            clock: $app->make(ClockInterface::class),
         ));
     }
 

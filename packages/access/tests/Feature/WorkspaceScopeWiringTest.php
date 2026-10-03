@@ -8,6 +8,7 @@ use CoreX\Modules\Data\EntityDefinition;
 use CoreX\Modules\Enums\Capability;
 use CoreX\Modules\Testing\ArrayEntityRegistry;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Scope;
 
 // Each test below declares its OWN `new class extends Model {}` at its own
 // source line: PHP treats every distinct anonymous-class expression site as
@@ -38,7 +39,7 @@ it('wires the workspace global scope onto every model whose entity declares Work
         titleAttribute: null,
     ));
 
-    WorkspaceScopeWiring::wire($registry, FakeWorkspaceScope::class);
+    WorkspaceScopeWiring::wire($registry, FakeWorkspaceScope::class, static fn (string $class): Scope => app()->make($class));
 
     expect($model->getGlobalScopes())->toHaveKey(FakeWorkspaceScope::class);
 });
@@ -65,7 +66,7 @@ it('does not wire the workspace global scope onto a model without the WorkspaceS
         titleAttribute: null,
     ));
 
-    WorkspaceScopeWiring::wire($registry, FakeWorkspaceScope::class);
+    WorkspaceScopeWiring::wire($registry, FakeWorkspaceScope::class, static fn (string $class): Scope => app()->make($class));
 
     expect($model->getGlobalScopes())->toBe([]);
 });
@@ -92,7 +93,7 @@ it('silently skips wiring when the scope class is null (boxed profile, no config
         titleAttribute: null,
     ));
 
-    WorkspaceScopeWiring::wire($registry, null);
+    WorkspaceScopeWiring::wire($registry, null, static fn (string $class): Scope => app()->make($class));
 
     expect($model->getGlobalScopes())->toBe([]);
 });
@@ -119,7 +120,7 @@ it('silently skips wiring when the pinned scope class does not exist', function 
         titleAttribute: null,
     ));
 
-    WorkspaceScopeWiring::wire($registry, 'CoreX\\Access\\Tests\\Stubs\\DoesNotExist');
+    WorkspaceScopeWiring::wire($registry, 'CoreX\\Access\\Tests\\Stubs\\DoesNotExist', static fn (string $class): Scope => app()->make($class));
 
     expect($model->getGlobalScopes())->toBe([]);
 });

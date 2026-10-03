@@ -46,10 +46,7 @@ function settingsPg(): Connection
  */
 function settingsRepositoryFor(array $defaults = [], array $sensitive = []): SettingsRepository
 {
-    return new DatabaseSettingsRepository(
-        defaults: new StubSettingDefaultsProvider($defaults, $sensitive),
-        connection: SETTINGS_TEST_CONNECTION,
-    );
+    return app()->make(DatabaseSettingsRepository::class, ['defaults' => new StubSettingDefaultsProvider($defaults, $sensitive), 'connection' => SETTINGS_TEST_CONNECTION]);
 }
 
 beforeEach(function (): void {
@@ -166,19 +163,18 @@ it('rejects a duplicate account-level row at the DB constraint (UNIQUE NULLS NOT
 });
 
 it('does not fire SettingChanged when set() re-writes the same value', function (): void {
+    // The dispatcher is injected: fake it before the repository is built.
+    Event::fake([SettingChanged::class]);
     $repository = settingsRepositoryFor();
     $repository->set('crm', 'theme', JsonDocuments::capture('stable'));
-
-    Event::fake([SettingChanged::class]);
     $repository->set('crm', 'theme', JsonDocuments::capture('stable'));
 
-    Event::assertNotDispatched(SettingChanged::class);
+    Event::assertDispatchedTimes(SettingChanged::class, 1);
 });
 
 it('fires SettingChanged once per actual value change', function (): void {
-    $repository = settingsRepositoryFor();
-
     Event::fake([SettingChanged::class]);
+    $repository = settingsRepositoryFor();
     $repository->set('crm', 'theme', JsonDocuments::capture('first'));
     $repository->set('crm', 'theme', JsonDocuments::capture('second'));
 
@@ -249,7 +245,7 @@ it('resolves a manifest-declared DefaultSettingDefinition through the container-
     try {
         $this->app->instance(ModuleRegistry::class, new CompiledModuleRegistry(
             cachePath: $path,
-            stateReader: new DatabaseModuleStateReader(connection: SETTINGS_TEST_CONNECTION),
+            stateReader: app()->make(DatabaseModuleStateReader::class, ['connection' => SETTINGS_TEST_CONNECTION]),
             cache: new RepositoryModuleRegistryCache(
                 Cache::store(),
                 ModulesOptions::fromArray(['cache' => ['ttl' => 3600, 'prefix' => 'corex.modules']]),
@@ -269,7 +265,7 @@ it('resolves a manifest-declared DefaultSettingDefinition through the container-
 
         // sys_settings carries no row for it — the manifest default alone
         // reaches SettingsRepository::get().
-        $repository = new DatabaseSettingsRepository(defaults: $defaults, connection: SETTINGS_TEST_CONNECTION);
+        $repository = app()->make(DatabaseSettingsRepository::class, ['defaults' => $defaults, 'connection' => SETTINGS_TEST_CONNECTION]);
 
         expect(JsonDocuments::decode($repository->get('sst', 'theme')))->toBe('manifest-default')
             ->and(settingsPg()->table('sys_settings')->where('namespace', 'sst')->where('key', 'theme')->exists())->toBeFalse();

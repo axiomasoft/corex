@@ -13,6 +13,8 @@ use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Provisioning\Internal\Database\SchemaCatalogueSerializer;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityLock;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Database\ConnectionResolverInterface;
+use Illuminate\Database\Connectors\ConnectionFactory;
 use Override;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
@@ -31,6 +33,9 @@ final class DatabaseRegistrar implements PackageRegistrar
                 centralConnection: $app->make(TenancyOptions::class)->centralConnection,
                 serializer: $app->make(SchemaCatalogueSerializer::class),
                 lock: $app->make(TemplateIntegrityLock::class),
+                options: $app->make(TenancyOptions::class),
+                connections: $app->make(ConnectionResolverInterface::class),
+                connectionFactory: $app->make(ConnectionFactory::class),
             ),
         );
         $app->singleton(

@@ -7,11 +7,15 @@ namespace CoreX\Media\Internal;
 use CoreX\Media\Data\ConversionClaim;
 use CoreX\Media\Data\ConversionOperationRequest;
 use CoreX\Media\Data\PurgeClaim;
+use DateInterval;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Illuminate\Database\ConnectionInterface;
+use Psr\Clock\ClockInterface;
 
 final class MediaOperationStore
 {
-    public function __construct(private readonly ConnectionInterface $connection) {}
+    public function __construct(private readonly ConnectionInterface $connection, private readonly ClockInterface $clock) {}
 
     public function enqueuePurge(string $fileId): void
     {
@@ -22,9 +26,9 @@ final class MediaOperationStore
             'state' => 'pending',
             'claim_epoch' => 0,
             'attempts' => 0,
-            'next_attempt_at' => now(),
-            'created_at' => now(),
-            'updated_at' => now(),
+            'next_attempt_at' => $this->clock->now(),
+            'created_at' => $this->clock->now(),
+            'updated_at' => $this->clock->now(),
         ]);
     }
 
@@ -47,7 +51,7 @@ final class MediaOperationStore
                 return null;
             }
 
-            if ($operation->next_attempt_at !== null && $operation->next_attempt_at > now()) {
+            if ($this->notYetDue($operation->next_attempt_at)) {
                 return null;
             }
 
@@ -56,8 +60,8 @@ final class MediaOperationStore
                 'state' => 'claimed',
                 'claim_epoch' => $epoch,
                 'attempts' => ((int) $operation->attempts) + 1,
-                'lease_until' => now()->addMinutes(5),
-                'updated_at' => now(),
+                'lease_until' => $this->clock->now()->add(new DateInterval('PT5M')),
+                'updated_at' => $this->clock->now(),
             ]);
 
             $conversionKeys = $this->connection->table('med_conversions')->where('file_id', $fileId)->whereNotNull('object_key')->pluck('object_key')->all();
@@ -79,13 +83,13 @@ final class MediaOperationStore
 
             $this->connection->table('med_files')->where('id', $claim->fileId)->update([
                 'state' => 'deleted',
-                'deleted_at' => now(),
-                'updated_at' => now(),
+                'deleted_at' => $this->clock->now(),
+                'updated_at' => $this->clock->now(),
             ]);
             $this->connection->table('med_operations')->where('id', $claim->operationId)->update([
                 'state' => 'ready',
                 'lease_until' => null,
-                'updated_at' => now(),
+                'updated_at' => $this->clock->now(),
             ]);
         });
     }
@@ -99,8 +103,8 @@ final class MediaOperationStore
             ->update([
                 'state' => 'unknown',
                 'lease_until' => null,
-                'next_attempt_at' => now()->addMinute(),
-                'updated_at' => now(),
+                'next_attempt_at' => $this->clock->now()->add(new DateInterval('PT1M')),
+                'updated_at' => $this->clock->now(),
             ]);
     }
 
@@ -116,9 +120,9 @@ final class MediaOperationStore
             'source_version' => $sourceVersion,
             'claim_epoch' => 0,
             'attempts' => 0,
-            'next_attempt_at' => now(),
-            'created_at' => now(),
-            'updated_at' => now(),
+            'next_attempt_at' => $this->clock->now(),
+            'created_at' => $this->clock->now(),
+            'updated_at' => $this->clock->now(),
         ]);
     }
 
@@ -151,7 +155,7 @@ final class MediaOperationStore
                 ->lockForUpdate()
                 ->first();
 
-            if ($operation === null || ! in_array($operation->state, ['pending', 'unknown'], true) || ($operation->next_attempt_at !== null && $operation->next_attempt_at > now())) {
+            if ($operation === null || ! in_array($operation->state, ['pending', 'unknown'], true) || ($this->notYetDue($operation->next_attempt_at))) {
                 return null;
             }
 
@@ -161,9 +165,9 @@ final class MediaOperationStore
                 'state' => 'claimed',
                 'claim_epoch' => $epoch,
                 'attempts' => ((int) $operation->attempts) + 1,
-                'lease_until' => now()->addMinutes(5),
+                'lease_until' => $this->clock->now()->add(new DateInterval('PT5M')),
                 'attempt_object_key' => $attemptKey,
-                'updated_at' => now(),
+                'updated_at' => $this->clock->now(),
             ]);
 
             return new ConversionClaim((int) $operation->id, (int) $conversion->id, $file->id, $epoch, (int) $file->version, $file->object_key, $file->mime_type, $profileKey, $conversion->profile_digest, $attemptKey);
@@ -188,12 +192,12 @@ final class MediaOperationStore
                 'size_bytes' => $sizeBytes,
                 'width' => $width,
                 'height' => $height,
-                'updated_at' => now(),
+                'updated_at' => $this->clock->now(),
             ]);
             $this->connection->table('med_operations')->where('id', $claim->operationId)->update([
                 'state' => 'ready',
                 'lease_until' => null,
-                'updated_at' => now(),
+                'updated_at' => $this->clock->now(),
             ]);
 
             return true;
@@ -209,18 +213,20 @@ final class MediaOperationStore
             ->update([
                 'state' => 'unknown',
                 'lease_until' => null,
-                'next_attempt_at' => now()->addMinute(),
-                'updated_at' => now(),
+                'next_attempt_at' => $this->clock->now()->add(new DateInterval('PT1M')),
+                'updated_at' => $this->clock->now(),
             ]);
     }
 
     /** @return list<string> */
     public function duePurgeFileIds(int $limit = 100): array
     {
+        $now = $this->clock->now();
+
         return $this->connection->table('med_operations')
             ->where('kind', 'purge')
             ->whereIn('state', ['pending', 'unknown'])
-            ->where(static fn ($query) => $query->whereNull('next_attempt_at')->orWhere('next_attempt_at', '<=', now()))
+            ->where(static fn ($query) => $query->whereNull('next_attempt_at')->orWhere('next_attempt_at', '<=', $now))
             ->orderBy('id')
             ->limit($limit)
             ->pluck('file_id')
@@ -230,14 +236,29 @@ final class MediaOperationStore
     /** @return list<ConversionOperationRequest> */
     public function dueConversionRequests(int $limit = 100): array
     {
+        $now = $this->clock->now();
+
         return $this->connection->table('med_operations')
             ->where('kind', 'conversion')
             ->whereIn('state', ['pending', 'unknown'])
-            ->where(static fn ($query) => $query->whereNull('next_attempt_at')->orWhere('next_attempt_at', '<=', now()))
+            ->where(static fn ($query) => $query->whereNull('next_attempt_at')->orWhere('next_attempt_at', '<=', $now))
             ->orderBy('id')
             ->limit($limit)
             ->get()
             ->map(static fn (object $operation): ConversionOperationRequest => new ConversionOperationRequest($operation->file_id, (string) $operation->profile_key))
             ->all();
+    }
+
+    /** A stored attempt time is a database string; comparing it with a DateTimeImmutable directly never orders. */
+    private function notYetDue(mixed $nextAttemptAt): bool
+    {
+        $now = $this->clock->now();
+
+        if ($nextAttemptAt instanceof DateTimeInterface) {
+            return $nextAttemptAt > $now;
+        }
+
+        // Timezone-less database wall time is read in the zone of the clock that wrote it.
+        return is_string($nextAttemptAt) && new DateTimeImmutable($nextAttemptAt, $now->getTimezone()) > $now;
     }
 }

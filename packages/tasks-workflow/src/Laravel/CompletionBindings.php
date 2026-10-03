@@ -6,10 +6,12 @@ namespace CoreX\TasksWorkflow\Laravel;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
+use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Tasks\Planning\Contracts\TaskOperationReceipts;
 use CoreX\Tasks\Task\Contracts\TaskCompletionCapture;
 use CoreX\TasksWorkflow\Internal\CaptureTaskCompletion;
 use CoreX\TasksWorkflow\Internal\TasksWorkflowOptions;
+use CoreX\Workflow\Contracts\WorkflowBinding;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Connection;
 
@@ -25,6 +27,8 @@ final class CompletionBindings
             definitionRef: $app->make(TasksWorkflowOptions::class)->completionCaptureDefinitionRef,
             versionRef: $app->make(TasksWorkflowOptions::class)->completionCaptureVersionRef,
             receipts: $app->make(TaskOperationReceipts::class),
+            contexts: $app->make(TenantContextResolver::class),
+            workflow: interface_exists(WorkflowBinding::class) && $app->bound(WorkflowBinding::class) ? $app->make(WorkflowBinding::class) : null,
         ));
         $app->tag(TaskCompletionCapture::class, 'corex.tasks.completion-captures');
     }

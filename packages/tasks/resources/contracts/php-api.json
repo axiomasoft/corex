@@ -1056,6 +1056,15 @@
                             "optional": false,
                             "default": null,
                             "flags": 68
+                        },
+                        {
+                            "name": "receipts",
+                            "type": "?CoreX\\Tasks\\Planning\\Contracts\\TaskOperationReceipts",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "null",
+                            "flags": 68
                         }
                     ],
                     "return": null,

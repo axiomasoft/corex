@@ -35,7 +35,7 @@ final class CostBindingsRegistrar implements PackageRegistrar
             (array) $app->make(Repository::class)->get('corex-operations.cost', []),
         ));
         $app->singleton(OperationCostEstimator::class, DeclaredCostEstimator::class);
-        $app->singleton(BudgetRetention::class, static fn (Application $app): BudgetRetention => new BudgetRetention(
+        $app->scoped(BudgetRetention::class, static fn (Application $app): BudgetRetention => new BudgetRetention(
             connection: $app->make(ApiSchemaRegistrar::class)->budget(),
             clock: $app->make(ClockInterface::class),
             terminalRetentionSeconds: $app->make(CostOptions::class)->terminalRetentionSeconds,
@@ -45,7 +45,7 @@ final class CostBindingsRegistrar implements PackageRegistrar
             return;
         }
 
-        $app->singleton(OperationBudget::class, static function (Application $app): SqlOperationBudget {
+        $app->scoped(OperationBudget::class, static function (Application $app): SqlOperationBudget {
             return new SqlOperationBudget(
                 connection: $app->make(ApiSchemaRegistrar::class)->budget(),
                 clock: $app->make(ClockInterface::class),
@@ -57,7 +57,7 @@ final class CostBindingsRegistrar implements PackageRegistrar
             );
         });
         $app->bind(BudgetExecution::class, static fn (Application $app): BudgetExecution => $app->make(BudgetAdmission::class));
-        $app->singleton(BudgetAdmission::class, static fn (Application $app): BudgetAdmission => new BudgetAdmission(
+        $app->scoped(BudgetAdmission::class, static fn (Application $app): BudgetAdmission => new BudgetAdmission(
             budget: $app->make(OperationBudget::class),
             estimator: $app->make(OperationCostEstimator::class),
             installationId: $app->make(CostOptions::class)->installationId,

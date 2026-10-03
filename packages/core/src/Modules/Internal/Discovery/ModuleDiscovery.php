@@ -50,9 +50,9 @@ final class ModuleDiscovery implements \CoreX\Modules\Contracts\ModuleDiscovery
     /** @return list<class-string> */
     private function scanInstalledJson(): array
     {
-        $path = $this->installedJsonPath ?? base_path('vendor/composer/installed.json');
+        $path = $this->installedJsonPath;
 
-        if (! is_file($path)) {
+        if ($path === null || ! is_file($path)) {
             return [];
         }
 

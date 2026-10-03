@@ -7,7 +7,7 @@ namespace CoreX\Messaging\Internal\Commands;
 use CoreX\Config\Data\CoreOptions;
 use DateInterval;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\ConnectionResolverInterface;
 use Psr\Clock\ClockInterface;
 
 /**
@@ -31,7 +31,7 @@ final class PruneOutboxMessages extends Command
 
     protected $description = 'Delete terminal sys_outbox_messages rows older than their retention window.';
 
-    public function handle(ClockInterface $clock): int
+    public function handle(ClockInterface $clock, CoreOptions $options, ConnectionResolverInterface $connections): int
     {
         /** @var string|null $publishedOption */
         $publishedOption = $this->option('published-older-than');
@@ -40,17 +40,17 @@ final class PruneOutboxMessages extends Command
         /** @var string|null $connection */
         $connection = $this->option('database');
 
-        $published = $publishedOption ?? app(CoreOptions::class)->messagingOutboxRetention;
-        $dead = $deadOption ?? app(CoreOptions::class)->messagingDeadRetention;
+        $published = $publishedOption ?? $options->messagingOutboxRetention;
+        $dead = $deadOption ?? $options->messagingDeadRetention;
         $now = $clock->now();
-        $table = app(CoreOptions::class)->outboxMessagesTable;
+        $table = $options->outboxMessagesTable;
 
-        $prunedPublished = DB::connection($connection)->table($table)
+        $prunedPublished = $connections->connection($connection)->table($table)
             ->where('status', 'published')
             ->where('published_at', '<', $now->sub(DateInterval::createFromDateString($published)))
             ->delete();
 
-        $prunedDead = DB::connection($connection)->table($table)
+        $prunedDead = $connections->connection($connection)->table($table)
             ->where('status', 'dead')
             ->where('dead_at', '<', $now->sub(DateInterval::createFromDateString($dead)))
             ->delete();

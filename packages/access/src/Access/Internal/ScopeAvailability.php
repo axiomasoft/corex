@@ -8,7 +8,9 @@ use CoreX\Access\Enums\Scope;
 use CoreX\Access\Exceptions\ScopeCapabilityMismatch;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Enums\Capability;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionResolverInterface;
+use Illuminate\Database\Schema\Builder as SchemaBuilder;
 
 /**
  * Normalizes a compiled Scope against the entity's declared capabilities
@@ -34,6 +36,7 @@ final class ScopeAvailability
 
     public function __construct(
         private readonly EntityRegistry $entities,
+        private readonly ConnectionResolverInterface $connections,
     ) {}
 
     public function normalize(string $entityKey, Scope $scope): Scope
@@ -79,10 +82,18 @@ final class ScopeAvailability
             return $scope;
         }
 
-        if (! Schema::hasColumn($entity->table, $requirement['column'])) {
+        if (! $this->schema()->hasColumn($entity->table, $requirement['column'])) {
             return Scope::Account;
         }
 
         throw ScopeCapabilityMismatch::forScope($entityKey, $scope->value, $requirement['capability']->value, $requirement['column']);
+    }
+
+    private function schema(): SchemaBuilder
+    {
+        /** @var Connection */
+        $connection = $this->connections->connection();
+
+        return $connection->getSchemaBuilder();
     }
 }

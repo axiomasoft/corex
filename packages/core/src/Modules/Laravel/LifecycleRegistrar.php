@@ -17,8 +17,11 @@ use CoreX\Modules\Internal\Lifecycle\DatabaseModuleLifecycle;
 use CoreX\Modules\Internal\Lifecycle\DatabaseModuleStateReader;
 use CoreX\Modules\Internal\Lifecycle\DatabaseRecordsRegistrar;
 use CoreX\Modules\Internal\Support\ModulesOptions;
+use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Database\ConnectionResolverInterface;
 use Override;
+use Psr\Clock\ClockInterface;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class LifecycleRegistrar implements PackageRegistrar
@@ -37,7 +40,7 @@ final class LifecycleRegistrar implements PackageRegistrar
         // default, so with a configured module DB the enabled set comes back empty
         // and every module reads inactive (a defect a targeted audit caught).
         $app->singleton(ModuleStateReader::class, static function (Application $app): DatabaseModuleStateReader {
-            return new DatabaseModuleStateReader($app->make(ModulesOptions::class)->connection);
+            return new DatabaseModuleStateReader($app->make(ConnectionResolverInterface::class), $app->make(ModulesOptions::class)->connection);
         });
 
         // RecordsRegistrar and the lifecycle read/write the module connection
@@ -45,7 +48,7 @@ final class LifecycleRegistrar implements PackageRegistrar
         // seam the epoch and state reader use, so auto-claims land in the module
         // DB, not the ambient default.
         $app->singleton(RecordsRegistrar::class, static function (Application $app): DatabaseRecordsRegistrar {
-            return new DatabaseRecordsRegistrar($app->make(ModulesOptions::class)->connection);
+            return new DatabaseRecordsRegistrar($app->make(ConnectionResolverInterface::class), $app->make(ClockInterface::class), $app->make(ModulesOptions::class)->connection);
         });
 
         // codeVersions / migrationPaths (composer name → value) come from
@@ -130,6 +133,9 @@ final class LifecycleRegistrar implements PackageRegistrar
             records: $app->make(RecordsRegistrar::class),
             container: $app,
             tenantContextResolver: $app->make(TenantContextResolver::class),
+            connections: $app->make(ConnectionResolverInterface::class),
+            events: $app->make(EventDispatcher::class),
+            clock: $app->make(ClockInterface::class),
             codeVersions: $wiring['codeVersions'],
             migrationPaths: $wiring['migrationPaths'],
             connection: $connection,

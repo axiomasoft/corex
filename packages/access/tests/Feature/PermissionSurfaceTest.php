@@ -13,6 +13,7 @@ use CoreX\Modules\Data\EntityDefinition;
 use CoreX\Modules\Data\Permissions;
 use CoreX\Modules\Enums\Capability;
 use CoreX\Modules\Testing\ArrayEntityRegistry;
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
@@ -20,7 +21,7 @@ function makeSurface(ArrayEntityRegistry $registry, FakeModuleRegistry $modules)
 {
     $activeEntities = new ActiveEntityFilter($registry, $modules, new SingleAccountResolver);
 
-    return new PermissionSurface($modules, $activeEntities, new ScopeAvailability($registry));
+    return new PermissionSurface($modules, $activeEntities, new ScopeAvailability($registry, app(ConnectionResolverInterface::class)));
 }
 
 // isScopeable() ⇒ every declared action row, scopes normalized per-entity capability.

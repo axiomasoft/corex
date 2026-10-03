@@ -32,6 +32,7 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\DatabaseManager;
 use Override;
+use Psr\Clock\ClockInterface;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class IntlBindingsRegistrar implements PackageRegistrar
@@ -59,6 +60,7 @@ final class IntlBindingsRegistrar implements PackageRegistrar
         $app->scoped(RateImporter::class, static fn (Application $app): RateImporter => new SqlRateImporter(
             connection: $app->make(DatabaseManager::class)->connection(),
             authorizer: $app->make(DataScopeAuthorizer::class),
+            clock: $app->make(ClockInterface::class),
             batchLimit: $app->make(IntlOptions::class)->moneyBatchLimit,
         ));
         $app->scoped(CurrencyConverter::class, BrickCurrencyConverter::class);

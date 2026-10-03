@@ -14,6 +14,7 @@ use CoreX\CustomFields\Internal\Storage\ScopeConnectionGuard;
 use CoreX\Data\Data\DataScope;
 use Illuminate\Database\ConnectionInterface;
 use InvalidArgumentException;
+use Psr\Clock\ClockInterface;
 use RuntimeException;
 
 final readonly class AttributeIndexPlanner
@@ -22,6 +23,7 @@ final readonly class AttributeIndexPlanner
         private ConnectionInterface $connection,
         private AttributeTables $tables,
         private SchemaOperations $operations,
+        private readonly ClockInterface $clock,
     ) {}
 
     public function indexName(AttributeDefinition $definition): string
@@ -104,7 +106,7 @@ final readonly class AttributeIndexPlanner
         $this->connection->table($this->tables->schemaOperations)->where('id', $queued->operation->id)->update([
             'status' => 'verified',
             'error_code' => null,
-            'finished_at' => now(),
+            'finished_at' => $this->clock->now(),
         ]);
         $after = $this->explain($definition->entity, $expression);
 

@@ -22,6 +22,7 @@ use CoreX\Tasks\Task\Internal\Models\Task;
 use CoreX\Tasks\Task\Internal\TaskCompletion;
 use CoreX\Tasks\Task\Internal\TaskReferenceFactory;
 use CoreX\Tasks\Task\Internal\TaskSnapshot;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
 use Illuminate\Validation\ValidationException;
 
@@ -30,7 +31,9 @@ final class MoveTaskToStage implements MoveTaskToStageCommand
     public function __construct(
         private readonly TaskModuleGuard $moduleGuard,
         private readonly TaskAccess $access,
-        private readonly ?TaskCompletion $completion = null,
+        private readonly TaskCompletion $completion,
+        private readonly ProjectRead $projects,
+        private readonly Dispatcher $events,
     ) {}
 
     public function handle(MoveTaskToStageData $data): TaskReference
@@ -70,7 +73,7 @@ final class MoveTaskToStage implements MoveTaskToStageCommand
         }
 
         /** @var ProjectView|null $project */
-        $project = app(ProjectRead::class)->find($stage->project_id, $connectionName);
+        $project = $this->projects->find($stage->project_id, $connectionName);
 
         if ($project === null || $project->workspaceId !== $task->workspace_id) {
             $this->invalid('stage_id', 'Проект стадии не принадлежит рабочему пространству задачи.');
@@ -89,15 +92,15 @@ final class MoveTaskToStage implements MoveTaskToStageCommand
         }
 
         if ($stage->auto_status === TaskStatus::Done) {
-            $completed = ($this->completion ?? app(TaskCompletion::class))->apply($task, new CompleteTaskData(taskId: $task->getKey(), actor: $data->actor), $context);
+            $completed = $this->completion->apply($task, new CompleteTaskData(taskId: $task->getKey(), actor: $data->actor), $context);
         }
 
         $task->save();
 
         if ($completed) {
-            event(new TaskCompleted(TaskSnapshot::fromTask($task)));
+            $this->events->dispatch(new TaskCompleted(TaskSnapshot::fromTask($task)));
         }
-        event(new TaskMovedToStage(TaskSnapshot::fromTask($task), new StageView($stage->id, $stage->project_id, $stage->name, (bool) $stage->getAttribute('is_final'))));
+        $this->events->dispatch(new TaskMovedToStage(TaskSnapshot::fromTask($task), new StageView($stage->id, $stage->project_id, $stage->name, (bool) $stage->getAttribute('is_final'))));
 
         return TaskReferenceFactory::fromTask($task);
     }

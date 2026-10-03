@@ -39,6 +39,7 @@ const CORE_ZONE_COMPOSITION = [
     'packages/core/src/Audit/Laravel/AuditRegistrar.php',
     'packages/core/src/Config/Laravel/ConfigRegistrar.php',
     'packages/core/src/Config/Laravel/ConfiguredImplementation.php',
+    'packages/core/src/Config/Internal/ApplicationLocator.php',
     'packages/core/src/Context/Laravel/ContextRegistrar.php',
     'packages/core/src/Data/Laravel/DataRegistrar.php',
     'packages/core/src/Departments/Laravel/DepartmentsRegistrar.php',
@@ -66,6 +67,10 @@ const CORE_ZONE_EXACT_IMPORTS = [
         'CoreX\\Context\\Data\\TenantContext',
     ],
     'packages/core/src/Messaging/Events/DomainEvent.php' => [
+        'CoreX\\Context\\Data\\TenantContext',
+        'CoreX\\Messaging\\Internal\\DomainEventDefaults',
+    ],
+    'packages/core/src/Messaging/Internal/DomainEventDefaults.php' => [
         'CoreX\\Context\\Data\\TenantContext',
         'CoreX\\Context\\Contracts\\TenantContextResolver',
     ],
@@ -228,6 +233,7 @@ const CORE_ZONE_DUMP = [
     'Database/Enums/IdStrategy.php' => 'Foundation',
     'Database/Laravel/HasConfiguredId.php' => 'Foundation',
     'Database/Laravel/IdColumns.php' => 'Foundation',
+    'Database/Laravel/ResolvesCoreOptions.php' => 'Foundation',
     'Departments/Contracts/DepartmentRepository.php' => 'Departments',
     'Departments/Internal/DatabaseDepartmentRepository.php' => 'Departments',
     'Departments/Data/Department.php' => 'Departments',
@@ -270,6 +276,7 @@ const CORE_ZONE_DUMP = [
     'Messaging/Enums/PiiClass.php' => 'Messaging',
     'Messaging/Enums/PubSubDriver.php' => 'Messaging',
     'Messaging/Events/DomainEvent.php' => 'Foundation',
+    'Messaging/Internal/DomainEventDefaults.php' => 'Foundation',
     'Messaging/Exceptions/InboxRefused.php' => 'Messaging',
     'Messaging/Exceptions/InvalidMessage.php' => 'Messaging',
     'Messaging/Exceptions/OutboxLeaseLost.php' => 'Messaging',
@@ -285,7 +292,6 @@ const CORE_ZONE_DUMP = [
     'Messaging/Internal/NullPubSub.php' => 'Messaging',
     'Messaging/PHPStan/Rules/DurablePayloadRule.php' => 'Foundation',
     'Messaging/Internal/PrunePubSubMessages.php' => 'Messaging',
-    'Messaging/Internal/PubSubManager.php' => 'Messaging',
     'Messaging/Internal/RedisPubSub.php' => 'Messaging',
     'Messaging/Internal/SubscribeGuard.php' => 'Messaging',
     'Messaging/Testing/MessagingFixtures.php' => 'Messaging',
@@ -341,7 +347,7 @@ const CORE_ZONE_DUMP = [
 
 test('every core src file is classified into a zone or composition/testing', function (): void {
     expect(rz0Offenders())->toBe([])
-        ->and(zoneOf('packages/core/src/Messaging/Internal/PubSubManager.php'))->toBe('Messaging')
+        ->and(zoneOf('packages/core/src/Messaging/Internal/RedisPubSub.php'))->toBe('Messaging')
         ->and(CORE_ZONE_ALLOWED['Foundation'])->toBe([])
         ->and(zoneOf('packages/core/src/Config/Laravel/ConfigurationValidator.php'))->toBe('Foundation')
         ->and(zoneOf('packages/core/src/Config/Exceptions/InvalidConfiguration.php'))->toBe('Foundation')

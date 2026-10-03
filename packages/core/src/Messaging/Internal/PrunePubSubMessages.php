@@ -6,9 +6,9 @@ namespace CoreX\Messaging\Internal;
 
 use CoreX\Config\Data\CoreOptions;
 use DateInterval;
-use DateTimeImmutable;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\ConnectionResolverInterface;
+use Psr\Clock\ClockInterface;
 
 /**
  * Prunes `sys_pubsub_messages` rows older than a threshold — the
@@ -34,18 +34,18 @@ final class PrunePubSubMessages extends Command
 
     protected $description = 'Delete sys_pubsub_messages rows older than the retention threshold.';
 
-    public function handle(): int
+    public function handle(ClockInterface $clock, CoreOptions $options, ConnectionResolverInterface $connections): int
     {
         /** @var string|null $olderThanOption */
         $olderThanOption = $this->option('older-than');
-        $olderThan = $olderThanOption ?? app(CoreOptions::class)->pubsubRetention;
+        $olderThan = $olderThanOption ?? $options->pubsubRetention;
 
-        $cutoff = (new DateTimeImmutable)->sub(DateInterval::createFromDateString($olderThan));
+        $cutoff = $clock->now()->sub(DateInterval::createFromDateString($olderThan));
 
         /** @var string|null $connection */
         $connection = $this->option('database');
 
-        $deleted = DB::connection($connection)->table(app(CoreOptions::class)->pubsubMessagesTable)
+        $deleted = $connections->connection($connection)->table($options->pubsubMessagesTable)
             ->where('created_at', '<', $cutoff)
             ->delete();
 

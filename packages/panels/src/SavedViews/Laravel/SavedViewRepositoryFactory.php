@@ -12,6 +12,7 @@ use CoreX\Panels\SavedViews\Contracts\ViewSchemaProvider;
 use CoreX\Panels\SavedViews\Internal\SqlSavedViewRepository;
 use CoreX\Panels\SavedViews\Internal\ViewConfigValidator;
 use Illuminate\Contracts\Foundation\Application;
+use Psr\Clock\ClockInterface;
 
 /** Builds the saved-view repository on the database manager of the current application. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
@@ -27,6 +28,7 @@ final class SavedViewRepositoryFactory
             validator: $app->make(ViewConfigValidator::class),
             options: $app->make(CoreOptions::class),
             database: $database,
+            clock: $app->make(ClockInterface::class),
         );
     }
 }

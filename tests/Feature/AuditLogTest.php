@@ -122,7 +122,7 @@ function auditPg(): Connection
 
 function auditLogger(): QueuedAuditLogger
 {
-    return new QueuedAuditLogger(connection: AUDIT_TEST_CONNECTION);
+    return app()->make(QueuedAuditLogger::class, ['connection' => AUDIT_TEST_CONNECTION]);
 }
 
 /** @param array<string, mixed> $overrides */
@@ -372,7 +372,7 @@ it('killswitch silences a direct AuditLogger::record() at the write seam, not on
     app()->forgetInstance(CoreOptions::class);
 
     // Bypass the observer entirely — call the AuditLogger contract directly, as
-    // any caller resolving it could. AuditObserver::record()'s guard (A60) does
+    // any caller resolving it could. app(AuditObserver::class)->record()'s guard (A60) does
     // not cover this path; the write seam must refuse on its own. Sync queue in
     // this suite means an un-guarded record() would write the row synchronously.
     auditLogger()->record(new AuditEntry(
@@ -433,7 +433,7 @@ it('snapshots occurred_at and workspace_id at enqueue, not in the worker (A17)',
     $resolver = new MutableTenantResolver;
     $resolver->workspaceId = $eventWorkspace = (string) Str::uuid7();
 
-    $logger = new QueuedAuditLogger(connection: AUDIT_TEST_CONNECTION, tenantContext: $resolver);
+    $logger = app()->make(QueuedAuditLogger::class, ['connection' => AUDIT_TEST_CONNECTION, 'tenantContext' => $resolver]);
 
     Carbon::setTestNow('2026-07-14 10:00:00');
 
@@ -456,7 +456,7 @@ it('snapshots occurred_at and workspace_id at enqueue, not in the worker (A17)',
     $resolver->workspaceId = (string) Str::uuid7();
     Carbon::setTestNow('2026-07-14 12:00:00');
 
-    $captured->handle();
+    app()->call([$captured, 'handle']);
 
     $row = AuditLog::on(AUDIT_TEST_CONNECTION)->sole();
 

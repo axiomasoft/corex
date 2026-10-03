@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Roles\Laravel;
 
+use Closure;
+use CoreX\Access\Roles\Internal\SystemRoleMutationScope;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Container\Container;
 
 /**
  * @corex-model-extension Exact Role/RoleMatrixRow saving(), deleting(), affectsSystemRole() hooks.
@@ -20,8 +23,6 @@ use Illuminate\Auth\Access\AuthorizationException;
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 trait SystemRoleImmutable
 {
-    private static bool $systemMutationAllowed = false;
-
     /**
      * @template T
      *
@@ -30,14 +31,7 @@ trait SystemRoleImmutable
      */
     public static function withSystemMutationAllowed(callable $callback): mixed
     {
-        $previous = static::$systemMutationAllowed;
-        static::$systemMutationAllowed = true;
-
-        try {
-            return $callback();
-        } finally {
-            static::$systemMutationAllowed = $previous;
-        }
+        return self::systemMutationScope()->allow(self::class, Closure::fromCallable($callback));
     }
 
     protected static function bootSystemRoleImmutable(): void
@@ -53,13 +47,18 @@ trait SystemRoleImmutable
 
     private function guardSystemRoleMutation(): void
     {
-        if (static::$systemMutationAllowed) {
+        if (self::systemMutationScope()->isAllowed(self::class)) {
             return;
         }
 
         if ($this->affectsSystemRole()) {
             throw new AuthorizationException('System role is immutable outside the seeder/release path; clone it to customize.');
         }
+    }
+
+    private static function systemMutationScope(): SystemRoleMutationScope
+    {
+        return Container::getInstance()->make(SystemRoleMutationScope::class);
     }
 
     abstract protected function affectsSystemRole(): bool;

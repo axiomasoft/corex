@@ -16,12 +16,17 @@ use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycleFsm;
 use CoreX\Tenancy\Account\Internal\PendingPool;
 use CoreX\Tenancy\Account\Internal\StanclTenantDatabaseProvisioner;
 use CoreX\Tenancy\Account\Laravel\MigrationWaveOrchestrator;
+use CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver;
 use CoreX\Tenancy\Laravel\Support\AccountLifecyclePolicy;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Provisioning\Internal\StanclTenantDatabaseLifecycle;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Database\ConnectionResolverInterface;
+use Illuminate\Database\Connectors\ConnectionFactory;
 use Override;
+use Psr\Clock\ClockInterface;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class ProvisioningRegistrar implements PackageRegistrar
@@ -36,6 +41,7 @@ final class ProvisioningRegistrar implements PackageRegistrar
             static fn (Application $app): StanclTenantDatabaseProvisioner => new StanclTenantDatabaseProvisioner(
                 centralConnection: $app->make(TenancyOptions::class)->centralConnection,
                 templateIntegrityVerifier: $app->make(TemplateIntegrityVerifier::class),
+                events: $app->make(Dispatcher::class),
             ),
         );
 
@@ -45,13 +51,17 @@ final class ProvisioningRegistrar implements PackageRegistrar
                 centralConnection: $app->make(TenancyOptions::class)->centralConnection,
                 provisioner: $app->make(StanclTenantDatabaseProvisioner::class),
                 templateIntegrityVerifier: $app->make(TemplateIntegrityVerifier::class),
+                connections: $app->make(ConnectionResolverInterface::class),
             ),
         );
 
         $app->singleton(
             StanclTenantDatabaseLifecycle::class,
             static fn (Application $app): StanclTenantDatabaseLifecycle => new StanclTenantDatabaseLifecycle(
-                $app->make(TenancyOptions::class)->centralConnection,
+                centralConnection: $app->make(TenancyOptions::class)->centralConnection,
+                connections: $app->make(ConnectionResolverInterface::class),
+                clock: $app->make(ClockInterface::class),
+                events: $app->make(Dispatcher::class),
             ),
         );
         $app->singleton(
@@ -71,6 +81,11 @@ final class ProvisioningRegistrar implements PackageRegistrar
                 impersonationGuard: $app->make(ImpersonationGuard::class),
                 templateIntegrityVerifier: $app->make(TemplateIntegrityVerifier::class),
                 lifecycle: $app->make(AccountLifecyclePolicy::class),
+                connections: $app->make(ConnectionResolverInterface::class),
+                clock: $app->make(ClockInterface::class),
+                events: $app->make(Dispatcher::class),
+                connectionFactory: $app->make(ConnectionFactory::class),
+                hostResolver: $app->make(HostTenantResolver::class),
             ),
         );
 

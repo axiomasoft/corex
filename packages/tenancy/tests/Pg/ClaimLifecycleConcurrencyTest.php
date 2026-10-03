@@ -8,6 +8,7 @@ use CoreX\Tenancy\Provisioning\Data\QualifiedTemplate;
 use CoreX\Tenancy\Provisioning\Exceptions\ClaimConflict;
 use CoreX\Tenancy\Provisioning\Internal\ClaimAccountSignup;
 use CoreX\Tenancy\Tests\TestCase;
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -149,7 +150,7 @@ if ($p['op'] === 'raw') {
             if (str_contains(strtolower($query->sql), 'update root_accounts')) { echo "ready\n"; fflush(STDOUT); fgets(STDIN); }
         });
     }
-    $result = (new ClaimAccountSignup(centralConnection: 'worker', templateIntegrity: $v))->claim($r);
+    $result = (new ClaimAccountSignup(connections: $capsule->getDatabaseManager(), centralConnection: 'worker', templateIntegrity: $v))->claim($r);
     if ($p['op'] === 'postcommit') { echo "committed\n"; fflush(STDOUT); fgets(STDIN); }
     echo json_encode(['account' => $result->accountId, 'replayed' => $result->replayed], JSON_THROW_ON_ERROR)."\n";
 }
@@ -246,7 +247,7 @@ it('rolls back a killed precommit worker and replays a committed response lost b
 
 it('denies every changed immutable fingerprint and soft-deleted replay without a second reservation', function (): void {
     $request = new ClaimRequest(requestKey: 'fingerprint', clusterId: $this->p32Cluster, templateId: $this->p32Template, requestDigest: hash('sha256', 'original'));
-    $claim = new ClaimAccountSignup(centralConnection: 'pgsql', templateIntegrity: new P32ConcurrentTemplate);
+    $claim = new ClaimAccountSignup(connections: app(ConnectionResolverInterface::class), centralConnection: 'pgsql', templateIntegrity: new P32ConcurrentTemplate);
     $first = $claim->claim($request);
     foreach ([['cluster' => (string) Str::uuid()], ['template' => (string) Str::uuid()], ['digest' => hash('sha256', 'changed')]] as $change) {
         $changed = new ClaimRequest(requestKey: $request->requestKey, clusterId: $change['cluster'] ?? $request->clusterId, templateId: $change['template'] ?? $request->templateId, requestDigest: $change['digest'] ?? $request->requestDigest);

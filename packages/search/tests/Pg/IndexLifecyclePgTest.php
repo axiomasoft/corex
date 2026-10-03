@@ -5,6 +5,7 @@ declare(strict_types=1);
 use CoreX\Search\Internal\Index\DurableIndexLane;
 use CoreX\Search\Internal\Index\DurableIndexRebuild;
 use CoreX\Search\Tests\PgTestCase;
+use CoreX\Time\Laravel\SystemClock;
 use Illuminate\Support\Facades\DB;
 
 uses(PgTestCase::class)->group('pg');
@@ -20,7 +21,7 @@ beforeEach(function (): void {
 });
 
 it('deduplicates a revision and fences generation and restore epoch before submit', function (): void {
-    $lane = new DurableIndexLane(connection: DB::connection());
+    $lane = new DurableIndexLane(connection: DB::connection(), clock: new SystemClock);
     $lane->recordDirty(laneKey: 'equipment', recordId: 'pump-1', revision: 1, tombstone: false, restoreEpoch: str_repeat('a', 64));
     $lane->recordDirty(laneKey: 'equipment', recordId: 'pump-1', revision: 1, tombstone: false, restoreEpoch: str_repeat('a', 64));
     $lane->recordDirty(laneKey: 'equipment', recordId: 'pump-1', revision: 3, tombstone: false, restoreEpoch: str_repeat('a', 64));
@@ -45,7 +46,7 @@ it('deduplicates a revision and fences generation and restore epoch before submi
 })->group('pg');
 
 it('keeps the dirty receipt transactional so a later sweep heals a missed kick', function (): void {
-    $lane = new DurableIndexLane(connection: DB::connection());
+    $lane = new DurableIndexLane(connection: DB::connection(), clock: new SystemClock);
 
     try {
         DB::transaction(function () use ($lane): void {
@@ -66,7 +67,7 @@ it('keeps the dirty receipt transactional so a later sweep heals a missed kick',
 })->group('pg');
 
 it('fences, drains, and quarantines an unknown swap without a blind replay', function (): void {
-    $rebuild = new DurableIndexRebuild(connection: DB::connection());
+    $rebuild = new DurableIndexRebuild(connection: DB::connection(), clock: new SystemClock);
     $rebuild->begin(
         rebuildId: 'rebuild-1', laneKey: 'equipment', fromGeneration: 'gen-a', toGeneration: 'gen-b',
         restoreEpoch: str_repeat('a', 64), schemaHash: str_repeat('b', 64),

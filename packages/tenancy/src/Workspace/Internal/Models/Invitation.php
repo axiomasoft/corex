@@ -88,7 +88,7 @@ final class Invitation extends Model
             }
 
             if ($this->workspace_id === null) {
-                $this->update(['status' => 'accepted', 'accepted_at' => now()]);
+                $this->update(['status' => 'accepted', 'accepted_at' => $this->freshTimestamp()]);
 
                 return null;
             }
@@ -100,7 +100,7 @@ final class Invitation extends Model
                 throw new InvitationNotAcceptableException("Workspace [{$this->workspace_id}] has reached its users_max limit ({$usersMax}).");
             }
             $member = WorkspaceMember::on($this->getConnectionName())->create(['workspace_id' => $this->workspace_id, 'user_id' => $userId, 'status' => 'active']);
-            $this->update(['status' => 'accepted', 'accepted_at' => now()]);
+            $this->update(['status' => 'accepted', 'accepted_at' => $this->freshTimestamp()]);
 
             return $member;
         });

@@ -11,10 +11,11 @@ use CoreX\Access\Laravel\AuthOptions;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Departments\Laravel\DepartmentQueries;
+use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Builder as SchemaBuilder;
 
 use function data_get;
 
@@ -39,6 +40,7 @@ final readonly class ScopePredicate
     public function __construct(
         private TenancyManager $tenancyManager,
         private AuthOptions $options,
+        private ConnectionResolverInterface $connections,
     ) {}
 
     /**
@@ -81,11 +83,11 @@ final readonly class ScopePredicate
             return $q->whereRaw('1 = 0');
         }
 
-        if (! Schema::hasTable('users') || ! Schema::hasTable(DepartmentQueries::table())) {
+        if (! $this->schema()->hasTable('users') || ! $this->schema()->hasTable(DepartmentQueries::table())) {
             return $q->whereRaw('1 = 0');
         }
 
-        $principalDeptId = DB::table('users')->where('id', $p->principalId())->value('department_id');
+        $principalDeptId = $this->connections->connection()->table('users')->where('id', $p->principalId())->value('department_id');
 
         if (! is_string($principalDeptId)) {
             return $q->whereRaw('1 = 0');
@@ -94,7 +96,7 @@ final readonly class ScopePredicate
         $column = $q->getModel()->qualifyColumn('owner_id');
 
         if (! $tree) {
-            return $q->whereIn($column, DB::table('users')->where('department_id', $principalDeptId)->select('id'));
+            return $q->whereIn($column, $this->connections->connection()->table('users')->where('department_id', $principalDeptId)->select('id'));
         }
 
         $principalPath = DepartmentQueries::path($principalDeptId);
@@ -108,7 +110,7 @@ final readonly class ScopePredicate
         // users lookup, never per-row.
         $deptIds = DepartmentQueries::subtreeIds($principalPath);
 
-        return $q->whereIn($column, DB::table('users')->whereIn('department_id', $deptIds)->select('id'));
+        return $q->whereIn($column, $this->connections->connection()->table('users')->whereIn('department_id', $deptIds)->select('id'));
     }
 
     /**
@@ -124,7 +126,7 @@ final readonly class ScopePredicate
             return false;
         }
 
-        if (! Schema::hasTable('users') || ! Schema::hasTable(DepartmentQueries::table())) {
+        if (! $this->schema()->hasTable('users') || ! $this->schema()->hasTable(DepartmentQueries::table())) {
             return false;
         }
 
@@ -134,8 +136,8 @@ final readonly class ScopePredicate
             return false;
         }
 
-        $ownerDeptId = DB::table('users')->where('id', $ownerId)->value('department_id');
-        $principalDeptId = DB::table('users')->where('id', $p->principalId())->value('department_id');
+        $ownerDeptId = $this->connections->connection()->table('users')->where('id', $ownerId)->value('department_id');
+        $principalDeptId = $this->connections->connection()->table('users')->where('id', $p->principalId())->value('department_id');
 
         if (! is_string($ownerDeptId) || ! is_string($principalDeptId)) {
             return false;
@@ -219,7 +221,7 @@ final readonly class ScopePredicate
         }
 
         /** @var list<string> */
-        return DB::table('wsp_workspaces')
+        return $this->connections->connection()->table('wsp_workspaces')
             ->whereRaw('path <@ ?::ltree', [$ctxWorkspace->path])
             ->pluck('id')
             ->map(static fn (mixed $id): string => (string) $id)
@@ -238,11 +240,11 @@ final readonly class ScopePredicate
             return false;
         }
 
-        if (! Schema::hasTable('wsp_workspaces')) {
+        if (! $this->schema()->hasTable('wsp_workspaces')) {
             return false;
         }
 
-        $flag = DB::table('wsp_workspaces')
+        $flag = $this->connections->connection()->table('wsp_workspaces')
             ->where('id', $ctxWorkspace->id)
             ->selectRaw("settings->>'cascade_view' as cascade_view")
             ->value('cascade_view');
@@ -270,5 +272,13 @@ final readonly class ScopePredicate
         }
 
         return $q;
+    }
+
+    private function schema(): SchemaBuilder
+    {
+        /** @var Connection */
+        $connection = $this->connections->connection();
+
+        return $connection->getSchemaBuilder();
     }
 }

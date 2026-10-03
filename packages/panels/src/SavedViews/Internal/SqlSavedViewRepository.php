@@ -18,9 +18,9 @@ use CoreX\Panels\SavedViews\Data\ViewScope;
 use CoreX\Panels\SavedViews\Data\ViewSubject;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\DatabaseManager;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
+use Psr\Clock\ClockInterface;
 use RuntimeException;
 
 /** @internal */
@@ -30,8 +30,9 @@ final class SqlSavedViewRepository implements SavedViewRepository
         private readonly ViewSchemaProvider $schemas,
         private readonly ViewAccessPolicy $policy,
         private readonly ViewConfigValidator $validator,
-        private readonly ?CoreOptions $options = null,
-        private readonly ?DatabaseManager $database = null,
+        private readonly CoreOptions $options,
+        private readonly DatabaseManager $database,
+        private readonly ClockInterface $clock,
     ) {}
 
     public function viewsFor(ViewContext $context, ViewScope $scope): array
@@ -146,7 +147,7 @@ final class SqlSavedViewRepository implements SavedViewRepository
      */
     private function payload(ViewContext $context, SaveViewInput $input, string $schemaVersion, string $scopeKey, string $id, string $revision, bool $isDefault, array $normalized): array
     {
-        $now = now();
+        $now = $this->clock->now();
 
         return ['id' => $id, 'entity_code' => $input->scope->entityHandle, 'workspace_id' => $input->scope->workspaceId, 'owner_kind' => $input->scope->ownerKind, 'owner_id' => $input->scope->ownerId, 'scope_key' => $scopeKey, 'kind' => $input->kind, 'name' => json_encode($input->localizedName, JSON_THROW_ON_ERROR), 'config' => json_encode(JsonDocuments::map($input->config), JSON_THROW_ON_ERROR), 'schema_version' => $schemaVersion, 'revision' => $revision, 'is_default' => $isDefault, 'default_scope_key' => $isDefault ? $scopeKey : null, 'position' => 0, 'created_by' => $context->actorId ?? $context->actorKind, 'created_at' => $now, 'updated_at' => $now];
     }
@@ -198,21 +199,11 @@ final class SqlSavedViewRepository implements SavedViewRepository
 
     private function resolvedOptions(): CoreOptions
     {
-        return $this->options ?? app(CoreOptions::class);
+        return $this->options;
     }
 
     private function manager(): DatabaseManager
     {
-        if ($this->database instanceof DatabaseManager) {
-            return $this->database;
-        }
-
-        $resolved = DB::getFacadeRoot();
-
-        if (! $resolved instanceof DatabaseManager) {
-            throw new RuntimeException('Database manager is not available.');
-        }
-
-        return $resolved;
+        return $this->database;
     }
 }

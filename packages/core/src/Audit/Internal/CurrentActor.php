@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Audit\Internal;
 
+use Closure;
 use CoreX\Audit\Enums\ActorType;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Data\ImpersonationState;
+use Illuminate\Contracts\Auth\Factory as AuthFactory;
+use Illuminate\Http\Request;
 
 /**
  * Actor/request snapshot for an audit entry built outside a queue worker
@@ -21,34 +24,41 @@ use CoreX\Context\Data\ImpersonationState;
  */
 final class CurrentActor
 {
-    public static function type(): ActorType
+    /** @param  Closure(): ?Request  $request  the request of the running cycle, null in console or without a request. */
+    public function __construct(
+        private readonly AuthFactory $auth,
+        private readonly ImpersonationService $impersonation,
+        private readonly Closure $request,
+    ) {}
+
+    public function type(): ActorType
     {
-        if (self::state() !== null) {
+        if ($this->state() !== null) {
             return ActorType::Support;
         }
 
-        return auth()->check() ? ActorType::User : ActorType::System;
+        return $this->auth->guard()->check() ? ActorType::User : ActorType::System;
     }
 
-    public static function id(): ?string
+    public function id(): ?string
     {
-        $state = self::state();
+        $state = $this->state();
 
         if ($state !== null) {
             return $state->staffIdentityId;
         }
 
-        $user = auth()->user();
+        $user = $this->auth->guard()->user();
 
         return $user !== null ? (string) $user->getAuthIdentifier() : null;
     }
 
     /** @return array<string, mixed> */
-    public static function context(): array
+    public function context(): array
     {
         $context = [];
 
-        $state = self::state();
+        $state = $this->state();
 
         if ($state !== null) {
             $context['impersonation'] = [
@@ -58,11 +68,11 @@ final class CurrentActor
             ];
         }
 
-        if (app()->runningInConsole() || ! app()->bound('request')) {
+        $request = ($this->request)();
+
+        if ($request === null) {
             return $context;
         }
-
-        $request = request();
 
         return array_filter([
             ...$context,
@@ -72,8 +82,8 @@ final class CurrentActor
         ], static fn (mixed $value): bool => $value !== null);
     }
 
-    private static function state(): ?ImpersonationState
+    private function state(): ?ImpersonationState
     {
-        return app(ImpersonationService::class)->state();
+        return $this->impersonation->state();
     }
 }

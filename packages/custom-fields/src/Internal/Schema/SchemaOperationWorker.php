@@ -15,6 +15,7 @@ use DateInterval;
 use DateTimeImmutable;
 use Exception;
 use Illuminate\Database\ConnectionInterface;
+use Psr\Clock\ClockInterface;
 use RuntimeException;
 use Throwable;
 
@@ -24,6 +25,7 @@ final readonly class SchemaOperationWorker
         private ConnectionInterface $connection,
         private AttributeTables $tables,
         private DataScopeAuthorizer $authorizer,
+        private readonly ClockInterface $clock,
     ) {}
 
     public function run(DataScope $scope, OperationRef $operation): void
@@ -38,13 +40,13 @@ final readonly class SchemaOperationWorker
             $this->connection->table($this->tables->schemaOperations)->where('id', $operation->id)->update([
                 'status' => 'verified',
                 'error_code' => null,
-                'finished_at' => now(),
+                'finished_at' => $this->clock->now(),
             ]);
         } catch (Throwable $exception) {
             $this->connection->table($this->tables->schemaOperations)->where('id', $operation->id)->update([
                 'status' => 'failed',
                 'error_code' => 'ddl_execution_failed',
-                'finished_at' => now(),
+                'finished_at' => $this->clock->now(),
             ]);
 
             throw $exception;
@@ -79,7 +81,7 @@ final readonly class SchemaOperationWorker
             $operations->where('id', $operation->id)->update([
                 'status' => 'running',
                 'attempts' => $row->attempts + 1,
-                'started_at' => now(),
+                'started_at' => $this->clock->now(),
                 'error_code' => null,
             ]);
 
@@ -149,7 +151,7 @@ final readonly class SchemaOperationWorker
             throw new RuntimeException('Schema retirement date is invalid.', previous: $exception);
         }
 
-        if ($retired->add(new DateInterval('P30D')) > new DateTimeImmutable) {
+        if ($retired->add(new DateInterval('P30D')) > $this->clock->now()) {
             throw new RuntimeException('Managed index retirement grace period has not elapsed.');
         }
 

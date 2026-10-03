@@ -19,7 +19,7 @@ final class ApiSchemaBindingsRegistrar implements PackageRegistrar
     #[Override]
     public function register(Application $app): void
     {
-        $app->singleton(ApiSchemaRegistrar::class, static fn (Application $app): ApiSchemaRegistrar => ApiSchemaRegistrar::fromSchema(
+        $app->scoped(ApiSchemaRegistrar::class, static fn (Application $app): ApiSchemaRegistrar => ApiSchemaRegistrar::fromSchema(
             $app->make(Repository::class)->get('corex-operations.schema'),
             $app->make(DatabaseManager::class),
         ));
