@@ -1,0 +1,326 @@
+{
+  "contract": "execution-sheet/v1",
+  "path": "roadmap.md",
+  "rows": [
+    {
+      "batch_id": "B00-A",
+      "items": [
+        "P00.1",
+        "P00.2",
+        "P00.3"
+      ],
+      "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P00.1 P00.2 P00.3",
+      "route": {
+        "model_class": "frontier",
+        "effort": "high"
+      },
+      "review": "full",
+      "recommended": true
+    },
+    {
+      "batch_id": "solo",
+      "items": [
+        "P01.1"
+      ],
+      "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P01.1",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "review": "full",
+      "recommended": true
+    },
+    {
+      "batch_id": "B01-B",
+      "items": [
+        "P01.2",
+        "P01.3"
+      ],
+      "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P01.2 P01.3",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "review": "full",
+      "recommended": true
+    },
+    {
+      "batch_id": "solo",
+      "items": [
+        "P01.4"
+      ],
+      "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P01.4",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "review": "full",
+      "recommended": true
+    },
+    {
+      "batch_id": "B02-A",
+      "items": [
+        "P02.1",
+        "P02.2"
+      ],
+      "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P02.1 P02.2",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "review": "full",
+      "recommended": true
+    },
+    {
+      "batch_id": "solo",
+      "items": [
+        "P02.3"
+      ],
+      "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P02.3",
+      "route": {
+        "model_class": "implementation",
+        "effort": "xhigh"
+      },
+      "review": "full",
+      "recommended": true
+    },
+    {
+      "batch_id": "solo",
+      "items": [
+        "P02.4"
+      ],
+      "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P02.4",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "review": "full",
+      "recommended": true
+    },
+    {
+      "batch_id": "solo",
+      "items": [
+        "P03.1"
+      ],
+      "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P03.1",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "review": "full",
+      "recommended": true
+    },
+    {
+      "batch_id": "solo",
+      "items": [
+        "P03.2"
+      ],
+      "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P03.2",
+      "route": {
+        "model_class": "implementation",
+        "effort": "xhigh"
+      },
+      "review": "full",
+      "recommended": true
+    },
+    {
+      "batch_id": "solo",
+      "items": [
+        "P04.1"
+      ],
+      "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P04.1",
+      "route": {
+        "model_class": "frontier",
+        "effort": "high"
+      },
+      "review": "full",
+      "recommended": true
+    },
+    {
+      "batch_id": "solo",
+      "items": [
+        "P04.2"
+      ],
+      "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P04.2",
+      "route": {
+        "model_class": "frontier",
+        "effort": "high"
+      },
+      "review": "full",
+      "recommended": true
+    },
+    {
+      "batch_id": "solo",
+      "items": [
+        "P04.3"
+      ],
+      "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P04.3",
+      "route": {
+        "model_class": "frontier",
+        "effort": "high"
+      },
+      "review": "full",
+      "recommended": true
+    },
+    {
+      "batch_id": "solo",
+      "items": [
+        "P04.4"
+      ],
+      "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P04.4",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "review": "full",
+      "recommended": true
+    },
+    {
+      "batch_id": "solo",
+      "items": [
+        "P10.1"
+      ],
+      "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P10.1",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "review": "light",
+      "recommended": true
+    },
+    {
+      "batch_id": "solo",
+      "items": [
+        "P10.2"
+      ],
+      "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P10.2",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "review": "full",
+      "recommended": true
+    },
+    {
+      "batch_id": "solo",
+      "items": [
+        "P10.3"
+      ],
+      "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P10.3",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "review": "full",
+      "recommended": true
+    },
+    {
+      "batch_id": "solo",
+      "items": [
+        "P10.4"
+      ],
+      "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P10.4",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "review": "light",
+      "recommended": true
+    },
+    {
+      "batch_id": "B05-A",
+      "items": [
+        "P05.1",
+        "P05.2"
+      ],
+      "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P05.1 P05.2",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "review": "light",
+      "recommended": true
+    },
+    {
+      "batch_id": "solo",
+      "items": [
+        "P05.3"
+      ],
+      "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P05.3",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "review": "full",
+      "recommended": true
+    },
+    {
+      "batch_id": "solo",
+      "items": [
+        "P05.4"
+      ],
+      "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P05.4",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "review": "light",
+      "recommended": true
+    },
+    {
+      "batch_id": "B06-A",
+      "items": [
+        "P06.1",
+        "P06.2"
+      ],
+      "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P06.1 P06.2",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "review": "light",
+      "recommended": true
+    },
+    {
+      "batch_id": "solo",
+      "items": [
+        "P06.3"
+      ],
+      "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P06.3",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "review": "light",
+      "recommended": true
+    },
+    {
+      "batch_id": "solo",
+      "items": [
+        "P06.4"
+      ],
+      "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P06.4",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "review": "light",
+      "recommended": true
+    },
+    {
+      "batch_id": "solo",
+      "items": [
+        "P06.5"
+      ],
+      "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P06.5",
+      "route": {
+        "model_class": "frontier",
+        "effort": "high"
+      },
+      "review": "none",
+      "recommended": true
+    }
+  ],
+  "errors": [],
+  "complete": true
+}

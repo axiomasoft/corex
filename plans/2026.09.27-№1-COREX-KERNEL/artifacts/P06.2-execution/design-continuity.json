@@ -1,0 +1,11 @@
+{
+  "outcome": "continue-root",
+  "reason": "context-telemetry-unavailable",
+  "evidence": [
+    "batch:ee3d66d8799b016c2581e0ad1093347eb9a2f5f02674ef9cd9a6f5a854e1671a",
+    "loaded-inputs:reusable",
+    "cold-start-cost:0"
+  ],
+  "runnable": true,
+  "schema_version": "session-continuity-decision/v1"
+}

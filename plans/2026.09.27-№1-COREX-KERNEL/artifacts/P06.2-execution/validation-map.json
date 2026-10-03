@@ -1,0 +1,60 @@
+{
+  "criteria": {
+    "E19": [
+      "contract-guard.log",
+      "contract-guard-base.log"
+    ],
+    "E20": [
+      "retired-error-literals.log",
+      "retired-outcome-constants.log"
+    ],
+    "E21": [
+      "taxonomy-tests.log",
+      "tools-tests.log",
+      "root-consumer-tests.log"
+    ],
+    "E22": [
+      "negative-denied.json",
+      "negative-denied.log",
+      "analyse-restored.log"
+    ],
+    "E23": [
+      "tools-tests.log",
+      "operations-tests.log"
+    ],
+    "E24": [
+      "error-registry.json"
+    ],
+    "E25": [
+      "empty-directories.json",
+      "module-layout.log"
+    ],
+    "E26": [
+      "php-api-write1.json",
+      "php-api-write2.json",
+      "api-generation-first.json",
+      "php-api-check.json",
+      "bc-check-tools-final.log",
+      "../P06.1-execution/bc-check-final.log",
+      "golden-semantic-delta.json",
+      "golden-check.log",
+      "bc-allowance-controls.json"
+    ],
+    "E27": [
+      "lint-clean-candidate.log",
+      "lint-clean-checkout.json",
+      "analyse-restored.log",
+      "anti-weakening.log"
+    ],
+    "E28": [
+      "completion.md",
+      "grok-review.json",
+      "grok-recheck.json",
+      "review-repair.json",
+      "grok-design-review.json"
+    ]
+  },
+  "bc_method": "current affected tools check + P06.1 full unchanged cohort",
+  "lint_method": "exact clean product candidate, preserved foreign baseline prototypes",
+  "review_model": "grok-4.7-high"
+}

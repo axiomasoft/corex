@@ -1,0 +1,9 @@
+{
+  "command": [
+    "/usr/bin/php8.4",
+    "plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P06-design-audit/http-415-registry.php"
+  ],
+  "exit_code": 0,
+  "stdout": "registry: CoreX\\Errors\\Exceptions\\ProblemRegistryException: ERROR-INVALID-DEFINITION operations.unsupported_media_type\nplanned definition category: unsupported\nplanned occurrence category: validation\n",
+  "stderr": ""
+}

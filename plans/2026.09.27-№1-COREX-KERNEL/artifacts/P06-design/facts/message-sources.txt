@@ -1,0 +1,6 @@
+# MessageEnvelope producers (source values must be URI-references, D90 p.2)
+packages/core/src/Messaging/Internal/SqlOutboxRelay.php:182:                source: 'corex/relay',
+packages/custom-fields/src/Internal/Integration/AttributeMessageTranslator.php:20:            source: 'axiomasoft/corex-custom-fields',
+packages/intl/src/Territory/Internal/Address/FixtureAddressSuggestProvider.php:101:                source: 'fixture-address/1',
+packages/intl/src/Territory/Internal/Address/FixtureAddressSuggestProvider.php:109:            source: 'fixture-address/1',
+packages/intl/src/Territory/Internal/Address/FixtureAddressSuggestProvider.php:92:                source: 'fixture-address/1',

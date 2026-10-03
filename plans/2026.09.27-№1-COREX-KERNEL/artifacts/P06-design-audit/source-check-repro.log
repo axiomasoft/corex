@@ -1,0 +1,6 @@
+{"source":"axiomasoft/corex-custom-fields","passes_designed_check":true}
+{"source":"has space","passes_designed_check":false}
+{"source":"%","passes_designed_check":true}
+{"source":"%zz","passes_designed_check":true}
+{"source":"1:foo","passes_designed_check":true}
+{"source":"http://[not-ip]/","passes_designed_check":true}

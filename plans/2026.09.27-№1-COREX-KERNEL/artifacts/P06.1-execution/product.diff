@@ -1,0 +1,3523 @@
+diff --git a/api/v1/errors.json b/api/v1/errors.json
+index 0d6850f9..672da374 100644
+--- a/api/v1/errors.json
++++ b/api/v1/errors.json
+@@ -507,6 +507,14 @@
+         "path": null,
+         "retryable": false
+     },
++    {
++        "category": "validation",
++        "code": "operations.input_envelope_invalid",
++        "detail_keys": [],
++        "owner": "axiomasoft/corex-operations",
++        "path": null,
++        "retryable": false
++    },
+     {
+         "category": "validation",
+         "code": "operations.invalid_request",
+@@ -595,6 +603,16 @@
+         "path": null,
+         "retryable": false
+     },
++    {
++        "category": "validation",
++        "code": "operations.undeclared_fields",
++        "detail_keys": [
++            "fields"
++        ],
++        "owner": "axiomasoft/corex-operations",
++        "path": null,
++        "retryable": false
++    },
+     {
+         "category": "validation",
+         "code": "operations.unknown_message_contract",
+@@ -603,6 +621,14 @@
+         "path": null,
+         "retryable": false
+     },
++    {
++        "category": "validation",
++        "code": "operations.unsupported_media_type",
++        "detail_keys": [],
++        "owner": "axiomasoft/corex-operations",
++        "path": null,
++        "retryable": false
++    },
+     {
+         "category": "validation",
+         "code": "operations.validation_failed",
+diff --git a/api/v1/manifest.json b/api/v1/manifest.json
+index 1e46bef4..e8c879f0 100644
+--- a/api/v1/manifest.json
++++ b/api/v1/manifest.json
+@@ -1,8 +1,8 @@
+ {
+-    "contract_fingerprint": "39ab05f3c70d1690f77ef5306e43d0f867eddf7c75ea319c00b2dc11f9107075",
++    "contract_fingerprint": "3f6ef218496667bace3c00a460f94808421225e45f9f20ff5de4242c386b8361",
+     "files": {
+-        "errors.json": "69ef09cd7f0427d99445a7ba6cfc144b705e466d777ac50fa464654ecd4c8557",
+-        "openapi.json": "a85b8d53f72e41bd8e2fd957d865b8f7972a565ba63bf6ff62c1ae68daf27fc3",
++        "errors.json": "65d537b90a17e5a95a60d8687cb8f169068743c1d6f38e96e56f39599baace38",
++        "openapi.json": "c7259bd5e56abb59fa255c201fcf14023a9de78e321decffd400f926ac70c286",
+         "operations.json": "76e3e2e445b06bd36f6371a6f4675ba492d2504d0a7ff555255ada1634af2814",
+         "webhooks.json": "af380203beaa1accbee1296510329991e58adba88c17d54e2a9a3d1ca4759a65"
+     },
+diff --git a/api/v1/openapi.json b/api/v1/openapi.json
+index 06992cd9..b6268265 100644
+--- a/api/v1/openapi.json
++++ b/api/v1/openapi.json
+@@ -197,9 +197,6 @@
+                                         "data": {
+                                             "type": "object"
+                                         },
+-                                        "error": {
+-                                            "type": "null"
+-                                        },
+                                         "meta": {
+                                             "properties": {
+                                                 "api_version": {
+@@ -223,7 +220,6 @@
+                                     },
+                                     "required": [
+                                         "data",
+-                                        "error",
+                                         "meta"
+                                     ],
+                                     "type": "object"
+@@ -234,75 +230,6 @@
+                     },
+                     "401": {
+                         "content": {
+-                            "application/json": {
+-                                "schema": {
+-                                    "properties": {
+-                                        "data": {
+-                                            "type": "null"
+-                                        },
+-                                        "error": {
+-                                            "properties": {
+-                                                "category": {
+-                                                    "type": "string"
+-                                                },
+-                                                "code": {
+-                                                    "type": "string"
+-                                                },
+-                                                "details": {
+-                                                    "type": "object"
+-                                                },
+-                                                "message": {
+-                                                    "type": "string"
+-                                                },
+-                                                "path": {
+-                                                    "type": [
+-                                                        "string",
+-                                                        "null"
+-                                                    ]
+-                                                },
+-                                                "retryable": {
+-                                                    "type": "boolean"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "code",
+-                                                "message",
+-                                                "category",
+-                                                "path",
+-                                                "retryable",
+-                                                "details"
+-                                            ],
+-                                            "type": "object"
+-                                        },
+-                                        "meta": {
+-                                            "properties": {
+-                                                "api_version": {
+-                                                    "const": "v1",
+-                                                    "type": "string"
+-                                                },
+-                                                "correlation_id": {
+-                                                    "type": "string"
+-                                                },
+-                                                "request_id": {
+-                                                    "type": "string"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "request_id",
+-                                                "correlation_id",
+-                                                "api_version"
+-                                            ],
+-                                            "type": "object"
+-                                        }
+-                                    },
+-                                    "required": [
+-                                        "data",
+-                                        "error",
+-                                        "meta"
+-                                    ],
+-                                    "type": "object"
+-                                }
+-                            },
+                             "application/problem+json": {
+                                 "schema": {
+                                     "properties": {
+@@ -325,10 +252,6 @@
+                                         "details": {
+                                             "type": "object"
+                                         },
+-                                        "instance": {
+-                                            "format": "uri",
+-                                            "type": "string"
+-                                        },
+                                         "path": {
+                                             "type": [
+                                                 "string",
+@@ -357,10 +280,8 @@
+                                         "title",
+                                         "status",
+                                         "detail",
+-                                        "instance",
+                                         "code",
+                                         "category",
+-                                        "path",
+                                         "retryable",
+                                         "details",
+                                         "request_id",
+@@ -375,75 +296,6 @@
+                     },
+                     "403": {
+                         "content": {
+-                            "application/json": {
+-                                "schema": {
+-                                    "properties": {
+-                                        "data": {
+-                                            "type": "null"
+-                                        },
+-                                        "error": {
+-                                            "properties": {
+-                                                "category": {
+-                                                    "type": "string"
+-                                                },
+-                                                "code": {
+-                                                    "type": "string"
+-                                                },
+-                                                "details": {
+-                                                    "type": "object"
+-                                                },
+-                                                "message": {
+-                                                    "type": "string"
+-                                                },
+-                                                "path": {
+-                                                    "type": [
+-                                                        "string",
+-                                                        "null"
+-                                                    ]
+-                                                },
+-                                                "retryable": {
+-                                                    "type": "boolean"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "code",
+-                                                "message",
+-                                                "category",
+-                                                "path",
+-                                                "retryable",
+-                                                "details"
+-                                            ],
+-                                            "type": "object"
+-                                        },
+-                                        "meta": {
+-                                            "properties": {
+-                                                "api_version": {
+-                                                    "const": "v1",
+-                                                    "type": "string"
+-                                                },
+-                                                "correlation_id": {
+-                                                    "type": "string"
+-                                                },
+-                                                "request_id": {
+-                                                    "type": "string"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "request_id",
+-                                                "correlation_id",
+-                                                "api_version"
+-                                            ],
+-                                            "type": "object"
+-                                        }
+-                                    },
+-                                    "required": [
+-                                        "data",
+-                                        "error",
+-                                        "meta"
+-                                    ],
+-                                    "type": "object"
+-                                }
+-                            },
+                             "application/problem+json": {
+                                 "schema": {
+                                     "properties": {
+@@ -466,10 +318,6 @@
+                                         "details": {
+                                             "type": "object"
+                                         },
+-                                        "instance": {
+-                                            "format": "uri",
+-                                            "type": "string"
+-                                        },
+                                         "path": {
+                                             "type": [
+                                                 "string",
+@@ -498,10 +346,8 @@
+                                         "title",
+                                         "status",
+                                         "detail",
+-                                        "instance",
+                                         "code",
+                                         "category",
+-                                        "path",
+                                         "retryable",
+                                         "details",
+                                         "request_id",
+@@ -516,75 +362,6 @@
+                     },
+                     "404": {
+                         "content": {
+-                            "application/json": {
+-                                "schema": {
+-                                    "properties": {
+-                                        "data": {
+-                                            "type": "null"
+-                                        },
+-                                        "error": {
+-                                            "properties": {
+-                                                "category": {
+-                                                    "type": "string"
+-                                                },
+-                                                "code": {
+-                                                    "type": "string"
+-                                                },
+-                                                "details": {
+-                                                    "type": "object"
+-                                                },
+-                                                "message": {
+-                                                    "type": "string"
+-                                                },
+-                                                "path": {
+-                                                    "type": [
+-                                                        "string",
+-                                                        "null"
+-                                                    ]
+-                                                },
+-                                                "retryable": {
+-                                                    "type": "boolean"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "code",
+-                                                "message",
+-                                                "category",
+-                                                "path",
+-                                                "retryable",
+-                                                "details"
+-                                            ],
+-                                            "type": "object"
+-                                        },
+-                                        "meta": {
+-                                            "properties": {
+-                                                "api_version": {
+-                                                    "const": "v1",
+-                                                    "type": "string"
+-                                                },
+-                                                "correlation_id": {
+-                                                    "type": "string"
+-                                                },
+-                                                "request_id": {
+-                                                    "type": "string"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "request_id",
+-                                                "correlation_id",
+-                                                "api_version"
+-                                            ],
+-                                            "type": "object"
+-                                        }
+-                                    },
+-                                    "required": [
+-                                        "data",
+-                                        "error",
+-                                        "meta"
+-                                    ],
+-                                    "type": "object"
+-                                }
+-                            },
+                             "application/problem+json": {
+                                 "schema": {
+                                     "properties": {
+@@ -607,10 +384,6 @@
+                                         "details": {
+                                             "type": "object"
+                                         },
+-                                        "instance": {
+-                                            "format": "uri",
+-                                            "type": "string"
+-                                        },
+                                         "path": {
+                                             "type": [
+                                                 "string",
+@@ -639,10 +412,8 @@
+                                         "title",
+                                         "status",
+                                         "detail",
+-                                        "instance",
+                                         "code",
+                                         "category",
+-                                        "path",
+                                         "retryable",
+                                         "details",
+                                         "request_id",
+@@ -655,77 +426,8 @@
+                         },
+                         "description": "API error"
+                     },
+-                    "406": {
++                    "409": {
+                         "content": {
+-                            "application/json": {
+-                                "schema": {
+-                                    "properties": {
+-                                        "data": {
+-                                            "type": "null"
+-                                        },
+-                                        "error": {
+-                                            "properties": {
+-                                                "category": {
+-                                                    "type": "string"
+-                                                },
+-                                                "code": {
+-                                                    "type": "string"
+-                                                },
+-                                                "details": {
+-                                                    "type": "object"
+-                                                },
+-                                                "message": {
+-                                                    "type": "string"
+-                                                },
+-                                                "path": {
+-                                                    "type": [
+-                                                        "string",
+-                                                        "null"
+-                                                    ]
+-                                                },
+-                                                "retryable": {
+-                                                    "type": "boolean"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "code",
+-                                                "message",
+-                                                "category",
+-                                                "path",
+-                                                "retryable",
+-                                                "details"
+-                                            ],
+-                                            "type": "object"
+-                                        },
+-                                        "meta": {
+-                                            "properties": {
+-                                                "api_version": {
+-                                                    "const": "v1",
+-                                                    "type": "string"
+-                                                },
+-                                                "correlation_id": {
+-                                                    "type": "string"
+-                                                },
+-                                                "request_id": {
+-                                                    "type": "string"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "request_id",
+-                                                "correlation_id",
+-                                                "api_version"
+-                                            ],
+-                                            "type": "object"
+-                                        }
+-                                    },
+-                                    "required": [
+-                                        "data",
+-                                        "error",
+-                                        "meta"
+-                                    ],
+-                                    "type": "object"
+-                                }
+-                            },
+                             "application/problem+json": {
+                                 "schema": {
+                                     "properties": {
+@@ -748,10 +450,6 @@
+                                         "details": {
+                                             "type": "object"
+                                         },
+-                                        "instance": {
+-                                            "format": "uri",
+-                                            "type": "string"
+-                                        },
+                                         "path": {
+                                             "type": [
+                                                 "string",
+@@ -780,10 +478,8 @@
+                                         "title",
+                                         "status",
+                                         "detail",
+-                                        "instance",
+                                         "code",
+                                         "category",
+-                                        "path",
+                                         "retryable",
+                                         "details",
+                                         "request_id",
+@@ -796,77 +492,8 @@
+                         },
+                         "description": "API error"
+                     },
+-                    "409": {
++                    "415": {
+                         "content": {
+-                            "application/json": {
+-                                "schema": {
+-                                    "properties": {
+-                                        "data": {
+-                                            "type": "null"
+-                                        },
+-                                        "error": {
+-                                            "properties": {
+-                                                "category": {
+-                                                    "type": "string"
+-                                                },
+-                                                "code": {
+-                                                    "type": "string"
+-                                                },
+-                                                "details": {
+-                                                    "type": "object"
+-                                                },
+-                                                "message": {
+-                                                    "type": "string"
+-                                                },
+-                                                "path": {
+-                                                    "type": [
+-                                                        "string",
+-                                                        "null"
+-                                                    ]
+-                                                },
+-                                                "retryable": {
+-                                                    "type": "boolean"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "code",
+-                                                "message",
+-                                                "category",
+-                                                "path",
+-                                                "retryable",
+-                                                "details"
+-                                            ],
+-                                            "type": "object"
+-                                        },
+-                                        "meta": {
+-                                            "properties": {
+-                                                "api_version": {
+-                                                    "const": "v1",
+-                                                    "type": "string"
+-                                                },
+-                                                "correlation_id": {
+-                                                    "type": "string"
+-                                                },
+-                                                "request_id": {
+-                                                    "type": "string"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "request_id",
+-                                                "correlation_id",
+-                                                "api_version"
+-                                            ],
+-                                            "type": "object"
+-                                        }
+-                                    },
+-                                    "required": [
+-                                        "data",
+-                                        "error",
+-                                        "meta"
+-                                    ],
+-                                    "type": "object"
+-                                }
+-                            },
+                             "application/problem+json": {
+                                 "schema": {
+                                     "properties": {
+@@ -889,10 +516,6 @@
+                                         "details": {
+                                             "type": "object"
+                                         },
+-                                        "instance": {
+-                                            "format": "uri",
+-                                            "type": "string"
+-                                        },
+                                         "path": {
+                                             "type": [
+                                                 "string",
+@@ -921,10 +544,8 @@
+                                         "title",
+                                         "status",
+                                         "detail",
+-                                        "instance",
+                                         "code",
+                                         "category",
+-                                        "path",
+                                         "retryable",
+                                         "details",
+                                         "request_id",
+@@ -939,76 +560,7 @@
+                     },
+                     "422": {
+                         "content": {
+-                            "application/json": {
+-                                "schema": {
+-                                    "properties": {
+-                                        "data": {
+-                                            "type": "null"
+-                                        },
+-                                        "error": {
+-                                            "properties": {
+-                                                "category": {
+-                                                    "type": "string"
+-                                                },
+-                                                "code": {
+-                                                    "type": "string"
+-                                                },
+-                                                "details": {
+-                                                    "type": "object"
+-                                                },
+-                                                "message": {
+-                                                    "type": "string"
+-                                                },
+-                                                "path": {
+-                                                    "type": [
+-                                                        "string",
+-                                                        "null"
+-                                                    ]
+-                                                },
+-                                                "retryable": {
+-                                                    "type": "boolean"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "code",
+-                                                "message",
+-                                                "category",
+-                                                "path",
+-                                                "retryable",
+-                                                "details"
+-                                            ],
+-                                            "type": "object"
+-                                        },
+-                                        "meta": {
+-                                            "properties": {
+-                                                "api_version": {
+-                                                    "const": "v1",
+-                                                    "type": "string"
+-                                                },
+-                                                "correlation_id": {
+-                                                    "type": "string"
+-                                                },
+-                                                "request_id": {
+-                                                    "type": "string"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "request_id",
+-                                                "correlation_id",
+-                                                "api_version"
+-                                            ],
+-                                            "type": "object"
+-                                        }
+-                                    },
+-                                    "required": [
+-                                        "data",
+-                                        "error",
+-                                        "meta"
+-                                    ],
+-                                    "type": "object"
+-                                }
+-                            },
+-                            "application/problem+json": {
++                            "application/problem+json": {
+                                 "schema": {
+                                     "properties": {
+                                         "api_version": {
+@@ -1030,10 +582,6 @@
+                                         "details": {
+                                             "type": "object"
+                                         },
+-                                        "instance": {
+-                                            "format": "uri",
+-                                            "type": "string"
+-                                        },
+                                         "path": {
+                                             "type": [
+                                                 "string",
+@@ -1062,10 +610,8 @@
+                                         "title",
+                                         "status",
+                                         "detail",
+-                                        "instance",
+                                         "code",
+                                         "category",
+-                                        "path",
+                                         "retryable",
+                                         "details",
+                                         "request_id",
+@@ -1080,75 +626,6 @@
+                     },
+                     "500": {
+                         "content": {
+-                            "application/json": {
+-                                "schema": {
+-                                    "properties": {
+-                                        "data": {
+-                                            "type": "null"
+-                                        },
+-                                        "error": {
+-                                            "properties": {
+-                                                "category": {
+-                                                    "type": "string"
+-                                                },
+-                                                "code": {
+-                                                    "type": "string"
+-                                                },
+-                                                "details": {
+-                                                    "type": "object"
+-                                                },
+-                                                "message": {
+-                                                    "type": "string"
+-                                                },
+-                                                "path": {
+-                                                    "type": [
+-                                                        "string",
+-                                                        "null"
+-                                                    ]
+-                                                },
+-                                                "retryable": {
+-                                                    "type": "boolean"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "code",
+-                                                "message",
+-                                                "category",
+-                                                "path",
+-                                                "retryable",
+-                                                "details"
+-                                            ],
+-                                            "type": "object"
+-                                        },
+-                                        "meta": {
+-                                            "properties": {
+-                                                "api_version": {
+-                                                    "const": "v1",
+-                                                    "type": "string"
+-                                                },
+-                                                "correlation_id": {
+-                                                    "type": "string"
+-                                                },
+-                                                "request_id": {
+-                                                    "type": "string"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "request_id",
+-                                                "correlation_id",
+-                                                "api_version"
+-                                            ],
+-                                            "type": "object"
+-                                        }
+-                                    },
+-                                    "required": [
+-                                        "data",
+-                                        "error",
+-                                        "meta"
+-                                    ],
+-                                    "type": "object"
+-                                }
+-                            },
+                             "application/problem+json": {
+                                 "schema": {
+                                     "properties": {
+@@ -1171,10 +648,6 @@
+                                         "details": {
+                                             "type": "object"
+                                         },
+-                                        "instance": {
+-                                            "format": "uri",
+-                                            "type": "string"
+-                                        },
+                                         "path": {
+                                             "type": [
+                                                 "string",
+@@ -1203,10 +676,8 @@
+                                         "title",
+                                         "status",
+                                         "detail",
+-                                        "instance",
+                                         "code",
+                                         "category",
+-                                        "path",
+                                         "retryable",
+                                         "details",
+                                         "request_id",
+@@ -1265,9 +736,6 @@
+                                         "data": {
+                                             "type": "object"
+                                         },
+-                                        "error": {
+-                                            "type": "null"
+-                                        },
+                                         "meta": {
+                                             "properties": {
+                                                 "api_version": {
+@@ -1291,7 +759,6 @@
+                                     },
+                                     "required": [
+                                         "data",
+-                                        "error",
+                                         "meta"
+                                     ],
+                                     "type": "object"
+@@ -1302,75 +769,6 @@
+                     },
+                     "401": {
+                         "content": {
+-                            "application/json": {
+-                                "schema": {
+-                                    "properties": {
+-                                        "data": {
+-                                            "type": "null"
+-                                        },
+-                                        "error": {
+-                                            "properties": {
+-                                                "category": {
+-                                                    "type": "string"
+-                                                },
+-                                                "code": {
+-                                                    "type": "string"
+-                                                },
+-                                                "details": {
+-                                                    "type": "object"
+-                                                },
+-                                                "message": {
+-                                                    "type": "string"
+-                                                },
+-                                                "path": {
+-                                                    "type": [
+-                                                        "string",
+-                                                        "null"
+-                                                    ]
+-                                                },
+-                                                "retryable": {
+-                                                    "type": "boolean"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "code",
+-                                                "message",
+-                                                "category",
+-                                                "path",
+-                                                "retryable",
+-                                                "details"
+-                                            ],
+-                                            "type": "object"
+-                                        },
+-                                        "meta": {
+-                                            "properties": {
+-                                                "api_version": {
+-                                                    "const": "v1",
+-                                                    "type": "string"
+-                                                },
+-                                                "correlation_id": {
+-                                                    "type": "string"
+-                                                },
+-                                                "request_id": {
+-                                                    "type": "string"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "request_id",
+-                                                "correlation_id",
+-                                                "api_version"
+-                                            ],
+-                                            "type": "object"
+-                                        }
+-                                    },
+-                                    "required": [
+-                                        "data",
+-                                        "error",
+-                                        "meta"
+-                                    ],
+-                                    "type": "object"
+-                                }
+-                            },
+                             "application/problem+json": {
+                                 "schema": {
+                                     "properties": {
+@@ -1393,10 +791,6 @@
+                                         "details": {
+                                             "type": "object"
+                                         },
+-                                        "instance": {
+-                                            "format": "uri",
+-                                            "type": "string"
+-                                        },
+                                         "path": {
+                                             "type": [
+                                                 "string",
+@@ -1425,10 +819,8 @@
+                                         "title",
+                                         "status",
+                                         "detail",
+-                                        "instance",
+                                         "code",
+                                         "category",
+-                                        "path",
+                                         "retryable",
+                                         "details",
+                                         "request_id",
+@@ -1443,75 +835,6 @@
+                     },
+                     "403": {
+                         "content": {
+-                            "application/json": {
+-                                "schema": {
+-                                    "properties": {
+-                                        "data": {
+-                                            "type": "null"
+-                                        },
+-                                        "error": {
+-                                            "properties": {
+-                                                "category": {
+-                                                    "type": "string"
+-                                                },
+-                                                "code": {
+-                                                    "type": "string"
+-                                                },
+-                                                "details": {
+-                                                    "type": "object"
+-                                                },
+-                                                "message": {
+-                                                    "type": "string"
+-                                                },
+-                                                "path": {
+-                                                    "type": [
+-                                                        "string",
+-                                                        "null"
+-                                                    ]
+-                                                },
+-                                                "retryable": {
+-                                                    "type": "boolean"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "code",
+-                                                "message",
+-                                                "category",
+-                                                "path",
+-                                                "retryable",
+-                                                "details"
+-                                            ],
+-                                            "type": "object"
+-                                        },
+-                                        "meta": {
+-                                            "properties": {
+-                                                "api_version": {
+-                                                    "const": "v1",
+-                                                    "type": "string"
+-                                                },
+-                                                "correlation_id": {
+-                                                    "type": "string"
+-                                                },
+-                                                "request_id": {
+-                                                    "type": "string"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "request_id",
+-                                                "correlation_id",
+-                                                "api_version"
+-                                            ],
+-                                            "type": "object"
+-                                        }
+-                                    },
+-                                    "required": [
+-                                        "data",
+-                                        "error",
+-                                        "meta"
+-                                    ],
+-                                    "type": "object"
+-                                }
+-                            },
+                             "application/problem+json": {
+                                 "schema": {
+                                     "properties": {
+@@ -1534,10 +857,6 @@
+                                         "details": {
+                                             "type": "object"
+                                         },
+-                                        "instance": {
+-                                            "format": "uri",
+-                                            "type": "string"
+-                                        },
+                                         "path": {
+                                             "type": [
+                                                 "string",
+@@ -1566,10 +885,8 @@
+                                         "title",
+                                         "status",
+                                         "detail",
+-                                        "instance",
+                                         "code",
+                                         "category",
+-                                        "path",
+                                         "retryable",
+                                         "details",
+                                         "request_id",
+@@ -1584,75 +901,6 @@
+                     },
+                     "404": {
+                         "content": {
+-                            "application/json": {
+-                                "schema": {
+-                                    "properties": {
+-                                        "data": {
+-                                            "type": "null"
+-                                        },
+-                                        "error": {
+-                                            "properties": {
+-                                                "category": {
+-                                                    "type": "string"
+-                                                },
+-                                                "code": {
+-                                                    "type": "string"
+-                                                },
+-                                                "details": {
+-                                                    "type": "object"
+-                                                },
+-                                                "message": {
+-                                                    "type": "string"
+-                                                },
+-                                                "path": {
+-                                                    "type": [
+-                                                        "string",
+-                                                        "null"
+-                                                    ]
+-                                                },
+-                                                "retryable": {
+-                                                    "type": "boolean"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "code",
+-                                                "message",
+-                                                "category",
+-                                                "path",
+-                                                "retryable",
+-                                                "details"
+-                                            ],
+-                                            "type": "object"
+-                                        },
+-                                        "meta": {
+-                                            "properties": {
+-                                                "api_version": {
+-                                                    "const": "v1",
+-                                                    "type": "string"
+-                                                },
+-                                                "correlation_id": {
+-                                                    "type": "string"
+-                                                },
+-                                                "request_id": {
+-                                                    "type": "string"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "request_id",
+-                                                "correlation_id",
+-                                                "api_version"
+-                                            ],
+-                                            "type": "object"
+-                                        }
+-                                    },
+-                                    "required": [
+-                                        "data",
+-                                        "error",
+-                                        "meta"
+-                                    ],
+-                                    "type": "object"
+-                                }
+-                            },
+                             "application/problem+json": {
+                                 "schema": {
+                                     "properties": {
+@@ -1675,10 +923,6 @@
+                                         "details": {
+                                             "type": "object"
+                                         },
+-                                        "instance": {
+-                                            "format": "uri",
+-                                            "type": "string"
+-                                        },
+                                         "path": {
+                                             "type": [
+                                                 "string",
+@@ -1707,10 +951,8 @@
+                                         "title",
+                                         "status",
+                                         "detail",
+-                                        "instance",
+                                         "code",
+                                         "category",
+-                                        "path",
+                                         "retryable",
+                                         "details",
+                                         "request_id",
+@@ -1723,77 +965,8 @@
+                         },
+                         "description": "API error"
+                     },
+-                    "406": {
++                    "409": {
+                         "content": {
+-                            "application/json": {
+-                                "schema": {
+-                                    "properties": {
+-                                        "data": {
+-                                            "type": "null"
+-                                        },
+-                                        "error": {
+-                                            "properties": {
+-                                                "category": {
+-                                                    "type": "string"
+-                                                },
+-                                                "code": {
+-                                                    "type": "string"
+-                                                },
+-                                                "details": {
+-                                                    "type": "object"
+-                                                },
+-                                                "message": {
+-                                                    "type": "string"
+-                                                },
+-                                                "path": {
+-                                                    "type": [
+-                                                        "string",
+-                                                        "null"
+-                                                    ]
+-                                                },
+-                                                "retryable": {
+-                                                    "type": "boolean"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "code",
+-                                                "message",
+-                                                "category",
+-                                                "path",
+-                                                "retryable",
+-                                                "details"
+-                                            ],
+-                                            "type": "object"
+-                                        },
+-                                        "meta": {
+-                                            "properties": {
+-                                                "api_version": {
+-                                                    "const": "v1",
+-                                                    "type": "string"
+-                                                },
+-                                                "correlation_id": {
+-                                                    "type": "string"
+-                                                },
+-                                                "request_id": {
+-                                                    "type": "string"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "request_id",
+-                                                "correlation_id",
+-                                                "api_version"
+-                                            ],
+-                                            "type": "object"
+-                                        }
+-                                    },
+-                                    "required": [
+-                                        "data",
+-                                        "error",
+-                                        "meta"
+-                                    ],
+-                                    "type": "object"
+-                                }
+-                            },
+                             "application/problem+json": {
+                                 "schema": {
+                                     "properties": {
+@@ -1816,10 +989,6 @@
+                                         "details": {
+                                             "type": "object"
+                                         },
+-                                        "instance": {
+-                                            "format": "uri",
+-                                            "type": "string"
+-                                        },
+                                         "path": {
+                                             "type": [
+                                                 "string",
+@@ -1848,10 +1017,8 @@
+                                         "title",
+                                         "status",
+                                         "detail",
+-                                        "instance",
+                                         "code",
+                                         "category",
+-                                        "path",
+                                         "retryable",
+                                         "details",
+                                         "request_id",
+@@ -1864,77 +1031,8 @@
+                         },
+                         "description": "API error"
+                     },
+-                    "409": {
++                    "415": {
+                         "content": {
+-                            "application/json": {
+-                                "schema": {
+-                                    "properties": {
+-                                        "data": {
+-                                            "type": "null"
+-                                        },
+-                                        "error": {
+-                                            "properties": {
+-                                                "category": {
+-                                                    "type": "string"
+-                                                },
+-                                                "code": {
+-                                                    "type": "string"
+-                                                },
+-                                                "details": {
+-                                                    "type": "object"
+-                                                },
+-                                                "message": {
+-                                                    "type": "string"
+-                                                },
+-                                                "path": {
+-                                                    "type": [
+-                                                        "string",
+-                                                        "null"
+-                                                    ]
+-                                                },
+-                                                "retryable": {
+-                                                    "type": "boolean"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "code",
+-                                                "message",
+-                                                "category",
+-                                                "path",
+-                                                "retryable",
+-                                                "details"
+-                                            ],
+-                                            "type": "object"
+-                                        },
+-                                        "meta": {
+-                                            "properties": {
+-                                                "api_version": {
+-                                                    "const": "v1",
+-                                                    "type": "string"
+-                                                },
+-                                                "correlation_id": {
+-                                                    "type": "string"
+-                                                },
+-                                                "request_id": {
+-                                                    "type": "string"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "request_id",
+-                                                "correlation_id",
+-                                                "api_version"
+-                                            ],
+-                                            "type": "object"
+-                                        }
+-                                    },
+-                                    "required": [
+-                                        "data",
+-                                        "error",
+-                                        "meta"
+-                                    ],
+-                                    "type": "object"
+-                                }
+-                            },
+                             "application/problem+json": {
+                                 "schema": {
+                                     "properties": {
+@@ -1957,10 +1055,6 @@
+                                         "details": {
+                                             "type": "object"
+                                         },
+-                                        "instance": {
+-                                            "format": "uri",
+-                                            "type": "string"
+-                                        },
+                                         "path": {
+                                             "type": [
+                                                 "string",
+@@ -1989,10 +1083,8 @@
+                                         "title",
+                                         "status",
+                                         "detail",
+-                                        "instance",
+                                         "code",
+                                         "category",
+-                                        "path",
+                                         "retryable",
+                                         "details",
+                                         "request_id",
+@@ -2007,75 +1099,6 @@
+                     },
+                     "422": {
+                         "content": {
+-                            "application/json": {
+-                                "schema": {
+-                                    "properties": {
+-                                        "data": {
+-                                            "type": "null"
+-                                        },
+-                                        "error": {
+-                                            "properties": {
+-                                                "category": {
+-                                                    "type": "string"
+-                                                },
+-                                                "code": {
+-                                                    "type": "string"
+-                                                },
+-                                                "details": {
+-                                                    "type": "object"
+-                                                },
+-                                                "message": {
+-                                                    "type": "string"
+-                                                },
+-                                                "path": {
+-                                                    "type": [
+-                                                        "string",
+-                                                        "null"
+-                                                    ]
+-                                                },
+-                                                "retryable": {
+-                                                    "type": "boolean"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "code",
+-                                                "message",
+-                                                "category",
+-                                                "path",
+-                                                "retryable",
+-                                                "details"
+-                                            ],
+-                                            "type": "object"
+-                                        },
+-                                        "meta": {
+-                                            "properties": {
+-                                                "api_version": {
+-                                                    "const": "v1",
+-                                                    "type": "string"
+-                                                },
+-                                                "correlation_id": {
+-                                                    "type": "string"
+-                                                },
+-                                                "request_id": {
+-                                                    "type": "string"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "request_id",
+-                                                "correlation_id",
+-                                                "api_version"
+-                                            ],
+-                                            "type": "object"
+-                                        }
+-                                    },
+-                                    "required": [
+-                                        "data",
+-                                        "error",
+-                                        "meta"
+-                                    ],
+-                                    "type": "object"
+-                                }
+-                            },
+                             "application/problem+json": {
+                                 "schema": {
+                                     "properties": {
+@@ -2098,10 +1121,6 @@
+                                         "details": {
+                                             "type": "object"
+                                         },
+-                                        "instance": {
+-                                            "format": "uri",
+-                                            "type": "string"
+-                                        },
+                                         "path": {
+                                             "type": [
+                                                 "string",
+@@ -2130,10 +1149,8 @@
+                                         "title",
+                                         "status",
+                                         "detail",
+-                                        "instance",
+                                         "code",
+                                         "category",
+-                                        "path",
+                                         "retryable",
+                                         "details",
+                                         "request_id",
+@@ -2148,75 +1165,6 @@
+                     },
+                     "500": {
+                         "content": {
+-                            "application/json": {
+-                                "schema": {
+-                                    "properties": {
+-                                        "data": {
+-                                            "type": "null"
+-                                        },
+-                                        "error": {
+-                                            "properties": {
+-                                                "category": {
+-                                                    "type": "string"
+-                                                },
+-                                                "code": {
+-                                                    "type": "string"
+-                                                },
+-                                                "details": {
+-                                                    "type": "object"
+-                                                },
+-                                                "message": {
+-                                                    "type": "string"
+-                                                },
+-                                                "path": {
+-                                                    "type": [
+-                                                        "string",
+-                                                        "null"
+-                                                    ]
+-                                                },
+-                                                "retryable": {
+-                                                    "type": "boolean"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "code",
+-                                                "message",
+-                                                "category",
+-                                                "path",
+-                                                "retryable",
+-                                                "details"
+-                                            ],
+-                                            "type": "object"
+-                                        },
+-                                        "meta": {
+-                                            "properties": {
+-                                                "api_version": {
+-                                                    "const": "v1",
+-                                                    "type": "string"
+-                                                },
+-                                                "correlation_id": {
+-                                                    "type": "string"
+-                                                },
+-                                                "request_id": {
+-                                                    "type": "string"
+-                                                }
+-                                            },
+-                                            "required": [
+-                                                "request_id",
+-                                                "correlation_id",
+-                                                "api_version"
+-                                            ],
+-                                            "type": "object"
+-                                        }
+-                                    },
+-                                    "required": [
+-                                        "data",
+-                                        "error",
+-                                        "meta"
+-                                    ],
+-                                    "type": "object"
+-                                }
+-                            },
+                             "application/problem+json": {
+                                 "schema": {
+                                     "properties": {
+@@ -2239,10 +1187,6 @@
+                                         "details": {
+                                             "type": "object"
+                                         },
+-                                        "instance": {
+-                                            "format": "uri",
+-                                            "type": "string"
+-                                        },
+                                         "path": {
+                                             "type": [
+                                                 "string",
+@@ -2271,10 +1215,8 @@
+                                         "title",
+                                         "status",
+                                         "detail",
+-                                        "instance",
+                                         "code",
+                                         "category",
+-                                        "path",
+                                         "retryable",
+                                         "details",
+                                         "request_id",
+diff --git a/docs/architecture/configuration.md b/docs/architecture/configuration.md
+index 62958921..e83058d9 100644
+--- a/docs/architecture/configuration.md
++++ b/docs/architecture/configuration.md
+@@ -92,7 +92,6 @@
+ | corex-operations.discovery | axiomasoft/corex-operations | string | public | no | product-policy | unobserved | unobserved | ApiOptions::$discovery |  |  |
+ | corex-operations.idempotency.lease_seconds | axiomasoft/corex-operations | int | 30 | no | product-policy | unobserved | unobserved | ApiOptions::$idempotencyLeaseSeconds |  |  |
+ | corex-operations.idempotency.retention_seconds | axiomasoft/corex-operations | int | 86400 | no | product-policy | unobserved | unobserved | ApiOptions::$idempotencyRetentionSeconds |  |  |
+-| corex-operations.problem_type_base | axiomasoft/corex-operations | string | https://corex.dev/problems/ | no | product-policy | unobserved | unobserved | ApiOptions::$problemTypeBase |  |  |
+ | corex-operations.product | axiomasoft/corex-operations | string | corex | no | product-policy | unobserved | unobserved | ApiOptions::$product |  |  |
+ | corex-operations.require_physical_tenancy | axiomasoft/corex-operations | bool | true | no | product-policy | unobserved | unobserved | ApiOptions::$requirePhysicalTenancy |  |  |
+ | corex-operations.routes.enabled | axiomasoft/corex-operations | bool | true | no | deployment | no | unobserved | ApiOptions::$routesEnabled |  |  |
+diff --git a/docs/reference/public-api.md b/docs/reference/public-api.md
+index 9df4988e..5389d8c5 100644
+--- a/docs/reference/public-api.md
++++ b/docs/reference/public-api.md
+@@ -483,7 +483,6 @@ Attributes own membership. Members belong to this package; direct extends/implem
+ | `CoreX\Operations\Errors\Contracts\ResponseSerializer` | spi-implement | 1.0 |
+ | `CoreX\Operations\Errors\Enums\OperationsErrorCode` | api | 1.0 |
+ | `CoreX\Operations\Errors\Exceptions\ApiError` | api | 1.0 |
+-| `CoreX\Operations\Errors\Laravel\AcceptNegotiation` | spi-call | 1.0 |
+ | `CoreX\Operations\Idempotency\Contracts\IdempotencyStore` | spi-implement | 1.0 |
+ | `CoreX\Operations\Idempotency\Data\IdempotencyAttempt` | api | 1.0 |
+ | `CoreX\Operations\Idempotency\Data\IdempotencyScope` | api | 1.0 |
+@@ -498,6 +497,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
+ | `CoreX\Operations\Invocation\Data\InvocationMetadata` | api | 1.0 |
+ | `CoreX\Operations\Invocation\Data\OperationInvocation` | api | 1.0 |
+ | `CoreX\Operations\Invocation\Data\OperationResult` | api | 1.0 |
++| `CoreX\Operations\Invocation\Enums\InputEnvelope` | api | 1.0 |
+ | `CoreX\Operations\Invocation\Laravel\InvocationMetadataFactory` | spi-call | 1.0 |
+ | `CoreX\Operations\Invocation\Laravel\ResolvedContexts` | spi-call | 1.0 |
+ | `CoreX\Operations\Laravel\ApiSchemaBindingsRegistrar` | spi-call | 1.0 |
+diff --git a/packages/operations/CHANGELOG.md b/packages/operations/CHANGELOG.md
+index 185dce64..62841007 100644
+--- a/packages/operations/CHANGELOG.md
++++ b/packages/operations/CHANGELOG.md
+@@ -1,5 +1,10 @@
+ # Changelog
+ 
++## Unreleased — strict input envelopes and RFC 9457 errors
++
++- Breaking before 1.0: operation errors always use `application/problem+json` with registry-owned type/title and occurrence detail; successes contain only data and meta. Remove Accept negotiation and the configurable problem type base.
++- Add the public InputEnvelope enum and Operation inputEnvelope policy derived by OperationFactory; reject invalid envelopes, unsupported media types and undeclared fields with distinct registered codes.
++
+ ## Unreleased — ports instead of facades, helpers and static state (P05.3)
+ 
+ - Services take `ConnectionResolverInterface` and `ClockInterface` through constructors instead of facades and helpers. `Testing\MutatingHandler` now needs a connection resolver and a clock.
+diff --git a/packages/operations/config/corex-operations.php b/packages/operations/config/corex-operations.php
+index 3512154c..6ae2492a 100644
+--- a/packages/operations/config/corex-operations.php
++++ b/packages/operations/config/corex-operations.php
+@@ -56,6 +56,5 @@ return [
+     ],
+ 
+     'discovery' => 'public',
+-    'problem_type_base' => 'https://corex.dev/problems/',
+     'capabilities' => [],
+ ];
+diff --git a/packages/operations/resources/contracts/php-api.json b/packages/operations/resources/contracts/php-api.json
+index 5fb43a4e..50acb91f 100644
+--- a/packages/operations/resources/contracts/php-api.json
++++ b/packages/operations/resources/contracts/php-api.json
+@@ -3760,6 +3760,15 @@
+                             "optional": true,
+                             "default": "null",
+                             "flags": 1
++                        },
++                        {
++                            "name": "inputEnvelope",
++                            "type": "CoreX\\Operations\\Invocation\\Enums\\InputEnvelope",
++                            "by_reference": false,
++                            "variadic": false,
++                            "optional": true,
++                            "default": "\\CoreX\\Operations\\Invocation\\Enums\\InputEnvelope::JsonObject",
++                            "flags": 1
+                         }
+                     ],
+                     "return": null,
+@@ -3939,6 +3948,22 @@
+                     },
+                     "hooks": []
+                 },
++                "inputEnvelope": {
++                    "flags": 1,
++                    "type": "CoreX\\Operations\\Invocation\\Enums\\InputEnvelope",
++                    "readonly": true,
++                    "visibility": "public",
++                    "static": false,
++                    "default": null,
++                    "doc": {
++                        "@param": [
++                            "(array<string, int> | null) $cost",
++                            "array<string, list<string>> $inputRules",
++                            "class-string<\\CoreX\\Operations\\Definition\\Contracts\\OperationHandler> $handler"
++                        ]
++                    },
++                    "hooks": []
++                },
+                 "inputRules": {
+                     "flags": 1,
+                     "type": "array",
+@@ -4707,6 +4732,7 @@
+                 "IdempotencyKeyInvalid": "'operations.idempotency_key_invalid'",
+                 "IdempotencyKeyRequired": "'operations.idempotency_key_required'",
+                 "IdempotencyNotSupported": "'operations.idempotency_not_supported'",
++                "InputEnvelopeInvalid": "'operations.input_envelope_invalid'",
+                 "InvalidRequest": "'operations.invalid_request'",
+                 "ModuleUnavailable": "'operations.module_unavailable'",
+                 "NotFound": "'operations.not_found'",
+@@ -4718,7 +4744,9 @@
+                 "RequestRejected": "'operations.request_rejected'",
+                 "ResourceNotFound": "'operations.resource_not_found'",
+                 "ScopeRequired": "'operations.scope_required'",
++                "UndeclaredFields": "'operations.undeclared_fields'",
+                 "UnknownMessageContract": "'operations.unknown_message_contract'",
++                "UnsupportedMediaType": "'operations.unsupported_media_type'",
+                 "ValidationFailed": "'operations.validation_failed'"
+             }
+         },
+@@ -4908,59 +4936,6 @@
+             "enum_backing": null,
+             "enum_cases": []
+         },
+-        "CoreX\\Operations\\Errors\\Laravel\\AcceptNegotiation": {
+-            "kind": "class",
+-            "layer": "spi-call",
+-            "since": "1.0",
+-            "final": true,
+-            "readonly": false,
+-            "abstract": false,
+-            "extends": [],
+-            "implements": [],
+-            "uses": [],
+-            "doc": [],
+-            "methods": {
+-                "select": {
+-                    "visibility": "public",
+-                    "static": true,
+-                    "final": false,
+-                    "abstract": false,
+-                    "by_reference": false,
+-                    "parameters": [
+-                        {
+-                            "name": "header",
+-                            "type": "string",
+-                            "by_reference": false,
+-                            "variadic": false,
+-                            "optional": false,
+-                            "default": null,
+-                            "flags": 0
+-                        }
+-                    ],
+-                    "return": "?string",
+-                    "doc": []
+-                }
+-            },
+-            "properties": [],
+-            "constants": {
+-                "JSON": {
+-                    "type": "string",
+-                    "value": "'application/json'",
+-                    "visibility": "public",
+-                    "final": false,
+-                    "doc": []
+-                },
+-                "PROBLEM": {
+-                    "type": "string",
+-                    "value": "'application/problem+json'",
+-                    "visibility": "public",
+-                    "final": false,
+-                    "doc": []
+-                }
+-            },
+-            "enum_backing": null,
+-            "enum_cases": []
+-        },
+         "CoreX\\Operations\\Idempotency\\Contracts\\IdempotencyStore": {
+             "kind": "interface",
+             "layer": "spi-implement",
+@@ -6502,6 +6477,47 @@
+             "enum_backing": null,
+             "enum_cases": []
+         },
++        "CoreX\\Operations\\Invocation\\Enums\\InputEnvelope": {
++            "kind": "enum",
++            "layer": "api",
++            "since": "1.0",
++            "final": false,
++            "readonly": false,
++            "abstract": false,
++            "extends": [],
++            "implements": [],
++            "uses": [],
++            "doc": [],
++            "methods": {
++                "forMethod": {
++                    "visibility": "public",
++                    "static": true,
++                    "final": false,
++                    "abstract": false,
++                    "by_reference": false,
++                    "parameters": [
++                        {
++                            "name": "method",
++                            "type": "string",
++                            "by_reference": false,
++                            "variadic": false,
++                            "optional": false,
++                            "default": null,
++                            "flags": 0
++                        }
++                    ],
++                    "return": "self(CoreX\\Operations\\Invocation\\Enums\\InputEnvelope)",
++                    "doc": []
++                }
++            },
++            "properties": [],
++            "constants": [],
++            "enum_backing": "string",
++            "enum_cases": {
++                "JsonObject": "'json-object'",
++                "Query": "'query'"
++            }
++        },
+         "CoreX\\Operations\\Invocation\\Laravel\\InvocationMetadataFactory": {
+             "kind": "class",
+             "layer": "spi-call",
+@@ -7474,15 +7490,6 @@
+                             "default": null,
+                             "flags": 1
+                         },
+-                        {
+-                            "name": "problemTypeBase",
+-                            "type": "string",
+-                            "by_reference": false,
+-                            "variadic": false,
+-                            "optional": false,
+-                            "default": null,
+-                            "flags": 1
+-                        },
+                         {
+                             "name": "capabilities",
+                             "type": "array",
+@@ -7706,23 +7713,6 @@
+                     },
+                     "hooks": []
+                 },
+-                "problemTypeBase": {
+-                    "flags": 1,
+-                    "type": "string",
+-                    "readonly": true,
+-                    "visibility": "public",
+-                    "static": false,
+-                    "default": null,
+-                    "doc": {
+-                        "@param": [
+-                            "array<string, \\CoreX\\Config\\Data\\SecretRef> $cursorKeyring",
+-                            "array<string, array{status: string, limits: array<string, (int | string)>}> $capabilities",
+-                            "list<\\CoreX\\Operations\\Versioning\\Data\\ApiVersion> $versions",
+-                            "list<string> $routeMiddleware"
+-                        ]
+-                    },
+-                    "hooks": []
+-                },
+                 "product": {
+                     "flags": 1,
+                     "type": "string",
+diff --git a/packages/operations/src/Definition/Data/Operation.php b/packages/operations/src/Definition/Data/Operation.php
+index 0a0eecb4..c7182964 100644
+--- a/packages/operations/src/Definition/Data/Operation.php
++++ b/packages/operations/src/Definition/Data/Operation.php
+@@ -10,6 +10,7 @@ use CoreX\Data\Data\JsonDocument;
+ use CoreX\Operations\Definition\Contracts\OperationHandler;
+ use CoreX\Operations\Definition\Enums\OperationMode;
+ use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
++use CoreX\Operations\Invocation\Enums\InputEnvelope;
+ 
+ /** Immutable runtime projection of one compiled declaration. */
+ #[Spi(kind: SpiKind::Call, since: '1.0')]
+@@ -50,6 +51,7 @@ final readonly class Operation
+         public ?string $effectMode = null,
+         public bool $executionSupported = true,
+         public ?array $cost = null,
++        public InputEnvelope $inputEnvelope = InputEnvelope::JsonObject,
+     ) {}
+ 
+ }
+diff --git a/packages/operations/src/Definition/Laravel/OperationFactory.php b/packages/operations/src/Definition/Laravel/OperationFactory.php
+index 5fa02386..612c5ce1 100644
+--- a/packages/operations/src/Definition/Laravel/OperationFactory.php
++++ b/packages/operations/src/Definition/Laravel/OperationFactory.php
+@@ -14,6 +14,7 @@ use CoreX\Operations\Definition\Enums\OperationMode;
+ use CoreX\Operations\Definition\Internal\ApiOperationValidator;
+ use CoreX\Operations\Definition\Internal\OperationContractHasher;
+ use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
++use CoreX\Operations\Invocation\Enums\InputEnvelope;
+ use LogicException;
+ 
+ #[Spi(kind: SpiKind::Call, since: '1.0')]
+@@ -38,6 +39,6 @@ final class OperationFactory
+         }
+ 
+         /** @var array<string, int>|null $cost */
+-        return new Operation(module: $api->declaringModule, id: $api->operationId, version: $api->version, method: $api->method, path: $api->path, ability: $api->ability, handler: $api->handler, requestSchema: JsonDocuments::capture($api->requestSchema), responseSchema: JsonDocuments::capture($api->responseSchema), inputRules: $api->inputRules, successStatus: $api->successStatus, mode: OperationMode::from($api->operationMode), requiredScopes: $api->requiredScopes, idempotency: IdempotencyRequirement::from($api->idempotencyRequirement), readFields: $api->readFields, writeFields: $api->writeFields, pagination: JsonDocuments::nullable($api->pagination), capabilities: $api->capabilities, deprecation: $api->deprecation, contractHash: OperationContractHasher::hash($api, $registryFingerprint), effectMode: $api->effectMode, executionSupported: $api->executionSupported, cost: $cost);
++        return new Operation(module: $api->declaringModule, id: $api->operationId, version: $api->version, method: $api->method, path: $api->path, ability: $api->ability, handler: $api->handler, requestSchema: JsonDocuments::capture($api->requestSchema), responseSchema: JsonDocuments::capture($api->responseSchema), inputRules: $api->inputRules, successStatus: $api->successStatus, mode: OperationMode::from($api->operationMode), requiredScopes: $api->requiredScopes, idempotency: IdempotencyRequirement::from($api->idempotencyRequirement), readFields: $api->readFields, writeFields: $api->writeFields, pagination: JsonDocuments::nullable($api->pagination), capabilities: $api->capabilities, deprecation: $api->deprecation, contractHash: OperationContractHasher::hash($api, $registryFingerprint), effectMode: $api->effectMode, executionSupported: $api->executionSupported, cost: $cost, inputEnvelope: InputEnvelope::forMethod($api->method));
+     }
+ }
+diff --git a/packages/operations/src/Errors/Enums/OperationsErrorCode.php b/packages/operations/src/Errors/Enums/OperationsErrorCode.php
+index b3b1699f..b2b75045 100644
+--- a/packages/operations/src/Errors/Enums/OperationsErrorCode.php
++++ b/packages/operations/src/Errors/Enums/OperationsErrorCode.php
+@@ -45,6 +45,10 @@ enum OperationsErrorCode: string implements ErrorCode
+     case UnknownMessageContract = 'operations.unknown_message_contract';
+     case ValidationFailed = 'operations.validation_failed';
+ 
++    case InputEnvelopeInvalid = 'operations.input_envelope_invalid';
++    case UndeclaredFields = 'operations.undeclared_fields';
++    case UnsupportedMediaType = 'operations.unsupported_media_type';
++
+     public function value(): string
+     {
+         return $this->value;
+diff --git a/packages/operations/src/Errors/Internal/EnvelopeSerializer.php b/packages/operations/src/Errors/Internal/EnvelopeSerializer.php
+index b9956a42..6bbc3172 100644
+--- a/packages/operations/src/Errors/Internal/EnvelopeSerializer.php
++++ b/packages/operations/src/Errors/Internal/EnvelopeSerializer.php
+@@ -4,38 +4,16 @@ declare(strict_types=1);
+ 
+ namespace CoreX\Operations\Errors\Internal;
+ 
+-use CoreX\Operations\Errors\Contracts\ResponseSerializer;
+-use CoreX\Operations\Errors\Exceptions\ApiError;
+ use CoreX\Operations\Invocation\Data\InvocationMetadata;
+ use Illuminate\Http\JsonResponse;
+-use Override;
+ 
+ /** @internal */
+-final class EnvelopeSerializer implements ResponseSerializer
++final class EnvelopeSerializer
+ {
+-    #[Override]
++    /** @param array<array-key, mixed> $data */
+     public function success(array $data, int $status, InvocationMetadata $metadata): JsonResponse
+     {
+-        return $this->respond(['data' => $data, 'error' => null, 'meta' => ErrorWire::meta($metadata)], $status, ErrorWire::headers($metadata));
+-    }
+-
+-    #[Override]
+-    public function error(ApiError $error, InvocationMetadata $metadata): JsonResponse
+-    {
+-        $descriptor = $error->errorDescriptor();
+-
+-        return $this->respond([
+-            'data' => null,
+-            'error' => [
+-                'code' => $descriptor->code,
+-                'message' => $error->getMessage(),
+-                'category' => $descriptor->category->value,
+-                'path' => $descriptor->path,
+-                'retryable' => $descriptor->retryable,
+-                'details' => (object) $descriptor->details,
+-            ],
+-            'meta' => ErrorWire::meta($metadata),
+-        ], $error->status, ErrorWire::headers($metadata, $error));
++        return $this->respond(['data' => $data, 'meta' => ErrorWire::meta($metadata)], $status, ErrorWire::headers($metadata));
+     }
+ 
+     /**
+diff --git a/packages/operations/src/Errors/Internal/ErrorWire.php b/packages/operations/src/Errors/Internal/ErrorWire.php
+index a195842d..afbf06ae 100644
+--- a/packages/operations/src/Errors/Internal/ErrorWire.php
++++ b/packages/operations/src/Errors/Internal/ErrorWire.php
+@@ -7,7 +7,7 @@ namespace CoreX\Operations\Errors\Internal;
+ use CoreX\Operations\Errors\Exceptions\ApiError;
+ use CoreX\Operations\Invocation\Data\InvocationMetadata;
+ 
+-/** @internal Stable error members shared by both HTTP representations. */
++/** @internal Response metadata and headers. */
+ final class ErrorWire
+ {
+     /** @return array<string, string> */
+@@ -28,7 +28,6 @@ final class ErrorWire
+         $headers = [
+             'X-Request-ID' => $metadata->requestId,
+             'Cache-Control' => 'no-store',
+-            'Vary' => 'Accept',
+         ];
+         $seconds = RetryAfterPolicy::seconds($error?->retryAfterPolicy);
+ 
+@@ -38,14 +37,4 @@ final class ErrorWire
+ 
+         return $headers;
+     }
+-
+-    public static function type(string $problemTypeBase, string $code): string
+-    {
+-        return rtrim($problemTypeBase, '/').'/'.rawurlencode($code);
+-    }
+-
+-    public static function instance(string $problemTypeBase, string $requestId): string
+-    {
+-        return rtrim($problemTypeBase, '/').'/instances/'.rawurlencode($requestId);
+-    }
+ }
+diff --git a/packages/operations/src/Errors/Internal/NegotiatingResponseSerializer.php b/packages/operations/src/Errors/Internal/HttpResponseSerializer.php
+similarity index 54%
+rename from packages/operations/src/Errors/Internal/NegotiatingResponseSerializer.php
+rename to packages/operations/src/Errors/Internal/HttpResponseSerializer.php
+index d450975f..3e068dac 100644
+--- a/packages/operations/src/Errors/Internal/NegotiatingResponseSerializer.php
++++ b/packages/operations/src/Errors/Internal/HttpResponseSerializer.php
+@@ -6,19 +6,16 @@ namespace CoreX\Operations\Errors\Internal;
+ 
+ use CoreX\Operations\Errors\Contracts\ResponseSerializer;
+ use CoreX\Operations\Errors\Exceptions\ApiError;
+-use CoreX\Operations\Errors\Laravel\AcceptNegotiation;
+ use CoreX\Operations\Invocation\Data\InvocationMetadata;
+ use Illuminate\Http\JsonResponse;
+ use Override;
+-use Symfony\Component\HttpKernel\Exception\HttpException;
+ 
+ /** @internal HTTP projection. The invoker stays transport-neutral. */
+-final class NegotiatingResponseSerializer implements ResponseSerializer
++final class HttpResponseSerializer implements ResponseSerializer
+ {
+     public function __construct(
+         private readonly EnvelopeSerializer $envelope,
+         private readonly ProblemDetailsSerializer $problems,
+-        private readonly ErrorMapper $errors,
+     ) {}
+ 
+     #[Override]
+@@ -30,19 +27,6 @@ final class NegotiatingResponseSerializer implements ResponseSerializer
+     #[Override]
+     public function error(ApiError $error, InvocationMetadata $metadata): JsonResponse
+     {
+-        $selected = AcceptNegotiation::select($metadata->accept);
+-
+-        if ($selected === AcceptNegotiation::PROBLEM) {
+-            return $this->problems->error($error, $metadata);
+-        }
+-
+-        if ($selected === AcceptNegotiation::JSON) {
+-            return $this->envelope->error($error, $metadata);
+-        }
+-
+-        return $this->envelope->error(
+-            $this->errors->map(new HttpException(406, 'requested representation')),
+-            $metadata,
+-        );
++        return $this->problems->error(error: $error, metadata: $metadata);
+     }
+ }
+diff --git a/packages/operations/src/Errors/Internal/PackageProblemDefinitions.php b/packages/operations/src/Errors/Internal/PackageProblemDefinitions.php
+index cc773634..d4cd3a48 100644
+--- a/packages/operations/src/Errors/Internal/PackageProblemDefinitions.php
++++ b/packages/operations/src/Errors/Internal/PackageProblemDefinitions.php
+@@ -47,6 +47,9 @@ final class PackageProblemDefinitions implements ProblemDefinitionProvider
+         yield new ProblemDefinition(OperationsErrorCode::ResourceNotFound, 'urn:corex:problem:operations.resource_not_found', 404, 'Resource not found.', false, ErrorCategory::NotFound, []);
+         yield new ProblemDefinition(OperationsErrorCode::ScopeRequired, 'urn:corex:problem:operations.scope_required', 403, 'Scope required.', false, ErrorCategory::Authorization, []);
+         yield new ProblemDefinition(OperationsErrorCode::UnknownMessageContract, 'urn:corex:problem:operations.unknown_message_contract', 422, 'Unknown message contract.', false, ErrorCategory::Validation, []);
++        yield new ProblemDefinition(OperationsErrorCode::InputEnvelopeInvalid, 'urn:corex:problem:operations.input_envelope_invalid', 422, 'Input envelope is invalid.', false, ErrorCategory::Validation, []);
++        yield new ProblemDefinition(OperationsErrorCode::UndeclaredFields, 'urn:corex:problem:operations.undeclared_fields', 422, 'Input contains undeclared fields.', false, ErrorCategory::Validation, ['fields']);
++        yield new ProblemDefinition(OperationsErrorCode::UnsupportedMediaType, 'urn:corex:problem:operations.unsupported_media_type', 415, 'Unsupported media type.', false, ErrorCategory::Validation, []);
+         yield new ProblemDefinition(OperationsErrorCode::ValidationFailed, 'urn:corex:problem:operations.validation_failed', 422, 'Validation failed.', false, ErrorCategory::Validation, ['*']);
+     }
+ }
+diff --git a/packages/operations/src/Errors/Internal/ProblemDetailsSerializer.php b/packages/operations/src/Errors/Internal/ProblemDetailsSerializer.php
+index 50e4649e..8a89afa5 100644
+--- a/packages/operations/src/Errors/Internal/ProblemDetailsSerializer.php
++++ b/packages/operations/src/Errors/Internal/ProblemDetailsSerializer.php
+@@ -4,35 +4,39 @@ declare(strict_types=1);
+ 
+ namespace CoreX\Operations\Errors\Internal;
+ 
++use CoreX\Errors\Contracts\ProblemRegistry;
+ use CoreX\Operations\Errors\Exceptions\ApiError;
+ use CoreX\Operations\Invocation\Data\InvocationMetadata;
+-use CoreX\Operations\Laravel\Support\ApiOptions;
+ use Illuminate\Http\JsonResponse;
+ 
+ /** @internal RFC 9457 projection of one mapped ApiError. */
+ final class ProblemDetailsSerializer
+ {
+-    public function __construct(private readonly ApiOptions $options) {}
++    public function __construct(private readonly ProblemRegistry $problems) {}
+ 
+     public function error(ApiError $error, InvocationMetadata $metadata): JsonResponse
+     {
+         $descriptor = $error->errorDescriptor();
+-        $message = $error->getMessage();
+-        $response = new JsonResponse([
+-            'type' => ErrorWire::type($this->options->problemTypeBase, $descriptor->code),
+-            'title' => $message,
++        $definition = $this->problems->fromWire($descriptor->code);
++        $body = [
++            'type' => $definition->type,
++            'title' => $definition->title,
+             'status' => $error->status,
+-            'detail' => $message,
+-            'instance' => ErrorWire::instance($this->options->problemTypeBase, $metadata->requestId),
++            'detail' => $error->getMessage(),
+             'code' => $descriptor->code,
+             'category' => $descriptor->category->value,
+-            'path' => $descriptor->path,
+             'retryable' => $descriptor->retryable,
+             'details' => (object) $descriptor->details,
+             'request_id' => $metadata->requestId,
+             'correlation_id' => $metadata->correlationId,
+             'api_version' => $metadata->version,
+-        ], $error->status, ErrorWire::headers($metadata, $error));
++        ];
++
++        if ($descriptor->path !== null) {
++            $body['path'] = $descriptor->path;
++        }
++
++        $response = new JsonResponse(data: $body, status: $error->status, headers: ErrorWire::headers($metadata, $error));
+         $response->headers->set('Content-Type', 'application/problem+json');
+ 
+         return $response;
+diff --git a/packages/operations/src/Errors/Laravel/AcceptNegotiation.php b/packages/operations/src/Errors/Laravel/AcceptNegotiation.php
+deleted file mode 100644
+index eb9aa4de..00000000
+--- a/packages/operations/src/Errors/Laravel/AcceptNegotiation.php
++++ /dev/null
+@@ -1,104 +0,0 @@
+-<?php
+-
+-declare(strict_types=1);
+-
+-namespace CoreX\Operations\Errors\Laravel;
+-
+-use CoreX\Attributes\Spi;
+-use CoreX\Attributes\SpiKind;
+-
+-#[Spi(kind: SpiKind::Call, since: '1.0')]
+-final class AcceptNegotiation
+-{
+-    public const string JSON = 'application/json';
+-
+-    public const string PROBLEM = 'application/problem+json';
+-
+-    public static function select(string $header): ?string
+-    {
+-        if (trim($header) === '') {
+-            return self::JSON;
+-        }
+-
+-        $best = null;
+-        $bestRank = -1.0;
+-
+-        foreach (self::ranges($header) as [$type, $quality]) {
+-            foreach ([self::JSON, self::PROBLEM] as $candidate) {
+-                if ($quality <= 0 || ! self::matches($type, $candidate)) {
+-                    continue;
+-                }
+-
+-                $rank = ($quality * 1000) + self::specificity($type) + ($candidate === self::JSON ? 0.1 : 0.0);
+-
+-                if ($rank > $bestRank) {
+-                    $bestRank = $rank;
+-                    $best = $candidate;
+-                }
+-            }
+-        }
+-
+-        return $best;
+-    }
+-
+-    /**
+-     * @return list<array{0: string, 1: float}>
+-     */
+-    private static function ranges(string $header): array
+-    {
+-        $ranges = [];
+-
+-        foreach (explode(',', $header) as $part) {
+-            $pieces = array_map(trim(...), explode(';', $part));
+-            $type = strtolower($pieces[0]);
+-
+-            if ($type === '') {
+-                continue;
+-            }
+-
+-            $quality = 1.0;
+-
+-            foreach (array_slice($pieces, 1) as $parameter) {
+-                if (! str_starts_with($parameter, 'q=')) {
+-                    continue;
+-                }
+-
+-                $value = substr($parameter, 2);
+-
+-                if (preg_match('/\A(?:0(?:\.\d{0,3})?|1(?:\.0{0,3})?)\z/', $value) !== 1) {
+-                    $quality = 0.0;
+-
+-                    break;
+-                }
+-
+-                $quality = (float) $value;
+-            }
+-
+-            $ranges[] = [$type, $quality];
+-        }
+-
+-        return $ranges;
+-    }
+-
+-    private static function matches(string $range, string $candidate): bool
+-    {
+-        if ($range === '*/*' || $range === $candidate) {
+-            return true;
+-        }
+-
+-        if (! str_ends_with($range, '/*')) {
+-            return false;
+-        }
+-
+-        return str_starts_with($candidate, substr($range, 0, -1));
+-    }
+-
+-    private static function specificity(string $range): float
+-    {
+-        if ($range === '*/*') {
+-            return 0.0;
+-        }
+-
+-        return str_ends_with($range, '/*') ? 1.0 : 2.0;
+-    }
+-}
+diff --git a/packages/operations/src/Invocation/Enums/InputEnvelope.php b/packages/operations/src/Invocation/Enums/InputEnvelope.php
+new file mode 100644
+index 00000000..6c107e89
+--- /dev/null
++++ b/packages/operations/src/Invocation/Enums/InputEnvelope.php
+@@ -0,0 +1,20 @@
++<?php
++
++declare(strict_types=1);
++
++namespace CoreX\Operations\Invocation\Enums;
++
++use CoreX\Attributes\Api;
++
++/** Input shape; rejecting undeclared fields remains an invariant of dispatch. */
++#[Api(since: '1.0')]
++enum InputEnvelope: string
++{
++    case Query = 'query';
++    case JsonObject = 'json-object';
++
++    public static function forMethod(string $method): self
++    {
++        return strtoupper($method) === 'GET' ? self::Query : self::JsonObject;
++    }
++}
+diff --git a/packages/operations/src/Invocation/Internal/InputEnvelopeReader.php b/packages/operations/src/Invocation/Internal/InputEnvelopeReader.php
+new file mode 100644
+index 00000000..b521cd22
+--- /dev/null
++++ b/packages/operations/src/Invocation/Internal/InputEnvelopeReader.php
+@@ -0,0 +1,14 @@
++<?php
++
++declare(strict_types=1);
++
++namespace CoreX\Operations\Invocation\Internal;
++
++use Illuminate\Http\Request;
++
++/** @internal */
++interface InputEnvelopeReader
++{
++    /** @return array<array-key, mixed> */
++    public function read(Request $request): array;
++}
+diff --git a/packages/operations/src/Invocation/Internal/JsonObjectEnvelopeReader.php b/packages/operations/src/Invocation/Internal/JsonObjectEnvelopeReader.php
+new file mode 100644
+index 00000000..f8375e24
+--- /dev/null
++++ b/packages/operations/src/Invocation/Internal/JsonObjectEnvelopeReader.php
+@@ -0,0 +1,40 @@
++<?php
++
++declare(strict_types=1);
++
++namespace CoreX\Operations\Invocation\Internal;
++
++use CoreX\Operations\Errors\Enums\OperationsErrorCode;
++use CoreX\Operations\Errors\Exceptions\ApiError;
++use Illuminate\Http\Request;
++use JsonException;
++use Override;
++
++/** @internal */
++final class JsonObjectEnvelopeReader implements InputEnvelopeReader
++{
++    #[Override]
++    public function read(Request $request): array
++    {
++        if ($request->query->count() !== 0) {
++            throw new ApiError(errorCode: OperationsErrorCode::InputEnvelopeInvalid, status: 422, message: 'Query parameters are not accepted with a request body.');
++        }
++
++        if (! $request->isJson()) {
++            throw new ApiError(errorCode: OperationsErrorCode::UnsupportedMediaType, status: 415, message: 'A JSON request body is required.');
++        }
++
++        try {
++            $body = $request->getContent();
++            $input = json_decode($body, associative: true, flags: JSON_THROW_ON_ERROR);
++        } catch (JsonException) {
++            throw new ApiError(errorCode: OperationsErrorCode::InputEnvelopeInvalid, status: 422, message: 'Malformed JSON body.');
++        }
++
++        if (! is_array($input) || ! str_starts_with(ltrim($body), '{')) {
++            throw new ApiError(errorCode: OperationsErrorCode::InputEnvelopeInvalid, status: 422, message: 'A JSON object body is required.');
++        }
++
++        return $input;
++    }
++}
+diff --git a/packages/operations/src/Invocation/Internal/OperationDispatcher.php b/packages/operations/src/Invocation/Internal/OperationDispatcher.php
+index 4cf40ec9..7ff2a138 100644
+--- a/packages/operations/src/Invocation/Internal/OperationDispatcher.php
++++ b/packages/operations/src/Invocation/Internal/OperationDispatcher.php
+@@ -16,12 +16,12 @@ use CoreX\Operations\Invocation\Contracts\ContextResolver;
+ use CoreX\Operations\Invocation\Contracts\OperationInvoker;
+ use CoreX\Operations\Invocation\Data\InvocationMetadata;
+ use CoreX\Operations\Invocation\Data\OperationInvocation;
++use CoreX\Operations\Invocation\Enums\InputEnvelope;
+ use CoreX\Operations\Invocation\Laravel\InvocationMetadataFactory;
+ use Illuminate\Contracts\Container\Container;
+ use Illuminate\Contracts\Validation\Factory;
+ use Illuminate\Http\JsonResponse;
+ use Illuminate\Http\Request;
+-use JsonException;
+ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+ use Throwable;
+ 
+@@ -96,29 +96,19 @@ final class OperationDispatcher implements \CoreX\Operations\Invocation\Contract
+     /** @return array<string, mixed> */
+     private function input(Request $request, Operation $operation): array
+     {
+-        if ($request->method() === 'GET') {
+-            $input = $request->query->all();
+-        } else {
+-            if (! $request->isJson() || $request->query->count() !== 0) {
+-                throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'A JSON object body without query parameters is required.');
+-            }
++        $input = match ($operation->inputEnvelope) {
++            InputEnvelope::Query => (new QueryEnvelopeReader)->read($request),
++            InputEnvelope::JsonObject => (new JsonObjectEnvelopeReader)->read($request),
++        };
+ 
+-            try {
+-                $body = $request->getContent();
+-                $input = json_decode($body, associative: true, flags: JSON_THROW_ON_ERROR);
+-            } catch (JsonException) {
+-                throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'Malformed JSON body.');
+-            }
++        $allowed = array_unique(array_map(static fn (string $key): string => explode('.', $key)[0], array_keys($operation->inputRules)));
+ 
+-            if (! is_array($input) || ! str_starts_with(ltrim($body), '{')) {
+-                throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'A JSON object body is required.');
+-            }
+-        }
++        $undeclared = array_values(array_diff(array_keys($input), $allowed));
+ 
+-        $allowed = array_unique(array_map(static fn (string $key): string => explode('.', $key)[0], array_keys($operation->inputRules)));
++        if ($undeclared !== []) {
++            sort($undeclared);
+ 
+-        if (array_diff(array_keys($input), $allowed) !== []) {
+-            throw new ApiError(OperationsErrorCode::ValidationFailed, 422, 'Input contains undeclared fields.');
++            throw new ApiError(errorCode: OperationsErrorCode::UndeclaredFields, status: 422, message: 'Input contains undeclared fields.', details: JsonDocuments::capture(['fields' => $undeclared]));
+         }
+ 
+         return $this->validation->make($input, $operation->inputRules)->validate();
+diff --git a/packages/operations/src/Invocation/Internal/QueryEnvelopeReader.php b/packages/operations/src/Invocation/Internal/QueryEnvelopeReader.php
+new file mode 100644
+index 00000000..c9a79b9b
+--- /dev/null
++++ b/packages/operations/src/Invocation/Internal/QueryEnvelopeReader.php
+@@ -0,0 +1,18 @@
++<?php
++
++declare(strict_types=1);
++
++namespace CoreX\Operations\Invocation\Internal;
++
++use Illuminate\Http\Request;
++use Override;
++
++/** @internal */
++final class QueryEnvelopeReader implements InputEnvelopeReader
++{
++    #[Override]
++    public function read(Request $request): array
++    {
++        return $request->query->all();
++    }
++}
+diff --git a/packages/operations/src/Laravel/OperationsBindingsRegistrar.php b/packages/operations/src/Laravel/OperationsBindingsRegistrar.php
+index 152a6cd1..8d654ec8 100644
+--- a/packages/operations/src/Laravel/OperationsBindingsRegistrar.php
++++ b/packages/operations/src/Laravel/OperationsBindingsRegistrar.php
+@@ -25,7 +25,7 @@ use CoreX\Operations\Definition\Internal\DeclaredSchemaContributor;
+ use CoreX\Operations\Definition\Internal\OperationSectionCompiler;
+ use CoreX\Operations\Definition\Laravel\OperationPortBindings;
+ use CoreX\Operations\Errors\Contracts\ResponseSerializer;
+-use CoreX\Operations\Errors\Internal\NegotiatingResponseSerializer;
++use CoreX\Operations\Errors\Internal\HttpResponseSerializer;
+ use CoreX\Operations\Idempotency\Internal\DefaultReplayAuthorizer;
+ use CoreX\Operations\Internal\AppKeyCheck;
+ use CoreX\Operations\Invocation\Contracts\OperationInvoker;
+@@ -66,7 +66,7 @@ final class OperationsBindingsRegistrar implements PackageRegistrar
+             $app->make(OperationAuthorizer::class),
+             $app->make(OperationFieldAuthorizer::class),
+         ));
+-        $app->bindIf(ResponseSerializer::class, NegotiatingResponseSerializer::class);
++        $app->bindIf(ResponseSerializer::class, HttpResponseSerializer::class);
+         $app->bindIf(SchemaContributor::class, DeclaredSchemaContributor::class);
+ 
+         if (! $app->bound(ClockInterface::class)) {
+diff --git a/packages/operations/src/Laravel/Support/ApiOptions.php b/packages/operations/src/Laravel/Support/ApiOptions.php
+index 40031885..0d13c825 100644
+--- a/packages/operations/src/Laravel/Support/ApiOptions.php
++++ b/packages/operations/src/Laravel/Support/ApiOptions.php
+@@ -38,7 +38,6 @@ final readonly class ApiOptions
+         public string $cursorKeyId,
+         public array $cursorKeyring,
+         public string $discovery,
+-        public string $problemTypeBase,
+         public array $capabilities,
+     ) {}
+ 
+@@ -70,12 +69,6 @@ final readonly class ApiOptions
+             $violations->add('discovery', 'must be public or authenticated');
+         }
+ 
+-        $problemTypeBase = self::nonEmpty($violations, 'problem_type_base', $config['problem_type_base'] ?? 'https://corex.dev/problems/');
+-
+-        if (preg_match('#\Ahttps://#', $problemTypeBase) !== 1) {
+-            $violations->add('problem_type_base', 'must be an absolute https URI');
+-        }
+-
+         $keyId = self::nonEmpty($violations, 'cursor.current_key_id', $cursor['current_key_id'] ?? 'primary');
+         $keyring = self::keyring($violations, $cursor['keyring'] ?? [$keyId => '']);
+ 
+@@ -117,7 +110,6 @@ final readonly class ApiOptions
+             cursorKeyId: $keyId,
+             cursorKeyring: $keyring,
+             discovery: $discovery,
+-            problemTypeBase: $problemTypeBase,
+             capabilities: $capabilities,
+         );
+     }
+@@ -137,7 +129,6 @@ final readonly class ApiOptions
+                 'lease_seconds' => $this->idempotencyLeaseSeconds,
+                 'retention_seconds' => $this->idempotencyRetentionSeconds,
+             ],
+-            'problem_type_base' => $this->problemTypeBase,
+             'product' => $this->product,
+             'routes' => [
+                 'enabled' => $this->routesEnabled,
+diff --git a/packages/operations/src/OpenApi/Internal/OpenApiDocumentGenerator.php b/packages/operations/src/OpenApi/Internal/OpenApiDocumentGenerator.php
+index 85f5a7fe..3426bc5f 100644
+--- a/packages/operations/src/OpenApi/Internal/OpenApiDocumentGenerator.php
++++ b/packages/operations/src/OpenApi/Internal/OpenApiDocumentGenerator.php
+@@ -40,24 +40,11 @@ final class OpenApiDocumentGenerator implements OpenApiDocuments
+             'correlation_id' => ['type' => 'string'],
+             'api_version' => ['type' => 'string', 'const' => $version],
+         ];
+-        $error = ['type' => 'object', 'required' => ['data', 'error', 'meta'], 'properties' => [
+-            'data' => ['type' => 'null'],
+-            'error' => ['type' => 'object', 'required' => ['code', 'message', 'category', 'path', 'retryable', 'details'], 'properties' => [
+-                'code' => $extensions['code'],
+-                'message' => ['type' => 'string'],
+-                'category' => $extensions['category'],
+-                'path' => $extensions['path'],
+-                'retryable' => $extensions['retryable'],
+-                'details' => $extensions['details'],
+-            ]],
+-            'meta' => $meta,
+-        ]];
+-        $problem = ['type' => 'object', 'required' => ['type', 'title', 'status', 'detail', 'instance', 'code', 'category', 'path', 'retryable', 'details', 'request_id', 'correlation_id', 'api_version'], 'properties' => [
++        $problem = ['type' => 'object', 'required' => ['type', 'title', 'status', 'detail', 'code', 'category', 'retryable', 'details', 'request_id', 'correlation_id', 'api_version'], 'properties' => [
+             'type' => ['type' => 'string', 'format' => 'uri'],
+             'title' => ['type' => 'string'],
+             'status' => ['type' => 'integer'],
+             'detail' => ['type' => 'string'],
+-            'instance' => ['type' => 'string', 'format' => 'uri'],
+             'code' => $extensions['code'],
+             'category' => $extensions['category'],
+             'path' => $extensions['path'],
+@@ -91,16 +78,15 @@ final class OpenApiDocumentGenerator implements OpenApiDocuments
+                 'parameters' => $parameters,
+                 'responses' => [
+                     $operation->successStatus => ['description' => 'Success', 'content' => ['application/json' => ['schema' => [
+-                        'type' => 'object', 'required' => ['data', 'error', 'meta'], 'properties' => [
+-                            'data' => $this->schemas->response($operation), 'error' => ['type' => 'null'], 'meta' => $meta,
++                        'type' => 'object', 'required' => ['data', 'meta'], 'properties' => [
++                            'data' => $this->schemas->response($operation), 'meta' => $meta,
+                         ],
+                     ]]]],
+                 ],
+             ];
+ 
+-            foreach ([401, 403, 404, 406, 409, 422, 500] as $status) {
++            foreach ([401, 403, 404, 409, 415, 422, 500] as $status) {
+                 $entry['responses'][$status] = ['description' => 'API error', 'content' => [
+-                    'application/json' => ['schema' => $error],
+                     'application/problem+json' => ['schema' => $problem],
+                 ]];
+             }
+diff --git a/packages/operations/tests/Feature/AuthorizationLayersTest.php b/packages/operations/tests/Feature/AuthorizationLayersTest.php
+index b846cab7..fe7bdfc1 100644
+--- a/packages/operations/tests/Feature/AuthorizationLayersTest.php
++++ b/packages/operations/tests/Feature/AuthorizationLayersTest.php
+@@ -222,14 +222,14 @@ final class AuthorizationLayersTest extends TestCase
+         $migration->up();
+ 
+         $this->clientScopes->allow = false;
+-        self::assertSame('operations.scope_required', $this->dispatch($this->validInput(), 'scope-denied')->getData(true)['error']['code']);
++        self::assertSame('operations.scope_required', $this->dispatch($this->validInput(), 'scope-denied')->getData(true)['code']);
+         self::assertSame(0, DB::table('sys_api_idempotency')->count());
+ 
+         $this->clientScopes->allow = true;
+         self::assertSame('operations.access_denied', $this->dispatch(
+             [...$this->validInput(), 'secret' => 'must-not-be-stored'],
+             'field-denied',
+-        )->getData(true)['error']['code']);
++        )->getData(true)['code']);
+         self::assertSame(0, DB::table('sys_api_idempotency')->count());
+         self::assertSame(0, AuthorizationHandler::$calls);
+     }
+diff --git a/packages/operations/tests/Feature/CostInvocationTest.php b/packages/operations/tests/Feature/CostInvocationTest.php
+index 8bd6fa71..608f9518 100644
+--- a/packages/operations/tests/Feature/CostInvocationTest.php
++++ b/packages/operations/tests/Feature/CostInvocationTest.php
+@@ -212,10 +212,10 @@ final class CostInvocationTest extends TestCase
+         $unavailable = $this->app->make(OperationDispatcher::class)->dispatch($request(), 'v1', 'notes');
+ 
+         self::assertSame(429, $limited->getStatusCode());
+-        self::assertSame('operations.rate_limited', $limited->getData(true)['error']['code']);
++        self::assertSame('operations.rate_limited', $limited->getData(true)['code']);
+         self::assertSame('7', $limited->headers->get('Retry-After'));
+         self::assertSame(500, $unavailable->getStatusCode());
+-        self::assertSame('operations.budget_store_unavailable', $unavailable->getData(true)['error']['code']);
++        self::assertSame('operations.budget_store_unavailable', $unavailable->getData(true)['code']);
+         self::assertNull($unavailable->headers->get('Retry-After'));
+     }
+ 
+diff --git a/packages/operations/tests/Feature/ErrorRepresentationTest.php b/packages/operations/tests/Feature/ErrorRepresentationTest.php
+index 43842021..fb5f0226 100644
+--- a/packages/operations/tests/Feature/ErrorRepresentationTest.php
++++ b/packages/operations/tests/Feature/ErrorRepresentationTest.php
+@@ -5,110 +5,127 @@ declare(strict_types=1);
+ namespace CoreX\Operations\Tests\Feature;
+ 
+ use CoreX\Data\Laravel\JsonDocuments;
++use CoreX\Errors\Contracts\ProblemRegistry;
+ use CoreX\Errors\Enums\ErrorCategory;
++use CoreX\Operations\Errors\Contracts\ResponseSerializer;
+ use CoreX\Operations\Errors\Enums\OperationsErrorCode;
+ use CoreX\Operations\Errors\Exceptions\ApiError;
+-use CoreX\Operations\Errors\Internal\EnvelopeSerializer;
+-use CoreX\Operations\Errors\Internal\ErrorWire;
+-use CoreX\Operations\Errors\Internal\NegotiatingResponseSerializer;
+ use CoreX\Operations\Errors\Internal\OperationErrorBoundary;
++use CoreX\Operations\Errors\Internal\ProblemDetailsSerializer;
+ use CoreX\Operations\Errors\Internal\RetryAfterPolicy;
+ use CoreX\Operations\Invocation\Data\InvocationMetadata;
+-use CoreX\Operations\Laravel\Support\ApiOptions;
+ use CoreX\Operations\Tests\Support\SyntheticErrorCode;
+ use CoreX\Operations\Tests\TestCase;
++use PHPUnit\Framework\Attributes\DataProvider;
+ use RuntimeException;
+ 
+ final class ErrorRepresentationTest extends TestCase
+ {
+-    public function test_every_category_keeps_the_same_machine_fields_in_both_representations(): void
++    public function test_every_category_preserves_machine_fields_and_registry_identity(): void
+     {
+-        $serializer = $this->app->make(NegotiatingResponseSerializer::class);
+-        $options = $this->app->make(ApiOptions::class);
++        $registry = SyntheticErrorCode::registry();
++        $serializer = new ProblemDetailsSerializer($registry);
+ 
+         foreach (ErrorCategory::cases() as $category) {
++            $code = SyntheticErrorCode::fromCategory($category);
+             $error = new ApiError(
+-                errorCode: SyntheticErrorCode::fromCategory($category),
+-                status: 409,
++                errorCode: $code,
++                status: $registry->get($code)->defaultStatus,
+                 message: 'Safe '.$category->value.' message.',
+                 details: JsonDocuments::capture(['reason' => $category->value]),
+                 category: $category,
+                 retryable: $category === ErrorCategory::Conflict,
+                 path: '/attributes/color',
+             );
+-            $metadata = new InvocationMetadata('req-1', 'v1', '', 'GET', 'corr-1');
+-            $envelope = $serializer->error($error, $metadata)->getData(true);
+-            $problem = $serializer->error($error, new InvocationMetadata('req-1', 'v1', '', 'GET', 'corr-1', 'application/problem+json'))->getData(true);
+-
+-            $this->assertSame($error->status, $problem['status']);
+-            $this->assertSame($envelope['error']['code'], $problem['code']);
+-            $this->assertSame($category->value, $envelope['error']['category']);
+-            $this->assertSame($envelope['error']['category'], $problem['category']);
+-            $this->assertSame('/attributes/color', $envelope['error']['path']);
+-            $this->assertSame($envelope['error']['path'], $problem['path']);
+-            $this->assertSame($envelope['error']['retryable'], $problem['retryable']);
+-            $this->assertSame(['reason' => $category->value], $envelope['error']['details']);
+-            $this->assertSame($envelope['error']['details'], $problem['details']);
+-            $this->assertSame('req-1', $envelope['meta']['request_id']);
+-            $this->assertSame($envelope['meta']['request_id'], $problem['request_id']);
+-            $this->assertSame('corr-1', $envelope['meta']['correlation_id']);
+-            $this->assertSame($envelope['meta']['correlation_id'], $problem['correlation_id']);
+-            $this->assertSame('v1', $envelope['meta']['api_version']);
+-            $this->assertSame($envelope['meta']['api_version'], $problem['api_version']);
+-            $this->assertSame(ErrorWire::type($options->problemTypeBase, $error->errorCode), $problem['type']);
+-            $this->assertSame(ErrorWire::instance($options->problemTypeBase, 'req-1'), $problem['instance']);
+-            $this->assertStringNotContainsString('Throwable', json_encode($problem, JSON_THROW_ON_ERROR));
++            $problem = $serializer->error(error: $error, metadata: new InvocationMetadata('req-1', 'v1', '', 'GET', 'corr-1'))->getData(true);
++
++            self::assertSame($error->status, $problem['status']);
++            self::assertSame($code->value(), $problem['code']);
++            self::assertSame($category->value, $problem['category']);
++            self::assertSame('/attributes/color', $problem['path']);
++            self::assertSame($category === ErrorCategory::Conflict, $problem['retryable']);
++            self::assertSame(['reason' => $category->value], $problem['details']);
++            self::assertSame('req-1', $problem['request_id']);
++            self::assertSame('corr-1', $problem['correlation_id']);
++            self::assertSame('v1', $problem['api_version']);
++            self::assertSame($registry->get($code)->type, $problem['type']);
++            self::assertSame($registry->get($code)->title, $problem['title']);
++            self::assertSame($error->getMessage(), $problem['detail']);
++            self::assertStringNotContainsString('Throwable', json_encode($problem, JSON_THROW_ON_ERROR));
++        }
++    }
++
++    public function test_every_registered_problem_can_be_serialized(): void
++    {
++        $registry = $this->app->make(ProblemRegistry::class);
++        $serializer = $this->app->make(ResponseSerializer::class);
++        $metadata = new InvocationMetadata('req-1', 'v1', '', 'GET');
++
++        self::assertNotEmpty($registry->all());
++        foreach ($registry->all() as $definition) {
++            $error = new ApiError(errorCode: $definition->code, status: $definition->defaultStatus, message: 'Occurrence detail.', category: $definition->category, retryable: $definition->retryable);
++            $registry->assertOccurrence(descriptor: $error->errorDescriptor(), status: $error->status);
++            $response = $serializer->error(error: $error, metadata: $metadata);
++            $problem = $response->getData(true);
++            self::assertSame($definition->type, $problem['type']);
++            self::assertSame($definition->title, $problem['title']);
++            self::assertSame('Occurrence detail.', $problem['detail']);
++            self::assertSame($definition->defaultStatus, $response->getStatusCode());
++            self::assertSame('application/problem+json', $response->headers->get('Content-Type'));
++            foreach (['instance', 'path', 'message', 'error', 'data'] as $member) {
++                self::assertArrayNotHasKey($member, $problem);
++            }
+         }
+     }
+ 
+     public function test_human_message_change_leaves_the_machine_fixture_unchanged(): void
+     {
+-        $serializer = new EnvelopeSerializer;
++        $serializer = $this->app->make(ResponseSerializer::class);
+         $metadata = new InvocationMetadata('req-1', 'v1', '', 'GET', 'corr-1');
+         $first = $serializer->error(new ApiError(OperationsErrorCode::Conflict, 409, 'First safe message.', category: ErrorCategory::Conflict, retryable: true, path: '/a'), $metadata)->getData(true);
+         $second = $serializer->error(new ApiError(OperationsErrorCode::Conflict, 409, 'Second safe message.', category: ErrorCategory::Conflict, retryable: true, path: '/a'), $metadata)->getData(true);
+ 
+-        $this->assertNotSame($first['error']['message'], $second['error']['message']);
+-        unset($first['error']['message'], $second['error']['message']);
+-        $this->assertSame($first, $second);
++        self::assertNotSame($first['detail'], $second['detail']);
++        unset($first['detail'], $second['detail']);
++        self::assertSame($first, $second);
+     }
+ 
+-    public function test_accept_q_values_wildcards_and_unsupported_types(): void
++    public static function accepts(): array
++    {
++        return [[''], ['application/json'], ['application/problem+json'], ['text/html'], ['*/*;q=0'], ['application/problem+json;q=0.9, application/json;q=0.1']];
++    }
++
++    #[DataProvider('accepts')]
++    public function test_accept_always_receives_problem_json(string $accept): void
+     {
+         $this->app['router']->get('/represented/{version}', static function (): never {
+-            throw new ApiError(OperationsErrorCode::Forbidden, 403, 'Operation is not permitted.', retryable: false);
++            throw new ApiError(OperationsErrorCode::Forbidden, 403, 'Operation is not permitted.');
+         })->middleware(OperationErrorBoundary::class);
+ 
+-        $problem = $this->call('GET', '/represented/v1', server: ['HTTP_ACCEPT' => 'application/problem+json;q=0.9, application/json;q=0.1', 'HTTP_X_REQUEST_ID' => 'req-1', 'HTTP_X_CORRELATION_ID' => 'corr-1']);
+-        $problem->assertForbidden();
+-        $this->assertStringContainsString('application/problem+json', (string) $problem->headers->get('Content-Type'));
+-        $this->assertSame('operations.forbidden', $problem->json('code'));
+-        $this->assertSame('Accept', $problem->headers->get('Vary'));
+-        $this->assertNull($problem->headers->get('Retry-After'));
+-
+-        $wildcard = $this->call('GET', '/represented/v1', server: ['HTTP_ACCEPT' => '*/*', 'HTTP_X_REQUEST_ID' => 'req-1']);
+-        $wildcard->assertForbidden();
+-        $this->assertSame('operations.forbidden', $wildcard->json('error.code'));
+-        $this->assertStringContainsString('application/json', (string) $wildcard->headers->get('Content-Type'));
+-
+-        $unsupported = $this->call('GET', '/represented/v1', server: ['HTTP_ACCEPT' => 'text/html', 'HTTP_X_REQUEST_ID' => 'req-1']);
+-        $unsupported->assertStatus(406);
+-        $this->assertSame('operations.request_rejected', $unsupported->json('error.code'));
+-        $this->assertStringNotContainsString('requested representation', (string) $unsupported->getContent());
+-        $this->assertStringContainsString('application/json', (string) $unsupported->headers->get('Content-Type'));
++        $response = $this->call('GET', '/represented/v1', server: ['HTTP_ACCEPT' => $accept, 'HTTP_X_REQUEST_ID' => 'req-1', 'HTTP_X_CORRELATION_ID' => 'corr-1']);
++        $definition = $this->app->make(ProblemRegistry::class)->get(OperationsErrorCode::Forbidden);
++        $response->assertForbidden()->assertHeader('Content-Type', 'application/problem+json')
++            ->assertJsonPath('code', 'operations.forbidden')->assertJsonPath('type', $definition->type)
++            ->assertJsonPath('title', $definition->title)->assertJsonPath('detail', 'Operation is not permitted.')
++            ->assertJsonPath('request_id', 'req-1')->assertJsonPath('correlation_id', 'corr-1');
++        self::assertNull($response->headers->get('Vary'));
++        self::assertNull($response->headers->get('Retry-After'));
++        foreach (['instance', 'path', 'message', 'error', 'data'] as $member) {
++            self::assertArrayNotHasKey($member, $response->json());
++        }
+     }
+ 
+     public function test_retry_after_requires_a_named_bounded_policy(): void
+     {
+-        $serializer = new EnvelopeSerializer;
++        $serializer = $this->app->make(ResponseSerializer::class);
+         $metadata = new InvocationMetadata('req-1', 'v1', '', 'GET');
+         $retryable = $serializer->error(new ApiError(OperationsErrorCode::Conflict, 409, 'Later.', category: ErrorCategory::Conflict, retryable: true), $metadata);
+         $named = $serializer->error(new ApiError(OperationsErrorCode::Conflict, 409, 'Later.', category: ErrorCategory::Conflict, retryable: true, retryAfterPolicy: RetryAfterPolicy::RATE_LIMIT), $metadata);
+         $unknown = $serializer->error(new ApiError(OperationsErrorCode::Conflict, 409, 'Later.', category: ErrorCategory::Conflict, retryable: true, retryAfterPolicy: 'custom'), $metadata);
+ 
+-        $this->assertNull($retryable->headers->get('Retry-After'));
+-        $this->assertSame('60', $named->headers->get('Retry-After'));
+-        $this->assertNull($unknown->headers->get('Retry-After'));
++        self::assertNull($retryable->headers->get('Retry-After'));
++        self::assertSame('60', $named->headers->get('Retry-After'));
++        self::assertNull($unknown->headers->get('Retry-After'));
+     }
+ 
+     public function test_unknown_exception_stays_a_safe_internal_error(): void
+@@ -118,11 +135,8 @@ final class ErrorRepresentationTest extends TestCase
+         })->middleware(OperationErrorBoundary::class);
+ 
+         $response = $this->call('GET', '/exploded/v1', server: ['HTTP_ACCEPT' => 'application/problem+json', 'HTTP_X_REQUEST_ID' => 'req-1']);
+-
+-        $response->assertStatus(500);
+-        $this->assertSame('core.internal_error', $response->json('code'));
+-        $this->assertSame('Operation could not be completed.', $response->json('detail'));
+-        $this->assertStringNotContainsString('SQLSTATE', (string) $response->getContent());
+-        $this->assertStringNotContainsString('secret', (string) $response->getContent());
++        $response->assertStatus(500)->assertJsonPath('code', 'core.internal_error')->assertJsonPath('detail', 'Operation could not be completed.');
++        self::assertStringNotContainsString('SQLSTATE', (string) $response->getContent());
++        self::assertStringNotContainsString('secret', (string) $response->getContent());
+     }
+ }
+diff --git a/packages/operations/tests/Feature/InputEnvelopeTest.php b/packages/operations/tests/Feature/InputEnvelopeTest.php
+new file mode 100644
+index 00000000..b9e37624
+--- /dev/null
++++ b/packages/operations/tests/Feature/InputEnvelopeTest.php
+@@ -0,0 +1,106 @@
++<?php
++
++declare(strict_types=1);
++
++namespace CoreX\Operations\Tests\Feature;
++
++use CoreX\Context\Contracts\TenancyManager;
++use CoreX\Context\Contracts\TenantContextResolver;
++use CoreX\Context\Data\AccountRef;
++use CoreX\Errors\Contracts\ProblemRegistry;
++use CoreX\Errors\Enums\ErrorCategory;
++use CoreX\Modules\Contracts\ModuleRegistry;
++use CoreX\Modules\Data\Api;
++use CoreX\Modules\Data\ModuleManifest;
++use CoreX\Modules\Internal\Compiler\RegistryCompiler;
++use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
++use CoreX\Operations\Authorization\Contracts\PrincipalResolver;
++use CoreX\Operations\Definition\Data\Operation;
++use CoreX\Operations\Definition\Laravel\OperationFactory;
++use CoreX\Operations\Errors\Enums\OperationsErrorCode;
++use CoreX\Operations\Internal\Http\ApiController;
++use CoreX\Operations\Invocation\Contracts\RequestContext;
++use CoreX\Operations\Invocation\Enums\InputEnvelope;
++use CoreX\Operations\Testing\ContextFixture;
++use CoreX\Operations\Testing\IdentityFixture;
++use CoreX\Operations\Testing\ModuleFixture;
++use CoreX\Operations\Testing\NoteHandler;
++use CoreX\Operations\Tests\TestCase;
++use PHPUnit\Framework\Attributes\DataProvider;
++
++final class InputEnvelopeTest extends TestCase
++{
++    protected function setUp(): void
++    {
++        parent::setUp();
++        $declarations = [];
++        foreach (['GET', 'POST'] as $method) {
++            $declarations[] = Api::operation(
++                id: 'notes.'.strtolower($method), method: $method, path: '/notes', handler: NoteHandler::class, ability: 'notes.read',
++                requestSchema: ['type' => 'object', 'additionalProperties' => false, 'required' => ['title'], 'properties' => ['title' => ['type' => 'string']]],
++                responseSchema: ['type' => 'object'], rules: ['title' => ['required', 'string']],
++            );
++        }
++        $registry = $this->app->make(RegistryCompiler::class)->compile([
++            ModuleManifest::make('example/notes')->title('Notes')->tablePrefix('nts')->extends($declarations),
++        ], installedPackages: []);
++        foreach ($registry->api as $declaration) {
++            self::assertSame(InputEnvelope::forMethod($declaration->method), OperationFactory::fromDeclaration($declaration)->inputEnvelope);
++        }
++        $this->app->instance(ModuleRegistry::class, new ModuleFixture($registry));
++        $tenants = new ContextFixture;
++        $tenants->initialize(new AccountRef('A', 'a', 'active', [], []));
++        $this->app->instance(TenantContextResolver::class, $tenants);
++        $this->app->instance(TenancyManager::class, $tenants);
++        $this->app->instance(PrincipalResolver::class, new IdentityFixture);
++        $this->app->instance(OperationAuthorizer::class, new class implements OperationAuthorizer
++        {
++            public function allows(Operation $operation, RequestContext $context): bool
++            {
++                return true;
++            }
++        });
++        NoteHandler::$calls = 0;
++        $this->app['router']->match(['GET', 'POST'], '/strict/{version}/{path}', ApiController::class);
++    }
++
++    public static function requests(): array
++    {
++        return [
++            'query' => ['GET', '?title=x', '', 'application/json', 200, null, null],
++            'strict query' => ['GET', '?title=x&color=red', '', 'application/json', 422, OperationsErrorCode::UndeclaredFields, ['color']],
++            'media type' => ['POST', '', '{"title":"x"}', 'text/plain', 415, OperationsErrorCode::UnsupportedMediaType, null],
++            'query before media type' => ['POST', '?a=1', '{', 'text/plain', 422, OperationsErrorCode::InputEnvelopeInvalid, null],
++            'query with body' => ['POST', '?a=1', '{"title":"x"}', 'application/json', 422, OperationsErrorCode::InputEnvelopeInvalid, null],
++            'array' => ['POST', '', '[1,2]', 'application/json', 422, OperationsErrorCode::InputEnvelopeInvalid, null],
++            'malformed' => ['POST', '', '{', 'application/json', 422, OperationsErrorCode::InputEnvelopeInvalid, null],
++            'scalar' => ['POST', '', 'null', 'application/json', 422, OperationsErrorCode::InputEnvelopeInvalid, null],
++            'strict body' => ['POST', '', '{"title":"x","b":1,"a":2}', 'application/json', 422, OperationsErrorCode::UndeclaredFields, ['a', 'b']],
++            'object' => ['POST', '', '{"title":"x"}', 'application/json', 200, null, null],
++            'field validation' => ['POST', '', '{}', 'application/json', 422, OperationsErrorCode::ValidationFailed, null],
++        ];
++    }
++
++    #[DataProvider('requests')]
++    public function test_input_envelope_and_strictness(string $method, string $query, string $body, string $contentType, int $status, ?OperationsErrorCode $code, ?array $fields): void
++    {
++        $response = $this->call($method, '/strict/v1/notes'.$query, server: ['CONTENT_TYPE' => $contentType], content: $body);
++        $response->assertStatus($status);
++
++        if ($code === null) {
++            self::assertSame(1, NoteHandler::$calls);
++            self::assertArrayNotHasKey('error', $response->json());
++
++            return;
++        }
++        self::assertSame(0, NoteHandler::$calls);
++        $definition = $this->app->make(ProblemRegistry::class)->get($code);
++        self::assertSame(ErrorCategory::Validation, $definition->category);
++        $response->assertHeader('Content-Type', 'application/problem+json')->assertJsonPath('code', $code->value())
++            ->assertJsonPath('type', $definition->type)->assertJsonPath('title', $definition->title)->assertJsonPath('category', 'validation');
++
++        if ($fields !== null) {
++            $response->assertJsonPath('details.fields', $fields);
++        }
++    }
++}
+diff --git a/packages/operations/tests/Feature/OperationErrorBoundaryTest.php b/packages/operations/tests/Feature/OperationErrorBoundaryTest.php
+index abb7b27d..6ec350b9 100644
+--- a/packages/operations/tests/Feature/OperationErrorBoundaryTest.php
++++ b/packages/operations/tests/Feature/OperationErrorBoundaryTest.php
+@@ -9,9 +9,9 @@ use CoreX\Errors\Contracts\DescribesError;
+ use CoreX\Errors\Contracts\ProblemRegistry;
+ use CoreX\Errors\Data\ErrorDescriptor;
+ use CoreX\Errors\Enums\ErrorCategory;
++use CoreX\Operations\Errors\Contracts\ResponseSerializer;
+ use CoreX\Operations\Errors\Enums\OperationsErrorCode;
+ use CoreX\Operations\Errors\Exceptions\ApiError;
+-use CoreX\Operations\Errors\Internal\EnvelopeSerializer;
+ use CoreX\Operations\Errors\Internal\ErrorMapper;
+ use CoreX\Operations\Errors\Internal\OperationErrorBoundary;
+ use CoreX\Operations\Invocation\Data\InvocationMetadata;
+@@ -28,9 +28,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
+ 
+ final class OperationErrorBoundaryTest extends TestCase
+ {
+-    public function test_old_wire_snapshot_has_no_new_error_fields(): void
++    public function test_problem_wire_snapshot_has_registry_identity_and_no_envelope(): void
+     {
+-        $response = (new EnvelopeSerializer)->error(
++        $response = $this->app->make(ResponseSerializer::class)->error(
+             error: new ApiError(OperationsErrorCode::Forbidden, 403, 'Operation is not permitted.'),
+             metadata: new InvocationMetadata('req-1', 'v1', '', 'GET', 'corr-1'),
+         );
+@@ -38,23 +38,20 @@ final class OperationErrorBoundaryTest extends TestCase
+         $json = $response->getContent();
+ 
+         $this->assertSame([
+-            'data' => null,
+-            'error' => [
+-                'code' => 'operations.forbidden',
+-                'message' => 'Operation is not permitted.',
+-                'category' => 'authorization',
+-                'path' => null,
+-                'retryable' => false,
+-                'details' => [],
+-            ],
+-            'meta' => [
+-                'request_id' => 'req-1',
+-                'correlation_id' => 'corr-1',
+-                'api_version' => 'v1',
+-            ],
++            'type' => 'urn:corex:problem:operations.forbidden',
++            'title' => 'Forbidden.',
++            'status' => 403,
++            'detail' => 'Operation is not permitted.',
++            'code' => 'operations.forbidden',
++            'category' => 'authorization',
++            'retryable' => false,
++            'details' => [],
++            'request_id' => 'req-1',
++            'correlation_id' => 'corr-1',
++            'api_version' => 'v1',
+         ], $payload);
+         $this->assertSame('req-1', $response->headers->get('X-Request-ID'));
+-        $this->assertSame('Accept', $response->headers->get('Vary'));
++        $this->assertNull($response->headers->get('Vary'));
+         $this->assertStringContainsString('no-store', (string) $response->headers->get('Cache-Control'));
+         $this->assertIsString($json);
+         $this->assertArrayNotHasKey('X-Correlation-ID', $response->headers->all());
+@@ -146,20 +143,17 @@ final class OperationErrorBoundaryTest extends TestCase
+ 
+         $response->assertStatus(500)
+             ->assertExactJson([
+-                'data' => null,
+-                'error' => [
+-                    'code' => 'core.internal_error',
+-                    'message' => 'Operation could not be completed.',
+-                    'category' => 'internal',
+-                    'path' => null,
+-                    'retryable' => false,
+-                    'details' => [],
+-                ],
+-                'meta' => [
+-                    'request_id' => 'req-boom',
+-                    'correlation_id' => 'req-boom',
+-                    'api_version' => 'v1',
+-                ],
++                'type' => 'urn:corex:problem:core.internal_error',
++                'title' => 'Internal error.',
++                'status' => 500,
++                'detail' => 'Operation could not be completed.',
++                'code' => 'core.internal_error',
++                'category' => 'internal',
++                'retryable' => false,
++                'details' => [],
++                'request_id' => 'req-boom',
++                'correlation_id' => 'req-boom',
++                'api_version' => 'v1',
+             ])
+             ->assertHeader('X-Request-ID', 'req-boom');
+         $this->assertStringContainsString('no-store', (string) $response->headers->get('Cache-Control'));
+@@ -219,23 +213,20 @@ final class OperationErrorBoundaryTest extends TestCase
+ 
+         $response->assertForbidden()
+             ->assertExactJson([
+-                'data' => null,
+-                'error' => [
+-                    'code' => 'operations.forbidden',
+-                    'message' => 'Operation is not permitted.',
+-                    'category' => 'authorization',
+-                    'path' => null,
+-                    'retryable' => false,
+-                    'details' => [],
+-                ],
+-                'meta' => [
+-                    'request_id' => 'req-123',
+-                    'correlation_id' => 'corr-456',
+-                    'api_version' => 'v2',
+-                ],
++                'type' => 'urn:corex:problem:operations.forbidden',
++                'title' => 'Forbidden.',
++                'status' => 403,
++                'detail' => 'Operation is not permitted.',
++                'code' => 'operations.forbidden',
++                'category' => 'authorization',
++                'retryable' => false,
++                'details' => [],
++                'request_id' => 'req-123',
++                'correlation_id' => 'corr-456',
++                'api_version' => 'v2',
+             ]);
+         $this->assertSame('corr-456', $metadata->correlationId);
+         $this->assertNull($response->headers->get('X-Correlation-ID'));
+-        $this->assertSame('Accept', $response->headers->get('Vary'));
++        $this->assertNull($response->headers->get('Vary'));
+     }
+ }
+diff --git a/packages/operations/tests/Feature/PlatformTest.php b/packages/operations/tests/Feature/PlatformTest.php
+index 0f0990e6..383e4795 100644
+--- a/packages/operations/tests/Feature/PlatformTest.php
++++ b/packages/operations/tests/Feature/PlatformTest.php
+@@ -124,7 +124,7 @@ final class PlatformTest extends TestCase
+         self::assertSame(['request_id' => 'request-123', 'correlation_id' => 'request-123', 'api_version' => 'v1'], $response->getData(true)['meta']);
+         self::assertSame('trusted-user', $response->getData(true)['data']['actor']);
+         self::assertSame('A', $response->getData(true)['data']['account']);
+-        self::assertNull($response->getData(true)['error']);
++        self::assertArrayNotHasKey('error', $response->getData(true));
+     }
+ 
+     public function test_unknown_routes_methods_versions_and_metadata_are_not_executable(): void
+@@ -141,12 +141,12 @@ final class PlatformTest extends TestCase
+     {
+         $this->allow();
+         $this->tenants->end();
+-        self::assertSame('operations.context_required', $this->dispatch()->getData(true)['error']['code']);
++        self::assertSame('operations.context_required', $this->dispatch()->getData(true)['code']);
+         $this->tenants->value = new TenantContext($this->account('A'), boxed: true);
+         self::assertSame(403, $this->dispatch()->getStatusCode());
+         $this->tenants->initialize($this->account('A'));
+         $this->modules->enabled = false;
+-        self::assertSame('operations.module_unavailable', $this->dispatch()->getData(true)['error']['code']);
++        self::assertSame('operations.module_unavailable', $this->dispatch()->getData(true)['code']);
+         self::assertSame(0, NoteHandler::$calls);
+     }
+ 
+@@ -198,7 +198,7 @@ final class PlatformTest extends TestCase
+         $this->allow();
+         $response = $this->dispatch('GET', 'notes/'.$id);
+         self::assertSame($status, $response->getStatusCode());
+-        self::assertNull($response->getData(true)['data']);
++        self::assertArrayNotHasKey('data', $response->getData(true));
+         self::assertStringNotContainsString('secret', $response->getContent());
+         self::assertStringNotContainsString('SQLSTATE', $response->getContent());
+     }
+@@ -233,11 +233,14 @@ final class PlatformTest extends TestCase
+         self::assertSame('notes.read', $paths['/notes']['post']['x-corex-ability']);
+         self::assertSame(['type' => 'object'], $paths['/notes']['post']['responses'][201]['content']['application/json']['schema']['properties']['data']);
+         $error = $paths['/notes']['post']['responses'][403]['content'];
+-        self::assertSame(
+-            $error['application/json']['schema']['properties']['error']['properties']['code'],
+-            $error['application/problem+json']['schema']['properties']['code'],
+-        );
+-        self::assertSame(['request_id', 'correlation_id', 'api_version'], $error['application/json']['schema']['properties']['meta']['required']);
++        self::assertSame(['application/problem+json'], array_keys($error));
++        $problem = $error['application/problem+json']['schema'];
++        self::assertNotContains('path', $problem['required']);
++        self::assertArrayNotHasKey('instance', $problem['properties']);
++        self::assertContains('request_id', $problem['required']);
++        self::assertContains('api_version', $problem['required']);
++        self::assertSame(['data', 'meta'], $paths['/notes']['post']['responses'][201]['content']['application/json']['schema']['required']);
++        self::assertArrayHasKey(415, $paths['/notes']['post']['responses']);
+         self::assertSame(json_encode($document), json_encode($schema->document('v1', 'https://example.test/chosen/v1')));
+         $this->modules->registry = $this->compile(array_reverse($this->modules->registry->api));
+         self::assertSame(json_encode($document), json_encode($schema->document('v1', 'https://example.test/chosen/v1')));
+@@ -263,8 +266,8 @@ final class PlatformTest extends TestCase
+         foreach ([401, 403, 404, 409, 422, 429, 400, 413, 415, 500, 503] as $status) {
+             $response = $this->getJson('/upstream/v2/'.$status, ['X-Request-ID' => 'upstream-123']);
+             $response->assertStatus($status >= 500 ? 500 : $status)
+-                ->assertJsonPath('meta.api_version', 'v2')
+-                ->assertJsonPath('meta.request_id', 'upstream-123')
++                ->assertJsonPath('api_version', 'v2')
++                ->assertJsonPath('request_id', 'upstream-123')
+                 ->assertHeader('X-Request-ID', 'upstream-123');
+             self::assertStringNotContainsString('secret', $response->getContent());
+         }
+@@ -286,7 +289,7 @@ final class PlatformTest extends TestCase
+         $this->allow();
+         $this->app['router']->post('/strict/{version}/{path}', ApiController::class);
+         $this->postJson('/strict/v1/notes?actor=forged', ['title' => 'Hello'])->assertUnprocessable();
+-        $this->post('/strict/v1/notes', ['title' => 'Hello'])->assertUnprocessable();
++        $this->post('/strict/v1/notes', ['title' => 'Hello'])->assertStatus(415);
+         self::assertSame(0, NoteHandler::$calls);
+     }
+ 
+@@ -294,7 +297,7 @@ final class PlatformTest extends TestCase
+     {
+         $this->allow();
+         $this->tenants->initialize(new AccountRef('A', 'a', 'suspended', [], []));
+-        self::assertSame('operations.account_unavailable', $this->dispatch()->getData(true)['error']['code']);
++        self::assertSame('operations.account_unavailable', $this->dispatch()->getData(true)['code']);
+         self::assertSame(0, NoteHandler::$calls);
+     }
+ 
+diff --git a/packages/tools/tests/Feature/ToolAuthorizationLayersTest.php b/packages/tools/tests/Feature/ToolAuthorizationLayersTest.php
+index 9ac2127e..5177e83d 100644
+--- a/packages/tools/tests/Feature/ToolAuthorizationLayersTest.php
++++ b/packages/tools/tests/Feature/ToolAuthorizationLayersTest.php
+@@ -256,7 +256,7 @@ final class ToolAuthorizationLayersTest extends TestCase
+     /** @param array<string, mixed> $input */
+     private function assertHttpError(string $code, array $input): void
+     {
+-        self::assertSame($code, $this->dispatch($input)->getData(true)['error']['code']);
++        self::assertSame($code, $this->dispatch($input)->getData(true)['code']);
+     }
+ 
+     /** @return array<string, string> */
+diff --git a/scripts/configuration-classes.json b/scripts/configuration-classes.json
+index f5d62968..a15e7ad4 100644
+--- a/scripts/configuration-classes.json
++++ b/scripts/configuration-classes.json
+@@ -826,15 +826,6 @@
+             "deprecated_aliases": "",
+             "notes": ""
+         },
+-        "corex-operations.problem_type_base": {
+-            "owner": "axiomasoft/corex-operations",
+-            "secret": "no",
+-            "mode": "product-policy",
+-            "reloadable": "unobserved",
+-            "validation": "unobserved",
+-            "deprecated_aliases": "",
+-            "notes": ""
+-        },
+         "corex-operations.product": {
+             "owner": "axiomasoft/corex-operations",
+             "secret": "no",
+diff --git a/tests/Golden/REBASELINE.md b/tests/Golden/REBASELINE.md
+index 75a4ca7a..858e0f29 100644
+--- a/tests/Golden/REBASELINE.md
++++ b/tests/Golden/REBASELINE.md
+@@ -16,3 +16,4 @@ Baseline changes require an intentional surface change under PLAN3.D40.
+ | 2026-10-02 | PLAN3.D69 / PLAN3.D64 | php-surface | P05.1: static Config removed; +RuntimeConfigCheck (Spi Implement), +RuntimeConfigGate (Spi Call), CoreOptions +acknowledgedDangerousModes, CoreOptionsParser::current removed, eleven new Internal Options and four DangerousModesCheck/AppKeyCheck types, provider boot() additions and Internal constructor/handle parameter deltas; named delta in plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05.1-execution/golden-semantic-delta.json; routes/events/wire preserved |
+ | 2026-10-02 | PLAN3.D70 / PLAN3.D64 | php-surface | P05.2: thin providers; +48 registrar, factory and named-class types (Spi call registrars/factories, Internal named classes), ProblemRegistryRegistrar Internal removed, provider/registrar signatures otherwise unchanged; named delta in plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05.2-execution/golden-semantic-delta.json; routes/events/wire preserved |
+ | 2026-10-03 | PLAN3.D70 / PLAN3.D64 | php-surface | P05.3: ports instead of facades/helpers/static state; -2 Internal types (PubSubManager, wakeup SystemClock), +5 Internal types (SystemRoleMutationScope, CurrentActorResolver, ApplicationLocator, DomainEventDefaults) and the ResolvesCoreOptions Spi trait, Internal constructor deltas, optional trailing PlanningCommand parameter, MutatingHandler Testing constructor; ten promoted Operations\Testing fixtures merged into the baseline by regeneration; named delta in plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05.3-execution/golden-semantic-delta.json; routes/events/wire preserved |
++| 2026-10-03 | PLAN3.D90 / PLAN3.D92 / PLAN3.D64 | php-surface, wire | P06.1: strict InputEnvelope, three registered errors and registry-backed RFC 9457 HTTP errors; remove Accept negotiation and problem type base; generated OpenAPI/errors snapshots refreshed; named semantic delta in plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06.1-execution/golden-semantic-delta.json; routes/events preserved |
+diff --git a/tests/Golden/baseline/php-surface.json b/tests/Golden/baseline/php-surface.json
+index 50181020..39e41a24 100644
+--- a/tests/Golden/baseline/php-surface.json
++++ b/tests/Golden/baseline/php-surface.json
+@@ -43622,6 +43622,17 @@
+                         "name": "cost",
+                         "type": "?array",
+                         "variadic": false
++                    },
++                    {
++                        "byRef": false,
++                        "default": {
++                            "enum": "CoreX\\Operations\\Invocation\\Enums\\InputEnvelope",
++                            "case": "JsonObject",
++                            "value": "json-object"
++                        },
++                        "name": "inputEnvelope",
++                        "type": "CoreX\\Operations\\Invocation\\Enums\\InputEnvelope",
++                        "variadic": false
+                     }
+                 ],
+                 "return": "",
+@@ -43690,6 +43701,12 @@
+                 "static": false,
+                 "type": "CoreX\\Operations\\Idempotency\\Enums\\IdempotencyRequirement"
+             },
++            "inputEnvelope": {
++                "name": "inputEnvelope",
++                "readonly": true,
++                "static": false,
++                "type": "CoreX\\Operations\\Invocation\\Enums\\InputEnvelope"
++            },
+             "inputRules": {
+                 "name": "inputRules",
+                 "readonly": true,
+@@ -44593,6 +44610,14 @@
+                     "value": "operations.idempotency_not_supported"
+                 }
+             },
++            "InputEnvelopeInvalid": {
++                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
++                "value": {
++                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
++                    "case": "InputEnvelopeInvalid",
++                    "value": "operations.input_envelope_invalid"
++                }
++            },
+             "InvalidRequest": {
+                 "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                 "value": {
+@@ -44681,6 +44706,14 @@
+                     "value": "operations.scope_required"
+                 }
+             },
++            "UndeclaredFields": {
++                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
++                "value": {
++                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
++                    "case": "UndeclaredFields",
++                    "value": "operations.undeclared_fields"
++                }
++            },
+             "UnknownMessageContract": {
+                 "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                 "value": {
+@@ -44689,6 +44722,14 @@
+                     "value": "operations.unknown_message_contract"
+                 }
+             },
++            "UnsupportedMediaType": {
++                "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
++                "value": {
++                    "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
++                    "case": "UnsupportedMediaType",
++                    "value": "operations.unsupported_media_type"
++                }
++            },
+             "ValidationFailed": {
+                 "type": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+                 "value": {
+@@ -44892,30 +44933,10 @@
+         "abstract": false,
+         "constants": [],
+         "final": true,
+-        "interfaces": [
+-            "CoreX\\Operations\\Errors\\Contracts\\ResponseSerializer"
+-        ],
++        "interfaces": [],
+         "internal": true,
+         "kind": "class",
+         "methods": {
+-            "error": {
+-                "params": [
+-                    {
+-                        "byRef": false,
+-                        "name": "error",
+-                        "type": "CoreX\\Operations\\Errors\\Exceptions\\ApiError",
+-                        "variadic": false
+-                    },
+-                    {
+-                        "byRef": false,
+-                        "name": "metadata",
+-                        "type": "CoreX\\Operations\\Invocation\\Data\\InvocationMetadata",
+-                        "variadic": false
+-                    }
+-                ],
+-                "return": "Illuminate\\Http\\JsonResponse",
+-                "static": false
+-            },
+             "success": {
+                 "params": [
+                     {
+@@ -45024,24 +45045,6 @@
+                 "return": "array",
+                 "static": true
+             },
+-            "instance": {
+-                "params": [
+-                    {
+-                        "byRef": false,
+-                        "name": "problemTypeBase",
+-                        "type": "string",
+-                        "variadic": false
+-                    },
+-                    {
+-                        "byRef": false,
+-                        "name": "requestId",
+-                        "type": "string",
+-                        "variadic": false
+-                    }
+-                ],
+-                "return": "string",
+-                "static": true
+-            },
+             "meta": {
+                 "params": [
+                     {
+@@ -45053,31 +45056,13 @@
+                 ],
+                 "return": "array",
+                 "static": true
+-            },
+-            "type": {
+-                "params": [
+-                    {
+-                        "byRef": false,
+-                        "name": "problemTypeBase",
+-                        "type": "string",
+-                        "variadic": false
+-                    },
+-                    {
+-                        "byRef": false,
+-                        "name": "code",
+-                        "type": "string",
+-                        "variadic": false
+-                    }
+-                ],
+-                "return": "string",
+-                "static": true
+             }
+         },
+         "parent": null,
+         "properties": [],
+         "readonly": false
+     },
+-    "CoreX\\Operations\\Errors\\Internal\\NegotiatingResponseSerializer": {
++    "CoreX\\Operations\\Errors\\Internal\\HttpResponseSerializer": {
+         "abstract": false,
+         "constants": [],
+         "final": true,
+@@ -45100,12 +45085,6 @@
+                         "name": "problems",
+                         "type": "CoreX\\Operations\\Errors\\Internal\\ProblemDetailsSerializer",
+                         "variadic": false
+-                    },
+-                    {
+-                        "byRef": false,
+-                        "name": "errors",
+-                        "type": "CoreX\\Operations\\Errors\\Internal\\ErrorMapper",
+-                        "variadic": false
+                     }
+                 ],
+                 "return": "",
+@@ -45239,8 +45218,8 @@
+                 "params": [
+                     {
+                         "byRef": false,
+-                        "name": "options",
+-                        "type": "CoreX\\Operations\\Laravel\\Support\\ApiOptions",
++                        "name": "problems",
++                        "type": "CoreX\\Errors\\Contracts\\ProblemRegistry",
+                         "variadic": false
+                     }
+                 ],
+@@ -45300,40 +45279,6 @@
+         "properties": [],
+         "readonly": false
+     },
+-    "CoreX\\Operations\\Errors\\Laravel\\AcceptNegotiation": {
+-        "abstract": false,
+-        "constants": {
+-            "JSON": {
+-                "type": "string",
+-                "value": "application/json"
+-            },
+-            "PROBLEM": {
+-                "type": "string",
+-                "value": "application/problem+json"
+-            }
+-        },
+-        "final": true,
+-        "interfaces": [],
+-        "internal": false,
+-        "kind": "class",
+-        "methods": {
+-            "select": {
+-                "params": [
+-                    {
+-                        "byRef": false,
+-                        "name": "header",
+-                        "type": "string",
+-                        "variadic": false
+-                    }
+-                ],
+-                "return": "?string",
+-                "static": true
+-            }
+-        },
+-        "parent": null,
+-        "properties": [],
+-        "readonly": false
+-    },
+     "CoreX\\Operations\\Idempotency\\Contracts\\IdempotencyStore": {
+         "abstract": false,
+         "constants": [],
+@@ -46864,6 +46809,93 @@
+         },
+         "readonly": true
+     },
++    "CoreX\\Operations\\Invocation\\Enums\\InputEnvelope": {
++        "abstract": false,
++        "constants": {
++            "JsonObject": {
++                "type": "CoreX\\Operations\\Invocation\\Enums\\InputEnvelope",
++                "value": {
++                    "enum": "CoreX\\Operations\\Invocation\\Enums\\InputEnvelope",
++                    "case": "JsonObject",
++                    "value": "json-object"
++                }
++            },
++            "Query": {
++                "type": "CoreX\\Operations\\Invocation\\Enums\\InputEnvelope",
++                "value": {
++                    "enum": "CoreX\\Operations\\Invocation\\Enums\\InputEnvelope",
++                    "case": "Query",
++                    "value": "query"
++                }
++            }
++        },
++        "final": true,
++        "interfaces": [
++            "BackedEnum",
++            "UnitEnum"
++        ],
++        "internal": false,
++        "kind": "enum",
++        "methods": {
++            "cases": {
++                "params": [],
++                "return": "array",
++                "static": true
++            },
++            "forMethod": {
++                "params": [
++                    {
++                        "byRef": false,
++                        "name": "method",
++                        "type": "string",
++                        "variadic": false
++                    }
++                ],
++                "return": "self",
++                "static": true
++            },
++            "from": {
++                "params": [
++                    {
++                        "byRef": false,
++                        "name": "value",
++                        "type": "string|int",
++                        "variadic": false
++                    }
++                ],
++                "return": "static",
++                "static": true
++            },
++            "tryFrom": {
++                "params": [
++                    {
++                        "byRef": false,
++                        "name": "value",
++                        "type": "string|int",
++                        "variadic": false
++                    }
++                ],
++                "return": "?static",
++                "static": true
++            }
++        },
++        "parent": null,
++        "properties": {
++            "name": {
++                "name": "name",
++                "readonly": true,
++                "static": false,
++                "type": "string"
++            },
++            "value": {
++                "name": "value",
++                "readonly": true,
++                "static": false,
++                "type": "string"
++            }
++        },
++        "readonly": false
++    },
+     "CoreX\\Operations\\Invocation\\Internal\\CapabilityResolver": {
+         "abstract": false,
+         "constants": [],
+@@ -47040,6 +47072,58 @@
+         "properties": [],
+         "readonly": false
+     },
++    "CoreX\\Operations\\Invocation\\Internal\\InputEnvelopeReader": {
++        "abstract": false,
++        "constants": [],
++        "final": false,
++        "interfaces": [],
++        "internal": true,
++        "kind": "interface",
++        "methods": {
++            "read": {
++                "params": [
++                    {
++                        "byRef": false,
++                        "name": "request",
++                        "type": "Illuminate\\Http\\Request",
++                        "variadic": false
++                    }
++                ],
++                "return": "array",
++                "static": false
++            }
++        },
++        "parent": null,
++        "properties": [],
++        "readonly": false
++    },
++    "CoreX\\Operations\\Invocation\\Internal\\JsonObjectEnvelopeReader": {
++        "abstract": false,
++        "constants": [],
++        "final": true,
++        "interfaces": [
++            "CoreX\\Operations\\Invocation\\Internal\\InputEnvelopeReader"
++        ],
++        "internal": true,
++        "kind": "class",
++        "methods": {
++            "read": {
++                "params": [
++                    {
++                        "byRef": false,
++                        "name": "request",
++                        "type": "Illuminate\\Http\\Request",
++                        "variadic": false
++                    }
++                ],
++                "return": "array",
++                "static": false
++            }
++        },
++        "parent": null,
++        "properties": [],
++        "readonly": false
++    },
+     "CoreX\\Operations\\Invocation\\Internal\\OperationDispatcher": {
+         "abstract": false,
+         "constants": [],
+@@ -47133,6 +47217,33 @@
+         "properties": [],
+         "readonly": false
+     },
++    "CoreX\\Operations\\Invocation\\Internal\\QueryEnvelopeReader": {
++        "abstract": false,
++        "constants": [],
++        "final": true,
++        "interfaces": [
++            "CoreX\\Operations\\Invocation\\Internal\\InputEnvelopeReader"
++        ],
++        "internal": true,
++        "kind": "class",
++        "methods": {
++            "read": {
++                "params": [
++                    {
++                        "byRef": false,
++                        "name": "request",
++                        "type": "Illuminate\\Http\\Request",
++                        "variadic": false
++                    }
++                ],
++                "return": "array",
++                "static": false
++            }
++        },
++        "parent": null,
++        "properties": [],
++        "readonly": false
++    },
+     "CoreX\\Operations\\Invocation\\Internal\\ResolvedContext": {
+         "abstract": false,
+         "constants": [],
+@@ -47877,12 +47988,6 @@
+                         "type": "string",
+                         "variadic": false
+                     },
+-                    {
+-                        "byRef": false,
+-                        "name": "problemTypeBase",
+-                        "type": "string",
+-                        "variadic": false
+-                    },
+                     {
+                         "byRef": false,
+                         "name": "capabilities",
+@@ -47972,12 +48077,6 @@
+                 "static": false,
+                 "type": "int"
+             },
+-            "problemTypeBase": {
+-                "name": "problemTypeBase",
+-                "readonly": true,
+-                "static": false,
+-                "type": "string"
+-            },
+             "product": {
+                 "name": "product",
+                 "readonly": true,
+diff --git a/tests/Golden/baseline/wire.json b/tests/Golden/baseline/wire.json
+index e203b389..7bdfc00e 100644
+--- a/tests/Golden/baseline/wire.json
++++ b/tests/Golden/baseline/wire.json
+@@ -596,6 +596,14 @@
+             "path": null,
+             "retryable": false
+         },
++        {
++            "category": "validation",
++            "code": "operations.input_envelope_invalid",
++            "detail_keys": [],
++            "owner": "axiomasoft/corex-operations",
++            "path": null,
++            "retryable": false
++        },
+         {
+             "category": "validation",
+             "code": "operations.invalid_request",
+@@ -684,6 +692,16 @@
+             "path": null,
+             "retryable": false
+         },
++        {
++            "category": "validation",
++            "code": "operations.undeclared_fields",
++            "detail_keys": [
++                "fields"
++            ],
++            "owner": "axiomasoft/corex-operations",
++            "path": null,
++            "retryable": false
++        },
+         {
+             "category": "validation",
+             "code": "operations.unknown_message_contract",
+@@ -692,6 +710,14 @@
+             "path": null,
+             "retryable": false
+         },
++        {
++            "category": "validation",
++            "code": "operations.unsupported_media_type",
++            "detail_keys": [],
++            "owner": "axiomasoft/corex-operations",
++            "path": null,
++            "retryable": false
++        },
+         {
+             "category": "validation",
+             "code": "operations.validation_failed",

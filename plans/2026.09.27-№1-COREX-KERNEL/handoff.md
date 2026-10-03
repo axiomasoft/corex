@@ -1,30 +1,22 @@
-# HANDOFF — 2026-10-03 — after P05.4
+# HANDOFF — 2026-10-03 — after P06.2
 
-**Next:** design-phase: task:plan-design 2026.09.27-№1-COREX-KERNEL P06
+**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P06.3
 
 | Parameter | Meaning |
 |:--|:--|
-| Batch | n/a |
-| Model class | frontier |
+| Batch | solo |
+| Model class | implementation |
 | Effort | high |
-| Capabilities | — |
 | Context | continue-root |
-| Essence | Detail skeleton P06 after P05 closed on green hosted CI (D73). |
 
-**Provider-native command:**
+**Done:** Authorized B06-A P06.1/P06.2 GREEN. Operations product d6ed2cde, exact BC gate repair 692bb89a/a98f1a65, tools product 58afb343cc02188d4ddee723638cf564f4e8a1e7. Self-checks and owner-requested Grok 4.7 High reviews GREEN. Owner-approved D93 adds five guard codes, total13, with independent design delta GREEN. Exact candidate checks and evidence maps are in both completion directories.
 
-```text
-task:plan-design 2026.09.27-№1-COREX-KERNEL P06
-```
+**Remaining:** P06.3 then P06.4/P06.5 recommended, not authorized by this completed workset. Phase P06 stays open until its final review and hosted CI gate. This scope is complete; current root remains reusable.
 
-**Done:** P05 closed GREEN on mirror run `37123316791`, SHA `0c7f7e84819e8730815afdc93e2256c13ab0f0cd` (36 success, 0 failure, 1 skipped mutation-registry job). Product commits `6bf07d9a`, `a5c1f350`, `a7a7d4a4`, `9aaaa7f6`, `0c7f7e84`. The contract heading is `Phase Contract` by owner permission. Direct-close allowed; no phase audit.
+**Open risks:** CloudEvents, webhook retry/egress and final phase review/CI remain future owning items. No skipped acceptance inside P06.1/P06.2. Preexisting CLAUDE.md, graph report and owner configuration changes preserved; historical PHP design proofs remain untouched and archived for portability.
 
-**Remaining:** Independent review of P0 and P05.4 is still for `codex/gpt-6.1-sol` (read-only, not started). Foreign bundles P00.1–P00.3 and P01.1 stay stale (glossary digest; `WriteApiSnapshots.php` unresolvable). P07 design follows P06.
-
-**Open risks:** `typed_options_field` for `tenancy.stancl.*` is `(reference)` and for `tenancy.identification.middleware` `(registrar-read)`. 61 config keys missing from the old registry were classified by key name in P05.4. The scope-map file lock now polls every 50 ms; the 5 s deadline is unchanged (pre-P05 flake, repaired because the cohort job was red). `runtime-globals` baseline must reach zero in P07. The D89 design-audit waiver fingerprint is no longer the current `design_snapshot`.
-
-**Sources of truth:** artifacts/P05.4-execution/hosted-ci.md; artifacts/P05.4-execution/completion.md; decisions/D73; decisions/D89; phases/P05/P05.md (Phase Handoff); phases/P05/P05.closed.md.
+**Sources of truth:** artifacts/P06.1-execution/completion.md and artifacts/P06.2-execution/completion.md; validation-map/source-binding/contract evaluations; Grok review JSON; D90/D92/D93; findings/P06.2-guard-design-review.md; phases/P06/ and journal.
 
 ```session-continuity-decision/v1
-{"outcome": "continue-root", "reason": "authorized-scope-complete", "evidence": ["batch:f8810e5152afda15f6a2699005bc55ef0892b8900cb9fd50dd90347cb036db5a", "loaded-inputs:reusable", "cold-start-cost:0", "lifecycle:scope-complete", "checkpoint:artifacts/P05.4-execution/hosted-ci.md"], "runnable": true, "schema_version": "session-continuity-decision/v1"}
+{"outcome": "continue-root", "reason": "authorized-scope-complete", "evidence": ["batch:f03c2f1c78e1b0b325dc9600e56ce624174f24840eccedc7dc9cf6c98ef64d01", "loaded-inputs:reusable", "cold-start-cost:0", "lifecycle:scope-complete", "checkpoint:artifacts/P06.2-execution/completion.md"], "runnable": true, "schema_version": "session-continuity-decision/v1"}
 ```

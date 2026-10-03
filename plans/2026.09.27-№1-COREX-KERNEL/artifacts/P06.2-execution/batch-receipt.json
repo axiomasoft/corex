@@ -1,0 +1,16 @@
+{
+  "schema_version": "batch-receipt/v1",
+  "batch_id": "B06-A",
+  "membership": [
+    "P06.1",
+    "P06.2"
+  ],
+  "invocation_digest": "8ec13b73e14aa1024829d11eaeb15da40fcf433c185ec8435bf2cf1938cc82b1",
+  "completed_prefix": [
+    "P06.1"
+  ],
+  "routing_digest": "3e6ad35b7f79cf776975a3b6f3ca2c56cd4e8f2a5c8a632c88a5bcef69d836f1",
+  "spec_digest": "02b5f01b8483f72d22a38c528cebe70d12af394305d84f52fc9c4deeaea09867",
+  "handoff_digest": "1e79b5b0f0b5caeca5018e6fb3849d35ad373822c341e7be03b68398fd6012ad",
+  "stop_disposition": "continue"
+}

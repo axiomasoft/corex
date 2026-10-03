@@ -1,0 +1,192 @@
+> pest '--filter=ErrorRepresentation'
+
+  [39;41;1m FAIL [39;49;22m[39m CoreX\Operations\Tests\Feature\ErrorRepresentationTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mevery category preserves machine fields and registry identity[39m[90m       [39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mevery registered problem can be serialized[39m[90m                          [39m [90m0.01s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mhuman message change leaves the machine fixture unchanged[39m[90m           [39m [90m0.01s[39m  
+  [31;1m⨯[39;22m[90m [39m[90maccept always receives problem json with data set #0[39m[90m                [39m [90m0.03s[39m  
+  [31;1m⨯[39;22m[90m [39m[90maccept always receives problem json with data set #1[39m[90m                [39m [90m0.01s[39m  
+  [31;1m⨯[39;22m[90m [39m[90maccept always receives problem json with data set #2[39m[90m                [39m [90m0.01s[39m  
+  [31;1m⨯[39;22m[90m [39m[90maccept always receives problem json with data set #3[39m[90m                [39m [90m0.01s[39m  
+  [31;1m⨯[39;22m[90m [39m[90maccept always receives problem json with data set #4[39m[90m                [39m [90m0.01s[39m  
+  [31;1m⨯[39;22m[90m [39m[90maccept always receives problem json with data set #5[39m[90m                [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mretry after requires a named bounded policy[39m[90m                         [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90munknown exception stays a safe internal error[39m[90m                       [39m [90m0.01s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mCoreX\Operations\Tests\Feature\ErrorRepresentationTest[22m [90m>[39m every ca…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'Safe failure.'[39m[39;1m
+  [39;22m[32m+'Safe authentication message.'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/ErrorRepresentationTest.php[39m:[32m52[39m
+     48▕             self::assertSame('req-1', $problem['request_id']);
+     49▕             self::assertSame('corr-1', $problem['correlation_id']);
+     50▕             self::assertSame('v1', $problem['api_version']);
+     51▕             self::assertSame($registry->get($code)->type, $problem['type']);
+  ➜  52▕             self::assertSame($registry->get($code)->title, $problem['title']);
+     53▕             self::assertSame($error->getMessage(), $problem['detail']);
+     54▕             self::assertStringNotContainsString('Throwable', json_encode($problem, JSON_THROW_ON_ERROR));
+     55▕         }
+     56▕     }
+
+  [33m1   [39m[39;1mtests/Feature/ErrorRepresentationTest.php[39;22m:[39;1m52[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mCoreX\Operations\Tests\Feature\ErrorRepresentationTest[22m [90m>[39m every re…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'Central context exception.'[39m[39;1m
+  [39;22m[32m+'Occurrence detail.'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/ErrorRepresentationTest.php[39m:[32m71[39m
+     67▕             $registry->assertOccurrence(descriptor: $error->errorDescriptor(), status: $error->status);
+     68▕             $response = $serializer->error(error: $error, metadata: $metadata);
+     69▕             $problem = $response->getData(true);
+     70▕             self::assertSame($definition->type, $problem['type']);
+  ➜  71▕             self::assertSame($definition->title, $problem['title']);
+     72▕             self::assertSame('Occurrence detail.', $problem['detail']);
+     73▕             self::assertSame($definition->defaultStatus, $response->getStatusCode());
+     74▕             self::assertSame('application/problem+json', $response->headers->get('Content-Type'));
+     75▕             foreach (['instance', 'path', 'message', 'error', 'data'] as $member) {
+
+  [33m1   [39m[39;1mtests/Feature/ErrorRepresentationTest.php[39;22m:[39;1m71[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mCoreX\Operations\Tests\Feature\ErrorRepresentationTest[22m [90m>[39m human me…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[32m     'type' => 'urn:corex:problem:operations.conflict',[39m[39;1m
+  [39;22m[31m-    'title' => 'First safe message.',[39m[39;1m
+  [39;22m[32m+    'title' => 'Second safe message.',[39m[39;1m
+  [39;22m[32m     'status' => 409,[39m[39;1m
+  [39;22m[32m     'code' => 'operations.conflict',[39m[39;1m
+  [39;22m[32m     'category' => 'conflict',[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/ErrorRepresentationTest.php[39m:[32m90[39m
+     86▕         $second = $serializer->error(new ApiError(OperationsErrorCode::Conflict, 409, 'Second safe message.', category: ErrorCategory::Conflict, retryable: true, path: '/a'), $metadata)->getData(true);
+     87▕ 
+     88▕         self::assertNotSame($first['detail'], $second['detail']);
+     89▕         unset($first['detail'], $second['detail']);
+  ➜  90▕         self::assertSame($first, $second);
+     91▕     }
+     92▕ 
+     93▕     public static function accepts(): array
+     94▕     {
+
+  [33m1   [39m[39;1mtests/Feature/ErrorRepresentationTest.php[39;22m:[39;1m90[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mCoreX\Operations\Tests\Feature\ErrorRepresentationTest[22m [90m>[39m accept a…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'Forbidden.'[39m[39;1m
+  [39;22m[32m+'Operation is not permitted.'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/ErrorRepresentationTest.php[39m:[32m109[39m
+    105▕         $response = $this->call('GET', '/represented/v1', server: ['HTTP_ACCEPT' => $accept, 'HTTP_X_REQUEST_ID' => 'req-1', 'HTTP_X_CORRELATION_ID' => 'corr-1']);
+    106▕         $definition = $this->app->make(ProblemRegistry::class)->get(OperationsErrorCode::Forbidden);
+    107▕         $response->assertForbidden()->assertHeader('Content-Type', 'application/problem+json')
+    108▕             ->assertJsonPath('code', 'operations.forbidden')->assertJsonPath('type', $definition->type)
+  ➜ 109▕             ->assertJsonPath('title', $definition->title)->assertJsonPath('detail', 'Operation is not permitted.')
+    110▕             ->assertJsonPath('request_id', 'req-1')->assertJsonPath('correlation_id', 'corr-1');
+    111▕         self::assertNull($response->headers->get('Vary'));
+    112▕         self::assertNull($response->headers->get('Retry-After'));
+    113▕         foreach (['instance', 'path', 'message', 'error', 'data'] as $member) {
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mCoreX\Operations\Tests\Feature\ErrorRepresentationTest[22m [90m>[39m accept a…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'Forbidden.'[39m[39;1m
+  [39;22m[32m+'Operation is not permitted.'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/ErrorRepresentationTest.php[39m:[32m109[39m
+    105▕         $response = $this->call('GET', '/represented/v1', server: ['HTTP_ACCEPT' => $accept, 'HTTP_X_REQUEST_ID' => 'req-1', 'HTTP_X_CORRELATION_ID' => 'corr-1']);
+    106▕         $definition = $this->app->make(ProblemRegistry::class)->get(OperationsErrorCode::Forbidden);
+    107▕         $response->assertForbidden()->assertHeader('Content-Type', 'application/problem+json')
+    108▕             ->assertJsonPath('code', 'operations.forbidden')->assertJsonPath('type', $definition->type)
+  ➜ 109▕             ->assertJsonPath('title', $definition->title)->assertJsonPath('detail', 'Operation is not permitted.')
+    110▕             ->assertJsonPath('request_id', 'req-1')->assertJsonPath('correlation_id', 'corr-1');
+    111▕         self::assertNull($response->headers->get('Vary'));
+    112▕         self::assertNull($response->headers->get('Retry-After'));
+    113▕         foreach (['instance', 'path', 'message', 'error', 'data'] as $member) {
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mCoreX\Operations\Tests\Feature\ErrorRepresentationTest[22m [90m>[39m accept a…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'Forbidden.'[39m[39;1m
+  [39;22m[32m+'Operation is not permitted.'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/ErrorRepresentationTest.php[39m:[32m109[39m
+    105▕         $response = $this->call('GET', '/represented/v1', server: ['HTTP_ACCEPT' => $accept, 'HTTP_X_REQUEST_ID' => 'req-1', 'HTTP_X_CORRELATION_ID' => 'corr-1']);
+    106▕         $definition = $this->app->make(ProblemRegistry::class)->get(OperationsErrorCode::Forbidden);
+    107▕         $response->assertForbidden()->assertHeader('Content-Type', 'application/problem+json')
+    108▕             ->assertJsonPath('code', 'operations.forbidden')->assertJsonPath('type', $definition->type)
+  ➜ 109▕             ->assertJsonPath('title', $definition->title)->assertJsonPath('detail', 'Operation is not permitted.')
+    110▕             ->assertJsonPath('request_id', 'req-1')->assertJsonPath('correlation_id', 'corr-1');
+    111▕         self::assertNull($response->headers->get('Vary'));
+    112▕         self::assertNull($response->headers->get('Retry-After'));
+    113▕         foreach (['instance', 'path', 'message', 'error', 'data'] as $member) {
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mCoreX\Operations\Tests\Feature\ErrorRepresentationTest[22m [90m>[39m accept a…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'Forbidden.'[39m[39;1m
+  [39;22m[32m+'Operation is not permitted.'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/ErrorRepresentationTest.php[39m:[32m109[39m
+    105▕         $response = $this->call('GET', '/represented/v1', server: ['HTTP_ACCEPT' => $accept, 'HTTP_X_REQUEST_ID' => 'req-1', 'HTTP_X_CORRELATION_ID' => 'corr-1']);
+    106▕         $definition = $this->app->make(ProblemRegistry::class)->get(OperationsErrorCode::Forbidden);
+    107▕         $response->assertForbidden()->assertHeader('Content-Type', 'application/problem+json')
+    108▕             ->assertJsonPath('code', 'operations.forbidden')->assertJsonPath('type', $definition->type)
+  ➜ 109▕             ->assertJsonPath('title', $definition->title)->assertJsonPath('detail', 'Operation is not permitted.')
+    110▕             ->assertJsonPath('request_id', 'req-1')->assertJsonPath('correlation_id', 'corr-1');
+    111▕         self::assertNull($response->headers->get('Vary'));
+    112▕         self::assertNull($response->headers->get('Retry-After'));
+    113▕         foreach (['instance', 'path', 'message', 'error', 'data'] as $member) {
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mCoreX\Operations\Tests\Feature\ErrorRepresentationTest[22m [90m>[39m accept a…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'Forbidden.'[39m[39;1m
+  [39;22m[32m+'Operation is not permitted.'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/ErrorRepresentationTest.php[39m:[32m109[39m
+    105▕         $response = $this->call('GET', '/represented/v1', server: ['HTTP_ACCEPT' => $accept, 'HTTP_X_REQUEST_ID' => 'req-1', 'HTTP_X_CORRELATION_ID' => 'corr-1']);
+    106▕         $definition = $this->app->make(ProblemRegistry::class)->get(OperationsErrorCode::Forbidden);
+    107▕         $response->assertForbidden()->assertHeader('Content-Type', 'application/problem+json')
+    108▕             ->assertJsonPath('code', 'operations.forbidden')->assertJsonPath('type', $definition->type)
+  ➜ 109▕             ->assertJsonPath('title', $definition->title)->assertJsonPath('detail', 'Operation is not permitted.')
+    110▕             ->assertJsonPath('request_id', 'req-1')->assertJsonPath('correlation_id', 'corr-1');
+    111▕         self::assertNull($response->headers->get('Vary'));
+    112▕         self::assertNull($response->headers->get('Retry-After'));
+    113▕         foreach (['instance', 'path', 'message', 'error', 'data'] as $member) {
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mCoreX\Operations\Tests\Feature\ErrorRepresentationTest[22m [90m>[39m accept a…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'Forbidden.'[39m[39;1m
+  [39;22m[32m+'Operation is not permitted.'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/ErrorRepresentationTest.php[39m:[32m109[39m
+    105▕         $response = $this->call('GET', '/represented/v1', server: ['HTTP_ACCEPT' => $accept, 'HTTP_X_REQUEST_ID' => 'req-1', 'HTTP_X_CORRELATION_ID' => 'corr-1']);
+    106▕         $definition = $this->app->make(ProblemRegistry::class)->get(OperationsErrorCode::Forbidden);
+    107▕         $response->assertForbidden()->assertHeader('Content-Type', 'application/problem+json')
+    108▕             ->assertJsonPath('code', 'operations.forbidden')->assertJsonPath('type', $definition->type)
+  ➜ 109▕             ->assertJsonPath('title', $definition->title)->assertJsonPath('detail', 'Operation is not permitted.')
+    110▕             ->assertJsonPath('request_id', 'req-1')->assertJsonPath('correlation_id', 'corr-1');
+    111▕         self::assertNull($response->headers->get('Vary'));
+    112▕         self::assertNull($response->headers->get('Retry-After'));
+    113▕         foreach (['instance', 'path', 'message', 'error', 'data'] as $member) {
+
+
+  [90mTests:[39m    [31;1m9 failed[39;22m[90m,[39m[39m [39m[32;1m2 passed[39;22m[90m (60 assertions)[39m
+  [90mDuration:[39m [39m0.29s[39m
+
+Script pest handling the test event returned with error code 1

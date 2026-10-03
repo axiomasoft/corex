@@ -9,7 +9,7 @@
 | Title | Plan №1 — CoreX Kernel 1.0: архитектурный идеал ядра и чистый API |
 | Layout | v2 |
 | Document Type | Executable Master Plan (катящийся дизайн с немедленным исполнением — D21) |
-| Authoring Model | codex/GPT-6 (owner-directed P10 finish, D77/D78, 2026-10-01; exact runtime selector/effort unavailable); claude-opus-5-5 (owner-authorized P10/P05 design audit remediation, D76, 2026-10-01); claude-opus-5-5/high (P05 и P10 design, 2026-10-01); codex/gpt-6-sol/high (owner-authorized P00–P04 finish, D65, 2026-09-29); codex/gpt-6-sol/high (owner-authorized P04 design, D62, 2026-09-29); codex/gpt-6-sol/xhigh (P03.2 routine input/formatter repair D61, 2026-09-29); claude-opus-5-5/high (initial, P01 design); codex/gpt-6-astra/high (P00 audit remediation, 2026-09-27; P00–P01 finish, 2026-09-28); codex/gpt-6-sol/high (P01 B1–B3 owner-prescribed remediation and finish, 2026-09-28); codex/gpt-6-sol/high (owner-authorized inline audit corrections, 2026-09-28); claude-opus-5-5/high (P02 design, 2026-09-28); codex/gpt-6-sol/high (owner-authorized P02 A1–A4 remediation, 2026-09-28); claude-opus-5-5/high (P03 design, 2026-09-29); codex/gpt-6-astra/high (owner-authorized P03 A1–A5 remediation + finish, D58, 2026-09-29); codex/gpt-6-astra/xhigh (owner-authorized P03 full replay and inline design fixes, D59, 2026-09-29); codex/gpt-6-sol/high (P03.1 historical evidence scan clarification, D60, 2026-09-29) |
+| Authoring Model | codex/gpt-6.1-sol/high (owner-approved P06.2 guard-taxonomy correction D93, 2026-10-03); codex/gpt-6.1-sol/xhigh (owner-authorized P06 audit remediation D92, 2026-10-03; provider-thread-state/additive follow-up); codex/gpt-6.1-sol/high (P06 whole-plan finish, 2026-10-03; provider-thread-state); claude-opus-5-5/high (P06 design, 2026-10-03); codex/GPT-6 (owner-directed P10 finish, D77/D78, 2026-10-01; exact runtime selector/effort unavailable); claude-opus-5-5 (owner-authorized P10/P05 design audit remediation, D76, 2026-10-01); claude-opus-5-5/high (P05 и P10 design, 2026-10-01); codex/gpt-6-sol/high (owner-authorized P00–P04 finish, D65, 2026-09-29); codex/gpt-6-sol/high (owner-authorized P04 design, D62, 2026-09-29); codex/gpt-6-sol/xhigh (P03.2 routine input/formatter repair D61, 2026-09-29); claude-opus-5-5/high (initial, P01 design); codex/gpt-6-astra/high (P00 audit remediation, 2026-09-27; P00–P01 finish, 2026-09-28); codex/gpt-6-sol/high (P01 B1–B3 owner-prescribed remediation and finish, 2026-09-28); codex/gpt-6-sol/high (owner-authorized inline audit corrections, 2026-09-28); claude-opus-5-5/high (P02 design, 2026-09-28); codex/gpt-6-sol/high (owner-authorized P02 A1–A4 remediation, 2026-09-28); claude-opus-5-5/high (P03 design, 2026-09-29); codex/gpt-6-astra/high (owner-authorized P03 A1–A5 remediation + finish, D58, 2026-09-29); codex/gpt-6-astra/xhigh (owner-authorized P03 full replay and inline design fixes, D59, 2026-09-29); codex/gpt-6-sol/high (P03.1 historical evidence scan clarification, D60, 2026-09-29) |
 | Repository | corex |
 | Related Packages | все `packages/*`, `docs/`, `docs-public/`, CI, `scripts/`, `tests/` |
 | Input | `audits/2026-09-27-perplexity-1.md` (вход, не норматив; вердикты — `findings/00-audit-verification.md`) |
@@ -130,7 +130,7 @@ operations, независимые модули, детерминированн�
 
 ## 3. Routing
 
-Детализированы: P00, P01, P02, P03, P04, P05, P10. Вставная P10 исполняется до P05 (D73). Фазы P06–P09 — skeleton в `backlog/` (D21, D24), детализируются по очереди. Batch — предложение группировки;
+Детализированы: P00, P01, P02, P03, P04, P05, P06, P10. Вставная P10 исполняется до P05 (D73). Фазы P07–P09 — skeleton в `backlog/` (D21, D24), детализируются по очереди. Batch — предложение группировки;
 окончательная — execution-sheet в `roadmap.md`.
 
 | Batch | Items | Model class/effort | Exec | Review | Why |
@@ -160,11 +160,18 @@ operations, независимые модули, детерминированн�
 | B05-A | P05.2 | implementation/high | manual | light | recommended: деление providers на registrars по уже переведённым на Options файлам; вторым в B05-A, после зелёного P05.1. |
 | solo | P05.3 | implementation/high | manual | full | recommended: самый объёмный item (16 пакетов); меняет время жизни зависимостей, ошибки класса «чужой tenant» тесты ловят слабо — отдельная сессия и независимое ревью (D71, D72). |
 | solo | P05.4 | implementation/high | manual | light | recommended: проверки итога (резидентный режим, config:cache), генератор reference, доктрина и CI — отдельный docs/CI-контекст; закрывает фазу. |
+| B06-A | P06.1 | implementation/high | manual | light | recommended: конверт входа и единая ошибка RFC 9457 по D90 п.1–п.2; первым в B06-A — сериализатор и реестр, на которые опирается P06.2. Review light по D91. |
+| B06-A | P06.2 | implementation/high | manual | light | recommended: коды tools регистрируются в том же реестре и проходят тот же сериализатор; вторым в B06-A, после зелёного P06.1. |
+| solo | P06.3 | implementation/high | manual | light | recommended: кодек CloudEvents и тело вебхука — core messaging и webhooks, отдельный контекст от ошибок HTTP; байтовый эталон закрывает риск wire. |
+| solo | P06.4 | implementation/high | manual | light | recommended: причины, бюджет и egress меняют те же доставки, что тело P06.3; отдельная сессия после него, mutation-кейс и модель угроз; закрывает исполнимую часть фазы. |
+| solo | P06.5 | frontier/high | manual | none | recommended: Review P06 — независимое read-only ревью всей фазы другой моделью (D91 п.2); вердикт-файл, ремонт — следующим владеющим item. |
 
 ## 4. Update Log
 
 | Дата | Изменение | Автор |
 |:--|:--|:--|
+| 2026-10-03 | `task:plan-design finish`: сверены зависимости P00–P06 + P10; четыре строки execution-sheet 21–24 по D91 (B06-A, P06.3, P06.4, P06.5); Inputs P06.5 дополнены research note без изменения scope/маршрутов/review. Досье, примеры и captures переиспользованы; новый fingerprint требует независимого design audit. Продукт не менялся, runtime не запускался. | designer/codex/gpt-6.1-sol/high |
+| 2026-10-03 | `task:plan-design P06`: `backlog/P06.md` → `phases/P06/`, items P06.1–P06.5; D90 (wire: одно представление ошибки RFC 9457 с идентичностью из реестра, именованный конверт входа, коды `tools.*` и `ToolOutcome`, CloudEvents 1.0 с внутренним и внешним профилями, тело вебхука CloudEvents, причины отказа и бюджет, SPI egress), D91 (implementation/high + light, отдельный Review P06 frontier/high, B06-A); досье `research/P06-design.md`, `research/P06-design-rag.md`, примеры/факты/скрипт `artifacts/P06-design/`, captures `artifacts/P06-design-rag/` (perplexity ×4, первичные ×5). Runtime не запускался. | designer/claude-opus-5-5/high |
 | 2026-10-03 | Правка по прямому указанию владельца (D89): из спеки P05.4 удалён carrier hosted CI и привязанная к нему формулировка закрытия фазы (hosted CI выполняется отдельно, фаза P05 остаётся открытой по D73); `design-audit-waiver/v1` D89 заменяет D88 для нового fingerprint, повторный whole-plan audit не назначается. Маршруты, порядок и review не менялись. | editor/claude-code/claude-sonnet-5-5/high |
 | 2026-10-03 | Правка по прямому указанию владельца (D88): из спеки P05.3 удалён carrier hosted CI (его покрывает carrier P05.4 на финальном commit фазы, D73); `design-audit-waiver/v1` D88 заменяет D86 для нового fingerprint, повторный whole-plan audit не назначается. Маршруты, порядок и review не менялись. | editor/claude-code/claude-sonnet-5-5/high |
 | 2026-10-02 | Ручная правка по прямому указанию владельца (D86): заголовок Routing `Почему` → `Why` (Task 0.26.2 принимает только `Why`; содержимое строк, группы, маршруты и review не менялись) и выбор `design-audit-waiver/v1`: повторный whole-plan audit из-за одной ячейки заголовка не назначается. Новый finish записан; продукт не менялся. | editor/claude-code/claude-sonnet-5-5/high |
@@ -198,6 +205,10 @@ operations, независимые модули, детерминированн�
 | 2026-10-01 | `task:plan-design finish`: второй содержательный дизайн P10 по D77; D78 уточняет рецепт установки, манифесты и протокол worker; строки 14–20 сохранены. Новый fingerprint; следующий шаг P10.1; runtime не запускался. | designer/codex/GPT-6 (runtime selector/effort unavailable) |
 
 | 2026-10-01 | D79 исправляет ошибочную интерпретацию D77: владелец не отменял независимый аудит. D78 сохранён; новый finish, handoff на независимый design audit; P10.1 только после GREEN текущего fingerprint. | designer/codex/GPT-6 |
+
+| 2026-10-03 | Owner-authorized correction of P06 audit A1–A6/m1–m2: D92, item scopes, shared recovery budget, typed persistence, external schema omission, full URI grammar, review reads and package contract guard; finish and independent delta recheck. | designer/codex/gpt-6.1-sol/xhigh |
+
+| 2026-10-03 | Owner-approved P06.2 guard-taxonomy supplement D93: 13 registered tools codes, original guard semantics preserved; default/consumer guards and provider-register lifecycle acceptance added; independent Grok 4.7 delta review GREEN. | executor/codex/gpt-6.1-sol/high |
 
 ## 5. Decision Log
 

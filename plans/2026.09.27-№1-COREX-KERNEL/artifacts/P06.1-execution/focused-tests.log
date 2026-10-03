@@ -1,0 +1,31 @@
+> pest '--filter=ErrorRepresentation|InputEnvelope'
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\ErrorRepresentationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mevery category preserves machine fields and registry identity[39m[90m       [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mevery registered problem can be serialized[39m[90m                          [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhuman message change leaves the machine fixture unchanged[39m[90m           [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90maccept always receives problem json with data set #0[39m[90m                [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90maccept always receives problem json with data set #1[39m[90m                [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90maccept always receives problem json with data set #2[39m[90m                [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90maccept always receives problem json with data set #3[39m[90m                [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90maccept always receives problem json with data set #4[39m[90m                [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90maccept always receives problem json with data set #5[39m[90m                [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mretry after requires a named bounded policy[39m[90m                         [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90munknown exception stays a safe internal error[39m[90m                       [39m [90m0.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\InputEnvelopeTest[39m
+  [32;1m✓[39;22m[90m [39m[90minput envelope and strictness with data set "query"[39m[90m                 [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90minput envelope and strictness with data set "strict query"[39m[90m          [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90minput envelope and strictness with data set "media type"[39m[90m            [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90minput envelope and strictness with data set "query before media typ[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90minput envelope and strictness with data set "query with body"[39m[90m       [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90minput envelope and strictness with data set "array"[39m[90m                 [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90minput envelope and strictness with data set "malformed"[39m[90m             [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90minput envelope and strictness with data set "scalar"[39m[90m                [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90minput envelope and strictness with data set "strict body"[39m[90m           [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90minput envelope and strictness with data set "object"[39m[90m                [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90minput envelope and strictness with data set "field validation"[39m[90m      [39m [90m0.02s[39m  
+
+  [90mTests:[39m    [32;1m22 passed[39;22m[90m (1145 assertions)[39m
+  [90mDuration:[39m [39m0.62s[39m
+

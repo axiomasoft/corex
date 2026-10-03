@@ -1,0 +1,537 @@
+{
+  "schema_version": "task-contract/v1",
+  "contract_id": "2026.09.27-№1-corex-kernel-p06-1",
+  "version": {
+    "revision": 1,
+    "content_hash": "11cc82c2e3963a81731b6714446e872ca972381e100875fb684955740081a31e",
+    "supersedes": null
+  },
+  "goal": {
+    "outcome": "Сделать конверт входа операции именованной политикой при неотключаемой строгости и оставить у ошибки одно представление — `application/problem+json`, где `type` и `title` берутся из реестра проблем, а сообщение случая уходит в `detail`.",
+    "non_goals": [
+      "Выбор конверта в объявлении модуля",
+      "новые конверты помимо двух",
+      "изменение статусов и сообщений существующих кодов",
+      "tool runtime (P06.2)",
+      "маршруты (слой routes Golden неизменен)."
+    ]
+  },
+  "must": [
+    {
+      "id": "M1",
+      "requirement": "`InputEnvelope` (enum, `#[Api]`), `QueryEnvelopeReader`, `JsonObjectEnvelopeReader` и internal interface reader-а",
+      "source_ref": "phases/P06.md:7"
+    },
+    {
+      "id": "M2",
+      "requirement": "`Operation::$inputEnvelope` и его вывод в `OperationFactory`",
+      "source_ref": "phases/P06.md:7"
+    },
+    {
+      "id": "M3",
+      "requirement": "коды `operations.unsupported_media_type`, `operations.input_envelope_invalid`, `operations.undeclared_fields` с определениями",
+      "source_ref": "phases/P06.md:7"
+    },
+    {
+      "id": "M4",
+      "requirement": "`ProblemDetailsSerializer` по D90 п.1",
+      "source_ref": "phases/P06.md:7"
+    },
+    {
+      "id": "M5",
+      "requirement": "новый Internal `HttpResponseSerializer` вместо `NegotiatingResponseSerializer`",
+      "source_ref": "phases/P06.md:7"
+    },
+    {
+      "id": "M6",
+      "requirement": "удаление `AcceptNegotiation`, ветки ошибки `EnvelopeSerializer`, члена `error` в успешном ответе, `ErrorWire::type/instance`, `Vary: Accept` в ошибках, `ApiOptions::$problemTypeBase` и ключа `problem_type_base`",
+      "source_ref": "phases/P06.md:7"
+    },
+    {
+      "id": "M7",
+      "requirement": "OpenAPI-ответы ошибок",
+      "source_ref": "phases/P06.md:7"
+    },
+    {
+      "id": "M8",
+      "requirement": "перевод тестов из `facts/envelope-error-tests.txt`",
+      "source_ref": "phases/P06.md:7"
+    },
+    {
+      "id": "M9",
+      "requirement": "регенерация `docs/architecture/configuration.md`",
+      "source_ref": "phases/P06.md:7"
+    },
+    {
+      "id": "M10",
+      "requirement": "Golden delta P06.1.",
+      "source_ref": "phases/P06.md:7"
+    }
+  ],
+  "never": [
+    {
+      "id": "N1",
+      "prohibition": "Выбор конверта в объявлении модуля",
+      "source_ref": "phases/P06.md:9"
+    },
+    {
+      "id": "N2",
+      "prohibition": "новые конверты помимо двух",
+      "source_ref": "phases/P06.md:9"
+    },
+    {
+      "id": "N3",
+      "prohibition": "изменение статусов и сообщений существующих кодов",
+      "source_ref": "phases/P06.md:9"
+    },
+    {
+      "id": "N4",
+      "prohibition": "tool runtime (P06.2)",
+      "source_ref": "phases/P06.md:9"
+    },
+    {
+      "id": "N5",
+      "prohibition": "маршруты (слой routes Golden неизменен).",
+      "source_ref": "phases/P06.md:9"
+    }
+  ],
+  "done": {
+    "public_acceptance": [
+      {
+        "id": "A1",
+        "predicate": "Package changelog(s), `artifacts/P06.1-execution/base-commit.txt` и точный candidate SHA в completion; Конверт входа и три кода; единственный сериализатор ошибки; OpenAPI ошибок только problem+json; переведённые тесты; регенерированный `configuration.md`; Golden delta P06.1 с поимённым перечнем; `artifacts/P06.1-execution/completion.md`.",
+        "scope": "public",
+        "check": "- После продуктового commit: `bash scripts/contract-guard.sh` и `bash scripts/contract-guard.sh \"$(cat plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06.1-execution/base-commit.txt)\"` → exit 0; в Unreleased каждого изменённого пакета описан объявленный API/wire delta.",
+        "evidence_ref": "E15"
+      },
+      {
+        "id": "A2",
+        "predicate": "Package changelog(s), `artifacts/P06.1-execution/base-commit.txt` и точный candidate SHA в completion; Конверт входа и три кода; единственный сериализатор ошибки; OpenAPI ошибок только problem+json; переведённые тесты; регенерированный `configuration.md`; Golden delta P06.1 с поимённым перечнем; `artifacts/P06.1-execution/completion.md`.",
+        "scope": "public",
+        "check": "- `bash plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/scripts/p06-facts.sh` до правок → состав файлов как в досье §2; после правок `grep -rn -e AcceptNegotiation -e NegotiatingResponseSerializer -e problemTypeBase -e problem_type_base packages products scripts docs --include='*.php' --include='*.json' --include='*.md' | grep -v /vendor/ | grep -v -e 'tests/Golden/rename-map.json' -e 'scripts/rename-completeness.json'` → пусто.",
+        "evidence_ref": "E16"
+      },
+      {
+        "id": "A3",
+        "predicate": "Package changelog(s), `artifacts/P06.1-execution/base-commit.txt` и точный candidate SHA в completion; Конверт входа и три кода; единственный сериализатор ошибки; OpenAPI ошибок только problem+json; переведённые тесты; регенерированный `configuration.md`; Golden delta P06.1 с поимённым перечнем; `artifacts/P06.1-execution/completion.md`.",
+        "scope": "public",
+        "check": "- `scripts/php84 composer --working-dir=packages/operations test -- --filter='ErrorRepresentation|InputEnvelope'` → exit 0; 415/Validation резолвится и сериализуется через реальный ProblemRegistry; датасет `Accept` из пяти значений и шесть случаев таблицы examples §4b присутствуют.",
+        "evidence_ref": "E17"
+      },
+      {
+        "id": "A4",
+        "predicate": "Package changelog(s), `artifacts/P06.1-execution/base-commit.txt` и точный candidate SHA в completion; Конверт входа и три кода; единственный сериализатор ошибки; OpenAPI ошибок только problem+json; переведённые тесты; регенерированный `configuration.md`; Golden delta P06.1 с поимённым перечнем; `artifacts/P06.1-execution/completion.md`.",
+        "scope": "public",
+        "check": "- Негативный контроль (в Completion Notes): `title` из сообщения вместо реестра → `ErrorRepresentationTest` красный; откат → зелёный.",
+        "evidence_ref": "E18"
+      },
+      {
+        "id": "A5",
+        "predicate": "Package changelog(s), `artifacts/P06.1-execution/base-commit.txt` и точный candidate SHA в completion; Конверт входа и три кода; единственный сериализатор ошибки; OpenAPI ошибок только problem+json; переведённые тесты; регенерированный `configuration.md`; Golden delta P06.1 с поимённым перечнем; `artifacts/P06.1-execution/completion.md`.",
+        "scope": "public",
+        "check": "- `scripts/php84 composer error-registry` → exit 0; три новых кода в выводе `definitions`.",
+        "evidence_ref": "E19"
+      },
+      {
+        "id": "A6",
+        "predicate": "Package changelog(s), `artifacts/P06.1-execution/base-commit.txt` и точный candidate SHA в completion; Конверт входа и три кода; единственный сериализатор ошибки; OpenAPI ошибок только problem+json; переведённые тесты; регенерированный `configuration.md`; Golden delta P06.1 с поимённым перечнем; `artifacts/P06.1-execution/completion.md`.",
+        "scope": "public",
+        "check": "- `scripts/php84 composer --working-dir=packages/operations test` → exit 0; `scripts/php84 composer --working-dir=products/flex-crm test` → exit 0.",
+        "evidence_ref": "E20"
+      },
+      {
+        "id": "A7",
+        "predicate": "Package changelog(s), `artifacts/P06.1-execution/base-commit.txt` и точный candidate SHA в completion; Конверт входа и три кода; единственный сериализатор ошибки; OpenAPI ошибок только problem+json; переведённые тесты; регенерированный `configuration.md`; Golden delta P06.1 с поимённым перечнем; `artifacts/P06.1-execution/completion.md`.",
+        "scope": "public",
+        "check": "- `scripts/php84 php scripts/configuration-reference.php --check` → exit 0; `scripts/php84 php scripts/rename-completeness-gate.php` → exit 0.",
+        "evidence_ref": "E21"
+      },
+      {
+        "id": "A8",
+        "predicate": "Package changelog(s), `artifacts/P06.1-execution/base-commit.txt` и точный candidate SHA в completion; Конверт входа и три кода; единственный сериализатор ошибки; OpenAPI ошибок только problem+json; переведённые тесты; регенерированный `configuration.md`; Golden delta P06.1 с поимённым перечнем; `artifacts/P06.1-execution/completion.md`.",
+        "scope": "public",
+        "check": "- `scripts/php84 php scripts/php-api.php --write` дважды → идентично; `scripts/php84 composer php-api`, `scripts/php84 composer bc-check` → exit 0; diff baseline Golden содержит только строки P06.1 из досье §4.",
+        "evidence_ref": "E22"
+      },
+      {
+        "id": "A9",
+        "predicate": "Package changelog(s), `artifacts/P06.1-execution/base-commit.txt` и точный candidate SHA в completion; Конверт входа и три кода; единственный сериализатор ошибки; OpenAPI ошибок только problem+json; переведённые тесты; регенерированный `configuration.md`; Golden delta P06.1 с поимённым перечнем; `artifacts/P06.1-execution/completion.md`.",
+        "scope": "public",
+        "check": "- `scripts/php84 composer lint:check`, `scripts/php84 composer analyse` → exit 0; `php scripts/quality-ceiling-guard.php` → `ceilings OK`; `bash scripts/anti-weakening-gate.sh` → exit 0.",
+        "evidence_ref": "E23"
+      },
+      {
+        "id": "A10",
+        "predicate": "Package changelog(s), `artifacts/P06.1-execution/base-commit.txt` и точный candidate SHA в completion; Конверт входа и три кода; единственный сериализатор ошибки; OpenAPI ошибок только problem+json; переведённые тесты; регенерированный `configuration.md`; Golden delta P06.1 с поимённым перечнем; `artifacts/P06.1-execution/completion.md`.",
+        "scope": "public",
+        "check": "- Review `light` (D91): self-check по досье §6; строка `review: self-check GREEN` в Completion Notes.",
+        "evidence_ref": "E24"
+      }
+    ]
+  },
+  "authority": {
+    "class": "routine",
+    "granted": true,
+    "granted_by": "phases/P06/P06.1.md:P06.1",
+    "auto_allowed": [
+      "write the item's declared Files",
+      "run the item's Validation",
+      "close the item with the two-commit topology"
+    ],
+    "stop_boundaries": [
+      "tag/push/release",
+      "fleet rollout",
+      "consumer repositories",
+      "FOREMAN outward parts"
+    ],
+    "loop_budget": {
+      "audit_rounds_max": 2,
+      "same_finding_max": 2
+    },
+    "observed_rounds": 0,
+    "audit_cap_remediation": false
+  },
+  "next": {
+    "form": "run-items",
+    "carrier": "task:plan-run 2026.09.27-№1-COREX-KERNEL P06.1",
+    "context": "continue-root",
+    "origin": "approved-goal",
+    "changed_by": null
+  },
+  "route": {
+    "required": {
+      "model_class": "implementation",
+      "effort": "high"
+    },
+    "actual": {
+      "model_class": "frontier",
+      "effort": "high"
+    },
+    "capabilities": []
+  },
+  "evidence": [
+    {
+      "id": "E1",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D92-p06-design-audit-remediation.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E2",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P06-design.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E3",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P06-design-rag.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E4",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/examples.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E5",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D90-p06-wire-contract.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E6",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/facts/envelope-error-tests.txt",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E7",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P06-design.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E8",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/examples.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E9",
+      "path": "packages/operations/src/Invocation/Internal/OperationDispatcher.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E10",
+      "path": "packages/operations/src/Errors/Internal/ProblemDetailsSerializer.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E11",
+      "path": "packages/core/src/Errors/Contracts/ProblemRegistry.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E12",
+      "path": "packages/operations/tests/Feature/ErrorRepresentationTest.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E13",
+      "path": "packages/operations/src/OpenApi/Internal/OpenApiDocumentGenerator.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E14",
+      "path": "packages/operations/src/Laravel/OperationsBindingsRegistrar.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E15",
+      "path": "- После продуктового commit: `bash scripts/contract-guard.sh` и `bash scripts/contract-guard.sh \"$(cat plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06.1-execution/base-commit.txt)\"` → exit 0; в Unreleased каждого изменённого пакета описан объявленный API/wire delta.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E16",
+      "path": "- `bash plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/scripts/p06-facts.sh` до правок → состав файлов как в досье §2; после правок `grep -rn -e AcceptNegotiation -e NegotiatingResponseSerializer -e problemTypeBase -e problem_type_base packages products scripts docs --include='*.php' --include='*.json' --include='*.md' | grep -v /vendor/ | grep -v -e 'tests/Golden/rename-map.json' -e 'scripts/rename-completeness.json'` → пусто.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E17",
+      "path": "- `scripts/php84 composer --working-dir=packages/operations test -- --filter='ErrorRepresentation|InputEnvelope'` → exit 0; 415/Validation резолвится и сериализуется через реальный ProblemRegistry; датасет `Accept` из пяти значений и шесть случаев таблицы examples §4b присутствуют.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E18",
+      "path": "- Негативный контроль (в Completion Notes): `title` из сообщения вместо реестра → `ErrorRepresentationTest` красный; откат → зелёный.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E19",
+      "path": "- `scripts/php84 composer error-registry` → exit 0; три новых кода в выводе `definitions`.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E20",
+      "path": "- `scripts/php84 composer --working-dir=packages/operations test` → exit 0; `scripts/php84 composer --working-dir=products/flex-crm test` → exit 0.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E21",
+      "path": "- `scripts/php84 php scripts/configuration-reference.php --check` → exit 0; `scripts/php84 php scripts/rename-completeness-gate.php` → exit 0.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E22",
+      "path": "- `scripts/php84 php scripts/php-api.php --write` дважды → идентично; `scripts/php84 composer php-api`, `scripts/php84 composer bc-check` → exit 0; diff baseline Golden содержит только строки P06.1 из досье §4.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E23",
+      "path": "- `scripts/php84 composer lint:check`, `scripts/php84 composer analyse` → exit 0; `php scripts/quality-ceiling-guard.php` → `ceilings OK`; `bash scripts/anti-weakening-gate.sh` → exit 0.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E24",
+      "path": "- Review `light` (D91): self-check по досье §6; строка `review: self-check GREEN` в Completion Notes.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    }
+  ],
+  "portability": {
+    "tier": "committed-bundle",
+    "execution_inputs": [
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D92-p06-design-audit-remediation.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D92-p06-design-audit-remediation.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D92-p06-design-audit-remediation.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P06-design.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/research/P06-design.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/research/P06-design.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P06-design-rag.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/research/P06-design-rag.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/research/P06-design-rag.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/examples.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/examples.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/examples.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D90-p06-wire-contract.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D90-p06-wire-contract.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D90-p06-wire-contract.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/facts/envelope-error-tests.txt",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/facts/envelope-error-tests.txt",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/facts/envelope-error-tests.txt",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P06-design.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/research/P06-design.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/research/P06-design.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/examples.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/examples.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/examples.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "packages/operations/src/Invocation/Internal/OperationDispatcher.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "packages/operations/src/Invocation/Internal/OperationDispatcher.php",
+        "normalized": "packages/operations/src/Invocation/Internal/OperationDispatcher.php",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "packages/operations/src/Errors/Internal/ProblemDetailsSerializer.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "packages/operations/src/Errors/Internal/ProblemDetailsSerializer.php",
+        "normalized": "packages/operations/src/Errors/Internal/ProblemDetailsSerializer.php",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "packages/core/src/Errors/Contracts/ProblemRegistry.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "packages/core/src/Errors/Contracts/ProblemRegistry.php",
+        "normalized": "packages/core/src/Errors/Contracts/ProblemRegistry.php",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "packages/operations/tests/Feature/ErrorRepresentationTest.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "packages/operations/tests/Feature/ErrorRepresentationTest.php",
+        "normalized": "packages/operations/tests/Feature/ErrorRepresentationTest.php",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "packages/operations/src/OpenApi/Internal/OpenApiDocumentGenerator.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "packages/operations/src/OpenApi/Internal/OpenApiDocumentGenerator.php",
+        "normalized": "packages/operations/src/OpenApi/Internal/OpenApiDocumentGenerator.php",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "packages/operations/src/Laravel/OperationsBindingsRegistrar.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "packages/operations/src/Laravel/OperationsBindingsRegistrar.php",
+        "normalized": "packages/operations/src/Laravel/OperationsBindingsRegistrar.php",
+        "path_kind": "internal",
+        "rejection": null
+      }
+    ],
+    "provenance_only": [],
+    "privacy": {
+      "minimized": true,
+      "excluded_classes": [
+        "chain-of-thought",
+        "raw-transcript-bodies",
+        "secrets",
+        "tool-payloads"
+      ]
+    },
+    "semantic_carrier": "task:plan-run",
+    "provider_renderers": {
+      "claude": "/task:plan-run 2026.09.27-№1-COREX-KERNEL P06.1",
+      "codex": "$ task:plan-run 2026.09.27-№1-COREX-KERNEL P06.1"
+    }
+  },
+  "conflicts": [],
+  "slice": {
+    "subagent_keys": [
+      "goal",
+      "must",
+      "never",
+      "done",
+      "authority",
+      "next",
+      "route",
+      "version"
+    ],
+    "root_only_keys": [
+      "evidence",
+      "portability",
+      "conflicts"
+    ]
+  },
+  "cold_start": {
+    "plan_id": "2026.09.27-№1-COREX-KERNEL",
+    "item_id": "P06.1",
+    "reads": [
+      "E7",
+      "E8",
+      "E9",
+      "E10",
+      "E11",
+      "E12",
+      "E13",
+      "E14"
+    ],
+    "carrier": "task:plan-run 2026.09.27-№1-COREX-KERNEL P06.1"
+  }
+}

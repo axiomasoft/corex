@@ -1,0 +1,23 @@
+# P06 — retrieval provenance
+
+Дата: 2026-10-03. Синтез и границы доверия — `research/P06-design-rag.md`.
+
+| Capture | Tool / source | Вопрос |
+|:--|:--|:--|
+| `pplx-01-rfc9457-title-accept-extensions.md` | perplexity-web `search` | стабильность `title`, `detail` для случая, problem+json при `Accept: application/json`, extension `code`, URN vs https `type` |
+| `pplx-02-cloudevents-structured-json.md` | perplexity-web `search` | обязательные/необязательные атрибуты CloudEvents 1.0.2, имена extensions, версионирование `type`/`dataschema`, tracing |
+| `pplx-03-standard-webhooks-retries-cloudevents-body.md` | perplexity-web `search` | заголовки и payload Standard Webhooks, ретраи, 410/3xx, CloudEvents как подписанное тело |
+| `pplx-04-webhook-ssrf-threat-model.md` | perplexity-web `search` | модель угроз доставки вебхуков: SSRF, egress арендатора, повторная проверка при доставке, dead-letter и replay |
+| `http-01-cloudevents-spec.md` | curl, `cloudevents/spec@v1.0.2` `spec.md` | первичный текст: правила имён, система типов, `id/source/specversion/type`, необязательные атрибуты, extensions |
+| `http-02-cloudevents-json-format.md` | curl, `cloudevents/spec@v1.0.2` `formats/json-format.md` | первичный текст: отображение типов в JSON, конверт `application/cloudevents+json`, `data`/`data_base64` |
+| `http-03-standard-webhooks.md` | curl, `standard-webhooks/standard-webhooks@main` `spec/standard-webhooks.md` | первичный текст: payload, подпись, эксплуатационные правила (ретраи, 3xx, 410) |
+| `http-04-rfc9457.md` | curl, `rfc-editor.org/rfc/rfc9457.txt` | первичный текст: §3 объект, пример с `Accept: application/json`, члены, extension members |
+| `http-05-cloudevents-distributed-tracing.md` | curl, `cloudevents/spec@v1.0.2` `extensions/distributed-tracing.md` | первичный текст: `traceparent`, `tracestate` |
+
+| `http-06-rfc3986.md` | RFC Editor primary HTTP capture; web.run verification | Appendix A: URI-reference/absolute-URI, percent encoding, IPv6/IPvFuture, relative first-segment rules (D92) |
+
+Переиспользовано без повторного поиска: `artifacts/research-rag/` (pplx-08 — строковые коды + реестр + RFC 9457, основание D10).
+
+Поиск не является доказательством. Каждое утверждение, меняющее контракт (D90 п.1–п.4), подтверждено
+первичным `http-NN`; ответы perplexity — синтез и чек-лист модели угроз. Инвентарь репозитория — `RAG:—`
+(`artifacts/P06-design/facts/`, скрипт `artifacts/P06-design/scripts/p06-facts.sh`).

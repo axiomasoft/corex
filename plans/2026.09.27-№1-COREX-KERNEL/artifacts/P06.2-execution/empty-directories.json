@@ -1,0 +1,6 @@
+{
+  "before_files": 0,
+  "removed_directories": 10,
+  "remaining": 0,
+  "method": "literal-path empty-directory removal, safe-dirs registered checkout"
+}

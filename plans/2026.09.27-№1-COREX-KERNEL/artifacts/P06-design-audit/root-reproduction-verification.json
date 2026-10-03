@@ -1,0 +1,26 @@
+[
+  {
+    "case": "http-415-registry",
+    "exit": 0,
+    "stdout": "registry: CoreX\\Errors\\Exceptions\\ProblemRegistryException: ERROR-INVALID-DEFINITION operations.unsupported_media_type\nplanned definition category: unsupported\nplanned occurrence category: validation\n",
+    "stderr": ""
+  },
+  {
+    "case": "webhook-lease-budget",
+    "exit": 0,
+    "stdout": "{\"configured_contract\":{\"maxAttempts\":3,\"horizon\":3600,\"attempt\":3,\"age\":120},\"required_status\":\"dead\",\"actual_status\":\"retry\",\"actual_last_error\":\"ack_unknown\",\"database_connection_opened\":false}\n{\"configured_contract\":{\"maxAttempts\":20,\"horizon\":3600,\"attempt\":1,\"age\":7200},\"required_status\":\"dead\",\"actual_status\":\"retry\",\"actual_last_error\":\"ack_unknown\",\"database_connection_opened\":false}\n",
+    "stderr": ""
+  },
+  {
+    "case": "tool-exception-code",
+    "exit": 255,
+    "stdout": "",
+    "stderr": "PHP Fatal error:  Cannot redeclare non-readonly property Exception::$code as readonly ToolSchemaFailure::$code in /home/vostrikov/projects/packages/corex/plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design-audit/tool-exception-code.php on line 5\n"
+  },
+  {
+    "case": "external-dataschema",
+    "exit": 0,
+    "stdout": "{\"scenario\":\"D90 permits a MessageContract dataSchema for payload; existing ExportProjector removes secret\",\"internal_dataschema\":\"https:\\/\\/schemas.example.test\\/orders.placed\\/v1.json\",\"external_dataschema_by_D90\":\"https:\\/\\/schemas.example.test\\/orders.placed\\/v1.json\",\"internal_data_valid\":true,\"external_data_valid\":false}\n",
+    "stderr": ""
+  }
+]

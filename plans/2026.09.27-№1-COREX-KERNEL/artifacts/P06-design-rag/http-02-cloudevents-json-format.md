@@ -1,0 +1,137 @@
+# http-02-cloudevents-json-format — CloudEvents 1.0.2 JSON format: type mapping, envelope, data handling
+
+- Tool: curl (primary source) · Date: 2026-10-03
+- URL: https://raw.githubusercontent.com/cloudevents/spec/v1.0.2/cloudevents/formats/json-format.md
+- SHA-256 of fetched document: `30778f995a2c82f3ac6c4f7cd56415d675111990151c9ab67bd0a2de1d0e1ce5` (454 lines)
+- Status: primary source; excerpts verbatim, line ranges of the fetched file.
+
+## Lines 54-80
+
+```text
+### 2.2. Type System Mapping
+
+The [CloudEvents type system][ce-types] MUST be mapped to JSON types as follows,
+with exceptions noted below.
+
+| CloudEvents   | JSON                                                           |
+| ------------- | -------------------------------------------------------------- |
+| Boolean       | [boolean][json-bool]                                           |
+| Integer       | [number][json-number], only the integer component optionally prefixed with a minus sign is permitted |
+| String        | [string][json-string]                                          |
+| Binary        | [string][json-string], [Base64-encoded][base64] binary         |
+| URI           | [string][json-string] following [RFC 3986][rfc3986]            |
+| URI-reference | [string][json-string] following [RFC 3986][rfc3986]            |
+| Timestamp     | [string][json-string] following [RFC 3339][rfc3339] (ISO 8601) |
+
+Unset attributes MAY be encoded to the JSON value of `null`. When decoding
+attributes and a `null` value is encountered, it MUST be treated as the
+equivalent of unset or omitted.
+
+Extension specifications MAY define secondary mapping rules for the values of
+attributes they define, but MUST also include the previously defined primary
+mapping.
+
+For instance, the attribute value might be a data structure defined in a
+standard outside of CloudEvents, with a formal JSON mapping, and there might be
+risk of translation errors or information loss when the original format is not
+preserved.
+```
+
+## Lines 114-206
+
+```text
+## 3. Envelope
+
+Each CloudEvents event can be wholly represented as a JSON object.
+
+Such a representation MUST use the media type `application/cloudevents+json`.
+
+All REQUIRED and all not omitted OPTIONAL attributes in the given event MUST
+become members of the JSON object, with the respective JSON object member name
+matching the attribute name, and the member's type and value being mapped using
+the [type system mapping](#22-type-system-mapping).
+
+OPTIONAL not omitted attributes MAY be represeted as a `null` JSON value.
+
+### 3.1. Handling of "data"
+
+The JSON representation of the event "data" payload is determined by the runtime
+type of the `data` content and the value of the [`datacontenttype`
+attribute][datacontenttype].
+
+#### 3.1.1. Payload Serialization
+
+Before taking action, a JSON serializer MUST first determine the runtime data
+type of the `data` content.
+
+If the implementation determines that the type of data is `Binary`, the value
+MUST be represented as a [JSON string][json-string] expression containing the
+[Base64][base64] encoded binary value, and use the member name `data_base64` to
+store it inside the JSON representation. If present, the `datacontenttype` MUST
+reflect the format of the original binary data.
+
+If the type of data is not `Binary`, the implementation will next determine
+whether the value of the `datacontenttype` attribute declares the `data` to
+contain JSON-formatted content. Such a content type is defined as one having a
+[media subtype][rfc2045-sec5] equal to `json` or ending with a `+json` format
+extension. That is, a `datacontenttype` declares JSON-formatted content if its
+media type, when stripped of parameters, has the form `*/json` or `*/*+json`.
+If the `datacontenttype` is unspecified, processing SHOULD proceed as if the
+`datacontenttype` had been specified explicitly as `application/json`.
+
+If the `datacontenttype` declares the data to contain JSON-formatted content, a
+JSON serializer MUST translate the data value to a [JSON value][json-value], and
+use the member name `data` to store it inside the JSON representation. The data
+value MUST be stored directly as a JSON value, rather than as an encoded JSON
+document represented as a string. An implementation MAY fail to serialize the
+event if it is unable to translate the runtime value to a JSON value.
+
+Otherwise, if the `datacontenttype` does not declare JSON-formatted data
+content, a JSON serializer MUST store a string representation of the data value,
+properly encoded according to the `datacontenttype`, in the `data` member of the
+JSON representation. An implementation MAY fail to serialize the event if it is
+unable to represent the runtime value as a properly encoded string.
+
+Out of this follows that the presence of the `data` and `data_base64` members is
+mutually exclusive in a JSON serialized CloudEvent.
+
+Furthermore, unlike attributes, for which value types are restricted by the
+[type-system mapping](#22-type-system-mapping), the `data` member
+[JSON value][json-value] is unrestricted, and MAY contain any valid JSON if the
+`datacontenttype` declares the data to be JSON-formatted. In particular, the
+`data` member MAY have a value of `null`, representing an explicit `null`
+payload as distinct from the absence of the `data` member.
+
+#### 3.1.2. Payload Deserialization
+
+When a CloudEvents is deserialized from JSON, the presence of the `data_base64`
+member clearly indicates that the value is a Base64 encoded binary data, which
+the deserializer MUST decode into a binary runtime data type. The deserializer
+MAY further interpret this binary data according to the `datacontenttype`.
+
+When a `data` member is present, the decoding behavior is dependent on the value
+of the `datacontenttype` attribute. If the `datacontenttype` declares the `data`
+to contain JSON-formatted content (that is, its subtype is `json` or has a
+`+json` format extension), then the `data` member MUST be treated directly as a
+[JSON value][json-value] and decoded using an appropriate JSON type mapping for
+the runtime. Note: if the `data` member is a string, a JSON deserializer MUST
+interpret it directly as a [JSON String][json-string] value; it MUST NOT further
+deserialize the string as a JSON document.
+
+If the `datacontenttype` does not declare JSON-formatted data content, then the
+`data` member SHOULD be treated as an encoded content string. An implementation
+MAY fail to deserialize the event if the `data` member is not a string, or if it
+is unable to interpret the `data` with the `datacontenttype`.
+
+When a `data` member is present, if the `datacontenttype` attribute is absent, a
+JSON deserializer SHOULD proceed as if it were set to `application/json`, which
+declares the data to contain JSON-formatted content. Thus, it SHOULD treat the
+`data` member directly as a [JSON value][json-value] as specified above.
+Furthermore, if a JSON-formatted event with no `datacontenttype` attribute, is
+deserialized and then re-serialized using a different format or protocol
+binding, the `datacontenttype` in the re-serialized event SHOULD be set
+explicitly to the implied `application/json` content type to preserve the
+semantics of the event.
+
+```
+

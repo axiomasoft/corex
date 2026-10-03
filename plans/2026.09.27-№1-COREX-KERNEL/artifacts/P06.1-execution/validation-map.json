@@ -1,0 +1,52 @@
+{
+  "criteria": {
+    "E15": [
+      "contract-guard-final.log",
+      "contract-guard-base-final.log"
+    ],
+    "E16": [
+      "../../artifacts/P06-design/facts/input-envelope.txt",
+      "retired-symbols.log",
+      "source-binding.json"
+    ],
+    "E17": [
+      "focused-tests.log"
+    ],
+    "E18": [
+      "negative-title.log",
+      "title-restored.log"
+    ],
+    "E19": [
+      "error-registry.json"
+    ],
+    "E20": [
+      "operations-tests.log",
+      "flex-crm-tests.log"
+    ],
+    "E21": [
+      "configuration-check.log",
+      "rename-check.log"
+    ],
+    "E22": [
+      "php-api-write1.json",
+      "php-api-write2.json",
+      "php-api-check.json",
+      "bc-check-final.log",
+      "golden-semantic-delta.json",
+      "golden-check.log"
+    ],
+    "E23": [
+      "lint-clean-candidate.log",
+      "lint-clean-checkout.json",
+      "analyse.log",
+      "anti-weakening.log"
+    ],
+    "E24": [
+      "completion.md",
+      "grok-review.json",
+      "grok-gate-final.json"
+    ]
+  },
+  "lint_method": "exact product PHP bytes in clean candidate; preserved dirty audit evidence is a foreign baseline",
+  "retired_scan_method": "exclude changelog descriptions of removals; runtime references empty"
+}

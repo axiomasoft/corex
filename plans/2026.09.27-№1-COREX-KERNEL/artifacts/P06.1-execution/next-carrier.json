@@ -1,0 +1,25 @@
+{
+  "kind": "run-items",
+  "command_id": "task:plan-run",
+  "plan_id": "2026.09.27-№1-COREX-KERNEL",
+  "arguments": [
+    "2026.09.27-№1-COREX-KERNEL",
+    "P06.2"
+  ],
+  "context_kind": "continue-root",
+  "item_ids": [
+    "P06.2"
+  ],
+  "cold_start_scope": [],
+  "continuity": {
+    "outcome": "continue-root",
+    "reason": "context-telemetry-unavailable",
+    "evidence": [
+      "batch:661b203d237f86a53433bf37612a26a23f90dd6ee38397e81ef820e169add342",
+      "loaded-inputs:reusable",
+      "cold-start-cost:0"
+    ],
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  }
+}

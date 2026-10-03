@@ -1,0 +1,45 @@
+> bash scripts/bc-check.sh
+bc-check: BC_CHECK_BASE=76f8bdde496154c0a8901e459175cf306bedd860 (PHP 8.4)
+bc-check: roave 8.22.0
+bc-check: axiomasoft/corex-access (access) |compatible| stability=stable base=d8bbc21b7b6b1b7a541b3894739f93d553a71d7e candidate=775ce5a612129e7d78881be6788e7c6c2a479089
+bc-check: axiomasoft/corex (core) |compatible| stability=stable base=77ce5b901b1743d70a8f448e21e3e88441351c59 candidate=91cf4592581c39db131ba2e62dcf00a67b51dd08
+bc-check: axiomasoft/corex-custom-fields (custom-fields) |compatible| stability=stable base=5ee950ccb04944642097cf5e403563ad55403525 candidate=ef9f446cd915b2084afbcf672bf638374fdad0e0
+bc-check: axiomasoft/corex-intl (intl) |compatible| stability=stable base=9ddc663c675c7f73cdc95576d24d6c160887ae61 candidate=c2d0eb0ef424466fecda4e3f63a0b730b952520a
+bc-check: axiomasoft/corex-media (media) |compatible| stability=stable base=b3545195c4dcf3c1d0bcafa956fd41bc96c4cd15 candidate=40e4514c697df6e23367d94e5700132ead7ac693
+bc-check: axiomasoft/corex-notifications (notifications) |compatible| stability=stable base=623387ffa846a4c5ae63be67f09c5cf241d301db candidate=7527db2ed2bb7fdd82737d697600773bb93e81e6
+bc-check: axiomasoft/corex-operations (operations) |bc-break| stability=stable base=a6b70eca94833dfe5f4d796a06a6cee359c33f42 candidate=4390591e042eda5ae80e77cebfa34f7dd3456268
+  - Installing guzzlehttp/uri-template (v2.0.1): Extracting archive
+  - Installing symfony/polyfill-php82 (v1.43.0): Extracting archive
+  - Installing guzzlehttp/psr7 (3.1.0): Extracting archive
+  - Installing guzzlehttp/promises (3.0.2): Extracting archive
+  - Installing psr/http-client (1.0.3): Extracting archive
+  - Installing guzzlehttp/guzzle (8.2.0): Extracting archive
+  - Installing fruitcake/php-cors (v1.4.0): Extracting archive
+  - Installing dragonmantank/cron-expression (v3.6.0): Extracting archive
+  - Installing doctrine/inflector (2.1.0): Extracting archive
+  - Installing laravel/framework (v13.34.0): Extracting archive
+  - Installing axiomasoft/corex (1.0.x-dev c97fcf0): Symlinking from packages/core
+  - Installing axiomasoft/corex-transfer (1.0.x-dev 2f63b8c): Symlinking from packages/transfer
+  - Installing axiomasoft/corex-operations (1.0.x-dev cfe4a32): Symlinking from packages/operations
+  - Installing axiomasoft/corex-webhooks (1.0.x-dev 5c1ee60): Symlinking from packages/webhooks
+58 package suggestions were added by new dependencies, use `composer suggest` to see details.
+54 packages you are using are looking for funding.
+Use the `composer fund` command to find out more!
+No security vulnerability advisories found.
+{"errors":[{"description":"Property CoreX\\Operations\\Laravel\\Support\\ApiOptions#$problemTypeBase was removed","path":"/packages/operations/src/Laravel/Support/ApiOptions.php","line":17,"column":1,"modificationType":"removed"},{"description":"The parameter $problemTypeBase of CoreX\\Operations\\Laravel\\Support\\ApiOptions#__construct() changed from string to a non-contravariant array","path":"/packages/operations/src/Laravel/Support/ApiOptions.php","line":26,"column":5,"modificationType":"changed"},{"description":"Class CoreX\\Operations\\Errors\\Laravel\\AcceptNegotiation has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Case CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode::InputEnvelopeInvalid was added","path":"/packages/operations/src/Errors/Enums/OperationsErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Case CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode::UndeclaredFields was added","path":"/packages/operations/src/Errors/Enums/OperationsErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Case CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode::UnsupportedMediaType was added","path":"/packages/operations/src/Errors/Enums/OperationsErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Property CoreX\\Operations\\Laravel\\Support\\ApiOptions#$problemTypeBase was removed","path":"/packages/operations/src/Laravel/Support/ApiOptions.php","line":17,"column":1,"modificationType":"removed"},{"description":"The parameter $problemTypeBase of CoreX\\Operations\\Laravel\\Support\\ApiOptions#__construct() changed from string to a non-contravariant array","path":"/packages/operations/src/Laravel/Support/ApiOptions.php","line":26,"column":5,"modificationType":"changed"},{"description":"Class CoreX\\Operations\\Errors\\Laravel\\AcceptNegotiation has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Case CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode::InputEnvelopeInvalid was added","path":"/packages/operations/src/Errors/Enums/OperationsErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Case CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode::UndeclaredFields was added","path":"/packages/operations/src/Errors/Enums/OperationsErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Case CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode::UnsupportedMediaType was added","path":"/packages/operations/src/Errors/Enums/OperationsErrorCode.php","line":10,"column":1,"modificationType":"added"}]}
+12 backwards-incompatible changes detected
+bc-check: exact decision-bound unpublished delta — axiomasoft/corex-operations
+bc-check: axiomasoft/corex-panels (panels) |compatible| stability=stable base=6f69b37ab96f866765960441ab99c50d9922e95f candidate=f06fb15ffc8f6deb9fed72d2198fae2b3f3b92bf
+bc-check: axiomasoft/corex-recurrence (recurrence) |compatible| stability=stable base=8e9d2c23cc1a921dea81d5ecdcf7be5623e0dab4 candidate=f1f8d7bba5b49f64918ac1f2c3b05939c8e81a81
+bc-check: axiomasoft/corex-search-intl (search-intl) |compatible| stability=stable base=a56453c0e91b3579b781a72d45596fe35b43cd25 candidate=bc77212b48d2968d2d0d97dda2aab9042eeaaf15
+bc-check: axiomasoft/corex-search-meilisearch (search-meilisearch) |compatible| stability=stable base=b4b43950cab8481899855dac444b427f89aa4589 candidate=3a3a1beb260059f99ad4277795b9c2171dd35f7f
+bc-check: axiomasoft/corex-search (search) |compatible| stability=stable base=074ed104500fd1309fdb991e4e0d4e05f6c5f468 candidate=68fd4d897d66d712ce7fd415500ea808d42e4168
+bc-check: axiomasoft/corex-tasks-workflow (tasks-workflow) |compatible| stability=stable base=03cbca0e68ddbdb7e7e3e8a79bd2b2a97a13d551 candidate=8c424938ab0ce8220a8503537089060c957b921a
+bc-check: axiomasoft/corex-tasks (tasks) |compatible| stability=stable base=1401545d30568bda7ee5286536baad92b1fd82a8 candidate=1a3ce0a108bb083bfd2265a66fe6d2592085acf4
+bc-check: axiomasoft/corex-tenancy (tenancy) |compatible| stability=stable base=c20da7d1ab7a38cc7bb4fc7b54cdbe96f949a5d0 candidate=aaca9968430f6907e5a5b6fc56a60d3fc54836ac
+bc-check: axiomasoft/corex-tools (tools) |compatible| stability=stable base=a1fdd2e6486ecb84f7edf64c3da8d7047ad855ec candidate=ab53cdd64d8294efacd3d91b04524c5e76c35d5e
+bc-check: axiomasoft/corex-transfer (transfer) |compatible| stability=stable base=2eb3699e5350a83462f26406a13932b28fa18fe1 candidate=a73c05fa1db6e2c1699c491826afe43b15fb54b3
+bc-check: axiomasoft/corex-wakeup (wakeup) |compatible| stability=stable base=6abd9ead07325ca9fc5e433bbb2a4180c2e2b874 candidate=46466852a1ba168ca5512431163fa5fc72218299
+bc-check: axiomasoft/corex-webhooks (webhooks) |compatible| stability=stable base=b23067f9bfaeeb128bc6040ffce94023ef77e72a candidate=8a1b4ce4437943490c6b30d1af8930d66278f73e
+bc-check: axiomasoft/corex-workflow (workflow) |compatible| stability=stable base=0401ecc88c40b8d481dd910217fe769a13e45d98 candidate=677428d0c77ed18f204f34cbff9294ea634ca57a
+bc-check: OK

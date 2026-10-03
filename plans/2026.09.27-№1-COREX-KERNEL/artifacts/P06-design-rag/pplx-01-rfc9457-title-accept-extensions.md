@@ -1,0 +1,37 @@
+# pplx-01 — RFC 9457: title/detail, Accept: application/json, extension members, type URI
+
+- Tool: perplexity-web `search` · Date: 2026-10-03
+- Query: "RFC 9457 problem details: should \"title\" be stable per problem type and \"detail\" occurrence-specific? If a JSON API client sends \"Accept: application/json\" (not application/problem+json), is it correct for the server to return error bodies as application/problem+json anyway? What do RFC 9457 §3 and API guidelines (Zalando, Microsoft, IETF HTTPAPI) recommend about extension members like \"code\" and about \"type\" URIs that are URNs (non-dereferenceable) vs https URLs?"
+- Status: provenance (synthesized answer; not a primary source). Primary confirmation: `http-04-rfc9457.md`.
+
+## Answer (verbatim)
+
+Yes: RFC 9457 says title should normally stay stable for a given problem type, while detail explains this particular occurrence. A server may return application/problem+json even when the request’s Accept header lists only application/json; RFC 9457 explicitly notes that this is allowed by HTTP, though advertising application/problem+json makes the client’s preference clear.
+
+## title and detail
+
+- title is a short, human-readable summary of the problem type. It SHOULD NOT change between occurrences of that type, except for localization.
+- detail is a human-readable explanation specific to this occurrence. Clients SHOULD NOT parse it for machine decisions; define an extension member for information clients need to act on.
+For example, a stable title might be “Insufficient credit,” while the detail varies with the actual balance and purchase amount.
+
+## Accept: application/json
+
+The problem-details JSON representation is identified by application/problem+json, not application/json. But RFC 9457’s §3 example returns Content-Type: application/problem+json even though the request did not list it in Accept, and says this is allowed by HTTP. The RFC also says APIs can add problem details to existing APIs using content negotiation.
+So, it is permitted, but don’t interpret Accept: application/json as an explicit request for application/problem+json. For predictable negotiation, clients that want problem details should send Accept: application/problem+json—or include it alongside application/json if they accept both. Servers should document their behavior and, if they negotiate representations, handle unacceptable representations consistently with HTTP semantics.
+Zalando’s current guidelines require APIs to support Problem JSON for errors and describe it as application/problem+json; that supports using the dedicated media type, but does not make it interchangeable with application/json.
+
+## Extension members such as code
+
+RFC 9457 allows problem-type-specific extension members, and requires consumers to ignore extensions they do not recognize. It recommends documenting extensions as part of the problem-type definition; names should start with a letter and use letters, digits, or underscores, with at least three characters.
+A code extension is therefore valid, but treat it as a documented, stable machine-readable contract, not as a replacement for type or the HTTP status. Clients should branch on the code or type—not on human-facing title or detail. Microsoft’s guidance illustrates the usefulness of stable error codes, including a code in the error body and, for Azure APIs, a matching x-ms-error-code header; that is Microsoft-specific guidance, not an RFC 9457 requirement.
+
+## URNs versus HTTPS type URIs
+
+A non-dereferenceable URI is allowed for type; RFC 9457 gives a tag: URI as an example. But it encourages resolvable type URIs: changing a non-resolvable identifier later to a resolvable one changes the problem type’s identity and can be a breaking change. For locator URIs such as HTTP(S), dereferencing SHOULD provide human-readable documentation, though consumers SHOULD NOT automatically dereference them in normal processing.
+Practical choice: use a stable HTTPS URI under your control, serve useful documentation there, and never repurpose that URI for a different problem. A URN is valid if you have a reason to use it and can keep it stable, but it forgoes the documentation/discovery benefit.
+Zalando’s retrieved guidelines require Problem JSON support and emphasize stable API contracts, but do not prescribe URNs versus HTTPS specifically for problem type values.
+
+## Sources (as returned)
+
+1. https://www.rfc-editor.org/rfc/rfc9457.html
+2. https://opensource.zalando.com/restful-api-guidelines/
