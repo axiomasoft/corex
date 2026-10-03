@@ -44,6 +44,22 @@ Product commit `6bf07d9a` (local, not pushed). Run `47536990eeee4ec143eabeb5f13d
 
 ## Hosted CI (D73) — left the item by owner decision D89
 
-The hosted-CI Validation bullet was removed from the P05.4 spec at the owner's direction («CI не фикси, это отдельно сделает sol», option «Перенести carrier», `owner-direction-d89.md`, decision D89, design-audit waiver for the new fingerprint). Nothing was pushed. **Phase P05 is not closed**: D73 still requires a green workflow `CI` on the final phase commit; the owner runs that separately. `handoff.md` names the requirement.
+The hosted-CI Validation bullet was removed from the P05.4 spec at the owner's direction («CI не фикси, это отдельно сделает sol», option «Перенести carrier», `owner-direction-d89.md`, decision D89, design-audit waiver for the new fingerprint). Nothing was pushed in that session. **Phase P05 was not closed then**: D73 still required a green workflow `CI` on the final phase commit.
 
-review: self-check GREEN (dossier §6: Options and gates by `configuration-reference`, lifetime by the two resident tests with negative controls, docs-gate OK). The owner asked for an independent review on `codex/gpt-6.1-sol` (high): it is a separate read-only `Review` run, not started from this session; the executor cannot select that model.
+review: self-check GREEN (dossier §6: Options and gates by `configuration-reference`, lifetime by the two resident tests with negative controls, docs-gate OK). The owner asked for an independent review on `codex/gpt-6.1-sol` (high): it is a separate read-only `Review` run, not started from that session and not started from the closure session either.
+
+## Closure session — tails and hosted CI
+
+Executor `grok-4.7/high`. Product commits after `f444568a`, pushed only to `mirror`:
+
+- `a5c1f350` — `mutation-check.sh` no longer calls `rg`. A Pest run that prints `No tests found` exits 2 (shown with a filter that matches nothing). `P1.19-hardcode-uuid` is reanchored to `CoreOptions::settingsTable`: strict `git apply --check` passes and the ulid settings test goes red (`uuid` vs `bpchar`). `bash scripts/mutation-check.sh --all` exit 0, 36/36, no `stale patch context`. Tree restored.
+- `a7a7d4a4`, `9aaaa7f6`, `0c7f7e84` — repairs for red mirror jobs. Detail and the green run are in `hosted-ci.md`.
+
+Green hosted run: `37123316791` on `0c7f7e84819e8730815afdc93e2256c13ab0f0cd`, conclusion `success`, 36 success / 0 failure / 1 skipped (mutation registry is `pull_request`-only). `phase_audit_policy` for P05 is `PHASE_DIRECT_CLOSE_ASSURED` (`audit_required` false, `close_allowed` true). No phase audit was admitted or run.
+
+The phase journal event and delivery receipt were not written. `task.plan_closure` in task 0.27.0 finds the phase contract only on a line matching `> **Phase Contract`. `phases/P05/P05.md` says `> **Контракт фазы.**`, the same heading as P00–P04 and P10. Replacing that heading changes `design_snapshot` and leaves the D89 waiver (`be4962cced9497af358502806c8b666e9c3466f81339bcd9e9dcefa182285f5d`) stale. That edit was not made. `P05.md` is unchanged from `0c7f7e84`.
+
+Recorded and not repaired:
+
+- Foreign bundles P00.1–P00.3 and P01.1 stay stale at HEAD (glossary digest; `WriteApiSnapshots.php` unresolvable in P01.2).
+- Independent review of P0 and of P05.4 remains for `codex/gpt-6.1-sol`. This session did not launch it.
