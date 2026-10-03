@@ -1,0 +1,3 @@
+docs/architecture/message-policy.md:19:Wire — **CloudEvents 1.0 structured JSON**, media type `application/cloudevents+json`.
+docs/architecture/constitution.md:414:### MSG-003 — Конверт опубликованного сообщения — CloudEvents 1.0 structured JSON
+docs/architecture/constitution.md:415:**Правило.** Конверт опубликованного сообщения — CloudEvents 1.0 structured JSON;

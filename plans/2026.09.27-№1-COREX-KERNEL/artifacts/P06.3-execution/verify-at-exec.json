@@ -1,0 +1,56 @@
+{
+  "source": {
+    "command": [
+      "git",
+      "grep",
+      "-n",
+      "source: '",
+      "--",
+      "packages/*/src/*"
+    ],
+    "exit": 0,
+    "stdout": "packages/core/src/Messaging/Internal/SqlOutboxRelay.php:182:                source: 'corex/relay',\npackages/custom-fields/src/Internal/Integration/AttributeMessageTranslator.php:20:            source: 'axiomasoft/corex-custom-fields',\npackages/intl/src/Territory/Internal/Address/FixtureAddressSuggestProvider.php:92:                source: 'fixture-address/1',\npackages/intl/src/Territory/Internal/Address/FixtureAddressSuggestProvider.php:101:                source: 'fixture-address/1',\npackages/intl/src/Territory/Internal/Address/FixtureAddressSuggestProvider.php:109:            source: 'fixture-address/1',\n",
+    "stderr": ""
+  },
+  "metadata": {
+    "command": [
+      "git",
+      "grep",
+      "-n",
+      "-e",
+      "metadata: [",
+      "-e",
+      "'metadata' =>",
+      "--",
+      "packages/*/src/*"
+    ],
+    "exit": 128,
+    "stdout": "",
+    "stderr": "fatal: -e option, 'metadata: [': Invalid regular expression\n"
+  },
+  "old-wire": {
+    "command": [
+      "git",
+      "grep",
+      "-n",
+      "двенадцать ключей",
+      "--",
+      "packages",
+      "docs"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": ""
+  },
+  "content-type": {
+    "command": [
+      "grep",
+      "-n",
+      "Content-Type: application/cloudevents+json",
+      "packages/webhooks/src/Internal/CurlWebhookTransport.php"
+    ],
+    "exit": 0,
+    "stdout": "143:            'Content-Type: application/cloudevents+json',\n",
+    "stderr": ""
+  }
+}

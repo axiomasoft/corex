@@ -1,6 +1,6 @@
-# HANDOFF — 2026-10-03 — after P06.2
+# HANDOFF — 2026-10-03 — after P06.3
 
-**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P06.3
+**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P06.4
 
 | Parameter | Meaning |
 |:--|:--|
@@ -9,14 +9,16 @@
 | Effort | high |
 | Context | continue-root |
 
-**Done:** Authorized B06-A P06.1/P06.2 GREEN. Operations product d6ed2cde, exact BC gate repair 692bb89a/a98f1a65, tools product 58afb343cc02188d4ddee723638cf564f4e8a1e7. Self-checks and owner-requested Grok 4.7 High reviews GREEN. Owner-approved D93 adds five guard codes, total13, with independent design delta GREEN. Exact candidate checks and evidence maps are in both completion directories.
+**Done:** P06.1/P06.2 and authorized solo P06.3 GREEN. P06.3 candidate 5fff36ed801c0f42f803cea85ebdc3fe33a2ddf8; CloudEvents wire, strict codec/URI validation, data-only projectors and external webhook profile; root/package/PG/BC/API/Golden/gates GREEN; self-check and owner-requested Grok 4.7 (medium) GREEN. Exact evidence in artifacts/P06.3-execution/completion.md and validation-map.json.
 
-**Remaining:** P06.3 then P06.4/P06.5 recommended, not authorized by this completed workset. Phase P06 stays open until its final review and hosted CI gate. This scope is complete; current root remains reusable.
+**Remaining:** P06.4 delivery/egress then P06.5 review are recommendations outside this completed authorization. P06 phase remains open until final review and hosted CI gate. Current root remains reusable; lifecycle scope-complete.
 
-**Open risks:** CloudEvents, webhook retry/egress and final phase review/CI remain future owning items. No skipped acceptance inside P06.1/P06.2. Preexisting CLAUDE.md, graph report and owner configuration changes preserved; historical PHP design proofs remain untouched and archived for portability.
+**Open risks:** P06.4 retry/egress work, P06.5 independent phase review and final hosted CI remain. No skipped P06.3 acceptance. Historical untracked PHP design prototypes and unrelated owner CLAUDE/config remain; generated graph report remains uncommitted after validation.
 
-**Sources of truth:** artifacts/P06.1-execution/completion.md and artifacts/P06.2-execution/completion.md; validation-map/source-binding/contract evaluations; Grok review JSON; D90/D92/D93; findings/P06.2-guard-design-review.md; phases/P06/ and journal.
+**Sources of truth:** phases/P06/, decisions/D90/D92/D93; artifacts/P06.1-execution/completion.md, artifacts/P06.2-execution/completion.md, artifacts/P06.3-execution/completion.md; validation maps, source/review binding, Grok reports and journal.
+
+**Workarounds/Deferred/Open questions:** Native Grok repository-tool access was refused by a compatibility hook; complete immutable source/diff packet review and final compact candidate review GREEN with no hook changes. Exact final git-archive lint avoids unrelated historical untracked PHP prototypes. Typed-doc and stale predecessor error-fixture repairs retained with original/red and final/green evidence.
 
 ```session-continuity-decision/v1
-{"outcome": "continue-root", "reason": "authorized-scope-complete", "evidence": ["batch:f03c2f1c78e1b0b325dc9600e56ce624174f24840eccedc7dc9cf6c98ef64d01", "loaded-inputs:reusable", "cold-start-cost:0", "lifecycle:scope-complete", "checkpoint:artifacts/P06.2-execution/completion.md"], "runnable": true, "schema_version": "session-continuity-decision/v1"}
+{"outcome": "continue-root", "reason": "authorized-scope-complete", "evidence": ["batch:5498effdcf7e30b9d76b78d373a2c08f11dbc7e9194f6ceadf41cea767cb3b7c", "loaded-inputs:reusable", "cold-start-cost:0", "lifecycle:scope-complete", "checkpoint:artifacts/P06.3-execution/completion.md"], "runnable": true, "schema_version": "session-continuity-decision/v1"}
 ```

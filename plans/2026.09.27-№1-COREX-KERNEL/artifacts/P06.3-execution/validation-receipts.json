@@ -1,0 +1,122 @@
+[
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E16",
+    "command": "- После продуктового commit: `bash scripts/contract-guard.sh` и `bash scripts/contract-guard.sh \"$(cat plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06.3-execution/base-commit.txt)\"` → exit 0; в Unreleased каждого изменённого пакета описан объявленный API/wire delta.",
+    "contract_sha256": "f73cae464b28c7ad372e031f6324c870617e8bc044da5199cf222014f84184f8",
+    "spec_sha256": "bd62c9194ec8e4e249e0304b1a9b50b741ad8a0e3253ab7d083c609e36bc8740",
+    "head": "5fff36ed801c0f42f803cea85ebdc3fe33a2ddf8",
+    "tree": "1f92583d92c20a9cc64eb1b0904c675ff2238bc50f28b38f746341d8ee82f93e",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-03T19:29:30Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E17",
+    "command": "- VERIFY-AT-EXEC из `research/P06-design-rag.md` → оба ожидания выполнены (запись в Completion Notes).",
+    "contract_sha256": "f73cae464b28c7ad372e031f6324c870617e8bc044da5199cf222014f84184f8",
+    "spec_sha256": "bd62c9194ec8e4e249e0304b1a9b50b741ad8a0e3253ab7d083c609e36bc8740",
+    "head": "5fff36ed801c0f42f803cea85ebdc3fe33a2ddf8",
+    "tree": "1f92583d92c20a9cc64eb1b0904c675ff2238bc50f28b38f746341d8ee82f93e",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-03T19:29:30Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E18",
+    "command": "- `scripts/php84 composer --working-dir=packages/core test -- --filter='CloudEventCodec|MessagingEnvelope'` → exit 0: эталон examples §6 байт-в-байт, round-trip, шесть негативов decode, encode-негативы и URI cases §6c (валидные relative/absolute, malformed percent/scheme/authority/IP-literal); внешний профиль без `dataschema`/`corex*`/`subject`/trace, в том числе после редактирующего проектора при заданной внутренней схеме.",
+    "contract_sha256": "f73cae464b28c7ad372e031f6324c870617e8bc044da5199cf222014f84184f8",
+    "spec_sha256": "bd62c9194ec8e4e249e0304b1a9b50b741ad8a0e3253ab7d083c609e36bc8740",
+    "head": "5fff36ed801c0f42f803cea85ebdc3fe33a2ddf8",
+    "tree": "1f92583d92c20a9cc64eb1b0904c675ff2238bc50f28b38f746341d8ee82f93e",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-03T19:29:30Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E19",
+    "command": "- `scripts/php84 composer --working-dir=packages/webhooks test -- --filter=WebhookFanout` → exit 0: тело разбирается `decode`-совместимым JSON с `specversion` `\"1.0\"` и `data` = вывод projector; подпись проверяется по тем же байтам; projector удаляет required secret внутренней schema, внешний event не объявляет dataschema и не содержит secret.",
+    "contract_sha256": "f73cae464b28c7ad372e031f6324c870617e8bc044da5199cf222014f84184f8",
+    "spec_sha256": "bd62c9194ec8e4e249e0304b1a9b50b741ad8a0e3253ab7d083c609e36bc8740",
+    "head": "5fff36ed801c0f42f803cea85ebdc3fe33a2ddf8",
+    "tree": "1f92583d92c20a9cc64eb1b0904c675ff2238bc50f28b38f746341d8ee82f93e",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-03T19:29:30Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E20",
+    "command": "- `git grep -n \"двенадцать ключей\" packages docs` → пусто; `grep -n \"Content-Type: application/cloudevents+json\" packages/webhooks/src/Internal/CurlWebhookTransport.php` → одна строка.",
+    "contract_sha256": "f73cae464b28c7ad372e031f6324c870617e8bc044da5199cf222014f84184f8",
+    "spec_sha256": "bd62c9194ec8e4e249e0304b1a9b50b741ad8a0e3253ab7d083c609e36bc8740",
+    "head": "5fff36ed801c0f42f803cea85ebdc3fe33a2ddf8",
+    "tree": "1f92583d92c20a9cc64eb1b0904c675ff2238bc50f28b38f746341d8ee82f93e",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-03T19:29:30Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E21",
+    "command": "- `scripts/php84 composer --working-dir=packages/core test`, `scripts/php84 composer --working-dir=packages/webhooks test` → exit 0; `PGSQL_PORT=5434 scripts/php84 composer test:pg` → exit 0.",
+    "contract_sha256": "f73cae464b28c7ad372e031f6324c870617e8bc044da5199cf222014f84184f8",
+    "spec_sha256": "bd62c9194ec8e4e249e0304b1a9b50b741ad8a0e3253ab7d083c609e36bc8740",
+    "head": "5fff36ed801c0f42f803cea85ebdc3fe33a2ddf8",
+    "tree": "1f92583d92c20a9cc64eb1b0904c675ff2238bc50f28b38f746341d8ee82f93e",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-03T19:29:30Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E22",
+    "command": "- `php scripts/package-docs-gate.php` → exit 0; `grep -n \"CloudEvents\" docs/architecture/message-policy.md docs/architecture/constitution.md` → строки в обоих файлах.",
+    "contract_sha256": "f73cae464b28c7ad372e031f6324c870617e8bc044da5199cf222014f84184f8",
+    "spec_sha256": "bd62c9194ec8e4e249e0304b1a9b50b741ad8a0e3253ab7d083c609e36bc8740",
+    "head": "5fff36ed801c0f42f803cea85ebdc3fe33a2ddf8",
+    "tree": "1f92583d92c20a9cc64eb1b0904c675ff2238bc50f28b38f746341d8ee82f93e",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-03T19:29:30Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E23",
+    "command": "- `scripts/php84 php scripts/php-api.php --write` дважды → идентично; `scripts/php84 composer php-api`, `scripts/php84 composer bc-check` → exit 0; diff baseline Golden содержит только строки P06.3 из досье §4.",
+    "contract_sha256": "f73cae464b28c7ad372e031f6324c870617e8bc044da5199cf222014f84184f8",
+    "spec_sha256": "bd62c9194ec8e4e249e0304b1a9b50b741ad8a0e3253ab7d083c609e36bc8740",
+    "head": "5fff36ed801c0f42f803cea85ebdc3fe33a2ddf8",
+    "tree": "1f92583d92c20a9cc64eb1b0904c675ff2238bc50f28b38f746341d8ee82f93e",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-03T19:29:30Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E24",
+    "command": "- `scripts/php84 composer lint:check`, `scripts/php84 composer analyse` → exit 0; `bash scripts/anti-weakening-gate.sh` → exit 0.",
+    "contract_sha256": "f73cae464b28c7ad372e031f6324c870617e8bc044da5199cf222014f84184f8",
+    "spec_sha256": "bd62c9194ec8e4e249e0304b1a9b50b741ad8a0e3253ab7d083c609e36bc8740",
+    "head": "5fff36ed801c0f42f803cea85ebdc3fe33a2ddf8",
+    "tree": "1f92583d92c20a9cc64eb1b0904c675ff2238bc50f28b38f746341d8ee82f93e",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-03T19:29:30Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E25",
+    "command": "- Review `light` (D91): self-check по досье §6; строка `review: self-check GREEN` в Completion Notes.",
+    "contract_sha256": "f73cae464b28c7ad372e031f6324c870617e8bc044da5199cf222014f84184f8",
+    "spec_sha256": "bd62c9194ec8e4e249e0304b1a9b50b741ad8a0e3253ab7d083c609e36bc8740",
+    "head": "5fff36ed801c0f42f803cea85ebdc3fe33a2ddf8",
+    "tree": "1f92583d92c20a9cc64eb1b0904c675ff2238bc50f28b38f746341d8ee82f93e",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-03T19:29:30Z"
+  }
+]
