@@ -54,22 +54,7 @@ final class LifecycleRegistrar implements PackageRegistrar
         // and resolve the lifecycle from the container, not a hand-built ctor.
         $app->singleton('corex.modules.wiring', fn (): array => $this->moduleWiring());
 
-        $app->singleton(ModuleLifecycle::class, static function (Application $app): DatabaseModuleLifecycle {
-            /** @var array{codeVersions: array<string, string>, migrationPaths: array<string, string>} $wiring */
-            $wiring = $app->make('corex.modules.wiring');
-            $connection = $app->make(ModulesOptions::class)->connection;
-
-            return new DatabaseModuleLifecycle(
-                registry: $app->make(ModuleRegistry::class),
-                discovery: $app->make(ModuleDiscovery::class),
-                records: $app->make(RecordsRegistrar::class),
-                container: $app,
-                tenantContextResolver: $app->make(TenantContextResolver::class),
-                codeVersions: $wiring['codeVersions'],
-                migrationPaths: $wiring['migrationPaths'],
-                connection: $connection,
-            );
-        });
+        $app->singleton(ModuleLifecycle::class, static fn (Application $app): DatabaseModuleLifecycle => self::moduleLifecycle($app));
     }
 
     /**
@@ -131,5 +116,23 @@ final class LifecycleRegistrar implements PackageRegistrar
         }
 
         return ['codeVersions' => $codeVersions, 'migrationPaths' => $migrationPaths];
+    }
+
+    private static function moduleLifecycle(Application $app): DatabaseModuleLifecycle
+    {
+        /** @var array{codeVersions: array<string, string>, migrationPaths: array<string, string>} $wiring */
+        $wiring = $app->make('corex.modules.wiring');
+        $connection = $app->make(ModulesOptions::class)->connection;
+
+        return new DatabaseModuleLifecycle(
+            registry: $app->make(ModuleRegistry::class),
+            discovery: $app->make(ModuleDiscovery::class),
+            records: $app->make(RecordsRegistrar::class),
+            container: $app,
+            tenantContextResolver: $app->make(TenantContextResolver::class),
+            codeVersions: $wiring['codeVersions'],
+            migrationPaths: $wiring['migrationPaths'],
+            connection: $connection,
+        );
     }
 }

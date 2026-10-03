@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — thin providers and registrars (P05.2)
+
+- `PanelsServiceProvider` delegates to `SavedViewsBindingsRegistrar` and `PanelsBindingsRegistrar`; `SavedViewsRegistrar::register()` stays as a deprecated shim.
+
 ## Unreleased — typed Options and runtime configuration checks (P05.1)
 
 - Added internal `PanelsOptions`, a lazy singleton resolved in `boot()`.

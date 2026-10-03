@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — thin providers and registrars (P05.2)
+
+- `ApiServiceProvider` delegates to `OperationsBindingsRegistrar`, `IdempotencyRegistrar`, `PaginationRegistrar`, `HttpRegistrar`, `ApiSchemaBindingsRegistrar`, `CostBindingsRegistrar` and `BulkBindingsRegistrar`. The anonymous replay authorizer, cursor keyring and handler-failure holder are named classes (`DefaultReplayAuthorizer`, `ConfiguredCursorKeyring`, `HandlerFailure`); the idempotency store is built by `IdempotencyStoreFactory`. `ApiSchemaRegistrar`, `CostRegistrar` and `BulkRegistrar` keep their static entry points as deprecated shims over the new registrars.
+
 ## Unreleased — typed Options and runtime configuration checks (P05.1)
 
 - `ApiOptions`, `BulkOptions` and `CostOptions` are lazy shared singletons resolved in `boot()`; the idempotency store takes lease and retention from `ApiOptions`. Added a `RuntimeConfigCheck` that requires `app.key` in `production`.

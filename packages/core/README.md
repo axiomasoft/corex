@@ -80,6 +80,14 @@ The factual compatibility passport, its local proof class, and explicit limits
 are in [PACKAGE.md](PACKAGE.md). It does not extend Composer constraints or
 constitute a publication promise.
 
+### Provider composition
+
+Public providers are thin composition roots: they merge configuration, publish assets and register commands, and
+delegate every binding to `PackageRegistrar` services listed in a `REGISTRARS` constant. A registrar keeps the
+original binding order and lifetimes; a factory closure in a provider or registrar is a single `return`, and
+anything with branching moves to a named `<Thing>Factory`. `CoreServiceProvider` registers `ModulesServiceProvider`
+itself, so applications list only `CoreX\CoreServiceProvider`.
+
 ### Configuration report contributions
 
 `corex:config:validate` collects services tagged with `CoreX\Config\Contracts\ConfigReportSection`.

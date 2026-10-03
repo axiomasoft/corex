@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — thin providers and registrars (P05.2)
+
+- The task-saving listener is a named method instead of a multi-statement closure.
+
 ## Unreleased — kernel package and API migration
 
 - Breaking (PLAN3.P02–P04, pre-1.0): Access and planning features expose TaskAccess, TaskPlanningCommand and TaskOperationReceipts with PlanningSubject/PlanningToken/TaskOperationReceipt DTOs; task rows and planning persistence are Internal.

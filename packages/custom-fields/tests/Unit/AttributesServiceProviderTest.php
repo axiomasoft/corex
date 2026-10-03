@@ -12,6 +12,7 @@ use CoreX\CustomFields\Contracts\AttributeStore;
 use CoreX\CustomFields\Contracts\FieldCatalogue;
 use CoreX\CustomFields\Contracts\SchemaOperations;
 use CoreX\CustomFields\Internal\Laravel\AttributeComposition;
+use CoreX\CustomFields\Internal\Schema\QueuedSchemaOperations;
 use CoreX\CustomFields\Internal\Schema\StaticFieldCatalogue;
 use CoreX\CustomFields\Internal\Storage\ResolvingAttributeStore;
 use CoreX\CustomFields\Internal\UnavailableAttributes;
@@ -38,12 +39,12 @@ final class AttributesServiceProviderTest extends TestCase
         return [CoreServiceProvider::class, AttributesServiceProvider::class];
     }
 
-    public function test_it_resolves_a_static_catalogue_without_modules(): void
+    public function test_it_resolves_a_static_catalogue_with_the_kernel_module_registry(): void
     {
         expect($this->app->make(FieldCatalogue::class))->toBeInstanceOf(StaticFieldCatalogue::class)
             ->and($this->app->make(AttributeStore::class))->toBeInstanceOf(ResolvingAttributeStore::class)
             ->and($this->app->make(AttributeFilter::class))->not->toBeInstanceOf(UnavailableAttributes::class)
-            ->and($this->app->make(SchemaOperations::class))->toBeInstanceOf(UnavailableAttributes::class)
+            ->and($this->app->make(SchemaOperations::class))->toBeInstanceOf(QueuedSchemaOperations::class)
             ->and($this->app->make(MessageContractRegistry::class)->has('attributes.values.changed', 1))->toBeTrue();
     }
 

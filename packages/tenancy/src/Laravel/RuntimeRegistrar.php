@@ -38,15 +38,10 @@ final class RuntimeRegistrar implements PackageRegistrar
         // validate OIDC before Testbench fills it; the provider resolves it in boot().
         $app->singleton(
             TenancyOptions::class,
-            static function (Application $app): TenancyOptions {
-                $tenancy = $app['config']->get('tenancy', []);
-                $corexTenancy = $app['config']->get('corex-tenancy', []);
-
-                return TenancyOptions::fromArray(
-                    tenancy: is_array($tenancy) ? $tenancy : [],
-                    corexTenancy: is_array($corexTenancy) ? $corexTenancy : [],
-                );
-            },
+            static fn (Application $app): TenancyOptions => TenancyOptions::fromArray(
+                tenancy: self::configSection($app, 'tenancy'),
+                corexTenancy: self::configSection($app, 'corex-tenancy'),
+            ),
         );
         $app->bind(
             ImpersonationPolicy::class,
@@ -140,5 +135,13 @@ final class RuntimeRegistrar implements PackageRegistrar
         ]);
 
         $app->bind(UniqueIdentifierGenerator::class, $options->idGenerator);
+    }
+
+    /** @return array<array-key, mixed> */
+    private static function configSection(Application $app, string $key): array
+    {
+        $section = $app['config']->get($key, []);
+
+        return is_array($section) ? $section : [];
     }
 }

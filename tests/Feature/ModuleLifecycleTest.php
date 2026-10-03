@@ -126,6 +126,7 @@ beforeEach(function (): void {
     DB::purge(LIFECYCLE_TEST_CONNECTION);
 
     config(['corex.modules.connection' => LIFECYCLE_TEST_CONNECTION]);
+    app()->forgetInstance(ModulesOptions::class);
     $this->app->register(ModulesServiceProvider::class);
 
     $this->app->instance(ModuleDiscovery::class, new ModuleDiscovery(fallbackModules: [

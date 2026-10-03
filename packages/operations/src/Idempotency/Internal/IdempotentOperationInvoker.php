@@ -74,10 +74,7 @@ final class IdempotentOperationInvoker implements OperationInvoker
 
         $scope = OperationFingerprint::scope($invocation, $this->connection);
         $fingerprint = OperationFingerprint::request($invocation);
-        $handlerFailure = new class
-        {
-            public ?ApiError $error = null;
-        };
+        $handlerFailure = new HandlerFailure;
         $effectCompleted = false;
         $terminalPersisted = false;
         $freshMetadata = [];

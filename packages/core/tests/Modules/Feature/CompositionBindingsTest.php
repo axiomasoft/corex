@@ -79,7 +79,9 @@ it('resolves ModulesOptions from the composition instance', function (): void {
 
 it('reads module options from the nested kernel configuration', function (): void {
     config()->set('corex.modules.connection', 'module-test');
+    app()->forgetInstance(ModulesOptions::class);
     config()->set('corex.modules.cache', ['store' => 'array', 'ttl' => 42, 'prefix' => 'module-test']);
+    app()->forgetInstance(ModulesOptions::class);
     $this->app->register(ModulesServiceProvider::class, force: true);
 
     $options = $this->app->make(ModulesOptions::class);

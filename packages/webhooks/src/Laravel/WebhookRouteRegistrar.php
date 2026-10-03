@@ -13,38 +13,16 @@ use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Idempotency\Enums\IdempotencyRequirement;
 use CoreX\Operations\Invocation\Contracts\OperationDispatcher;
-use CoreX\Operations\Laravel\Support\ApiOptions;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final readonly class WebhookRouteRegistrar
 {
     public static function register(Application $app): void
     {
-        if (! $app->bound(ApiOptions::class)) {
-            return;
-        }
-
-        $options = $app->make(ApiOptions::class);
-
-        if (! $options->routesEnabled || Route::has('corex.api.webhooks.subscription.list')) {
-            return;
-        }
-
-        Route::prefix($options->routePrefix)->middleware($options->routeMiddleware)->group(static function (): void {
-            Route::get('v1/webhook-subscriptions', [self::class, 'forward'])->name('corex.api.webhooks.subscription.list');
-            Route::post('v1/webhook-subscriptions', [self::class, 'forward'])->name('corex.api.webhooks.subscription.create');
-            Route::patch('v1/webhook-subscriptions/{id}', [self::class, 'forward'])->name('corex.api.webhooks.subscription.update');
-            Route::post('v1/webhook-subscriptions/{id}/disable', [self::class, 'forward'])->name('corex.api.webhooks.subscription.disable');
-            Route::get('v1/webhook-deliveries', [self::class, 'forward'])->name('corex.api.webhooks.delivery.list');
-            Route::post('v1/webhook-deliveries/replay', [self::class, 'forward'])->name('corex.api.webhooks.delivery.range-replay');
-            Route::get('v1/webhook-deliveries/{id}', [self::class, 'forward'])->name('corex.api.webhooks.delivery.show');
-            Route::get('v1/webhook-deliveries/{id}/attempts', [self::class, 'forward'])->name('corex.api.webhooks.delivery.attempts');
-            Route::post('v1/webhook-deliveries/{id}/replay', [self::class, 'forward'])->name('corex.api.webhooks.delivery.replay');
-        });
+        (new WebhookHttpRegistrar)->boot($app);
     }
 
     public function forward(Request $request, OperationDispatcher $dispatcher, OperationRegistry $operations): JsonResponse

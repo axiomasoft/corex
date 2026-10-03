@@ -1606,6 +1606,84 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Access\\Laravel\\AccessBindingsRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Access\\Laravel\\AccessIntegrationRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Access\\Laravel\\AuthOptions": {
         "abstract": false,
         "constants": [],
@@ -4299,6 +4377,45 @@
         },
         "readonly": false
     },
+    "CoreX\\Audit\\Laravel\\AuditRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Audit\\Laravel\\AuditRegistration": {
         "abstract": false,
         "constants": [],
@@ -5128,6 +5245,45 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Config\\Laravel\\ConfigRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Config\\Laravel\\ConfigurationValidator": {
         "abstract": false,
         "constants": [],
@@ -5158,6 +5314,43 @@
                 "params": [],
                 "return": "void",
                 "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Config\\Laravel\\ConfiguredImplementation": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "resolve": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "contract",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "implementation",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "object",
+                "static": true
             }
         },
         "parent": null,
@@ -6597,6 +6790,45 @@
             "current": {
                 "params": [],
                 "return": "CoreX\\Context\\Data\\TenantContext",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Context\\Laravel\\ContextRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
                 "static": false
             }
         },
@@ -8807,6 +9039,45 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\CustomFields\\Internal\\Laravel\\AttributeBindingsRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\CustomFields\\Internal\\Laravel\\AttributeComposition": {
         "abstract": false,
         "constants": [],
@@ -8916,10 +9187,24 @@
         "abstract": false,
         "constants": [],
         "final": true,
-        "interfaces": [],
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
         "internal": true,
         "kind": "class",
         "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
             "register": {
                 "params": [
                     {
@@ -8941,10 +9226,24 @@
         "abstract": false,
         "constants": [],
         "final": true,
-        "interfaces": [],
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
         "internal": true,
         "kind": "class",
         "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
             "register": {
                 "params": [
                     {
@@ -8955,6 +9254,81 @@
                     }
                 ],
                 "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\CustomFields\\Internal\\Laravel\\AttributeStoreFactory": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "make": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\CustomFields\\Contracts\\AttributeStore",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\CustomFields\\Internal\\Laravel\\FieldCatalogueFactory": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "make": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\CustomFields\\Contracts\\FieldCatalogue",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\CustomFields\\Internal\\Laravel\\SchemaOperationsFactory": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "make": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\CustomFields\\Contracts\\SchemaOperations",
                 "static": false
             }
         },
@@ -12080,6 +12454,45 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Data\\Laravel\\DataRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Data\\Laravel\\JsonDocuments": {
         "abstract": false,
         "constants": [],
@@ -13276,6 +13689,45 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Departments\\Laravel\\DepartmentsRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Errors\\Contracts\\DescribesError": {
         "abstract": false,
         "constants": [],
@@ -14435,14 +14887,28 @@
         },
         "readonly": true
     },
-    "CoreX\\Errors\\Internal\\ProblemRegistryRegistrar": {
+    "CoreX\\Errors\\Laravel\\ErrorsRegistrar": {
         "abstract": false,
         "constants": [],
         "final": true,
-        "interfaces": [],
-        "internal": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
         "kind": "class",
         "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
             "register": {
                 "params": [
                     {
@@ -14453,7 +14919,7 @@
                     }
                 ],
                 "return": "void",
-                "static": true
+                "static": false
             }
         },
         "parent": null,
@@ -14491,6 +14957,31 @@
                 ],
                 "return": "void",
                 "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Errors\\Laravel\\ProblemRegistryFactory": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "make": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Errors\\Internal\\CompiledProblemRegistry",
+                "static": false
             }
         },
         "parent": null,
@@ -14959,6 +15450,45 @@
             }
         },
         "parent": "Illuminate\\Database\\Eloquent\\Model",
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Features\\Laravel\\FeaturesRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
         "properties": [],
         "readonly": false
     },
@@ -16787,6 +17317,84 @@
             }
         },
         "parent": "Illuminate\\Support\\ServiceProvider",
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Intl\\Laravel\\IntlBindingsRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Intl\\Laravel\\IntlReferenceRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
         "properties": [],
         "readonly": false
     },
@@ -22989,6 +23597,70 @@
         },
         "readonly": true
     },
+    "CoreX\\Media\\Laravel\\GdThumbnailDriverFactory": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "make": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Media\\Internal\\GdThumbnailDriver",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Media\\Laravel\\MediaBindingsRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Media\\Laravel\\UploadedFileSource": {
         "abstract": false,
         "constants": [],
@@ -25451,6 +26123,45 @@
         "parent": null,
         "properties": [],
         "readonly": true
+    },
+    "CoreX\\Messaging\\Laravel\\MessagingRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
     },
     "CoreX\\Messaging\\Laravel\\PubSubAdapters": {
         "abstract": false,
@@ -30942,6 +31653,33 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Modules\\Internal\\Commands\\RepairModuleCommand": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "Symfony\\Component\\Console\\Command\\SignalableCommandInterface"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "lifecycle",
+                        "type": "CoreX\\Modules\\Contracts\\ModuleLifecycle",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": false
+            }
+        },
+        "parent": "Illuminate\\Console\\Command",
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Modules\\Internal\\Compiler\\CompilationValidator": {
         "abstract": false,
         "constants": [],
@@ -33153,6 +33891,45 @@
             }
         },
         "readonly": true
+    },
+    "CoreX\\Modules\\Laravel\\CoreModulesRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
     },
     "CoreX\\Modules\\Laravel\\LifecycleRegistrar": {
         "abstract": false,
@@ -37506,6 +38283,84 @@
         },
         "readonly": true
     },
+    "CoreX\\Notifications\\Laravel\\NotificationsBindingsRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Notifications\\Laravel\\NotificationsDigestRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Notifications\\NotificationsModule": {
         "abstract": false,
         "constants": [],
@@ -38555,6 +39410,45 @@
                         "byRef": false,
                         "name": "event",
                         "type": "CoreX\\Observability\\Data\\OperationStarted",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Observability\\Laravel\\ObservabilityRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
                         "variadic": false
                     }
                 ],
@@ -40613,6 +41507,96 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Operations\\Bulk\\Laravel\\BulkBindingsRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Operations\\Bulk\\Laravel\\BulkHttpRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "registerRoutes": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Operations\\Bulk\\Laravel\\BulkOptionsParser": {
         "abstract": false,
         "constants": [],
@@ -41797,6 +42781,45 @@
         "parent": null,
         "properties": [],
         "readonly": true
+    },
+    "CoreX\\Operations\\Cost\\Laravel\\CostBindingsRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
     },
     "CoreX\\Operations\\Cost\\Laravel\\CostOptionsParser": {
         "abstract": false,
@@ -44504,6 +45527,94 @@
         },
         "readonly": false
     },
+    "CoreX\\Operations\\Idempotency\\Internal\\DefaultReplayAuthorizer": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Operations\\Authorization\\Contracts\\ReplayAuthorizer"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "modules",
+                        "type": "CoreX\\Modules\\Contracts\\ModuleRegistry",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clientScopes",
+                        "type": "CoreX\\Operations\\Authorization\\Contracts\\ClientScopeAuthorizer",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "authorizer",
+                        "type": "CoreX\\Operations\\Authorization\\Contracts\\OperationAuthorizer",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "fields",
+                        "type": "CoreX\\Operations\\Authorization\\Contracts\\OperationFieldAuthorizer",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "authorize": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "invocation",
+                        "type": "CoreX\\Operations\\Invocation\\Data\\OperationInvocation",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "outcome",
+                        "type": "CoreX\\Operations\\Idempotency\\Data\\StoredOperationOutcome",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "replayed",
+                        "type": "bool",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Operations\\Idempotency\\Data\\StoredOperationOutcome",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\Operations\\Idempotency\\Internal\\HandlerFailure": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": [],
+        "parent": null,
+        "properties": {
+            "error": {
+                "name": "error",
+                "readonly": false,
+                "static": false,
+                "type": "?CoreX\\Operations\\Errors\\Exceptions\\ApiError"
+            }
+        },
+        "readonly": false
+    },
     "CoreX\\Operations\\Idempotency\\Internal\\IdempotentOperationInvoker": {
         "abstract": false,
         "constants": [],
@@ -45784,6 +46895,45 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Operations\\Laravel\\ApiSchemaBindingsRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Operations\\Laravel\\ApiSchemaRegistrar": {
         "abstract": false,
         "constants": [],
@@ -45839,6 +46989,24 @@
                 "return": "Illuminate\\Database\\Connection",
                 "static": false
             },
+            "fromSchema": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "schema",
+                        "type": "mixed",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "database",
+                        "type": "Illuminate\\Database\\DatabaseManager",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            },
             "register": {
                 "params": [
                     {
@@ -45891,6 +47059,109 @@
             }
         },
         "parent": "Illuminate\\Console\\Command",
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Operations\\Laravel\\HttpRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Operations\\Laravel\\IdempotencyRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Operations\\Laravel\\IdempotencyStoreFactory": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "make": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Operations\\Idempotency\\Internal\\SqlIdempotencyStore",
+                "static": false
+            }
+        },
+        "parent": null,
         "properties": [],
         "readonly": false
     },
@@ -46004,6 +47275,84 @@
                 ],
                 "return": "CoreX\\Operations\\Cost\\Contracts\\OperationBudget",
                 "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Operations\\Laravel\\OperationsBindingsRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Operations\\Laravel\\PaginationRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
             }
         },
         "parent": null,
@@ -46984,6 +48333,55 @@
                 "type": "array"
             }
         },
+        "readonly": true
+    },
+    "CoreX\\Operations\\Pagination\\Internal\\ConfiguredCursorKeyring": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Operations\\Pagination\\Contracts\\CursorKeyring"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\Operations\\Laravel\\Support\\ApiOptions",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "currentKeyId": {
+                "params": [],
+                "return": "string",
+                "static": false
+            },
+            "ttlSeconds": {
+                "params": [],
+                "return": "int",
+                "static": false
+            },
+            "verifyingSecret": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "keyId",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "?string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
         "readonly": true
     },
     "CoreX\\Operations\\Pagination\\Internal\\OrderingRegistry": {
@@ -49182,6 +50580,45 @@
         },
         "readonly": true
     },
+    "CoreX\\Panels\\Laravel\\PanelsBindingsRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Panels\\PanelsModule": {
         "abstract": false,
         "constants": [],
@@ -50331,6 +51768,70 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Panels\\SavedViews\\Laravel\\SavedViewRepositoryFactory": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "make": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Panels\\SavedViews\\Internal\\SqlSavedViewRepository",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Panels\\SavedViews\\Laravel\\SavedViewsBindingsRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Panels\\SavedViews\\Laravel\\SavedViewsRegistrar": {
         "abstract": false,
         "constants": [],
@@ -50354,7 +51855,7 @@
         },
         "parent": null,
         "properties": [],
-        "readonly": false
+        "readonly": true
     },
     "CoreX\\Recurrence\\Contracts\\RecurrenceExpander": {
         "abstract": false,
@@ -52449,6 +53950,31 @@
                     }
                 ],
                 "return": "CoreX\\Search\\Data\\CandidatePage",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\SearchMeilisearch\\Laravel\\MeilisearchProviderFactory": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "make": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Search\\Contracts\\SearchProvider",
                 "static": false
             }
         },
@@ -55252,6 +56778,45 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Settings\\Laravel\\SettingsRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Storage\\Contracts\\TenantStorage": {
         "abstract": false,
         "constants": [],
@@ -55996,6 +57561,45 @@
                 ],
                 "return": "Illuminate\\Contracts\\Filesystem\\Filesystem",
                 "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Storage\\Laravel\\StorageRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
             }
         },
         "parent": null,
@@ -75678,6 +77282,45 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Time\\Laravel\\TimeRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Time\\Testing\\FrozenClock": {
         "abstract": false,
         "constants": [],
@@ -80918,6 +82561,45 @@
         },
         "readonly": true
     },
+    "CoreX\\Wakeup\\Laravel\\WakeupBindingsRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Wakeup\\Testing\\WakeupFixtures": {
         "abstract": false,
         "constants": {
@@ -83927,6 +85609,84 @@
         "properties": [],
         "readonly": true
     },
+    "CoreX\\Webhooks\\Laravel\\WebhookBindingsRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Webhooks\\Laravel\\WebhookHttpRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Webhooks\\Laravel\\WebhookOptionsParser": {
         "abstract": false,
         "constants": [],
@@ -85057,6 +86817,31 @@
             }
         },
         "readonly": true
+    },
+    "CoreX\\Workflow\\Laravel\\WorkflowBindingFactory": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "make": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Workflow\\Internal\\SqlWorkflowBinding",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
     },
     "CoreX\\Workflow\\WorkflowModule": {
         "abstract": false,

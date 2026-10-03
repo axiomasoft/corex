@@ -28,13 +28,16 @@ final class ConsoleRegistrar implements PackageRegistrar
             return;
         }
 
-        Artisan::starting(static function (Artisan $artisan): void {
-            $artisan->resolveCommands([
-                PendingCreateCommand::class,
-                PendingClearCommand::class,
-                IdentitiesReconcileCommand::class,
-                TenantsMigrateCommand::class,
-            ]);
-        });
+        Artisan::starting(self::registerCommands(...));
+    }
+
+    private static function registerCommands(Artisan $artisan): void
+    {
+        $artisan->resolveCommands([
+            PendingCreateCommand::class,
+            PendingClearCommand::class,
+            IdentitiesReconcileCommand::class,
+            TenantsMigrateCommand::class,
+        ]);
     }
 }

@@ -1,12 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			rawMessage: 'Parameter $providers of class CoreX\Panels\Internal\ModulePanelCatalogue constructor expects iterable<CoreX\Panels\Contracts\PanelProvider>, iterable given.'
-			identifier: argument.type
-			count: 1
-			path: src/PanelsServiceProvider.php
-
-		-
 			rawMessage: Access to an undefined property object::$entity_code.
 			identifier: property.notFound
 			count: 1

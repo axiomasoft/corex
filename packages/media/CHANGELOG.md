@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — thin providers and registrars (P05.2)
+
+- `MediaServiceProvider` delegates to `MediaBindingsRegistrar`; the thumbnail driver is built by `GdThumbnailDriverFactory` from the current options.
+
 ## Unreleased — typed Options and runtime configuration checks (P05.1)
 
 - `MediaOptions` is a lazy shared singleton resolved in `boot()`.

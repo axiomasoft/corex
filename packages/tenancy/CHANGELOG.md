@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — thin providers and registrars (P05.2)
+
+- Registrar closures with several statements moved to named methods; behaviour is unchanged.
+
 ## Unreleased — typed Options and runtime configuration checks (P05.1)
 
 - `TenancyOptions` is a lazy shared singleton; `IdentitiesReconcileCommand` and `PendingCreateCommand` read the central connection from it (the new `handle()` parameter is optional).

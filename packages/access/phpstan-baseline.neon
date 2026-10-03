@@ -103,18 +103,6 @@ parameters:
 			path: src/Access/Internal/WorkspaceScopeWiring.php
 
 		-
-			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/CoreAuthServiceProvider.php
-
-		-
-			rawMessage: 'Cannot call method set() on mixed.'
-			identifier: method.nonObject
-			count: 3
-			path: src/CoreAuthServiceProvider.php
-
-		-
 			rawMessage: Cannot cast mixed to string.
 			identifier: cast.string
 			count: 1

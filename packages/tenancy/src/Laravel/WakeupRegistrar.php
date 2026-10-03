@@ -49,8 +49,11 @@ final class WakeupRegistrar implements PackageRegistrar
             return;
         }
 
-        Artisan::starting(static function (Artisan $artisan): void {
-            $artisan->resolveCommands([SweepRootWakeups::class]);
-        });
+        Artisan::starting(self::registerCommands(...));
+    }
+
+    private static function registerCommands(Artisan $artisan): void
+    {
+        $artisan->resolveCommands([SweepRootWakeups::class]);
     }
 }

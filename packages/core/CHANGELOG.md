@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — thin providers and registrars (P05.2)
+
+- `CoreServiceProvider` is the only public provider of the kernel: it registers `ModulesServiceProvider` itself (after the kernel bindings, so module-aware services refine them) and delegates bindings to per-module registrars (`Config`, `Context`, `Data`, `Messaging`, `Settings`, `Audit`, `Features`, `Departments`, `Storage`, `Time`, `Observability`, `Errors`, modules). Apps no longer need to list `ModulesServiceProvider` separately. `corex:modules:repair` is a regular command class.
+
 ## Unreleased — typed Options and runtime configuration checks (P05.1)
 
 - Removed the static `CoreX\Config\Internal\Config` holder: `CoreOptions` is a lazy shared singleton read once at boot (`app(CoreOptions::class)` in migrations and tests; call `forgetInstance(CoreOptions::class)` after writing `corex` config in a booted test). Added `CoreOptions::$acknowledgedDangerousModes` (`corex.acknowledged_dangerous_modes`, exact config paths only), the `RuntimeConfigCheck` SPI and `RuntimeConfigGate`: checks run when the HTTP application finishes booting or a console command starts, except build commands. `corex:config:validate` runs them too, accepts `--production`, lists acknowledged dangerous modes as warnings and reports the `corex-operations.require_physical_tenancy=false` opt-out as a notice. `CoreOptionsParser::current()` is deprecated and returns the shared `CoreOptions`.

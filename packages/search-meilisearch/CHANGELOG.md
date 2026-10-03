@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — thin providers and registrars (P05.2)
+
+- The Meilisearch driver is assembled by `MeilisearchProviderFactory`.
+
 ## Unreleased — typed Options and runtime configuration checks (P05.1)
 
 - Added internal `MeilisearchOptions`; host, index and key stay runtime requirements of the `meilisearch` driver.

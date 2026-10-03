@@ -361,54 +361,6 @@ parameters:
 			path: src/Internal/SqlRelationLookup.php
 
 		-
-			rawMessage: Cannot access offset 'db' on Illuminate\Contracts\Foundation\Application.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 4
-			path: src/MediaServiceProvider.php
-
-		-
-			rawMessage: 'Cannot call method connection() on mixed.'
-			identifier: method.nonObject
-			count: 4
-			path: src/MediaServiceProvider.php
-
-		-
-			rawMessage: Cannot cast mixed to int.
-			identifier: cast.int
-			count: 4
-			path: src/MediaServiceProvider.php
-
-		-
-			rawMessage: 'Parameter #1 $connection of class CoreX\Media\Internal\ConversionCoordinator constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/MediaServiceProvider.php
-
-		-
-			rawMessage: 'Parameter #1 $connection of class CoreX\Media\Internal\MediaOperationStore constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/MediaServiceProvider.php
-
-		-
-			rawMessage: 'Parameter #1 $connection of class CoreX\Media\Internal\SqlMediaLibrary constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/MediaServiceProvider.php
-
-		-
-			rawMessage: 'Parameter #1 $connection of class CoreX\Media\Internal\SqlRelationLookup constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/MediaServiceProvider.php
-
-		-
-			rawMessage: 'Parameter #1 $drivers of class CoreX\Media\Internal\ConversionProfiles constructor expects iterable<CoreX\Media\Contracts\ConversionDriver>, iterable given.'
-			identifier: argument.type
-			count: 1
-			path: src/MediaServiceProvider.php
-
-		-
 			rawMessage: 'Parameter $conversion of class CoreX\Media\Internal\Support\MediaOptions constructor expects array<string, mixed>, array<mixed> given.'
 			identifier: argument.type
 			count: 1

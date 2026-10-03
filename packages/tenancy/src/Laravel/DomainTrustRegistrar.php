@@ -33,24 +33,24 @@ final class DomainTrustRegistrar implements PackageRegistrar
                 centralConnection: $app->make(TenancyOptions::class)->centralConnection,
             ),
         );
-        $app->scoped(
-            DomainTrustCoordinator::class,
-            static function (Application $app): DomainTrustCoordinator {
-                $options = $app->make(TenancyOptions::class);
+        $app->scoped(DomainTrustCoordinator::class, static fn (Application $app): DomainTrustCoordinator => self::coordinator($app));
+    }
 
-                if (! $options->domainTrustEnabled) {
-                    throw new DomainTrustDisabled('Custom-domain verification is disabled.');
-                }
+    private static function coordinator(Application $app): DomainTrustCoordinator
+    {
+        $options = $app->make(TenancyOptions::class);
 
-                return new DomainTrustCoordinator(
-                    policy: $app->make(DomainTrustPolicy::class),
-                    challengeStore: $app->make(DomainChallengeStore::class),
-                    proofVerifier: $app->make(DomainOwnershipProofVerifier::class),
-                    authorizer: $app->make(DomainTrustAuthorizer::class),
-                    stateWriter: $app->make(DomainTrustStateWriter::class),
-                    challengeTtlSeconds: $options->domainTrustChallengeTtlSeconds,
-                );
-            },
+        if (! $options->domainTrustEnabled) {
+            throw new DomainTrustDisabled('Custom-domain verification is disabled.');
+        }
+
+        return new DomainTrustCoordinator(
+            policy: $app->make(DomainTrustPolicy::class),
+            challengeStore: $app->make(DomainChallengeStore::class),
+            proofVerifier: $app->make(DomainOwnershipProofVerifier::class),
+            authorizer: $app->make(DomainTrustAuthorizer::class),
+            stateWriter: $app->make(DomainTrustStateWriter::class),
+            challengeTtlSeconds: $options->domainTrustChallengeTtlSeconds,
         );
     }
 }

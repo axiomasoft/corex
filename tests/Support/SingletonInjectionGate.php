@@ -197,13 +197,13 @@ final class SingletonInjectionGate
         foreach (glob(SourceScanner::repoRoot().'/packages/*/src', GLOB_ONLYDIR) ?: [] as $srcDir) {
             $matches = [
                 ...$matches,
-                ...SourceScanner::filesMatching($srcDir, '/\bclass\s+\w+ServiceProvider\b/'),
+                ...SourceScanner::filesMatching($srcDir, '/\bclass\s+\w+(?:ServiceProvider|Registrar)\b/'),
             ];
         }
 
         $matches = array_values(array_filter(
             $matches,
-            static fn (string $path): bool => str_ends_with($path, 'ServiceProvider.php'),
+            static fn (string $path): bool => str_ends_with($path, 'ServiceProvider.php') || str_ends_with($path, 'Registrar.php'),
         ));
 
         sort($matches);

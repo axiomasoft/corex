@@ -11,7 +11,6 @@ use CoreX\Operations\Bulk\Data\BulkOperationDefinition;
 use CoreX\Operations\Bulk\Internal\BulkFailureLimit;
 use CoreX\Operations\Bulk\Internal\BulkOperations;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Support\Facades\Route;
 use InvalidArgumentException;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
@@ -19,15 +18,7 @@ final readonly class BulkRouteRegistrar
 {
     public static function register(Application $app): void
     {
-        $prefix = (string) $app['config']->get('corex-operations.routes.prefix', 'api');
-
-        Route::prefix($prefix)->group(static function (): void {
-            Route::post('v1/bulk-operations', [self::class, 'submit'])->name('corex.api.bulk.submit');
-            Route::get('v1/bulk-operations/{id}', [self::class, 'show'])->name('corex.api.bulk.show');
-            Route::post('v1/bulk-operations/{id}/cancel', [self::class, 'cancel'])->name('corex.api.bulk.cancel');
-            Route::get('v1/bulk-operations/{id}/result', [self::class, 'result'])->name('corex.api.bulk.result');
-            Route::get('v1/bulk-operations/{id}/failures', [self::class, 'failures'])->name('corex.api.bulk.failures');
-        });
+        (new BulkHttpRegistrar)->registerRoutes($app);
     }
 
     public function submit(): mixed

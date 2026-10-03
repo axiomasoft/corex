@@ -80,8 +80,7 @@
         },
         "laravel": {
             "providers": [
-                "CoreX\\CoreServiceProvider",
-                "CoreX\\Modules\\ModulesServiceProvider"
+                "CoreX\\CoreServiceProvider"
             ]
         },
         "branch-alias": {

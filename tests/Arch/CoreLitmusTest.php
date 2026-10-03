@@ -41,11 +41,13 @@ const LITMUS_FOUNDATION = [
     'packages/core/src/Data/Internal/CallableDataScopeAuthorizer.php',
     'packages/core/src/Data/Data/DataScope.php',
     'packages/core/src/Data/Internal/DenyDataScopeAuthorizer.php',
+    'packages/core/src/Data/Laravel/DataRegistrar.php',
     'packages/core/src/Data/Data/RecordRef.php',
     'packages/core/src/Data/Data/WriteToken.php',
     'packages/core/src/Database/Laravel/IdColumns.php',
     'packages/core/src/Time/Testing/FrozenClock.php',
     'packages/core/src/Time/Laravel/LaravelClock.php',
+    'packages/core/src/Time/Laravel/TimeRegistrar.php',
     'packages/core/src/Time/Laravel/SystemClock.php',
 ];
 

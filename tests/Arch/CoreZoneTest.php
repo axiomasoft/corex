@@ -36,6 +36,21 @@ const CORE_ZONE_COMPOSITION = [
     'packages/core/src/Modules/Internal/ServiceProviderModuleRegistrar.php',
     'packages/core/src/Modules/Contracts/PackageRegistrar.php',
     'packages/core/src/Modules/Laravel/RegistersNothingOnBoot.php',
+    'packages/core/src/Audit/Laravel/AuditRegistrar.php',
+    'packages/core/src/Config/Laravel/ConfigRegistrar.php',
+    'packages/core/src/Config/Laravel/ConfiguredImplementation.php',
+    'packages/core/src/Context/Laravel/ContextRegistrar.php',
+    'packages/core/src/Data/Laravel/DataRegistrar.php',
+    'packages/core/src/Departments/Laravel/DepartmentsRegistrar.php',
+    'packages/core/src/Errors/Laravel/ErrorsRegistrar.php',
+    'packages/core/src/Errors/Laravel/ProblemRegistryFactory.php',
+    'packages/core/src/Features/Laravel/FeaturesRegistrar.php',
+    'packages/core/src/Messaging/Laravel/MessagingRegistrar.php',
+    'packages/core/src/Modules/Laravel/CoreModulesRegistrar.php',
+    'packages/core/src/Observability/Laravel/ObservabilityRegistrar.php',
+    'packages/core/src/Settings/Laravel/SettingsRegistrar.php',
+    'packages/core/src/Storage/Laravel/StorageRegistrar.php',
+    'packages/core/src/Time/Laravel/TimeRegistrar.php',
 ];
 
 const CORE_ZONE_E_BASEMODEL = 'packages/core/src/Database/Laravel/BaseModel.php';

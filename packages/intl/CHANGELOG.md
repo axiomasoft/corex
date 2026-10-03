@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — thin providers and registrars (P05.2)
+
+- `IntlServiceProvider` delegates to `IntlBindingsRegistrar` and `IntlReferenceRegistrar`; bindings are unchanged.
+
 ## Unreleased — typed Options and runtime configuration checks (P05.1)
 
 - Added internal `IntlOptions` (lazy singleton, resolved in `boot()`); `SqlGeographyProvider` and `SqlDatasetImporter` receive the dataset key instead of the config repository.

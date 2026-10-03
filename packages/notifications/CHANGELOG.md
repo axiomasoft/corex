@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — thin providers and registrars (P05.2)
+
+- `NotificationsServiceProvider` delegates to `NotificationsBindingsRegistrar` and `NotificationsDigestRegistrar`; the digest wakeup adapter no longer uses a multi-statement closure.
+
 ## Unreleased — typed Options and runtime configuration checks (P05.1)
 
 - Added internal `NotificationsOptions` and a `RuntimeConfigCheck`: in `production`, `corex-notifications.digest.accept_legacy_unstamped=true` stops the process unless that exact path is listed in `corex.acknowledged_dangerous_modes`.

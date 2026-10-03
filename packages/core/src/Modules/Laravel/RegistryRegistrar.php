@@ -72,14 +72,10 @@ final class RegistryRegistrar implements PackageRegistrar
 
         // Registry cache WITHOUT tags: store/ttl/prefix from Options
         // (no hardcoded 3600). store = null ⇒ the app's default store.
-        $app->singleton(ModuleRegistryCache::class, static function (Application $app): RepositoryModuleRegistryCache {
-            $options = $app->make(ModulesOptions::class);
-
-            return new RepositoryModuleRegistryCache(
-                store: $app->make(CacheFactory::class)->store($options->cacheStore),
-                options: $options,
-            );
-        });
+        $app->singleton(ModuleRegistryCache::class, static fn (Application $app): RepositoryModuleRegistryCache => new RepositoryModuleRegistryCache(
+            store: $app->make(CacheFactory::class)->store($app->make(ModulesOptions::class)->cacheStore),
+            options: $app->make(ModulesOptions::class),
+        ));
 
         $app->singleton(ModuleRegistry::class, function (Application $app): CompiledModuleRegistry {
             return new CompiledModuleRegistry(

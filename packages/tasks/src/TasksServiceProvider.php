@@ -55,21 +55,26 @@ final class TasksServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        Task::saving(function (Task $task): void {
-            $raw = $task->getRawOriginal('status');
-            $previous = is_string($raw) ? TaskStatus::from($raw) : TaskStatus::Open;
-            $candidate = new TaskCompletionCandidate(
-                taskId: ($task->id ?? ''),
-                previousStatus: $previous,
-                status: $task->status,
-                statusChanged: $task->isDirty('status'),
-            );
-            foreach ($this->app->tagged('corex.tasks.completion-captures') as $capture) {
-                if (! $capture instanceof TaskCompletionCapture) {
-                    throw new LogicException('Task completion captures must implement TaskCompletionCapture.');
-                }
-                $capture->capture($candidate);
+        Task::saving($this->captureCompletion(...));
+    }
+
+    private function captureCompletion(Task $task): void
+    {
+        $raw = $task->getRawOriginal('status');
+        $previous = is_string($raw) ? TaskStatus::from($raw) : TaskStatus::Open;
+        $candidate = new TaskCompletionCandidate(
+            taskId: ($task->id ?? ''),
+            previousStatus: $previous,
+            status: $task->status,
+            statusChanged: $task->isDirty('status'),
+        );
+
+        foreach ($this->app->tagged('corex.tasks.completion-captures') as $capture) {
+            if (! $capture instanceof TaskCompletionCapture) {
+                throw new LogicException('Task completion captures must implement TaskCompletionCapture.');
             }
-        });
+
+            $capture->capture($candidate);
+        }
     }
 }

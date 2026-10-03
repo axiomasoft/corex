@@ -19,6 +19,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Audit\Contracts\CurrentActor` | spi-call | 1.0 |
 | `CoreX\Audit\Data\AuditEntry` | api | 1.0 |
 | `CoreX\Audit\Enums\ActorType` | api | 1.0 |
+| `CoreX\Audit\Laravel\AuditRegistrar` | spi-call | 1.0 |
 | `CoreX\Audit\Laravel\AuditRegistration` | spi-call | 1.0 |
 | `CoreX\Audit\Laravel\AuditWriteExemption` | spi-call | 1.0 |
 | `CoreX\Audit\Laravel\HasAuditLog` | spi-call | 1.0 |
@@ -27,7 +28,9 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Config\Data\CoreOptions` | api | 1.0 |
 | `CoreX\Config\Data\SecretRef` | api | 1.0 |
 | `CoreX\Config\Exceptions\InvalidConfiguration` | api | 1.0 |
+| `CoreX\Config\Laravel\ConfigRegistrar` | spi-call | 1.0 |
 | `CoreX\Config\Laravel\ConfigurationValidator` | spi-call | 1.0 |
+| `CoreX\Config\Laravel\ConfiguredImplementation` | spi-call | 1.0 |
 | `CoreX\Config\Laravel\CoreOptionsParser` | spi-call | 1.0 |
 | `CoreX\Config\Laravel\RuntimeConfigGate` | spi-call | 1.0 |
 | `CoreX\Context\Contracts\AccountConnectionResolver` | spi-implement | 1.0 |
@@ -49,6 +52,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Context\Exceptions\CentralContextException` | api | 1.0 |
 | `CoreX\Context\Exceptions\ImpersonationRestrictedException` | api | 1.0 |
 | `CoreX\Context\Exceptions\ScopeContextMismatch` | api | 1.0 |
+| `CoreX\Context\Laravel\ContextRegistrar` | spi-call | 1.0 |
 | `CoreX\CoreServiceProvider` | spi-call | 1.0 |
 | `CoreX\Data\Contracts\DataScopeAuthorizer` | spi-implement | 1.0 |
 | `CoreX\Data\Contracts\DataScopeCodec` | spi-implement | 1.0 |
@@ -58,6 +62,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Data\Data\RecordRef` | api | 1.0 |
 | `CoreX\Data\Data\WriteToken` | api | 1.0 |
 | `CoreX\Data\Exceptions\InvalidScopePayload` | spi-call | 1.0 |
+| `CoreX\Data\Laravel\DataRegistrar` | spi-call | 1.0 |
 | `CoreX\Data\Laravel\JsonDocuments` | spi-call | 1.0 |
 | `CoreX\Data\Laravel\SystemDataScopeAuthorization` | spi-call | 1.0 |
 | `CoreX\Database\Enums\IdStrategy` | api | 1.0 |
@@ -70,6 +75,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Departments\Exceptions\CrossWorkspaceMoveException` | api | 1.0 |
 | `CoreX\Departments\Exceptions\DepartmentCycleException` | api | 1.0 |
 | `CoreX\Departments\Laravel\DepartmentQueries` | spi-call | 1.0 |
+| `CoreX\Departments\Laravel\DepartmentsRegistrar` | spi-call | 1.0 |
 | `CoreX\Errors\Contracts\DescribesError` | spi-implement | 1.0 |
 | `CoreX\Errors\Contracts\ErrorCode` | spi-implement | 1.0 |
 | `CoreX\Errors\Contracts\ProblemDefinitionProvider` | spi-implement | 1.0 |
@@ -81,10 +87,13 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Errors\Enums\UnavailabilityReason` | api | 1.0 |
 | `CoreX\Errors\Exceptions\CodedException` | spi-implement | 1.0 |
 | `CoreX\Errors\Exceptions\ProblemRegistryException` | api | 1.0 |
+| `CoreX\Errors\Laravel\ErrorsRegistrar` | spi-call | 1.0 |
 | `CoreX\Errors\Laravel\ProblemDefinitions` | spi-call | 1.0 |
+| `CoreX\Errors\Laravel\ProblemRegistryFactory` | spi-call | 1.0 |
 | `CoreX\Features\Contracts\FeatureFlags` | api | 1.0 |
 | `CoreX\Features\Data\FeatureFlagDefinition` | api | 1.0 |
 | `CoreX\Features\Events\FeatureFlagToggled` | spi-call | 1.0 |
+| `CoreX\Features\Laravel\FeaturesRegistrar` | spi-call | 1.0 |
 | `CoreX\Messaging\Contracts\Cancellable` | spi-implement | 1.0 |
 | `CoreX\Messaging\Contracts\DurableMessagePublisher` | spi-implement | 1.0 |
 | `CoreX\Messaging\Contracts\DurablePayload` | spi-implement | 1.0 |
@@ -111,6 +120,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Messaging\Exceptions\OutboxRefused` | api | 1.0 |
 | `CoreX\Messaging\Exceptions\UnknownMessageContract` | api | 1.0 |
 | `CoreX\Messaging\Laravel\InboxRetention` | spi-call | 1.0 |
+| `CoreX\Messaging\Laravel\MessagingRegistrar` | spi-call | 1.0 |
 | `CoreX\Messaging\Laravel\PubSubAdapters` | spi-call | 1.0 |
 | `CoreX\Messaging\PHPStan\Rules\DurablePayloadPromotedPropertyRule` | spi-implement | 1.0 |
 | `CoreX\Messaging\PHPStan\Rules\DurablePayloadRule` | spi-call | 1.0 |
@@ -173,6 +183,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Modules\Exceptions\RegistryFrozen` | api | 1.0 |
 | `CoreX\Modules\Exceptions\RegistryInputUnavailable` | api | 1.0 |
 | `CoreX\Modules\Exceptions\StaleRegistryRevision` | api | 1.0 |
+| `CoreX\Modules\Laravel\CoreModulesRegistrar` | spi-call | 1.0 |
 | `CoreX\Modules\Laravel\LifecycleRegistrar` | spi-call | 1.0 |
 | `CoreX\Modules\Laravel\ModulesBootRegistrar` | spi-call | 1.0 |
 | `CoreX\Modules\Laravel\RegistersNothingOnBoot` | spi-call | 1.0 |
@@ -199,6 +210,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Observability\Data\OperationFailed` | api | 1.0 |
 | `CoreX\Observability\Data\OperationStarted` | api | 1.0 |
 | `CoreX\Observability\Enums\OperationOutcome` | api | 1.0 |
+| `CoreX\Observability\Laravel\ObservabilityRegistrar` | spi-call | 1.0 |
 | `CoreX\Settings\Contracts\SettingDefaultsProvider` | spi-implement | 1.0 |
 | `CoreX\Settings\Contracts\SettingsRepository` | api | 1.0 |
 | `CoreX\Settings\Data\SettingsScope` | api | 1.0 |
@@ -206,14 +218,17 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Settings\Events\SettingChanged` | spi-call | 1.0 |
 | `CoreX\Settings\Exceptions\SettingValueTooLargeException` | api | 1.0 |
 | `CoreX\Settings\Exceptions\UnsupportedScopeException` | api | 1.0 |
+| `CoreX\Settings\Laravel\SettingsRegistrar` | spi-call | 1.0 |
 | `CoreX\Storage\Contracts\TenantStorage` | spi-implement | 1.0 |
 | `CoreX\Storage\Data\ExportArchiveRef` | api | 1.0 |
 | `CoreX\Storage\Data\StorageCapabilities` | api | 1.0 |
 | `CoreX\Storage\Exceptions\StorageCapabilityUnavailable` | api | 1.0 |
 | `CoreX\Storage\Exceptions\StorageOperationFailed` | api | 1.0 |
 | `CoreX\Storage\Laravel\ScopedFilesystemFactory` | spi-call | 1.0 |
+| `CoreX\Storage\Laravel\StorageRegistrar` | spi-call | 1.0 |
 | `CoreX\Time\Laravel\LaravelClock` | spi-call | 1.0 |
 | `CoreX\Time\Laravel\SystemClock` | spi-call | 1.0 |
+| `CoreX\Time\Laravel\TimeRegistrar` | spi-call | 1.0 |
 | `CoreX\Time\Testing\FrozenClock` | spi-call | 1.0 |
 
 ## axiomasoft/corex-access
@@ -233,6 +248,8 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Access\Errors\Enums\AccessErrorCode` | api | 1.0 |
 | `CoreX\Access\Exceptions\ScopeCapabilityMismatch` | api | 1.0 |
 | `CoreX\Access\Identity\Laravel\PrincipalUserProvider` | spi-call | 1.0 |
+| `CoreX\Access\Laravel\AccessBindingsRegistrar` | spi-call | 1.0 |
+| `CoreX\Access\Laravel\AccessIntegrationRegistrar` | spi-call | 1.0 |
 | `CoreX\Access\Laravel\AuthOptions` | spi-call | 1.0 |
 | `CoreX\Access\Laravel\ScopeResolver` | spi-implement | 1.0 |
 | `CoreX\Access\Matrix\Contracts\EntityActivity` | spi-call | 1.0 |
@@ -306,6 +323,8 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Intl\Formatting\Exceptions\UnsupportedFormattingException` | api | 1.0 |
 | `CoreX\Intl\IntlModule` | spi-call | 1.0 |
 | `CoreX\Intl\IntlServiceProvider` | spi-call | 1.0 |
+| `CoreX\Intl\Laravel\IntlBindingsRegistrar` | spi-call | 1.0 |
+| `CoreX\Intl\Laravel\IntlReferenceRegistrar` | spi-call | 1.0 |
 | `CoreX\Intl\Locale\Contracts\LocaleResolver` | spi-implement | 1.0 |
 | `CoreX\Intl\Locale\Contracts\LocaleValidation` | spi-call | 1.0 |
 | `CoreX\Intl\Locale\Data\LocaleInputs` | api | 1.0 |
@@ -362,6 +381,8 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Media\Data\PurgeClaim` | api | 1.0 |
 | `CoreX\Media\Data\UploadFile` | api | 1.0 |
 | `CoreX\Media\Data\UploadInput` | api | 1.0 |
+| `CoreX\Media\Laravel\GdThumbnailDriverFactory` | spi-call | 1.0 |
+| `CoreX\Media\Laravel\MediaBindingsRegistrar` | spi-call | 1.0 |
 | `CoreX\Media\Laravel\UploadedFileSource` | spi-call | 1.0 |
 | `CoreX\Media\MediaModule` | spi-call | 1.0 |
 | `CoreX\Media\MediaServiceProvider` | spi-call | 1.0 |
@@ -398,6 +419,8 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Notifications\Inbox\Data\NotificationSubject` | api | 1.0 |
 | `CoreX\Notifications\Inbox\Exceptions\NotificationAccessDenied` | spi-call | 1.0 |
 | `CoreX\Notifications\Inbox\Exceptions\NotificationOperationConflict` | spi-call | 1.0 |
+| `CoreX\Notifications\Laravel\NotificationsBindingsRegistrar` | spi-call | 1.0 |
+| `CoreX\Notifications\Laravel\NotificationsDigestRegistrar` | spi-call | 1.0 |
 | `CoreX\Notifications\NotificationsModule` | spi-call | 1.0 |
 | `CoreX\Notifications\NotificationsServiceProvider` | spi-call | 1.0 |
 | `CoreX\Notifications\Preferences\Contracts\PreferenceRepository` | spi-implement | 1.0 |
@@ -425,6 +448,8 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Operations\Bulk\Data\BulkOptions` | api | 1.0 |
 | `CoreX\Operations\Bulk\Data\BulkTransferSession` | api | 1.0 |
 | `CoreX\Operations\Bulk\Enums\BulkOperationStatus` | api | 1.0 |
+| `CoreX\Operations\Bulk\Laravel\BulkBindingsRegistrar` | spi-call | 1.0 |
+| `CoreX\Operations\Bulk\Laravel\BulkHttpRegistrar` | spi-call | 1.0 |
 | `CoreX\Operations\Bulk\Laravel\BulkOptionsParser` | spi-call | 1.0 |
 | `CoreX\Operations\Bulk\Laravel\BulkRegistrar` | spi-call | 1.0 |
 | `CoreX\Operations\Bulk\Laravel\BulkRouteRegistrar` | spi-call | 1.0 |
@@ -440,6 +465,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Operations\Cost\Data\ThrottleStatus` | api | 1.0 |
 | `CoreX\Operations\Cost\Exceptions\BudgetRateLimited` | spi-call | 1.0 |
 | `CoreX\Operations\Cost\Exceptions\BudgetStoreUnavailable` | spi-call | 1.0 |
+| `CoreX\Operations\Cost\Laravel\CostBindingsRegistrar` | spi-call | 1.0 |
 | `CoreX\Operations\Cost\Laravel\CostOptionsParser` | spi-call | 1.0 |
 | `CoreX\Operations\Cost\Laravel\CostRegistrar` | spi-call | 1.0 |
 | `CoreX\Operations\Definition\Contracts\OperationDefinitionValidator` | spi-call | 1.0 |
@@ -473,9 +499,15 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Operations\Invocation\Data\OperationResult` | api | 1.0 |
 | `CoreX\Operations\Invocation\Laravel\InvocationMetadataFactory` | spi-call | 1.0 |
 | `CoreX\Operations\Invocation\Laravel\ResolvedContexts` | spi-call | 1.0 |
+| `CoreX\Operations\Laravel\ApiSchemaBindingsRegistrar` | spi-call | 1.0 |
 | `CoreX\Operations\Laravel\ApiSchemaRegistrar` | spi-call | 1.0 |
 | `CoreX\Operations\Laravel\Commands\PruneApiOperations` | spi-call | 1.0 |
+| `CoreX\Operations\Laravel\HttpRegistrar` | spi-call | 1.0 |
+| `CoreX\Operations\Laravel\IdempotencyRegistrar` | spi-call | 1.0 |
+| `CoreX\Operations\Laravel\IdempotencyStoreFactory` | spi-call | 1.0 |
 | `CoreX\Operations\Laravel\InvocationFixtures` | spi-call | 1.0 |
+| `CoreX\Operations\Laravel\OperationsBindingsRegistrar` | spi-call | 1.0 |
+| `CoreX\Operations\Laravel\PaginationRegistrar` | spi-call | 1.0 |
 | `CoreX\Operations\Laravel\Support\ApiOptions` | spi-call | 1.0 |
 | `CoreX\Operations\OpenApi\Contracts\ContractSnapshotSection` | spi-implement | 1.0 |
 | `CoreX\Operations\OpenApi\Contracts\OpenApiDocuments` | spi-call | 1.0 |
@@ -530,6 +562,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Panels\Data\PanelContext` | api | 1.0 |
 | `CoreX\Panels\Data\PanelDescriptor` | api | 1.0 |
 | `CoreX\Panels\Data\PanelReference` | api | 1.0 |
+| `CoreX\Panels\Laravel\PanelsBindingsRegistrar` | spi-call | 1.0 |
 | `CoreX\Panels\PanelsModule` | spi-call | 1.0 |
 | `CoreX\Panels\PanelsServiceProvider` | spi-call | 1.0 |
 | `CoreX\Panels\SavedViews\Contracts\SavedViewRepository` | api | 1.0 |
@@ -544,6 +577,8 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Panels\SavedViews\Data\ViewSchema` | api | 1.0 |
 | `CoreX\Panels\SavedViews\Data\ViewScope` | api | 1.0 |
 | `CoreX\Panels\SavedViews\Data\ViewSubject` | api | 1.0 |
+| `CoreX\Panels\SavedViews\Laravel\SavedViewRepositoryFactory` | spi-call | 1.0 |
+| `CoreX\Panels\SavedViews\Laravel\SavedViewsBindingsRegistrar` | spi-call | 1.0 |
 | `CoreX\Panels\SavedViews\Laravel\SavedViewsRegistrar` | spi-call | 1.0 |
 
 ## axiomasoft/corex-recurrence
@@ -620,6 +655,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 |:--|:--|:--|
 | `CoreX\SearchMeilisearch\Errors\Enums\SearchMeilisearchErrorCode` | api | 1.0 |
 | `CoreX\SearchMeilisearch\Exceptions\InvalidMeilisearchConfiguration` | api | 1.0 |
+| `CoreX\SearchMeilisearch\Laravel\MeilisearchProviderFactory` | spi-call | 1.0 |
 | `CoreX\SearchMeilisearch\MeilisearchServiceProvider` | spi-call | 1.0 |
 
 ## axiomasoft/corex-tasks
@@ -901,6 +937,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Wakeup\Data\WakeupHandlerDefinition` | api | 1.0 |
 | `CoreX\Wakeup\Data\WakeupRequest` | api | 1.0 |
 | `CoreX\Wakeup\Data\WakeupWindow` | api | 1.0 |
+| `CoreX\Wakeup\Laravel\WakeupBindingsRegistrar` | spi-call | 1.0 |
 | `CoreX\Wakeup\Testing\WakeupFixtures` | spi-call | 1.0 |
 | `CoreX\Wakeup\WakeupModule` | spi-call | 1.0 |
 | `CoreX\Wakeup\WakeupServiceProvider` | spi-call | 1.0 |
@@ -924,6 +961,8 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Webhooks\Data\WebhookSubscription` | api | 1.0 |
 | `CoreX\Webhooks\Data\WebhookTopic` | api | 1.0 |
 | `CoreX\Webhooks\Errors\Enums\WebhooksErrorCode` | api | 1.0 |
+| `CoreX\Webhooks\Laravel\WebhookBindingsRegistrar` | spi-call | 1.0 |
+| `CoreX\Webhooks\Laravel\WebhookHttpRegistrar` | spi-call | 1.0 |
 | `CoreX\Webhooks\Laravel\WebhookOptionsParser` | spi-call | 1.0 |
 | `CoreX\Webhooks\Laravel\WebhookRegistrar` | spi-call | 1.0 |
 | `CoreX\Webhooks\Laravel\WebhookRouteRegistrar` | spi-call | 1.0 |
@@ -944,5 +983,6 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Workflow\Data\TransitionRequest` | api | 1.0 |
 | `CoreX\Workflow\Data\TransitionResult` | api | 1.0 |
 | `CoreX\Workflow\Data\TriggerRequest` | api | 1.0 |
+| `CoreX\Workflow\Laravel\WorkflowBindingFactory` | spi-call | 1.0 |
 | `CoreX\Workflow\WorkflowModule` | spi-call | 1.0 |
 | `CoreX\Workflow\WorkflowServiceProvider` | spi-call | 1.0 |

@@ -452,8 +452,11 @@ it('builds the registry cache from configured Options — store, ttl and prefix 
     // assert the resolved cache writes the epoch-stamped key THERE — proving
     // config('corex.modules.cache.*') drives the binding (no hardcoded 3600).
     config()->set('corex.modules.cache.store', 'array');
+    app()->forgetInstance(ModulesOptions::class);
     config()->set('corex.modules.cache.prefix', 'cfg-driven');
+    app()->forgetInstance(ModulesOptions::class);
     config()->set('corex.modules.cache.ttl', 3600);
+    app()->forgetInstance(ModulesOptions::class);
 
     // Options is a provider-time snapshot. Replace it after changing test
     // config, then rebuild the already-resolved cache singleton.

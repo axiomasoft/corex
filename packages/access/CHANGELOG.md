@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — thin providers and registrars (P05.2)
+
+- `CoreAuthServiceProvider` delegates to `AccessBindingsRegistrar` and `AccessIntegrationRegistrar`; bindings, order and lifetimes are unchanged.
+
 ## Unreleased — typed Options and runtime configuration checks (P05.1)
 
 - `AuthOptions` is a lazy shared singleton resolved in `boot()`; it is no longer bound with `instance()` while the provider registers.

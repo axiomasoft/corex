@@ -6,57 +6,18 @@ namespace CoreX\Operations\Cost\Laravel;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Operations\Cost\Contracts\BudgetExecution;
-use CoreX\Operations\Cost\Contracts\OperationBudget;
-use CoreX\Operations\Cost\Contracts\OperationCostEstimator;
-use CoreX\Operations\Cost\Data\CostOptions;
-use CoreX\Operations\Cost\Internal\BudgetAdmission;
-use CoreX\Operations\Cost\Internal\BudgetRetention;
-use CoreX\Operations\Cost\Internal\DeclaredCostEstimator;
-use CoreX\Operations\Cost\Internal\SqlOperationBudget;
-use CoreX\Operations\Laravel\ApiSchemaRegistrar;
-use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
-use Psr\Clock\ClockInterface;
 
+/**
+ * Compatibility entry point for hosts that register the cost services themselves.
+ *
+ * @deprecated The operations provider registers {@see CostBindingsRegistrar}.
+ */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final readonly class CostRegistrar
 {
     public static function register(Application $app): void
     {
-        // Registration below depends on enabled flags; this one-off read does not cache Options before boot.
-        $options = CostOptionsParser::fromArray((array) $app->make(Repository::class)->get('corex-operations.cost', []));
-
-        $app->singleton(CostOptions::class, static fn (Application $app): CostOptions => CostOptionsParser::fromArray(
-            (array) $app->make(Repository::class)->get('corex-operations.cost', []),
-        ));
-        $app->singleton(OperationCostEstimator::class, DeclaredCostEstimator::class);
-        $app->singleton(BudgetRetention::class, static fn (Application $app): BudgetRetention => new BudgetRetention(
-            connection: $app->make(ApiSchemaRegistrar::class)->budget(),
-            clock: $app->make(ClockInterface::class),
-            terminalRetentionSeconds: $app->make(CostOptions::class)->terminalRetentionSeconds,
-        ));
-
-        if (! $options->enabled) {
-            return;
-        }
-
-        $app->singleton(OperationBudget::class, static function (Application $app): SqlOperationBudget {
-            return new SqlOperationBudget(
-                connection: $app->make(ApiSchemaRegistrar::class)->budget(),
-                clock: $app->make(ClockInterface::class),
-                scopeHmacSecret: $app->make(CostOptions::class)->scopeHmacSecret,
-                capacity: $app->make(CostOptions::class)->capacity,
-                restoreRate: $app->make(CostOptions::class)->restoreRate,
-                enforcedLevels: $app->make(CostOptions::class)->enforcedLevels,
-                reservationTtlSeconds: $app->make(CostOptions::class)->reservationTtlSeconds,
-            );
-        });
-        $app->bind(BudgetExecution::class, static fn (Application $app): BudgetExecution => $app->make(BudgetAdmission::class));
-        $app->singleton(BudgetAdmission::class, static fn (Application $app): BudgetAdmission => new BudgetAdmission(
-            budget: $app->make(OperationBudget::class),
-            estimator: $app->make(OperationCostEstimator::class),
-            installationId: $app->make(CostOptions::class)->installationId,
-        ));
+        (new CostBindingsRegistrar)->register($app);
     }
 }

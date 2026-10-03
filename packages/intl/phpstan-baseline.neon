@@ -31,30 +31,6 @@ parameters:
 			path: src/Currency/Internal/SqlRateProvider.php
 
 		-
-			rawMessage: Cannot access offset 'db' on Illuminate\Contracts\Foundation\Application.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 2
-			path: src/IntlServiceProvider.php
-
-		-
-			rawMessage: 'Cannot call method connection() on mixed.'
-			identifier: method.nonObject
-			count: 2
-			path: src/IntlServiceProvider.php
-
-		-
-			rawMessage: 'Parameter $connection of class CoreX\Intl\Currency\Internal\SqlRateImporter constructor expects Illuminate\Database\Connection, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/IntlServiceProvider.php
-
-		-
-			rawMessage: 'Parameter $connection of class CoreX\Intl\Currency\Internal\SqlRateProvider constructor expects Illuminate\Database\Connection, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/IntlServiceProvider.php
-
-		-
 			rawMessage: 'Only booleans are allowed in a negated boolean, int|false given.'
 			identifier: booleanNot.exprNotBoolean
 			count: 2

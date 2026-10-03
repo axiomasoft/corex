@@ -69,3 +69,64 @@ PHP;
         ->and($joined)->toContain('SingletonInjectionProbeServiceProvider.php')
         ->and($joined)->toContain('SingletonInjectionProbe');
 });
+
+test('singleton injection gate scans registrars and names a probe registrar that captures the application', function (): void {
+    $repoRoot = dirname(__DIR__, 2);
+    $probeClass = $repoRoot.'/packages/core/src/Internal/SingletonInjectionRegistrarProbe.php';
+    $probeRegistrar = $repoRoot.'/packages/core/src/Internal/Laravel/SingletonInjectionProbeRegistrar.php';
+
+    $probeClassContents = <<<'PHP'
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Internal;
+
+use Illuminate\Contracts\Foundation\Application;
+
+final class SingletonInjectionRegistrarProbe
+{
+    public function __construct(private readonly Application $app) {}
+}
+PHP;
+
+    $probeRegistrarContents = <<<'PHP'
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Internal\Laravel;
+
+use CoreX\Internal\SingletonInjectionRegistrarProbe;
+use Illuminate\Contracts\Foundation\Application;
+
+final class SingletonInjectionProbeRegistrar
+{
+    public function register(Application $app): void
+    {
+        $app->singleton(SingletonInjectionRegistrarProbe::class);
+    }
+}
+PHP;
+
+    if (! is_dir(\dirname($probeRegistrar))) {
+        mkdir(\dirname($probeRegistrar), 0755, true);
+    }
+
+    file_put_contents($probeClass, $probeClassContents);
+    file_put_contents($probeRegistrar, $probeRegistrarContents);
+
+    try {
+        $violations = SingletonInjectionGate::violations(SingletonInjectionGate::allowlistPath());
+    } finally {
+        unlink($probeClass);
+        unlink($probeRegistrar);
+        @rmdir(\dirname($probeRegistrar));
+    }
+
+    $joined = implode("\n", $violations);
+
+    expect($violations)->not->toBeEmpty()
+        ->and($joined)->toContain('SingletonInjectionProbeRegistrar.php')
+        ->and($joined)->toContain('SingletonInjectionRegistrarProbe');
+});

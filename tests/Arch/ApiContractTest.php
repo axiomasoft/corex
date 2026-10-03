@@ -109,7 +109,7 @@ function p13ApiArchitectureViolations(?string $composer = null): array
     $profile = (string) file_get_contents($src.'/Versioning/Data/ApiProfile.php');
     $factory = (string) file_get_contents($src.'/Versioning/Internal/ApiProfileFactory.php');
     $defaultInvoker = (string) file_get_contents($src.'/Invocation/Internal/DefaultOperationInvoker.php');
-    $replay = (string) file_get_contents($src.'/ApiServiceProvider.php');
+    $replay = (string) file_get_contents($src.'/Idempotency/Internal/DefaultReplayAuthorizer.php');
     $exposed = strstr($tools, "if (\$declaration->toolKind === 'exposed')");
     $exposed = $exposed === false ? '' : explode('} else {', $exposed, 2)[0];
 

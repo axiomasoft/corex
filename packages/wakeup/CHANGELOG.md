@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — thin providers and registrars (P05.2)
+
+- `WakeupServiceProvider` delegates to `WakeupBindingsRegistrar`; bindings are unchanged.
+
 ## Unreleased — typed Options and runtime configuration checks (P05.1)
 
 - Added internal `WakeupOptions` and a `RuntimeConfigCheck`. Breaking (pre-1.0, PLAN3.D01): the scalar `kind => class` handler form is rejected with an invalid-configuration error; configure `handler` and `version`. In `production`, `accept_legacy_unstamped=true` of any handler stops the process unless `corex-wakeup.handlers.<kind>.accept_legacy_unstamped` is acknowledged.

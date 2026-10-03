@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — thin providers and registrars (P05.2)
+
+- `AttributesServiceProvider` delegates to messaging, composition and bindings registrars; multi-statement closures moved to `AttributeStoreFactory`, `SchemaOperationsFactory` and `FieldCatalogueFactory`. With the kernel provider the module registry is always bound, so `SchemaOperations` resolves to the queued DDL implementation.
+
 ## Unreleased — typed Options and runtime configuration checks (P05.1)
 
 - Added internal `CustomFieldsOptions`, a lazy singleton resolved in `boot()` that carries the validated composition and table map; `AttributeTables` and the composition are built from it.

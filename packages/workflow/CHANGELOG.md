@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — thin providers and registrars (P05.2)
+
+- The workflow binding is assembled by `WorkflowBindingFactory`.
+
 ## Unreleased — typed Options and runtime configuration checks (P05.1)
 
 - Added internal `WorkflowOptions` and a `RuntimeConfigCheck`: in `production`, `corex-workflow.enforce_declarations=false` stops the process unless that exact path is listed in `corex.acknowledged_dangerous_modes`.

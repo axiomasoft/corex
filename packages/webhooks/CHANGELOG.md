@@ -1,3 +1,7 @@
+## Unreleased — thin providers and registrars (P05.2)
+
+- `WebhooksServiceProvider` uses `WebhookBindingsRegistrar` and `WebhookHttpRegistrar`; `WebhookRegistrar` and `WebhookRouteRegistrar::register()` stay as deprecated shims.
+
 ## Unreleased — typed Options and runtime configuration checks (P05.1)
 
 - `WebhookOptions` is a lazy shared singleton resolved in `boot()`; `WebhookUrlPolicy` is built from it on first use.
