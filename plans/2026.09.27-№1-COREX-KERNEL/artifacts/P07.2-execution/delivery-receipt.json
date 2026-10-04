@@ -1,0 +1,74 @@
+{
+  "adapter_attestation": {
+    "canonical_command_sha256": "sha256:c8e9c5f9179827994fdc31a95d10b55d49c0042a2b893b6f16f421488db5cbcb",
+    "command_id": "task:plan-run",
+    "package": "task",
+    "version": "0.28.0"
+  },
+  "commit_sha": "ef8a2869e0d7ee8f3a1ab5cbfddf60b78d1b4db6",
+  "continuity": {
+    "evidence": [
+      "batch:125352c510fc40c36a0b028babb177b2b473d32ece640331105b2558a919868f",
+      "loaded-inputs:reusable",
+      "cold-start-cost:0"
+    ],
+    "outcome": "waiting-owner",
+    "reason": "owner-wait",
+    "runnable": false,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": null,
+    "handoff": "sha256:ff8d332908e48f2fee6dd0b212407d340cb54ed8c78d316b5717d3c361f8396b",
+    "plan": "sha256:a9cd518ddade9e64fdd62b416850a7d830d347da38dc98a64aa5d211d70fd21d",
+    "state": "sha256:3c04b2c7bcbe23b3627450081ae347e8e00cd478814da772e8307e6142cea5a5"
+  },
+  "journal": {
+    "batch_receipt": {
+      "batch_id": "solo",
+      "completed_prefix": [],
+      "handoff_digest": "217024ffce8573fce49c290496783ab727e019f64241d6b0a6bd9b8a8fe72db1",
+      "invocation_digest": "125352c510fc40c36a0b028babb177b2b473d32ece640331105b2558a919868f",
+      "membership": [
+        "P07.2"
+      ],
+      "routing_digest": "a9cd518ddade9e64fdd62b416850a7d830d347da38dc98a64aa5d211d70fd21d",
+      "schema_version": "batch-receipt/v1",
+      "spec_digest": "a0791babef35a8fec7c909a1b745fccc46997edfae4becb3d5185a1d2319f8d8",
+      "stop_disposition": "continue"
+    },
+    "command": "plan-run",
+    "line": 231,
+    "result": "escalated",
+    "run_id": "31ee26b55bbdd51ff945818d865c78eb867db38ca50f9786003e3c3dc3046473",
+    "sha256": "sha256:54935665ac5e63e9d4b93c2117e1c747926ced8ced4f5a50c7584ffa2c608a3a"
+  },
+  "next_exact": "waiting: owner authorizes one additional Grok 4.7/500k review round for P07.2",
+  "plan_id": "2026.09.27-№1-COREX-KERNEL",
+  "rationale": {
+    "open_risks": "D107 retains durable claim/cleanup SQL in data until P08; six existing Redis skips. Preserve unrelated CLAUDE.md and local skills/agents. P07.2 is not GREEN.",
+    "remaining": "Current independent GREEN review. Two-round limit exhausted; pending async owner approval. Do not launch round three without an accepted candidate-bound D# using the marker in artifacts/P07.2-execution/pending-review-candidate.json. No P07.3 execution."
+  },
+  "recommendation": "**Next:** waiting: owner authorizes one additional Grok 4.7/500k review round for P07.2\n\n| Parameter | Meaning |\n|:--|:--|\n| Batch | solo |\n| Model | implementation |\n| Thinking | high |\n| Context | waiting-owner |\n| The bottom line | Все пять замечаний исправлены; требуется разрешение на один дополнительный раунд Grok. |\n| Command | — |\n\n```session-continuity-decision/v1\n{\"evidence\": [\"batch:125352c510fc40c36a0b028babb177b2b473d32ece640331105b2558a919868f\", \"loaded-inputs:reusable\", \"cold-start-cost:0\"], \"outcome\": \"waiting-owner\", \"reason\": \"owner-wait\", \"runnable\": false, \"schema_version\": \"session-continuity-decision/v1\"}\n```",
+  "route": {
+    "batch": "solo",
+    "command": "—",
+    "context": "waiting-owner",
+    "continuity": {
+      "evidence": [
+        "batch:125352c510fc40c36a0b028babb177b2b473d32ece640331105b2558a919868f",
+        "loaded-inputs:reusable",
+        "cold-start-cost:0"
+      ],
+      "outcome": "waiting-owner",
+      "reason": "owner-wait",
+      "runnable": false,
+      "schema_version": "session-continuity-decision/v1"
+    },
+    "model": "implementation",
+    "thinking": "high"
+  },
+  "schema_version": "terminal-delivery-receipt/v1",
+  "status": "🔴 Blocked",
+  "subject": "P07.2"
+}

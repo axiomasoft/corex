@@ -1,0 +1,13 @@
+{
+  "positive": {
+    "exit_code": 0,
+    "staged_versions": {
+      "axiomasoft/stancl-tenancy": "4.0.0-alpha1",
+      "axiomasoft/stancl-jobpipeline": "2.0.0-alpha1"
+    }
+  },
+  "negative": {
+    "exit_code": 1,
+    "reason": "tampered historical archive rejected before extraction"
+  }
+}

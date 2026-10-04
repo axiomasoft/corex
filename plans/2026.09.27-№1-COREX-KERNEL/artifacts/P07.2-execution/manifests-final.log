@@ -1,0 +1,2 @@
+manifests OK: 22 roots
+> python3 scripts/manifest-check.py

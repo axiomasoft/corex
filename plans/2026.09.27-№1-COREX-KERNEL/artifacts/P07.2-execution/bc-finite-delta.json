@@ -1,0 +1,348 @@
+{
+  "added": [
+    {
+      "description": "The parameter $storageEphemeralRoot of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string to a non-contravariant int",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 26,
+      "column": 5,
+      "modificationType": "changed"
+    },
+    {
+      "description": "The parameter $wakeupRootConnection of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string to a non-contravariant array",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 26,
+      "column": 5,
+      "modificationType": "changed"
+    },
+    {
+      "description": "The parameter $oidcDiscoveryCacheStore of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string|null to a non-contravariant int",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 26,
+      "column": 5,
+      "modificationType": "changed"
+    },
+    {
+      "description": "The parameter $wakeupDriver of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string to a non-contravariant array",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 26,
+      "column": 5,
+      "modificationType": "changed"
+    },
+    {
+      "description": "Property CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#$tenantDatabaseManager was removed",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 16,
+      "column": 1,
+      "modificationType": "removed"
+    },
+    {
+      "description": "The parameter $oidcEnabled of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from bool to a non-contravariant CoreX\\Config\\Data\\SecretRef|null",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 26,
+      "column": 5,
+      "modificationType": "changed"
+    },
+    {
+      "description": "The parameter $lifecycle of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from CoreX\\Tenancy\\Laravel\\Support\\AccountLifecyclePolicy to a non-contravariant int",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 26,
+      "column": 5,
+      "modificationType": "changed"
+    },
+    {
+      "description": "The number of required arguments for CoreX\\Tenancy\\Account\\Laravel\\AccountTemplateSnapshot::capture() increased from 1 to 2",
+      "path": "/packages/tenancy/src/Account/Laravel/AccountTemplateSnapshot.php",
+      "line": 17,
+      "column": 5,
+      "modificationType": "changed"
+    },
+    {
+      "description": "The parameter $impersonation of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from CoreX\\Tenancy\\Laravel\\Support\\ImpersonationPolicy to a non-contravariant CoreX\\Tenancy\\Laravel\\Support\\AccountLifecyclePolicy",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 26,
+      "column": 5,
+      "modificationType": "changed"
+    },
+    {
+      "description": "The parameter $oidcRedirectUri of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string|null to a non-contravariant string",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 26,
+      "column": 5,
+      "modificationType": "changed"
+    },
+    {
+      "description": "The parameter $hostIdentificationEnabled of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from bool to a non-contravariant string|null",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 26,
+      "column": 5,
+      "modificationType": "changed"
+    },
+    {
+      "description": "The parameter $provisioningPipeline of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from array to a non-contravariant string",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 26,
+      "column": 5,
+      "modificationType": "changed"
+    },
+    {
+      "description": "The parameter $storageDurableRoot of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string to a non-contravariant bool",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 26,
+      "column": 5,
+      "modificationType": "changed"
+    },
+    {
+      "description": "The parameter $workspacePathSegment of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string|null to a non-contravariant string",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 26,
+      "column": 5,
+      "modificationType": "changed"
+    },
+    {
+      "description": "The parameter $storageDurableDriver of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string to a non-contravariant bool",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 26,
+      "column": 5,
+      "modificationType": "changed"
+    },
+    {
+      "description": "The parameter $oidcJwksCacheStore of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string|null to a non-contravariant CoreX\\Tenancy\\Laravel\\Support\\ImpersonationPolicy",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 26,
+      "column": 5,
+      "modificationType": "changed"
+    },
+    {
+      "description": "The parameter $oidcJwksRefetchCooldownSeconds of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from int to a non-contravariant string|null",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 26,
+      "column": 5,
+      "modificationType": "changed"
+    },
+    {
+      "description": "The parameter $hostIdentificationCacheStore of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string|null to a non-contravariant CoreX\\Tenancy\\Laravel\\Support\\StatusGatePolicy",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 26,
+      "column": 5,
+      "modificationType": "changed"
+    },
+    {
+      "description": "Property CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#$provisioningPipeline was removed",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 16,
+      "column": 1,
+      "modificationType": "removed"
+    },
+    {
+      "description": "The parameter $domainTrustChallengeTtlSeconds of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from int to a non-contravariant string|null",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 26,
+      "column": 5,
+      "modificationType": "changed"
+    },
+    {
+      "description": "The parameter $statusGate of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from CoreX\\Tenancy\\Laravel\\Support\\StatusGatePolicy to a non-contravariant string|null",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 26,
+      "column": 5,
+      "modificationType": "changed"
+    },
+    {
+      "description": "The parameter $tenant of CoreX\\Tenancy\\Account\\Laravel\\AccountTemplateSnapshot::capture() changed from Stancl\\Tenancy\\Database\\Contracts\\TenantWithDatabase to a non-contravariant CoreX\\Context\\Data\\AccountRef",
+      "path": "/packages/tenancy/src/Account/Laravel/AccountTemplateSnapshot.php",
+      "line": 17,
+      "column": 5,
+      "modificationType": "changed"
+    },
+    {
+      "description": "Property CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#$idGenerator was removed",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 16,
+      "column": 1,
+      "modificationType": "removed"
+    },
+    {
+      "description": "Class CoreX\\Tenancy\\PHPStan\\Rules\\StanclImportBoundaryRule has been deleted",
+      "path": null,
+      "line": null,
+      "column": null,
+      "modificationType": "removed"
+    },
+    {
+      "description": "The parameter $bootstrapperOrder of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from array to a non-contravariant string",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 26,
+      "column": 5,
+      "modificationType": "changed"
+    },
+    {
+      "description": "The parameter $tenantModel of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string to a non-contravariant array",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 26,
+      "column": 5,
+      "modificationType": "changed"
+    },
+    {
+      "description": "The parameter $tenantDatabaseManager of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string to a non-contravariant array",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 26,
+      "column": 5,
+      "modificationType": "changed"
+    },
+    {
+      "description": "The parameter $oidcMaxSessionLifetimeMinutes of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from int to a non-contravariant string",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 26,
+      "column": 5,
+      "modificationType": "changed"
+    },
+    {
+      "description": "The parameter $oidcClientId of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from string|null to a non-contravariant array",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 26,
+      "column": 5,
+      "modificationType": "changed"
+    },
+    {
+      "description": "Property CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#$tenantModel was removed",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 16,
+      "column": 1,
+      "modificationType": "removed"
+    },
+    {
+      "description": "The parameter $oidcClientSecret of CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions#__construct() changed from CoreX\\Config\\Data\\SecretRef|null to a non-contravariant int",
+      "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "line": 26,
+      "column": 5,
+      "modificationType": "changed"
+    }
+  ],
+  "obsolete_previous_signatures": [
+    [
+      "ee9f2afa8496137e15c852dcf3f72340059347e11448e56edd3e079883f160ac",
+      "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "changed"
+    ],
+    [
+      "6bca57da884b89cdcfe1c956bd231b4ce75d7b66cc569815e31161a9bfaf6ca8",
+      "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "changed"
+    ],
+    [
+      "9ce053356d76b529f4c50826bf668e90603ec83a89cd5e384e4ce23f9ce4a353",
+      "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "changed"
+    ],
+    [
+      "7633c02738088091b8eab7525734f0a193ed6751f8e63b6fb2b9262baf8d2013",
+      "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "changed"
+    ],
+    [
+      "f678c755f77e430a136359708e754497150c1b333ef6cd6e4cc472654f9c4838",
+      "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "changed"
+    ],
+    [
+      "b41aaf5190833ee4f58c69612d6468701b788832c82ec99bdac094e13b7f982d",
+      "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "changed"
+    ],
+    [
+      "0713aac82a579858ad5f2f19ada0c3bf97376b4168acd7aa8f3c71f80179a469",
+      "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "changed"
+    ],
+    [
+      "2a03585c3d7c0abcc7f326174d0d46212fa869735e91cb7f8d6a29124f859eca",
+      "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "changed"
+    ],
+    [
+      "72604653abb8c0749b803d84e064ddbd5842c8e76e98e787ec5437b103af7e4d",
+      "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "changed"
+    ],
+    [
+      "fb8ff94ede50788d2f59d80a76ffc783f7ab0f779fd2410a66006c65d224bdad",
+      "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "changed"
+    ],
+    [
+      "ce2fc640f0b972e4897a4763f6c18c9e54ca0ad2d9f30d5fdddd09ec18486e29",
+      "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "changed"
+    ],
+    [
+      "ad69416effb52b8b81de2069de20a2d570b3bccf6d8bef4a886ffc1cee69deab",
+      "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "changed"
+    ],
+    [
+      "3d83924028bcc1b31995525ae3f0d22b34eb2ab9432c720f409c822246561ecd",
+      "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "changed"
+    ],
+    [
+      "c77090f20c169c71a55bc6dc62ea0dcabd2277751709cb7e8b73b9f460456a45",
+      "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "changed"
+    ],
+    [
+      "0d45820e9f98f24745ce963e8facfe6aba52a303fba530237984888a4da2173f",
+      "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "changed"
+    ],
+    [
+      "09d7b46bf69a16838e8a328c1e72f2569949ae91a511d482be94c19d8f6a58fa",
+      "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "changed"
+    ],
+    [
+      "5ac6ad14c01b91accbcbdc9e2ade306c003db8236d5fc16464d5e9b9628d0315",
+      "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "changed"
+    ],
+    [
+      "44381e8a85ffaa6bb0c78a0921ba829cf676e2b7d81b492e3a9b65158050de12",
+      "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "changed"
+    ],
+    [
+      "3ce1d0c16a810a47912d3a05da99954a154198414022eb127972dbc07e8d3534",
+      "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "changed"
+    ],
+    [
+      "2367ac96fcf6c1065788e16905690c3813ecaa190816d4bf912ce31e86c880d5",
+      "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "changed"
+    ],
+    [
+      "4651815f399e0e89d9459ae95216d0de268beeec06278809af9a2454d7f709c2",
+      "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "changed"
+    ],
+    [
+      "1ac2e9ac833c23c71ffc7192f95dfd69dde23bf54c066c54d5400cb6d29cb5c6",
+      "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "changed"
+    ],
+    [
+      "a92ee1195577fb802da1a30f03b22d7e492ce00e7bab7327485ffe3aa37134a4",
+      "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "changed"
+    ],
+    [
+      "d642b2e3660e48988a6b2eb255512c76e10c4f8d3f09d400d26873f9042bd0f2",
+      "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "changed"
+    ],
+    [
+      "04cf020572bfa10a691424a650f3a811c895f35cdf1e9f935d079fb35309940e",
+      "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "changed"
+    ]
+  ]
+}

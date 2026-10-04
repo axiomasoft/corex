@@ -1,0 +1,11 @@
+{
+  "outcome": "waiting-owner",
+  "reason": "owner-wait",
+  "evidence": [
+    "batch:125352c510fc40c36a0b028babb177b2b473d32ece640331105b2558a919868f",
+    "loaded-inputs:reusable",
+    "cold-start-cost:0"
+  ],
+  "runnable": false,
+  "schema_version": "session-continuity-decision/v1"
+}

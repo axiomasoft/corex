@@ -1,0 +1,17 @@
+[
+  "plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P06-design-audit/webhook-lease-budget.php",
+  "plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P06-design-audit/http-415-registry.php",
+  "plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P06-design-audit/external-dataschema.php",
+  "plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P06-design-audit/tool-exception-code.php",
+  "plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P06-design-audit/reproduce-source-check.php",
+  "plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P07-design-remediation/file-session-directory.php",
+  "plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P07-design-remediation/six-findings-proof.php",
+  "plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P07-design-remediation/prove.php",
+  "plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P07-design-remediation/rereview-contract-proof.php",
+  "plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P07-design-remediation/extra-arg-counterexample.php",
+  "plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P06-design-remediation/http-415-registry.php",
+  "plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P06-design-remediation/independent-fixture-seam.php",
+  "plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P06-design-remediation/tool-exception-code.php",
+  "plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P06-design-remediation/uri-reference-proof.php",
+  "plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P07-design-audit/reproduce.php"
+]

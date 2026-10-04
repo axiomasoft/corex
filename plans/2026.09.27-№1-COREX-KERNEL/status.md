@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-10-04
-inputs_sha256: d471697fd79a6fe461113bc3b4dc54ff52f1db8ee2ea3d70d7c0a36bdadc5521
+inputs_sha256: cc46be365a8fbeb5e89d8044ccefc10ba8c71eb23842236b068b15f6bbf9d4d5
 generated_by: task plan-views status
 -->
 
@@ -16,7 +16,7 @@ generated_by: task plan-views status
 | Field | Meaning |
 |:--|:--|
 | Version | — |
-| Status | 🟡 In progress |
+| Status | 🔴 Blocked |
 | Last Updated | 2026-10-04 |
 
 ## 4. Phase Index & Status Board
@@ -30,7 +30,7 @@ generated_by: task plan-views status
 | P04 | Application API, Extension SPI и типизированные ошибки | 4/4 | 🟢 Done |
 | P05 | Typed config, композиция и порты | 4/4 | 🟢 Done |
 | P06 | Operations, tools, webhooks и wire | 4/5 | 🟠 Done with deviations |
-| P07 | Tenancy, access, независимость модулей | 1/6 | 🟡 In progress |
+| P07 | Tenancy, access, независимость модулей | 1/6 | 🔴 Blocked |
 | P10 | Зелёный hosted CI на базе P04 | 4/4 | 🟢 Done |
 
 ## Phase P00
@@ -99,7 +99,7 @@ generated_by: task plan-views status
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
 | P07.1 | Собственный движок tenancy и граница контекста | 🟢 Done | 2026-10-04 |
-| P07.2 | Tenancy без stancl: данные, provisioning, manifests | ⬜ Not started | — |
+| P07.2 | Tenancy без stancl: данные, provisioning, manifests | 🔴 Blocked | 2026-10-04 |
 | P07.3 | Impersonation на портах с профилями и двойным аудитом | ⬜ Not started | — |
 | P07.4 | Access без AzGuard и мост access-azguard | ⬜ Not started | — |
 | P07.5 | Контракты пробуждения в ядре и граф без notifications → wakeup | ⬜ Not started | — |
@@ -383,7 +383,10 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-10-04 | codex/GPT-6 | plan-run · closed-green · P07.1 GREEN; product 1f42e01d. Completion/evidence: artifacts/P07.1-execution/{completion,validation-summary}.md. Owner-qualified unchanged foreign root lint; affected checks GREEN. No new review/audit/subagent; original run/route preserved. P07 open, Next P07.2. |
 | 2026-10-04 | codex/GPT-6 | plan-run · no-op · Bookkeeping: verified original-route pre-mutation and terminal-policy/delivery final boundary; evidence final-verification/write-site.json. No new attempt.
 write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-04 | executor/codex | plan-run · in-progress · — |
+| 2026-10-04 | executor/codex | plan-run · escalated · All five Grok findings repaired; affected checks GREEN, product ef8a2869. Two completed review rounds exhausted. Pending owner approval for one additional round. Evidence: artifacts/P07.2-execution/review-approval-checkpoint.json. |
 
 ## Owner Gates
 
 - P06.5: known deviation
+- P07.2: escalation

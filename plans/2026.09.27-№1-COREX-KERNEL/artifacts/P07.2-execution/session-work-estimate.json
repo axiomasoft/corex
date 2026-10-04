@@ -1,0 +1,17 @@
+{
+  "route_attested": true,
+  "capabilities_attested": true,
+  "capabilities_sufficient": true,
+  "context_attested": false,
+  "context_health": "unavailable",
+  "batch_receipt_valid": true,
+  "remaining_batch_digest": "125352c510fc40c36a0b028babb177b2b473d32ece640331105b2558a919868f",
+  "loaded_inputs_reusable": true,
+  "cold_start_cost": 0,
+  "lifecycle": "waiting-owner",
+  "isolated_review": false,
+  "reviewer_task": null,
+  "checkpoint": "artifacts/P07.2-execution/review-approval-checkpoint.json",
+  "external_pause": null,
+  "schema_version": "session-work-estimate/v1"
+}

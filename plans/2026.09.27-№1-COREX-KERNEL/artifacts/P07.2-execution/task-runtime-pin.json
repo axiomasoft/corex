@@ -1,0 +1,7 @@
+{
+  "reason": "Concurrent uncommitted changes in the external Task runtime introduced incompatible strict Files expansion after the admitted first review; use its committed runtime for the repair review and closure. No repository spec/validation/review gate is waived.",
+  "repository": "/home/vostrikov/projects/packages/swissknifeman",
+  "commit": "8f0b115e975803202c3df5068808be6ebc72f56f",
+  "runtime": "/tmp/p072-task-runtime",
+  "review_packet_sha256": "6dbb9d5957b4b38efb26f36993a8afb9deb53352ba35ff2049bbb6a621a6785e"
+}

@@ -1,0 +1,2 @@
+{"action": "review-ready", "manifest": "/home/vostrikov/projects/packages/corex/plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.2/owner-review/packet-b56dcced9ee99c604fd6bd60/review-route.json", "packet": "/home/vostrikov/projects/packages/corex/plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.2/owner-review/packet-b56dcced9ee99c604fd6bd60/packet.md", "candidate_sha256": "a526b9bbedc05e6df24d367bb22969c633af64006842b40ab0b1adfaa60e98b3", "completed_rounds": 1, "packet_bytes": 45426, "metrics": {"operation": "review-packet", "wall_ms": 524, "payload_bytes": 488}}
+ 
