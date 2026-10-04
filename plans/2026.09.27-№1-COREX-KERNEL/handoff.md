@@ -1,32 +1,32 @@
-# HANDOFF — 2026-10-04 — after P07
+# HANDOFF — 2026-10-04 — after P07.1
 
-**Next:** waiting: restore GitHub Actions capacity and obtain P06 hosted-CI GREEN before P07's D94 prerequisite can be met.
+**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P07.2
 
 | Parameter | Meaning |
 |:--|:--|
-| Batch | n/a |
+| Batch | solo |
 | Model | implementation |
-| Thinking | low |
-| Context | waiting-owner |
-| Суть | P06 закрыта с owner-approved deviations (D105); P07 remains gated by its separate GREEN hosted-CI prerequisite. |
+| Thinking | high |
+| Context | cold-start-root: owner-requested-new-session |
+| The bottom line | P07.2 удаляет остаток stancl после принятого движка P07.1; отдельная сессия и high по D97. |
+| Command | task:plan-run 2026.09.27-№1-COREX-KERNEL P07.2 |
 
 ```session-continuity-decision/v1
-{"evidence": ["batch:6c53c4206610981206cf9c23184718411e392ab54384ef8c5bf96350099780e3", "loaded-inputs:reusable", "cold-start-cost:0"], "outcome": "waiting-owner", "reason": "owner-wait", "runnable": false, "schema_version": "session-continuity-decision/v1"}
+{"evidence": ["batch:a0791babef35a8fec7c909a1b745fccc46997edfae4becb3d5185a1d2319f8d8", "loaded-inputs:reusable", "cold-start-cost:0", "checkpoint:artifacts/P07.1-execution/completion.md"], "outcome": "cold-start-root", "reason": "owner-requested-new-session", "runnable": true, "schema_version": "session-continuity-decision/v1"}
 ```
 
 **Native Codex command:**
 
-```bash
-# NOT BEFORE: GitHub Actions capacity is restored and a green CI run satisfies D73/D94
-task:plan-close 2026.09.27-№1-COREX-KERNEL P06
+```text
+$ task:plan-run 2026.09.27-№1-COREX-KERNEL P07.2
 ```
 
-**Done:** Owner-directed local carrier/admission repair complete. D104 captures the owner's exact no-repeat-audit instruction, selects a fingerprint-bound waiver and preserves historical audit-attention event 222. Authored design changes only plan.md waiver selector D89→D104; new candidate 6c53c4206610981206cf9c23184718411e392ab54384ef8c5bf96350099780e3. Task P07.1 bundle materialized and fresh. Broad “33 stale bundles” admission inventory corrected: closed snapshots remain historical; P07.2–P07.6 are deferred until predecessor completion inputs exist. Existing six proofs/143 author checks and technical reviews remain historical evidence; they were not independently rerun in this carrier repair. No new audit/reviewer/model/subagent or product execution.
+**Done:** P07.1 closed GREEN in its existing run; product anchor 1f42e01d. Dependency analyzer RED repaired through manifest/test metadata only; lock content-hash reconciled (one line); tenancy 588+6 skipped, scope/resident PG 8, root hermetic 1124+17 and root PG 242 passed. Scoped lint, all 22 analyse configurations and affected gates GREEN. Original self-check/BC/mutation evidence reused; no new audit, review or subagent.
 
-**Remaining:** P06 is `Done with deviations` under D105. Restore Actions capacity and obtain hosted CI GREEN before P07 can satisfy D94; P07.1–P07.6 remain Not started. The repeated whole-plan design audit is explicitly waived by owner D104 for this finished fingerprint; this is owner admission, not a new audit-green verdict.
+**Remaining:** P07 stays In progress (1/6); P07.2–P07.6 remain Not started. Only P07.2 is the next runnable successor. No phase closure or P07.2 execution in this workset.
 
-**Sources of truth:** `phases/P06/P06.closed.md`, `decisions/D105-p06-hosted-ci-deferral.md`, `artifacts/P06-phase-close/hosted-ci-deferral.md`; decisions/D104-owner-no-repeat-design-audit.md; artifacts/P07-formal-design-audit-repair/owner-direction.md, owner-waiver.json, finish.json, completion.json, report.md, receipt.json. P07 code contracts remain D94–D103, research/P07-design.md and artifacts/P07-design/examples.md.
+**Sources of truth:** phases/P07/P07.1.state.md; journal.jsonl (run 88a6e4f216e6b9fe3bd7a6e4e9bef0de3cbff6b00c7ef07f11ef298015cda536); artifacts/P07.1-execution/completion.md; artifacts/P07.1-execution/validation-summary.md; artifacts/P07.1-execution/final-verification/verification.json; decisions/D95-p07-tenancy-engine.md; decisions/D97-p07-routing-and-review.md; decisions/D106-p07-audit-waiver-refresh-ci-ignored.md; bundles/P07.2.json.
 
-**Open risks:** Full PostgreSQL/provider/Redis/Memcached/resident integration remains product acceptance. No content-design changes or additional audit are performed here. Exact real Roave constructor approval rows remain P07.1 execution deliverables. Task has updated its explicit --reviewer command surface; no new review is invoked.
+**Open risks:** Root lint remains RED only on 15 unrelated plan-artifact files byte-identical to 57369e08, explicitly left unchanged by owner. Six Redis tests skipped as baseline because ext-redis is unavailable. Remaining stancl models/provisioning/vendor hooks belong to P07.2; G2 baseline 19 persists until P07.3.
 
-**Workarounds/Deferred/Open questions:** Owner explicitly said “аудит уже был, больше не надо. доделай свою задачу!!!”; no further audit is scheduled. G2 remains 19 through P07.1 (23 service findings/25 total), full baseline {} only P07.3. Product/tests/scripts/manifests/baselines/dossier/examples/history and unrelated dirty changes are preserved. No commits, dependency updates, Docker/migrations or project DB access.
+**Workarounds/Deferred/Open questions:** PostgreSQL port override 5432; package dependency resolution ignores ext-redis only. Root/access manifests restored after staging; authorized tenancy dependency declarations retained. Stale local Testbench generated caches refreshed before GREEN analyse. Hosted CI ignored for this item by owner (D106). No new review/audit is authorized. Unrelated CLAUDE.md and local skill/agent files preserved.

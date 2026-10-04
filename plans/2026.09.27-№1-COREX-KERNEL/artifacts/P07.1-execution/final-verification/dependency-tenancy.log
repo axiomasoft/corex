@@ -1,0 +1,24 @@
+Using config /home/vostrikov/projects/packages/corex/packages/tenancy/composer-dependency-analyser.php
+
+Found 1 unknown class!
+(unable to autoload those, so we cannot check them)
+
+  • CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver
+    in packages/tenancy/tests/Feature/DomainTrustTest.php:265
+
+
+
+Found 3 shadow dependencies!
+(those are used, but not listed as dependency in composer.json)
+
+  • ext-ctype
+      e.g. ctype_digit in packages/tenancy/src/Runtime/Internal/CentralTemplateConnectionResolver.php:79
+
+  • ext-session
+      e.g. SessionHandlerInterface in packages/tenancy/src/Runtime/Internal/Bootstrappers/SessionConnectionBootstrapper.php:153
+
+  • symfony/http-foundation
+      e.g. Symfony\Component\HttpFoundation\Response in packages/tenancy/src/Laravel/Http/Middleware/ScopeSessionToTenant.php:28
+
+
+(scanned 323 files in 0.201 s)

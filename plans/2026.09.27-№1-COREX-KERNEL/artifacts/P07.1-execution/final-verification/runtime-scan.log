@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "git",
+    "grep",
+    "-n",
+    "-E",
+    "Stancl\\\\Tenancy\\\\(Tenancy|Bootstrappers|Middleware|Listeners|Resolvers)|tenancy\\(\\)",
+    "--",
+    "packages/tenancy/src"
+  ],
+  "exit_code": 1,
+  "stdout": "",
+  "stderr": "",
+  "carrier_status": "green: no matches"
+}

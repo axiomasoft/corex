@@ -1,0 +1,32 @@
+{
+  "source": "D97: separate session for P07.2; current owner workset ends at P07.1",
+  "estimate": {
+    "route_attested": true,
+    "capabilities_attested": true,
+    "capabilities_sufficient": true,
+    "context_attested": false,
+    "context_health": "unavailable",
+    "batch_receipt_valid": true,
+    "remaining_batch_digest": "a0791babef35a8fec7c909a1b745fccc46997edfae4becb3d5185a1d2319f8d8",
+    "loaded_inputs_reusable": true,
+    "cold_start_cost": 0,
+    "lifecycle": "owner-requested-new-session",
+    "isolated_review": false,
+    "reviewer_task": null,
+    "checkpoint": "artifacts/P07.1-execution/completion.md",
+    "external_pause": null,
+    "schema_version": "session-work-estimate/v1"
+  },
+  "decision": {
+    "outcome": "cold-start-root",
+    "reason": "owner-requested-new-session",
+    "evidence": [
+      "batch:a0791babef35a8fec7c909a1b745fccc46997edfae4becb3d5185a1d2319f8d8",
+      "loaded-inputs:reusable",
+      "cold-start-cost:0",
+      "checkpoint:artifacts/P07.1-execution/completion.md"
+    ],
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  }
+}

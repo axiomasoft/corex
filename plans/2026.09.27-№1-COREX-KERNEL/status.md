@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-10-04
-inputs_sha256: 60dde7c87f854197747375cd56fe327ed4768db1d70dbeefaa74bebba49596a3
+inputs_sha256: d471697fd79a6fe461113bc3b4dc54ff52f1db8ee2ea3d70d7c0a36bdadc5521
 generated_by: task plan-views status
 -->
 
@@ -30,7 +30,7 @@ generated_by: task plan-views status
 | P04 | Application API, Extension SPI и типизированные ошибки | 4/4 | 🟢 Done |
 | P05 | Typed config, композиция и порты | 4/4 | 🟢 Done |
 | P06 | Operations, tools, webhooks и wire | 4/5 | 🟠 Done with deviations |
-| P07 | Tenancy, access, независимость модулей | 0/6 | ⬜ Not started |
+| P07 | Tenancy, access, независимость модулей | 1/6 | 🟡 In progress |
 | P10 | Зелёный hosted CI на базе P04 | 4/4 | 🟢 Done |
 
 ## Phase P00
@@ -98,7 +98,7 @@ generated_by: task plan-views status
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P07.1 | Собственный движок tenancy и граница контекста | ⬜ Not started | — |
+| P07.1 | Собственный движок tenancy и граница контекста | 🟢 Done | 2026-10-04 |
 | P07.2 | Tenancy без stancl: данные, provisioning, manifests | ⬜ Not started | — |
 | P07.3 | Impersonation на портах с профилями и двойным аудитом | ⬜ Not started | — |
 | P07.4 | Access без AzGuard и мост access-azguard | ⬜ Not started | — |
@@ -379,6 +379,10 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-10-04 | gpt-6.1-sol/xhigh | plan-design · no-op · Owner repair complete: D104 explicit no-repeat-audit waiver admitted; first P07 bundle fresh, future/closed bundles correctly classified. P06 acceptance open; no P07 execution or audit-green. |
 | 2026-10-04 | owner/codex/GPT-6 | plan-close · closed-deviations · note abbreviated; full text: journal.jsonl:225 |
 | 2026-10-04 | claude-code | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | claude-code | plan-run · in-progress · — |
+| 2026-10-04 | codex/GPT-6 | plan-run · closed-green · P07.1 GREEN; product 1f42e01d. Completion/evidence: artifacts/P07.1-execution/{completion,validation-summary}.md. Owner-qualified unchanged foreign root lint; affected checks GREEN. No new review/audit/subagent; original run/route preserved. P07 open, Next P07.2. |
+| 2026-10-04 | codex/GPT-6 | plan-run · no-op · Bookkeeping: verified original-route pre-mutation and terminal-policy/delivery final boundary; evidence final-verification/write-site.json. No new attempt.
+write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates
 

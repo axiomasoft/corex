@@ -19,7 +19,6 @@ use CoreX\Tenancy\DomainTrust\Events\DomainTrustChanged;
 use CoreX\Tenancy\DomainTrust\Exceptions\DomainTrustDenied;
 use CoreX\Tenancy\DomainTrust\Exceptions\DomainTrustDisabled;
 use CoreX\Tenancy\DomainTrust\Internal\DomainTrustCoordinator;
-use CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
@@ -262,7 +261,9 @@ it('denies verification and rolls back trusted state when resolver-cache invalid
     $issued = $coordinator->issue(actor: $actor, accountId: $accountId, host: 'cache-failure.example.test');
     $verifier->token = $issued->token;
 
-    config(['tenancy.identification.resolvers.'.HostTenantResolver::class => [
+    // The vendor-owned model cache hook remains until P07.2. Its legacy config key
+    // is a string identifier; the deleted runtime resolver is never instantiated.
+    config(['tenancy.identification.resolvers.CoreX\\Tenancy\\Laravel\\Resolvers\\HostTenantResolver' => [
         'cache' => true,
         'cache_ttl' => 300,
         'cache_store' => null,

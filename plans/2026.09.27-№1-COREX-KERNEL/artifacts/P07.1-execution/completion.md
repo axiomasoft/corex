@@ -1,7 +1,7 @@
 # P07.1 — Completion Notes
 
 Item: собственный движок tenancy и граница контекста (D95, D98–D103). Route: `implementation/xhigh` (фактический xhigh, `route-run-receipt/v1` — run `88a6e4f2…`).
-Base commit: `artifacts/P07.1-execution/base-commit.txt` (`57369e08`). Candidate SHA: см. итоговый коммит item (строка в журнале `plan-close`/`finalize`).
+Base commit: `artifacts/P07.1-execution/base-commit.txt` (`57369e08`). Product candidate SHA: `1f42e01d10d21582746b31f89525f59e5ab024ff`. Финальное закрытие продолжает исходный run; исходники продукта после этого commit не менялись.
 
 ## Что сделано
 
@@ -64,12 +64,18 @@ review: self-check GREEN
   в Scope/Files P07.1; других строк нет, подстановок нет.
 - **R5/S3.** `HostResolverCacheInvalidator` лежит в `Laravel/Support` (AccountLifecycle — другой модуль); многострочные фабрики вынесены в `Laravel/TenancyRuntimeFactory`.
 - **Листенеры stancl `TenantSaved/TenantDeleted` не нужны:** `eloquent.saved/deleting` на `Account`/`Domain` срабатывают (проверено `HostResolutionTest` ж); временные подписки не добавлялись.
-- **`composer.lock` content-hash.** Root `extra` изменён → hash устарел; `composer.lock` закрыт deny-правилом владельца, поэтому не тронут — см. «Открытое».
+- **`composer.lock` content-hash.** При финальном закрытии разрешённая владельцем точечная правка выполнена: `Composer\Package\Locker::getContentHash` от pristine root manifest → `206ead12b1f28c451a3c070cc405a6ea`. Staging-репозиторий не входит в hash; diff lock — одна строка, validate GREEN.
 - **`lint:check` корня красный только на PHP-артефактах планов P06/P07 (foreign baseline, уже красные на `57369e08`);** собственные файлы чисты (`pint --test` пакетов/ядра/скриптов — passed).
 
-## Открытое (владельцу)
+## Финальное закрытие (2026-10-04)
 
-- Обновить `content-hash` в `composer.lock` после правки root `composer.json` (одна строка; `composer update --lock` без staging-репозитория не резолвится).
+- `dependency-analyser.sh packages/tenancy` после staging воспроизвёл три shadow dependencies и неизвестный удалённый resolver в тесте. В manifest явно добавлены `ext-ctype`, `ext-session`, `symfony/http-foundation`; legacy config key vendor-owned model hook в `DomainTrustTest` записан строкой до P07.2 (без импорта/инстанцирования удалённого runtime-класса). Поведение теста сохранено; exclusions/ceilings не расширены. Повтор анализатора GREEN, manifests после staging восстановлены.
+- `composer analyse` первоначально воспроизвёл старый generated Testbench manifest со stancl provider. Пересозданы только локальные `vendor/orchestra/testbench-core/laravel/bootstrap/cache/{packages,services,corex_modules}.php`; повтор всех 22 конфигураций GREEN, ceilings OK. Product-код не менялся.
+- Финальные проверки и точные результаты: `validation-summary.md`, `final-verification/verification.json`, логи в `final-verification/`. Все 15 красных файлов root lint побайтно идентичны `57369e08`; scoped lint GREEN. Владелец разрешил оставить foreign baseline, отдельного форматирующего commit нет.
+- Закрытие P07.1: `closed-green` с `terminal-evidence/v1`, исходные run/session/attempt и завершённый solo batch. Новых аудитов, ревью и субагентов нет; существующий self-check выше переиспользован. P07.2–P07.6 не исполнялись, P07 не закрывается. Semantic Next — P07.2, проверяется terminal receipt.
+
+## Открытое (следующие items)
+
 - G2 baseline остаётся 19 (D99); полный `{}` — P07.3. P07.2 удаляет остаток stancl (модели, provisioning, пакеты, lock, CI).
 
 ## Evidence

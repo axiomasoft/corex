@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a008bfc06a5cf0f7cc478b67bd7ab6e4",
+    "content-hash": "206ead12b1f28c451a3c070cc405a6ea",
     "packages": [
         {
             "name": "axiomasoft/corex",
