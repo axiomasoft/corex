@@ -1,13 +1,11 @@
-diff --git a/packages/core/src/Audit/Internal/AuditObserver.php b/packages/core/src/Audit/Internal/AuditObserver.php
-index 3da3fc4..f3c5060 100644
 --- a/packages/core/src/Audit/Internal/AuditObserver.php
 +++ b/packages/core/src/Audit/Internal/AuditObserver.php
-@@ -72,7 +72,7 @@ final class AuditObserver
+@@ -79,7 +79,7 @@
          // HasAuditLog::boot: a boot-time skip never re-enables when the
          // config flips, and the capability path (::observe) never saw the flag
          // at all — a disabled audit still wrote through byCapability(Auditable).
--        if (! app(CoreOptions::class)->auditEnabled) {
-+        if (! app(CoreOptions::class)->auditEnabled && false) {
+-        if (! $this->options->auditEnabled) {
++        if (! $this->options->auditEnabled && false) {
              return;
          }
  

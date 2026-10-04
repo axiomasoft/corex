@@ -1,0 +1,10 @@
+| Binding | Lifetime before → after | Package | Reason |
+|:--|:--|:--|:--|
+| `SystemRoleMutationScope` | — → scoped | access | new; replaces static mutable flag |
+| `CurrentActor`, `AuditObserver` | — → scoped | core | replace helper/static reads of the actor |
+| `AuditLogger` | singleton → scoped | core | depends on scoped `CurrentActor` (L2) |
+| `DigestWakeupHandler` | singleton → scoped | notifications | holds connection/scoped deps |
+| `BulkOperationStore`, `BulkOperations`, `BulkRetention`, `BulkWorker`, `TransferBulkExecutor`, `BudgetAdmission`, `BudgetRetention`, `OperationBudget`, `ApiSchemaRegistrar` | singleton → scoped | operations | capture a `Connection` (L3) / scoped dependency (L2) |
+| `WebhookSubscriptionStore`, `WebhookDeliveryStore`, `WebhookDeliveryWorker`, `WebhookFanout`, `WebhookManagement`, `WebhookReplay`, `WebhookRetention` | singleton → scoped | webhooks | capture the tenant `Connection` (L3) |
+| `OidcLoginController` | singleton → scoped | tenancy | depends on scoped `ImpersonationService` (L2) |
+| `RootWakeupReconciler` | singleton → scoped | tenancy | depends on scoped `DueWakeupSweeper` (L2) |

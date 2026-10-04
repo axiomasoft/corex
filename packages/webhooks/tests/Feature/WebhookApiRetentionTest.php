@@ -314,7 +314,7 @@ final class WebhookApiRetentionTest extends TestCase
             'topic_version' => 1,
             'major' => 'v1',
             'endpoint_snapshot' => 'https://hooks.example/receiver',
-            'scope' => JsonCanonical::encode(['account_id' => 'account-a', 'workspace_id' => null]),
+            'scope' => JsonCanonical::encode(['account' => 'account-a', 'workspace' => null]),
             'body' => $body,
             'body_hash' => hash('sha256', $body),
             'status' => $status,

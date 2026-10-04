@@ -13,6 +13,7 @@ use CoreX\CustomFields\Tests\Support\PgTestSupport;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Internal\CallableDataScopeAuthorizer;
+use CoreX\Time\Laravel\SystemClock;
 use Illuminate\Support\Facades\DB;
 
 uses(PgTestCase::class)->group('pg');
@@ -35,6 +36,7 @@ function schemaWorker(?DataScopeAuthorizer $authorizer = null): SchemaOperationW
         connection: DB::connection(),
         tables: PgTestSupport::tables(),
         authorizer: $authorizer ?? jsonbAuthorizer(),
+        clock: new SystemClock,
     );
 }
 

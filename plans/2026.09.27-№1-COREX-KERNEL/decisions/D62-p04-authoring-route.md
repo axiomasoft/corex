@@ -16,7 +16,7 @@ superseded_by: null
 `rollout-2026-09-29T16-21-47-01a0ed54-1b4b-7821-9974-44912db4e27d.jsonl`.
 Host rollout — provenance, не переносимый bundle input. RAG:—.
 
-## Решение
+## Solution
 
 Разрешён дизайн P04 в текущем root на codex/gpt-6-sol/high, вместо планового
 claude-opus-5-5/high и command default frontier/high. Это scoped authoring override,
@@ -30,7 +30,7 @@ CLI `design-context` отклонил нестандартную строку `$
 из provider turn_context, а не выдан за успешно attested execution admission.
 Дефект parser не меняет продуктовые контракты; Task package не правится.
 
-## Почему
+## Why
 
 Владелец явно разрешил Sol после выбора команды; provenance текущего дизайна должен соответствовать фактическому author, сохраняя scope и independent audit boundary.
 

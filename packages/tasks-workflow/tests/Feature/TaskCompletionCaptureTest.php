@@ -13,6 +13,7 @@ use CoreX\Tasks\Task\Data\TaskCompletionCandidate;
 use CoreX\Tasks\Task\Data\TaskDraft;
 use CoreX\Tasks\Task\Enums\TaskStatus;
 use CoreX\Tasks\Task\Internal\Models\Task;
+use CoreX\TasksWorkflow\Internal\TasksWorkflowOptions;
 use CoreX\Workflow\Contracts\WorkflowBinding;
 use CoreX\Workflow\Data\CaptureResult;
 use CoreX\Workflow\Data\TriggerRequest;
@@ -31,6 +32,8 @@ beforeEach(function (): void {
         actor: $this->actor,
     ))->id;
     config()->set('corex-tasks-workflow.completion_capture.enabled', true);
+    app()->forgetInstance(TasksWorkflowOptions::class);
+    app()->forgetScopedInstances();
 });
 
 it('captures synchronously with a DTO and deduplicates the receipt on repeated completion', function (): void {
@@ -80,6 +83,7 @@ it('rolls the task and already recorded receipt back when a later synchronous co
 it('preserves normal saves when capture is disabled or the workflow binding is missing', function (bool $disabled): void {
     if ($disabled) {
         config()->set('corex-tasks-workflow.completion_capture.enabled', false);
+        app()->forgetInstance(TasksWorkflowOptions::class);
         $binding = Mockery::mock(WorkflowBinding::class);
         $binding->shouldNotReceive('capture');
         app()->instance(WorkflowBinding::class, $binding);

@@ -67,10 +67,8 @@ final class CompiledModuleRegistry implements ModuleRegistry
         private readonly bool $failIfMissing = false,
     ) {}
 
-    public static function defaultCachePath(): string
-    {
-        return base_path('bootstrap/cache/corex_modules.php');
-    }
+    /** Compiled registry location, relative to the application base path. */
+    public const string CACHE_PATH = 'bootstrap/cache/corex_modules.php';
 
     public function all(): array
     {

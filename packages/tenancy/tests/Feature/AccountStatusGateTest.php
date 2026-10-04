@@ -7,6 +7,7 @@ use CoreX\Tenancy\DomainTrust\Internal\Models\Domain;
 use CoreX\Tenancy\Laravel\Http\Middleware\AccountStatusGate;
 use CoreX\Tenancy\Laravel\Http\Middleware\ResolveTenantFromHost;
 use CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
@@ -42,6 +43,7 @@ beforeEach(function (): void {
             'cache_store' => null,
         ],
     ]);
+    app()->forgetInstance(TenancyOptions::class);
 });
 
 afterEach(function (): void {

@@ -1,0 +1,58 @@
+> pest --exclude-group=pg
+
+   PASS  Tests\Feature\CompanyContactTest
+  ✓ it creates a company and a contact linked to it                      0.44s
+
+   PASS  Tests\Feature\ParityTest
+  ✓ it rejects invalid UTF-8 names rather than silently dropping their…  0.23s
+  ✓ it rejects nameless contacts without usable channels                 0.22s
+  ✓ it creates approved records and a typed primary association          0.37s
+  ✓ it normalizes Unicode whitespace before testing empty name componen… 0.26s
+
+   PASS  Tests\Feature\ActivityTimelineTest
+  ✓ it logs a polymorphic activity resolved through the morph alias      0.30s
+  ✓ it attaches activities to different subject types                    0.37s
+
+   PASS  Tests\Feature\SalesStorageTest
+  ✓ it stores activity kinds and canonical target associations           0.26s
+  ✓ it rejects creation veto without persisted rows or success events    0.21s
+  ✓ it rolls back the entire conversion when the final lead update is v… 0.33s
+  ✓ it does not represent legacy statuses or note and task as activitie… 0.19s
+  ✓ it refuses conversion without explicit human identity and preserves… 0.23s
+  ✓ it persists canonical lead fields with trusted provenance            0.23s
+
+   PASS  Tests\Feature\ApiOperationsTest
+  ✓ it normalizes CRM identifiers for the configured ID strategy         0.19s
+  ✓ it declares and dispatches company, contact and association operati… 0.50s
+
+   PASS  Tests\Feature\RegistryFieldCastsTest
+  ✓ it compiles a consumer money field using the intl cast registration  0.19s
+
+   PASS  Tests\Feature\ContextSecurityTest
+  ✓ it overwrites forged creation provenance and prevents changing it a… 0.26s
+  ✓ it rejects a late observer changing association endpoints            0.43s
+  ✓ it fails closed for disabled CRM and tenant context mismatch         0.20s
+  ✓ it rejects a late observer changing the workspace and guards quiet…  0.34s
+  ✓ it requires account-level capability when no workspace exists        0.20s
+  ✓ it guards direct association writes against cross-scope and foreign… 0.33s
+  ✓ it rejects malformed actor identities and foreign profile IDs        0.22s
+  ✓ it rechecks trusted provenance after late creating observers         0.26s
+  ✓ it treats observer veto as failed mutation without dispatching succ… 0.44s
+  ✓ it rejects direct foreign workspace writes and foreign connection q… 0.21s
+
+   PASS  Tests\Feature\LeadConversionTest
+  ✓ it converts a lead without company or deal                           0.39s
+  ✓ it converts a lead into contact, company and deal                    0.66s
+  ✓ it returns the same conversion on retry even when passed a stale le… 0.61s
+
+   PASS  Tests\Feature\DealFlowTest
+  ✓ it moves a deal to a won stage and marks it won                      0.36s
+  ✓ it refuses to create a deal in a pipeline without stages             0.27s
+  ✓ it rolls back a vetoed stage update without a success event          0.33s
+  ✓ it creates a deal at the first stage with money                      0.31s
+  ✓ it clears optional amount without clearing mandatory currency        0.30s
+  ✓ it rejects a stage from another pipeline without changing the deal…  0.32s
+
+  Tests:    35 passed (136 assertions)
+  Duration: 11.06s
+  Random Order Seed: 1790878925

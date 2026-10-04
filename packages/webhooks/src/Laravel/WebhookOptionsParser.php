@@ -26,6 +26,8 @@ final class WebhookOptionsParser
         $bodyRetention = self::positiveInt($violations, 'body_retention_seconds', $config['body_retention_seconds'] ?? 604_800);
         $historyRetention = self::positiveInt($violations, 'history_retention_seconds', $config['history_retention_seconds'] ?? 2_592_000);
         $replayHorizon = self::positiveInt($violations, 'replay_horizon_seconds', $config['replay_horizon_seconds'] ?? 604_800);
+        $maxAttempts = self::positiveInt($violations, 'max_attempts', $config['max_attempts'] ?? 12);
+        $retryHorizon = self::positiveInt($violations, 'retry_horizon_seconds', $config['retry_horizon_seconds'] ?? 259_200);
         $deniedCidrs = self::stringList($violations, 'organization_denied_cidrs', $config['organization_denied_cidrs'] ?? []);
         $projectors = self::projectors($violations, $config['projectors'] ?? []);
         $topics = self::topics($violations, $config['topics'] ?? []);
@@ -45,6 +47,14 @@ final class WebhookOptionsParser
 
         if ($replayHorizon !== $bodyRetention) {
             $violations->add('replay_horizon_seconds', 'must equal body_retention_seconds');
+        }
+
+        if ($maxAttempts > 20) {
+            $violations->add('max_attempts', 'must be between 1 and 20');
+        }
+
+        if ($retryHorizon < 3600 || $retryHorizon > 604_800 || $retryHorizon > $replayHorizon) {
+            $violations->add('retry_horizon_seconds', 'must be between 3600 and 604800 and not exceed replay_horizon_seconds');
         }
 
         foreach ($topics as $index => $topic) {
@@ -69,6 +79,8 @@ final class WebhookOptionsParser
             organizationDeniedCidrs: $deniedCidrs,
             topics: $topics,
             projectors: $projectors,
+            maxAttempts: $maxAttempts,
+            retryHorizonSeconds: $retryHorizon,
         );
     }
 

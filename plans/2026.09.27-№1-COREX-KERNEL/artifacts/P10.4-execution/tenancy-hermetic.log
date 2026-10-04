@@ -1,0 +1,101 @@
+> pest '--exclude-group=pg'
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\TenancyOptionsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit builds options from a valid tenancy snapshot[39m
+  [32;1m✓[39;22m[90m [39m[90mit accumulates oidc and wakeup violations in one exception[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects root_registry wakeup without root connection[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects oidc enabled without client secret[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\MembershipEventTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed and noncanonical UUIDs with ('11111111-1111-0111-8111-111111111111')[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed and noncanonical UUIDs with ('123')[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed and noncanonical UUIDs with ('AAAAAAAA-AAAA-4AAA-8AAA-AAAAAAAAAAAA')[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects malformed and noncanonical UUIDs with ('11111111-1111-4111-7111-111111111111')[39m
+  [32;1m✓[39;22m[90m [39m[90mit roundtrips the proposed ordered RFC3986 scalar query fixture[39m
+  [32;1m✓[39;22m[90m [39m[90mit decodes legitimate JSON escaping arrays booleans and distinct object keys[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects noncanonical fractional exponential and overflowing counters with (' 1')[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects noncanonical fractional exponential and overflowing counters with ('18446744073709551616')[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects noncanonical fractional exponential and overflowing counters with ('Infinity')[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects noncanonical fractional exponential and overflowing counters with ('')[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects noncanonical fractional exponential and overflowing counters with ('1e2')[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects noncanonical fractional exponential and overflowing counters with ('01')[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects noncanonical fractional exponential and overflowing counters with ('NaN')[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects noncanonical fractional exponential and overflowing counters with ('1.0')[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects noncanonical fractional exponential and overflowing counters with ('+1')[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects noncanonical fractional exponential and overflowing counters with ('-1')[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects tampered and malformed signatures with zero key retrieva[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects duplicate JSON escaped keys nested keys malformed objects and excessive size with ('{"a":1,}')[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects duplicate JSON escaped keys nested keys malformed objects and excessive size with ('{"a":[{"x":1,"x":2}]}')[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects duplicate JSON escaped keys nested keys malformed objects and excessive size with ('{"a":1,"\u0061":2}')[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects duplicate JSON escaped keys nested keys malformed objects and excessive size with ('[]')[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects duplicate JSON escaped keys nested keys malformed objects and excessive size with ('{"a":1} {}')[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects duplicate JSON escaped keys nested keys malformed objects and excessive size with ('{"cnf":{"x":1,"x":2}}')[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects duplicate JSON escaped keys nested keys malformed objects and excessive size with ('{"a":1,"a":2}')[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects duplicate JSON escaped keys nested keys malformed objects and excessive size with ('{"a":"xxxxxxxxxxxxxxxxxxxxxxx…xxxx"}')[39m
+  [32;1m✓[39;22m[90m [39m[90mit keeps exact unsigned64 decimal values without lossy casts with ('9007199254740991')[39m
+  [32;1m✓[39;22m[90m [39m[90mit keeps exact unsigned64 decimal values without lossy casts with ('10')[39m
+  [32;1m✓[39;22m[90m [39m[90mit keeps exact unsigned64 decimal values without lossy casts with ('0')[39m
+  [32;1m✓[39;22m[90m [39m[90mit keeps exact unsigned64 decimal values without lossy casts with ('18446744073709551615')[39m
+  [32;1m✓[39;22m[90m [39m[90mit keeps exact unsigned64 decimal values without lossy casts with ('9223372036854775807')[39m
+  [32;1m✓[39;22m[90m [39m[90mit keeps exact unsigned64 decimal values without lossy casts with ('9007199254740992')[39m
+  [32;1m✓[39;22m[90m [39m[90mit keeps exact unsigned64 decimal values without lossy casts with ('9223372036854775808')[39m
+  [32;1m✓[39;22m[90m [39m[90mit keeps exact unsigned64 decimal values without lossy casts with ('9')[39m
+  [32;1m✓[39;22m[90m [39m[90mit keeps exact unsigned64 decimal values without lossy casts with ('9007199254740993')[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies unsigned expired wrong context and unnegotiated trigger payloads with ('expired')[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies unsigned expired wrong context and unnegotiated trigger payloads with ('kind')[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies unsigned expired wrong context and unnegotiated trigger payloads with ('product')[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies unsigned expired wrong context and unnegotiated trigger payloads with ('no-actor')[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies unsigned expired wrong context and unnegotiated trigger payloads with ('issuer')[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies unsigned expired wrong context and unnegotiated trigger payloads with ('token-type')[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies unsigned expired wrong context and unnegotiated trigger payloads with ('audience')[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies unsigned expired wrong context and unnegotiated trigger payloads with ('reason')[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies unsigned expired wrong context and unnegotiated trigger payloads with ('none')[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies unsigned expired wrong context and unnegotiated trigger payloads with ('x5u')[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies unsigned expired wrong context and unnegotiated trigger payloads with ('pii')[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies unsigned expired wrong context and unnegotiated trigger payloads with ('key-purpose')[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies unsigned expired wrong context and unnegotiated trigger payloads with ('long-ttl')[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies unsigned expired wrong context and unnegotiated trigger payloads with ('profile')[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies unsigned expired wrong context and unnegotiated trigger payloads with ('unknown-key')[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies unsigned expired wrong context and unnegotiated trigger payloads with ('actor')[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies unsigned expired wrong context and unnegotiated trigger payloads with ('uuid')[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies unsigned expired wrong context and unnegotiated trigger payloads with ('account')[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies unsigned expired wrong context and unnegotiated trigger payloads with ('iat-type')[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies unsigned expired wrong context and unnegotiated trigger payloads with ('jku')[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies unsigned expired wrong context and unnegotiated trigger payloads with ('critical')[39m
+  [32;1m✓[39;22m[90m [39m[90mit denies unsigned expired wrong context and unnegotiated trigger payloads with ('future')[39m
+  [32;1m✓[39;22m[90m [39m[90mit authenticates trigger only and permits fresh re-enveloping of on[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects duplicate scalar arrays conflicting query and noncanonical encoding with ('identity_id[]=x&account_id=x&…t_id=x')[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects duplicate scalar arrays conflicting query and noncanonical encoding with ('identity_id%5B%5D=x&account_i…t_id=x')[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects duplicate scalar arrays conflicting query and noncanonical encoding with ('identity_id=x&account_id=x&pr…nown=y')[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects duplicate scalar arrays conflicting query and noncanonical encoding with ('identity_id=x&identity_id=y&a…t_id=x')[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects duplicate scalar arrays conflicting query and noncanonical encoding with ('identity_id=x&account_id=x&pr…t_id=x') #2[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects duplicate scalar arrays conflicting query and noncanonical encoding with ('identity_id=x&account_id=x&pr…t_id=x') #3[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects duplicate scalar arrays conflicting query and noncanonical encoding with ('identity_id=x&account_id=x&pr…=extra')[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects duplicate scalar arrays conflicting query and noncanonical encoding with ('identity_id=x&account_id=x&pr…t_id=x') #1[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\SchemaCatalogueSerializerTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit encodes equivalent catalogue maps into identical canonical bytes[39m[90m [39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Tenancy\Tests\PHPStan\StanclImportBoundaryRuleTest[39m
+  [32;1m✓[39;22m[90m [39m[90mstancl import inside tenancy is silent[39m[90m                              [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstancl import outside tenancy is reported[39m[90m                           [39m [90m0.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\NoCrossDbFkTest[39m
+  [32;1m✓[39;22m[90m [39m[90mthe FK-target detector reads both Laravel forms and flags dynamic t[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mevery axiomasoft/corex-tenancy migration is classified root or tenant by its directory[39m
+  [32;1m✓[39;22m[90m [39m[90mthe central and tenant runners load disjoint migration paths[39m
+  [32;1m✓[39;22m[90m [39m[90mroot-directory migrations create only root_ tables and tenant-directory migrations create none[39m
+  [32;1m✓[39;22m[90m [39m[90mroot-layer migrations declare foreign keys only to root_ tables[39m
+  [32;1m✓[39;22m[90m [39m[90mtenant-layer migrations declare no foreign key to a root_ table[39m[90m     [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mliteral model table resolution retains root detection and rejects unknown expressions[39m
+  [32;1m✓[39;22m[90m [39m[90mthe migration inventory is not empty in either layer[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\StanclIsolationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mno package outside axiomasoft/corex-tenancy references Stancl in co[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe stancl detector actually detects (positive control on axiomasof[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe stancl detector ignores comments and docblocks[39m
+
+  [90mTests:[39m    [32;1m83 passed[39;22m[90m (116 assertions)[39m
+  [90mDuration:[39m [39m1.96s[39m
+  [90mRandom Order Seed:[39m [39m1790889594[39m
+

@@ -19,8 +19,7 @@ expect($exitCode)->toBe(0, "package-graph-gate exit {$exitCode}:\n".implode("\n"
 
 ```bash
 #!/usr/bin/env bash
-# Reproduces the hosted CI recipe in a throwaway worktree. Never run the recipe in the main tree:
-# `composer update` rewrites composer.lock and provider staging rewrites three composer.json files.
+# Reproduces the committed CI candidate in a throwaway worktree.
 set -euo pipefail
 root="$(git rev-parse --show-toplevel)"
 copy="$(mktemp -d)/corex-ci"
@@ -28,23 +27,31 @@ git -C "$root" worktree add --detach "$copy" HEAD >/dev/null
 trap 'git -C "$root" worktree remove --force "$copy"' EXIT
 cd "$copy"
 if [[ "${LARAVEL_VERSION:-}" == 12.* ]]; then
-    # D42: Pest ^5.2 does not resolve with Laravel 12; the hosted Laravel 12 lane applies the same override.
     scripts/php84 composer require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
 fi
 python3 scripts/distribution/stage-stancl-providers.py >/dev/null
-scripts/php84 composer update --prefer-dist --no-interaction --no-progress ${LARAVEL_VERSION:+--with "illuminate/contracts:$LARAVEL_VERSION"}
-scripts/php84 composer test:hermetic
-scripts/php84 composer test:arch
-scripts/php84 composer php-api
-scripts/php84 composer deps:analyse
-scripts/php84 composer analyse:tests-lint
+update_args=(update --prefer-dist --no-interaction --no-progress)
+if [[ -n "${LARAVEL_VERSION:-}" ]]; then
+    update_args+=(--with "illuminate/contracts:$LARAVEL_VERSION")
+fi
+scripts/php84 composer "${update_args[@]}"
+scripts/php84 composer --working-dir=packages/access update --prefer-dist --no-interaction --no-progress
+if (( $# )); then
+    "$@"
+else
+    scripts/php84 composer test:hermetic
+    scripts/php84 composer test:arch
+    scripts/php84 composer php-api
+    scripts/php84 composer deps:analyse
+    scripts/php84 composer analyse:tests-lint
+fi
 ```
 
 Вызов: `bash scripts/ci-local.sh` (Laravel 13) и `LARAVEL_VERSION='12.*' bash scripts/ci-local.sh`. До P10 — exit ≠ 0
 на первом же гейте; после P10 — exit 0. `composer.json` (оба скрипта создаёт P10.1): `"ci:local": "bash scripts/ci-local.sh"`,
-`"test:hermetic": "PGSQL_PORT=1 bash scripts/run-root-tests.sh @additional_args"`. До P10.4 `test:hermetic` ожидаемо красный
+`"test:hermetic": "PGSQL_HOST=127.0.0.1 PGSQL_PORT=1 PGSQL_DATABASE=corex_test bash scripts/run-root-tests.sh @additional_args"`. До P10.4 `test:hermetic` ожидаемо красный
 (H1, H2, H5); зелёным его делает P10.4. Переопределение Pest меняет `composer.json` только в копии.
-Проверяемое копией состояние — commit `HEAD`: незакоммиченные правки в неё не попадают.
+Проверяемое копией состояние — commit HEAD: незакоммиченные правки в неё не попадают; кандидат коммитится перед прогоном. P10.2: `LARAVEL_VERSION=12.* bash scripts/ci-local.sh scripts/php84 php scripts/php-api.php --strict --check` и то же с 13.*. Недоступность PG задаётся только этому процессу через 127.0.0.1:1, общая БД не останавливается (D78).
 
 Заглушка `rg` для проверки `bc-check` без ripgrep (раннер CI его не имеет; код 127 = «команда не найдена»):
 
@@ -89,31 +96,30 @@ namespace Fixture\Pkg\Data;
 final class Own extends \Vendor\Lib\Base { public function own(): int { return 1; } }
 ```
 
-Эталон записи символа (схема остаётся `php-api/1`):
+Проекция значимых полей `symbols["Fixture\\Pkg\\Data\\Own"]` (схема `php-api/1`; остальные поля сигнатур сохраняются):
 
 ```json
 {
-    "name": "Fixture\\Pkg\\Data\\Own",
     "kind": "class",
-    "extends": "Vendor\\Lib\\Base",
+    "extends": ["Vendor\\Lib\\Base"],
     "implements": [],
     "uses": [],
-    "methods": { "own": { "returnType": "int", "parameters": [] } }
+    "methods": { "own": { "return": "int", "parameters": [] } }
 }
 ```
 
 Утверждения теста: (a) в `methods` нет `morph`; (b) манифест при `external-v1` и `external-v2` байт-идентичен;
 (c) метод, переопределённый в `Own`, присутствует с собственной сигнатурой; (d) у символа записаны `extends`,
-`implements`, `uses` как FQCN.
+`implements`, `uses` отдельными списками прямых FQCN. Fixture того же пакета содержит родителя/trait с methods/properties/constants и класс с promoted property: все внутрипакетные объявления сохраняются; внешний trait не разворачивается. Enum fixture сохраняет enum_cases. AST preimage и проекция after сравнивают собственные объявления с сигнатурами, без vendor-членов (D78).
 
 ## 5. Протокол готовности worker схем
 
 ```text
 supervisor                                   worker (ToolSchemaWorker.php)
-proc_open(php -d memory_limit=64M worker)    require autoload; готовит валидатор
+proc_open(php -d memory_limit=64M worker)    require autoload; создаёт валидатор
 ждёт строку "ready\n" ≤ WORKER_STARTUP_MS  ← echo "ready\n"; fflush
   нет строки → terminate, schema_unavailable
-fwrite(request JSON); fclose(stdin)        → читает stdin, валидирует
+старт monotonic deadline; write request    → читает stdin, валидирует
 ждёт ответ ≤ WORKER_DEADLINE_MS (100 мс)   ← echo response JSON
   нет ответа → terminate, schema_limit
 ```
@@ -131,3 +137,17 @@ private const int WORKER_STARTUP_MS = 5_000;   // запуск процесса 
 | готов, схема превышает память worker | `schema_limit`, процесс завершён |
 
 Бюджет старта для теста задаётся аргументом конструктора supervisor (`?int $startupMs = null`), а не правкой константы.
+
+Дополнение D78: wrapper через существующий phpBinary получает аргументы PHP CLI и подменяет последний
+аргумент worker fixture; PID пишет в test-owned файл. Production не получает fixture path.
+
+| Framing/cleanup | Ожидание |
+|:--|:--|
+| ready двумя частями, затем валидный ответ | успех; остаток буфера не теряется |
+| после ready повреждённый ответ или EOF до полного JSON | schema_limit; процесс завершён |
+| EOF/мусор вместо ready | schema_unavailable без ожидания полного стартового бюджета |
+
+Cleanup в finally: только открытые ресурсы; bounded terminate → force kill живого worker → close pipes → reap.
+proc_get_status закрытого ресурса не вызывается; тест проверяет PID после cleanup.
+Stderr дренируется с ограничением сохранённых байт. Ответ ожидаемой формы: ok=true, valid — boolean,
+handle/validation — требуемые поля. EOF/JSON/shape ошибки не допускают успех.

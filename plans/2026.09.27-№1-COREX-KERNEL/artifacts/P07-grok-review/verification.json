@@ -1,0 +1,21 @@
+{
+  "review_finished": true,
+  "stop_reason": "end_turn",
+  "model": "grok-4.7",
+  "effort": "high",
+  "context_configured": 500000,
+  "tools_used": {
+    "read_file": 90,
+    "list_dir": 8,
+    "grep": 63
+  },
+  "calls": 161,
+  "product_hashes_checked": 2772,
+  "changed_product_files": [],
+  "formal_green": false,
+  "findings": {
+    "Critical": 1,
+    "Major": 4,
+    "Minor": 2
+  }
+}

@@ -509,6 +509,14 @@
     },
     {
         "category": "validation",
+        "code": "operations.input_envelope_invalid",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
         "code": "operations.invalid_request",
         "detail_keys": [],
         "owner": "axiomasoft/corex-operations",
@@ -597,7 +605,25 @@
     },
     {
         "category": "validation",
+        "code": "operations.undeclared_fields",
+        "detail_keys": [
+            "fields"
+        ],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
         "code": "operations.unknown_message_contract",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-operations",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "operations.unsupported_media_type",
         "detail_keys": [],
         "owner": "axiomasoft/corex-operations",
         "path": null,
@@ -624,6 +650,14 @@
     {
         "category": "validation",
         "code": "webhooks.unknown_message_schema",
+        "detail_keys": [],
+        "owner": "axiomasoft/corex-webhooks",
+        "path": null,
+        "retryable": false
+    },
+    {
+        "category": "validation",
+        "code": "webhooks.webhook_egress_denied",
         "detail_keys": [],
         "owner": "axiomasoft/corex-webhooks",
         "path": null,

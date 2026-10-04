@@ -11,9 +11,10 @@ use CoreX\Access\Contracts\Principal;
 use CoreX\Access\Enums\PrincipalType;
 use CoreX\Context\Contracts\TenancyManager;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Query\Builder;
-use Illuminate\Support\Facades\DB;
 use Override;
+use Psr\Clock\ClockInterface;
 
 /**
  * GrantSource reading `aut_role_assignments` (D101) — the built-in
@@ -32,6 +33,8 @@ final readonly class AutMatrixGrantSource implements GrantSource
 {
     public function __construct(
         private TenancyManager $tenancyManager,
+        private readonly ConnectionResolverInterface $connections,
+        private readonly ClockInterface $clock,
     ) {}
 
     #[Override]
@@ -78,12 +81,14 @@ final readonly class AutMatrixGrantSource implements GrantSource
 
     private function assignmentsQuery(PrincipalType $principalType, string $principalId, ?string $workspaceId): Builder
     {
-        return DB::table('aut_role_assignments')
+        $now = $this->clock->now();
+
+        return $this->connections->connection()->table('aut_role_assignments')
             ->where('aut_role_assignments.principal_type', $principalType->value)
             ->where('aut_role_assignments.principal_id', $principalId)
-            ->where(static function (Builder $q): void {
+            ->where(static function (Builder $q) use ($now): void {
                 $q->whereNull('aut_role_assignments.expires_at')
-                    ->orWhere('aut_role_assignments.expires_at', '>', now());
+                    ->orWhere('aut_role_assignments.expires_at', '>', $now);
             })
             ->where(static function (Builder $q) use ($workspaceId): void {
                 $q->whereNull('aut_role_assignments.workspace_id');

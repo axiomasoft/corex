@@ -1,26 +1,32 @@
-# HANDOFF — 2026-10-01 — after P10
+# HANDOFF — 2026-10-04 — after P07
 
-**Next:** design-finish: task:plan-design 2026.09.27-№1-COREX-KERNEL finish
+**Next:** waiting: restore GitHub Actions capacity and obtain P06 hosted-CI GREEN before P07's D94 prerequisite can be met.
 
-| Параметр | Значение |
+| Parameter | Meaning |
 |:--|:--|
 | Batch | n/a |
-| Model | frontier |
-| Thinking | high |
-| Context | cold-start-root: owner-requested-new-session |
-| Capabilities | repository read · Task Python runtime · правка носителей плана |
-| Суть | Повторный finish P00–P05 + P10 после правки D76: сверить зависимости и строки execution-sheet 14–20, записать новый fingerprint. Затем design audit независимой моделью либо owner acceptance, затем строка 14 (P10.1). Рекомендация не авторизует запуск. |
+| Model | implementation |
+| Thinking | low |
+| Context | waiting-owner |
+| Суть | P06 закрыта с owner-approved deviations (D105); P07 remains gated by its separate GREEN hosted-CI prerequisite. |
 
-```text
-task:plan-design 2026.09.27-№1-COREX-KERNEL finish
+```session-continuity-decision/v1
+{"evidence": ["batch:6c53c4206610981206cf9c23184718411e392ab54384ef8c5bf96350099780e3", "loaded-inputs:reusable", "cold-start-cost:0"], "outcome": "waiting-owner", "reason": "owner-wait", "runnable": false, "schema_version": "session-continuity-decision/v1"}
 ```
 
-**Done:** Design audit finish `f188df5f…` — ATTENTION, 4 Major (`findings/P05-P10-design-audit.md`). По разрешению владельца A1–A4 и minor m1–m6 исправлены, решение D76: критерий агрегатора в P10.1; CHANGELOG 20 пакетов и arch-тесты в Files P10.2; `test:hermetic` определяется в P10.1, Pest `^4.7` в `ci-local.sh`; две команды Validation P05.3; hosted CI на каждом item P05; независимое ревью продуктовых правок P10.4. Phase finalize P10 и P05 и plan-lint — OK. Маршруты, группы и порядок строк 14–20 не менялись. Runtime не начинался, продукт не менялся.
+**Native Codex command:**
 
-**Remaining:** `task:plan-design … finish` (новый fingerprint; design-gate сейчас `PLAN_DESIGN_FINISH_MISSING`); design audit этого fingerprint независимой моделью либо owner acceptance; затем строки 14–17 (P10.1 → P10.2 → P10.3 → P10.4) до зелёного hosted CI; затем строки 18–20 (B05-A → P05.3 → P05.4). P06–P09 — backlog skeleton (D24).
+```bash
+# NOT BEFORE: GitHub Actions capacity is restored and a green CI run satisfies D73/D94
+task:plan-close 2026.09.27-№1-COREX-KERNEL P06
+```
 
-**Sources of truth:** decisions/D76-p10-p05-design-audit-remediation.md; findings/P05-P10-design-audit.md; plan.md §2 и §3 Routing; roadmap.md execution-sheet строки 14–20; phases/P10/ и phases/P05/; research/P10-design.md; research/P05-design.md; artifacts/P10-design/; artifacts/P05-design/; decisions/D69–D75.
+**Done:** Owner-directed local carrier/admission repair complete. D104 captures the owner's exact no-repeat-audit instruction, selects a fingerprint-bound waiver and preserves historical audit-attention event 222. Authored design changes only plan.md waiver selector D89→D104; new candidate 6c53c4206610981206cf9c23184718411e392ab54384ef8c5bf96350099780e3. Task P07.1 bundle materialized and fresh. Broad “33 stale bundles” admission inventory corrected: closed snapshots remain historical; P07.2–P07.6 are deferred until predecessor completion inputs exist. Existing six proofs/143 author checks and technical reviews remain historical evidence; they were not independently rerun in this carrier repair. No new audit/reviewer/model/subagent or product execution.
 
-**Open risks:** Дизайн, аудит и правка D76 выполнены одной моделью (claude-opus-5-5): независимой проверки правки не было — её даёт следующий design audit. Команды с vendor/, composer, PHP 8.4, PostgreSQL и hosted CI не запускались. V1–V3 подтверждает hosted CI; объём недостающего покрытия tools, webhooks, tasks и отказы лейнов Laravel 12 и PHP 8.5 после устранения дедлайна worker неизвестны; отказы transfer под драйвером покрытия не разобраны. Для P05: E1, E2, E8 — VERIFY-AT-EXEC; L2 может каскадно перевести сервисы в scoped.
+**Remaining:** P06 is `Done with deviations` under D105. Restore Actions capacity and obtain hosted CI GREEN before P07 can satisfy D94; P07.1–P07.6 remain Not started. The repeated whole-plan design audit is explicitly waived by owner D104 for this finished fingerprint; this is owner admission, not a new audit-green verdict.
 
-**Workarounds/Deferred/Open questions:** Установка из composer.lock в hosted CI и stancl-staging — P07 (D74 п.11). Workflows distribution-proof и remaining-cohort-proof — ручной запуск, P09. packages/tenancy/src/Impersonation/** и 61 захват default-соединения — P07 (D70). operations с ручной регистрацией provider — P06. D68 действует в уточнении D72. Исполнитель и reviewer строк 14–20 назначены по пулу session-routing.md; замена — решением владельца.
+**Sources of truth:** `phases/P06/P06.closed.md`, `decisions/D105-p06-hosted-ci-deferral.md`, `artifacts/P06-phase-close/hosted-ci-deferral.md`; decisions/D104-owner-no-repeat-design-audit.md; artifacts/P07-formal-design-audit-repair/owner-direction.md, owner-waiver.json, finish.json, completion.json, report.md, receipt.json. P07 code contracts remain D94–D103, research/P07-design.md and artifacts/P07-design/examples.md.
+
+**Open risks:** Full PostgreSQL/provider/Redis/Memcached/resident integration remains product acceptance. No content-design changes or additional audit are performed here. Exact real Roave constructor approval rows remain P07.1 execution deliverables. Task has updated its explicit --reviewer command surface; no new review is invoked.
+
+**Workarounds/Deferred/Open questions:** Owner explicitly said “аудит уже был, больше не надо. доделай свою задачу!!!”; no further audit is scheduled. G2 remains 19 through P07.1 (23 service findings/25 total), full baseline {} only P07.3. Product/tests/scripts/manifests/baselines/dossier/examples/history and unrelated dirty changes are preserved. No commits, dependency updates, Docker/migrations or project DB access.

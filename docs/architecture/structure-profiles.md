@@ -12,7 +12,7 @@
 
 Корень `src/` пакета — его корневой модуль. Он содержит публичные категории
 `Contracts/`, `Data/`, `Enums/`, `Events/`, `Exceptions/`; мосты `Internal/`, `Laravel/`,
-`Testing/`, `PHPStan/`; provider(ы), `<Pkg>Module.php` и каталоги feature modules.
+`Testing/`, `PHPStan/`, `Tooling/`; provider(ы), `<Pkg>Module.php` и каталоги feature modules.
 Каждый feature module использует те же категории и мосты непосредственно под своим корнем.
 Provider feature module живёт прямо в модуле; `<Pkg>Module.php` — только в корне пакета.
 
@@ -55,3 +55,5 @@ P03.1 фиксирует текущее дерево: 436 записей (R1 49,
 P03.2 выполняет утверждённый перенос и сокращает baseline до 159;
 P04 классифицирует публичные типы и сокращает межмодульные ссылки в Internal.
 Прогноз будущего дерева не подменяет baseline текущего дерева.
+
+Runtime-код не ссылается на dev-мосты `Tooling/`, `PHPStan/`, `Testing/` своего или другого пакета. Гейт `module-layout` R6 проверяет namespace-ссылки; общая runtime-часть размещается в `Internal/`.

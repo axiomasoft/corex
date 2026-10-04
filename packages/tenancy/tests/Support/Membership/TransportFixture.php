@@ -10,6 +10,7 @@ use CoreX\Tenancy\Membership\Internal\Transport\ChannelBinding;
 use CoreX\Tenancy\Membership\Internal\Transport\JwsVerifier;
 use CoreX\Tenancy\Membership\Internal\Transport\StrictTransport;
 use CoreX\Tenancy\Membership\Internal\Transport\TriggerParser;
+use Illuminate\Http\Client\Factory as HttpFactory;
 use OpenSSLAsymmetricKey;
 
 /** Fixed isolated reference consumer: real signatures, fake HTTP, no deployment. */
@@ -92,7 +93,7 @@ final class TransportFixture
     /** @param array<string, mixed>|null $claims */
     public function client(?array $claims = null, ?ChannelBinding $binding = null, bool $permission = true, string $contextAccount = self::ACCOUNT, string $contextProduct = self::PRODUCT): StrictTransport
     {
-        return new StrictTransport(binding: $binding ?? $this->binding, accessToken: $this->sign($claims ?? $this->accessClaims()), tokenValidator: new AccessTokenValidator($this->verifier), clock: fn (): int => $this->now, context: fn (): array => ['accountId' => $contextAccount, 'product' => $contextProduct], removalPermission: fn (): bool => $permission);
+        return new StrictTransport(http: app(HttpFactory::class), binding: $binding ?? $this->binding, accessToken: $this->sign($claims ?? $this->accessClaims()), tokenValidator: new AccessTokenValidator($this->verifier), clock: fn (): int => $this->now, context: fn (): array => ['accountId' => $contextAccount, 'product' => $contextProduct], removalPermission: fn (): bool => $permission);
     }
 
     /** @param array<string, mixed> $claims

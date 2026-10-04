@@ -1,8 +1,6 @@
-diff --git a/packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php b/packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php
-index 3536fea..899cae7 100644
 --- a/packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php
 +++ b/packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php
-@@ -74,37 +74,14 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
+@@ -78,37 +78,15 @@
      public function move(string $departmentId, ?string $newParentId): void
      {
          $this->db()->transaction(function () use ($departmentId, $newParentId): void {
@@ -11,10 +9,17 @@ index 3536fea..899cae7 100644
 -            //     query still returns it for a row mid-deletion, so we always
 -            //     serialize on the right workspace. Absent row → explicit throw,
 -            //     never a silent no-op (A5 If-then).
--            $lockWorkspaceId = $this->db()->table(app(CoreOptions::class)->departmentsTable)
+-            $lockWorkspaceId = $this->db()->table($this->options->departmentsTable)
 -                ->where('id', $departmentId)
 -                ->value('workspace_id');
--
++            // MUTATION (stale-read, A5/A24): read the moving row BEFORE the lock
++            // and never re-read it under the lock — and read it soft-delete-blind
++            // (withTrashed), so a concurrently removed/stale row is used instead
++            // of triggering the explicit throw. This is exactly the A5 defect.
++            /** @var Models\Department $moving */
++            $moving = Models\Department::on($this->connection)->withTrashed()->where('id', $departmentId)->firstOrFail();
++            $lockWorkspaceId = $moving->workspace_id;
+ 
 -            if (! is_string($lockWorkspaceId)) {
 -                throw (new ModelNotFoundException)->setModel(Models\Department::class, [$departmentId]);
 -            }
@@ -28,14 +33,9 @@ index 3536fea..899cae7 100644
 -            //     so firstOrFail() throws instead of running a no-op UPDATE that
 -            //     matches nothing (A5/A24 If-then). All downstream maths use THIS
 -            //     row, never the pre-lock read.
-+            // MUTATION (stale-read, A5/A24): read the moving row BEFORE the lock
-+            // and never re-read it under the lock — and read it soft-delete-blind
-+            // (withTrashed), so a concurrently removed/stale row is used instead
-+            // of triggering the explicit throw. This is exactly the A5 defect.
-             /** @var Models\Department $moving */
+-            /** @var Models\Department $moving */
 -            $moving = Models\Department::on($this->connection)->where('id', $departmentId)->firstOrFail();
-+            $moving = Models\Department::on($this->connection)->withTrashed()->where('id', $departmentId)->firstOrFail();
- 
+-
 -            // The lock key was read before the lock; workspace_id is immutable,
 -            // but if it changed under us a concurrent writer is doing something
 -            // the contract forbids — fail loudly rather than lock the wrong key.

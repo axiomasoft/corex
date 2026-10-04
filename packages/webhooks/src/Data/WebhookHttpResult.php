@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Webhooks\Data;
 
 use CoreX\Attributes\Api;
+use CoreX\Webhooks\Enums\WebhookFailureReason;
 use InvalidArgumentException;
 
 #[Api(since: '1.0')]
@@ -13,7 +14,7 @@ final readonly class WebhookHttpResult
     public function __construct(
         public ?int $status,
         public ?string $retryAfter,
-        public ?string $errorCode,
+        public ?WebhookFailureReason $errorCode,
         public int $durationMs,
     ) {
         if ($status !== null && ($status < 100 || $status > 599)) {
@@ -25,10 +26,6 @@ final readonly class WebhookHttpResult
                 || strlen($retryAfter) > 255
                 || preg_match('/[\x00-\x1f\x7f]/', $retryAfter) === 1)) {
             throw new InvalidArgumentException('Webhook Retry-After value is invalid.');
-        }
-
-        if ($errorCode !== null && preg_match('/\A[a-z][a-z0-9_]{0,63}\z/D', $errorCode) !== 1) {
-            throw new InvalidArgumentException('Webhook transport error code is invalid.');
         }
 
         if ($status === null && $errorCode === null) {

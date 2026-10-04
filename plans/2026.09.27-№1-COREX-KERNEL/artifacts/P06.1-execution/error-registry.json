@@ -1,0 +1,1251 @@
+> php scripts/error-registry.php --check
+{
+    "schema": "corex-error-registry/1",
+    "definitions": [
+        {
+            "code": "access.scope_capability_mismatch",
+            "enum": "CoreX\\Access\\Errors\\Enums\\AccessErrorCode",
+            "type": "urn:corex:problem:access.scope_capability_mismatch",
+            "status": 422,
+            "title": "Scope capability mismatch.",
+            "category": "unsupported",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.central_context_exception",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.central_context_exception",
+            "status": 403,
+            "title": "Central context exception.",
+            "category": "authorization",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.compilation_exception",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.compilation_exception",
+            "status": 500,
+            "title": "Compilation exception.",
+            "category": "internal",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.cross_workspace_move_exception",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.cross_workspace_move_exception",
+            "status": 409,
+            "title": "Cross workspace move exception.",
+            "category": "conflict",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.department_cycle_exception",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.department_cycle_exception",
+            "status": 409,
+            "title": "Department cycle exception.",
+            "category": "conflict",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.duplicate_code",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.duplicate_code",
+            "status": 500,
+            "title": "Duplicate code.",
+            "category": "internal",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.duplicate_type",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.duplicate_type",
+            "status": 500,
+            "title": "Duplicate type.",
+            "category": "internal",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.entity_not_found",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.entity_not_found",
+            "status": 404,
+            "title": "Entity not found.",
+            "category": "not_found",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.foreign_prefix",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.foreign_prefix",
+            "status": 500,
+            "title": "Foreign prefix.",
+            "category": "internal",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.has_enabled_dependents_exception",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.has_enabled_dependents_exception",
+            "status": 409,
+            "title": "Has enabled dependents exception.",
+            "category": "conflict",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.impersonation_restricted_exception",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.impersonation_restricted_exception",
+            "status": 403,
+            "title": "Impersonation restricted exception.",
+            "category": "authorization",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.inbox_refused",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.inbox_refused",
+            "status": 409,
+            "title": "Inbox refused.",
+            "category": "conflict",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.internal_error",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.internal_error",
+            "status": 500,
+            "title": "Internal error.",
+            "category": "internal",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.invalid_configuration",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.invalid_configuration",
+            "status": 500,
+            "title": "Invalid configuration.",
+            "category": "internal",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.invalid_definition",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.invalid_definition",
+            "status": 500,
+            "title": "Invalid definition.",
+            "category": "internal",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.invalid_manifest_exception",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.invalid_manifest_exception",
+            "status": 422,
+            "title": "Invalid manifest exception.",
+            "category": "validation",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.invalid_message",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.invalid_message",
+            "status": 422,
+            "title": "Invalid message.",
+            "category": "validation",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.invalid_registry_point",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.invalid_registry_point",
+            "status": 422,
+            "title": "Invalid registry point.",
+            "category": "validation",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.invalid_scope_payload",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.invalid_scope_payload",
+            "status": 422,
+            "title": "Invalid scope payload.",
+            "category": "validation",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.invalid_state_transition_exception",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.invalid_state_transition_exception",
+            "status": 409,
+            "title": "Invalid state transition exception.",
+            "category": "conflict",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.invalid_status",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.invalid_status",
+            "status": 500,
+            "title": "Invalid status.",
+            "category": "internal",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.missing_dependency_exception",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.missing_dependency_exception",
+            "status": 409,
+            "title": "Missing dependency exception.",
+            "category": "conflict",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.module_enable_failed_exception",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.module_enable_failed_exception",
+            "status": 500,
+            "title": "Module enable failed exception.",
+            "category": "internal",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.module_not_found",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.module_not_found",
+            "status": 404,
+            "title": "Module not found.",
+            "category": "not_found",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.module_upgrade_failed_exception",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.module_upgrade_failed_exception",
+            "status": 500,
+            "title": "Module upgrade failed exception.",
+            "category": "internal",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.outbox_lease_lost",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.outbox_lease_lost",
+            "status": 409,
+            "title": "Outbox lease lost.",
+            "category": "conflict",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.outbox_refused",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.outbox_refused",
+            "status": 409,
+            "title": "Outbox refused.",
+            "category": "conflict",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.registry_frozen",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.registry_frozen",
+            "status": 500,
+            "title": "Registry frozen.",
+            "category": "internal",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.registry_input_unavailable",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.registry_input_unavailable",
+            "status": 503,
+            "title": "Registry input unavailable.",
+            "category": "unavailable",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.scope_context_mismatch",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.scope_context_mismatch",
+            "status": 403,
+            "title": "Scope context mismatch.",
+            "category": "authorization",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.setting_value_too_large_exception",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.setting_value_too_large_exception",
+            "status": 422,
+            "title": "Setting value too large exception.",
+            "category": "validation",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.stale_registry_revision",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.stale_registry_revision",
+            "status": 409,
+            "title": "Stale registry revision.",
+            "category": "conflict",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.storage_capability_unavailable",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.storage_capability_unavailable",
+            "status": 503,
+            "title": "Storage capability unavailable.",
+            "category": "unavailable",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.storage_operation_failed",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.storage_operation_failed",
+            "status": 503,
+            "title": "Storage operation failed.",
+            "category": "unavailable",
+            "retryable": true,
+            "detail_keys": []
+        },
+        {
+            "code": "core.unknown_code",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.unknown_code",
+            "status": 500,
+            "title": "Unknown code.",
+            "category": "internal",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.unknown_message_contract",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.unknown_message_contract",
+            "status": 422,
+            "title": "Unknown message contract.",
+            "category": "validation",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "core.unsupported_scope_exception",
+            "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+            "type": "urn:corex:problem:core.unsupported_scope_exception",
+            "status": 422,
+            "title": "Unsupported scope exception.",
+            "category": "unsupported",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "custom-fields.attribute_schema_conflict",
+            "enum": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
+            "type": "urn:corex:problem:custom-fields.attribute_schema_conflict",
+            "status": 409,
+            "title": "Attribute schema conflict.",
+            "category": "conflict",
+            "retryable": true,
+            "detail_keys": [
+                "reason"
+            ]
+        },
+        {
+            "code": "custom-fields.attribute_schema_retry_exhausted",
+            "enum": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
+            "type": "urn:corex:problem:custom-fields.attribute_schema_retry_exhausted",
+            "status": 409,
+            "title": "Attribute schema retry exhausted.",
+            "category": "conflict",
+            "retryable": false,
+            "detail_keys": [
+                "reason"
+            ]
+        },
+        {
+            "code": "custom-fields.attributes_access_denied",
+            "enum": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
+            "type": "urn:corex:problem:custom-fields.attributes_access_denied",
+            "status": 403,
+            "title": "Attributes access denied.",
+            "category": "authorization",
+            "retryable": false,
+            "detail_keys": [
+                "reason"
+            ]
+        },
+        {
+            "code": "custom-fields.attributes_engine_unavailable",
+            "enum": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
+            "type": "urn:corex:problem:custom-fields.attributes_engine_unavailable",
+            "status": 503,
+            "title": "Attributes engine unavailable.",
+            "category": "unavailable",
+            "retryable": false,
+            "detail_keys": [
+                "reason"
+            ]
+        },
+        {
+            "code": "custom-fields.invalid_attribute_tables",
+            "enum": "CoreX\\CustomFields\\Errors\\Enums\\CustomFieldsErrorCode",
+            "type": "urn:corex:problem:custom-fields.invalid_attribute_tables",
+            "status": 500,
+            "title": "Invalid attribute tables.",
+            "category": "internal",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "intl.access_denied_exception",
+            "enum": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+            "type": "urn:corex:problem:intl.access_denied_exception",
+            "status": 403,
+            "title": "Access denied exception.",
+            "category": "authorization",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "intl.invalid_locale_exception",
+            "enum": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+            "type": "urn:corex:problem:intl.invalid_locale_exception",
+            "status": 422,
+            "title": "Invalid locale exception.",
+            "category": "validation",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "intl.invalid_rate_exception",
+            "enum": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+            "type": "urn:corex:problem:intl.invalid_rate_exception",
+            "status": 422,
+            "title": "Invalid rate exception.",
+            "category": "validation",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "intl.operation_conflict_exception",
+            "enum": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+            "type": "urn:corex:problem:intl.operation_conflict_exception",
+            "status": 409,
+            "title": "Operation conflict exception.",
+            "category": "conflict",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "intl.schema_mismatch_exception",
+            "enum": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+            "type": "urn:corex:problem:intl.schema_mismatch_exception",
+            "status": 409,
+            "title": "Schema mismatch exception.",
+            "category": "conflict",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "intl.snapshot_expired_exception",
+            "enum": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+            "type": "urn:corex:problem:intl.snapshot_expired_exception",
+            "status": 404,
+            "title": "Snapshot expired exception.",
+            "category": "not_found",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "intl.unsupported_formatting_exception",
+            "enum": "CoreX\\Intl\\Errors\\Enums\\IntlErrorCode",
+            "type": "urn:corex:problem:intl.unsupported_formatting_exception",
+            "status": 422,
+            "title": "Unsupported formatting exception.",
+            "category": "unsupported",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "notifications.notification_access_denied",
+            "enum": "CoreX\\Notifications\\Errors\\Enums\\NotificationsErrorCode",
+            "type": "urn:corex:problem:notifications.notification_access_denied",
+            "status": 403,
+            "title": "Notification access denied.",
+            "category": "authorization",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "notifications.notification_operation_conflict",
+            "enum": "CoreX\\Notifications\\Errors\\Enums\\NotificationsErrorCode",
+            "type": "urn:corex:problem:notifications.notification_operation_conflict",
+            "status": 409,
+            "title": "Notification operation conflict.",
+            "category": "conflict",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.access_denied",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.access_denied",
+            "status": 403,
+            "title": "Access denied.",
+            "category": "authorization",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.account_unavailable",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.account_unavailable",
+            "status": 403,
+            "title": "Account unavailable.",
+            "category": "authorization",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.authentication_required",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.authentication_required",
+            "status": 401,
+            "title": "Authentication required.",
+            "category": "authentication",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.budget_rate_limited",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.budget_rate_limited",
+            "status": 429,
+            "title": "Budget rate limited.",
+            "category": "rate_limit",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.budget_store_unavailable",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.budget_store_unavailable",
+            "status": 500,
+            "title": "Budget store unavailable.",
+            "category": "internal",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.bulk_not_ready",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.bulk_not_ready",
+            "status": 409,
+            "title": "Bulk result is not ready.",
+            "category": "conflict",
+            "retryable": true,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.bulk_reconciliation_required",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.bulk_reconciliation_required",
+            "status": 409,
+            "title": "Bulk reconciliation is required.",
+            "category": "conflict",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.bulk_result_expired",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.bulk_result_expired",
+            "status": 410,
+            "title": "Bulk result has expired.",
+            "category": "not_found",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.capability_unavailable",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.capability_unavailable",
+            "status": 503,
+            "title": "Capability unavailable.",
+            "category": "unavailable",
+            "retryable": false,
+            "detail_keys": [
+                "reason"
+            ]
+        },
+        {
+            "code": "operations.catalogue_limit",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.catalogue_limit",
+            "status": 403,
+            "title": "Catalogue limit.",
+            "category": "authorization",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.conflict",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.conflict",
+            "status": 409,
+            "title": "Conflict.",
+            "category": "conflict",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.context_required",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.context_required",
+            "status": 403,
+            "title": "Context required.",
+            "category": "authorization",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.cursor_invalid",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.cursor_invalid",
+            "status": 422,
+            "title": "Cursor invalid.",
+            "category": "validation",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.forbidden",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.forbidden",
+            "status": 403,
+            "title": "Forbidden.",
+            "category": "authorization",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.idempotency_conflict",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.idempotency_conflict",
+            "status": 409,
+            "title": "Idempotency conflict.",
+            "category": "conflict",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.idempotency_contract_mismatch",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.idempotency_contract_mismatch",
+            "status": 409,
+            "title": "Idempotency contract mismatch.",
+            "category": "conflict",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.idempotency_in_progress",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.idempotency_in_progress",
+            "status": 409,
+            "title": "Idempotency in progress.",
+            "category": "conflict",
+            "retryable": true,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.idempotency_key_forbidden",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.idempotency_key_forbidden",
+            "status": 422,
+            "title": "Idempotency key forbidden.",
+            "category": "validation",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.idempotency_key_invalid",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.idempotency_key_invalid",
+            "status": 422,
+            "title": "Idempotency key invalid.",
+            "category": "validation",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.idempotency_key_required",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.idempotency_key_required",
+            "status": 422,
+            "title": "Idempotency key required.",
+            "category": "validation",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.idempotency_not_supported",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.idempotency_not_supported",
+            "status": 422,
+            "title": "Idempotency not supported.",
+            "category": "validation",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.input_envelope_invalid",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.input_envelope_invalid",
+            "status": 422,
+            "title": "Input envelope is invalid.",
+            "category": "validation",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.invalid_request",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.invalid_request",
+            "status": 422,
+            "title": "Invalid request.",
+            "category": "validation",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.module_unavailable",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.module_unavailable",
+            "status": 404,
+            "title": "Module unavailable.",
+            "category": "not_found",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.not_found",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.not_found",
+            "status": 404,
+            "title": "Not found.",
+            "category": "not_found",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.operation_not_found",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.operation_not_found",
+            "status": 404,
+            "title": "Operation not found.",
+            "category": "not_found",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.operation_unsupported",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.operation_unsupported",
+            "status": 404,
+            "title": "Operation unsupported.",
+            "category": "not_found",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.ordering_version_unsupported",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.ordering_version_unsupported",
+            "status": 422,
+            "title": "Ordering version unsupported.",
+            "category": "validation",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.rate_limited",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.rate_limited",
+            "status": 429,
+            "title": "Rate limited.",
+            "category": "rate_limit",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.reconciliation_required",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.reconciliation_required",
+            "status": 409,
+            "title": "Reconciliation required.",
+            "category": "conflict",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.request_rejected",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.request_rejected",
+            "status": 422,
+            "title": "Request rejected.",
+            "category": "validation",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.resource_not_found",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.resource_not_found",
+            "status": 404,
+            "title": "Resource not found.",
+            "category": "not_found",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.scope_required",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.scope_required",
+            "status": 403,
+            "title": "Scope required.",
+            "category": "authorization",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.undeclared_fields",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.undeclared_fields",
+            "status": 422,
+            "title": "Input contains undeclared fields.",
+            "category": "validation",
+            "retryable": false,
+            "detail_keys": [
+                "fields"
+            ]
+        },
+        {
+            "code": "operations.unknown_message_contract",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.unknown_message_contract",
+            "status": 422,
+            "title": "Unknown message contract.",
+            "category": "validation",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.unsupported_media_type",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.unsupported_media_type",
+            "status": 415,
+            "title": "Unsupported media type.",
+            "category": "validation",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "operations.validation_failed",
+            "enum": "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode",
+            "type": "urn:corex:problem:operations.validation_failed",
+            "status": 422,
+            "title": "Validation failed.",
+            "category": "validation",
+            "retryable": false,
+            "detail_keys": [
+                "*"
+            ]
+        },
+        {
+            "code": "recurrence.stale_cursor_exception",
+            "enum": "CoreX\\Recurrence\\Errors\\Enums\\RecurrenceErrorCode",
+            "type": "urn:corex:problem:recurrence.stale_cursor_exception",
+            "status": 409,
+            "title": "Stale cursor exception.",
+            "category": "conflict",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "recurrence.unsupported_environment_exception",
+            "enum": "CoreX\\Recurrence\\Errors\\Enums\\RecurrenceErrorCode",
+            "type": "urn:corex:problem:recurrence.unsupported_environment_exception",
+            "status": 422,
+            "title": "Unsupported environment exception.",
+            "category": "unsupported",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "search-meilisearch.invalid_meilisearch_configuration",
+            "enum": "CoreX\\SearchMeilisearch\\Errors\\Enums\\SearchMeilisearchErrorCode",
+            "type": "urn:corex:problem:search-meilisearch.invalid_meilisearch_configuration",
+            "status": 500,
+            "title": "Invalid meilisearch configuration.",
+            "category": "internal",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "search.invalid_search_configuration",
+            "enum": "CoreX\\Search\\Errors\\Enums\\SearchErrorCode",
+            "type": "urn:corex:problem:search.invalid_search_configuration",
+            "status": 500,
+            "title": "Invalid search configuration.",
+            "category": "internal",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "tasks-workflow.materialization_conflict",
+            "enum": "CoreX\\TasksWorkflow\\Errors\\Enums\\TasksWorkflowErrorCode",
+            "type": "urn:corex:problem:tasks-workflow.materialization_conflict",
+            "status": 409,
+            "title": "Materialization conflict.",
+            "category": "conflict",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "tasks-workflow.stale_materialization",
+            "enum": "CoreX\\TasksWorkflow\\Errors\\Enums\\TasksWorkflowErrorCode",
+            "type": "urn:corex:problem:tasks-workflow.stale_materialization",
+            "status": 409,
+            "title": "Stale materialization.",
+            "category": "conflict",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "tasks-workflow.unsupported_materialization",
+            "enum": "CoreX\\TasksWorkflow\\Errors\\Enums\\TasksWorkflowErrorCode",
+            "type": "urn:corex:problem:tasks-workflow.unsupported_materialization",
+            "status": 422,
+            "title": "Unsupported materialization.",
+            "category": "unsupported",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "tasks.invalid_planning_draft",
+            "enum": "CoreX\\Tasks\\Errors\\Enums\\TasksErrorCode",
+            "type": "urn:corex:problem:tasks.invalid_planning_draft",
+            "status": 422,
+            "title": "Invalid planning draft.",
+            "category": "validation",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "tasks.planning_conflict",
+            "enum": "CoreX\\Tasks\\Errors\\Enums\\TasksErrorCode",
+            "type": "urn:corex:problem:tasks.planning_conflict",
+            "status": 409,
+            "title": "Planning conflict.",
+            "category": "conflict",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "tasks.tasks_module_disabled",
+            "enum": "CoreX\\Tasks\\Errors\\Enums\\TasksErrorCode",
+            "type": "urn:corex:problem:tasks.tasks_module_disabled",
+            "status": 503,
+            "title": "Tasks module disabled.",
+            "category": "unavailable",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "tenancy.central_protocol_violation",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "type": "urn:corex:problem:tenancy.central_protocol_violation",
+            "status": 500,
+            "title": "Central protocol violation.",
+            "category": "internal",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "tenancy.central_unauthorized",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "type": "urn:corex:problem:tenancy.central_unauthorized",
+            "status": 403,
+            "title": "Central unauthorized.",
+            "category": "authorization",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "tenancy.central_unavailable",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "type": "urn:corex:problem:tenancy.central_unavailable",
+            "status": 503,
+            "title": "Central unavailable.",
+            "category": "unavailable",
+            "retryable": true,
+            "detail_keys": []
+        },
+        {
+            "code": "tenancy.claim_conflict",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "type": "urn:corex:problem:tenancy.claim_conflict",
+            "status": 409,
+            "title": "Claim conflict.",
+            "category": "conflict",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "tenancy.claim_unavailable",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "type": "urn:corex:problem:tenancy.claim_unavailable",
+            "status": 503,
+            "title": "Claim unavailable.",
+            "category": "unavailable",
+            "retryable": true,
+            "detail_keys": []
+        },
+        {
+            "code": "tenancy.credential_issuance_denied",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "type": "urn:corex:problem:tenancy.credential_issuance_denied",
+            "status": 403,
+            "title": "Credential issuance denied.",
+            "category": "authorization",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "tenancy.domain_trust_denied",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "type": "urn:corex:problem:tenancy.domain_trust_denied",
+            "status": 403,
+            "title": "Domain trust denied.",
+            "category": "authorization",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "tenancy.domain_trust_disabled",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "type": "urn:corex:problem:tenancy.domain_trust_disabled",
+            "status": 503,
+            "title": "Domain trust disabled.",
+            "category": "unavailable",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "tenancy.inbox_conflict",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "type": "urn:corex:problem:tenancy.inbox_conflict",
+            "status": 409,
+            "title": "Inbox conflict.",
+            "category": "conflict",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "tenancy.invitation_not_acceptable_exception",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "type": "urn:corex:problem:tenancy.invitation_not_acceptable_exception",
+            "status": 409,
+            "title": "Invitation not acceptable exception.",
+            "category": "conflict",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "tenancy.no_default_workspace_exception",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "type": "urn:corex:problem:tenancy.no_default_workspace_exception",
+            "status": 404,
+            "title": "No default workspace exception.",
+            "category": "not_found",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "tenancy.oidc_authentication_exception",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "type": "urn:corex:problem:tenancy.oidc_authentication_exception",
+            "status": 401,
+            "title": "Oidc authentication exception.",
+            "category": "authentication",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "tenancy.pair_store_violation",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "type": "urn:corex:problem:tenancy.pair_store_violation",
+            "status": 500,
+            "title": "Pair store violation.",
+            "category": "internal",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "tenancy.projection_denied",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "type": "urn:corex:problem:tenancy.projection_denied",
+            "status": 403,
+            "title": "Projection denied.",
+            "category": "authorization",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "tenancy.revoke_uncertain",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "type": "urn:corex:problem:tenancy.revoke_uncertain",
+            "status": 503,
+            "title": "Revoke uncertain.",
+            "category": "unavailable",
+            "retryable": true,
+            "detail_keys": []
+        },
+        {
+            "code": "tenancy.template_integrity_exception",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "type": "urn:corex:problem:tenancy.template_integrity_exception",
+            "status": 500,
+            "title": "Template integrity exception.",
+            "category": "internal",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "tenancy.tenant_could_not_be_identified_by_host_exception",
+            "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+            "type": "urn:corex:problem:tenancy.tenant_could_not_be_identified_by_host_exception",
+            "status": 404,
+            "title": "Tenant could not be identified by host exception.",
+            "category": "not_found",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "webhooks.unknown_message_contract",
+            "enum": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+            "type": "urn:corex:problem:webhooks.unknown_message_contract",
+            "status": 422,
+            "title": "Unknown message contract.",
+            "category": "validation",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "webhooks.unknown_message_schema",
+            "enum": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+            "type": "urn:corex:problem:webhooks.unknown_message_schema",
+            "status": 422,
+            "title": "Unknown message schema.",
+            "category": "validation",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "webhooks.webhook_endpoint_changed",
+            "enum": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+            "type": "urn:corex:problem:webhooks.webhook_endpoint_changed",
+            "status": 409,
+            "title": "Webhook endpoint changed.",
+            "category": "conflict",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "webhooks.webhook_payload_too_large",
+            "enum": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+            "type": "urn:corex:problem:webhooks.webhook_payload_too_large",
+            "status": 422,
+            "title": "Webhook payload is too large.",
+            "category": "validation",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "webhooks.webhook_replay_expired",
+            "enum": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+            "type": "urn:corex:problem:webhooks.webhook_replay_expired",
+            "status": 409,
+            "title": "Webhook replay expired.",
+            "category": "conflict",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "webhooks.webhook_secret_denied",
+            "enum": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+            "type": "urn:corex:problem:webhooks.webhook_secret_denied",
+            "status": 403,
+            "title": "Webhook secret denied.",
+            "category": "authorization",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "webhooks.webhook_sensitive_denied",
+            "enum": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+            "type": "urn:corex:problem:webhooks.webhook_sensitive_denied",
+            "status": 403,
+            "title": "Webhook sensitive denied.",
+            "category": "authorization",
+            "retryable": false,
+            "detail_keys": []
+        },
+        {
+            "code": "webhooks.webhook_subscription_cap",
+            "enum": "CoreX\\Webhooks\\Errors\\Enums\\WebhooksErrorCode",
+            "type": "urn:corex:problem:webhooks.webhook_subscription_cap",
+            "status": 422,
+            "title": "Webhook subscription cap.",
+            "category": "validation",
+            "retryable": false,
+            "detail_keys": []
+        }
+    ],
+    "diagnostics": []
+}

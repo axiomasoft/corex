@@ -16,6 +16,7 @@ use CoreX\Tenancy\Membership\Internal\Transport\AccessTokenValidator;
 use CoreX\Tenancy\Membership\Internal\Transport\StrictTransport;
 use CoreX\Tenancy\Tests\Support\Membership\FakeCentral;
 use CoreX\Tenancy\Tests\Support\Membership\TransportFixture;
+use Illuminate\Http\Client\Factory as HttpFactory;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
@@ -306,7 +307,7 @@ it('reference has no call without channel binding or qualified deduplication', f
 
     try {
         Http::fake();
-        $client = new StrictTransport(binding: $missingBinding ? null : $fixture->binding(['deduplicationQualified' => false]), accessToken: $fixture->sign($fixture->accessClaims()), tokenValidator: new AccessTokenValidator($fixture->verifier), clock: fn (): int => $fixture->now, context: fn (): array => ['accountId' => $fixture::ACCOUNT, 'product' => $fixture::PRODUCT], removalPermission: fn (): bool => true);
+        $client = new StrictTransport(http: app(HttpFactory::class), binding: $missingBinding ? null : $fixture->binding(['deduplicationQualified' => false]), accessToken: $fixture->sign($fixture->accessClaims()), tokenValidator: new AccessTokenValidator($fixture->verifier), clock: fn (): int => $fixture->now, context: fn (): array => ['accountId' => $fixture::ACCOUNT, 'product' => $fixture::PRODUCT], removalPermission: fn (): bool => true);
         $request = new RevokeMembershipRequest(requestId: $fixture::REQUEST, identityId: $fixture::IDENTITY, accountId: $fixture::ACCOUNT, product: $fixture::PRODUCT, reason: MembershipReason::Removed, actingIdentityId: null);
         expect(fn () => $client->revokeMembership($request))->toThrow(CentralUnavailable::class);
         Http::assertNothingSent();

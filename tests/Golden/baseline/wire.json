@@ -598,6 +598,14 @@
         },
         {
             "category": "validation",
+            "code": "operations.input_envelope_invalid",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
             "code": "operations.invalid_request",
             "detail_keys": [],
             "owner": "axiomasoft/corex-operations",
@@ -686,7 +694,25 @@
         },
         {
             "category": "validation",
+            "code": "operations.undeclared_fields",
+            "detail_keys": [
+                "fields"
+            ],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
             "code": "operations.unknown_message_contract",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-operations",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "operations.unsupported_media_type",
             "detail_keys": [],
             "owner": "axiomasoft/corex-operations",
             "path": null,
@@ -903,6 +929,110 @@
             "retryable": false
         },
         {
+            "category": "authorization",
+            "code": "tools.approval_invalid",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tools",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authorization",
+            "code": "tools.approval_required",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tools",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "authorization",
+            "code": "tools.forbidden",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tools",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "conflict",
+            "code": "tools.idempotency_conflict",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tools",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "tools.input_invalid",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tools",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "internal",
+            "code": "tools.internal_error",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tools",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "internal",
+            "code": "tools.output_contract_failed",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tools",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "rate_limit",
+            "code": "tools.rate_limited",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tools",
+            "path": null,
+            "retryable": true
+        },
+        {
+            "category": "validation",
+            "code": "tools.schema_limit",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tools",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "unavailable",
+            "code": "tools.schema_unavailable",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tools",
+            "path": null,
+            "retryable": true
+        },
+        {
+            "category": "conflict",
+            "code": "tools.tool_revision_conflict",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tools",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "not_found",
+            "code": "tools.tool_unavailable",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tools",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "internal",
+            "code": "tools.unknown_effect",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tools",
+            "path": null,
+            "retryable": false
+        },
+        {
             "category": "validation",
             "code": "webhooks.unknown_message_contract",
             "detail_keys": [],
@@ -913,6 +1043,14 @@
         {
             "category": "validation",
             "code": "webhooks.unknown_message_schema",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-webhooks",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "validation",
+            "code": "webhooks.webhook_egress_denied",
             "detail_keys": [],
             "owner": "axiomasoft/corex-webhooks",
             "path": null,

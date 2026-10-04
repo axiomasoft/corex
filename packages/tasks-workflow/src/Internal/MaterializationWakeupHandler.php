@@ -15,12 +15,15 @@ use CoreX\TasksWorkflow\Exceptions\StaleMaterialization;
 use CoreX\Wakeup\Contracts\DueWakeupHandler;
 use CoreX\Wakeup\Data\WakeupDelivery;
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionResolverInterface;
 
 final class MaterializationWakeupHandler implements DueWakeupHandler
 {
     public function __construct(
         private readonly Container $container,
         private readonly TenantContextResolver $contexts,
+        private readonly ConnectionResolverInterface $connections,
     ) {}
 
     public function handle(WakeupDelivery $delivery): void
@@ -28,7 +31,8 @@ final class MaterializationWakeupHandler implements DueWakeupHandler
         $decoded = MaterializationHasher::decodeWakeupPayload(JsonDocuments::map($delivery->request->payload));
         $series = $decoded['series'];
         $window = $decoded['window'];
-        $connection = app('db')->connection();
+        /** @var Connection */
+        $connection = $this->connections->connection();
         $restoreEpoch = $connection->table('corex_task_series_state')
             ->where('series_key', $series->id)
             ->value('restore_epoch');

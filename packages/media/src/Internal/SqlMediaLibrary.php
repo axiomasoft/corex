@@ -19,6 +19,7 @@ use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
+use Psr\Clock\ClockInterface;
 use Throwable;
 
 final class SqlMediaLibrary implements MediaLibrary
@@ -30,6 +31,7 @@ final class SqlMediaLibrary implements MediaLibrary
         private readonly MediaOperationStore $operations,
         private readonly ConversionCoordinator $conversions,
         private readonly MediaOptions $options,
+        private readonly ClockInterface $clock,
     ) {}
 
     public function store(MediaContext $context, UploadInput $input): MediaFileRef
@@ -102,7 +104,7 @@ final class SqlMediaLibrary implements MediaLibrary
                     'object_key' => $key, 'mime_type' => $mime, 'size_bytes' => $size, 'sha256' => $checksum,
                     'kind' => $input->purpose, 'uploaded_actor_kind' => $context->actorKind,
                     'uploaded_actor_id' => $context->actorId, 'workspace_scope_key' => $context->tenant->workspace?->id,
-                    'version' => 1, 'created_at' => now(), 'updated_at' => now(),
+                    'version' => 1, 'created_at' => $this->clock->now(), 'updated_at' => $this->clock->now(),
                 ]);
             });
         } catch (QueryException $exception) {
@@ -136,7 +138,7 @@ final class SqlMediaLibrary implements MediaLibrary
             }
         } catch (Throwable $exception) {
             $this->connection->transaction(function () use ($id): void {
-                $this->connection->table('med_files')->where('id', $id)->where('state', 'staged')->update(['state' => 'deleting', 'updated_at' => now()]);
+                $this->connection->table('med_files')->where('id', $id)->where('state', 'staged')->update(['state' => 'deleting', 'updated_at' => $this->clock->now()]);
                 $this->operations->enqueuePurge(fileId: $id);
             });
 
@@ -157,13 +159,13 @@ final class SqlMediaLibrary implements MediaLibrary
             }
 
             if (! $this->policy->allows($context, MediaAction::Store, new MediaSubject($this->reference($file)))) {
-                $this->connection->table('med_files')->where('id', $id)->update(['state' => 'deleting', 'updated_at' => now()]);
+                $this->connection->table('med_files')->where('id', $id)->update(['state' => 'deleting', 'updated_at' => $this->clock->now()]);
                 $this->operations->enqueuePurge(fileId: $id);
 
                 return null;
             }
 
-            return $this->connection->table('med_files')->where('id', $id)->where('state', 'staged')->update(['state' => 'ready', 'updated_at' => now()]) === 1;
+            return $this->connection->table('med_files')->where('id', $id)->where('state', 'staged')->update(['state' => 'ready', 'updated_at' => $this->clock->now()]) === 1;
         });
 
         if ($published === null) {
@@ -223,7 +225,7 @@ final class SqlMediaLibrary implements MediaLibrary
             if ($this->connection->table('med_relations')->where('file_id', $fileId)->exists()) {
                 throw new MediaFileInUse('Media file still has usages.');
             }
-            $this->connection->table('med_files')->where('id', $fileId)->update(['state' => 'deleting', 'updated_at' => now()]);
+            $this->connection->table('med_files')->where('id', $fileId)->update(['state' => 'deleting', 'updated_at' => $this->clock->now()]);
             $this->operations->enqueuePurge(fileId: $fileId);
 
             return $file;

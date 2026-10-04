@@ -498,11 +498,6 @@ parameters:
 			count: 1
 			path: src/Internal/WebhookReplay.php
 
-		-
-			rawMessage: 'Parameter #1 $sql of method Illuminate\Database\Query\Builder::whereRaw() expects Illuminate\Contracts\Database\Query\Expression|literal-string, non-falsy-string given.'
-			identifier: argument.type
-			count: 1
-			path: src/Internal/WebhookRetention.php
 
 		-
 			rawMessage: Binary operation "+" between mixed and 1 results in an error.
@@ -510,11 +505,6 @@ parameters:
 			count: 1
 			path: src/Internal/WebhookUrlPolicy.php
 
-		-
-			rawMessage: Casting to string something that's already string.
-			identifier: cast.useless
-			count: 1
-			path: src/Internal/WebhookUrlPolicy.php
 
 		-
 			rawMessage: 'Parameter #1 $hostname of function dns_get_record expects string, mixed given.'
@@ -527,15 +517,3 @@ parameters:
 			identifier: offsetAccess.invalidOffset
 			count: 2
 			path: src/Internal/WebhookUrlPolicy.php
-
-		-
-			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Laravel/WebhookRegistrar.php
-
-		-
-			rawMessage: 'Cannot call method get() on mixed.'
-			identifier: method.nonObject
-			count: 1
-			path: src/Laravel/WebhookRegistrar.php

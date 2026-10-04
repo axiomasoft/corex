@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Internal\Config;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Messaging\Internal\SqlDeliveryHealth;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
@@ -12,7 +12,7 @@ function deliveryHealthInsertRow(array $overrides = []): void
 {
     $now = app(ClockInterface::class)->now();
 
-    DB::connection('pgsql')->table(Config::outboxMessagesTable())->insert([
+    DB::connection('pgsql')->table(app(CoreOptions::class)->outboxMessagesTable)->insert([
         'id' => $overrides['id'] ?? '01932f5a-0000-7000-8000-000000000099',
         'name' => $overrides['name'] ?? 'membership.expired',
         'contract_version' => $overrides['contract_version'] ?? 1,

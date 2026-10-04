@@ -1,0 +1,23 @@
+{
+  "report_sha256": "4949c9e78a8e20a2fd52b02a4c389d69e3045cf39ca3886fe787eb09b2747808",
+  "packages": 20,
+  "symbols": 800,
+  "diagnostics": [
+    {
+      "code": "API-UNRESOLVED-TYPE",
+      "file": "packages/core/src/Errors/Tooling/ErrorSourceScanner.php",
+      "line": 111,
+      "symbol": "CoreX\\Errors\\Tooling\\ErrorSourceScanner",
+      "path": "methods.catalogue.return",
+      "message": "CoreX\\Errors\\Tooling\\CompiledProblemRegistry"
+    },
+    {
+      "code": "API-UNCLASSIFIED",
+      "file": "packages/core/src/Messaging/PHPStan/DurablePayloadTypeChecker.php",
+      "line": 17,
+      "symbol": "CoreX\\Messaging\\PHPStan\\DurablePayloadTypeChecker",
+      "path": "declaration",
+      "message": "Missing Api/Spi annotation"
+    }
+  ]
+}

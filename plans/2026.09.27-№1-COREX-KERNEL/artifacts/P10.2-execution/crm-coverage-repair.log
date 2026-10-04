@@ -1,0 +1,175 @@
+> pest --coverage --min=95
+
+   PASS  Tests\Feature\LeadConversionTest
+  ✓ it returns the same conversion on retry even when passed a stale le… 0.73s
+  ✓ it converts a lead without company or deal                           0.41s
+  ✓ it converts a lead into contact, company and deal                    0.69s
+
+   PASS  Tests\Feature\SalesStorageTest
+  ✓ it persists canonical lead fields with trusted provenance            0.25s
+  ✓ it refuses conversion without explicit human identity and preserves… 0.25s
+  ✓ it rejects creation veto without persisted rows or success events    0.23s
+  ✓ it stores activity kinds and canonical target associations           0.28s
+  ✓ it does not represent legacy statuses or note and task as activitie… 0.21s
+  ✓ it rolls back the entire conversion when the final lead update is v… 0.35s
+
+   PASS  Tests\Feature\ActivityTimelineTest
+  ✓ it attaches activities to different subject types                    0.40s
+  ✓ it logs a polymorphic activity resolved through the morph alias      0.31s
+
+   PASS  Tests\Feature\ContextSecurityTest
+  ✓ it guards direct association writes against cross-scope and foreign… 0.36s
+  ✓ it rechecks trusted provenance after late creating observers         0.28s
+  ✓ it requires account-level capability when no workspace exists        0.22s
+  ✓ it overwrites forged creation provenance and prevents changing it a… 0.28s
+  ✓ it rejects a late observer changing association endpoints            0.46s
+  ✓ it rejects a late observer changing the workspace and guards quiet…  0.35s
+  ✓ it treats observer veto as failed mutation without dispatching succ… 0.47s
+  ✓ it rejects malformed actor identities and foreign profile IDs        0.23s
+  ✓ it fails closed for disabled CRM and tenant context mismatch         0.21s
+  ✓ it rejects direct foreign workspace writes and foreign connection q… 0.23s
+
+   PASS  Tests\Feature\CompanyContactTest
+  ✓ it creates a company and a contact linked to it                      0.39s
+
+   PASS  Tests\Feature\ApiOperationsTest
+  ✓ it declares and dispatches company, contact and association operati… 0.55s
+  ✓ it normalizes CRM identifiers for the configured ID strategy         0.20s
+
+   PASS  Tests\Feature\DealFlowTest
+  ✓ it rolls back a vetoed stage update without a success event          0.35s
+  ✓ it refuses to create a deal in a pipeline without stages             0.29s
+  ✓ it rejects a stage from another pipeline without changing the deal…  0.34s
+  ✓ it creates a deal at the first stage with money                      0.32s
+  ✓ it clears optional amount without clearing mandatory currency        0.32s
+  ✓ it moves a deal to a won stage and marks it won                      0.39s
+
+   PASS  Tests\Feature\ParityTest
+  ✓ it rejects invalid UTF-8 names rather than silently dropping their…  0.23s
+  ✓ it creates approved records and a typed primary association          0.40s
+  ✓ it rejects nameless contacts without usable channels                 0.23s
+  ✓ it normalizes Unicode whitespace before testing empty name componen… 0.27s
+
+   PASS  Tests\Feature\RegistryFieldCastsTest
+  ✓ it compiles a consumer money field using the intl cast registration  0.20s
+
+   PASS  Tests\Pg\ModuleLifecycleTest
+  ✓ it discovers CRM composer metadata and manages its schema through t… 0.68s
+
+   PASS  Tests\Pg\FullStorageParityTest
+  ✓ it refuses populated legacy sales tables before changing any storag… 0.32s
+  ✓ it refuses populated legacy sales tables before changing any storag… 0.31s
+  ✓ it refuses populated legacy sales tables before changing any storag… 0.34s
+  ✓ it matches every actual enabled column constraint and index against… 0.63s
+
+   PASS  Tests\Pg\ActivityIdTest
+  ✓ it converts with canonical deal associations under enum configured…  0.89s
+  ✓ it converts with canonical deal associations under enum configured…  1.08s
+  ✓ it widens a legacy activity morph column before a UUID insert        0.10s
+  ✓ it stores and resolves activity subjects on PostgreSQL for the conf… 0.60s
+  ✓ it stores and resolves activity subjects on PostgreSQL for the conf… 0.75s
+  ✓ it stores and resolves activity subjects on PostgreSQL for the conf… 0.63s
+  ✓ it stores and resolves activity subjects on PostgreSQL for the conf… 0.62s
+
+   PASS  Tests\Pg\ConversionConcurrencyTest
+  ✓ it serializes concurrent conversion and returns the committed resul… 0.82s
+
+   PASS  Tests\Pg\ParityContractTest
+  ✓ it serializes competing primary actions and rejects the loser after… 0.93s
+  ✓ it enforces pair and primary constraints for direct database writer… 0.88s
+  ✓ it keeps committed data when a synchronous after-commit listener fa… 0.63s
+  ✓ it uses deterministic channel fallback and nullable whitespace comp… 0.78s
+  ✓ it separates NULL account data current workspace and foreign worksp… 0.72s
+  ✓ it rejects associations between NULL and workspace even with accoun… 0.74s
+  ✓ it fails closed for missing context and revoked membership on reads… 0.70s
+  ✓ it roundtrips all approved company and contact values and search     0.84s
+  ✓ it rejects forged actors and mismatched account connections          0.56s
+  ✓ it stores each admitted B13 actor kind through a trusted run-as con… 0.67s
+  ✓ it stores each admitted B13 actor kind through a trusted run-as con… 0.64s
+  ✓ it stores each admitted B13 actor kind through a trusted run-as con… 0.63s
+  ✓ it stores each admitted B13 actor kind through a trusted run-as con… 0.64s
+  ✓ it stores each admitted B13 actor kind through a trusted run-as con… 0.64s
+  ✓ it stores each admitted B13 actor kind through a trusted run-as con… 0.67s
+  ✓ it matches approved PostgreSQL fields lengths defaults indexes and…  0.56s
+  ✓ it preserves pivot on soft delete and applies hard delete SET NULL…  0.85s
+  ✓ it rejects invalid dates and field widths                            0.61s
+  ✓ it rejects malformed channels without storing a contact with ([['in… 0.61s
+  ✓ it rejects malformed channels without storing a contact with ([['a@… 0.60s
+  ✓ it rejects malformed channels without storing a contact with ([['+1… 0.62s
+  ✓ it rejects malformed channels without storing a contact with ([['a@… 0.60s
+  ✓ it rejects malformed channels without storing a contact with ([['']… 0.62s
+  ✓ it rejects malformed channels without storing a contact with ([['+1… 0.60s
+  ✓ it rejects malformed channels without storing a contact with ([['65… 0.64s
+  ✓ it rejects malformed channels without storing a contact with ([['a@… 0.66s
+  ✓ it rejects malformed channels without storing a contact with ([['a@… 0.68s
+  ✓ it rejects malformed channels without storing a contact with (['a@e… 0.64s
+  ✓ it rejects malformed channels without storing a contact with ([['+1… 0.59s
+  ✓ it rejects foreign or inactive source and owner references           0.67s
+  ✓ it dispatches mutation events only after the successful outer commi… 0.97s
+
+   PASS  Tests\Pg\UpgradeSafetyTest
+  ✓ it refuses automatic legacy backfill before altering any CRM data    0.12s
+  ✓ it checks prerequisite ownership before any destructive schema oper… 0.08s
+
+  Tests:    81 passed (408 assertions)
+  Duration: 41.13s
+  Random Order Seed: 1790879635
+
+  Activity/Actions/LogActivity ............................ 35, 39, 56 / 87.5%
+  Activity/Enums/ActivityType ......................................... 100.0%
+  Activity/Events/ActivityLogged ...................................... 100.0%
+  Activity/Models/Activity ............................................ 100.0%
+  Activity/Models/ActivityTarget ...................................... 100.0%
+  ApiShared/CrmIdentifier ......................................... 41 / 90.9%
+  ApiShared/CrmSchemas ................................................ 100.0%
+  Company/Actions/CreateCompany ....................................... 100.0%
+  Company/Api/CompanyPayload .......................................... 100.0%
+  Company/Api/CreateCompanyOperation .................................. 100.0%
+  Company/Api/ListCompaniesOperation .................................. 100.0%
+  Company/Api/ShowCompanyOperation ...................................... 0.0%
+  Company/Data/CompanyData ............................................ 100.0%
+  Company/Events/CompanyCreated ....................................... 100.0%
+  Company/Models/Company .............................................. 100.0%
+  Contact/Actions/AssociateContactCompany ......................... 25 / 95.5%
+  Contact/Actions/CreateContact ....................................... 100.0%
+  Contact/Api/ContactPayload .......................................... 100.0%
+  Contact/Api/CreateContactCompanyOperation ........................... 100.0%
+  Contact/Api/CreateContactOperation .................................. 100.0%
+  Contact/Api/ListContactsOperation ................................... 100.0%
+  Contact/Api/ShowContactOperation .................................... 100.0%
+  Contact/Data/ContactData ............................................ 100.0%
+  Contact/Events/ContactCompanyAssociated ............................. 100.0%
+  Contact/Events/ContactCreated ....................................... 100.0%
+  Contact/Models/Contact .............................................. 100.0%
+  Contact/Models/ContactCompany ........................... 61, 78..80 / 87.5%
+  Context/Channels ................................................ 53 / 97.0%
+  Context/ContextGuard ............................................ 46 / 98.0%
+  Context/Contracts/CrmExecutionContext ............................... 100.0%
+  Context/CrmScope .................................................... 100.0%
+  Context/Data/Actor .................................................. 100.0%
+  Context/Data/ExecutionContext ....................................... 100.0%
+  Context/Internal/RecordRules .................................... 75 / 98.5%
+  Context/Models/Concerns/HasActivities ............................... 100.0%
+  Context/Models/Concerns/HasCrmContext ............................... 100.0%
+  Context/Models/Source ............................................... 100.0%
+  CrmModule ........................................................... 100.0%
+  CrmServiceProvider .................................................. 100.0%
+  Deal/Actions/CreateDeal ......................... 30, 38, 60, 63..64 / 84.4%
+  Deal/Actions/MoveDealToStage ............................ 28, 42..43 / 87.5%
+  Deal/Casts/DealAmount ............................................... 100.0%
+  Deal/Enums/DealStatus ............................................... 100.0%
+  Deal/Events/DealCreated ............................................. 100.0%
+  Deal/Events/DealMovedToStage ........................................ 100.0%
+  Deal/Models/Deal .................................................... 100.0%
+  Deal/Models/Pipeline ................................................ 100.0%
+  Deal/Models/Stage ........................................... 30..36 / 77.8%
+  Lead/Actions/ConvertLead .................................... 46, 88 / 95.6%
+  Lead/Actions/CreateLead ............................................. 100.0%
+  Lead/Enums/LeadSource ............................................... 100.0%
+  Lead/Enums/LeadStatus ............................................... 100.0%
+  Lead/Events/LeadConverted ........................................... 100.0%
+  Lead/Events/LeadCreated ............................................. 100.0%
+  Lead/Models/Lead .................................................... 100.0%
+  Support/CrmOptions .......................................... 32..34 / 77.8%
+  ────────────────────────────────────────────────────────────────────────────
+                                                                 Total: 95.7 %

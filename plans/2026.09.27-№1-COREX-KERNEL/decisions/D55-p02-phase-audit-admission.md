@@ -12,7 +12,7 @@ superseded_by: null
 **Actor:** repository owner, this session's initial prompt. The grant is the owner-launched text preserved in `brief/p02-phase-audit-owner.md`, not a template author.
 **Evidence:** `brief/p02-phase-audit-owner.md#p02-phase-audit-launch`; candidate fingerprint `8a70cb68e2473960610ffc474d5e1498f966d86a214ac806a5691f35d6e159f5` rebuilt by `task.plan_gates.phase_candidate_fingerprint`.
 
-## Решение
+## Solution
 
 Принять один одноразовый phase audit P02 для run `c3e1a9b74d0f6e82a15c4b9078d3f6a1e0c9b27d54a8f1e6c3b0d9a7f4e2c815` и материального кандидата `8a70cb68e2473960610ffc474d5e1498f966d86a214ac806a5691f35d6e159f5`. Источник согласия — фактический запуск владельца в этой сессии: `[OWNER-GRANT:AUDIT-P02]` в `brief/p02-phase-audit-owner.md#p02-phase-audit-launch`. Повторный consent и второй run этим решением не создаются.
 
@@ -37,7 +37,7 @@ superseded_by: null
 }
 ```
 
-## Почему
+## Why
 
 Локальное закрытие P02 уже GREEN, а независимые item-ревью не заменяют один фазовый вопрос: соблюдены ли контракты P02.1–P02.4 и сохранено ли поведение после переносов и переименований. Владелец ограничил запуск одним вопросом, одним кандидатом и одним run. Hosted CI остаётся отложенным по D47 и этим решением не сертифицируется.
 

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Authentication\Internal\Oidc;
 
 use CoreX\Tenancy\Authentication\Exceptions\OidcAuthenticationException;
+use Illuminate\Http\Client\Factory as HttpFactory;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use SensitiveParameter;
 
@@ -29,6 +29,7 @@ final class OidcClient
     public const string SESSION_CODE_VERIFIER_KEY = 'corex_tenancy_oidc.code_verifier';
 
     public function __construct(
+        private readonly HttpFactory $http,
         private readonly OidcDiscovery $discovery,
         private readonly string $clientId,
         #[SensitiveParameter]
@@ -79,7 +80,7 @@ final class OidcClient
             $payload['client_secret'] = $this->clientSecret;
         }
 
-        $response = Http::asForm()->post($this->discovery->tokenEndpoint(), $payload);
+        $response = $this->http->createPendingRequest()->asForm()->post($this->discovery->tokenEndpoint(), $payload);
 
         if ($response->failed()) {
             throw OidcAuthenticationException::tokenExchangeFailed();

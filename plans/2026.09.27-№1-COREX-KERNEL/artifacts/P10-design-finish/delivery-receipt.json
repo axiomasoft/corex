@@ -1,0 +1,46 @@
+{
+  "adapter_attestation": null,
+  "commit_sha": "db5abf279ba54356145cb8b779f592e0f2fdc8d7",
+  "continuity": {
+    "evidence": [
+      "persisted-context:continue-root"
+    ],
+    "outcome": "continue-root",
+    "reason": "compatible-active-work",
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": null,
+    "handoff": "sha256:810187b98024177cda16b9381fb67bef0fd98d38841a64e0d9e8d1d726c604a6",
+    "plan": "sha256:6c81194ebe75fdf55e5d449db84805880fb9aa08b469e5ada8690015821ad7a4",
+    "state": null
+  },
+  "journal": null,
+  "next_exact": "run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P10.1",
+  "plan_id": "2026.09.27-№1-COREX-KERNEL",
+  "rationale": {
+    "open_risks": "Runtime/hosted CI не проверялись в finish; V1–V3 подтверждаются исполнением. Остаточные Laravel 12/PHP 8.5 отказы и coverage выясняются P10.4. Независимые ревью P10.2/P10.3 и продуктовых правок P10.4 обязательны. Точный selector/effort автора не аттестован; будущий исполнитель следует sheet. Handoff — рекомендация, не execution admission.",
+    "remaining": "P10.1 → P10.2 → P10.3 → P10.4; полный hosted CI GREEN на финальном commit P10.4, затем B05-A → P05.3 → P05.4. P06–P09 backlog. Дополнительного обязательного design audit перед P10 по D77 нет."
+  },
+  "recommendation": "**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P10.1\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | solo |\n| Model | implementation |\n| Thinking | high |\n| Context | continue-root |\n| Capabilities | PHP 8.4 · Composer · repository write · push origin · hosted CI read |\n| Суть | Строка 14 execution-sheet: начать P10.1. Второй содержательный дизайн завершён; допуск D77, уточнения D78. |\n\n```text\ntask:plan-run 2026.09.27-№1-COREX-KERNEL P10.1\n```\n\n```session-continuity-decision/v1\n{\"evidence\": [\"persisted-context:continue-root\"], \"outcome\": \"continue-root\", \"reason\": \"compatible-active-work\", \"runnable\": true, \"schema_version\": \"session-continuity-decision/v1\"}\n```",
+  "route": {
+    "batch": "solo",
+    "command": null,
+    "context": "continue-root",
+    "continuity": {
+      "evidence": [
+        "persisted-context:continue-root"
+      ],
+      "outcome": "continue-root",
+      "reason": "compatible-active-work",
+      "runnable": true,
+      "schema_version": "session-continuity-decision/v1"
+    },
+    "model": "implementation",
+    "thinking": "high"
+  },
+  "schema_version": "handoff-recommendation-receipt/v1",
+  "status": "handoff-persisted",
+  "subject": "P10"
+}

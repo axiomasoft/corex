@@ -26,7 +26,9 @@ use CoreX\Tools\Contracts\ToolPolicy;
 use CoreX\Tools\Contracts\ToolSchemaValidator;
 use CoreX\Tools\Data\ToolCall;
 use CoreX\Tools\Data\ToolDescriptor;
+use CoreX\Tools\Data\ToolOutcome;
 use CoreX\Tools\Data\ToolResult;
+use CoreX\Tools\Errors\Enums\ToolsErrorCode;
 use Illuminate\Contracts\Container\Container;
 use LogicException;
 use Override;
@@ -52,21 +54,21 @@ final class GuardedToolInvoker implements ToolInvoker
         $declaration = $this->resolveDeclaration(code: $call->code, toolVersion: $call->toolVersion);
 
         if ($declaration === null || $declaration->declaringModule === null) {
-            return $this->denied('tool_unavailable', $call);
+            return $this->denied(errorCode: ToolsErrorCode::ToolUnavailable, call: $call);
         }
 
         if (! $this->modules->isActive($declaration->declaringModule, $context->tenant())) {
-            return $this->denied('tool_unavailable', $call);
+            return $this->denied(errorCode: ToolsErrorCode::ToolUnavailable, call: $call);
         }
 
         $tool = ToolDescriptorFactory::fromDeclaration($declaration);
 
         if ($call->expectedContractHash !== $tool->contractHash) {
-            return $this->denied('tool_revision_conflict', $call);
+            return $this->denied(errorCode: ToolsErrorCode::ToolRevisionConflict, call: $call);
         }
 
         if (! $this->policy->invoke($tool, $context, $call->arguments)) {
-            return $this->denied('tool_unavailable', $call);
+            return $this->denied(errorCode: ToolsErrorCode::ToolUnavailable, call: $call);
         }
 
         $inputError = $this->validateInput($tool, $call);
@@ -103,10 +105,10 @@ final class GuardedToolInvoker implements ToolInvoker
 
         if (
             $callbackInvocations === 0
-            && $result->outcome === ToolResult::OUTCOME_COMMITTED
+            && $result->outcome === ToolOutcome::Committed
             && ! $result->replayed
         ) {
-            return $this->denied('internal_error', $call);
+            return $this->denied(errorCode: ToolsErrorCode::InternalError, call: $call);
         }
 
         return $result;
@@ -133,15 +135,12 @@ final class GuardedToolInvoker implements ToolInvoker
             );
 
             if (! $validation->valid) {
-                return $this->denied('input_invalid', $call);
+                return $this->denied(errorCode: ToolsErrorCode::InputInvalid, call: $call);
             }
-        } catch (RuntimeException $exception) {
-            $code = match ($exception->getMessage()) {
-                'schema_unavailable', 'schema_limit' => $exception->getMessage(),
-                default => 'internal_error',
-            };
-
-            return $this->denied($code, $call);
+        } catch (ToolSchemaFailure $exception) {
+            return $this->denied(errorCode: $exception->errorCode, call: $call);
+        } catch (RuntimeException) {
+            return $this->denied(errorCode: ToolsErrorCode::InternalError, call: $call);
         }
 
         return null;
@@ -170,11 +169,11 @@ final class GuardedToolInvoker implements ToolInvoker
                     ));
                 } catch (Throwable $error) {
                     if ($error instanceof ApiError) {
-                        return $this->denied($error->errorCode, $call);
+                        return $this->operationFailed(errorCode: $error->errorCode, call: $call);
                     }
 
                     if ($error instanceof HttpExceptionInterface && $error->getStatusCode() === 429) {
-                        return $this->denied('rate_limited', $call);
+                        return $this->denied(errorCode: ToolsErrorCode::RateLimited, call: $call);
                     }
 
                     throw $error;
@@ -187,7 +186,7 @@ final class GuardedToolInvoker implements ToolInvoker
                 $handler = $this->container->make($declaration->handler ?? throw new LogicException('Tool handler missing.'));
 
                 if (! $handler instanceof OperationHandler) {
-                    return $this->denied('internal_error', $call);
+                    return $this->denied(errorCode: ToolsErrorCode::InternalError, call: $call);
                 }
 
                 $toolContext = new ToolRequestContext(
@@ -207,7 +206,7 @@ final class GuardedToolInvoker implements ToolInvoker
             }
 
             return new ToolResult(
-                outcome: ToolResult::OUTCOME_COMMITTED,
+                outcome: ToolOutcome::Committed,
                 structuredData: $structured,
                 errorCode: null,
                 operationKey: $call->operationKey,
@@ -219,7 +218,7 @@ final class GuardedToolInvoker implements ToolInvoker
                 throw $exception;
             }
 
-            return $this->denied('internal_error', $call);
+            return $this->denied(errorCode: ToolsErrorCode::InternalError, call: $call);
         }
     }
 
@@ -275,30 +274,27 @@ final class GuardedToolInvoker implements ToolInvoker
             );
 
             if (! $validation->valid) {
-                return new ToolResult(
-                    outcome: ToolResult::OUTCOME_NOT_EXECUTED,
-                    structuredData: null,
-                    errorCode: 'output_contract_failed',
-                    operationKey: $call->operationKey,
-                    replayed: false,
-                );
+                return $this->denied(errorCode: ToolsErrorCode::OutputContractFailed, call: $call);
             }
-        } catch (RuntimeException $exception) {
-            $code = match ($exception->getMessage()) {
-                'schema_unavailable', 'schema_limit' => $exception->getMessage(),
-                default => 'internal_error',
-            };
-
-            return $this->denied($code, $call);
+        } catch (ToolSchemaFailure $exception) {
+            return $this->denied(errorCode: $exception->errorCode, call: $call);
+        } catch (RuntimeException) {
+            return $this->denied(errorCode: ToolsErrorCode::InternalError, call: $call);
         }
 
         return null;
     }
 
-    private function denied(string $errorCode, ToolCall $call): ToolResult
+    private function denied(ToolsErrorCode $errorCode, ToolCall $call): ToolResult
+    {
+        return $this->operationFailed(errorCode: $errorCode->value, call: $call);
+    }
+
+    /** Registered codes from the invoked operation retain their owning namespace. */
+    private function operationFailed(string $errorCode, ToolCall $call): ToolResult
     {
         return new ToolResult(
-            outcome: ToolResult::OUTCOME_NOT_EXECUTED,
+            outcome: ToolOutcome::NotExecuted,
             structuredData: null,
             errorCode: $errorCode,
             operationKey: $call->operationKey,

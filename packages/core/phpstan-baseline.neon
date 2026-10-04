@@ -19,18 +19,6 @@ parameters:
 			path: src/Audit/Internal/CurrentActor.php
 
 		-
-			rawMessage: 'Dynamic call to static method Illuminate\Contracts\Auth\Guard::check().'
-			identifier: staticMethod.dynamicCall
-			count: 1
-			path: src/Audit/Internal/CurrentActor.php
-
-		-
-			rawMessage: 'Dynamic call to static method Illuminate\Contracts\Auth\Guard::user().'
-			identifier: staticMethod.dynamicCall
-			count: 1
-			path: src/Audit/Internal/CurrentActor.php
-
-		-
 			rawMessage: 'Construct empty() is not allowed. Use more strict comparison.'
 			identifier: empty.notAllowed
 			count: 1
@@ -119,108 +107,6 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: src/Config/Laravel/CoreOptionsParser.php
-
-		-
-			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/CoreServiceProvider.php
-
-		-
-			rawMessage: 'Cannot call method get() on mixed.'
-			identifier: method.nonObject
-			count: 1
-			path: src/CoreServiceProvider.php
-
-		-
-			rawMessage: 'Cannot call method make() on mixed.'
-			identifier: method.nonObject
-			count: 13
-			path: src/CoreServiceProvider.php
-
-		-
-			rawMessage: 'Parameter #1 $app of class Illuminate\Filesystem\FilesystemManager constructor expects Illuminate\Contracts\Foundation\Application, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/CoreServiceProvider.php
-
-		-
-			rawMessage: 'Parameter $clock of class CoreX\Messaging\Internal\SqlDeliveryHealth constructor expects Psr\Clock\ClockInterface, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/CoreServiceProvider.php
-
-		-
-			rawMessage: 'Parameter $clock of class CoreX\Messaging\Internal\SqlInbox constructor expects Psr\Clock\ClockInterface, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/CoreServiceProvider.php
-
-		-
-			rawMessage: 'Parameter $clock of class CoreX\Messaging\Internal\SqlOutbox constructor expects Psr\Clock\ClockInterface, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/CoreServiceProvider.php
-
-		-
-			rawMessage: 'Parameter $clock of class CoreX\Messaging\Internal\SqlOutboxRelay constructor expects Psr\Clock\ClockInterface, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/CoreServiceProvider.php
-
-		-
-			rawMessage: 'Parameter $connection of class CoreX\Messaging\Internal\SqlDeliveryHealth constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/CoreServiceProvider.php
-
-		-
-			rawMessage: 'Parameter $connection of class CoreX\Messaging\Internal\SqlInbox constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/CoreServiceProvider.php
-
-		-
-			rawMessage: 'Parameter $connection of class CoreX\Messaging\Internal\SqlOutbox constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/CoreServiceProvider.php
-
-		-
-			rawMessage: 'Parameter $connection of class CoreX\Messaging\Internal\SqlOutboxRelay constructor expects Illuminate\Database\Connection, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/CoreServiceProvider.php
-
-		-
-			rawMessage: 'Parameter $contexts of class CoreX\Storage\Internal\LocalTenantStorage constructor expects CoreX\Context\Contracts\TenantContextResolver, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/CoreServiceProvider.php
-
-		-
-			rawMessage: 'Parameter $contracts of class CoreX\Messaging\Internal\SqlOutbox constructor expects CoreX\Messaging\Contracts\MessageContractRegistry, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/CoreServiceProvider.php
-
-		-
-			rawMessage: 'Parameter $dates of class CoreX\Time\Laravel\LaravelClock constructor expects Illuminate\Support\DateFactory, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/CoreServiceProvider.php
-
-		-
-			rawMessage: 'Parameter $resolver of class CoreX\Context\Internal\GuardedTenantContextRestorer constructor expects CoreX\Context\Contracts\TenantContextResolver, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/CoreServiceProvider.php
-
-		-
-			rawMessage: 'Parameter $traces of class CoreX\Messaging\Internal\SqlOutbox constructor expects CoreX\Messaging\Contracts\TraceContextBridge, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/CoreServiceProvider.php
 
 		-
 			rawMessage: 'Construct empty() is not allowed. Use more strict comparison.'
@@ -787,24 +673,6 @@ parameters:
 			path: src/Modules/Internal/Lifecycle/DatabaseModuleStateReader.php
 
 		-
-			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Modules/ModulesServiceProvider.php
-
-		-
-			rawMessage: 'Cannot call method get() on mixed.'
-			identifier: method.nonObject
-			count: 1
-			path: src/Modules/ModulesServiceProvider.php
-
-		-
-			rawMessage: 'Parameter #1 $config of static method CoreX\Modules\Internal\Support\ModulesOptions::fromArray() expects array<string, mixed>, array<mixed> given.'
-			identifier: argument.type
-			count: 1
-			path: src/Modules/ModulesServiceProvider.php
-
-		-
 			rawMessage: 'Parameter $onDisableHook of class CoreX\Modules\Data\CompiledModule constructor expects class-string|null, string|null given.'
 			identifier: argument.type
 			count: 1
@@ -887,12 +755,6 @@ parameters:
 			identifier: method.dynamicName
 			count: 1
 			path: src/Observability/Internal/OpenTelemetryBridge.php
-
-		-
-			rawMessage: 'Parameter #1 $payload of static method Illuminate\Support\Facades\Crypt::decryptString() expects string, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/Settings/Internal/DatabaseSettingsRepository.php
 
 		-
 			rawMessage: 'Construct empty() is not allowed. Use more strict comparison.'

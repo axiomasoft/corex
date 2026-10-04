@@ -8,6 +8,7 @@ use Closure;
 use CoreX\Access\Laravel\AuthOptions;
 use CoreX\Access\Matrix\Contracts\ScopeMapVersions;
 use CoreX\Context\Contracts\TenantContextResolver;
+use Illuminate\Cache\Lock;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Cache\LockProvider;
 use Illuminate\Contracts\Cache\Repository;
@@ -55,9 +56,19 @@ final readonly class ScopeMapVersion implements ScopeMapVersions
             $backend = $store->getStore();
 
             // FileStore's increment is a read/put pair, not an atomic counter.
-            return $backend instanceof LockProvider
-                ? $backend->lock($key.':bump', 10)->block(5, $increment)
-                : $increment();
+            // The framework polls a blocked lock every 250ms, which is longer than
+            // this critical section, so concurrent bumps time out while the lock is free.
+            if (! $backend instanceof LockProvider) {
+                return $increment();
+            }
+
+            $lock = $backend->lock($key.':bump', 10);
+
+            if ($lock instanceof Lock) {
+                $lock->betweenBlockedAttemptsSleepFor(50);
+            }
+
+            return $lock->block(5, $increment);
         };
     }
 

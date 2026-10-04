@@ -172,7 +172,9 @@ it('binds Authentication when oidc is enabled', function (): void {
         $this->assertSingletonBinding($app, IdTokenVerifier::class, IdTokenVerifier::class);
         $this->assertSingletonBinding($app, OidcClient::class, OidcClient::class);
         $this->assertSingletonBinding($app, LogoutController::class, LogoutController::class);
-        $this->assertSingletonBinding($app, OidcLoginController::class, OidcLoginController::class);
+        // Scoped: the controller stores ImpersonationService, which is itself scoped.
+        // A singleton would keep the first impersonation service for the process.
+        $this->assertScopedBinding($app, OidcLoginController::class, OidcLoginController::class);
         $this->assertScopedBinding(
             $app,
             ImpersonationService::class,

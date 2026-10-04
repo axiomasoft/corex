@@ -8,7 +8,7 @@ use Closure;
 use CoreX\Config\Data\CoreOptions;
 use CoreX\Messaging\Contracts\PubSub;
 use CoreX\Messaging\Contracts\WorkerRuntime;
-use Illuminate\Support\Facades\Redis;
+use Illuminate\Contracts\Redis\Factory as RedisFactory;
 use Override;
 
 /**
@@ -24,22 +24,24 @@ use Override;
 final class RedisPubSub implements PubSub
 {
     public function __construct(
+        private readonly RedisFactory $redis,
+        private readonly CoreOptions $options,
+        private readonly WorkerRuntime $runtime,
         private readonly ?string $connection = null,
-        private readonly WorkerRuntime $runtime = new DefaultWorkerRuntime,
     ) {}
 
     #[Override]
     public function publish(string $channel, array $payload): void
     {
-        Redis::connection($this->connection)->publish($channel, json_encode($payload, JSON_THROW_ON_ERROR));
+        $this->redis->connection($this->connection)->publish($channel, json_encode($payload, JSON_THROW_ON_ERROR));
     }
 
     #[Override]
     public function subscribe(string $channel, Closure $handler): void
     {
-        SubscribeGuard::assert($this->runtime, app(CoreOptions::class)->pubsubOctaneWorkerOptIn, self::class);
+        SubscribeGuard::assert($this->runtime, $this->options->pubsubOctaneWorkerOptIn, self::class);
 
-        Redis::connection($this->connection)->subscribe([$channel], function (string $message) use ($handler): void {
+        $this->redis->connection($this->connection)->subscribe([$channel], function (string $message) use ($handler): void {
             /** @var array<string, mixed> $payload */
             $payload = json_decode($message, true, flags: JSON_THROW_ON_ERROR);
             $handler($payload);

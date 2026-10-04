@@ -11,6 +11,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "authorizeCreate": {
@@ -124,6 +125,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "context": {
@@ -151,6 +153,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "authorizeComplete": {
@@ -244,6 +247,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "authorize": {
@@ -312,66 +316,9 @@
             "implements": [
                 "CoreX\\Errors\\Contracts\\DescribesError"
             ],
+            "uses": [],
             "doc": [],
             "methods": {
-                "__construct": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "message",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": true,
-                            "default": "''",
-                            "flags": 0
-                        },
-                        {
-                            "name": "code",
-                            "type": "int",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": true,
-                            "default": "0",
-                            "flags": 0
-                        },
-                        {
-                            "name": "previous",
-                            "type": "?Throwable",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": true,
-                            "default": "NULL",
-                            "flags": 0
-                        }
-                    ],
-                    "return": null,
-                    "doc": []
-                },
-                "__toString": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "string",
-                    "doc": []
-                },
-                "__wakeup": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": null,
-                    "doc": []
-                },
                 "errorDescriptor": {
                     "visibility": "public",
                     "static": false,
@@ -391,76 +338,6 @@
                     "parameters": [],
                     "return": "self(CoreX\\Tasks\\Access\\Exceptions\\TasksModuleDisabled)",
                     "doc": []
-                },
-                "getCode": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": true,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": null,
-                    "doc": []
-                },
-                "getFile": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": true,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "string",
-                    "doc": []
-                },
-                "getLine": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": true,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "int",
-                    "doc": []
-                },
-                "getMessage": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": true,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "string",
-                    "doc": []
-                },
-                "getPrevious": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": true,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "?Throwable",
-                    "doc": []
-                },
-                "getTrace": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": true,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "array",
-                    "doc": []
-                },
-                "getTraceAsString": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": true,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "string",
-                    "doc": []
                 }
             },
             "properties": [],
@@ -479,6 +356,7 @@
             "implements": [
                 "CoreX\\Errors\\Contracts\\ErrorCode"
             ],
+            "uses": [],
             "doc": [],
             "methods": {
                 "value": {
@@ -510,6 +388,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "find": {
@@ -625,6 +504,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "createProject": {
@@ -729,6 +609,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": [],
             "properties": [],
@@ -749,6 +630,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "__construct": {
@@ -854,6 +736,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "__construct": {
@@ -921,6 +804,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": [],
             "properties": [],
@@ -943,6 +827,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "__construct": {
@@ -1033,66 +918,9 @@
             "implements": [
                 "CoreX\\Errors\\Contracts\\DescribesError"
             ],
+            "uses": [],
             "doc": [],
             "methods": {
-                "__construct": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "message",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": true,
-                            "default": "''",
-                            "flags": 0
-                        },
-                        {
-                            "name": "code",
-                            "type": "int",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": true,
-                            "default": "0",
-                            "flags": 0
-                        },
-                        {
-                            "name": "previous",
-                            "type": "?Throwable",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": true,
-                            "default": "NULL",
-                            "flags": 0
-                        }
-                    ],
-                    "return": null,
-                    "doc": []
-                },
-                "__toString": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "string",
-                    "doc": []
-                },
-                "__wakeup": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": null,
-                    "doc": []
-                },
                 "errorDescriptor": {
                     "visibility": "public",
                     "static": false,
@@ -1131,76 +959,6 @@
                     ],
                     "return": "self(CoreX\\Tasks\\Planning\\Exceptions\\InvalidPlanningDraft)",
                     "doc": []
-                },
-                "getCode": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": true,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": null,
-                    "doc": []
-                },
-                "getFile": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": true,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "string",
-                    "doc": []
-                },
-                "getLine": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": true,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "int",
-                    "doc": []
-                },
-                "getMessage": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": true,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "string",
-                    "doc": []
-                },
-                "getPrevious": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": true,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "?Throwable",
-                    "doc": []
-                },
-                "getTrace": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": true,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "array",
-                    "doc": []
-                },
-                "getTraceAsString": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": true,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "string",
-                    "doc": []
                 }
             },
             "properties": [],
@@ -1221,66 +979,9 @@
             "implements": [
                 "CoreX\\Errors\\Contracts\\DescribesError"
             ],
+            "uses": [],
             "doc": [],
             "methods": {
-                "__construct": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "message",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": true,
-                            "default": "''",
-                            "flags": 0
-                        },
-                        {
-                            "name": "code",
-                            "type": "int",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": true,
-                            "default": "0",
-                            "flags": 0
-                        },
-                        {
-                            "name": "previous",
-                            "type": "?Throwable",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": true,
-                            "default": "NULL",
-                            "flags": 0
-                        }
-                    ],
-                    "return": null,
-                    "doc": []
-                },
-                "__toString": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "string",
-                    "doc": []
-                },
-                "__wakeup": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": null,
-                    "doc": []
-                },
                 "errorDescriptor": {
                     "visibility": "public",
                     "static": false,
@@ -1310,76 +1011,6 @@
                     ],
                     "return": "self(CoreX\\Tasks\\Planning\\Exceptions\\PlanningConflict)",
                     "doc": []
-                },
-                "getCode": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": true,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": null,
-                    "doc": []
-                },
-                "getFile": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": true,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "string",
-                    "doc": []
-                },
-                "getLine": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": true,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "int",
-                    "doc": []
-                },
-                "getMessage": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": true,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "string",
-                    "doc": []
-                },
-                "getPrevious": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": true,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "?Throwable",
-                    "doc": []
-                },
-                "getTrace": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": true,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "array",
-                    "doc": []
-                },
-                "getTraceAsString": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": true,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "string",
-                    "doc": []
                 }
             },
             "properties": [],
@@ -1398,6 +1029,7 @@
             "implements": [
                 "CoreX\\Tasks\\Planning\\Contracts\\TaskPlanningCommand"
             ],
+            "uses": [],
             "doc": [],
             "methods": {
                 "__construct": {
@@ -1423,6 +1055,15 @@
                             "variadic": false,
                             "optional": false,
                             "default": null,
+                            "flags": 68
+                        },
+                        {
+                            "name": "receipts",
+                            "type": "?CoreX\\Tasks\\Planning\\Contracts\\TaskOperationReceipts",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "default": "null",
                             "flags": 68
                         }
                     ],
@@ -1531,6 +1172,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "find": {
@@ -1577,6 +1219,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "__construct": {
@@ -1663,6 +1306,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "__construct": {
@@ -1795,6 +1439,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "__construct": {
@@ -1862,6 +1507,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": [],
             "properties": [],
@@ -1881,6 +1527,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": {
                 "@corex-model-extension": [
                     "laravel-model"
@@ -1959,6 +1606,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "find": {
@@ -2005,6 +1653,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "__construct": {
@@ -2129,6 +1778,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "__construct": {
@@ -2261,6 +1911,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "__construct": {
@@ -2328,6 +1979,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": [],
             "properties": [],
@@ -2348,6 +2000,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": {
                 "@corex-model-extension": [
                     "laravel-model"
@@ -2474,6 +2127,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "handle": {
@@ -2511,6 +2165,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "handle": {
@@ -2548,6 +2203,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "handle": {
@@ -2585,6 +2241,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "capture": {
@@ -2622,6 +2279,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "handle": {
@@ -2659,6 +2317,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "__construct": {
@@ -2759,6 +2418,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "__construct": {
@@ -2826,6 +2486,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "__construct": {
@@ -2893,6 +2554,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "__construct": {
@@ -2979,6 +2641,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "__construct": {
@@ -3104,6 +2767,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "__construct": {
@@ -3209,6 +2873,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "__construct": {
@@ -3587,6 +3252,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "__construct": {
@@ -3681,6 +3347,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "__construct": {
@@ -3881,6 +3548,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "__construct": {
@@ -4201,6 +3869,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": [],
             "properties": [],
@@ -4222,6 +3891,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": [],
             "properties": [],
@@ -4247,6 +3917,7 @@
             "implements": [
                 "Illuminate\\Contracts\\Events\\ShouldDispatchAfterCommit"
             ],
+            "uses": [],
             "doc": [],
             "methods": {
                 "__construct": {
@@ -4297,6 +3968,7 @@
             "implements": [
                 "Illuminate\\Contracts\\Events\\ShouldDispatchAfterCommit"
             ],
+            "uses": [],
             "doc": [],
             "methods": {
                 "__construct": {
@@ -4347,6 +4019,7 @@
             "implements": [
                 "Illuminate\\Contracts\\Events\\ShouldDispatchAfterCommit"
             ],
+            "uses": [],
             "doc": [],
             "methods": {
                 "__construct": {
@@ -4416,6 +4089,7 @@
             "implements": [
                 "Illuminate\\Contracts\\Events\\ShouldDispatchAfterCommit"
             ],
+            "uses": [],
             "doc": [],
             "methods": {
                 "__construct": {
@@ -4495,6 +4169,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": {
                 "@corex-model-extension": [
                     "laravel-model"
@@ -4564,6 +4239,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "register": {
@@ -4601,6 +4277,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": {
                 "@corex-model-extension": [
                     "laravel-model"
@@ -4729,6 +4406,7 @@
                 "CoreX\\Modules\\Contracts\\ModuleDefinition"
             ],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "manifest": {
@@ -4766,69 +4444,9 @@
                 "Illuminate\\Support\\ServiceProvider"
             ],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
-                "__construct": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "app",
-                            "type": null,
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": null,
-                    "doc": {
-                        "@param": [
-                            "\\Illuminate\\Contracts\\Foundation\\Application $app"
-                        ]
-                    }
-                },
-                "addProviderToBootstrapFile": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "provider",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        },
-                        {
-                            "name": "path",
-                            "type": "?string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": true,
-                            "default": "null",
-                            "flags": 0
-                        }
-                    ],
-                    "return": null,
-                    "doc": {
-                        "@param": [
-                            "(string | null) $path",
-                            "string $provider"
-                        ],
-                        "@return": [
-                            "bool"
-                        ]
-                    }
-                },
                 "boot": {
                     "visibility": "public",
                     "static": false,
@@ -4839,236 +4457,6 @@
                     "return": "void",
                     "doc": []
                 },
-                "booted": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "callback",
-                            "type": "Closure",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": null,
-                    "doc": {
-                        "@param": [
-                            "\\Closure $callback"
-                        ],
-                        "@return": [
-                            "void"
-                        ]
-                    }
-                },
-                "booting": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "callback",
-                            "type": "Closure",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": null,
-                    "doc": {
-                        "@param": [
-                            "\\Closure $callback"
-                        ],
-                        "@return": [
-                            "void"
-                        ]
-                    }
-                },
-                "callBootedCallbacks": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": null,
-                    "doc": {
-                        "@return": [
-                            "void"
-                        ]
-                    }
-                },
-                "callBootingCallbacks": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": null,
-                    "doc": {
-                        "@return": [
-                            "void"
-                        ]
-                    }
-                },
-                "commands": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "commands",
-                            "type": null,
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": null,
-                    "doc": {
-                        "@param": [
-                            "mixed $commands"
-                        ],
-                        "@return": [
-                            "void"
-                        ]
-                    }
-                },
-                "defaultProviders": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": null,
-                    "doc": {
-                        "@return": [
-                            "\\Illuminate\\Support\\DefaultProviders"
-                        ]
-                    }
-                },
-                "isDeferred": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": null,
-                    "doc": {
-                        "@return": [
-                            "bool"
-                        ]
-                    }
-                },
-                "pathsToPublish": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "provider",
-                            "type": null,
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": true,
-                            "default": "null",
-                            "flags": 0
-                        },
-                        {
-                            "name": "group",
-                            "type": null,
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": true,
-                            "default": "null",
-                            "flags": 0
-                        }
-                    ],
-                    "return": null,
-                    "doc": {
-                        "@param": [
-                            "(string | null) $group",
-                            "(string | null) $provider"
-                        ],
-                        "@return": [
-                            "array"
-                        ]
-                    }
-                },
-                "provides": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": null,
-                    "doc": {
-                        "@return": [
-                            "array"
-                        ]
-                    }
-                },
-                "publishableGroups": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": null,
-                    "doc": {
-                        "@return": [
-                            "array"
-                        ]
-                    }
-                },
-                "publishableMigrationPaths": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": null,
-                    "doc": {
-                        "@return": [
-                            "array"
-                        ]
-                    }
-                },
-                "publishableProviders": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": null,
-                    "doc": {
-                        "@return": [
-                            "array"
-                        ]
-                    }
-                },
                 "register": {
                     "visibility": "public",
                     "static": false,
@@ -5078,141 +4466,9 @@
                     "parameters": [],
                     "return": "void",
                     "doc": []
-                },
-                "removeProviderFromBootstrapFile": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "providersToRemove",
-                            "type": "(string|array)",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        },
-                        {
-                            "name": "path",
-                            "type": "?string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": true,
-                            "default": "null",
-                            "flags": 0
-                        },
-                        {
-                            "name": "strict",
-                            "type": "bool",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": true,
-                            "default": "false",
-                            "flags": 0
-                        }
-                    ],
-                    "return": null,
-                    "doc": {
-                        "@param": [
-                            "(string | array) $providersToRemove",
-                            "(string | null) $path",
-                            "bool $strict"
-                        ],
-                        "@return": [
-                            "bool"
-                        ]
-                    }
-                },
-                "when": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": null,
-                    "doc": {
-                        "@return": [
-                            "array"
-                        ]
-                    }
                 }
             },
-            "properties": {
-                "optimizeClearCommands": {
-                    "flags": 9,
-                    "type": "array",
-                    "readonly": false,
-                    "visibility": "public",
-                    "static": true,
-                    "default": "[]",
-                    "doc": {
-                        "@var": [
-                            "array<string, string>"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "optimizeCommands": {
-                    "flags": 9,
-                    "type": "array",
-                    "readonly": false,
-                    "visibility": "public",
-                    "static": true,
-                    "default": "[]",
-                    "doc": {
-                        "@var": [
-                            "array<string, string>"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "publishGroups": {
-                    "flags": 9,
-                    "type": null,
-                    "readonly": false,
-                    "visibility": "public",
-                    "static": true,
-                    "default": "[]",
-                    "doc": {
-                        "@var": [
-                            "array"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "publishes": {
-                    "flags": 9,
-                    "type": null,
-                    "readonly": false,
-                    "visibility": "public",
-                    "static": true,
-                    "default": "[]",
-                    "doc": {
-                        "@var": [
-                            "array"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "reloadCommands": {
-                    "flags": 9,
-                    "type": "array",
-                    "readonly": false,
-                    "visibility": "public",
-                    "static": true,
-                    "default": "[]",
-                    "doc": {
-                        "@var": [
-                            "array<string, string>"
-                        ]
-                    },
-                    "hooks": []
-                }
-            },
+            "properties": [],
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -5226,6 +4482,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "__construct": {
@@ -5388,6 +4645,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": {
                 "__construct": {
@@ -5520,6 +4778,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": [],
             "methods": [],
             "properties": [],
@@ -5539,6 +4798,7 @@
             "abstract": false,
             "extends": [],
             "implements": [],
+            "uses": [],
             "doc": {
                 "@corex-model-extension": [
                     "laravel-model"

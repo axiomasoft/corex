@@ -7,6 +7,7 @@ namespace CoreX\Tenancy\Laravel\Commands;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Tenancy\Account\Internal\PendingPool;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -23,9 +24,9 @@ final class PendingCreateCommand extends Command
 
     protected $description = 'Top up (or explicitly seed) the pending account pool for one or all active clusters.';
 
-    public function handle(PendingPool $pool): int
+    public function handle(PendingPool $pool, ?TenancyOptions $options = null): int
     {
-        $centralConnection = (string) config('tenancy.central_connection');
+        $centralConnection = ($options ?? $this->laravel->make(TenancyOptions::class))->centralConnection;
         $explicitCount = $this->option('count') !== null ? (int) $this->option('count') : null;
         $clusterId = $this->option('cluster');
 

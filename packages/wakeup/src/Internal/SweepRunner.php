@@ -50,7 +50,7 @@ final class SweepRunner implements DueWakeupSweeper
         }
         $sourceLimit = max(1, intdiv($limit, count($this->dueSources) + 1));
         foreach ($this->dueSources as $source) {
-            $sourceResult = $source->sweep($context, new DateTimeImmutable('now'), $sourceLimit);
+            $sourceResult = $source->sweep($context, $this->clock->now(), $sourceLimit);
             $completed += $sourceResult->completed;
             $retried += $sourceResult->retried;
             $failed += $sourceResult->failed;

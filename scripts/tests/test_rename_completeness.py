@@ -27,7 +27,7 @@ class AttributeRenameTest(unittest.TestCase):
                                  if row.get('new') == 'CoreX\\CustomFields\\Internal\\Schema')
             for text, expected in (
                 ('namespace CoreX\\Attributes;', 0),
-                ('namespace CoreX\\Attributes\\Internal;', 0),
+                ('namespace CoreX\\Attributes\\Tooling;', 0),
                 ('use ' + old_class + ';', 1),
                 ('namespace ' + old_namespace + ';', 1),
             ):

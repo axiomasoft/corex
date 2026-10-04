@@ -2,15 +2,15 @@
 projection: decision-open-questions
 projection_version: v1
 source_scope: decisions/
-through: 2026-10-01/D76
-inputs_sha256: dbc8eb4570fb2bc70f8c899603220561aee00e6b2db3068148a5abca574512c4
+through: 2026-10-04/D104
+inputs_sha256: 21240d7de46b670bb263f477f784d8ecce66014bc951482d5c9e29741dcf1c83
 generated_by: task plan-views decisions
 -->
 
-# Открытые развилки
+# Open forks
 
-> Не править руками: это генерируемый вид.
+> Do not manipulate by hand: this is a generated view.
 
-| ID | Date | Status | Items | Решение |
+| ID | Date | Status | Items | Solution |
 |:--|:--|:--|:--|:--|
-| — | — | — | — | Нет записей |
+| — | — | — | — | No entries |

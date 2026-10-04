@@ -12,6 +12,7 @@ use CoreX\Tasks\Access\Contracts\TaskAccess;
 use CoreX\Tasks\Access\Contracts\TaskMutationAccess;
 use CoreX\Tasks\Access\Exceptions\TasksModuleDisabled;
 use CoreX\Tasks\Project\Internal\Models\Project;
+use CoreX\Tasks\Sprint\Internal\Models\Sprint;
 use CoreX\Tasks\Task\Contracts\CompleteTaskCommand;
 use CoreX\Tasks\Task\Contracts\CreateTaskCommand;
 use CoreX\Tasks\Task\Contracts\MoveTaskToStageCommand;
@@ -479,4 +480,86 @@ it('publishes the lifecycle manifest instead of loading migrations from its prov
         ->and($composer['type'])->toBe('corex-module')
         ->and($composer['extra']['corex']['module'])->toBe(TasksModule::class)
         ->and($provider)->not->toContain('loadMigrationsFrom');
+});
+
+it('rejects invalid task drafts atomically', function (array $changes, string $field): void {
+    $values = array_replace(['workspaceId' => $this->workspaceId, 'title' => 'Valid', 'actor' => $this->actor], $changes);
+
+    try {
+        app(CreateTaskCommand::class)->handle(new TaskDraft(...$values));
+        test()->fail('Invalid draft was accepted.');
+    } catch (ValidationException $exception) {
+        expect($exception->errors())->toHaveKey($field);
+    }
+    expect(Task::query()->count())->toBe(0);
+})->with([
+    'blank title' => [['title' => '  '], 'title'],
+    'long title' => [['title' => str_repeat('a', 256)], 'title'],
+    'missing workspace' => [['workspaceId' => 'missing'], 'workspace_id'],
+    'negative estimate' => [['estimateMinutes' => -1], 'estimate_minutes'],
+    'reversed dates' => [['startsAt' => new DateTimeImmutable('2026-10-02'), 'dueAt' => new DateTimeImmutable('2026-10-01')], 'due_at'],
+    'unknown author' => [['authorId' => 'missing'], 'author_id'],
+    'unknown project' => [['projectId' => 'missing'], 'project_id'],
+    'unknown sprint' => [['sprintId' => 'missing'], 'sprint_id'],
+    'unknown parent' => [['parentId' => 'missing'], 'parent_id'],
+    'invalid target' => [['targets' => [new EntityReference('', 'missing')]], 'targets'],
+    'duplicate target' => [['targets' => [new EntityReference('item', '11111111-1111-4111-8111-111111111111'), new EntityReference('item', '11111111-1111-4111-8111-111111111111')]], 'targets'],
+]);
+
+it('rejects invalid updates without changing the persisted task', function (array $changes, string $field): void {
+    $reference = app(CreateTaskCommand::class)->handle(new TaskDraft($this->workspaceId, 'Original', $this->actor));
+    $values = array_replace(['taskId' => $reference->id, 'actor' => $this->actor, 'provided' => []], $changes);
+
+    try {
+        app(UpdateTaskCommand::class)->handle(new UpdateTaskData(...$values));
+        test()->fail('Invalid update was accepted.');
+    } catch (ValidationException $exception) {
+        expect($exception->errors())->toHaveKey($field);
+    }
+    expect(Task::query()->findOrFail($reference->id)->title)->toBe('Original');
+})->with([
+    'no fields' => [[], 'task'],
+    'unknown field' => [['provided' => ['unsupported']], 'task'],
+    'duplicate field' => [['provided' => ['title', 'title'], 'title' => 'Changed'], 'task'],
+    'missing task' => [['taskId' => 'missing', 'provided' => ['title'], 'title' => 'Changed'], 'task_id'],
+    'blank title' => [['provided' => ['title'], 'title' => ' '], 'title'],
+    'null priority' => [['provided' => ['priority']], 'priority'],
+    'missing assignee' => [['provided' => ['assignee_id'], 'assigneeId' => 'missing'], 'assignee_id'],
+    'negative estimate' => [['provided' => ['estimate_minutes'], 'estimateMinutes' => -1], 'estimate_minutes'],
+    'reversed dates' => [['provided' => ['starts_at', 'due_at'], 'startsAt' => new DateTimeImmutable('2026-10-02'), 'dueAt' => new DateTimeImmutable('2026-10-01')], 'due_at'],
+]);
+
+it('updates dates description and nullable fields and emits no event for a no-op', function (): void {
+    $reference = app(CreateTaskCommand::class)->handle(new TaskDraft($this->workspaceId, 'Original', $this->actor));
+    $starts = new DateTimeImmutable('2026-10-01T12:00:00Z');
+    $due = new DateTimeImmutable('2026-10-02T12:00:00Z');
+    app(UpdateTaskCommand::class)->handle(new UpdateTaskData($reference->id, $this->actor,
+        ['description', 'starts_at', 'due_at'], description: 'Details', startsAt: $starts, dueAt: $due));
+    Event::fake([TaskUpdated::class]);
+    app(UpdateTaskCommand::class)->handle(new UpdateTaskData($reference->id, $this->actor, ['title'], title: 'Original'));
+    Event::assertNotDispatched(TaskUpdated::class);
+    app(UpdateTaskCommand::class)->handle(new UpdateTaskData($reference->id, $this->actor, ['assignee_id', 'project_id']));
+    $task = Task::query()->findOrFail($reference->id);
+    expect($task->description)->toBe('Details')->and($task->starts_at->format('c'))->toBe($starts->format('c'))
+        ->and($task->due_at->format('c'))->toBe($due->format('c'))->and($task->project_id)->toBeNull();
+});
+
+it('resolves task project stage parent and child relationships on the current tenant connection', function (): void {
+    $sprint = Sprint::query()->create([
+        'project_id' => $this->project->getKey(), 'name' => 'Sprint', 'starts_on' => '2026-10-01', 'ends_on' => '2026-10-14',
+    ]);
+    $parent = app(CreateTaskCommand::class)->handle(new TaskDraft($this->workspaceId, 'Parent', $this->actor,
+        projectId: (string) $this->project->getKey(), sprintId: (string) $sprint->getKey(), stageId: (string) $this->todo->getKey()));
+    $child = app(CreateTaskCommand::class)->handle(new TaskDraft($this->workspaceId, 'Child', $this->actor, parentId: $parent->id));
+    $task = Task::query()->findOrFail($parent->id);
+    expect($task->project->getKey())->toBe($this->project->getKey())->and($task->sprint->getKey())->toBe($sprint->getKey())
+        ->and($task->stage->getKey())->toBe($this->todo->getKey())->and($task->children->first()->getKey())->toBe($child->id)
+        ->and($this->project->tasks->first()->getKey())->toBe($parent->id)->and($this->project->sprints->first()->getKey())->toBe($sprint->getKey())
+        ->and($this->project->stages)->toHaveCount(2)->and($sprint->project->getKey())->toBe($this->project->getKey())
+        ->and($sprint->tasks->first()->getKey())->toBe($parent->id)->and($this->todo->project->getKey())->toBe($this->project->getKey())
+        ->and($this->todo->tasks->first()->getKey())->toBe($parent->id)->and(Task::query()->findOrFail($child->id)->parent->getKey())->toBe($parent->id)
+        ->and($task->watchers)->toHaveCount(0)->and($task->timeLogs)->toHaveCount(0);
+    expect(fn () => app(CreateTaskCommand::class)->handle(new TaskDraft($this->workspaceId, 'Grandchild', $this->actor, parentId: $child->id)))
+        ->toThrow(ValidationException::class);
+    expect(Task::query()->count())->toBe(2);
 });

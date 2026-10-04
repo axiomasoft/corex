@@ -7,13 +7,13 @@ namespace CoreX\Tenancy\Authentication\Internal\Oidc;
 use CoreX\Tenancy\Authentication\Exceptions\OidcAuthenticationException;
 use Firebase\JWT\JWK;
 use Firebase\JWT\Key;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Contracts\Cache\Factory as CacheFactory;
+use Illuminate\Http\Client\Factory as HttpFactory;
 
 /**
  * JWKS fetch/cache WITHOUT `Firebase\JWT\CachedKeySet` (D130 — no PSR-6 in
  * this tree, and a raw PSR-18 client would not be `Http::fake()`-able).
- * `Http::get($jwksUri)` → `JWK::parseKeySet()` → `Cache::store()->put()`.
+ * `$http->get($jwksUri)` → `JWK::parseKeySet()` → `$cache->store()->put()`.
  * On an unknown `kid` (AS rotated its signing key), exactly ONE forced
  * refetch runs, gated by a separate cooldown cache key — otherwise an
  * attacker-controlled `kid` becomes a JWKS-endpoint DoS lever.
@@ -27,6 +27,8 @@ final class JwksKeySet
     private const string COOLDOWN_KEY_PREFIX = 'corex_tenancy_oidc_jwks_refetch_cooldown:';
 
     public function __construct(
+        private readonly HttpFactory $http,
+        private readonly CacheFactory $cache,
         private readonly ?string $cacheStore,
         private readonly int $cacheTtl,
         private readonly int $refetchCooldownSeconds,
@@ -52,7 +54,7 @@ final class JwksKeySet
     private function cachedJwks(string $jwksUri): array
     {
         /** @var array<string, mixed> $jwks */
-        $jwks = Cache::store($this->cacheStore)->remember(
+        $jwks = $this->cache->store($this->cacheStore)->remember(
             self::CACHE_KEY_PREFIX.md5($jwksUri),
             $this->cacheTtl,
             fn (): array => $this->fetch($jwksUri),
@@ -66,7 +68,7 @@ final class JwksKeySet
      */
     private function forceRefetch(string $jwksUri): array
     {
-        $store = Cache::store($this->cacheStore);
+        $store = $this->cache->store($this->cacheStore);
         $cooldownKey = self::COOLDOWN_KEY_PREFIX.md5($jwksUri);
 
         // Cooldown active: someone already forced a refetch for this JWKS
@@ -89,7 +91,7 @@ final class JwksKeySet
      */
     private function fetch(string $jwksUri): array
     {
-        $response = Http::get($jwksUri);
+        $response = $this->http->createPendingRequest()->get($jwksUri);
 
         if ($response->failed()) {
             throw OidcAuthenticationException::jwksFetchFailed();

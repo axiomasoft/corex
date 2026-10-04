@@ -1,10 +1,8 @@
-diff --git a/packages/core/database/migrations/pg/2026_07_13_100000_create_sys_settings_table.php b/packages/core/database/migrations/pg/2026_07_13_100000_create_sys_settings_table.php
-index ec5aa12..f4a194a 100644
 --- a/packages/core/database/migrations/pg/2026_07_13_100000_create_sys_settings_table.php
 +++ b/packages/core/database/migrations/pg/2026_07_13_100000_create_sys_settings_table.php
-@@ -28,7 +28,7 @@ return new class extends Migration
-         $table = Config::settingsTable();
- 
+@@ -28,7 +28,7 @@
+         $table = app(CoreOptions::class)->settingsTable;
+
          Schema::create($table, function (Blueprint $table): void {
 -            IdColumns::primary($table);
 +            $table->uuid('id')->primary();

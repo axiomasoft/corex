@@ -1,0 +1,2 @@
+{"case": "manifest without CHANGELOG", "exit": 1, "stdout": "contract-guard: ✗ packages/tools/resources/contracts/php-api.json changed WITHOUT packages/tools/CHANGELOG.md\n\ncontract-guard: a PHP surface change must carry a CHANGELOG entry in the same package\n                (ADR-008; breaking→CHANGELOG until v1.0 — D17).\n"}
+{"case": "manifest with CHANGELOG", "exit": 0, "stdout": "contract-guard: packages/tools/resources/contracts/php-api.json changed WITH CHANGELOG — OK\ncontract-guard: all PHP surface changes accompanied by a CHANGELOG — OK\n"}

@@ -32,6 +32,7 @@ final readonly class CoreOptions
      * @param  class-string<FeatureFlags>  $featureFlags
      * @param  class-string<DepartmentRepository>  $departmentRepository
      * @param  class-string<DataScopeAuthorizer>  $dataScopeAuthorizer
+     * @param  list<string>  $acknowledgedDangerousModes  exact config paths of dangerous modes accepted in production
      */
     public function __construct(
         public IdStrategy $idStrategy,
@@ -75,6 +76,6 @@ final readonly class CoreOptions
         public string $messagingOutboxRetention,
         public string $messagingDeadRetention,
         public ?string $messagingInboxRetention,
+        public array $acknowledgedDangerousModes = [],
     ) {}
-
 }

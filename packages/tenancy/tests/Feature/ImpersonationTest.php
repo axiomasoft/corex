@@ -12,6 +12,7 @@ use CoreX\Tenancy\Authentication\Internal\Oidc\OidcClient;
 use CoreX\Tenancy\Identity\Internal\Models\User;
 use CoreX\Tenancy\Impersonation\Events\ImpersonationEnded;
 use CoreX\Tenancy\Impersonation\Events\ImpersonationStarted;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Tests\TestCase;
 use Firebase\JWT\JWT;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -493,6 +494,7 @@ it('з: is_staff=false у предъявителя → 403', function (): void {
 
 it('и: require_approved_by=true и approved_by=NULL → 403; approved_by задан → проходит', function (): void {
     config(['tenancy.oidc.impersonation.require_approved_by' => true]);
+    app()->forgetInstance(TenancyOptions::class);
 
     $account = initAccountWithTenantIM();
     $staffId = makeStaffIdentityIM();
@@ -743,6 +745,7 @@ it('я: revoked_at выставлен извне mid-session → следующ�
 
 it('а: imp в токене при impersonation.enabled=false → 403 (регресс P2.22)', function (): void {
     config(['tenancy.oidc.impersonation.enabled' => false]);
+    app()->forgetInstance(TenancyOptions::class);
 
     $account = initAccountWithTenantIM();
     $staffId = makeStaffIdentityIM();

@@ -111,7 +111,7 @@ it('clones a system role into an editable copy with cloned_from_id and a copied 
         'scope' => 'account',
     ]));
 
-    $clone = (new RoleCloner)->clone($admin, 'admin-custom');
+    $clone = (app(RoleCloner::class))->clone($admin, 'admin-custom');
 
     expect($clone->is_system)->toBeFalse()
         ->and($clone->cloned_from_id)->toBe($admin->id)
@@ -128,7 +128,7 @@ it('does not grant owner-wildcard capability to a clone of owner', function (): 
     (new SystemRolesSeeder)->run();
     $owner = Role::query()->where('slug', 'owner')->firstOrFail();
 
-    $clone = (new RoleCloner)->clone($owner, 'owner-custom');
+    $clone = (app(RoleCloner::class))->clone($owner, 'owner-custom');
 
     expect($clone->slug)->not->toBe('owner')
         ->and(RoleMatrixRow::query()->where('role_id', $clone->id)->count())->toBe(0);

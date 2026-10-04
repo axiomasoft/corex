@@ -31,18 +31,16 @@ use CoreX\Settings\Contracts\SettingsRepository;
 use CoreX\Settings\Internal\DatabaseSettingsRepository;
 use CoreX\Settings\Internal\NullSettingDefaultsProvider;
 use DateInterval;
-use Illuminate\Contracts\Config\Repository;
 use Throwable;
 
 /** Parses the host Laravel configuration and validates module bindings. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class CoreOptionsParser
 {
+    /** @deprecated Resolve `CoreOptions` from the container; it is a shared lazy singleton. */
     public static function current(): CoreOptions
     {
-        $raw = app(Repository::class)->get('corex', []);
-
-        return self::fromArray(is_array($raw) ? $raw : []);
+        return app(CoreOptions::class);
     }
 
     /** @param  array<array-key, mixed>  $config */
@@ -110,6 +108,7 @@ final class CoreOptionsParser
         $inboxRetention = array_key_exists('inbox_retention', $messaging) && $messaging['inbox_retention'] !== null
             ? self::interval($violations, 'messaging.inbox_retention', $messaging['inbox_retention'])
             : null;
+        $acknowledged = self::acknowledgedDangerousModes($violations, $config['acknowledged_dangerous_modes'] ?? []);
 
         $violations->failIfAny();
 
@@ -155,6 +154,7 @@ final class CoreOptionsParser
             messagingOutboxRetention: $outboxRetention,
             messagingDeadRetention: $deadRetention,
             messagingInboxRetention: $inboxRetention,
+            acknowledgedDangerousModes: $acknowledged,
         );
     }
 
@@ -207,6 +207,29 @@ final class CoreOptionsParser
         $violations->add($path, 'must be a class implementing '.$contract);
 
         return $contract;
+    }
+
+    /** @return list<string> */
+    private static function acknowledgedDangerousModes(ConfigurationValidator $violations, mixed $value): array
+    {
+        if (! is_array($value) || ! array_is_list($value)) {
+            $violations->add('acknowledged_dangerous_modes', 'must be a list of exact config paths');
+
+            return [];
+        }
+
+        $paths = [];
+        foreach ($value as $index => $path) {
+            if (! is_string($path) || $path === '' || str_contains($path, '*')) {
+                $violations->add('acknowledged_dangerous_modes.'.$index, 'must be an exact config path without wildcards');
+
+                continue;
+            }
+
+            $paths[] = $path;
+        }
+
+        return $paths;
     }
 
     private static function bool(ConfigurationValidator $violations, string $path, mixed $value): bool

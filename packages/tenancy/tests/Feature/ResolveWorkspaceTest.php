@@ -12,9 +12,11 @@ use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Identity\Internal\Models\User;
 use CoreX\Tenancy\Laravel\Http\Middleware\ResolveWorkspace;
 use CoreX\Tenancy\Laravel\Scopes\WorkspaceScope;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Workspace\Internal\Models\Workspace;
 use CoreX\Tenancy\Workspace\Internal\Models\WorkspaceMember;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -43,6 +45,7 @@ beforeEach(function (): void {
     ])->run();
 
     config(['tenancy.workspace.path_segment' => 'w']);
+    app()->forgetInstance(TenancyOptions::class);
 });
 
 afterEach(function (): void {
@@ -149,7 +152,7 @@ function makeWorkspaceRW(array $overrides = []): Workspace
 /** Swaps the `auth` container binding for a {@see Guard} stub — mirrors WorkspaceResolverTest's actingAsIdWsp(). */
 function actingAsIdRW(?string $userId): void
 {
-    app()->instance('auth', new class($userId) implements Guard
+    $guard = new class($userId) implements Guard
     {
         public function __construct(private readonly ?string $id) {}
 
@@ -186,6 +189,24 @@ function actingAsIdRW(?string $userId): void
         public function setUser(Authenticatable $user): static
         {
             return $this;
+        }
+    };
+
+    app()->instance('auth', new class($guard) implements AuthFactory
+    {
+        public function __construct(private readonly Guard $guard) {}
+
+        public function guard($name = null): Guard
+        {
+            return $this->guard;
+        }
+
+        public function shouldUse($name): void {}
+
+        /** @param array<int, mixed> $arguments */
+        public function __call(string $method, array $arguments): mixed
+        {
+            return $this->guard->{$method}(...$arguments);
         }
     });
 }
@@ -329,6 +350,7 @@ it('л: маркер глубже в пути → тот же результат
 
 it('м: кастомный маркер path_segment=ws — /ws/{slug} резолвит, /w/{slug} трактуется как «без маркера» (default)', function (): void {
     config(['tenancy.workspace.path_segment' => 'ws']);
+    app()->forgetInstance(TenancyOptions::class);
 
     initializedAccountRW();
     $workspace = makeWorkspaceRW();

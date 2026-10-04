@@ -14,7 +14,7 @@ by the P03.1 handoff. Plan §2 B6 applies; this is not a new product or architec
 **Evidence:** `artifacts/P03.2-execution/plan-lint-before.log`, P03.1 completion/handoff;
 `artifacts/P03.2-execution/project-map.py`. RAG:—; no new external premise.
 
-## Решение
+## Solution
 
 The complete 1168-row TSV remains the transfer tool's unchanged source. Its executor reading
 input is `artifacts/P03/module-map.execution.json`: a lossless grouped representation with
@@ -32,7 +32,7 @@ As assigned in D60, Pint fixes the four inherited formatting findings in `p03-ad
 Its parsed AST must be identical to HEAD before transfer; no operation, value or check changes.
 The bounded amendment is finished and independently reviewed before product transfer.
 
-## Почему
+## Why
 
 The ready successor's bundle exposed a 119306-token reading carrier and 184714-token aggregate.
 Repeated prefixes caused this transport defect; exact reconstruction preserves the complete

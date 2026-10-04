@@ -13,7 +13,7 @@ use CoreX\Webhooks\Errors\Internal\PackageProblemDefinitions;
 use CoreX\Webhooks\Internal\Commands\DeliverWebhooks;
 use CoreX\Webhooks\Internal\Commands\PruneWebhooks;
 use CoreX\Webhooks\Internal\WebhookSnapshotSection;
-use CoreX\Webhooks\Laravel\WebhookRegistrar;
+use CoreX\Webhooks\Laravel\WebhookBindingsRegistrar;
 use Illuminate\Support\ServiceProvider;
 use Override;
 
@@ -27,13 +27,13 @@ final class WebhooksServiceProvider extends ServiceProvider
         ProblemDefinitions::register($this->app, __DIR__.'/../composer.json', PackageProblemDefinitions::class);
 
         $this->mergeConfigFrom(__DIR__.'/../config/corex-webhooks.php', 'corex-webhooks');
-        WebhookRegistrar::register($this->app);
+        (new WebhookBindingsRegistrar)->register($this->app);
         $this->app->tag([WebhookSnapshotSection::class], ContractSnapshotSection::class);
     }
 
     public function boot(): void
     {
-        WebhookRegistrar::boot($this->app);
+        (new WebhookBindingsRegistrar)->boot($this->app);
 
         if ($this->app->runningInConsole()) {
             $commands = [PruneWebhooks::class];

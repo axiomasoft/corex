@@ -27,7 +27,7 @@ final readonly class AuthOptions
         public array $azguardPins,
     ) {}
 
-    /** @param  array<string, mixed>  $config */
+    /** @param  array<array-key, mixed>  $config */
     public static function fromArray(array $config): self
     {
         $violations = new ConfigurationValidator;

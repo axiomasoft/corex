@@ -12,7 +12,7 @@ test('package graph gate reports no violations', function (): void {
 
     exec($command, $output, $exitCode);
 
-    expect($exitCode)->toBe(0)
+    expect($exitCode)->toBe(0, "gate exit {$exitCode}:\n".implode("\n", $output))
         ->and($output)->not->toBeEmpty();
 
     $joined = implode("\n", $output);
@@ -52,7 +52,7 @@ test('package graph gate reports R1 when guard content is removed from guard fil
 
     $joined = implode("\n", $output);
 
-    expect($exitCode)->toBe(1)
+    expect($exitCode)->toBe(1, "gate exit {$exitCode}:\n".implode("\n", $output))
         ->and($joined)->toContain('[R1]')
         ->and($joined)->toContain('SqlTaskRecurrenceMaterializer.php');
 });
@@ -85,7 +85,7 @@ PHP;
 
     $joined = implode("\n", $output);
 
-    expect($exitCode)->toBe(1)
+    expect($exitCode)->toBe(1, "gate exit {$exitCode}:\n".implode("\n", $output))
         ->and($joined)->toContain('[R3]')
         ->and($joined)->toContain('host defines classes under reserved prefix');
 });
@@ -118,7 +118,7 @@ PHP;
 
         $joined = implode("\n", $output);
 
-        expect($exitCode)->toBe(1)
+        expect($exitCode)->toBe(1, "gate exit {$exitCode}:\n".implode("\n", $output))
             ->and($joined)->toMatch('/\[(R1|R2)\]/')
             ->and($joined)->toContain('GroupUseProbe.php');
     } finally {
@@ -160,7 +160,7 @@ PHP;
 
         $joined = implode("\n", $output);
 
-        expect($exitCode)->toBe(1)
+        expect($exitCode)->toBe(1, "gate exit {$exitCode}:\n".implode("\n", $output))
             ->and($joined)->toMatch('/\[(R1|R2)\]/')
             ->and($joined)->toContain('FqcnGraphProbe.php');
     } finally {
@@ -200,7 +200,7 @@ PHP;
 
         $joined = implode("\n", $output);
 
-        expect($exitCode)->toBe(1)
+        expect($exitCode)->toBe(1, "gate exit {$exitCode}:\n".implode("\n", $output))
             ->and($joined)->toContain('[R4]')
             ->and($joined)->toContain('PublicApiR4Probe.php')
             ->and($joined)->toContain('непубличного');
@@ -241,7 +241,7 @@ PHP;
 
         $joined = implode("\n", $output);
 
-        expect($exitCode)->toBe(1)
+        expect($exitCode)->toBe(1, "gate exit {$exitCode}:\n".implode("\n", $output))
             ->and($joined)->toContain('foreign Internal')
             ->and($joined)->toContain('InternalR2Probe.php')
             ->and($joined)->not->toContain('непубличного');
@@ -280,7 +280,7 @@ PHP;
 
         $joined = implode("\n", $output);
 
-        expect($exitCode)->toBe(1)
+        expect($exitCode)->toBe(1, "gate exit {$exitCode}:\n".implode("\n", $output))
             ->and($joined)->toContain('[R4b]')
             ->and($joined)->toContain('AccidentalPublic.php');
     } finally {
@@ -320,7 +320,7 @@ PHP;
 
         $joined = implode("\n", $output);
 
-        expect($exitCode)->toBe(1)
+        expect($exitCode)->toBe(1, "gate exit {$exitCode}:\n".implode("\n", $output))
             ->and($joined)->toContain('[R5]')
             ->and($joined)->toContain('foundation')
             ->and($joined)->toContain('product')
@@ -351,7 +351,7 @@ test('package graph gate reports R1 for wakeup import outside Integration/Wakeup
 
         $joined = implode("\n", $output);
 
-        expect($exitCode)->toBe(1)
+        expect($exitCode)->toBe(1, "gate exit {$exitCode}:\n".implode("\n", $output))
             ->and($joined)->toContain('[R1]')
             ->and($joined)->toContain('WakeupForeignContextProbe.php')
             ->and($joined)->toContain('axiomasoft/corex-wakeup');
@@ -371,12 +371,12 @@ test('extension contract gate classifies registry-like surfaces and rejects a ne
     $status = 0;
 
     exec($gate.' 2>&1', $output, $status);
-    expect($status)->toBe(0)
+    expect($status)->toBe(0, "gate exit {$status}:\n".implode("\n", $output))
         ->and(implode("\n", $output))->toContain('extension-contract-gate: OK');
 
     $output = [];
     exec($gate.' --fixture '.escapeshellarg($root.'/tests/fixtures/extension-contract/unclassified.php').' 2>&1', $output, $status);
-    expect($status)->toBe(1)
+    expect($status)->toBe(1, "gate exit {$status}:\n".implode("\n", $output))
         ->and(implode("\n", $output))->toContain('unclassified CoreX\\Fixture\\SurpriseRegistry');
 });
 
@@ -392,7 +392,7 @@ test('package graph rejects an invented generated symbol without authorizing its
         file_put_contents($manifest, json_encode($snapshot, JSON_THROW_ON_ERROR));
         file_put_contents($probe, '<?php namespace CoreX\\Config; use CoreX\\Tenancy\\Support\\DoesNotExist; final class StaleMembershipProbe {}');
         exec(escapeshellarg(PHP_BINARY).' '.escapeshellarg($root.'/scripts/package-graph-gate.php').' 2>&1', $output, $status);
-        expect($status)->toBe(1)
+        expect($status)->toBe(1, "gate exit {$status}:\n".implode("\n", $output))
             ->and(implode("\n", $output))->toContain('[R4]', '[R4b]', 'API-STALE', 'DoesNotExist');
     } finally {
         file_put_contents($manifest, $original);

@@ -1,0 +1,2 @@
+PASS: no runtime source, package manifest, or lockfile delta versus c8df0aae
+PASS: no PHPStan baseline delta; all eight prior full-analysis extensions explicitly retained

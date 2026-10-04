@@ -218,7 +218,7 @@ final class IdempotentInvocationTest extends TestCase
             modules: $this->modules,
             authorizer: $this->operationAuthorizer,
             replayAuthorizer: $this->authorizer,
-            errors: new ErrorMapper(app(ProblemRegistry::class)),
+            errors: app(ErrorMapper::class),
             problems: app(ProblemRegistry::class),
         );
     }

@@ -1,0 +1,3 @@
+$ scripts/php84 --check
+php84 OK: 8.4.26, extensions complete
+exit=0

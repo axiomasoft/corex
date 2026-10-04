@@ -25,6 +25,7 @@ use CoreX\Operations\Internal\Http\ApiController;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
 use CoreX\Operations\Invocation\Contracts\RequestContextProvider;
 use CoreX\Operations\Invocation\Internal\OperationDispatcher;
+use CoreX\Operations\Laravel\Support\ApiOptions;
 use CoreX\Operations\OpenApi\Internal\OpenApiDocumentGenerator;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
@@ -123,7 +124,7 @@ final class PlatformTest extends TestCase
         self::assertSame(['request_id' => 'request-123', 'correlation_id' => 'request-123', 'api_version' => 'v1'], $response->getData(true)['meta']);
         self::assertSame('trusted-user', $response->getData(true)['data']['actor']);
         self::assertSame('A', $response->getData(true)['data']['account']);
-        self::assertNull($response->getData(true)['error']);
+        self::assertArrayNotHasKey('error', $response->getData(true));
     }
 
     public function test_unknown_routes_methods_versions_and_metadata_are_not_executable(): void
@@ -140,12 +141,12 @@ final class PlatformTest extends TestCase
     {
         $this->allow();
         $this->tenants->end();
-        self::assertSame('operations.context_required', $this->dispatch()->getData(true)['error']['code']);
+        self::assertSame('operations.context_required', $this->dispatch()->getData(true)['code']);
         $this->tenants->value = new TenantContext($this->account('A'), boxed: true);
         self::assertSame(403, $this->dispatch()->getStatusCode());
         $this->tenants->initialize($this->account('A'));
         $this->modules->enabled = false;
-        self::assertSame('operations.module_unavailable', $this->dispatch()->getData(true)['error']['code']);
+        self::assertSame('operations.module_unavailable', $this->dispatch()->getData(true)['code']);
         self::assertSame(0, NoteHandler::$calls);
     }
 
@@ -154,6 +155,7 @@ final class PlatformTest extends TestCase
         $this->allow();
         $this->tenants->value = new TenantContext($this->account('A'), boxed: true);
         $this->app['config']->set('corex-operations.require_physical_tenancy', false);
+        $this->app->forgetInstance(ApiOptions::class);
         self::assertSame(201, $this->dispatch()->getStatusCode());
     }
 
@@ -196,7 +198,7 @@ final class PlatformTest extends TestCase
         $this->allow();
         $response = $this->dispatch('GET', 'notes/'.$id);
         self::assertSame($status, $response->getStatusCode());
-        self::assertNull($response->getData(true)['data']);
+        self::assertArrayNotHasKey('data', $response->getData(true));
         self::assertStringNotContainsString('secret', $response->getContent());
         self::assertStringNotContainsString('SQLSTATE', $response->getContent());
     }
@@ -231,11 +233,14 @@ final class PlatformTest extends TestCase
         self::assertSame('notes.read', $paths['/notes']['post']['x-corex-ability']);
         self::assertSame(['type' => 'object'], $paths['/notes']['post']['responses'][201]['content']['application/json']['schema']['properties']['data']);
         $error = $paths['/notes']['post']['responses'][403]['content'];
-        self::assertSame(
-            $error['application/json']['schema']['properties']['error']['properties']['code'],
-            $error['application/problem+json']['schema']['properties']['code'],
-        );
-        self::assertSame(['request_id', 'correlation_id', 'api_version'], $error['application/json']['schema']['properties']['meta']['required']);
+        self::assertSame(['application/problem+json'], array_keys($error));
+        $problem = $error['application/problem+json']['schema'];
+        self::assertNotContains('path', $problem['required']);
+        self::assertArrayNotHasKey('instance', $problem['properties']);
+        self::assertContains('request_id', $problem['required']);
+        self::assertContains('api_version', $problem['required']);
+        self::assertSame(['data', 'meta'], $paths['/notes']['post']['responses'][201]['content']['application/json']['schema']['required']);
+        self::assertArrayHasKey(415, $paths['/notes']['post']['responses']);
         self::assertSame(json_encode($document), json_encode($schema->document('v1', 'https://example.test/chosen/v1')));
         $this->modules->registry = $this->compile(array_reverse($this->modules->registry->api));
         self::assertSame(json_encode($document), json_encode($schema->document('v1', 'https://example.test/chosen/v1')));
@@ -261,8 +266,8 @@ final class PlatformTest extends TestCase
         foreach ([401, 403, 404, 409, 422, 429, 400, 413, 415, 500, 503] as $status) {
             $response = $this->getJson('/upstream/v2/'.$status, ['X-Request-ID' => 'upstream-123']);
             $response->assertStatus($status >= 500 ? 500 : $status)
-                ->assertJsonPath('meta.api_version', 'v2')
-                ->assertJsonPath('meta.request_id', 'upstream-123')
+                ->assertJsonPath('api_version', 'v2')
+                ->assertJsonPath('request_id', 'upstream-123')
                 ->assertHeader('X-Request-ID', 'upstream-123');
             self::assertStringNotContainsString('secret', $response->getContent());
         }
@@ -284,7 +289,7 @@ final class PlatformTest extends TestCase
         $this->allow();
         $this->app['router']->post('/strict/{version}/{path}', ApiController::class);
         $this->postJson('/strict/v1/notes?actor=forged', ['title' => 'Hello'])->assertUnprocessable();
-        $this->post('/strict/v1/notes', ['title' => 'Hello'])->assertUnprocessable();
+        $this->post('/strict/v1/notes', ['title' => 'Hello'])->assertStatus(415);
         self::assertSame(0, NoteHandler::$calls);
     }
 
@@ -292,7 +297,7 @@ final class PlatformTest extends TestCase
     {
         $this->allow();
         $this->tenants->initialize(new AccountRef('A', 'a', 'suspended', [], []));
-        self::assertSame('operations.account_unavailable', $this->dispatch()->getData(true)['error']['code']);
+        self::assertSame('operations.account_unavailable', $this->dispatch()->getData(true)['code']);
         self::assertSame(0, NoteHandler::$calls);
     }
 

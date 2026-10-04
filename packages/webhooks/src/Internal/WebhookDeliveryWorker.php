@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Internal;
 
+use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
+use CoreX\Webhooks\Contracts\WebhookEgressPolicy;
 use CoreX\Webhooks\Contracts\WebhookHttpTransport;
 use CoreX\Webhooks\Contracts\WebhookSigner;
 use CoreX\Webhooks\Data\WebhookDelivery;
+use CoreX\Webhooks\Data\WebhookDestination;
 use CoreX\Webhooks\Data\WebhookHttpResult;
+use CoreX\Webhooks\Enums\WebhookFailureReason;
 use InvalidArgumentException;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
@@ -26,6 +30,8 @@ final readonly class WebhookDeliveryWorker
         private WebhookHttpTransport $transport,
         private WebhookTopicCatalogue $topics,
         private ClockInterface $clock,
+        private WebhookEgressPolicy $egress,
+        private DataScopeCodec $scopeCodec,
     ) {}
 
     public function workOnce(DataScope $scope, string $worker): ?WebhookDelivery
@@ -52,7 +58,7 @@ final readonly class WebhookDeliveryWorker
             return $this->finish($scope, $delivery, new WebhookHttpResult(
                 status: null,
                 retryAfter: null,
-                errorCode: 'topic_unavailable',
+                errorCode: WebhookFailureReason::TopicUnavailable,
                 durationMs: 0,
             ));
         }
@@ -68,7 +74,29 @@ final readonly class WebhookDeliveryWorker
             return $this->finish($scope, $delivery, new WebhookHttpResult(
                 status: null,
                 retryAfter: null,
-                errorCode: 'signing_unavailable',
+                errorCode: WebhookFailureReason::SigningUnavailable,
+                durationMs: 0,
+            ));
+        }
+
+        try {
+            $destination = WebhookDestination::fromUrl($delivery->endpointSnapshot);
+        } catch (InvalidArgumentException) {
+            return $this->finish($scope, $delivery, new WebhookHttpResult(
+                status: null,
+                retryAfter: null,
+                errorCode: WebhookFailureReason::UrlForbidden,
+                durationMs: 0,
+            ));
+        }
+
+        $deliveryScope = $this->scopeCodec->decode($delivery->scope);
+
+        if (! $this->egress->allows($deliveryScope, $destination)) {
+            return $this->finish($scope, $delivery, new WebhookHttpResult(
+                status: null,
+                retryAfter: null,
+                errorCode: WebhookFailureReason::EgressDenied,
                 durationMs: 0,
             ));
         }
@@ -83,14 +111,14 @@ final readonly class WebhookDeliveryWorker
             return $this->finish($scope, $delivery, new WebhookHttpResult(
                 status: null,
                 retryAfter: null,
-                errorCode: 'webhook_url_forbidden',
+                errorCode: WebhookFailureReason::UrlForbidden,
                 durationMs: 0,
             ));
         } catch (RuntimeException) {
             return $this->finish($scope, $delivery, new WebhookHttpResult(
                 status: null,
                 retryAfter: null,
-                errorCode: 'dns_unavailable',
+                errorCode: WebhookFailureReason::DnsUnavailable,
                 durationMs: 0,
             ));
         }
@@ -101,7 +129,7 @@ final readonly class WebhookDeliveryWorker
             $result = new WebhookHttpResult(
                 status: null,
                 retryAfter: null,
-                errorCode: 'network_failure',
+                errorCode: WebhookFailureReason::NetworkFailure,
                 durationMs: 0,
             );
         }

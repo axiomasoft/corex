@@ -7,12 +7,14 @@ namespace CoreX\Webhooks\Internal;
 use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Data\Data\DataScope;
+use CoreX\Messaging\Laravel\InboxRetention;
 use DateInterval;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder;
 use InvalidArgumentException;
 use Psr\Clock\ClockInterface;
+use UnexpectedValueException;
 
 /**
  * Clock-controlled webhook body, history and inbox cleanup.
@@ -124,18 +126,18 @@ final readonly class WebhookRetention
             return 0;
         }
 
-        $ids = $this->connection->table($this->inboxTable)
+        $ids = $this->connection->table($this->inboxTable.' as retained_inbox')
             ->where('consumer', self::Consumer)
             ->whereNotExists(function (Builder $query): void {
                 $query->selectRaw('1')->from(self::Deliveries);
 
                 if ($this->connection->getDriverName() === 'pgsql') {
-                    $query->whereRaw(self::Deliveries.'.event_id = '.$this->inboxTable.'.message_id::text');
+                    $query->whereRaw('sys_api_webhook_deliveries.event_id = retained_inbox.message_id::text');
 
                     return;
                 }
 
-                $query->whereColumn(self::Deliveries.'.event_id', $this->inboxTable.'.message_id');
+                $query->whereColumn(self::Deliveries.'.event_id', 'retained_inbox.message_id');
             })
             ->orderBy('message_id')
             ->limit($limit)
@@ -146,10 +148,11 @@ final readonly class WebhookRetention
             return 0;
         }
 
-        return $this->connection->table($this->inboxTable)
-            ->where('consumer', self::Consumer)
-            ->whereIn('message_id', $ids)
-            ->delete();
+        return (new InboxRetention(connection: $this->connection, table: $this->inboxTable))
+            ->forget(consumer: self::Consumer, messageIds: array_map(
+                static fn (mixed $id): string => is_string($id) ? $id : throw new UnexpectedValueException('Inbox message ID must be a string.'),
+                array_values($ids),
+            ));
     }
 
     private function assertLimit(int $limit): void
@@ -184,11 +187,11 @@ final readonly class WebhookRetention
     {
         $query = $this->connection->table(self::Deliveries);
         $accountPath = $this->connection->getDriverName() === 'pgsql'
-            ? "scope->>'account_id'"
-            : "json_extract(scope, '$.account_id')";
+            ? "scope->>'account'"
+            : "json_extract(scope, '$.account')";
         $workspacePath = $this->connection->getDriverName() === 'pgsql'
-            ? "scope->>'workspace_id'"
-            : "json_extract(scope, '$.workspace_id')";
+            ? "scope->>'workspace'"
+            : "json_extract(scope, '$.workspace')";
         $query->whereRaw($accountPath.' = ?', [$scope->accountId]);
 
         if ($scope->workspaceId === null) {

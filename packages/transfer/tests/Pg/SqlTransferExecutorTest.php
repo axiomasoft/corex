@@ -8,6 +8,7 @@ use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Data\WriteToken;
 use CoreX\Data\Internal\CallableDataScopeAuthorizer;
+use CoreX\Time\Laravel\SystemClock;
 use CoreX\Transfer\Contracts\RecordMapper;
 use CoreX\Transfer\Contracts\TransferSink;
 use CoreX\Transfer\Contracts\TransferSource;
@@ -133,6 +134,7 @@ it('rolls back only the failed row savepoint and continues the batch', function 
         new ConflictRule('create-only'),
         new TransferLimits,
         new CallableDataScopeAuthorizer(static fn (): bool => true),
+        new SystemClock,
     );
 
     $receipt = $runner->step(scope: scope($hash), transfer: new TransferRef($jobId), token: new StepToken('0', '1', $hash, $hash, $hash, $hash));
@@ -270,5 +272,6 @@ function runner(SourceManifest $manifest, CanonicalRecord $record, ?stdClass $co
         new ConflictRule('create-only'),
         new TransferLimits,
         new CallableDataScopeAuthorizer(static fn (): bool => $allowed),
+        new SystemClock,
     );
 }

@@ -8,7 +8,7 @@ Install with `composer require axiomasoft/corex-workflow` from the approved Core
 
 ## Configuration
 
-`corex-workflow.enforce_declarations` defaults to true. Supply explicit workflow bindings and definitions through module declarations and keep captured definition/version fingerprints with durable intents. The engine adapter and worker credentials/configuration remain application-owned.
+`corex-workflow.enforce_declarations` defaults to true; setting it to false is a dangerous mode that production refuses unless `corex-workflow.enforce_declarations` is listed in `corex.acknowledged_dangerous_modes`. Supply explicit workflow bindings and definitions through module declarations and keep captured definition/version fingerprints with durable intents. The engine adapter and worker credentials/configuration remain application-owned.
 
 ## Failure semantics
 

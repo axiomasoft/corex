@@ -1,5 +1,27 @@
 # Changelog
 
+## Unreleased — strict input envelopes and RFC 9457 errors
+
+- Breaking before 1.0: operation errors always use `application/problem+json` with registry-owned type/title and occurrence detail; successes contain only data and meta. Remove Accept negotiation and the configurable problem type base.
+- Add the public InputEnvelope enum and Operation inputEnvelope policy derived by OperationFactory; reject invalid envelopes, unsupported media types and undeclared fields with distinct registered codes.
+
+## Unreleased — ports instead of facades, helpers and static state (P05.3)
+
+- Services take `ConnectionResolverInterface` and `ClockInterface` through constructors instead of facades and helpers. `Testing\MutatingHandler` now needs a connection resolver and a clock.
+
+## Unreleased — thin providers and registrars (P05.2)
+
+- `ApiServiceProvider` delegates to `OperationsBindingsRegistrar`, `IdempotencyRegistrar`, `PaginationRegistrar`, `HttpRegistrar`, `ApiSchemaBindingsRegistrar`, `CostBindingsRegistrar` and `BulkBindingsRegistrar`. The anonymous replay authorizer, cursor keyring and handler-failure holder are named classes (`DefaultReplayAuthorizer`, `ConfiguredCursorKeyring`, `HandlerFailure`); the idempotency store is built by `IdempotencyStoreFactory`. `ApiSchemaRegistrar`, `CostRegistrar` and `BulkRegistrar` keep their static entry points as deprecated shims over the new registrars.
+
+## Unreleased — typed Options and runtime configuration checks (P05.1)
+
+- `ApiOptions`, `BulkOptions` and `CostOptions` are lazy shared singletons resolved in `boot()`; the idempotency store takes lease and retention from `ApiOptions`. Added a `RuntimeConfigCheck` that requires `app.key` in `production`.
+
+## Unreleased — kernel package and API migration
+
+- Breaking (PLAN3.P02–P04, pre-1.0): The package uses CoreX\Operations as its sole PSR-4 root; authorization, operation catalogue, bulk execution and validation expose feature-owned ports and typed inputs/results. Extracted tools, webhooks, custom fields and transfer APIs belong to their own packages.
+- Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.
+
 ## Unreleased — PHP surface strict cutover
 
 - Breaking (PLAN3.P04, pre-1.0): supported PHP symbols are declared individually with Api/Spi attributes. Concrete implementation types moved to Internal and typed ports/DTOs and error contracts replace predecessor surfaces as recorded in PLAN3.D63/D64; namespace metadata no longer grants compatibility.
@@ -27,6 +49,10 @@
 - Breaking before 1.0: Rename config/publish identifiers to `corex-operations` and commands to `corex:operations:*`. The tenant migration tag publishes both idempotency and tenant schema migrations.
 
 ## Unreleased
+
+- Include public promoted resource and stored-outcome fields even when their constructor is private; source signatures stay unchanged.
+
+- PHP API manifests now record direct inheritance, interfaces and traits separately and include only members declared by this package; external dependency members are omitted without changing the `php-api/1` schema.
 
 - Extract webhook provider/config, snapshot section and bounded `corex:webhooks:prune`; the engine uses the snapshot SPI and owns only bulk/budget retention.
 - Add public request-context and invocation testing factories; preserve transport assertions in separately owned test cases.

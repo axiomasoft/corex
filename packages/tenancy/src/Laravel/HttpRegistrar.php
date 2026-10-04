@@ -104,14 +104,7 @@ final class HttpRegistrar implements PackageRegistrar
 
         if ($options->hostIdentificationEnabled) {
             // Account is identified before auth: the user row lives in the tenant DB.
-            $app->afterResolving(HttpKernel::class, static function (HttpKernel $kernel): void {
-                if (method_exists($kernel, 'addToMiddlewarePriorityBefore')) {
-                    $kernel->addToMiddlewarePriorityBefore(
-                        before: AuthenticatesRequests::class,
-                        middleware: ResolveTenantFromHost::class,
-                    );
-                }
-            });
+            $app->afterResolving(HttpKernel::class, self::prioritiseHostMiddleware(...));
 
             $app['config']->set([
                 'tenancy.identification.resolvers.'.HostTenantResolver::class => [
@@ -163,5 +156,15 @@ final class HttpRegistrar implements PackageRegistrar
             ImpersonationSessionGuard::class,
             DenyImpersonatedWrites::class,
         ]);
+    }
+
+    private static function prioritiseHostMiddleware(HttpKernel $kernel): void
+    {
+        if (method_exists($kernel, 'addToMiddlewarePriorityBefore')) {
+            $kernel->addToMiddlewarePriorityBefore(
+                before: AuthenticatesRequests::class,
+                middleware: ResolveTenantFromHost::class,
+            );
+        }
     }
 }

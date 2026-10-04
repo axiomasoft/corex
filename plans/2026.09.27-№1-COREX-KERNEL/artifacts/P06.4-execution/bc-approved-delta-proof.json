@@ -1,0 +1,10 @@
+{
+  "base": "76f8bdde496154c0a8901e459175cf306bedd860",
+  "exact_four_changes_approved": true,
+  "unknown_extra_break_approved": false,
+  "decisions": [
+    "PLAN3.D90",
+    "PLAN3.D92"
+  ],
+  "stability_unchanged": "stable"
+}

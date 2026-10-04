@@ -20,6 +20,7 @@ use CoreX\Tenancy\DomainTrust\Exceptions\DomainTrustDenied;
 use CoreX\Tenancy\DomainTrust\Exceptions\DomainTrustDisabled;
 use CoreX\Tenancy\DomainTrust\Internal\DomainTrustCoordinator;
 use CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
@@ -172,6 +173,7 @@ function domainTrustCoordinatorDT(): array
     $authorizer = new FakeDomainTrustAuthorizerDT;
 
     config(['tenancy.domain_trust.enabled' => true]);
+    app()->forgetInstance(TenancyOptions::class);
     app()->instance(DomainTrustPolicy::class, $policy);
     app()->instance(DomainChallengeStore::class, $store);
     app()->instance(DomainOwnershipProofVerifier::class, $verifier);
@@ -187,9 +189,9 @@ it('keeps custom-domain verification disabled without consumer port bindings', f
 
 it('issues and consumes a proof once, persisting only trusted state and notification metadata', function (): void {
     $accountId = domainTrustAccountDT();
+    Event::fake([DomainTrustChanged::class]);
     [$coordinator, $store, $verifier] = domainTrustCoordinatorDT();
     $actor = new DomainTrustActor(id: 'actor-a');
-    Event::fake([DomainTrustChanged::class]);
 
     $issued = $coordinator->issue(actor: $actor, accountId: $accountId, host: 'SHOP.EXAMPLE.TEST');
     $verifier->token = $issued->token;
@@ -210,9 +212,9 @@ it('issues and consumes a proof once, persisting only trusted state and notifica
 
 it('dispatches the lifecycle notification only after an enclosing transaction commits', function (): void {
     $accountId = domainTrustAccountDT();
+    Event::fake([DomainTrustChanged::class]);
     [$coordinator, , $verifier] = domainTrustCoordinatorDT();
     $actor = new DomainTrustActor(id: 'actor-a');
-    Event::fake([DomainTrustChanged::class]);
 
     DB::transaction(function () use ($coordinator, $verifier, $actor, $accountId): void {
         $issued = $coordinator->issue(actor: $actor, accountId: $accountId, host: 'after-commit.example.test');
@@ -265,6 +267,7 @@ it('denies verification and rolls back trusted state when resolver-cache invalid
         'cache_ttl' => 300,
         'cache_store' => null,
     ]]);
+    app()->forgetInstance(TenancyOptions::class);
     app()->instance('globalCache', new class
     {
         public function store(?string $name): never

@@ -12,7 +12,7 @@ superseded_by: null
 **Actor:** author-choice (designer/claude-opus-5-5/high) по мандату B6 и D72; D08 остаётся нормой, здесь — развилки по фактическому коду после P04.
 **Evidence:** RAG:— `artifacts/P05-design/facts/summary.txt` (commit `39ae489a`), `packages/core/src/Config/Internal/Config.php`, `packages/core/src/CoreServiceProvider.php:100-106`, раскладка существующих Options (`facts/options-inventory.tsv`); RAG:✅ `artifacts/P05-design-rag/ctx7-01-testbench-define-environment.md`, `ctx7-02-octane-container-lifetime.md`, `ctx7-03-config-cache-merge.md`, `pplx-02-layered-validation-production-guards.md`.
 
-## Решение
+## Solution
 
 1. **Один Options на config-файл; новый Options — внутренний тип композиции.** `<Pkg>Options` — `final readonly`, `@internal`, `src/Internal/<Pkg>Options.php` корневого модуля, без `#[Api]`. Его читают только публичный provider и registrars (composition root, исключение R5). Runtime-класс получает конструктором нужные значения либо узкий value object, а не весь Options. Новые 11: `CustomFieldsOptions`, `IntlOptions`, `NotificationsOptions`, `PanelsOptions`, `SearchOptions`, `SearchIntlOptions`, `MeilisearchOptions`, `TasksWorkflowOptions`, `TransferOptions`, `WakeupOptions`, `WorkflowOptions`. Четыре уже публичных (`CoreOptions`, `WebhookOptions`, `BulkOptions`, `CostOptions`) и пять внутренних существующих не переносятся; публичные можно инъектировать.
 2. **Форма.** `fromArray(array $config): self` проверяет только форму и детерминированные инварианты: типы, диапазоны, допустимые значения, `class-string` через `is_a(…, true)`. Дефолты живут в `fromArray` (`mergeConfigFrom` сливает лишь первый уровень). Нарушения копятся в `ConfigurationValidator`, один `failIfAny()`. Секрет — `SecretRef`; отсутствие секрета формой не считается. `fromArray` на дефолтах без единой переменной окружения обязан пройти.
@@ -25,7 +25,7 @@ superseded_by: null
 9. **`docs/architecture/configuration.md` генерируется** `scripts/configuration-reference.php` из config-файлов и Options (колонка `typed_options_field` заполнена для каждого ключа пакетного config); `--check` — блокирующий.
 10. **Runtime-проверки** — отдельный слой после формы: наличие секрета у включённой функции и опасные режимы п.7. Контракт `CoreX\Config\Contracts\RuntimeConfigCheck` (Spi Implement, `violations(bool $production): list<string>`), реализации тегируются пакетом-владельцем. Запуск — до приёма работы процессом: HTTP — по завершении boot; console — на `CommandStarting`, кроме build-команд (`package:discover`, `config:cache`, `config:clear`, `optimize`, `optimize:clear`, `route:cache`, `route:clear`, `view:cache`, `view:clear`, `event:cache`, `event:clear`, `vendor:publish`, `key:generate`, `storage:link`, `list`, `help`, `about`, `corex:config:validate`). `corex:config:validate` выполняет те же проверки всегда и служит deploy-gate.
 
-## Почему
+## Why
 
 - После P02–P04 в `src` остался один потребитель static `Config` (сам provider); 132 из 134 ссылок — миграции, тесты, скрипты.
 - `CoreOptions` и `ApiOptions` пересобираются на каждый `make()`; 11 из 16 пакетов с config читают массив по ключам; 4 runtime-класса получают config repository мимо гейта.

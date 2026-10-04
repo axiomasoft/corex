@@ -227,7 +227,7 @@ it('corex:modules:compile writes the compiled registry file for the discovered m
 
     expect($exitCode)->toBe(0);
 
-    $cachePath = CompiledModuleRegistry::defaultCachePath();
+    $cachePath = base_path(CompiledModuleRegistry::CACHE_PATH);
     $data = require $cachePath;
 
     expect($data['modules'])->toHaveCount(1)
@@ -245,7 +245,7 @@ it('corex:modules:compile persists the entity, permissions and menu slices, not 
 
     expect(Artisan::call('corex:modules:compile'))->toBe(0);
 
-    $cachePath = CompiledModuleRegistry::defaultCachePath();
+    $cachePath = base_path(CompiledModuleRegistry::CACHE_PATH);
 
     // File is a plain-array payload — no object was var_export'd into it.
     expect(file_get_contents($cachePath))->not->toContain('::__set_state');
@@ -268,7 +268,7 @@ it('projects the compiled entities into EntityRegistry at boot — runtime path,
         new ModuleDiscovery(fallbackModules: [P15CompiledStubModule::class]),
     );
     Artisan::call('corex:modules:compile');
-    $cachePath = CompiledModuleRegistry::defaultCachePath();
+    $cachePath = base_path(CompiledModuleRegistry::CACHE_PATH);
 
     // Re-boot the provider so its app.booted projection reads the file we just
     // wrote (force re-register drops the stale singletons bound before it).
@@ -289,7 +289,7 @@ it('adds the compiled entity handle to the morph map at boot, spanning the whole
         new ModuleDiscovery(fallbackModules: [P15CompiledStubModule::class]),
     );
     Artisan::call('corex:modules:compile');
-    $cachePath = CompiledModuleRegistry::defaultCachePath();
+    $cachePath = base_path(CompiledModuleRegistry::CACHE_PATH);
 
     $this->app->register(new ModulesServiceProvider($this->app), force: true);
 
@@ -452,8 +452,11 @@ it('builds the registry cache from configured Options — store, ttl and prefix 
     // assert the resolved cache writes the epoch-stamped key THERE — proving
     // config('corex.modules.cache.*') drives the binding (no hardcoded 3600).
     config()->set('corex.modules.cache.store', 'array');
+    app()->forgetInstance(ModulesOptions::class);
     config()->set('corex.modules.cache.prefix', 'cfg-driven');
+    app()->forgetInstance(ModulesOptions::class);
     config()->set('corex.modules.cache.ttl', 3600);
+    app()->forgetInstance(ModulesOptions::class);
 
     // Options is a provider-time snapshot. Replace it after changing test
     // config, then rebuild the already-resolved cache singleton.

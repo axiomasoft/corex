@@ -10,6 +10,7 @@ use CoreX\Tenancy\Workspace\Internal\Models\Workspace;
 use CoreX\Tenancy\Workspace\Internal\Models\WorkspaceMember;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
@@ -73,7 +74,7 @@ function makeWorkspaceWsp(array $overrides = []): Workspace
 /** Swaps the `auth` container binding for a {@see Guard} stub — the `auth()` helper's return type forces an actual Guard/Factory instance, even though {@see DatabaseWorkspaceResolver} only calls id(). */
 function actingAsIdWsp(?string $userId): void
 {
-    app()->instance('auth', new class($userId) implements Guard
+    $guard = new class($userId) implements Guard
     {
         public function __construct(private readonly ?string $id) {}
 
@@ -111,6 +112,18 @@ function actingAsIdWsp(?string $userId): void
         {
             return $this;
         }
+    };
+
+    app()->instance('auth', new class($guard) implements AuthFactory
+    {
+        public function __construct(private readonly Guard $guard) {}
+
+        public function guard($name = null): Guard
+        {
+            return $this->guard;
+        }
+
+        public function shouldUse($name): void {}
     });
 }
 
@@ -173,7 +186,7 @@ it('AC-18: resolve(slug) 403s without an active membership row', function (): vo
     $user = makeUserWsp();
     actingAsIdWsp($user->id);
 
-    expect(fn () => (new DatabaseWorkspaceResolver)->resolve($workspace->slug))->toThrow(AuthorizationException::class);
+    expect(fn () => (new DatabaseWorkspaceResolver(app(AuthFactory::class)))->resolve($workspace->slug))->toThrow(AuthorizationException::class);
 });
 
 it('AC-18: resolve(slug) 403s a suspended member', function (): void {
@@ -182,7 +195,7 @@ it('AC-18: resolve(slug) 403s a suspended member', function (): void {
     WorkspaceMember::query()->create(['workspace_id' => $workspace->id, 'user_id' => $user->id, 'status' => 'suspended']);
     actingAsIdWsp($user->id);
 
-    expect(fn () => (new DatabaseWorkspaceResolver)->resolve($workspace->slug))->toThrow(AuthorizationException::class);
+    expect(fn () => (new DatabaseWorkspaceResolver(app(AuthFactory::class)))->resolve($workspace->slug))->toThrow(AuthorizationException::class);
 });
 
 it('AC-18: resolve(slug) succeeds for an active member', function (): void {
@@ -191,7 +204,7 @@ it('AC-18: resolve(slug) succeeds for an active member', function (): void {
     WorkspaceMember::query()->create(['workspace_id' => $workspace->id, 'user_id' => $user->id, 'status' => 'active']);
     actingAsIdWsp($user->id);
 
-    $ref = (new DatabaseWorkspaceResolver)->resolve($workspace->slug);
+    $ref = (new DatabaseWorkspaceResolver(app(AuthFactory::class)))->resolve($workspace->slug);
 
     expect($ref->id)->toBe($workspace->id)
         ->and($ref->slug)->toBe($workspace->slug);
@@ -200,7 +213,7 @@ it('AC-18: resolve(slug) succeeds for an active member', function (): void {
 it('AC-18: resolve(slug) throws ModelNotFoundException for a nonexistent slug', function (): void {
     actingAsIdWsp((string) Str::uuid7());
 
-    expect(fn () => (new DatabaseWorkspaceResolver)->resolve('does-not-exist'))->toThrow(ModelNotFoundException::class);
+    expect(fn () => (new DatabaseWorkspaceResolver(app(AuthFactory::class)))->resolve('does-not-exist'))->toThrow(ModelNotFoundException::class);
 });
 
 it('AC-18: resolve(null) returns the user default workspace', function (): void {
@@ -209,7 +222,7 @@ it('AC-18: resolve(null) returns the user default workspace', function (): void 
     WorkspaceMember::query()->create(['workspace_id' => $workspace->id, 'user_id' => $user->id, 'status' => 'active', 'is_default' => true]);
     actingAsIdWsp($user->id);
 
-    $ref = (new DatabaseWorkspaceResolver)->resolve(null);
+    $ref = (new DatabaseWorkspaceResolver(app(AuthFactory::class)))->resolve(null);
 
     expect($ref->id)->toBe($workspace->id);
 });
@@ -218,7 +231,7 @@ it('AC-18: resolve(null) throws when the user has no default workspace membershi
     $user = makeUserWsp();
     actingAsIdWsp($user->id);
 
-    expect(fn () => (new DatabaseWorkspaceResolver)->resolve(null))->toThrow(RuntimeException::class);
+    expect(fn () => (new DatabaseWorkspaceResolver(app(AuthFactory::class)))->resolve(null))->toThrow(RuntimeException::class);
 });
 
 it('AC-18: a partner-workspace membership does not grant visibility of its parent', function (): void {
@@ -228,7 +241,7 @@ it('AC-18: a partner-workspace membership does not grant visibility of its paren
     WorkspaceMember::query()->create(['workspace_id' => $partner->id, 'user_id' => $user->id, 'status' => 'active']);
     actingAsIdWsp($user->id);
 
-    $resolver = new DatabaseWorkspaceResolver;
+    $resolver = new DatabaseWorkspaceResolver(app(AuthFactory::class));
 
     expect($resolver->resolve($partner->slug)->id)->toBe($partner->id)
         ->and(fn () => $resolver->resolve($parent->slug))->toThrow(AuthorizationException::class);

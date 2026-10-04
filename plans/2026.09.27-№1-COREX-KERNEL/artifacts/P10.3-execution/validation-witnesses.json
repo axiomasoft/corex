@@ -1,0 +1,75 @@
+{
+  "proofs": {
+    "E14": [
+      "baseline-startup.json",
+      "baseline-tests.log"
+    ],
+    "E15": [
+      "supervisor-green.log"
+    ],
+    "E16": [
+      "supervisor-green.log",
+      "self-check.md"
+    ],
+    "E17": [
+      "repeat-tests.json",
+      "tools-01.log",
+      "tools-02.log",
+      "tools-03.log",
+      "tools-04.log",
+      "tools-05.log",
+      "tools-06.log",
+      "tools-07.log",
+      "tools-08.log",
+      "tools-09.log",
+      "tools-10.log"
+    ],
+    "E18": [
+      "profile.log",
+      "surface-golden-invariants.json",
+      "source-binding.json",
+      "php-api.log"
+    ],
+    "E19": [
+      "mapping.log"
+    ],
+    "E20": [
+      "analyse.log",
+      "lint.log",
+      "ceilings.log"
+    ],
+    "E21": [
+      "golden.log",
+      "golden-semantic-delta.json",
+      "ci-final-jobs.json"
+    ],
+    "E22": [
+      "docs.log",
+      "anti-weakening.log",
+      "ci-final-jobs.json"
+    ],
+    "E23": [
+      "ci-final-assessment.json",
+      "ci-final-jobs.json",
+      "ci-worker-witnesses.json"
+    ],
+    "E24": [
+      "self-check.md",
+      "review-policy-override.json"
+    ]
+  },
+  "overrides": {
+    "E21": {
+      "decision": "decisions/D83-p103-internal-constructor-golden.md",
+      "effective_predicate": "Golden GREEN with exactly the declared optional Internal startupMs constructor parameter; all other records/layers unchanged."
+    },
+    "E24": {
+      "decision": "decisions/D81-p10-phase-review-only.md",
+      "authority": "Owner instruction: work without large review, only optimal checks; D81 waives item independent review.",
+      "effective_predicate": "Focused executor self-check and affected checks GREEN; no independent item review claimed; one whole-P10 review remains assigned to P10.4.",
+      "item_independent_review_performed": false,
+      "phase_review_outstanding": true
+    }
+  },
+  "note": "E21 and E24 are effective semantic acceptance under D83/D81 and the current owner instruction. No independent review result is fabricated."
+}

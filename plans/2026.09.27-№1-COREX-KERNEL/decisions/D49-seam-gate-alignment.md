@@ -13,7 +13,7 @@ superseded_by: null
 **Evidence:** RAG:— `artifacts/P02.1-execution/`; старые гейты R-Z0/R-Z1/R-Z2,
 R-T1, R4/R4b, provider-size и extension-contract не учитывали D27/D28/D32/D35.
 
-## Решение
+## Solution
 
 1. FieldCastRegistry классифицируется как boot-built catalogue; consumer Testing
    namespaces Messaging/Search/Wakeup объявляются в public-api владельцев.
@@ -42,7 +42,7 @@ R-T1, R4/R4b, provider-size и extension-contract не учитывали D27/D2
 7. Три obsolete PHPStan entries извлечённой логики удаляются из modules baseline;
    nullable provenance и лишний cast исправляются в реализациях секций.
 
-## Почему
+## Why
 
 Полный стек воспроизвёл конкретные противоречия старых гейтов уже принятым
 границам швов. Широкие namespace-исключения, повышение потолков и перенос

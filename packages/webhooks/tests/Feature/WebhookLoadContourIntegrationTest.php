@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Tests\Feature;
 
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Config\Data\SecretRef;
-use CoreX\Config\Internal\Config;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
@@ -13,12 +13,14 @@ use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\CoreServiceProvider;
+use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Data\MessagePayload;
 use CoreX\Messaging\Enums\MessageClass;
 use CoreX\Messaging\Enums\PiiClass;
+use CoreX\Messaging\Internal\JsonCloudEventCodec;
 use CoreX\Messaging\Testing\MessagingFixtures;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\ModulesServiceProvider;
@@ -35,6 +37,7 @@ use CoreX\Webhooks\Data\ValidatedWebhookRequest;
 use CoreX\Webhooks\Data\WebhookSubscription;
 use CoreX\Webhooks\Data\WebhookTopic;
 use CoreX\Webhooks\Internal\HmacWebhookSigner;
+use CoreX\Webhooks\Internal\PermitPublicEgressPolicy;
 use CoreX\Webhooks\Internal\SqlWebhookDeliveryStore;
 use CoreX\Webhooks\Internal\SqlWebhookSubscriptionStore;
 use CoreX\Webhooks\Internal\WebhookDeliveryWorker;
@@ -43,6 +46,7 @@ use CoreX\Webhooks\Internal\WebhookKeyRing;
 use CoreX\Webhooks\Internal\WebhookRetryPolicy;
 use CoreX\Webhooks\Internal\WebhookTopicCatalogue;
 use CoreX\Webhooks\Internal\WebhookUrlPolicy;
+use CoreX\Webhooks\Laravel\WebhookOptionsParser;
 use CoreX\Webhooks\Tests\Fixtures\LocalWebhookReceiver;
 use CoreX\Webhooks\WebhooksServiceProvider;
 use DateTimeImmutable;
@@ -122,7 +126,7 @@ final class WebhookLoadContourIntegrationTest extends TestCase
             $migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_webhook_tables.php';
             $migration->up();
             $connection = DB::connection('api_p1420_tenant');
-            $connection->getSchemaBuilder()->create(Config::inboxMessagesTable(), function (Blueprint $table): void {
+            $connection->getSchemaBuilder()->create(app(CoreOptions::class)->inboxMessagesTable, function (Blueprint $table): void {
                 $table->string('consumer', 120);
                 $table->uuid('message_id');
                 $table->string('name', 160);
@@ -131,7 +135,7 @@ final class WebhookLoadContourIntegrationTest extends TestCase
             });
             $clock = new FrozenClock(new DateTimeImmutable('2026-09-26T12:00:00.000000+00:00'));
             $catalogue = $this->catalogue();
-            $fanout = new WebhookFanout($connection, MessagingFixtures::inbox($connection, $clock), $catalogue, ['orders.placed' => new WebhookLoadContourIntegrationLoadContourProjector], $clock);
+            $fanout = new WebhookFanout($connection, MessagingFixtures::inbox($connection, $clock), $catalogue, ['orders.placed' => new WebhookLoadContourIntegrationLoadContourProjector], $clock, new JsonCloudEventCodec(MessagingFixtures::contracts([new MessageContract('orders.placed', 1, MessageClass::IntegrationEvent, 'orders/api', PiiClass::Personal, 'webhooks')])));
             $now = $clock->now();
             $connection->table('sys_api_webhook_subscriptions')->insert([
                 'id' => 'sub-local',
@@ -146,13 +150,20 @@ final class WebhookLoadContourIntegrationTest extends TestCase
                 'created_at' => $now,
                 'updated_at' => $now,
             ]);
+            $scope = new DataScope(
+                'account-1',
+                null,
+                'pgsql:'.$database,
+                'actor-1',
+                hash('sha256', 'p1420-restore'),
+            );
             $envelope = new MessageEnvelope(
                 messageId: '55555555-5555-4555-8555-555555555555',
                 source: 'orders',
                 name: 'orders.placed',
                 contractVersion: 1,
                 occurredAt: $now,
-                scope: ['account_id' => 'account-1'],
+                scope: app(DataScopeCodec::class)->encode($scope),
                 payload: new MessagePayload(['id' => 'order-1', 'secret' => 'hidden']),
                 piiClass: PiiClass::Personal,
                 correlationId: 'correlation-1',
@@ -166,23 +177,18 @@ final class WebhookLoadContourIntegrationTest extends TestCase
 
             $contexts = new ContextFixture;
             $contexts->initialize(new AccountRef('account-1', 'account', 'active', [], []));
-            $scope = new DataScope(
-                'account-1',
-                null,
-                'pgsql:'.$database,
-                'actor-1',
-                hash('sha256', 'p1420-restore'),
-            );
             $keys = new WebhookKeyRing;
             $keys->provision('current', new SecretRef(self::Secret), 0);
             $receiver = new LocalWebhookReceiver([self::Secret], $clock->now()->getTimestamp());
             $worker = new WebhookDeliveryWorker(
-                store: new SqlWebhookDeliveryStore($connection, new GuardedTenantContextRestorer($contexts), $clock, new WebhookRetryPolicy),
+                store: new SqlWebhookDeliveryStore($connection, new GuardedTenantContextRestorer($contexts), $clock, new WebhookRetryPolicy(WebhookOptionsParser::fromArray([]))),
                 signer: new HmacWebhookSigner($keys),
                 urlPolicy: new WebhookUrlPolicy(static fn (): array => ['93.184.216.34']),
                 transport: $receiver,
                 topics: $catalogue,
                 clock: $clock,
+                egress: new PermitPublicEgressPolicy,
+                scopeCodec: app(DataScopeCodec::class),
             );
             $delivered = $worker->workOnce($scope, 'worker-local');
 
@@ -210,7 +216,9 @@ final class WebhookLoadContourIntegrationTest extends TestCase
 
             self::assertSame(1, $receiver->effects);
             self::assertSame(401, $receiver->send($tampered)->status);
-            self::assertSame('signature_invalid', $receiver->send($tampered)->errorCode);
+            $rejected = $receiver->send($tampered);
+            self::assertSame(401, $rejected->status);
+            self::assertNull($rejected->errorCode);
             self::assertSame(1, $receiver->effects);
         } finally {
             $root->statement('DROP SCHEMA IF EXISTS api_p1420_tenant_test CASCADE');
@@ -268,7 +276,7 @@ final class WebhookLoadContourIntegrationTest extends TestCase
         $contexts = new ContextFixture;
         $contexts->value = new TenantContext($account, null, true);
         $clock = new FrozenClock(new DateTimeImmutable('2026-09-26T12:00:00.000000+00:00'));
-        $store = new SqlWebhookSubscriptionStore($connection, new GuardedTenantContextRestorer($contexts), $this->catalogue(), $clock);
+        $store = new SqlWebhookSubscriptionStore($connection, new GuardedTenantContextRestorer($contexts), $this->catalogue(), $clock, new PermitPublicEgressPolicy);
         $boxed = new DataScope('account-1', null, 'boxed:account-1', 'actor-1', hash('sha256', 'boxed-restore'), boxed: true);
         $created = $store->create($boxed, $this->subscription('boxed-sub', $clock->now()), true, true);
 
@@ -314,13 +322,6 @@ final class WebhookLoadContourIntegrationLoadContourProjector implements Webhook
 {
     public function project(MessageEnvelope $message, WebhookTopic $topic): array
     {
-        return [
-            'event_id' => $message->messageId,
-            'type' => $message->name,
-            'version' => $message->contractVersion,
-            'occurred_at' => '2026-09-26T12:00:00+00:00',
-            'data' => ['id' => 'order-1'],
-            'correlation_id' => $message->correlationId,
-        ];
+        return ['id' => 'order-1'];
     }
 }

@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased — typed Options and runtime configuration checks (P05.1)
+
+- Added internal `TasksWorkflowOptions` and a `RuntimeConfigCheck`: in `production`, `corex-tasks-workflow.wakeup.accept_legacy_unstamped=true` stops the process unless that exact path is acknowledged. `CaptureTaskCompletion` and `SqlTaskRecurrenceMaterializer` receive values instead of the config repository.
+
+## Unreleased — kernel package and API migration
+
+- Breaking (PLAN3.P02–P04, pre-1.0): TaskRecurrenceCommand accepts SeriesReference and MaterializationWindow and returns MaterializationReceipt; completion bindings are explicit, and materialization conflicts use package-owned typed errors.
+- Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.
+
 ## Unreleased — PHP surface strict cutover
 
 - Breaking (PLAN3.P04, pre-1.0): supported PHP symbols are declared individually with Api/Spi attributes. Concrete implementation types moved to Internal and typed ports/DTOs and error contracts replace predecessor surfaces as recorded in PLAN3.D63/D64; namespace metadata no longer grants compatibility.
@@ -22,6 +31,8 @@
 - Breaking before 1.0: Rename the config file and key to `corex-tasks-workflow`.
 
 ## Unreleased
+
+- PHP API manifests now record direct inheritance, interfaces and traits separately and include only members declared by this package; external dependency members are omitted without changing the `php-api/1` schema.
 
 - Add `corex/tasks-workflow` package with `TaskRecurrenceCommand` materialization (P7.4).
 - Add `corex_task_series`, `corex_task_series_state`, and `corex_task_occurrences` mapping tables.

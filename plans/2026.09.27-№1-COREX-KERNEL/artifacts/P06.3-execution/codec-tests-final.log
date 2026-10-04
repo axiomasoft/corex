@@ -1,0 +1,2 @@
+> ../../vendor/bin/pest --configuration=../../phpunit.xml --bootstrap=../../vendor/autoload.php --testsuite=CorePackage,ModulesPackage --exclude-group=pg '--filter=CloudEventCodec|MessagingEnvelope'
+{"tool":"pest","result":"passed","tests":73,"passed":73,"assertions":94,"duration_ms":1000}

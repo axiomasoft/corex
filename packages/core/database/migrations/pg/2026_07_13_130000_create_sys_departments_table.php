@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Internal\Config;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Database\Laravel\IdColumns;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -24,7 +24,7 @@ return new class extends Migration
         // suffices, no superuser required (RAG:✅ 2026-07-12 findings §4).
         DB::statement('CREATE EXTENSION IF NOT EXISTS ltree');
 
-        $table = Config::departmentsTable();
+        $table = app(CoreOptions::class)->departmentsTable;
 
         Schema::create($table, function (Blueprint $table): void {
             IdColumns::primary($table);
@@ -51,6 +51,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists(Config::departmentsTable());
+        Schema::dropIfExists(app(CoreOptions::class)->departmentsTable);
     }
 };

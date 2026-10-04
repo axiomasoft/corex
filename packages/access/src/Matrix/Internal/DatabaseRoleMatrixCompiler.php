@@ -11,7 +11,8 @@ use CoreX\Access\Laravel\AuthOptions;
 use CoreX\Access\Matrix\Laravel\AzGuardRoleModel;
 use CoreX\Access\Roles\Data\RoleMatrixEntry;
 use CoreX\Access\Roles\Laravel\RoleMatrixData;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionResolverInterface;
 use Override;
 
 /**
@@ -34,7 +35,8 @@ final readonly class DatabaseRoleMatrixCompiler implements RoleMatrixCompiler
     public function __construct(
         private ScopeMapVersion $scopeMapVersion,
         private AuthOptions $options,
-        private ?ActiveEntityFilter $activeEntities = null,
+        private ActiveEntityFilter $activeEntities,
+        private ConnectionResolverInterface $connections,
     ) {}
 
     #[Override]
@@ -42,7 +44,10 @@ final readonly class DatabaseRoleMatrixCompiler implements RoleMatrixCompiler
     {
         $panel = $this->options->panel;
 
-        DB::transaction(function () use ($roleId, $panel): void {
+        /** @var Connection */
+        $connection = $this->connections->connection();
+
+        $connection->transaction(function () use ($roleId, $panel, $connection): void {
             $role = RoleMatrixData::role($roleId);
 
             $azguardRole = AzGuardRoleModel::query()->firstOrCreate(['name' => $role->slug]);
@@ -58,7 +63,7 @@ final readonly class DatabaseRoleMatrixCompiler implements RoleMatrixCompiler
 
             $keys = collect(RoleMatrixData::matrix($role->id))
                 ->filter(static fn (RoleMatrixEntry $row): bool => $row->scope !== Scope::None)
-                ->filter(fn (RoleMatrixEntry $row): bool => $this->activeEntities()->isActive($row->entityKey))
+                ->filter(fn (RoleMatrixEntry $row): bool => $this->activeEntities->isActive($row->entityKey))
                 ->map(static fn (RoleMatrixEntry $row): string => "{$panel}.{$row->entityKey}.{$row->action}")
                 ->unique();
 
@@ -69,7 +74,7 @@ final readonly class DatabaseRoleMatrixCompiler implements RoleMatrixCompiler
                     'panel_id' => $panel,
                 ]);
             }
-            DB::afterCommit($this->scopeMapVersion->invalidator($roleId));
+            $connection->afterCommit($this->scopeMapVersion->invalidator($roleId));
         });
     }
 
@@ -78,10 +83,5 @@ final readonly class DatabaseRoleMatrixCompiler implements RoleMatrixCompiler
     {
         collect(RoleMatrixData::roleIds())
             ->each(fn (string $roleId) => $this->compile($roleId));
-    }
-
-    private function activeEntities(): ActiveEntityFilter
-    {
-        return $this->activeEntities ?? app(ActiveEntityFilter::class);
     }
 }

@@ -26,6 +26,8 @@ cd "$(git rev-parse --show-toplevel)"
 # Реестр кейсов: "<item>-<case>" -> тестовая команда, которая обязана
 # ПОКРАСНЕТЬ под применённым патчем-саботажем.
 declare -A TEST_CMD=(
+    [P06-egress-skip-on-delivery]="vendor/bin/pest --exclude-group=pg packages/webhooks/tests/Feature/WebhookEgressPolicyTest.php --filter=revocation"
+    [P10-pg-outside-group]="PGSQL_PORT=1 vendor/bin/pest --exclude-group=pg packages/webhooks/tests/Feature/WebhookFanoutTest.php"
     [API-default-deny]="vendor/bin/pest --exclude-group=pg packages/operations/tests/Feature/PlatformTest.php --filter=test_default_authentication_and_authorization_deny"
     [API-module-activation]="vendor/bin/pest --exclude-group=pg packages/operations/tests/Feature/PlatformTest.php --filter=test_context_and_module_state_are_read_on_every_dispatch"
     [API-physical-context]="vendor/bin/pest --exclude-group=pg packages/operations/tests/Feature/PlatformTest.php --filter=test_missing_boxed_and_disabled_contexts_fail_closed"
@@ -60,6 +62,7 @@ declare -A TEST_CMD=(
     [P1.25-null-provider-binding]="vendor/bin/pest --group=pg tests/Feature/SettingsTest.php --filter='resolves a manifest-declared DefaultSettingDefinition'"
     [P1.29-upgrade-swallow]="vendor/bin/pest --group=pg tests/Feature/ModuleLifecycleTest.php --filter='catch-up migration fails'"
     [P1.29-move-parent-workspace]="vendor/bin/pest --group=pg tests/Feature/DepartmentTest.php --filter='in ANOTHER workspace is rejected'"
+    [P05-scoped-to-singleton]="vendor/bin/pest --exclude-group=pg tests/Feature/ResidentLifecycleTest.php"
 )
 
 if [ "${1:-}" = "--list" ]; then
@@ -134,8 +137,19 @@ run_case() {
     cat "$SNAPSHOT_DIR/test.log"
     set -e
 
-    if rg -q 'No tests found|"tests"[[:space:]]*:[[:space:]]*0([,}])' "$SNAPSHOT_DIR/test.log"; then
+    # rg is not required. A missing grep or an unreadable log is exit 2, same as
+    # a carrier that matched nothing (Pest prints "No tests found" and exits 0).
+    local guard_status
+    set +e
+    command grep -Eq 'No tests found|"tests"[[:space:]]*:[[:space:]]*0([,}])' "$SNAPSHOT_DIR/test.log"
+    guard_status=$?
+    set -e
+    if [ "$guard_status" -eq 0 ]; then
         echo "mutation-check[$KEY]: FAIL — carrier executed no tests" >&2
+        return 2
+    fi
+    if [ "$guard_status" -ne 1 ]; then
+        echo "mutation-check[$KEY]: FAIL — test-log guard failed (grep exit=$guard_status)" >&2
         return 2
     fi
 

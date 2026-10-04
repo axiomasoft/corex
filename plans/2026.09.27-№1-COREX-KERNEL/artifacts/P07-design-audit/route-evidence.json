@@ -1,0 +1,11 @@
+{
+  "cwd": "/home/vostrikov/projects/packages/corex",
+  "effort": "high",
+  "invocation": "$ task:plan-audit 2026.09.27-№1-COREX-KERNEL design",
+  "model": "gpt-6.1-sol",
+  "model_class": "frontier",
+  "source": "provider-thread-state",
+  "source_version": "codex-turn-context-v1",
+  "thread_id": "01a10573-5a1f-7cd3-b619-a69754aceb54",
+  "ts": "2026-10-04T05:56:26Z"
+}

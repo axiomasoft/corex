@@ -8,11 +8,14 @@ use CoreX\CustomFields\Internal\Integration\AttributeMessageContractRegistry;
 use CoreX\CustomFields\Internal\Integration\AttributeMessageTranslator;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
+use CoreX\Modules\Contracts\PackageRegistrar;
 use Illuminate\Contracts\Foundation\Application;
+use Override;
 
 /** @internal Composition of the package's message contract and translator. */
-final class AttributeMessagingRegistrar
+final class AttributeMessagingRegistrar implements PackageRegistrar
 {
+    #[Override]
     public function register(Application $app): void
     {
         $app->extend(
@@ -26,4 +29,7 @@ final class AttributeMessagingRegistrar
             ),
         );
     }
+
+    #[Override]
+    public function boot(Application $app): void {}
 }

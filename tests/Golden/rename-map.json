@@ -2285,7 +2285,7 @@
         {
             "from": "CoreX\\PHPStan\\Rules\\DurablePayloadTypeChecker",
             "kind": "class",
-            "to": "CoreX\\Messaging\\Internal\\DurablePayloadTypeChecker"
+            "to": "CoreX\\Messaging\\PHPStan\\DurablePayloadTypeChecker"
         },
         {
             "from": "CoreX\\Recurrence\\Internal\\RRuleRecurrenceExpander",
@@ -4055,7 +4055,7 @@
         {
             "kind": "class",
             "from": "CoreX\\Messaging\\PHPStan\\Rules\\DurablePayloadTypeChecker",
-            "to": "CoreX\\Messaging\\Internal\\DurablePayloadTypeChecker"
+            "to": "CoreX\\Messaging\\PHPStan\\DurablePayloadTypeChecker"
         },
         {
             "kind": "class",

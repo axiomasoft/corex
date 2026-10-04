@@ -1,0 +1,37 @@
+{
+  "schema_version": "handoff-recommendation-receipt/v1",
+  "plan_id": "2026.09.27-№1-COREX-KERNEL",
+  "subject": "design",
+  "status": "handoff-persisted",
+  "next_exact": "audit-design: task:plan-audit 2026.09.27-№1-COREX-KERNEL design",
+  "recommendation": "**Next:** audit-design: task:plan-audit 2026.09.27-№1-COREX-KERNEL design\n\n| Parameter | Meaning |\n|:--|:--|\n| Batch | n/a |\n| Model | frontier, свежий reviewer, не автор дизайна |\n| Thinking | xhigh |\n| Context | isolated-child-return |\n| Суть | Независимый design audit fingerprint finish 2026-10-04 (`**Design Audit:** required`); delta — P07 и строки 25–29 execution-sheet. |\n\n```text\ntask:plan-audit 2026.09.27-№1-COREX-KERNEL design\n```",
+  "route": {
+    "batch": "n/a",
+    "model": "frontier, свежий reviewer, не автор дизайна",
+    "thinking": "xhigh",
+    "context": "isolated-child-return",
+    "command": null
+  },
+  "continuity": {
+    "outcome": "isolated-child-return",
+    "reason": "independent-review",
+    "evidence": [
+      "persisted-context:isolated-child-return"
+    ],
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "rationale": {
+    "remaining": "Независимый design audit нового fingerprint. Отдельно и раньше исполнения P07: полное ревью фазы P06 владельцем и финальный hosted CI P06 с закрытием фазы (D73, D91 п.4) — P06 acceptance по-прежнему открыта; строка 25 (P07.1) не стартует до закрытия P06 (D94 п.2). P08–P09 — backlog.",
+    "open_risks": "Ремонт по итогам ревью P06 может сдвинуть факты карты кода P07 (D94 п.3 — сверка `p07-facts.sh` первым шагом P07.1). Мост access-azguard в CI зависит от доступа к приватному репозиторию AzGuard (§5 F6). Stancl v4 может выйти до P07.2 (VERIFY-AT-EXEC, F5)."
+  },
+  "commit_sha": "4137d2412497aa9348cf19322b26f1d074b5ad2c",
+  "journal": null,
+  "adapter_attestation": null,
+  "digests": {
+    "plan": "sha256:2901fe117d7ca5ede31511595cd6c93d30fb24ebea3b43f6999e9bf91deb26e8",
+    "handoff": "sha256:5b42605f3874d858e194855d0390230307f34a63bfb2820059ec9e00e4effb30",
+    "state": null,
+    "closure": null
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "model": "grok-4.7",
+  "effort": "medium",
+  "packet_sha256": "8437f518d6787ab260d846c33f68253511460a577cd29b09b87511acc9f9171a",
+  "source_sha256": {
+    "packages/webhooks/src/Contracts/WebhookEgressPolicy.php": "a447a7a8d06d53e426f52d2842f4a1f6fdc6b9835aaf849cae6644d76d6a2f20",
+    "packages/webhooks/src/Data/WebhookDestination.php": "873f8b2122a972538c041e20258c26a86e5e22ce0115d75b9decc97df918a267",
+    "packages/webhooks/src/Data/WebhookHttpResult.php": "e2cef36fd8e05f95e6a1837e69730df3a09bec988fdbd34c4524a5d89b76653b",
+    "packages/webhooks/src/Data/WebhookOptions.php": "aaee67e50acbc069489ae9911cfcbbadc7998674007ef385c413f2caf39bf6de",
+    "packages/webhooks/src/Enums/WebhookFailureReason.php": "971d61158e9e398da8af44a1f116d6f1f45c80e35584ba77bb4f771c27c71264",
+    "packages/webhooks/src/Errors/Enums/WebhooksErrorCode.php": "4da4f8d7abc3115bc3e09489a0d7ebf56bacc0935c4af724f2b6aae65c9adf97",
+    "packages/webhooks/src/Errors/Internal/PackageProblemDefinitions.php": "c6c090eec713127697a8a5f67000627d707c8bbc49aafd58886c476f53488ba3",
+    "packages/webhooks/src/Internal/CurlWebhookTransport.php": "dea39b6a28794a7fcd7deafdfdd4955311ac2825dca7a1426b51fb5e81b6f4e5",
+    "packages/webhooks/src/Internal/PermitPublicEgressPolicy.php": "413cdb2405f4bf49f251e29c6c47f3563b7ceed731cb16d159063f884ffc1a79",
+    "packages/webhooks/src/Internal/SqlWebhookDeliveryStore.php": "3556a2a7dd01c5e8cd1a1946571a778149f499af24fa752d9bb7ef3186d06670",
+    "packages/webhooks/src/Internal/SqlWebhookSubscriptionStore.php": "58fb64e0580e822344c9d0373ceff0db46fc9f1633b64a641a17ebaaa7ef95d7",
+    "packages/webhooks/src/Internal/WebhookDeliveryWorker.php": "81fa55dbef931ec841afe9c0f77d5e8d86310ae0ca116088e2faca1beaab5a0f",
+    "packages/webhooks/src/Internal/WebhookFanout.php": "ab76e94ab3ab2c73212cfe8992d9eabe9ee06d84c702121721919926982e096e",
+    "packages/webhooks/src/Internal/WebhookManagement.php": "739e35c354aa3487f1b6fca86fd22216bac6ea5962e79ac721600554d9066e9b",
+    "packages/webhooks/src/Internal/WebhookReplay.php": "0e5df5ea25a12c1d67ebc68208c1533c37479eb4cba0368dfd7e2dee9e05d8fb",
+    "packages/webhooks/src/Internal/WebhookRetention.php": "03ab09d7c2e58a0fb917d125d556c699f74931d0478a22215268e62530c415e6",
+    "packages/webhooks/src/Internal/WebhookRetryPolicy.php": "c3dabd8d98a9f972aeb33d76f0f2dab348a4e33a55a9a1003f0bcfd4ab1b9b08",
+    "packages/webhooks/src/Internal/WebhookUrlPolicy.php": "2886bc2b9f26d39765324d668326612d44704910352b6796f913635320989291",
+    "packages/webhooks/src/Laravel/WebhookBindingsRegistrar.php": "6a15ef2af6b4d4220f12a309188ec2eba5699707191d89ee3a198b2c81bed8ac",
+    "packages/webhooks/src/Laravel/WebhookOptionsParser.php": "a2902dc950a9227e88d3c98f180c7853c7241d69387b3ab9a9873c74f5f7805a",
+    "packages/webhooks/tests/Feature/WebhookEgressPolicyTest.php": "07da537cb59d08be643922e2be3a125c393cbe32faa28c38dc2cc58de5a12359",
+    "packages/webhooks/tests/Feature/WebhookRetryBudgetTest.php": "8f14086c0c1270862fbc599dbdca82b8a7a119c5e15428c5f32b7ebe100c1928",
+    "packages/webhooks/tests/Unit/WebhookFailureReasonTest.php": "30cb42ab167291e39a73d0a2b85ed9ebf1b4454c3d83cfc4e32adcf4457225ab"
+  }
+}

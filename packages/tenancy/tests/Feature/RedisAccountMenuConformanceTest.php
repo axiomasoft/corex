@@ -20,6 +20,10 @@ use Illuminate\Support\Facades\Http;
 
 function p3RedisRepository(): Repository
 {
+    if (! extension_loaded('redis')) {
+        test()->markTestSkipped('Redis account menu conformance requires the optional ext-redis extension.');
+    }
+
     $port = getenv('P3_REDIS_PORT');
 
     if (! is_string($port) || filter_var($port, FILTER_VALIDATE_INT) === false) {

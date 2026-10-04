@@ -352,3 +352,31 @@ it('creates maintenance project sprint and time log through the neutral fixture'
         ->and($time->type)->toBe('tsk.time-log')
         ->and(Task::query()->findOrFail($task->getKey())->spent_minutes)->toBe(45);
 });
+
+it('replays sprint creation without creating a second sprint', function (): void {
+    $projectDraft = new ProjectDraft($this->workspaceId, 'Planning', $this->actor);
+    $command = app(TaskPlanningCommand::class);
+    $project = $command->createProject($projectDraft, planningToken('coverage-project', PlanningHasher::project($projectDraft, $this->context)));
+    $draft = new SprintDraft($project->id, 'Sprint', startDate: '2026-10-01', endDate: '2026-10-14', actor: $this->actor);
+    $token = planningToken('coverage-sprint', PlanningHasher::sprint($draft, $this->context, '2026-10-01', '2026-10-14'));
+    $first = $command->createSprint($draft, $token);
+    $replay = $command->createSprint($draft, $token);
+    expect($replay)->toEqual($first)->and(Sprint::query()->count())->toBe(1);
+});
+
+it('rejects malformed planning tokens before writes', function (string $key, string $hash): void {
+    $draft = new ProjectDraft($this->workspaceId, 'Planning', $this->actor);
+
+    try {
+        app(TaskPlanningCommand::class)->createProject($draft, planningToken($key, $hash));
+        test()->fail('Invalid token was accepted.');
+    } catch (InvalidPlanningDraft $exception) {
+        expect($exception->errorDescriptor()->retryable)->toBeFalse();
+    }
+    expect(Project::query()->count())->toBe(0);
+})->with([
+    'empty key' => ['', str_repeat('a', 64)],
+    'long key' => [str_repeat('a', 191), str_repeat('a', 64)],
+    'malformed hash' => ['invalid-hash', 'BAD'],
+    'different hash' => ['wrong-hash', str_repeat('a', 64)],
+]);

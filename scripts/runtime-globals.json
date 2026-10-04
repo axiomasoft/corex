@@ -1,0 +1,38 @@
+{
+    "bridge_globs": [
+        "*/src/**/Laravel/**",
+        "*/src/*ServiceProvider.php",
+        "*/src/**/*ServiceProvider.php"
+    ],
+    "testing_globs": [
+        "*/src/**/Testing/**"
+    ],
+    "phpstan_globs": [
+        "*/src/**/PHPStan/**"
+    ],
+    "helpers": [
+        "app",
+        "resolve",
+        "now",
+        "today",
+        "event",
+        "dispatch",
+        "session",
+        "request",
+        "auth",
+        "cache",
+        "logger",
+        "report",
+        "abort",
+        "url",
+        "route",
+        "base_path",
+        "storage_path",
+        "database_path",
+        "config_path",
+        "app_path"
+    ],
+    "baseline_prefixes": [
+        "packages/tenancy/src/Impersonation/"
+    ]
+}

@@ -15,17 +15,18 @@ use CoreX\Intl\Currency\Data\RateSnapshot;
 use CoreX\Intl\Currency\Exceptions\InvalidRateException;
 use CoreX\Intl\Territory\Exceptions\AccessDeniedException;
 use CoreX\Intl\Territory\Exceptions\OperationConflictException;
-use DateTimeImmutable;
 use DateTimeZone;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Str;
 use Override;
+use Psr\Clock\ClockInterface;
 
 final class SqlRateImporter implements RateImporter
 {
     public function __construct(
         private readonly Connection $connection,
         private readonly DataScopeAuthorizer $authorizer,
+        private readonly ClockInterface $clock,
         private readonly int $batchLimit = 1000,
     ) {}
 
@@ -129,7 +130,7 @@ final class SqlRateImporter implements RateImporter
                 'source_manifest' => json_encode(JsonDocuments::map($batch->sourceManifest), JSON_THROW_ON_ERROR),
                 'generation' => $generation,
                 'state' => $conflicts > 0 ? 'conflict' : 'published',
-                'created_at' => (new DateTimeImmutable('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s'),
+                'created_at' => $this->clock->now()->setTimezone(new DateTimeZone('UTC'))->format('Y-m-d H:i:s'),
             ]);
 
             return new RateImportReceipt(

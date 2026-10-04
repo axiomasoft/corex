@@ -10,7 +10,7 @@ and optional `axiomasoft/corex-workflow` completion capture.
 
 ## Configuration
 
-See `config/corex-tasks-workflow.php` for wakeup and completion-capture toggles.
+See `config/corex-tasks-workflow.php` for wakeup and completion-capture toggles. `corex-tasks-workflow.wakeup.accept_legacy_unstamped=true` is a dangerous mode: production starts only when `corex.acknowledged_dangerous_modes` lists that exact path.
 
 ## Installation
 

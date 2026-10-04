@@ -1,0 +1,37 @@
+{
+  "php-surface": {
+    "added": [
+      "CoreX\\Operations\\Errors\\Internal\\HttpResponseSerializer",
+      "CoreX\\Operations\\Invocation\\Enums\\InputEnvelope",
+      "CoreX\\Operations\\Invocation\\Internal\\InputEnvelopeReader",
+      "CoreX\\Operations\\Invocation\\Internal\\JsonObjectEnvelopeReader",
+      "CoreX\\Operations\\Invocation\\Internal\\QueryEnvelopeReader"
+    ],
+    "removed": [
+      "CoreX\\Operations\\Errors\\Internal\\NegotiatingResponseSerializer",
+      "CoreX\\Operations\\Errors\\Laravel\\AcceptNegotiation"
+    ],
+    "changed": [
+      "CoreX\\Operations\\Errors\\Internal\\ErrorWire",
+      "CoreX\\Operations\\Definition\\Data\\Operation",
+      "CoreX\\Operations\\Errors\\Internal\\EnvelopeSerializer",
+      "CoreX\\Operations\\Errors\\Internal\\ProblemDetailsSerializer",
+      "CoreX\\Operations\\Laravel\\Support\\ApiOptions",
+      "CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode"
+    ]
+  },
+  "routes": {
+    "unchanged": true,
+    "note": "Preimage retained byte-for-byte; the generated candidate only expanded historical class renames already covered by RenameMap."
+  },
+  "events": {
+    "unchanged": true
+  },
+  "wire": {
+    "added": [],
+    "removed": [],
+    "changed": [
+      "errors"
+    ]
+  }
+}

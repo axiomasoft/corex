@@ -87,10 +87,11 @@ it('can compile a missing production registry while ordinary console boot still 
 
     try {
         $_SERVER['argv'] = ['artisan', 'corex:modules:compile'];
-        $this->app->register(ModulesServiceProvider::class);
+        // The kernel provider already registered the module provider; re-register it under the production environment.
+        $this->app->register(ModulesServiceProvider::class, true);
         $this->app->instance(ModuleDiscovery::class, new ModuleDiscovery(installedJsonPath: '/nonexistent-test-installed.json'));
         $this->artisan('corex:modules:compile')->assertSuccessful();
-        $path = CompiledModuleRegistry::defaultCachePath();
+        $path = base_path(CompiledModuleRegistry::CACHE_PATH);
         expect(is_file($path))->toBeTrue();
         unlink($path);
         app(ModuleRegistry::class)->flush();

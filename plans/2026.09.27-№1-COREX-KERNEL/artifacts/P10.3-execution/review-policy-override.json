@@ -1,0 +1,7 @@
+{
+  "decision": "decisions/D81-p10-phase-review-only.md",
+  "authority": "Owner instruction: work without large review, only optimal checks; D81 waives item independent review.",
+  "effective_predicate": "Focused executor self-check and affected checks GREEN; no independent item review claimed; one whole-P10 review remains assigned to P10.4.",
+  "item_independent_review_performed": false,
+  "phase_review_outstanding": true
+}

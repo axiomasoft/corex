@@ -1,0 +1,50 @@
+DATA-003 packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php:147 dynamic table name on write
+DATA-003 packages/core/src/Messaging/Internal/Commands/PruneOutboxMessages.php:48 dynamic table name on write
+DATA-003 packages/core/src/Messaging/Internal/Commands/PruneOutboxMessages.php:53 dynamic table name on write
+DATA-003 packages/core/src/Messaging/Internal/DatabasePollPubSub.php:155 dynamic table name on write
+DATA-003 packages/core/src/Messaging/Internal/DatabasePollPubSub.php:61 dynamic table name on write
+DATA-003 packages/core/src/Messaging/Internal/PrunePubSubMessages.php:48 dynamic table name on write
+DATA-003 packages/core/src/Messaging/Internal/SqlInbox.php:30 dynamic table name on write
+DATA-003 packages/core/src/Messaging/Internal/SqlOutbox.php:46 dynamic table name on write
+DATA-003 packages/core/src/Messaging/Internal/SqlOutboxRelay.php:127 dynamic table name on write
+DATA-003 packages/core/src/Messaging/Internal/SqlOutboxRelay.php:153 dynamic table name on write
+DATA-003 packages/core/src/Messaging/Internal/SqlOutboxRelay.php:42 dynamic table name on write
+DATA-003 packages/core/src/Messaging/Internal/SqlOutboxRelay.php:55 dynamic table name on write
+DATA-003 packages/core/src/Messaging/Internal/SqlOutboxRelay.php:82 dynamic table name on write
+DATA-003 packages/core/src/Settings/Internal/DatabaseSettingsRepository.php:106 dynamic table name on write
+DATA-003 packages/core/src/Settings/Internal/DatabaseSettingsRepository.php:80 dynamic table name on write
+DATA-003 packages/custom-fields/src/Internal/Schema/DatabaseFieldCatalogue.php:106 dynamic table name on write
+DATA-003 packages/custom-fields/src/Internal/Schema/DatabaseFieldCatalogue.php:112 dynamic table name on write
+DATA-003 packages/custom-fields/src/Internal/Schema/DatabaseFieldCatalogue.php:89 dynamic table name on write
+DATA-003 packages/custom-fields/src/Internal/Values/AttributeBackfill.php:114 dynamic table name on write
+DATA-003 packages/custom-fields/src/Internal/Values/AttributeBackfill.php:133 dynamic table name on write
+DATA-003 packages/custom-fields/src/Internal/Values/AttributeBackfill.php:166 dynamic table name on write
+DATA-003 packages/custom-fields/src/Internal/Values/AttributeBackfill.php:204 dynamic table name on write
+DATA-003 packages/custom-fields/src/Internal/Values/AttributeBackfill.php:79 dynamic table name on write
+DATA-003 packages/operations/src/Testing/MutatingHandler.php:22 table 'tool_effects' missing from catalog
+DATA-003 packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php:116 dynamic table name on write
+DATA-003 packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php:117 dynamic table name on write
+DATA-003 packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php:163 dynamic table name on write
+DATA-003 packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php:64 dynamic table name on write
+DATA-003 packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php:76 dynamic table name on write
+DATA-003 packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php:93 dynamic table name on write
+DATA-003 packages/panels/src/SavedViews/Internal/SqlSavedViewRepository.php:99 dynamic table name on write
+DATA-003 packages/webhooks/src/Internal/SqlWebhookDeliveryStore.php:106 axiomasoft/corex-webhooks writes 'sys_api_webhook_attempts' owned by axiomasoft/corex-operations
+DATA-003 packages/webhooks/src/Internal/SqlWebhookDeliveryStore.php:196 axiomasoft/corex-webhooks writes 'sys_api_webhook_deliveries' owned by axiomasoft/corex-operations
+DATA-003 packages/webhooks/src/Internal/SqlWebhookDeliveryStore.php:250 axiomasoft/corex-webhooks writes 'sys_api_webhook_attempts' owned by axiomasoft/corex-operations
+DATA-003 packages/webhooks/src/Internal/SqlWebhookDeliveryStore.php:260 axiomasoft/corex-webhooks writes 'sys_api_webhook_deliveries' owned by axiomasoft/corex-operations
+DATA-003 packages/webhooks/src/Internal/SqlWebhookDeliveryStore.php:279 axiomasoft/corex-webhooks writes 'sys_api_webhook_deliveries' owned by axiomasoft/corex-operations
+DATA-003 packages/webhooks/src/Internal/SqlWebhookDeliveryStore.php:291 axiomasoft/corex-webhooks writes 'sys_api_webhook_attempts' owned by axiomasoft/corex-operations
+DATA-003 packages/webhooks/src/Internal/SqlWebhookDeliveryStore.php:310 axiomasoft/corex-webhooks writes 'sys_api_webhook_attempts' owned by axiomasoft/corex-operations
+DATA-003 packages/webhooks/src/Internal/SqlWebhookDeliveryStore.php:326 axiomasoft/corex-webhooks writes 'sys_api_webhook_subscriptions' owned by axiomasoft/corex-operations
+DATA-003 packages/webhooks/src/Internal/SqlWebhookDeliveryStore.php:334 axiomasoft/corex-webhooks writes 'sys_api_webhook_deliveries' owned by axiomasoft/corex-operations
+DATA-003 packages/webhooks/src/Internal/SqlWebhookDeliveryStore.php:89 axiomasoft/corex-webhooks writes 'sys_api_webhook_deliveries' owned by axiomasoft/corex-operations
+DATA-003 packages/webhooks/src/Internal/SqlWebhookSubscriptionStore.php:107 axiomasoft/corex-webhooks writes 'sys_api_webhook_subscriptions' owned by axiomasoft/corex-operations
+DATA-003 packages/webhooks/src/Internal/SqlWebhookSubscriptionStore.php:142 axiomasoft/corex-webhooks writes 'sys_api_webhook_subscriptions' owned by axiomasoft/corex-operations
+DATA-003 packages/webhooks/src/Internal/SqlWebhookSubscriptionStore.php:59 axiomasoft/corex-webhooks writes 'sys_api_webhook_subscriptions' owned by axiomasoft/corex-operations
+DATA-003 packages/webhooks/src/Internal/WebhookFanout.php:66 axiomasoft/corex-webhooks writes 'sys_api_webhook_deliveries' owned by axiomasoft/corex-operations
+DATA-003 packages/webhooks/src/Internal/WebhookReplay.php:228 axiomasoft/corex-webhooks writes 'sys_api_webhook_deliveries' owned by axiomasoft/corex-operations
+DATA-003 packages/webhooks/src/Internal/WebhookRetention.php:110 axiomasoft/corex-webhooks writes 'sys_api_webhook_attempts' owned by axiomasoft/corex-operations
+DATA-003 packages/webhooks/src/Internal/WebhookRetention.php:149 dynamic table name on write
+DATA-003 packages/webhooks/src/Internal/WebhookRetention.php:89 axiomasoft/corex-webhooks writes 'sys_api_webhook_deliveries' owned by axiomasoft/corex-operations
+DATA-003: 267 resolved write sites, 49 violations

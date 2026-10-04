@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace CoreX\Tests\Support;
 
 use ReflectionClass;
+use ReflectionIntersectionType;
 use ReflectionNamedType;
 use ReflectionType;
+use ReflectionUnionType;
 use RuntimeException;
 
 /**
- * P4.12 — scan package ServiceProviders for singleton ::class literals and flag
- * constructors that capture Application, Request, or Config Repository.
+ * P4.12 — scan package ServiceProviders and Registrars for singleton ::class literals and flag
+ * constructors that capture Application, Request, or Config Repository (L1).
+ * P05.3 (D70 п.11): L2 — a singleton constructor takes a type registered as scoped
+ * (captive dependency); L3 — a singleton constructor takes a database connection.
  */
 final class SingletonInjectionGate
 {
@@ -20,6 +24,12 @@ final class SingletonInjectionGate
         'Illuminate\Contracts\Foundation\Application',
         'Illuminate\Http\Request',
         'Illuminate\Contracts\Config\Repository',
+    ];
+
+    /** @var list<string> */
+    public const CONNECTION_TYPES = [
+        'Illuminate\Database\Connection',
+        'Illuminate\Database\ConnectionInterface',
     ];
 
     /**
@@ -33,11 +43,14 @@ final class SingletonInjectionGate
      *     captures_context: bool,
      *     verdict: string,
      *     violation: ?string,
+     *     rule: ?string,
+     *     type: ?string,
      * }>
      */
     public static function auditRows(): array
     {
         $rows = [];
+        $scoped = self::scopedAbstracts();
 
         foreach (self::serviceProviderFiles() as $providerPath) {
             $package = self::packageFromProviderPath($providerPath);
@@ -47,44 +60,48 @@ final class SingletonInjectionGate
 
             foreach (self::extractSingletonRegistrations($content) as $registration) {
                 $abstractFqcn = self::resolveClassName($registration['abstract'], $namespace, $useMap);
-                $concreteFqcn = $registration['concrete'] !== null
-                    ? self::resolveClassName($registration['concrete'], $namespace, $useMap)
-                    : $abstractFqcn;
-
                 $staticParse = $registration['concrete_literal'];
-                $captures = false;
-                $violation = null;
-                $verdict = 'ok';
 
-                if (! $staticParse) {
-                    $verdict = 'static-limit';
-                } elseif ($concreteFqcn !== null && self::classInMonorepoSrc($concreteFqcn)) {
-                    $violation = self::constructorForbiddenParameter($concreteFqcn);
-                    $captures = $violation !== null;
-
-                    if ($captures) {
-                        $verdict = 'allowlist-required';
-                    } elseif ($staticParse) {
-                        $verdict = 'stateless-ok';
-                    }
-                } elseif ($abstractFqcn !== null && $staticParse && $concreteFqcn === $abstractFqcn
-                    && self::classInMonorepoSrc($abstractFqcn)) {
-                    $violation = self::constructorForbiddenParameter($abstractFqcn);
-                    $captures = $violation !== null;
-                    $verdict = $captures ? 'allowlist-required' : 'stateless-ok';
+                if ($staticParse) {
+                    $concreteFqcn = $registration['concrete'] !== null
+                        ? self::resolveClassName($registration['concrete'], $namespace, $useMap)
+                        : $abstractFqcn;
+                    $concretes = [$concreteFqcn];
+                } else {
+                    // Factory closure: every class the closure constructs lives as long as the singleton.
+                    $concretes = array_values(array_filter(array_map(
+                        static fn (string $name): ?string => self::resolveTypeName($name, $namespace, $useMap),
+                        $registration['constructed'],
+                    ), static fn (?string $resolved): bool => $resolved !== null));
+                    $staticParse = $concretes !== [];
+                    $concretes = $concretes === [] ? [null] : $concretes;
                 }
 
-                $rows[] = [
-                    'package' => $package,
-                    'provider' => self::relativePath($providerPath),
-                    'abstract' => $abstractFqcn ?? $registration['abstract'],
-                    'lifetime' => 'singleton',
-                    'concrete_fqcn' => $concreteFqcn,
-                    'static_parse' => $staticParse,
-                    'captures_context' => $captures,
-                    'verdict' => $verdict,
-                    'violation' => $violation,
-                ];
+                foreach ($concretes as $concreteFqcn) {
+                    $found = $concreteFqcn !== null && $staticParse && self::classInMonorepoSrc($concreteFqcn)
+                        ? self::constructorViolation($concreteFqcn, $scoped)
+                        : null;
+                    $verdict = match (true) {
+                        ! $staticParse => 'static-limit',
+                        $found !== null => 'allowlist-required',
+                        $concreteFqcn !== null && self::classInMonorepoSrc($concreteFqcn) => 'stateless-ok',
+                        default => 'ok',
+                    };
+
+                    $rows[] = [
+                        'package' => $package,
+                        'provider' => self::relativePath($providerPath),
+                        'abstract' => $abstractFqcn ?? $registration['abstract'],
+                        'lifetime' => 'singleton',
+                        'concrete_fqcn' => $concreteFqcn,
+                        'static_parse' => $staticParse,
+                        'captures_context' => $found !== null,
+                        'verdict' => $verdict,
+                        'violation' => $found['parameter'] ?? null,
+                        'rule' => $found['rule'] ?? null,
+                        'type' => $found['type'] ?? null,
+                    ];
+                }
             }
 
             foreach (self::extractScopedRegistrations($content) as $registration) {
@@ -100,6 +117,8 @@ final class SingletonInjectionGate
                     'captures_context' => false,
                     'verdict' => $registration['concrete_literal'] ? 'ok (scoped)' : 'static-limit',
                     'violation' => null,
+                    'rule' => null,
+                    'type' => null,
                 ];
             }
         }
@@ -129,7 +148,11 @@ final class SingletonInjectionGate
                 continue;
             }
 
-            $violations[] = $row['provider'].': '.$row['concrete_fqcn'].' — '.$row['violation'];
+            $violations[] = match ($row['rule']) {
+                'L2' => $row['provider'].': L2 '.$row['concrete_fqcn'].'::$'.$row['violation'].' depends on scoped '.$row['type'],
+                'L3' => $row['provider'].': L3 '.$row['concrete_fqcn'].'::$'.$row['violation'].' captures a database connection',
+                default => $row['provider'].': '.$row['concrete_fqcn'].' — '.$row['violation'],
+            };
         }
 
         sort($violations);
@@ -197,13 +220,13 @@ final class SingletonInjectionGate
         foreach (glob(SourceScanner::repoRoot().'/packages/*/src', GLOB_ONLYDIR) ?: [] as $srcDir) {
             $matches = [
                 ...$matches,
-                ...SourceScanner::filesMatching($srcDir, '/\bclass\s+\w+ServiceProvider\b/'),
+                ...SourceScanner::filesMatching($srcDir, '/\bclass\s+\w+(?:ServiceProvider|Registrar)\b/'),
             ];
         }
 
         $matches = array_values(array_filter(
             $matches,
-            static fn (string $path): bool => str_ends_with($path, 'ServiceProvider.php'),
+            static fn (string $path): bool => str_ends_with($path, 'ServiceProvider.php') || str_ends_with($path, 'Registrar.php'),
         ));
 
         sort($matches);
@@ -295,7 +318,7 @@ final class SingletonInjectionGate
     }
 
     /**
-     * @return list<array{abstract: string, concrete: ?string, concrete_literal: bool}>
+     * @return list<array{abstract: string, concrete: ?string, concrete_literal: bool, constructed: list<string>}>
      */
     private static function extractSingletonRegistrations(string $content): array
     {
@@ -303,7 +326,7 @@ final class SingletonInjectionGate
     }
 
     /**
-     * @return list<array{abstract: string, concrete: ?string, concrete_literal: bool}>
+     * @return list<array{abstract: string, concrete: ?string, concrete_literal: bool, constructed: list<string>}>
      */
     private static function extractScopedRegistrations(string $content): array
     {
@@ -311,7 +334,7 @@ final class SingletonInjectionGate
     }
 
     /**
-     * @return list<array{abstract: string, concrete: ?string, concrete_literal: bool}>
+     * @return list<array{abstract: string, concrete: ?string, concrete_literal: bool, constructed: list<string>}>
      */
     private static function extractLifetimeRegistrations(string $content, string $method): array
     {
@@ -346,12 +369,60 @@ final class SingletonInjectionGate
                 'abstract' => trim($abstract),
                 'concrete' => $concrete,
                 'concrete_literal' => $concreteLiteral && ($concrete !== null || preg_match('/::class$/', trim($abstract)) === 1),
+                'constructed' => $second !== null && ! $concreteLiteral ? self::constructedClassNames($second) : [],
             ];
 
             $offset = $argsStart + \strlen($args) + 1;
         }
 
         return $registrations;
+    }
+
+    /**
+     * Class names a factory closure builds with `new`, anonymous classes and self/static excluded.
+     *
+     * @return list<string>
+     */
+    private static function constructedClassNames(string $closure): array
+    {
+        $names = [];
+
+        // A factory that only forwards to the container (`fn ($app) => $app->make(Holder::class)`) lives as long as Holder.
+        if (preg_match('/(?:=>|\breturn)\s*\$\w+->make\(\s*(\\\\?[A-Za-z_][A-Za-z0-9_\\\\]*)::class\s*\)\s*;?\s*\}?\s*$/', trim($closure), $forward) === 1) {
+            $names[] = $forward[1];
+        }
+
+        // A factory with a declared return type lives as long as that type, even when it delegates to a helper.
+        if (preg_match('/^\s*(?:static\s+)?(?:fn|function)\s*\([^)]*\)\s*:\s*\??(\\\\?[A-Za-z_][A-Za-z0-9_\\\\]*)\s*(?:=>|\{)/', $closure, $declared) === 1
+            && ! in_array(strtolower($declared[1]), ['void', 'mixed', 'object', 'static', 'self', 'null', 'never', 'array', 'string', 'int', 'bool', 'float', 'callable', 'iterable'], true)) {
+            $names[] = $declared[1];
+        }
+
+        if (preg_match_all('/\bnew\s+(\\\\?[A-Za-z_][A-Za-z0-9_\\\\]*)\s*\(/', $closure, $matches) > 0) {
+            array_push($names, ...$matches[1]);
+        }
+
+        return array_values(array_unique(array_filter(
+            $names,
+            static fn (string $name): bool => ! in_array(strtolower($name), ['self', 'static', 'parent', 'class'], true),
+        )));
+    }
+
+    /** @param  array<string, string>  $useMap */
+    private static function resolveTypeName(string $name, ?string $namespace, array $useMap): ?string
+    {
+        if (str_starts_with($name, '\\')) {
+            return ltrim($name, '\\');
+        }
+
+        $head = strstr($name, '\\', true);
+        $head = $head === false ? $name : $head;
+
+        if (isset($useMap[$head])) {
+            return $useMap[$head].substr($name, strlen($head));
+        }
+
+        return $namespace !== null ? $namespace.'\\'.$name : null;
     }
 
     private static function readParenthesizedArgumentList(string $content, int $argsStartIndex): ?string
@@ -448,7 +519,11 @@ final class SingletonInjectionGate
         return $file !== false && str_contains($file, '/packages/') && str_contains($file, '/src/');
     }
 
-    private static function constructorForbiddenParameter(string $fqcn): ?string
+    /**
+     * @param  array<string, true>  $scoped
+     * @return array{rule: string, parameter: string, type: string}|null
+     */
+    private static function constructorViolation(string $fqcn, array $scoped): ?array
     {
         if (! class_exists($fqcn) && ! interface_exists($fqcn)) {
             return null;
@@ -463,33 +538,91 @@ final class SingletonInjectionGate
 
         foreach ($constructor->getParameters() as $parameter) {
             $type = $parameter->getType();
+            $members = self::namedMembers($type);
 
-            if (! self::typeIsForbidden($type)) {
-                continue;
+            foreach ($members as $member) {
+                if ($member->isBuiltin()) {
+                    continue;
+                }
+
+                $name = $member->getName();
+                $rule = match (true) {
+                    self::isAnyOf($name, self::FORBIDDEN_TYPES) => 'L1',
+                    self::isAnyOf($name, self::CONNECTION_TYPES) => 'L3',
+                    isset($scoped[$name]) => 'L2',
+                    default => null,
+                };
+
+                if ($rule !== null) {
+                    return ['rule' => $rule, 'parameter' => $parameter->getName(), 'type' => $name];
+                }
             }
-
-            return $parameter->getName();
         }
 
         return null;
     }
 
-    private static function typeIsForbidden(?ReflectionType $type): bool
+    /**
+     * Named types of a constructor parameter, flattening unions, intersections and DNF combinations.
+     *
+     * @return list<ReflectionNamedType>
+     */
+    private static function namedMembers(?ReflectionType $type): array
     {
         if ($type instanceof ReflectionNamedType) {
-            if ($type->isBuiltin()) {
-                return false;
-            }
+            return [$type];
+        }
 
-            $name = $type->getName();
+        if (! $type instanceof ReflectionUnionType && ! $type instanceof ReflectionIntersectionType) {
+            return [];
+        }
 
-            foreach (self::FORBIDDEN_TYPES as $forbidden) {
-                if (is_a($name, $forbidden, true)) {
-                    return true;
-                }
+        $members = [];
+
+        foreach ($type->getTypes() as $member) {
+            array_push($members, ...self::namedMembers($member));
+        }
+
+        return $members;
+    }
+
+    /**
+     * @param  list<string>  $types
+     */
+    private static function isAnyOf(string $name, array $types): bool
+    {
+        foreach ($types as $type) {
+            if (is_a($name, $type, true)) {
+                return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * Abstract types registered with `->scoped(X::class ...)` in any provider or registrar.
+     *
+     * @return array<string, true>
+     */
+    private static function scopedAbstracts(): array
+    {
+        $scoped = [];
+
+        foreach (self::serviceProviderFiles() as $path) {
+            $content = (string) file_get_contents($path);
+            $useMap = self::parseUseMap($content);
+            $namespace = self::parseNamespace($content);
+
+            foreach (self::extractScopedRegistrations($content) as $registration) {
+                $abstract = self::resolveClassName($registration['abstract'], $namespace, $useMap);
+
+                if ($abstract !== null) {
+                    $scoped[$abstract] = true;
+                }
+            }
+        }
+
+        return $scoped;
     }
 }

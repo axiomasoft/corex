@@ -19,6 +19,7 @@ use CoreX\Workflow\Data\TriggerRequest;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
+use Psr\Clock\ClockInterface;
 use RuntimeException;
 
 final class SqlWorkflowBinding implements WorkflowBinding
@@ -29,6 +30,7 @@ final class SqlWorkflowBinding implements WorkflowBinding
         private readonly EngineAdapter $engine,
         private readonly ?ModuleRegistry $modules,
         private readonly bool $enforceDeclarations,
+        private readonly ClockInterface $clock,
     ) {}
 
     public function capture(TriggerRequest $request): CaptureResult
@@ -64,7 +66,7 @@ final class SqlWorkflowBinding implements WorkflowBinding
         $this->assertContext($request->context->account->id, $request->context->workspace?->id);
         $this->assertKey($request->requestKey);
 
-        if ($request->expiresAt <= now()) {
+        if ($request->expiresAt <= $this->clock->now()) {
             return new SignalResult(status: 'expired');
         }
 
@@ -117,8 +119,8 @@ final class SqlWorkflowBinding implements WorkflowBinding
                 'claim_epoch' => 0,
                 'attempt' => 0,
                 'generation' => 0,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => $this->clock->now(),
+                'updated_at' => $this->clock->now(),
             ]);
         } catch (QueryException $exception) {
             $existing = $this->connection->table('sys_workflow_intents')->where('request_key', $requestKey)->first();

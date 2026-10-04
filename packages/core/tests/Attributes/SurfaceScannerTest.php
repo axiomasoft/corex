@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Tests\Attributes;
 
-use CoreX\Attributes\Internal\SurfaceReport;
-use CoreX\Attributes\Internal\SurfaceScanner;
+use CoreX\Attributes\Tooling\SurfaceReport;
+use CoreX\Attributes\Tooling\SurfaceScanner;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
@@ -303,6 +303,73 @@ final class SurfaceScannerTest extends TestCase
         self::assertContains('API-INTERNAL-TYPE', array_column($this->scan()->diagnostics, 'code'));
         file_put_contents($config, '{"internal_composition_edges":["invalid"]}');
         self::assertSame(2, $this->cli('--report')->getExitCode());
+    }
+
+    public function test_attributes_manifest_keeps_own_and_local_members_without_expanding_external_types(): void
+    {
+        $this->source(<<<'SOURCE'
+        namespace Foreign;
+        use CoreX\Attributes\{Spi, SpiKind};
+        #[Spi(SpiKind::Implement)] class Base {
+            public const EXTERNAL = 1;
+            public string $externalProperty;
+            public function morph(string $key): string { return $key; }
+            public function overridden(): string { return 'external'; }
+        }
+        #[Spi(SpiKind::Call)] trait ExternalTrait { public function externalTrait(): void {} }
+        #[Spi(SpiKind::Implement)] interface ExternalPort { public function port(): void; }
+        SOURCE, 'foreign');
+        $own = <<<'SOURCE'
+        namespace Demo;
+        use CoreX\Attributes\{Api, Spi, SpiKind};
+        #[Spi(SpiKind::Call)] trait LocalTrait {
+            public const LOCAL = 2;
+            public string $localProperty;
+            public function localTrait(): void {}
+        }
+        #[Spi(SpiKind::Implement)] class Base extends \Foreign\Base {
+            public const OWN = 3;
+            public string $ownProperty;
+            public function own(): int { return 1; }
+        }
+        #[Spi(SpiKind::Implement)] final class Child extends Base implements \Foreign\ExternalPort {
+            use LocalTrait, \Foreign\ExternalTrait;
+            public function __construct(public string $promoted) {}
+            public function overridden(): string { return 'own'; }
+            public function port(): void {}
+        }
+        #[Api] enum Status: string { case On = 'on'; }
+        SOURCE;
+        $this->source($own);
+        $first = $this->scan()->manifests['test/demo'];
+        $child = $first['symbols']['Demo\\Child'];
+        self::assertSame(['Demo\\Base'], $child['extends']);
+        self::assertSame(['Foreign\\ExternalPort'], $child['implements']);
+        self::assertSame(['Demo\\LocalTrait', 'Foreign\\ExternalTrait'], $child['uses']);
+        self::assertArrayNotHasKey('morph', $child['methods']);
+        self::assertArrayNotHasKey('externalTrait', $child['methods']);
+        self::assertArrayNotHasKey('externalProperty', $child['properties']);
+        self::assertArrayNotHasKey('EXTERNAL', $child['constants']);
+        self::assertSame(['__construct', 'localTrait', 'overridden', 'own', 'port'], array_keys($child['methods']));
+        self::assertSame(['localProperty', 'ownProperty', 'promoted'], array_keys($child['properties']));
+        self::assertSame(['LOCAL', 'OWN'], array_keys($child['constants']));
+        self::assertSame('string', $child['methods']['overridden']['return']);
+        self::assertSame(['On' => "'on'"], $first['symbols']['Demo\\Status']['enum_cases']);
+        // Change external signatures and PHPDoc, not merely executable bodies.
+        $external = (string) file_get_contents($this->root.'/packages/foreign/src/Surface.php');
+        file_put_contents($this->root.'/packages/foreign/src/Surface.php', str_replace('public function morph(string $key): string', '/** @throws \\RuntimeException */ public function morph(int $key): string', $external));
+        self::assertSame($first, $this->scan()->manifests['test/demo']);
+    }
+
+    public function test_attributes_public_promoted_property_survives_a_private_constructor(): void
+    {
+        $this->source('namespace Demo; #[\CoreX\Attributes\Api] final readonly class View { private function __construct(public string $id) {} }');
+        $report = $this->scan();
+        self::assertSame([], $report->diagnostics);
+        $view = $report->manifests['test/demo']['symbols']['Demo\\View'];
+        self::assertArrayNotHasKey('__construct', $view['methods']);
+        self::assertSame('string', $view['properties']['id']['type']);
+        self::assertSame('public', $view['properties']['id']['visibility']);
     }
 
     private function cli(string $mode): Process

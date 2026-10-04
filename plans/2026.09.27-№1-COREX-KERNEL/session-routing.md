@@ -1,6 +1,6 @@
 # Session routing — pool, native launch и review runbook
 
-Единственное конкретное расписание — [`roadmap.md`](roadmap.md) `execution-sheet/v1`. Этот файл — pool, mapping и
+Единственное конкретное расписание — [`roadmap.md`](roadmap.md) `execution-sheet/v1`. Адресные принятые решения владельца имеют приоритет над default selectors листа: D85 назначает Sonnet 5.5 для строки 18 (B05-A, P05.1/P05.2). Этот файл — pool, mapping и
 runbooks (по образцу chatom PLAN2 `session-routing.md`).
 
 ## Пул и роли
@@ -10,7 +10,9 @@ runbooks (по образцу chatom PLAN2 `session-routing.md`).
 | Provider | Model | Role в PLAN3 | Effort |
 |:--|:--|:--|:--|
 | claude-code | `opus` (claude-opus-5-5) | автор плана: дизайн фаз, frontier-решения P00, ведение процесса (D21) | `high` |
+| claude-code | `sonnet` (claude-sonnet-5-5) | исполнение и owning auto-fix P05.1/P05.2 (B05-A), owner D85 | `high` |
 | codex | `gpt-6-sol` | стандартная implementation и owning auto-fix | из sheet |
+| codex | `gpt-6.1-sol` | текущий независимый design audit после D79, owner override D80 | `xhigh` |
 | codex | `gpt-6-astra` | frontier execution P00 и review/audit | `high`/`xhigh` |
 | cursor | `grok-4.6` | bounded rename/tools/snapshots, ревью механических items | `high` |
 | cursor | `grok-4.7` | frontier execution и API/SPI/transactions/security ревью | `high` |
@@ -31,7 +33,9 @@ Cursor (effort — нативным селектором до запуска):
 agent --workspace "$(git rev-parse --show-toplevel)" --model grok-4.7 --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.27-№1-COREX-KERNEL <exact-items-from-sheet>'
 ```
 
-Claude Code: `claude --model opus`, затем `task:plan-run 2026.09.27-№1-COREX-KERNEL <items>`.
+Claude Code для B05-A (D85): `claude --model claude-sonnet-5-5`, затем `task:plan-run 2026.09.27-№1-COREX-KERNEL P05.1 P05.2`.
+
+Claude Code для opus: `claude --model opus`, затем `task:plan-run 2026.09.27-№1-COREX-KERNEL <items>`.
 
 ## Full review runbook
 

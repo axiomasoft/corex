@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use CoreX\Config\Data\CoreOptions;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -104,6 +105,7 @@ it('uses configured messaging table names for tables and indexes', function (): 
             'corex.tables.outbox_messages' => $outboxTable,
             'corex.tables.inbox_messages' => $inboxTable,
         ]);
+        app()->forgetInstance(CoreOptions::class);
 
         DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
         DB::statement('CREATE SCHEMA public');
@@ -143,6 +145,7 @@ it('uses configured messaging table names for tables and indexes', function (): 
             'corex.tables.outbox_messages' => $originalOutboxTable,
             'corex.tables.inbox_messages' => $originalInboxTable,
         ]);
+        app()->forgetInstance(CoreOptions::class);
     }
 })->group('pg');
 

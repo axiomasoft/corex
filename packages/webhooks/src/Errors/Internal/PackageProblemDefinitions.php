@@ -14,6 +14,7 @@ final class PackageProblemDefinitions implements ProblemDefinitionProvider
 {
     public function definitions(): iterable
     {
+        yield new ProblemDefinition(WebhooksErrorCode::WebhookEgressDenied, 'urn:corex:problem:webhooks.webhook_egress_denied', 422, 'Webhook destination is denied by tenant egress policy.', false, ErrorCategory::Validation);
         yield new ProblemDefinition(WebhooksErrorCode::WebhookPayloadTooLarge, 'urn:corex:problem:webhooks.webhook_payload_too_large', 422, 'Webhook payload is too large.', false, ErrorCategory::Validation);
         yield new ProblemDefinition(WebhooksErrorCode::UnknownMessageContract, 'urn:corex:problem:webhooks.unknown_message_contract', 422, 'Unknown message contract.', false, ErrorCategory::Validation, []);
         yield new ProblemDefinition(WebhooksErrorCode::UnknownMessageSchema, 'urn:corex:problem:webhooks.unknown_message_schema', 422, 'Unknown message schema.', false, ErrorCategory::Validation, []);

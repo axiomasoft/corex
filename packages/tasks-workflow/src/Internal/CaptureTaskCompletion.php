@@ -13,20 +13,23 @@ use CoreX\Tasks\Task\Data\TaskCompletionCandidate;
 use CoreX\Tasks\Task\Enums\TaskStatus;
 use CoreX\Workflow\Contracts\WorkflowBinding;
 use CoreX\Workflow\Data\TriggerRequest;
-use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Connection;
 
 final class CaptureTaskCompletion implements TaskCompletionCapture
 {
     public function __construct(
         private readonly Connection $connection,
-        private readonly Repository $config,
+        private readonly bool $enabled,
+        private readonly string $definitionRef,
+        private readonly string $versionRef,
         private readonly TaskOperationReceipts $receipts,
+        private readonly TenantContextResolver $contexts,
+        private readonly ?WorkflowBinding $workflow = null,
     ) {}
 
     public function capture(TaskCompletionCandidate $candidate): void
     {
-        if (! $this->config->get('corex-tasks-workflow.completion_capture.enabled', false)) {
+        if (! $this->enabled) {
             return;
         }
 
@@ -34,12 +37,10 @@ final class CaptureTaskCompletion implements TaskCompletionCapture
             return;
         }
 
-        if (! interface_exists(WorkflowBinding::class)
-            || ! app()->bound(WorkflowBinding::class)) {
+        if ($this->workflow === null) {
             return;
         }
 
-        $workflowBinding = app()->make(WorkflowBinding::class);
         $restoreEpoch = str_repeat('0', 64);
         $requestKey = hash('sha256', 'completion-capture/1'."\0".$candidate->taskId."\0".$restoreEpoch);
         $payload = [
@@ -54,15 +55,15 @@ final class CaptureTaskCompletion implements TaskCompletionCapture
             return;
         }
 
-        $workflowBinding->capture(new TriggerRequest(
-            context: app(TenantContextResolver::class)->current(),
+        $this->workflow->capture(new TriggerRequest(
+            context: $this->contexts->current(),
             module: 'axiomasoft/corex-tasks-workflow',
             entityHandle: 'tsk.task',
             eventId: 'task:'.$candidate->taskId,
             eventName: 'completed',
             subjectRef: 'task:'.$candidate->taskId,
-            definitionRef: (string) $this->config->get('corex-tasks-workflow.completion_capture.definition_ref', 'task-completion/1'),
-            versionRef: (string) $this->config->get('corex-tasks-workflow.completion_capture.version_ref', 'task-completion/1'),
+            definitionRef: $this->definitionRef,
+            versionRef: $this->versionRef,
             scalarSnapshot: JsonDocuments::capture($payload),
             requestKey: $requestKey,
         ));

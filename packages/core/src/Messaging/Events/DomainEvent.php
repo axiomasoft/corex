@@ -6,8 +6,8 @@ namespace CoreX\Messaging\Events;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\TenantContext;
+use CoreX\Messaging\Internal\DomainEventDefaults;
 use DateTimeImmutable;
 use Illuminate\Support\Str;
 
@@ -31,8 +31,8 @@ abstract readonly class DomainEvent
     public function __construct(?TenantContext $tenant = null)
     {
         $this->eventId = (string) Str::uuid7();
-        $this->occurredAt = new DateTimeImmutable;
-        $this->tenant = $tenant ?? app(TenantContextResolver::class)->current();
+        $this->occurredAt = DomainEventDefaults::now();
+        $this->tenant = $tenant ?? DomainEventDefaults::tenant();
     }
 
     /**

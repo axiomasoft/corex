@@ -1,0 +1,108 @@
+{
+  "decision": "D70 / D64",
+  "layer": "php-surface",
+  "removed_records": [
+    "CoreX\\Errors\\Internal\\ProblemRegistryRegistrar"
+  ],
+  "added_records": [
+    "CoreX\\Access\\Laravel\\AccessBindingsRegistrar",
+    "CoreX\\Access\\Laravel\\AccessIntegrationRegistrar",
+    "CoreX\\Audit\\Laravel\\AuditRegistrar",
+    "CoreX\\Config\\Laravel\\ConfigRegistrar",
+    "CoreX\\Config\\Laravel\\ConfiguredImplementation",
+    "CoreX\\Context\\Laravel\\ContextRegistrar",
+    "CoreX\\CustomFields\\Internal\\Laravel\\AttributeBindingsRegistrar",
+    "CoreX\\CustomFields\\Internal\\Laravel\\AttributeStoreFactory",
+    "CoreX\\CustomFields\\Internal\\Laravel\\FieldCatalogueFactory",
+    "CoreX\\CustomFields\\Internal\\Laravel\\SchemaOperationsFactory",
+    "CoreX\\Data\\Laravel\\DataRegistrar",
+    "CoreX\\Departments\\Laravel\\DepartmentsRegistrar",
+    "CoreX\\Errors\\Laravel\\ErrorsRegistrar",
+    "CoreX\\Errors\\Laravel\\ProblemRegistryFactory",
+    "CoreX\\Features\\Laravel\\FeaturesRegistrar",
+    "CoreX\\Intl\\Laravel\\IntlBindingsRegistrar",
+    "CoreX\\Intl\\Laravel\\IntlReferenceRegistrar",
+    "CoreX\\Media\\Laravel\\GdThumbnailDriverFactory",
+    "CoreX\\Media\\Laravel\\MediaBindingsRegistrar",
+    "CoreX\\Messaging\\Laravel\\MessagingRegistrar",
+    "CoreX\\Modules\\Internal\\Commands\\RepairModuleCommand",
+    "CoreX\\Modules\\Laravel\\CoreModulesRegistrar",
+    "CoreX\\Notifications\\Laravel\\NotificationsBindingsRegistrar",
+    "CoreX\\Notifications\\Laravel\\NotificationsDigestRegistrar",
+    "CoreX\\Observability\\Laravel\\ObservabilityRegistrar",
+    "CoreX\\Operations\\Bulk\\Laravel\\BulkBindingsRegistrar",
+    "CoreX\\Operations\\Bulk\\Laravel\\BulkHttpRegistrar",
+    "CoreX\\Operations\\Cost\\Laravel\\CostBindingsRegistrar",
+    "CoreX\\Operations\\Idempotency\\Internal\\DefaultReplayAuthorizer",
+    "CoreX\\Operations\\Idempotency\\Internal\\HandlerFailure",
+    "CoreX\\Operations\\Laravel\\ApiSchemaBindingsRegistrar",
+    "CoreX\\Operations\\Laravel\\HttpRegistrar",
+    "CoreX\\Operations\\Laravel\\IdempotencyRegistrar",
+    "CoreX\\Operations\\Laravel\\IdempotencyStoreFactory",
+    "CoreX\\Operations\\Laravel\\OperationsBindingsRegistrar",
+    "CoreX\\Operations\\Laravel\\PaginationRegistrar",
+    "CoreX\\Operations\\Pagination\\Internal\\ConfiguredCursorKeyring",
+    "CoreX\\Panels\\Laravel\\PanelsBindingsRegistrar",
+    "CoreX\\Panels\\SavedViews\\Laravel\\SavedViewRepositoryFactory",
+    "CoreX\\Panels\\SavedViews\\Laravel\\SavedViewsBindingsRegistrar",
+    "CoreX\\SearchMeilisearch\\Laravel\\MeilisearchProviderFactory",
+    "CoreX\\Settings\\Laravel\\SettingsRegistrar",
+    "CoreX\\Storage\\Laravel\\StorageRegistrar",
+    "CoreX\\Time\\Laravel\\TimeRegistrar",
+    "CoreX\\Wakeup\\Laravel\\WakeupBindingsRegistrar",
+    "CoreX\\Webhooks\\Laravel\\WebhookBindingsRegistrar",
+    "CoreX\\Webhooks\\Laravel\\WebhookHttpRegistrar",
+    "CoreX\\Workflow\\Laravel\\WorkflowBindingFactory"
+  ],
+  "changed_records": {
+    "CoreX\\CustomFields\\Internal\\Laravel\\AttributeCompositionRegistrar": [
+      [
+        "~",
+        ".interfaces"
+      ],
+      [
+        "+",
+        ".methods.boot"
+      ]
+    ],
+    "CoreX\\CustomFields\\Internal\\Laravel\\AttributeMessagingRegistrar": [
+      [
+        "~",
+        ".interfaces"
+      ],
+      [
+        "+",
+        ".methods.boot"
+      ]
+    ],
+    "CoreX\\Operations\\Laravel\\ApiSchemaRegistrar": [
+      [
+        "+",
+        ".methods.fromSchema"
+      ]
+    ],
+    "CoreX\\Panels\\SavedViews\\Laravel\\SavedViewsRegistrar": [
+      [
+        "~",
+        ".readonly"
+      ]
+    ]
+  },
+  "note": "Registrars and factories under <Module>/Laravel are Spi-call types (package-graph R4b); legacy static registrars (SavedViewsRegistrar, CostRegistrar, BulkRegistrar, WebhookRegistrar, ApiSchemaRegistrar) keep their public static entry points as deprecated shims so bc-check stays green.",
+  "pre_sha256": "cc5186ecc955cca64e6699cc1d44de7d469e3d944e3ec1ac54ff428d2aea3a77",
+  "post_sha256": "f2e076372d499673578c9d4c1be649e5046e7e88fe32916e259cf47bcd0309a5",
+  "unchanged_layers": {
+    "routes": {
+      "byte_identical": true,
+      "sha256": "cb16a39748b25bc62ac2a567c44925197a1ccba76a4b251e1de363de84ac3ce7"
+    },
+    "events": {
+      "byte_identical": true,
+      "sha256": "9968778cdd94c68b00c78c7aa6e4ae7e569da9e8e611f024f10289c1daa62f5d"
+    },
+    "wire": {
+      "byte_identical": true,
+      "sha256": "80c37f4460c365130edc2d220340054ee58b2fa8fbba91776bc1ef584bea848d"
+    }
+  }
+}

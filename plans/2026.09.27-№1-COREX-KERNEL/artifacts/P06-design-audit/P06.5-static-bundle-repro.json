@@ -1,0 +1,22 @@
+[
+  {
+    "ordinal": 2,
+    "raw": "`plans/2026.09.27-№1-COREX-KERNEL/phases/P06/P06.1.md`…`P06.4.md`;",
+    "declared_paths": [
+      "plans/2026.09.27-№1-COREX-KERNEL/phases/P06/P06.1.md",
+      "P06.4.md"
+    ],
+    "resolved": {
+      "plans/2026.09.27-№1-COREX-KERNEL/phases/P06/P06.1.md": true,
+      "P06.4.md": false
+    },
+    "failure": "unresolvable_entry"
+  },
+  {
+    "ordinal": 5,
+    "raw": "diff фазы по путям Files;",
+    "declared_paths": [],
+    "resolved": {},
+    "failure": "unresolvable_entry"
+  }
+]

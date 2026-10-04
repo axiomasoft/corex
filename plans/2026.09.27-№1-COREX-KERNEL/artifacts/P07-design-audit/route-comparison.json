@@ -1,0 +1,11 @@
+{
+  "actual": {
+    "effort": "high",
+    "model_class": "frontier"
+  },
+  "capabilities": [],
+  "required": {
+    "effort": "xhigh",
+    "model_class": "frontier"
+  }
+}

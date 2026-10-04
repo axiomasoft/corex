@@ -6,10 +6,11 @@ namespace CoreX\Search\Internal\Index;
 
 use Illuminate\Database\ConnectionInterface;
 use InvalidArgumentException;
+use Psr\Clock\ClockInterface;
 
 final readonly class DurableIndexRebuild
 {
-    public function __construct(private ConnectionInterface $connection) {}
+    public function __construct(private ConnectionInterface $connection, private readonly ClockInterface $clock) {}
 
     public function begin(string $rebuildId, string $laneKey, string $fromGeneration, string $toGeneration, string $restoreEpoch, string $schemaHash): void
     {
@@ -40,8 +41,8 @@ final readonly class DurableIndexRebuild
                 'schema_hash' => $schemaHash,
                 'fence_revision' => (int) $lane->committed_revision,
                 'state' => 'capturing',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => $this->clock->now(),
+                'updated_at' => $this->clock->now(),
             ]);
         });
     }
@@ -62,7 +63,7 @@ final readonly class DurableIndexRebuild
             $this->connection->table('corex_search_rebuilds')->where('rebuild_id', $rebuildId)->update([
                 'fence_revision' => max((int) $rebuild->fence_revision, $watermark),
                 'state' => 'fenced',
-                'updated_at' => now(),
+                'updated_at' => $this->clock->now(),
             ]);
         });
     }
@@ -89,7 +90,7 @@ final readonly class DurableIndexRebuild
             }
 
             $this->connection->table('corex_search_rebuilds')->where('rebuild_id', $rebuildId)->update([
-                'state' => 'swapping', 'swap_task' => $taskId, 'marker_hash' => $markerHash, 'updated_at' => now(),
+                'state' => 'swapping', 'swap_task' => $taskId, 'marker_hash' => $markerHash, 'updated_at' => $this->clock->now(),
             ]);
         });
     }
@@ -115,20 +116,20 @@ final readonly class DurableIndexRebuild
 
             if ($outcome === 'succeeded') {
                 $this->connection->table('corex_search_lanes')->where('lane_key', $rebuild->lane_key)->update([
-                    'generation' => $rebuild->to_generation, 'state' => 'ready', 'updated_at' => now(),
+                    'generation' => $rebuild->to_generation, 'state' => 'ready', 'updated_at' => $this->clock->now(),
                 ]);
                 $this->connection->table('corex_search_rebuilds')->where('rebuild_id', $rebuildId)->update([
-                    'state' => 'verified', 'swapped_at' => now(), 'updated_at' => now(),
+                    'state' => 'verified', 'swapped_at' => $this->clock->now(), 'updated_at' => $this->clock->now(),
                 ]);
 
                 return;
             }
 
             $this->connection->table('corex_search_rebuilds')->where('rebuild_id', $rebuildId)->update([
-                'state' => $outcome === 'unknown' ? 'unknown' : 'failed', 'updated_at' => now(),
+                'state' => $outcome === 'unknown' ? 'unknown' : 'failed', 'updated_at' => $this->clock->now(),
             ]);
             $this->connection->table('corex_search_lanes')->where('lane_key', $rebuild->lane_key)->update([
-                'state' => $outcome === 'unknown' ? 'quarantined' : 'ready', 'updated_at' => now(),
+                'state' => $outcome === 'unknown' ? 'quarantined' : 'ready', 'updated_at' => $this->clock->now(),
             ]);
         });
     }

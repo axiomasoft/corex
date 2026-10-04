@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Identity\Internal;
 
-use Carbon\CarbonImmutable;
 use CoreX\Context\Contracts\IdentityPasswordRehasher;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Tenancy\Account\Contracts\AccountRead;
@@ -12,8 +11,12 @@ use CoreX\Tenancy\Identity\Contracts\IdentitySyncer;
 use CoreX\Tenancy\Identity\Events\UserSynced;
 use CoreX\Tenancy\Identity\Internal\Jobs\SyncIdentityToAccount;
 use CoreX\Tenancy\Identity\Internal\Models\User;
-use Illuminate\Support\Facades\DB;
+use DateTimeImmutable;
+use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionResolverInterface;
 use InvalidArgumentException;
+use Psr\Clock\ClockInterface;
 use Throwable;
 
 /**
@@ -32,6 +35,10 @@ final class DatabaseIdentitySyncer implements IdentityPasswordRehasher, Identity
     public function __construct(
         private readonly string $centralConnection,
         private readonly TenancyManager $tenancy,
+        private readonly AccountRead $accounts,
+        private readonly ConnectionResolverInterface $connections,
+        private readonly ClockInterface $clock,
+        private readonly Dispatcher $events,
     ) {}
 
     /** @param array<string, string> $columns */
@@ -52,12 +59,12 @@ final class DatabaseIdentitySyncer implements IdentityPasswordRehasher, Identity
 
     public function syncToAccount(string $identityId, string $accountId): void
     {
-        $identity = DB::connection($this->centralConnection)
+        $identity = $this->connections->connection($this->centralConnection)
             ->table('root_identities')
             ->where('id', $identityId)
             ->first();
 
-        $account = app(AccountRead::class)->find($accountId, $this->centralConnection);
+        $account = $this->accounts->find($accountId, $this->centralConnection);
 
         if ($identity === null || $account === null) {
             $this->markFailed($identityId, $accountId);
@@ -65,7 +72,7 @@ final class DatabaseIdentitySyncer implements IdentityPasswordRehasher, Identity
             return;
         }
 
-        $membership = DB::connection($this->centralConnection)
+        $membership = $this->connections->connection($this->centralConnection)
             ->table('root_identity_accounts')
             ->where('identity_id', $identityId)
             ->where('account_id', $accountId)
@@ -75,17 +82,19 @@ final class DatabaseIdentitySyncer implements IdentityPasswordRehasher, Identity
 
         try {
             $this->tenancy->runFor($accountRef, null, function () use ($identity, $identityId, $accountId): void {
-                DB::connection()->transaction(function () use ($identity, $identityId, $accountId): void {
+                /** @var Connection */
+                $connection = $this->connections->connection();
+                $connection->transaction(function () use ($connection, $identity, $identityId, $accountId): void {
                     // The lock also covers an absent user row, serializing first delivery.
-                    DB::select('SELECT pg_advisory_xact_lock(hashtextextended(?, 0))', ['corex-identity:'.$identityId]);
+                    $connection->select('SELECT pg_advisory_xact_lock(hashtextextended(?, 0))', ['corex-identity:'.$identityId]);
                     $existing = User::withTrashed()->whereKey($identityId)->first();
-                    $sourceUpdatedAt = CarbonImmutable::parse($identity->updated_at);
-                    $isMembershipActive = DB::connection($this->centralConnection)->table('root_identity_accounts')
+                    $sourceUpdatedAt = new DateTimeImmutable((string) $identity->updated_at);
+                    $isMembershipActive = $this->connections->connection($this->centralConnection)->table('root_identity_accounts')
                         ->where('identity_id', $identityId)->where('account_id', $accountId)->value('status') === 'active';
 
                     if ($existing !== null
                         && $existing->identity_source_updated_at !== null
-                        && $sourceUpdatedAt->lessThanOrEqualTo($existing->identity_source_updated_at)) {
+                        && $sourceUpdatedAt <= $existing->identity_source_updated_at) {
                         // Membership authority is independent of the profile clock. A
                         // revoke must apply even when the identity profile has not
                         // changed; a stale profile snapshot must still not overwrite
@@ -105,12 +114,12 @@ final class DatabaseIdentitySyncer implements IdentityPasswordRehasher, Identity
                             'phone' => $identity->phone,
                             'locale' => $identity->locale,
                             'is_active' => $isMembershipActive,
-                            'synced_at' => CarbonImmutable::now(),
+                            'synced_at' => $this->clock->now(),
                             'identity_source_updated_at' => $sourceUpdatedAt->format('Y-m-d H:i:s.uP'),
                         ],
                     );
 
-                    DB::afterCommit(static fn () => event(new UserSynced(identityId: $identityId, accountId: $accountId)));
+                    $connection->afterCommit(fn () => $this->events->dispatch(new UserSynced(identityId: $identityId, accountId: $accountId)));
                 });
             });
         } catch (Throwable) {
@@ -120,20 +129,20 @@ final class DatabaseIdentitySyncer implements IdentityPasswordRehasher, Identity
         }
 
         if ($membership !== null) {
-            DB::connection($this->centralConnection)
+            $this->connections->connection($this->centralConnection)
                 ->table('root_identity_accounts')
                 ->where('identity_id', $identityId)
                 ->where('account_id', $accountId)
                 ->where('updated_at', $membership->updated_at)
                 ->whereExists(static fn ($query) => $query->selectRaw('1')->from('root_identities')
                     ->where('id', $identityId)->where('updated_at', $identity->updated_at))
-                ->update(['sync_status' => 'synced', 'synced_at' => CarbonImmutable::now()]);
+                ->update(['sync_status' => 'synced', 'synced_at' => $this->clock->now()]);
         }
     }
 
     public function fanOut(string $identityId): void
     {
-        $accountIds = DB::connection($this->centralConnection)
+        $accountIds = $this->connections->connection($this->centralConnection)
             ->table('root_identity_accounts')
             ->where('identity_id', $identityId)
             ->pluck('account_id');
@@ -145,7 +154,7 @@ final class DatabaseIdentitySyncer implements IdentityPasswordRehasher, Identity
 
     private function markFailed(string $identityId, string $accountId): void
     {
-        DB::connection($this->centralConnection)
+        $this->connections->connection($this->centralConnection)
             ->table('root_identity_accounts')
             ->where('identity_id', $identityId)
             ->where('account_id', $accountId)

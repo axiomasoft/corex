@@ -1,0 +1,23 @@
+{
+  "original_carrier": "scripts/php84 composer test",
+  "initial_evidence": "root-tests.log",
+  "API_delta": "new CloudEventCodec array<string,mixed> rejected by strict gate; concrete eight-level JSON alias now reflects adopted payload boundary, native signature unchanged",
+  "fixture_baseline": {
+    "sha": "bf557c36ca9cdcec93930e22f71fb22b6a3c8674",
+    "path": "tests/fixtures/public-error-contract.php",
+    "sha256": "1f6e2f5af3df59a9ae2a071ad23fad69f2983935b17687cd1f60621fbb37b1c9",
+    "error_source_paths_unchanged": [
+      "packages/core/src/Errors",
+      "packages/operations/src/Errors",
+      "packages/tools/src/Errors"
+    ]
+  },
+  "fixture_candidate": "error-fixture-delta.json; exactly 3 operations +13 tools definitions from accepted D90/D92/D93, all existing rows/other sections preserved",
+  "owning_paths": [
+    "packages/core/src/Messaging/Contracts/CloudEventCodec.php",
+    "packages/core/src/Messaging/Internal/JsonCloudEventCodec.php",
+    "tests/fixtures/public-error-contract.php"
+  ],
+  "material_surface_delta": "no new outcome or native contract choice; typed API docs and stale predecessor fixture synchronized; limits/registry/thresholds preserved",
+  "verification": "root-repair-tests.log and exact original root-tests-final.log; strict php-api check"
+}

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Authentication\Internal\Http\Controllers;
 
-use Carbon\CarbonImmutable;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Tenancy\Authentication\Exceptions\OidcAuthenticationException;
 use CoreX\Tenancy\Authentication\Internal\Oidc\IdTokenVerifier;
@@ -13,10 +12,13 @@ use CoreX\Tenancy\Authentication\Internal\Oidc\OidcDiscovery;
 use CoreX\Tenancy\Identity\Contracts\IdentitySyncer;
 use CoreX\Tenancy\Laravel\Support\ImpersonationPolicy;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
+use Illuminate\Contracts\Auth\Factory as AuthFactory;
+use Illuminate\Contracts\Auth\StatefulGuard;
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use LogicException;
+use Psr\Clock\ClockInterface;
 use Stancl\Tenancy\Database\Models\Tenant as Account;
 
 /**
@@ -30,7 +32,7 @@ use Stancl\Tenancy\Database\Models\Tenant as Account;
  * runs; absent ⇒ `root_identity_accounts.status === 'active'` (RIGID
  * equality — the enum is three-valued, `invited` must NOT pass) →
  * {@see IdentitySyncer::syncToAccount()}. Both lanes converge on
- * `session()->regenerate()` → `Auth::loginUsingId()` (the ONLY seam that
+ * `session()->regenerate()` → `Guard::loginUsingId()` (the ONLY seam that
  * constructs the Principal — never a class from `axiomasoft/corex-access`, D125) →
  * `_corex_auth_at` marker (AC-15, read by `EnforceSessionLifetime`). Any
  * failure is an {@see OidcAuthenticationException} — no partial login. The
@@ -47,6 +49,9 @@ final class OidcLoginController
         private readonly ImpersonationService $impersonation,
         private readonly ImpersonationPolicy $impersonationPolicy,
         private readonly TenancyOptions $options,
+        private readonly AuthFactory $auth,
+        private readonly ConnectionResolverInterface $connections,
+        private readonly ClockInterface $clock,
     ) {}
 
     public function redirect(Request $request): RedirectResponse
@@ -94,7 +99,7 @@ final class OidcLoginController
 
             $this->impersonation->start($grantId, $sub);
 
-            $request->session()->put('_corex_auth_at', CarbonImmutable::now()->toIso8601String());
+            $request->session()->put('_corex_auth_at', $this->clock->now()->format(DATE_ATOM));
 
             return redirect()->intended('/');
         }
@@ -105,7 +110,7 @@ final class OidcLoginController
 
         $request->session()->regenerate();
 
-        $authenticated = Auth::guard($this->guard())->loginUsingId($sub);
+        $authenticated = $this->statefulGuard()->loginUsingId($sub);
 
         // loginUsingId() returns `false` (WITHOUT throwing) when the
         // configured provider's retrieveById($sub) resolves to null — e.g.
@@ -117,7 +122,7 @@ final class OidcLoginController
             throw OidcAuthenticationException::loginFailed();
         }
 
-        $request->session()->put('_corex_auth_at', CarbonImmutable::now()->toIso8601String());
+        $request->session()->put('_corex_auth_at', $this->clock->now()->format(DATE_ATOM));
 
         return redirect()->intended('/');
     }
@@ -199,7 +204,7 @@ final class OidcLoginController
      */
     private function assertMembership(string $sub, Account $account): void
     {
-        $membership = DB::connection($this->centralConnection())
+        $membership = $this->connections->connection($this->centralConnection())
             ->table('root_identity_accounts')
             ->where('identity_id', $sub)
             ->where('account_id', $account->id)
@@ -238,6 +243,17 @@ final class OidcLoginController
         }
 
         return $imp;
+    }
+
+    private function statefulGuard(): StatefulGuard
+    {
+        $guard = $this->auth->guard($this->guard());
+
+        if (! $guard instanceof StatefulGuard) {
+            throw new LogicException("Auth guard [{$this->guard()}] must be stateful to log an identity in.");
+        }
+
+        return $guard;
     }
 
     private function guard(): string

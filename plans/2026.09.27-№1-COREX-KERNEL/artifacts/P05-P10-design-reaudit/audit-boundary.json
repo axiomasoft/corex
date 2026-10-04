@@ -1,0 +1,8 @@
+{
+  "scope": "design-only",
+  "admission": "PLAN_DESIGN_AUDIT_GREEN",
+  "phase_close_gate": "not applicable: no phase audited or closed",
+  "product_anchors_equal": true,
+  "authored_design_anchors_equal": true,
+  "audit_owned_bookkeeping_repair": "handoff title after P04 and exact Batch solo, followed by original plan-lint GREEN"
+}

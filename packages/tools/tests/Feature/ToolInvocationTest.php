@@ -32,9 +32,11 @@ use CoreX\Tools\Contracts\ToolInvoker;
 use CoreX\Tools\Contracts\ToolPolicy;
 use CoreX\Tools\Data\ToolCall;
 use CoreX\Tools\Data\ToolDescriptor;
-use CoreX\Tools\Data\ToolResult;
+use CoreX\Tools\Data\ToolOutcome;
+use CoreX\Tools\Errors\Enums\ToolsErrorCode;
 use CoreX\Tools\Internal\ReadOnlyToolExecutionGuard;
 use CoreX\Tools\Internal\ToolDescriptorFactory;
+use CoreX\Tools\Tests\Support\AssertsRegisteredToolErrors;
 use CoreX\Tools\Tests\Support\CountingHandler;
 use CoreX\Tools\Tests\Support\HeadlessWrappedHandler;
 use CoreX\Tools\Tests\Support\ToolGuardFixture;
@@ -48,6 +50,8 @@ use LogicException;
 
 final class ToolInvocationTest extends TestCase
 {
+    use AssertsRegisteredToolErrors;
+
     private CatalogueModuleFixture $modules;
 
     private ContextFixture $tenants;
@@ -202,7 +206,7 @@ final class ToolInvocationTest extends TestCase
         $call = $this->makeToolCall('notes.read');
         $result = $invoker->invoke($this->context(), $call);
 
-        self::assertSame(ToolResult::OUTCOME_COMMITTED, $result->outcome);
+        self::assertSame(ToolOutcome::Committed, $result->outcome);
         self::assertNotNull($result->structuredData);
         $decoded = JsonCanonical::decodeObject($result->structuredData->canonicalJson);
 
@@ -218,7 +222,7 @@ final class ToolInvocationTest extends TestCase
         $invoker = $this->app->make(ToolInvoker::class);
 
         $unknownField = $invoker->invoke($this->context(), $this->makeToolCall('notes.read', ['name' => 'x', 'forged' => true]));
-        self::assertSame('input_invalid', $unknownField->errorCode);
+        $this->assertToolError(ToolsErrorCode::InputInvalid, $unknownField->errorCode);
 
         $badJson = new ToolCall(
             code: 'notes.read',
@@ -228,7 +232,7 @@ final class ToolInvocationTest extends TestCase
             requestId: 'req-bad-type',
         );
         $wrongType = $invoker->invoke($this->context(), $badJson);
-        self::assertSame('input_invalid', $wrongType->errorCode);
+        $this->assertToolError(ToolsErrorCode::InputInvalid, $wrongType->errorCode);
 
         self::assertSame(0, CountingHandler::$calls);
     }
@@ -245,7 +249,7 @@ final class ToolInvocationTest extends TestCase
             operationKey: 'op-1',
         ));
 
-        self::assertSame('approval_required', $result->errorCode);
+        $this->assertToolError(ToolsErrorCode::ApprovalRequired, $result->errorCode);
         self::assertSame(0, MutatingHandler::$calls);
     }
 
@@ -258,16 +262,16 @@ final class ToolInvocationTest extends TestCase
         $this->guard->approvedProofDigest = $binding;
 
         $ok = $invoker->invoke($this->context(), $call);
-        self::assertSame(ToolResult::OUTCOME_COMMITTED, $ok->outcome);
+        self::assertSame(ToolOutcome::Committed, $ok->outcome);
 
         $changedArgs = $this->makeToolCall('notes.create', ['name' => 'beta', 'operation_key' => 'op-4b'], operationKey: 'op-4b', clientProof: $binding);
         $argsDenied = $invoker->invoke($this->context(), $changedArgs);
-        self::assertSame('approval_invalid', $argsDenied->errorCode);
+        $this->assertToolError(ToolsErrorCode::ApprovalInvalid, $argsDenied->errorCode);
 
         $this->tenants->initialize($this->account('B'));
         $foreignCall = $this->makeToolCall('notes.create', ['name' => 'alpha', 'operation_key' => 'op-4-foreign'], operationKey: 'op-4-foreign');
         $foreign = $invoker->invoke($this->context('B'), $foreignCall);
-        self::assertSame('approval_invalid', $foreign->errorCode);
+        $this->assertToolError(ToolsErrorCode::ApprovalInvalid, $foreign->errorCode);
     }
 
     public function test_domain_key_idempotency_replays_equal_requests_and_conflicts_on_mismatch_invoke_05(): void
@@ -280,7 +284,7 @@ final class ToolInvocationTest extends TestCase
         $first = $invoker->invoke($this->context(), $call);
         $second = $invoker->invoke($this->context(), $call);
 
-        self::assertSame(ToolResult::OUTCOME_COMMITTED, $first->outcome);
+        self::assertSame(ToolOutcome::Committed, $first->outcome);
         self::assertTrue($second->replayed);
         self::assertSame(1, MutatingHandler::$calls);
         self::assertSame(1, DB::table('tool_effects')->count());
@@ -289,7 +293,7 @@ final class ToolInvocationTest extends TestCase
             $this->context(),
             $this->makeToolCall('notes.create', ['name' => 'other', 'operation_key' => 'op-5'], operationKey: 'op-5'),
         );
-        self::assertSame('idempotency_conflict', $conflict->errorCode);
+        $this->assertToolError(ToolsErrorCode::IdempotencyConflict, $conflict->errorCode);
     }
 
     public function test_stale_resource_version_denies_before_effect_invoke_06(): void
@@ -302,13 +306,13 @@ final class ToolInvocationTest extends TestCase
         $this->guard->requiredResourceVersion = 1;
 
         $denied = $invoker->invoke($this->context(), $call);
-        self::assertSame('approval_invalid', $denied->errorCode);
+        $this->assertToolError(ToolsErrorCode::ApprovalInvalid, $denied->errorCode);
         self::assertSame(0, MutatingHandler::$calls);
 
         $this->guard->requiredResourceVersion = 2;
         $this->guard->approvedProofDigest = $this->guard->bindingDigest($this->descriptor('notes.create'), $this->context(), $call);
         $allowed = $invoker->invoke($this->context(), $call);
-        self::assertSame(ToolResult::OUTCOME_COMMITTED, $allowed->outcome);
+        self::assertSame(ToolOutcome::Committed, $allowed->outcome);
     }
 
     public function test_provider_key_timeout_keeps_unknown_outcome_and_stable_operation_key_invoke_07(): void
@@ -318,13 +322,13 @@ final class ToolInvocationTest extends TestCase
         $call = $this->makeToolCall('notes.provider', ['name' => 'alpha'], operationKey: 'provider-op-7');
 
         $unknown = $invoker->invoke($this->context(), $call);
-        self::assertSame(ToolResult::OUTCOME_UNKNOWN, $unknown->outcome);
-        self::assertSame('unknown_effect', $unknown->errorCode);
+        self::assertSame(ToolOutcome::Unknown, $unknown->outcome);
+        $this->assertToolError(ToolsErrorCode::UnknownEffect, $unknown->errorCode);
         self::assertSame('provider-op-7', $unknown->operationKey);
 
         ProviderKeyHandler::$mode = 'committed';
         $committed = $invoker->invoke($this->context(), $call);
-        self::assertSame(ToolResult::OUTCOME_COMMITTED, $committed->outcome);
+        self::assertSame(ToolOutcome::Committed, $committed->outcome);
     }
 
     public function test_output_schema_mismatch_rolls_back_local_transaction_invoke_08(): void
@@ -333,7 +337,7 @@ final class ToolInvocationTest extends TestCase
         $invoker = $this->app->make(ToolInvoker::class);
         $bad = $invoker->invoke($this->context(), $this->makeToolCall('notes.badoutput'));
 
-        self::assertSame('output_contract_failed', $bad->errorCode);
+        $this->assertToolError(ToolsErrorCode::OutputContractFailed, $bad->errorCode);
         self::assertSame(0, CountingHandler::$calls);
     }
 
@@ -345,11 +349,11 @@ final class ToolInvocationTest extends TestCase
         $this->guard->approvedProofDigest = $this->guard->bindingDigest($this->descriptor('notes.create'), $this->context(), $call);
 
         $first = $invoker->invoke($this->context(), $call);
-        self::assertSame(ToolResult::OUTCOME_COMMITTED, $first->outcome);
+        self::assertSame(ToolOutcome::Committed, $first->outcome);
 
         $this->guard->visibilityRevoked = true;
         $denied = $invoker->invoke($this->context(), $call);
-        self::assertSame('forbidden', $denied->errorCode);
+        $this->assertToolError(ToolsErrorCode::Forbidden, $denied->errorCode);
         self::assertNull($denied->structuredData);
     }
 
@@ -360,14 +364,14 @@ final class ToolInvocationTest extends TestCase
         $invoker = $this->app->make(ToolInvoker::class);
 
         $read = $invoker->invoke($this->context(), $this->makeToolCall('notes.read', ['name' => 'preview']));
-        self::assertSame(ToolResult::OUTCOME_COMMITTED, $read->outcome);
+        self::assertSame(ToolOutcome::Committed, $read->outcome);
         self::assertSame(0, DB::table('tool_effects')->count());
 
         $draft = $invoker->invoke($this->context(), $this->makeToolCall('notes.draft', ['name' => 'alpha', 'operation_key' => 'd-1'], operationKey: 'd-1'));
-        self::assertSame('approval_required', $draft->errorCode);
+        $this->assertToolError(ToolsErrorCode::ApprovalRequired, $draft->errorCode);
 
         $erase = $invoker->invoke($this->context(), $this->makeToolCall('notes.erase', ['name' => 'alpha', 'operation_key' => 'e-1'], operationKey: 'e-1'));
-        self::assertSame('approval_required', $erase->errorCode);
+        $this->assertToolError(ToolsErrorCode::ApprovalRequired, $erase->errorCode);
     }
 
     public function test_unexpected_exceptions_produce_safe_error_without_secrets_invoke_11(): void
@@ -388,7 +392,7 @@ final class ToolInvocationTest extends TestCase
 
         $result = $invoker->invoke($this->context(), $call);
 
-        self::assertSame('internal_error', $result->errorCode);
+        $this->assertToolError(ToolsErrorCode::InternalError, $result->errorCode);
         self::assertStringNotContainsString('SQLSTATE', (string) $result->errorCode);
         self::assertStringNotContainsString('secret', json_encode($result, JSON_THROW_ON_ERROR));
     }
@@ -399,10 +403,10 @@ final class ToolInvocationTest extends TestCase
         $invoker = $this->app->make(ToolInvoker::class);
 
         $http = $invoker->invoke($this->context(), $this->makeToolCall('notes.http'));
-        self::assertSame('internal_error', $http->errorCode);
+        $this->assertToolError(ToolsErrorCode::InternalError, $http->errorCode);
 
         $wrapped = $invoker->invoke($this->context(), $this->makeToolCall('notes.wrapped'));
-        self::assertSame(ToolResult::OUTCOME_COMMITTED, $wrapped->outcome);
+        self::assertSame(ToolOutcome::Committed, $wrapped->outcome);
         $payload = JsonCanonical::decodeObject($wrapped->structuredData?->canonicalJson ?? '{}');
         self::assertSame('trusted-user', $payload['actor'] ?? null);
     }
@@ -421,6 +425,6 @@ final class ToolInvocationTest extends TestCase
         );
 
         $result = $invoker->invoke($this->context(), $stale);
-        self::assertSame('tool_revision_conflict', $result->errorCode);
+        $this->assertToolError(ToolsErrorCode::ToolRevisionConflict, $result->errorCode);
     }
 }

@@ -14,10 +14,11 @@ use CoreX\Access\Laravel\AuthOptions;
 use CoreX\Access\Matrix\Contracts\ScopeMapVersions as ScopeMapVersion;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Modules\Contracts\EntityRegistry;
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Override;
+use Psr\Clock\ClockInterface;
 
 /**
  * Two-phase AccessChecker (D101, B-11 §5.5). allowed() asks the real AzGuard
@@ -49,6 +50,8 @@ final class DefaultAccessChecker implements AccessChecker
         private readonly ScopePredicate $scopePredicate,
         private readonly DirectGrantLookup $directGrants,
         private readonly AuthOptions $options,
+        private readonly ConnectionResolverInterface $connections,
+        private readonly ClockInterface $clock,
     ) {}
 
     #[Override]
@@ -113,7 +116,7 @@ final class DefaultAccessChecker implements AccessChecker
 
         return $this->allowed($p, $entity->handle, $action)
             && $this->scopePredicate->matches(
-                (new ScopeAvailability($this->entities))->normalize($entity->handle, $this->scopeFor($p, $entity->handle, $action)),
+                (new ScopeAvailability($this->entities, $this->connections))->normalize($entity->handle, $this->scopeFor($p, $entity->handle, $action)),
                 $record,
                 $p,
             );
@@ -124,12 +127,15 @@ final class DefaultAccessChecker implements AccessChecker
     {
         $workspaceId = $this->tenancyManager->context()?->workspace?->id;
 
-        return DB::table('aut_role_assignments')
-            ->whereIn('role_id', DB::table('aut_roles')->select('id')->whereNull('deleted_at'))
+        $connection = $this->connections->connection();
+        $now = $this->clock->now();
+
+        return $connection->table('aut_role_assignments')
+            ->whereIn('role_id', $connection->table('aut_roles')->select('id')->whereNull('deleted_at'))
             ->where('principal_type', $p->principalType()->value)
             ->where('principal_id', $p->principalId())
-            ->where(static function (Builder $q): void {
-                $q->whereNull('expires_at')->orWhere('expires_at', '>', now());
+            ->where(static function (Builder $q) use ($now): void {
+                $q->whereNull('expires_at')->orWhere('expires_at', '>', $now);
             })
             ->where(static function (Builder $q) use ($workspaceId): void {
                 $q->whereNull('workspace_id');
@@ -147,7 +153,7 @@ final class DefaultAccessChecker implements AccessChecker
     /** @param list<string> $roleIds */
     private function matrixQuery(array $roleIds, string $entityKey, string $action): Builder
     {
-        return DB::table('aut_role_matrix')
+        return $this->connections->connection()->table('aut_role_matrix')
             ->whereIn('role_id', $roleIds)
             ->where('entity_key', $entityKey)
             ->where('action', $action);

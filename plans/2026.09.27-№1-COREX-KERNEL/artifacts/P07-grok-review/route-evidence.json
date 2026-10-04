@@ -1,0 +1,19 @@
+{
+  "source": "Grok native summary.json and isolated config.toml",
+  "session_id": "1dad8bfb-8584-45c9-92e1-4ff0b2a572d4",
+  "model": "grok-4.7",
+  "reasoning_effort": "high",
+  "context_window_configured": 500000,
+  "supported_context_windows": [
+    256000,
+    500000
+  ],
+  "formal_task_audit": false,
+  "notes": "Window 500k configured in isolated Grok home, supported by native model catalog. Kernel sandbox unavailable. Broad review used only read/search/list tools; no product writes detected. Finding 5 corrected and confirmed closed by independent follow-up. Formal Task GREEN not claimed.",
+  "followup_model": "grok-4.7",
+  "followup_effort": "high",
+  "requested_selector": "grok-4.7",
+  "api_usage_model_keys": [
+    "grok-4.7-build"
+  ]
+}

@@ -1,0 +1,59 @@
+> pest --exclude-group=pg '--filter=SalesStorageTest|ActivityTimelineTest'
+
+   FAIL  Tests\Feature\ActivityTimelineTest
+  ⨯ it logs a polymorphic activity resolved through the morph alias      0.43s
+  ✓ it attaches activities to different subject types                    0.37s
+
+   FAIL  Tests\Feature\SalesStorageTest
+  ✓ it does not represent legacy statuses or note and task as activitie… 0.21s
+  ✓ it rejects creation veto without persisted rows or success events    0.21s
+  ⨯ it stores activity kinds and canonical target associations           0.26s
+  ✓ it persists canonical lead fields with trusted provenance            0.21s
+  ✓ it refuses conversion without explicit human identity and preserves… 0.22s
+  ✓ it rolls back the entire conversion when the final lead update is v… 0.35s
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Feature\ActivityTimelineTest > it logs a polymorphic activi…
+  Failed asserting that two strings are identical.
+  -'crm.contact'
+  +'Flex\Crm\Contact\Models\Contact'
+
+
+  at tests/Feature/ActivityTimelineTest.php:22
+     18▕     $contact = app(CreateContact::class)->handle(new ContactData(nameFirst: 'Jane'));
+     19▕     $activity = app(LogActivity::class)->handle($contact, ActivityType::Call, 'Intro call', body: 'Went well');
+     20▕
+     21▕     expect($activity->kind)->toBe(ActivityType::Call)
+  ➜  22▕         ->and($activity->targets()->sole()->entity_type)->toBe('crm.contact')
+     23▕         ->and($activity->targets()->sole()->entity->is($contact))->toBeTrue()
+     24▕         ->and($contact->activities()->count())->toBe(1);
+     25▕
+     26▕     Event::assertDispatched(ActivityLogged::class);
+
+  1   tests/Feature/ActivityTimelineTest.php:22
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Feature\SalesStorageTest > it stores activity kinds and can…
+  Failed asserting that two strings are identical.
+  -'crm.lead'
+  +'Flex\Crm\Lead\Models\Lead'
+
+
+  at tests/Feature/SalesStorageTest.php:37
+     33▕     $activity = app(LogActivity::class)->handle(subject: $lead, type: ActivityType::Call, summary: 'Intro call');
+     34▕     expect($activity->fresh()->kind)->toBe(ActivityType::Call)
+     35▕         ->and($activity->subject)->toBe('Intro call')
+     36▕         ->and($lead->activities()->sole()->id)->toBe($activity->id)
+  ➜  37▕         ->and(DB::table('crm_activity_targets')->sole()->entity_type)->toBe('crm.lead');
+     38▕ });
+     39▕
+     40▕ it('does not represent legacy statuses or note and task as activities', function (): void {
+     41▕     expect(LeadStatus::tryFrom('new'))->toBeNull()
+
+  1   tests/Feature/SalesStorageTest.php:37
+
+
+  Tests:    2 failed, 6 passed (27 assertions)
+  Duration: 2.37s
+  Random Order Seed: 1790878476
+
+Script pest --exclude-group=pg handling the test event returned with error code 1

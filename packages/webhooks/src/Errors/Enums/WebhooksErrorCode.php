@@ -12,6 +12,7 @@ enum WebhooksErrorCode: string implements ErrorCode
 {
     case UnknownMessageContract = 'webhooks.unknown_message_contract';
     case UnknownMessageSchema = 'webhooks.unknown_message_schema';
+    case WebhookEgressDenied = 'webhooks.webhook_egress_denied';
     case WebhookEndpointChanged = 'webhooks.webhook_endpoint_changed';
     case WebhookPayloadTooLarge = 'webhooks.webhook_payload_too_large';
     case WebhookReplayExpired = 'webhooks.webhook_replay_expired';

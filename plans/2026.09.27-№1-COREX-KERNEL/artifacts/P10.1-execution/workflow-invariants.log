@@ -1,0 +1,3 @@
+PASS: 27 job IDs/names, pins, permissions and all original steps retained; no continue-on-error growth
+PASS: ten temporary Laravel update constraints; nine healthchecks select corex/corex_test
+PASS: V1 diagnostic removed after observed no-rg; one test:hermetic definition

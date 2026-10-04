@@ -135,7 +135,7 @@
 **Почему.** Группировка по задаче сохраняет её код в одной границе.
 
 ### STR-003 — Корень пакета — его корневой модуль
-**Правило.** Корень `src/` пакета — его корневой модуль: публичные категории, `Internal/`, `Laravel/`, `Testing/`, `PHPStan/`, provider(ы), `<Pkg>Module.php` и каталоги feature modules; у ядра — только `CoreServiceProvider.php` и модули закрытого списка glossary.
+**Правило.** Корень `src/` пакета — его корневой модуль: публичные категории, `Internal/`, `Laravel/`, `Testing/`, `PHPStan/`, `Tooling/`, provider(ы), `<Pkg>Module.php` и каталоги feature modules; у ядра — только `CoreServiceProvider.php` и модули закрытого списка glossary.
 **Владелец.** Этот документ.
 **Enforcement.** `composer module-layout-gate` → R0–R3 (CI, PLAN3.D57).
 **Исключения.** `scripts/module-layout-baseline.json` — ratchet: новые и устаревшие записи запрещены; P04 сокращает остаток.
@@ -315,7 +315,9 @@
 ### RUN-004 — Текущее время берётся из инъектируемого источника времени, а не из глобального хелпера
 **Правило.** Текущее время берётся из инъектируемого источника времени, а не из глобального хелпера
 **Владелец.** Этот документ.
-**Enforcement.** нет — P4
+**Enforcement.** `composer runtime-globals-gate` → G2 (глобальные хелперы, включая `now()`) и G3 (статические часы:
+  `Carbon::now()`, `new DateTime()` без аргумента, `time()`) вне Laravel-моста; baseline — только
+  `packages/tenancy/src/Impersonation/` (обнуляет P07)
 **Исключения.** —
 **Почему.** См. решения и политики, названные во владельце.
 
@@ -323,7 +325,11 @@
 **Правило.** Состояние не переживает границу запроса и границу джоба: резидентный режим (Octane) не
   должен менять поведение
 **Владелец.** Этот документ.
-**Enforcement.** частично — 0 объявлений `static $` в `packages/*/src` как измеренный факт
+**Enforcement.** `composer runtime-globals-gate` → G4 (static-свойства и `static $x`); `composer test:arch` →
+  `tests/Arch/SingletonInjectionTest.php` (L1–L3 при пустом allowlist: singleton не захватывает
+  `Application`/`Request`/репозиторий конфигурации, scoped-тип и соединение); `tests/Feature/ResidentLifecycleTest.php` (scoped-экземпляры и контекст tenant
+  не переживают `forgetScopedInstances()`); `packages/tenancy/tests/Pg/ResidentTenantSwitchPgTest.php`
+  (группа `pg`: запись после смены tenant попадает в фактическую базу текущего tenant)
 **Исключения.** —
 **Почему.** См. решения и политики, названные во владельце.
 
@@ -342,16 +348,19 @@
 **Правило.** `config()` вызывается только на границе composition (service provider, консольная
   команда); сервис получает значения через конструктор
 **Владелец.** config-policy.md
-**Enforcement.** нет — P3 (наблюдательный), P7 (блокирующий)
+**Enforcement.** `composer config-composition-gate` → C1 (`config()`), C2 (доступ к репозиторию конфигурации),
+  C3 (статический `Config`), C4 (`env()`) вне allowlist composition-путей (`scripts/composition-boundary.json`)
 **Исключения.** —
-**Почему.** Известный долг (`RAG:—`): 152 строки с `config(` в `packages/*/src` (tenancy 75, core
-  41); блокирующий гейт отложен до P7.
+**Почему.** Блокирующий гейт введён в P05.1: чтение конфигурации вне границы сборки невозможно
+  вернуть незамеченным.
 
 ### CFG-003 — Значения конфигурации передаются типизированным неизменяемым объектом опций, а не…
 **Правило.** Значения конфигурации передаются типизированным неизменяемым объектом опций, а не
   массивом и не строкой ключа
 **Владелец.** config-policy.md
-**Enforcement.** нет — P7
+**Enforcement.** `composer test:arch` → `tests/Arch/OptionsSingletonTest.php` (Options — lazy singleton, ни один
+  источник не биндит Options eagerly); `composer configuration-reference` (в каждой строке реестра
+  `typed_options_field` называет поле Options, ключ без поля — ошибка генератора)
 **Исключения.** —
 **Почему.** См. решения и политики, названные во владельце.
 
@@ -359,7 +368,9 @@
 **Правило.** Невалидная конфигурация обнаруживается при загрузке приложения, а не в момент первого
   использования
 **Владелец.** config-policy.md
-**Enforcement.** нет — P7
+**Enforcement.** валидация формы Options в `boot()` и runtime-проверки `RuntimeConfigGate` (`php artisan
+  corex:config:validate --production`); `composer config-cache-check` → `tests/Feature/ConfigCacheTest.php`
+  (каждый `packages/*/config/*.php` переживает `var_export` → `eval`, приложение загружается из кэша)
 **Исключения.** —
 **Почему.** См. решения и политики, названные во владельце.
 
@@ -367,7 +378,8 @@
 **Правило.** Секрет не читается как обычная конфигурация и не попадает в дампы, логи и сообщения об
   ошибках
 **Владелец.** config-policy.md
-**Enforcement.** нет — P7
+**Enforcement.** секрет не входит в форму Options: наличие проверяет runtime-проверка `RuntimeConfigGate`, значение
+  по умолчанию секретного ключа в реестре — `***` (`composer configuration-reference`)
 **Исключения.** —
 **Почему.** См. решения и политики, названные во владельце.
 
@@ -399,13 +411,13 @@
 **Исключения.** —
 **Почему.** См. решения и политики, названные во владельце.
 
-### MSG-003 — Опубликованное сообщение несёт конверт с обязательными полями; их перечень — в…
-**Правило.** Опубликованное сообщение несёт конверт с обязательными полями; их перечень — в
-  `message-policy.md`
+### MSG-003 — Конверт опубликованного сообщения — CloudEvents 1.0 structured JSON
+**Правило.** Конверт опубликованного сообщения — CloudEvents 1.0 structured JSON;
+  отображение и профили — в `message-policy.md`.
 **Владелец.** message-policy.md
-**Enforcement.** нет — P5
+**Enforcement.** `packages/core/tests/Unit/CloudEventCodecTest.php`
 **Исключения.** —
-**Почему.** См. решения и политики, названные во владельце.
+**Почему.** Стандартный wire и закрытые внутренний/внешний профили (PLAN3.D90, PLAN3.D92).
 
 ### MSG-004 — Имя опубликованного события версионировано и не равно имени PHP-класса
 **Правило.** Имя опубликованного события версионировано и не равно имени PHP-класса
@@ -450,7 +462,7 @@
 **Правило.** Набор механизмов расширения закрыт; новый механизм и девятый extender вводятся только
   через RFC/ADR
 **Владелец.** ../dev-doctrine.md §4 (ADR-011, ADR-014)
-**Enforcement.** `packages/core/src/Modules/Contracts/Extender.php` (докблок закрытого набора) + ревью
+**Enforcement.** `packages/core/src/Modules/Contracts/Extender.php` (докблок закрытого набора) + ревью; webhook outgoing-call enforcement: `WebhookEgressPolicyTest`, mutation `P06-egress-skip-on-delivery`, [webhooks threat model](webhooks-threat-model.md)
 **Исключения.** —
 **Почему.** См. решения и политики, названные во владельце.
 
@@ -546,3 +558,5 @@
 | NON-020 | Override компонента по alias вместо стабильного handle | доктрина §4, урок October |
 | NON-021 | Рост числа extenders за пределы закрытого набора без RFC | EXT-001, урок Flarum |
 | NON-022 | Runtime-конструктор таблиц в стиле инфоблоков | доктрина §4, урок Битрикса |
+
+Runtime-код не ссылается на dev-мосты `Tooling/`, `PHPStan/`, `Testing/` своего или другого пакета. Гейт `module-layout` R6 проверяет namespace-ссылки; общая runtime-часть размещается в `Internal/`.

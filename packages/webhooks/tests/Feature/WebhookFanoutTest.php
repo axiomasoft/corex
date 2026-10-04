@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Tests\Feature;
 
-use CoreX\Config\Internal\Config;
+use CoreX\Config\Data\CoreOptions;
+use CoreX\Config\Data\SecretRef;
 use CoreX\Context\Data\AccountRef;
 use CoreX\CoreServiceProvider;
 use CoreX\Messaging\Contracts\DurableMessagePublisher;
@@ -14,6 +15,7 @@ use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Data\MessagePayload;
 use CoreX\Messaging\Enums\MessageClass;
 use CoreX\Messaging\Enums\PiiClass;
+use CoreX\Messaging\Internal\JsonCloudEventCodec;
 use CoreX\Messaging\Testing\MessagingFixtures;
 use CoreX\Operations\Laravel\ApiSchemaRegistrar;
 use CoreX\Operations\Testing\ContextFixture;
@@ -22,7 +24,9 @@ use CoreX\Time\Testing\FrozenClock;
 use CoreX\Webhooks\Contracts\WebhookPayloadProjector;
 use CoreX\Webhooks\Data\WebhookSubscription;
 use CoreX\Webhooks\Data\WebhookTopic;
+use CoreX\Webhooks\Internal\HmacWebhookSigner;
 use CoreX\Webhooks\Internal\WebhookFanout;
+use CoreX\Webhooks\Internal\WebhookKeyRing;
 use CoreX\Webhooks\Internal\WebhookMessagePublisher;
 use CoreX\Webhooks\Internal\WebhookTopicCatalogue;
 use CoreX\Webhooks\Tests\TestCase;
@@ -30,6 +34,7 @@ use DateTimeImmutable;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
+use PHPUnit\Framework\Attributes\Group;
 use RuntimeException;
 use TypeError;
 
@@ -64,7 +69,7 @@ final class WebhookFanoutTest extends TestCase
             $publisher->publish($this->envelope('11111111-1111-4111-8111-111111111111'));
             self::fail('Projection failure was committed.');
         } catch (RuntimeException) {
-            self::assertSame(0, DB::connection('api_tenant')->table(Config::inboxMessagesTable())->count());
+            self::assertSame(0, DB::connection('api_tenant')->table(app(CoreOptions::class)->inboxMessagesTable)->count());
             self::assertSame(0, DB::connection('api_tenant')->table('sys_api_webhook_deliveries')->count());
         }
     }
@@ -98,6 +103,17 @@ final class WebhookFanoutTest extends TestCase
         self::assertSame('https://hooks.example/receiver', $rows[0]->endpoint_snapshot);
         self::assertSame(3, $forwarded);
         self::assertStringNotContainsString('hidden', (string) $rows[0]->body);
+        $event = json_decode((string) $rows[0]->body, true, flags: JSON_THROW_ON_ERROR);
+        self::assertSame(['specversion', 'id', 'source', 'type', 'time', 'datacontenttype', 'data'], array_keys($event));
+        self::assertSame('1.0', $event['specversion']);
+        self::assertSame('orders.placed.v1', $event['type']);
+        self::assertSame(['id' => 'order-1'], $event['data']);
+        self::assertArrayNotHasKey('dataschema', $event);
+        $keys = new WebhookKeyRing;
+        $keys->provision('current', new SecretRef('whsec_'.base64_encode(str_repeat('s', 32))), 0);
+        $signer = new HmacWebhookSigner($keys);
+        $signed = $signer->sign((string) $rows[0]->id, 1790337600, (string) $rows[0]->body, ['current']);
+        self::assertSame(['v1,'.base64_encode(hash_hmac('sha256', $rows[0]->id.'.1790337600.'.$rows[0]->body, str_repeat('s', 32), true))], $signed->signatures);
     }
 
     public function test_oversize_payload_is_dead_and_a_lossy_publisher_is_rejected(): void
@@ -118,6 +134,7 @@ final class WebhookFanoutTest extends TestCase
         }, $this->fanout(new ExportProjector));
     }
 
+    #[Group('pg')]
     public function test_postgresql_inbox_and_delivery_roll_back_together(): void
     {
         $database = getenv('PGSQL_DATABASE') ?: '';
@@ -158,7 +175,7 @@ final class WebhookFanoutTest extends TestCase
                 $fanout->accept($this->envelope('44444444-4444-4444-8444-444444444444'));
                 self::fail('PostgreSQL projection failure was committed.');
             } catch (RuntimeException) {
-                self::assertSame(0, $connection->table(Config::inboxMessagesTable())->count());
+                self::assertSame(0, $connection->table(app(CoreOptions::class)->inboxMessagesTable)->count());
                 self::assertSame(0, $connection->table('sys_api_webhook_deliveries')->count());
             }
         } finally {
@@ -183,11 +200,12 @@ final class WebhookFanoutTest extends TestCase
         $contexts->initialize(new AccountRef('account-1', 'account', 'active', [], []));
         $schema = ['id' => 'string'];
         $topic = new WebhookTopic('orders.placed', 1, 'v1', $schema, hash('sha256', JsonCanonical::encode($schema)), 'personal', 'orders.placed');
-        $catalogue = new WebhookTopicCatalogue(MessagingFixtures::contracts([
-            new MessageContract('orders.placed', 1, MessageClass::IntegrationEvent, 'orders/api', PiiClass::Personal, 'webhooks'),
-        ]), [$topic], ['orders.placed' => $projector]);
+        $contracts = MessagingFixtures::contracts([
+            new MessageContract('orders.placed', 1, MessageClass::IntegrationEvent, 'orders/api', PiiClass::Personal, 'webhooks', 'https://schemas.example.test/orders/v1.json'),
+        ]);
+        $catalogue = new WebhookTopicCatalogue($contracts, [$topic], ['orders.placed' => $projector]);
 
-        return new WebhookFanout($db, MessagingFixtures::inbox($db, $this->clock), $catalogue, ['orders.placed' => $projector], $this->clock);
+        return new WebhookFanout($db, MessagingFixtures::inbox($db, $this->clock), $catalogue, ['orders.placed' => $projector], $this->clock, new JsonCloudEventCodec($contracts));
     }
 
     private function subscribe(string $id, string $connection = 'api_tenant'): void
@@ -217,7 +235,7 @@ final class WebhookFanoutTest extends TestCase
             name: 'orders.placed',
             contractVersion: 1,
             occurredAt: new DateTimeImmutable('2026-09-25T12:00:00+00:00'),
-            scope: ['account_id' => 'account-1'],
+            scope: ['account' => 'account-1'],
             payload: new MessagePayload(['id' => 'order-1', 'secret' => 'hidden']),
             piiClass: PiiClass::Personal,
             correlationId: 'correlation-1',
@@ -226,7 +244,7 @@ final class WebhookFanoutTest extends TestCase
 
     private function inbox(string $connection = 'api_tenant'): void
     {
-        DB::connection($connection)->getSchemaBuilder()->create(Config::inboxMessagesTable(), function (Blueprint $table): void {
+        DB::connection($connection)->getSchemaBuilder()->create(app(CoreOptions::class)->inboxMessagesTable, function (Blueprint $table): void {
             $table->string('consumer', 120);
             $table->uuid('message_id');
             $table->string('name', 160);
@@ -262,14 +280,7 @@ final class ExportProjector implements WebhookPayloadProjector
 {
     public function project(MessageEnvelope $message, WebhookTopic $topic): array
     {
-        return [
-            'event_id' => $message->messageId,
-            'type' => $message->name,
-            'version' => $message->contractVersion,
-            'occurred_at' => '2026-09-25T12:00:00+00:00',
-            'data' => ['id' => 'order-1'],
-            'correlation_id' => $message->correlationId,
-        ];
+        return ['id' => 'order-1'];
     }
 }
 
@@ -285,13 +296,6 @@ final class HugeProjector implements WebhookPayloadProjector
 {
     public function project(MessageEnvelope $message, WebhookTopic $topic): array
     {
-        return [
-            'event_id' => $message->messageId,
-            'type' => $message->name,
-            'version' => $message->contractVersion,
-            'occurred_at' => '2026-09-25T12:00:00+00:00',
-            'data' => ['id' => str_repeat('x', WebhookFanout::BodyLimit)],
-            'correlation_id' => null,
-        ];
+        return ['id' => str_repeat('x', WebhookFanout::BodyLimit)];
     }
 }

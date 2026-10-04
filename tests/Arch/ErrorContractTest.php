@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use CoreX\Errors\Data\ErrorDescriptor;
 use CoreX\Errors\Enums\ErrorCategory;
-use CoreX\Errors\Internal\ErrorSourceScanner;
+use CoreX\Errors\Tooling\ErrorSourceScanner;
 use CoreX\Tests\Support\SourceScanner;
 
 test('ErrorContract package catalogue matches the complete stable fixture', function (): void {

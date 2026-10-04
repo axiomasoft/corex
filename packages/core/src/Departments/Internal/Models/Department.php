@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Departments\Internal\Models;
 
-use CoreX\Config\Data\CoreOptions;
 use CoreX\Database\Laravel\HasConfiguredId;
+use CoreX\Database\Laravel\ResolvesCoreOptions;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Override;
@@ -33,6 +33,7 @@ use Override;
 final class Department extends Model
 {
     use HasConfiguredId;
+    use ResolvesCoreOptions;
     use SoftDeletes;
 
     protected $guarded = [];
@@ -50,6 +51,6 @@ final class Department extends Model
     #[Override]
     public function getTable(): string
     {
-        return app(CoreOptions::class)->departmentsTable;
+        return $this->coreOptions()->departmentsTable;
     }
 }

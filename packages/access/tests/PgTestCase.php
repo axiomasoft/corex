@@ -24,6 +24,8 @@ abstract class PgTestCase extends CoreAuthTestCase
     #[Override]
     protected function defineEnvironment($app): void
     {
+        parent::defineEnvironment($app);
+
         $app['config']->set('database.default', 'pgsql');
         $app['config']->set('database.connections.pgsql', [
             'driver' => 'pgsql',

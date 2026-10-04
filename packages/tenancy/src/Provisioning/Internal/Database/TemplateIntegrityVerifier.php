@@ -11,8 +11,9 @@ use CoreX\Tenancy\Provisioning\Data\ClaimRequest;
 use CoreX\Tenancy\Provisioning\Data\QualifiedTemplate;
 use CoreX\Tenancy\Provisioning\Data\TemplateAccountView;
 use CoreX\Tenancy\Provisioning\Exceptions\TemplateIntegrityException;
+use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Connectors\ConnectionFactory;
-use Illuminate\Support\Facades\DB;
 
 /** @internal */
 final class TemplateIntegrityVerifier implements TemplateIntegrityChecks, TemplateIntegrityVerifierContract
@@ -21,7 +22,9 @@ final class TemplateIntegrityVerifier implements TemplateIntegrityChecks, Templa
         private readonly string $centralConnection,
         private readonly SchemaCatalogueSerializer $serializer,
         private readonly TemplateIntegrityLock $lock,
-        private readonly ?TenancyOptions $options = null,
+        private readonly TenancyOptions $options,
+        private readonly ConnectionResolverInterface $connections,
+        private readonly ConnectionFactory $connectionFactory,
     ) {}
 
     public function qualify(ClaimRequest $request): QualifiedTemplate
@@ -72,7 +75,7 @@ final class TemplateIntegrityVerifier implements TemplateIntegrityChecks, Templa
 
     private function verify(?string $templateId, ?int $version, ?string $clusterId): object
     {
-        $connection = DB::connection($this->centralConnection);
+        $connection = $this->db();
 
         return $connection->transaction(function () use ($connection, $templateId, $version, $clusterId): object {
             $query = $connection->table('root_templates')->where('status', 'ready')->lockForUpdate();
@@ -116,10 +119,10 @@ final class TemplateIntegrityVerifier implements TemplateIntegrityChecks, Templa
 
     private function actualHashForDatabase(string $database): string
     {
-        $central = DB::connection($this->centralConnection);
+        $central = $this->db();
         $configuration = $central->getConfig();
         $configuration['database'] = $database;
-        $connection = (new ConnectionFactory(app()))->make($configuration, 'corex-template-catalogue');
+        $connection = $this->connectionFactory->make($configuration, 'corex-template-catalogue');
 
         try {
             return $this->serializer->hash($connection);
@@ -142,6 +145,14 @@ final class TemplateIntegrityVerifier implements TemplateIntegrityChecks, Templa
 
     private function tenancyOptions(): TenancyOptions
     {
-        return $this->options ?? app(TenancyOptions::class);
+        return $this->options;
+    }
+
+    private function db(): Connection
+    {
+        /** @var Connection */
+        $connection = $this->connections->connection($this->centralConnection);
+
+        return $connection;
     }
 }

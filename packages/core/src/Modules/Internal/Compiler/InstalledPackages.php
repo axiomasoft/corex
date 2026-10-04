@@ -78,9 +78,9 @@ final class InstalledPackages
     /** @return list<mixed> */
     private static function packages(?string $installedJsonPath): array
     {
-        $path = $installedJsonPath ?? base_path('vendor/composer/installed.json');
+        $path = $installedJsonPath;
 
-        if (! is_file($path)) {
+        if ($path === null || ! is_file($path)) {
             return [];
         }
 

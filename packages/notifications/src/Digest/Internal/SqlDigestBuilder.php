@@ -16,6 +16,7 @@ use CoreX\Wakeup\Data\WakeupRequest;
 use CoreX\Wakeup\Data\WakeupWindow;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Str;
+use Psr\Clock\ClockInterface;
 
 final class SqlDigestBuilder implements DigestBuilder
 {
@@ -23,6 +24,7 @@ final class SqlDigestBuilder implements DigestBuilder
         private readonly ConnectionInterface $connection,
         private readonly WakeupScheduler $wakeup,
         private readonly bool $enabled,
+        private readonly ClockInterface $clock,
     ) {}
 
     public function build(NotificationContext $context, DigestWindow $window): ?DigestRef
@@ -63,7 +65,7 @@ final class SqlDigestBuilder implements DigestBuilder
             $ids = $items->pluck('id')->all();
             $runId = (string) Str::uuid7();
             $batchSequence = $runs->isEmpty() ? 0 : (int) $runs->first()->batch_seq + 1;
-            $this->connection->table('ntf_digest_runs')->insert(['id' => $runId, 'recipient_kind' => $recipient->kind, 'recipient_id' => $recipient->id, 'period' => $window->period, 'period_start' => $window->start, 'period_end' => $window->end, 'batch_seq' => $batchSequence, 'membership_hash' => hash('sha256', implode("\0", $ids)), 'state' => 'frozen', 'created_at' => now()]);
+            $this->connection->table('ntf_digest_runs')->insert(['id' => $runId, 'recipient_kind' => $recipient->kind, 'recipient_id' => $recipient->id, 'period' => $window->period, 'period_start' => $window->start, 'period_end' => $window->end, 'batch_seq' => $batchSequence, 'membership_hash' => hash('sha256', implode("\0", $ids)), 'state' => 'frozen', 'created_at' => $this->clock->now()]);
             foreach ($ids as $id) {
                 $this->connection->table('ntf_digest_items')->insert(['id' => (string) Str::uuid7(), 'run_id' => $runId, 'notification_id' => $id, 'channel' => 'in_app']);
             }

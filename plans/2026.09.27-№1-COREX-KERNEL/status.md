@@ -2,34 +2,36 @@
 projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
-through: 2026-10-01
-inputs_sha256: c43154045240ef8a7221ead46d6c395327c0c311d61dcf4d1826f7103cba1570
+through: 2026-10-04
+inputs_sha256: 5118ed7d37a7eebf8506145ed8f295f4e7b1810d200ec3a6817da155e1a067ba
 generated_by: task plan-views status
 -->
 
-# Статус плана
+# Plan status
 
-> Не править руками: это генерируемый вид.
+> Do not manipulate by hand: this is a generated view.
 
 ## 0. Meta
 
-| Поле | Значение |
+| Field | Meaning |
 |:--|:--|
 | Version | — |
 | Status | 🟡 In progress |
-| Last Updated | 2026-10-01 |
+| Last Updated | 2026-10-04 |
 
 ## 4. Phase Index & Status Board
 
-| Phase | Title | Items 🟢/всего | Status |
+| Phase | Title | Items 🟢/total | Status |
 |:--|:--|:--|:--|
 | P00 | Glossary, карта пакетов/namespace, финальная архитектура | 3/3 | 🟢 Done |
 | P01 | Окружение, платформа и страховочная сетка | 4/4 | 🟢 Done |
 | P02 | Vendor, состав пакетов, namespace = путь | 4/4 | 🟢 Done |
 | P03 | Feature modules и `Internal` | 2/2 | 🟢 Done |
 | P04 | Application API, Extension SPI и типизированные ошибки | 4/4 | 🟢 Done |
-| P05 | Typed config, композиция и порты | 0/4 | ⬜ Not started |
-| P10 | Зелёный hosted CI на базе P04 | 0/4 | ⬜ Not started |
+| P05 | Typed config, композиция и порты | 4/4 | 🟢 Done |
+| P06 | Operations, tools, webhooks и wire | 4/5 | 🟠 Done with deviations (closed: D105) |
+| P07 | Tenancy, access, независимость модулей | 0/6 | ⬜ Not started |
+| P10 | Зелёный hosted CI на базе P04 | 4/4 | 🟢 Done |
 
 ## Phase P00
 
@@ -77,23 +79,44 @@ generated_by: task plan-views status
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P05.1 | Typed Options, runtime-проверки и удаление static Config | ⬜ Not started | — |
-| P05.2 | Тонкие providers, registrars и именованные классы | ⬜ Not started | — |
-| P05.3 | Порты вместо фасадов, хелперов и static state | ⬜ Not started | — |
-| P05.4 | Резидентный режим, config:cache, reference и доктрина | ⬜ Not started | — |
+| P05.1 | Typed Options, runtime-проверки и удаление static Config | 🟢 Done | 2026-10-02 |
+| P05.2 | Тонкие providers, registrars и именованные классы | 🟢 Done | 2026-10-03 |
+| P05.3 | Порты вместо фасадов, хелперов и static state | 🟢 Done | 2026-10-03 |
+| P05.4 | Резидентный режим, config:cache, reference и доктрина | 🟢 Done | 2026-10-03 |
+
+## Phase P06
+
+| ID | Title | Status | Updated |
+|:--|:--|:--|:--|
+| P06.1 | Wire HTTP операций: конверт входа и единая ошибка RFC 9457 | 🟢 Done | 2026-10-03 |
+| P06.2 | Таксономия кодов и исходы tool runtime | 🟢 Done | 2026-10-03 |
+| P06.3 | Конверт CloudEvents для сообщений и тела вебхуков | 🟢 Done | 2026-10-03 |
+| P06.4 | Контракт доставки вебхуков, egress арендатора и модель угроз | 🟢 Done | 2026-10-03 |
+| P06.5 | Review P06 | 🟠 Done with deviations | 2026-10-03 |
+
+## Phase P07
+
+| ID | Title | Status | Updated |
+|:--|:--|:--|:--|
+| P07.1 | Собственный движок tenancy и граница контекста | ⬜ Not started | — |
+| P07.2 | Tenancy без stancl: данные, provisioning, manifests | ⬜ Not started | — |
+| P07.3 | Impersonation на портах с профилями и двойным аудитом | ⬜ Not started | — |
+| P07.4 | Access без AzGuard и мост access-azguard | ⬜ Not started | — |
+| P07.5 | Контракты пробуждения в ядре и граф без notifications → wakeup | ⬜ Not started | — |
+| P07.6 | Review P07 | ⬜ Not started | — |
 
 ## Phase P10
 
 | ID | Title | Status | Updated |
 |:--|:--|:--|:--|
-| P10.1 | Герметичный CI-рецепт и диагностируемые гейты | ⬜ Not started | — |
-| P10.2 | Манифесты без чужих членов, dev-tooling вне runtime, объявленные зависимости | ⬜ Not started | — |
-| P10.3 | Worker схем инструментов: дедлайн валидации без учёта старта | ⬜ Not started | — |
-| P10.4 | Лейны тестов, покрытие и зелёный hosted CI | ⬜ Not started | — |
+| P10.1 | Герметичный CI-рецепт и диагностируемые гейты | 🟢 Done | 2026-10-01 |
+| P10.2 | Манифесты без чужих членов, dev-tooling вне runtime, объявленные зависимости | 🟢 Done | 2026-10-01 |
+| P10.3 | Worker схем инструментов: дедлайн валидации без учёта старта | 🟢 Done | 2026-10-01 |
+| P10.4 | Лейны тестов, покрытие и зелёный hosted CI | 🟢 Done | 2026-10-01 |
 
 ## 6. Update Log
 
-| Дата | Кто (role/model) | Что |
+| Date | Who (role/model) | What |
 |:--|:--|:--|
 | 2026-09-27 | claude-opus-5-5/high | plan-design · no-op · top layer authored: D01-D24, P00 detailed, P01-P09 skeletons in backlog/ (D24) |
 | 2026-09-27 | claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
@@ -148,7 +171,7 @@ write-site: pre_mutation: allow · pre_final: block:VALIDATION_RECEIPT_MISSING |
 | 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · no-op · write-site: pre_mutation: allow · pre_final: allow
 Final typed evaluation: artifacts/P01.1-execution/write-site-final.json; receipts and validation context retained. |
 | 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · in-progress · — |
-| 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · closed-green · note сокращена; полный текст: journal.jsonl:49 |
+| 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · closed-green · note abbreviated; full text: journal.jsonl:49 |
 | 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · no-op · write-site: pre_mutation: allow · pre_final: allow
 Canonical standalone boundary line; typed evaluation retained in artifacts/P01.2-execution/write-site-final.json. |
 | 2026-09-28 | executor/codex/gpt-6-sol/high | plan-design · no-op · Design finalized; execution has not started. |
@@ -181,7 +204,7 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-28 | executor/codex/gpt-6-sol/high | plan-run · closed-green · 9cabf10; seams89→18; sqlite821+10/PG240/package20 GREEN. review: cursor/grok-4.7 GREEN. Proof: artifacts/P02.2-execution/completion.md. D47: CI deferred.
 write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-29 | codex/gpt-6-sol/xhigh | plan-run · in-progress · — |
-| 2026-09-29 | codex/gpt-6-sol/xhigh | plan-run · closed-green · note сокращена; полный текст: journal.jsonl:75 |
+| 2026-09-29 | codex/gpt-6-sol/xhigh | plan-run · closed-green · note abbreviated; full text: journal.jsonl:75 |
 | 2026-09-29 | codex/gpt-6-sol/high | plan-run · in-progress · — |
 | 2026-09-29 | codex/gpt-6-sol/high | plan-run · closed-green · b335462; 60 rules/93 files; ownership524/0, rename528; SQLite832/PG240/pkg852/Golden4; literal lines:none; mutation34; review: cursor/grok-4.6 GREEN. Proof: artifacts/P02.4-execution/completion.md. D47 CI deferred.
 write-site: pre_mutation: allow · pre_final: allow |
@@ -234,12 +257,12 @@ write-site: pre_mutation: allow · pre_final: allow |
 write-site: pre_mutation: allow · pre_final: allow |
 | 2026-09-30 | executor/codex/gpt-6.1-sol | plan-run · in-progress · Owner authorizes GPT-6.1 Sol and explicitly waives executor-route verification; Validation and independent result review remain required. |
 | 2026-09-30 | executor/codex/gpt-6.1-sol | plan-run · no-op · D67: implementation saved; owner stopped all checks and moved review/validation to a new session. Item remains In progress. Checkpoint: artifacts/P04.2-execution/implementation-handoff.md; final validation pending. |
-| 2026-10-01 | reviewer/codex/gpt-6 | plan-run · closed-green · note сокращена; полный текст: journal.jsonl:122 |
+| 2026-10-01 | reviewer/codex/gpt-6 | plan-run · closed-green · note abbreviated; full text: journal.jsonl:122 |
 | 2026-10-01 | reviewer/codex/gpt-6 | plan-run · no-op · Format correction: effective pre_mutation allow uses the existing owner route waiver; raw ROUTE-UNVERIFIABLE remains in write-sites.json. Actual pre_final allow uses validation receipts.
 write-site: pre_mutation: allow · pre_final: allow |
 | 2026-10-01 | executor/codex/SOL | plan-run · in-progress · Owner authorizes SOL and waives executor model/route verification. No extra SKM reviews or redundant runs. Source: artifacts/P04.3-execution/owner-instructions.md. No route attestation claimed. |
 | 2026-10-01 | executor/codex/SOL | plan-run · in-progress · Owner authorizes SOL and waives executor model/route verification. No extra SKM reviews or redundant runs. Source: artifacts/P04.3-execution/owner-instructions.md. No route attestation claimed. Append-only identity correction: durable start binds attempt 1 and run_id. |
-| 2026-10-01 | executor/codex/SOL | plan-run · closed-green · note сокращена; полный текст: journal.jsonl:126 |
+| 2026-10-01 | executor/codex/SOL | plan-run · closed-green · note abbreviated; full text: journal.jsonl:126 |
 | 2026-10-01 | executor/gpt-6 | plan-exec · in-progress · — |
 | 2026-10-01 | executor/codex/gpt-6.1-sol/high | plan-exec · closed-green · P04.4 strict/API/SPI/BC/docs GREEN; completion.md and final-surface.json. Independent review owner-waived D68; no extra audit/replay.
 write-site: pre_mutation: allow · pre_final: allow |
@@ -260,7 +283,101 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-10-01 | auditor/claude-opus-5-5 | plan-audit · audit-attention · ATTENTION: 4 Major A1–A4 (P10.1 aggregator, P10.2 Files/CHANGELOG, ci-local.sh, P05.3 Validation greps). findings/P05-P10-design-audit.md. Same model as designer — not an independent audit. Product and design inputs unchanged. |
 | 2026-10-01 | designer/claude-opus-5-5 | plan-design · no-op · Design finalized; execution has not started. |
 | 2026-10-01 | designer/claude-opus-5-5 | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-01 | designer/codex/GPT-6 | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-01 | designer/codex/GPT-6 | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-01 | auditor/codex/gpt-6.1-sol/xhigh | plan-audit · in-progress · Independent design audit after D76/D78/D79, owner model D80. Delta P05/P10; P00-P04 evidence reused. Product read-only; committed Task runtime ba841d9 used. |
+| 2026-10-01 | auditor/codex/gpt-6.1-sol/xhigh | plan-audit · audit-green · GREEN current finish: 0 Blocker, 0 Major, 1 nonblocking Options-example Minor for P05.1. D76/D78 verified; product/design unchanged. findings/P05-P10-design-reaudit.md. Owner: skip SKM review at execution. |
+| 2026-10-01 | executor/codex/GPT-6 | plan-run · in-progress · — |
+| 2026-10-01 | executor/codex/gpt-6.1-sol/high | plan-run · local-repair · Bounded PHPStan recipe repair complete; no dependency/runtime/baseline changes. Exact tests-lint green in clean candidate and hosted; negative control red then restored green. artifacts/P10.1-execution/recipe-repair-decision.json |
+| 2026-10-01 | executor/codex/gpt-6.1-sol/high | plan-run · closed-green · P10.1 GREEN: hosted 36877605003 @ 0d1baedf, all item targets green; 14 inherited failures belong P10.2–P10.4. BC no rg exit 0. review: self-check GREEN; SKM skipped by owner. artifacts/P10.1-execution/completion.md |
+| 2026-10-01 | executor/codex/gpt-6.1-sol/high | plan-run · no-op · write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-01 | executor/codex/GPT-6 | plan-run · in-progress · — |
+| 2026-10-01 | executor/codex/GPT-6 | plan-run · local-repair · Owner D81/D82 resolved review/scope: phase-only review; continue CI repair. DATA-003 267 writes pass; tenancy 497 passed/1800 assertions. Same attempt, acceptance pending. Details: artifacts/P10.2-execution/progress.md. |
+| 2026-10-01 | executor/codex/GPT-6 | plan-run · closed-green · P10.2 GREEN: candidate dd94f729, CI 36907048899 required jobs and 22 baseline greens success; overall coverage pending. D81 phase-only review; D82 CI repairs. Evidence: artifacts/P10.2-execution/completion.md. |
+| 2026-10-01 | executor/codex/GPT-6 | plan-run · in-progress · — |
+| 2026-10-01 | executor/codex/GPT-6 | plan-run · closed-green · P10.3 GREEN: candidate 5b553ad1, CI 36912719906, 24 baseline green jobs preserved; seven target jobs have no worker failures. Ten tools runs 81/453; D81 self-check and D83 single Internal Golden delta. Evidence: artifacts/P10.3-execution/completion.md. |
+| 2026-10-01 | executor/codex/GPT-6 | plan-run · no-op · Append-only metadata projection repair; previously recorded evaluation artifacts/P10.2-execution/task-contract-evaluation.json is allow at both sites. No new product execution or acceptance verdict.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-01 | executor/codex/GPT-6 | plan-run · no-op · Append-only metadata projection repair; previously recorded evaluation artifacts/P10.3-execution/task-contract-evaluation.json is allow at both sites. No new product execution or acceptance verdict.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-01 | codex/GPT-6 | plan-run · in-progress · — |
+| 2026-10-01 | executor/codex/gpt-6.1-sol/high | plan-run · closed-green · P10.4 GREEN; product 4522e2b3; CI 36923853013: 36 success / 0 failure / 1 event skip. See artifacts/P10.4-execution/completion.md and validation-map.json. D84: no reviews or duplicate local replay.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-01 | executor/codex/gpt-6.1-sol/high | plan-close · closed-green · Inline phase closure within P10.4 invocation. Hosted CI 36923853013 on 4522e2b3f1ac741518387d24d1dd83248e97cc34: success, zero failures; closure-evidence.json. Owner D84: no review/audit.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-02 | editor/claude-code/claude-sonnet-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-02 | executor/claude-code/claude-sonnet-5-5/high | plan-run · in-progress · — |
+| 2026-10-02 | executor/claude-code/claude-sonnet-5-5/high | plan-run · closed-green · P05.1 GREEN: products 5911120c, 2c625e4d. Mirror CI 37029892294 success (36/0/1 skip); origin 37027169858 not started (billing). Local stack green. See artifacts/P05.1-execution/completion.md. review: self-check GREEN. |
+| 2026-10-02 | executor/claude-code/claude-sonnet-5-5/high | plan-run · no-op · Append-only metadata projection repair; artifacts/P05.1-execution/task-contract-evaluation.json (18 validation receipts) is allow at both sites. No new product execution or acceptance verdict.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-02 | executor/claude-code/claude-sonnet-5-5/high | plan-run · in-progress · — |
+| 2026-10-03 | executor/claude-code/claude-sonnet-5-5/high | plan-run · closed-green · P05.2 GREEN: product aea83241. Mirror CI 37091757720 success (36/0/1 skip); origin CI blocked by billing. Gate S1-S3, thin providers, bc-check and local stack green. See artifacts/P05.2-execution/completion.md. review: self-check GREEN. |
+| 2026-10-03 | executor/claude-code/claude-sonnet-5-5/high | plan-run · no-op · Append-only metadata projection repair; artifacts/P05.2-execution/task-contract-evaluation.json (16 validation receipts) is allow at both sites. No new product execution or acceptance verdict.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-03 | executor/claude-code/claude-sonnet-5-5/high | plan-run · no-op · Correction: previous metadata note counted 16 validation receipts; validation-receipts.json holds 15 (E16-E30), all exit 0, evaluation allow at both sites. No product change.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-03 | claude-code/claude-sonnet-5-5/high | plan-run · in-progress · — |
+| 2026-10-03 | claude-code/claude-sonnet-5-5/high | plan-run · closed-deviations · P05.3 closed with deviations: product a59c38b2, local Validation green, independent review codex/gpt-6.1-sol 5+3 findings fixed, hosted CI deferred by owner to after P05.4 (D87). See completion.md. |
+| 2026-10-03 | claude-code/claude-sonnet-5-5/high | plan-run · closed-deviations · P05.3 closed with deviations: hosted CI deferred by owner (D87), product a59c38b2 not pushed. Local Validation green; review codex/gpt-6.1-sol 5+3 findings fixed. See completion.md.
+write-site: pre_mutation: allow · pre_final: block:VALIDATION_RECEIPT_MISSING |
+| 2026-10-03 | claude-code/claude-sonnet-5-5/high | plan-run · in-progress · note abbreviated; full text: journal.jsonl:174 |
+| 2026-10-03 | editor/claude-code/claude-sonnet-5-5/high | plan-design · no-op · Design amended by owner direction D88 (hosted-CI carrier of P05.3 moves to P05.4); waiver D88 binds this fingerprint; no execution started by this event. |
+| 2026-10-03 | claude-code/claude-sonnet-5-5/high | plan-run · closed-green · note abbreviated; full text: journal.jsonl:176 |
+| 2026-10-03 | claude-code/claude-sonnet-5-5/high | plan-run · in-progress · — |
+| 2026-10-03 | editor/claude-code/claude-sonnet-5-5/high | plan-design · no-op · Design amended by owner direction D89 (hosted-CI carrier leaves P05.4); waiver D89 binds this fingerprint; no execution started by this event. |
+| 2026-10-03 | claude-code/claude-sonnet-5-5/high | plan-run · closed-green · P05.4 GREEN: product 6bf07d9a, local, not pushed; local Validation green; review self-check GREEN. Hosted-CI carrier left the item (D89): phase P05 stays open on D73; gpt-6.1-sol review not run here. See completion.md. |
+| 2026-10-03 | claude-code/claude-sonnet-5-5/high | plan-run · no-op · Boundary codes of the P05.4 close-green write sites.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-03 | executor/grok-4.7/high | plan-close · in-progress · Owner permitted the Phase Contract heading so plan_closure can emit the P05 digest. |
+| 2026-10-03 | executor/grok-4.7/high | plan-close · closed-green · P05 closed on mirror CI 37123316791 sha 0c7f7e84819e8730815afdc93e2256c13ab0f0cd: success, 36 success / 0 failure / 1 skipped. PHASE_DIRECT_CLOSE_ASSURED. Evidence artifacts/P05.4-execution/hosted-ci.md. |
+| 2026-10-03 | designer/claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-03 | designer/codex/gpt-6.1-sol/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-03 | auditor/root/codex/gpt-6.1-sol/xhigh | plan-audit · in-progress · Owner-invoked design audit; one independent gpt-6-astra/xhigh isolated reviewer checks changed P06 risks. Root owns static/routing evidence and carriers; product read-only. |
+| 2026-10-03 | auditor/root/codex/gpt-6.1-sol/xhigh | plan-audit · audit-attention · ATTENTION: 6 Major / 2 Minor, independent reviewer gpt-6-astra/xhigh; root verified focused reproductions. findings/P06-design-audit.md. Product/design bytes unchanged; no runtime execution or phase closure. Return bounded P06 design correction; execution not admitted. |
+| 2026-10-03 | designer/codex/gpt-6.1-sol/xhigh | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-03 | auditor/root/codex/gpt-6.1-sol/xhigh | plan-audit · in-progress · Owner-authorized corrected-design recheck A1–A6/m1–m2; isolated Astra reviewer, prior unaffected full-audit evidence reused. No product execution. |
+| 2026-10-03 | designer/codex/gpt-6.1-sol/xhigh | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-03 | auditor/root/codex/gpt-6.1-sol/xhigh | plan-audit · audit-green · GREEN corrected P06 design: A1–A6/m1–m2 resolved; independent Astra/xhigh recheck. Root verified carriers and 2743 unchanged product files. findings/P06-design-recheck.md. No product execution or phase audit. |
+| 2026-10-03 | codex/GPT-6 | plan-run · in-progress · — |
+| 2026-10-03 | executor/codex/gpt-6.1-sol/high | plan-run · closed-green · P06.1 GREEN; product d6ed2cde; final candidate a98f1a65370f3a2c046e4e4ed4bed8459a6e1a43; review: self-check GREEN; owner-requested Grok 4.7 High GREEN. Completion and validation-map in artifacts/P06.1-execution.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-03 | designer/codex/gpt-6.1-sol/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-03 | auditor/root/codex/gpt-6.1-sol/high | plan-audit · audit-green · note abbreviated; full text: journal.jsonl:194 |
+| 2026-10-03 | executor/codex/gpt-6.1-sol/high | plan-run · in-progress · — |
+| 2026-10-03 | executor/codex/gpt-6.1-sol/high | plan-run · closed-green · P06.2 GREEN; product 58afb343cc02188d4ddee723638cf564f4e8a1e7; owner D93 taxonomy13; tests15/99/180; review: self-check GREEN; Grok 4.7 High independent GREEN. Completion and validation-map in artifacts/P06.2-execution.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-03 | executor/codex/gpt-6.1-sol/high | plan-run · in-progress · — |
+| 2026-10-03 | executor/codex/gpt-6.1-sol/high | plan-run · closed-green · P06.3 GREEN; product 5fff36ed801c0f42f803cea85ebdc3fe33a2ddf8; CloudEvents codec and webhook wire. Acceptance and Grok 4.7 GREEN; review: self-check GREEN. Evidence: artifacts/P06.3-execution/completion.md.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-03 | codex/gpt-6.1-sol/high | plan-run · in-progress · — |
+| 2026-10-03 | codex/gpt-6.1-sol/high | plan-run · closed-green · Candidate 2a0265d57c93514f518ace028999debe52a4df2d; plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06.4-execution/completion.md; Grok 4.7 GREEN after two bounded fixes; pre_mutation: allow · pre_final: allow; retain unchanged validation plus affected reruns. |
+| 2026-10-03 | codex/gpt-6.1-sol/high | plan-run · no-op · Bookkeeping: persist already evaluated write-site result in exact generated-state format.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-03 | reviewer/codex/GPT-6 | plan-run · in-progress · Owner explicitly authorizes Sol and waives model-route verification; P06.5 only, no extra reviewer. Read-only product review at 3f568ddd..2a0265d5. No provider model/effort attestation claimed. |
+| 2026-10-03 | reviewer/codex/GPT-6 | plan-run · closed-deviations · Verdict GREEN, findings 0; tests139, registry/full BC GREEN. Deviation: owner-selected Sol, route check waived. Phase remains open. See artifacts/P06.5-review/verdict.md.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-04 | designer/claude-code/claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | claude-code/claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | gpt-6.1-sol/high | plan-audit · routing-rejected · note abbreviated; full text: journal.jsonl:206 |
+| 2026-10-04 | designer/codex/gpt-6.1-sol/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/gpt-6.1-sol/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/gpt-6.1-sol/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/gpt-6.1-sol/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/GPT-6 (runtime selector/effort unavailable) | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/GPT-6 (runtime selector/effort unavailable) | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/GPT-6 (runtime selector/effort unavailable) | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/GPT-6 (runtime selector/effort unavailable) | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/GPT-6 (exact runtime selector/effort unavailable) | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/GPT-6 (exact runtime selector/effort unavailable) | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/GPT-6 (exact runtime selector/effort unavailable) | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/GPT-6 (exact runtime selector/effort unavailable) | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/GPT-6 (exact runtime selector/effort unavailable) | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/GPT-6 (exact runtime selector/effort unavailable) | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/GPT-6 (exact runtime selector/effort unavailable) | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | gpt-6.1-sol/xhigh | plan-audit · audit-attention · Admission preflight blocked: current gpt-6.1-sol/xhigh matches D98/D99 author model; D100-D103 selector unavailable. No substantive audit/proofs or GREEN. See artifacts/P07-formal-design-audit/report.md. |
+| 2026-10-04 | gpt-6.1-sol/xhigh | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | gpt-6.1-sol/xhigh | plan-design · no-op · Owner repair complete: D104 explicit no-repeat-audit waiver admitted; first P07 bundle fresh, future/closed bundles correctly classified. P06 acceptance open; no P07 execution or audit-green. |
 
 ## Owner Gates
 
-- —
+- P06.5: known deviation

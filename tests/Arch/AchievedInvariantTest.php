@@ -154,7 +154,7 @@ test('table ownership gate reports no violations on clean tree', function (): vo
 
     $joined = implode("\n", $output);
 
-    expect($exitCode)->toBe(0)
+    expect($exitCode)->toBe(0, "gate exit {$exitCode}:\n".implode("\n", $output))
         ->and($joined)->toContain('table-ownership-gate: OK');
 });
 
@@ -198,7 +198,7 @@ PHP;
 
     $joined = implode("\n", $output);
 
-    expect($exitCode)->toBe(1)
+    expect($exitCode)->toBe(1, "gate exit {$exitCode}:\n".implode("\n", $output))
         ->and($joined)->toContain('T1')
         ->and($joined)->toContain('2099_01_01_000000_table_ownership_t1_probe.php');
 });
@@ -242,7 +242,7 @@ PHP;
 
     $joined = implode("\n", $output);
 
-    expect($exitCode)->toBe(1)
+    expect($exitCode)->toBe(1, "gate exit {$exitCode}:\n".implode("\n", $output))
         ->and($joined)->toContain('T4')
         ->and($joined)->toContain('2099_01_01_000001_table_ownership_t4_probe.php');
 });

@@ -1,0 +1,1 @@
+P10.2 closed-green in the original admitted attempt. Product candidate dd94f729; hosted CI 36907048899 required jobs and all 22 baseline-green jobs pass. Independent review belongs to whole P10 per D81. See completion.md and ci-final-assessment.json; P10.3 recommended, not executed.

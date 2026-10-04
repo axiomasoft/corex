@@ -7,6 +7,10 @@
 
 ### Changed
 
+- CRM entities enter the runtime registry and morph map through the compiled `CrmModule` manifest; the provider no longer depends on a Testing registry.
+
+- Breaking (PLAN3.P02–P04, pre-1.0): CRM stays a `flex/crm` product with one `Flex\Crm` PSR-4 root; lead/contact/company operations use typed request/result DTOs and explicit Api/Spi declarations. CRM model persistence is Internal, its errors use package-owned codes, and kernel dependencies use the `axiomasoft` Composer vendor.
+
 - **Breaking (next MINOR >=0.3.0, pre-1.0):** additive full enabled CRM storage parity,
   canonical sales enums/fields/relations, lost reasons and activity targets; explicit
   CreateLead and LogActivity named-argument migration. No guessed legacy status,

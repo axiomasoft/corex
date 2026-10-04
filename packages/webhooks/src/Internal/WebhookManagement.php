@@ -241,11 +241,11 @@ final readonly class WebhookManagement
     {
         $query = $this->connection->table('sys_api_webhook_deliveries');
         $accountPath = $this->connection->getDriverName() === 'pgsql'
-            ? "scope->>'account_id'"
-            : "json_extract(scope, '$.account_id')";
+            ? "scope->>'account'"
+            : "json_extract(scope, '$.account')";
         $workspacePath = $this->connection->getDriverName() === 'pgsql'
-            ? "scope->>'workspace_id'"
-            : "json_extract(scope, '$.workspace_id')";
+            ? "scope->>'workspace'"
+            : "json_extract(scope, '$.workspace')";
         $query->whereRaw("{$accountPath} = ?", [$scope->accountId]);
 
         if ($scope->workspaceId === null) {

@@ -1,0 +1,5 @@
+configuration-reference: docs/architecture/configuration.md differs at line 230
+  expected: | tenancy.trial_days | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$lifecycle |  |  |
+  actual:   | tenancy.trial_days | axiomasoft/corex-tenancy | unobserved | unobserved | no | deploymenx | no | use-site | TenancyOptions::$lifecycle |  |  |
+configuration-reference: run `php scripts/configuration-reference.php --write`
+configuration-reference: OK

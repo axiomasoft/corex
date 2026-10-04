@@ -18,15 +18,20 @@ use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycleFsm;
 use CoreX\Tenancy\Account\Internal\PendingPool;
 use CoreX\Tenancy\Account\Internal\StanclTenantDatabaseProvisioner;
 use CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver;
+use CoreX\Tenancy\Laravel\Support\AccountLifecyclePolicy;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Provisioning\Internal\StanclTenantDatabaseLifecycle;
 use CoreX\Tenancy\Tests\TestCase;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionResolverInterface;
+use Illuminate\Database\Connectors\ConnectionFactory;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Psr\Clock\ClockInterface;
 
 // P2.12 — AccountLifecycle FSM (B-11 §5.1). Reuses PendingPoolTest's
 // physical-clone bootstrap style with an "LC"-suffixed const/helper set
@@ -152,17 +157,20 @@ function lcLifecycle(?ImpersonationService $impersonation = null, ?TenantDatabas
     $templateIntegrityVerifier = app(TemplateIntegrityVerifier::class);
 
     return new AccountLifecycle(
+        lifecycle: app(AccountLifecyclePolicy::class), connections: app(ConnectionResolverInterface::class), clock: app(ClockInterface::class), events: app(Dispatcher::class), connectionFactory: app(ConnectionFactory::class), hostResolver: app(HostTenantResolver::class),
         centralConnection: 'pgsql',
         pendingPool: new PendingPool(
+            connections: app(ConnectionResolverInterface::class),
             centralConnection: 'pgsql',
             provisioner: new StanclTenantDatabaseProvisioner(
+                events: app(Dispatcher::class),
                 centralConnection: 'pgsql',
                 templateIntegrityVerifier: $templateIntegrityVerifier,
             ),
             templateIntegrityVerifier: $templateIntegrityVerifier,
         ),
         fsm: new AccountLifecycleFsm,
-        tenantDatabaseLifecycle: $tenantDatabaseLifecycle ?? new StanclTenantDatabaseLifecycle('pgsql'),
+        tenantDatabaseLifecycle: $tenantDatabaseLifecycle ?? new StanclTenantDatabaseLifecycle(connections: app(ConnectionResolverInterface::class), clock: app(ClockInterface::class), events: app(Dispatcher::class), centralConnection: 'pgsql'),
         impersonationGuard: app()->makeWith(ImpersonationGuard::class, ['impersonation' => $impersonation ?? new NullImpersonationService]),
         templateIntegrityVerifier: $templateIntegrityVerifier,
     );
@@ -175,8 +183,10 @@ function activateLcAccount(): AccountRef
     makeLcTemplateRow();
     $templateIntegrityVerifier = app(TemplateIntegrityVerifier::class);
     (new PendingPool(
+        connections: app(ConnectionResolverInterface::class),
         centralConnection: 'pgsql',
         provisioner: new StanclTenantDatabaseProvisioner(
+            events: app(Dispatcher::class),
             centralConnection: 'pgsql',
             templateIntegrityVerifier: $templateIntegrityVerifier,
         ),
@@ -303,6 +313,7 @@ it('purge() after a ready export drops the DB, soft-deletes the account, removes
     file_put_contents($archive, 'test archive');
     $digest = hash_file('sha256', $archive);
     $database = new StanclTenantDatabaseLifecycle(
+        connections: app(ConnectionResolverInterface::class), clock: app(ClockInterface::class), events: app(Dispatcher::class),
         centralConnection: 'pgsql',
         writer: static fn (): array => ['storage_path' => $archive, 'size_bytes' => 12],
         verifier: static fn (string $path, int $size): bool => $path === $archive && is_file($path) && is_readable($path) && filesize($path) === $size && hash_equals($digest, (string) hash_file('sha256', $path)),
@@ -342,6 +353,7 @@ it('default export cannot become ready or authorize purge', function (): void {
 it('refuses ready and DROP when an archive is unavailable', function (): void {
     $account = activateLcAccount();
     $database = new StanclTenantDatabaseLifecycle(
+        connections: app(ConnectionResolverInterface::class), clock: app(ClockInterface::class), events: app(Dispatcher::class),
         centralConnection: 'pgsql',
         writer: static fn (): array => ['storage_path' => '/missing/archive.dump', 'size_bytes' => 12],
         verifier: static fn (): bool => false,

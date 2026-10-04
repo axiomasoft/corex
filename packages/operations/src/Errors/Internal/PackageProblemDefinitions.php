@@ -47,6 +47,9 @@ final class PackageProblemDefinitions implements ProblemDefinitionProvider
         yield new ProblemDefinition(OperationsErrorCode::ResourceNotFound, 'urn:corex:problem:operations.resource_not_found', 404, 'Resource not found.', false, ErrorCategory::NotFound, []);
         yield new ProblemDefinition(OperationsErrorCode::ScopeRequired, 'urn:corex:problem:operations.scope_required', 403, 'Scope required.', false, ErrorCategory::Authorization, []);
         yield new ProblemDefinition(OperationsErrorCode::UnknownMessageContract, 'urn:corex:problem:operations.unknown_message_contract', 422, 'Unknown message contract.', false, ErrorCategory::Validation, []);
+        yield new ProblemDefinition(OperationsErrorCode::InputEnvelopeInvalid, 'urn:corex:problem:operations.input_envelope_invalid', 422, 'Input envelope is invalid.', false, ErrorCategory::Validation, []);
+        yield new ProblemDefinition(OperationsErrorCode::UndeclaredFields, 'urn:corex:problem:operations.undeclared_fields', 422, 'Input contains undeclared fields.', false, ErrorCategory::Validation, ['fields']);
+        yield new ProblemDefinition(OperationsErrorCode::UnsupportedMediaType, 'urn:corex:problem:operations.unsupported_media_type', 415, 'Unsupported media type.', false, ErrorCategory::Validation, []);
         yield new ProblemDefinition(OperationsErrorCode::ValidationFailed, 'urn:corex:problem:operations.validation_failed', 422, 'Validation failed.', false, ErrorCategory::Validation, ['*']);
     }
 }

@@ -73,13 +73,13 @@
 | RUN-001 | RUN | нет — P4 | объявлено, фаза P4 |
 | RUN-002 | RUN | нет — P3 (гейт сериализуемости), P4 | объявлено, фаза P3 |
 | RUN-003 | RUN | нет — P3 | объявлено, фаза P3 |
-| RUN-004 | RUN | нет — P4 | объявлено, фаза P4 |
-| RUN-005 | RUN | частично — 0 объявлений `static $` в `packages/*/src` как измеренный факт | объявлено, фаза P1 |
+| RUN-004 | RUN | `composer runtime-globals-gate` → G2/G3 | исполняется |
+| RUN-005 | RUN | `composer runtime-globals-gate` → G4; `tests/Arch/SingletonInjectionTest.php`; `ResidentLifecycleTest`; `ResidentTenantSwitchPgTest` | исполняется |
 | CFG-001 | CFG | нет — P2 (реестр), P7 | объявлено, фаза P2 |
-| CFG-002 | CFG | нет — P3 (наблюдательный), P7 (блокирующий) | объявлено, фаза P3 |
-| CFG-003 | CFG | нет — P7 | объявлено, фаза P7 |
-| CFG-004 | CFG | нет — P7 | объявлено, фаза P7 |
-| CFG-005 | CFG | нет — P7 | объявлено, фаза P7 |
+| CFG-002 | CFG | `composer config-composition-gate` → C1–C4 | исполняется |
+| CFG-003 | CFG | `tests/Arch/OptionsSingletonTest.php`; `composer configuration-reference` | исполняется |
+| CFG-004 | CFG | `RuntimeConfigGate`; `composer config-cache-check` | исполняется |
+| CFG-005 | CFG | `RuntimeConfigGate`; `composer configuration-reference` (`***`) | исполняется |
 | CFG-006 | CFG | ревью | объявлено, фаза P1 |
 | MSG-001 | MSG | нет — P5 | объявлено, фаза P5 |
 | MSG-002 | MSG | нет — P5 | объявлено, фаза P5 |

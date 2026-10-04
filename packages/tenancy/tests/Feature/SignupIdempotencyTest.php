@@ -9,6 +9,7 @@ use CoreX\Tenancy\Provisioning\Exceptions\ClaimConflict;
 use CoreX\Tenancy\Provisioning\Exceptions\ClaimUnavailable;
 use CoreX\Tenancy\Provisioning\Internal\ClaimAccountSignup;
 use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -150,6 +151,7 @@ function signupClaim(string $connection, TemplateIntegrityVerifier $verifier): C
     signupConnection($connection);
 
     return new ClaimAccountSignup(
+        connections: app(ConnectionResolverInterface::class),
         centralConnection: $connection,
         templateIntegrity: $verifier,
     );

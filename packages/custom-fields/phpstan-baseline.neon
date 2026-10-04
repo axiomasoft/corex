@@ -1,36 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			rawMessage: Cannot access offset 'db' on Illuminate\Contracts\Foundation\Application.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 2
-			path: src/AttributesServiceProvider.php
-
-		-
-			rawMessage: 'Cannot call method connection() on mixed.'
-			identifier: method.nonObject
-			count: 2
-			path: src/AttributesServiceProvider.php
-
-		-
-			rawMessage: 'Parameter $connection of class CoreX\CustomFields\Internal\Schema\QueuedSchemaOperations constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/AttributesServiceProvider.php
-
-		-
-			rawMessage: 'Parameter $connection of class CoreX\CustomFields\Internal\Values\EavAttributeStore constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/AttributesServiceProvider.php
-
-		-
-			rawMessage: 'Parameter $connection of class CoreX\CustomFields\Internal\Values\JsonbAttributeStore constructor expects Illuminate\Database\ConnectionInterface, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/AttributesServiceProvider.php
-
-		-
 			rawMessage: 'Parameter #2 $subject of function preg_match expects string, mixed given.'
 			identifier: argument.type
 			count: 1
@@ -47,24 +17,6 @@ parameters:
 			identifier: return.type
 			count: 1
 			path: src/Internal/Laravel/AttributeComposition.php
-
-		-
-			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 2
-			path: src/Internal/Laravel/AttributeCompositionRegistrar.php
-
-		-
-			rawMessage: 'Cannot call method get() on mixed.'
-			identifier: method.nonObject
-			count: 2
-			path: src/Internal/Laravel/AttributeCompositionRegistrar.php
-
-		-
-			rawMessage: Cannot cast mixed to string.
-			identifier: cast.string
-			count: 5
-			path: src/Internal/Laravel/AttributeCompositionRegistrar.php
 
 		-
 			rawMessage: Cannot access property $QUERY PLAN on mixed.

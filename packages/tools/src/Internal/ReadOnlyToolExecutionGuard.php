@@ -9,7 +9,9 @@ use CoreX\Operations\Invocation\Contracts\RequestContext;
 use CoreX\Tools\Contracts\ToolExecutionGuard;
 use CoreX\Tools\Data\ToolCall;
 use CoreX\Tools\Data\ToolDescriptor;
+use CoreX\Tools\Data\ToolOutcome;
 use CoreX\Tools\Data\ToolResult;
+use CoreX\Tools\Errors\Enums\ToolsErrorCode;
 use Override;
 
 /** Default guard: admits read tools only; mutations require a consumer guard. */
@@ -20,9 +22,9 @@ final class ReadOnlyToolExecutionGuard implements ToolExecutionGuard
     {
         if ($tool->sideEffect !== 'read') {
             return new ToolResult(
-                outcome: ToolResult::OUTCOME_NOT_EXECUTED,
+                outcome: ToolOutcome::NotExecuted,
                 structuredData: null,
-                errorCode: 'approval_required',
+                errorCode: ToolsErrorCode::ApprovalRequired->value,
                 operationKey: $call->operationKey,
                 replayed: false,
             );

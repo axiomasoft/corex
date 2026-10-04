@@ -6,6 +6,7 @@ use CoreX\Modules\Contracts\ModuleLifecycle;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Enums\DisableReason;
 use CoreX\Modules\Internal\Discovery\ModuleDiscovery;
+use CoreX\Modules\Internal\Support\ModulesOptions;
 use Flex\Crm\CrmModule;
 use Flex\Crm\Tests\Support\AccountFixture;
 use Illuminate\Support\Facades\DB;
@@ -16,6 +17,7 @@ uses()->group('pg');
 
 it('discovers CRM composer metadata and manages its schema through the standard lifecycle', function (): void {
     config(['database.default' => 'pgsql', 'corex.modules.connection' => 'pgsql']);
+    app()->forgetInstance(ModulesOptions::class);
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     AccountFixture::migrate();
@@ -34,7 +36,9 @@ it('discovers CRM composer metadata and manages its schema through the standard 
     $this->app->setBasePath($consumer);
     $this->app->useDatabasePath($databasePath);
     $this->app->useBootstrapPath($bootstrapPath);
-    $discovered = (new ModuleDiscovery)->discover();
+    // P05.3 reads installed.json from the path bound on the container, not from base_path() inside discovery.
+    $this->app->forgetInstance(ModuleDiscovery::class);
+    $discovered = $this->app->make(ModuleDiscovery::class)->discover();
     expect($discovered)->toHaveCount(1)->and($discovered[0]->composerName)->toBe('flex/crm')
         ->and($metadata['extra']['corex']['module'])->toBe(CrmModule::class);
     $this->artisan('corex:modules:compile')->assertSuccessful();

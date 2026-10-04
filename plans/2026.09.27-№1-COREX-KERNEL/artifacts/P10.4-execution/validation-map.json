@@ -1,0 +1,91 @@
+{
+  "owner_decision": "D84",
+  "semantics": "Receipt command fields preserve criterion text. They do not assert execution of quoted commands superseded or waived by D84. Exit 0 is the accepted criterion assessment using these explicit sources.",
+  "criteria": {
+    "E15": {
+      "method": "local",
+      "sources": [
+        "hermetic.log"
+      ]
+    },
+    "E16": {
+      "method": "local",
+      "sources": [
+        "mutation.log"
+      ]
+    },
+    "E17": {
+      "method": "inventory + executed PG + inherited PG correction",
+      "sources": [
+        "pg-inventory.txt",
+        "webhooks-pg.log",
+        "tenancy-hermetic.log",
+        "ci-final-jobs.json"
+      ]
+    },
+    "E18": {
+      "method": "local package coverage",
+      "sources": [
+        "coverage-tools.log",
+        "coverage-webhooks.log",
+        "coverage-tasks.log"
+      ]
+    },
+    "E19": {
+      "method": "unchanged floors/ceilings and Composer min arguments",
+      "sources": [
+        "source-binding.json"
+      ]
+    },
+    "E20": {
+      "method": "git delta: no deleted tests or added skip calls",
+      "sources": [
+        "source-binding.json"
+      ]
+    },
+    "E21": {
+      "method": "owner D84 replacement: four hosted root matrix lanes; ci-local.sh NOT EXECUTED",
+      "sources": [
+        "ci-final-jobs.json",
+        "../../decisions/D84-p10-4-validation-economy.md"
+      ]
+    },
+    "E22": {
+      "method": "local affected + final hosted Static analysis & code style / Anti-weakening",
+      "sources": [
+        "analyse-final.log",
+        "root-analyse-final.log",
+        "lint.log",
+        "tests-lint-final.log",
+        "anti-weakening-final.log",
+        "ci-final-jobs.json"
+      ]
+    },
+    "E23": {
+      "method": "owner D84 replacement: final hosted PG/package/Layer/Golden jobs; broad final local replay NOT EXECUTED",
+      "sources": [
+        "ci-final-jobs.json",
+        "packages.log"
+      ]
+    },
+    "E24": {
+      "method": "whole final hosted CI success on pushed product SHA",
+      "sources": [
+        "ci-final-jobs.json",
+        "ci-final-assessment.json"
+      ]
+    },
+    "E25": {
+      "method": "one closure section, H1–H12 + new classes mapped to item/commit/run",
+      "sources": [
+        "../../findings/01-hosted-ci-debt.md"
+      ]
+    },
+    "E26": {
+      "method": "owner D84 waiver; review NOT EXECUTED; acceptance is checking the explicit owner instruction, not a review verdict",
+      "sources": [
+        "../../decisions/D84-p10-4-validation-economy.md"
+      ]
+    }
+  }
+}

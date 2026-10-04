@@ -81,18 +81,12 @@ parameters:
 		-
 			rawMessage: Cannot cast mixed to string.
 			identifier: cast.string
-			count: 1
+			count: 2
 			path: src/Identity/Internal/DatabaseIdentitySyncer.php
 
 		-
 			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Identity\Internal\Models\User>::whereNull().'
 			identifier: staticMethod.dynamicCall
-			count: 1
-			path: src/Identity/Internal/DatabaseIdentitySyncer.php
-
-		-
-			rawMessage: 'Parameter #1 $time of static method Carbon\CarbonImmutable::parse() expects Carbon\Month|Carbon\WeekDay|DateTimeInterface|float|int|string|null, mixed given.'
-			identifier: argument.type
 			count: 1
 			path: src/Identity/Internal/DatabaseIdentitySyncer.php
 
@@ -261,7 +255,7 @@ parameters:
 		-
 			rawMessage: Cannot cast mixed to string.
 			identifier: cast.string
-			count: 3
+			count: 2
 			path: src/Laravel/Commands/IdentitiesReconcileCommand.php
 
 		-
@@ -273,7 +267,7 @@ parameters:
 		-
 			rawMessage: Cannot cast mixed to string.
 			identifier: cast.string
-			count: 3
+			count: 2
 			path: src/Laravel/Commands/PendingCreateCommand.php
 
 		-
@@ -411,13 +405,13 @@ parameters:
 		-
 			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
 			identifier: offsetAccess.nonOffsetAccessible
-			count: 4
+			count: 3
 			path: src/Laravel/RuntimeRegistrar.php
 
 		-
 			rawMessage: 'Cannot call method get() on mixed.'
 			identifier: method.nonObject
-			count: 3
+			count: 2
 			path: src/Laravel/RuntimeRegistrar.php
 
 		-
@@ -457,33 +451,9 @@ parameters:
 			path: src/Laravel/Support/TenancyOptions.php
 
 		-
-			rawMessage: Cannot access offset 'db' on Illuminate\Contracts\Foundation\Application.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 2
-			path: src/Laravel/WakeupRegistrar.php
-
-		-
-			rawMessage: 'Cannot call method connection() on mixed.'
-			identifier: method.nonObject
-			count: 2
-			path: src/Laravel/WakeupRegistrar.php
-
-		-
-			rawMessage: 'Parameter $root of class CoreX\Tenancy\Integration\Internal\Wakeup\RootRegistryWakeupHint constructor expects Illuminate\Database\Connection, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/Laravel/WakeupRegistrar.php
-
-		-
-			rawMessage: 'Parameter $root of class CoreX\Tenancy\Integration\Internal\Wakeup\RootWakeupReconciler constructor expects Illuminate\Database\Connection, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/Laravel/WakeupRegistrar.php
-
-		-
 			rawMessage: Cannot cast mixed to string.
 			identifier: cast.string
-			count: 4
+			count: 5
 			path: src/Identity/Internal/Membership/ManagementIdentityHydrator.php
 
 		-
@@ -495,12 +465,6 @@ parameters:
 		-
 			rawMessage: 'Only booleans are allowed in an if condition, bool|null given.'
 			identifier: if.condNotBoolean
-			count: 1
-			path: src/Identity/Internal/Membership/ManagementIdentityHydrator.php
-
-		-
-			rawMessage: 'Parameter #1 $time of static method Carbon\CarbonImmutable::parse() expects Carbon\Month|Carbon\WeekDay|DateTimeInterface|float|int|string|null, mixed given.'
-			identifier: argument.type
 			count: 1
 			path: src/Identity/Internal/Membership/ManagementIdentityHydrator.php
 
@@ -1169,12 +1133,6 @@ parameters:
 			identifier: method.nonObject
 			count: 2
 			path: src/TenancyServiceProvider.php
-
-		-
-			rawMessage: 'Dynamic call to static method Illuminate\Contracts\Auth\Guard::id().'
-			identifier: staticMethod.dynamicCall
-			count: 1
-			path: src/Workspace/Internal/DatabaseWorkspaceResolver.php
 
 		-
 			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Workspace\Internal\Models\WorkspaceMember>::exists().'

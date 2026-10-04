@@ -1,0 +1,10 @@
+--- a/packages/webhooks/tests/Feature/WebhookFanoutTest.php
++++ b/packages/webhooks/tests/Feature/WebhookFanoutTest.php
+@@ -119,7 +119,6 @@
+         }, $this->fanout(new ExportProjector));
+     }
+ 
+-    #[Group('pg')]
+     public function test_postgresql_inbox_and_delivery_roll_back_together(): void
+     {
+         $database = getenv('PGSQL_DATABASE') ?: '';

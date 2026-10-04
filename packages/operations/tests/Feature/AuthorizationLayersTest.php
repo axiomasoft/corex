@@ -222,14 +222,14 @@ final class AuthorizationLayersTest extends TestCase
         $migration->up();
 
         $this->clientScopes->allow = false;
-        self::assertSame('operations.scope_required', $this->dispatch($this->validInput(), 'scope-denied')->getData(true)['error']['code']);
+        self::assertSame('operations.scope_required', $this->dispatch($this->validInput(), 'scope-denied')->getData(true)['code']);
         self::assertSame(0, DB::table('sys_api_idempotency')->count());
 
         $this->clientScopes->allow = true;
         self::assertSame('operations.access_denied', $this->dispatch(
             [...$this->validInput(), 'secret' => 'must-not-be-stored'],
             'field-denied',
-        )->getData(true)['error']['code']);
+        )->getData(true)['code']);
         self::assertSame(0, DB::table('sys_api_idempotency')->count());
         self::assertSame(0, AuthorizationHandler::$calls);
     }

@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased — thin providers and registrars (P05.2)
+
+- The Meilisearch driver is assembled by `MeilisearchProviderFactory`.
+
+## Unreleased — typed Options and runtime configuration checks (P05.1)
+
+- Added internal `MeilisearchOptions`; host, index and key stay runtime requirements of the `meilisearch` driver.
+
+## Unreleased — kernel package and API migration
+
+- Breaking (PLAN3.P02–P04, pre-1.0): The bridge owns CoreX\SearchMeilisearch and MeilisearchServiceProvider; configuration failures have package-owned typed codes and the concrete search driver is Internal.
+- Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.
+
 ## Unreleased — PHP surface strict cutover
 
 - Breaking (PLAN3.P04, pre-1.0): supported PHP symbols are declared individually with Api/Spi attributes. Concrete implementation types moved to Internal and typed ports/DTOs and error contracts replace predecessor surfaces as recorded in PLAN3.D63/D64; namespace metadata no longer grants compatibility.
@@ -12,6 +25,8 @@
 - Contributions are validated and frozen at boot; persisted identities use validated lookup.
 
 ## Unreleased
+
+- PHP API manifests now record direct inheritance, interfaces and traits separately and include only members declared by this package; external dependency members are omitted without changing the `php-api/1` schema.
 
 ### Changed
 

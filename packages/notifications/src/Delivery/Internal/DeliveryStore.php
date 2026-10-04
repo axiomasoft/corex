@@ -8,8 +8,12 @@ use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Notifications\Delivery\Data\DeliveryClaim;
 use CoreX\Notifications\Delivery\Data\DeliveryOutcome;
 use CoreX\Notifications\Inbox\Exceptions\NotificationOperationConflict;
+use DateInterval;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Illuminate\Database\ConnectionInterface;
 use JsonException;
+use Psr\Clock\ClockInterface;
 
 final class DeliveryStore
 {
@@ -17,14 +21,17 @@ final class DeliveryStore
         private readonly ConnectionInterface $connection,
         private readonly int $claimSeconds,
         private readonly int $maxAttempts,
+        private readonly ClockInterface $clock,
     ) {}
 
     /** @return list<string> */
     public function dueIds(int $limit = 100): array
     {
+        $now = $this->clock->now();
+
         return $this->connection->table('ntf_deliveries')
             ->whereIn('state', ['pending', 'failed'])
-            ->where(static fn ($query) => $query->whereNull('next_attempt')->orWhere('next_attempt', '<=', now()))
+            ->where(static fn ($query) => $query->whereNull('next_attempt')->orWhere('next_attempt', '<=', $now))
             ->orderBy('id')
             ->limit($limit)
             ->pluck('id')
@@ -35,7 +42,7 @@ final class DeliveryStore
     {
         return $this->connection->table('ntf_deliveries')
             ->where('state', 'claimed')
-            ->where('lease_until', '<=', now())
+            ->where('lease_until', '<=', $this->clock->now())
             ->update([
                 'state' => 'unknown',
                 'lease_until' => null,
@@ -51,7 +58,7 @@ final class DeliveryStore
             if ($delivery === null
                 || ! in_array($delivery->state, ['pending', 'failed'], true)
                 || (int) $delivery->attempts >= $this->maxAttempts
-                || ($delivery->next_attempt !== null && $delivery->next_attempt > now())) {
+                || $this->notYetDue($delivery->next_attempt)) {
                 return null;
             }
 
@@ -61,7 +68,7 @@ final class DeliveryStore
                 'state' => 'claimed',
                 'claim_epoch' => (string) $epoch,
                 'attempts' => $attempts,
-                'lease_until' => now()->addSeconds($this->claimSeconds),
+                'lease_until' => $this->clock->now()->add(new DateInterval('PT'.($this->claimSeconds).'S')),
             ]);
 
             return new DeliveryClaim(
@@ -103,8 +110,8 @@ final class DeliveryStore
                 'state' => $state,
                 'provider_ref' => $outcome->providerRef,
                 'error' => $outcome->kind === 'accepted' ? null : json_encode(['reason' => $outcome->reason], JSON_THROW_ON_ERROR),
-                'sent_at' => $outcome->kind === 'accepted' ? now() : null,
-                'next_attempt' => $retryAfter === null ? null : now()->addSeconds($retryAfter),
+                'sent_at' => $outcome->kind === 'accepted' ? $this->clock->now() : null,
+                'next_attempt' => $retryAfter === null ? null : $this->clock->now()->add(new DateInterval('PT'.($retryAfter).'S')),
                 'lease_until' => null,
             ]);
 
@@ -176,5 +183,18 @@ final class DeliveryStore
         }
 
         return $decoded;
+    }
+
+    /** A stored attempt time is a database string; comparing it with a DateTimeImmutable directly never orders. */
+    private function notYetDue(mixed $nextAttempt): bool
+    {
+        $now = $this->clock->now();
+
+        if ($nextAttempt instanceof DateTimeInterface) {
+            return $nextAttempt > $now;
+        }
+
+        // Timezone-less database wall time is read in the zone of the clock that wrote it.
+        return is_string($nextAttempt) && new DateTimeImmutable($nextAttempt, $now->getTimezone()) > $now;
     }
 }

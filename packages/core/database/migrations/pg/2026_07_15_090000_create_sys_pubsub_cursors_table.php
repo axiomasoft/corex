@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Internal\Config;
+use CoreX\Config\Data\CoreOptions;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,7 +19,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create(Config::pubsubCursorsTable(), function (Blueprint $table): void {
+        Schema::create(app(CoreOptions::class)->pubsubCursorsTable, function (Blueprint $table): void {
             $table->string('channel', 190);
             $table->string('subscriber', 190);
             $table->unsignedBigInteger('position');
@@ -31,6 +31,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists(Config::pubsubCursorsTable());
+        Schema::dropIfExists(app(CoreOptions::class)->pubsubCursorsTable);
     }
 };

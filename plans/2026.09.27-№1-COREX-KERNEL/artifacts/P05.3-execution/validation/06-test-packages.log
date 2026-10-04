@@ -1,0 +1,42 @@
+==> packages/access
+  Tests:    38 passed (65 assertions)
+==> packages/core
+{"tool":"pest","result":"passed","tests":242,"passed":242,"assertions":830,"duration_ms":4159}
+==> packages/custom-fields
+{"tool":"pest","result":"passed","tests":73,"passed":73,"assertions":250,"duration_ms":10521}
+==> packages/intl
+{"tool":"pest","result":"passed","tests":37,"passed":37,"assertions":114,"duration_ms":699}
+==> packages/media
+  Tests:    20 passed (58 assertions)
+==> packages/notifications
+{"tool":"pest","result":"passed","tests":23,"passed":23,"assertions":85,"duration_ms":843}
+==> packages/operations
+  Tests:    158 passed (1110 assertions)
+==> packages/panels
+  Tests:    20 passed (85 assertions)
+==> packages/recurrence
+{"tool":"pest","result":"passed","tests":13,"passed":13,"assertions":28,"duration_ms":24}
+==> packages/search
+{"tool":"pest","result":"passed","tests":14,"passed":14,"assertions":35,"duration_ms":119}
+==> packages/search-intl
+{"tool":"pest","result":"passed","tests":9,"passed":9,"assertions":17,"duration_ms":226}
+==> packages/search-meilisearch
+{"tool":"pest","result":"passed","tests":7,"passed":7,"assertions":16,"duration_ms":115}
+==> packages/tasks
+  Tests:    60 passed (177 assertions)
+==> packages/tasks-workflow
+  Tests:    17 passed (79 assertions)
+==> packages/tenancy
+  Tests:    83 passed (116 assertions)
+==> packages/tools
+  Tests:    84 passed (463 assertions)
+==> packages/transfer
+{"tool":"pest","result":"passed","tests":11,"passed":11,"assertions":29,"duration_ms":19}
+==> packages/wakeup
+{"tool":"pest","result":"passed","tests":25,"passed":25,"assertions":100,"duration_ms":397}
+==> packages/webhooks
+  Tests:    96 passed (439 assertions)
+==> packages/workflow
+{"tool":"pest","result":"passed","tests":18,"passed":18,"assertions":46,"duration_ms":242}
+==> products/flex-crm
+  Tests:    35 passed (139 assertions)

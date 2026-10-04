@@ -20,6 +20,7 @@ use CoreX\CustomFields\Tests\PgTestCase;
 use CoreX\CustomFields\Tests\Support\PgTestSupport;
 use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Data\WriteToken;
+use CoreX\Time\Laravel\SystemClock;
 use Illuminate\Support\Facades\DB;
 
 uses(PgTestCase::class)->group('pg');
@@ -121,5 +122,6 @@ function indexPlanner(): AttributeIndexPlanner
             catalogue: schemaCatalogue('contact', str_repeat('f', 64)),
             authorizer: jsonbAuthorizer(),
         ),
+        clock: new SystemClock,
     );
 }

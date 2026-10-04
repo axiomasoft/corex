@@ -20,12 +20,15 @@ use CoreX\Testing\Stubs\Lifecycle\StubBaseModule;
 use CoreX\Testing\Stubs\Lifecycle\StubFailingModule;
 use CoreX\Testing\Stubs\Lifecycle\StubFeatureFlagModule;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Events\MigrationEnded;
 use Illuminate\Database\Events\MigrationStarted;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Psr\Clock\ClockInterface;
 
 uses()->group('pg');
 
@@ -45,8 +48,8 @@ beforeEach(function (): void {
     $this->app->instance(ModuleRegistry::class, $registry);
     $this->app->instance(FeatureFlags::class, new DatabaseFeatureFlags('pgsql'));
     $this->lifecycle = new DatabaseModuleLifecycle(
-        registry: $registry, discovery: $discovery, records: new DatabaseRecordsRegistrar('pgsql'),
-        container: app(), tenantContextResolver: app(TenantContextResolver::class),
+        registry: $registry, discovery: $discovery, records: app()->make(DatabaseRecordsRegistrar::class, ['connection' => 'pgsql']),
+        container: app(), tenantContextResolver: app(TenantContextResolver::class), connections: app(ConnectionResolverInterface::class), events: app(Dispatcher::class), clock: app(ClockInterface::class),
         migrationPaths: [
             'corex/stub-base' => __DIR__.'/../../../../../tests/Stubs/Lifecycle/migrations/base',
             'corex/stub-failing' => __DIR__.'/../../../../../tests/Stubs/Lifecycle/migrations/failing',
@@ -69,8 +72,8 @@ it('serializes different module transitions on the dependency graph lock', funct
     DB::connection('module_race')->statement("SET LOCAL lock_timeout = '50ms'");
     $other = new DatabaseModuleLifecycle(
         registry: app(ModuleRegistry::class), discovery: new ModuleDiscovery(fallbackModules: [StubFeatureFlagModule::class]),
-        records: new DatabaseRecordsRegistrar('module_race'), container: app(),
-        tenantContextResolver: app(TenantContextResolver::class), connection: 'module_race',
+        records: app()->make(DatabaseRecordsRegistrar::class, ['connection' => 'module_race']), container: app(),
+        tenantContextResolver: app(TenantContextResolver::class), connections: app(ConnectionResolverInterface::class), events: app(Dispatcher::class), clock: app(ClockInterface::class), connection: 'module_race',
     );
     $observed = false;
     DB::listen(function ($query) use (&$observed, $other): void {
@@ -159,7 +162,7 @@ it('uses the current physical default when lifecycle connection is unpinned', fu
     app()->instance(FeatureFlags::class, new DatabaseFeatureFlags);
     $lifecycle = new DatabaseModuleLifecycle(
         registry: app(ModuleRegistry::class), discovery: new ModuleDiscovery(fallbackModules: [StubFeatureFlagModule::class]),
-        records: new DatabaseRecordsRegistrar, container: app(), tenantContextResolver: app(TenantContextResolver::class),
+        records: app(DatabaseRecordsRegistrar::class), container: app(), tenantContextResolver: app(TenantContextResolver::class), connections: app(ConnectionResolverInterface::class), events: app(Dispatcher::class), clock: app(ClockInterface::class),
     );
     $lifecycle->enable('corex/stub-feature-flag');
     expect(DB::table('sys_feature_flags')->where('key', 'sff.beta_mode')->exists())->toBeTrue()

@@ -13,7 +13,7 @@ superseded_by: null
 **Evidence:** RAG:— `findings/design-audit-2026-09-28.md` B1/B2; генератор `artifacts/P01-design/scripts/golden-rename-map.py`
 даёт 666 class и 16 package правил; plan.md §2 требует зелёную сетку перед P02 и после каждого переноса.
 
-## Решение
+## Solution
 
 1. Golden — Pest-сьют `Golden` в корне: frozen `tests/Golden/baseline/*.json` против текущего снимка. Слои D38 сохранены:
    `php-surface` (Reflection публичных типов `packages/*/src`), `routes`, `events` (`DomainEvent::name()` + message
@@ -32,7 +32,7 @@ superseded_by: null
 6. `phpSurface()` следует досье §4.2: constants = name→{value, type}, properties = name→{name, type, static, readonly},
    параметры содержат фактический `default`, если он доступен (включая null). Эти поля обязательны, не ADAPT.
 
-## Почему
+## Why
 
 Односторонняя проекция D38 переименовывает baseline до переноса кода и делает P01.2 красным. Симметричная проекция
 сохраняет равенство до и после механического переноса, а изменение метода, property type, constant value/type или

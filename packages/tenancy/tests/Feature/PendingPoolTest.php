@@ -8,7 +8,9 @@ use CoreX\Tenancy\Account\Internal\StanclTenantDatabaseProvisioner;
 use CoreX\Tenancy\Provisioning\Exceptions\TemplateIntegrityException;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Tests\TestCase;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -123,8 +125,10 @@ function pendingPool(): PendingPool
     $templateIntegrityVerifier = app(TemplateIntegrityVerifier::class);
 
     return new PendingPool(
+        connections: app(ConnectionResolverInterface::class),
         centralConnection: 'pgsql',
         provisioner: new StanclTenantDatabaseProvisioner(
+            events: app(Dispatcher::class),
             centralConnection: 'pgsql',
             templateIntegrityVerifier: $templateIntegrityVerifier,
         ),

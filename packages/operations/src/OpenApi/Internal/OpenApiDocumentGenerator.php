@@ -40,24 +40,11 @@ final class OpenApiDocumentGenerator implements OpenApiDocuments
             'correlation_id' => ['type' => 'string'],
             'api_version' => ['type' => 'string', 'const' => $version],
         ];
-        $error = ['type' => 'object', 'required' => ['data', 'error', 'meta'], 'properties' => [
-            'data' => ['type' => 'null'],
-            'error' => ['type' => 'object', 'required' => ['code', 'message', 'category', 'path', 'retryable', 'details'], 'properties' => [
-                'code' => $extensions['code'],
-                'message' => ['type' => 'string'],
-                'category' => $extensions['category'],
-                'path' => $extensions['path'],
-                'retryable' => $extensions['retryable'],
-                'details' => $extensions['details'],
-            ]],
-            'meta' => $meta,
-        ]];
-        $problem = ['type' => 'object', 'required' => ['type', 'title', 'status', 'detail', 'instance', 'code', 'category', 'path', 'retryable', 'details', 'request_id', 'correlation_id', 'api_version'], 'properties' => [
+        $problem = ['type' => 'object', 'required' => ['type', 'title', 'status', 'detail', 'code', 'category', 'retryable', 'details', 'request_id', 'correlation_id', 'api_version'], 'properties' => [
             'type' => ['type' => 'string', 'format' => 'uri'],
             'title' => ['type' => 'string'],
             'status' => ['type' => 'integer'],
             'detail' => ['type' => 'string'],
-            'instance' => ['type' => 'string', 'format' => 'uri'],
             'code' => $extensions['code'],
             'category' => $extensions['category'],
             'path' => $extensions['path'],
@@ -91,16 +78,15 @@ final class OpenApiDocumentGenerator implements OpenApiDocuments
                 'parameters' => $parameters,
                 'responses' => [
                     $operation->successStatus => ['description' => 'Success', 'content' => ['application/json' => ['schema' => [
-                        'type' => 'object', 'required' => ['data', 'error', 'meta'], 'properties' => [
-                            'data' => $this->schemas->response($operation), 'error' => ['type' => 'null'], 'meta' => $meta,
+                        'type' => 'object', 'required' => ['data', 'meta'], 'properties' => [
+                            'data' => $this->schemas->response($operation), 'meta' => $meta,
                         ],
                     ]]]],
                 ],
             ];
 
-            foreach ([401, 403, 404, 406, 409, 422, 500] as $status) {
+            foreach ([401, 403, 404, 409, 415, 422, 500] as $status) {
                 $entry['responses'][$status] = ['description' => 'API error', 'content' => [
-                    'application/json' => ['schema' => $error],
                     'application/problem+json' => ['schema' => $problem],
                 ]];
             }

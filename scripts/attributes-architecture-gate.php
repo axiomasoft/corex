@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tooling\AttributesArchitecture;
 
-use CoreX\Attributes\Internal\SurfaceScanner;
+use CoreX\Attributes\Tooling\SurfaceScanner;
 use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\CustomFields\Internal\Laravel\AttributeComposition;
 use RecursiveDirectoryIterator;

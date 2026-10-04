@@ -8,32 +8,40 @@ use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Connection;
+use Illuminate\Database\DatabaseManager;
 use InvalidArgumentException;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final readonly class ApiSchemaRegistrar
 {
+    /** @deprecated The operations provider registers {@see ApiSchemaBindingsRegistrar}. */
     public static function register(Application $app): void
     {
-        $app->singleton(self::class, static function (Application $app): self {
-            $schema = $app['config']->get('corex-operations.schema');
+        (new ApiSchemaBindingsRegistrar)->register($app);
+    }
 
-            if (! is_array($schema)) {
-                throw new InvalidArgumentException('Explicit corex-operations.schema budget and tenant settings are required.');
-            }
+    /**
+     * Builds the schema registrar from the explicit `corex-operations.schema` settings.
+     *
+     * @internal Composition helper of the operations package.
+     */
+    public static function fromSchema(mixed $schema, DatabaseManager $database): self
+    {
+        if (! is_array($schema)) {
+            throw new InvalidArgumentException('Explicit corex-operations.schema budget and tenant settings are required.');
+        }
 
-            $budget = self::identity($schema, 'budget');
-            $tenant = self::identity($schema, 'tenant');
+        $budget = self::identity($schema, 'budget');
+        $tenant = self::identity($schema, 'tenant');
 
-            return new self(
-                budget: $app['db']->connection($budget['connection']),
-                budgetDriver: $budget['driver'],
-                budgetDatabase: $budget['database'],
-                tenant: $app['db']->connection($tenant['connection']),
-                tenantDriver: $tenant['driver'],
-                tenantDatabase: $tenant['database'],
-            );
-        });
+        return new self(
+            budget: $database->connection($budget['connection']),
+            budgetDriver: $budget['driver'],
+            budgetDatabase: $budget['database'],
+            tenant: $database->connection($tenant['connection']),
+            tenantDriver: $tenant['driver'],
+            tenantDatabase: $tenant['database'],
+        );
     }
 
     public function __construct(

@@ -7,6 +7,7 @@ namespace CoreX\Tools\Internal;
 use CoreX\Operations\Validation\Data\JsonObject;
 use CoreX\Operations\Validation\Data\JsonValue;
 use CoreX\Operations\Validation\Data\SchemaHandle;
+use CoreX\Tools\Errors\Enums\ToolsErrorCode;
 
 foreach ([
     __DIR__.'/../../vendor/autoload.php',
@@ -27,6 +28,10 @@ final class ToolSchemaWorker
 {
     public static function runCli(): void
     {
+        $validator = new OpisToolSchemaValidator;
+        echo "ready\n";
+        fflush(STDOUT);
+
         $input = stream_get_contents(STDIN);
 
         if ($input === false || trim($input) === '') {
@@ -38,7 +43,6 @@ final class ToolSchemaWorker
         try {
             /** @var array<string, mixed> $request */
             $request = json_decode($input, true, 512, JSON_THROW_ON_ERROR);
-            $validator = new OpisToolSchemaValidator;
             $action = $request['action'] ?? '';
 
             if ($action === 'admit') {
@@ -82,11 +86,10 @@ final class ToolSchemaWorker
             }
 
             self::respond(['ok' => false, 'error' => 'unknown_action']);
-        } catch (Throwable $exception) {
-            self::respond([
-                'ok' => false,
-                'error' => $exception->getMessage(),
-            ]);
+        } catch (ToolSchemaFailure $exception) {
+            self::respond(['ok' => false, 'error' => $exception->errorCode->value]);
+        } catch (Throwable) {
+            self::respond(['ok' => false, 'error' => ToolsErrorCode::SchemaLimit->value]);
         }
     }
 

@@ -11,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueueAfterCommit;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Psr\Clock\ClockInterface;
 
 /**
  * Queue worker that writes the sys_audit_log row (the sync path only
@@ -41,10 +42,10 @@ final class RecordAuditEntry implements ShouldQueueAfterCommit
         private readonly ?string $writeConnection = null,
     ) {}
 
-    public function handle(): void
+    public function handle(ClockInterface $clock): void
     {
         AuditLog::on($this->writeConnection)->create([
-            'occurred_at' => $this->entry->occurredAt ?? now(),
+            'occurred_at' => $this->entry->occurredAt ?? $clock->now(),
             'actor_type' => $this->entry->actorType,
             'actor_id' => $this->entry->actorId,
             'workspace_id' => $this->entry->workspaceId,

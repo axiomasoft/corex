@@ -1,5 +1,30 @@
 # Changelog
 
+## Unreleased — CloudEvents wire (P06.3)
+
+- CloudEvents 1.0 structured JSON codec with internal/external profiles; MessageContract dataSchema, MessageEnvelope source URI-reference validation and withPayload. MessagePublisher wire uses application/cloudevents+json (PLAN3.D90/D92).
+
+## Unreleased — ports instead of facades, helpers and static state (P05.3)
+
+- Runtime code outside the Laravel bridge takes `ConnectionResolverInterface`, `ClockInterface`, `Dispatcher` and the other `Illuminate\Contracts` ports through constructors instead of facades, global helpers and static clocks; `Messaging\Internal\PubSubManager` is gone (the `PubSub` binding selects the driver from `CoreOptions::pubsubDriver`). Added the `CoreX\Database\Laravel\ResolvesCoreOptions` SPI trait for migrations and models that read `CoreOptions` through the container bridge.
+
+## Unreleased — thin providers and registrars (P05.2)
+
+- `CoreServiceProvider` is the only public provider of the kernel: it registers `ModulesServiceProvider` itself (after the kernel bindings, so module-aware services refine them) and delegates bindings to per-module registrars (`Config`, `Context`, `Data`, `Messaging`, `Settings`, `Audit`, `Features`, `Departments`, `Storage`, `Time`, `Observability`, `Errors`, modules). Apps no longer need to list `ModulesServiceProvider` separately. `corex:modules:repair` is a regular command class.
+
+## Unreleased — typed Options and runtime configuration checks (P05.1)
+
+- Removed the static `CoreX\Config\Internal\Config` holder: `CoreOptions` is a lazy shared singleton read once at boot (`app(CoreOptions::class)` in migrations and tests; call `forgetInstance(CoreOptions::class)` after writing `corex` config in a booted test). Added `CoreOptions::$acknowledgedDangerousModes` (`corex.acknowledged_dangerous_modes`, exact config paths only), the `RuntimeConfigCheck` SPI and `RuntimeConfigGate`: checks run when the HTTP application finishes booting or a console command starts, except build commands. `corex:config:validate` runs them too, accepts `--production`, lists acknowledged dangerous modes as warnings and reports the `corex-operations.require_physical_tenancy=false` opt-out as a notice. `CoreOptionsParser::current()` is deprecated and returns the shared `CoreOptions`.
+
+## Unreleased — CI ownership and test isolation repair (P10.2)
+
+- Added `Messaging\Laravel\InboxRetention` for explicit cleanup of a consumer's selected inbox message IDs. Other consumers and IDs remain retained; callers must establish that the selected messages cannot be replayed.
+
+## Unreleased — kernel package and API migration
+
+- Breaking (PLAN3.P02–P04, pre-1.0): CoreX owns the kernel feature namespaces under one PSR-4 root; Api/Spi attributes, CoreOptions, ExtensionContribution and coded error descriptors declare the supported kernel and extension contracts. Runtime models and scanners no longer grant an implicit public contract.
+- Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.
+
 ## Unreleased — PHP surface strict cutover
 
 - Breaking (PLAN3.P04, pre-1.0): supported PHP symbols are declared individually with Api/Spi attributes. Concrete implementation types moved to Internal and typed ports/DTOs and error contracts replace predecessor surfaces as recorded in PLAN3.D63/D64; namespace metadata no longer grants compatibility.
@@ -35,6 +60,10 @@
 
 ## Unreleased
 
+- Public promoted properties are captured even when their constructor is private. Runtime entity registry bindings now use the shared Internal implementation while the Testing SPI keeps its signatures. Parser and analyser dependencies are declared as optional development tooling.
+
+- PHP API manifests now record direct inheritance, interfaces and traits separately and include only members declared by this package; external dependency members are omitted without changing the `php-api/1` schema. Source scanners move to the Attributes/Errors Tooling bridges and the durable payload checker moves to Messaging/PHPStan; runtime references to development bridges are forbidden.
+
 - Added package-contributed configuration reports through `ConfigReportSection` and public messaging test fixtures. Saved Views default bindings now register with panels.
 
 - Added immutable `DataScope`, `RecordRef`, and `WriteToken` boundary DTOs for optional data services.
@@ -43,6 +72,10 @@
 Пакет pre-1.0 — breaking-изменения публичных контрактов легальны в MINOR до 1.0 (D17).
 
 ## [Unreleased]
+
+- CloudEvents 1.0 structured JSON codec with internal/external profiles; MessageContract dataSchema, MessageEnvelope source URI-reference validation and withPayload; MessagePublisher wire now uses application/cloudevents+json (PLAN3.D90/D92, P06.3).
+
+- PHP API manifests now record direct inheritance, interfaces and traits separately and include only members declared by this package; external dependency members are omitted without changing the `php-api/1` schema. Source scanners move to the Attributes/Errors Tooling bridges and the durable payload checker moves to Messaging/PHPStan; runtime references to development bridges are forbidden.
 
 ### Changed
 

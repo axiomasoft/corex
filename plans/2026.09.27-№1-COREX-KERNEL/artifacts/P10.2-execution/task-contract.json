@@ -1,0 +1,643 @@
+{
+  "schema_version": "task-contract/v1",
+  "contract_id": "2026.09.27-№1-corex-kernel-p10-2",
+  "version": {
+    "revision": 1,
+    "content_hash": "126979c99f741773d9a55de004d8a17f3a9f5752098d94d925e879868d8dead8",
+    "supersedes": null
+  },
+  "goal": {
+    "outcome": "Сделать сгенерированный манифест публичной поверхности независимым от версий зависимостей, вынести dev-tooling из runtime-кода ядра в мост `Tooling/` с правилом, запрещающим runtime ссылаться на dev-мосты, и объявить все фактические зависимости пакетов.",
+    "non_goals": [
+      "Изменение членства Api/Spi и сигнатур публичных символов",
+      "логика BC-проверки",
+      "CI-рецепт (P10.1)",
+      "worker схем (P10.3)",
+      "новые исключения анализатора",
+      "перенос `Testing/` и `PHPStan/` каталогов."
+    ]
+  },
+  "must": [
+    {
+      "id": "M1",
+      "requirement": "Правило включения членов в манифест и запись `extends`/`implements`/`uses`",
+      "source_ref": "phases/P10.md:7"
+    },
+    {
+      "id": "M2",
+      "requirement": "потребители новых полей манифеста при прежней схеме `php-api/1`",
+      "source_ref": "phases/P10.md:7"
+    },
+    {
+      "id": "M3",
+      "requirement": "регенерация 20 манифестов и reference",
+      "source_ref": "phases/P10.md:7"
+    },
+    {
+      "id": "M4",
+      "requirement": "перенос шести классов (`Attributes`, `Errors` → `Tooling/`",
+      "source_ref": "phases/P10.md:7"
+    },
+    {
+      "id": "M5",
+      "requirement": "`DurablePayloadTypeChecker` → `Messaging/PHPStan/`)",
+      "source_ref": "phases/P10.md:7"
+    },
+    {
+      "id": "M6",
+      "requirement": "`BRIDGES` + `Tooling`, правило R6 и его тесты",
+      "source_ref": "phases/P10.md:7"
+    },
+    {
+      "id": "M7",
+      "requirement": "доктрина раскладки",
+      "source_ref": "phases/P10.md:7"
+    },
+    {
+      "id": "M8",
+      "requirement": "конфиги dependency-analyser и манифесты пакетов до нуля находок",
+      "source_ref": "phases/P10.md:7"
+    },
+    {
+      "id": "M9",
+      "requirement": "fixture-enum в `ErrorDescriptorTest`",
+      "source_ref": "phases/P10.md:7"
+    },
+    {
+      "id": "M10",
+      "requirement": "запись `Unreleased` в CHANGELOG каждого из 20 пакетов об изменении содержимого манифеста (для core — также о переносе tooling)",
+      "source_ref": "phases/P10.md:7"
+    },
+    {
+      "id": "M11",
+      "requirement": "Golden delta.",
+      "source_ref": "phases/P10.md:7"
+    }
+  ],
+  "never": [
+    {
+      "id": "N1",
+      "prohibition": "Изменение членства Api/Spi и сигнатур публичных символов",
+      "source_ref": "phases/P10.md:9"
+    },
+    {
+      "id": "N2",
+      "prohibition": "логика BC-проверки",
+      "source_ref": "phases/P10.md:9"
+    },
+    {
+      "id": "N3",
+      "prohibition": "CI-рецепт (P10.1)",
+      "source_ref": "phases/P10.md:9"
+    },
+    {
+      "id": "N4",
+      "prohibition": "worker схем (P10.3)",
+      "source_ref": "phases/P10.md:9"
+    },
+    {
+      "id": "N5",
+      "prohibition": "новые исключения анализатора",
+      "source_ref": "phases/P10.md:9"
+    },
+    {
+      "id": "N6",
+      "prohibition": "перенос `Testing/` и `PHPStan/` каталогов.",
+      "source_ref": "phases/P10.md:9"
+    }
+  ],
+  "done": {
+    "public_acceptance": [
+      {
+        "id": "A1",
+        "predicate": "Сканер с правилом собственных объявлений (схема `php-api/1`); 20 манифестов и reference; мост `Tooling/`, R6 с тестами и строкой доктрины; объявленные зависимости; записи CHANGELOG 20 пакетов; Golden delta; `artifacts/P10.2-execution/completion.md` и `own-members-diff.json`; результат ревью.",
+        "scope": "public",
+        "check": "- Preimage H2 — сохранённый repro-package-graph-gate.txt; текущее множество собственных объявлений снимается AST до правки. Повторное воспроизведение входного RED и число 2 — диагностика, не приёмка: patch-версии изменяемы (D78).",
+        "evidence_ref": "E17"
+      },
+      {
+        "id": "A2",
+        "predicate": "Сканер с правилом собственных объявлений (схема `php-api/1`); 20 манифестов и reference; мост `Tooling/`, R6 с тестами и строкой доктрины; объявленные зависимости; записи CHANGELOG 20 пакетов; Golden delta; `artifacts/P10.2-execution/completion.md` и `own-members-diff.json`; результат ревью.",
+        "scope": "public",
+        "check": "- `git grep -n -E 'Attributes\\\\Internal|Errors\\\\Internal\\\\ErrorSourceScanner|Messaging\\\\Internal\\\\DurablePayloadTypeChecker' -- packages products scripts tests docs` → нет совпадений (Git exit 1).",
+        "evidence_ref": "E18"
+      },
+      {
+        "id": "A3",
+        "predicate": "Сканер с правилом собственных объявлений (схема `php-api/1`); 20 манифестов и reference; мост `Tooling/`, R6 с тестами и строкой доктрины; объявленные зависимости; записи CHANGELOG 20 пакетов; Golden delta; `artifacts/P10.2-execution/completion.md` и `own-members-diff.json`; результат ревью.",
+        "scope": "public",
+        "check": "- `composer module-layout-gate` → `R0 0, R1 0, R2 0, R3 0, R4 0, R5 0, R6 0`; `python3 -m unittest discover -s scripts/tests -p 'test_module_layout_gate.py'` → OK, включая кейсы R6 (нарушение и чистый случай).",
+        "evidence_ref": "E19"
+      },
+      {
+        "id": "A4",
+        "predicate": "Сканер с правилом собственных объявлений (схема `php-api/1`); 20 манифестов и reference; мост `Tooling/`, R6 с тестами и строкой доктрины; объявленные зависимости; записи CHANGELOG 20 пакетов; Golden delta; `artifacts/P10.2-execution/completion.md` и `own-members-diff.json`; результат ревью.",
+        "scope": "public",
+        "check": "- `scripts/php84 vendor/bin/pest packages/core/tests/Attributes/SurfaceScannerTest.php` → exit 0, включая утверждения `examples.md` §4 о внешних и собственных methods/properties/constants/traits, promoted properties и enum cases (нет унаследованного внешнего метода; манифест идентичен для двух редакций родителя; собственное переопределение присутствует; `extends`/`implements`/`uses` записаны).",
+        "evidence_ref": "E20"
+      },
+      {
+        "id": "A5",
+        "predicate": "Сканер с правилом собственных объявлений (схема `php-api/1`); 20 манифестов и reference; мост `Tooling/`, R6 с тестами и строкой доктрины; объявленные зависимости; записи CHANGELOG 20 пакетов; Golden delta; `artifacts/P10.2-execution/completion.md` и `own-members-diff.json`; результат ревью.",
+        "scope": "public",
+        "check": "- `scripts/php84 php scripts/php-api.php --write` дважды → байт-идентично; `scripts/php84 composer php-api` → exit 0; каждый `php-api.json` содержит `\"schema\": \"php-api/1\"`; `git grep -n 'php-api/2' -- packages scripts docs tests` → нет совпадений (Git exit 1).",
+        "evidence_ref": "E21"
+      },
+      {
+        "id": "A6",
+        "predicate": "Сканер с правилом собственных объявлений (схема `php-api/1`); 20 манифестов и reference; мост `Tooling/`, R6 с тестами и строкой доктрины; объявленные зависимости; записи CHANGELOG 20 пакетов; Golden delta; `artifacts/P10.2-execution/completion.md` и `own-members-diff.json`; результат ревью.",
+        "scope": "public",
+        "check": "- После commit кандидата: `LARAVEL_VERSION=12.* bash scripts/ci-local.sh scripts/php84 php scripts/php-api.php --strict --check` → exit 0; то же с `LARAVEL_VERSION=13.*` → exit 0. Рецепт включает staging, Pest ^4.7 для 12 и access; проверяется один committed HEAD без регенерации манифестов в копиях (D78).",
+        "evidence_ref": "E22"
+      },
+      {
+        "id": "A7",
+        "predicate": "Сканер с правилом собственных объявлений (схема `php-api/1`); 20 манифестов и reference; мост `Tooling/`, R6 с тестами и строкой доктрины; объявленные зависимости; записи CHANGELOG 20 пакетов; Golden delta; `artifacts/P10.2-execution/completion.md` и `own-members-diff.json`; результат ревью.",
+        "scope": "public",
+        "check": "- Evidence полноты: `artifacts/P10.2-execution/own-members-diff.json` — для каждого пакета множество собственных членов до и после совпадает (preimage из AST файлов пакета до правки; проекция результата по тем же декларациям, без vendor-членов; D78); расхождение — RED.",
+        "evidence_ref": "E23"
+      },
+      {
+        "id": "A8",
+        "predicate": "Сканер с правилом собственных объявлений (схема `php-api/1`); 20 манифестов и reference; мост `Tooling/`, R6 с тестами и строкой доктрины; объявленные зависимости; записи CHANGELOG 20 пакетов; Golden delta; `artifacts/P10.2-execution/completion.md` и `own-members-diff.json`; результат ревью.",
+        "scope": "public",
+        "check": "- `scripts/php84 composer deps:analyse` → exit 0; `git diff <база> -- packages/core/composer-dependency-analyser.php` добавляет только `addPathToScan(…Tooling, isDev: true)`; в остальных конфигах анализатора изменений нет.",
+        "evidence_ref": "E24"
+      },
+      {
+        "id": "A9",
+        "predicate": "Сканер с правилом собственных объявлений (схема `php-api/1`); 20 манифестов и reference; мост `Tooling/`, R6 с тестами и строкой доктрины; объявленные зависимости; записи CHANGELOG 20 пакетов; Golden delta; `artifacts/P10.2-execution/completion.md` и `own-members-diff.json`; результат ревью.",
+        "scope": "public",
+        "check": "- `scripts/php84 php scripts/package-graph-gate.php` → exit 0; `scripts/php84 composer bc-check` → exit 0; `scripts/php84 composer error-registry` → exit 0.",
+        "evidence_ref": "E25"
+      },
+      {
+        "id": "A10",
+        "predicate": "Сканер с правилом собственных объявлений (схема `php-api/1`); 20 манифестов и reference; мост `Tooling/`, R6 с тестами и строкой доктрины; объявленные зависимости; записи CHANGELOG 20 пакетов; Golden delta; `artifacts/P10.2-execution/completion.md` и `own-members-diff.json`; результат ревью.",
+        "scope": "public",
+        "check": "- `bash scripts/contract-guard.sh <базовый commit item>` → для каждого из 20 пакетов строка `changed WITH CHANGELOG — OK`, exit 0.",
+        "evidence_ref": "E26"
+      },
+      {
+        "id": "A11",
+        "predicate": "Сканер с правилом собственных объявлений (схема `php-api/1`); 20 манифестов и reference; мост `Tooling/`, R6 с тестами и строкой доктрины; объявленные зависимости; записи CHANGELOG 20 пакетов; Golden delta; `artifacts/P10.2-execution/completion.md` и `own-members-diff.json`; результат ревью.",
+        "scope": "public",
+        "check": "- `scripts/php84 composer lint:check`, `scripts/php84 composer analyse` → exit 0; `php scripts/quality-ceiling-guard.php` → `ceilings OK`.",
+        "evidence_ref": "E27"
+      },
+      {
+        "id": "A12",
+        "predicate": "Сканер с правилом собственных объявлений (схема `php-api/1`); 20 манифестов и reference; мост `Tooling/`, R6 с тестами и строкой доктрины; объявленные зависимости; записи CHANGELOG 20 пакетов; Golden delta; `artifacts/P10.2-execution/completion.md` и `own-members-diff.json`; результат ревью.",
+        "scope": "public",
+        "check": "- Один раз на финальном кандидате: `scripts/php84 composer test:arch`, `scripts/php84 composer golden` → exit 0 без `GOLDEN_UPDATE`; delta поимённо; routes байт-идентичны. Полный sqlite-стек — hosted CI (локально он красный по H1/H5 до P10.3–P10.4).",
+        "evidence_ref": "E28"
+      },
+      {
+        "id": "A13",
+        "predicate": "Сканер с правилом собственных объявлений (схема `php-api/1`); 20 манифестов и reference; мост `Tooling/`, R6 с тестами и строкой доктрины; объявленные зависимости; записи CHANGELOG 20 пакетов; Golden delta; `artifacts/P10.2-execution/completion.md` и `own-members-diff.json`; результат ревью.",
+        "scope": "public",
+        "check": "- `php scripts/package-docs-gate.php`, `bash scripts/anti-weakening-gate.sh` → exit 0.",
+        "evidence_ref": "E29"
+      },
+      {
+        "id": "A14",
+        "predicate": "Сканер с правилом собственных объявлений (схема `php-api/1`); 20 манифестов и reference; мост `Tooling/`, R6 с тестами и строкой доктрины; объявленные зависимости; записи CHANGELOG 20 пакетов; Golden delta; `artifacts/P10.2-execution/completion.md` и `own-members-diff.json`; результат ревью.",
+        "scope": "public",
+        "check": "- Hosted CI (D73): `success` у `Layer & core-isolation gate` и `Standalone dependencies and lockfile audits`; в root `Tests` всех четырёх лейнов проходят `PackageGraphTest` и `AttributesArchitectureGateTest`; джобы, зелёные после P10.1, остаются зелёными, включая `Contract-snapshot guard`. Id запуска и sha — в Completion Notes.",
+        "evidence_ref": "E30"
+      },
+      {
+        "id": "A15",
+        "predicate": "Сканер с правилом собственных объявлений (схема `php-api/1`); 20 манифестов и reference; мост `Tooling/`, R6 с тестами и строкой доктрины; объявленные зависимости; записи CHANGELOG 20 пакетов; Golden delta; `artifacts/P10.2-execution/completion.md` и `own-members-diff.json`; результат ревью.",
+        "scope": "public",
+        "check": "- Independent review (D75, `full`): reviewer и effort из строки execution-sheet, свежий контекст, модель ≠ исполнитель; вход — item-spec, diff, вывод Validation, `own-members-diff.json`. Фокус: правило включения членов и полнота собственных объявлений; R6; отсутствие новых исключений анализатора. Строка `review: <provider>/<model> <GREEN|findings:N>`; не более двух раундов fix/recheck.",
+        "evidence_ref": "E31"
+      }
+    ]
+  },
+  "authority": {
+    "class": "routine",
+    "granted": true,
+    "granted_by": "phases/P10/P10.2.md:P10.2",
+    "auto_allowed": [
+      "write the item's declared Files",
+      "run the item's Validation",
+      "close the item with the two-commit topology"
+    ],
+    "stop_boundaries": [
+      "tag/push/release",
+      "fleet rollout",
+      "consumer repositories",
+      "FOREMAN outward parts"
+    ],
+    "loop_budget": {
+      "audit_rounds_max": 2,
+      "same_finding_max": 2
+    },
+    "observed_rounds": 0,
+    "audit_cap_remediation": false
+  },
+  "next": {
+    "form": "run-items",
+    "carrier": "task:plan-run 2026.09.27-№1-COREX-KERNEL P10.2",
+    "context": "continue-root",
+    "origin": "approved-goal",
+    "changed_by": null
+  },
+  "route": {
+    "required": {
+      "model_class": "implementation",
+      "effort": "high"
+    },
+    "actual": {
+      "model_class": "frontier",
+      "effort": "high"
+    },
+    "capabilities": []
+  },
+  "evidence": [
+    {
+      "id": "E1",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P10-design.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E2",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P10-design-rag.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E3",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P10-design/examples.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E4",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D74-p10-hermetic-base.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E5",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P10-design/facts/manifest-drift.txt",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E6",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P10-design/facts/repro-package-graph-gate.txt",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E7",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P10-design/facts/ci-dependency-analyser.txt",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E8",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P10.1-execution/completion.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E9",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D74-p10-hermetic-base.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E10",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P10-design.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E11",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P10-design/examples.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E12",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D63-p04-public-surface-contract.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E13",
+      "path": "packages/core/src/Attributes/Internal/SurfaceScanner.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E14",
+      "path": "packages/core/src/Attributes/Internal/SurfaceReport.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E15",
+      "path": "scripts/module-layout-gate.py",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E16",
+      "path": "packages/core/composer-dependency-analyser.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E17",
+      "path": "- Preimage H2 — сохранённый repro-package-graph-gate.txt; текущее множество собственных объявлений снимается AST до правки. Повторное воспроизведение входного RED и число 2 — диагностика, не приёмка: patch-версии изменяемы (D78).",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E18",
+      "path": "- `git grep -n -E 'Attributes\\\\Internal|Errors\\\\Internal\\\\ErrorSourceScanner|Messaging\\\\Internal\\\\DurablePayloadTypeChecker' -- packages products scripts tests docs` → нет совпадений (Git exit 1).",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E19",
+      "path": "- `composer module-layout-gate` → `R0 0, R1 0, R2 0, R3 0, R4 0, R5 0, R6 0`; `python3 -m unittest discover -s scripts/tests -p 'test_module_layout_gate.py'` → OK, включая кейсы R6 (нарушение и чистый случай).",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E20",
+      "path": "- `scripts/php84 vendor/bin/pest packages/core/tests/Attributes/SurfaceScannerTest.php` → exit 0, включая утверждения `examples.md` §4 о внешних и собственных methods/properties/constants/traits, promoted properties и enum cases (нет унаследованного внешнего метода; манифест идентичен для двух редакций родителя; собственное переопределение присутствует; `extends`/`implements`/`uses` записаны).",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E21",
+      "path": "- `scripts/php84 php scripts/php-api.php --write` дважды → байт-идентично; `scripts/php84 composer php-api` → exit 0; каждый `php-api.json` содержит `\"schema\": \"php-api/1\"`; `git grep -n 'php-api/2' -- packages scripts docs tests` → нет совпадений (Git exit 1).",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E22",
+      "path": "- После commit кандидата: `LARAVEL_VERSION=12.* bash scripts/ci-local.sh scripts/php84 php scripts/php-api.php --strict --check` → exit 0; то же с `LARAVEL_VERSION=13.*` → exit 0. Рецепт включает staging, Pest ^4.7 для 12 и access; проверяется один committed HEAD без регенерации манифестов в копиях (D78).",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E23",
+      "path": "- Evidence полноты: `artifacts/P10.2-execution/own-members-diff.json` — для каждого пакета множество собственных членов до и после совпадает (preimage из AST файлов пакета до правки; проекция результата по тем же декларациям, без vendor-членов; D78); расхождение — RED.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E24",
+      "path": "- `scripts/php84 composer deps:analyse` → exit 0; `git diff <база> -- packages/core/composer-dependency-analyser.php` добавляет только `addPathToScan(…Tooling, isDev: true)`; в остальных конфигах анализатора изменений нет.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E25",
+      "path": "- `scripts/php84 php scripts/package-graph-gate.php` → exit 0; `scripts/php84 composer bc-check` → exit 0; `scripts/php84 composer error-registry` → exit 0.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E26",
+      "path": "- `bash scripts/contract-guard.sh <базовый commit item>` → для каждого из 20 пакетов строка `changed WITH CHANGELOG — OK`, exit 0.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E27",
+      "path": "- `scripts/php84 composer lint:check`, `scripts/php84 composer analyse` → exit 0; `php scripts/quality-ceiling-guard.php` → `ceilings OK`.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E28",
+      "path": "- Один раз на финальном кандидате: `scripts/php84 composer test:arch`, `scripts/php84 composer golden` → exit 0 без `GOLDEN_UPDATE`; delta поимённо; routes байт-идентичны. Полный sqlite-стек — hosted CI (локально он красный по H1/H5 до P10.3–P10.4).",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E29",
+      "path": "- `php scripts/package-docs-gate.php`, `bash scripts/anti-weakening-gate.sh` → exit 0.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E30",
+      "path": "- Hosted CI (D73): `success` у `Layer & core-isolation gate` и `Standalone dependencies and lockfile audits`; в root `Tests` всех четырёх лейнов проходят `PackageGraphTest` и `AttributesArchitectureGateTest`; джобы, зелёные после P10.1, остаются зелёными, включая `Contract-snapshot guard`. Id запуска и sha — в Completion Notes.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E31",
+      "path": "- Independent review (D75, `full`): reviewer и effort из строки execution-sheet, свежий контекст, модель ≠ исполнитель; вход — item-spec, diff, вывод Validation, `own-members-diff.json`. Фокус: правило включения членов и полнота собственных объявлений; R6; отсутствие новых исключений анализатора. Строка `review: <provider>/<model> <GREEN|findings:N>`; не более двух раундов fix/recheck.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    }
+  ],
+  "portability": {
+    "tier": "committed-bundle",
+    "execution_inputs": [
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P10-design.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/research/P10-design.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/research/P10-design.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P10-design-rag.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/research/P10-design-rag.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/research/P10-design-rag.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P10-design/examples.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P10-design/examples.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P10-design/examples.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D74-p10-hermetic-base.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D74-p10-hermetic-base.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D74-p10-hermetic-base.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P10-design/facts/manifest-drift.txt",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P10-design/facts/manifest-drift.txt",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P10-design/facts/manifest-drift.txt",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P10-design/facts/repro-package-graph-gate.txt",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P10-design/facts/repro-package-graph-gate.txt",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P10-design/facts/repro-package-graph-gate.txt",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P10-design/facts/ci-dependency-analyser.txt",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P10-design/facts/ci-dependency-analyser.txt",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P10-design/facts/ci-dependency-analyser.txt",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P10.1-execution/completion.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P10.1-execution/completion.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P10.1-execution/completion.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D74-p10-hermetic-base.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D74-p10-hermetic-base.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D74-p10-hermetic-base.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P10-design.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/research/P10-design.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/research/P10-design.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P10-design/examples.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P10-design/examples.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P10-design/examples.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D63-p04-public-surface-contract.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D63-p04-public-surface-contract.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D63-p04-public-surface-contract.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "packages/core/src/Attributes/Internal/SurfaceScanner.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "packages/core/src/Attributes/Internal/SurfaceScanner.php",
+        "normalized": "packages/core/src/Attributes/Internal/SurfaceScanner.php",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "packages/core/src/Attributes/Internal/SurfaceReport.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "packages/core/src/Attributes/Internal/SurfaceReport.php",
+        "normalized": "packages/core/src/Attributes/Internal/SurfaceReport.php",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "scripts/module-layout-gate.py",
+        "kind": "committed",
+        "producer": null,
+        "original": "scripts/module-layout-gate.py",
+        "normalized": "scripts/module-layout-gate.py",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "packages/core/composer-dependency-analyser.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "packages/core/composer-dependency-analyser.php",
+        "normalized": "packages/core/composer-dependency-analyser.php",
+        "path_kind": "internal",
+        "rejection": null
+      }
+    ],
+    "provenance_only": [],
+    "privacy": {
+      "minimized": true,
+      "excluded_classes": [
+        "chain-of-thought",
+        "raw-transcript-bodies",
+        "secrets",
+        "tool-payloads"
+      ]
+    },
+    "semantic_carrier": "task:plan-run",
+    "provider_renderers": {
+      "claude": "/task:plan-run 2026.09.27-№1-COREX-KERNEL P10.2",
+      "codex": "$ task:plan-run 2026.09.27-№1-COREX-KERNEL P10.2"
+    }
+  },
+  "conflicts": [],
+  "slice": {
+    "subagent_keys": [
+      "goal",
+      "must",
+      "never",
+      "done",
+      "authority",
+      "next",
+      "route",
+      "version"
+    ],
+    "root_only_keys": [
+      "evidence",
+      "portability",
+      "conflicts"
+    ]
+  },
+  "cold_start": {
+    "plan_id": "2026.09.27-№1-COREX-KERNEL",
+    "item_id": "P10.2",
+    "reads": [
+      "E9",
+      "E10",
+      "E11",
+      "E12",
+      "E13",
+      "E14",
+      "E15",
+      "E16"
+    ],
+    "carrier": "task:plan-run 2026.09.27-№1-COREX-KERNEL P10.2"
+  }
+}

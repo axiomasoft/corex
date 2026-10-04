@@ -6,7 +6,7 @@ namespace CoreX\Tenancy\Provisioning\Internal\Database;
 
 use CoreX\Tenancy\Account\Laravel\AccountTemplateSnapshot;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\ConnectionResolverInterface;
 use RuntimeException;
 use Stancl\Tenancy\Database\Contracts\TenantWithDatabase;
 use Stancl\Tenancy\Database\TenantDatabaseManagers\PostgreSQLDatabaseManager;
@@ -40,14 +40,16 @@ final class TemplateClonePostgreSQLManager extends PostgreSQLDatabaseManager
     private const int QUARANTINE_BACKOFF_MS = 200;
 
     public function __construct(
-        private readonly ?TenancyOptions $options = null,
+        private readonly TenancyOptions $options,
+        private readonly ConnectionResolverInterface $connections,
+        private readonly TemplateIntegrityVerifier $integrity,
     ) {}
 
     public function createDatabase(TenantWithDatabase $tenant): bool
     {
         $snapshot = AccountTemplateSnapshot::capture($tenant);
 
-        app(TemplateIntegrityVerifier::class)->assertCurrent(
+        $this->integrity->assertCurrent(
             version: $snapshot->templateVersion,
             clusterId: $snapshot->clusterId,
         );
@@ -103,7 +105,7 @@ final class TemplateClonePostgreSQLManager extends PostgreSQLDatabaseManager
 
     private function resolveReadyTemplate(int $version): object
     {
-        $template = DB::connection($this->centralConnection())
+        $template = $this->connections->connection($this->centralConnection())
             ->table('root_templates')
             ->where('version', $version)
             ->first();
@@ -119,7 +121,7 @@ final class TemplateClonePostgreSQLManager extends PostgreSQLDatabaseManager
 
     private function resolveCluster(string $clusterId): object
     {
-        $cluster = DB::connection($this->centralConnection())
+        $cluster = $this->connections->connection($this->centralConnection())
             ->table('root_clusters')
             ->where('id', $clusterId)
             ->first();
@@ -133,6 +135,6 @@ final class TemplateClonePostgreSQLManager extends PostgreSQLDatabaseManager
 
     private function centralConnection(): string
     {
-        return ($this->options ?? app(TenancyOptions::class))->centralConnection;
+        return $this->options->centralConnection;
     }
 }

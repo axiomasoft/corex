@@ -26,7 +26,9 @@
         "axiomasoft/stancl-tenancy": ">=4.0.0-alpha1 <=4.0.0-alpha1",
         "firebase/php-jwt": "^7.1",
         "laravel/framework": "^12.0|^13.0",
-        "nesbot/carbon": "^3.0"
+        "nesbot/carbon": "^3.0",
+        "psr/clock": "^1.0",
+        "psr/log": "^3.0"
     },
     "require-dev": {
         "ext-pdo": "*",
@@ -43,7 +45,8 @@
         "pestphp/pest": "^5.2",
         "symfony/console": "^7.2|^8.0",
         "symfony/http-kernel": "^7.2|^8.0",
-        "symfony/process": "^7.2|^8.0"
+        "symfony/process": "^7.2|^8.0",
+        "ext-redis": "*"
     },
     "autoload": {
         "psr-4": {
@@ -52,7 +55,8 @@
     },
     "suggest": {
         "league/flysystem-aws-s3-v3": "Install the qualified native S3 adapter to explicitly construct optional ObjectTenantStorage.",
-        "axiomasoft/corex-wakeup": "Install to opt into root_registry wakeup hints; boxed and local_sweep profiles do not require it."
+        "axiomasoft/corex-wakeup": "Install to opt into root_registry wakeup hints; boxed and local_sweep profiles do not require it.",
+        "ext-redis": "Optional Redis account menu cache integration; its conformance tests require this extension."
     },
     "autoload-dev": {
         "psr-4": {

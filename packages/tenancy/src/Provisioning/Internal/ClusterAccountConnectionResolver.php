@@ -7,7 +7,8 @@ namespace CoreX\Tenancy\Provisioning\Internal;
 use CoreX\Context\Contracts\AccountConnectionResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\DatabaseConnectionConfig;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionResolverInterface;
 use RuntimeException;
 
 /**
@@ -19,11 +20,12 @@ final class ClusterAccountConnectionResolver implements AccountConnectionResolve
 {
     public function __construct(
         private readonly string $centralConnection,
+        private readonly ConnectionResolverInterface $connections,
     ) {}
 
     public function resolve(AccountRef $account): DatabaseConnectionConfig
     {
-        $row = DB::connection($this->centralConnection)
+        $row = $this->db()
             ->table('root_accounts')
             ->where('id', $account->id)
             ->select(['db_name', 'cluster_id'])
@@ -33,7 +35,7 @@ final class ClusterAccountConnectionResolver implements AccountConnectionResolve
             throw new RuntimeException("Account [{$account->id}] not found in root_accounts.");
         }
 
-        $cluster = DB::connection($this->centralConnection)
+        $cluster = $this->db()
             ->table('root_clusters')
             ->where('id', $row->cluster_id)
             ->select(['pgbouncer_host', 'pgbouncer_port', 'app_db_user'])
@@ -50,5 +52,13 @@ final class ClusterAccountConnectionResolver implements AccountConnectionResolve
             database: $row->db_name,
             username: $cluster->app_db_user,
         );
+    }
+
+    private function db(): Connection
+    {
+        /** @var Connection */
+        $connection = $this->connections->connection($this->centralConnection);
+
+        return $connection;
     }
 }

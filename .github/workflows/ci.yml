@@ -46,7 +46,7 @@ jobs:
           coverage: none
 
       - name: Constrain Laravel version
-        run: composer require "illuminate/contracts:$LARAVEL_VERSION" --no-update --no-interaction
+        run: echo "Temporary constraint illuminate/contracts:$LARAVEL_VERSION applies during dependency installation"
 
       - name: Laravel 12 test stack
         if: matrix.laravel == '12.*'
@@ -56,13 +56,22 @@ jobs:
         run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
+        run: composer update --prefer-dist --no-interaction --no-progress --with "illuminate/contracts:$LARAVEL_VERSION"
 
       - name: Composer audit
         run: composer audit --locked
 
       - name: Tests
         run: composer test
+
+      - name: Runtime globals gate
+        run: composer runtime-globals-gate
+
+      - name: Config cache check
+        run: composer config-cache-check
+
+      - name: Configuration reference
+        run: composer configuration-reference
 
   tests-pg:
     permissions:
@@ -84,7 +93,7 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd pg_isready
+          --health-cmd "pg_isready -U corex -d corex_test"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
@@ -102,7 +111,7 @@ jobs:
           coverage: none
 
       - name: Constrain Laravel version
-        run: composer require "illuminate/contracts:$LARAVEL_VERSION" --no-update --no-interaction
+        run: echo "Temporary constraint illuminate/contracts:$LARAVEL_VERSION applies during dependency installation"
 
       - name: Laravel 12 test stack
         if: matrix.laravel == '12.*'
@@ -112,7 +121,7 @@ jobs:
         run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
+        run: composer update --prefer-dist --no-interaction --no-progress --with "illuminate/contracts:$LARAVEL_VERSION"
 
       - name: Composer audit
         run: composer audit --locked
@@ -154,9 +163,9 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd, xdebug
           coverage: xdebug
       - name: Constrain Laravel version
-        run: composer --working-dir=packages/operations require "laravel/framework:$LARAVEL_VERSION" --no-update --no-interaction
+        run: echo "Temporary constraint laravel/framework:$LARAVEL_VERSION applies during dependency installation"
       - name: Constrain root Laravel version
-        run: composer require "illuminate/contracts:$LARAVEL_VERSION" --no-update --no-interaction
+        run: echo "Temporary constraint illuminate/contracts:$LARAVEL_VERSION applies during dependency installation"
 
       - name: Root Laravel 12 test stack
         if: matrix.laravel == '12.*'
@@ -170,13 +179,13 @@ jobs:
         run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install root tooling and shared test dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
+        run: composer update --prefer-dist --no-interaction --no-progress --with "illuminate/contracts:$LARAVEL_VERSION"
 
       - name: Composer audit
         run: composer audit --locked
 
       - name: Install dependencies
-        run: composer --working-dir=packages/operations update --prefer-dist --no-interaction --no-progress
+        run: composer --working-dir=packages/operations update --prefer-dist --no-interaction --no-progress --with "laravel/framework:$LARAVEL_VERSION"
 
       - name: Composer audit
         run: composer audit --locked --working-dir=packages/operations
@@ -206,9 +215,9 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd, xdebug
           coverage: xdebug
       - name: Constrain Laravel version
-        run: composer --working-dir=packages/tools require "laravel/framework:$LARAVEL_VERSION" --no-update --no-interaction
+        run: echo "Temporary constraint laravel/framework:$LARAVEL_VERSION applies during dependency installation"
       - name: Constrain root Laravel version
-        run: composer require "illuminate/contracts:$LARAVEL_VERSION" --no-update --no-interaction
+        run: echo "Temporary constraint illuminate/contracts:$LARAVEL_VERSION applies during dependency installation"
 
       - name: Root Laravel 12 test stack
         if: matrix.laravel == '12.*'
@@ -222,13 +231,13 @@ jobs:
         run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install root tooling and shared test dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
+        run: composer update --prefer-dist --no-interaction --no-progress --with "illuminate/contracts:$LARAVEL_VERSION"
 
       - name: Composer audit
         run: composer audit --locked
 
       - name: Install dependencies
-        run: composer --working-dir=packages/tools update --prefer-dist --no-interaction --no-progress
+        run: composer --working-dir=packages/tools update --prefer-dist --no-interaction --no-progress --with "laravel/framework:$LARAVEL_VERSION"
 
       - name: Composer audit
         run: composer audit --locked --working-dir=packages/tools
@@ -258,9 +267,9 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd, xdebug
           coverage: xdebug
       - name: Constrain Laravel version
-        run: composer --working-dir=packages/webhooks require "laravel/framework:$LARAVEL_VERSION" --no-update --no-interaction
+        run: echo "Temporary constraint laravel/framework:$LARAVEL_VERSION applies during dependency installation"
       - name: Constrain root Laravel version
-        run: composer require "illuminate/contracts:$LARAVEL_VERSION" --no-update --no-interaction
+        run: echo "Temporary constraint illuminate/contracts:$LARAVEL_VERSION applies during dependency installation"
 
       - name: Root Laravel 12 test stack
         if: matrix.laravel == '12.*'
@@ -274,13 +283,13 @@ jobs:
         run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install root tooling and shared test dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
+        run: composer update --prefer-dist --no-interaction --no-progress --with "illuminate/contracts:$LARAVEL_VERSION"
 
       - name: Composer audit
         run: composer audit --locked
 
       - name: Install dependencies
-        run: composer --working-dir=packages/webhooks update --prefer-dist --no-interaction --no-progress
+        run: composer --working-dir=packages/webhooks update --prefer-dist --no-interaction --no-progress --with "laravel/framework:$LARAVEL_VERSION"
 
       - name: Composer audit
         run: composer audit --locked --working-dir=packages/webhooks
@@ -335,7 +344,7 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd pg_isready
+          --health-cmd "pg_isready -U corex -d corex_test"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
@@ -370,6 +379,19 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     name: Panels package
+    services:
+      pgsql:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_DB: corex_test
+          POSTGRES_USER: corex
+          POSTGRES_PASSWORD: corex
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U corex -d corex_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -377,7 +399,7 @@ jobs:
       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.4'
-          extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd, xdebug
+          extensions: mbstring, pdo, pdo_pgsql, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd, xdebug
           coverage: xdebug
       - name: Stage sealed stancl provider candidates
         run: python3 scripts/distribution/stage-stancl-providers.py
@@ -393,8 +415,16 @@ jobs:
 
       - name: Composer audit
         run: composer audit --locked --working-dir=packages/panels
+      - name: Panels SQLite tests
+        run: composer --working-dir=packages/panels test -- --exclude-group=pg
       - name: Panels tests and coverage
         run: composer --working-dir=packages/panels test:coverage
+        env:
+          PGSQL_HOST: 127.0.0.1
+          PGSQL_PORT: 5432
+          PGSQL_DATABASE: corex_test
+          PGSQL_USERNAME: corex
+          PGSQL_PASSWORD: corex
       - name: Panels static analysis
         run: composer --working-dir=packages/panels analyse
 
@@ -446,7 +476,7 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd pg_isready
+          --health-cmd "pg_isready -U corex -d corex_test"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
@@ -501,7 +531,7 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd pg_isready
+          --health-cmd "pg_isready -U corex -d corex_test"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
@@ -519,10 +549,10 @@ jobs:
           coverage: none
 
       - name: Constrain Laravel version
-        run: composer --working-dir=packages/tenancy require "laravel/framework:$LARAVEL_VERSION" --no-update --no-interaction
+        run: echo "Temporary constraint laravel/framework:$LARAVEL_VERSION applies during dependency installation"
 
       - name: Constrain root Laravel version
-        run: composer require "illuminate/contracts:$LARAVEL_VERSION" --no-update --no-interaction
+        run: echo "Temporary constraint illuminate/contracts:$LARAVEL_VERSION applies during dependency installation"
 
       - name: Root Laravel 12 test stack
         if: matrix.laravel == '12.*'
@@ -536,16 +566,27 @@ jobs:
         run: python3 scripts/distribution/stage-stancl-providers.py
 
       - name: Install root tooling and shared test dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
+        run: composer update --prefer-dist --no-interaction --no-progress --with "illuminate/contracts:$LARAVEL_VERSION"
 
       - name: Composer audit
         run: composer audit --locked
 
       - name: Install dependencies
-        run: composer --working-dir=packages/tenancy update --prefer-dist --no-interaction --no-progress
+        run: composer --working-dir=packages/tenancy update --prefer-dist --no-interaction --no-progress --with "laravel/framework:$LARAVEL_VERSION"
 
       - name: Composer audit
         run: composer audit --locked --working-dir=packages/tenancy
+
+      - name: Install PostgreSQL 18 client
+        run: |
+          sudo install -d /usr/share/postgresql-common/pgdg
+          sudo curl --fail --silent --show-error -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc
+          . /etc/os-release
+          echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt ${VERSION_CODENAME}-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client-18
+          echo /usr/lib/postgresql/18/bin >> "$GITHUB_PATH"
+          /usr/lib/postgresql/18/bin/pg_dump --version
 
       - name: Tenancy tests
         run: composer --working-dir=packages/tenancy test
@@ -575,7 +616,7 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd pg_isready
+          --health-cmd "pg_isready -U corex -d corex_test"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
@@ -641,11 +682,26 @@ jobs:
       - name: Composer audit
         run: composer audit --locked
 
+      - name: Install access dependencies
+        run: composer --working-dir=packages/access update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit (access)
+        run: composer audit --locked --working-dir=packages/access
+
+      - name: Install remaining standalone package harnesses
+        run: |
+          for package in media tasks tasks-workflow panels operations tenancy webhooks tools recurrence; do
+            composer --working-dir="packages/$package" update --prefer-dist --no-interaction --no-progress
+            composer audit --locked --working-dir="packages/$package"
+          done
+          composer --working-dir=products/flex-crm update --prefer-dist --no-interaction --no-progress
+          composer audit --locked --working-dir=products/flex-crm
+
       - name: Per-package test aggregator
         run: composer test:packages
 
-      - name: Core and modules suites
-        run: vendor/bin/pest packages/core/tests packages/core/tests/Modules
+      - name: Core and modules SQLite suites
+        run: vendor/bin/pest --exclude-group=pg packages/core/tests
 
   tasks-tests:
     permissions:
@@ -662,7 +718,7 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd pg_isready
+          --health-cmd "pg_isready -U corex -d corex_test"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
@@ -706,6 +762,12 @@ jobs:
 
       - name: Tasks coverage (P1.27 compensating gate)
         run: composer --working-dir=packages/tasks test:coverage
+        env:
+          PGSQL_HOST: 127.0.0.1
+          PGSQL_PORT: 5432
+          PGSQL_DATABASE: corex_test
+          PGSQL_USERNAME: corex
+          PGSQL_PASSWORD: corex
 
   auth-tests:
     permissions:
@@ -722,7 +784,7 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd pg_isready
+          --health-cmd "pg_isready -U corex -d corex_test"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
@@ -810,7 +872,9 @@ jobs:
           python3 -m unittest discover -s scripts/tests -p 'test_module_layout_gate.py'
 
       - name: DATA-003 table write ownership
-        run: composer table-write-ownership-gate
+        run: |
+          composer table-write-ownership-gate
+          python3 -m unittest discover -s scripts/tests -p 'test_table_write_ownership_gate.py'
 
   contract-guard:
     permissions:
@@ -823,7 +887,7 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
 
-      - name: Guard src/Contracts changes against a CHANGELOG entry
+      - name: Guard PHP surface snapshots against a CHANGELOG entry
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
         run: bash scripts/contract-guard.sh "$BASE_SHA"
@@ -854,7 +918,7 @@ jobs:
       - name: Composer audit
         run: composer audit --locked
 
-      - name: Roave BC diff (experimental report-only)
+      - name: Backward compatibility (bc-check)
         run: bash scripts/bc-check.sh
 
   coverage:
@@ -872,7 +936,7 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd pg_isready
+          --health-cmd "pg_isready -U corex -d corex_test"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
@@ -950,6 +1014,12 @@ jobs:
       - name: Composer audit
         run: composer audit --locked
 
+      - name: Install access dependencies
+        run: composer --working-dir=packages/access update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit (access)
+        run: composer audit --locked --working-dir=packages/access
+
       - name: PHPStan
         run: composer analyse
 
@@ -978,7 +1048,7 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd pg_isready
+          --health-cmd "pg_isready -U corex -d corex_test"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10

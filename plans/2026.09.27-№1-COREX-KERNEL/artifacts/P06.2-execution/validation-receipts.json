@@ -1,0 +1,122 @@
+[
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E19",
+    "command": "- После продуктового commit: `bash scripts/contract-guard.sh` и `bash scripts/contract-guard.sh \"$(cat plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06.2-execution/base-commit.txt)\"` → exit 0; в Unreleased каждого изменённого пакета описан объявленный API/wire delta.",
+    "contract_sha256": "726c906a56adef1c8745b3fd8bffe1990cbc79cd4ec3c11fd7582046213fb86e",
+    "spec_sha256": "b60da1f1404690b165156d71045a80ed5dec295baa3bab7254fd0d51b2be8cf2",
+    "head": "58afb343cc02188d4ddee723638cf564f4e8a1e7",
+    "tree": "68fc94feadc4661fffe5436d326082f247016dfad6c770a1686fcf597be4cbb5",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-03T18:34:33Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E20",
+    "command": "- `grep -rn -E \"'(tool_unavailable|tool_revision_conflict|input_invalid|schema_unavailable|schema_limit|internal_error|rate_limited|output_contract_failed)'\" packages/tools/src` → пусто; `git grep -n \"OUTCOME_\" packages products` → пусто.",
+    "contract_sha256": "726c906a56adef1c8745b3fd8bffe1990cbc79cd4ec3c11fd7582046213fb86e",
+    "spec_sha256": "b60da1f1404690b165156d71045a80ed5dec295baa3bab7254fd0d51b2be8cf2",
+    "head": "58afb343cc02188d4ddee723638cf564f4e8a1e7",
+    "tree": "68fc94feadc4661fffe5436d326082f247016dfad6c770a1686fcf597be4cbb5",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-03T18:34:33Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E21",
+    "command": "- `scripts/php84 composer --working-dir=packages/tools test -- --filter=ToolErrorTaxonomy` → exit 0: фабрики ToolSchemaFailure загружаются без PHP fatal и catch читает errorCode; типизированные schema-отказы и plain-RuntimeException fallback проверены реальным invoker; совместно с полным consumer suite каждая ветка отказа даёт зарегистрированный код, каждый `errorCode` резолвится `ProblemRegistry::fromWire()`. Default guard возвращает ApprovalRequired, consumer guards сохраняют ApprovalInvalid/Forbidden/IdempotencyConflict/UnknownEffect.",
+    "contract_sha256": "726c906a56adef1c8745b3fd8bffe1990cbc79cd4ec3c11fd7582046213fb86e",
+    "spec_sha256": "b60da1f1404690b165156d71045a80ed5dec295baa3bab7254fd0d51b2be8cf2",
+    "head": "58afb343cc02188d4ddee723638cf564f4e8a1e7",
+    "tree": "68fc94feadc4661fffe5436d326082f247016dfad6c770a1686fcf597be4cbb5",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-03T18:34:33Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E22",
+    "command": "- Негативный контроль (в Completion Notes): строковый литерал в `denied()` → `scripts/php84 composer analyse` exit ≠ 0; откат → exit 0.",
+    "contract_sha256": "726c906a56adef1c8745b3fd8bffe1990cbc79cd4ec3c11fd7582046213fb86e",
+    "spec_sha256": "b60da1f1404690b165156d71045a80ed5dec295baa3bab7254fd0d51b2be8cf2",
+    "head": "58afb343cc02188d4ddee723638cf564f4e8a1e7",
+    "tree": "68fc94feadc4661fffe5436d326082f247016dfad6c770a1686fcf597be4cbb5",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-03T18:34:33Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E23",
+    "command": "- `scripts/php84 composer --working-dir=packages/tools test` → exit 0; `scripts/php84 composer --working-dir=packages/operations test` → exit 0.",
+    "contract_sha256": "726c906a56adef1c8745b3fd8bffe1990cbc79cd4ec3c11fd7582046213fb86e",
+    "spec_sha256": "b60da1f1404690b165156d71045a80ed5dec295baa3bab7254fd0d51b2be8cf2",
+    "head": "58afb343cc02188d4ddee723638cf564f4e8a1e7",
+    "tree": "68fc94feadc4661fffe5436d326082f247016dfad6c770a1686fcf597be4cbb5",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-03T18:34:33Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E24",
+    "command": "- `scripts/php84 composer error-registry` → exit 0; 13 кодов `tools.*` в выводе, включая пять guard-кодов D93.",
+    "contract_sha256": "726c906a56adef1c8745b3fd8bffe1990cbc79cd4ec3c11fd7582046213fb86e",
+    "spec_sha256": "b60da1f1404690b165156d71045a80ed5dec295baa3bab7254fd0d51b2be8cf2",
+    "head": "58afb343cc02188d4ddee723638cf564f4e8a1e7",
+    "tree": "68fc94feadc4661fffe5436d326082f247016dfad6c770a1686fcf597be4cbb5",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-03T18:34:33Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E25",
+    "command": "- `find packages/operations/src/Tools packages/operations/src/Webhooks 2>/dev/null | wc -l` → `0`; `scripts/php84 composer module-layout-gate` → exit 0.",
+    "contract_sha256": "726c906a56adef1c8745b3fd8bffe1990cbc79cd4ec3c11fd7582046213fb86e",
+    "spec_sha256": "b60da1f1404690b165156d71045a80ed5dec295baa3bab7254fd0d51b2be8cf2",
+    "head": "58afb343cc02188d4ddee723638cf564f4e8a1e7",
+    "tree": "68fc94feadc4661fffe5436d326082f247016dfad6c770a1686fcf597be4cbb5",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-03T18:34:33Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E26",
+    "command": "- `scripts/php84 php scripts/php-api.php --write` дважды → идентично; `scripts/php84 composer php-api`, `scripts/php84 composer bc-check` → exit 0; diff baseline Golden содержит только строки P06.2 из досье §4.",
+    "contract_sha256": "726c906a56adef1c8745b3fd8bffe1990cbc79cd4ec3c11fd7582046213fb86e",
+    "spec_sha256": "b60da1f1404690b165156d71045a80ed5dec295baa3bab7254fd0d51b2be8cf2",
+    "head": "58afb343cc02188d4ddee723638cf564f4e8a1e7",
+    "tree": "68fc94feadc4661fffe5436d326082f247016dfad6c770a1686fcf597be4cbb5",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-03T18:34:33Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E27",
+    "command": "- `scripts/php84 composer lint:check`, `scripts/php84 composer analyse` → exit 0; `bash scripts/anti-weakening-gate.sh` → exit 0.",
+    "contract_sha256": "726c906a56adef1c8745b3fd8bffe1990cbc79cd4ec3c11fd7582046213fb86e",
+    "spec_sha256": "b60da1f1404690b165156d71045a80ed5dec295baa3bab7254fd0d51b2be8cf2",
+    "head": "58afb343cc02188d4ddee723638cf564f4e8a1e7",
+    "tree": "68fc94feadc4661fffe5436d326082f247016dfad6c770a1686fcf597be4cbb5",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-03T18:34:33Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E28",
+    "command": "- Review `light` (D91): self-check по досье §6 и D93; строка `review: self-check GREEN` в Completion Notes. По явному указанию владельца независимое read-only ревью Grok 4.7 High должно быть GREEN.",
+    "contract_sha256": "726c906a56adef1c8745b3fd8bffe1990cbc79cd4ec3c11fd7582046213fb86e",
+    "spec_sha256": "b60da1f1404690b165156d71045a80ed5dec295baa3bab7254fd0d51b2be8cf2",
+    "head": "58afb343cc02188d4ddee723638cf564f4e8a1e7",
+    "tree": "68fc94feadc4661fffe5436d326082f247016dfad6c770a1686fcf597be4cbb5",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-03T18:34:33Z"
+  }
+]

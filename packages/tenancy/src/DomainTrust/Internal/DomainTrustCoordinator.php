@@ -14,6 +14,8 @@ use CoreX\Tenancy\DomainTrust\Data\DomainTrustTransition;
 use CoreX\Tenancy\DomainTrust\Data\IssuedDomainChallenge;
 use CoreX\Tenancy\DomainTrust\Enums\DomainTrustOperation;
 use CoreX\Tenancy\DomainTrust\Exceptions\DomainTrustDenied;
+use DateInterval;
+use Psr\Clock\ClockInterface;
 
 final class DomainTrustCoordinator
 {
@@ -23,6 +25,7 @@ final class DomainTrustCoordinator
         private readonly DomainOwnershipProofVerifier $proofVerifier,
         private readonly DomainTrustAuthorizer $authorizer,
         private readonly DomainTrustStateWriter $stateWriter,
+        private readonly ClockInterface $clock,
         private readonly int $challengeTtlSeconds,
     ) {}
 
@@ -37,7 +40,7 @@ final class DomainTrustCoordinator
         );
 
         $generation = $this->stateWriter->generationFor(accountId: $accountId, host: $normalizedHost);
-        $expiresAt = now()->addSeconds($this->challengeTtlSeconds)->toDateTimeImmutable();
+        $expiresAt = $this->clock->now()->add(new DateInterval('PT'.$this->challengeTtlSeconds.'S'));
 
         return $this->challengeStore->issue(new DomainChallengeDraft(
             accountId: $accountId,

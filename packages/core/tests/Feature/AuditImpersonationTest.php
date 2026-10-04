@@ -8,6 +8,7 @@ use CoreX\Audit\Enums\ActorType;
 use CoreX\Audit\Internal\AuditObserver;
 use CoreX\Audit\Internal\QueuedAuditLogger;
 use CoreX\Audit\Internal\RecordAuditEntry;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
@@ -27,6 +28,7 @@ uses()->group('pg');
 
 beforeEach(function (): void {
     config(['database.default' => 'pgsql', 'corex.audit.enabled' => true, 'queue.default' => 'sync', 'queue.connections.sync.after_commit' => false]);
+    app()->forgetInstance(CoreOptions::class);
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     $this->artisan('migrate', ['--path' => realpath(__DIR__.'/../../database/migrations/pg'), '--realpath' => true, '--force' => true])->assertSuccessful();
@@ -37,10 +39,10 @@ it('stamps observer and direct logger entries from authority and keeps unrelated
     $state = impersonationState('because');
     $tenant = fixedTenant(Str::uuid7()->toString());
     app()->instance(ImpersonationService::class, new FixedImpersonationService($state));
-    app()->instance(AuditLogger::class, new QueuedAuditLogger('pgsql', $tenant));
+    app()->instance(AuditLogger::class, app()->make(QueuedAuditLogger::class, ['connection' => 'pgsql', 'tenantContext' => $tenant]));
 
-    AuditObserver::record(auditSubject((string) Str::uuid7()), 'updated');
-    (new QueuedAuditLogger('pgsql', $tenant))->record(new AuditEntry(
+    app(AuditObserver::class)->record(auditSubject((string) Str::uuid7()), 'updated');
+    (app()->make(QueuedAuditLogger::class, ['connection' => 'pgsql', 'tenantContext' => $tenant]))->record(new AuditEntry(
         action: 'direct',
         actorType: ActorType::User,
         actorId: 'caller',
@@ -70,7 +72,7 @@ it('stamps observer and direct logger entries from authority and keeps unrelated
 it('leaves user and system records byte-equivalent when no impersonation is active', function (): void {
     $workspaceId = Str::uuid7()->toString();
     $actorId = Str::uuid7()->toString();
-    $logger = new QueuedAuditLogger('pgsql', fixedTenant($workspaceId));
+    $logger = app()->make(QueuedAuditLogger::class, ['connection' => 'pgsql', 'tenantContext' => fixedTenant($workspaceId)]);
     $user = new AuditEntry(action: 'user-act', actorType: ActorType::User, actorId: $actorId, context: JsonDocuments::capture(['ip' => '1.1.1.1']));
     $system = new AuditEntry(action: 'system-act', actorType: ActorType::System, context: JsonDocuments::capture(['module' => 'core']));
 
@@ -97,7 +99,7 @@ it('writes the captured snapshot from a worker that has no session', function ()
     $user->id = 'session-user';
 
     $workspaceId = Str::uuid7()->toString();
-    (new QueuedAuditLogger('pgsql', fixedTenant($workspaceId)))->record(new AuditEntry(
+    (app()->make(QueuedAuditLogger::class, ['connection' => 'pgsql', 'tenantContext' => fixedTenant($workspaceId)]))->record(new AuditEntry(
         action: 'queued',
         actorType: ActorType::User,
         actorId: 'session-user',
@@ -109,7 +111,7 @@ it('writes the captured snapshot from a worker that has no session', function ()
 
     $jobs = Queue::pushed(RecordAuditEntry::class);
     expect($jobs)->toHaveCount(1);
-    $jobs[0]->handle();
+    app()->call([$jobs[0], 'handle']);
 
     $row = DB::table('sys_audit_log')->sole();
     expect($row->actor_type)->toBe('support')

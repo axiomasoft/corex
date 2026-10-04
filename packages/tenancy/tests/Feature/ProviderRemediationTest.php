@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use CoreX\Tenancy\Account\Internal\Models\Account;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\TenancyServiceProvider;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Support\Facades\Event;
@@ -23,6 +24,7 @@ final class RemediationProvisioningStep
 it('executes the configured provisioning pipeline', function (): void {
     Event::swap(new Dispatcher(app()));
     config(['tenancy.provisioning.pipeline' => [RemediationProvisioningStep::class]]);
+    app()->forgetInstance(TenancyOptions::class);
     (new TenancyServiceProvider(app()))->boot();
     $account = new Account;
     Event::dispatch(new TenantCreated($account));

@@ -14,9 +14,10 @@ use CoreX\Settings\Events\SettingChanged;
 use CoreX\Settings\Exceptions\SettingValueTooLargeException;
 use CoreX\Settings\Exceptions\UnsupportedScopeException;
 use CoreX\Settings\Internal\Models\Setting;
+use Illuminate\Contracts\Encryption\StringEncrypter;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\ConnectionResolverInterface;
 use Override;
 
 /**
@@ -42,6 +43,9 @@ final class DatabaseSettingsRepository implements SettingsRepository
 
     public function __construct(
         private readonly SettingDefaultsProvider $defaults,
+        private readonly ConnectionResolverInterface $connections,
+        private readonly Dispatcher $events,
+        private readonly StringEncrypter $encrypter,
         private readonly ?string $connection = null,
     ) {}
 
@@ -75,7 +79,7 @@ final class DatabaseSettingsRepository implements SettingsRepository
         $oldValue = $old instanceof Setting ? $this->decode($old) : null;
         $changed = ! $old instanceof Setting || ($oldValue === null || JsonDocuments::decode($oldValue) !== JsonDocuments::decode($value));
 
-        $stored = $sensitive ? json_encode(Crypt::encryptString($encoded), JSON_THROW_ON_ERROR) : $encoded;
+        $stored = $sensitive ? json_encode($this->encrypter->encryptString($encoded), JSON_THROW_ON_ERROR) : $encoded;
 
         Setting::on($this->connection)->updateOrCreate(
             attributes: ['namespace' => $namespace, 'key' => $key, 'scope_type' => $scopeType->value, 'scope_id' => $scopeId],
@@ -86,7 +90,7 @@ final class DatabaseSettingsRepository implements SettingsRepository
         // no-op set() (same value re-written) must not spam listeners, and a
         // rolled-back transaction must not have fired the event at all.
         if ($changed) {
-            $this->db()->afterCommit(fn () => event(new SettingChanged(
+            $this->db()->afterCommit(fn () => $this->events->dispatch(new SettingChanged(
                 namespace: $namespace,
                 key: $key,
                 scopeType: $scopeType,
@@ -134,7 +138,10 @@ final class DatabaseSettingsRepository implements SettingsRepository
 
     private function db(): Connection
     {
-        return DB::connection($this->connection);
+        /** @var Connection */
+        $connection = $this->connections->connection($this->connection);
+
+        return $connection;
     }
 
     private function find(string $namespace, string $key, SettingScope $scopeType, ?string $scopeId): ?Setting
@@ -153,8 +160,9 @@ final class DatabaseSettingsRepository implements SettingsRepository
         $raw = $row->value;
 
         if ($row->is_sensitive) {
+            /** @var string $cipher */
             $cipher = json_decode($raw, true, 512, JSON_THROW_ON_ERROR);
-            $raw = Crypt::decryptString($cipher);
+            $raw = $this->encrypter->decryptString($cipher);
         }
 
         return new JsonDocument($raw);

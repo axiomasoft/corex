@@ -1,0 +1,27 @@
+---
+id: D94
+date: 2026-10-04
+status: accepted
+item: P07
+items: [P07]
+supersedes: []
+superseded_by: null
+---
+# D94 — p07-early-design-admission (accepted)
+
+**Actor:** repository owner (ответ в сессии `task:plan-design 2026.09.27-№1-COREX-KERNEL P07`, 2026-10-04: «Design now, gate exec»); запись designer/claude-code/claude-opus-5-5/high.
+**Evidence:** RAG:— `handoff.md` (after P06.5: Next — полное ревью P06 и финальный hosted CI), `phases/P06/P06.md` §Dependencies и §Phase Handoff («P07 проектируется после закрытия P06»), `plan.md` §2 (D21/D24, B5).
+
+## Solution
+
+1. P07 детализируется до закрытия P06 по прямому решению владельца. Это исключение из правила «дизайн следующей фазы после закрытия предыдущей» (D21, D24, B5) только для P07; правило для P08–P09 не меняется.
+2. Исполнение P07 не начинается, пока P06 не закрыта GREEN на hosted CI (D73) с принятым владельцем полным ревью фазы. Условие записано в DoR P07 и в Checkpoint первой строки execution-sheet P07.
+3. Дизайн опирается на дерево `4137d241` (после P06.5). Если ремонт по итогам ревью P06 затронет файлы из `Files` items P07, первый исполнитель P07.1 сверяет `artifacts/P07-design/facts/` повторным запуском `artifacts/P07-design/scripts/p07-facts.sh` и записывает расхождение в Completion Notes; расхождение в фактах карты кода — не изменение контракта.
+
+## Why
+
+Пересечение P06 и P07 по коду минимально: P06 меняла wire operations/tools/webhooks и egress вебхуков; P07 — движок tenancy, impersonation, access и рёбра notifications/wakeup. Ранний дизайн экономит время владельца, а гейт исполнения сохраняет D73.
+
+## Consequences
+
+Phase Handoff P06 («P07 remains backlog until P06 is accepted») уточняется этим решением: backlog снят, исполнение по-прежнему ждёт приёмки P06.

@@ -14,7 +14,7 @@ superseded_by: null
 `tests/fixtures/public-error-contract.php`, `vendor/roave/backward-compatibility-check/src/CompareClasses.php`,
 `research/P04-design-rag.md`. RAG:— / RAG:✅.
 
-## Решение
+## Solution
 
 1. `CoreX\Errors\Contracts\ErrorCode` — Spi Implement с `value(): string`.
 Package backed enums реализуют метод `return $this->value`; значение regex
@@ -74,7 +74,7 @@ Internal зависимости остаются разрешимыми reflecto
 Не вырезать файлы зависимостей из staging. Негатив: private internal signature change
 не BC break, удаление старого Api/Spi и Spi Implement member addition — BC break.
 
-## Почему
+## Why
 
 Scoped stable codes и typed registry требуют обновления реальных wire expectations. Старый механический Golden нельзя ни безусловно сохранить, ни автоматически заменить; нужен reviewed semantic delta.
 

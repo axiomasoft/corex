@@ -1,0 +1,13 @@
+{
+  "reviewed_candidate": "cd31e521",
+  "final_candidate": "58afb343cc02188d4ddee723638cf564f4e8a1e7",
+  "finding": "root OperationContractTest referenced removed ToolResult constants",
+  "changed_file": "tests/Feature/OperationContractTest.php",
+  "repair": "both assertions use ToolOutcome::Committed; import added",
+  "test": "root-consumer-tests.log:3passed32assertions",
+  "unchanged_product_php": true,
+  "unchanged_public_api": true,
+  "unchanged_bc_input": true,
+  "original_report": "grok-review.json",
+  "recheck": "grok-recheck.json"
+}

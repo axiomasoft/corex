@@ -1,0 +1,4 @@
+Raw command output preserved losslessly in php-api-write-2.log.gz.
+Uncompressed SHA-256: 91e6539b9281df969b53506c1fb2c536aa90ec7c77ef79cd54d2c305fee868a6
+Uncompressed bytes: 3907477
+Read with: gzip -dc php-api-write-2.log.gz

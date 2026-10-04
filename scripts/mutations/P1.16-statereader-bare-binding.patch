@@ -1,12 +1,11 @@
-diff --git a/packages/core/src/Modules/Laravel/LifecycleRegistrar.php b/packages/core/src/Modules/Laravel/LifecycleRegistrar.php
 --- a/packages/core/src/Modules/Laravel/LifecycleRegistrar.php
 +++ b/packages/core/src/Modules/Laravel/LifecycleRegistrar.php
-@@ -35,9 +35,7 @@
+@@ -39,9 +39,7 @@
          // class-string autowires $connection = null and silently reads the ambient
          // default, so with a configured module DB the enabled set comes back empty
          // and every module reads inactive (a defect a targeted audit caught).
 -        $app->singleton(ModuleStateReader::class, static function (Application $app): DatabaseModuleStateReader {
--            return new DatabaseModuleStateReader($app->make(ModulesOptions::class)->connection);
+-            return new DatabaseModuleStateReader($app->make(ConnectionResolverInterface::class), $app->make(ModulesOptions::class)->connection);
 -        });
 +        $app->singleton(ModuleStateReader::class, DatabaseModuleStateReader::class);
  

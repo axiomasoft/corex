@@ -1,18 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			rawMessage: Cannot cast mixed to string.
-			identifier: cast.string
-			count: 2
-			path: src/Internal/CaptureTaskCompletion.php
-
-		-
-			rawMessage: 'Only booleans are allowed in a negated boolean, mixed given.'
-			identifier: booleanNot.exprNotBoolean
-			count: 1
-			path: src/Internal/CaptureTaskCompletion.php
-
-		-
 			rawMessage: Cannot cast mixed to int.
 			identifier: cast.int
 			count: 3
@@ -129,20 +117,8 @@ parameters:
 		-
 			rawMessage: Cannot cast mixed to string.
 			identifier: cast.string
-			count: 12
+			count: 11
 			path: src/Internal/SqlTaskRecurrenceMaterializer.php
-
-		-
-			rawMessage: 'Only booleans are allowed in a negated boolean, mixed given.'
-			identifier: booleanNot.exprNotBoolean
-			count: 1
-			path: src/Internal/SqlTaskRecurrenceMaterializer.php
-
-		-
-			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/TasksWorkflowServiceProvider.php
 
 		-
 			rawMessage: Cannot access offset 'db' on Illuminate\Contracts\Foundation\Application.
@@ -153,12 +129,6 @@ parameters:
 		-
 			rawMessage: 'Cannot call method connection() on mixed.'
 			identifier: method.nonObject
-			count: 1
-			path: src/TasksWorkflowServiceProvider.php
-
-		-
-			rawMessage: 'Parameter $config of class CoreX\TasksWorkflow\Internal\SqlTaskRecurrenceMaterializer constructor expects Illuminate\Contracts\Config\Repository, mixed given.'
-			identifier: argument.type
 			count: 1
 			path: src/TasksWorkflowServiceProvider.php
 

@@ -22,13 +22,13 @@ function runAttributesArchitectureGate(?string $fixture = null): array
 it('passes the package architecture ratchet on the current source tree', function (): void {
     [$status, $output] = runAttributesArchitectureGate();
 
-    expect($status)->toBe(0)->and($output)->toContain('attributes-architecture-gate: OK');
+    expect($status)->toBe(0, "attributes-architecture-gate exit {$status}:\n".$output)->and($output)->toContain('attributes-architecture-gate: OK');
 });
 
 it('rejects each planted architecture violation for its own reason', function (string $fixture, string $reason): void {
     [$status, $output] = runAttributesArchitectureGate($fixture);
 
-    expect($status)->toBe(1)->and($output)->toContain($reason);
+    expect($status)->toBe(1, "attributes-architecture-gate exit {$status}:\n".$output)->and($output)->toContain($reason);
 })->with([
     ['search-import.php.fixture', 'A1 search import'],
     ['runtime-config.php.fixture', 'A2 runtime config()'],

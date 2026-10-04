@@ -8,6 +8,7 @@ use CoreX\Context\Contracts\TenantDatabaseProvisioner;
 use CoreX\Context\Data\ProvisionParams;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Provisioning\Contracts\TemplateIntegrityChecks;
+use Illuminate\Contracts\Events\Dispatcher;
 use Stancl\Tenancy\Events\TenantCreated;
 
 /**
@@ -24,6 +25,7 @@ final class StanclTenantDatabaseProvisioner implements TenantDatabaseProvisioner
     public function __construct(
         private readonly string $centralConnection,
         private readonly TemplateIntegrityChecks $templateIntegrityVerifier,
+        private readonly Dispatcher $events,
     ) {}
 
     public function provision(ProvisionParams $params): void
@@ -44,6 +46,6 @@ final class StanclTenantDatabaseProvisioner implements TenantDatabaseProvisioner
             'locale' => $params->locale,
         ])->save();
 
-        event(new TenantCreated($account));
+        $this->events->dispatch(new TenantCreated($account));
     }
 }

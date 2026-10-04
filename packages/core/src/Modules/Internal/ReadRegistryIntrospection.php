@@ -59,6 +59,7 @@ final class ReadRegistryIntrospection implements RegistryIntrospection
         private readonly ModuleActivationGate $activationGate,
         private readonly string $cachePath,
         private readonly bool $failIfMissing = false,
+        private readonly ?string $installedJsonPath = null,
     ) {}
 
     #[Override]
@@ -427,7 +428,7 @@ final class ReadRegistryIntrospection implements RegistryIntrospection
             'editions' => $module->editions,
             'components' => $module->components,
             'compatibilityPassport' => 'pending',
-            'installedPackagePresent' => in_array($module->composerName, InstalledPackages::discover(), true),
+            'installedPackagePresent' => in_array($module->composerName, InstalledPackages::discover($this->installedJsonPath), true),
         ];
     }
 
@@ -436,7 +437,7 @@ final class ReadRegistryIntrospection implements RegistryIntrospection
      */
     private function dependenciesSatisfied(CompiledModule $module, array $modules): bool
     {
-        $installed = InstalledPackages::discover();
+        $installed = InstalledPackages::discover($this->installedJsonPath);
 
         foreach ($module->requires as $requirement) {
             if ($requirement['kind'] !== 'module') {

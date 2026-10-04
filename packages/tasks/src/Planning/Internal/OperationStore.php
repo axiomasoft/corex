@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tasks\Planning\Internal;
 
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Tasks\Planning\Contracts\TaskOperationReceipts;
 use CoreX\Tasks\Planning\Data\PlanningOperation;
 use CoreX\Tasks\Planning\Data\PlanningToken;
 use CoreX\Tasks\Planning\Data\TaskOperationKind;
@@ -15,7 +16,10 @@ use Illuminate\Database\QueryException;
 /** @internal Durable planning operation receipts. */
 final class OperationStore
 {
-    public function __construct(private readonly Connection $connection) {}
+    public function __construct(
+        private readonly Connection $connection,
+        private readonly TaskOperationReceipts $receipts,
+    ) {}
 
     /**
      * @param  array{id: string, type: string, display: string}  $resultRef
@@ -38,7 +42,7 @@ final class OperationStore
             return null;
         }
 
-        $existing = (new DatabaseTaskOperationReceipts)->find($this->connection, $token->requestKey);
+        $existing = $this->receipts->find($this->connection, $token->requestKey);
 
         if ($existing === null) {
             return null;
@@ -60,7 +64,7 @@ final class OperationStore
         array $resultRef,
     ): void {
         try {
-            (new DatabaseTaskOperationReceipts)->record(
+            $this->receipts->record(
                 connection: $this->connection,
                 kind: TaskOperationKind::from($operation->value),
                 requestKey: $token->requestKey,
@@ -69,7 +73,7 @@ final class OperationStore
                 resultRef: $resultRef,
             );
         } catch (QueryException $exception) {
-            $existing = (new DatabaseTaskOperationReceipts)->find($this->connection, $token->requestKey);
+            $existing = $this->receipts->find($this->connection, $token->requestKey);
 
             if ($existing === null) {
                 throw $exception;

@@ -15,7 +15,7 @@ Mechanical validation correction: executor/codex/gpt-6-sol/high under D41's inli
 `l12-update-with-dependencies.log`, `l12-proposal.json`, `l12-proposal-test.log`,
 `validate-clean-worktree.log`, `validate-clean-manifests.log` in the same artifact directory.
 
-## Решение
+## Solution
 
 1. Уточнить D37: основные манифесты и Laravel 13 используют Pest `^5.2` / PHPUnit 13.
    Только Laravel 12 test/CI-лейн в своём checkout переопределяет dev requirement на
@@ -30,7 +30,7 @@ Mechanical validation correction: executor/codex/gpt-6-sol/high under D41's inli
    Каталог с одним историческим CHANGELOG не является Composer-корнем.
    Строгость Composer и все отрицательные контроли сохраняются.
 
-## Почему
+## Why
 
 Pest 5.2.0/5.2.1 требует Symfony Process 8.1; Laravel 12 требует Process 7.x.
 Разрешение полного набора несовместимо даже с `--with-all-dependencies`.

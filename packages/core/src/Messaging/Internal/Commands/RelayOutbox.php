@@ -35,11 +35,11 @@ final class RelayOutbox extends Command
 
     private bool $stopping = false;
 
-    public function handle(OutboxRelay $relay, DurableMessagePublisher $publisher): int
+    public function handle(OutboxRelay $relay, DurableMessagePublisher $publisher, CoreOptions $options): int
     {
         /** @var string|null $batchOption */
         $batchOption = $this->option('batch');
-        $batch = $batchOption === null ? app(CoreOptions::class)->messagingBatchSize : (int) $batchOption;
+        $batch = $batchOption === null ? $options->messagingBatchSize : (int) $batchOption;
 
         if ($batch < 1 || $batch > 1_000) {
             $this->error('The --batch option must be between 1 and 1000.');

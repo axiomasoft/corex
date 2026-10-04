@@ -8,6 +8,7 @@ use CoreX\Data\Data\DataScope;
 use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Data\WriteToken;
 use CoreX\Data\Internal\CallableDataScopeAuthorizer;
+use CoreX\Time\Laravel\SystemClock;
 use CoreX\Transfer\Contracts\CancellationSignal;
 use CoreX\Transfer\Contracts\RecordMapper;
 use CoreX\Transfer\Contracts\TransferSink;
@@ -174,6 +175,7 @@ function cancelRunner(string $hash, object $calls, bool $cancelled): SqlTransfer
         new ConflictRule('create-only'),
         new TransferLimits,
         new CallableDataScopeAuthorizer(static fn (): bool => true),
+        new SystemClock,
         cancellation: $signal,
     );
 }

@@ -10,9 +10,10 @@ use CoreX\Departments\Data\Department;
 use CoreX\Departments\Events\DepartmentMoved;
 use CoreX\Departments\Exceptions\CrossWorkspaceMoveException;
 use CoreX\Departments\Exceptions\DepartmentCycleException;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\DB;
 use Override;
 use RuntimeException;
 
@@ -28,6 +29,9 @@ use RuntimeException;
 final class DatabaseDepartmentRepository implements DepartmentRepository
 {
     public function __construct(
+        private readonly ConnectionResolverInterface $connections,
+        private readonly CoreOptions $options,
+        private readonly Dispatcher $events,
         private readonly ?string $connection = null,
     ) {}
 
@@ -62,7 +66,7 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
     #[Override]
     public function primaryOf(string $userId): ?Department
     {
-        $departmentId = $this->db()->table(app(CoreOptions::class)->departmentUserTable)
+        $departmentId = $this->db()->table($this->options->departmentUserTable)
             ->where('user_id', $userId)
             ->where('is_primary', true)
             ->value('department_id');
@@ -79,7 +83,7 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
             //     query still returns it for a row mid-deletion, so we always
             //     serialize on the right workspace. Absent row → explicit throw,
             //     never a silent no-op (A5 If-then).
-            $lockWorkspaceId = $this->db()->table(app(CoreOptions::class)->departmentsTable)
+            $lockWorkspaceId = $this->db()->table($this->options->departmentsTable)
                 ->where('id', $departmentId)
                 ->value('workspace_id');
 
@@ -145,7 +149,7 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
             // on workspace_id — a same-shaped path in ANOTHER workspace under
             // `path <@` must never be rewritten by this workspace's move().
             $this->db()->statement(
-                'update '.app(CoreOptions::class)->departmentsTable.' set
+                'update '.$this->options->departmentsTable.' set
                     path = (?::ltree || subpath(path, nlevel(?::ltree) - 1)),
                     parent_id = case when id = ? then ? else parent_id end,
                     updated_at = now()
@@ -156,7 +160,7 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
             // A6: dispatch AFTER the transaction commits, not inside it — the
             // dept_tree cache invalidator (entity-scoped RBAC) must not
             // read uncommitted paths, and a rollback must not leak the event.
-            $this->db()->afterCommit(static fn () => event(
+            $this->db()->afterCommit(fn () => $this->events->dispatch(
                 new DepartmentMoved(departmentId: $departmentId, oldPath: $oldPath, newPath: $newPath),
             ));
         });
@@ -177,6 +181,9 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
 
     private function db(): Connection
     {
-        return DB::connection($this->connection);
+        /** @var Connection */
+        $connection = $this->connections->connection($this->connection);
+
+        return $connection;
     }
 }

@@ -4,13 +4,14 @@
 declare(strict_types=1);
 
 /**
- * Blocking provider-size gate (P8.6, D45).
+ * Blocking provider-size gate (P8.6, D45; thin providers P05.2, D70).
  *
- * Counts singleton|scoped|bind|bindIf call sites only inside classes that
- * extend Illuminate\Support\ServiceProvider. A foreach body is one call site.
- * Exit 1 when a provider grows past its ratchet, or when a provider that is
- * not in the snapshot exceeds max_bindings. CoreServiceProvider may stay
- * above that cap: P8 freezes its measured size and still rejects growth.
+ * S1: singleton|scoped|bind|bindIf call sites only inside classes that extend
+ * Illuminate\Support\ServiceProvider; a foreach body is one call site; at most
+ * max_bindings per provider and never above the ratchet.
+ * S2: no `new class` in a provider or registrar.
+ * S3: every `function` closure in a provider or registrar is a single
+ * `return ...;` statement (`fn` is always allowed).
  * `--report` prints the measured snapshot and does not judge it.
  */
 const EXIT_OK = 0;
@@ -19,22 +20,25 @@ const EXIT_CONFIG = 2;
 
 const PROVIDER_PARENT = 'Illuminate\\Support\\ServiceProvider';
 const BINDING_METHODS = ['singleton', 'scoped', 'bind', 'bindIf'];
-const MAX_BINDINGS = 20;
-const CORE_PROVIDER = 'packages/core/src/CoreServiceProvider.php';
+const MAX_BINDINGS = 8;
 
 $repoRoot = dirname(__DIR__);
 $configPath = $repoRoot.'/scripts/provider-size.json';
 $reportOnly = in_array('--report', $argv, true);
 
+$config = loadProviderSizeConfig($configPath);
 $measured = measureProviders($repoRoot);
+$findings = styleFindings($repoRoot, $config['registrar_globs']);
 
 if ($reportOnly) {
-    fwrite(STDOUT, json_encode($measured, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)."\n");
+    fwrite(STDOUT, json_encode(['providers' => $measured, 'style' => $findings], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)."\n");
     exit(EXIT_OK);
 }
 
-$config = loadProviderSizeConfig($configPath);
-$violations = judgeProviders($measured, $config['ratchet']);
+$violations = [...judgeProviders($measured, $config['ratchet']), ...array_map(
+    static fn (array $finding): string => sprintf('%s %s:%d %s', $finding['rule'], $finding['file'], $finding['line'], $finding['message']),
+    $findings,
+)];
 
 foreach ($violations as $violation) {
     fwrite(STDOUT, $violation."\n");
@@ -84,18 +88,14 @@ function judgeProviders(array $measured, array $ratchet): array
     foreach ($measured as $relative => $counts) {
         $reasons = [];
 
-        $frozen = $ratchet[$relative] ?? null;
-
-        if ($frozen === null && $counts['total'] > MAX_BINDINGS) {
+        if ($counts['total'] > MAX_BINDINGS) {
             $reasons[] = 'max_bindings='.MAX_BINDINGS;
         }
+
+        $frozen = $ratchet[$relative] ?? null;
 
         if ($frozen !== null && $counts['total'] > $frozen) {
             $reasons[] = 'ratchet='.$frozen;
-        }
-
-        if ($frozen !== null && $relative !== CORE_PROVIDER && $counts['total'] > MAX_BINDINGS) {
-            $reasons[] = 'max_bindings='.MAX_BINDINGS;
         }
 
         if ($reasons === []) {
@@ -103,14 +103,14 @@ function judgeProviders(array $measured, array $ratchet): array
         }
 
         $violations[] = sprintf(
-            'provider-size-gate: %s singleton=%d scoped=%d bind=%d bindIf=%d total=%d exceeds %s',
+            'S1 %s singleton=%d scoped=%d bind=%d bindIf=%d total=%d %s',
             $relative,
             $counts['singleton'],
             $counts['scoped'],
             $counts['bind'],
             $counts['bindIf'],
             $counts['total'],
-            implode(' and ', $reasons),
+            implode(' ', $reasons),
         );
     }
 
@@ -118,7 +118,7 @@ function judgeProviders(array $measured, array $ratchet): array
 }
 
 /**
- * @return array{ratchet: array<string, int>}
+ * @return array{ratchet: array<string, int>, registrar_globs: list<string>}
  */
 function loadProviderSizeConfig(string $path): array
 {
@@ -136,6 +136,18 @@ function loadProviderSizeConfig(string $path): array
 
     if (($decoded['max_bindings'] ?? null) !== MAX_BINDINGS) {
         fwrite(STDERR, 'provider-size-gate: max_bindings must be '.MAX_BINDINGS."\n");
+        exit(EXIT_CONFIG);
+    }
+
+    if (($decoded['forbid_anonymous_classes'] ?? null) !== true || ($decoded['single_return_factories'] ?? null) !== true) {
+        fwrite(STDERR, "provider-size-gate: forbid_anonymous_classes and single_return_factories must be true\n");
+        exit(EXIT_CONFIG);
+    }
+
+    $globs = $decoded['registrar_globs'] ?? null;
+
+    if (! is_array($globs) || $globs === [] || array_filter($globs, static fn (mixed $glob): bool => ! is_string($glob) || $glob === '') !== []) {
+        fwrite(STDERR, "provider-size-gate: invalid registrar_globs in {$path}\n");
         exit(EXIT_CONFIG);
     }
 
@@ -161,15 +173,255 @@ function loadProviderSizeConfig(string $path): array
 
         $file = str_replace('\\', '/', $file);
 
-        if ($count > MAX_BINDINGS && $file !== CORE_PROVIDER) {
-            fwrite(STDERR, 'provider-size-gate: ratchet above '.MAX_BINDINGS.' is only valid for '.CORE_PROVIDER."\n");
+        if ($count > MAX_BINDINGS) {
+            fwrite(STDERR, 'provider-size-gate: ratchet above '.MAX_BINDINGS." is not allowed\n");
             exit(EXIT_CONFIG);
         }
 
         $normalized[$file] = $count;
     }
 
-    return ['ratchet' => $normalized];
+    /** @var list<string> $registrarGlobs */
+    $registrarGlobs = array_values($globs);
+
+    return ['ratchet' => $normalized, 'registrar_globs' => $registrarGlobs];
+}
+
+/**
+ * S2 and S3 over every provider and registrar file.
+ *
+ * @param  list<string>  $registrarGlobs
+ * @return list<array{rule: string, file: string, line: int, message: string}>
+ */
+function styleFindings(string $repoRoot, array $registrarGlobs): array
+{
+    $findings = [];
+
+    $roots = glob($repoRoot.'/packages/*/src', GLOB_ONLYDIR);
+
+    foreach ($roots === false ? [] : $roots as $srcRoot) {
+        foreach (walkPhpFiles($srcRoot) as $file) {
+            $relative = str_replace('\\', '/', substr($file, strlen($repoRoot) + 1));
+            $isRegistrar = matchesAnyGlob(substr($relative, strlen('packages/')), $registrarGlobs);
+
+            if (! $isRegistrar && countBindingCalls($file) === null) {
+                continue;
+            }
+
+            foreach (scanStyle($file) as $finding) {
+                $findings[] = ['rule' => $finding['rule'], 'file' => $relative, 'line' => $finding['line'], 'message' => $finding['message']];
+            }
+        }
+    }
+
+    usort($findings, static fn (array $a, array $b): int => [$a['file'], $a['line'], $a['rule']] <=> [$b['file'], $b['line'], $b['rule']]);
+
+    return $findings;
+}
+
+/**
+ * @param  list<string>  $globs
+ */
+function matchesAnyGlob(string $path, array $globs): bool
+{
+    foreach ($globs as $glob) {
+        $segments = explode('/', str_replace('\\', '/', $glob));
+        $rendered = '';
+        $last = count($segments) - 1;
+
+        foreach ($segments as $index => $segment) {
+            if ($segment === '**') {
+                $rendered .= '(?:[^/]+/)*';
+
+                continue;
+            }
+
+            $rendered .= str_replace(['\*', '\?'], ['[^/]*', '[^/]'], preg_quote($segment, '#')).($index !== $last ? '/' : '');
+        }
+
+        if (preg_match('#^'.$rendered.'$#', $path) === 1) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * @return list<array{rule: string, line: int, message: string}>
+ */
+function scanStyle(string $file): array
+{
+    $code = file_get_contents($file);
+
+    if ($code === false) {
+        fwrite(STDERR, "provider-size-gate: unreadable {$file}\n");
+        exit(EXIT_CONFIG);
+    }
+
+    try {
+        $tokens = token_get_all($code, TOKEN_PARSE);
+    } catch (ParseError) {
+        fwrite(STDOUT, 'provider-size-gate: '.relativeFromRepo($file)." parse error\n");
+        exit(EXIT_VIOLATION);
+    }
+
+    $findings = [];
+    $count = count($tokens);
+
+    for ($i = 0; $i < $count; $i++) {
+        $token = $tokens[$i];
+
+        if (! is_array($token)) {
+            continue;
+        }
+
+        if ($token[0] === T_NEW && anonymousClassFollows($tokens, $i)) {
+            $findings[] = ['rule' => 'S2', 'line' => $token[2], 'message' => 'anonymous class'];
+
+            continue;
+        }
+
+        if ($token[0] === T_FUNCTION && ! isNamedFunction($tokens, $i) && ! closureBodyIsSingleReturn($tokens, $i)) {
+            $findings[] = ['rule' => 'S3', 'line' => $token[2], 'message' => 'factory closure is not a single return'];
+        }
+    }
+
+    return $findings;
+}
+
+/**
+ * @param  list<mixed>  $tokens
+ */
+function anonymousClassFollows(array $tokens, int $newIndex): bool
+{
+    $next = nextSignificant($tokens, $newIndex);
+
+    while ($next !== null && is_array($tokens[$next]) && in_array($tokens[$next][0], [T_READONLY, T_ATTRIBUTE], true)) {
+        if ($tokens[$next][0] === T_ATTRIBUTE) {
+            return true;
+        }
+
+        $next = nextSignificant($tokens, $next);
+    }
+
+    return $next !== null && is_array($tokens[$next]) && $tokens[$next][0] === T_CLASS;
+}
+
+/**
+ * A method or function declaration has a name after `function`; a closure goes straight to `(`.
+ *
+ * @param  list<mixed>  $tokens
+ */
+function isNamedFunction(array $tokens, int $functionIndex): bool
+{
+    $next = nextSignificant($tokens, $functionIndex);
+
+    if ($next !== null && $tokens[$next] === '&') {
+        $next = nextSignificant($tokens, $next);
+    }
+
+    return $next !== null && $tokens[$next] !== '(';
+}
+
+/**
+ * @param  list<mixed>  $tokens
+ */
+function closureBodyIsSingleReturn(array $tokens, int $functionIndex): bool
+{
+    $count = count($tokens);
+    $i = nextSignificant($tokens, $functionIndex);
+
+    if ($i !== null && $tokens[$i] === '&') {
+        $i = nextSignificant($tokens, $i);
+    }
+
+    // Parameter list, then an optional `use (...)` list.
+    $i = skipParenthesised($tokens, (int) $i);
+    $next = $i === null ? null : nextSignificant($tokens, $i);
+
+    if ($next !== null && is_array($tokens[$next]) && $tokens[$next][0] === T_USE) {
+        $open = nextSignificant($tokens, $next);
+        $i = $open === null ? null : skipParenthesised($tokens, $open);
+    }
+
+    // Optional return type up to the body brace.
+    $cursor = $i === null ? null : nextSignificant($tokens, $i);
+
+    while ($cursor !== null && $tokens[$cursor] !== '{') {
+        if ($tokens[$cursor] === ';') {
+            return true;
+        }
+
+        $cursor = nextSignificant($tokens, $cursor);
+    }
+
+    if ($cursor === null) {
+        return true;
+    }
+
+    $depth = 0;
+    $statements = 0;
+    $first = null;
+    $lastSignificant = null;
+
+    for ($j = $cursor; $j < $count; $j++) {
+        $token = $tokens[$j];
+
+        if ($token === '{' || (is_array($token) && in_array($token[0], [T_CURLY_OPEN, T_DOLLAR_OPEN_CURLY_BRACES], true))) {
+            $depth++;
+
+            continue;
+        }
+
+        if ($token === '}') {
+            $depth--;
+
+            if ($depth === 0) {
+                break;
+            }
+
+            continue;
+        }
+
+        if (is_array($token) && in_array($token[0], [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT], true)) {
+            continue;
+        }
+
+        if ($depth === 1) {
+            $first ??= $token;
+            $lastSignificant = $token;
+
+            if ($token === ';') {
+                $statements++;
+            }
+        }
+    }
+
+    return is_array($first) && $first[0] === T_RETURN && $statements === 1 && $lastSignificant === ';';
+}
+
+/**
+ * @param  list<mixed>  $tokens
+ */
+function skipParenthesised(array $tokens, int $openIndex): ?int
+{
+    $count = count($tokens);
+    $depth = 0;
+
+    for ($i = $openIndex; $i < $count; $i++) {
+        if ($tokens[$i] === '(') {
+            $depth++;
+        } elseif ($tokens[$i] === ')') {
+            $depth--;
+
+            if ($depth === 0) {
+                return $i;
+            }
+        }
+    }
+
+    return null;
 }
 
 /**

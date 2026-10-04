@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use CoreX\Config\Contracts\ConfigReportSection;
+use CoreX\Config\Contracts\RuntimeConfigCheck;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Config\Data\SecretRef;
 use CoreX\Config\Internal\Commands\ValidateConfigCommand;
 use CoreX\Testing\ConfigReportTestSection;
@@ -126,4 +128,39 @@ it('does not carry errors or secret warnings into a later run of the same comman
     expect($tester->execute([], ['capture_stderr_separately' => true]))->toBe(0)
         ->and($tester->getDisplay())->not->toContain('WARNING [secret-default]')
         ->and($tester->getErrorOutput())->toBe('');
+});
+
+it('fails on a runtime check violation and prints its config path', function (): void {
+    app()->bind('probe.runtime-check', static fn (): RuntimeConfigCheck => new class implements RuntimeConfigCheck
+    {
+        public function violations(bool $production): array
+        {
+            return ['probe.feature.secret: must be configured when the feature is enabled'];
+        }
+    });
+    app()->tag(['probe.runtime-check'], RuntimeConfigCheck::class);
+
+    $result = validateConfigRun();
+
+    expect($result['exit'])->toBe(1)
+        ->and($result['stderr'])->toContain('probe.feature.secret: must be configured when the feature is enabled');
+});
+
+it('reports an acknowledged dangerous mode as a warning', function (): void {
+    config(['corex.acknowledged_dangerous_modes' => ['corex-workflow.enforce_declarations']]);
+    app()->forgetInstance(CoreOptions::class);
+
+    $result = validateConfigRun();
+
+    expect($result['exit'])->toBe(0)
+        ->and($result['stdout'])->toContain('WARNING [dangerous-mode-acknowledged] corex-workflow.enforce_declarations');
+});
+
+it('reports the physical tenancy opt-out as a notice without failing', function (): void {
+    config(['corex-operations.require_physical_tenancy' => false]);
+
+    $result = validateConfigRun();
+
+    expect($result['exit'])->toBe(0)
+        ->and($result['stdout'])->toContain('NOTICE [opt-out] corex-operations.require_physical_tenancy=false');
 });

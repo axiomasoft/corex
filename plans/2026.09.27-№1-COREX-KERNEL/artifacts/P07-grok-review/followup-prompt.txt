@@ -1,0 +1,5 @@
+Проверь только узкую последующую коррекцию твоего finding 5 (A8/G2). После твоего широкого отчёта я не исправлял остальные новые findings 1–4, 6–7; они явно остались открыты. Не повторяй широкое ревью и не проверяй их снова.
+
+Изменены: decisions/D99-p07-g2-scan-correction.md (приоритет над ошибочной цифрой D98), phases/P07/P07.1.md, research/P07-design.md и artifacts/P07-design/examples.md §6b, artifacts/P07-design-remediation/remediation.md; корень paths plans/2026.09.27-№1-COREX-KERNEL/. Во всех актуальных договорах baseline G2 остаётся 19 до P07.3, tenancy() удаляется отдельно, baseline не принадлежит Files P07.1. D98 сохранён исторически и переопределён D99. Runtime-globals gate на неизменённом продукте запущен и прошёл; лог artifacts/P07-design-remediation/runtime-globals-baseline-check.log. Продукт не менялся.
+
+Прочитай D99, актуальные положения трёх документов, scanner helper list и лог. Ответь кратко: закрыта ли ошибка числового baseline/Files, есть ли противоречие в этой узкой коррекции. Read-only, не запускай shell/subagents и не меняй файлы. Техническое ревью, формальный GREEN task:plan-audit не заявляй.

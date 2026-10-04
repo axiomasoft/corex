@@ -1,0 +1,5 @@
+overlap union and unchanged denominator: 17/20, pass
+below-floor coverage: rejected
+larger static denominator retained: 17/21, pass
+source hash drift: rejected
+weakened floor: rejected

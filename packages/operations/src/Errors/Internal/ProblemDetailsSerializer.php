@@ -4,35 +4,39 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Errors\Internal;
 
+use CoreX\Errors\Contracts\ProblemRegistry;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Data\InvocationMetadata;
-use CoreX\Operations\Laravel\Support\ApiOptions;
 use Illuminate\Http\JsonResponse;
 
 /** @internal RFC 9457 projection of one mapped ApiError. */
 final class ProblemDetailsSerializer
 {
-    public function __construct(private readonly ApiOptions $options) {}
+    public function __construct(private readonly ProblemRegistry $problems) {}
 
     public function error(ApiError $error, InvocationMetadata $metadata): JsonResponse
     {
         $descriptor = $error->errorDescriptor();
-        $message = $error->getMessage();
-        $response = new JsonResponse([
-            'type' => ErrorWire::type($this->options->problemTypeBase, $descriptor->code),
-            'title' => $message,
+        $definition = $this->problems->fromWire($descriptor->code);
+        $body = [
+            'type' => $definition->type,
+            'title' => $definition->title,
             'status' => $error->status,
-            'detail' => $message,
-            'instance' => ErrorWire::instance($this->options->problemTypeBase, $metadata->requestId),
+            'detail' => $error->getMessage(),
             'code' => $descriptor->code,
             'category' => $descriptor->category->value,
-            'path' => $descriptor->path,
             'retryable' => $descriptor->retryable,
             'details' => (object) $descriptor->details,
             'request_id' => $metadata->requestId,
             'correlation_id' => $metadata->correlationId,
             'api_version' => $metadata->version,
-        ], $error->status, ErrorWire::headers($metadata, $error));
+        ];
+
+        if ($descriptor->path !== null) {
+            $body['path'] = $descriptor->path;
+        }
+
+        $response = new JsonResponse(data: $body, status: $error->status, headers: ErrorWire::headers($metadata, $error));
         $response->headers->set('Content-Type', 'application/problem+json');
 
         return $response;

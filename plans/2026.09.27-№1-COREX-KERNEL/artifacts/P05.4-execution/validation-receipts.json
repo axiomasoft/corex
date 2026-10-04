@@ -1,0 +1,167 @@
+{
+  "context": {
+    "schema_version": "validation-context/v1",
+    "spec_sha256": "a4ec00c5fa03b5130c252a0c00577c6ee022da48d119641e74c9919b1c9add91",
+    "head": "b63436ef013b150774ec17ca579cbf9e68795614",
+    "tree": "d2b20c85e741eef8b9aec1e6722d173dab1584ce67a3fc83afa233551666b12d",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16"
+  },
+  "receipts": [
+    {
+      "schema_version": "validation-receipt/v1",
+      "evidence_id": "E15",
+      "command": "- `scripts/php84 vendor/bin/pest tests/Feature/ResidentLifecycleTest.php` → exit 0.",
+      "contract_sha256": "5c1f6cd7edc7c243b015b21a49f78b9c0b8ae4f9a3727a9ba5d9aa062acec188",
+      "spec_sha256": "a4ec00c5fa03b5130c252a0c00577c6ee022da48d119641e74c9919b1c9add91",
+      "head": "b63436ef013b150774ec17ca579cbf9e68795614",
+      "tree": "d2b20c85e741eef8b9aec1e6722d173dab1584ce67a3fc83afa233551666b12d",
+      "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+      "exit_code": 0,
+      "executed_at": "2026-10-03T12:52:09Z"
+    },
+    {
+      "schema_version": "validation-receipt/v1",
+      "evidence_id": "E16",
+      "command": "- `PGSQL_PORT=5434 scripts/php84 composer --working-dir=packages/tenancy test -- --group=pg --filter=ResidentTenantSwitch` → exit 0: метка A только в базе A, метка B только в базе B, в central — ни одной.",
+      "contract_sha256": "5c1f6cd7edc7c243b015b21a49f78b9c0b8ae4f9a3727a9ba5d9aa062acec188",
+      "spec_sha256": "a4ec00c5fa03b5130c252a0c00577c6ee022da48d119641e74c9919b1c9add91",
+      "head": "b63436ef013b150774ec17ca579cbf9e68795614",
+      "tree": "d2b20c85e741eef8b9aec1e6722d173dab1584ce67a3fc83afa233551666b12d",
+      "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+      "exit_code": 0,
+      "executed_at": "2026-10-03T12:52:09Z"
+    },
+    {
+      "schema_version": "validation-receipt/v1",
+      "evidence_id": "E17",
+      "command": "- `bash scripts/mutation-check.sh P05 scoped-to-singleton` → кейс краснеет под патчем, дерево восстановлено; `bash scripts/mutation-check.sh --all` → exit 0, прежние 34 кейса сохранены.",
+      "contract_sha256": "5c1f6cd7edc7c243b015b21a49f78b9c0b8ae4f9a3727a9ba5d9aa062acec188",
+      "spec_sha256": "a4ec00c5fa03b5130c252a0c00577c6ee022da48d119641e74c9919b1c9add91",
+      "head": "b63436ef013b150774ec17ca579cbf9e68795614",
+      "tree": "d2b20c85e741eef8b9aec1e6722d173dab1584ce67a3fc83afa233551666b12d",
+      "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+      "exit_code": 0,
+      "executed_at": "2026-10-03T12:52:09Z"
+    },
+    {
+      "schema_version": "validation-receipt/v1",
+      "evidence_id": "E18",
+      "command": "- `scripts/php84 composer config-cache-check` → exit 0; проба-конфиг с замыканием делает `ConfigCacheTest` красным (негативный контроль внутри теста).",
+      "contract_sha256": "5c1f6cd7edc7c243b015b21a49f78b9c0b8ae4f9a3727a9ba5d9aa062acec188",
+      "spec_sha256": "a4ec00c5fa03b5130c252a0c00577c6ee022da48d119641e74c9919b1c9add91",
+      "head": "b63436ef013b150774ec17ca579cbf9e68795614",
+      "tree": "d2b20c85e741eef8b9aec1e6722d173dab1584ce67a3fc83afa233551666b12d",
+      "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+      "exit_code": 0,
+      "executed_at": "2026-10-03T12:52:09Z"
+    },
+    {
+      "schema_version": "validation-receipt/v1",
+      "evidence_id": "E19",
+      "command": "- `scripts/php84 php scripts/configuration-reference.php --write` дважды → байт-идентично; `scripts/php84 php scripts/configuration-reference.php --check` → exit 0; `awk -F'|' '$2 ~ /^ (corex|tenancy)/ && $10 !~ /Options::\\$/' docs/architecture/configuration.md | wc -l` → `0`.",
+      "contract_sha256": "5c1f6cd7edc7c243b015b21a49f78b9c0b8ae4f9a3727a9ba5d9aa062acec188",
+      "spec_sha256": "a4ec00c5fa03b5130c252a0c00577c6ee022da48d119641e74c9919b1c9add91",
+      "head": "b63436ef013b150774ec17ca579cbf9e68795614",
+      "tree": "d2b20c85e741eef8b9aec1e6722d173dab1584ce67a3fc83afa233551666b12d",
+      "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+      "exit_code": 0,
+      "executed_at": "2026-10-03T12:52:09Z"
+    },
+    {
+      "schema_version": "validation-receipt/v1",
+      "evidence_id": "E20",
+      "command": "- Ручная правка одной строки `docs/architecture/configuration.md` → `--check` exit 1; откат → exit 0.",
+      "contract_sha256": "5c1f6cd7edc7c243b015b21a49f78b9c0b8ae4f9a3727a9ba5d9aa062acec188",
+      "spec_sha256": "a4ec00c5fa03b5130c252a0c00577c6ee022da48d119641e74c9919b1c9add91",
+      "head": "b63436ef013b150774ec17ca579cbf9e68795614",
+      "tree": "d2b20c85e741eef8b9aec1e6722d173dab1584ce67a3fc83afa233551666b12d",
+      "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+      "exit_code": 0,
+      "executed_at": "2026-10-03T12:52:09Z"
+    },
+    {
+      "schema_version": "validation-receipt/v1",
+      "evidence_id": "E21",
+      "command": "- `grep -A5 -E '^### (RUN-004|RUN-005|CFG-002|CFG-003|CFG-004|CFG-005) ' docs/architecture/constitution.md | grep -c -E 'Enforcement\\.\\*\\* (нет|частично)'` → `0`; статья RUN-005 называет `runtime-globals-gate`, `SingletonInjectionTest`, `ResidentLifecycleTest`, `ResidentTenantSwitchPgTest`.",
+      "contract_sha256": "5c1f6cd7edc7c243b015b21a49f78b9c0b8ae4f9a3727a9ba5d9aa062acec188",
+      "spec_sha256": "a4ec00c5fa03b5130c252a0c00577c6ee022da48d119641e74c9919b1c9add91",
+      "head": "b63436ef013b150774ec17ca579cbf9e68795614",
+      "tree": "d2b20c85e741eef8b9aec1e6722d173dab1584ce67a3fc83afa233551666b12d",
+      "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+      "exit_code": 0,
+      "executed_at": "2026-10-03T12:52:09Z"
+    },
+    {
+      "schema_version": "validation-receipt/v1",
+      "evidence_id": "E22",
+      "command": "- `php scripts/package-docs-gate.php` → exit 0; `bash scripts/anti-weakening-gate.sh` → exit 0.",
+      "contract_sha256": "5c1f6cd7edc7c243b015b21a49f78b9c0b8ae4f9a3727a9ba5d9aa062acec188",
+      "spec_sha256": "a4ec00c5fa03b5130c252a0c00577c6ee022da48d119641e74c9919b1c9add91",
+      "head": "b63436ef013b150774ec17ca579cbf9e68795614",
+      "tree": "d2b20c85e741eef8b9aec1e6722d173dab1584ce67a3fc83afa233551666b12d",
+      "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+      "exit_code": 0,
+      "executed_at": "2026-10-03T12:52:09Z"
+    },
+    {
+      "schema_version": "validation-receipt/v1",
+      "evidence_id": "E23",
+      "command": "- `grep -n -e runtime-globals-gate -e config-cache-check -e configuration-reference .github/workflows/ci.yml composer.json` → каждый идентификатор присутствует в обоих файлах.",
+      "contract_sha256": "5c1f6cd7edc7c243b015b21a49f78b9c0b8ae4f9a3727a9ba5d9aa062acec188",
+      "spec_sha256": "a4ec00c5fa03b5130c252a0c00577c6ee022da48d119641e74c9919b1c9add91",
+      "head": "b63436ef013b150774ec17ca579cbf9e68795614",
+      "tree": "d2b20c85e741eef8b9aec1e6722d173dab1584ce67a3fc83afa233551666b12d",
+      "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+      "exit_code": 0,
+      "executed_at": "2026-10-03T12:52:09Z"
+    },
+    {
+      "schema_version": "validation-receipt/v1",
+      "evidence_id": "E24",
+      "command": "- Итог фазы на финальном кандидате: `php scripts/config-composition-gate.php` → `config-composition-gate: OK`; `php scripts/provider-size-gate.php` → `provider-size-gate: OK`; `php scripts/runtime-globals-gate.php` → `runtime-globals-gate: OK`; `scripts/php84 vendor/bin/pest tests/Arch/SingletonInjectionTest.php` → exit 0 при пустом allowlist.",
+      "contract_sha256": "5c1f6cd7edc7c243b015b21a49f78b9c0b8ae4f9a3727a9ba5d9aa062acec188",
+      "spec_sha256": "a4ec00c5fa03b5130c252a0c00577c6ee022da48d119641e74c9919b1c9add91",
+      "head": "b63436ef013b150774ec17ca579cbf9e68795614",
+      "tree": "d2b20c85e741eef8b9aec1e6722d173dab1584ce67a3fc83afa233551666b12d",
+      "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+      "exit_code": 0,
+      "executed_at": "2026-10-03T12:52:09Z"
+    },
+    {
+      "schema_version": "validation-receipt/v1",
+      "evidence_id": "E25",
+      "command": "- `scripts/php84 composer lint:check`, `scripts/php84 composer analyse` → exit 0; `php scripts/quality-ceiling-guard.php` → `ceilings OK`.",
+      "contract_sha256": "5c1f6cd7edc7c243b015b21a49f78b9c0b8ae4f9a3727a9ba5d9aa062acec188",
+      "spec_sha256": "a4ec00c5fa03b5130c252a0c00577c6ee022da48d119641e74c9919b1c9add91",
+      "head": "b63436ef013b150774ec17ca579cbf9e68795614",
+      "tree": "d2b20c85e741eef8b9aec1e6722d173dab1584ce67a3fc83afa233551666b12d",
+      "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+      "exit_code": 0,
+      "executed_at": "2026-10-03T12:52:09Z"
+    },
+    {
+      "schema_version": "validation-receipt/v1",
+      "evidence_id": "E26",
+      "command": "- Один раз на финальном кандидате: `scripts/php84 composer test:hermetic`, `PGSQL_PORT=5434 scripts/php84 composer test:pg`, `scripts/php84 composer test:packages`, `scripts/php84 composer test:arch`, `scripts/php84 composer golden` → exit 0; Golden без изменений относительно P05.3, если тесты не потребовали ремонта биндинга.",
+      "contract_sha256": "5c1f6cd7edc7c243b015b21a49f78b9c0b8ae4f9a3727a9ba5d9aa062acec188",
+      "spec_sha256": "a4ec00c5fa03b5130c252a0c00577c6ee022da48d119641e74c9919b1c9add91",
+      "head": "b63436ef013b150774ec17ca579cbf9e68795614",
+      "tree": "d2b20c85e741eef8b9aec1e6722d173dab1584ce67a3fc83afa233551666b12d",
+      "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+      "exit_code": 0,
+      "executed_at": "2026-10-03T12:52:09Z"
+    },
+    {
+      "schema_version": "validation-receipt/v1",
+      "evidence_id": "E27",
+      "command": "- Review `light` (D71): self-check по досье §6; строка `review: self-check GREEN` в Completion Notes.",
+      "contract_sha256": "5c1f6cd7edc7c243b015b21a49f78b9c0b8ae4f9a3727a9ba5d9aa062acec188",
+      "spec_sha256": "a4ec00c5fa03b5130c252a0c00577c6ee022da48d119641e74c9919b1c9add91",
+      "head": "b63436ef013b150774ec17ca579cbf9e68795614",
+      "tree": "d2b20c85e741eef8b9aec1e6722d173dab1584ce67a3fc83afa233551666b12d",
+      "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+      "exit_code": 0,
+      "executed_at": "2026-10-03T12:52:09Z"
+    }
+  ]
+}

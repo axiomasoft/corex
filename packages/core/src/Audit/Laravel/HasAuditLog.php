@@ -8,6 +8,7 @@ use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Audit\Contracts\Auditable;
 use CoreX\Audit\Internal\AuditObserver;
+use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -25,7 +26,7 @@ trait HasAuditLog
     public static function bootHasAuditLog(): void
     {
         // Observers are registered UNCONDITIONALLY — the killswitch
-        // (Config::auditEnabled) is evaluated at write time in
+        // (CoreOptions::auditEnabled) is evaluated at write time in
         // AuditObserver::record(), not here (A60): model boot happens once and
         // is cached across the process, so a boot-time skip would never
         // re-enable when the config flips (and the capability path never saw
@@ -65,7 +66,7 @@ trait HasAuditLog
     private static function recordAudit(Model $model, string $action): null
     {
         if ($model instanceof Auditable) {
-            AuditObserver::record($model, $action);
+            Container::getInstance()->make(AuditObserver::class)->record($model, $action);
         }
 
         return null;

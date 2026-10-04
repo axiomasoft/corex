@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Internal\Config;
+use CoreX\Config\Data\CoreOptions;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,12 +11,12 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create(Config::savedViewScopesTable(), function (Blueprint $table): void {
+        Schema::create(app(CoreOptions::class)->savedViewScopesTable, function (Blueprint $table): void {
             $table->string('entity_code', 128);
             $table->string('scope_key', 1024);
             $table->primary(['entity_code', 'scope_key']);
         });
-        Schema::create(Config::savedViewsTable(), function (Blueprint $table): void {
+        Schema::create(app(CoreOptions::class)->savedViewsTable, function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->string('entity_code', 128);
             $table->string('workspace_id', 255)->nullable();
@@ -34,7 +34,7 @@ return new class extends Migration
             $table->string('created_by', 128);
             $table->timestampsTz(precision: 6);
             $table->unique(['entity_code', 'default_scope_key']);
-            $table->foreign(['entity_code', 'scope_key'])->references(['entity_code', 'scope_key'])->on(Config::savedViewScopesTable());
+            $table->foreign(['entity_code', 'scope_key'])->references(['entity_code', 'scope_key'])->on(app(CoreOptions::class)->savedViewScopesTable);
         });
     }
 };

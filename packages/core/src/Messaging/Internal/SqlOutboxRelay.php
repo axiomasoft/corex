@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Messaging\Internal;
 
-use CoreX\Config\Data\CoreOptions;
 use CoreX\Messaging\Contracts\OutboxRelay;
 use CoreX\Messaging\Data\LeasedMessage;
 use CoreX\Messaging\Data\MessageEnvelope;
@@ -27,6 +26,7 @@ final readonly class SqlOutboxRelay implements OutboxRelay
         private int $leaseSeconds,
         private int $maxAttempts,
         private int $backoffCapSeconds,
+        private string $table = 'sys_outbox_messages',
     ) {}
 
     /** @return list<LeasedMessage> */
@@ -35,7 +35,7 @@ final readonly class SqlOutboxRelay implements OutboxRelay
     {
         $now = $this->clock->now();
         $leaseUntil = $now->add(new DateInterval("PT{$this->leaseSeconds}S"));
-        $table = app(CoreOptions::class)->outboxMessagesTable;
+        $table = $this->table;
 
         /** @var list<object> $rows */
         $rows = $this->connection->transaction(function () use ($table, $leaseOwner, $batchSize, $now, $leaseUntil): array {
@@ -124,7 +124,7 @@ final readonly class SqlOutboxRelay implements OutboxRelay
     {
         $now = $this->clock->now();
 
-        $changed = $this->connection->table(app(CoreOptions::class)->outboxMessagesTable)
+        $changed = $this->connection->table($this->table)
             ->where('id', $message->envelope->messageId)
             ->where('status', 'publishing')
             ->where('lease_owner', $message->leaseOwner)
@@ -150,7 +150,7 @@ final readonly class SqlOutboxRelay implements OutboxRelay
         $dead = $message->attempt >= $this->maxAttempts;
         $delay = min($this->backoffCapSeconds, 2 ** $message->attempt);
 
-        $changed = $this->connection->table(app(CoreOptions::class)->outboxMessagesTable)
+        $changed = $this->connection->table($this->table)
             ->where('id', $message->envelope->messageId)
             ->where('status', 'publishing')
             ->where('lease_owner', $message->leaseOwner)

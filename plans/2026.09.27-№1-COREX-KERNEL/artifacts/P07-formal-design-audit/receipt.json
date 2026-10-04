@@ -1,0 +1,50 @@
+{
+  "adapter_attestation": null,
+  "commit_sha": "4137d2412497aa9348cf19322b26f1d074b5ad2c",
+  "continuity": {
+    "evidence": [
+      "batch:830e2cb881f05da62be0f5b03dfb2dec2fdacab9fef449186a6418d8d9ca925f",
+      "loaded-inputs:not-reusable",
+      "cold-start-cost:0"
+    ],
+    "outcome": "waiting-owner",
+    "reason": "owner-wait",
+    "runnable": false,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": null,
+    "handoff": "sha256:71a4b74d96ad9fdc8b333154854a7c65f260baa39af85f40259eb3652fe8afcf",
+    "plan": "sha256:a7861d5e98c9669747a13196cec387faa37a82d7164b2d209967729eb213f351",
+    "state": null
+  },
+  "journal": null,
+  "next_exact": "waiting: подтверждена модель аудитора, отличная от авторов P07 (D24), и её provider provenance frontier/xhigh → audit-design: task:plan-audit 2026.09.27-№1-COREX-KERNEL design",
+  "plan_id": "2026.09.27-№1-COREX-KERNEL",
+  "rationale": {
+    "open_risks": "Содержательные P07 контракты, Validation и 143 standalone checks здесь не оценены. Нет PG/provider/Redis/Memcached или product suites. Preflight freshness выявил 33 устаревших bundles из 36, включая P07.1–P07.6; это generated-carrier observation, не заявленный дефект дизайна. Bundles сохранены без ремонта; их детерминированный owner — Task plan-views bundle. Status/state/decision views до запуска свежие.",
+    "remaining": "Formal independent audit текущего 830e2cb881f05da62be0f5b03dfb2dec2fdacab9fef449186a6418d8d9ca925f не состоялся из-за admission blocker. Подтверждённый другой model selector и provenance — owning continuation этого блокера; текущая сессия ничего не запускает. Даже будущий GREEN не разрешает P07 до закрытия P06 по D94. P06 acceptance остаётся открытой, closure отсутствует; P07.1–P07.6 Not started. Старый waiver D89 stale."
+  },
+  "recommendation": "**Next:** waiting: подтверждена модель аудитора, отличная от авторов P07 (D24), и её provider provenance frontier/xhigh → audit-design: task:plan-audit 2026.09.27-№1-COREX-KERNEL design\n\n| Parameter | Meaning |\n|:--|:--|\n| Batch | n/a |\n| Model | frontier |\n| Thinking | xhigh |\n| Context | waiting-owner |\n| Суть | Доказать независимость модели по D24 перед формальным аудитом; P06 acceptance до исполнения P07. |\n\n```session-continuity-decision/v1\n{\"evidence\": [\"batch:830e2cb881f05da62be0f5b03dfb2dec2fdacab9fef449186a6418d8d9ca925f\", \"loaded-inputs:not-reusable\", \"cold-start-cost:0\"], \"outcome\": \"waiting-owner\", \"reason\": \"owner-wait\", \"runnable\": false, \"schema_version\": \"session-continuity-decision/v1\"}\n```\n\n**Native Codex command (conditional recommendation only):**\n\n```bash\n# NOT BEFORE: подтверждена модель аудитора, отличная от авторов P07 (D24), и её provider provenance frontier/xhigh; gpt-6-astra допустима только при подтверждённом отличии от авторов P07.\ncodex -C /home/vostrikov/projects/packages/corex -m gpt-6-astra -c 'model_reasoning_effort=\"xhigh\"' -a never -s danger-full-access '$ task:plan-audit 2026.09.27-№1-COREX-KERNEL design'\n```",
+  "route": {
+    "batch": "n/a",
+    "command": null,
+    "context": "waiting-owner",
+    "continuity": {
+      "evidence": [
+        "batch:830e2cb881f05da62be0f5b03dfb2dec2fdacab9fef449186a6418d8d9ca925f",
+        "loaded-inputs:not-reusable",
+        "cold-start-cost:0"
+      ],
+      "outcome": "waiting-owner",
+      "reason": "owner-wait",
+      "runnable": false,
+      "schema_version": "session-continuity-decision/v1"
+    },
+    "model": "frontier",
+    "thinking": "xhigh"
+  },
+  "schema_version": "handoff-recommendation-receipt/v1",
+  "status": "handoff-persisted",
+  "subject": "design"
+}

@@ -7,7 +7,7 @@ namespace CoreX\Operations\Errors\Internal;
 use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Data\InvocationMetadata;
 
-/** @internal Stable error members shared by both HTTP representations. */
+/** @internal Response metadata and headers. */
 final class ErrorWire
 {
     /** @return array<string, string> */
@@ -28,7 +28,6 @@ final class ErrorWire
         $headers = [
             'X-Request-ID' => $metadata->requestId,
             'Cache-Control' => 'no-store',
-            'Vary' => 'Accept',
         ];
         $seconds = RetryAfterPolicy::seconds($error?->retryAfterPolicy);
 
@@ -37,15 +36,5 @@ final class ErrorWire
         }
 
         return $headers;
-    }
-
-    public static function type(string $problemTypeBase, string $code): string
-    {
-        return rtrim($problemTypeBase, '/').'/'.rawurlencode($code);
-    }
-
-    public static function instance(string $problemTypeBase, string $requestId): string
-    {
-        return rtrim($problemTypeBase, '/').'/instances/'.rawurlencode($requestId);
     }
 }

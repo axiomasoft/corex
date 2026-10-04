@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Modules\Internal;
 
+use Closure;
 use CoreX\Modules\Contracts\ModuleRegistrar;
 use Illuminate\Contracts\Foundation\Application;
 
@@ -17,14 +18,15 @@ final class ServiceProviderModuleRegistrar implements ModuleRegistrar
     /** @var list<class-string> */
     private array $registered = [];
 
+    /** @param  Closure(): Application  $application  resolves the running application when a provider is registered. */
     public function __construct(
-        private readonly Application $app,
+        private readonly Closure $application,
     ) {}
 
     public function register(string ...$providers): void
     {
         foreach ($providers as $provider) {
-            $this->app->register($provider);
+            ($this->application)()->register($provider);
             $this->registered[] = $provider;
         }
     }

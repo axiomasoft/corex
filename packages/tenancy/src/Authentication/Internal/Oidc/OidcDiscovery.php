@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Authentication\Internal\Oidc;
 
 use CoreX\Tenancy\Authentication\Exceptions\OidcAuthenticationException;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Contracts\Cache\Factory as CacheFactory;
+use Illuminate\Http\Client\Factory as HttpFactory;
 
 /**
  * `GET {issuer}/.well-known/openid-configuration` (D123/D129 — endpoints
  * come from Discovery, never hardcoded), cached under a configurable
  * store/TTL so a real login does not round-trip the AS on every request.
- * Uses {@see Http} (not a raw Guzzle/PSR-18 client) so `Http::fake()` works
+ * Uses {@see HttpFactory} (not a raw Guzzle/PSR-18 client) so `Http::fake()` works
  * in tests (D130).
  *
  * @internal
@@ -22,6 +22,8 @@ final class OidcDiscovery
     private const string CACHE_KEY_PREFIX = 'corex_tenancy_oidc_discovery:';
 
     public function __construct(
+        private readonly HttpFactory $http,
+        private readonly CacheFactory $cache,
         private readonly string $issuer,
         private readonly ?string $cacheStore,
         private readonly int $cacheTtl,
@@ -59,11 +61,11 @@ final class OidcDiscovery
     private function document(): array
     {
         /** @var array<string, mixed> $document */
-        $document = Cache::store($this->cacheStore)->remember(
+        $document = $this->cache->store($this->cacheStore)->remember(
             self::CACHE_KEY_PREFIX.md5($this->issuer),
             $this->cacheTtl,
             function (): array {
-                $response = Http::get(rtrim($this->issuer, '/').'/.well-known/openid-configuration');
+                $response = $this->http->createPendingRequest()->get(rtrim($this->issuer, '/').'/.well-known/openid-configuration');
 
                 if ($response->failed()) {
                     throw OidcAuthenticationException::discoveryFailed();

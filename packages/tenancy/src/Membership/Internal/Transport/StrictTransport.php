@@ -22,9 +22,9 @@ use CoreX\Tenancy\Membership\Laravel\RevokeMembershipReceiptFactory;
 use DateTimeImmutable;
 use DateTimeZone;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\Factory as HttpFactory;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Throwable;
 
@@ -44,6 +44,7 @@ final class StrictTransport implements CentralApiClient
      *  @param Closure(): (array{accountId: string, product: string}|null) $context
      * @param Closure(RevokeMembershipRequest):bool $removalPermission */
     public function __construct(
+        private readonly HttpFactory $http,
         private readonly ?ChannelBinding $binding,
         private readonly string $accessToken,
         private readonly AccessTokenValidator $tokenValidator,
@@ -166,7 +167,7 @@ final class StrictTransport implements CentralApiClient
         $this->binding->assertUsable(accountId: $accountId, product: $product, now: $now);
         $this->tokenValidator->validate(token: $this->accessToken, binding: $this->binding, capability: $capability, now: $now);
 
-        return Http::acceptJson()->asJson()->withToken($this->accessToken)
+        return $this->http->createPendingRequest()->acceptJson()->asJson()->withToken($this->accessToken)
             ->timeout(5)->connectTimeout(5)
             ->withOptions(['cert' => $this->binding->certificatePath, 'ssl_key' => $this->binding->keyPath, 'verify' => $this->binding->caPath, 'allow_redirects' => false])
             ->withHeaders(['Cache-Control' => 'no-store', 'X-CoreX-Membership-Profile' => 'corex-membership/1']);

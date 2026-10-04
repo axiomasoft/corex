@@ -1,0 +1,44 @@
+# P05 hosted CI (D73)
+
+Mirror only: `academici/corex-mirror` (`git remote mirror`). `origin` was not pushed.
+
+## Green run
+
+| Field | Value |
+|:--|:--|
+| Workflow | `CI` |
+| Run | `37123316791` |
+| URL | https://github.com/academici/corex-mirror/actions/runs/37123316791 |
+| SHA | `0c7f7e84819e8730815afdc93e2256c13ab0f0cd` |
+| Event | `push` |
+| Conclusion | `success` |
+| Jobs | 36 `success`, 0 `failure`, 1 `skipped` |
+
+The skipped job is `Mutation registry (scripts/mutation-check.sh --all)`. It is gated on `pull_request` in `.github/workflows/ci.yml`, the same skip recorded for P10.4 and P05.2. `gh run list --repo academici/corex-mirror --workflow CI --commit 0c7f7e84819e8730815afdc93e2256c13ab0f0cd --json conclusion` returns `success`.
+
+## Runs repaired before that SHA
+
+| Run | SHA | Conclusion | Red jobs | Repair |
+|:--|:--|:--|:--|:--|
+| `37121987443` | `a5c1f350` | `failure` | Crm package; Layer & core-isolation gate; Static analysis & code style; Tenancy package (PG18) Laravel 12 and Laravel 13 | `a7a7d4a4` |
+| `37122642062` | `a7a7d4a4` | `failure` | Remaining cohort package aggregator; Static analysis & code style | `9aaaa7f6`, `0c7f7e84` |
+
+`37121987443` (introduced by P05.3/P05.4, first hosted run of this phase tip):
+
+- Crm `Tests\Pg\ModuleLifecycleTest`: `new ModuleDiscovery` no longer falls back to `base_path()`. The test now resolves the container binding after `setBasePath`. Local: 1 passed.
+- DATA-003 did not resolve an Options method parameter or a trait accessor (`$options->outboxMessagesTable`, `$this->coreOptions()->settingsTable`). The gate follows those forms. Local: `DATA-003: OK (267 statically resolved writes)`; 8 unit tests passed.
+- `tests/Feature/ConfigCacheTest.php` used `eval()`. The round-trip now includes a generated PHP file. Local: `config-cache-check` 3 passed; `analyse:tests-lint` no errors.
+- `OidcLoginController` is scoped because it stores scoped `ImpersonationService`. The tenancy binding test now asserts scoped lifetime. Local: 1 passed, 37 assertions.
+
+`37122642062`:
+
+- `packages/access` `ScopeVersionConcurrencyTest` (`LockTimeoutException`). `ScopeMapVersion` was not changed by P05. Laravel polls a blocked lock every 250 ms, so four concurrent bumps missed a free lock inside the 5 s deadline. The poll is now 50 ms; the 5 s deadline is unchanged. Local: 3/3 passed; access PHPStan no errors. Pre-P05 path, repaired here because D73 does not leave it red.
+- The new DATA-003 branches widened ignored PHPStan counts and added untyped returns. Parameter nodes are narrowed and the return-type map is annotated. Baseline counts were not raised. Local PHPStan on the script: no errors.
+
+## Product commits on the green SHA
+
+- `6bf07d9a` P05.4 resident lifecycle, config cache, configuration reference
+- `a5c1f350` mutation guard without `rg`; `P1.19-hardcode-uuid` reanchored
+- `a7a7d4a4` first five red jobs
+- `9aaaa7f6` scope-map lock poll
+- `0c7f7e84` DATA-003 PHPStan types (this SHA)

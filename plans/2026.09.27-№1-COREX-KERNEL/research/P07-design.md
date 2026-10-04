@@ -1,0 +1,220 @@
+# P07 — досье дизайна
+
+База: commit `4137d241` (после P06.5; P06 ещё не закрыта — D94). Нормы: D13, D14, D16, D69, D70, D95, D96, D97 с приоритетными поправками D98–D101.
+Факты воспроизводимы: `bash plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design/scripts/p07-facts.sh` → `artifacts/P07-design/facts/*.txt`.
+Внешние факты — `research/P07-design-rag.md` (W1–W7). Готовый код и worked examples — `artifacts/P07-design/examples.md`.
+Окружение исполнения как в P06: `scripts/php84`, python3, PostgreSQL `corex_test` на host-порту 5434 (`PGSQL_PORT=5434`), preflight до мутирующих тестов.
+
+## 1. Карта кода
+
+### 1.1 Движок (P07.1)
+
+| Файл | Сейчас | Цель |
+|:--|:--|:--|
+| `packages/core/src/Context/Contracts/TenancyManager.php` | SPI `context/initialized/initialize/setWorkspace/end/runFor` | без изменений сигнатур; docblock — семантика D95 п.2–п.3 |
+| `packages/tenancy/src/Runtime/Internal/StanclTenancyManager.php` (100 стр.) | делегирует `Stancl\Tenancy\Tenancy` | удалить; новый `Runtime/Internal/DatabaseTenancyManager.php` (examples §1) |
+| `packages/tenancy/src/Runtime/Contracts/TenantBootstrapper.php` | нет | новый SPI (examples §2) |
+| `packages/tenancy/src/Runtime/Internal/Bootstrappers/{Connection,CachePrefix,SessionConnection}Bootstrapper.php` | stancl `Database/Cache/DatabaseSession` bootstrappers | новые (examples §3) |
+| `packages/tenancy/src/Laravel/Bootstrappers/WorkspaceContextBootstrapper.php` (119) | реализует stancl `TenancyBootstrapper`, `__constructStatic` | удалить; workspace state у manager, queue restore в QueueTenantContext (D98) |
+| `packages/tenancy/src/Runtime/Internal/CentralTemplateConnectionResolver.php` | `AccountConnectionResolver` не забинден; stancl строит соединение из central + `db_name` | новый штатный `AccountConnectionResolver` (`bindIf`), examples §1b |
+| `packages/tenancy/src/Runtime/Events/{TenantContextInitialized,TenantContextEnded}.php` | stancl `TenancyInitialized/Ended` | новые `#[Api]` события (account id, workspace id) |
+| `packages/tenancy/src/Runtime/Exceptions/TenantContextUnavailable.php` | нет | новое исключение с кодом реестра `tenancy.context_unavailable` (P04 реестр ошибок tenancy) |
+| `packages/tenancy/src/Laravel/RuntimeRegistrar.php` (153) | singleton `StanclTenancyManager`, цикл `bootstrapper_order`, проекция `tenancy.*` в boot | singleton `DatabaseTenancyManager`, список bootstrappers из `TenancyOptions::$bootstrappers`; model/provisioning projections и UUID binding временно сохраняются по D98 п.6, runtime projections удаляются |
+| `packages/tenancy/src/Laravel/EventsRegistrar.php` (64) | stancl `BootstrapTenancy/RevertToCentralContext`, `JobPipeline` на `TenantCreated` | слушатели очереди (examples §4); `JobPipeline` уходит в P07.2 |
+| `packages/tenancy/src/Laravel/Listeners/RevertTenancyOnJobException.php` (35) | `tenancy()->end()` | `TenancyManager::end()`; часть `QueueTenantContext` |
+| `packages/tenancy/src/Laravel/Resolvers/HostTenantResolver.php` (104) | `extends CachedTenantResolver` | `Runtime/Internal/HostAccountResolver.php` (examples §5) |
+| `packages/tenancy/src/Laravel/Http/Middleware/ResolveTenantFromHost.php` (34) | stancl `IdentificationMiddleware` | собственный middleware: initialize → `$next` → `finally end()` |
+| `packages/tenancy/src/Laravel/HttpRegistrar.php` (170, стр. 124–131) | `ScopeSessions` | `Laravel/Http/Middleware/ScopeSessionToTenant.php` (examples §6) |
+| `packages/tenancy/src/Laravel/Http/Middleware/AccountStatusGate.php:36` | `tenancy()->tenant` и owner_identity_id | `TenantContextResolver` + `AccountRead::ownerIdentityId(id, centralConnection)` + `AuthFactory`; constructor BC (D102/examples §6c) |
+| `packages/tenancy/src/Authentication/Internal/Http/Controllers/OidcLoginController.php:87` | `tenancy()->tenant` | `TenantContextResolver` инъекцией |
+| `packages/tenancy/src/Laravel/Support/TenancyOptions.php` (513) | `bootstrapperOrder` (class-string stancl), `tenantModel`, `idGenerator`, `tenantDatabaseManager`, `cachePrefix` | `bootstrappers: list<class-string<TenantBootstrapper>>` (закрытый порядок валидируется), `cachePrefix`, `hostCache*`; поля stancl удаляются в P07.2 |
+| `packages/tenancy/src/Runtime/Exceptions/TenantCouldNotBeIdentifiedByHostException.php` | реализует stancl `TenantCouldNotBeIdentifiedException` | реализует только собственную иерархию ошибок пакета |
+
+### 1.2 Данные, provisioning, manifests (P07.2)
+
+| Файл | Сейчас | Цель |
+|:--|:--|:--|
+| `packages/tenancy/src/Account/Internal/Models/Account.php` (97) | `extends Stancl Tenant implements TenantWithDatabase`, `HasDatabase`, `InvalidatesResolverCache`, `$dispatchesEvents` stancl, `getCustomColumns` | `extends Model`, `HasUuids`, `$table='root_accounts'`, `$connection` = central из options; явные `$fillable`/`$casts`; observer инвалидации кэша host (§1.1) |
+| `packages/tenancy/src/DomainTrust/Internal/Models/Domain.php` (69) | `InvalidatesTenantsResolverCache` | тот же observer |
+| `packages/tenancy/src/Account/Internal/StanclTenantDatabaseProvisioner.php` (51) | диспатчит stancl `TenantCreated` → `JobPipeline` | `DatabaseTenantProvisioner`: синхронно `CreateDatabaseFromTemplate::dispatchSync` (поведение `shouldBeQueued(false)`) |
+| `packages/tenancy/src/Account/Internal/Jobs/CreateDatabaseFromTemplate.php` | принимает stancl tenant | принимает `AccountRef` + `ProvisionParams` |
+| `packages/tenancy/src/Provisioning/Internal/StanclTenantDatabaseLifecycle.php` | stancl tenant/manager | `DatabaseTenantLifecycle` поверх `TemplateClonePostgreSQLManager` |
+| `packages/tenancy/src/Provisioning/Internal/Database/TemplateClonePostgreSQLManager.php` (140) | `extends PostgreSQLDatabaseManager` | самостоятельный: `createDatabase(string $name, string $template)`, `deleteDatabase(string $name)`, `databaseExists(string $name)` через `ConnectionResolverInterface` central; квотирование идентификаторов как сейчас |
+| `packages/tenancy/src/Account/Laravel/AccountTemplateSnapshot.php` (23) | stancl-тип в сигнатуре | `AccountRef` |
+| `packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php`, `Laravel/AuthenticationRegistrar.php` | Stancl Account type, два tenancy() | P07.1 снимает тип и helpers через TenantContextResolver; G2 остаётся 19 до P07.3 (D99); порты — P07.3 |
+| `packages/tenancy/config/tenancy.php` → `config/corex-tenancy.php` | два config-ключа, ключ `tenancy` общий со stancl | один ключ `corex-tenancy`; `TenancyOptions::fromArray(array $config)`; `TenancyServiceProvider` — один `mergeConfigFrom`, publish-tag `corex-tenancy-config` |
+| `packages/tenancy/src/PHPStan/Rules/StanclImportBoundaryRule.php`, `packages/tenancy/extension.neon` (регистрация), `tests/PHPStan/StanclImportBoundaryRuleTest.php`, `tests/PHPStan/data/**/stancl-import.php`, `tests/Arch/StanclIsolationTest.php` | граница импорта stancl | удалить |
+| `packages/core/src/Context/Contracts/TenantDatabaseLifecycle.php` | docblock со stancl | docblock без stancl |
+| `composer.json` (root), `packages/tenancy/composer.json`, `composer.lock` | `axiomasoft/stancl-tenancy`, `axiomasoft/stancl-jobpipeline`; lock: + `stancl/virtualcolumn` | удалить; `composer update --lock` без других изменений (§3.2 шаг 9) |
+| `scripts/manifest-check.py` стр. 20–24, 110–121 | `ALLOWED_PRERELEASE` со stancl, правило `prerelease-root` | `ALLOWED_PRERELEASE = {}`; ветку `needed` для tenancy удалить |
+| `scripts/distribution/stage-stancl-providers.py`, `.composer-provider-staging/`, `.github/workflows/{ci,distribution-proof,remaining-cohort-proof}.yml` (шаги «Stage sealed stancl provider candidates»), `scripts/{ci-local.sh,bc-check.sh,dependency-analyser.sh}`, `scripts/distribution/{pristine-proof.py,profile-proof.py,remaining-cohort-policy.json,tests/test_publish_guard.py}`, `scripts/configuration-classes.json` | staging снимков и ссылки на stancl | удалить шаги/ссылки; полный список — `facts/stancl-coupling.txt` §non-PHP |
+| `packages/tenancy/phpstan-baseline.neon`, `packages/tenancy/resources/contracts/php-api.json` | строки stancl | регенерация (`php-api --write`), baseline только сокращается |
+| `docs/architecture/configuration.md`, `packages/tenancy/{README,PACKAGE,CHANGELOG}.md` | stancl v4 | собственный движок; `docs/03_Dev/**`, `docs/audit-*.md` — исторические, не правятся |
+
+### 1.3 Impersonation (P07.3)
+
+| Файл | Цель |
+|:--|:--|
+| `packages/core/src/Audit/Contracts/SynchronousAuditWriter.php`, `Internal/DatabaseSynchronousAuditWriter.php`, `Laravel/AuditRegistrar.php`, core tests/README/CHANGELOG | новый публичный SPI и writer без impersonation/queue, committed saveQuietly + explicit configured ids через AuditLog (examples §7d) |
+| `packages/tenancy/src/Impersonation/Contracts/{ImpersonationGrantStore,ImpersonationAuditSink}.php` | новые порты (examples §7) |
+| `packages/tenancy/src/Impersonation/Data/{GrantClaim,ClaimedGrant,ImpersonationAuditEvent}.php` | новые value objects |
+| `packages/tenancy/src/Impersonation/Enums/ImpersonationProfile.php` | `dev|standard|regulated` с методами правил (examples §8) |
+| `packages/tenancy/src/Impersonation/Internal/{DatabaseImpersonationGrantStore,DualImpersonationAuditSink}.php` | штатные реализации |
+| `packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php` (256) | только порты/контракты; 23 находки runtime-globals в сервисе → 0 |
+| `packages/tenancy/src/Impersonation/Internal/ImpersonatedModelWriteGuard.php` (84) | экземплярный `allowing()`, scoped |
+| `packages/tenancy/src/Laravel/Support/ImpersonationPolicy.php` | `enabled`, `profile` (вместо `requireApprovedBy`) |
+| `packages/tenancy/src/Laravel/{RuntimeRegistrar,EventsRegistrar,AuthenticationRegistrar}.php` | scoped-фабрики, слушатели `eloquent.*` |
+| `packages/tenancy/src/Internal/DangerousModesCheck.php` (новый, по образцу `packages/notifications/src/Internal/DangerousModesCheck.php`; тег регистрации — как у notifications) | опасный режим `corex-tenancy.impersonation.profile` = `dev` |
+| `packages/core/src/Context/Exceptions/ImpersonationRestrictedException.php:35` | текст про экземплярный `allowing()` |
+| `scripts/runtime-globals-baseline.json` | удалить три строки Impersonation → `{}` |
+| `docs/architecture/configuration.md`, `packages/tenancy/README.md` (раздел impersonation) | профили и порты |
+
+### 1.4 Access и мост (P07.4)
+
+| Файл | Цель |
+|:--|:--|
+| `packages/access/src/Access/Internal/{DefaultAccessChecker,DefaultScopeResolver}.php` | `allowed()` без `PrincipalIdentity::hasPermission` (examples §9) |
+| `packages/access/src/Access/Internal/DirectGrantLookup.php` | читает `aut_direct_grants` через `ConnectionResolverInterface` |
+| `packages/access/src/Matrix/Internal/DatabaseRoleMatrixCompiler.php` | без AzGuard; bump версии; событие `Matrix/Events/RoleMatrixCompiled` |
+| `packages/access/src/Access/Laravel/PrincipalIdentity.php` | без `HasPermissions` AzGuard |
+| `packages/access/src/Laravel/{AccessBindingsRegistrar,AccessIntegrationRegistrar}.php` | без AzGuard-биндингов, pins и директив |
+| `packages/access/src/{Access/Internal/AutMatrixGrantSource,Access/Internal/WorkspacePermissionLayer,Matrix/Internal/MatrixPermissionCatalogBuilder,Matrix/Laravel/AzGuardRoleModel,Tenancy/Internal/TenantContextGuard}.php` | перенос в `packages/access-azguard/src/Internal/` (`git mv` + namespace `CoreX\AccessAzguard\Internal`) |
+| `packages/access/database/migrations/tenant/2026_07_26_200001_create_aut_roles_table.php`, `Roles/Internal/Models/Role.php`, `Roles/Data/RoleView.php`, `Roles/Laravel/RoleMatrixData.php` | удалить azguard_role_id, azguardRoleId и bindAzGuardRole; callers/tests и bridge link seam — examples §11b |
+| `packages/access/database/migrations/tenant/2026_10_04_000001_create_aut_direct_grants_table.php` | новая (examples §10) |
+| `packages/access/config/corex-access.php`, `AuthOptions` | удалить `azguard_pins` и AzGuard-ключи |
+| `packages/access/composer.json` | удалить `axioma-studio/azguard-core` и package-репозиторий AzGuard |
+| `packages/access-azguard/**` | новый пакет (examples §11): composer.json, provider, registrar, migration `aut_azguard_role_links`, listener `SyncAzGuardRolePermissions`, `PACKAGE.md`, `README.md`, `CHANGELOG.md`, tests (перенос `TenantContextGuardTest`, `BladeDirectivesTest`, AzGuard-части Pg-тестов) |
+| `composer.json` (root) | path-репозиторий уже `packages/*`; require-dev `axiomasoft/corex-access-azguard` для тестов моста |
+| `scripts/package-graph-gate.php`, `docs/architecture/taxonomy.md` | D100: пятое значение stability `unreleased`; parser/gate + taxonomy синхронны |
+| `scripts/manifest-check.py` | closed enum + `UNRELEASED = {"axiomasoft/corex-access-azguard"}`; значение `stability: unreleased` только для него |
+| `plans/2026.09.27-№1-COREX-KERNEL/research/03-glossary.md` §Packages; `scripts/ownership-map.json` `packages` | строка моста (`dir: access-azguard`, `root: CoreX\AccessAzguard`, `config: corex-access-azguard`, prefixes по N7) |
+| `.github/workflows/ci.yml` (стр. 685–689, 812 — шаги access), `composer.json` script `test:packages` | шаги install/audit/test для `packages/access-azguard` по образцу строк access; `packages/access-azguard` в списке `test:packages` после `packages/access` |
+
+### 1.5 Рёбра (P07.5)
+
+| Файл | Цель |
+|:--|:--|
+| `packages/wakeup/src/Contracts/{WakeupScheduler,DueWakeupSource,DueWakeupHandler}.php`, `packages/wakeup/src/Data/{WakeupRequest,WakeupWindow,WakeupDelivery,WakeupHandlerDefinition,ScheduleResult,CancelResult,SweepResult}.php` | `git mv` в `packages/core/src/Scheduling/{Contracts,Data}/`, namespace `CoreX\Scheduling\…` |
+| все импорты (`facts/package-edges.txt` §CoreX\Wakeup + `packages/wakeup/**`, tests) | новые FQCN; `rename-completeness` |
+| `packages/wakeup/src/Laravel/WakeupBindingsRegistrar.php:48,94` | определения: config + tag `WakeupHandlerDefinition::TAG`; источники: `DueWakeupSource::TAG` |
+| `packages/notifications/src/Laravel/NotificationsDigestRegistrar.php:45–54,74–76` | тег вместо записи `corex-wakeup.handlers`; источник — новый тег |
+| `packages/notifications/src/Internal/DangerousModesCheck.php` (существующий) → новый рядом `packages/notifications/src/Internal/DigestSchedulerCheck.php` (`RuntimeConfigCheck`, тот же тег) | digest включён без биндинга `WakeupScheduler` → violation `corex-notifications.digest.enabled requires a bound CoreX\Scheduling\Contracts\WakeupScheduler` |
+| `packages/notifications/src/Digest/Internal/SqlDigestBuilder.php` | nullable scheduler, enabled-null constructor violation, disabled build never schedules (examples §13b) |
+| `packages/notifications/composer.json`, `packages/tasks-workflow/composer.json` | удалить `axiomasoft/corex-wakeup` (require/suggest) |
+| `scripts/package-graph-gate.php`, `scripts/package-graph-gate.json` | целевое правило «notifications ↛ wakeup»; allowlist tasks-workflow → wakeup удалить |
+| `plans/2026.09.27-№1-COREX-KERNEL/research/03-glossary.md` §Kernel modules; `scripts/ownership-map.json` `kernel.modules`; `scripts/module-layout.json` `kernel_modules` (D102, дополнение D29/D57) | `Scheduling` (алфавитный порядок: между `Observability` и `Settings`) |
+| `docs/architecture/constitution.md` (PKG/EXT), `packages/{notifications,wakeup,tasks-workflow}/{README,CHANGELOG}.md` | новое ребро и регистрация тегом |
+
+## 2. Предвычисленные факты
+
+- Связность stancl: 19 файлов src/config + 1 в core, 36 символов; 13 тестовых файлов; 20+ не-PHP ссылок (`facts/stancl-coupling.txt`).
+- Захваченное соединение: 60 параметров конструктора (`facts/connection-captures.txt`; core 5, custom-fields 8, operations 8, notifications 6, webhooks 6, tenancy 5, intl 4, media 4, tasks-workflow 4, search 3, transfer 3, wakeup 2, tasks 1, workflow 1). D70 называл 61 на `39ae489a`; разница — P06. Изменение параметров не требуется: D95 п.3 делает захват безопасным через сброс scoped-экземпляров.
+- Runtime-globals baseline: только Impersonation, `G1 2, G2 19, G3 2` в сервисе, `G4 1` в guard, `G2 1` в модели гранта (`facts/impersonation.txt`).
+- AzGuard: 15 символов в 10 файлах access src; ссылки в 12 тестах, миграции ролей, config, docs (`facts/azguard-coupling.txt`).
+- Рёбра: жёсткие capability→capability — `notifications → wakeup`, `tools → operations`, `webhooks → operations`; wakeup-символы вне wakeup — notifications (10 импортов), tasks-workflow (4), tenancy (4, optional integration) (`facts/package-edges.txt`).
+- Stancl на Packagist — W1/W2; AzGuard — W7.
+
+## 3. Runbook по item
+
+Общее для всех: до правок `git rev-parse HEAD > plans/…/artifacts/P07.<n>-execution/base-commit.txt`; package CHANGELOG и manifest меняются в одном продуктовом commit; `contract-guard.sh` без аргумента и с base-commit — exit 0.
+
+### 3.1 P07.1 — движок
+
+1. `bash …/p07-facts.sh /tmp/p07-facts && diff -r /tmp/p07-facts …/artifacts/P07-design/facts` → расхождения только в строке `# base:` либо записать их (D94 п.3).
+2. Создать `TenantBootstrapper`, события, исключение (код в реестре ошибок tenancy, `composer error-registry` exit 0).
+3. Создать `DatabaseTenancyManager` по examples §1; bootstrappers по examples §3/§3b (URL parsed/removed до tenant overrides, live session handler rebuilt); удалить `WorkspaceContextBootstrapper` (D98), без обратной DI-зависимости.
+4. `RuntimeRegistrar`: singleton движка, `TenancyManager` → он; bootstrappers — singleton по классу; удалить цикл `__constructStatic`.
+5. `EventsRegistrar`: удалить `BootstrapTenancy`/`RevertToCentralContext`; подключить `QueueTenantContext` (examples §4). `JobPipeline` не трогать (P07.2).
+6. HTTP (priority ResolveTenantFromHost before StartSession, ScopeSessionToTenant after StartSession before auth, response save before end, resident attributes/guard reset — examples §3b): `HostAccountResolver`, `ResolveTenantFromHost`, `ScopeSessionToTenant`; `HttpRegistrar` без `ScopeSessions`; заменить tenancy() в OidcLoginController и DatabaseImpersonationService на TenantContextResolver; AccountStatusGate — полный port/owner/factory/constructor переход examples §6c (D102); фабрику AuthenticationRegistrar обновить здесь; baseline не менять: G2 сервиса остаётся 19 до P07.3 (D99). HostResolverCacheInvalidator создаётся здесь, включая TenantSaved/TenantDeleted до P07.2.
+7. Тесты (examples §12): `TenancyEngineTest` (initialize/end/runFor/вложенность/исключение в bootstrapper), `QueueTenantContextTest` (A затем B в одном worker, отсутствующий account → fail без отката), `ScopeBoundaryPgTest` (D95 п.3 на реальных базах), перевод `BootstrapperOrderTest`, `HostResolutionTest`, `TenantSessionScopeTest`, `QueueTenancyRevertTest`, `TenancyManagerTest`, `ResidentTenantSwitchPgTest` на новый движок.
+8. `git grep -n "Stancl\\\\Tenancy\\\\Tenancy\|Bootstrappers\\\\\|IdentificationMiddleware\|ScopeSessions\|CachedTenantResolver\|tenancy()" -- packages/*/src` → пусто (модели/provisioning — P07.2).
+9. Constitution: статья RUN «граница scoped = граница tenant» (D95 п.3) рядом с RUN-004/RUN-005.
+
+Ожидание при расхождении: если ResidentTenantSwitchPgTest краснеет — исправлять движок, не ослаблять тест. Старый provider отключается **обязательно** в root composer.json: `extra.laravel.dont-discover=["axiomasoft/stancl-tenancy"]`. Dependency extra недостаточен. Удалить explicit Stancl provider из Testbench harnesses; PackageManifest test не содержит его. Временно до P07.2 RuntimeRegistrar сохраняет только models.tenant/database.central_connection/database.managers.pgsql/database.template_tenant_connection=null и UUID generator binding; identification.resolvers/middleware и bootstrappers = []. Старые resolver invalidators становятся no-op; новый invalidator слушает также TenantSaved/TenantDeleted. Проверить UUID создание Account, provisioning template и сохранение/удаление domain с cache invalidation без vendor provider. P07.2 удаляет все временные projections/bindings/vendor event listeners.
+
+### 3.2 P07.2 — удаление stancl
+
+1. VERIFY-AT-EXEC (`research/P07-design-rag.md`).
+2. Модели `Account`, `Domain` (§1.2); observer `HostResolverCacheInvalidator` на saved/deleted обеих моделей.
+3. `TemplateClonePostgreSQLManager` самостоятельный; `DatabaseTenantProvisioner`, `DatabaseTenantLifecycle`; `CreateDatabaseFromTemplate` на `AccountRef`; `EventsRegistrar` без `JobPipeline`/`TenantCreated`.
+4. Config: слить `tenancy.php` в `corex-tenancy.php`; `TenancyOptions::fromArray(array $config)`; удалить поля `tenantModel`, `idGenerator`, `tenantDatabaseManager`, stancl-пин; обновить тесты конфигурации и `docs/architecture/configuration.md` (`composer configuration-reference` регенерирует).
+5. Удалить PHPStan-правило, его тесты и `StanclIsolationTest`; убрать регистрацию из `extension.neon`.
+6. Тесты, импортировавшие stancl (13 файлов, `facts/stancl-coupling.txt`), перевести на собственные типы.
+7. Скрипты/CI/workflows из §1.2; удалить `.composer-provider-staging/` и `stage-stancl-providers.py`.
+8. `manifest-check.py`: `ALLOWED_PRERELEASE = {}`, удалить ветку `needed`.
+9. `scripts/php84 composer remove axiomasoft/stancl-tenancy axiomasoft/stancl-jobpipeline --no-update` в root и с `--working-dir=packages/tenancy`; затем в root `scripts/php84 composer update axiomasoft/stancl-tenancy axiomasoft/stancl-jobpipeline stancl/virtualcolumn --with-dependencies`. `git diff composer.lock` содержит только удаление `axiomasoft/stancl-*`, `stancl/virtualcolumn` и пакетов, которые требовались только им (проверка — `scripts/php84 composer why <name>` на базе для каждого удалённого). Любое другое изменение lock — §5 F4.
+10. `git grep -n -i "stancl" -- packages products scripts .github composer.json ':!**/CHANGELOG.md'` → пусто; `python3 -c "import json;print([p['name'] for p in json.load(open('composer.lock'))['packages']+json.load(open('composer.lock'))['packages-dev'] if 'stancl' in p['name']])"` → `[]`.
+
+### 3.3 P07.3 — impersonation
+
+1. Порты, VO, enum по examples §7–§8.
+2. `DatabaseImpersonationGrantStore::claim` — один `UPDATE … WHERE` из текущего сервиса + условия профиля с отдельным correlated approver.is_staff EXISTS (examples §8 SQL); `claimedReason` — перенос.
+3. Kernel SynchronousAuditWriter + DatabaseSynchronousAuditWriter/AuditRegistrar (examples §7d), затем DualImpersonationAuditSink: central committed insert, tenant committed writer при mirrorsToTenant; no ambient transactions, mandatory audit bypasses auditEnabled/queue, no DI cycle. Central intent сохраняется при tenant failure, login запрещён; claim уже consumed. Kernel persistence/tenancy integration tests используют штатные writer/sink.
+4. `DatabaseImpersonationService` переписать на зависимости D96 п.2 (examples §7c); порядок D96 п.5.
+5. Guard: scoped, экземплярный `allowing()`; исправить `ImpersonationWriteGuardTest` (стр. 234, 242) и текст исключения ядра.
+6. `ImpersonationPolicy(enabled, profile)`; config `corex-tenancy.impersonation.profile`; `RuntimeConfigCheck` опасного режима.
+7. `scripts/runtime-globals-baseline.json` → `{}`; `composer runtime-globals-gate` exit 0.
+8. Тесты `ImpersonationProfileTest` (матрица профилей: TTL, approved_by, четыре глаза, зеркало), `ImpersonationAuditTest` (сбой central/tenant → отказ, сессия не открыта), перевод `ImpersonationTest`.
+
+### 3.4 P07.4 — access и мост
+
+1. Миграция `aut_direct_grants`; `DirectGrantLookup` на неё.
+2. EntityActivity guards на allowed/scopeFor/canOnRecord и DefaultScopeResolver::apply по examples §9; событие `RoleMatrixCompiled`; компилятор без AzGuard.
+3. `git mv` пяти AzGuard-классов в мост; заменить role link reads/joins и dependency MatrixPermissionCatalogBuilder на public EntityActivity по examples §11b; создать пакет моста (examples §11); перенести AzGuard-тесты.
+4. Access: удалить AzGuard из composer/config/registrars/миграции ролей, Role model, RoleView и RoleMatrixData плюс callers/tests; `PACKAGE.md`, `README.md` — без AzGuard.
+5. D100: graph VALID_STABILITY/taxonomy + unreleased; manifest closed enum и UNRELEASED; mystery/foreign-unreleased negative; glossary; CI-матрица. Package-graph проходит уже в P07.4.
+6. Тесты: `NativePermissionTest` (allowed по матрице, по прямому grant, истёкший/отозванный grant, scope none → false, другой workspace → false), мост — `AzGuardBridgeTest` (sync `az_guard_role_permissions` после `RoleMatrixCompiled`).
+7. `git grep -n "AzGuard\|azguard\|az_guard" -- packages/access` → только CHANGELOG.
+
+### 3.5 P07.5 — рёбра
+
+1. `git mv` 10 файлов wakeup в `packages/core/src/Scheduling/{Contracts,Data}`; Rector `RenameClassRector` по карте examples §13 либо sed по 10 FQCN; `composer rename-completeness` exit 0.
+2. Теги D96 п.9; `WakeupBindingsRegistrar` объединяет определения; повтор kind → `InvalidConfiguration`.
+3. Notifications: тег вместо записи config; nullable SqlDigestBuilder scheduler + conditional factory, enabled-null constructor violation и disabled nonempty build без resolve/schedule (examples §13b); RuntimeConfigCheck; composer без wakeup; tasks-workflow без suggest.
+4. `package-graph-gate`: правило + негативный контроль (examples §14).
+5. Добавить Scheduling в scripts/ownership-map.json и scripts/module-layout.json closed kernel_modules (15 → 16 только Scheduling, D102); R1 и baseline неизменны; проверить negative старый enum/UnknownModule. Glossary §Kernel modules; constitution; CHANGELOG.
+
+## 4. Golden / BC delta
+
+Все изменения php-surface — reviewed semantic delta (D64). Ожидаемые строки:
+- P07.1: AccountStatusGate (Spi Call) constructor `(?StatusGatePolicy = null)` → `(StatusGatePolicy, TenantContextResolver, AccountRead, AuthFactory, string centralConnection)`; migrate callers/HttpRegistrar and record CHANGELOG/php-api/Golden delta (D102). session configuration now supports database/redis/memcached/file, requires dedicated named cache session store/Redis connection, invalidates first tenant binding; file directory 0700 created and real persistence validated (D100/D101). CHANGELOG documents this security/configuration delta. + `CoreX\Tenancy\Runtime\Contracts\TenantBootstrapper` (Spi Implement), + `Runtime\Events\TenantContextInitialized|TenantContextEnded` (Api), + `Runtime\Exceptions\TenantContextUnavailable` (Api); класс `StanclTenancyManager` был Internal — вне surface.
+- P07.2: изменение публичных моделей/Options tenancy (поля stancl удалены); удаление `PHPStan\Rules\StanclImportBoundaryRule` из manifest; config-слой Golden (`corex-tenancy` вместо `tenancy`).
+- P07.3: + kernel Audit Contracts SynchronousAuditWriter (Spi Implement), CHANGELOG/core README/Golden и provider binding; прежний queued AuditLogger не меняется. + порты, VO, enum Impersonation; `ImpersonationPolicy` поля.
+- P07.4: + stability=unreleased в закрытом наборе graph/taxonomy/manifest, schema-version 1 сохраняется; − RoleView.azguardRoleId (constructor 4→3 args), − RoleMatrixData.bindAzGuardRole, − AzGuard-типы из manifest access; + `RoleMatrixCompiled`; + пакет `access-azguard` (новый manifest).
+- P07.5: nullable scheduler только Internal implementation; DigestBuilder контракт/disabled frozen-build semantics сохранены. Перенос 10 symbols `CoreX\Wakeup\*` → `CoreX\Scheduling\*`.
+`scripts/php84 php scripts/php-api.php --write` дважды → идентично; `composer bc-check` exit 0 после `--write`; Golden — только перечисленные строки.
+
+## 5. Failure playbook
+
+| # | Класс | Действие |
+|:--|:--|:--|
+| F1 | Тест изоляции (PG) пишет в чужую базу | Стоп item; дефект движка, не теста. Исправлять движок; ослабление теста запрещено. |
+| F2 | Scoped-сервис переживает смену контекста в продуктовом коде (найден тестом D95 п.3) | Исправить вызывающий код (повторное разрешение внутри `runFor`); исключение в гейте не вводится. |
+| F3 | Порог/гейт краснеет (runtime-globals, lifetime, package-graph, anti-weakening) | Исправить код; baseline только уменьшается. Рост — стоп и эскалация. |
+| F4 | `composer.lock` меняет что-либо кроме удаления stancl-пакетов | Откатить lock, повторить шаг §3.2/9 точнее; при невозможности — стоп и эскалация. |
+| F5 | На Packagist появился стабильный stancl v4 (VERIFY-AT-EXEC) | Стоп P07.2, эскалация автору плана; новое D#. |
+| F6 | AzGuard-мост не устанавливается в CI (нет доступа к приватному репозиторию) | Не в Validation access; job моста помечается в CI как зависящий от секрета, падение — стоп и эскалация владельцу (Q2), access не блокируется. |
+| F7 | Hosted CI красный на финальном commit фазы | Исправление в владеющем item по D73; фаза не закрывается. |
+| F8 | Расхождение фактов с базой из-за ремонта P06 (D94 п.3) | Записать в Completion Notes; если меняется контракт item — стоп и эскалация. |
+
+## 6. Self-check (для design и light-review)
+
+| Item | Факты, которые ищет исполнитель | Решения, оставленные исполнителю | Доказательство готовности |
+|:--|:--|:--|:--|
+| P07.1 | нет (карта §1.1, examples §1–§6, §12) | нет; промежуточный `dont-discover` — заданный шаг | Validation P07.1 |
+| P07.2 | точный список ссылок — пересобирается `p07-facts.sh` | нет | Validation P07.2 (пустые grep, lock) |
+| P07.3 | нет (§1.3, examples §7–§8) | нет | Validation P07.3, baseline `{}` |
+| P07.4 | нет (§1.4, examples §9–§11) | нет | Validation P07.4 |
+| P07.5 | нет (§1.5, examples §13–§14) | нет | Validation P07.5, негатив графа |
+| P07.6 | — (read-only) | вердикт | `artifacts/P07.6-review/verdict.md` |
+
+Light-review исполнителя: каждая актуальная строка D95/D96/D98–D100 соответствующего item → файл:строка реализации и тест; Completion Notes содержит `review: self-check GREEN`.
+
+## D102 — дополнительные замечания независимого rereview
+
+Приоритет: decisions/D102-p07-rereview-contract-completeness.md; examples §1/1c, §6/6c и заключительная module-layout норма. P07.1 Files дополнительно Runtime/Internal/TenantCleanupFailure.php; RuntimeRegistrar передаёт PSR logger. AccountStatusGate owner policy через AccountRead explicit central, AuthFactory и AccountRef; обязательная constructor BC/CHANGELOG/php-api/Golden delta, существующая status matrix сохраняется. ScopeSessionToTenant использует TenancyManager::context(). Cleanup wrapper/log обеих причин и poisoned runFor проверяются executable harness.
+P07.5 Files дополнительно scripts/module-layout.json (closed kernel_modules 15 → 16 только Scheduling); D29/D57 приоритетно дополнены D102, R1/baseline не ослабляются. Actual gate negative старый список/UnknownModule и positive десять moved files. P07.6 сверяет эти две Files/BC delta; только после исполнения продуктовые full boot/PG/package gates.
+
+## D103 — stable BC admission and review evidence
+
+D103 priority: P07.1 Files/Scope includes scripts/bc/approved-deltas.json; exact D102 AccountStatusGate constructor optional policy → five required arguments is an approved unpublished semantic delta under D64. At product execution, preserve unrelated approvals and bind finite actual Roave rows to actual resolved BC_CHECK_BASE and accepted D102/D103 hashes; never invent description hashes, relax stable gate or change accepted base. Golden/CHANGELOG alone insufficient. P07.6 explicitly reviews enum 15→16 and constructor/admission alongside D98–D103. Actual checker scratch positive/negative proof is bc-admission-proof.py; it is not real Roave/product admission. Proof arity aligned with QueueTenantContext four parameters; outer callback+cleanup restoration branch now executed. No new implementation behavior.

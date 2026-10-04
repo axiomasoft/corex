@@ -1,0 +1,13 @@
+diff --git a/packages/core/src/Storage/Laravel/StorageRegistrar.php b/packages/core/src/Storage/Laravel/StorageRegistrar.php
+index 2696ebc7..70180de8 100644
+--- a/packages/core/src/Storage/Laravel/StorageRegistrar.php
++++ b/packages/core/src/Storage/Laravel/StorageRegistrar.php
+@@ -22,7 +22,7 @@ final class StorageRegistrar implements PackageRegistrar
+     #[Override]
+     public function register(Application $app): void
+     {
+-        $app->scoped(TenantStorage::class, static fn (Application $app): LocalTenantStorage => new LocalTenantStorage(
++        $app->singleton(TenantStorage::class, static fn (Application $app): LocalTenantStorage => new LocalTenantStorage(
+             contexts: $app->make(TenantContextResolver::class),
+             filesystems: new FilesystemManager($app),
+             durableRoot: $app->make(CoreOptions::class)->storageDurableRoot,

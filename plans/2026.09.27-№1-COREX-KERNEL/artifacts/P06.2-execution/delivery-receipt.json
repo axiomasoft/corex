@@ -1,0 +1,65 @@
+{
+  "adapter_attestation": {
+    "canonical_command_sha256": "sha256:21a20c3b12eb6966dcb6139dc24fa9ab321f52e80cb51ca2820f46618954dd1f",
+    "command_id": "task:plan-run",
+    "package": "task",
+    "version": "0.27.0"
+  },
+  "commit_sha": "58afb343cc02188d4ddee723638cf564f4e8a1e7",
+  "continuity": {
+    "evidence": [
+      "persisted-context:continue-root"
+    ],
+    "outcome": "continue-root",
+    "reason": "compatible-active-work",
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": null,
+    "handoff": "sha256:9dd46a354baa5bbe63b1bee683a0a83b8828380bc590864d11d8da4d61d8f4b8",
+    "plan": "sha256:3e6ad35b7f79cf776975a3b6f3ca2c56cd4e8f2a5c8a632c88a5bcef69d836f1",
+    "state": "sha256:c1d5815128f52a8558906bff1068c12cc6e4d681a1fa1efe318b6094f311050b"
+  },
+  "journal": {
+    "batch_receipt": {
+      "batch_id": "B06-A",
+      "completed_prefix": [
+        "P06.1",
+        "P06.2"
+      ],
+      "handoff_digest": "1e79b5b0f0b5caeca5018e6fb3849d35ad373822c341e7be03b68398fd6012ad",
+      "invocation_digest": "8ec13b73e14aa1024829d11eaeb15da40fcf433c185ec8435bf2cf1938cc82b1",
+      "membership": [
+        "P06.1",
+        "P06.2"
+      ],
+      "routing_digest": "3e6ad35b7f79cf776975a3b6f3ca2c56cd4e8f2a5c8a632c88a5bcef69d836f1",
+      "schema_version": "batch-receipt/v1",
+      "spec_digest": "02b5f01b8483f72d22a38c528cebe70d12af394305d84f52fc9c4deeaea09867",
+      "stop_disposition": "continue"
+    },
+    "command": "plan-run",
+    "line": 196,
+    "result": "closed-green",
+    "run_id": "b9e415d2d25aa297a2ace75f44fe3d3451a237986fa053848920b5466f4dd317",
+    "sha256": "sha256:97cbf6c4d2cbf503907a7a2fb0e38883719f298277cf965ca716bfa2908d3951"
+  },
+  "next_exact": "run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P06.3",
+  "plan_id": "2026.09.27-№1-COREX-KERNEL",
+  "rationale": {
+    "open_risks": "CloudEvents, webhook retry/egress and final phase review/CI remain future owning items. No skipped acceptance inside P06.1/P06.2. Preexisting CLAUDE.md, graph report and owner configuration changes preserved; historical PHP design proofs remain untouched and archived for portability.",
+    "remaining": "P06.3 then P06.4/P06.5 recommended, not authorized by this completed workset. Phase P06 stays open until its final review and hosted CI gate. This scope is complete; current root remains reusable."
+  },
+  "recommendation": "**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P06.3\n\n| Parameter | Meaning |\n|:--|:--|\n| Batch | solo |\n| Model class | implementation |\n| Effort | high |\n| Context | continue-root |",
+  "route": {
+    "batch": "solo",
+    "command": null,
+    "context": "continue-root",
+    "model": null,
+    "thinking": null
+  },
+  "schema_version": "terminal-delivery-receipt/v1",
+  "status": "🟢 Done",
+  "subject": "P06.2"
+}

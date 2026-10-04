@@ -109,7 +109,7 @@ final class CostInvocationTest extends TestCase
             modules: $modules,
             authorizer: $this->operationAuthorizer(),
             replayAuthorizer: new AllowReplayAuthorizer,
-            errors: new ErrorMapper(app(ProblemRegistry::class)),
+            errors: app(ErrorMapper::class),
             problems: app(ProblemRegistry::class),
             budget: $admission,
         );
@@ -166,7 +166,7 @@ final class CostInvocationTest extends TestCase
             $invoker->invoke($this->invocation($this->operation()));
             self::fail('A missing budget authority must fail closed.');
         } catch (BudgetStoreUnavailable $error) {
-            $mapped = (new ErrorMapper(app(ProblemRegistry::class)))->map($error, reportUnexpected: false);
+            $mapped = (app(ErrorMapper::class))->map($error, reportUnexpected: false);
             self::assertSame('operations.budget_store_unavailable', $mapped->errorCode);
             self::assertSame(500, $mapped->status);
         }
@@ -212,10 +212,10 @@ final class CostInvocationTest extends TestCase
         $unavailable = $this->app->make(OperationDispatcher::class)->dispatch($request(), 'v1', 'notes');
 
         self::assertSame(429, $limited->getStatusCode());
-        self::assertSame('operations.rate_limited', $limited->getData(true)['error']['code']);
+        self::assertSame('operations.rate_limited', $limited->getData(true)['code']);
         self::assertSame('7', $limited->headers->get('Retry-After'));
         self::assertSame(500, $unavailable->getStatusCode());
-        self::assertSame('operations.budget_store_unavailable', $unavailable->getData(true)['error']['code']);
+        self::assertSame('operations.budget_store_unavailable', $unavailable->getData(true)['code']);
         self::assertNull($unavailable->headers->get('Retry-After'));
     }
 

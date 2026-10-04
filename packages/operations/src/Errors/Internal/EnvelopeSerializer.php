@@ -4,38 +4,16 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Errors\Internal;
 
-use CoreX\Operations\Errors\Contracts\ResponseSerializer;
-use CoreX\Operations\Errors\Exceptions\ApiError;
 use CoreX\Operations\Invocation\Data\InvocationMetadata;
 use Illuminate\Http\JsonResponse;
-use Override;
 
 /** @internal */
-final class EnvelopeSerializer implements ResponseSerializer
+final class EnvelopeSerializer
 {
-    #[Override]
+    /** @param array<array-key, mixed> $data */
     public function success(array $data, int $status, InvocationMetadata $metadata): JsonResponse
     {
-        return $this->respond(['data' => $data, 'error' => null, 'meta' => ErrorWire::meta($metadata)], $status, ErrorWire::headers($metadata));
-    }
-
-    #[Override]
-    public function error(ApiError $error, InvocationMetadata $metadata): JsonResponse
-    {
-        $descriptor = $error->errorDescriptor();
-
-        return $this->respond([
-            'data' => null,
-            'error' => [
-                'code' => $descriptor->code,
-                'message' => $error->getMessage(),
-                'category' => $descriptor->category->value,
-                'path' => $descriptor->path,
-                'retryable' => $descriptor->retryable,
-                'details' => (object) $descriptor->details,
-            ],
-            'meta' => ErrorWire::meta($metadata),
-        ], $error->status, ErrorWire::headers($metadata, $error));
+        return $this->respond(['data' => $data, 'meta' => ErrorWire::meta($metadata)], $status, ErrorWire::headers($metadata));
     }
 
     /**

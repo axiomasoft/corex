@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Internal\Config;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Messaging\Contracts\WorkerRuntime;
 use CoreX\Messaging\Internal\DatabasePollPubSub;
 use Illuminate\Database\Connection;
@@ -48,10 +48,10 @@ beforeEach(function (): void {
 
 function pollingPubSub(): DatabasePollPubSub
 {
-    return new DatabasePollPubSub(
-        connection: PUBSUB_DB_POLL_TEST_CONNECTION,
-        runtime: new WorkerConsoleRuntime,
-    );
+    return app()->make(DatabasePollPubSub::class, [
+        'connection' => PUBSUB_DB_POLL_TEST_CONNECTION,
+        'runtime' => new WorkerConsoleRuntime,
+    ]);
 }
 
 it('AC-25(a)/(б) publish→subscribe delivers the payload via the poll cursor, from a console worker context', function (): void {
@@ -78,7 +78,7 @@ it('persists rows in the configured table with a bigint cursor', function (): vo
     $pubsub = pollingPubSub();
     $pubsub->publish('module.enabled', ['module' => 'crm']);
 
-    $row = pubsubPg()->table(Config::pubsubMessagesTable())->first();
+    $row = pubsubPg()->table(app(CoreOptions::class)->pubsubMessagesTable)->first();
 
     expect($row->channel)->toBe('module.enabled')
         ->and(json_decode((string) $row->payload, true))->toBe(['module' => 'crm'])
@@ -127,7 +127,7 @@ it('(г) D44: a rolling restart of the SAME subscriber resumes from its persiste
 });
 
 it('(д) corex:messaging:prune-pubsub truncates rows older than the threshold, leaving fresh rows intact', function (): void {
-    pubsubPg()->table(Config::pubsubMessagesTable())->insert([
+    pubsubPg()->table(app(CoreOptions::class)->pubsubMessagesTable)->insert([
         ['channel' => 'module.enabled', 'payload' => '{"module":"stale"}', 'created_at' => now()->subDays(60)],
         ['channel' => 'module.enabled', 'payload' => '{"module":"fresh"}', 'created_at' => now()],
     ]);
@@ -137,7 +137,7 @@ it('(д) corex:messaging:prune-pubsub truncates rows older than the threshold, l
         '--database' => PUBSUB_DB_POLL_TEST_CONNECTION,
     ])->assertSuccessful();
 
-    $remaining = pubsubPg()->table(Config::pubsubMessagesTable())->pluck('payload');
+    $remaining = pubsubPg()->table(app(CoreOptions::class)->pubsubMessagesTable)->pluck('payload');
 
     expect($remaining)->toHaveCount(1)
         ->and(json_decode((string) $remaining->first(), true))->toBe(['module' => 'fresh']);

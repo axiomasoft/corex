@@ -5,110 +5,127 @@ declare(strict_types=1);
 namespace CoreX\Operations\Tests\Feature;
 
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Errors\Contracts\ProblemRegistry;
 use CoreX\Errors\Enums\ErrorCategory;
+use CoreX\Operations\Errors\Contracts\ResponseSerializer;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
-use CoreX\Operations\Errors\Internal\EnvelopeSerializer;
-use CoreX\Operations\Errors\Internal\ErrorWire;
-use CoreX\Operations\Errors\Internal\NegotiatingResponseSerializer;
 use CoreX\Operations\Errors\Internal\OperationErrorBoundary;
+use CoreX\Operations\Errors\Internal\ProblemDetailsSerializer;
 use CoreX\Operations\Errors\Internal\RetryAfterPolicy;
 use CoreX\Operations\Invocation\Data\InvocationMetadata;
-use CoreX\Operations\Laravel\Support\ApiOptions;
 use CoreX\Operations\Tests\Support\SyntheticErrorCode;
 use CoreX\Operations\Tests\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use RuntimeException;
 
 final class ErrorRepresentationTest extends TestCase
 {
-    public function test_every_category_keeps_the_same_machine_fields_in_both_representations(): void
+    public function test_every_category_preserves_machine_fields_and_registry_identity(): void
     {
-        $serializer = $this->app->make(NegotiatingResponseSerializer::class);
-        $options = $this->app->make(ApiOptions::class);
+        $registry = SyntheticErrorCode::registry();
+        $serializer = new ProblemDetailsSerializer($registry);
 
         foreach (ErrorCategory::cases() as $category) {
+            $code = SyntheticErrorCode::fromCategory($category);
             $error = new ApiError(
-                errorCode: SyntheticErrorCode::fromCategory($category),
-                status: 409,
+                errorCode: $code,
+                status: $registry->get($code)->defaultStatus,
                 message: 'Safe '.$category->value.' message.',
                 details: JsonDocuments::capture(['reason' => $category->value]),
                 category: $category,
                 retryable: $category === ErrorCategory::Conflict,
                 path: '/attributes/color',
             );
-            $metadata = new InvocationMetadata('req-1', 'v1', '', 'GET', 'corr-1');
-            $envelope = $serializer->error($error, $metadata)->getData(true);
-            $problem = $serializer->error($error, new InvocationMetadata('req-1', 'v1', '', 'GET', 'corr-1', 'application/problem+json'))->getData(true);
+            $problem = $serializer->error(error: $error, metadata: new InvocationMetadata('req-1', 'v1', '', 'GET', 'corr-1'))->getData(true);
 
-            $this->assertSame($error->status, $problem['status']);
-            $this->assertSame($envelope['error']['code'], $problem['code']);
-            $this->assertSame($category->value, $envelope['error']['category']);
-            $this->assertSame($envelope['error']['category'], $problem['category']);
-            $this->assertSame('/attributes/color', $envelope['error']['path']);
-            $this->assertSame($envelope['error']['path'], $problem['path']);
-            $this->assertSame($envelope['error']['retryable'], $problem['retryable']);
-            $this->assertSame(['reason' => $category->value], $envelope['error']['details']);
-            $this->assertSame($envelope['error']['details'], $problem['details']);
-            $this->assertSame('req-1', $envelope['meta']['request_id']);
-            $this->assertSame($envelope['meta']['request_id'], $problem['request_id']);
-            $this->assertSame('corr-1', $envelope['meta']['correlation_id']);
-            $this->assertSame($envelope['meta']['correlation_id'], $problem['correlation_id']);
-            $this->assertSame('v1', $envelope['meta']['api_version']);
-            $this->assertSame($envelope['meta']['api_version'], $problem['api_version']);
-            $this->assertSame(ErrorWire::type($options->problemTypeBase, $error->errorCode), $problem['type']);
-            $this->assertSame(ErrorWire::instance($options->problemTypeBase, 'req-1'), $problem['instance']);
-            $this->assertStringNotContainsString('Throwable', json_encode($problem, JSON_THROW_ON_ERROR));
+            self::assertSame($error->status, $problem['status']);
+            self::assertSame($code->value(), $problem['code']);
+            self::assertSame($category->value, $problem['category']);
+            self::assertSame('/attributes/color', $problem['path']);
+            self::assertSame($category === ErrorCategory::Conflict, $problem['retryable']);
+            self::assertSame(['reason' => $category->value], $problem['details']);
+            self::assertSame('req-1', $problem['request_id']);
+            self::assertSame('corr-1', $problem['correlation_id']);
+            self::assertSame('v1', $problem['api_version']);
+            self::assertSame($registry->get($code)->type, $problem['type']);
+            self::assertSame($registry->get($code)->title, $problem['title']);
+            self::assertSame($error->getMessage(), $problem['detail']);
+            self::assertStringNotContainsString('Throwable', json_encode($problem, JSON_THROW_ON_ERROR));
+        }
+    }
+
+    public function test_every_registered_problem_can_be_serialized(): void
+    {
+        $registry = $this->app->make(ProblemRegistry::class);
+        $serializer = $this->app->make(ResponseSerializer::class);
+        $metadata = new InvocationMetadata('req-1', 'v1', '', 'GET');
+
+        self::assertNotEmpty($registry->all());
+        foreach ($registry->all() as $definition) {
+            $error = new ApiError(errorCode: $definition->code, status: $definition->defaultStatus, message: 'Occurrence detail.', category: $definition->category, retryable: $definition->retryable);
+            $registry->assertOccurrence(descriptor: $error->errorDescriptor(), status: $error->status);
+            $response = $serializer->error(error: $error, metadata: $metadata);
+            $problem = $response->getData(true);
+            self::assertSame($definition->type, $problem['type']);
+            self::assertSame($definition->title, $problem['title']);
+            self::assertSame('Occurrence detail.', $problem['detail']);
+            self::assertSame($definition->defaultStatus, $response->getStatusCode());
+            self::assertSame('application/problem+json', $response->headers->get('Content-Type'));
+            foreach (['instance', 'path', 'message', 'error', 'data'] as $member) {
+                self::assertArrayNotHasKey($member, $problem);
+            }
         }
     }
 
     public function test_human_message_change_leaves_the_machine_fixture_unchanged(): void
     {
-        $serializer = new EnvelopeSerializer;
+        $serializer = $this->app->make(ResponseSerializer::class);
         $metadata = new InvocationMetadata('req-1', 'v1', '', 'GET', 'corr-1');
         $first = $serializer->error(new ApiError(OperationsErrorCode::Conflict, 409, 'First safe message.', category: ErrorCategory::Conflict, retryable: true, path: '/a'), $metadata)->getData(true);
         $second = $serializer->error(new ApiError(OperationsErrorCode::Conflict, 409, 'Second safe message.', category: ErrorCategory::Conflict, retryable: true, path: '/a'), $metadata)->getData(true);
 
-        $this->assertNotSame($first['error']['message'], $second['error']['message']);
-        unset($first['error']['message'], $second['error']['message']);
-        $this->assertSame($first, $second);
+        self::assertNotSame($first['detail'], $second['detail']);
+        unset($first['detail'], $second['detail']);
+        self::assertSame($first, $second);
     }
 
-    public function test_accept_q_values_wildcards_and_unsupported_types(): void
+    public static function accepts(): array
+    {
+        return [[''], ['application/json'], ['application/problem+json'], ['text/html'], ['*/*;q=0'], ['application/problem+json;q=0.9, application/json;q=0.1']];
+    }
+
+    #[DataProvider('accepts')]
+    public function test_accept_always_receives_problem_json(string $accept): void
     {
         $this->app['router']->get('/represented/{version}', static function (): never {
-            throw new ApiError(OperationsErrorCode::Forbidden, 403, 'Operation is not permitted.', retryable: false);
+            throw new ApiError(OperationsErrorCode::Forbidden, 403, 'Operation is not permitted.');
         })->middleware(OperationErrorBoundary::class);
 
-        $problem = $this->call('GET', '/represented/v1', server: ['HTTP_ACCEPT' => 'application/problem+json;q=0.9, application/json;q=0.1', 'HTTP_X_REQUEST_ID' => 'req-1', 'HTTP_X_CORRELATION_ID' => 'corr-1']);
-        $problem->assertForbidden();
-        $this->assertStringContainsString('application/problem+json', (string) $problem->headers->get('Content-Type'));
-        $this->assertSame('operations.forbidden', $problem->json('code'));
-        $this->assertSame('Accept', $problem->headers->get('Vary'));
-        $this->assertNull($problem->headers->get('Retry-After'));
-
-        $wildcard = $this->call('GET', '/represented/v1', server: ['HTTP_ACCEPT' => '*/*', 'HTTP_X_REQUEST_ID' => 'req-1']);
-        $wildcard->assertForbidden();
-        $this->assertSame('operations.forbidden', $wildcard->json('error.code'));
-        $this->assertStringContainsString('application/json', (string) $wildcard->headers->get('Content-Type'));
-
-        $unsupported = $this->call('GET', '/represented/v1', server: ['HTTP_ACCEPT' => 'text/html', 'HTTP_X_REQUEST_ID' => 'req-1']);
-        $unsupported->assertStatus(406);
-        $this->assertSame('operations.request_rejected', $unsupported->json('error.code'));
-        $this->assertStringNotContainsString('requested representation', (string) $unsupported->getContent());
-        $this->assertStringContainsString('application/json', (string) $unsupported->headers->get('Content-Type'));
+        $response = $this->call('GET', '/represented/v1', server: ['HTTP_ACCEPT' => $accept, 'HTTP_X_REQUEST_ID' => 'req-1', 'HTTP_X_CORRELATION_ID' => 'corr-1']);
+        $definition = $this->app->make(ProblemRegistry::class)->get(OperationsErrorCode::Forbidden);
+        $response->assertForbidden()->assertHeader('Content-Type', 'application/problem+json')
+            ->assertJsonPath('code', 'operations.forbidden')->assertJsonPath('type', $definition->type)
+            ->assertJsonPath('title', $definition->title)->assertJsonPath('detail', 'Operation is not permitted.')
+            ->assertJsonPath('request_id', 'req-1')->assertJsonPath('correlation_id', 'corr-1');
+        self::assertNull($response->headers->get('Vary'));
+        self::assertNull($response->headers->get('Retry-After'));
+        foreach (['instance', 'path', 'message', 'error', 'data'] as $member) {
+            self::assertArrayNotHasKey($member, $response->json());
+        }
     }
 
     public function test_retry_after_requires_a_named_bounded_policy(): void
     {
-        $serializer = new EnvelopeSerializer;
+        $serializer = $this->app->make(ResponseSerializer::class);
         $metadata = new InvocationMetadata('req-1', 'v1', '', 'GET');
         $retryable = $serializer->error(new ApiError(OperationsErrorCode::Conflict, 409, 'Later.', category: ErrorCategory::Conflict, retryable: true), $metadata);
         $named = $serializer->error(new ApiError(OperationsErrorCode::Conflict, 409, 'Later.', category: ErrorCategory::Conflict, retryable: true, retryAfterPolicy: RetryAfterPolicy::RATE_LIMIT), $metadata);
         $unknown = $serializer->error(new ApiError(OperationsErrorCode::Conflict, 409, 'Later.', category: ErrorCategory::Conflict, retryable: true, retryAfterPolicy: 'custom'), $metadata);
 
-        $this->assertNull($retryable->headers->get('Retry-After'));
-        $this->assertSame('60', $named->headers->get('Retry-After'));
-        $this->assertNull($unknown->headers->get('Retry-After'));
+        self::assertNull($retryable->headers->get('Retry-After'));
+        self::assertSame('60', $named->headers->get('Retry-After'));
+        self::assertNull($unknown->headers->get('Retry-After'));
     }
 
     public function test_unknown_exception_stays_a_safe_internal_error(): void
@@ -118,11 +135,8 @@ final class ErrorRepresentationTest extends TestCase
         })->middleware(OperationErrorBoundary::class);
 
         $response = $this->call('GET', '/exploded/v1', server: ['HTTP_ACCEPT' => 'application/problem+json', 'HTTP_X_REQUEST_ID' => 'req-1']);
-
-        $response->assertStatus(500);
-        $this->assertSame('core.internal_error', $response->json('code'));
-        $this->assertSame('Operation could not be completed.', $response->json('detail'));
-        $this->assertStringNotContainsString('SQLSTATE', (string) $response->getContent());
-        $this->assertStringNotContainsString('secret', (string) $response->getContent());
+        $response->assertStatus(500)->assertJsonPath('code', 'core.internal_error')->assertJsonPath('detail', 'Operation could not be completed.');
+        self::assertStringNotContainsString('SQLSTATE', (string) $response->getContent());
+        self::assertStringNotContainsString('secret', (string) $response->getContent());
     }
 }

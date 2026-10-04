@@ -25,6 +25,7 @@ use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Psr\Clock\ClockInterface;
 
 function mediaEdgeContext(): MediaContext
 {
@@ -153,6 +154,7 @@ it('rechecks policy before publishing uploaded bytes and when an authorized hand
         app(MediaOperationStore::class),
         app(ConversionCoordinator::class),
         app(MediaOptions::class),
+        app(ClockInterface::class),
     );
 
     $file = $library->store(mediaEdgeContext(), edgeUpload('read-recheck', 'bytes'));

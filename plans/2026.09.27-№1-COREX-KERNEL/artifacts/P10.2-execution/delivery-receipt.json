@@ -1,0 +1,63 @@
+{
+  "adapter_attestation": {
+    "canonical_command_sha256": "sha256:4f80d5b70dea003557f17bfebdb247a31c5eedb2fe3219ecd1a6367280f21967",
+    "command_id": "task:plan-run",
+    "package": "task",
+    "version": "0.25.2"
+  },
+  "commit_sha": "dd94f729078e966b6b8bfa6ac851e7c528e3e0d7",
+  "continuity": {
+    "evidence": [
+      "persisted-context:continue-root"
+    ],
+    "outcome": "continue-root",
+    "reason": "compatible-active-work",
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": null,
+    "handoff": "sha256:571ef178ccdacd1c255cacfde0a0d870ae85874437f2f654965e85506acaf740",
+    "plan": "sha256:d81af66b8b3caf9eb5ba5fbde2789be771eb964f31fc590faeed4d603ef6965c",
+    "state": "sha256:2b2ad29f4ba8e56d9fe030861b532ea762fe20ee0e922e6ca972bee8b6e161d2"
+  },
+  "journal": {
+    "batch_receipt": {
+      "batch_id": "solo",
+      "completed_prefix": [
+        "P10.2"
+      ],
+      "handoff_digest": "4d5ee813b5263733ab9c71ebe8b4cf6eb91f0ee2fbf8ca0235433ce5167fc9a3",
+      "invocation_digest": "ed7646ba7d8a75ce8ed3b1f0e5ab77fc9c5298936f75d0086728895818a2b531",
+      "membership": [
+        "P10.2"
+      ],
+      "routing_digest": "d81af66b8b3caf9eb5ba5fbde2789be771eb964f31fc590faeed4d603ef6965c",
+      "schema_version": "batch-receipt/v1",
+      "spec_digest": "cf77fe6d61029c70d1362a177790942003e5fd6126e0184dbe6a64df96ea0603",
+      "stop_disposition": "continue"
+    },
+    "command": "plan-run",
+    "line": 155,
+    "result": "closed-green",
+    "run_id": "2ebafa81e70caba86a6dab9da8ae8d65cd4503768a41186b4c101b01f2d4b569",
+    "sha256": "sha256:69887e8c63589f1681e6095980e72093a3dd8865ca1e11e3452067239fa81a07"
+  },
+  "next_exact": "run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P10.3",
+  "plan_id": "2026.09.27-№1-COREX-KERNEL",
+  "rationale": {
+    "open_risks": "Overall CI is not GREEN: 12 known failures including coverage at final snapshot; coverage already red after P10.1 and belongs to P10.4. Final run 36907048899 has 24 success / 12 failure / 1 skipped. Exact context telemetry unavailable; no percentages claimed. User CLAUDE.md and CLAUDE.md.bak remain unrelated.",
+    "remaining": "P10.3 worker schema readiness → P10.4 lanes/coverage/install → one independent whole-P10 review before phase closure. Then B05-A and P05.3/P05.4. Solo P10.3 requires its own owner invocation."
+  },
+  "recommendation": "**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P10.3\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | solo |\n| Model | implementation |\n| Thinking | high |\n| Context | continue-root |\n| Capabilities | Task runtime · PHP 8.4 · push/read CI |\n| Суть | P10.2 GREEN; следующий отдельный item P10.3 рекомендован, автоматически не запускался. |",
+  "route": {
+    "batch": "solo",
+    "command": null,
+    "context": "continue-root",
+    "model": "implementation",
+    "thinking": "high"
+  },
+  "schema_version": "terminal-delivery-receipt/v1",
+  "status": "🟢 Done",
+  "subject": "P10.2"
+}

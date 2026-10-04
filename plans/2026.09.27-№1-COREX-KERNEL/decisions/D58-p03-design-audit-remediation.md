@@ -17,7 +17,7 @@ superseded_by: null
 `3f592897c5ed169202d6d22fbee4560a15c78c0a3949ad9e41e126995b9f05d9`);
 `artifacts/P03-design-remediation/README.md` и логи. Исходные audit artifacts сохранены.
 
-## Решение
+## Solution
 
 1. **A1, поправка к D57 п.6.** Literal pass изменяет FQCN в `extra.corex.public-api` и `extra.corex.module` шести манифестов
    `packages/{access,core,operations,tasks-workflow,tasks,tenancy}/composer.json`.
@@ -37,7 +37,7 @@ superseded_by: null
 5. **A5.** Корень kernel разрешает ровно `CoreServiceProvider.php`; произвольный `*ServiceProvider.php`
    там — R1. Provider непосредственно в разрешённом feature module остаётся допустим.
 
-## Почему
+## Why
 
 Аудит воспроизвёл stale lock, неверный порядок команд и три пропуска гейта. Исправления делают
 инструмент и executable contract согласованными с исходной нормой D57; D57 сохранён как история.

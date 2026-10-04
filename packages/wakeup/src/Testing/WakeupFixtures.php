@@ -6,7 +6,7 @@ namespace CoreX\Wakeup\Testing;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
-use CoreX\Wakeup\Internal\SystemClock;
+use CoreX\Time\Laravel\SystemClock;
 use CoreX\Wakeup\Internal\WakeupHandlerRegistry;
 
 /** Identifies existing bindings without exposing internal names to consumer tests. */

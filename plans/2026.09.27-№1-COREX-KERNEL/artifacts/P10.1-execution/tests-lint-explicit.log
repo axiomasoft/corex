@@ -1,0 +1,3 @@
+> vendor/bin/phpstan analyse -c phpstan-tests-lint.neon --memory-limit=1G '--no-progress' '--error-format=json'
+{"tool":"phpstan","raw":["This file is included multiple times:","- /home/vostrikov/projects/packages/corex/vendor/pestphp/pest/extension.neon","It can lead to unexpected results. If you're using phpstan/extension-installer, make sure you have removed corresponding neon files from your project config file."]}
+Script vendor/bin/phpstan analyse -c phpstan-tests-lint.neon --memory-limit=1G handling the analyse:tests-lint event returned with error code 1

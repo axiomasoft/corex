@@ -29,12 +29,29 @@ const CORE_ZONE_COMPOSITION = [
     'packages/core/src/Config/Laravel/CoreOptionsParser.php',
     'packages/core/src/Config/Internal/KernelConfigSection.php',
     'packages/core/src/CoreServiceProvider.php',
-    'packages/core/src/Config/Internal/Config.php',
+    'packages/core/src/Config/Contracts/RuntimeConfigCheck.php',
+    'packages/core/src/Config/Laravel/RuntimeConfigGate.php',
     'packages/core/src/Config/Data/CoreOptions.php',
     'packages/core/src/Config/Internal/Commands/ValidateConfigCommand.php',
     'packages/core/src/Modules/Internal/ServiceProviderModuleRegistrar.php',
     'packages/core/src/Modules/Contracts/PackageRegistrar.php',
     'packages/core/src/Modules/Laravel/RegistersNothingOnBoot.php',
+    'packages/core/src/Audit/Laravel/AuditRegistrar.php',
+    'packages/core/src/Config/Laravel/ConfigRegistrar.php',
+    'packages/core/src/Config/Laravel/ConfiguredImplementation.php',
+    'packages/core/src/Config/Internal/ApplicationLocator.php',
+    'packages/core/src/Context/Laravel/ContextRegistrar.php',
+    'packages/core/src/Data/Laravel/DataRegistrar.php',
+    'packages/core/src/Departments/Laravel/DepartmentsRegistrar.php',
+    'packages/core/src/Errors/Laravel/ErrorsRegistrar.php',
+    'packages/core/src/Errors/Laravel/ProblemRegistryFactory.php',
+    'packages/core/src/Features/Laravel/FeaturesRegistrar.php',
+    'packages/core/src/Messaging/Laravel/MessagingRegistrar.php',
+    'packages/core/src/Modules/Laravel/CoreModulesRegistrar.php',
+    'packages/core/src/Observability/Laravel/ObservabilityRegistrar.php',
+    'packages/core/src/Settings/Laravel/SettingsRegistrar.php',
+    'packages/core/src/Storage/Laravel/StorageRegistrar.php',
+    'packages/core/src/Time/Laravel/TimeRegistrar.php',
 ];
 
 const CORE_ZONE_E_BASEMODEL = 'packages/core/src/Database/Laravel/BaseModel.php';
@@ -50,6 +67,10 @@ const CORE_ZONE_EXACT_IMPORTS = [
         'CoreX\\Context\\Data\\TenantContext',
     ],
     'packages/core/src/Messaging/Events/DomainEvent.php' => [
+        'CoreX\\Context\\Data\\TenantContext',
+        'CoreX\\Messaging\\Internal\\DomainEventDefaults',
+    ],
+    'packages/core/src/Messaging/Internal/DomainEventDefaults.php' => [
         'CoreX\\Context\\Data\\TenantContext',
         'CoreX\\Context\\Contracts\\TenantContextResolver',
     ],
@@ -112,7 +133,7 @@ const CORE_ZONE_FOUNDATION_SUPPORT = [
     'Errors/Exceptions/CodedException.php',
     'Errors/Exceptions/ProblemRegistryException.php',
     'Errors/Internal/CompiledProblemRegistry.php',
-    'Errors/Internal/ErrorSourceScanner.php',
+    'Errors/Tooling/ErrorSourceScanner.php',
     'Errors/Internal/PackageProblemDefinitions.php',
     'Errors/Internal/ProblemContribution.php',
     'Errors/Internal/ProblemRegistryRegistrar.php',
@@ -148,13 +169,13 @@ const CORE_ZONE_PREFIX = [
  */
 const CORE_ZONE_DUMP = [
     'Observability/Contracts/TracePropagation.php' => 'Foundation',
-    'Messaging/Internal/DurablePayloadTypeChecker.php' => 'Foundation',
+    'Messaging/PHPStan/DurablePayloadTypeChecker.php' => 'Foundation',
     'Messaging/PHPStan/Rules/DurablePayloadPromotedPropertyRule.php' => 'Foundation',
     'Attributes/Api.php' => 'Foundation',
-    'Attributes/Internal/SourceType.php' => 'Foundation',
-    'Attributes/Internal/SurfaceDiagnostic.php' => 'Foundation',
-    'Attributes/Internal/SurfaceReport.php' => 'Foundation',
-    'Attributes/Internal/SurfaceScanner.php' => 'Foundation',
+    'Attributes/Tooling/SourceType.php' => 'Foundation',
+    'Attributes/Tooling/SurfaceDiagnostic.php' => 'Foundation',
+    'Attributes/Tooling/SurfaceReport.php' => 'Foundation',
+    'Attributes/Tooling/SurfaceScanner.php' => 'Foundation',
     'Attributes/Spi.php' => 'Foundation',
     'Attributes/SpiKind.php' => 'Foundation',
     'Audit/Internal/AuditObserver.php' => 'Audit',
@@ -212,6 +233,7 @@ const CORE_ZONE_DUMP = [
     'Database/Enums/IdStrategy.php' => 'Foundation',
     'Database/Laravel/HasConfiguredId.php' => 'Foundation',
     'Database/Laravel/IdColumns.php' => 'Foundation',
+    'Database/Laravel/ResolvesCoreOptions.php' => 'Foundation',
     'Departments/Contracts/DepartmentRepository.php' => 'Departments',
     'Departments/Internal/DatabaseDepartmentRepository.php' => 'Departments',
     'Departments/Data/Department.php' => 'Departments',
@@ -254,6 +276,7 @@ const CORE_ZONE_DUMP = [
     'Messaging/Enums/PiiClass.php' => 'Messaging',
     'Messaging/Enums/PubSubDriver.php' => 'Messaging',
     'Messaging/Events/DomainEvent.php' => 'Foundation',
+    'Messaging/Internal/DomainEventDefaults.php' => 'Foundation',
     'Messaging/Exceptions/InboxRefused.php' => 'Messaging',
     'Messaging/Exceptions/InvalidMessage.php' => 'Messaging',
     'Messaging/Exceptions/OutboxLeaseLost.php' => 'Messaging',
@@ -269,7 +292,6 @@ const CORE_ZONE_DUMP = [
     'Messaging/Internal/NullPubSub.php' => 'Messaging',
     'Messaging/PHPStan/Rules/DurablePayloadRule.php' => 'Foundation',
     'Messaging/Internal/PrunePubSubMessages.php' => 'Messaging',
-    'Messaging/Internal/PubSubManager.php' => 'Messaging',
     'Messaging/Internal/RedisPubSub.php' => 'Messaging',
     'Messaging/Internal/SubscribeGuard.php' => 'Messaging',
     'Messaging/Testing/MessagingFixtures.php' => 'Messaging',
@@ -325,7 +347,7 @@ const CORE_ZONE_DUMP = [
 
 test('every core src file is classified into a zone or composition/testing', function (): void {
     expect(rz0Offenders())->toBe([])
-        ->and(zoneOf('packages/core/src/Messaging/Internal/PubSubManager.php'))->toBe('Messaging')
+        ->and(zoneOf('packages/core/src/Messaging/Internal/RedisPubSub.php'))->toBe('Messaging')
         ->and(CORE_ZONE_ALLOWED['Foundation'])->toBe([])
         ->and(zoneOf('packages/core/src/Config/Laravel/ConfigurationValidator.php'))->toBe('Foundation')
         ->and(zoneOf('packages/core/src/Config/Exceptions/InvalidConfiguration.php'))->toBe('Foundation')

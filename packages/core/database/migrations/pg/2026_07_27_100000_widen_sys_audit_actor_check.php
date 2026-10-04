@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Internal\Config;
+use CoreX\Config\Data\CoreOptions;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
@@ -14,7 +14,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        $table = Config::auditLogsTable();
+        $table = app(CoreOptions::class)->auditLogsTable;
 
         DB::statement("ALTER TABLE {$table} DROP CONSTRAINT sys_audit_actor_ck");
         DB::statement("ALTER TABLE {$table} ADD CONSTRAINT sys_audit_actor_ck CHECK (actor_type IN ('user','agent','api_key','system','support'))");
@@ -22,7 +22,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        $table = Config::auditLogsTable();
+        $table = app(CoreOptions::class)->auditLogsTable;
 
         DB::statement("ALTER TABLE {$table} DROP CONSTRAINT sys_audit_actor_ck");
         DB::statement("ALTER TABLE {$table} ADD CONSTRAINT sys_audit_actor_ck CHECK (actor_type IN ('user','agent','api_key','system'))");

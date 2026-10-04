@@ -1,0 +1,18 @@
+{
+  "base": "7a5bd4afea309f9c5482f3d39fba084ba241eb7f",
+  "command": "scripts/php84 php -r: require autoload; new OpisToolSchemaValidator",
+  "startup_ms": [
+    221.29,
+    42.16,
+    38.15,
+    35.8,
+    38.2,
+    44.81,
+    39.3,
+    44.43,
+    35.61,
+    35.66
+  ],
+  "deadline_ms": 100,
+  "memory_bytes": 67108864
+}

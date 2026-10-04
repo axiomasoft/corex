@@ -1,0 +1,9 @@
+> pest --exclude-group=pg '--filter=ApiOperationsTest'
+
+   PASS  Tests\Feature\ApiOperationsTest
+  ✓ it declares and dispatches company, contact and association operati… 0.59s
+  ✓ it normalizes CRM identifiers for the configured ID strategy         0.19s
+
+  Tests:    2 passed (25 assertions)
+  Duration: 0.86s
+  Random Order Seed: 1790879564

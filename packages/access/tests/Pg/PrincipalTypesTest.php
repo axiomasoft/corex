@@ -8,9 +8,7 @@ use CoreX\Access\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Enums\PrincipalType;
 use CoreX\Access\Enums\Scope;
-use CoreX\Access\Laravel\AuthOptions;
 use CoreX\Access\Matrix\Internal\DatabaseRoleMatrixCompiler;
-use CoreX\Access\Matrix\Internal\ScopeMapVersion;
 use CoreX\Access\Roles\Internal\Models\Role;
 use CoreX\Access\Roles\Internal\Models\RoleAssignment;
 use CoreX\Access\Roles\Internal\Models\RoleMatrixRow;
@@ -49,7 +47,7 @@ beforeEach(function (): void {
     app()->instance(ModuleRegistry::class, new FakeModuleRegistry(['corex/access-tests']));
 
     $this->compileRole = function (string $roleId): void {
-        (new DatabaseRoleMatrixCompiler(app(ScopeMapVersion::class), app(AuthOptions::class)))->compile($roleId);
+        app(DatabaseRoleMatrixCompiler::class)->compile($roleId);
     };
 
     $this->newRole = function (PrincipalType ...$assignableTo): Role {

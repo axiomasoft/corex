@@ -12,6 +12,7 @@ use CoreX\Audit\Internal\NullAuditRetention;
 use CoreX\Audit\Internal\QueuedAuditLogger;
 use CoreX\Audit\Internal\RecordAuditEntry;
 use CoreX\Audit\Laravel\HasAuditLog;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
@@ -121,7 +122,7 @@ function auditPg(): Connection
 
 function auditLogger(): QueuedAuditLogger
 {
-    return new QueuedAuditLogger(connection: AUDIT_TEST_CONNECTION);
+    return app()->make(QueuedAuditLogger::class, ['connection' => AUDIT_TEST_CONNECTION]);
 }
 
 /** @param array<string, mixed> $overrides */
@@ -151,6 +152,7 @@ beforeEach(function (): void {
     // CoreXTestCase disables audit by default (missing-table guard for the
     // sqlite lane, see its defineEnvironment) — this suite opts back in.
     config(['corex.audit.enabled' => true]);
+    app()->forgetInstance(CoreOptions::class);
 
     // D12: sys_audit_log is PG-only (jsonb/CHECK/BRIN). Reset to a clean
     // public schema so each test starts with no migration history (mirrors
@@ -346,6 +348,7 @@ it('masks a fillable sensitive field in both old and new on update (A17)', funct
 
 it('killswitch silences the capability path, not only the trait (A60)', function (): void {
     config(['corex.audit.enabled' => false]);
+    app()->forgetInstance(CoreOptions::class);
 
     Schema::create('stub_auditable_things', function ($table): void {
         $table->uuid('id')->primary();
@@ -366,9 +369,10 @@ it('killswitch silences the capability path, not only the trait (A60)', function
 
 it('killswitch silences a direct AuditLogger::record() at the write seam, not only the observer (D63/D66 defense-in-depth)', function (): void {
     config(['corex.audit.enabled' => false]);
+    app()->forgetInstance(CoreOptions::class);
 
     // Bypass the observer entirely — call the AuditLogger contract directly, as
-    // any caller resolving it could. AuditObserver::record()'s guard (A60) does
+    // any caller resolving it could. app(AuditObserver::class)->record()'s guard (A60) does
     // not cover this path; the write seam must refuse on its own. Sync queue in
     // this suite means an un-guarded record() would write the row synchronously.
     auditLogger()->record(new AuditEntry(
@@ -383,6 +387,7 @@ it('killswitch silences a direct AuditLogger::record() at the write seam, not on
 
 it('killswitch aborts in the observer itself — an unconditional logger stays untouched (P1.21 observer isolation)', function (): void {
     config(['corex.audit.enabled' => false]);
+    app()->forgetInstance(CoreOptions::class);
 
     Schema::create('stub_auditable_things', function ($table): void {
         $table->uuid('id')->primary();
@@ -428,7 +433,7 @@ it('snapshots occurred_at and workspace_id at enqueue, not in the worker (A17)',
     $resolver = new MutableTenantResolver;
     $resolver->workspaceId = $eventWorkspace = (string) Str::uuid7();
 
-    $logger = new QueuedAuditLogger(connection: AUDIT_TEST_CONNECTION, tenantContext: $resolver);
+    $logger = app()->make(QueuedAuditLogger::class, ['connection' => AUDIT_TEST_CONNECTION, 'tenantContext' => $resolver]);
 
     Carbon::setTestNow('2026-07-14 10:00:00');
 
@@ -451,7 +456,7 @@ it('snapshots occurred_at and workspace_id at enqueue, not in the worker (A17)',
     $resolver->workspaceId = (string) Str::uuid7();
     Carbon::setTestNow('2026-07-14 12:00:00');
 
-    $captured->handle();
+    app()->call([$captured, 'handle']);
 
     $row = AuditLog::on(AUDIT_TEST_CONNECTION)->sole();
 

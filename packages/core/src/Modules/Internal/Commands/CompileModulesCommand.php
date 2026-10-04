@@ -51,7 +51,7 @@ final class CompileModulesCommand extends Command
 
         $this->components->info(sprintf('Compiled %d entity definition(s).', count($compiled->entities)));
 
-        $cachePath = CompiledModuleRegistry::defaultCachePath();
+        $cachePath = $this->laravel->basePath(CompiledModuleRegistry::CACHE_PATH);
         CompiledModuleRegistry::writeAtomic(
             $cachePath,
             array_map(CompiledModule::fromManifest(...), $manifests),

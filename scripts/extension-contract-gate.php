@@ -21,6 +21,7 @@ if (count($argv) > 1 && ($fixture === null || ! is_file($fixture) || ! str_ends_
  * @var array<string, string>
  */
 $classification = [
+    'CoreX\\Modules\\Internal\\InMemoryEntityRegistry' => 'projection',
     'CoreX\\Errors\\Contracts\\ProblemRegistry' => 'boot-built catalogue',
     'CoreX\\Errors\\Internal\\CompiledProblemRegistry' => 'boot-built catalogue',
     'CoreX\\Operations\\Definition\\Contracts\\OperationRegistry' => 'projection',
@@ -43,7 +44,6 @@ $classification = [
     'CoreX\\CustomFields\\Internal\\Values\\AttributeValueTransformerRegistry' => 'boot-built catalogue',
     'CoreX\\Messaging\\Contracts\\MessageContractRegistry' => 'authority',
     'CoreX\\Messaging\\Internal\\ArrayMessageContractRegistry' => 'authority',
-    'CoreX\\Messaging\\Internal\\PubSubManager' => 'driver factory',
     'CoreX\\Context\\Contracts\\TenancyManager' => 'runtime manager',
     'CoreX\Context\Internal\NullTenancyManager' => 'runtime manager',
     'CoreX\Modules\Data\CompiledRegistry' => 'authority',

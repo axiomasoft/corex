@@ -1,0 +1,10 @@
+provider-size-gate: OK
+config-composition-gate: blocking=true
+config-composition-gate: C1 count=0 C2 count=0 C3 count=0 C4 count=0
+config-composition-gate: OK
+> python3 scripts/module-layout-gate.py
+module-layout OK: 1316 files, 0 violations, 0 baselined, 0 new, 0 stale; R0 0, R1 0, R2 0, R3 0, R4 0, R5 0, R6 0
+package-graph-gate: OK
+deps:analyse exit 0
+ceilings OK
+anti-weakening exit 0

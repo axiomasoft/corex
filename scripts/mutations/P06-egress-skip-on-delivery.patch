@@ -1,0 +1,18 @@
+--- a/packages/webhooks/src/Internal/WebhookDeliveryWorker.php
++++ b/packages/webhooks/src/Internal/WebhookDeliveryWorker.php
+@@ -92,15 +92,6 @@
+ 
+         $deliveryScope = $this->scopeCodec->decode($delivery->scope);
+ 
+-        if (! $this->egress->allows($deliveryScope, $destination)) {
+-            return $this->finish($scope, $delivery, new WebhookHttpResult(
+-                status: null,
+-                retryAfter: null,
+-                errorCode: WebhookFailureReason::EgressDenied,
+-                durationMs: 0,
+-            ));
+-        }
+-
+         try {
+             $request = $this->urlPolicy->validate(
+                 url: $delivery->endpointSnapshot,

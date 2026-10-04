@@ -12,7 +12,7 @@ superseded_by: null
 **Actor:** repository owner (разрешение на правку в сессии аудита); запись и выбор вариантов — auditor/designer claude-opus-5-5 по D72.
 **Evidence:** сообщение владельца после вердикта ATTENTION: «я хочу, чтобы ты свою часть закрыл, чтобы я потом моделью кодекса выполнил вот этот вот план дизайн finish и начал разрабатывать… чтобы ты закоммитил и запушил». RAG:— `findings/P05-P10-design-audit.md` (A1–A4, m1–m6; fingerprint `f188df5f5ff304b1ed28672b74c7fee914843f97a6a6cb8a8c0b9d53e698bd0d`); `.github/workflows/ci.yml:619-649,815-829,965-968`; `composer.json` (`test:packages`, `pestphp/pest ^5.2`); `decisions/D42-laravel12-test-stack.md`; `artifacts/P10-design/facts/repro-root-tests.txt`.
 
-## Решение
+## Solution
 
 1. **A1.** P10.1 не требует `success` у джоба `Remaining cohort package aggregator`: критерий item — в логе джоба блок `==> packages/access` проходит. Джоб исполняет `composer test:packages` по всем пакетам и зеленеет в P10.4, где это проверяется явно.
 2. **A2.** Изменение `php-api.json` пакета сопровождается записью в `CHANGELOG.md` этого пакета в том же item — следствие D74 п.9. P10.2 получает в Scope и Files CHANGELOG 20 пакетов и проверку `contract-guard` от базового commit item; в Files добавлены `tests/Arch/CoreZoneTest.php` и `tests/Arch/ErrorContractTest.php`. P05.3 получает CHANGELOG в Files на случай изменения манифеста.
@@ -25,7 +25,7 @@ superseded_by: null
 9. **Уточнение D70 п.1.** В список static-registrars, приводимых к `PackageRegistrar`, входит `SavedViewsRegistrar` (panels).
 10. V3-ветка P10 (оставить `require --no-update` в лейне Laravel 12) допустима в Validation P10.1 с записью числа шагов и причины.
 
-## Почему
+## Why
 
 - A1–A4 делали items незакрываемыми либо красными на корректном результате: исполнитель упёрся бы в проверку, которую нельзя выполнить, не нарушив Scope. Каждая воспроизведена командой на commit `39ae489a`.
 - п.5: P05 меняет boot и время жизни биндингов во всех пакетах; D73 принят именно затем, чтобы отказы hosted-матрицы не копились до конца фазы.

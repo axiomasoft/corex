@@ -80,12 +80,33 @@ The factual compatibility passport, its local proof class, and explicit limits
 are in [PACKAGE.md](PACKAGE.md). It does not extend Composer constraints or
 constitute a publication promise.
 
+### Provider composition
+
+Public providers are thin composition roots: they merge configuration, publish assets and register commands, and
+delegate every binding to `PackageRegistrar` services listed in a `REGISTRARS` constant. A registrar keeps the
+original binding order and lifetimes; a factory closure in a provider or registrar is a single `return`, and
+anything with branching moves to a named `<Thing>Factory`. `CoreServiceProvider` registers `ModulesServiceProvider`
+itself, so applications list only `CoreX\CoreServiceProvider`.
+
 ### Configuration report contributions
 
 `corex:config:validate` collects services tagged with `CoreX\Config\Contracts\ConfigReportSection`.
 Each package owns its options types, secret keys and defaults, drivers and adapters. Sections
 supply an integer order; the command retains its stable report format and redacts secret values.
 Kernel installations require no optional package to build the report.
+
+Each package validates the shape of its configuration once, when its provider boots, through an
+internal `<Pkg>Options` type; the shape check passes on an empty environment, so an image build
+(`package:discover`, `config:cache`) needs no secrets. Requirements of the running process are
+separate `CoreX\Config\Contracts\RuntimeConfigCheck` services tagged by the owning package: they
+run when the HTTP application finishes booting or a console command starts (build commands such as
+`package:discover`, `config:cache`, `optimize` and `corex:config:validate` are exempt). In
+`production`, an enabled dangerous mode (`corex-workflow.enforce_declarations=false`,
+`accept_legacy_unstamped=true` of notifications, tasks-workflow or any wakeup handler) stops the
+process unless its exact config path is listed in `corex.acknowledged_dangerous_modes`; patterns
+are rejected. `corex:config:validate` runs the same checks (`--production` evaluates them as
+production), prints acknowledged modes as warnings and the `corex-operations.require_physical_tenancy=false`
+opt-out as a notice, and exits non-zero on a violation.
 
 Consumer tests can create messaging adapters through
 `CoreX\Messaging\Testing\MessagingFixtures`; the factory returns the public messaging contracts.

@@ -22,6 +22,7 @@ use CoreX\Tasks\Task\Internal\Models\Task;
 use CoreX\Tasks\Task\Internal\Models\TaskTarget;
 use CoreX\Tasks\Task\Internal\TaskReferenceFactory;
 use CoreX\Tasks\Task\Internal\TaskSnapshot;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -31,6 +32,9 @@ final class CreateTask implements CreateTaskCommand
     public function __construct(
         private readonly TaskModuleGuard $moduleGuard,
         private readonly TaskAccess $access,
+        private readonly ProjectRead $projects,
+        private readonly SprintRead $sprints,
+        private readonly Dispatcher $events,
     ) {}
 
     public function handle(TaskDraft $draft): TaskReference
@@ -141,7 +145,7 @@ final class CreateTask implements CreateTaskCommand
             $link->save();
         }
 
-        event(new TaskCreated(TaskSnapshot::fromTask($task)));
+        $this->events->dispatch(new TaskCreated(TaskSnapshot::fromTask($task)));
 
         return TaskReferenceFactory::fromTask($task);
     }
@@ -153,7 +157,7 @@ final class CreateTask implements CreateTaskCommand
         }
 
         /** @var ProjectView|null $project */
-        $project = app(ProjectRead::class)->find($id, $connectionName);
+        $project = $this->projects->find($id, $connectionName);
 
         if ($project === null || $project->workspaceId !== $workspaceId) {
             $this->invalid('project_id', 'Проект не найден в рабочем пространстве задачи.');
@@ -169,7 +173,7 @@ final class CreateTask implements CreateTaskCommand
         }
 
         /** @var SprintView|null $sprint */
-        $sprint = app(SprintRead::class)->find($id, $connectionName);
+        $sprint = $this->sprints->find($id, $connectionName);
 
         if ($project === null || $sprint === null || $sprint->projectId !== $project->id) {
             $this->invalid('sprint_id', 'Спринт не принадлежит проекту задачи.');

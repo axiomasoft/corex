@@ -1,0 +1,7 @@
+{
+  "anchor_commit": "33d44f741f4a5d2faa3f3908c262021cb1720681",
+  "algorithm": "sha256 of sorted JSON path->content-sha256 for tracked regular files outside plans/",
+  "files": 2637,
+  "product_tree_sha256": "393a477b147323e81d08bbd8115dfe44261268d10938a4b6883b7fc7d02dbe77",
+  "unchanged": true
+}

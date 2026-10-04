@@ -33,15 +33,16 @@ use CoreX\Modules\Internal\Discovery\ModuleDiscovery;
 use CoreX\Modules\ModulesServiceProvider;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Events\MigrationEnded;
 use Illuminate\Database\Events\MigrationStarted;
 use Illuminate\Database\Migrations\Migrator;
 use Illuminate\Events\Dispatcher;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use LogicException;
+use Psr\Clock\ClockInterface;
 use Throwable;
 
 /**
@@ -88,6 +89,9 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
         private readonly RecordsRegistrar $records,
         private readonly Container $container,
         private readonly TenantContextResolver $tenantContextResolver,
+        private readonly ConnectionResolverInterface $connections,
+        private readonly EventDispatcher $events,
+        private readonly ClockInterface $clock,
         private readonly array $codeVersions = [],
         private readonly array $migrationPaths = [],
         private readonly ?string $connection = null,
@@ -95,7 +99,10 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
 
     private function db(): Connection
     {
-        return DB::connection($this->connection);
+        /** @var Connection */
+        $connection = $this->connections->connection($this->connection);
+
+        return $connection;
     }
 
     /**
@@ -109,7 +116,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
      */
     private function timestamp(): string
     {
-        return now()->format('Y-m-d H:i:s.u');
+        return $this->clock->now()->format('Y-m-d H:i:s.u');
     }
 
     public function enable(string $module, string $edition = 'standard', bool $cascade = false): void
@@ -175,7 +182,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
             ]);
 
             $this->db()->afterCommit(function () use ($module, $edition, $migration): void {
-                event(new ModuleEnabled($module, $edition, $migration['ran']));
+                $this->events->dispatch(new ModuleEnabled($module, $edition, $migration['ran']));
             });
         });
     }
@@ -190,14 +197,19 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
      */
     private function defineManifestFeatureFlags(string $module): void
     {
-        DB::usingConnection($this->connection ?? DB::getDefaultConnection(), function () use ($module): void {
+        $previous = $this->connections->getDefaultConnection();
+        $this->connections->setDefaultConnection($this->connection ?? $previous);
+
+        try {
             /** @var FeatureFlags $flags */
             $flags = $this->container->make(FeatureFlags::class);
 
             foreach ($this->manifestFor($module)->featureFlags as $definition) {
                 $flags->define($definition);
             }
-        });
+        } finally {
+            $this->connections->setDefaultConnection($previous);
+        }
     }
 
     public function disable(string $module, DisableReason $reason, bool $cascade = false): void
@@ -237,7 +249,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
                 'reason' => $reason->value,
             ]);
 
-            $this->db()->afterCommit(static fn () => event(new ModuleDisabled($module, $reason)));
+            $this->db()->afterCommit(fn () => $this->events->dispatch(new ModuleDisabled($module, $reason)));
         });
     }
 
@@ -270,7 +282,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
 
                 $this->log($module, 'archive', $current->state, ModuleState::Archived->value, 'success', []);
 
-                $this->db()->afterCommit(static fn () => event(new ModuleArchived($module)));
+                $this->db()->afterCommit(fn () => $this->events->dispatch(new ModuleArchived($module)));
 
                 return;
             }
@@ -323,7 +335,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
                 'to_version' => $codeVersion,
             ]);
 
-            $this->db()->afterCommit(static fn () => event(new ModuleUpgraded($module, $fromVersion, $codeVersion, $migration['ran'])));
+            $this->db()->afterCommit(fn () => $this->events->dispatch(new ModuleUpgraded($module, $fromVersion, $codeVersion, $migration['ran'])));
         });
     }
 
@@ -470,13 +482,13 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
             'dropped_tables' => $droppedTables,
         ]);
 
-        $this->db()->afterCommit(static fn () => event(new ModulePurged($module, $droppedTables)));
+        $this->db()->afterCommit(fn () => $this->events->dispatch(new ModulePurged($module, $droppedTables)));
     }
 
     /** @param  list<string>  $droppedTables */
     private function dropOwnedTable(string $table, array &$droppedTables): void
     {
-        Schema::connection($this->connection)->dropIfExists($table);
+        $this->db()->getSchemaBuilder()->dropIfExists($table);
         $droppedTables[] = $table;
     }
 

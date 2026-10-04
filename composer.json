@@ -145,6 +145,20 @@
             }
         }
     ],
+    "extra": {
+        "phpstan/extension-installer": {
+            "ignore": [
+                "axiomasoft/corex",
+                "axiomasoft/corex-tenancy",
+                "composer/composer",
+                "composer/pcre",
+                "larastan/larastan",
+                "nesbot/carbon",
+                "pestphp/pest",
+                "phpstan/phpstan-strict-rules"
+            ]
+        }
+    },
     "minimum-stability": "stable",
     "prefer-stable": true,
     "config": {
@@ -156,8 +170,10 @@
     },
     "scripts": {
         "test": "bash scripts/run-root-tests.sh @additional_args",
+        "test:hermetic": "PGSQL_HOST=127.0.0.1 PGSQL_PORT=1 PGSQL_DATABASE=corex_test bash scripts/run-root-tests.sh @additional_args",
+        "ci:local": "bash scripts/ci-local.sh",
         "test:pg": "vendor/bin/pest --group=pg",
-        "test:packages": "for p in packages/access packages/core packages/custom-fields packages/intl packages/media packages/notifications packages/operations packages/panels packages/recurrence packages/search packages/search-intl packages/search-meilisearch packages/tasks packages/tasks-workflow packages/tenancy packages/tools packages/transfer packages/wakeup packages/webhooks packages/workflow products/flex-crm; do echo \"==> $p\" && composer --working-dir=\"$p\" test || exit 1; done",
+        "test:packages": "for p in packages/access packages/core packages/custom-fields packages/intl packages/media packages/notifications packages/operations packages/panels packages/recurrence packages/search packages/search-intl packages/search-meilisearch packages/tasks packages/tasks-workflow packages/tenancy packages/tools packages/transfer packages/wakeup packages/webhooks packages/workflow products/flex-crm; do echo \"==> $p\" && composer --working-dir=\"$p\" test -- --exclude-group=pg || exit 1; done",
         "test:arch": "bash scripts/ci-deferred-guard.sh vendor/bin/pest --testsuite=Arch",
         "package-graph-gate": "bash scripts/ci-deferred-guard.sh php scripts/package-graph-gate.php",
         "package-docs-gate": "php scripts/package-docs-gate.php",
@@ -169,11 +185,14 @@
         "naming-gate": "bash scripts/ci-deferred-guard.sh php scripts/naming-gate.php",
         "rename-completeness": "php scripts/rename-completeness-gate.php",
         "config-composition-gate": "bash scripts/ci-deferred-guard.sh php scripts/config-composition-gate.php",
+        "runtime-globals-gate": "php scripts/runtime-globals-gate.php",
+        "config-cache-check": "vendor/bin/pest tests/Feature/ConfigCacheTest.php",
+        "configuration-reference": "php scripts/configuration-reference.php --check",
         "table-ownership-gate": "bash scripts/ci-deferred-guard.sh php scripts/table-ownership-gate.php",
         "contract-guard": "bash scripts/contract-guard.sh",
         "api-contract": "php scripts/check-api-contract.php",
         "bc-check": "bash scripts/bc-check.sh",
-        "test:coverage": "vendor/bin/pest --coverage --min=80",
+        "test:coverage": "bash scripts/run-root-coverage.sh --min=80",
         "lint": "vendor/bin/pint",
         "lint:check": "vendor/bin/pint --test",
         "analyse": "bash scripts/phpstan-packages.sh",

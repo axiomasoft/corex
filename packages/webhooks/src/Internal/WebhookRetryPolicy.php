@@ -7,6 +7,8 @@ namespace CoreX\Webhooks\Internal;
 use Closure;
 use CoreX\Webhooks\Data\WebhookDelivery;
 use CoreX\Webhooks\Data\WebhookHttpResult;
+use CoreX\Webhooks\Data\WebhookOptions;
+use CoreX\Webhooks\Enums\WebhookFailureReason;
 use DateInterval;
 use DateTimeImmutable;
 use Throwable;
@@ -14,17 +16,13 @@ use Throwable;
 /** @internal Pure finite retry policy; no durable state is changed here. */
 final readonly class WebhookRetryPolicy
 {
-    private const int MaxAttempts = 12;
-
     private const int MaxRetryAfterSeconds = 86_400;
-
-    private const int HorizonSeconds = 72 * 60 * 60;
 
     /** @var Closure(int, int): int */
     private Closure $random;
 
     /** @param null|callable(int, int): int $random */
-    public function __construct(?callable $random = null)
+    public function __construct(private WebhookOptions $options, ?callable $random = null)
     {
         $this->random = $random === null
             ? static fn (int $min, int $max): int => random_int($min, $max)
@@ -32,7 +30,7 @@ final readonly class WebhookRetryPolicy
     }
 
     /**
-     * @return array{status: 'succeeded'|'retry'|'dead', next: DateTimeImmutable, error: string|null}
+     * @return array{status: 'succeeded'|'retry'|'dead', next: DateTimeImmutable, error: WebhookFailureReason|null}
      */
     public function decide(
         WebhookDelivery $delivery,
@@ -49,8 +47,8 @@ final readonly class WebhookRetryPolicy
             ];
         }
 
-        if ($delivery->attempt >= self::MaxAttempts) {
-            return ['status' => 'dead', 'next' => $now, 'error' => 'retry_exhausted'];
+        if (($failure = $this->budgetFailure($delivery, $now)) !== null) {
+            return ['status' => 'dead', 'next' => $now, 'error' => $failure];
         }
 
         $cap = min(3_600, 5 * (2 ** min(10, max(0, $delivery->attempt - 1))));
@@ -58,56 +56,42 @@ final readonly class WebhookRetryPolicy
         $retryAfter = $this->retryAfterSeconds($result->retryAfter, $now);
         $delay = max($jitter, $retryAfter ?? 0);
         $next = $now->add(new DateInterval("PT{$delay}S"));
-        $horizon = $delivery->createdAt->add(new DateInterval('PT'.self::HorizonSeconds.'S'));
 
-        if ($next > $horizon) {
-            return ['status' => 'dead', 'next' => $now, 'error' => 'retry_horizon_exhausted'];
+        if (($failure = $this->budgetFailure($delivery, $next)) !== null) {
+            return ['status' => 'dead', 'next' => $now, 'error' => $failure];
         }
 
         return ['status' => 'retry', 'next' => $next, 'error' => $classification['error']];
     }
 
-    /** @return array{status: 'succeeded'|'retry'|'dead', error: string|null} */
+    public function budgetFailure(WebhookDelivery $delivery, DateTimeImmutable $instant): ?WebhookFailureReason
+    {
+        if ($delivery->attempt >= $this->options->maxAttempts) {
+            return WebhookFailureReason::RetryExhausted;
+        }
+
+        $horizon = $delivery->createdAt->add(new DateInterval('PT'.$this->options->retryHorizonSeconds.'S'));
+
+        return $instant >= $horizon ? WebhookFailureReason::RetryHorizonExhausted : null;
+    }
+
+    /** @return array{status: 'succeeded'|'retry'|'dead', error: WebhookFailureReason|null} */
     private function classification(WebhookHttpResult $result): array
     {
-        $status = $result->status;
+        // A rejected transport response is not a trustworthy HTTP acknowledgement.
+        if ($result->errorCode?->isTerminal() === true) {
+            return ['status' => 'dead', 'error' => $result->errorCode];
+        }
 
-        if ($status !== null && $status >= 200 && $status < 300) {
+        if ($result->status !== null && $result->status >= 200 && $result->status < 300) {
             return ['status' => 'succeeded', 'error' => null];
         }
 
-        if ($status === 410) {
-            return ['status' => 'dead', 'error' => 'endpoint_gone'];
-        }
+        $error = ($result->status !== null ? WebhookFailureReason::fromHttpStatus($result->status) : null)
+            ?? $result->errorCode
+            ?? WebhookFailureReason::TransportFailure;
 
-        if ($status !== null && $status >= 300 && $status < 400) {
-            return ['status' => 'dead', 'error' => 'redirect_forbidden'];
-        }
-
-        if ($status !== null && $status >= 400 && $status < 500
-            && ! in_array($status, [408, 425, 429], true)) {
-            return ['status' => 'dead', 'error' => 'http_permanent'];
-        }
-
-        if ($status === 429) {
-            return ['status' => 'retry', 'error' => 'http_429'];
-        }
-
-        if ($status !== null && $status >= 500) {
-            return ['status' => 'retry', 'error' => 'http_5xx'];
-        }
-
-        if ($status !== null && in_array($status, [408, 425], true)) {
-            return ['status' => 'retry', 'error' => 'http_'.$status];
-        }
-
-        $error = $result->errorCode ?? 'transport_failure';
-
-        if (in_array($error, ['address_not_allowed', 'webhook_url_forbidden', 'topic_unavailable'], true)) {
-            return ['status' => 'dead', 'error' => $error];
-        }
-
-        return ['status' => 'retry', 'error' => $error];
+        return ['status' => $error->isTerminal() ? 'dead' : 'retry', 'error' => $error];
     }
 
     private function retryAfterSeconds(?string $value, DateTimeImmutable $now): ?int

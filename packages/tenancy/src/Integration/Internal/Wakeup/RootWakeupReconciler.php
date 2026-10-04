@@ -8,8 +8,11 @@ use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Wakeup\Contracts\DueWakeupSweeper;
+use DateInterval;
 use DateTimeImmutable;
-use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\ConnectionResolverInterface;
+use Psr\Clock\ClockInterface;
 use RuntimeException;
 use Throwable;
 
@@ -22,7 +25,10 @@ use Throwable;
 final class RootWakeupReconciler
 {
     public function __construct(
-        private readonly Connection $root,
+        private readonly ConnectionResolverInterface $connections,
+        private readonly string $rootConnection,
+        private readonly ClockInterface $clock,
+        private readonly RootRegistryWakeupHint $hint,
         private readonly TenancyManager $tenancy,
         private readonly DueWakeupSweeper $sweeper,
         private readonly int $leaseSeconds,
@@ -63,8 +69,8 @@ final class RootWakeupReconciler
             throw new RuntimeException('Root wakeup reconciliation limit must be between 1 and 1000.');
         }
 
-        $state = $this->root->transaction(function (): object {
-            $state = $this->root->table('root_wakeup_reconciliation_state')
+        $state = $this->root()->transaction(function (): object {
+            $state = $this->root()->table('root_wakeup_reconciliation_state')
                 ->where('name', 'default')
                 ->lockForUpdate()
                 ->first();
@@ -73,8 +79,8 @@ final class RootWakeupReconciler
                 return $state;
             }
 
-            $now = now();
-            $this->root->table('root_wakeup_reconciliation_state')->insert([
+            $now = $this->clock->now();
+            $this->root()->table('root_wakeup_reconciliation_state')->insert([
                 'name' => 'default',
                 'cursor_account_id' => null,
                 'attempts' => 0,
@@ -83,21 +89,20 @@ final class RootWakeupReconciler
                 'updated_at' => $now,
             ]);
 
-            return $this->root->table('root_wakeup_reconciliation_state')->where('name', 'default')->firstOrFail();
+            return $this->root()->table('root_wakeup_reconciliation_state')->where('name', 'default')->firstOrFail();
         });
 
-        if ($state->retry_at !== null && new DateTimeImmutable((string) $state->retry_at) > new DateTimeImmutable('now')) {
+        if ($state->retry_at !== null && new DateTimeImmutable((string) $state->retry_at) > $this->clock->now()) {
             return ['processed' => 0, 'next_cursor' => $state->cursor_account_id];
         }
 
         $cursor = $afterAccountId ?? $state->cursor_account_id;
-        $accounts = $this->root->table('root_accounts')
+        $accounts = $this->root()->table('root_accounts')
             ->where('status', 'active')
             ->when($cursor !== null, static fn ($query) => $query->where('id', '>', $cursor))
             ->orderBy('id')
             ->limit($limit)
             ->get(['id', 'slug', 'status']);
-        $hint = new RootRegistryWakeupHint(root: $this->root);
         $cursor = null;
 
         foreach ($accounts as $account) {
@@ -118,28 +123,28 @@ final class RootWakeupReconciler
                 );
             } catch (Throwable) {
                 $attempts = (int) $state->attempts + 1;
-                $this->root->table('root_wakeup_reconciliation_state')->where('name', 'default')->update([
+                $this->root()->table('root_wakeup_reconciliation_state')->where('name', 'default')->update([
                     'attempts' => $attempts,
-                    'retry_at' => now()->addSeconds(min(300, 2 ** min($attempts, 8))),
-                    'updated_at' => now(),
+                    'retry_at' => $this->clock->now()->add(new DateInterval('PT'.(min(300, 2 ** min($attempts, 8))).'S')),
+                    'updated_at' => $this->clock->now(),
                 ]);
 
                 return ['processed' => 0, 'next_cursor' => $cursor];
             }
 
             if ($nextFireAt !== null) {
-                $hint->scheduled(context: $context, fireAt: $nextFireAt);
+                $this->hint->scheduled(context: $context, fireAt: $nextFireAt);
             }
 
             $cursor = $accountRef->id;
         }
 
         $nextCursor = $accounts->count() === $limit ? $cursor : null;
-        $this->root->table('root_wakeup_reconciliation_state')->where('name', 'default')->update([
+        $this->root()->table('root_wakeup_reconciliation_state')->where('name', 'default')->update([
             'cursor_account_id' => $nextCursor,
             'attempts' => 0,
             'retry_at' => null,
-            'updated_at' => now(),
+            'updated_at' => $this->clock->now(),
         ]);
 
         return ['processed' => $accounts->count(), 'next_cursor' => $nextCursor];
@@ -148,10 +153,10 @@ final class RootWakeupReconciler
     /** @return array{account: AccountRef, revision: int, epoch: int}|null */
     private function claimNext(): ?array
     {
-        return $this->root->transaction(function (): ?array {
+        return $this->root()->transaction(function (): ?array {
             while (true) {
-                $now = now();
-                $hint = $this->root->table('root_wakeup_hints')
+                $now = $this->clock->now();
+                $hint = $this->root()->table('root_wakeup_hints')
                     ->where('next_fire_at', '<=', $now)
                     ->where(static fn ($query) => $query->whereNull('leased_until')->orWhere('leased_until', '<=', $now))
                     ->orderBy('next_fire_at')
@@ -162,22 +167,22 @@ final class RootWakeupReconciler
                     return null;
                 }
 
-                $account = $this->root->table('root_accounts')->where('id', $hint->account_id)->first();
+                $account = $this->root()->table('root_accounts')->where('id', $hint->account_id)->first();
 
                 if ($account === null) {
-                    $this->root->table('root_wakeup_hints')->where('account_id', $hint->account_id)->delete();
+                    $this->root()->table('root_wakeup_hints')->where('account_id', $hint->account_id)->delete();
 
                     continue;
                 }
 
                 $epoch = (int) $hint->claim_epoch + 1;
-                $this->root->table('root_wakeup_hints')
+                $this->root()->table('root_wakeup_hints')
                     ->where('account_id', $hint->account_id)
                     ->where('hint_revision', $hint->hint_revision)
                     ->where('claim_epoch', $hint->claim_epoch)
                     ->update([
                         'claim_epoch' => $epoch,
-                        'leased_until' => $now->copy()->addSeconds($this->leaseSeconds),
+                        'leased_until' => $now->add(new DateInterval('PT'.$this->leaseSeconds.'S')),
                         'updated_at' => $now,
                     ]);
 
@@ -210,8 +215,8 @@ final class RootWakeupReconciler
             },
         );
 
-        $this->root->transaction(function () use ($claim, $nextFireAt): void {
-            $query = $this->root->table('root_wakeup_hints')
+        $this->root()->transaction(function () use ($claim, $nextFireAt): void {
+            $query = $this->root()->table('root_wakeup_hints')
                 ->where('account_id', $claim['account']->id)
                 ->where('hint_revision', $claim['revision'])
                 ->where('claim_epoch', $claim['epoch']);
@@ -225,8 +230,13 @@ final class RootWakeupReconciler
             $query->update([
                 'next_fire_at' => $nextFireAt,
                 'leased_until' => null,
-                'updated_at' => now(),
+                'updated_at' => $this->clock->now(),
             ]);
         });
+    }
+
+    private function root(): ConnectionInterface
+    {
+        return $this->connections->connection($this->rootConnection);
     }
 }

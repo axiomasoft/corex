@@ -39,7 +39,7 @@ function departmentsSession(string $name): Connection
 
 function departments(): DepartmentRepository
 {
-    return new DatabaseDepartmentRepository(connection: DEPARTMENTS_TEST_CONNECTION);
+    return app()->make(DatabaseDepartmentRepository::class, ['connection' => DEPARTMENTS_TEST_CONNECTION]);
 }
 
 function departmentLabel(string $id): string

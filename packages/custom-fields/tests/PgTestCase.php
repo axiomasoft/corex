@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\CustomFields\Tests;
 
+use CoreX\CoreServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Override;
@@ -11,6 +12,12 @@ use RuntimeException;
 
 abstract class PgTestCase extends Orchestra
 {
+    #[Override]
+    protected function getPackageProviders($app): array
+    {
+        return [CoreServiceProvider::class];
+    }
+
     #[Override]
     protected function defineEnvironment($app): void
     {

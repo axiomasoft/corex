@@ -1,0 +1,27 @@
+{"name": "targeted", "command": "PGSQL_PORT=5434 PGSQL_DATABASE=corex_test PGSQL_USERNAME=corex PGSQL_PASSWORD=corex scripts/php84 composer --working-dir=packages/webhooks test -- --filter='WebhookFailureReason|WebhookRetryBudget|WebhookEgressPolicy|WebhookLoadContourIntegration'", "exit_code": 0, "duration_seconds": 1.07, "log": "targeted.log"}
+{"name": "webhooks", "command": "PGSQL_PORT=5434 PGSQL_DATABASE=corex_test PGSQL_USERNAME=corex PGSQL_PASSWORD=corex scripts/php84 composer --working-dir=packages/webhooks test", "exit_code": 0, "duration_seconds": 2.85, "log": "webhooks.log"}
+{"name": "mutation-egress", "command": "scripts/php84 bash scripts/mutation-check.sh P06 egress-skip-on-delivery", "exit_code": 0, "duration_seconds": 0.21, "log": "mutation-egress.log"}
+{"name": "mutation-all", "command": "PGSQL_PORT=5434 scripts/php84 bash scripts/mutation-check.sh --all", "exit_code": 1, "duration_seconds": 11.88, "log": "mutation-all.log"}
+{"name": "error-registry", "command": "scripts/php84 composer error-registry", "exit_code": 0, "duration_seconds": 7.06, "log": "error-registry.log"}
+{"name": "config-check", "command": "scripts/php84 php scripts/configuration-reference.php --check", "exit_code": 0, "duration_seconds": 0.06, "log": "config-check.log"}
+{"name": "package-docs", "command": "php scripts/package-docs-gate.php", "exit_code": 0, "duration_seconds": 1.48, "log": "package-docs.log"}
+{"name": "php-api", "command": "scripts/php84 composer php-api", "exit_code": 0, "duration_seconds": 5.34, "log": "php-api.log"}
+{"name": "quality-ceilings", "command": "php scripts/quality-ceiling-guard.php", "exit_code": 0, "duration_seconds": 0.02, "log": "quality-ceilings.log"}
+{"name": "anti-weakening", "command": "bash scripts/anti-weakening-gate.sh", "exit_code": 1, "duration_seconds": 3.95, "log": "anti-weakening.log"}
+{"name": "targeted", "command": "PGSQL_PORT=5434 PGSQL_DATABASE=corex_test PGSQL_USERNAME=corex PGSQL_PASSWORD=corex scripts/php84 composer --working-dir=packages/webhooks test -- --filter='WebhookFailureReason|WebhookRetryBudget|WebhookEgressPolicy|WebhookLoadContourIntegration'", "exit_code": 0, "duration_seconds": 1.07, "log": "targeted.log"}
+{"name": "webhooks", "command": "PGSQL_PORT=5434 PGSQL_DATABASE=corex_test PGSQL_USERNAME=corex PGSQL_PASSWORD=corex scripts/php84 composer --working-dir=packages/webhooks test", "exit_code": 0, "duration_seconds": 3.09, "log": "webhooks.log"}
+{"name": "mutation-egress", "command": "scripts/php84 bash scripts/mutation-check.sh P06 egress-skip-on-delivery", "exit_code": 0, "duration_seconds": 0.21, "log": "mutation-egress.log"}
+{"name": "error-registry", "command": "scripts/php84 composer error-registry", "exit_code": 0, "duration_seconds": 4.57, "log": "error-registry.log"}
+{"name": "config-check", "command": "scripts/php84 php scripts/configuration-reference.php --check", "exit_code": 0, "duration_seconds": 0.07, "log": "config-check.log"}
+{"name": "package-docs", "command": "php scripts/package-docs-gate.php", "exit_code": 0, "duration_seconds": 1.53, "log": "package-docs.log"}
+{"name": "php-api", "command": "scripts/php84 composer php-api", "exit_code": 0, "duration_seconds": 5.51, "log": "php-api.log"}
+{"name": "quality-ceilings", "command": "php scripts/quality-ceiling-guard.php", "exit_code": 0, "duration_seconds": 0.02, "log": "quality-ceilings.log"}
+{"name": "mutation-all", "command": "PGSQL_PORT=5434 scripts/php84 bash scripts/mutation-check.sh --all", "exit_code": 0, "duration_seconds": 12.18, "log": "mutation-all.log"}
+{"name": "anti-weakening", "command": "bash scripts/anti-weakening-gate.sh", "exit_code": 0, "duration_seconds": 4.61, "log": "anti-weakening.log"}
+{"name": "analyse", "command": "scripts/php84 composer analyse", "exit_code": 0, "duration_seconds": 34.08, "log": "analyse.log"}
+{"name": "hermetic", "command": "scripts/php84 composer test:hermetic", "exit_code": 1, "duration_seconds": 197.78, "log": "hermetic.log"}
+{"name": "hermetic", "command": "scripts/php84 composer test:hermetic", "exit_code": 0, "duration_seconds": 196.91, "log": "hermetic.log"}
+{"name": "pg", "command": "PGSQL_PORT=5434 scripts/php84 composer test:pg", "exit_code": 0, "duration_seconds": 34.82, "log": "pg.log"}
+{"name": "packages", "command": "scripts/php84 composer test:packages", "exit_code": 0, "duration_seconds": 47.19, "log": "packages.log"}
+{"name": "arch", "command": "scripts/php84 composer test:arch", "exit_code": 0, "duration_seconds": 162.4, "log": "arch.log"}
+{"name": "golden", "command": "scripts/php84 composer golden", "exit_code": 0, "duration_seconds": 7.79, "log": "golden.log"}

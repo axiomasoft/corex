@@ -33,7 +33,7 @@ final readonly class MatrixPermissionCatalogBuilder implements PermissionCatalog
      */
     public function __construct(
         private AuthOptions $options,
-        private ?ActiveEntityFilter $activeEntities = null,
+        private ActiveEntityFilter $activeEntities,
     ) {}
 
     #[Override]
@@ -52,16 +52,11 @@ final readonly class MatrixPermissionCatalogBuilder implements PermissionCatalog
 
         return collect(RoleMatrixData::matrix())
             ->filter(static fn (RoleMatrixEntry $row): bool => $row->scope !== Scope::None)
-            ->filter(fn (RoleMatrixEntry $row): bool => $this->activeEntities()->isActive($row->entityKey))
+            ->filter(fn (RoleMatrixEntry $row): bool => $this->activeEntities->isActive($row->entityKey))
             ->map(static fn (RoleMatrixEntry $row): string => "{$panelId}.{$row->entityKey}.{$row->action}")
             ->unique()
             ->map(static fn (string $key): PermissionDefinition => new SimplePermissionDefinition($key, $panelId))
             ->values()
             ->all();
-    }
-
-    private function activeEntities(): ActiveEntityFilter
-    {
-        return $this->activeEntities ?? app(ActiveEntityFilter::class);
     }
 }

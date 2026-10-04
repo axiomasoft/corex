@@ -1,0 +1,134 @@
+{
+  "schema": "p10.2-routine-repair-scope/v1",
+  "base": "428f47dbbab1ea1663a673f0fa1d6c2709f8e148",
+  "repairs": [
+    {
+      "signal": "R6 runtime references to Testing registry",
+      "paths": [
+        "packages/core/src/Modules/Internal/InMemoryEntityRegistry.php",
+        "packages/core/src/Modules/Testing/ArrayEntityRegistry.php",
+        "packages/core/src/Modules/Laravel/RegistryRegistrar.php",
+        "packages/core/src/Modules/Laravel/ModulesBootRegistrar.php",
+        "packages/core/tests/Modules/Feature/CompositionBindingsTest.php",
+        "scripts/extension-contract-gate.php"
+      ],
+      "delta": "Shared implementation in Internal; Testing SPI delegates with unchanged own signatures. Runtime container bindings point to Internal implementation. Projection classification updated by identity.",
+      "public_signature_delta": false,
+      "baseline_delta": "Golden + one Internal type; no threshold/allowance increase",
+      "authority": "D74.2 and item Implementation Rules explicitly require shared runtime parts in Internal when R6 finds a conflict."
+    },
+    {
+      "signal": "15 public promoted properties omitted from preimage manifests by private constructor visibility (core 3, operations 12)",
+      "paths": [
+        "packages/core/src/Attributes/Tooling/SurfaceScanner.php",
+        "packages/core/tests/Attributes/SurfaceScannerTest.php"
+      ],
+      "delta": "Capture non-private promoted properties independently of constructor visibility; own AST preimage bound to committed base.",
+      "public_source_delta": false
+    },
+    {
+      "signal": "Dependency analyser framework/support shadow and unused contradiction",
+      "paths": [
+        "packages/recurrence/composer.json",
+        "composer.lock"
+      ],
+      "delta": "Declare laravel/framework, which already supplies Illuminate\\Support\\ServiceProvider through required core package; no added ignore.",
+      "constraints": "^12.0|^13.0 unchanged supported stack",
+      "installed_dependency_set_delta": false
+    },
+    {
+      "signal": "Local fixture enum is not autoloadable by standalone analyser",
+      "paths": [
+        "packages/core/tests/Support/DescriptorFixtureCode.php",
+        "packages/core/tests/Unit/ErrorDescriptorTest.php"
+      ],
+      "delta": "Put enum under existing CoreX\\Testing PSR-4 dev root; no new autoload mapping or ignore."
+    },
+    {
+      "signal": "Checker move extends Foundation litmus discovery prefix",
+      "paths": [
+        "tests/Arch/CoreLitmusTest.php"
+      ],
+      "delta": "Add moved checker to explicit list to match live map; no exemption."
+    },
+    {
+      "signal": "Relocated namespace has CLI/rename-tool consumers",
+      "paths": [
+        "scripts/error-registry.php",
+        "scripts/rename-completeness-gate.php",
+        "tests/Golden/rename-map.json"
+      ],
+      "delta": "Update exact consumers and historical rename destinations; no alias."
+    },
+    {
+      "signal": "Pint reintroduces JsonDocuments import at previous late-use position",
+      "paths": [
+        "packages/tasks-workflow/tests/Pg/WorkUnitIsolationPgTest.php"
+      ],
+      "delta": "Move only the JsonDocuments import above uses(PgTestCase), respecting Pint and keeping other analyser configurations unchanged. Moving all late imports would make five existing suppressions stale; original unaffected imports remain.",
+      "behavior_delta": false
+    },
+    {
+      "signal": "Hosted consumer regressions after separating runtime registry from Testing concrete",
+      "paths": [
+        "packages/access/tests/Support/CoreAuthTestCase.php",
+        "products/flex-crm/src/CrmServiceProvider.php",
+        "products/flex-crm/tests/Support/CrmTestCase.php",
+        "products/flex-crm/CHANGELOG.md"
+      ],
+      "delta": "Access explicitly binds the public test fixture; CRM runtime uses declared compiled module entities, with a deploy-artifact fixture after provider boot in Testbench. No new public contract or foreign runtime Internal reference."
+    },
+    {
+      "signal": "Hosted dependency analyser with ext-redis installed reports suggestion-only as shadow dev dependency",
+      "paths": [
+        "packages/tenancy/composer.json"
+      ],
+      "delta": "ext-redis is required for package development, remains optional for runtime consumers; no new analyser ignore."
+    },
+    {
+      "signal": "Hosted rename negative fixture still expects reclaimed Attributes Internal namespace",
+      "paths": [
+        "scripts/tests/test_rename_completeness.py"
+      ],
+      "delta": "Fixture expects moved Tooling namespace; renamed custom-fields tokens still fail."
+    },
+    {
+      "signal": "Hosted access PG subclass skips parent environment setup",
+      "paths": [
+        "packages/access/tests/PgTestCase.php"
+      ],
+      "delta": "Call parent before selecting the PG connection, retaining the shared test fixture. Local full PG suite 112 tests/293 assertions passes in dedicated corex_p102_access_2ebafa81_test on postgres16, removed after execution."
+    },
+    {
+      "signal": "Removal of duplicated provider entity registrations exposes CRM contact-list coverage gap",
+      "paths": [
+        "products/flex-crm/tests/Feature/ApiOperationsTest.php"
+      ],
+      "delta": "Assert the public list-contacts operation returns the seeded contact under the existing trusted request context and bounded limit. Full CRM coverage 95.7%, threshold stays 95%. Separate corex_p102_crm_2ebafa81_test removed after execution."
+    },
+    {
+      "signal": "Owner-authorized DATA-003 CI repair (D82)",
+      "delta": "Exact Options FQN resolution; catalog migration owners; core-owned additive InboxRetention API for existing webhook cleanup; no existing public signature changed or writer exception added.",
+      "paths": [
+        "scripts/table-write-ownership-gate.php",
+        "scripts/tests/test_table_write_ownership_gate.py",
+        "docs/architecture/table-ownership.md",
+        "packages/core/src/Messaging/Laravel/InboxRetention.php",
+        "packages/core/tests/Feature/InboxClaimTest.php",
+        "packages/webhooks/src/Internal/WebhookRetention.php",
+        ".github/workflows/ci.yml"
+      ],
+      "public_signature_delta": "one additive API; existing signatures preserved"
+    },
+    {
+      "signal": "Hosted PostgreSQL connection limit exhaustion",
+      "delta": "Release all managed PDOs after public schema restoration and before Testbench application teardown; standalone package suite 497 passed/1800 assertions, normal max_connections=100, disposable cluster.",
+      "paths": [
+        "packages/tenancy/tests/TestCase.php"
+      ]
+    }
+  ],
+  "new_analyser_ignores": 0,
+  "threshold_delta": false,
+  "routes_delta": false
+}

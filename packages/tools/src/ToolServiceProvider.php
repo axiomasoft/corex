@@ -6,12 +6,14 @@ namespace CoreX\Tools;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
+use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Modules\Contracts\ManifestSectionCompiler;
 use CoreX\Tools\Contracts\ToolCatalogue;
 use CoreX\Tools\Contracts\ToolExecutionGuard;
 use CoreX\Tools\Contracts\ToolInvoker;
 use CoreX\Tools\Contracts\ToolPolicy;
 use CoreX\Tools\Contracts\ToolSchemaValidator;
+use CoreX\Tools\Errors\Internal\PackageProblemDefinitions;
 use CoreX\Tools\Internal\CompiledToolCatalogue;
 use CoreX\Tools\Internal\DenyToolPolicy;
 use CoreX\Tools\Internal\GuardedToolInvoker;
@@ -28,6 +30,8 @@ final class ToolServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        ProblemDefinitions::register(app: $this->app, composerManifest: __DIR__.'/../composer.json', provider: PackageProblemDefinitions::class);
+
         $this->app->tag([ToolSectionCompiler::class], ManifestSectionCompiler::class);
 
         $this->app->bindIf(ToolPolicy::class, DenyToolPolicy::class);

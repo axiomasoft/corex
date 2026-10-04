@@ -14,7 +14,7 @@ test('naming gate reports no violations on clean tree', function (): void {
 
     $joined = implode("\n", $output);
 
-    expect($exitCode)->toBe(0)
+    expect($exitCode)->toBe(0, "gate exit {$exitCode}:\n".implode("\n", $output))
         ->and($joined)->toContain('naming-gate: OK');
 });
 
@@ -46,7 +46,7 @@ PHP;
 
     $joined = implode("\n", $output);
 
-    expect($exitCode)->not->toBe(0)
+    expect($exitCode)->not->toBe(0, "gate exit {$exitCode}:\n".implode("\n", $output))
         ->and($joined)->toContain('ProbeHelper.php')
         ->and($joined)->toContain('N1');
 });
@@ -61,7 +61,7 @@ test('config composition gate is blocking on a clean tree', function (): void {
 
     $joined = implode("\n", $output);
 
-    expect($exitCode)->toBe(0)
+    expect($exitCode)->toBe(0, "gate exit {$exitCode}:\n".implode("\n", $output))
         ->and($joined)->toContain('config-composition-gate: OK')
         ->and($joined)->toContain('blocking=true');
 });
@@ -96,7 +96,7 @@ PHP;
 
         $joined = implode("\n", $output);
 
-        expect($exitCode)->toBe(1)
+        expect($exitCode)->toBe(1, "gate exit {$exitCode}:\n".implode("\n", $output))
             ->and($joined)->toContain('ConfigCompositionProbe.php')
             ->and($joined)->toContain('C1');
     } finally {

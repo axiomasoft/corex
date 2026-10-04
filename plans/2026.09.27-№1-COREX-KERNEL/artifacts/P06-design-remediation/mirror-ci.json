@@ -1,0 +1,244 @@
+{
+  "checked_at": "2026-10-03T16:43:43.091352+00:00",
+  "repo": "academici/corex-mirror",
+  "run": {
+    "conclusion": "success",
+    "headSha": "0c7f7e84819e8730815afdc93e2256c13ab0f0cd",
+    "jobs": [
+      {
+        "name": "Notifications and wakeup packages",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548205"
+      },
+      {
+        "name": "Anti-weakening gate",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548332"
+      },
+      {
+        "name": "Workflow supply chain security",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548335"
+      },
+      {
+        "name": "Golden surface and wire contracts",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548353"
+      },
+      {
+        "name": "Tools package · Laravel 12.*",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548354"
+      },
+      {
+        "name": "Operations package · Laravel 12.*",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548363"
+      },
+      {
+        "name": "Remaining cohort package aggregator",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548370"
+      },
+      {
+        "name": "PG lane (postgres:18) · Laravel 12.*",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548371"
+      },
+      {
+        "name": "Static analysis & code style",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548376"
+      },
+      {
+        "name": "Backward compatibility (Roave · PHP 8.4)",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548377"
+      },
+      {
+        "name": "PHP 8.5 · Laravel 12.*",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548387"
+      },
+      {
+        "name": "Operations package · Laravel 13.*",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548396"
+      },
+      {
+        "name": "Tenancy package (PG18) · Laravel 12.*",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548401"
+      },
+      {
+        "name": "Contract-snapshot guard",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548405"
+      },
+      {
+        "name": "Tasks package",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548411"
+      },
+      {
+        "name": "Webhooks package · Laravel 13.*",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548412"
+      },
+      {
+        "name": "Tenancy package (PG18) · Laravel 13.*",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548414"
+      },
+      {
+        "name": "Notifications package (PG18)",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548419"
+      },
+      {
+        "name": "Webhooks package · Laravel 12.*",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548459"
+      },
+      {
+        "name": "PG lane (postgres:18) · Laravel 13.*",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548461"
+      },
+      {
+        "name": "PG lane (postgres:16) · Laravel 12.*",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548477"
+      },
+      {
+        "name": "PHP 8.4 · Laravel 12.*",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548501"
+      },
+      {
+        "name": "PG lane (postgres:16) · Laravel 13.*",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548504"
+      },
+      {
+        "name": "PHP 8.4 · Laravel 13.*",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548537"
+      },
+      {
+        "name": "Media package",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548554"
+      },
+      {
+        "name": "PHP 8.5 · Laravel 13.*",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548555"
+      },
+      {
+        "name": "Package identifier ownership",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548561"
+      },
+      {
+        "name": "Manifest policy and strict Composer validation",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548587"
+      },
+      {
+        "name": "Standalone dependencies and lockfile audits",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548598"
+      },
+      {
+        "name": "Layer & core-isolation gate",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548605"
+      },
+      {
+        "name": "Coverage (floor from scripts/coverage-min-floor.txt)",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548627"
+      },
+      {
+        "name": "Crm package",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548632"
+      },
+      {
+        "name": "Panels package",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548640"
+      },
+      {
+        "name": "Tools package · Laravel 13.*",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548653"
+      },
+      {
+        "name": "Media package (PG18)",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548654"
+      },
+      {
+        "name": "Auth package (AzGuard)",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548728"
+      },
+      {
+        "name": "Mutation registry (scripts/mutation-check.sh --all)",
+        "status": "completed",
+        "conclusion": "skipped",
+        "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791/job/111203548961"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/academici/corex-mirror/actions/runs/37123316791"
+  },
+  "mirror_head": {
+    "message": "docs(plan): close phase P05 on green mirror CI [skip ci]\n\nOwner permitted the Phase Contract heading. Closure digest, plan-close\njournal and the P05.4 delivery receipt are in. Next is design of P06.\nHosted run 37123316791 on 0c7f7e84 stays the D73 evidence.",
+    "sha": "3f568ddd53520693cd94a7bc3761e9b5ac2412d0"
+  },
+  "job_counts": {
+    "success": 36,
+    "failure": 0,
+    "skipped": 1
+  },
+  "local_head": "3f568ddd53520693cd94a7bc3761e9b5ac2412d0"
+}

@@ -11,17 +11,20 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Storage\Contracts\TenantStorage;
+use CoreX\Tenancy\Account\Contracts\AccountRead;
 use CoreX\Tenancy\Laravel\Bootstrappers\WorkspaceContextBootstrapper;
 use CoreX\Tenancy\Laravel\Support\AccountLifecyclePolicy;
 use CoreX\Tenancy\Laravel\Support\ImpersonationPolicy;
 use CoreX\Tenancy\Laravel\Support\StatusGatePolicy;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateClonePostgreSQLManager;
+use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Runtime\Internal\ConnectionGuardedTenantContextRestorer;
 use CoreX\Tenancy\Runtime\Internal\StanclTenancyManager;
 use CoreX\Tenancy\Runtime\Internal\Storage\ContextTenantStorage;
 use CoreX\Tenancy\Runtime\Internal\TenancyManagerContextResolver;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Filesystem\FilesystemManager;
 use Override;
@@ -34,19 +37,14 @@ final class RuntimeRegistrar implements PackageRegistrar
     #[Override]
     public function register(Application $app): void
     {
-        // bind(), not instance(): each make() re-reads config. Materializing
-        // TenancyOptions here would validate OIDC before Testbench fills it.
-        $app->bind(
+        // Lazy singleton, never instance(): materializing TenancyOptions here would
+        // validate OIDC before Testbench fills it; the provider resolves it in boot().
+        $app->singleton(
             TenancyOptions::class,
-            static function (Application $app): TenancyOptions {
-                $tenancy = $app['config']->get('tenancy', []);
-                $corexTenancy = $app['config']->get('corex-tenancy', []);
-
-                return TenancyOptions::fromArray(
-                    tenancy: is_array($tenancy) ? $tenancy : [],
-                    corexTenancy: is_array($corexTenancy) ? $corexTenancy : [],
-                );
-            },
+            static fn (Application $app): TenancyOptions => TenancyOptions::fromArray(
+                tenancy: self::configSection($app, 'tenancy'),
+                corexTenancy: self::configSection($app, 'corex-tenancy'),
+            ),
         );
         $app->bind(
             ImpersonationPolicy::class,
@@ -65,6 +63,7 @@ final class RuntimeRegistrar implements PackageRegistrar
             StanclTenancyManager::class,
             static fn (Application $app): StanclTenancyManager => new StanclTenancyManager(
                 $app->make(Stancl::class),
+                $app->make(AccountRead::class),
             ),
         );
         $app->singleton(
@@ -93,7 +92,7 @@ final class RuntimeRegistrar implements PackageRegistrar
             ),
         );
 
-        // TenancyOptions stays bind()-lazy (P7.2): materializing it here would
+        // TenancyOptions stays lazy (P7.2): materializing it here would
         // validate OIDC before Testbench defineEnvironment fills issuer fields.
         // bootstrapper_order is read from the already-merged composition config,
         // same source the provider used before this move.
@@ -120,6 +119,8 @@ final class RuntimeRegistrar implements PackageRegistrar
             TemplateClonePostgreSQLManager::class,
             static fn (Application $app): TemplateClonePostgreSQLManager => new TemplateClonePostgreSQLManager(
                 options: $app->make(TenancyOptions::class),
+                connections: $app->make(ConnectionResolverInterface::class),
+                integrity: $app->make(TemplateIntegrityVerifier::class),
             ),
         );
     }
@@ -140,5 +141,13 @@ final class RuntimeRegistrar implements PackageRegistrar
         ]);
 
         $app->bind(UniqueIdentifierGenerator::class, $options->idGenerator);
+    }
+
+    /** @return array<array-key, mixed> */
+    private static function configSection(Application $app, string $key): array
+    {
+        $section = $app['config']->get($key, []);
+
+        return is_array($section) ? $section : [];
     }
 }

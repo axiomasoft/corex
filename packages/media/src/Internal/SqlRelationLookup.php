@@ -13,10 +13,11 @@ use CoreX\Media\Data\MediaContext;
 use CoreX\Media\Data\MediaFileRef;
 use CoreX\Media\Data\MediaSubject;
 use Illuminate\Database\ConnectionInterface;
+use Psr\Clock\ClockInterface;
 
 final class SqlRelationLookup implements RelationLookup
 {
-    public function __construct(private readonly ConnectionInterface $connection, private readonly MediaPolicy $policy) {}
+    public function __construct(private readonly ConnectionInterface $connection, private readonly MediaPolicy $policy, private readonly ClockInterface $clock) {}
 
     public function attach(MediaContext $context, AttachmentInput $input): void
     {
@@ -37,7 +38,7 @@ final class SqlRelationLookup implements RelationLookup
 
             $this->connection->table('med_relations')->updateOrInsert(
                 ['file_id' => $input->fileId, 'entity_handle' => $input->entityHandle, 'entity_id' => $input->entityId, 'slot' => $input->slot],
-                ['created_at' => now(), 'updated_at' => now()],
+                ['created_at' => $this->clock->now(), 'updated_at' => $this->clock->now()],
             );
         });
     }

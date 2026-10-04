@@ -1,0 +1,6 @@
+{
+  "sha": "1c3de3bdfb6fe231efe9c339b3dfc4142b13ff18",
+  "path": "/tmp/corex-p063-candidate-lint-il70ulq9",
+  "method": "exact git archive; vendor symlink; foreign historical untracked PHP prototypes preserved",
+  "exit_code": 0
+}

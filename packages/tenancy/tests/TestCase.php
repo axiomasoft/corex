@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Tests;
 
 use CoreX\CoreServiceProvider;
+use CoreX\Tenancy\Contracts\TemplateIntegrityVerifier as TemplateIntegrityVerifierContract;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Provisioning\Internal\Database\SchemaCatalogueSerializer;
+use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\TenancyServiceProvider;
 use CoreX\Tenancy\Tests\Stubs\StubIdentityProvider;
 use CoreX\Tenancy\Tests\Support\IsolatesDatabasePath;
@@ -154,10 +157,19 @@ abstract class TestCase extends Orchestra
     protected function tearDown(): void
     {
         try {
-            DB::disconnect('pgsql');
             DB::connection('pgsql')->statement('CREATE SCHEMA IF NOT EXISTS public');
         } finally {
-            parent::tearDown();
+            try {
+                // Testbench applications can remain reachable until cyclic GC runs.
+                // Release every owned PDO now, including the schema-restoration connection.
+                if ($this->app !== null && $this->app->bound('db')) {
+                    foreach ($this->app->make('db')->getConnections() as $connection) {
+                        $connection->disconnect();
+                    }
+                }
+            } finally {
+                parent::tearDown();
+            }
         }
     }
 
@@ -204,5 +216,9 @@ abstract class TestCase extends Orchestra
                 ],
             ],
         ]);
+        app()->forgetInstance(TenancyOptions::class);
+        // Singletons that captured the previous options snapshot must be rebuilt against the new one.
+        app()->forgetInstance(TemplateIntegrityVerifier::class);
+        app()->forgetInstance(TemplateIntegrityVerifierContract::class);
     }
 }

@@ -11,7 +11,9 @@ use CoreX\Access\Roles\Data\RoleView;
 use CoreX\Access\Roles\Laravel\RoleMatrixData;
 use CoreX\Modules\Contracts\EntityRegistry;
 use CoreX\Modules\Enums\Capability;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionResolverInterface;
+use Illuminate\Database\Schema\Builder as SchemaBuilder;
 
 /**
  * Warns (never throws) about two classes of matrix-row risk — the return
@@ -27,11 +29,6 @@ use Illuminate\Support\Facades\Schema;
  *    {@see CoreX\Access\Access\Internal\ScopeAvailability} would fail closed on at
  *    request time; this surfaces the same condition earlier, at
  *    matrix-authoring time.
- *
- * `$entities` defaults to null (resolved from the container lazily) so the
- * pre-existing zero-argument `new MatrixValidator` call sites (P2.8) keep
- * working unchanged; DI containers still inject the real EntityRegistry via
- * the constructor's type-hint.
  */
 final readonly class MatrixValidator
 {
@@ -50,7 +47,8 @@ final readonly class MatrixValidator
     ];
 
     public function __construct(
-        private ?EntityRegistry $entities = null,
+        private EntityRegistry $entities,
+        private ConnectionResolverInterface $connections,
     ) {}
 
     /** @return list<string> */
@@ -106,18 +104,18 @@ final readonly class MatrixValidator
 
     private function capabilityDriftWarning(RoleView $role, string $entityKey, string $scope): ?string
     {
-        if (! $this->entities()->has($entityKey)) {
+        if (! $this->entities->has($entityKey)) {
             return null;
         }
 
-        $entity = $this->entities()->get($entityKey);
+        $entity = $this->entities->get($entityKey);
         $requirement = self::SCOPE_CAPABILITY_REQUIREMENT[$scope];
 
         if (in_array($requirement['capability'], $entity->capabilities, true)) {
             return null;
         }
 
-        if (! Schema::hasColumn($entity->table, $requirement['column'])) {
+        if (! $this->schema()->hasColumn($entity->table, $requirement['column'])) {
             return null;
         }
 
@@ -131,8 +129,11 @@ final readonly class MatrixValidator
         );
     }
 
-    private function entities(): EntityRegistry
+    private function schema(): SchemaBuilder
     {
-        return $this->entities ?? app(EntityRegistry::class);
+        /** @var Connection */
+        $connection = $this->connections->connection();
+
+        return $connection->getSchemaBuilder();
     }
 }

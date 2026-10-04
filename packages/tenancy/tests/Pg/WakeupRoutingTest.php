@@ -12,8 +12,11 @@ use CoreX\Tenancy\Integration\Internal\Wakeup\SweepRootWakeups;
 use CoreX\Tenancy\Tests\TestCase;
 use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use CoreX\Wakeup\Data\SweepResult;
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Psr\Clock\ClockInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 
@@ -113,8 +116,18 @@ function wakeupRoutingAccount(): AccountRef
     return new AccountRef(id: $accountId, slug: 'wakeup-'.$accountId, status: 'active', features: [], limits: []);
 }
 
+function wakeupRoutingHint(): RootRegistryWakeupHint
+{
+    return new RootRegistryWakeupHint(
+        connections: app(ConnectionResolverInterface::class),
+        rootConnection: 'pgsql',
+        clock: app(ClockInterface::class),
+        logger: app(LoggerInterface::class),
+    );
+}
+
 it('keeps the earliest root hint and increments its revision on every upsert', function (): void {
-    $hint = new RootRegistryWakeupHint(DB::connection('pgsql'));
+    $hint = wakeupRoutingHint();
     $context = new TenantContext(new AccountRef(
         id: '11111111-1111-7111-8111-111111111111',
         slug: 'hint-test',
@@ -137,7 +150,7 @@ it('keeps the earliest root hint and increments its revision on every upsert', f
 it('does not let a stale root claimant delete a concurrently refreshed hint', function (): void {
     $account = wakeupRoutingAccount();
     $context = new TenantContext(account: $account);
-    $hint = new RootRegistryWakeupHint(DB::connection('pgsql'));
+    $hint = wakeupRoutingHint();
     $hint->scheduled(context: $context, fireAt: new DateTimeImmutable('2000-01-01T00:00:00Z'));
     $sweeper = new WakeupRoutingSweeper;
     $sweeper->onSweep = static function (TenantContext $current) use ($hint): void {
@@ -145,7 +158,10 @@ it('does not let a stale root claimant delete a concurrently refreshed hint', fu
     };
 
     $reconciler = new RootWakeupReconciler(
-        root: DB::connection('pgsql'),
+        connections: app(ConnectionResolverInterface::class),
+        rootConnection: 'pgsql',
+        clock: app(ClockInterface::class),
+        hint: wakeupRoutingHint(),
         tenancy: new WakeupRoutingTenancyManager,
         sweeper: $sweeper,
         leaseSeconds: 60,
@@ -162,7 +178,7 @@ it('does not let a stale root claimant delete a concurrently refreshed hint', fu
 it('reclaims expired root leases and rebuilds lost hints in bounded account pages', function (): void {
     $account = wakeupRoutingAccount();
     $context = new TenantContext(account: $account);
-    $hint = new RootRegistryWakeupHint(DB::connection('pgsql'));
+    $hint = wakeupRoutingHint();
     $hint->scheduled(context: $context, fireAt: new DateTimeImmutable('2000-01-01T00:00:00Z'));
     DB::table('root_wakeup_hints')->where('account_id', $account->id)->update([
         'leased_until' => now()->subMinute(),
@@ -170,7 +186,10 @@ it('reclaims expired root leases and rebuilds lost hints in bounded account page
     ]);
     $sweeper = new WakeupRoutingSweeper;
     $reconciler = new RootWakeupReconciler(
-        root: DB::connection('pgsql'),
+        connections: app(ConnectionResolverInterface::class),
+        rootConnection: 'pgsql',
+        clock: app(ClockInterface::class),
+        hint: wakeupRoutingHint(),
         tenancy: new WakeupRoutingTenancyManager,
         sweeper: $sweeper,
         leaseSeconds: 60,
@@ -201,7 +220,10 @@ it('runs valid root sweeps and rejects invalid limits before doing root work', f
     $this->app->instance(
         RootWakeupReconciler::class,
         new RootWakeupReconciler(
-            root: DB::connection('pgsql'),
+            connections: app(ConnectionResolverInterface::class),
+            rootConnection: 'pgsql',
+            clock: app(ClockInterface::class),
+            hint: wakeupRoutingHint(),
             tenancy: new WakeupRoutingTenancyManager,
             sweeper: new WakeupRoutingSweeper,
             leaseSeconds: 60,

@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Internal;
 
+use CoreX\Messaging\Contracts\CloudEventCodec;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
 use CoreX\Webhooks\Contracts\WebhookPayloadProjector;
+use CoreX\Webhooks\Enums\WebhookFailureReason;
 use DateInterval;
 use Illuminate\Database\Connection;
 use Psr\Clock\ClockInterface;
@@ -29,6 +31,7 @@ final readonly class WebhookFanout
         private WebhookTopicCatalogue $catalogue,
         private array $projectors,
         private ClockInterface $clock,
+        private CloudEventCodec $codec,
     ) {}
 
     public function accept(MessageEnvelope $message): void
@@ -57,9 +60,9 @@ final readonly class WebhookFanout
             }
 
             $projected = $projector->project($message, $topic);
-            $encoded = JsonCanonical::encode($projected);
+            $encoded = $this->codec->encodeExternal($message, $projected);
             $oversize = strlen($encoded) > self::BodyLimit;
-            $body = $oversize ? JsonCanonical::encode(['error' => 'payload_too_large']) : $encoded;
+            $body = $oversize ? $this->codec->encodeExternal($message, ['error' => WebhookFailureReason::PayloadTooLarge->value]) : $encoded;
             $now = $this->clock->now();
 
             foreach ($rows as $row) {
@@ -84,7 +87,7 @@ final readonly class WebhookFanout
                     'created_at' => $now,
                     'finished_at' => $oversize ? $now : null,
                     'expires_at' => $now->add(new DateInterval('P7D')),
-                    'last_error' => $oversize ? 'payload_too_large' : null,
+                    'last_error' => $oversize ? WebhookFailureReason::PayloadTooLarge->value : null,
                 ]);
             }
         });

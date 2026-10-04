@@ -7,6 +7,7 @@ namespace CoreX\Workflow\Tests;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
+use CoreX\Time\Laravel\TimeRegistrar;
 use CoreX\Workflow\Contracts\EngineAdapter;
 use CoreX\Workflow\Data\SignalRequest;
 use CoreX\Workflow\Data\SignalResult;
@@ -69,6 +70,7 @@ abstract class TestCase extends Orchestra
     protected function setUp(): void
     {
         parent::setUp();
+        (new TimeRegistrar)->register($this->app);
         $this->app->instance(TenantContextResolver::class, new TestTenantContextResolver);
         $this->app->instance(EngineAdapter::class, new FakeEngineAdapter);
     }

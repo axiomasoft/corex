@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased — thin providers and registrars (P05.2)
+
+- `AttributesServiceProvider` delegates to messaging, composition and bindings registrars; multi-statement closures moved to `AttributeStoreFactory`, `SchemaOperationsFactory` and `FieldCatalogueFactory`. With the kernel provider the module registry is always bound, so `SchemaOperations` resolves to the queued DDL implementation.
+
+## Unreleased — typed Options and runtime configuration checks (P05.1)
+
+- Added internal `CustomFieldsOptions`, a lazy singleton resolved in `boot()` that carries the validated composition and table map; `AttributeTables` and the composition are built from it.
+
+## Unreleased — kernel package and API migration
+
+- Breaking (PLAN3.P02–P04, pre-1.0): AttributeStore, FieldCatalogue and SchemaOperations expose AttributeId, AttributeDefinition, FieldSelection and write-result DTOs; physical attribute storage and catalogue implementation are Internal.
+- Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.
+
 ## Unreleased — PHP surface strict cutover
 
 - Breaking (PLAN3.P04, pre-1.0): supported PHP symbols are declared individually with Api/Spi attributes. Concrete implementation types moved to Internal and typed ports/DTOs and error contracts replace predecessor surfaces as recorded in PLAN3.D63/D64; namespace metadata no longer grants compatibility.
@@ -22,6 +35,10 @@
 - Breaking before 1.0: Rename the config file and key to `corex-custom-fields`.
 
 ## Unreleased
+
+- Declare Symfony Process as a development dependency used by package tests.
+
+- PHP API manifests now record direct inheritance, interfaces and traits separately and include only members declared by this package; external dependency members are omitted without changing the `php-api/1` schema.
 
 - Added owned neutral JSONB/EAV attribute storage, active EntityRegistry field binding, and typed value validation.
 - Added durable schema-operation requests and a restore-safe asynchronous PostgreSQL concurrent-index worker.

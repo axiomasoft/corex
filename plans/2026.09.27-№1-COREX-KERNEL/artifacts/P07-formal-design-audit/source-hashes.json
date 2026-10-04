@@ -1,0 +1,13 @@
+{
+  "decisions/D24-rolling-backlog.md": "71ecc6d82870dadd3f3a7d09144cb6e98a0b8dd875776e99115cddbf67e4233e",
+  "decisions/D98-p07-design-audit-remediation.md": "762e169c3f6a233a0e4c3fe0c415f78ca4c0259749550414e1dd9b3d28c69f10",
+  "decisions/D99-p07-g2-scan-correction.md": "bcca88d0172d2290b4c83636028bcd4bb6ee4d593effb784b984d167fe6ce519",
+  "decisions/D100-p07-grok-design-remediation.md": "c6036d8746643d497efd2fb5194c6cb252d4d1084ce3c5338c35dd8eb8b9dd2c",
+  "decisions/D101-p07-session-directory-review-evidence.md": "8006ab4042d0948bf83a52f6b9d0efec41f7ec2a6143737e3ebe8e7196ea4810",
+  "decisions/D102-p07-rereview-contract-completeness.md": "5b3393a94d7231a77ddc3649795b8aec7e4b3017ade3e1002930329656206fa7",
+  "decisions/D103-p07-stable-bc-admission-review.md": "9a044681191c020fc52199ebd4ae8bc20f46c7028753f686ab93f69382d0b7de",
+  "artifacts/P07-design-remediation/repair-provenance.json": "bd1f4b5364dc64bc4a3e73a904714188f920ca782eefd77073807ee1a03c5806",
+  "artifacts/P07-design-remediation/route-evidence.json": "7c43ccb886b38d097b9d22327e1d6270591e238d8fab871334ce5543a9e02d71",
+  "artifacts/P07-design-remediation/completion.json": "c4598e2616bbdbbab8ab5bef088fa2349b94014e6d55b1566e913b5959bafe2a",
+  "artifacts/P07-design-remediation/finish-final.json": "bd80f6d9a77db830c1894a73f09d40ed1443f081634298be45de78b34d00c0e4"
+}

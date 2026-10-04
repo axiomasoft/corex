@@ -31,60 +31,6 @@ parameters:
 			path: src/Currency/Internal/SqlRateProvider.php
 
 		-
-			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 6
-			path: src/IntlServiceProvider.php
-
-		-
-			rawMessage: Cannot access offset 'db' on Illuminate\Contracts\Foundation\Application.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 2
-			path: src/IntlServiceProvider.php
-
-		-
-			rawMessage: 'Cannot call method connection() on mixed.'
-			identifier: method.nonObject
-			count: 2
-			path: src/IntlServiceProvider.php
-
-		-
-			rawMessage: 'Cannot call method get() on mixed.'
-			identifier: method.nonObject
-			count: 6
-			path: src/IntlServiceProvider.php
-
-		-
-			rawMessage: Cannot cast mixed to int.
-			identifier: cast.int
-			count: 2
-			path: src/IntlServiceProvider.php
-
-		-
-			rawMessage: Cannot cast mixed to string.
-			identifier: cast.string
-			count: 2
-			path: src/IntlServiceProvider.php
-
-		-
-			rawMessage: 'Parameter $config of method CoreX\Intl\Locale\Internal\LocalePolicyBuilder::build() expects array<string, mixed>, array given.'
-			identifier: argument.type
-			count: 1
-			path: src/IntlServiceProvider.php
-
-		-
-			rawMessage: 'Parameter $connection of class CoreX\Intl\Currency\Internal\SqlRateImporter constructor expects Illuminate\Database\Connection, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/IntlServiceProvider.php
-
-		-
-			rawMessage: 'Parameter $connection of class CoreX\Intl\Currency\Internal\SqlRateProvider constructor expects Illuminate\Database\Connection, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/IntlServiceProvider.php
-
-		-
 			rawMessage: 'Only booleans are allowed in a negated boolean, int|false given.'
 			identifier: booleanNot.exprNotBoolean
 			count: 2
@@ -237,7 +183,7 @@ parameters:
 		-
 			rawMessage: Cannot cast mixed to string.
 			identifier: cast.string
-			count: 5
+			count: 4
 			path: src/Territory/Internal/Reference/SqlDatasetImporter.php
 
 		-
@@ -261,7 +207,7 @@ parameters:
 		-
 			rawMessage: Cannot cast mixed to string.
 			identifier: cast.string
-			count: 25
+			count: 23
 			path: src/Territory/Internal/Reference/SqlGeographyProvider.php
 
 		-

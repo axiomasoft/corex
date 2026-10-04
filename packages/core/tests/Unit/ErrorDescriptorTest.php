@@ -7,7 +7,7 @@ use CoreX\Errors\Contracts\ErrorCode;
 use CoreX\Errors\Data\ErrorDescriptor;
 use CoreX\Errors\Enums\ErrorCategory;
 use CoreX\Errors\Enums\UnavailabilityReason;
-use CoreX\Operations\Errors\Enums\OperationsErrorCode;
+use CoreX\Testing\DescriptorFixtureCode;
 
 test('error category exposes the nine stable values', function (): void {
     expect(array_map(
@@ -138,7 +138,7 @@ test('retryable records only that the same semantic input may succeed later', fu
         details: ['attempt' => 1, 'tags' => ['primary', null]],
     );
     $terminal = new ErrorDescriptor(
-        code: OperationsErrorCode::AccessDenied,
+        code: DescriptorFixtureCode::AccessDenied,
         category: ErrorCategory::Authorization,
         retryable: false,
     );

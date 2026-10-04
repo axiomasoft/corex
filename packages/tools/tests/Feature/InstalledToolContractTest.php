@@ -22,11 +22,13 @@ use CoreX\Tools\Contracts\ToolInvoker;
 use CoreX\Tools\Contracts\ToolPolicy;
 use CoreX\Tools\Data\ToolCall;
 use CoreX\Tools\Data\ToolDescriptor;
-use CoreX\Tools\Data\ToolResult;
+use CoreX\Tools\Data\ToolOutcome;
+use CoreX\Tools\Errors\Enums\ToolsErrorCode;
 use CoreX\Tools\Internal\DenyToolPolicy;
 use CoreX\Tools\Internal\McpToolsProjection;
 use CoreX\Tools\Internal\ReadOnlyToolExecutionGuard;
 use CoreX\Tools\Tests\Support\ArchiveToolModule;
+use CoreX\Tools\Tests\Support\AssertsRegisteredToolErrors;
 use CoreX\Tools\Tests\Support\CountingHandler;
 use CoreX\Tools\Tests\Support\LabToolModule;
 use CoreX\Tools\Tests\Support\ToolGuardFixture;
@@ -39,6 +41,8 @@ use Illuminate\Support\Facades\Schema;
 
 final class InstalledToolContractTest extends TestCase
 {
+    use AssertsRegisteredToolErrors;
+
     private ContextFixture $tenants;
 
     private IdentityFixture $identity;
@@ -168,7 +172,7 @@ final class InstalledToolContractTest extends TestCase
                 requestId: 'req-archive-read',
             ),
         );
-        self::assertSame(ToolResult::OUTCOME_COMMITTED, $readResult->outcome);
+        self::assertSame(ToolOutcome::Committed, $readResult->outcome);
 
         $writeDescriptor = $this->archiveDescriptor('maintenance.export_account');
         $writeCall = new ToolCall(
@@ -182,7 +186,7 @@ final class InstalledToolContractTest extends TestCase
         $this->app->instance(ToolExecutionGuard::class, new ReadOnlyToolExecutionGuard);
         $this->app->forgetInstance(ToolInvoker::class);
         $withoutProof = $this->app->make(ToolInvoker::class)->invoke($this->context(), $writeCall);
-        self::assertSame('approval_required', $withoutProof->errorCode);
+        $this->assertToolError(ToolsErrorCode::ApprovalRequired, $withoutProof->errorCode);
 
         $guard = new ToolGuardFixture;
         $this->app->instance(ToolExecutionGuard::class, $guard);
@@ -190,7 +194,7 @@ final class InstalledToolContractTest extends TestCase
         $guard->approvedProofDigest = $guard->bindingDigest($writeDescriptor, $this->context(), $writeCall);
         $this->app->forgetInstance(ToolInvoker::class);
         $approved = $this->app->make(ToolInvoker::class)->invoke($this->context(), $writeCall);
-        self::assertSame(ToolResult::OUTCOME_COMMITTED, $approved->outcome);
+        self::assertSame(ToolOutcome::Committed, $approved->outcome);
 
         $this->tenants->initialize($this->account('B'));
         $foreign = $this->app->make(ToolInvoker::class)->invoke(
@@ -204,7 +208,7 @@ final class InstalledToolContractTest extends TestCase
                 operationKey: 'op-foreign',
             ),
         );
-        self::assertSame('approval_invalid', $foreign->errorCode);
+        $this->assertToolError(ToolsErrorCode::ApprovalInvalid, $foreign->errorCode);
     }
 
     public function test_direct_and_mcp_projection_share_descriptor_and_result_semantics_inst_03(): void
@@ -274,7 +278,7 @@ final class InstalledToolContractTest extends TestCase
             requestId: 'req-bad-input',
         );
         self::assertTrue($badInput['isError']);
-        self::assertSame('input_invalid', $badInput['structuredContent']['errorCode']);
+        self::assertSame(ToolsErrorCode::InputInvalid->value, $badInput['structuredContent']['errorCode']);
     }
 
     public function test_tool_provider_mounts_no_routes_and_rejects_unknown_or_unguarded_mutations_inst_04(): void
@@ -301,7 +305,7 @@ final class InstalledToolContractTest extends TestCase
                 requestId: 'req-unknown',
             ),
         );
-        self::assertSame('tool_unavailable', $unknown->errorCode);
+        $this->assertToolError(ToolsErrorCode::ToolUnavailable, $unknown->errorCode);
 
         $descriptor = $this->archiveDescriptor('files.read_retained');
         $forged = $this->app->make(ToolInvoker::class)->invoke(
@@ -314,7 +318,7 @@ final class InstalledToolContractTest extends TestCase
                 requestId: 'req-forged',
             ),
         );
-        self::assertSame('tool_revision_conflict', $forged->errorCode);
+        $this->assertToolError(ToolsErrorCode::ToolRevisionConflict, $forged->errorCode);
 
         $modules->enabled = false;
         $this->app->forgetInstance(ToolInvoker::class);
@@ -328,7 +332,7 @@ final class InstalledToolContractTest extends TestCase
                 requestId: 'req-disabled',
             ),
         );
-        self::assertSame('tool_unavailable', $disabled->errorCode);
+        $this->assertToolError(ToolsErrorCode::ToolUnavailable, $disabled->errorCode);
 
         $modules->enabled = true;
         $this->app->instance(ToolExecutionGuard::class, new ReadOnlyToolExecutionGuard);
@@ -345,7 +349,7 @@ final class InstalledToolContractTest extends TestCase
                 operationKey: 'op-unguarded',
             ),
         );
-        self::assertSame('approval_required', $unguarded->errorCode);
+        $this->assertToolError(ToolsErrorCode::ApprovalRequired, $unguarded->errorCode);
     }
 
     public function test_lab_cohort_remains_disjoint_from_archive_after_install_inst_02_and_05(): void

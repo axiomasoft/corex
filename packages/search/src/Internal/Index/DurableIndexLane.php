@@ -7,10 +7,11 @@ namespace CoreX\Search\Internal\Index;
 use CoreX\Search\Data\IndexClaim;
 use Illuminate\Database\ConnectionInterface;
 use InvalidArgumentException;
+use Psr\Clock\ClockInterface;
 
 final readonly class DurableIndexLane
 {
-    public function __construct(private ConnectionInterface $connection) {}
+    public function __construct(private ConnectionInterface $connection, private readonly ClockInterface $clock) {}
 
     public function recordDirty(string $laneKey, string $recordId, int $revision, bool $tombstone, string $restoreEpoch): void
     {
@@ -70,14 +71,14 @@ final readonly class DurableIndexLane
             $superseded = $rows->filter(static fn (object $row): bool => $latestRows->get($row->record_id)->sequence !== $row->sequence);
 
             if ($superseded->isNotEmpty()) {
-                $this->connection->table('corex_search_dirty')->whereIn('sequence', $superseded->pluck('sequence')->all())->update(['completed_at' => now()]);
+                $this->connection->table('corex_search_dirty')->whereIn('sequence', $superseded->pluck('sequence')->all())->update(['completed_at' => $this->clock->now()]);
             }
 
             $claimEpoch = ((int) $lane->claim_epoch) + 1;
             $this->connection->table('corex_search_lanes')->where('lane_key', $laneKey)->update([
                 'state' => 'claimed',
                 'claim_epoch' => $claimEpoch,
-                'updated_at' => now(),
+                'updated_at' => $this->clock->now(),
             ]);
 
             return new IndexClaim(
@@ -104,9 +105,9 @@ final readonly class DurableIndexLane
             }
 
             $sequences = array_column($claim->records, 'sequence');
-            $this->connection->table('corex_search_dirty')->whereIn('sequence', $sequences)->whereNull('submitted_at')->update(['submitted_at' => now()]);
+            $this->connection->table('corex_search_dirty')->whereIn('sequence', $sequences)->whereNull('submitted_at')->update(['submitted_at' => $this->clock->now()]);
             $this->connection->table('corex_search_lanes')->where('lane_key', $claim->laneKey)->update([
-                'state' => 'submitted', 'active_task' => $taskId, 'request_hash' => $requestHash, 'updated_at' => now(),
+                'state' => 'submitted', 'active_task' => $taskId, 'request_hash' => $requestHash, 'updated_at' => $this->clock->now(),
             ]);
         });
     }
@@ -126,7 +127,7 @@ final readonly class DurableIndexLane
 
             if ($outcome === 'unknown') {
                 $this->connection->table('corex_search_lanes')->where('lane_key', $claim->laneKey)->update([
-                    'state' => 'quarantined', 'updated_at' => now(),
+                    'state' => 'quarantined', 'updated_at' => $this->clock->now(),
                 ]);
 
                 return;
@@ -136,10 +137,10 @@ final readonly class DurableIndexLane
 
             if ($outcome === 'succeeded') {
                 $maxRevision = max(array_map(static fn (array $record): int => (int) $record['revision'], $claim->records));
-                $this->connection->table('corex_search_dirty')->whereIn('sequence', $sequences)->update(['completed_at' => now()]);
+                $this->connection->table('corex_search_dirty')->whereIn('sequence', $sequences)->update(['completed_at' => $this->clock->now()]);
                 $this->connection->table('corex_search_lanes')->where('lane_key', $claim->laneKey)->update([
                     'state' => 'ready', 'active_task' => null, 'request_hash' => null,
-                    'committed_revision' => max((int) $lane->committed_revision, $maxRevision), 'updated_at' => now(),
+                    'committed_revision' => max((int) $lane->committed_revision, $maxRevision), 'updated_at' => $this->clock->now(),
                 ]);
 
                 return;
@@ -147,7 +148,7 @@ final readonly class DurableIndexLane
 
             $this->connection->table('corex_search_dirty')->whereIn('sequence', $sequences)->update(['submitted_at' => null]);
             $this->connection->table('corex_search_lanes')->where('lane_key', $claim->laneKey)->update([
-                'state' => 'ready', 'active_task' => null, 'request_hash' => null, 'updated_at' => now(),
+                'state' => 'ready', 'active_task' => null, 'request_hash' => null, 'updated_at' => $this->clock->now(),
             ]);
         });
     }

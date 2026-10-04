@@ -8,6 +8,7 @@ use CoreX\Attributes\Api;
 use CoreX\Messaging\Contracts\DurablePayload;
 use CoreX\Messaging\Enums\PiiClass;
 use CoreX\Messaging\Exceptions\InvalidMessage;
+use CoreX\Messaging\Internal\UriReference;
 use DateTimeImmutable;
 
 /**
@@ -47,6 +48,10 @@ final readonly class MessageEnvelope implements DurablePayload
         self::assertOpaque(value: $messageId, name: 'message identity');
         self::assertOpaque(value: $source, name: 'message source');
 
+        if (! UriReference::isValid($source)) {
+            throw InvalidMessage::identity('message source');
+        }
+
         if ($contractVersion < 1) {
             throw InvalidMessage::identity("contract version [{$contractVersion}]");
         }
@@ -76,6 +81,18 @@ final readonly class MessageEnvelope implements DurablePayload
     public function contract(): string
     {
         return "{$this->name}.v{$this->contractVersion}";
+    }
+
+    public function withPayload(MessagePayload $payload): self
+    {
+        return new self(
+            messageId: $this->messageId, source: $this->source, name: $this->name,
+            contractVersion: $this->contractVersion, occurredAt: $this->occurredAt,
+            scope: $this->scope, payload: $payload, piiClass: $this->piiClass,
+            subject: $this->subject, correlationId: $this->correlationId,
+            causationId: $this->causationId, metadata: $this->metadata,
+            envelopeVersion: $this->envelopeVersion,
+        );
     }
 
     private static function assertOpaque(string $value, string $name): void

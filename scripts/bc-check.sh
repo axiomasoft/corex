@@ -72,17 +72,23 @@ stage_package_vendors() {
   local ns pkgpath leaf
 
   for ns in axioma-studio axiomasoft; do
-    local root="$REPO_ROOT/packages/${dir}/vendor/${ns}"
-    [[ -d "$root" ]] || continue
-    for pkgpath in "${root}"/*; do
+    for pkgpath in "$REPO_ROOT/vendor/${ns}"/* "$REPO_ROOT/packages/${dir}/vendor/${ns}"/*; do
       [[ -f "${pkgpath}/composer.json" ]] || continue
       leaf="$(basename "${pkgpath}")"
+      # Monorepo packages are already archived separately; only private
+      # upstream providers need a local path repository for Roave.
+      [[ "$leaf" == stancl-* || "$leaf" == azguard-core ]] || continue
       mkdir -p "${work}/packages/_vendor/${leaf}"
       rsync -a --exclude=.git "${pkgpath}/" "${work}/packages/_vendor/${leaf}/"
     done
   done
 
-  if rg -q 'PHPStan\\' "$work/packages/$dir/src"; then
+  needs_phpstan=0
+  if grep -rqF --include='*.php' 'PHPStan\' "$work/packages/$dir/src"; then
+    needs_phpstan=1
+  fi
+
+  if [[ "$needs_phpstan" == 1 ]]; then
     BC_WORK="$work" bc_php '
 $r=getenv("BC_REPO_ROOT"); $work=getenv("BC_WORK");
 require "$r/vendor/autoload.php";
@@ -110,7 +116,7 @@ foreach(glob("$work/packages/_vendor/*/composer.json")?:[] as $cp){
 
 run_one_package() {
   local dir="$1" pkg_name="$2" stability="$3" work="$4"
-  local base_sha cand_sha roave_exit classified contract_hint=""
+  local base_sha cand_sha roave_exit classified needs_phpstan=0 contract_hint=""
 
   if ! git -C "$REPO_ROOT" cat-file -e "${BC_CHECK_BASE}:packages/${dir}" 2>/dev/null; then
     echo "bc-check: ${pkg_name} (${dir}) |new-package| base missing at ${BC_CHECK_BASE}"
@@ -121,6 +127,9 @@ run_one_package() {
   git -C "$work" init -q
   git -C "$work" config user.email bc-check@corex.local
   git -C "$work" config user.name "bc-check"
+  # Roave clones immediately after commit; background GC can remove loose
+  # objects while that local clone is copying the disposable repository.
+  git -C "$work" config gc.auto 0
 
   mapfile -t dep_dirs < <(BC_CHECK_TARGET_DIR="$dir" bc_php '
 $r=getenv("BC_REPO_ROOT"); $target=getenv("BC_CHECK_TARGET_DIR");
@@ -183,7 +192,7 @@ foreach(glob(getenv("BC_WORK")."/packages/*/composer.json")?:[] as $file){
 
   stage_package_vendors "$dir" "$work"
 
-  BC_WORK="$work" BC_CHECK_TARGET_DIR="$dir" bc_php '
+  BC_WORK="$work" BC_CHECK_TARGET_DIR="$dir" BC_NEEDS_PHPSTAN="$needs_phpstan" bc_php '
 $r=getenv("BC_REPO_ROOT"); $d=getenv("BC_CHECK_TARGET_DIR");
 $archived=getenv("BC_WORK")."/packages/$d/composer.json";
 $pkg=json_decode(file_get_contents(is_file($archived)?$archived:"$r/packages/$d/composer.json"),true);
@@ -236,7 +245,7 @@ if(is_dir($src)){
     }
   }
 }
-if(str_contains($blob??"","PHPStan\\")){$requireDev["phpstan/phpstan"]="@dev";$repos[]=["type"=>"path","url"=>"packages/_vendor/phpstan"]; }
+if(getenv("BC_NEEDS_PHPSTAN")==="1"){$requireDev["phpstan/phpstan"]="@dev";$repos[]=["type"=>"path","url"=>"packages/_vendor/phpstan"]; }
 $root=["name"=>"corex/bc-compare-root","type"=>"project","license"=>"MIT","require"=>$require,"repositories"=>$repos,"autoload"=>[],"minimum-stability"=>"dev","prefer-stable"=>true];
 if($requireDev!==[]){$root["require-dev"]=$requireDev;}
 if(isset($pkg["extra"]["corex"]["public-api"])){$root["extra"]["corex"]["public-api"]=$pkg["extra"]["corex"]["public-api"];}
@@ -280,7 +289,7 @@ foreach(glob(getenv("BC_WORK")."/packages/*/composer.json")?:[] as $file){
 
   stage_package_vendors "$dir" "$work"
 
-  BC_WORK="$work" BC_CHECK_TARGET_DIR="$dir" bc_php '
+  BC_WORK="$work" BC_CHECK_TARGET_DIR="$dir" BC_NEEDS_PHPSTAN="$needs_phpstan" bc_php '
 $r=getenv("BC_REPO_ROOT"); $d=getenv("BC_CHECK_TARGET_DIR");
 $pkg=json_decode(file_get_contents("$r/packages/$d/composer.json"),true);
 $requireDev=[];
@@ -332,7 +341,7 @@ if(is_dir($src)){
     }
   }
 }
-if(str_contains($blob??"","PHPStan\\")){$requireDev["phpstan/phpstan"]="@dev";$repos[]=["type"=>"path","url"=>"packages/_vendor/phpstan"]; }
+if(getenv("BC_NEEDS_PHPSTAN")==="1"){$requireDev["phpstan/phpstan"]="@dev";$repos[]=["type"=>"path","url"=>"packages/_vendor/phpstan"]; }
 $root=["name"=>"corex/bc-compare-root","type"=>"project","license"=>"MIT","require"=>$require,"repositories"=>$repos,"autoload"=>[],"minimum-stability"=>"dev","prefer-stable"=>true];
 if($requireDev!==[]){$root["require-dev"]=$requireDev;}
 if(isset($pkg["extra"]["corex"]["public-api"])){$root["extra"]["corex"]["public-api"]=$pkg["extra"]["corex"]["public-api"];}
@@ -387,11 +396,14 @@ echo json_encode($root,JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES)."\n";
     return 1
   fi
   if [[ "$classified" == "bc-break" ]]; then
-    if [[ "$stability" != "experimental" ]] || ! grep -Eq 'Breaking.*PLAN3[.]P04|PLAN3[.]P04.*[Bb]reaking' "$REPO_ROOT/packages/$dir/CHANGELOG.md"; then
+    if printf '%s\n' "$roave_out" | python3 "$REPO_ROOT/scripts/bc/approved-delta.py" --root "$REPO_ROOT" --package "$pkg_name" --base "$(git -C "$REPO_ROOT" rev-parse "${BC_CHECK_BASE}^{commit}")"; then
+      echo "bc-check: exact decision-bound unpublished delta — ${pkg_name}"
+    elif [[ "$stability" == "experimental" ]] && grep -Eq 'Breaking.*PLAN3[.]P04|PLAN3[.]P04.*[Bb]reaking' "$REPO_ROOT/packages/$dir/CHANGELOG.md"; then
+      echo "bc-check: declared pre-1.0 delta in packages/$dir/CHANGELOG.md"
+    else
       echo "bc-check: undeclared or stable BC break — ${pkg_name}" >&2
       return 1
     fi
-    echo "bc-check: declared pre-1.0 delta in packages/$dir/CHANGELOG.md"
   fi
   return 0
 }

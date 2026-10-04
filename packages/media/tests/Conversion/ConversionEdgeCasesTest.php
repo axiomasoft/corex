@@ -22,6 +22,7 @@ use CoreX\Media\Laravel\UploadedFileSource;
 use CoreX\Storage\Contracts\TenantStorage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Psr\Clock\ClockInterface;
 
 function allowMediaConversions(): void
 {
@@ -97,7 +98,7 @@ it('rejects output facts that exceed the immutable conversion profile', function
     ]);
     $operations = app(MediaOperationStore::class);
     $operations->enqueueConversion($file->id, 'bounded', $digest, 1);
-    $coordinator = new ConversionCoordinator(app('db')->connection(), app(TenantStorage::class), $profiles, $operations, app(MediaOptions::class));
+    $coordinator = new ConversionCoordinator(app('db')->connection(), app(TenantStorage::class), $profiles, $operations, app(MediaOptions::class), app(ClockInterface::class));
 
     expect(fn (): mixed => $coordinator->process($file->id, 'bounded'))->toThrow(MediaOperationConflict::class);
 

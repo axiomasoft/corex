@@ -12,8 +12,8 @@ use CoreX\Tenancy\Provisioning\Data\QualifiedTemplate;
 use CoreX\Tenancy\Provisioning\Exceptions\ClaimConflict;
 use CoreX\Tenancy\Provisioning\Exceptions\ClaimUnavailable;
 use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\DB;
 
 /** @internal */
 final class ClaimAccountSignup implements ProvisioningClaim
@@ -25,6 +25,7 @@ final class ClaimAccountSignup implements ProvisioningClaim
     public function __construct(
         private readonly string $centralConnection,
         private readonly TemplateIntegrityVerifier $templateIntegrity,
+        private readonly ConnectionResolverInterface $connections,
     ) {}
 
     public function claim(ClaimRequest $request): ClaimResult
@@ -219,6 +220,9 @@ final class ClaimAccountSignup implements ProvisioningClaim
 
     private function connection(): Connection
     {
-        return DB::connection($this->centralConnection);
+        /** @var Connection */
+        $connection = $this->connections->connection($this->centralConnection);
+
+        return $connection;
     }
 }

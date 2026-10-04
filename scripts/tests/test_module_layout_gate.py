@@ -143,6 +143,24 @@ final class Uses {
                 'final class Uses { public Feature\\Internal\\Driver $driver; }'})
             self.assertEqual([], rules(root))
 
+    def test_r6_forbids_runtime_references_to_every_dev_bridge(self) -> None:
+        for bridge in ('Tooling', 'PHPStan', 'Testing'):
+            for body in (
+                f'namespace CoreX\\Search\\Internal; use CoreX\\Attributes\\{bridge}\\Helper; final class Uses {{}}',
+                f'namespace CoreX\\Search\\Internal; final class Uses {{ public \\CoreX\\Attributes\\{bridge}\\Helper $helper; }}',
+                f'namespace CoreX\\Search\\Internal; use CoreX\\Attributes as A; final class Uses extends A\\{bridge}\\Helper {{}}',
+                f'namespace CoreX\\Search\\Internal; final class Uses {{ public {bridge}\\Helper $helper; }}',
+            ):
+                with self.subTest(body=body), tempfile.TemporaryDirectory() as tmp:
+                    self.assertIn('R6', rules(build(Path(tmp), {'search/src/Internal/Uses.php': body})))
+
+    def test_r6_allows_dev_to_dev_references(self) -> None:
+        for bridge in ('Tooling', 'PHPStan', 'Testing'):
+            with self.subTest(bridge=bridge), tempfile.TemporaryDirectory() as tmp:
+                root = build(Path(tmp), {f'search/src/{bridge}/Uses.php':
+                    f'namespace CoreX\\Search\\{bridge}; use CoreX\\Attributes\\Tooling\\Helper; final class Uses {{}}'})
+                self.assertEqual([], rules(root))
+
     def test_baseline_rejects_new_and_stale_entries(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = build(Path(tmp), {PLANTED['R3'][0]: PLANTED['R3'][1]})

@@ -16,7 +16,7 @@ declare(strict_types=1);
 // конструкции, а не по внимательности автора миграции.
 //
 // Разрешение имён — по строковым литералам. Немногочисленные конфиг-driven
-// цели (`->constrained(Config::…())` в axiomasoft/corex) статически не резолвятся:
+// цели (`->constrained(app(CoreOptions::class)->…)` в axiomasoft/corex) статически не резолвятся:
 // они перечислены явным allowlist'ом ниже, любая НОВАЯ динамическая цель
 // краснит гейт и требует ручного разбора. Это заявленное ограничение
 // (Code Guidance P2.13), а не молчаливый пропуск.
@@ -111,7 +111,7 @@ $foreignKeyTargets = static function (string $source) use ($literalModelTables):
     $modelTables = $literalModelTables($source);
 
     // Аргумент допускает ОДИН уровень вложенных скобок — этого хватает на
-    // `Config::table()`-форму и не даёт регэксу оборваться на её `)`.
+    // `app(CoreOptions::class)->table`-форму и не даёт регэксу оборваться на её `)`.
     $argument = '(?:[^(),]|\([^()]*\))*';
 
     preg_match_all(
@@ -165,7 +165,7 @@ $createdTables = static function (string $source): array {
 // axiomasoft/corex, все резолвятся в `sys_*` (тенант-слой), все объявлены в
 // тенант-слойных миграциях: кросс-слойными они быть не могут, но зафиксированы
 // поимённо, чтобы НОВАЯ динамическая цель не проехала под этим исключением.
-$allowedDynamicTargets = ['Config::featureFlagsTable()', 'Config::departmentsTable()', 'Config::savedViewScopesTable()'];
+$allowedDynamicTargets = ['app(CoreOptions::class)->featureFlagsTable', 'app(CoreOptions::class)->departmentsTable', 'app(CoreOptions::class)->savedViewScopesTable'];
 
 /**
  * Все миграции репозитория (в split-зеркале — только собственные).
@@ -195,13 +195,13 @@ $allMigrations = static function () use ($repoRoot, $packageRoot, $migrationFile
 test('the FK-target detector reads both Laravel forms and flags dynamic targets', function () use ($foreignKeyTargets): void {
     $sample = <<<'PHP'
     $table->foreign('account_id')->references('id')->on('root_accounts')->cascadeOnDelete();
-    IdColumns::foreign($table, 'flag_id')->constrained(Config::featureFlagsTable())->cascadeOnDelete();
+    IdColumns::foreign($table, 'flag_id')->constrained(app(CoreOptions::class)->featureFlagsTable)->cascadeOnDelete();
     IdColumns::foreign($table, 'stage_id')->constrained('crm_stages')->restrictOnDelete();
     PHP;
 
     expect($foreignKeyTargets($sample))->toBe([
         'literal' => ['root_accounts', 'crm_stages'],
-        'dynamic' => ['Config::featureFlagsTable()'],
+        'dynamic' => ['app(CoreOptions::class)->featureFlagsTable'],
     ]);
 });
 

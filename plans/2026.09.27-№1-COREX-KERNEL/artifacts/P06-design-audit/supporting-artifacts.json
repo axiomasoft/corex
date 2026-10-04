@@ -1,0 +1,119 @@
+{
+  "contract": "self-contained-design/v1",
+  "phases": {
+    "P00": {
+      "normative": [
+        "research/P00-design.md",
+        "research/P00-design-rag.md",
+        "artifacts/P00-design/examples.md"
+      ],
+      "capture": "artifacts/P00-design-rag/README.md",
+      "present": [
+        "research/P00-design.md",
+        "research/P00-design-rag.md",
+        "artifacts/P00-design/examples.md",
+        "artifacts/P00-design-rag/README.md"
+      ]
+    },
+    "P01": {
+      "normative": [
+        "research/P01-design.md",
+        "research/P01-design-rag.md",
+        "artifacts/P01-design/examples.md"
+      ],
+      "capture": "artifacts/P01-design-rag/README.md",
+      "present": [
+        "research/P01-design.md",
+        "research/P01-design-rag.md",
+        "artifacts/P01-design/examples.md",
+        "artifacts/P01-design-rag/README.md"
+      ]
+    },
+    "P02": {
+      "normative": [
+        "research/P02-design.md",
+        "research/P02-design-rag.md",
+        "artifacts/P02-design/examples.md"
+      ],
+      "capture": "artifacts/P02-design-rag/README.md",
+      "present": [
+        "research/P02-design.md",
+        "research/P02-design-rag.md",
+        "artifacts/P02-design/examples.md",
+        "artifacts/P02-design-rag/README.md"
+      ]
+    },
+    "P03": {
+      "normative": [
+        "research/P03-design.md",
+        "research/P03-design-rag.md",
+        "artifacts/P03-design/examples.md"
+      ],
+      "capture": "artifacts/P03-design-rag/README.md",
+      "present": [
+        "research/P03-design.md",
+        "research/P03-design-rag.md",
+        "artifacts/P03-design/examples.md",
+        "artifacts/P03-design-rag/README.md"
+      ]
+    },
+    "P04": {
+      "normative": [
+        "research/P04-design.md",
+        "research/P04-design-rag.md",
+        "artifacts/P04-design/examples.md"
+      ],
+      "capture": "artifacts/P04-design-rag/README.md",
+      "present": [
+        "research/P04-design.md",
+        "research/P04-design-rag.md",
+        "artifacts/P04-design/examples.md",
+        "artifacts/P04-design-rag/README.md"
+      ]
+    },
+    "P05": {
+      "normative": [
+        "research/P05-design.md",
+        "research/P05-design-rag.md",
+        "artifacts/P05-design/examples.md"
+      ],
+      "capture": "artifacts/P05-design-rag/README.md",
+      "present": [
+        "research/P05-design.md",
+        "research/P05-design-rag.md",
+        "artifacts/P05-design/examples.md",
+        "artifacts/P05-design-rag/README.md"
+      ]
+    },
+    "P06": {
+      "normative": [
+        "research/P06-design.md",
+        "research/P06-design-rag.md",
+        "artifacts/P06-design/examples.md"
+      ],
+      "capture": "artifacts/P06-design-rag/README.md",
+      "present": [
+        "research/P06-design.md",
+        "research/P06-design-rag.md",
+        "artifacts/P06-design/examples.md",
+        "artifacts/P06-design-rag/README.md"
+      ]
+    },
+    "P10": {
+      "normative": [
+        "research/P10-design.md",
+        "research/P10-design-rag.md",
+        "artifacts/P10-design/examples.md"
+      ],
+      "capture": "artifacts/P10-design-rag/README.md",
+      "present": [
+        "research/P10-design.md",
+        "research/P10-design-rag.md",
+        "artifacts/P10-design/examples.md",
+        "artifacts/P10-design-rag/README.md"
+      ]
+    }
+  },
+  "errors": [],
+  "complete": true
+}

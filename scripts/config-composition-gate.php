@@ -4,10 +4,12 @@
 declare(strict_types=1);
 
 /**
- * Blocking config() composition gate (P3.6 scanner, P7.11 blocking bit).
+ * Blocking configuration-read composition gate (P3.6 scanner, P7.11 blocking bit, P05.1 D69 p.6).
  *
- * Reports direct config() calls outside allowlisted composition paths.
- * Exit 1 when blocking=true and any C1 remains.
+ * Reports configuration reads outside allowlisted composition paths:
+ * C1 `config()`, C2 any config repository access, C3 the removed static
+ * the removed static `Config` holder, C4 `env()`.
+ * Exit 1 when blocking=true and any finding remains.
  */
 const EXIT_OK = 0;
 const EXIT_CONFIG = 2;
@@ -29,26 +31,37 @@ foreach (glob($repoRoot.'/packages/*/src', GLOB_ONLYDIR) ?: [] as $srcRoot) {
             continue;
         }
 
-        foreach (findConfigCalls($file) as $finding) {
+        foreach (findConfigReads($file) as $finding) {
             $findings[] = [
+                'rule' => $finding['rule'],
                 'file' => $relativeFile,
                 'line' => $finding['line'],
+                'what' => $finding['what'],
             ];
         }
     }
 }
 
-usort($findings, static fn (array $a, array $b): int => [$a['file'], $a['line']] <=> [$b['file'], $b['line']]);
+usort($findings, static fn (array $a, array $b): int => [$a['rule'], $a['file'], $a['line']] <=> [$b['rule'], $b['file'], $b['line']]);
+
+$counts = ['C1' => 0, 'C2' => 0, 'C3' => 0, 'C4' => 0];
 
 foreach ($findings as $finding) {
-    fwrite(STDOUT, sprintf("C1 %s:%d config()\n", $finding['file'], $finding['line']));
+    $counts[$finding['rule']]++;
+    fwrite(STDOUT, sprintf("%s %s:%d %s\n", $finding['rule'], $finding['file'], $finding['line'], $finding['what']));
 }
 
 fwrite(STDOUT, sprintf(
     "config-composition-gate: blocking=%s\n",
     $blocking ? 'true' : 'false',
 ));
-fwrite(STDOUT, sprintf("config-composition-gate: C1 count=%d\n", count($findings)));
+fwrite(STDOUT, sprintf(
+    "config-composition-gate: C1 count=%d C2 count=%d C3 count=%d C4 count=%d\n",
+    $counts['C1'],
+    $counts['C2'],
+    $counts['C3'],
+    $counts['C4'],
+));
 
 if ($findings !== [] && $blocking) {
     exit(1);
@@ -185,9 +198,9 @@ function globToRegex(string $glob): string
 }
 
 /**
- * @return list<array{line: int}>
+ * @return list<array{rule: string, line: int, what: string}>
  */
-function findConfigCalls(string $file): array
+function findConfigReads(string $file): array
 {
     $code = file_get_contents($file);
 
@@ -198,6 +211,10 @@ function findConfigCalls(string $file): array
     $tokens = token_get_all($code, TOKEN_PARSE);
     $findings = [];
     $count = count($tokens);
+    $skipped = [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT];
+    $repositoryTypes = ['illuminate\\contracts\\config\\repository', 'illuminate\\config\\repository', 'illuminate\\support\\facades\\config'];
+    $staticConfig = 'corex\\config\\internal\\config';
+    $resolvers = ['app', 'make', 'resolve', 'get', 'makewith'];
 
     for ($i = 0; $i < $count; $i++) {
         $token = $tokens[$i];
@@ -206,39 +223,96 @@ function findConfigCalls(string $file): array
             continue;
         }
 
-        $plain = $token[0] === T_STRING && strtolower($token[1]) === 'config';
-        $qualified = $token[0] === T_NAME_FULLY_QUALIFIED && strtolower($token[1]) === '\\config';
+        if (in_array($token[0], [T_NAME_QUALIFIED, T_NAME_FULLY_QUALIFIED], true)) {
+            $name = strtolower(ltrim($token[1], '\\'));
 
-        if (! $plain && ! $qualified) {
+            if (in_array($name, $repositoryTypes, true)) {
+                $findings[] = ['rule' => 'C2', 'line' => $token[2], 'what' => 'config-repository'];
+            } elseif ($name === $staticConfig) {
+                $findings[] = ['rule' => 'C3', 'line' => $token[2], 'what' => 'static-Config'];
+            } elseif ($token[0] === T_NAME_FULLY_QUALIFIED && in_array($name, ['config', 'env'], true) && isFunctionCall($tokens, $i, $count, false)) {
+                $findings[] = $name === 'config'
+                    ? ['rule' => 'C1', 'line' => $token[2], 'what' => 'config()']
+                    : ['rule' => 'C4', 'line' => $token[2], 'what' => 'env()'];
+            }
+
             continue;
         }
 
-        $previous = $i - 1;
+        if ($token[0] === T_CONSTANT_ENCAPSED_STRING && in_array($token[1], ["'config'", '"config"'], true)) {
+            $before = $i - 1;
 
-        while ($previous >= 0 && is_array($tokens[$previous])
-            && in_array($tokens[$previous][0], [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT], true)) {
-            $previous--;
-        }
+            while ($before >= 0 && is_array($tokens[$before]) && in_array($tokens[$before][0], $skipped, true)) {
+                $before--;
+            }
 
-        if ($plain && $previous >= 0 && is_array($tokens[$previous])
-            && in_array($tokens[$previous][0], [T_FUNCTION, T_OBJECT_OPERATOR, T_NULLSAFE_OBJECT_OPERATOR, T_DOUBLE_COLON], true)) {
+            if ($before < 0) {
+                continue;
+            }
+
+            if ($tokens[$before] === '[') {
+                $findings[] = ['rule' => 'C2', 'line' => $token[2], 'what' => 'config-repository'];
+
+                continue;
+            }
+
+            if ($tokens[$before] === '(') {
+                $callee = $before - 1;
+
+                while ($callee >= 0 && is_array($tokens[$callee]) && in_array($tokens[$callee][0], $skipped, true)) {
+                    $callee--;
+                }
+
+                if ($callee >= 0 && is_array($tokens[$callee]) && $tokens[$callee][0] === T_STRING
+                    && in_array(strtolower($tokens[$callee][1]), $resolvers, true)) {
+                    $findings[] = ['rule' => 'C2', 'line' => $token[2], 'what' => 'config-repository'];
+                }
+            }
+
             continue;
         }
 
-        $j = $i + 1;
+        $name = $token[0] === T_STRING ? strtolower($token[1]) : '';
+        $rule = match ($name) {
+            'config' => 'C1',
+            'env' => 'C4',
+            default => null,
+        };
 
-        while ($j < $count && is_array($tokens[$j]) && in_array($tokens[$j][0], [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT], true)) {
-            $j++;
-        }
-
-        if ($j >= $count || $tokens[$j] !== '(') {
+        if ($rule === null || ! isFunctionCall($tokens, $i, $count, true)) {
             continue;
         }
 
-        $findings[] = ['line' => $token[2]];
+        $findings[] = ['rule' => $rule, 'line' => $token[2], 'what' => $rule === 'C1' ? 'config()' : 'env()'];
     }
 
     return $findings;
+}
+
+/**
+ * @param  array<int, mixed>  $tokens
+ */
+function isFunctionCall(array $tokens, int $i, int $count, bool $plain): bool
+{
+    $skipped = [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT];
+    $previous = $i - 1;
+
+    while ($previous >= 0 && is_array($tokens[$previous]) && in_array($tokens[$previous][0], $skipped, true)) {
+        $previous--;
+    }
+
+    if ($plain && $previous >= 0 && is_array($tokens[$previous])
+        && in_array($tokens[$previous][0], [T_FUNCTION, T_OBJECT_OPERATOR, T_NULLSAFE_OBJECT_OPERATOR, T_DOUBLE_COLON], true)) {
+        return false;
+    }
+
+    $next = $i + 1;
+
+    while ($next < $count && is_array($tokens[$next]) && in_array($tokens[$next][0], $skipped, true)) {
+        $next++;
+    }
+
+    return $next < $count && $tokens[$next] === '(';
 }
 
 /**

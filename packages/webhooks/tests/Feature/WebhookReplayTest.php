@@ -33,6 +33,7 @@ use CoreX\Webhooks\Internal\WebhookTopicCatalogue;
 use CoreX\Webhooks\Tests\TestCase;
 use DateInterval;
 use DateTimeImmutable;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Group;
@@ -262,7 +263,7 @@ final class WebhookReplayTest extends TestCase
         } catch (ApiError $error) {
             self::assertSame($code, $error->errorCode);
             $problems = app(ProblemRegistry::class);
-            self::assertSame($error, (new ErrorMapper($problems))->map($error, reportUnexpected: false));
+            self::assertSame($error, (new ErrorMapper($problems, app(ExceptionHandler::class)))->map($error, reportUnexpected: false));
             $restored = StoredOperationOutcome::fromCanonicalJson(StoredOperationOutcome::failure($error)->canonicalJson(), $problems)->error($problems);
             self::assertSame($error->status, $restored->status);
             self::assertSame($error->category, $restored->category);
@@ -298,7 +299,7 @@ final class WebhookReplayTest extends TestCase
             'id' => $id, 'subscription_id' => $subscription, 'subscription_revision' => $subscriptionRevision,
             'event_id' => 'event-'.$id, 'topic' => 'orders.placed', 'topic_version' => 1, 'major' => 'v1',
             'endpoint_snapshot' => 'https://hooks.example/receiver',
-            'scope' => JsonCanonical::encode(['account_id' => 'account-a', 'workspace_id' => null]),
+            'scope' => JsonCanonical::encode(['account' => 'account-a', 'workspace' => null]),
             'body' => $body, 'body_hash' => hash('sha256', $body), 'status' => $status, 'attempt' => $attempt,
             'replay_count' => $replayCount, 'lease_owner' => $leaseOwner,
             'lease_until' => $leaseOwner === null ? null : $this->clock->now()->add(new DateInterval('PT30S')),
@@ -403,13 +404,6 @@ final class ReplayProjector implements WebhookPayloadProjector
 {
     public function project(MessageEnvelope $message, WebhookTopic $topic): array
     {
-        return [
-            'event_id' => $message->messageId,
-            'type' => $topic->name,
-            'version' => $topic->version,
-            'occurred_at' => $message->occurredAt->format(DATE_ATOM),
-            'data' => [],
-            'correlation_id' => $message->correlationId,
-        ];
+        return [];
     }
 }

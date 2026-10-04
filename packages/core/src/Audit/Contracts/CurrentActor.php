@@ -7,23 +7,24 @@ namespace CoreX\Audit\Contracts;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Audit\Enums\ActorType;
+use CoreX\Audit\Internal\CurrentActorResolver;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class CurrentActor
 {
     public static function type(): ActorType
     {
-        return \CoreX\Audit\Internal\CurrentActor::type();
+        return CurrentActorResolver::current()->type();
     }
 
     public static function id(): ?string
     {
-        return \CoreX\Audit\Internal\CurrentActor::id();
+        return CurrentActorResolver::current()->id();
     }
 
     /** @return array<string, mixed> */
     public static function context(): array
     {
-        return \CoreX\Audit\Internal\CurrentActor::context();
+        return CurrentActorResolver::current()->context();
     }
 }

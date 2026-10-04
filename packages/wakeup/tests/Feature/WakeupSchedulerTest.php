@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
+use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\TenantContext;
 use CoreX\CoreServiceProvider;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Time\Laravel\SystemClock;
 use CoreX\Time\Testing\FrozenClock;
 use CoreX\Wakeup\Contracts\DueWakeupHandler;
 use CoreX\Wakeup\Contracts\DueWakeupSweeper;
@@ -17,8 +19,8 @@ use CoreX\Wakeup\Data\WakeupRequest;
 use CoreX\Wakeup\Data\WakeupWindow;
 use CoreX\Wakeup\Internal\SqlWakeupScheduler;
 use CoreX\Wakeup\Internal\SweepRunner;
-use CoreX\Wakeup\Internal\SystemClock;
 use CoreX\Wakeup\Internal\WakeupHandlerRegistry;
+use CoreX\Wakeup\Internal\WakeupOptions;
 use CoreX\Wakeup\Tests\TestCase;
 use CoreX\Wakeup\WakeupModule;
 use CoreX\Wakeup\WakeupServiceProvider;
@@ -90,7 +92,8 @@ function insertLegacyWakeup(string $requestKey, array $payload, string $kind = '
 }
 
 it('persists idempotent requests and completes the local handler once', function (): void {
-    app()['config']->set('corex-wakeup.handlers', ['test.reminder' => WakeupTestHandler::class]);
+    app()['config']->set('corex-wakeup.handlers', ['test.reminder' => ['handler' => WakeupTestHandler::class, 'version' => 'test/1']]);
+    app()->forgetInstance(WakeupOptions::class);
     app()->forgetScopedInstances();
     $context = app(TenantContextResolver::class)->current();
     $scheduler = app(WakeupScheduler::class);
@@ -115,6 +118,7 @@ it('stores a versioned envelope and exposes only business data to the handler', 
             'accept_legacy_unstamped' => false,
         ],
     ]);
+    app()->forgetInstance(WakeupOptions::class);
     app()->forgetInstance(WakeupHandlerRegistry::class);
     app()->forgetScopedInstances();
     $context = app(TenantContextResolver::class)->current();
@@ -215,6 +219,7 @@ it('retains the legacy digest algorithm for unstamped existing rows', function (
             'version' => 'reminder/1',
         ],
     ]);
+    app()->forgetInstance(WakeupOptions::class);
     app()->forgetInstance(WakeupHandlerRegistry::class);
     app()->forgetScopedInstances();
     $context = app(TenantContextResolver::class)->current();
@@ -250,6 +255,7 @@ it('quarantines missing and mismatched stamps without invocation or retry', func
             'version' => 'reminder/2',
         ],
     ]);
+    app()->forgetInstance(WakeupOptions::class);
     app()->forgetInstance(WakeupHandlerRegistry::class);
     app()->forgetScopedInstances();
     $context = app(TenantContextResolver::class)->current();
@@ -283,6 +289,7 @@ it('admits unstamped rows only for the exact definition opt-in', function (): vo
             'accept_legacy_unstamped' => true,
         ],
     ]);
+    app()->forgetInstance(WakeupOptions::class);
     app()->forgetInstance(WakeupHandlerRegistry::class);
     app()->forgetScopedInstances();
     insertLegacyWakeup(requestKey: 'legacy-opt-in', payload: ['message' => 'legacy']);
@@ -305,6 +312,7 @@ it('reports incompatible pending stamps without mutating rows', function (): voi
             'version' => 'reminder/1',
         ],
     ]);
+    app()->forgetInstance(WakeupOptions::class);
     app()->forgetInstance(WakeupHandlerRegistry::class);
     insertLegacyWakeup(requestKey: 'preflight-legacy', payload: ['message' => 'legacy']);
     $before = (array) DB::table('sys_wakeup_requests')->where('request_key', 'preflight-legacy')->first();
@@ -319,31 +327,14 @@ it('reports incompatible pending stamps without mutating rows', function (): voi
     expect($after)->toBe($before);
 });
 
-it('keeps scalar handler config as a deprecated versioned transition branch', function (): void {
-    app()['config']->set('corex-wakeup.handlers', ['test.reminder' => WakeupTestHandler::class]);
-    app()->forgetInstance(WakeupHandlerRegistry::class);
-    $deprecations = [];
-    set_error_handler(function (int $severity, string $message) use (&$deprecations): bool {
-        if ($severity === E_USER_DEPRECATED) {
-            $deprecations[] = $message;
-        }
-
-        return true;
-    });
-
-    try {
-        $definition = app(WakeupHandlerRegistry::class)->definition('test.reminder');
-    } finally {
-        restore_error_handler();
-    }
-
-    expect($definition->version)->toStartWith('legacy-class/1:')
-        ->and($definition->acceptLegacyUnstamped)->toBeFalse()
-        ->and($deprecations)->toHaveCount(1);
+it('rejects scalar handler config because handler and version are explicit', function (): void {
+    expect(fn () => WakeupOptions::fromArray(['handlers' => ['test.reminder' => WakeupTestHandler::class]]))
+        ->toThrow(InvalidConfiguration::class, 'handlers.test.reminder: requires handler, version');
 });
 
 it('persists a retryable handler failure without reusing its generation', function (): void {
-    app()['config']->set('corex-wakeup.handlers', ['test.failure' => FailingWakeupTestHandler::class]);
+    app()['config']->set('corex-wakeup.handlers', ['test.failure' => ['handler' => FailingWakeupTestHandler::class, 'version' => 'test/1']]);
+    app()->forgetInstance(WakeupOptions::class);
     app()->forgetScopedInstances();
     $context = app(TenantContextResolver::class)->current();
     app(WakeupScheduler::class)->schedule(new WakeupRequest(
@@ -366,7 +357,8 @@ it('persists a retryable handler failure without reusing its generation', functi
 });
 
 it('rejects unsafe request data before writing a durable request', function (): void {
-    app()['config']->set('corex-wakeup.handlers', ['test.reminder' => WakeupTestHandler::class]);
+    app()['config']->set('corex-wakeup.handlers', ['test.reminder' => ['handler' => WakeupTestHandler::class, 'version' => 'test/1']]);
+    app()->forgetInstance(WakeupOptions::class);
     app()->forgetScopedInstances();
     $context = app(TenantContextResolver::class)->current();
 
@@ -393,9 +385,10 @@ it('rejects unsafe request data before writing a durable request', function (): 
 
 it('keeps cancellation keys unambiguous across registered kinds and dispatches a best-effort hint', function (): void {
     app()['config']->set('corex-wakeup.handlers', [
-        'test.reminder' => WakeupTestHandler::class,
-        'test.secondary' => WakeupTestHandler::class,
+        'test.reminder' => ['handler' => WakeupTestHandler::class, 'version' => 'test/1'],
+        'test.secondary' => ['handler' => WakeupTestHandler::class, 'version' => 'test/1'],
     ]);
+    app()->forgetInstance(WakeupOptions::class);
     $hint = new RecordingWakeupHint;
     app()->instance(RecordingWakeupHint::class, $hint);
     app()->tag(RecordingWakeupHint::class, 'corex.wakeup.hints');
@@ -425,7 +418,8 @@ it('keeps cancellation keys unambiguous across registered kinds and dispatches a
 });
 
 it('makes cancellation outcomes explicit without depending on a root hint', function (): void {
-    app()['config']->set('corex-wakeup.handlers', ['test.reminder' => WakeupTestHandler::class]);
+    app()['config']->set('corex-wakeup.handlers', ['test.reminder' => ['handler' => WakeupTestHandler::class, 'version' => 'test/1']]);
+    app()->forgetInstance(WakeupOptions::class);
     app()->forgetScopedInstances();
     $context = app(TenantContextResolver::class)->current();
     $scheduler = app(WakeupScheduler::class);
@@ -478,7 +472,8 @@ it('rejects unregistered handlers and invalid window contracts before scheduling
 });
 
 it('computes handler backoff from the injected clock', function (): void {
-    app()['config']->set('corex-wakeup.handlers', ['test.failure' => FailingWakeupTestHandler::class]);
+    app()['config']->set('corex-wakeup.handlers', ['test.failure' => ['handler' => FailingWakeupTestHandler::class, 'version' => 'test/1']]);
+    app()->forgetInstance(WakeupOptions::class);
     $anchor = new DateTimeImmutable('2026-06-01T12:00:00Z');
     $clock = new FrozenClock($anchor);
     app()->instance(ClockInterface::class, $clock);
@@ -513,8 +508,10 @@ it('computes handler backoff from the injected clock', function (): void {
 });
 
 it('expires a running lease exactly at the clock boundary but not one second later', function (): void {
-    app()['config']->set('corex-wakeup.handlers', ['test.reminder' => WakeupTestHandler::class]);
+    app()['config']->set('corex-wakeup.handlers', ['test.reminder' => ['handler' => WakeupTestHandler::class, 'version' => 'test/1']]);
+    app()->forgetInstance(WakeupOptions::class);
     app()['config']->set('corex-wakeup.max_attempts', 5);
+    app()->forgetInstance(WakeupOptions::class);
     $anchor = new DateTimeImmutable('2026-06-01T12:00:00Z');
     $clock = new FrozenClock($anchor);
     app()->instance(ClockInterface::class, $clock);

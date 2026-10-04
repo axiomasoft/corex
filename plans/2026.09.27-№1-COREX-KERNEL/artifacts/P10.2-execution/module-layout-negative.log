@@ -1,0 +1,122 @@
+.......FFFFFFFFFFFFF..
+======================================================================
+FAIL: test_r6_allows_dev_to_dev_references (test_module_layout_gate.ModuleLayoutGateTest.test_r6_allows_dev_to_dev_references) (bridge='Tooling')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/vostrikov/projects/packages/corex/scripts/tests/test_module_layout_gate.py", line 162, in test_r6_allows_dev_to_dev_references
+    self.assertEqual([], rules(root))
+AssertionError: Lists differ: [] != ['R3']
+
+Second list contains 1 additional elements.
+First extra element 0:
+'R3'
+
+- []
++ ['R3']
+
+======================================================================
+FAIL: test_r6_forbids_runtime_references_to_every_dev_bridge (test_module_layout_gate.ModuleLayoutGateTest.test_r6_forbids_runtime_references_to_every_dev_bridge) (body='namespace CoreX\\Search\\Internal; use CoreX\\Attributes\\Tooling\\Helper; final class Uses {}')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/vostrikov/projects/packages/corex/scripts/tests/test_module_layout_gate.py", line 155, in test_r6_forbids_runtime_references_to_every_dev_bridge
+    self.assertIn('R6', rules(build(Path(tmp), {'search/src/Internal/Uses.php': body})))
+AssertionError: 'R6' not found in []
+
+======================================================================
+FAIL: test_r6_forbids_runtime_references_to_every_dev_bridge (test_module_layout_gate.ModuleLayoutGateTest.test_r6_forbids_runtime_references_to_every_dev_bridge) (body='namespace CoreX\\Search\\Internal; final class Uses { public \\CoreX\\Attributes\\Tooling\\Helper $helper; }')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/vostrikov/projects/packages/corex/scripts/tests/test_module_layout_gate.py", line 155, in test_r6_forbids_runtime_references_to_every_dev_bridge
+    self.assertIn('R6', rules(build(Path(tmp), {'search/src/Internal/Uses.php': body})))
+AssertionError: 'R6' not found in []
+
+======================================================================
+FAIL: test_r6_forbids_runtime_references_to_every_dev_bridge (test_module_layout_gate.ModuleLayoutGateTest.test_r6_forbids_runtime_references_to_every_dev_bridge) (body='namespace CoreX\\Search\\Internal; use CoreX\\Attributes as A; final class Uses extends A\\Tooling\\Helper {}')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/vostrikov/projects/packages/corex/scripts/tests/test_module_layout_gate.py", line 155, in test_r6_forbids_runtime_references_to_every_dev_bridge
+    self.assertIn('R6', rules(build(Path(tmp), {'search/src/Internal/Uses.php': body})))
+AssertionError: 'R6' not found in []
+
+======================================================================
+FAIL: test_r6_forbids_runtime_references_to_every_dev_bridge (test_module_layout_gate.ModuleLayoutGateTest.test_r6_forbids_runtime_references_to_every_dev_bridge) (body='namespace CoreX\\Search\\Internal; final class Uses { public Tooling\\Helper $helper; }')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/vostrikov/projects/packages/corex/scripts/tests/test_module_layout_gate.py", line 155, in test_r6_forbids_runtime_references_to_every_dev_bridge
+    self.assertIn('R6', rules(build(Path(tmp), {'search/src/Internal/Uses.php': body})))
+AssertionError: 'R6' not found in []
+
+======================================================================
+FAIL: test_r6_forbids_runtime_references_to_every_dev_bridge (test_module_layout_gate.ModuleLayoutGateTest.test_r6_forbids_runtime_references_to_every_dev_bridge) (body='namespace CoreX\\Search\\Internal; use CoreX\\Attributes\\PHPStan\\Helper; final class Uses {}')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/vostrikov/projects/packages/corex/scripts/tests/test_module_layout_gate.py", line 155, in test_r6_forbids_runtime_references_to_every_dev_bridge
+    self.assertIn('R6', rules(build(Path(tmp), {'search/src/Internal/Uses.php': body})))
+AssertionError: 'R6' not found in []
+
+======================================================================
+FAIL: test_r6_forbids_runtime_references_to_every_dev_bridge (test_module_layout_gate.ModuleLayoutGateTest.test_r6_forbids_runtime_references_to_every_dev_bridge) (body='namespace CoreX\\Search\\Internal; final class Uses { public \\CoreX\\Attributes\\PHPStan\\Helper $helper; }')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/vostrikov/projects/packages/corex/scripts/tests/test_module_layout_gate.py", line 155, in test_r6_forbids_runtime_references_to_every_dev_bridge
+    self.assertIn('R6', rules(build(Path(tmp), {'search/src/Internal/Uses.php': body})))
+AssertionError: 'R6' not found in []
+
+======================================================================
+FAIL: test_r6_forbids_runtime_references_to_every_dev_bridge (test_module_layout_gate.ModuleLayoutGateTest.test_r6_forbids_runtime_references_to_every_dev_bridge) (body='namespace CoreX\\Search\\Internal; use CoreX\\Attributes as A; final class Uses extends A\\PHPStan\\Helper {}')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/vostrikov/projects/packages/corex/scripts/tests/test_module_layout_gate.py", line 155, in test_r6_forbids_runtime_references_to_every_dev_bridge
+    self.assertIn('R6', rules(build(Path(tmp), {'search/src/Internal/Uses.php': body})))
+AssertionError: 'R6' not found in []
+
+======================================================================
+FAIL: test_r6_forbids_runtime_references_to_every_dev_bridge (test_module_layout_gate.ModuleLayoutGateTest.test_r6_forbids_runtime_references_to_every_dev_bridge) (body='namespace CoreX\\Search\\Internal; final class Uses { public PHPStan\\Helper $helper; }')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/vostrikov/projects/packages/corex/scripts/tests/test_module_layout_gate.py", line 155, in test_r6_forbids_runtime_references_to_every_dev_bridge
+    self.assertIn('R6', rules(build(Path(tmp), {'search/src/Internal/Uses.php': body})))
+AssertionError: 'R6' not found in []
+
+======================================================================
+FAIL: test_r6_forbids_runtime_references_to_every_dev_bridge (test_module_layout_gate.ModuleLayoutGateTest.test_r6_forbids_runtime_references_to_every_dev_bridge) (body='namespace CoreX\\Search\\Internal; use CoreX\\Attributes\\Testing\\Helper; final class Uses {}')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/vostrikov/projects/packages/corex/scripts/tests/test_module_layout_gate.py", line 155, in test_r6_forbids_runtime_references_to_every_dev_bridge
+    self.assertIn('R6', rules(build(Path(tmp), {'search/src/Internal/Uses.php': body})))
+AssertionError: 'R6' not found in []
+
+======================================================================
+FAIL: test_r6_forbids_runtime_references_to_every_dev_bridge (test_module_layout_gate.ModuleLayoutGateTest.test_r6_forbids_runtime_references_to_every_dev_bridge) (body='namespace CoreX\\Search\\Internal; final class Uses { public \\CoreX\\Attributes\\Testing\\Helper $helper; }')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/vostrikov/projects/packages/corex/scripts/tests/test_module_layout_gate.py", line 155, in test_r6_forbids_runtime_references_to_every_dev_bridge
+    self.assertIn('R6', rules(build(Path(tmp), {'search/src/Internal/Uses.php': body})))
+AssertionError: 'R6' not found in []
+
+======================================================================
+FAIL: test_r6_forbids_runtime_references_to_every_dev_bridge (test_module_layout_gate.ModuleLayoutGateTest.test_r6_forbids_runtime_references_to_every_dev_bridge) (body='namespace CoreX\\Search\\Internal; use CoreX\\Attributes as A; final class Uses extends A\\Testing\\Helper {}')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/vostrikov/projects/packages/corex/scripts/tests/test_module_layout_gate.py", line 155, in test_r6_forbids_runtime_references_to_every_dev_bridge
+    self.assertIn('R6', rules(build(Path(tmp), {'search/src/Internal/Uses.php': body})))
+AssertionError: 'R6' not found in []
+
+======================================================================
+FAIL: test_r6_forbids_runtime_references_to_every_dev_bridge (test_module_layout_gate.ModuleLayoutGateTest.test_r6_forbids_runtime_references_to_every_dev_bridge) (body='namespace CoreX\\Search\\Internal; final class Uses { public Testing\\Helper $helper; }')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/vostrikov/projects/packages/corex/scripts/tests/test_module_layout_gate.py", line 155, in test_r6_forbids_runtime_references_to_every_dev_bridge
+    self.assertIn('R6', rules(build(Path(tmp), {'search/src/Internal/Uses.php': body})))
+AssertionError: 'R6' not found in []
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.054s
+
+FAILED (failures=13)
+module-layout: baseline written, 1 entries; R0 0, R1 0, R2 0, R3 1, R4 0, R5 0
+module-layout OK: 10 files, 1 violations, 1 baselined, 0 new, 0 stale; R0 0, R1 0, R2 0, R3 1, R4 0, R5 0
+new R5 packages/search/src/Index/Internal/Uses.php CoreX\Search\Internal\Hydrator
+module-layout FAIL: 11 files, 2 violations, 1 baselined, 1 new, 0 stale; R0 0, R1 0, R2 0, R3 1, R4 0, R5 1
+stale R3 packages/search/src/Index/Compiler/Plan.php (remove it from the baseline)
+module-layout FAIL: 9 files, 0 violations, 1 baselined, 0 new, 1 stale; R0 0, R1 0, R2 0, R3 0, R4 0, R5 0

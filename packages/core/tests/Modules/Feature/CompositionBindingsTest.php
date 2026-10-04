@@ -13,6 +13,7 @@ use CoreX\Modules\Contracts\RecordsRegistrar;
 use CoreX\Modules\Contracts\RegistryIntrospection;
 use CoreX\Modules\Internal\Discovery\ModuleDiscovery;
 use CoreX\Modules\Internal\Gate\AllowAllActivationGate;
+use CoreX\Modules\Internal\InMemoryEntityRegistry;
 use CoreX\Modules\Internal\Lifecycle\DatabaseModuleLifecycle;
 use CoreX\Modules\Internal\Lifecycle\DatabaseModuleStateReader;
 use CoreX\Modules\Internal\Lifecycle\DatabaseRecordsRegistrar;
@@ -26,7 +27,6 @@ use CoreX\Modules\Laravel\ModulesBootRegistrar;
 use CoreX\Modules\Laravel\RegistryRegistrar;
 use CoreX\Modules\Laravel\SettingsRegistrar;
 use CoreX\Modules\ModulesServiceProvider;
-use CoreX\Modules\Testing\ArrayEntityRegistry;
 use CoreX\Settings\Contracts\SettingDefaultsProvider;
 use Illuminate\Foundation\Application;
 
@@ -36,8 +36,8 @@ beforeEach(function (): void {
 
 it('keeps Registry register bindings on the measured key, concrete and lifetime', function (): void {
     $app = $this->app;
-    assertSingletonBinding($app, ArrayEntityRegistry::class, ArrayEntityRegistry::class);
-    assertSingletonBinding($app, EntityRegistry::class, ArrayEntityRegistry::class);
+    assertSingletonBinding($app, InMemoryEntityRegistry::class, InMemoryEntityRegistry::class);
+    assertSingletonBinding($app, EntityRegistry::class, InMemoryEntityRegistry::class);
     assertSingletonBinding($app, ModuleDiscovery::class, ModuleDiscovery::class);
     assertSingletonBinding($app, ModuleActivationGate::class, AllowAllActivationGate::class);
     assertSingletonBinding($app, ModuleRegistryCache::class, RepositoryModuleRegistryCache::class);
@@ -79,7 +79,9 @@ it('resolves ModulesOptions from the composition instance', function (): void {
 
 it('reads module options from the nested kernel configuration', function (): void {
     config()->set('corex.modules.connection', 'module-test');
+    app()->forgetInstance(ModulesOptions::class);
     config()->set('corex.modules.cache', ['store' => 'array', 'ttl' => 42, 'prefix' => 'module-test']);
+    app()->forgetInstance(ModulesOptions::class);
     $this->app->register(ModulesServiceProvider::class, force: true);
 
     $options = $this->app->make(ModulesOptions::class);
