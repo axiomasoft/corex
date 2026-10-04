@@ -1,0 +1,115 @@
+{
+  "signal_class": "acceptance",
+  "scope_class": "item",
+  "action": "close-green",
+  "recovered": true,
+  "terminal": true,
+  "terminal_evidence": {
+    "schema_version": "terminal-evidence/v1",
+    "spec_sha256": "a0791babef35a8fec7c909a1b745fccc46997edfae4becb3d5185a1d2319f8d8",
+    "validation": [
+      {
+        "carrier": "После продуктового commit: `bash scripts/contract-guard.sh` и `bash scripts/contract-guard.sh \"$(cat plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.2-execution/base-commit.txt)\"` → exit 0.",
+        "status": "green",
+        "evidence_ids": [
+          "artifacts/P07.2-execution/contract-guard.log",
+          "artifacts/P07.2-execution/contract-guard-base.log"
+        ]
+      },
+      {
+        "carrier": "VERIFY-AT-EXEC → нет `v4*` (запись в Completion Notes).",
+        "status": "green",
+        "evidence_ids": [
+          "artifacts/P07.2-execution/verify-at-exec.json",
+          "artifacts/P07.2-execution/packagist-stancl.json"
+        ]
+      },
+      {
+        "carrier": "`git grep -n -i stancl -- packages products scripts .github composer.json ':!**/CHANGELOG.md'` → пусто; `test ! -e .composer-provider-staging` → exit 0; `python3 -c \"import json;l=json.load(open('composer.lock'));print([p['name'] for p in l['packages']+l['packages-dev'] if 'stancl' in p['name']])\"` → `[]`; `git diff \"$(cat plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.2-execution/base-commit.txt)\" -- composer.lock` удаляет только пакеты, перечисленные в Completion Notes с выводом `composer why`.",
+        "status": "green",
+        "evidence_ids": [
+          "artifacts/P07.2-execution/final-scans.json",
+          "artifacts/P07.2-execution/lock-delta.json",
+          "artifacts/P07.2-execution/composer-why-axiomasoft__stancl-tenancy.log",
+          "artifacts/P07.2-execution/composer-why-axiomasoft__stancl-jobpipeline.log",
+          "artifacts/P07.2-execution/composer-why-stancl__virtualcolumn.log",
+          "artifacts/P07.2-execution/composer-why-spatie__invade.log"
+        ]
+      },
+      {
+        "carrier": "`scripts/php84 composer manifests:check` → exit 0 при `ALLOWED_PRERELEASE = {}`; негатив: временно вернуть `\"axiomasoft/stancl-tenancy\": \">=4.0.0-alpha1 <=4.0.0-alpha1\"` в `packages/tenancy/composer.json` → exit ≠ 0 (`prerelease`), вернуть.",
+        "status": "green",
+        "evidence_ids": [
+          "artifacts/P07.2-execution/manifests-final.log",
+          "artifacts/P07.2-execution/manifests-negative.log",
+          "artifacts/P07.2-execution/manifests-negative.json"
+        ]
+      },
+      {
+        "carrier": "`scripts/php84 composer --working-dir=packages/tenancy test`, `PGSQL_PORT=5434 scripts/php84 composer --working-dir=packages/tenancy test -- --group=pg` → exit 0 (provisioning из шаблона, lifecycle export/drop, host resolution с инвалидацией).",
+        "status": "green",
+        "evidence_ids": [
+          "artifacts/P07.2-execution/tenancy-full-final.log",
+          "artifacts/P07.2-execution/tenancy-pg-final.log"
+        ]
+      },
+      {
+        "carrier": "`scripts/php84 composer config-cache-check`, `scripts/php84 composer configuration-reference` → exit 0, `docs/architecture/configuration.md` без ключа `tenancy.` и без stancl.",
+        "status": "green",
+        "evidence_ids": [
+          "artifacts/P07.2-execution/config-cache.log",
+          "artifacts/P07.2-execution/configuration-final.log"
+        ]
+      },
+      {
+        "carrier": "`scripts/php84 composer test:packages`, `PGSQL_PORT=5434 scripts/php84 composer test:pg`, `scripts/php84 composer test:arch` → exit 0.",
+        "status": "green",
+        "evidence_ids": [
+          "artifacts/P07.2-execution/test-packages-final.log",
+          "artifacts/P07.2-execution/root-pg-final.log",
+          "artifacts/P07.2-execution/test-arch.log"
+        ]
+      },
+      {
+        "carrier": "`scripts/php84 php scripts/php-api.php --write` дважды → идентично; `scripts/php84 composer php-api`, `scripts/php84 composer bc-check` → exit 0; diff Golden — только строки P07.2 из досье §4.",
+        "status": "green",
+        "evidence_ids": [
+          "artifacts/P07.2-execution/php-api-log-identities.json",
+          "artifacts/P07.2-execution/php-api-write.log.gz",
+          "artifacts/P07.2-execution/php-api-write-second.log.gz",
+          "artifacts/P07.2-execution/php-api-current.log.gz",
+          "artifacts/P07.2-execution/bc-check-parallel-final.log",
+          "artifacts/P07.2-execution/bc-finite-delta.json",
+          "artifacts/P07.2-execution/golden-final.log",
+          "artifacts/P07.2-execution/golden-semantic-delta.json"
+        ]
+      },
+      {
+        "carrier": "`scripts/php84 composer lint:check`, `scripts/php84 composer analyse`, `scripts/php84 composer deps:analyse` → exit 0; `bash scripts/anti-weakening-gate.sh` → exit 0; `php scripts/package-docs-gate.php` → exit 0.",
+        "status": "green",
+        "evidence_ids": [
+          "artifacts/P07.2-execution/lint-repair-review.log",
+          "artifacts/P07.2-execution/analyse-green.log",
+          "artifacts/P07.2-execution/deps-green.log",
+          "artifacts/P07.2-execution/anti-weakening-final.log",
+          "artifacts/P07.2-execution/package-docs-final.log",
+          "artifacts/P07.2-execution/ownership-gate-final.log",
+          "artifacts/P07.2-execution/ownership-gate-negative.json",
+          "artifacts/P07.2-execution/validation-reuse-witness.json"
+        ]
+      },
+      {
+        "carrier": "Review `light` (D97): self-check по досье §6; строка `review: self-check GREEN` в Completion Notes.",
+        "status": "green",
+        "evidence_ids": [
+          "artifacts/P07.2-execution/completion.md",
+          "artifacts/P07.2-execution/review-self-check.md",
+          "artifacts/P07.2-execution/review-run-repair.json",
+          "decisions/D108-p072-review-waiver-and-new-session.md"
+        ]
+      }
+    ],
+    "repair_exhausted": null
+  },
+  "owner_review_withdrawal": "D108"
+}

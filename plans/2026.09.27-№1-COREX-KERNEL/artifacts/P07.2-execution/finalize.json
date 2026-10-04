@@ -3,14 +3,16 @@
   "plan_id": "2026.09.27-№1-COREX-KERNEL",
   "item_id": "P07.2",
   "terminal": {
-    "line": 231,
-    "sha256": "sha256:54935665ac5e63e9d4b93c2117e1c747926ced8ced4f5a50c7584ffa2c608a3a",
-    "run_id": "31ee26b55bbdd51ff945818d865c78eb867db38ca50f9786003e3c3dc3046473",
-    "result": "escalated",
+    "line": 233,
+    "sha256": "sha256:4c2c196dc80b4f6f1f5f9df57cc9adfb676e36d6d36dbc911b034f335274ac51",
+    "run_id": "3d303b94aabcbf760c096cd6e630f87b78f90b3e9ebe173366f19a324e620b80",
+    "result": "closed-green",
     "command": "plan-run",
     "batch_receipt": {
       "batch_id": "solo",
-      "completed_prefix": [],
+      "completed_prefix": [
+        "P07.2"
+      ],
       "handoff_digest": "217024ffce8573fce49c290496783ab727e019f64241d6b0a6bd9b8a8fe72db1",
       "invocation_digest": "125352c510fc40c36a0b028babb177b2b473d32ece640331105b2558a919868f",
       "membership": [
@@ -25,57 +27,61 @@
   "reconciled_items": [
     "P07.2"
   ],
-  "next_bundle": null,
+  "next_bundle": "bundles/P07.3.json",
   "receipt": {
     "schema_version": "terminal-delivery-receipt/v1",
     "plan_id": "2026.09.27-№1-COREX-KERNEL",
     "subject": "P07.2",
-    "status": "🔴 Blocked",
-    "next_exact": "waiting: owner authorizes one additional Grok 4.7/500k review round for P07.2",
-    "recommendation": "**Next:** waiting: owner authorizes one additional Grok 4.7/500k review round for P07.2\n\n| Parameter | Meaning |\n|:--|:--|\n| Batch | solo |\n| Model | implementation |\n| Thinking | high |\n| Context | waiting-owner |\n| The bottom line | Все пять замечаний исправлены; требуется разрешение на один дополнительный раунд Grok. |\n| Command | — |\n\n```session-continuity-decision/v1\n{\"evidence\": [\"batch:125352c510fc40c36a0b028babb177b2b473d32ece640331105b2558a919868f\", \"loaded-inputs:reusable\", \"cold-start-cost:0\"], \"outcome\": \"waiting-owner\", \"reason\": \"owner-wait\", \"runnable\": false, \"schema_version\": \"session-continuity-decision/v1\"}\n```",
+    "status": "🟢 Done",
+    "next_exact": "run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P07.3",
+    "recommendation": "**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P07.3\n\n| Parameter | Meaning |\n|:--|:--|\n| Batch | solo |\n| Model | implementation |\n| Thinking | high |\n| Context | cold-start-root: owner-requested-new-session |\n| The bottom line | P07.3 переводит impersonation на порты после принятого native engine; это рекомендация вне завершённого owner scope P07.2. |\n\n```session-continuity-decision/v1\n{\"evidence\": [\"batch:125352c510fc40c36a0b028babb177b2b473d32ece640331105b2558a919868f\", \"loaded-inputs:reusable\", \"cold-start-cost:0\", \"checkpoint:artifacts/P07.2-execution/completion.md\"], \"outcome\": \"cold-start-root\", \"reason\": \"owner-requested-new-session\", \"runnable\": true, \"schema_version\": \"session-continuity-decision/v1\"}\n```\n\n**Native Codex command:**\n\n```bash\ncodex -C /home/vostrikov/projects/packages/corex -m gpt-6-sol -c 'model_reasoning_effort=\"high\"' -a never -s danger-full-access '$ task:plan-run 2026.09.27-№1-COREX-KERNEL P07.3'\n```",
     "route": {
       "batch": "solo",
       "model": "implementation",
       "thinking": "high",
-      "context": "waiting-owner",
-      "command": "—",
+      "context": "cold-start-root: owner-requested-new-session",
+      "command": null,
       "continuity": {
-        "outcome": "waiting-owner",
-        "reason": "owner-wait",
+        "outcome": "cold-start-root",
+        "reason": "owner-requested-new-session",
         "evidence": [
           "batch:125352c510fc40c36a0b028babb177b2b473d32ece640331105b2558a919868f",
           "loaded-inputs:reusable",
-          "cold-start-cost:0"
+          "cold-start-cost:0",
+          "checkpoint:artifacts/P07.2-execution/completion.md"
         ],
-        "runnable": false,
+        "runnable": true,
         "schema_version": "session-continuity-decision/v1"
       }
     },
     "continuity": {
-      "outcome": "waiting-owner",
-      "reason": "owner-wait",
+      "outcome": "cold-start-root",
+      "reason": "owner-requested-new-session",
       "evidence": [
         "batch:125352c510fc40c36a0b028babb177b2b473d32ece640331105b2558a919868f",
         "loaded-inputs:reusable",
-        "cold-start-cost:0"
+        "cold-start-cost:0",
+        "checkpoint:artifacts/P07.2-execution/completion.md"
       ],
-      "runnable": false,
+      "runnable": true,
       "schema_version": "session-continuity-decision/v1"
     },
     "rationale": {
-      "remaining": "Current independent GREEN review. Two-round limit exhausted; pending async owner approval. Do not launch round three without an accepted candidate-bound D# using the marker in artifacts/P07.2-execution/pending-review-candidate.json. No P07.3 execution.",
-      "open_risks": "D107 retains durable claim/cleanup SQL in data until P08; six existing Redis skips. Preserve unrelated CLAUDE.md and local skills/agents. P07.2 is not GREEN."
+      "remaining": "P07 stays In progress (2/6); P07.3–P07.6 remain outside this invocation. P07.3 is handed to the owner-requested new session; no execution here.",
+      "open_risks": "D107 preserves durable signup/cleanup SQL in root_accounts.data until P08 relocates it; six existing Redis tests skipped without ext-redis. G2 impersonation baseline remains for P07.3. Hosted CI remains the P07.6 phase closing step under D106, not this item's gate."
     },
-    "commit_sha": "ef8a2869e0d7ee8f3a1ab5cbfddf60b78d1b4db6",
+    "commit_sha": "a6f12481c2f8f734afd0db0f419c3e08ba70ef73",
     "journal": {
-      "line": 231,
-      "sha256": "sha256:54935665ac5e63e9d4b93c2117e1c747926ced8ced4f5a50c7584ffa2c608a3a",
-      "run_id": "31ee26b55bbdd51ff945818d865c78eb867db38ca50f9786003e3c3dc3046473",
-      "result": "escalated",
+      "line": 233,
+      "sha256": "sha256:4c2c196dc80b4f6f1f5f9df57cc9adfb676e36d6d36dbc911b034f335274ac51",
+      "run_id": "3d303b94aabcbf760c096cd6e630f87b78f90b3e9ebe173366f19a324e620b80",
+      "result": "closed-green",
       "command": "plan-run",
       "batch_receipt": {
         "batch_id": "solo",
-        "completed_prefix": [],
+        "completed_prefix": [
+          "P07.2"
+        ],
         "handoff_digest": "217024ffce8573fce49c290496783ab727e019f64241d6b0a6bd9b8a8fe72db1",
         "invocation_digest": "125352c510fc40c36a0b028babb177b2b473d32ece640331105b2558a919868f",
         "membership": [
@@ -95,8 +101,8 @@
     },
     "digests": {
       "plan": "sha256:a9cd518ddade9e64fdd62b416850a7d830d347da38dc98a64aa5d211d70fd21d",
-      "handoff": "sha256:ff8d332908e48f2fee6dd0b212407d340cb54ed8c78d316b5717d3c361f8396b",
-      "state": "sha256:3c04b2c7bcbe23b3627450081ae347e8e00cd478814da772e8307e6142cea5a5",
+      "handoff": "sha256:33f9694d452e684cacae29ed556929d4c7c95fe83371b560d451828f8230f92d",
+      "state": "sha256:47517c94f1498b8862c67e4a0563f3c46225e5b590737dc8f00feb3dec99c259",
       "closure": null
     }
   }

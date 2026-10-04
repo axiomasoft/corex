@@ -1,6 +1,6 @@
 # P07.2 — native models, provisioning and dependency removal
 
-Status: implementation and declared local Validation GREEN; awaiting owner approval for one additional review round after the two-round limit. P07.2 is not declared GREEN.
+Status: P07.2 closed GREEN on existing local Validation; further independent review and repeat runs explicitly withdrawn by owner under D108. No independent GREEN verdict is claimed.
 
 Base: `d6ed93fccd9b1ec50428d0f3d18c7c329895c2cd` (captured before product edits). Product anchor: `ef8a2869e0d7ee8f3a1ab5cbfddf60b78d1b4db6`.
 
@@ -20,6 +20,8 @@ Bounded repairs: stale tenancy analyser exceptions were only removed/reduced; ob
 
 review: self-check GREEN
 
-Independent review: first completed Grok review returned two findings, both repaired: D107 documentation now preserves claim/cleanup SQL; obsolete ownership-map config exemption removed. The second completed review found three additional stale config/bootstrap references; all fixed, focused ConfigReportCompositionTest GREEN (1 test, 2 assertions). Review budget is exhausted; one bounded additional round awaits owner authorization. Earlier transport attempts produced no complete verdict. Owner authorized temporary reads of lock/changelog; all write/shell restrictions remain, and the original applicable deny rules are restored after the provider exits.
+Independent review: two completed Grok 4.7/500k FINDINGS verdicts, all five findings fixed. D108 withdraws the close requirement and any further review/retest; original request archived as request.withdrawn-D108.json. Temporary read permission restored.
 
 Delivery topology: a second evidence/bookkeeping commit is required by the explicit post-product-commit Validation and candidate commit SHA deliverables; these cannot truthfully record their own Git anchor in that same product commit. No push, release or P07.3 execution is authorized here. Preserve unrelated CLAUDE.md and local skill/agent files.
+
+Owner closure and new-session direction: D108; owner-close-direction.md. No checks/audits rerun during closure. P07.3 belongs to the new session.
