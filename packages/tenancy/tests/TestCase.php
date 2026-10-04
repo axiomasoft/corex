@@ -13,11 +13,11 @@ use CoreX\Tenancy\TenancyServiceProvider;
 use CoreX\Tenancy\Tests\Stubs\StubIdentityProvider;
 use CoreX\Tenancy\Tests\Support\IsolatesDatabasePath;
 use Illuminate\Database\Connectors\ConnectionFactory;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Override;
-use Stancl\Tenancy\TenancyServiceProvider as StanclTenancyServiceProvider;
 
 /**
  * root_* is PG-only DDL on the central connection (D14/D16) — no sqlite
@@ -63,15 +63,8 @@ abstract class TestCase extends Orchestra
             CoreServiceProvider::class,
             // Core's scoped semantic restorer is decorated by tenancy (D49).
             // Testbench disables package discovery, so register both owners.
-            // Orchestra\Testbench\TestCase::$enablesPackageDiscoveries defaults
-            // to false (composer package auto-discovery, which a real
-            // consumer app gets for free, is off in testbench) — stancl's own
-            // provider (Tenancy::class singleton, its config/tenancy.php
-            // asset defaults, the bootstrapper __constructStatic loop) must
-            // be listed explicitly or `tenancy.cache`/`tenancy.database`
-            // defaults silently end up as whatever OUR narrower config/
-            // tenancy.php happens to project (P2.5).
-            StanclTenancyServiceProvider::class,
+            // The stancl provider is deliberately absent: the runtime is the
+            // package's own engine (PLAN3.D95) and must boot without it.
             TenancyServiceProvider::class,
         ];
     }
@@ -102,9 +95,23 @@ abstract class TestCase extends Orchestra
         $this->resolveIsolatedApplicationCore($app);
     }
 
+    /** Per-test cache/session fixtures; the tenant isolation under test needs real stores, never `array`. */
+    private ?string $runtimeFixtures = null;
+
     /** @param Application $app */
     protected function defineEnvironment($app): void
     {
+        $this->runtimeFixtures = sys_get_temp_dir().'/corex-tenancy-runtime-'.bin2hex(random_bytes(8));
+        (new Filesystem)->makeDirectory($this->runtimeFixtures.'/cache', 0700, true);
+        (new Filesystem)->makeDirectory($this->runtimeFixtures.'/sessions', 0700, true);
+        $app['config']->set('cache.stores.tenant_file', [
+            'driver' => 'file',
+            'path' => $this->runtimeFixtures.'/cache',
+            'lock_path' => $this->runtimeFixtures.'/cache',
+        ]);
+        $app['config']->set('tenancy.cache_stores', ['tenant_file']);
+        $app['config']->set('session.driver', 'file');
+        $app['config']->set('session.files', $this->runtimeFixtures.'/sessions');
         $app['config']->set('database.default', 'pgsql');
         $app['config']->set('database.connections.pgsql', [
             'driver' => 'pgsql',
@@ -168,7 +175,14 @@ abstract class TestCase extends Orchestra
                     }
                 }
             } finally {
-                parent::tearDown();
+                try {
+                    parent::tearDown();
+                } finally {
+                    if ($this->runtimeFixtures !== null) {
+                        (new Filesystem)->deleteDirectory($this->runtimeFixtures);
+                        $this->runtimeFixtures = null;
+                    }
+                }
             }
         }
     }

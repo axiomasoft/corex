@@ -7,7 +7,9 @@ namespace CoreX\Tenancy\Impersonation\Internal;
 use Carbon\CarbonImmutable;
 use CoreX\Audit\Contracts\CurrentActor;
 use CoreX\Context\Contracts\ImpersonationService;
+use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\ImpersonationState;
+use CoreX\Context\Exceptions\CentralContextException;
 use CoreX\Tenancy\Account\Contracts\AccountRead;
 use CoreX\Tenancy\Authentication\Exceptions\OidcAuthenticationException;
 use CoreX\Tenancy\Impersonation\Events\ImpersonationEnded;
@@ -18,7 +20,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Override;
-use Stancl\Tenancy\Database\Models\Tenant as Account;
 
 /**
  * Cloud implementation of support impersonation (B-11 §5.9, D139). Rebound
@@ -56,6 +57,7 @@ final class DatabaseImpersonationService implements ImpersonationService
     public function __construct(
         private readonly ImpersonationPolicy $impersonationPolicy,
         private readonly TenancyOptions $options,
+        private readonly TenantContextResolver $contexts,
     ) {}
 
     #[Override]
@@ -67,8 +69,7 @@ final class DatabaseImpersonationService implements ImpersonationService
 
         $central = $this->centralConnection();
 
-        /** @var Account $account */
-        $account = tenancy()->tenant;
+        $account = $this->contexts->current()->account;
 
         $requireApprovedBy = $this->impersonationPolicy->requireApprovedBy;
 
@@ -95,14 +96,14 @@ final class DatabaseImpersonationService implements ImpersonationService
 
         $row = DB::connection($central)->table('root_impersonation_grants')->where('id', $grantId)->first();
 
-        $targetUserId = $row->target_user_id ?? app(AccountRead::class)->ownerIdentityId((string) $account->id, $central);
+        $targetUserId = $row->target_user_id ?? app(AccountRead::class)->ownerIdentityId($account->id, $central);
         $reason = is_string($row->reason) ? $row->reason : '';
 
         if (! is_string($targetUserId) || $targetUserId === '' || $reason === '') {
             throw OidcAuthenticationException::loginFailed();
         }
 
-        $this->mirror((string) $account->id, 'impersonation.started', $staffIdentityId, $grantId, $targetUserId, $reason, (string) $row->expires_at);
+        $this->mirror($account->id, 'impersonation.started', $staffIdentityId, $grantId, $targetUserId, $reason, (string) $row->expires_at);
 
         $expiresAt = CarbonImmutable::parse($row->expires_at);
 
@@ -121,7 +122,7 @@ final class DatabaseImpersonationService implements ImpersonationService
         $authenticated = Auth::guard($this->guard())->loginUsingId($targetUserId);
 
         if ($authenticated === false) {
-            $this->failStart((string) $account->id, $grantId, $staffIdentityId, $targetUserId, $reason);
+            $this->failStart($account->id, $grantId, $staffIdentityId, $targetUserId, $reason);
 
             throw OidcAuthenticationException::loginFailed();
         }
@@ -138,9 +139,11 @@ final class DatabaseImpersonationService implements ImpersonationService
             return;
         }
 
-        /** @var Account|null $account */
-        $account = tenancy()->tenant;
-        $accountId = $account === null ? null : (string) $account->id;
+        try {
+            $accountId = $this->contexts->current()->account->id;
+        } catch (CentralContextException) {
+            $accountId = null;
+        }
 
         $this->clearSession();
 

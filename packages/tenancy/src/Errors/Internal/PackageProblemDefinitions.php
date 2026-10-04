@@ -19,6 +19,7 @@ final class PackageProblemDefinitions implements ProblemDefinitionProvider
         yield new ProblemDefinition(TenancyErrorCode::CentralUnavailable, 'urn:corex:problem:tenancy.central_unavailable', 503, 'Central unavailable.', true, ErrorCategory::Unavailable, []);
         yield new ProblemDefinition(TenancyErrorCode::ClaimConflict, 'urn:corex:problem:tenancy.claim_conflict', 409, 'Claim conflict.', false, ErrorCategory::Conflict, []);
         yield new ProblemDefinition(TenancyErrorCode::ClaimUnavailable, 'urn:corex:problem:tenancy.claim_unavailable', 503, 'Claim unavailable.', true, ErrorCategory::Unavailable, []);
+        yield new ProblemDefinition(TenancyErrorCode::ContextUnavailable, 'urn:corex:problem:tenancy.context_unavailable', 503, 'Tenant context unavailable.', false, ErrorCategory::Unavailable, []);
         yield new ProblemDefinition(TenancyErrorCode::CredentialIssuanceDenied, 'urn:corex:problem:tenancy.credential_issuance_denied', 403, 'Credential issuance denied.', false, ErrorCategory::Authorization, []);
         yield new ProblemDefinition(TenancyErrorCode::DomainTrustDenied, 'urn:corex:problem:tenancy.domain_trust_denied', 403, 'Domain trust denied.', false, ErrorCategory::Authorization, []);
         yield new ProblemDefinition(TenancyErrorCode::DomainTrustDisabled, 'urn:corex:problem:tenancy.domain_trust_disabled', 503, 'Domain trust disabled.', false, ErrorCategory::Unavailable, []);

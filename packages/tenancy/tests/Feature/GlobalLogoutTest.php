@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
-use Stancl\Tenancy\Tenancy;
 
 // AC-15 — global logout revokes root_idp_sessions/root_oauth_refresh_tokens
 // (a real revoke, never a DELETE) and the local tenant session dies with it;
@@ -50,7 +49,7 @@ beforeEach(function (): void {
 });
 
 afterEach(function (): void {
-    app(Tenancy::class)->end();
+    endTenantContext();
     DB::purge('pgsql');
 });
 

@@ -1,0 +1,18 @@
+mutation P07-scope-boundary — delete the single forgetScopedInstances() call of resetScope()
+file: packages/tenancy/src/Runtime/Internal/DatabaseTenancyManager.php  match count: 1
+sha256 before: 61d22a25642bed481bf3608c4d73cb3d9a7ae3e1704d3df4dc3b579de212a3df
+--- diff (original -> mutant)
+215d214
+<         $this->container->forgetScopedInstances();
+--- ScopeBoundaryPgTest under the mutant (expected: red)
+  ✓ it transfers central URL credentials and options to the account con… 1.46s  
+  ⨯ it central → A: a writer built central is not reused inside A (init… 1.18s  
+  ✓ it keeps a host resolver's credential/option overrides and refuses…  1.15s  
+  ⨯ it A → central: end() resets scope, the A writer is not reused cent… 1.12s  
+  ✓ it a replica overlay on the central connection never overrides the…  1.18s  
+  ✓ it the stock resolver is bound as the account connection resolver    1.12s  
+  ⨯ it a service resolved before a runFor keeps its database, the one r… 1.20s  
+  Tests:    3 failed, 4 passed (48 assertions)
+--- restored
+sha256 after:  61d22a25642bed481bf3608c4d73cb3d9a7ae3e1704d3df4dc3b579de212a3df
+restored:   Tests:    7 passed (54 assertions)

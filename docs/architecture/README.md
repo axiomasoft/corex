@@ -75,6 +75,7 @@
 | RUN-003 | RUN | нет — P3 | объявлено, фаза P3 |
 | RUN-004 | RUN | `composer runtime-globals-gate` → G2/G3 | исполняется |
 | RUN-005 | RUN | `composer runtime-globals-gate` → G4; `tests/Arch/SingletonInjectionTest.php`; `ResidentLifecycleTest`; `ResidentTenantSwitchPgTest` | исполняется |
+| RUN-006 | RUN | `packages/tenancy/tests/Pg/ScopeBoundaryPgTest.php`; `tests/Arch/SingletonInjectionTest.php` | исполняется |
 | CFG-001 | CFG | нет — P2 (реестр), P7 | объявлено, фаза P2 |
 | CFG-002 | CFG | `composer config-composition-gate` → C1–C4 | исполняется |
 | CFG-003 | CFG | `tests/Arch/OptionsSingletonTest.php`; `composer configuration-reference` | исполняется |

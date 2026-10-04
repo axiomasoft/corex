@@ -833,6 +833,14 @@
             "retryable": true
         },
         {
+            "category": "unavailable",
+            "code": "tenancy.context_unavailable",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex-tenancy",
+            "path": null,
+            "retryable": false
+        },
+        {
             "category": "authorization",
             "code": "tenancy.credential_issuance_denied",
             "detail_keys": [],

@@ -12,10 +12,19 @@ use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
 
 /**
- * Single point of tenant-context switching (connection/cache/queue/fs).
- * Boxed installs bind a null-manager (constant context, no stancl); cloud
- * installs bind реализацию из пакета axiomasoft/corex-tenancy — the choice is a container
+ * Single point of tenant-context switching (connection/cache/session/queue).
+ * Boxed installs bind a null-manager (constant context); cloud installs bind
+ * the implementation of `axiomasoft/corex-tenancy` — the choice is a container
  * binding, never an `if(cloud)` branch.
+ *
+ * Switching semantics of the cloud implementation (PLAN3.D95):
+ * - `initialize()` of another account ends the current one first; the same account is a no-op;
+ * - every switch — `initialize()`, `end()`, leaving `runFor()` — forgets the container's scoped
+ *   instances, so a scoped service resolved inside a context holds that context's connection and
+ *   one resolved before a switch must not be kept across it;
+ * - `runFor()` restores the previous account and workspace in `finally`, also after a failure;
+ * - a failed restoration poisons the runtime: it refuses every further call until the
+ *   application is recreated.
  */
 #[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface TenancyManager

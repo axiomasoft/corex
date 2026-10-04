@@ -3,9 +3,11 @@
 declare(strict_types=1);
 
 use CoreX\Context\Contracts\TenancyManager;
-use CoreX\Context\Data\AccountRef;
 use CoreX\Tenancy\Account\Internal\Models\Account;
+use Illuminate\Contracts\Queue\Job;
+use Illuminate\Queue\Events\JobAttempted;
 use Illuminate\Queue\Events\JobExceptionOccurred;
+use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
@@ -39,15 +41,14 @@ afterEach(function (): void {
 });
 
 /**
- * F-Q1 (D76 PoC finding): stancl's QueueTenancyBootstrapper reverts tenancy
- * on JobProcessed/JobFailed only — a job that throws and is released for
- * retry fires JobExceptionOccurred instead, leaking the tenant context into
- * the next job picked up by the same long-lived worker. This exercises the
- * app-listener mitigation directly against the real event, without needing
- * a full queue:work retry cycle (already proven end-to-end in the P2.1 PoC,
- * findings/P2.1-poc-report-2026-07-18.md §F-Q1).
+ * F-Q1 (D76 PoC finding): a job that throws and is released for retry must not leak its tenant
+ * context into the next job of the same long-lived worker. The own engine ends a job's context at
+ * its single completion point — `JobAttempted`, dispatched from the `finally` of Worker::process —
+ * so a throwing job, a released job and a failed job are all covered by one event; the intermediate
+ * `JobExceptionOccurred`/`JobFailed` do not end it (failed callbacks still run in the job context).
+ * Exercised against the real events, without a full queue:work cycle.
  */
-it('ends tenancy on JobExceptionOccurred so the next job in the worker starts in central context (AC-28 е)', function (): void {
+it('ends tenancy on JobAttempted after a throwing job so the next job starts in central context (AC-28 е)', function (): void {
     $clusterId = (string) Str::uuid();
     DB::table('root_clusters')->insert([
         'id' => $clusterId,
@@ -77,18 +78,29 @@ it('ends tenancy on JobExceptionOccurred so the next job in the worker starts in
 
     /** @var TenancyManager $manager */
     $manager = app(TenancyManager::class);
-    $manager->initialize(new AccountRef(
-        id: $account->id,
-        slug: (string) $account->slug,
-        status: $account->status,
-        features: [],
-        limits: [],
-    ));
+    $failure = new RuntimeException('job blew up');
 
+    $job = Mockery::mock(Job::class);
+    $job->shouldReceive('payload')->andReturn(['corex_tenant' => ['account' => $account->id, 'workspace' => null]]);
+    Event::dispatch(new JobProcessing('database', $job));
+
+    expect($manager->initialized())->toBeTrue()
+        ->and(DB::getDefaultConnection())->toBe('tenant');
+
+    // The retry/exception notifications leave the job context alone ...
+    Event::dispatch(new JobExceptionOccurred('database', $job, $failure));
     expect($manager->initialized())->toBeTrue();
 
-    Event::dispatch(new JobExceptionOccurred('database', null, new RuntimeException('job blew up')));
+    // ... and the single completion point ends it.
+    Event::dispatch(new JobAttempted('database', $job, $failure));
 
     expect($manager->initialized())->toBeFalse()
-        ->and($manager->context())->toBeNull();
+        ->and($manager->context())->toBeNull()
+        ->and(DB::getDefaultConnection())->toBe('pgsql');
+
+    $next = Mockery::mock(Job::class);
+    $next->shouldReceive('payload')->andReturn([]);
+    Event::dispatch(new JobProcessing('database', $next));
+    expect($manager->initialized())->toBeFalse();
+    Event::dispatch(new JobAttempted('database', $next));
 });

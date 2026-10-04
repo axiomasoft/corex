@@ -9,19 +9,24 @@ use CoreX\Context\Exceptions\CentralContextException;
 use CoreX\Storage\Contracts\TenantStorage;
 use CoreX\Storage\Exceptions\StorageOperationFailed;
 use CoreX\Tenancy\Account\Internal\Models\Account;
+use CoreX\Tenancy\Runtime\Exceptions\TenantContextUnavailable;
 use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Contracts\Queue\Job;
 use Illuminate\Database\Connectors\ConnectionFactory;
-use Illuminate\Queue\Events\JobExceptionOccurred;
-use Illuminate\Queue\Events\JobProcessed;
+use Illuminate\Queue\Events\JobAttempted;
 use Illuminate\Queue\Events\JobProcessing;
-use Illuminate\Queue\Events\JobRetryRequested;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 uses(TestCase::class)->group('pg');
+
+/** @return array{corex_tenant: array{account: string, workspace: ?string}} */
+function physicalContextPayload(string $account, ?string $workspace = null): array
+{
+    return ['corex_tenant' => ['account' => $account, 'workspace' => $workspace]];
+}
 
 /** @param array<string, mixed> $payload */
 function physicalContextJob(array $payload): Job
@@ -84,16 +89,16 @@ afterEach(function (): void {
 it('clears previous workspace for another job in the same account and refuses unavailable narrowing', function (): void {
     $manager = app(TenancyManager::class);
     $account = $this->accounts['archive'];
-    $job = physicalContextJob(['tenant_id' => $account->id, 'workspace_id' => $this->workspaceId]);
+    $job = physicalContextJob(physicalContextPayload($account->id, $this->workspaceId));
     Event::dispatch(new JobProcessing('database', $job));
     expect($manager->context()->workspace->slug)->toBe('archive');
 
-    Event::dispatch(new JobProcessing('database', physicalContextJob(['tenant_id' => $account->id])));
+    Event::dispatch(new JobProcessing('database', physicalContextJob(physicalContextPayload($account->id))));
     expect($manager->context()->workspace)->toBeNull();
 
     $manager->setWorkspace(new WorkspaceRef(id: $this->workspaceId, slug: 'archive', type: 'company', path: 'archive', parentId: null));
-    expect(fn () => Event::dispatch(new JobProcessing('database', physicalContextJob(['tenant_id' => $account->id, 'workspace_id' => (string) Str::uuid()]))))
-        ->toThrow(RuntimeException::class, 'Queued workspace context is unavailable.');
+    expect(fn () => Event::dispatch(new JobProcessing('database', physicalContextJob(physicalContextPayload($account->id, (string) Str::uuid())))))
+        ->toThrow(TenantContextUnavailable::class, 'does not exist in the current account');
     expect($manager->context()->workspace)->toBeNull();
 });
 
@@ -101,31 +106,33 @@ it('runs archive and laboratory jobs on distinct physical databases with success
     $manager = app(TenancyManager::class);
     $archive = $this->accounts['archive'];
     $lab = $this->accounts['lab'];
-    $archivePayload = ['tenant_id' => $archive->id, 'workspace_id' => $this->workspaceId];
+    $archivePayload = physicalContextPayload($archive->id, $this->workspaceId);
     $archiveJob = physicalContextJob($archivePayload);
     Event::dispatch(new JobProcessing('database', $archiveJob));
     expect(DB::table('context_sentinel')->value('name'))->toBe('archive');
     $archiveDisk = app(TenantStorage::class)->disk();
     $archiveDisk->put('document.txt', 'archive');
-    Event::dispatch(new JobProcessed('database', $archiveJob));
+    Event::dispatch(new JobAttempted('database', $archiveJob));
     expect($manager->context())->toBeNull()->and(DB::table('context_sentinel')->value('name'))->toBe('root');
     expect(fn () => $archiveDisk->get('document.txt'))->toThrow(CentralContextException::class);
 
     $rootJob = physicalContextJob([]);
     Event::dispatch(new JobProcessing('database', $rootJob));
     expect(DB::table('context_sentinel')->value('name'))->toBe('root');
-    Event::dispatch(new JobProcessed('database', $rootJob));
+    Event::dispatch(new JobAttempted('database', $rootJob));
 
-    $labJob = physicalContextJob(['tenant_id' => $lab->id, 'workspace_id' => $this->workspaceId]);
+    $labJob = physicalContextJob(physicalContextPayload($lab->id, $this->workspaceId));
     Event::dispatch(new JobProcessing('database', $labJob));
     expect(DB::table('context_sentinel')->value('name'))->toBe('lab')
         ->and($manager->context()->workspace->slug)->toBe('lab')
         ->and(app(TenantStorage::class)->disk()->exists('document.txt'))->toBeFalse();
     expect(fn () => $archiveDisk->get('document.txt'))->toThrow(StorageOperationFailed::class);
-    Event::dispatch(new JobExceptionOccurred('database', $labJob, new RuntimeException('interrupted lab job')));
+    Event::dispatch(new JobAttempted('database', $labJob, new RuntimeException('interrupted lab job')));
     expect($manager->context())->toBeNull()->and(DB::table('context_sentinel')->value('name'))->toBe('root');
 
-    Event::dispatch(new JobRetryRequested((object) ['payload' => json_encode($archivePayload, JSON_THROW_ON_ERROR)]));
+    // queue:retry re-pushes the stored payload, so the retried job runs under its original account.
+    $retriedJob = physicalContextJob($archivePayload);
+    Event::dispatch(new JobProcessing('database', $retriedJob));
     $outerWorkspace = $manager->context()->workspace;
     expect(DB::table('context_sentinel')->value('name'))->toBe('archive')->and($archiveDisk->get('document.txt'))->toBe('archive');
     expect(fn () => $manager->runFor($lab, null, function (): void {
@@ -134,6 +141,6 @@ it('runs archive and laboratory jobs on distinct physical databases with success
         throw new RuntimeException('nested lab failure');
     }))->toThrow(RuntimeException::class, 'nested lab failure');
     expect(DB::table('context_sentinel')->value('name'))->toBe('archive')->and($manager->context()->workspace)->toBe($outerWorkspace);
-    Event::dispatch(new JobProcessed('database', $archiveJob));
+    Event::dispatch(new JobAttempted('database', $retriedJob));
     expect($manager->context())->toBeNull()->and(DB::table('context_sentinel')->value('name'))->toBe('root');
 });

@@ -15,6 +15,7 @@ enum TenancyErrorCode: string implements ErrorCode
     case CentralUnavailable = 'tenancy.central_unavailable';
     case ClaimConflict = 'tenancy.claim_conflict';
     case ClaimUnavailable = 'tenancy.claim_unavailable';
+    case ContextUnavailable = 'tenancy.context_unavailable';
     case CredentialIssuanceDenied = 'tenancy.credential_issuance_denied';
     case DomainTrustDenied = 'tenancy.domain_trust_denied';
     case DomainTrustDisabled = 'tenancy.domain_trust_disabled';

@@ -2,19 +2,23 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Tenancy\Account\Contracts\AccountRead;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\DomainTrust\Internal\Models\Domain;
 use CoreX\Tenancy\Laravel\Http\Middleware\AccountStatusGate;
 use CoreX\Tenancy\Laravel\Http\Middleware\ResolveTenantFromHost;
-use CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver;
+use CoreX\Tenancy\Laravel\Support\StatusGatePolicy;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Stancl\Tenancy\Tenancy;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 uses()->group('pg');
@@ -37,17 +41,15 @@ beforeEach(function (): void {
         'tenancy.status_gate.payment_route' => '/billing',
         'tenancy.status_gate.export_route' => '/export',
         'tenancy.status_gate.read_only_methods' => ['GET', 'HEAD', 'OPTIONS'],
-        'tenancy.identification.resolvers.'.HostTenantResolver::class => [
-            'cache' => true,
-            'cache_ttl' => 300,
-            'cache_store' => null,
-        ],
+        'tenancy.host_identification.enabled' => true,
+        'tenancy.host_identification.cache' => true,
+        'tenancy.host_identification.cache_store' => null,
     ]);
     app()->forgetInstance(TenancyOptions::class);
 });
 
 afterEach(function (): void {
-    app(Tenancy::class)->end();
+    endTenantContext();
     DB::purge('pgsql');
     DB::purge('tenant');
 
@@ -105,7 +107,7 @@ function initializedAccountASG(string $status, array $overrides = []): Account
         'status' => $status,
     ], $overrides));
 
-    app(Tenancy::class)->initialize($account);
+    initTenantContext($account);
 
     return $account;
 }
@@ -113,7 +115,7 @@ function initializedAccountASG(string $status, array $overrides = []): Account
 /** Swaps the `auth` container binding for a {@see Guard} stub — mirrors WorkspaceResolverTest's actingAsIdWsp(). */
 function actingAsIdASG(?string $userId): void
 {
-    app()->instance('auth', new class($userId) implements Guard
+    $guard = new class($userId) implements Guard
     {
         public function __construct(private readonly ?string $id) {}
 
@@ -151,6 +153,18 @@ function actingAsIdASG(?string $userId): void
         {
             return $this;
         }
+    };
+
+    app()->instance('auth', new class($guard) implements AuthFactory
+    {
+        public function __construct(private readonly Guard $guard) {}
+
+        public function guard($name = null): Guard
+        {
+            return $this->guard;
+        }
+
+        public function shouldUse($name): void {}
     });
 }
 
@@ -167,9 +181,20 @@ function statusOfASG(Closure $dispatch): int
     return $response->getStatusCode();
 }
 
-function dispatchGateASG(Request $request): mixed
+function gateASG(?AccountRead $accounts = null, ?TenantContextResolver $contexts = null): AccountStatusGate
 {
-    return (new AccountStatusGate)->handle($request, fn (Request $r): Response => new Response('ok', 200));
+    return new AccountStatusGate(
+        statusGate: app(StatusGatePolicy::class),
+        contexts: $contexts ?? app(TenantContextResolver::class),
+        accounts: $accounts ?? app(AccountRead::class),
+        auth: app('auth'),
+        centralConnection: 'pgsql',
+    );
+}
+
+function dispatchGateASG(Request $request, ?AccountStatusGate $gate = null): mixed
+{
+    return ($gate ?? gateASG())->handle($request, fn (Request $r): Response => new Response('ok', 200));
 }
 
 it('trial → 200', function (): void {
@@ -244,10 +269,19 @@ it('deleted → 410', function (): void {
 
 it('pending/provisioning/выдуманный статус → 403 (fail-closed)', function (string $status): void {
     $account = initializedAccountASG('trial'); // CHECK constraint allows only pending/provisioning with slug=null
-    tenancy()->tenant->status = $status; // in-memory only — DB CHECK forbids persisting an unknown status
     actingAsIdASG($account->owner_identity_id);
+    // A status the DB CHECK forbids persisting exists only on the in-memory context.
+    $contexts = new class(new AccountRef(id: $account->id, slug: (string) $account->slug, status: $status, features: [], limits: [])) implements TenantContextResolver
+    {
+        public function __construct(private readonly AccountRef $account) {}
 
-    expect(statusOfASG(fn () => dispatchGateASG(Request::create('http://x/', 'GET'))))->toBe(403);
+        public function current(): TenantContext
+        {
+            return new TenantContext($this->account);
+        }
+    };
+
+    expect(statusOfASG(fn () => dispatchGateASG(Request::create('http://x/', 'GET'), gateASG(contexts: $contexts))))->toBe(403);
 })->with(['pending', 'provisioning', 'bogus-status']);
 
 it('смена status у аккаунта → следующий запрос видит НОВОЕ правило без Cache::flush()', function (): void {
@@ -277,16 +311,77 @@ it('смена status у аккаунта → следующий запрос в
 
     $pipeline = fn (Request $request): mixed => app(ResolveTenantFromHost::class)->handle(
         $request,
-        fn (Request $r): mixed => (new AccountStatusGate)->handle($r, fn (Request $rr): Response => new Response('ok', 200)),
+        fn (Request $r): mixed => gateASG()->handle($r, fn (Request $rr): Response => new Response('ok', 200)),
     );
 
     actingAsIdASG(null);
 
     expect(statusOfASG(fn () => $pipeline(Request::create('http://status-flip.example.test/', 'GET'))))->toBe(200);
-    app(Tenancy::class)->end();
+    endTenantContext();
 
     $account->status = 'suspended';
-    $account->save(); // InvalidatesResolverCache (inherited from base Tenant, D119) busts the resolver's cache
+    $account->save(); // status is read per request from the central row, never cached with the host entry
 
     expect(statusOfASG(fn () => $pipeline(Request::create('http://status-flip.example.test/', 'GET'))))->toBe(403);
+});
+
+/** @param list<array{string, ?string}> $calls */
+function recordingAccountReadASG(array &$calls, ?string $owner): AccountRead
+{
+    return new class($calls, $owner, app(AccountRead::class)) implements AccountRead
+    {
+        /** @param list<array{string, ?string}> $calls */
+        public function __construct(private array &$calls, private readonly ?string $owner, private readonly AccountRead $inner) {}
+
+        public function ownerIdentityId(string $accountId, ?string $connectionName = null): ?string
+        {
+            $this->calls[] = [$accountId, $connectionName];
+
+            return $this->owner;
+        }
+
+        public function find(string $accountId, ?string $connectionName = null): ?AccountRef
+        {
+            return $this->inner->find($accountId, $connectionName);
+        }
+    };
+}
+
+it('читает владельца через AccountRead явно в central, пока default-соединение — tenant', function (): void {
+    $account = initializedAccountASG('suspended');
+    actingAsIdASG($account->owner_identity_id);
+    $calls = [];
+    $gate = gateASG(accounts: recordingAccountReadASG($calls, $account->owner_identity_id));
+
+    expect(DB::getDefaultConnection())->toBe('tenant')
+        ->and(statusOfASG(fn () => dispatchGateASG(Request::create('http://x/billing', 'GET'), $gate)))->toBe(200)
+        ->and($calls)->toBe([[$account->id, 'pgsql']]);
+});
+
+it('аккаунт без владельца никого не пропускает: suspended на payment-route и grace на GET → 403', function (string $status, string $path): void {
+    $account = initializedAccountASG($status);
+    actingAsIdASG((string) Str::uuid());
+    $calls = [];
+    $gate = gateASG(accounts: recordingAccountReadASG($calls, null));
+
+    expect(statusOfASG(fn () => dispatchGateASG(Request::create('http://x'.$path, 'GET'), $gate)))->toBe(403);
+})->with([['suspended', '/billing'], ['grace', '/anything']]);
+
+it('неаутентифицированный пользователь не владелец, даже если владелец не задан', function (): void {
+    $account = initializedAccountASG('grace');
+    actingAsIdASG(null);
+    $calls = [];
+    $gate = gateASG(accounts: recordingAccountReadASG($calls, null));
+
+    expect(statusOfASG(fn () => dispatchGateASG(Request::create('http://x/anything', 'GET'), $gate)))->toBe(403)
+        ->and($calls)->toBe([]);
+});
+
+it('HttpRegistrar собирает AccountStatusGate с пятью зависимостями и central-соединением из options', function (): void {
+    $gate = app(AccountStatusGate::class);
+    $constructor = (new ReflectionClass(AccountStatusGate::class))->getConstructor();
+    $central = (new ReflectionProperty($gate, 'centralConnection'))->getValue($gate);
+
+    expect($constructor->getNumberOfRequiredParameters())->toBe(5)
+        ->and($central)->toBe(app(TenancyOptions::class)->centralConnection);
 });

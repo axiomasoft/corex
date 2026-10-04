@@ -2270,6 +2270,7 @@
                 "CentralUnavailable": "'tenancy.central_unavailable'",
                 "ClaimConflict": "'tenancy.claim_conflict'",
                 "ClaimUnavailable": "'tenancy.claim_unavailable'",
+                "ContextUnavailable": "'tenancy.context_unavailable'",
                 "CredentialIssuanceDenied": "'tenancy.credential_issuance_denied'",
                 "DomainTrustDenied": "'tenancy.domain_trust_denied'",
                 "DomainTrustDisabled": "'tenancy.domain_trust_disabled'",
@@ -2853,105 +2854,6 @@
             "enum_backing": null,
             "enum_cases": []
         },
-        "CoreX\\Tenancy\\Laravel\\Bootstrappers\\WorkspaceContextBootstrapper": {
-            "kind": "class",
-            "layer": "spi-call",
-            "since": "1.0",
-            "final": true,
-            "readonly": false,
-            "abstract": false,
-            "extends": [],
-            "implements": [
-                "Stancl\\Tenancy\\Contracts\\TenancyBootstrapper"
-            ],
-            "uses": [],
-            "doc": [],
-            "methods": {
-                "__construct": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "manager",
-                            "type": "CoreX\\Context\\Contracts\\TenancyManager",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 68
-                        },
-                        {
-                            "name": "queue",
-                            "type": "Illuminate\\Queue\\QueueManager",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": null,
-                    "doc": []
-                },
-                "__constructStatic": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "app",
-                            "type": "Illuminate\\Contracts\\Foundation\\Application",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "void",
-                    "doc": []
-                },
-                "bootstrap": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "tenant",
-                            "type": "Stancl\\Tenancy\\Contracts\\Tenant",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "void",
-                    "doc": []
-                },
-                "revert": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "void",
-                    "doc": []
-                }
-            },
-            "properties": [],
-            "constants": [],
-            "enum_backing": null,
-            "enum_cases": []
-        },
         "CoreX\\Tenancy\\Laravel\\Commands\\IdentitiesReconcileCommand": {
             "kind": "class",
             "layer": "spi-call",
@@ -3415,12 +3317,48 @@
                     "parameters": [
                         {
                             "name": "statusGate",
-                            "type": "?CoreX\\Tenancy\\Laravel\\Support\\StatusGatePolicy",
+                            "type": "CoreX\\Tenancy\\Laravel\\Support\\StatusGatePolicy",
                             "by_reference": false,
                             "variadic": false,
-                            "optional": true,
-                            "default": "null",
-                            "flags": 0
+                            "optional": false,
+                            "default": null,
+                            "flags": 68
+                        },
+                        {
+                            "name": "contexts",
+                            "type": "CoreX\\Context\\Contracts\\TenantContextResolver",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 68
+                        },
+                        {
+                            "name": "accounts",
+                            "type": "CoreX\\Tenancy\\Account\\Contracts\\AccountRead",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 68
+                        },
+                        {
+                            "name": "auth",
+                            "type": "Illuminate\\Contracts\\Auth\\Factory",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 68
+                        },
+                        {
+                            "name": "centralConnection",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 68
                         }
                     ],
                     "return": null,
@@ -3825,9 +3763,7 @@
             "final": true,
             "readonly": false,
             "abstract": false,
-            "extends": [
-                "Stancl\\Tenancy\\Middleware\\IdentificationMiddleware"
-            ],
+            "extends": [],
             "implements": [],
             "uses": [],
             "doc": [],
@@ -3840,22 +3776,49 @@
                     "by_reference": false,
                     "parameters": [
                         {
-                            "name": "tenancy",
-                            "type": "Stancl\\Tenancy\\Tenancy",
+                            "name": "manager",
+                            "type": "CoreX\\Context\\Contracts\\TenancyManager",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
                             "default": null,
-                            "flags": 2
+                            "flags": 68
                         },
                         {
-                            "name": "resolver",
-                            "type": "CoreX\\Tenancy\\Laravel\\Resolvers\\HostTenantResolver",
+                            "name": "hosts",
+                            "type": "CoreX\\Tenancy\\Runtime\\Internal\\HostAccountResolver",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
                             "default": null,
-                            "flags": 2
+                            "flags": 68
+                        },
+                        {
+                            "name": "accounts",
+                            "type": "CoreX\\Tenancy\\Account\\Contracts\\AccountRead",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 68
+                        },
+                        {
+                            "name": "container",
+                            "type": "Illuminate\\Contracts\\Container\\Container",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 68
+                        },
+                        {
+                            "name": "centralConnection",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 68
                         }
                     ],
                     "return": null,
@@ -3989,6 +3952,73 @@
             "enum_backing": null,
             "enum_cases": []
         },
+        "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ScopeSessionToTenant": {
+            "kind": "class",
+            "layer": "spi-call",
+            "since": "1.0",
+            "final": true,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "__construct": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "manager",
+                            "type": "CoreX\\Context\\Contracts\\TenancyManager",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 68
+                        }
+                    ],
+                    "return": null,
+                    "doc": []
+                },
+                "handle": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "request",
+                            "type": "Illuminate\\Http\\Request",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "next",
+                            "type": "Closure",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "Symfony\\Component\\HttpFoundation\\Response",
+                    "doc": []
+                }
+            },
+            "properties": [],
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
         "CoreX\\Tenancy\\Laravel\\IdentityRegistrar": {
             "kind": "class",
             "layer": "spi-call",
@@ -4015,64 +4045,6 @@
                         {
                             "name": "app",
                             "type": "Illuminate\\Contracts\\Foundation\\Application",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "void",
-                    "doc": []
-                }
-            },
-            "properties": [],
-            "constants": [],
-            "enum_backing": null,
-            "enum_cases": []
-        },
-        "CoreX\\Tenancy\\Laravel\\Listeners\\RevertTenancyOnJobException": {
-            "kind": "class",
-            "layer": "spi-call",
-            "since": "1.0",
-            "final": true,
-            "readonly": false,
-            "abstract": false,
-            "extends": [],
-            "implements": [],
-            "uses": [],
-            "doc": [],
-            "methods": {
-                "__construct": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "tenancy",
-                            "type": "Stancl\\Tenancy\\Tenancy",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 68
-                        }
-                    ],
-                    "return": null,
-                    "doc": []
-                },
-                "handle": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "event",
-                            "type": "Illuminate\\Queue\\Events\\JobExceptionOccurred",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -4123,123 +4095,6 @@
                         }
                     ],
                     "return": "void",
-                    "doc": []
-                }
-            },
-            "properties": [],
-            "constants": [],
-            "enum_backing": null,
-            "enum_cases": []
-        },
-        "CoreX\\Tenancy\\Laravel\\Resolvers\\HostTenantResolver": {
-            "kind": "class",
-            "layer": "spi-call",
-            "since": "1.0",
-            "final": true,
-            "readonly": false,
-            "abstract": false,
-            "extends": [
-                "Stancl\\Tenancy\\Resolvers\\Contracts\\CachedTenantResolver"
-            ],
-            "implements": [],
-            "uses": [],
-            "doc": {
-                "@corex-model-extension": [
-                    "laravel-model"
-                ]
-            },
-            "methods": {
-                "__construct": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "app",
-                            "type": "Illuminate\\Contracts\\Foundation\\Application",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        },
-                        {
-                            "name": "options",
-                            "type": "?CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": true,
-                            "default": "null",
-                            "flags": 68
-                        }
-                    ],
-                    "return": null,
-                    "doc": []
-                },
-                "getPossibleCacheKeys": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "tenant",
-                            "type": "(Stancl\\Tenancy\\Contracts\\Tenant&Illuminate\\Database\\Eloquent\\Model)",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "array",
-                    "doc": {
-                        "@return": [
-                            "list<string>"
-                        ]
-                    }
-                },
-                "normalizeHost": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "host",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "string",
-                    "doc": []
-                },
-                "resolveWithoutCache": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "args",
-                            "type": "mixed",
-                            "by_reference": false,
-                            "variadic": true,
-                            "optional": true,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "Stancl\\Tenancy\\Contracts\\Tenant",
                     "doc": []
                 }
             },
@@ -4447,6 +4302,126 @@
                     "hooks": []
                 }
             },
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
+        "CoreX\\Tenancy\\Laravel\\Support\\HostResolverCacheInvalidator": {
+            "kind": "class",
+            "layer": "spi-call",
+            "since": "1.0",
+            "final": true,
+            "readonly": true,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": {
+                "@corex-model-extension": [
+                    "laravel-model"
+                ]
+            },
+            "methods": {
+                "__construct": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "connections",
+                            "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 4
+                        },
+                        {
+                            "name": "cache",
+                            "type": "Illuminate\\Contracts\\Cache\\Factory",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 4
+                        },
+                        {
+                            "name": "options",
+                            "type": "CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 4
+                        }
+                    ],
+                    "return": null,
+                    "doc": []
+                },
+                "accountChanged": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "account",
+                            "type": "Illuminate\\Database\\Eloquent\\Model",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "void",
+                    "doc": []
+                },
+                "domainChanged": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "domain",
+                            "type": "Illuminate\\Database\\Eloquent\\Model",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "void",
+                    "doc": []
+                },
+                "forgetAccount": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "accountId",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "void",
+                    "doc": []
+                }
+            },
+            "properties": [],
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -4778,7 +4753,7 @@
                             "flags": 1
                         },
                         {
-                            "name": "bootstrapperOrder",
+                            "name": "bootstrappers",
                             "type": "array",
                             "by_reference": false,
                             "variadic": false,
@@ -4798,6 +4773,15 @@
                         {
                             "name": "cachePrefix",
                             "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        },
+                        {
+                            "name": "cacheStores",
+                            "type": "array",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -4841,7 +4825,7 @@
                             "flags": 1
                         },
                         {
-                            "name": "hostIdentificationCache",
+                            "name": "hostCache",
                             "type": "bool",
                             "by_reference": false,
                             "variadic": false,
@@ -4850,7 +4834,7 @@
                             "flags": 1
                         },
                         {
-                            "name": "hostIdentificationCacheTtl",
+                            "name": "hostCacheTtl",
                             "type": "int",
                             "by_reference": false,
                             "variadic": false,
@@ -4859,7 +4843,7 @@
                             "flags": 1
                         },
                         {
-                            "name": "hostIdentificationCacheStore",
+                            "name": "hostCacheStore",
                             "type": "?string",
                             "by_reference": false,
                             "variadic": false,
@@ -5110,8 +5094,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     }
@@ -5152,7 +5137,7 @@
                 }
             },
             "properties": {
-                "bootstrapperOrder": {
+                "bootstrappers": {
                     "flags": 1,
                     "type": "array",
                     "readonly": true,
@@ -5166,8 +5151,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5187,8 +5173,31 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
+                            "list<string> $oidcAllowedAlgs"
+                        ]
+                    },
+                    "hooks": []
+                },
+                "cacheStores": {
+                    "flags": 1,
+                    "type": "array",
+                    "readonly": true,
+                    "visibility": "public",
+                    "static": false,
+                    "default": null,
+                    "doc": {
+                        "@param": [
+                            "array<string, array<string, mixed>> $templateIntegrityManifests",
+                            "array<string, string> $templateIntegrityTrustedKeys",
+                            "class-string $idGenerator",
+                            "class-string $tenantDatabaseManager",
+                            "class-string $tenantModel",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
+                            "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5208,8 +5217,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5229,8 +5239,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5250,14 +5261,15 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
                     "hooks": []
                 },
-                "hostIdentificationCache": {
+                "hostCache": {
                     "flags": 1,
                     "type": "bool",
                     "readonly": true,
@@ -5271,14 +5283,15 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
                     "hooks": []
                 },
-                "hostIdentificationCacheStore": {
+                "hostCacheStore": {
                     "flags": 1,
                     "type": "?string",
                     "readonly": true,
@@ -5292,14 +5305,15 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
                     "hooks": []
                 },
-                "hostIdentificationCacheTtl": {
+                "hostCacheTtl": {
                     "flags": 1,
                     "type": "int",
                     "readonly": true,
@@ -5313,8 +5327,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5334,8 +5349,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5355,8 +5371,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5376,8 +5393,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5397,8 +5415,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5418,8 +5437,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5439,8 +5459,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5460,8 +5481,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5481,8 +5503,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5502,8 +5525,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5523,8 +5547,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5544,8 +5569,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5565,8 +5591,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5586,8 +5613,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5607,8 +5635,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5628,8 +5657,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5649,8 +5679,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5670,8 +5701,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5691,8 +5723,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5712,8 +5745,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5733,8 +5767,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5754,8 +5789,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5775,8 +5811,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5796,8 +5833,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5817,8 +5855,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5838,8 +5877,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5859,8 +5899,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5880,8 +5921,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5901,8 +5943,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5922,8 +5965,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5943,8 +5987,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5964,8 +6009,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -5985,8 +6031,9 @@
                             "class-string $idGenerator",
                             "class-string $tenantDatabaseManager",
                             "class-string $tenantModel",
-                            "list<class-string> $bootstrapperOrder",
+                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
                             "list<class-string> $provisioningPipeline",
+                            "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
                     },
@@ -6028,6 +6075,82 @@
                     ],
                     "return": "void",
                     "doc": []
+                }
+            },
+            "properties": [],
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
+        "CoreX\\Tenancy\\Laravel\\TenancyRuntimeFactory": {
+            "kind": "class",
+            "layer": "spi-call",
+            "since": "1.0",
+            "final": true,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "frameworkConfig": {
+                    "visibility": "public",
+                    "static": true,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [],
+                    "return": "CoreX\\Tenancy\\Runtime\\Internal\\FrameworkConfig",
+                    "doc": []
+                },
+                "manager": {
+                    "visibility": "public",
+                    "static": true,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "app",
+                            "type": "Illuminate\\Contracts\\Foundation\\Application",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "CoreX\\Tenancy\\Runtime\\Internal\\DatabaseTenancyManager",
+                    "doc": []
+                },
+                "payloadHook": {
+                    "visibility": "public",
+                    "static": true,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [],
+                    "return": "Closure",
+                    "doc": {
+                        "@return": [
+                            "\\Closure(string, ?string, array<array-key, mixed>): array<string, mixed>"
+                        ]
+                    }
+                },
+                "workspaceResolver": {
+                    "visibility": "public",
+                    "static": true,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [],
+                    "return": "Closure",
+                    "doc": {
+                        "@return": [
+                            "\\Closure(string): ?\\CoreX\\Context\\Data\\WorkspaceRef"
+                        ]
+                    }
                 }
             },
             "properties": [],
@@ -9441,6 +9564,283 @@
             "enum_backing": null,
             "enum_cases": []
         },
+        "CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper": {
+            "kind": "interface",
+            "layer": "spi-implement",
+            "since": "1.0",
+            "final": false,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "bootstrap": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": true,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "context",
+                            "type": "CoreX\\Context\\Data\\TenantContext",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "database",
+                            "type": "CoreX\\Context\\Data\\DatabaseConnectionConfig",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "void",
+                    "doc": []
+                },
+                "revert": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": true,
+                    "by_reference": false,
+                    "parameters": [],
+                    "return": "void",
+                    "doc": []
+                }
+            },
+            "properties": [],
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
+        "CoreX\\Tenancy\\Runtime\\Events\\TenantContextEnded": {
+            "kind": "class",
+            "layer": "api",
+            "since": "1.0",
+            "final": true,
+            "readonly": true,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "__construct": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "accountId",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        }
+                    ],
+                    "return": null,
+                    "doc": []
+                }
+            },
+            "properties": {
+                "accountId": {
+                    "flags": 1,
+                    "type": "string",
+                    "readonly": true,
+                    "visibility": "public",
+                    "static": false,
+                    "default": null,
+                    "doc": [],
+                    "hooks": []
+                }
+            },
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
+        "CoreX\\Tenancy\\Runtime\\Events\\TenantContextInitialized": {
+            "kind": "class",
+            "layer": "api",
+            "since": "1.0",
+            "final": true,
+            "readonly": true,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "__construct": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "accountId",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        }
+                    ],
+                    "return": null,
+                    "doc": []
+                }
+            },
+            "properties": {
+                "accountId": {
+                    "flags": 1,
+                    "type": "string",
+                    "readonly": true,
+                    "visibility": "public",
+                    "static": false,
+                    "default": null,
+                    "doc": [],
+                    "hooks": []
+                }
+            },
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
+        "CoreX\\Tenancy\\Runtime\\Exceptions\\TenantContextUnavailable": {
+            "kind": "class",
+            "layer": "api",
+            "since": "1.0",
+            "final": true,
+            "readonly": false,
+            "abstract": false,
+            "extends": [
+                "RuntimeException"
+            ],
+            "implements": [
+                "CoreX\\Errors\\Contracts\\DescribesError"
+            ],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "errorDescriptor": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [],
+                    "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                    "doc": []
+                },
+                "invalidPayload": {
+                    "visibility": "public",
+                    "static": true,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [],
+                    "return": "self(CoreX\\Tenancy\\Runtime\\Exceptions\\TenantContextUnavailable)",
+                    "doc": []
+                },
+                "missingAccount": {
+                    "visibility": "public",
+                    "static": true,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "accountId",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "self(CoreX\\Tenancy\\Runtime\\Exceptions\\TenantContextUnavailable)",
+                    "doc": []
+                },
+                "missingDatabase": {
+                    "visibility": "public",
+                    "static": true,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "accountId",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "self(CoreX\\Tenancy\\Runtime\\Exceptions\\TenantContextUnavailable)",
+                    "doc": []
+                },
+                "missingWorkspace": {
+                    "visibility": "public",
+                    "static": true,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "workspaceId",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "self(CoreX\\Tenancy\\Runtime\\Exceptions\\TenantContextUnavailable)",
+                    "doc": []
+                },
+                "notInitialized": {
+                    "visibility": "public",
+                    "static": true,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [],
+                    "return": "self(CoreX\\Tenancy\\Runtime\\Exceptions\\TenantContextUnavailable)",
+                    "doc": []
+                },
+                "runtimePoisoned": {
+                    "visibility": "public",
+                    "static": true,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [],
+                    "return": "self(CoreX\\Tenancy\\Runtime\\Exceptions\\TenantContextUnavailable)",
+                    "doc": []
+                }
+            },
+            "properties": [],
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
         "CoreX\\Tenancy\\Runtime\\Exceptions\\TenantCouldNotBeIdentifiedByHostException": {
             "kind": "class",
             "layer": "api",
@@ -9449,7 +9849,7 @@
             "readonly": false,
             "abstract": false,
             "extends": [
-                "Stancl\\Tenancy\\Contracts\\TenantCouldNotBeIdentifiedException"
+                "RuntimeException"
             ],
             "implements": [
                 "CoreX\\Errors\\Contracts\\DescribesError"
@@ -9485,6 +9885,26 @@
                     "by_reference": false,
                     "parameters": [],
                     "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                    "doc": []
+                },
+                "forHost": {
+                    "visibility": "public",
+                    "static": true,
+                    "final": false,
+                    "abstract": false,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "host",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "self(CoreX\\Tenancy\\Runtime\\Exceptions\\TenantCouldNotBeIdentifiedByHostException)",
                     "doc": []
                 }
             },

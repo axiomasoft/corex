@@ -26,7 +26,6 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
-use Stancl\Tenancy\Tenancy;
 
 // P2.11 — grant validation (D143) + read-only-session effects, through the
 // REAL callback() lane (D145 imp branch). Negative-first per Code Guidance.
@@ -104,7 +103,7 @@ beforeEach(function (): void {
 });
 
 afterEach(function (): void {
-    app(Tenancy::class)->end();
+    endTenantContext();
     DB::purge('pgsql');
     DB::purge('tenant');
 
@@ -254,7 +253,7 @@ function initAccountWithTenantIM(): Account
         'status' => 'active',
     ]);
 
-    app(Tenancy::class)->initialize($account);
+    initTenantContext($account);
 
     $ref = new AccountRef(id: $account->id, slug: (string) $account->slug, status: $account->status, features: [], limits: []);
     /** @var TenancyManager $manager */

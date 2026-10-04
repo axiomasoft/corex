@@ -2,18 +2,19 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Laravel\Http\Middleware\ResolveTenantFromHost;
+use CoreX\Tenancy\Laravel\Http\Middleware\ScopeSessionToTenant;
+use CoreX\Tenancy\Runtime\Exceptions\TenantContextUnavailable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Session\ArraySessionHandler;
+use Illuminate\Session\FileSessionHandler;
 use Illuminate\Session\Store;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
-use Stancl\Tenancy\Middleware\ScopeSessions;
-use Stancl\Tenancy\Tenancy;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 uses()->group('pg');
@@ -38,7 +39,7 @@ beforeEach(function (): void {
 });
 
 afterEach(function (): void {
-    app(Tenancy::class)->end();
+    endTenantContext();
     DB::purge('pgsql');
     DB::purge('tenant');
 
@@ -117,17 +118,35 @@ function migrateTenantSessionsTSS(): void
     ]);
 }
 
-it('а: sessions создаётся тенантской миграцией; сессия пишется в БД аккаунта, не в root', function (): void {
+/** Runs the middleware with the given session and returns the HTTP status it ended with. */
+function scopeStatusTSS(Store $session): int
+{
+    $request = Request::create('http://tenant.example.test/', 'GET');
+    $request->setLaravelSession($session);
+
+    try {
+        $response = app(ScopeSessionToTenant::class)->handle($request, fn (Request $r) => new Response('ok'));
+    } catch (HttpException $e) {
+        return $e->getStatusCode();
+    }
+
+    return $response->getStatusCode();
+}
+
+it('а: sessions создаётся тенантской миграцией; уже созданный handler переезжает в БД аккаунта, не в root', function (): void {
     $account = makeAccountTSS();
-    app(Tenancy::class)->initialize($account);
-
-    migrateTenantSessionsTSS();
-
-    expect(Schema::connection('tenant')->hasTable('sessions'))->toBeTrue()
-        ->and(Schema::connection('pgsql')->hasTable('sessions'))->toBeFalse();
 
     /** @var Store $driver */
     $driver = app('session')->driver('database');
+    $central = $driver->getHandler();   // built BEFORE the account context existed
+
+    initTenantContext($account);
+    migrateTenantSessionsTSS();
+
+    expect(Schema::connection('tenant')->hasTable('sessions'))->toBeTrue()
+        ->and(Schema::connection('pgsql')->hasTable('sessions'))->toBeFalse()
+        ->and($driver->getHandler())->not->toBe($central);
+
     // Store::setId() silently discards a malformed id (fails its own
     // isValidId() regex — 40 alphanumeric chars) and generates a random one
     // instead, so the id actually written has to be read back via getId().
@@ -135,42 +154,74 @@ it('а: sessions создаётся тенантской миграцией; с�
     $driver->save();
 
     expect(DB::connection('tenant')->table('sessions')->where('id', $driver->getId())->exists())->toBeTrue();
+
+    endTenantContext();
+
+    // revert: the very same Store goes back to a central handler, nothing is deleted
+    expect($driver->getHandler())->toBe($central)
+        ->and(config('session.connection'))->toBeNull()
+        ->and(config('database.connections.tenant'))->toBeNull(); // the last account's route is not left behind
 });
 
-it('б: cookie-сессия тенанта A на домене тенанта B → 403 (ScopeSessions, F19)', function (): void {
+it('б: cookie-сессия тенанта A на домене тенанта B → 403 и invalidate (F19)', function (): void {
     $accountA = makeAccountTSS();
     $accountB = makeAccountTSS();
 
-    $session = new Store('tenant_scope_probe', new ArraySessionHandler(120));
+    $session = new Store('tenant_scope_probe', new FileSessionHandler(app('files'), config('session.files'), 120));
+    $session->start();
 
-    app(Tenancy::class)->initialize($accountA);
-    $requestA = Request::create('http://tenant-a.example.test/', 'GET');
-    $requestA->setLaravelSession($session);
+    initTenantContext($accountA);
+    expect(scopeStatusTSS($session))->toBe(200)
+        ->and($session->get('corex.tenancy.account_id'))->toBe($accountA->id);
+    $session->put('login_web_x', 'user-a');
 
-    (new ScopeSessions)->handle($requestA, fn (Request $r) => new Response('ok'));
-    expect($session->get(ScopeSessions::$tenantIdKey))->toBe($accountA->getTenantKey());
+    endTenantContext();
+    initTenantContext($accountB);
 
-    app(Tenancy::class)->end();
-    app(Tenancy::class)->initialize($accountB);
-    $requestB = Request::create('http://tenant-b.example.test/', 'GET');
-    $requestB->setLaravelSession($session); // same session object — simulates a shared cookie across domains
+    expect(scopeStatusTSS($session))->toBe(403)
+        ->and($session->get('login_web_x'))->toBeNull()
+        ->and($session->get('corex.tenancy.account_id'))->toBeNull();
+});
 
-    $statusCode = null;
+it('г: первая привязка сбрасывает чужие атрибуты (central/auth) и ротирует токен', function (): void {
+    $account = makeAccountTSS();
+    $session = new Store('tenant_scope_probe', new FileSessionHandler(app('files'), config('session.files'), 120));
+    $session->start();
+    $session->put('login_web_central', 'central-user');
+    $session->regenerateToken();
+    $token = $session->token();
 
-    try {
-        (new ScopeSessions)->handle($requestB, fn (Request $r) => new Response('ok'));
-    } catch (HttpException $e) {
-        $statusCode = $e->getStatusCode();
-    }
+    initTenantContext($account);
 
-    expect($statusCode)->toBe(403);
+    expect(scopeStatusTSS($session))->toBe(200)
+        ->and($session->get('login_web_central'))->toBeNull()
+        ->and($session->token())->not->toBe($token)
+        ->and($session->get('corex.tenancy.account_id'))->toBe($account->id);
+});
+
+it('д: сессия того же аккаунта сохраняет вход', function (): void {
+    $account = makeAccountTSS();
+    $session = new Store('tenant_scope_probe', new FileSessionHandler(app('files'), config('session.files'), 120));
+    $session->start();
+
+    initTenantContext($account);
+    expect(scopeStatusTSS($session))->toBe(200);
+    $session->put('login_web_x', 'user-a');
+
+    expect(scopeStatusTSS($session))->toBe(200)
+        ->and($session->get('login_web_x'))->toBe('user-a');
+});
+
+it('е: без контекста аккаунта middleware отказывает типизированной ошибкой', function (): void {
+    $session = new Store('tenant_scope_probe', new FileSessionHandler(app('files'), config('session.files'), 120));
+
+    expect(fn () => scopeStatusTSS($session))->toThrow(TenantContextUnavailable::class);
+    expect(app(TenancyManager::class)->initialized())->toBeFalse();
 });
 
 it('в: host_identification.enabled=false (boxed) → middleware не зарегистрирована, приложение поднимается без root-БД', function (): void {
-    // stancl's OWN provider unconditionally pre-registers an EMPTY 'tenant'
-    // group as a route-context flag (DealsWithRouteContexts) — the key
-    // itself always exists; what must stay absent under the flag is OUR
-    // contribution to it, plus the two aliases this package owns outright.
+    // Our contribution to the tenant group and the aliases this package owns outright stay
+    // absent under the flag.
     expect(config('tenancy.host_identification.enabled'))->toBeFalse()
         ->and(app('router')->getMiddlewareGroups()['tenant'] ?? [])->not->toContain(ResolveTenantFromHost::class)
         ->and(app('router')->getMiddleware())->not->toHaveKey('tenancy.host')

@@ -126,7 +126,7 @@ operations, независимые модули, детерминированн�
 
 **Design Audit:** required
 
-**Design Audit Waiver:** D104
+**Design Audit Waiver:** D106
 
 ## 3. Routing
 

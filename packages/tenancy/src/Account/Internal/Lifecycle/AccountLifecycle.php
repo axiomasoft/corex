@@ -16,8 +16,8 @@ use CoreX\Tenancy\Account\Events\GraceStarted;
 use CoreX\Tenancy\Account\Events\TrialStarted;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Account\Internal\PendingPool;
-use CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver;
 use CoreX\Tenancy\Laravel\Support\AccountLifecyclePolicy;
+use CoreX\Tenancy\Laravel\Support\HostResolverCacheInvalidator;
 use CoreX\Tenancy\Provisioning\Contracts\TemplateIntegrityChecks as TemplateIntegrityVerifier;
 use CoreX\Tenancy\Provisioning\Data\TemplateAccountView;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -61,7 +61,7 @@ final class AccountLifecycle
         private readonly ClockInterface $clock,
         private readonly Dispatcher $events,
         private readonly ConnectionFactory $connectionFactory,
-        private readonly HostTenantResolver $hostResolver,
+        private readonly HostResolverCacheInvalidator $hostCache,
     ) {}
 
     /**
@@ -368,13 +368,8 @@ final class AccountLifecycle
      */
     private function writeEvent(string $accountId, string $event, array $payload = []): void
     {
-        $connectionName = $this->centralConnection;
-        $this->db()->afterCommit(function () use ($accountId, $connectionName): void {
-            $model = Account::on($connectionName)->find($accountId);
-
-            if ($model !== null) {
-                $this->hostResolver->invalidateCache($model);
-            }
+        $this->db()->afterCommit(function () use ($accountId): void {
+            $this->hostCache->forgetAccount($accountId);
         });
 
         $this->db()->table('root_account_events')->insert([

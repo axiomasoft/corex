@@ -12,9 +12,9 @@ use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
 
 /**
- * Boxed-install default: a single constant account context, no stancl
+ * Boxed-install default: a single constant account context, no tenant
  * bootstrap, `initialized()` always true. Cloud installs (`axiomasoft/corex-tenancy`
- * present) rebind {@see TenancyManager} to `StanclTenancyManager` — same
+ * present) rebind {@see TenancyManager} to its own database engine — same
  * pattern as the module-activation-gate boxed/cloud seam.
  *
  * @internal spec: D10, B-11 §6.1 L892–907
