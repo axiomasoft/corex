@@ -16,8 +16,8 @@ use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycleFsm;
 use CoreX\Tenancy\Account\Internal\PendingPool;
 use CoreX\Tenancy\Account\Internal\StanclTenantDatabaseProvisioner;
 use CoreX\Tenancy\Account\Laravel\MigrationWaveOrchestrator;
-use CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver;
 use CoreX\Tenancy\Laravel\Support\AccountLifecyclePolicy;
+use CoreX\Tenancy\Laravel\Support\HostResolverCacheInvalidator;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Provisioning\Internal\StanclTenantDatabaseLifecycle;
@@ -85,7 +85,7 @@ final class ProvisioningRegistrar implements PackageRegistrar
                 clock: $app->make(ClockInterface::class),
                 events: $app->make(Dispatcher::class),
                 connectionFactory: $app->make(ConnectionFactory::class),
-                hostResolver: $app->make(HostTenantResolver::class),
+                hostCache: $app->make(HostResolverCacheInvalidator::class),
             ),
         );
 

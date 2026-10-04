@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-10-04
-inputs_sha256: 5118ed7d37a7eebf8506145ed8f295f4e7b1810d200ec3a6817da155e1a067ba
+inputs_sha256: 60dde7c87f854197747375cd56fe327ed4768db1d70dbeefaa74bebba49596a3
 generated_by: task plan-views status
 -->
 
@@ -29,7 +29,7 @@ generated_by: task plan-views status
 | P03 | Feature modules и `Internal` | 2/2 | 🟢 Done |
 | P04 | Application API, Extension SPI и типизированные ошибки | 4/4 | 🟢 Done |
 | P05 | Typed config, композиция и порты | 4/4 | 🟢 Done |
-| P06 | Operations, tools, webhooks и wire | 4/5 | 🟠 Done with deviations (closed: D105) |
+| P06 | Operations, tools, webhooks и wire | 4/5 | 🟠 Done with deviations |
 | P07 | Tenancy, access, независимость модулей | 0/6 | ⬜ Not started |
 | P10 | Зелёный hosted CI на базе P04 | 4/4 | 🟢 Done |
 
@@ -377,6 +377,8 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-10-04 | gpt-6.1-sol/xhigh | plan-audit · audit-attention · Admission preflight blocked: current gpt-6.1-sol/xhigh matches D98/D99 author model; D100-D103 selector unavailable. No substantive audit/proofs or GREEN. See artifacts/P07-formal-design-audit/report.md. |
 | 2026-10-04 | gpt-6.1-sol/xhigh | plan-design · no-op · Design finalized; execution has not started. |
 | 2026-10-04 | gpt-6.1-sol/xhigh | plan-design · no-op · Owner repair complete: D104 explicit no-repeat-audit waiver admitted; first P07 bundle fresh, future/closed bundles correctly classified. P06 acceptance open; no P07 execution or audit-green. |
+| 2026-10-04 | owner/codex/GPT-6 | plan-close · closed-deviations · note abbreviated; full text: journal.jsonl:225 |
+| 2026-10-04 | claude-code | plan-design · no-op · Design finalized; execution has not started. |
 
 ## Owner Gates
 

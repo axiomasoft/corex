@@ -124,6 +124,245 @@
                     "description_sha256": "f1f270b15786343d4af28490a63e67bca44769f8ea49468e33c905548a34b65d"
                 }
             ]
+        },
+        "axiomasoft/corex-tenancy": {
+            "base_revision": "76f8bdde496154c0a8901e459175cf306bedd860",
+            "decisions": [
+                {
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D95-p07-tenancy-engine.md",
+                    "sha256": "b7f35499ba0149e65742df648b50a7bf6c8c5f8e8a55c56f97bae25032bfcf0e"
+                },
+                {
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D102-p07-rereview-contract-completeness.md",
+                    "sha256": "5b3393a94d7231a77ddc3649795b8aec7e4b3017ade3e1002930329656206fa7"
+                },
+                {
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D103-p07-stable-bc-admission-review.md",
+                    "sha256": "9a044681191c020fc52199ebd4ae8bc20f46c7028753f686ab93f69382d0b7de"
+                }
+            ],
+            "changes": [
+                {
+                    "path": "/packages/tenancy/src/Errors/Enums/TenancyErrorCode.php",
+                    "modificationType": "added",
+                    "description_sha256": "cc3745f91a9a6e98cc12c76f1a8a832e316bb87f18866f153acdd06dab4ec8db"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "removed",
+                    "description_sha256": "eeb4e2fb3704467d48dfd9f6c4c8612f390f9b4b31d689a8c177e95a6253af05"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "removed",
+                    "description_sha256": "55320b41edd446998d197f407245e0c2c71bd2f8dfc3151c37e61a93288616ed"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "removed",
+                    "description_sha256": "bbf702048d74b25c31a8ce73692ad8be2faf51cab2549d4f3ba65facec5c5b4d"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "removed",
+                    "description_sha256": "cd355686c5fd3922eb3a07871555075e98314054c3e79cd1e98d408a486cd69b"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "0713aac82a579858ad5f2f19ada0c3bf97376b4168acd7aa8f3c71f80179a469"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "1ac2e9ac833c23c71ffc7192f95dfd69dde23bf54c066c54d5400cb6d29cb5c6"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "3ce1d0c16a810a47912d3a05da99954a154198414022eb127972dbc07e8d3534"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "09d7b46bf69a16838e8a328c1e72f2569949ae91a511d482be94c19d8f6a58fa"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "ad69416effb52b8b81de2069de20a2d570b3bccf6d8bef4a886ffc1cee69deab"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "fb8ff94ede50788d2f59d80a76ffc783f7ab0f779fd2410a66006c65d224bdad"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "a92ee1195577fb802da1a30f03b22d7e492ce00e7bab7327485ffe3aa37134a4"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "44381e8a85ffaa6bb0c78a0921ba829cf676e2b7d81b492e3a9b65158050de12"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "7633c02738088091b8eab7525734f0a193ed6751f8e63b6fb2b9262baf8d2013"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "6bca57da884b89cdcfe1c956bd231b4ce75d7b66cc569815e31161a9bfaf6ca8"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "d642b2e3660e48988a6b2eb255512c76e10c4f8d3f09d400d26873f9042bd0f2"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "5ac6ad14c01b91accbcbdc9e2ade306c003db8236d5fc16464d5e9b9628d0315"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "4c5139be044ce93c4187e2b0ad8f5d570a515be70aaed9531c68885371ec8a98"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "ce2fc640f0b972e4897a4763f6c18c9e54ca0ad2d9f30d5fdddd09ec18486e29"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "f678c755f77e430a136359708e754497150c1b333ef6cd6e4cc472654f9c4838"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "ee9f2afa8496137e15c852dcf3f72340059347e11448e56edd3e079883f160ac"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "c77090f20c169c71a55bc6dc62ea0dcabd2277751709cb7e8b73b9f460456a45"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "2367ac96fcf6c1065788e16905690c3813ecaa190816d4bf912ce31e86c880d5"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "4651815f399e0e89d9459ae95216d0de268beeec06278809af9a2454d7f709c2"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "2a03585c3d7c0abcc7f326174d0d46212fa869735e91cb7f8d6a29124f859eca"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "3d83924028bcc1b31995525ae3f0d22b34eb2ab9432c720f409c822246561ecd"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "04cf020572bfa10a691424a650f3a811c895f35cdf1e9f935d079fb35309940e"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "0d45820e9f98f24745ce963e8facfe6aba52a303fba530237984888a4da2173f"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "9ce053356d76b529f4c50826bf668e90603ec83a89cd5e384e4ce23f9ce4a353"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "0fc708b23c27d28b096671a0d8fd85d02e7b307b3877d495237ef4caf8fcca80"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "72604653abb8c0749b803d84e064ddbd5842c8e76e98e787ec5437b103af7e4d"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "b41aaf5190833ee4f58c69612d6468701b788832c82ec99bdac094e13b7f982d"
+                },
+                {
+                    "path": null,
+                    "modificationType": "removed",
+                    "description_sha256": "6abd94a4235a2a6f8517c1f0d713811e2bc2facaa2df4656c2b52ab0bf518396"
+                },
+                {
+                    "path": null,
+                    "modificationType": "removed",
+                    "description_sha256": "9bf06cec348d3df899b70a78a166aee89be97f9449cdc9f99600bf4c1bb4c063"
+                },
+                {
+                    "path": null,
+                    "modificationType": "removed",
+                    "description_sha256": "a89ae76ce5a4b60d2753baac9bf0415d224bc0260e8bee9ee6f0b801b0ca85f0"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Http/Middleware/AccountStatusGate.php",
+                    "modificationType": "changed",
+                    "description_sha256": "03d272bba3390c1fc31090bcb3b3ba26ed425a6adac2401a07a8ce4d5917ecf3"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Http/Middleware/AccountStatusGate.php",
+                    "modificationType": "changed",
+                    "description_sha256": "d782ac39d6740e31b2545058211c8925ee6bf3f5986200d13b1593016655c840"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Http/Middleware/ResolveTenantFromHost.php",
+                    "modificationType": "removed",
+                    "description_sha256": "f17261cb78281f5c3bace26838b30ff9cc082b8881214cda6663ab301012cb25"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Http/Middleware/ResolveTenantFromHost.php",
+                    "modificationType": "removed",
+                    "description_sha256": "539912565aba22d95f3b0c8720e423f5d7c277598842f3bd84bf6ec327070d6a"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Http/Middleware/ResolveTenantFromHost.php",
+                    "modificationType": "removed",
+                    "description_sha256": "966f68344a56dabf1fb1b58bdf9014bf1ab8f4bbd0de60bc74beb16221838147"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Http/Middleware/ResolveTenantFromHost.php",
+                    "modificationType": "changed",
+                    "description_sha256": "e93baa0e8971565ffb65ec92e7ed73f96949befc48e4b123adb84c0f410749f4"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Http/Middleware/ResolveTenantFromHost.php",
+                    "modificationType": "changed",
+                    "description_sha256": "fa3241e6089cc2edf2ac6ff18a5c440c16d4971296f869a7eb59b3660fdaf934"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Http/Middleware/ResolveTenantFromHost.php",
+                    "modificationType": "changed",
+                    "description_sha256": "82c52cd4ed6accecafa4b904976998b5b1af7c817dded7eb5458c667ae86094e"
+                },
+                {
+                    "path": "/packages/tenancy/src/Runtime/Exceptions/TenantCouldNotBeIdentifiedByHostException.php",
+                    "modificationType": "removed",
+                    "description_sha256": "57d29c8f9c0570590cfddee210f3334a4920e3791035de339ab5eacb63a372d4"
+                }
+            ]
         }
     }
 }

@@ -146,6 +146,11 @@
         }
     ],
     "extra": {
+        "laravel": {
+            "dont-discover": [
+                "axiomasoft/stancl-tenancy"
+            ]
+        },
         "phpstan/extension-installer": {
             "ignore": [
                 "axiomasoft/corex",

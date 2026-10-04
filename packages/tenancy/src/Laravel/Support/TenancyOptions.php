@@ -9,6 +9,10 @@ use CoreX\Attributes\SpiKind;
 use CoreX\Config\Data\SecretRef;
 use CoreX\Config\Laravel\ConfigurationValidator;
 use CoreX\Tenancy\Account\Internal\Jobs\CreateDatabaseFromTemplate;
+use CoreX\Tenancy\Runtime\Contracts\TenantBootstrapper;
+use CoreX\Tenancy\Runtime\Internal\Bootstrappers\CachePrefixBootstrapper;
+use CoreX\Tenancy\Runtime\Internal\Bootstrappers\ConnectionBootstrapper;
+use CoreX\Tenancy\Runtime\Internal\Bootstrappers\SessionConnectionBootstrapper;
 use Stancl\Tenancy\Contracts\UniqueIdentifierGenerator;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
@@ -18,7 +22,8 @@ final readonly class TenancyOptions
      * @param  class-string  $tenantModel
      * @param  class-string  $idGenerator
      * @param  class-string  $tenantDatabaseManager
-     * @param  list<class-string>  $bootstrapperOrder
+     * @param  list<class-string<TenantBootstrapper>>  $bootstrappers
+     * @param  list<string>  $cacheStores
      * @param  list<class-string>  $provisioningPipeline
      * @param  list<string>  $oidcAllowedAlgs
      * @param  array<string, string>  $templateIntegrityTrustedKeys
@@ -29,16 +34,17 @@ final readonly class TenancyOptions
         public string $tenantModel,
         public string $idGenerator,
         public string $tenantDatabaseManager,
-        public array $bootstrapperOrder,
+        public array $bootstrappers,
         public array $provisioningPipeline,
         public string $cachePrefix,
+        public array $cacheStores,
         public string $storageDurableDriver,
         public string $storageDurableRoot,
         public string $storageEphemeralRoot,
         public bool $hostIdentificationEnabled,
-        public bool $hostIdentificationCache,
-        public int $hostIdentificationCacheTtl,
-        public ?string $hostIdentificationCacheStore,
+        public bool $hostCache,
+        public int $hostCacheTtl,
+        public ?string $hostCacheStore,
         public bool $domainTrustEnabled,
         public int $domainTrustChallengeTtlSeconds,
         public StatusGatePolicy $statusGate,
@@ -89,12 +95,7 @@ final readonly class TenancyOptions
             $tenancy['tenant_database_manager'] ?? null,
         );
 
-        $bootstrapperOrder = self::classList(
-            $violations,
-            'bootstrapper_order',
-            $tenancy['bootstrapper_order'] ?? [],
-            required: true,
-        );
+        $bootstrappers = self::bootstrappers($violations, $tenancy['bootstrappers'] ?? null);
 
         $provisioning = is_array($tenancy['provisioning'] ?? null) ? $tenancy['provisioning'] : [];
         $provisioningPipeline = self::classList(
@@ -105,6 +106,12 @@ final readonly class TenancyOptions
         );
 
         $cachePrefix = self::nonEmpty($violations, 'cache_prefix', $tenancy['cache_prefix'] ?? 'tenant_%tenant%_');
+
+        if (! str_contains($cachePrefix, '%tenant%')) {
+            $violations->add('corex-tenancy.cache_prefix', 'must contain %tenant%');
+        }
+
+        $cacheStores = self::cacheStores($violations, $tenancy['cache_stores'] ?? []);
 
         $storage = is_array($tenancy['storage'] ?? null) ? $tenancy['storage'] : [];
         $storageDurableDriver = self::nonEmpty(
@@ -131,19 +138,25 @@ final readonly class TenancyOptions
             'host_identification.enabled',
             $hostIdentification['enabled'] ?? false,
         );
-        $hostIdentificationCache = self::bool(
+        $hostCache = self::bool(
             $violations,
             'host_identification.cache',
             $hostIdentification['cache'] ?? true,
         );
-        $hostIdentificationCacheTtl = self::nonNegativeInt(
+        $hostCacheTtl = self::nonNegativeInt(
             $violations,
             'host_identification.cache_ttl',
             $hostIdentification['cache_ttl'] ?? 300,
         );
-        $hostIdentificationCacheStore = self::nullableNonEmptyString(
+        $hostCacheStore = self::nullableNonEmptyString(
             $hostIdentification['cache_store'] ?? null,
         );
+
+        // Host lookups run before any account context and must stay central: the host store is
+        // never one of the per-account (prefixed) stores.
+        if ($hostCacheStore !== null && in_array($hostCacheStore, $cacheStores, true)) {
+            $violations->add('corex-tenancy.host_identification.cache_store', 'must not be one of cache_stores');
+        }
 
         $domainTrust = is_array($tenancy['domain_trust'] ?? null) ? $tenancy['domain_trust'] : [];
         $domainTrustEnabled = self::bool($violations, 'domain_trust.enabled', $domainTrust['enabled'] ?? false);
@@ -269,16 +282,17 @@ final readonly class TenancyOptions
             tenantModel: $tenantModel,
             idGenerator: $idGenerator,
             tenantDatabaseManager: $tenantDatabaseManager,
-            bootstrapperOrder: $bootstrapperOrder,
+            bootstrappers: $bootstrappers,
             provisioningPipeline: $provisioningPipeline,
             cachePrefix: $cachePrefix,
+            cacheStores: $cacheStores,
             storageDurableDriver: $storageDurableDriver,
             storageDurableRoot: $storageDurableRoot,
             storageEphemeralRoot: $storageEphemeralRoot,
             hostIdentificationEnabled: $hostIdentificationEnabled,
-            hostIdentificationCache: $hostIdentificationCache,
-            hostIdentificationCacheTtl: $hostIdentificationCacheTtl,
-            hostIdentificationCacheStore: $hostIdentificationCacheStore,
+            hostCache: $hostCache,
+            hostCacheTtl: $hostCacheTtl,
+            hostCacheStore: $hostCacheStore,
             domainTrustEnabled: $domainTrustEnabled,
             domainTrustChallengeTtlSeconds: $domainTrustChallengeTtlSeconds,
             statusGate: $statusGate,
@@ -330,6 +344,96 @@ final readonly class TenancyOptions
             exportRoute: $exportRoute,
             readOnlyMethods: $normalized,
         );
+    }
+
+    /**
+     * Closed order: the stock bootstrappers keep their relative order with the connection one
+     * first and exactly once; host-supplied bootstrappers may follow, never precede.
+     *
+     * @return list<class-string<TenantBootstrapper>>
+     */
+    private static function bootstrappers(ConfigurationValidator $violations, mixed $value): array
+    {
+        $value ??= [
+            ConnectionBootstrapper::class,
+            CachePrefixBootstrapper::class,
+            SessionConnectionBootstrapper::class,
+        ];
+
+        if (! is_array($value) || $value === []) {
+            $violations->add('corex-tenancy.bootstrappers', 'must be a non-empty list of class names');
+
+            return [];
+        }
+
+        $stock = [ConnectionBootstrapper::class, CachePrefixBootstrapper::class, SessionConnectionBootstrapper::class];
+        $resolved = [];
+        $lastStock = -1;
+        $hostSeen = false;
+
+        foreach (array_values($value) as $index => $class) {
+            $path = 'corex-tenancy.bootstrappers.'.$index;
+
+            if (! is_string($class) || ! class_exists($class) || ! is_a($class, TenantBootstrapper::class, true)) {
+                $violations->add($path, 'must be an existing class implementing '.TenantBootstrapper::class);
+
+                continue;
+            }
+
+            if (in_array($class, $resolved, true)) {
+                $violations->add($path, 'must not be listed twice');
+
+                continue;
+            }
+
+            $position = array_search($class, $stock, true);
+
+            if ($position === false) {
+                $hostSeen = true;
+            } elseif ($hostSeen || $position < $lastStock) {
+                $violations->add($path, 'stock bootstrappers must keep their order and precede host bootstrappers');
+            } else {
+                $lastStock = $position;
+            }
+
+            $resolved[] = $class;
+        }
+
+        if (($resolved[0] ?? null) !== ConnectionBootstrapper::class) {
+            $violations->add('corex-tenancy.bootstrappers.0', ConnectionBootstrapper::class.' must come first');
+        }
+
+        return $resolved;
+    }
+
+    /** @return list<string> */
+    private static function cacheStores(ConfigurationValidator $violations, mixed $value): array
+    {
+        if (! is_array($value)) {
+            $violations->add('corex-tenancy.cache_stores', 'must be a list of cache store names');
+
+            return [];
+        }
+
+        $stores = [];
+
+        foreach (array_values($value) as $index => $store) {
+            if (! is_string($store) || $store === '') {
+                $violations->add('corex-tenancy.cache_stores.'.$index, 'must be a non-empty store name');
+
+                continue;
+            }
+
+            if (in_array($store, $stores, true)) {
+                $violations->add('corex-tenancy.cache_stores.'.$index, 'must be unique');
+
+                continue;
+            }
+
+            $stores[] = $store;
+        }
+
+        return $stores;
     }
 
     private static function optionalSecret(ConfigurationValidator $violations, string $path, mixed $value): ?SecretRef

@@ -7,6 +7,7 @@
         "*/src/**/*ConfigSection.php"
     ],
     "allow_paths": {
-        "packages/core/src/Config/Internal/Commands/ValidateConfigCommand.php": "Effective configuration report command"
+        "packages/core/src/Config/Internal/Commands/ValidateConfigCommand.php": "Effective configuration report command",
+        "packages/tenancy/src/Runtime/Internal/FrameworkConfig.php": "Tenant runtime seam: reads and switches the framework's own database/cache/session runtime configuration per account (PLAN3.D95); package settings arrive as typed Options"
     }
 }

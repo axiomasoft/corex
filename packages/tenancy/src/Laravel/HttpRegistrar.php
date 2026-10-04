@@ -8,7 +8,9 @@ use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Modules\Contracts\PackageRegistrar;
+use CoreX\Tenancy\Account\Contracts\AccountRead;
 use CoreX\Tenancy\Impersonation\Internal\Models\ImpersonationGrant;
 use CoreX\Tenancy\Laravel\Http\Middleware\AccountStatusGate;
 use CoreX\Tenancy\Laravel\Http\Middleware\AllowImpersonatedWrites;
@@ -18,17 +20,25 @@ use CoreX\Tenancy\Laravel\Http\Middleware\ImpersonationSessionGuard;
 use CoreX\Tenancy\Laravel\Http\Middleware\RequireActiveMembership;
 use CoreX\Tenancy\Laravel\Http\Middleware\ResolveTenantFromHost;
 use CoreX\Tenancy\Laravel\Http\Middleware\ResolveWorkspace;
-use CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver;
+use CoreX\Tenancy\Laravel\Http\Middleware\ScopeSessionToTenant;
+use CoreX\Tenancy\Laravel\Support\HostResolverCacheInvalidator;
 use CoreX\Tenancy\Laravel\Support\StatusGatePolicy;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
+use CoreX\Tenancy\Runtime\Internal\HostAccountResolver;
 use CoreX\Tenancy\Workspace\Contracts\WorkspaceResolver;
+use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests;
+use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Foundation\CachesRoutes;
 use Illuminate\Contracts\Http\Kernel as HttpKernel;
+use Illuminate\Contracts\Session\Middleware\AuthenticatesSessions;
+use Illuminate\Database\ConnectionResolverInterface;
+use Illuminate\Foundation\Http\Kernel as FoundationKernel;
 use Illuminate\Routing\Router;
+use Illuminate\Session\Middleware\StartSession;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Override;
-use Stancl\Tenancy\Middleware\ScopeSessions;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class HttpRegistrar implements PackageRegistrar
@@ -60,6 +70,10 @@ final class HttpRegistrar implements PackageRegistrar
             AccountStatusGate::class,
             static fn (Application $app): AccountStatusGate => new AccountStatusGate(
                 statusGate: $app->make(StatusGatePolicy::class),
+                contexts: $app->make(TenantContextResolver::class),
+                accounts: $app->make(AccountRead::class),
+                auth: $app->make(AuthFactory::class),
+                centralConnection: $app->make(TenancyOptions::class)->centralConnection,
             ),
         );
         $app->bind(
@@ -69,10 +83,35 @@ final class HttpRegistrar implements PackageRegistrar
             ),
         );
         $app->bind(
-            HostTenantResolver::class,
-            static fn (Application $app): HostTenantResolver => new HostTenantResolver(
-                app: $app,
+            HostAccountResolver::class,
+            static fn (Application $app): HostAccountResolver => new HostAccountResolver(
+                connections: $app->make(ConnectionResolverInterface::class),
+                cache: $app->make(CacheFactory::class),
                 options: $app->make(TenancyOptions::class),
+            ),
+        );
+        $app->bind(
+            HostResolverCacheInvalidator::class,
+            static fn (Application $app): HostResolverCacheInvalidator => new HostResolverCacheInvalidator(
+                connections: $app->make(ConnectionResolverInterface::class),
+                cache: $app->make(CacheFactory::class),
+                options: $app->make(TenancyOptions::class),
+            ),
+        );
+        $app->bind(
+            ResolveTenantFromHost::class,
+            static fn (Application $app): ResolveTenantFromHost => new ResolveTenantFromHost(
+                manager: $app->make(TenancyManager::class),
+                hosts: $app->make(HostAccountResolver::class),
+                accounts: $app->make(AccountRead::class),
+                container: $app,
+                centralConnection: $app->make(TenancyOptions::class)->centralConnection,
+            ),
+        );
+        $app->bind(
+            ScopeSessionToTenant::class,
+            static fn (Application $app): ScopeSessionToTenant => new ScopeSessionToTenant(
+                manager: $app->make(TenancyManager::class),
             ),
         );
         $app->bind(
@@ -106,28 +145,16 @@ final class HttpRegistrar implements PackageRegistrar
             // Account is identified before auth: the user row lives in the tenant DB.
             $app->afterResolving(HttpKernel::class, self::prioritiseHostMiddleware(...));
 
-            $app['config']->set([
-                'tenancy.identification.resolvers.'.HostTenantResolver::class => [
-                    'cache' => $options->hostIdentificationCache,
-                    'cache_ttl' => $options->hostIdentificationCacheTtl,
-                    'cache_store' => $options->hostIdentificationCacheStore,
-                ],
-                'tenancy.identification.middleware' => [
-                    ...$app['config']->get('tenancy.identification.middleware', []),
-                    ResolveTenantFromHost::class,
-                ],
-            ]);
-
             $router->aliasMiddleware('tenancy.host', ResolveTenantFromHost::class);
             $router->aliasMiddleware('tenancy.status', AccountStatusGate::class);
 
-            // stancl pre-registers tenant as an empty route-context group.
-            // Merge into it; do not replace the existing list.
+            // Merge into an existing `tenant` group; do not replace the list. Priority (below)
+            // sorts the three entries around StartSession.
             $router->middlewareGroup('tenant', [
                 ...($router->getMiddlewareGroups()['tenant'] ?? []),
                 ResolveTenantFromHost::class,
+                ScopeSessionToTenant::class,
                 AccountStatusGate::class,
-                ScopeSessions::class,
             ]);
         }
 
@@ -158,13 +185,22 @@ final class HttpRegistrar implements PackageRegistrar
         ]);
     }
 
+    /**
+     * The account is identified before StartSession (so the session handler is built for the
+     * account and saved inside it) and before any user resolution; the session is bound to the
+     * account right after StartSession and before errors/auth middleware; the status gate follows.
+     */
     private static function prioritiseHostMiddleware(HttpKernel $kernel): void
     {
-        if (method_exists($kernel, 'addToMiddlewarePriorityBefore')) {
-            $kernel->addToMiddlewarePriorityBefore(
-                before: AuthenticatesRequests::class,
-                middleware: ResolveTenantFromHost::class,
-            );
+        if (! $kernel instanceof FoundationKernel) {
+            return;
         }
+
+        $kernel->addToMiddlewarePriorityBefore(StartSession::class, ResolveTenantFromHost::class);
+        $kernel->addToMiddlewarePriorityBefore(
+            [ShareErrorsFromSession::class, AuthenticatesRequests::class, AuthenticatesSessions::class],
+            ScopeSessionToTenant::class,
+        );
+        $kernel->addToMiddlewarePriorityAfter(ScopeSessionToTenant::class, AccountStatusGate::class);
     }
 }

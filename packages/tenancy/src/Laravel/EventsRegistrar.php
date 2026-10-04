@@ -7,19 +7,19 @@ namespace CoreX\Tenancy\Laravel;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Modules\Contracts\PackageRegistrar;
+use CoreX\Tenancy\Account\Internal\Models\Account;
+use CoreX\Tenancy\DomainTrust\Internal\Models\Domain;
 use CoreX\Tenancy\Impersonation\Internal\ImpersonatedModelWriteGuard;
-use CoreX\Tenancy\Laravel\Listeners\RevertTenancyOnJobException;
+use CoreX\Tenancy\Laravel\Support\HostResolverCacheInvalidator;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
+use CoreX\Tenancy\Runtime\Internal\QueueTenantContext;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Queue\Events\JobExceptionOccurred;
+use Illuminate\Queue\Events\JobAttempted;
+use Illuminate\Queue\Events\JobProcessing;
 use Override;
 use Stancl\JobPipeline\JobPipeline;
-use Stancl\Tenancy\Events\TenancyEnded;
-use Stancl\Tenancy\Events\TenancyInitialized;
 use Stancl\Tenancy\Events\TenantCreated;
-use Stancl\Tenancy\Listeners\BootstrapTenancy;
-use Stancl\Tenancy\Listeners\RevertToCentralContext;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class EventsRegistrar implements PackageRegistrar
@@ -41,15 +41,18 @@ final class EventsRegistrar implements PackageRegistrar
                 ->toListener(),
         );
 
-        // stancl ships these two listeners but wires them only in the
-        // tenancy:install stub, not in its package provider. Without them
-        // Tenancy::initialize()/end() never run a bootstrapper.
-        $events->listen(TenancyInitialized::class, BootstrapTenancy::class);
-        $events->listen(TenancyEnded::class, RevertToCentralContext::class);
+        // Resolved from the container per event: QueueTenantContext is a singleton frame stack.
+        // JobAttempted (dispatched from the `finally` of Worker::process and SyncQueue::executeJob)
+        // is the only point that ends a job's context.
+        $events->listen(JobProcessing::class, [QueueTenantContext::class, 'processing']);
+        $events->listen(JobAttempted::class, [QueueTenantContext::class, 'finished']);
 
-        // QueueTenancyBootstrapper reverts on JobProcessed/JobFailed only,
-        // never on the retry path JobExceptionOccurred.
-        $events->listen(JobExceptionOccurred::class, RevertTenancyOnJobException::class);
+        // Host → account entries are forgotten before a model's rows go away, and after any save.
+        // The invalidator itself is a no-op while host identification or its cache is off.
+        $events->listen('eloquent.saved: '.Account::class, [HostResolverCacheInvalidator::class, 'accountChanged']);
+        $events->listen('eloquent.deleting: '.Account::class, [HostResolverCacheInvalidator::class, 'accountChanged']);
+        $events->listen('eloquent.saved: '.Domain::class, [HostResolverCacheInvalidator::class, 'domainChanged']);
+        $events->listen('eloquent.deleting: '.Domain::class, [HostResolverCacheInvalidator::class, 'domainChanged']);
 
         // Wildcard listeners stay inside the OIDC block: impersonation can be
         // configured while OIDC is off, and that profile registers nothing.

@@ -4,14 +4,10 @@ declare(strict_types=1);
 
 use CoreX\Tenancy\Account\Internal\Jobs\CreateDatabaseFromTemplate;
 use CoreX\Tenancy\Account\Internal\Models\Account;
-use CoreX\Tenancy\Laravel\Bootstrappers\WorkspaceContextBootstrapper;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateClonePostgreSQLManager;
-use Stancl\Tenancy\Bootstrappers\CacheTenancyBootstrapper;
-use Stancl\Tenancy\Bootstrappers\DatabaseSessionBootstrapper;
-use Stancl\Tenancy\Bootstrappers\DatabaseTenancyBootstrapper;
-use Stancl\Tenancy\Bootstrappers\FilesystemTenancyBootstrapper;
-use Stancl\Tenancy\Bootstrappers\Integrations\ScoutPrefixBootstrapper;
-use Stancl\Tenancy\Bootstrappers\QueueTenancyBootstrapper;
+use CoreX\Tenancy\Runtime\Internal\Bootstrappers\CachePrefixBootstrapper;
+use CoreX\Tenancy\Runtime\Internal\Bootstrappers\ConnectionBootstrapper;
+use CoreX\Tenancy\Runtime\Internal\Bootstrappers\SessionConnectionBootstrapper;
 use Stancl\Tenancy\UniqueIdentifierGenerators\UUIDv7Generator;
 
 return [
@@ -81,36 +77,32 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | TenancyManager bootstrappers (P2.5, R-11 §2.4 — fixed order)
+    | TenancyManager bootstrappers (fixed order, PLAN3.D95/D98)
     |--------------------------------------------------------------------------
-    | Own key (not `bootstrappers` — that's stancl's own top-level key under
-    | the SAME `tenancy` config namespace; TenancyServiceProvider::boot()
-    | projects this onto it deterministically, mirroring `tenant_model`/
-    | `central_connection` above). Database → Cache(prefix-mode) →
-    | DatabaseSession → Queue → Filesystem → Scout-prefix — order is an
-    | Implementation Rule (P2.5), not incidental.
+    | Connection → cache prefix → session. The connection bootstrapper comes
+    | first and exactly once; host-supplied TenantBootstrapper classes may only
+    | follow the stock ones and must not depend on the TenancyManager.
     */
-    'bootstrapper_order' => [
-        DatabaseTenancyBootstrapper::class,
-        // P2.6 — narrows the workspace within the already-switched account
-        // connection; must run after the account-level Database bootstrapper.
-        WorkspaceContextBootstrapper::class,
-        CacheTenancyBootstrapper::class,
-        DatabaseSessionBootstrapper::class,
-        QueueTenancyBootstrapper::class,
-        FilesystemTenancyBootstrapper::class,
-        ScoutPrefixBootstrapper::class,
+    'bootstrappers' => [
+        ConnectionBootstrapper::class,
+        CachePrefixBootstrapper::class,
+        SessionConnectionBootstrapper::class,
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Cache prefix-mode (P2.5 — NOT cache tags, v4 default)
+    | Cache isolation (prefix mode — NOT cache tags)
     |--------------------------------------------------------------------------
-    | `%tenant%` is replaced with the tenant key by CacheTenancyBootstrapper;
-    | prepended to the store's original prefix. Own key, projected onto
-    | stancl's `tenancy.cache.prefix` in boot() (same reasoning as above).
+    | `cache_stores` are the stores isolated per account (null = the application's
+    | default cache store): redis/memcached/
+    | database stores get `cache_prefix` (`%tenant%` = SHA-256 of the account
+    | id, prepended to the store prefix); a file store gets a per-account
+    | directory and lock directory. Any other driver (array, null, failover,
+    | custom) is refused. `host_identification.cache_store` and the dedicated
+    | `session.store` must not be listed here.
     */
     'cache_prefix' => 'tenant_%tenant%_',
+    'cache_stores' => null,
 
     /*
     |--------------------------------------------------------------------------
@@ -133,13 +125,12 @@ return [
     |--------------------------------------------------------------------------
     | Host identification (P2.10, B-11 §5.4 п.1–3)
     |--------------------------------------------------------------------------
-    | Own top-level key, projected in TenancyServiceProvider::boot() onto
-    | stancl's `tenancy.identification.resolvers.<HostTenantResolver::class>`
-    | (same reasoning as `bootstrapper_order`/`cache_prefix` above) and onto
-    | `tenancy.identification.middleware`. `enabled=false` (boxed profile,
-    | AC-28) registers neither the resolver's config subtree nor the
-    | middleware group/aliases — the package pushes nothing onto the host
-    | application's global middleware stack either way (D10).
+    | `enabled=false` (boxed profile, AC-28) registers neither the tenant
+    | middleware group nor the aliases — the package pushes nothing onto the
+    | host application's global middleware stack either way (D10). The cache
+    | holds host → account id only (never a miss) in `cache_store`, which is
+    | outside `cache_stores`; null = the default store, which then must not be
+    | one of them.
     */
     'host_identification' => [
         'enabled' => (bool) env('COREX_TENANCY_HOST_IDENTIFICATION_ENABLED', false),

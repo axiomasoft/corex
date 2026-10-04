@@ -7,7 +7,9 @@ use CoreX\Tenancy\Account\Internal\Jobs\CreateDatabaseFromTemplate;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateClonePostgreSQLManager;
-use Stancl\Tenancy\Bootstrappers\DatabaseTenancyBootstrapper;
+use CoreX\Tenancy\Runtime\Internal\Bootstrappers\CachePrefixBootstrapper;
+use CoreX\Tenancy\Runtime\Internal\Bootstrappers\ConnectionBootstrapper;
+use CoreX\Tenancy\Runtime\Internal\Bootstrappers\SessionConnectionBootstrapper;
 use Stancl\Tenancy\UniqueIdentifierGenerators\UUIDv7Generator;
 
 /**
@@ -21,9 +23,10 @@ function validTenancyConfigArrays(): array
             'tenant_model' => Account::class,
             'id_generator' => UUIDv7Generator::class,
             'tenant_database_manager' => TemplateClonePostgreSQLManager::class,
-            'bootstrapper_order' => [DatabaseTenancyBootstrapper::class],
+            'bootstrappers' => [ConnectionBootstrapper::class, CachePrefixBootstrapper::class, SessionConnectionBootstrapper::class],
             'provisioning' => ['pipeline' => [CreateDatabaseFromTemplate::class]],
             'cache_prefix' => 'tenant_%tenant%_',
+            'cache_stores' => ['tenant_file'],
             'storage' => [
                 'durable_driver' => 'local',
                 'durable_root' => '/tmp/durable',
@@ -153,5 +156,53 @@ it('accumulates oidc and wakeup violations in one exception', function (): void 
                 'oidc.client_secret: must be present when oidc.enabled is true',
                 'wakeup.root_connection: must be non-empty when wakeup.driver is root_registry',
             );
+    }
+});
+
+it('exposes the closed stock bootstrapper order, tenant cache stores and the host cache settings', function (): void {
+    [$tenancy, $corexTenancy] = validTenancyConfigArrays();
+
+    $options = TenancyOptions::fromArray($tenancy, $corexTenancy);
+
+    expect($options->bootstrappers)->toBe([ConnectionBootstrapper::class, CachePrefixBootstrapper::class, SessionConnectionBootstrapper::class])
+        ->and($options->cacheStores)->toBe(['tenant_file'])
+        ->and($options->hostCache)->toBeTrue()
+        ->and($options->hostCacheTtl)->toBe(300)
+        ->and($options->hostCacheStore)->toBeNull();
+});
+
+it('rejects bootstrapper lists that break the closed order', function (array $list, string $path): void {
+    [$tenancy, $corexTenancy] = validTenancyConfigArrays();
+    $tenancy['bootstrappers'] = $list;
+
+    try {
+        TenancyOptions::fromArray($tenancy, $corexTenancy);
+        $this->fail('Invalid configuration was accepted.');
+    } catch (InvalidConfiguration $exception) {
+        expect(implode("\n", $exception->violations))->toContain($path);
+    }
+})->with([
+    'connection not first' => [[CachePrefixBootstrapper::class, ConnectionBootstrapper::class], 'corex-tenancy.bootstrappers.0'],
+    'stock order swapped' => [[ConnectionBootstrapper::class, SessionConnectionBootstrapper::class, CachePrefixBootstrapper::class], 'corex-tenancy.bootstrappers.2'],
+    'stock after a host class' => [[ConnectionBootstrapper::class, stdClass::class, CachePrefixBootstrapper::class], 'corex-tenancy.bootstrappers.1'],
+    'duplicate' => [[ConnectionBootstrapper::class, ConnectionBootstrapper::class], 'corex-tenancy.bootstrappers.1'],
+    'empty' => [[], 'corex-tenancy.bootstrappers'],
+]);
+
+it('rejects a cache prefix without %tenant%, duplicate stores and a host store that is also a tenant store', function (): void {
+    [$tenancy, $corexTenancy] = validTenancyConfigArrays();
+    $tenancy['cache_prefix'] = 'static_';
+    $tenancy['cache_stores'] = ['a', 'a'];
+    $tenancy['host_identification']['cache_store'] = 'a';
+
+    try {
+        TenancyOptions::fromArray($tenancy, $corexTenancy);
+        $this->fail('Invalid configuration was accepted.');
+    } catch (InvalidConfiguration $exception) {
+        expect($exception->violations)->toContain(
+            'corex-tenancy.cache_prefix: must contain %tenant%',
+            'corex-tenancy.cache_stores.1: must be unique',
+            'corex-tenancy.host_identification.cache_store: must not be one of cache_stores',
+        );
     }
 });

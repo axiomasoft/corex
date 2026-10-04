@@ -8,8 +8,7 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Context\Exceptions\CentralContextException;
 use CoreX\Tenancy\Account\Internal\Models\Account;
-use CoreX\Tenancy\Laravel\Bootstrappers\WorkspaceContextBootstrapper;
-use CoreX\Tenancy\Runtime\Internal\StanclTenancyManager;
+use CoreX\Tenancy\Runtime\Internal\DatabaseTenancyManager;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -92,7 +91,7 @@ it('cloud initialize()/end() switches connection+session and context() reflects 
     $account = makeAccountTM(makeClusterRowTM());
     $ref = new AccountRef(id: $account->id, slug: (string) $account->slug, status: $account->status, features: [], limits: []);
 
-    /** @var StanclTenancyManager $manager */
+    /** @var DatabaseTenancyManager $manager */
     $manager = app(TenancyManager::class);
 
     expect($manager->initialized())->toBeFalse()
@@ -131,19 +130,6 @@ it('cloud initialize()/end() switches connection+session and context() reflects 
         ->and($reader->currentDefault())->toBe('pgsql')
         ->and($manager->context())->toBeNull();
 
-    $bootstrapper = app(WorkspaceContextBootstrapper::class);
-    $manager->initialize($ref);
-    $manager->setWorkspace($workspace);
-    $bootstrapper->revert();
-    $bootstrapper->revert();
-    expect($manager->context()->workspace)->toBeNull();
-    $manager->setWorkspace($workspace);
-    $bootstrapper->bootstrap($account);
-    $bootstrapper->bootstrap($account);
-    $bootstrapper->revert();
-    $bootstrapper->revert();
-    expect($manager->context()->workspace)->toBeNull();
-    $manager->end();
     expect($reader->currentDefault())->toBe('pgsql');
 });
 
@@ -158,7 +144,7 @@ it('runFor() initializes, runs the closure, and always ends — nesting restores
     $refA = new AccountRef(id: $accountA->id, slug: (string) $accountA->slug, status: $accountA->status, features: [], limits: []);
     $refB = new AccountRef(id: $accountB->id, slug: (string) $accountB->slug, status: $accountB->status, features: [], limits: []);
 
-    /** @var StanclTenancyManager $manager */
+    /** @var DatabaseTenancyManager $manager */
     $manager = app(TenancyManager::class);
 
     $workspace = new WorkspaceRef(id: (string) Str::uuid(), slug: 'outer', type: 'department', path: '/outer', parentId: null);
@@ -188,7 +174,7 @@ it('a callback that throws inside runFor() still ends tenancy (unconditional rev
     $account = makeAccountTM(makeClusterRowTM());
     $ref = new AccountRef(id: $account->id, slug: (string) $account->slug, status: $account->status, features: [], limits: []);
 
-    /** @var StanclTenancyManager $manager */
+    /** @var DatabaseTenancyManager $manager */
     $manager = app(TenancyManager::class);
 
     expect(fn () => $manager->runFor($ref, null, function (): void {
@@ -216,5 +202,5 @@ it('TenancyManagerContextResolver::current() throws CentralContextException outs
 });
 
 it('is wired via the TenancyManager contract binding, not a hardcoded concrete (D10)', function (): void {
-    expect(app(TenancyManager::class))->toBeInstanceOf(StanclTenancyManager::class);
+    expect(app(TenancyManager::class))->toBeInstanceOf(DatabaseTenancyManager::class);
 });

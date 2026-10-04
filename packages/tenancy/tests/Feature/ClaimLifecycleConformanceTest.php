@@ -11,8 +11,8 @@ use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycle;
 use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycleFsm;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Account\Internal\PendingPool;
-use CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver;
 use CoreX\Tenancy\Laravel\Support\AccountLifecyclePolicy;
+use CoreX\Tenancy\Laravel\Support\HostResolverCacheInvalidator;
 use CoreX\Tenancy\Provisioning\Data\ClaimRequest;
 use CoreX\Tenancy\Provisioning\Exceptions\ClaimUnavailable;
 use CoreX\Tenancy\Provisioning\Exceptions\TemplateIntegrityException;
@@ -76,7 +76,7 @@ function p32ArchiveCommand(array $command, string $path, bool $input = false): v
 function p32Lifecycle(StanclTenantDatabaseLifecycle $database): AccountLifecycle
 {
     return new AccountLifecycle(
-        lifecycle: app(AccountLifecyclePolicy::class), connections: app(ConnectionResolverInterface::class), clock: app(ClockInterface::class), events: app(Dispatcher::class), connectionFactory: app(ConnectionFactory::class), hostResolver: app(HostTenantResolver::class),
+        lifecycle: app(AccountLifecyclePolicy::class), connections: app(ConnectionResolverInterface::class), clock: app(ClockInterface::class), events: app(Dispatcher::class), connectionFactory: app(ConnectionFactory::class), hostCache: app(HostResolverCacheInvalidator::class),
         centralConnection: 'pgsql',
         pendingPool: app(PendingPool::class),
         fsm: new AccountLifecycleFsm,

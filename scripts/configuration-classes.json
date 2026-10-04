@@ -1636,16 +1636,25 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.bootstrapper_order": {
+        "tenancy.bootstrappers": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "product-policy",
             "reloadable": "unobserved",
             "validation": "use-site",
             "deprecated_aliases": "",
-            "notes": "undeclared-read"
+            "notes": ""
         },
         "tenancy.cache_prefix": {
+            "owner": "axiomasoft/corex-tenancy",
+            "secret": "no",
+            "mode": "product-policy",
+            "reloadable": "unobserved",
+            "validation": "use-site",
+            "deprecated_aliases": "",
+            "notes": ""
+        },
+        "tenancy.cache_stores": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "product-policy",
@@ -2118,6 +2127,9 @@
         "corex.tenant_context.impersonation": "CoreOptions::$impersonationService",
         "corex.tenant_context.manager": "CoreOptions::$tenancyManager",
         "tenancy.grace_days": "TenancyOptions::$lifecycle",
+        "tenancy.host_identification.cache": "TenancyOptions::$hostCache",
+        "tenancy.host_identification.cache_store": "TenancyOptions::$hostCacheStore",
+        "tenancy.host_identification.cache_ttl": "TenancyOptions::$hostCacheTtl",
         "tenancy.oidc.impersonation.enabled": "TenancyOptions::$impersonation",
         "tenancy.oidc.impersonation.require_approved_by": "TenancyOptions::$impersonation",
         "tenancy.platform_domain": "TenancyOptions::$lifecycle",

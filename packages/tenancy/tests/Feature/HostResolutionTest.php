@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
+use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\DomainTrust\Internal\Models\Domain;
 use CoreX\Tenancy\Laravel\Http\Middleware\ResolveTenantFromHost;
-use CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Runtime\Exceptions\TenantCouldNotBeIdentifiedByHostException;
+use CoreX\Tenancy\Runtime\Internal\HostAccountResolver;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Stancl\Tenancy\Tenancy;
 
 uses()->group('pg');
 
@@ -29,19 +30,18 @@ beforeEach(function (): void {
         '--force' => true,
     ])->run();
 
-    // HostTenantResolver's own cache subtree — the projection
-    // TenancyServiceProvider::boot() would perform under
-    // `host_identification.enabled`, set directly here since these tests
-    // call the resolver/middleware without going through the router.
-    config(['tenancy.identification.resolvers.'.HostTenantResolver::class => [
-        'cache' => true,
-        'cache_ttl' => 300,
-        'cache_store' => null,
-    ]]);
+    // Host identification with its explicit cache; options are lazy, so rebuild the snapshot.
+    config([
+        'tenancy.host_identification.enabled' => true,
+        'tenancy.host_identification.cache' => true,
+        'tenancy.host_identification.cache_ttl' => 300,
+        'tenancy.host_identification.cache_store' => null,
+    ]);
+    app()->forgetInstance(TenancyOptions::class);
 });
 
 afterEach(function (): void {
-    app(Tenancy::class)->end();
+    endTenantContext();
     DB::purge('pgsql');
     DB::purge('tenant');
 
@@ -117,17 +117,25 @@ function makeAccountWithDomainHR(?string $host, array $accountOverrides = [], ar
     return [$account, $domain];
 }
 
-function resolverHR(): HostTenantResolver
+function resolverHR(): HostAccountResolver
 {
-    return app(HostTenantResolver::class);
+    return app(HostAccountResolver::class);
 }
 
-function dispatchHostMiddlewareHR(string $host): mixed
+/** Runs the host middleware and returns the account id that was active INSIDE the request. */
+function accountSeenByHostMiddlewareHR(string $host, array $server = []): ?string
 {
-    return app(ResolveTenantFromHost::class)->handle(
-        Request::create('http://'.$host.'/', 'GET'),
-        fn (Request $request): Response => new Response('ok'),
+    $seen = null;
+    app(ResolveTenantFromHost::class)->handle(
+        Request::create('http://'.$host.'/', 'GET', server: $server),
+        function (Request $request) use (&$seen): Response {
+            $seen = app(TenancyManager::class)->context()?->account->id;
+
+            return new Response('ok');
+        },
     );
+
+    return $seen;
 }
 
 it('а: неизвестный host → отказ резолва (наш exception)', function (): void {
@@ -166,14 +174,12 @@ it('г: deleted_at у аккаунта → отказ', function (): void {
         ->toThrow(TenantCouldNotBeIdentifiedByHostException::class);
 });
 
-it('д: валидный host → tenancy()->initialized === true и tenant->id ожидаемый', function (): void {
+it('д: валидный host → внутри запроса контекст account активен, после ответа — закрыт', function (): void {
     [$account] = makeAccountWithDomainHR('acme.example.test');
 
-    $response = dispatchHostMiddlewareHR('acme.example.test');
-
-    expect($response->getContent())->toBe('ok')
-        ->and(tenancy()->initialized)->toBeTrue()
-        ->and(tenancy()->tenant->id)->toBe($account->id);
+    expect(accountSeenByHostMiddlewareHR('acme.example.test'))->toBe($account->id)
+        ->and(app(TenancyManager::class)->initialized())->toBeFalse()
+        ->and(DB::getDefaultConnection())->toBe('pgsql');
 });
 
 it('е: второй запрос по тому же host делает 0 запросов в central-коннекшн (кеш-хит)', function (): void {
@@ -187,7 +193,7 @@ it('е: второй запрос по тому же host делает 0 зап�
 
     $resolved = $resolver->resolve('cached.example.test');
 
-    expect($resolved->id)->toBe($account->id)
+    expect($resolved)->toBe($account->id)
         ->and(DB::connection('pgsql')->getQueryLog())->toHaveCount(0);
 });
 
@@ -195,7 +201,7 @@ it('ж: смена домена → старый host больше не резо
     [$account, $oldDomain] = makeAccountWithDomainHR('old.example.test');
 
     $resolver = resolverHR();
-    expect($resolver->resolve('old.example.test')->id)->toBe($account->id); // primes the cache
+    expect($resolver->resolve('old.example.test'))->toBe($account->id); // primes the cache
 
     // Retiring a domain (soft-delete, D122/§7.3 п.9 semantics) — NOT an
     // in-place rename of `host`: InvalidatesTenantsResolverCache invalidates
@@ -216,7 +222,7 @@ it('ж: смена домена → старый host больше не резо
     expect(fn () => resolverHR()->resolve('old.example.test'))
         ->toThrow(TenantCouldNotBeIdentifiedByHostException::class);
 
-    expect(resolverHR()->resolve('new.example.test')->id)->toBe($account->id);
+    expect(resolverHR()->resolve('new.example.test'))->toBe($account->id);
 });
 
 it('з: два аккаунта × два домена, чередование запросов → 0 пересечений (AC-30)', function (): void {
@@ -224,13 +230,8 @@ it('з: два аккаунта × два домена, чередование �
     [$accountB] = makeAccountWithDomainHR('tenant-b.example.test');
 
     for ($i = 0; $i < 25; $i++) {
-        dispatchHostMiddlewareHR('tenant-a.example.test');
-        expect(tenancy()->tenant->id)->toBe($accountA->id);
-        app(Tenancy::class)->end();
-
-        dispatchHostMiddlewareHR('tenant-b.example.test');
-        expect(tenancy()->tenant->id)->toBe($accountB->id);
-        app(Tenancy::class)->end();
+        expect(accountSeenByHostMiddlewareHR('tenant-a.example.test'))->toBe($accountA->id);
+        expect(accountSeenByHostMiddlewareHR('tenant-b.example.test'))->toBe($accountB->id);
     }
 });
 
@@ -238,21 +239,19 @@ it('и: следующий host всегда читается из central по�
     [$accountA] = makeAccountWithDomainHR('first.example.test');
     [$accountB] = makeAccountWithDomainHR('second.example.test');
 
-    tenancy()->initialize($accountA);
+    initTenantContext($accountA);
 
-    expect(resolverHR()->resolve('second.example.test')->id)->toBe($accountB->id);
+    expect(resolverHR()->resolve('second.example.test'))->toBe($accountB->id);
 });
 
 it('й: подделанные X-Account-Id/X-Forwarded-Host не влияют на резолв', function (): void {
     [$account] = makeAccountWithDomainHR('real-host.example.test');
     makeAccountWithDomainHR('evil.example.test');
 
-    $request = Request::create('http://real-host.example.test/', 'GET', server: [
+    $seen = accountSeenByHostMiddlewareHR('real-host.example.test', [
         'HTTP_X_ACCOUNT_ID' => 'fake-account-id',
         'HTTP_X_FORWARDED_HOST' => 'evil.example.test',
     ]);
 
-    app(ResolveTenantFromHost::class)->handle($request, fn (Request $r): Response => new Response('ok'));
-
-    expect(tenancy()->tenant->id)->toBe($account->id);
+    expect($seen)->toBe($account->id);
 });

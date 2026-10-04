@@ -55,7 +55,7 @@ $classification = [
     'CoreX\\Panels\\Internal\\ModulePanelCatalogue' => 'boot-built catalogue',
     'CoreX\Search\Internal\SearchManager' => 'driver factory',
     'CoreX\Tenancy\Provisioning\Internal\Database\TemplateClonePostgreSQLManager' => 'runtime manager',
-    'CoreX\\Tenancy\\Runtime\\Internal\\StanclTenancyManager' => 'runtime manager',
+    'CoreX\\Tenancy\\Runtime\\Internal\\DatabaseTenancyManager' => 'runtime manager',
     'CoreX\\Wakeup\\Internal\\WakeupHandlerRegistry' => 'authority',
 ];
 

@@ -60,7 +60,7 @@ return [
     | `manager` (P2.5): TenancyManager binding — single switch point for
     | connection/cache/queue/fs. Boxed default is a null-manager (no-op,
     | constant context via `resolver` above); axiomasoft/corex-tenancy rebinds this to
-    | StanclTenancyManager when the package is present (D10 — container
+    | DatabaseTenancyManager when the package is present (D10 — container
     | binding, never an `if(cloud)` branch).
     |
     | `impersonation` (P2.11, D139): ImpersonationService binding — boxed

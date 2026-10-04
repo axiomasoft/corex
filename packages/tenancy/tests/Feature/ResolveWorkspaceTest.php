@@ -23,7 +23,6 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Stancl\Tenancy\Tenancy;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 uses()->group('pg');
@@ -49,7 +48,7 @@ beforeEach(function (): void {
 });
 
 afterEach(function (): void {
-    app(Tenancy::class)->end();
+    endTenantContext();
     DB::purge('pgsql');
     DB::purge('tenant');
 
@@ -107,7 +106,7 @@ function initializedAccountRW(array $overrides = []): Account
         'status' => 'active',
     ], $overrides));
 
-    app(Tenancy::class)->initialize($account);
+    initTenantContext($account);
 
     Artisan::call('migrate', [
         '--database' => 'tenant',
@@ -236,7 +235,7 @@ it('а: тенанси НЕ инициализирована → 403, context() 
     WorkspaceMember::query()->create(['workspace_id' => $workspace->id, 'user_id' => $user->id, 'status' => 'active']);
     actingAsIdRW($user->id);
 
-    app(Tenancy::class)->end();
+    endTenantContext();
 
     expect(statusOfRW(fn () => dispatchRW(Request::create('http://x/w/'.$workspace->slug, 'GET'))))->toBe(403)
         ->and(app(TenancyManager::class)->context())->toBeNull();
@@ -430,7 +429,7 @@ it('р: после tenancy()->end() context() = null (workspace не переж�
 
     expect(statusOfRW(fn () => dispatchRW(Request::create('http://x/w/'.$workspace->slug, 'GET'))))->toBe(200);
 
-    app(Tenancy::class)->end();
+    endTenantContext();
 
     expect(app(TenancyManager::class)->context())->toBeNull();
 });

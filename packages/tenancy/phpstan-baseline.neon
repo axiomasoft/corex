@@ -205,42 +205,6 @@ parameters:
 			path: src/Integration/Internal/Wakeup/SweepRootWakeups.php
 
 		-
-			rawMessage: Cannot access offset 'workspace_id' on mixed.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 2
-			path: src/Laravel/Bootstrappers/WorkspaceContextBootstrapper.php
-
-		-
-			rawMessage: Cannot access property $job on mixed.
-			identifier: property.nonObject
-			count: 1
-			path: src/Laravel/Bootstrappers/WorkspaceContextBootstrapper.php
-
-		-
-			rawMessage: 'Cannot call method payload() on mixed.'
-			identifier: method.nonObject
-			count: 2
-			path: src/Laravel/Bootstrappers/WorkspaceContextBootstrapper.php
-
-		-
-			rawMessage: PHPDoc tag @var with type CoreX\Context\Contracts\TenancyManager is not subtype of type CoreX\Tenancy\Runtime\Internal\StanclTenancyManager.
-			identifier: varTag.type
-			count: 1
-			path: src/Laravel/Bootstrappers/WorkspaceContextBootstrapper.php
-
-		-
-			rawMessage: PHPDoc tag @var with type Illuminate\Contracts\Events\Dispatcher is not subtype of type Illuminate\Events\Dispatcher.
-			identifier: varTag.type
-			count: 1
-			path: src/Laravel/Bootstrappers/WorkspaceContextBootstrapper.php
-
-		-
-			rawMessage: 'Parameter #2 $workspaceId of static method CoreX\Tenancy\Laravel\Bootstrappers\WorkspaceContextBootstrapper::restore() expects string|null, mixed given.'
-			identifier: argument.type
-			count: 2
-			path: src/Laravel/Bootstrappers/WorkspaceContextBootstrapper.php
-
-		-
 			rawMessage: 'Cannot call method orWhereColumn() on mixed.'
 			identifier: method.nonObject
 			count: 1
@@ -275,12 +239,6 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: src/Laravel/Commands/PendingCreateCommand.php
-
-		-
-			rawMessage: 'Dynamic call to static method Illuminate\Contracts\Auth\Guard::id().'
-			identifier: staticMethod.dynamicCall
-			count: 1
-			path: src/Laravel/Http/Middleware/AccountStatusGate.php
 
 		-
 			rawMessage: Cannot access property $headers on mixed.
@@ -319,31 +277,7 @@ parameters:
 			path: src/Laravel/Http/Middleware/ResolveWorkspace.php
 
 		-
-			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 2
-			path: src/Laravel/HttpRegistrar.php
-
-		-
-			rawMessage: 'Cannot call method get() on mixed.'
-			identifier: method.nonObject
-			count: 1
-			path: src/Laravel/HttpRegistrar.php
-
-		-
-			rawMessage: 'Cannot call method set() on mixed.'
-			identifier: method.nonObject
-			count: 1
-			path: src/Laravel/HttpRegistrar.php
-
-		-
 			rawMessage: 'Dynamic call to static method Illuminate\Contracts\Foundation\CachesRoutes::routesAreCached().'
-			identifier: staticMethod.dynamicCall
-			count: 1
-			path: src/Laravel/HttpRegistrar.php
-
-		-
-			rawMessage: 'Dynamic call to static method Illuminate\Foundation\Http\Kernel::addToMiddlewarePriorityBefore().'
 			identifier: staticMethod.dynamicCall
 			count: 1
 			path: src/Laravel/HttpRegistrar.php
@@ -351,67 +285,19 @@ parameters:
 		-
 			rawMessage: 'Only iterables can be unpacked, mixed given.'
 			identifier: arrayUnpacking.nonIterable
-			count: 4
+			count: 3
 			path: src/Laravel/HttpRegistrar.php
-
-		-
-			rawMessage: Cannot cast mixed to string.
-			identifier: cast.string
-			count: 1
-			path: src/Laravel/Resolvers/HostTenantResolver.php
-
-		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Account\Internal\Models\Account>::whereNotNull().'
-			identifier: staticMethod.dynamicCall
-			count: 1
-			path: src/Laravel/Resolvers/HostTenantResolver.php
-
-		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\Account\Internal\Models\Account>::whereNull().'
-			identifier: staticMethod.dynamicCall
-			count: 1
-			path: src/Laravel/Resolvers/HostTenantResolver.php
-
-		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\DomainTrust\Internal\Models\Domain>::whereNotNull().'
-			identifier: staticMethod.dynamicCall
-			count: 1
-			path: src/Laravel/Resolvers/HostTenantResolver.php
-
-		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\DomainTrust\Internal\Models\Domain>::whereNull().'
-			identifier: staticMethod.dynamicCall
-			count: 1
-			path: src/Laravel/Resolvers/HostTenantResolver.php
-
-		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<CoreX\Tenancy\DomainTrust\Internal\Models\Domain>::whereRaw().'
-			identifier: staticMethod.dynamicCall
-			count: 1
-			path: src/Laravel/Resolvers/HostTenantResolver.php
-
-		-
-			rawMessage: 'Method CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver::getPossibleCacheKeys() should return list<string> but returns array<int, string>.'
-			identifier: return.type
-			count: 1
-			path: src/Laravel/Resolvers/HostTenantResolver.php
-
-		-
-			rawMessage: 'PHPDoc tag @var with type (Illuminate\Database\Eloquent\Model&Stancl\Tenancy\Contracts\Tenant)|null is not subtype of type CoreX\Tenancy\Account\Internal\Models\Account|null.'
-			identifier: varTag.type
-			count: 1
-			path: src/Laravel/Resolvers/HostTenantResolver.php
 
 		-
 			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
 			identifier: offsetAccess.nonOffsetAccessible
-			count: 3
+			count: 2
 			path: src/Laravel/RuntimeRegistrar.php
 
 		-
 			rawMessage: 'Cannot call method get() on mixed.'
 			identifier: method.nonObject
-			count: 2
+			count: 1
 			path: src/Laravel/RuntimeRegistrar.php
 
 		-
@@ -1075,18 +961,6 @@ parameters:
 			path: src/Provisioning/Internal/StanclTenantDatabaseLifecycle.php
 
 		-
-			rawMessage: 'CoreX\Tenancy\Runtime\Exceptions\TenantCouldNotBeIdentifiedByHostException::__construct() does not call parent constructor from Exception.'
-			identifier: constructor.missingParentCall
-			count: 1
-			path: src/Runtime/Exceptions/TenantCouldNotBeIdentifiedByHostException.php
-
-		-
-			rawMessage: 'Method CoreX\Tenancy\Runtime\Internal\StanclTenancyManager::runFor() should return T but returns (T of mixed)|null.'
-			identifier: return.type
-			count: 1
-			path: src/Runtime/Internal/StanclTenancyManager.php
-
-		-
 			rawMessage: 'Binary operation "+=" between (float|int) and mixed results in an error.'
 			identifier: assignOp.invalid
 			count: 1
@@ -1163,3 +1037,9 @@ parameters:
 			identifier: staticMethod.dynamicCall
 			count: 1
 			path: src/Workspace/Internal/Models/Invitation.php
+
+		-
+			rawMessage: 'Dynamic call to static method Illuminate\Container\Container::forgetScopedInstances().'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: src/Runtime/Internal/DatabaseTenancyManager.php

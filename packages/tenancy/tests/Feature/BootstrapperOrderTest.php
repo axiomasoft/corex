@@ -2,33 +2,32 @@
 
 declare(strict_types=1);
 
-use CoreX\Tenancy\Laravel\Bootstrappers\WorkspaceContextBootstrapper;
-use Stancl\Tenancy\Bootstrappers\CacheTenancyBootstrapper;
-use Stancl\Tenancy\Bootstrappers\DatabaseSessionBootstrapper;
-use Stancl\Tenancy\Bootstrappers\DatabaseTenancyBootstrapper;
-use Stancl\Tenancy\Bootstrappers\FilesystemTenancyBootstrapper;
-use Stancl\Tenancy\Bootstrappers\Integrations\ScoutPrefixBootstrapper;
-use Stancl\Tenancy\Bootstrappers\QueueTenancyBootstrapper;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
+use CoreX\Tenancy\Runtime\Internal\Bootstrappers\CachePrefixBootstrapper;
+use CoreX\Tenancy\Runtime\Internal\Bootstrappers\ConnectionBootstrapper;
+use CoreX\Tenancy\Runtime\Internal\Bootstrappers\SessionConnectionBootstrapper;
+use Stancl\Tenancy\TenancyServiceProvider;
 
-it('сохраняет порядок семи bootstrapper-ов байтово', function (): void {
+it('сохраняет порядок трёх штатных bootstrapper-ов байтово', function (): void {
     $expected = [
-        DatabaseTenancyBootstrapper::class,
-        WorkspaceContextBootstrapper::class,
-        CacheTenancyBootstrapper::class,
-        DatabaseSessionBootstrapper::class,
-        QueueTenancyBootstrapper::class,
-        FilesystemTenancyBootstrapper::class,
-        ScoutPrefixBootstrapper::class,
+        ConnectionBootstrapper::class,
+        CachePrefixBootstrapper::class,
+        SessionConnectionBootstrapper::class,
     ];
 
-    $order = config('tenancy.bootstrapper_order');
-    $projected = config('tenancy.bootstrappers');
+    expect(config('tenancy.bootstrappers'))->toBe($expected)
+        ->and(app(TenancyOptions::class)->bootstrappers)->toBe($expected);
+});
 
-    expect($order)->toBe($expected)
-        ->and($projected)->toBe($expected);
+it('не оставляет runtime-хуков stancl: нет ключа bootstrapper_order, нет идентификации и мидлвари stancl', function (): void {
+    expect(config('tenancy.bootstrapper_order'))->toBeNull()
+        ->and(config('tenancy.identification.resolvers'))->toBeNull()
+        ->and(config('tenancy.identification.middleware'))->toBeNull()
+        ->and(app()->getProviders(TenancyServiceProvider::class))->toBe([]);
+});
 
-    foreach ($expected as $index => $class) {
-        expect($order[$index])->toBe($class)
-            ->and($projected[$index])->toBe($class);
+it('штатные bootstrapper-ы — singleton в контейнере, а порядок в менеджере совпадает с options', function (): void {
+    foreach (app(TenancyOptions::class)->bootstrappers as $class) {
+        expect(app($class))->toBe(app($class));
     }
 });

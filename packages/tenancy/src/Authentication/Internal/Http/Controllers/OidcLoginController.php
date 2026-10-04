@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Authentication\Internal\Http\Controllers;
 
 use CoreX\Context\Contracts\ImpersonationService;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\AccountRef;
 use CoreX\Tenancy\Authentication\Exceptions\OidcAuthenticationException;
 use CoreX\Tenancy\Authentication\Internal\Oidc\IdTokenVerifier;
 use CoreX\Tenancy\Authentication\Internal\Oidc\OidcClient;
@@ -19,7 +21,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use LogicException;
 use Psr\Clock\ClockInterface;
-use Stancl\Tenancy\Database\Models\Tenant as Account;
 
 /**
  * Authorization-code + PKCE RP endpoints (AC-14). `callback()` runs the
@@ -52,6 +53,7 @@ final class OidcLoginController
         private readonly AuthFactory $auth,
         private readonly ConnectionResolverInterface $connections,
         private readonly ClockInterface $clock,
+        private readonly TenantContextResolver $contexts,
     ) {}
 
     public function redirect(Request $request): RedirectResponse
@@ -83,8 +85,7 @@ final class OidcLoginController
             throw OidcAuthenticationException::claimMismatch('sub');
         }
 
-        /** @var Account $account */
-        $account = tenancy()->tenant;
+        $account = $this->contexts->current()->account;
 
         $this->assertAccountClaim($claims, $account);
 
@@ -106,7 +107,7 @@ final class OidcLoginController
 
         $this->assertMembership($sub, $account);
 
-        $this->syncer->syncToAccount($sub, (string) $account->id);
+        $this->syncer->syncToAccount($sub, $account->id);
 
         $request->session()->regenerate();
 
@@ -188,7 +189,7 @@ final class OidcLoginController
      *
      * @param  array<string, mixed>  $claims
      */
-    private function assertAccountClaim(array $claims, Account $account): void
+    private function assertAccountClaim(array $claims, AccountRef $account): void
     {
         $acct = $claims['acct'] ?? null;
 
@@ -202,7 +203,7 @@ final class OidcLoginController
      * the client's account, so this check must not run on the impersonation
      * branch.
      */
-    private function assertMembership(string $sub, Account $account): void
+    private function assertMembership(string $sub, AccountRef $account): void
     {
         $membership = $this->connections->connection($this->centralConnection())
             ->table('root_identity_accounts')

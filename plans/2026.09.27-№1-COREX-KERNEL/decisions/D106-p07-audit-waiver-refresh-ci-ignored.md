@@ -1,0 +1,42 @@
+---
+id: D106
+date: 2026-10-04
+status: accepted
+item: P07
+items: [P07, P07.1]
+supersedes: []
+superseded_by: null
+---
+# D106 — p07-audit-waiver-refresh-ci-ignored (accepted)
+
+**Actor:** owner, explicit current-conversation instructions; recorder: claude-code (task:plan-run P07.1).
+**Evidence:** artifacts/P07-design-audit-waiver-refresh/owner-direction.md; D104; D105; installed Task docs/reference/design-audit-waiver.md.
+
+## Solution
+
+1. Select this fingerprint-bound waiver in plan.md in place of D104 (bound to the stale fingerprint 6c53…; the P06 close/D105 edits to plan.md moved the design fingerprint). It waives only the repeated whole-plan design audit, on the owner's standing D104 instruction extended by the owner's explicit choice «Продлить waiver (рекомендую)». It asserts no audit-green verdict.
+2. Amend D94 п.2 / P07 DoR only for the start of P07.1: the owner instruction «изнорируй CI» removes «P06 GREEN on hosted CI» as a start prerequisite (P06 is closed `Done with deviations` under D105). Hosted CI at P07's final commit stays a separate closing step after P07.6 (D73, D97 п.4) and is not a P07.1 gate.
+
+```design-audit-waiver/v1
+{
+  "schema_version": "design-audit-waiver/v1",
+  "plan_id": "2026.09.27-№1-COREX-KERNEL",
+  "decision_id": "D106",
+  "scope": "whole-plan-design-audit",
+  "design_fingerprint": "4fa4a5b11413a169e6a12a0e765a9e35b3a02531cb36490ef8d9add8ad905085",
+  "owner_provenance": {
+    "path": "artifacts/P07-design-audit-waiver-refresh/owner-direction.md",
+    "sha256": "18e48f0f52541282fe5cfc4999195eca98b3f93e0466298c134f7419eb51caca",
+    "message": "Продлить waiver (рекомендую)"
+  },
+  "reason": "Owner chose to extend the no-repeat-audit waiver (D104) to the post-P06-close fingerprint and to ignore hosted CI. Not an audit-green verdict."
+}
+```
+
+## Why
+
+D104's waiver is bound to 6c53…; P06 closure changed plan.md, so the gate demanded finish+audit again. The owner refuses another audit and asked to proceed.
+
+## Consequences
+
+Run Task finish once for the new candidate; verify PLAN_DESIGN_AUDIT_WAIVED_BY_OWNER. Waives no item Validation, producer dependency, Routing, phase checkpoint, terminal admission, Review P07 or release gate. No design algorithms, APIs, code, tests, manifests or baselines change.

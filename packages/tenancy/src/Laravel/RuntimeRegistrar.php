@@ -6,30 +6,38 @@ namespace CoreX\Tenancy\Laravel;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
+use CoreX\Context\Contracts\AccountConnectionResolver;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Storage\Contracts\TenantStorage;
 use CoreX\Tenancy\Account\Contracts\AccountRead;
-use CoreX\Tenancy\Laravel\Bootstrappers\WorkspaceContextBootstrapper;
 use CoreX\Tenancy\Laravel\Support\AccountLifecyclePolicy;
 use CoreX\Tenancy\Laravel\Support\ImpersonationPolicy;
 use CoreX\Tenancy\Laravel\Support\StatusGatePolicy;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateClonePostgreSQLManager;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
+use CoreX\Tenancy\Runtime\Internal\Bootstrappers\CachePrefixBootstrapper;
+use CoreX\Tenancy\Runtime\Internal\Bootstrappers\ConnectionBootstrapper;
+use CoreX\Tenancy\Runtime\Internal\Bootstrappers\SessionConnectionBootstrapper;
+use CoreX\Tenancy\Runtime\Internal\CentralTemplateConnectionResolver;
 use CoreX\Tenancy\Runtime\Internal\ConnectionGuardedTenantContextRestorer;
-use CoreX\Tenancy\Runtime\Internal\StanclTenancyManager;
+use CoreX\Tenancy\Runtime\Internal\DatabaseTenancyManager;
+use CoreX\Tenancy\Runtime\Internal\FrameworkConfig;
+use CoreX\Tenancy\Runtime\Internal\QueueTenantContext;
 use CoreX\Tenancy\Runtime\Internal\Storage\ContextTenantStorage;
 use CoreX\Tenancy\Runtime\Internal\TenancyManagerContextResolver;
+use Illuminate\Cache\CacheManager;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Filesystem\FilesystemManager;
+use Illuminate\Queue\QueueManager;
+use Illuminate\Session\SessionManager;
 use Override;
 use Stancl\Tenancy\Contracts\UniqueIdentifierGenerator;
-use Stancl\Tenancy\Tenancy as Stancl;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class RuntimeRegistrar implements PackageRegistrar
@@ -42,7 +50,7 @@ final class RuntimeRegistrar implements PackageRegistrar
         $app->singleton(
             TenancyOptions::class,
             static fn (Application $app): TenancyOptions => TenancyOptions::fromArray(
-                tenancy: self::configSection($app, 'tenancy'),
+                tenancy: self::tenancySection($app),
                 corexTenancy: self::configSection($app, 'corex-tenancy'),
             ),
         );
@@ -60,16 +68,64 @@ final class RuntimeRegistrar implements PackageRegistrar
         );
 
         $app->singleton(
-            StanclTenancyManager::class,
-            static fn (Application $app): StanclTenancyManager => new StanclTenancyManager(
-                $app->make(Stancl::class),
-                $app->make(AccountRead::class),
+            FrameworkConfig::class,
+            static fn (): FrameworkConfig => TenancyRuntimeFactory::frameworkConfig(),
+        );
+
+        $app->bindIf(
+            AccountConnectionResolver::class,
+            static fn (Application $app): AccountConnectionResolver => new CentralTemplateConnectionResolver(
+                connections: $app->make(ConnectionResolverInterface::class),
+                config: $app->make(FrameworkConfig::class),
+                centralConnection: $app->make(TenancyOptions::class)->centralConnection,
+            ),
+        );
+
+        $app->singleton(
+            ConnectionBootstrapper::class,
+            static fn (Application $app): ConnectionBootstrapper => new ConnectionBootstrapper(
+                databases: $app->make(DatabaseManager::class),
+                config: $app->make(FrameworkConfig::class),
+                centralConnection: $app->make(TenancyOptions::class)->centralConnection,
             ),
         );
         $app->singleton(
+            CachePrefixBootstrapper::class,
+            static fn (Application $app): CachePrefixBootstrapper => new CachePrefixBootstrapper(
+                cache: $app->make(CacheManager::class),
+                config: $app->make(FrameworkConfig::class),
+                stores: $app->make(TenancyOptions::class)->cacheStores,
+                prefix: $app->make(TenancyOptions::class)->cachePrefix,
+                centralConnection: $app->make(TenancyOptions::class)->centralConnection,
+            ),
+        );
+        $app->singleton(
+            SessionConnectionBootstrapper::class,
+            static fn (Application $app): SessionConnectionBootstrapper => new SessionConnectionBootstrapper(
+                sessions: $app->make(SessionManager::class),
+                cache: $app->make(CacheManager::class),
+                container: $app,
+                config: $app->make(FrameworkConfig::class),
+                centralConnection: $app->make(TenancyOptions::class)->centralConnection,
+                files: $app->make('files'),
+            ),
+        );
+
+        $app->singleton(
+            DatabaseTenancyManager::class,
+            static fn (Application $app): DatabaseTenancyManager => TenancyRuntimeFactory::manager($app),
+        );
+        $app->singleton(
             TenancyManager::class,
-            static fn (Application $app): StanclTenancyManager => $app->make(
-                StanclTenancyManager::class,
+            static fn (Application $app): DatabaseTenancyManager => $app->make(DatabaseTenancyManager::class),
+        );
+        $app->singleton(
+            QueueTenantContext::class,
+            static fn (Application $app): QueueTenantContext => new QueueTenantContext(
+                manager: $app->make(TenancyManager::class),
+                accounts: $app->make(AccountRead::class),
+                workspaceResolver: TenancyRuntimeFactory::workspaceResolver(),
+                centralConnection: $app->make(TenancyOptions::class)->centralConnection,
             ),
         );
         $app->singleton(TenantContextResolver::class, TenancyManagerContextResolver::class);
@@ -92,29 +148,6 @@ final class RuntimeRegistrar implements PackageRegistrar
             ),
         );
 
-        // TenancyOptions stays lazy (P7.2): materializing it here would
-        // validate OIDC before Testbench defineEnvironment fills issuer fields.
-        // bootstrapper_order is read from the already-merged composition config,
-        // same source the provider used before this move.
-        $tenancy = $app['config']->get('tenancy', []);
-        $tenancy = is_array($tenancy) ? $tenancy : [];
-        /** @var list<class-string> $bootstrapperOrder */
-        $bootstrapperOrder = is_array($tenancy['bootstrapper_order'] ?? null)
-            ? $tenancy['bootstrapper_order']
-            : [];
-
-        // WorkspaceContextBootstrapper is not in stancl's default list, so
-        // __constructStatic runs here exactly once. Stancl defaults already
-        // ran theirs in their own provider — calling them again would
-        // double-register queue listeners.
-        foreach ($bootstrapperOrder as $bootstrapper) {
-            if ($bootstrapper === WorkspaceContextBootstrapper::class) {
-                WorkspaceContextBootstrapper::__constructStatic($app);
-            }
-
-            $app->singleton($bootstrapper);
-        }
-
         $app->bind(
             TemplateClonePostgreSQLManager::class,
             static fn (Application $app): TemplateClonePostgreSQLManager => new TemplateClonePostgreSQLManager(
@@ -130,17 +163,36 @@ final class RuntimeRegistrar implements PackageRegistrar
     {
         $options = $app->make(TenancyOptions::class);
 
-        // Projected in boot so this wins over stancl's own register()
-        // regardless of provider order.
+        // Model/provisioning projections stay until the Account model is plain Eloquent (PLAN3.P07.2);
+        // there is no vendor runtime: no resolvers, middleware, bootstrappers or listeners.
         $app['config']->set([
             'tenancy.models.tenant' => $options->tenantModel,
             'tenancy.database.central_connection' => $options->centralConnection,
             'tenancy.database.managers.pgsql' => $options->tenantDatabaseManager,
-            'tenancy.bootstrappers' => $options->bootstrapperOrder,
-            'tenancy.cache.prefix' => $options->cachePrefix,
+            'tenancy.database.template_tenant_connection' => null,
         ]);
 
         $app->bind(UniqueIdentifierGenerator::class, $options->idGenerator);
+
+        $app->make(QueueManager::class)->createPayloadUsing(TenancyRuntimeFactory::payloadHook());
+    }
+
+    /**
+     * `cache_stores = null` means the application's default cache store: the secure default is to
+     * isolate what the application actually uses.
+     *
+     * @return array<array-key, mixed>
+     */
+    private static function tenancySection(Application $app): array
+    {
+        $section = self::configSection($app, 'tenancy');
+
+        if (($section['cache_stores'] ?? null) === null) {
+            $default = TenancyRuntimeFactory::frameworkConfig()->get('cache.default');
+            $section['cache_stores'] = is_string($default) && $default !== '' ? [$default] : [];
+        }
+
+        return $section;
     }
 
     /** @return array<array-key, mixed> */

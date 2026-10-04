@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
-use Stancl\Tenancy\Tenancy;
 
 // AC-14 — authorization-code + PKCE + nonce (D129), Implementation Rule 5
 // order (research/10 §3). Negative-first per the P2.22 pre-mortem (§7): each
@@ -73,7 +72,7 @@ beforeEach(function (): void {
 });
 
 afterEach(function (): void {
-    app(Tenancy::class)->end();
+    endTenantContext();
     DB::purge('pgsql');
     DB::purge('tenant');
 
@@ -152,7 +151,7 @@ function initAccountWithTenantOL(): Account
         'status' => 'active',
     ]);
 
-    app(Tenancy::class)->initialize($account);
+    initTenantContext($account);
 
     $ref = new AccountRef(id: $account->id, slug: (string) $account->slug, status: $account->status, features: [], limits: []);
     /** @var TenancyManager $manager */

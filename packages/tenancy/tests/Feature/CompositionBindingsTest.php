@@ -43,7 +43,8 @@ use CoreX\Tenancy\Provisioning\Internal\Database\SchemaCatalogueSerializer;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityLock;
 use CoreX\Tenancy\Provisioning\Internal\StanclTenantDatabaseLifecycle;
 use CoreX\Tenancy\Runtime\Internal\ConnectionGuardedTenantContextRestorer;
-use CoreX\Tenancy\Runtime\Internal\StanclTenancyManager;
+use CoreX\Tenancy\Runtime\Internal\DatabaseTenancyManager;
+use CoreX\Tenancy\Runtime\Internal\QueueTenantContext;
 use CoreX\Tenancy\Runtime\Internal\Storage\ContextTenantStorage;
 use CoreX\Tenancy\Runtime\Internal\TenancyManagerContextResolver;
 use CoreX\Tenancy\Tests\Concerns\AssertsContainerBindings;
@@ -62,8 +63,9 @@ beforeEach(function (): void {
 
 it('keeps Runtime register bindings on the measured key, concrete and lifetime', function (): void {
     $app = $this->app;
-    $this->assertSingletonBinding($app, StanclTenancyManager::class, StanclTenancyManager::class);
-    $this->assertSingletonBinding($app, TenancyManager::class, StanclTenancyManager::class);
+    $this->assertSingletonBinding($app, DatabaseTenancyManager::class, DatabaseTenancyManager::class);
+    $this->assertSingletonBinding($app, TenancyManager::class, DatabaseTenancyManager::class);
+    $this->assertSingletonBinding($app, QueueTenantContext::class, QueueTenantContext::class);
     $this->assertSingletonBinding(
         $app,
         TenantContextResolver::class,
@@ -76,7 +78,7 @@ it('keeps Runtime register bindings on the measured key, concrete and lifetime',
         ConnectionGuardedTenantContextRestorer::class,
     );
 
-    foreach ($app->make(TenancyOptions::class)->bootstrapperOrder as $bootstrapper) {
+    foreach ($app->make(TenancyOptions::class)->bootstrappers as $bootstrapper) {
         $this->assertSingletonBinding($app, $bootstrapper, $bootstrapper);
     }
 });

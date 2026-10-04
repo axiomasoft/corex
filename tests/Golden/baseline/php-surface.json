@@ -66257,8 +66257,8 @@
                     },
                     {
                         "byRef": false,
-                        "name": "hostResolver",
-                        "type": "CoreX\\Tenancy\\Laravel\\Resolvers\\HostTenantResolver",
+                        "name": "hostCache",
+                        "type": "CoreX\\Tenancy\\Laravel\\Support\\HostResolverCacheInvalidator",
                         "variadic": false
                     }
                 ],
@@ -67145,6 +67145,12 @@
                         "byRef": false,
                         "name": "clock",
                         "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "contexts",
+                        "type": "CoreX\\Context\\Contracts\\TenantContextResolver",
                         "variadic": false
                     }
                 ],
@@ -68890,6 +68896,14 @@
                     "value": "tenancy.claim_unavailable"
                 }
             },
+            "ContextUnavailable": {
+                "type": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                "value": {
+                    "enum": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
+                    "case": "ContextUnavailable",
+                    "value": "tenancy.context_unavailable"
+                }
+            },
             "CredentialIssuanceDenied": {
                 "type": "CoreX\\Tenancy\\Errors\\Enums\\TenancyErrorCode",
                 "value": {
@@ -70401,6 +70415,12 @@
                         "name": "options",
                         "type": "CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "contexts",
+                        "type": "CoreX\\Context\\Contracts\\TenantContextResolver",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -70768,68 +70788,6 @@
         "properties": [],
         "readonly": false
     },
-    "CoreX\\Tenancy\\Laravel\\Bootstrappers\\WorkspaceContextBootstrapper": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "Stancl\\Tenancy\\Contracts\\TenancyBootstrapper"
-        ],
-        "internal": false,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "manager",
-                        "type": "CoreX\\Context\\Contracts\\TenancyManager",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "queue",
-                        "type": "Illuminate\\Queue\\QueueManager",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "__constructStatic": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "app",
-                        "type": "Illuminate\\Contracts\\Foundation\\Application",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
-                "static": true
-            },
-            "bootstrap": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "tenant",
-                        "type": "Stancl\\Tenancy\\Contracts\\Tenant",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
-                "static": false
-            },
-            "revert": {
-                "params": [],
-                "return": "void",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
     "CoreX\\Tenancy\\Laravel\\Commands\\IdentitiesReconcileCommand": {
         "abstract": false,
         "constants": [],
@@ -71159,9 +71117,32 @@
                 "params": [
                     {
                         "byRef": false,
-                        "default": null,
                         "name": "statusGate",
-                        "type": "?CoreX\\Tenancy\\Laravel\\Support\\StatusGatePolicy",
+                        "type": "CoreX\\Tenancy\\Laravel\\Support\\StatusGatePolicy",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "contexts",
+                        "type": "CoreX\\Context\\Contracts\\TenantContextResolver",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "accounts",
+                        "type": "CoreX\\Tenancy\\Account\\Contracts\\AccountRead",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "auth",
+                        "type": "Illuminate\\Contracts\\Auth\\Factory",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "centralConnection",
+                        "type": "string",
                         "variadic": false
                     }
                 ],
@@ -71419,14 +71400,32 @@
                 "params": [
                     {
                         "byRef": false,
-                        "name": "tenancy",
-                        "type": "Stancl\\Tenancy\\Tenancy",
+                        "name": "manager",
+                        "type": "CoreX\\Context\\Contracts\\TenancyManager",
                         "variadic": false
                     },
                     {
                         "byRef": false,
-                        "name": "resolver",
-                        "type": "CoreX\\Tenancy\\Laravel\\Resolvers\\HostTenantResolver",
+                        "name": "hosts",
+                        "type": "CoreX\\Tenancy\\Runtime\\Internal\\HostAccountResolver",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "accounts",
+                        "type": "CoreX\\Tenancy\\Account\\Contracts\\AccountRead",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "container",
+                        "type": "Illuminate\\Contracts\\Container\\Container",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "centralConnection",
+                        "type": "string",
                         "variadic": false
                     }
                 ],
@@ -71452,7 +71451,7 @@
                 "static": false
             }
         },
-        "parent": "Stancl\\Tenancy\\Middleware\\IdentificationMiddleware",
+        "parent": null,
         "properties": [],
         "readonly": false
     },
@@ -71512,6 +71511,49 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Tenancy\\Laravel\\Http\\Middleware\\ScopeSessionToTenant": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "manager",
+                        "type": "CoreX\\Context\\Contracts\\TenancyManager",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "request",
+                        "type": "Illuminate\\Http\\Request",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "next",
+                        "type": "Closure",
+                        "variadic": false
+                    }
+                ],
+                "return": "Symfony\\Component\\HttpFoundation\\Response",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Tenancy\\Laravel\\IdentityRegistrar": {
         "abstract": false,
         "constants": [],
@@ -71540,43 +71582,6 @@
                         "byRef": false,
                         "name": "app",
                         "type": "Illuminate\\Contracts\\Foundation\\Application",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
-    "CoreX\\Tenancy\\Laravel\\Listeners\\RevertTenancyOnJobException": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
-        "internal": false,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "tenancy",
-                        "type": "Stancl\\Tenancy\\Tenancy",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "handle": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "event",
-                        "type": "Illuminate\\Queue\\Events\\JobExceptionOccurred",
                         "variadic": false
                     }
                 ],
@@ -71624,76 +71629,6 @@
             }
         },
         "parent": null,
-        "properties": [],
-        "readonly": false
-    },
-    "CoreX\\Tenancy\\Laravel\\Resolvers\\HostTenantResolver": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "Stancl\\Tenancy\\Contracts\\TenantResolver"
-        ],
-        "internal": false,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "app",
-                        "type": "Illuminate\\Contracts\\Foundation\\Application",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "options",
-                        "type": "?CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "getPossibleCacheKeys": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "tenant",
-                        "type": "Stancl\\Tenancy\\Contracts\\Tenant&Illuminate\\Database\\Eloquent\\Model",
-                        "variadic": false
-                    }
-                ],
-                "return": "array",
-                "static": false
-            },
-            "normalizeHost": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "host",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "string",
-                "static": true
-            },
-            "resolveWithoutCache": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "args",
-                        "type": "mixed",
-                        "variadic": true
-                    }
-                ],
-                "return": "Stancl\\Tenancy\\Contracts\\Tenant",
-                "static": false
-            }
-        },
-        "parent": "Stancl\\Tenancy\\Resolvers\\Contracts\\CachedTenantResolver",
         "properties": [],
         "readonly": false
     },
@@ -71823,6 +71758,79 @@
                 "type": "int"
             }
         },
+        "readonly": true
+    },
+    "CoreX\\Tenancy\\Laravel\\Support\\HostResolverCacheInvalidator": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "cache",
+                        "type": "Illuminate\\Contracts\\Cache\\Factory",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "accountChanged": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "account",
+                        "type": "Illuminate\\Database\\Eloquent\\Model",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "domainChanged": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "domain",
+                        "type": "Illuminate\\Database\\Eloquent\\Model",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "forgetAccount": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "accountId",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
         "readonly": true
     },
     "CoreX\\Tenancy\\Laravel\\Support\\ImpersonationPolicy": {
@@ -72018,7 +72026,7 @@
                     },
                     {
                         "byRef": false,
-                        "name": "bootstrapperOrder",
+                        "name": "bootstrappers",
                         "type": "array",
                         "variadic": false
                     },
@@ -72032,6 +72040,12 @@
                         "byRef": false,
                         "name": "cachePrefix",
                         "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "cacheStores",
+                        "type": "array",
                         "variadic": false
                     },
                     {
@@ -72060,19 +72074,19 @@
                     },
                     {
                         "byRef": false,
-                        "name": "hostIdentificationCache",
+                        "name": "hostCache",
                         "type": "bool",
                         "variadic": false
                     },
                     {
                         "byRef": false,
-                        "name": "hostIdentificationCacheTtl",
+                        "name": "hostCacheTtl",
                         "type": "int",
                         "variadic": false
                     },
                     {
                         "byRef": false,
-                        "name": "hostIdentificationCacheStore",
+                        "name": "hostCacheStore",
                         "type": "?string",
                         "variadic": false
                     },
@@ -72257,8 +72271,8 @@
         },
         "parent": null,
         "properties": {
-            "bootstrapperOrder": {
-                "name": "bootstrapperOrder",
+            "bootstrappers": {
+                "name": "bootstrappers",
                 "readonly": true,
                 "static": false,
                 "type": "array"
@@ -72268,6 +72282,12 @@
                 "readonly": true,
                 "static": false,
                 "type": "string"
+            },
+            "cacheStores": {
+                "name": "cacheStores",
+                "readonly": true,
+                "static": false,
+                "type": "array"
             },
             "centralConnection": {
                 "name": "centralConnection",
@@ -72287,20 +72307,20 @@
                 "static": false,
                 "type": "bool"
             },
-            "hostIdentificationCache": {
-                "name": "hostIdentificationCache",
+            "hostCache": {
+                "name": "hostCache",
                 "readonly": true,
                 "static": false,
                 "type": "bool"
             },
-            "hostIdentificationCacheStore": {
-                "name": "hostIdentificationCacheStore",
+            "hostCacheStore": {
+                "name": "hostCacheStore",
                 "readonly": true,
                 "static": false,
                 "type": "?string"
             },
-            "hostIdentificationCacheTtl": {
-                "name": "hostIdentificationCacheTtl",
+            "hostCacheTtl": {
+                "name": "hostCacheTtl",
                 "readonly": true,
                 "static": false,
                 "type": "int"
@@ -72518,6 +72538,46 @@
                     }
                 ],
                 "return": "void",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Tenancy\\Laravel\\TenancyRuntimeFactory": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "frameworkConfig": {
+                "params": [],
+                "return": "CoreX\\Tenancy\\Runtime\\Internal\\FrameworkConfig",
+                "static": true
+            },
+            "manager": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Tenancy\\Runtime\\Internal\\DatabaseTenancyManager",
+                "static": true
+            },
+            "payloadHook": {
+                "params": [],
+                "return": "Closure",
+                "static": true
+            },
+            "workspaceResolver": {
+                "params": [],
+                "return": "Closure",
                 "static": true
             }
         },
@@ -78181,6 +78241,179 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "bootstrap": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Context\\Data\\TenantContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "database",
+                        "type": "CoreX\\Context\\Data\\DatabaseConnectionConfig",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "revert": {
+                "params": [],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Tenancy\\Runtime\\Events\\TenantContextEnded": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "accountId",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "accountId": {
+                "name": "accountId",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Tenancy\\Runtime\\Events\\TenantContextInitialized": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "accountId",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "accountId": {
+                "name": "accountId",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Tenancy\\Runtime\\Exceptions\\TenantContextUnavailable": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            },
+            "invalidPayload": {
+                "params": [],
+                "return": "self",
+                "static": true
+            },
+            "missingAccount": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "accountId",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            },
+            "missingDatabase": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "accountId",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            },
+            "missingWorkspace": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "workspaceId",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            },
+            "notInitialized": {
+                "params": [],
+                "return": "self",
+                "static": true
+            },
+            "runtimePoisoned": {
+                "params": [],
+                "return": "self",
+                "static": true
+            }
+        },
+        "parent": "RuntimeException",
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Tenancy\\Runtime\\Exceptions\\TenantCouldNotBeIdentifiedByHostException": {
         "abstract": false,
         "constants": [],
@@ -78209,11 +78442,310 @@
                 "params": [],
                 "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
                 "static": false
+            },
+            "forHost": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "host",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
             }
         },
-        "parent": "Stancl\\Tenancy\\Contracts\\TenantCouldNotBeIdentifiedException",
+        "parent": "RuntimeException",
         "properties": [],
         "readonly": false
+    },
+    "CoreX\\Tenancy\\Runtime\\Internal\\Bootstrappers\\CachePrefixBootstrapper": {
+        "abstract": false,
+        "constants": {
+            "SUPPORTED_DRIVERS": {
+                "type": "array",
+                "value": [
+                    "redis",
+                    "memcached",
+                    "database",
+                    "file"
+                ]
+            }
+        },
+        "final": true,
+        "interfaces": [
+            "CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "cache",
+                        "type": "Illuminate\\Cache\\CacheManager",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "config",
+                        "type": "CoreX\\Tenancy\\Runtime\\Internal\\FrameworkConfig",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "stores",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "prefix",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "centralConnection",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "bootstrap": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Context\\Data\\TenantContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "database",
+                        "type": "CoreX\\Context\\Data\\DatabaseConnectionConfig",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "revert": {
+                "params": [],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Tenancy\\Runtime\\Internal\\Bootstrappers\\ConnectionBootstrapper": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "databases",
+                        "type": "Illuminate\\Database\\DatabaseManager",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "config",
+                        "type": "CoreX\\Tenancy\\Runtime\\Internal\\FrameworkConfig",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "centralConnection",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "bootstrap": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Context\\Data\\TenantContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "database",
+                        "type": "CoreX\\Context\\Data\\DatabaseConnectionConfig",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "revert": {
+                "params": [],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Tenancy\\Runtime\\Internal\\Bootstrappers\\SessionConnectionBootstrapper": {
+        "abstract": false,
+        "constants": {
+            "SUPPORTED_DRIVERS": {
+                "type": "array",
+                "value": [
+                    "database",
+                    "redis",
+                    "memcached",
+                    "file"
+                ]
+            }
+        },
+        "final": true,
+        "interfaces": [
+            "CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "sessions",
+                        "type": "Illuminate\\Session\\SessionManager",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "cache",
+                        "type": "Illuminate\\Cache\\CacheManager",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "container",
+                        "type": "Illuminate\\Contracts\\Container\\Container",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "config",
+                        "type": "CoreX\\Tenancy\\Runtime\\Internal\\FrameworkConfig",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "centralConnection",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "files",
+                        "type": "Illuminate\\Filesystem\\Filesystem",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "bootstrap": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Context\\Data\\TenantContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "database",
+                        "type": "CoreX\\Context\\Data\\DatabaseConnectionConfig",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "revert": {
+                "params": [],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Tenancy\\Runtime\\Internal\\CentralTemplateConnectionResolver": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Context\\Contracts\\AccountConnectionResolver"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "config",
+                        "type": "CoreX\\Tenancy\\Runtime\\Internal\\FrameworkConfig",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "centralConnection",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "resolve": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "account",
+                        "type": "CoreX\\Context\\Data\\AccountRef",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Context\\Data\\DatabaseConnectionConfig",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
     },
     "CoreX\\Tenancy\\Runtime\\Internal\\ConnectionGuardedTenantContextRestorer": {
         "abstract": false,
@@ -78260,7 +78792,7 @@
         "properties": [],
         "readonly": true
     },
-    "CoreX\\Tenancy\\Runtime\\Internal\\StanclTenancyManager": {
+    "CoreX\\Tenancy\\Runtime\\Internal\\DatabaseTenancyManager": {
         "abstract": false,
         "constants": [],
         "final": true,
@@ -78274,14 +78806,44 @@
                 "params": [
                     {
                         "byRef": false,
-                        "name": "tenancy",
-                        "type": "Stancl\\Tenancy\\Tenancy",
+                        "name": "bootstrappers",
+                        "type": "array",
                         "variadic": false
                     },
                     {
                         "byRef": false,
                         "name": "accounts",
                         "type": "CoreX\\Tenancy\\Account\\Contracts\\AccountRead",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "CoreX\\Context\\Contracts\\AccountConnectionResolver",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "container",
+                        "type": "Illuminate\\Contracts\\Container\\Container",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "events",
+                        "type": "Illuminate\\Contracts\\Events\\Dispatcher",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "centralConnection",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "logger",
+                        "type": "Psr\\Log\\LoggerInterface",
                         "variadic": false
                     }
                 ],
@@ -78345,6 +78907,208 @@
                         "byRef": false,
                         "name": "workspace",
                         "type": "?CoreX\\Context\\Data\\WorkspaceRef",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Tenancy\\Runtime\\Internal\\FrameworkConfig": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "repository",
+                        "type": "Closure",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "get": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "key",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "default",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "mixed",
+                "static": false
+            },
+            "set": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "key",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\Tenancy\\Runtime\\Internal\\HostAccountResolver": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "cache",
+                        "type": "Illuminate\\Contracts\\Cache\\Factory",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "key": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "host",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
+            },
+            "normalizeHost": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "host",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
+            },
+            "resolve": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "host",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\Tenancy\\Runtime\\Internal\\QueueTenantContext": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "manager",
+                        "type": "CoreX\\Context\\Contracts\\TenancyManager",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "accounts",
+                        "type": "CoreX\\Tenancy\\Account\\Contracts\\AccountRead",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "workspaceResolver",
+                        "type": "Closure",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "centralConnection",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "finished": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "event",
+                        "type": "Illuminate\\Queue\\Events\\JobAttempted",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "processing": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "event",
+                        "type": "Illuminate\\Queue\\Events\\JobProcessing",
                         "variadic": false
                     }
                 ],
@@ -78533,6 +79297,83 @@
         "parent": null,
         "properties": [],
         "readonly": false
+    },
+    "CoreX\\Tenancy\\Runtime\\Internal\\TenantCleanupFailure": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "Stringable",
+            "Throwable"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "original",
+                        "type": "Throwable",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "cleanup",
+                        "type": "Throwable",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": "RuntimeException",
+        "properties": {
+            "cleanup": {
+                "name": "cleanup",
+                "readonly": true,
+                "static": false,
+                "type": "Throwable"
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\Tenancy\\Runtime\\Internal\\TenantFacilitiesValidator": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "config",
+                        "type": "CoreX\\Tenancy\\Runtime\\Internal\\FrameworkConfig",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "assertValid": {
+                "params": [],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
     },
     "CoreX\\Tenancy\\TenancyServiceProvider": {
         "abstract": false,

@@ -17,16 +17,19 @@ use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycle;
 use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycleFsm;
 use CoreX\Tenancy\Account\Internal\PendingPool;
 use CoreX\Tenancy\Account\Internal\StanclTenantDatabaseProvisioner;
-use CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver;
 use CoreX\Tenancy\Laravel\Support\AccountLifecyclePolicy;
+use CoreX\Tenancy\Laravel\Support\HostResolverCacheInvalidator;
+use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Provisioning\Internal\StanclTenantDatabaseLifecycle;
+use CoreX\Tenancy\Runtime\Internal\HostAccountResolver;
 use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Connectors\ConnectionFactory;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
@@ -157,7 +160,7 @@ function lcLifecycle(?ImpersonationService $impersonation = null, ?TenantDatabas
     $templateIntegrityVerifier = app(TemplateIntegrityVerifier::class);
 
     return new AccountLifecycle(
-        lifecycle: app(AccountLifecyclePolicy::class), connections: app(ConnectionResolverInterface::class), clock: app(ClockInterface::class), events: app(Dispatcher::class), connectionFactory: app(ConnectionFactory::class), hostResolver: app(HostTenantResolver::class),
+        lifecycle: app(AccountLifecyclePolicy::class), connections: app(ConnectionResolverInterface::class), clock: app(ClockInterface::class), events: app(Dispatcher::class), connectionFactory: app(ConnectionFactory::class), hostCache: app(HostResolverCacheInvalidator::class),
         centralConnection: 'pgsql',
         pendingPool: new PendingPool(
             connections: app(ConnectionResolverInterface::class),
@@ -386,18 +389,26 @@ it('retries failed physical purge without publishing a terminal account state', 
         ->and(DB::table('root_account_events')->where('account_id', $account->id)->where('event', 'account.purged')->count())->toBe(1);
 });
 
-it('invalidates a warmed host resolver only when a status transition commits', function (): void {
+it('invalidates a warmed host cache entry only when a status transition commits', function (): void {
+    config([
+        'tenancy.host_identification.enabled' => true,
+        'tenancy.host_identification.cache' => true,
+        'tenancy.host_identification.cache_store' => null,
+    ]);
+    app()->forgetInstance(TenancyOptions::class);
     $account = activateLcAccount();
     lcLifecycle()->activate($account);
-    $resolver = app(HostTenantResolver::class);
+    $resolver = app(HostAccountResolver::class);
     $host = $account->slug.'.'.config('tenancy.platform_domain');
-    expect($resolver->resolve($host)->status)->toBe('active');
+    $key = HostAccountResolver::key(strtolower($host));
+    expect($resolver->resolve($host))->toBe($account->id)
+        ->and(Cache::has($key))->toBeTrue();
     DB::beginTransaction();
     lcLifecycle()->suspend($account, 'test');
     DB::rollBack();
-    expect($resolver->resolve($host)->status)->toBe('active');
+    expect(Cache::has($key))->toBeTrue();
     lcLifecycle()->suspend($account, 'test');
-    expect($resolver->resolve($host)->status)->toBe('suspended');
+    expect(Cache::has($key))->toBeFalse();
 });
 
 it('holds the account row lock while validating and committing a transition', function (): void {

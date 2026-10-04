@@ -7,6 +7,7 @@ namespace CoreX\Tenancy\Laravel;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\ImpersonationService;
+use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Modules\Laravel\RegistersNothingOnBoot;
 use CoreX\Tenancy\Authentication\Internal\Http\Controllers\LogoutController;
@@ -101,6 +102,7 @@ final class AuthenticationRegistrar implements PackageRegistrar
                 auth: $app->make(AuthFactory::class),
                 connections: $app->make(ConnectionResolverInterface::class),
                 clock: $app->make(ClockInterface::class),
+                contexts: $app->make(TenantContextResolver::class),
             ),
         );
 
@@ -117,6 +119,7 @@ final class AuthenticationRegistrar implements PackageRegistrar
             static fn (Application $app): DatabaseImpersonationService => new DatabaseImpersonationService(
                 impersonationPolicy: $app->make(ImpersonationPolicy::class),
                 options: $app->make(TenancyOptions::class),
+                contexts: $app->make(TenantContextResolver::class),
             ),
         );
     }
