@@ -1,6 +1,6 @@
 {
     "schema": "package-graph-report/1",
-    "generated_at": "2026-10-02T11:38:34+00:00",
+    "generated_at": "2026-10-03T20:04:06+00:00",
     "legacy_namespace_splits": [],
     "reservations": [
         {
@@ -10,7 +10,7 @@
             "reason": "host-reserved adapter namespace; host defines zero classes under the prefix",
             "class_counts": {
                 "axiomasoft/corex-search": 0,
-                "axiomasoft/corex-search-meilisearch": 8
+                "axiomasoft/corex-search-meilisearch": 9
             }
         }
     ],
@@ -69,7 +69,7 @@
     ],
     "summary": {
         "packages_scanned": 21,
-        "classes_indexed": 1325,
+        "classes_indexed": 1389,
         "violation_count": 5,
         "legacy_split_count": 0,
         "reservation_count": 1

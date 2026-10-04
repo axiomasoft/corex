@@ -1,0 +1,37 @@
+{
+  "adapter_attestation": null,
+  "commit_sha": "4137d2412497aa9348cf19322b26f1d074b5ad2c",
+  "continuity": {
+    "evidence": [
+      "persisted-context:continue-root"
+    ],
+    "outcome": "continue-root",
+    "reason": "compatible-active-work",
+    "runnable": true,
+    "schema_version": "session-continuity-decision/v1"
+  },
+  "digests": {
+    "closure": null,
+    "handoff": "sha256:602641b0e026f8b5086173693b14feb6f1c76c7387ce12994daadd04761aeb0b",
+    "plan": "sha256:115374b6fc8ddb116acbb446af46e47cddc1a7aea90ddfe7f89e9387228b8ac1",
+    "state": null
+  },
+  "journal": null,
+  "next_exact": "manual: ремонт дизайна P07 по findings/P07-grok-review.md — findings 1–4, 6–7; затем finish и независимый design audit",
+  "plan_id": "2026.09.27-№1-COREX-KERNEL",
+  "rationale": {
+    "open_risks": "Ремонт по итогам ревью P06 может сдвинуть факты карты кода P07 (D94 п.3 — сверка `p07-facts.sh` первым шагом P07.1). Мост access-azguard в CI зависит от доступа к приватному репозиторию AzGuard (§5 F6). Stancl v4 может выйти до P07.2 (VERIFY-AT-EXEC, F5).",
+    "remaining": "Owner-requested Grok 4.7/high/500k review completed: findings/P07-grok-review.md, 1 Critical/4 Major/2 Minor. Finding 5 (G2 baseline) corrected by D99; findings 1–4, 6–7 remain open. Resolve these design defects before a GREEN audit; this technical review is not a formal design-audit GREEN. Независимый design audit нового fingerprint. Отдельно и раньше исполнения P07: полное ревью фазы P06 владельцем и финальный hosted CI P06 с закрытием фазы (D73, D91 п.4) — P06 acceptance по-прежнему открыта; строка 25 (P07.1) не стартует до закрытия P06 (D94 п.2). P08–P09 — backlog."
+  },
+  "recommendation": "**Next:** manual: ремонт дизайна P07 по findings/P07-grok-review.md — findings 1–4, 6–7; затем finish и независимый design audit\n\n| Parameter | Meaning |\n|:--|:--|\n| Batch | n/a |\n| Model | frontier |\n| Thinking | high |\n| Context | continue-root |\n| Суть | Устранить Critical DB_URL, session isolation, durable impersonation audit, stability gate, regulated approver и disabled-digest DI. |",
+  "route": {
+    "batch": "n/a",
+    "command": null,
+    "context": "continue-root",
+    "model": "frontier",
+    "thinking": "high"
+  },
+  "schema_version": "handoff-recommendation-receipt/v1",
+  "status": "handoff-persisted",
+  "subject": "P07"
+}

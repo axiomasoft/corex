@@ -2,8 +2,8 @@
 projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
-through: 2026-10-03
-inputs_sha256: e6a12f9137a4c4742bdb8eb631df27ec45a010df27f6b19640cdf3f22740fb15
+through: 2026-10-04
+inputs_sha256: 5118ed7d37a7eebf8506145ed8f295f4e7b1810d200ec3a6817da155e1a067ba
 generated_by: task plan-views status
 -->
 
@@ -16,8 +16,8 @@ generated_by: task plan-views status
 | Field | Meaning |
 |:--|:--|
 | Version | — |
-| Status | 🟠 Done with deviations |
-| Last Updated | 2026-10-03 |
+| Status | 🟡 In progress |
+| Last Updated | 2026-10-04 |
 
 ## 4. Phase Index & Status Board
 
@@ -29,7 +29,8 @@ generated_by: task plan-views status
 | P03 | Feature modules и `Internal` | 2/2 | 🟢 Done |
 | P04 | Application API, Extension SPI и типизированные ошибки | 4/4 | 🟢 Done |
 | P05 | Typed config, композиция и порты | 4/4 | 🟢 Done |
-| P06 | Operations, tools, webhooks и wire | 4/5 | 🟠 Done with deviations |
+| P06 | Operations, tools, webhooks и wire | 4/5 | 🟠 Done with deviations (closed: D105) |
+| P07 | Tenancy, access, независимость модулей | 0/6 | ⬜ Not started |
 | P10 | Зелёный hosted CI на базе P04 | 4/4 | 🟢 Done |
 
 ## Phase P00
@@ -92,6 +93,17 @@ generated_by: task plan-views status
 | P06.3 | Конверт CloudEvents для сообщений и тела вебхуков | 🟢 Done | 2026-10-03 |
 | P06.4 | Контракт доставки вебхуков, egress арендатора и модель угроз | 🟢 Done | 2026-10-03 |
 | P06.5 | Review P06 | 🟠 Done with deviations | 2026-10-03 |
+
+## Phase P07
+
+| ID | Title | Status | Updated |
+|:--|:--|:--|:--|
+| P07.1 | Собственный движок tenancy и граница контекста | ⬜ Not started | — |
+| P07.2 | Tenancy без stancl: данные, provisioning, manifests | ⬜ Not started | — |
+| P07.3 | Impersonation на портах с профилями и двойным аудитом | ⬜ Not started | — |
+| P07.4 | Access без AzGuard и мост access-azguard | ⬜ Not started | — |
+| P07.5 | Контракты пробуждения в ядре и граф без notifications → wakeup | ⬜ Not started | — |
+| P07.6 | Review P07 | ⬜ Not started | — |
 
 ## Phase P10
 
@@ -344,6 +356,27 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-10-03 | reviewer/codex/GPT-6 | plan-run · in-progress · Owner explicitly authorizes Sol and waives model-route verification; P06.5 only, no extra reviewer. Read-only product review at 3f568ddd..2a0265d5. No provider model/effort attestation claimed. |
 | 2026-10-03 | reviewer/codex/GPT-6 | plan-run · closed-deviations · Verdict GREEN, findings 0; tests139, registry/full BC GREEN. Deviation: owner-selected Sol, route check waived. Phase remains open. See artifacts/P06.5-review/verdict.md.
 write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-04 | designer/claude-code/claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | claude-code/claude-opus-5-5/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | gpt-6.1-sol/high | plan-audit · routing-rejected · note abbreviated; full text: journal.jsonl:206 |
+| 2026-10-04 | designer/codex/gpt-6.1-sol/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/gpt-6.1-sol/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/gpt-6.1-sol/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/gpt-6.1-sol/high | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/GPT-6 (runtime selector/effort unavailable) | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/GPT-6 (runtime selector/effort unavailable) | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/GPT-6 (runtime selector/effort unavailable) | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/GPT-6 (runtime selector/effort unavailable) | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/GPT-6 (exact runtime selector/effort unavailable) | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/GPT-6 (exact runtime selector/effort unavailable) | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/GPT-6 (exact runtime selector/effort unavailable) | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/GPT-6 (exact runtime selector/effort unavailable) | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/GPT-6 (exact runtime selector/effort unavailable) | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/GPT-6 (exact runtime selector/effort unavailable) | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | designer/codex/GPT-6 (exact runtime selector/effort unavailable) | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | gpt-6.1-sol/xhigh | plan-audit · audit-attention · Admission preflight blocked: current gpt-6.1-sol/xhigh matches D98/D99 author model; D100-D103 selector unavailable. No substantive audit/proofs or GREEN. See artifacts/P07-formal-design-audit/report.md. |
+| 2026-10-04 | gpt-6.1-sol/xhigh | plan-design · no-op · Design finalized; execution has not started. |
+| 2026-10-04 | gpt-6.1-sol/xhigh | plan-design · no-op · Owner repair complete: D104 explicit no-repeat-audit waiver admitted; first P07 bundle fresh, future/closed bundles correctly classified. P06 acceptance open; no P07 execution or audit-green. |
 
 ## Owner Gates
 

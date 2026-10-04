@@ -41,3 +41,4 @@ __pycache__/
 # CoreX specifications and ADRs are maintained in the Brain vault.
 /docs/03_Dev/
 .mcp.json
+.grok/config.toml

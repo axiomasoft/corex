@@ -1,0 +1,11 @@
+# P07 carrier/admission repair — resolution — 2026-10-04
+
+**Repair result: GREEN. Remaining Critical / Major / Minor: 0 / 0 / 0 within this reported repair scope.**
+
+The original [audit-attention finding A01](P07-formal-design-audit.md) remains historical. The owner explicitly refused another audit and required completing the local repair. Accepted [D104](../decisions/D104-owner-no-repeat-design-audit.md), tied to the exact new finish fingerprint and actual owner-message hash, resolves current design admission through `PLAN_DESIGN_AUDIT_WAIVED_BY_OWNER`. This is owner admission; no independent audit-green event or model-independence claim was created.
+
+The previous broad bundle freshness observation is corrected. Under Task's execution-sheet layout contract, only the next runnable bundle needs current production; later predecessor-dependent bundles remain deferred, and closed snapshots remain historical. P07.1 is materialized and fresh. P07.2–P07.6 correctly await execution-completion inputs. Historical bundles are preserved. These expected future/historical states are not design defects.
+
+Current fingerprint: `6c53c4206610981206cf9c23184718411e392ab54384ef8c5bf96350099780e3`. The sole authored-input change is selecting D104 instead of D89. P06 acceptance stays open, P07 remains Not started, product and unrelated dirty work are preserved.
+
+[Repair report](../artifacts/P07-formal-design-audit-repair/report.md), [verification](../artifacts/P07-formal-design-audit-repair/verification.json), [Task receipt](../artifacts/P07-formal-design-audit-repair/receipt.json).

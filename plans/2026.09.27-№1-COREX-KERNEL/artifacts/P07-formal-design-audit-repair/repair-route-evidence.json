@@ -1,0 +1,10 @@
+{
+  "model": "gpt-6.1-sol",
+  "effort": "xhigh",
+  "thread_id": "01a10707-81b0-7da3-84c8-873ea6cde1f4",
+  "source": "provider-thread-state",
+  "source_version": "codex-turn-context-v1",
+  "scope": "actual non-Task owner-repair actor metadata",
+  "task_invocation_verified": false,
+  "task_capture_result": "ROUTE_LAUNCH_MISMATCH: current turn has owner repair instructions, not exact Task invocation"
+}

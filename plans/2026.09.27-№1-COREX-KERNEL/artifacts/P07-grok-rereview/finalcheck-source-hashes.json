@@ -1,0 +1,18 @@
+{
+  "plans/2026.09.27-№1-COREX-KERNEL/decisions/D103-p07-stable-bc-admission-review.md": "9a044681191c020fc52199ebd4ae8bc20f46c7028753f686ab93f69382d0b7de",
+  "plans/2026.09.27-№1-COREX-KERNEL/decisions/D102-p07-rereview-contract-completeness.md": "5b3393a94d7231a77ddc3649795b8aec7e4b3017ade3e1002930329656206fa7",
+  "plans/2026.09.27-№1-COREX-KERNEL/phases/P07/P07.1.md": "8e91df8d19c2a13775d024c1d04eed01b4a44989ca5aa5000da5d1357c428a6b",
+  "plans/2026.09.27-№1-COREX-KERNEL/phases/P07/P07.6.md": "5528485556022c52c9730bb1087fba31aba053cef21cd4dd0851b9ac51530556",
+  "plans/2026.09.27-№1-COREX-KERNEL/research/P07-design.md": "75fac48ae0c17c0484b4d87f21d63ba90e570fa85cc4848d9f264a11d7c3cbdd",
+  "scripts/bc/approved-delta.py": "1c0fafccb9978ea6536790fd904d5c149d72189b2c7b1d1d170977e3b587d179",
+  "scripts/bc-check.sh": "e92d506a7d286e3ff016398df412f70a3ce26f453e667594e6b723c3b1511be9",
+  "scripts/bc/accepted-base.json": "e4312a96dbb104fa75b030f5738b89854d4b73ffb2b4f22f0498314e199f00c4",
+  "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design-remediation/bc-admission-proof.py": "ebef07120e006e75453c2abaab7c3c55df379ed49d0a26e7a81e637001916a7f",
+  "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design-remediation/bc-admission-proof.json": "8b82ae4dc785f996ac3264975290509c897e25ed3b266e24276e34fa7192f625",
+  "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design-remediation/prove.php": "af5601b89a0d9e230c58dd085fdd15fb2c1baf748665f84f5534234a2c76328d",
+  "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design-remediation/rereview-contract-proof.php": "9459158546c40658908418112f55518022954f27343322aa028368570e2b85e6",
+  "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design-remediation/rereview-contract-proof.json": "bac6eeafc42edffb34b29c109d9973b79546fad0701b3c241f801f573607e410",
+  "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design-remediation/extra-arg-counterexample.php": "a4dcaa75157d95262d802f2df6f80d337b950665ecd1f819e0ffa6bb56c3b644",
+  "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design-remediation/extra-arg-counterexample.json": "21435e7a4876210a80276ba3b42875a20e8b9e17ac6b6e4bcb80d8bf3f7f8cad",
+  "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design/examples.md": "5840bd1f14ff6651996c365a057742f865620e4157b6194046cdd0e30ae24cc3"
+}

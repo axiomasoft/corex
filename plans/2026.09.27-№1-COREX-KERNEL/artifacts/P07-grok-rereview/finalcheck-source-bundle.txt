@@ -1,0 +1,1778 @@
+Fresh independent NARROW technical review of D103 design repair. Do not assume author conclusions or previous reviewer claims. You have the exact current sources below, with path+sha256; Use the supplied source snapshot for this bounded review. Do not perform additional tool reads; if a necessary fact is missing, mark that limit. Review these materials now and output final Russian report in this response, <=600 words. No P07 broad exploration: unchanged original six/D102 behaviors already received broad+delta reviews. No formal audit GREEN/P07 execution claim.
+Evaluate ONLY: (1) stable AccountStatusGate optional-policy -> required5 constructor admission runbook under exact approved-delta.py (carrier declared in P07.1 Files, actual BC_CHECK_BASE, accepted decision hashes, finite actual Roave rows, no blanket bypass, product carrier not populated during design); dossier§4 exact delta. (2) P07.6 explicit enum15->16 and constructor/BC approval crosscheck. (3) QueueTenantContext extra NullLogger removal and PHP8.4 evidence distinguishing prior alleged ArgumentCountError from actual output. (4) new outer callback+cleanup proof that initializes A, enters B callback and then previous-account restoration fails end/revert, preserving both causes/logs/poison. Proofs are author-executed fixtures, not independent runs. No actual real Roave/provider/PG result is claimed. Identify any actionable confirmed defect with severity/source/impact/fix; separate limits and unverified risks. You may conclude closed or open based on evidence. Prior finalcheck session read60calls but stopped at CLI18 limit without a report; this is a fresh independent review from exact machine-produced source bundle, no prepared verdict.
+Reviewed whole-plan finish fingerprint: 1cc22905f90878f1c94f062071cbe4f2c3eb825ebe409f2ed78d62f683d221c7
+
+
+===== SOURCE plans/2026.09.27-№1-COREX-KERNEL/decisions/D103-p07-stable-bc-admission-review.md SHA256 9a044681191c020fc52199ebd4ae8bc20f46c7028753f686ab93f69382d0b7de =====
+---
+id: D103
+date: 2026-10-04
+status: accepted
+item: P07.1
+items: [P07, P07.1, P07.6]
+supersedes: []
+superseded_by: null
+---
+# D103 — p07-stable-bc-admission-review (accepted)
+
+**Actor:** designer/codex/GPT-6 (exact runtime selector/effort unavailable), same owner-authorized repair.
+**Evidence:** RAG:— artifacts/P07-grok-rereview/followup-report.md; scripts/bc-check.sh stable branch and scripts/bc/approved-delta.py; artifacts/P07-design-remediation/bc-admission-proof.py and rereview-contract-proof.php.
+
+## Solution
+
+1. D102 AccountStatusGate constructor change is a finite approved unpublished semantic delta under D64. Explicitly include scripts/bc/approved-deltas.json in P07.1 Files and scope. Preserve existing package entries; add tenancy entry at product execution only, bound to the resolved BC_CHECK_BASE revision actually used by bc-check (accepted-base.json by default), accepted D102/D103 source paths and exact SHA-256. Collect actual Roave JSON errors on the product candidate, approve only the declared constructor delta rows (description SHA-256, path, modificationType). No wildcard, invented hash, blanket exemption or base change. If any row is outside declared §4 surface, stop/fix; do not expand approvals silently. Golden regeneration and CHANGELOG alone do not admit stable BC. Same product commit carries CHANGELOG, php-api/Golden and finite approval. Rerun bc-check to exit 0 and preserve gate output. No stable bypass or checker change.
+2. Dossier §4 explicitly names optional-policy → required five-argument constructor. P07.6 Scope/Validation covers D95/D96 with D98–D103 corrections, closed kernel enum 15→16 and this exact stable BC admission. Product tests and gates remain execution acceptance.
+3. Remove unintended extra NullLogger argument from QueueTenantContext proof constructor; the logger belongs only to manager. PHP 8.4 accepts surplus arguments for this user-defined constructor, so the review's ArgumentCountError/current-proof-invalid assertion is not reproduced. Preserve raw report, record this evidence correction in triage, rerun current bodies/results. Add callback+cleanup with an initialized outer account to exercise actual previous-account restoration branch; current central scenario remains.
+
+## Why
+
+Stable packages require exact decision-bound Roave approval; scope and Golden prose alone cannot pass bc-check. Additional proof coverage must match current bodies and exercise outer restoration, while raw reviewer claims remain historical evidence to verify.
+
+## Consequences
+
+No product mutation/approval file filled now; no real Roave result claimed. Temp-only actual approved-delta checker tests exact positive and unknown-description/base/decision-hash/status negatives, with fixture Roave-shaped rows honestly labelled. No implementation snippet change since D102; only design execution carriers/BC admission and proof coverage. Independent narrow recheck required. Formal frontier/xhigh audit and P06 acceptance still gate product execution.
+
+===== SOURCE plans/2026.09.27-№1-COREX-KERNEL/decisions/D102-p07-rereview-contract-completeness.md SHA256 5b3393a94d7231a77ddc3649795b8aec7e4b3017ade3e1002930329656206fa7 =====
+---
+id: D102
+date: 2026-10-04
+status: accepted
+item: P07.1
+items: [P07, P07.1, P07.5, P07.6]
+supersedes: []
+superseded_by: null
+---
+# D102 — p07-rereview-contract-completeness (accepted)
+
+**Actor:** designer/codex/GPT-6 (exact runtime selector/effort unavailable), owner-authorized design repair.
+**Evidence:** RAG:— artifacts/P07-grok-rereview/report.md (independent Grok 4.7/high/500k; two Major and two Minor); installed AccountRef/AccountRead/AccountStatusGate and scripts/module-layout-gate.py R1; artifacts/P07-design-remediation/rereview-contract-proof.php and rereview-layout-proof.py.
+
+## Solution
+
+1. Amend D29/D57 only by adding Scheduling to scripts/module-layout.json::kernel_modules, between Observability and Settings (15 → 16), alongside ownership/glossary/constitution in P07.5. Keep the closed enum, R1, and exact ratchet baseline unchanged. Actual gate checks moved ten files; old list fails R1, new passes, unknown module still fails.
+2. P07.1 AccountStatusGate uses AccountRef status and AccountRead::ownerIdentityId(accountId, centralConnection), AuthFactory::guard()->id(), and unchanged StatusGatePolicy. Do not extend AccountRef with persistence fields. Constructor now requires policy, resolver, read port, auth factory, central name; HttpRegistrar constructs it explicitly. Record the SpiKind::Call constructor BC delta in CHANGELOG/php-api/Golden and migrate callers. Existing suspended/grace owner/payment/export/read-only behavior, null-owner denial and named/path route matching must remain verified.
+3. ScopeSessionToTenant injects TenancyManager, using nullable context() with TenantContextUnavailable::notInitialized. TenantContextResolver::current() is non-null and throws CentralContextException; do not append unreachable ?? to it.
+4. DatabaseTenancyManager injects existing PSR LoggerInterface; internal TenantCleanupFailure keeps original getPrevious() plus cleanup Throwable property. Log both causes, tolerate log-transport failure, attempt all reverts and poison runtime. runFor skips restoration after poison, preserving the failure instead of replacing it with runtimePoisoned. When callback and restoration both fail, preserve both through the same wrapper. RuntimeRegistrar binds the logger; no package dependency/public interface delta. Tests check actual cause objects/log context and both central/outer runFor paths.
+
+## Why
+
+Ownership metadata alone cannot admit a new root module. AccountRef has no owner_identity_id. Typed context contract and prose-only cleanup diagnostics made the previous execution instructions incomplete. Original broad review confirmed all six D100 findings closed; these are additional defects, not reopened findings.
+
+## Consequences
+
+D95–D101 and broad report stay historical; this decision has priority for its narrow scope. Update item Files/Validation/BC, examples/dossier and supporting views. No product code or project DB change, no P07 execution or formal audit GREEN. P06 acceptance and independent frontier/xhigh audit of final finish remain required.
+
+===== SOURCE plans/2026.09.27-№1-COREX-KERNEL/phases/P07/P07.1.md SHA256 8e91df8d19c2a13775d024c1d04eed01b4a44989ca5aa5000da5d1357c428a6b =====
+### P07.1 — Собственный движок tenancy и граница контекста
+
+**Intent:** Заменить runtime stancl собственным DB-per-account движком за SPI ядра `TenancyManager`: переключение соединения, кэша и сессии через упорядоченные bootstrappers, контекст очередей, идентификация по host и сессия, привязанная к tenant, — с инвариантом «каждая смена контекста сбрасывает scoped-экземпляры».
+
+**Why:** D13/D95 п.1–п.6: v4 не опубликован (W1), 3.10 — другой API (W2); движок использует малую часть stancl. D70 оставил открытым захват default-соединения в 60 сервисах — D95 п.3 закрывает его границей scoped-экземпляров. Правила переключения, очередей и resident-режима — W3–W5.
+
+**Scope Included:** D103 finite stable BC approval carrier for D102 constructor; `CoreX\Tenancy\Runtime\Contracts\TenantBootstrapper` (Spi Implement); `Runtime\Internal\DatabaseTenancyManager`, `Runtime\Internal\CentralTemplateConnectionResolver`, `Runtime\Internal\Bootstrappers\{ConnectionBootstrapper,CachePrefixBootstrapper,SessionConnectionBootstrapper}`, `Runtime\Internal\QueueTenantContext`, `Runtime\Internal\HostAccountResolver`; события `Runtime\Events\{TenantContextInitialized,TenantContextEnded}` (Api); `Runtime\Exceptions\TenantContextUnavailable` с кодом `tenancy.context_unavailable` в `TenancyErrorCode`; удаление `WorkspaceContextBootstrapper`; `ResolveTenantFromHost` и `ScopeSessionToTenant`; `RuntimeRegistrar`/`EventsRegistrar`/`HttpRegistrar` без runtime-символов stancl; `TenancyOptions::$bootstrappers`, `$cacheStores`, `$hostCache*`; `AccountStatusGate` и `OidcLoginController` через `TenantContextResolver`; статья RUN «граница scoped = граница tenant» в `docs/architecture/constitution.md`; тесты `TenancyEngineTest`, `QueueTenantContextTest`, `ScopeBoundaryPgTest` и перевод существующих тестов движка; Golden delta P07.1 (досье §4).
+
+**Scope Excluded:** модели `Account`/`Domain`, provisioning/lifecycle, `JobPipeline`, config-слияние, удаление пакетов stancl и PHPStan-правила (P07.2); impersonation-порты/профили (P07.3), кроме снятия tenancy() и Stancl-типа сервиса (этот item); изменение 60 параметров `Connection|ConnectionInterface`; Filesystem/Scout bootstrappers; схема.
+
+**Inputs:** `plans/2026.09.27-№1-COREX-KERNEL/decisions/D103-p07-stable-bc-admission-review.md` · `plans/2026.09.27-№1-COREX-KERNEL/decisions/D102-p07-rereview-contract-completeness.md` · `plans/2026.09.27-№1-COREX-KERNEL/decisions/D101-p07-session-directory-review-evidence.md` · `plans/2026.09.27-№1-COREX-KERNEL/decisions/D100-p07-grok-design-remediation.md` · `plans/2026.09.27-№1-COREX-KERNEL/decisions/D99-p07-g2-scan-correction.md` · `plans/2026.09.27-№1-COREX-KERNEL/decisions/D98-p07-design-audit-remediation.md` · `plans/2026.09.27-№1-COREX-KERNEL/decisions/D95-p07-tenancy-engine.md` · `plans/2026.09.27-№1-COREX-KERNEL/decisions/D94-p07-early-design-admission.md` · `plans/2026.09.27-№1-COREX-KERNEL/research/P07-design.md` (§1.1, §2, §3.1, §4, §5, §6) · `plans/2026.09.27-№1-COREX-KERNEL/research/P07-design-rag.md` (W1–W5) · `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design/examples.md` (§1–§6, §12) · `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design/facts/connection-captures.txt` · `plans/2026.09.27-№1-COREX-KERNEL/decisions/D70-p05-composition-and-ports.md`
+
+**Files:** `scripts/bc/approved-deltas.json` (finite decision-bound tenancy constructor delta, D103); `packages/tenancy/CHANGELOG.md`; `packages/tenancy/src/Runtime/Contracts/TenantBootstrapper.php`, `packages/tenancy/src/Runtime/Internal/{TenantCleanupFailure,DatabaseTenancyManager,CentralTemplateConnectionResolver,QueueTenantContext,HostAccountResolver}.php`, `packages/tenancy/src/Runtime/Internal/Bootstrappers/{ConnectionBootstrapper,CachePrefixBootstrapper,SessionConnectionBootstrapper}.php`, `packages/tenancy/src/Runtime/Events/{TenantContextInitialized,TenantContextEnded}.php`, `packages/tenancy/src/Runtime/Exceptions/TenantContextUnavailable.php` (новые); `packages/tenancy/src/Runtime/Internal/StanclTenancyManager.php`, `packages/tenancy/src/Laravel/Resolvers/HostTenantResolver.php`, `packages/tenancy/src/Laravel/Listeners/RevertTenancyOnJobException.php` (удалить); `packages/tenancy/src/Laravel/Bootstrappers/WorkspaceContextBootstrapper.php` (удалить); `packages/tenancy/src/Runtime/Internal/HostResolverCacheInvalidator.php` (новый); `packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php`; `packages/tenancy/src/Laravel/AuthenticationRegistrar.php`; `packages/tenancy/src/Laravel/{RuntimeRegistrar,EventsRegistrar,HttpRegistrar}.php`; `packages/tenancy/src/Laravel/Http/Middleware/{ResolveTenantFromHost,AccountStatusGate,ScopeSessionToTenant}.php`; `packages/tenancy/src/Authentication/Internal/Http/Controllers/OidcLoginController.php`; `packages/tenancy/src/Runtime/Exceptions/TenantCouldNotBeIdentifiedByHostException.php`; `packages/tenancy/src/Laravel/Support/TenancyOptions.php`; `packages/tenancy/src/Errors/Enums/TenancyErrorCode.php` и определение проблемы кода; `packages/tenancy/config/{tenancy,corex-tenancy}.php` (ключи bootstrappers/cache/host); `packages/tenancy/composer.json` и root `composer.json` (root `extra.laravel.dont-discover: ["axiomasoft/stancl-tenancy"]`, промежуточно до P07.2); `packages/core/src/Context/Contracts/TenancyManager.php` (docblock); `packages/tenancy/tests/**` (новые и переводимые тесты из досье §3.1/7); `docs/architecture/constitution.md`; `packages/tenancy/resources/contracts/php-api.json`; `tests/Golden/baseline/*` (строки P07.1 из §4); `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.1-execution/**`.
+
+**Required Reads:** 1) `plans/2026.09.27-№1-COREX-KERNEL/research/P07-design.md` §1.1, §3.1, §5; 2) `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design/examples.md` §1–§6, §12; 3) `plans/2026.09.27-№1-COREX-KERNEL/decisions/D98-p07-design-audit-remediation.md`; 4) `packages/tenancy/src/Runtime/Internal/StanclTenancyManager.php`; 5) `packages/tenancy/src/Laravel/RuntimeRegistrar.php`; 6) `packages/tenancy/src/Laravel/Bootstrappers/WorkspaceContextBootstrapper.php`; 7) `packages/tenancy/src/Laravel/Resolvers/HostTenantResolver.php`; 8) `packages/tenancy/tests/Pg/ResidentTenantSwitchPgTest.php`.
+
+**Implementation Rules:** D102/examples §1c/§6c: explicit central owner read and injected AuthFactory preserve status policy; internal cleanup diagnostic + PSR logger preserve both causes and poisoned runFor; ScopeSessionToTenant uses nullable TenancyManager::context(). D95 п.2–п.6 с приоритетными поправками D98/D100: порядок операций `initialize`/`end`/`runFor`, сброс scoped-экземпляров на каждой смене, откат всех начатых, включая бросивший, bootstrappers при сбое, без static-состояния. Tenant-соединение — parsed central URL без url/read/write + `db_name`; options не переопределяет route (examples §1b/§3, D100). Session handler и middleware priority — examples §3b; первая привязка invalidate, resident attributes/guards flush на HTTP boundary. Job без существующего account падает без отката на предыдущую базу. `createPayloadUsing` не захватывает экземпляр приложения. Фасады и helper-функции не вводятся вне `Laravel/` (runtime-globals G1–G4). Existing тесты P05 (`ResidentTenantSwitchPgTest`) не ослабляются. Промежуточные root dont-discover и только model/provisioning bindings — D98 п.6. Удалить explicit vendor provider во всех затронутых Testbench harnesses; test absence в PackageManifest и нормального UUID/provisioning. Host cache invalidator уже работает здесь, включая временные TenantSaved/TenantDeleted. Cache file key/lock isolation, unsupported driver validation и poison failure обязательны (D98). Manifest и changelog меняются в одном продуктовом commit; base SHA — до правок (досье §3).
+
+**Code Guidance:** Досье §3.1 шаги 1–9; examples §1 (движок и worked example), §1b (resolver), §2 (SPI и валидация порядка), §3 (bootstrappers), §4 (очереди, workspace), §5 (host), §6 (сессия), §12 (тесты и mutation-кейс `P07-scope-boundary`).
+
+**Validation:**
+- D103: capture actual Roave JSON; scripts/bc/approved-deltas.json tenancy entry binds actual resolved BC_CHECK_BASE and accepted D102/D103 SHA-256, exact finite constructor rows only; unknown description/base/decision-hash negatives reject. Preserve unrelated entries, no checker/base weakening; CHANGELOG/php-api/Golden and approval in same product commit. `scripts/php84 composer bc-check` → exit 0 with captured output.
+- AccountStatusGateTest + HttpRegistrar tests: suspended/grace owner/nonowner/nullowner, payment/export named/path routes, read-only vs writes, unknown/terminal status; AccountRead spy always central. Public constructor BC delta in CHANGELOG/php-api/Golden. Bootstrap+revert failure inside direct initialize and both runFor contexts preserves both Throwable objects, emits log context, attempts every revert; failing logger does not mask; poisoned context rejects reuse.
+- После продуктового commit: `bash scripts/contract-guard.sh` и `bash scripts/contract-guard.sh "$(cat plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.1-execution/base-commit.txt)"` → exit 0; в Unreleased `packages/tenancy/CHANGELOG.md` описан API delta.
+- `scripts/php84 composer --working-dir=packages/tenancy test -- --filter='TenancyEngine|QueueTenantContext|BootstrapperOrder|HostResolution|TenantSessionScope|QueueTenancyRevert|TenancyManager'` → exit 0: worked example examples §1, A затем B в одном worker, отсутствующий account → `TenantContextUnavailable` и default = central, sync и nested sync success/failure восстанавливают outer account/workspace; async завершается central; повторный completion не снимает outer frame; failure find/resolve/bootstrap/event восстанавливает runFor caller; повтор `queue:retry` исполняется под исходным account, сессия чужого tenant → 403; DB/cache/file live handler rebuilt; file directory создан 0700, actual read/write/gc проходят (D101); central cookie на tenant не сохраняет auth id; same-account cookie сохраняет вход; web+tenant priority и response save до end; resident A→B/exception не переносят auth (examples §3b).
+- `PGSQL_PORT=5434 scripts/php84 composer --working-dir=packages/tenancy test -- --group=pg --filter='ScopeBoundary|ResidentTenantSwitch'` → exit 0, включая DB_URL central + реальные базы A/B: tenant writes отсутствуют в URL DB, URL credentials/options перенесены, custom resolver overrides сохранены; под патчем без единственного `forgetScopedInstances()` в `resetScope()` `ScopeBoundaryPgTest` красный (mutation-кейс `P07-scope-boundary`, вывод в `artifacts/P07.1-execution/`).
+- `git grep -n -E 'Stancl\\\\Tenancy\\\\(Tenancy|Bootstrappers|Middleware|Listeners|Resolvers)|tenancy\(\)' -- packages/tenancy/src` → пусто.
+- Cache fixture: file central/A/B/A keys и locks из examples §3; unsupported array отклонён; PackageManifest не содержит Stancl provider, модели генерируют UUID и provisioning проходит без vendor provider. Команда — основной tenancy test выше.
+- `scripts/php84 composer error-registry`, `scripts/php84 composer runtime-globals-gate`, `scripts/php84 composer config-cache-check` → exit 0.
+- `scripts/php84 composer --working-dir=packages/tenancy test`, `scripts/php84 composer test:packages`, `PGSQL_PORT=5434 scripts/php84 composer test:pg` → exit 0.
+- `scripts/php84 php scripts/php-api.php --write` дважды → идентично; `scripts/php84 composer php-api`, `scripts/php84 composer bc-check` → exit 0; diff Golden baseline — только строки P07.1 из досье §4.
+- `scripts/php84 composer lint:check`, `scripts/php84 composer analyse` → exit 0; `bash scripts/anti-weakening-gate.sh` → exit 0; `php scripts/package-docs-gate.php` → exit 0.
+- Review `light` (D97): self-check по досье §6; строка `review: self-check GREEN` в Completion Notes.
+
+**Deliverables:** `packages/tenancy/CHANGELOG.md`; `artifacts/P07.1-execution/base-commit.txt` и точный candidate SHA в completion; движок, SPI, bootstrappers, контекст очередей, host/сессия; статья RUN; тесты и вывод mutation-кейса; Golden delta P07.1; `artifacts/P07.1-execution/completion.md`.
+
+BC delta D102 — AccountStatusGate SpiKind::Call constructor optional policy → required (policy, TenantContextResolver, AccountRead, AuthFactory, centralConnection); migrate direct callers and HttpRegistrar. Internal diagnostic/logger constructor is not a public contract.
+
+===== SOURCE plans/2026.09.27-№1-COREX-KERNEL/phases/P07/P07.6.md SHA256 5528485556022c52c9730bb1087fba31aba053cef21cd4dd0851b9ac51530556 =====
+### P07.6 — Review P07
+
+**Intent:** Независимо и только чтением проверить, что результат P07.1–P07.5 согласован как одна граница безопасности: движок изолирует tenant во всех путях входа, stancl удалён полностью, impersonation fail-closed и аудируется, access не зависит от AzGuard, граф модулей соответствует D16.
+
+**Why:** D97 п.2: независимое full-ревью фазы — отдельный read-only item другой моделью; риск фазы — изоляция tenant и обход аудита, которые видны только при сквозном чтении движка, очередей, сессий, impersonation и прав.
+
+**Scope Included:** D102/D103 closed Scheduling module enum 15→16 with unchanged R1/baseline, AccountStatusGate constructor BC + exact decision-bound stable admission; чтение diff фазы от base P07.1 до финального candidate P07.5; сверка каждого актуального пункта D95/D96/D98–D103 с кодом и тестами; проверка негативных контролей (`P07-scope-boundary`, manifest-check, runtime-globals, package-graph) по их записанным выводам; повторный запуск только перечисленных в Validation проверок; запись `artifacts/P07.6-review/verdict.md` с вердиктом `GREEN` или findings (severity, файл:строка, сценарий отказа).
+
+**Scope Excluded:** любые правки продукта, плана или тестов; ремонт по findings (выполняет владеющий item P07.1–P07.5); hosted CI и закрытие фазы (D97 п.4); phase audit.
+
+**Inputs:** `plans/2026.09.27-№1-COREX-KERNEL/decisions/D103-p07-stable-bc-admission-review.md` · `plans/2026.09.27-№1-COREX-KERNEL/decisions/D102-p07-rereview-contract-completeness.md` · `plans/2026.09.27-№1-COREX-KERNEL/decisions/D101-p07-session-directory-review-evidence.md` · `plans/2026.09.27-№1-COREX-KERNEL/decisions/D100-p07-grok-design-remediation.md` · `plans/2026.09.27-№1-COREX-KERNEL/decisions/D98-p07-design-audit-remediation.md` · `plans/2026.09.27-№1-COREX-KERNEL/decisions/D95-p07-tenancy-engine.md` · `plans/2026.09.27-№1-COREX-KERNEL/decisions/D96-p07-impersonation-access-edges.md` · `plans/2026.09.27-№1-COREX-KERNEL/decisions/D97-p07-routing-and-review.md` · `plans/2026.09.27-№1-COREX-KERNEL/research/P07-design.md` (§4, §5, §6) · `plans/2026.09.27-№1-COREX-KERNEL/research/P07-design-rag.md` (W1–W7, VERIFY-AT-EXEC — сверка с Completion Notes P07.2) · `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design/examples.md` (§1, §8, §9, §12) · результаты P07.1–P07.5 (`plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.<n>-execution/completion.md`, появляются после их исполнения)
+
+**Files:** `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.6-review/verdict.md`.
+
+**Required Reads:** 1) `plans/2026.09.27-№1-COREX-KERNEL/decisions/D95-p07-tenancy-engine.md`; 2) `plans/2026.09.27-№1-COREX-KERNEL/decisions/D96-p07-impersonation-access-edges.md`; 3) `plans/2026.09.27-№1-COREX-KERNEL/research/P07-design.md` §4–§6; 4) `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.1-execution/completion.md`; 5) `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.3-execution/completion.md`; 6) `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.5-execution/completion.md`; 7) `packages/tenancy/src/Runtime/Internal/DatabaseTenancyManager.php`; 8) `packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php`.
+
+**Implementation Rules:** Read-only: единственная запись — verdict-файл. Модель ревьюера отличается от исполнителей P07.1–P07.5 (строка execution-sheet). Finding требует воспроизводимого сценария (вход → неверный выход) либо точной ссылки на нарушенный пункт D95/D96; стилистика не является finding. Вердикт фиксирует exact reviewed range `<base>..<candidate>`.
+
+**Code Guidance:** Порядок чтения: движок и bootstrappers (D95 п.2–п.4) → очереди и HTTP (п.5–п.6) → удаление stancl (п.1, п.7–п.8) → impersonation (D96 п.1–п.5) → access и мост (п.6–п.7) → граф (п.8–п.11). Для каждого пункта: файл:строка реализации, тест, негатив.
+
+**Validation:**
+- D102/D103: module-layout enum contains exactly Scheduling addition and R1/ratchet remain unchanged; positive ten-file transfer and old/unknown enum negatives captured. AccountStatusGate optional-policy → five-required constructor matches §4 and finite tenancy entry in approved-deltas.json, actual resolved BC_CHECK_BASE, decision hashes and actual Roave rows; unknown/unlisted delta rejects. Review CHANGELOG/php-api/Golden with same public delta, status-owner matrix and outer restoration cause/log evidence; table covers D98–D103 corrections explicitly.
+- `test -s plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.6-review/verdict.md` → exit 0; файл содержит строку `Verdict: GREEN` либо `Verdict: findings:<N>`, reviewed range и таблицу пунктов D95/D96 с файлом и тестом для каждого.
+- `git status --porcelain -- packages products scripts tests docs .github composer.json composer.lock` до и после ревью совпадают (нет продуктовых правок).
+- `git grep -n -i stancl -- packages products scripts .github composer.json ':!**/CHANGELOG.md'` → пусто; `cat scripts/runtime-globals-baseline.json` → `{}`; `scripts/php84 php scripts/package-graph-gate.php` → exit 0.
+- `PGSQL_PORT=5434 scripts/php84 composer --working-dir=packages/tenancy test -- --group=pg --filter='ScopeBoundary|ImpersonationProfile'` и `scripts/php84 composer --working-dir=packages/access test -- --filter=NativePermission` → exit 0 (выводы в verdict).
+
+**Deliverables:** `artifacts/P07.6-review/verdict.md`.
+
+===== SOURCE plans/2026.09.27-№1-COREX-KERNEL/research/P07-design.md SHA256 75fac48ae0c17c0484b4d87f21d63ba90e570fa85cc4848d9f264a11d7c3cbdd =====
+# P07 — досье дизайна
+
+База: commit `4137d241` (после P06.5; P06 ещё не закрыта — D94). Нормы: D13, D14, D16, D69, D70, D95, D96, D97 с приоритетными поправками D98–D101.
+Факты воспроизводимы: `bash plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design/scripts/p07-facts.sh` → `artifacts/P07-design/facts/*.txt`.
+Внешние факты — `research/P07-design-rag.md` (W1–W7). Готовый код и worked examples — `artifacts/P07-design/examples.md`.
+Окружение исполнения как в P06: `scripts/php84`, python3, PostgreSQL `corex_test` на host-порту 5434 (`PGSQL_PORT=5434`), preflight до мутирующих тестов.
+
+## 1. Карта кода
+
+### 1.1 Движок (P07.1)
+
+| Файл | Сейчас | Цель |
+|:--|:--|:--|
+| `packages/core/src/Context/Contracts/TenancyManager.php` | SPI `context/initialized/initialize/setWorkspace/end/runFor` | без изменений сигнатур; docblock — семантика D95 п.2–п.3 |
+| `packages/tenancy/src/Runtime/Internal/StanclTenancyManager.php` (100 стр.) | делегирует `Stancl\Tenancy\Tenancy` | удалить; новый `Runtime/Internal/DatabaseTenancyManager.php` (examples §1) |
+| `packages/tenancy/src/Runtime/Contracts/TenantBootstrapper.php` | нет | новый SPI (examples §2) |
+| `packages/tenancy/src/Runtime/Internal/Bootstrappers/{Connection,CachePrefix,SessionConnection}Bootstrapper.php` | stancl `Database/Cache/DatabaseSession` bootstrappers | новые (examples §3) |
+| `packages/tenancy/src/Laravel/Bootstrappers/WorkspaceContextBootstrapper.php` (119) | реализует stancl `TenancyBootstrapper`, `__constructStatic` | удалить; workspace state у manager, queue restore в QueueTenantContext (D98) |
+| `packages/tenancy/src/Runtime/Internal/CentralTemplateConnectionResolver.php` | `AccountConnectionResolver` не забинден; stancl строит соединение из central + `db_name` | новый штатный `AccountConnectionResolver` (`bindIf`), examples §1b |
+| `packages/tenancy/src/Runtime/Events/{TenantContextInitialized,TenantContextEnded}.php` | stancl `TenancyInitialized/Ended` | новые `#[Api]` события (account id, workspace id) |
+| `packages/tenancy/src/Runtime/Exceptions/TenantContextUnavailable.php` | нет | новое исключение с кодом реестра `tenancy.context_unavailable` (P04 реестр ошибок tenancy) |
+| `packages/tenancy/src/Laravel/RuntimeRegistrar.php` (153) | singleton `StanclTenancyManager`, цикл `bootstrapper_order`, проекция `tenancy.*` в boot | singleton `DatabaseTenancyManager`, список bootstrappers из `TenancyOptions::$bootstrappers`; model/provisioning projections и UUID binding временно сохраняются по D98 п.6, runtime projections удаляются |
+| `packages/tenancy/src/Laravel/EventsRegistrar.php` (64) | stancl `BootstrapTenancy/RevertToCentralContext`, `JobPipeline` на `TenantCreated` | слушатели очереди (examples §4); `JobPipeline` уходит в P07.2 |
+| `packages/tenancy/src/Laravel/Listeners/RevertTenancyOnJobException.php` (35) | `tenancy()->end()` | `TenancyManager::end()`; часть `QueueTenantContext` |
+| `packages/tenancy/src/Laravel/Resolvers/HostTenantResolver.php` (104) | `extends CachedTenantResolver` | `Runtime/Internal/HostAccountResolver.php` (examples §5) |
+| `packages/tenancy/src/Laravel/Http/Middleware/ResolveTenantFromHost.php` (34) | stancl `IdentificationMiddleware` | собственный middleware: initialize → `$next` → `finally end()` |
+| `packages/tenancy/src/Laravel/HttpRegistrar.php` (170, стр. 124–131) | `ScopeSessions` | `Laravel/Http/Middleware/ScopeSessionToTenant.php` (examples §6) |
+| `packages/tenancy/src/Laravel/Http/Middleware/AccountStatusGate.php:36` | `tenancy()->tenant` и owner_identity_id | `TenantContextResolver` + `AccountRead::ownerIdentityId(id, centralConnection)` + `AuthFactory`; constructor BC (D102/examples §6c) |
+| `packages/tenancy/src/Authentication/Internal/Http/Controllers/OidcLoginController.php:87` | `tenancy()->tenant` | `TenantContextResolver` инъекцией |
+| `packages/tenancy/src/Laravel/Support/TenancyOptions.php` (513) | `bootstrapperOrder` (class-string stancl), `tenantModel`, `idGenerator`, `tenantDatabaseManager`, `cachePrefix` | `bootstrappers: list<class-string<TenantBootstrapper>>` (закрытый порядок валидируется), `cachePrefix`, `hostCache*`; поля stancl удаляются в P07.2 |
+| `packages/tenancy/src/Runtime/Exceptions/TenantCouldNotBeIdentifiedByHostException.php` | реализует stancl `TenantCouldNotBeIdentifiedException` | реализует только собственную иерархию ошибок пакета |
+
+### 1.2 Данные, provisioning, manifests (P07.2)
+
+| Файл | Сейчас | Цель |
+|:--|:--|:--|
+| `packages/tenancy/src/Account/Internal/Models/Account.php` (97) | `extends Stancl Tenant implements TenantWithDatabase`, `HasDatabase`, `InvalidatesResolverCache`, `$dispatchesEvents` stancl, `getCustomColumns` | `extends Model`, `HasUuids`, `$table='root_accounts'`, `$connection` = central из options; явные `$fillable`/`$casts`; observer инвалидации кэша host (§1.1) |
+| `packages/tenancy/src/DomainTrust/Internal/Models/Domain.php` (69) | `InvalidatesTenantsResolverCache` | тот же observer |
+| `packages/tenancy/src/Account/Internal/StanclTenantDatabaseProvisioner.php` (51) | диспатчит stancl `TenantCreated` → `JobPipeline` | `DatabaseTenantProvisioner`: синхронно `CreateDatabaseFromTemplate::dispatchSync` (поведение `shouldBeQueued(false)`) |
+| `packages/tenancy/src/Account/Internal/Jobs/CreateDatabaseFromTemplate.php` | принимает stancl tenant | принимает `AccountRef` + `ProvisionParams` |
+| `packages/tenancy/src/Provisioning/Internal/StanclTenantDatabaseLifecycle.php` | stancl tenant/manager | `DatabaseTenantLifecycle` поверх `TemplateClonePostgreSQLManager` |
+| `packages/tenancy/src/Provisioning/Internal/Database/TemplateClonePostgreSQLManager.php` (140) | `extends PostgreSQLDatabaseManager` | самостоятельный: `createDatabase(string $name, string $template)`, `deleteDatabase(string $name)`, `databaseExists(string $name)` через `ConnectionResolverInterface` central; квотирование идентификаторов как сейчас |
+| `packages/tenancy/src/Account/Laravel/AccountTemplateSnapshot.php` (23) | stancl-тип в сигнатуре | `AccountRef` |
+| `packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php`, `Laravel/AuthenticationRegistrar.php` | Stancl Account type, два tenancy() | P07.1 снимает тип и helpers через TenantContextResolver; G2 остаётся 19 до P07.3 (D99); порты — P07.3 |
+| `packages/tenancy/config/tenancy.php` → `config/corex-tenancy.php` | два config-ключа, ключ `tenancy` общий со stancl | один ключ `corex-tenancy`; `TenancyOptions::fromArray(array $config)`; `TenancyServiceProvider` — один `mergeConfigFrom`, publish-tag `corex-tenancy-config` |
+| `packages/tenancy/src/PHPStan/Rules/StanclImportBoundaryRule.php`, `packages/tenancy/extension.neon` (регистрация), `tests/PHPStan/StanclImportBoundaryRuleTest.php`, `tests/PHPStan/data/**/stancl-import.php`, `tests/Arch/StanclIsolationTest.php` | граница импорта stancl | удалить |
+| `packages/core/src/Context/Contracts/TenantDatabaseLifecycle.php` | docblock со stancl | docblock без stancl |
+| `composer.json` (root), `packages/tenancy/composer.json`, `composer.lock` | `axiomasoft/stancl-tenancy`, `axiomasoft/stancl-jobpipeline`; lock: + `stancl/virtualcolumn` | удалить; `composer update --lock` без других изменений (§3.2 шаг 9) |
+| `scripts/manifest-check.py` стр. 20–24, 110–121 | `ALLOWED_PRERELEASE` со stancl, правило `prerelease-root` | `ALLOWED_PRERELEASE = {}`; ветку `needed` для tenancy удалить |
+| `scripts/distribution/stage-stancl-providers.py`, `.composer-provider-staging/`, `.github/workflows/{ci,distribution-proof,remaining-cohort-proof}.yml` (шаги «Stage sealed stancl provider candidates»), `scripts/{ci-local.sh,bc-check.sh,dependency-analyser.sh}`, `scripts/distribution/{pristine-proof.py,profile-proof.py,remaining-cohort-policy.json,tests/test_publish_guard.py}`, `scripts/configuration-classes.json` | staging снимков и ссылки на stancl | удалить шаги/ссылки; полный список — `facts/stancl-coupling.txt` §non-PHP |
+| `packages/tenancy/phpstan-baseline.neon`, `packages/tenancy/resources/contracts/php-api.json` | строки stancl | регенерация (`php-api --write`), baseline только сокращается |
+| `docs/architecture/configuration.md`, `packages/tenancy/{README,PACKAGE,CHANGELOG}.md` | stancl v4 | собственный движок; `docs/03_Dev/**`, `docs/audit-*.md` — исторические, не правятся |
+
+### 1.3 Impersonation (P07.3)
+
+| Файл | Цель |
+|:--|:--|
+| `packages/core/src/Audit/Contracts/SynchronousAuditWriter.php`, `Internal/DatabaseSynchronousAuditWriter.php`, `Laravel/AuditRegistrar.php`, core tests/README/CHANGELOG | новый публичный SPI и writer без impersonation/queue, committed saveQuietly + explicit configured ids через AuditLog (examples §7d) |
+| `packages/tenancy/src/Impersonation/Contracts/{ImpersonationGrantStore,ImpersonationAuditSink}.php` | новые порты (examples §7) |
+| `packages/tenancy/src/Impersonation/Data/{GrantClaim,ClaimedGrant,ImpersonationAuditEvent}.php` | новые value objects |
+| `packages/tenancy/src/Impersonation/Enums/ImpersonationProfile.php` | `dev|standard|regulated` с методами правил (examples §8) |
+| `packages/tenancy/src/Impersonation/Internal/{DatabaseImpersonationGrantStore,DualImpersonationAuditSink}.php` | штатные реализации |
+| `packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php` (256) | только порты/контракты; 23 находки runtime-globals в сервисе → 0 |
+| `packages/tenancy/src/Impersonation/Internal/ImpersonatedModelWriteGuard.php` (84) | экземплярный `allowing()`, scoped |
+| `packages/tenancy/src/Laravel/Support/ImpersonationPolicy.php` | `enabled`, `profile` (вместо `requireApprovedBy`) |
+| `packages/tenancy/src/Laravel/{RuntimeRegistrar,EventsRegistrar,AuthenticationRegistrar}.php` | scoped-фабрики, слушатели `eloquent.*` |
+| `packages/tenancy/src/Internal/DangerousModesCheck.php` (новый, по образцу `packages/notifications/src/Internal/DangerousModesCheck.php`; тег регистрации — как у notifications) | опасный режим `corex-tenancy.impersonation.profile` = `dev` |
+| `packages/core/src/Context/Exceptions/ImpersonationRestrictedException.php:35` | текст про экземплярный `allowing()` |
+| `scripts/runtime-globals-baseline.json` | удалить три строки Impersonation → `{}` |
+| `docs/architecture/configuration.md`, `packages/tenancy/README.md` (раздел impersonation) | профили и порты |
+
+### 1.4 Access и мост (P07.4)
+
+| Файл | Цель |
+|:--|:--|
+| `packages/access/src/Access/Internal/{DefaultAccessChecker,DefaultScopeResolver}.php` | `allowed()` без `PrincipalIdentity::hasPermission` (examples §9) |
+| `packages/access/src/Access/Internal/DirectGrantLookup.php` | читает `aut_direct_grants` через `ConnectionResolverInterface` |
+| `packages/access/src/Matrix/Internal/DatabaseRoleMatrixCompiler.php` | без AzGuard; bump версии; событие `Matrix/Events/RoleMatrixCompiled` |
+| `packages/access/src/Access/Laravel/PrincipalIdentity.php` | без `HasPermissions` AzGuard |
+| `packages/access/src/Laravel/{AccessBindingsRegistrar,AccessIntegrationRegistrar}.php` | без AzGuard-биндингов, pins и директив |
+| `packages/access/src/{Access/Internal/AutMatrixGrantSource,Access/Internal/WorkspacePermissionLayer,Matrix/Internal/MatrixPermissionCatalogBuilder,Matrix/Laravel/AzGuardRoleModel,Tenancy/Internal/TenantContextGuard}.php` | перенос в `packages/access-azguard/src/Internal/` (`git mv` + namespace `CoreX\AccessAzguard\Internal`) |
+| `packages/access/database/migrations/tenant/2026_07_26_200001_create_aut_roles_table.php`, `Roles/Internal/Models/Role.php`, `Roles/Data/RoleView.php`, `Roles/Laravel/RoleMatrixData.php` | удалить azguard_role_id, azguardRoleId и bindAzGuardRole; callers/tests и bridge link seam — examples §11b |
+| `packages/access/database/migrations/tenant/2026_10_04_000001_create_aut_direct_grants_table.php` | новая (examples §10) |
+| `packages/access/config/corex-access.php`, `AuthOptions` | удалить `azguard_pins` и AzGuard-ключи |
+| `packages/access/composer.json` | удалить `axioma-studio/azguard-core` и package-репозиторий AzGuard |
+| `packages/access-azguard/**` | новый пакет (examples §11): composer.json, provider, registrar, migration `aut_azguard_role_links`, listener `SyncAzGuardRolePermissions`, `PACKAGE.md`, `README.md`, `CHANGELOG.md`, tests (перенос `TenantContextGuardTest`, `BladeDirectivesTest`, AzGuard-части Pg-тестов) |
+| `composer.json` (root) | path-репозиторий уже `packages/*`; require-dev `axiomasoft/corex-access-azguard` для тестов моста |
+| `scripts/package-graph-gate.php`, `docs/architecture/taxonomy.md` | D100: пятое значение stability `unreleased`; parser/gate + taxonomy синхронны |
+| `scripts/manifest-check.py` | closed enum + `UNRELEASED = {"axiomasoft/corex-access-azguard"}`; значение `stability: unreleased` только для него |
+| `plans/2026.09.27-№1-COREX-KERNEL/research/03-glossary.md` §Packages; `scripts/ownership-map.json` `packages` | строка моста (`dir: access-azguard`, `root: CoreX\AccessAzguard`, `config: corex-access-azguard`, prefixes по N7) |
+| `.github/workflows/ci.yml` (стр. 685–689, 812 — шаги access), `composer.json` script `test:packages` | шаги install/audit/test для `packages/access-azguard` по образцу строк access; `packages/access-azguard` в списке `test:packages` после `packages/access` |
+
+### 1.5 Рёбра (P07.5)
+
+| Файл | Цель |
+|:--|:--|
+| `packages/wakeup/src/Contracts/{WakeupScheduler,DueWakeupSource,DueWakeupHandler}.php`, `packages/wakeup/src/Data/{WakeupRequest,WakeupWindow,WakeupDelivery,WakeupHandlerDefinition,ScheduleResult,CancelResult,SweepResult}.php` | `git mv` в `packages/core/src/Scheduling/{Contracts,Data}/`, namespace `CoreX\Scheduling\…` |
+| все импорты (`facts/package-edges.txt` §CoreX\Wakeup + `packages/wakeup/**`, tests) | новые FQCN; `rename-completeness` |
+| `packages/wakeup/src/Laravel/WakeupBindingsRegistrar.php:48,94` | определения: config + tag `WakeupHandlerDefinition::TAG`; источники: `DueWakeupSource::TAG` |
+| `packages/notifications/src/Laravel/NotificationsDigestRegistrar.php:45–54,74–76` | тег вместо записи `corex-wakeup.handlers`; источник — новый тег |
+| `packages/notifications/src/Internal/DangerousModesCheck.php` (существующий) → новый рядом `packages/notifications/src/Internal/DigestSchedulerCheck.php` (`RuntimeConfigCheck`, тот же тег) | digest включён без биндинга `WakeupScheduler` → violation `corex-notifications.digest.enabled requires a bound CoreX\Scheduling\Contracts\WakeupScheduler` |
+| `packages/notifications/src/Digest/Internal/SqlDigestBuilder.php` | nullable scheduler, enabled-null constructor violation, disabled build never schedules (examples §13b) |
+| `packages/notifications/composer.json`, `packages/tasks-workflow/composer.json` | удалить `axiomasoft/corex-wakeup` (require/suggest) |
+| `scripts/package-graph-gate.php`, `scripts/package-graph-gate.json` | целевое правило «notifications ↛ wakeup»; allowlist tasks-workflow → wakeup удалить |
+| `plans/2026.09.27-№1-COREX-KERNEL/research/03-glossary.md` §Kernel modules; `scripts/ownership-map.json` `kernel.modules`; `scripts/module-layout.json` `kernel_modules` (D102, дополнение D29/D57) | `Scheduling` (алфавитный порядок: между `Observability` и `Settings`) |
+| `docs/architecture/constitution.md` (PKG/EXT), `packages/{notifications,wakeup,tasks-workflow}/{README,CHANGELOG}.md` | новое ребро и регистрация тегом |
+
+## 2. Предвычисленные факты
+
+- Связность stancl: 19 файлов src/config + 1 в core, 36 символов; 13 тестовых файлов; 20+ не-PHP ссылок (`facts/stancl-coupling.txt`).
+- Захваченное соединение: 60 параметров конструктора (`facts/connection-captures.txt`; core 5, custom-fields 8, operations 8, notifications 6, webhooks 6, tenancy 5, intl 4, media 4, tasks-workflow 4, search 3, transfer 3, wakeup 2, tasks 1, workflow 1). D70 называл 61 на `39ae489a`; разница — P06. Изменение параметров не требуется: D95 п.3 делает захват безопасным через сброс scoped-экземпляров.
+- Runtime-globals baseline: только Impersonation, `G1 2, G2 19, G3 2` в сервисе, `G4 1` в guard, `G2 1` в модели гранта (`facts/impersonation.txt`).
+- AzGuard: 15 символов в 10 файлах access src; ссылки в 12 тестах, миграции ролей, config, docs (`facts/azguard-coupling.txt`).
+- Рёбра: жёсткие capability→capability — `notifications → wakeup`, `tools → operations`, `webhooks → operations`; wakeup-символы вне wakeup — notifications (10 импортов), tasks-workflow (4), tenancy (4, optional integration) (`facts/package-edges.txt`).
+- Stancl на Packagist — W1/W2; AzGuard — W7.
+
+## 3. Runbook по item
+
+Общее для всех: до правок `git rev-parse HEAD > plans/…/artifacts/P07.<n>-execution/base-commit.txt`; package CHANGELOG и manifest меняются в одном продуктовом commit; `contract-guard.sh` без аргумента и с base-commit — exit 0.
+
+### 3.1 P07.1 — движок
+
+1. `bash …/p07-facts.sh /tmp/p07-facts && diff -r /tmp/p07-facts …/artifacts/P07-design/facts` → расхождения только в строке `# base:` либо записать их (D94 п.3).
+2. Создать `TenantBootstrapper`, события, исключение (код в реестре ошибок tenancy, `composer error-registry` exit 0).
+3. Создать `DatabaseTenancyManager` по examples §1; bootstrappers по examples §3/§3b (URL parsed/removed до tenant overrides, live session handler rebuilt); удалить `WorkspaceContextBootstrapper` (D98), без обратной DI-зависимости.
+4. `RuntimeRegistrar`: singleton движка, `TenancyManager` → он; bootstrappers — singleton по классу; удалить цикл `__constructStatic`.
+5. `EventsRegistrar`: удалить `BootstrapTenancy`/`RevertToCentralContext`; подключить `QueueTenantContext` (examples §4). `JobPipeline` не трогать (P07.2).
+6. HTTP (priority ResolveTenantFromHost before StartSession, ScopeSessionToTenant after StartSession before auth, response save before end, resident attributes/guard reset — examples §3b): `HostAccountResolver`, `ResolveTenantFromHost`, `ScopeSessionToTenant`; `HttpRegistrar` без `ScopeSessions`; заменить tenancy() в OidcLoginController и DatabaseImpersonationService на TenantContextResolver; AccountStatusGate — полный port/owner/factory/constructor переход examples §6c (D102); фабрику AuthenticationRegistrar обновить здесь; baseline не менять: G2 сервиса остаётся 19 до P07.3 (D99). HostResolverCacheInvalidator создаётся здесь, включая TenantSaved/TenantDeleted до P07.2.
+7. Тесты (examples §12): `TenancyEngineTest` (initialize/end/runFor/вложенность/исключение в bootstrapper), `QueueTenantContextTest` (A затем B в одном worker, отсутствующий account → fail без отката), `ScopeBoundaryPgTest` (D95 п.3 на реальных базах), перевод `BootstrapperOrderTest`, `HostResolutionTest`, `TenantSessionScopeTest`, `QueueTenancyRevertTest`, `TenancyManagerTest`, `ResidentTenantSwitchPgTest` на новый движок.
+8. `git grep -n "Stancl\\\\Tenancy\\\\Tenancy\|Bootstrappers\\\\\|IdentificationMiddleware\|ScopeSessions\|CachedTenantResolver\|tenancy()" -- packages/*/src` → пусто (модели/provisioning — P07.2).
+9. Constitution: статья RUN «граница scoped = граница tenant» (D95 п.3) рядом с RUN-004/RUN-005.
+
+Ожидание при расхождении: если ResidentTenantSwitchPgTest краснеет — исправлять движок, не ослаблять тест. Старый provider отключается **обязательно** в root composer.json: `extra.laravel.dont-discover=["axiomasoft/stancl-tenancy"]`. Dependency extra недостаточен. Удалить explicit Stancl provider из Testbench harnesses; PackageManifest test не содержит его. Временно до P07.2 RuntimeRegistrar сохраняет только models.tenant/database.central_connection/database.managers.pgsql/database.template_tenant_connection=null и UUID generator binding; identification.resolvers/middleware и bootstrappers = []. Старые resolver invalidators становятся no-op; новый invalidator слушает также TenantSaved/TenantDeleted. Проверить UUID создание Account, provisioning template и сохранение/удаление domain с cache invalidation без vendor provider. P07.2 удаляет все временные projections/bindings/vendor event listeners.
+
+### 3.2 P07.2 — удаление stancl
+
+1. VERIFY-AT-EXEC (`research/P07-design-rag.md`).
+2. Модели `Account`, `Domain` (§1.2); observer `HostResolverCacheInvalidator` на saved/deleted обеих моделей.
+3. `TemplateClonePostgreSQLManager` самостоятельный; `DatabaseTenantProvisioner`, `DatabaseTenantLifecycle`; `CreateDatabaseFromTemplate` на `AccountRef`; `EventsRegistrar` без `JobPipeline`/`TenantCreated`.
+4. Config: слить `tenancy.php` в `corex-tenancy.php`; `TenancyOptions::fromArray(array $config)`; удалить поля `tenantModel`, `idGenerator`, `tenantDatabaseManager`, stancl-пин; обновить тесты конфигурации и `docs/architecture/configuration.md` (`composer configuration-reference` регенерирует).
+5. Удалить PHPStan-правило, его тесты и `StanclIsolationTest`; убрать регистрацию из `extension.neon`.
+6. Тесты, импортировавшие stancl (13 файлов, `facts/stancl-coupling.txt`), перевести на собственные типы.
+7. Скрипты/CI/workflows из §1.2; удалить `.composer-provider-staging/` и `stage-stancl-providers.py`.
+8. `manifest-check.py`: `ALLOWED_PRERELEASE = {}`, удалить ветку `needed`.
+9. `scripts/php84 composer remove axiomasoft/stancl-tenancy axiomasoft/stancl-jobpipeline --no-update` в root и с `--working-dir=packages/tenancy`; затем в root `scripts/php84 composer update axiomasoft/stancl-tenancy axiomasoft/stancl-jobpipeline stancl/virtualcolumn --with-dependencies`. `git diff composer.lock` содержит только удаление `axiomasoft/stancl-*`, `stancl/virtualcolumn` и пакетов, которые требовались только им (проверка — `scripts/php84 composer why <name>` на базе для каждого удалённого). Любое другое изменение lock — §5 F4.
+10. `git grep -n -i "stancl" -- packages products scripts .github composer.json ':!**/CHANGELOG.md'` → пусто; `python3 -c "import json;print([p['name'] for p in json.load(open('composer.lock'))['packages']+json.load(open('composer.lock'))['packages-dev'] if 'stancl' in p['name']])"` → `[]`.
+
+### 3.3 P07.3 — impersonation
+
+1. Порты, VO, enum по examples §7–§8.
+2. `DatabaseImpersonationGrantStore::claim` — один `UPDATE … WHERE` из текущего сервиса + условия профиля с отдельным correlated approver.is_staff EXISTS (examples §8 SQL); `claimedReason` — перенос.
+3. Kernel SynchronousAuditWriter + DatabaseSynchronousAuditWriter/AuditRegistrar (examples §7d), затем DualImpersonationAuditSink: central committed insert, tenant committed writer при mirrorsToTenant; no ambient transactions, mandatory audit bypasses auditEnabled/queue, no DI cycle. Central intent сохраняется при tenant failure, login запрещён; claim уже consumed. Kernel persistence/tenancy integration tests используют штатные writer/sink.
+4. `DatabaseImpersonationService` переписать на зависимости D96 п.2 (examples §7c); порядок D96 п.5.
+5. Guard: scoped, экземплярный `allowing()`; исправить `ImpersonationWriteGuardTest` (стр. 234, 242) и текст исключения ядра.
+6. `ImpersonationPolicy(enabled, profile)`; config `corex-tenancy.impersonation.profile`; `RuntimeConfigCheck` опасного режима.
+7. `scripts/runtime-globals-baseline.json` → `{}`; `composer runtime-globals-gate` exit 0.
+8. Тесты `ImpersonationProfileTest` (матрица профилей: TTL, approved_by, четыре глаза, зеркало), `ImpersonationAuditTest` (сбой central/tenant → отказ, сессия не открыта), перевод `ImpersonationTest`.
+
+### 3.4 P07.4 — access и мост
+
+1. Миграция `aut_direct_grants`; `DirectGrantLookup` на неё.
+2. EntityActivity guards на allowed/scopeFor/canOnRecord и DefaultScopeResolver::apply по examples §9; событие `RoleMatrixCompiled`; компилятор без AzGuard.
+3. `git mv` пяти AzGuard-классов в мост; заменить role link reads/joins и dependency MatrixPermissionCatalogBuilder на public EntityActivity по examples §11b; создать пакет моста (examples §11); перенести AzGuard-тесты.
+4. Access: удалить AzGuard из composer/config/registrars/миграции ролей, Role model, RoleView и RoleMatrixData плюс callers/tests; `PACKAGE.md`, `README.md` — без AzGuard.
+5. D100: graph VALID_STABILITY/taxonomy + unreleased; manifest closed enum и UNRELEASED; mystery/foreign-unreleased negative; glossary; CI-матрица. Package-graph проходит уже в P07.4.
+6. Тесты: `NativePermissionTest` (allowed по матрице, по прямому grant, истёкший/отозванный grant, scope none → false, другой workspace → false), мост — `AzGuardBridgeTest` (sync `az_guard_role_permissions` после `RoleMatrixCompiled`).
+7. `git grep -n "AzGuard\|azguard\|az_guard" -- packages/access` → только CHANGELOG.
+
+### 3.5 P07.5 — рёбра
+
+1. `git mv` 10 файлов wakeup в `packages/core/src/Scheduling/{Contracts,Data}`; Rector `RenameClassRector` по карте examples §13 либо sed по 10 FQCN; `composer rename-completeness` exit 0.
+2. Теги D96 п.9; `WakeupBindingsRegistrar` объединяет определения; повтор kind → `InvalidConfiguration`.
+3. Notifications: тег вместо записи config; nullable SqlDigestBuilder scheduler + conditional factory, enabled-null constructor violation и disabled nonempty build без resolve/schedule (examples §13b); RuntimeConfigCheck; composer без wakeup; tasks-workflow без suggest.
+4. `package-graph-gate`: правило + негативный контроль (examples §14).
+5. Добавить Scheduling в scripts/ownership-map.json и scripts/module-layout.json closed kernel_modules (15 → 16 только Scheduling, D102); R1 и baseline неизменны; проверить negative старый enum/UnknownModule. Glossary §Kernel modules; constitution; CHANGELOG.
+
+## 4. Golden / BC delta
+
+Все изменения php-surface — reviewed semantic delta (D64). Ожидаемые строки:
+- P07.1: AccountStatusGate (Spi Call) constructor `(?StatusGatePolicy = null)` → `(StatusGatePolicy, TenantContextResolver, AccountRead, AuthFactory, string centralConnection)`; migrate callers/HttpRegistrar and record CHANGELOG/php-api/Golden delta (D102). session configuration now supports database/redis/memcached/file, requires dedicated named cache session store/Redis connection, invalidates first tenant binding; file directory 0700 created and real persistence validated (D100/D101). CHANGELOG documents this security/configuration delta. + `CoreX\Tenancy\Runtime\Contracts\TenantBootstrapper` (Spi Implement), + `Runtime\Events\TenantContextInitialized|TenantContextEnded` (Api), + `Runtime\Exceptions\TenantContextUnavailable` (Api); класс `StanclTenancyManager` был Internal — вне surface.
+- P07.2: изменение публичных моделей/Options tenancy (поля stancl удалены); удаление `PHPStan\Rules\StanclImportBoundaryRule` из manifest; config-слой Golden (`corex-tenancy` вместо `tenancy`).
+- P07.3: + kernel Audit Contracts SynchronousAuditWriter (Spi Implement), CHANGELOG/core README/Golden и provider binding; прежний queued AuditLogger не меняется. + порты, VO, enum Impersonation; `ImpersonationPolicy` поля.
+- P07.4: + stability=unreleased в закрытом наборе graph/taxonomy/manifest, schema-version 1 сохраняется; − RoleView.azguardRoleId (constructor 4→3 args), − RoleMatrixData.bindAzGuardRole, − AzGuard-типы из manifest access; + `RoleMatrixCompiled`; + пакет `access-azguard` (новый manifest).
+- P07.5: nullable scheduler только Internal implementation; DigestBuilder контракт/disabled frozen-build semantics сохранены. Перенос 10 symbols `CoreX\Wakeup\*` → `CoreX\Scheduling\*`.
+`scripts/php84 php scripts/php-api.php --write` дважды → идентично; `composer bc-check` exit 0 после `--write`; Golden — только перечисленные строки.
+
+## 5. Failure playbook
+
+| # | Класс | Действие |
+|:--|:--|:--|
+| F1 | Тест изоляции (PG) пишет в чужую базу | Стоп item; дефект движка, не теста. Исправлять движок; ослабление теста запрещено. |
+| F2 | Scoped-сервис переживает смену контекста в продуктовом коде (найден тестом D95 п.3) | Исправить вызывающий код (повторное разрешение внутри `runFor`); исключение в гейте не вводится. |
+| F3 | Порог/гейт краснеет (runtime-globals, lifetime, package-graph, anti-weakening) | Исправить код; baseline только уменьшается. Рост — стоп и эскалация. |
+| F4 | `composer.lock` меняет что-либо кроме удаления stancl-пакетов | Откатить lock, повторить шаг §3.2/9 точнее; при невозможности — стоп и эскалация. |
+| F5 | На Packagist появился стабильный stancl v4 (VERIFY-AT-EXEC) | Стоп P07.2, эскалация автору плана; новое D#. |
+| F6 | AzGuard-мост не устанавливается в CI (нет доступа к приватному репозиторию) | Не в Validation access; job моста помечается в CI как зависящий от секрета, падение — стоп и эскалация владельцу (Q2), access не блокируется. |
+| F7 | Hosted CI красный на финальном commit фазы | Исправление в владеющем item по D73; фаза не закрывается. |
+| F8 | Расхождение фактов с базой из-за ремонта P06 (D94 п.3) | Записать в Completion Notes; если меняется контракт item — стоп и эскалация. |
+
+## 6. Self-check (для design и light-review)
+
+| Item | Факты, которые ищет исполнитель | Решения, оставленные исполнителю | Доказательство готовности |
+|:--|:--|:--|:--|
+| P07.1 | нет (карта §1.1, examples §1–§6, §12) | нет; промежуточный `dont-discover` — заданный шаг | Validation P07.1 |
+| P07.2 | точный список ссылок — пересобирается `p07-facts.sh` | нет | Validation P07.2 (пустые grep, lock) |
+| P07.3 | нет (§1.3, examples §7–§8) | нет | Validation P07.3, baseline `{}` |
+| P07.4 | нет (§1.4, examples §9–§11) | нет | Validation P07.4 |
+| P07.5 | нет (§1.5, examples §13–§14) | нет | Validation P07.5, негатив графа |
+| P07.6 | — (read-only) | вердикт | `artifacts/P07.6-review/verdict.md` |
+
+Light-review исполнителя: каждая актуальная строка D95/D96/D98–D100 соответствующего item → файл:строка реализации и тест; Completion Notes содержит `review: self-check GREEN`.
+
+## D102 — дополнительные замечания независимого rereview
+
+Приоритет: decisions/D102-p07-rereview-contract-completeness.md; examples §1/1c, §6/6c и заключительная module-layout норма. P07.1 Files дополнительно Runtime/Internal/TenantCleanupFailure.php; RuntimeRegistrar передаёт PSR logger. AccountStatusGate owner policy через AccountRead explicit central, AuthFactory и AccountRef; обязательная constructor BC/CHANGELOG/php-api/Golden delta, существующая status matrix сохраняется. ScopeSessionToTenant использует TenancyManager::context(). Cleanup wrapper/log обеих причин и poisoned runFor проверяются executable harness.
+P07.5 Files дополнительно scripts/module-layout.json (closed kernel_modules 15 → 16 только Scheduling); D29/D57 приоритетно дополнены D102, R1/baseline не ослабляются. Actual gate negative старый список/UnknownModule и positive десять moved files. P07.6 сверяет эти две Files/BC delta; только после исполнения продуктовые full boot/PG/package gates.
+
+## D103 — stable BC admission and review evidence
+
+D103 priority: P07.1 Files/Scope includes scripts/bc/approved-deltas.json; exact D102 AccountStatusGate constructor optional policy → five required arguments is an approved unpublished semantic delta under D64. At product execution, preserve unrelated approvals and bind finite actual Roave rows to actual resolved BC_CHECK_BASE and accepted D102/D103 hashes; never invent description hashes, relax stable gate or change accepted base. Golden/CHANGELOG alone insufficient. P07.6 explicitly reviews enum 15→16 and constructor/admission alongside D98–D103. Actual checker scratch positive/negative proof is bc-admission-proof.py; it is not real Roave/product admission. Proof arity aligned with QueueTenantContext four parameters; outer callback+cleanup restoration branch now executed. No new implementation behavior.
+
+===== SOURCE scripts/bc/approved-delta.py SHA256 1c0fafccb9978ea6536790fd904d5c149d72189b2c7b1d1d170977e3b587d179 =====
+#!/usr/bin/env python3
+"""Match a finite, decision-bound unpublished API delta; unknown breaks fail closed."""
+import argparse
+import hashlib
+import json
+from pathlib import Path
+import sys
+
+
+def admitted(root, package, base, errors):
+    carrier = json.loads((root / 'scripts/bc/approved-deltas.json').read_text())
+    if carrier.get('schema') != 'corex-bc-approved-deltas/1':
+        return False
+    rule = carrier.get('packages', {}).get(package)
+    if not isinstance(rule, dict) or rule.get('base_revision') != base:
+        return False
+    decisions = rule.get('decisions')
+    if not isinstance(decisions, list) or not decisions:
+        return False
+    for decision in decisions:
+        path = (root / decision['path']).resolve()
+        if not path.is_relative_to(root.resolve()) or not path.is_file():
+            return False
+        if hashlib.sha256(path.read_bytes()).hexdigest() != decision['sha256']:
+            return False
+        source = path.read_text()
+        if '\nstatus: accepted\n' not in source:
+            return False
+    def signature(row):
+        return (hashlib.sha256(row['description'].encode()).hexdigest(), row['path'], row['modificationType'])
+    actual = {signature(row) for row in errors}
+    approved = {(row['description_sha256'], row['path'], row['modificationType']) for row in rule.get('changes', [])}
+    return bool(actual) and actual == approved
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--root', type=Path, required=True)
+    parser.add_argument('--package', required=True)
+    parser.add_argument('--base', required=True)
+    args = parser.parse_args()
+    try:
+        reports = [json.loads(line)['errors'] for line in sys.stdin if line.startswith('{"errors":')]
+        return 0 if len(reports) == 1 and admitted(args.root, args.package, args.base, reports[0]) else 1
+    except (OSError, ValueError, KeyError, TypeError):
+        return 1
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())
+
+===== SOURCE scripts/bc-check.sh SHA256 e92d506a7d286e3ff016398df412f70a3ce26f453e667594e6b723c3b1511be9 =====
+#!/usr/bin/env bash
+#
+# Roave backward-compatibility gate (PLAN2 P3.4 · D98).
+#
+# Per live package: disposable git repo with explicit base/candidate commits;
+# comparison Composer root autoloads only that package (production paths).
+#
+# Unsupported PHP and skipped Roave checks are infrastructure RED.
+# Roave exit 3 with only real changes = BC break; experimental requires a declared changelog delta.
+# Any other Roave outcome = infrastructure RED.
+#
+# Env:
+#   BC_CHECK_BASE          — git ref (default: accepted unpublished kernel baseline)
+#   BC_CHECK_FORCE_STABLE  — composer package name treated as stable (validation probe)
+#   BC_CHECK_PROBE_INFRA   — if set, corrupt comparison composer.json for core (probe)
+#   BC_CHECK_ONLY          — single package dir (debug)
+set -euo pipefail
+
+REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+ROAVE_BIN="${REPO_ROOT}/vendor/bin/roave-backward-compatibility-check"
+PHP_MM="$(php -r 'echo PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;')"
+
+bc_php() {
+  BC_REPO_ROOT="$REPO_ROOT" php -d detect_unicode=0 -r "$1"
+}
+
+if [[ "$PHP_MM" != "8.4" && "$PHP_MM" != "8.5" ]]; then
+  echo "bc-check: infrastructure RED — roave/backward-compatibility-check ^8.22 requires PHP 8.4 or 8.5 (current: ${PHP_MM})"
+  exit 1
+fi
+
+if [[ ! -x "$ROAVE_BIN" ]]; then
+  echo "bc-check: infrastructure RED — missing ${ROAVE_BIN} (composer install)" >&2
+  exit 1
+fi
+
+BC_CHECK_BASE="${BC_CHECK_BASE:-}"
+if [[ -z "$BC_CHECK_BASE" ]]; then
+  if [[ -f "$REPO_ROOT/scripts/bc/accepted-base.json" ]]; then
+    BC_CHECK_BASE="$(bc_php '$j=json_decode(file_get_contents(getenv("BC_REPO_ROOT")."/scripts/bc/accepted-base.json"),true,flags:JSON_THROW_ON_ERROR); if(($j["schema"]??null)!=="corex-bc-base/1"||!is_string($j["revision"]??null)){throw new RuntimeException("Invalid accepted BC base");} echo $j["revision"];')"
+  elif git -C "$REPO_ROOT" rev-parse --verify origin/main^{commit} >/dev/null 2>&1; then
+    BC_CHECK_BASE="$(git -C "$REPO_ROOT" merge-base HEAD origin/main)"
+  else
+    BC_CHECK_BASE="$(git -C "$REPO_ROOT" rev-parse HEAD)"
+  fi
+fi
+
+if ! git -C "$REPO_ROOT" rev-parse --verify "${BC_CHECK_BASE}^{commit}" >/dev/null 2>&1; then
+  echo "bc-check: infrastructure RED — BC_CHECK_BASE not resolvable: ${BC_CHECK_BASE}" >&2
+  exit 1
+fi
+
+roave_ver="$(composer --working-dir="$REPO_ROOT" show roave/backward-compatibility-check --format=json 2>/dev/null | bc_php '$j=json_decode(stream_get_contents(STDIN),true); echo $j["versions"][0]??"unknown";')"
+echo "bc-check: BC_CHECK_BASE=${BC_CHECK_BASE} (PHP ${PHP_MM})"
+echo "bc-check: roave ${roave_ver}"
+
+package_listing="$(bc_php '
+$r=getenv("BC_REPO_ROOT");
+$paths=glob("$r/packages/*/composer.json")?:[];
+if($paths===[]){throw new RuntimeException("Missing BC package cohort");}
+sort($paths);
+foreach($paths as $path){
+  $j=json_decode(file_get_contents($path),true,flags:JSON_THROW_ON_ERROR);
+  if(!is_array($j)||!is_string($j["name"]??null)){throw new RuntimeException("Invalid BC package manifest");}
+  echo basename(dirname($path))."\n";
+}
+')"
+mapfile -t PACKAGE_DIRS <<< "$package_listing"
+
+stage_package_vendors() {
+  local dir="$1" work="$2"
+  local ns pkgpath leaf
+
+  for ns in axioma-studio axiomasoft; do
+    for pkgpath in "$REPO_ROOT/vendor/${ns}"/* "$REPO_ROOT/packages/${dir}/vendor/${ns}"/*; do
+      [[ -f "${pkgpath}/composer.json" ]] || continue
+      leaf="$(basename "${pkgpath}")"
+      # Monorepo packages are already archived separately; only private
+      # upstream providers need a local path repository for Roave.
+      [[ "$leaf" == stancl-* || "$leaf" == azguard-core ]] || continue
+      mkdir -p "${work}/packages/_vendor/${leaf}"
+      rsync -a --exclude=.git "${pkgpath}/" "${work}/packages/_vendor/${leaf}/"
+    done
+  done
+
+  needs_phpstan=0
+  if grep -rqF --include='*.php' 'PHPStan\' "$work/packages/$dir/src"; then
+    needs_phpstan=1
+  fi
+
+  if [[ "$needs_phpstan" == 1 ]]; then
+    BC_WORK="$work" bc_php '
+$r=getenv("BC_REPO_ROOT"); $work=getenv("BC_WORK");
+require "$r/vendor/autoload.php";
+$destination="$work/packages/_vendor/phpstan";
+@mkdir($destination,0777,true);
+(new Phar("$r/vendor/phpstan/phpstan/phpstan.phar"))->extractTo($destination,null,true);
+$manifest=["name"=>"phpstan/phpstan","version"=>Composer\InstalledVersions::getPrettyVersion("phpstan/phpstan"),"require"=>["nikic/php-parser"=>"^5.0"],"autoload"=>["psr-4"=>["PHPStan\\"=>"src/"]]];
+file_put_contents("$destination/composer.json",json_encode($manifest,JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES));
+'
+  fi
+
+  BC_WORK="$work" bc_php '
+$work=getenv("BC_WORK");
+$versions=["stancl-tenancy"=>"4.0.0-alpha1","stancl-jobpipeline"=>"2.0.0-alpha1","azguard-core"=>"0.2.0"];
+foreach(glob("$work/packages/_vendor/*/composer.json")?:[] as $cp){
+  $leaf=basename(dirname($cp));
+  if(!isset($versions[$leaf])){continue;}
+  $j=json_decode((string)file_get_contents($cp),true);
+  if(!is_array($j)){continue;}
+  $j["version"]=$versions[$leaf];
+  file_put_contents($cp,json_encode($j,JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES)."\n");
+}
+'
+}
+
+run_one_package() {
+  local dir="$1" pkg_name="$2" stability="$3" work="$4"
+  local base_sha cand_sha roave_exit classified needs_phpstan=0 contract_hint=""
+
+  if ! git -C "$REPO_ROOT" cat-file -e "${BC_CHECK_BASE}:packages/${dir}" 2>/dev/null; then
+    echo "bc-check: ${pkg_name} (${dir}) |new-package| base missing at ${BC_CHECK_BASE}"
+    return 0
+  fi
+
+  mkdir -p "${work}/packages"
+  git -C "$work" init -q
+  git -C "$work" config user.email bc-check@corex.local
+  git -C "$work" config user.name "bc-check"
+  # Roave clones immediately after commit; background GC can remove loose
+  # objects while that local clone is copying the disposable repository.
+  git -C "$work" config gc.auto 0
+
+  mapfile -t dep_dirs < <(BC_CHECK_TARGET_DIR="$dir" bc_php '
+$r=getenv("BC_REPO_ROOT"); $target=getenv("BC_CHECK_TARGET_DIR");
+$map=[];
+foreach(glob("$r/packages/*/composer.json")?:[] as $p){
+  $j=json_decode(file_get_contents($p),true);
+  if(is_array($j)&&isset($j["name"])){$map[$j["name"]]=basename(dirname($p));}
+}
+$seen=[]; $q=[];
+$root="$r/packages/$target/composer.json";
+$walk=function(string $d) use (&$walk,&$seen,&$q,$r,$map){
+  if(isset($seen[$d])) return; $seen[$d]=true;
+  $path="$r/packages/$d/composer.json";
+  if(!is_file($path)) return;
+  $j=json_decode(file_get_contents($path),true);
+  foreach(array_keys(array_merge($j["require"]??[],$j["require-dev"]??[])) as $req){
+    if(!isset($map[$req])) continue;
+    $dep=$map[$req];
+    $q[]=$dep;
+    $walk($dep);
+  }
+};
+$walk($target);
+$q[]=$target;
+$q=array_values(array_unique($q));
+sort($q);
+foreach($q as $d) echo basename($d)."\n";
+')
+
+  # Uncommitted D89/D90 renames are absent at BC_CHECK_BASE. Archive the predecessor
+  # tree under the current directory and composer name so the live require graph installs.
+  archive_base_package() {
+    local dep="$1" old=""
+    if git -C "$REPO_ROOT" cat-file -e "${BC_CHECK_BASE}:packages/${dep}" 2>/dev/null; then
+      git -C "$REPO_ROOT" archive "${BC_CHECK_BASE}" "packages/${dep}" | tar -x -C "$work"
+      return 0
+    fi
+    case "$dep" in
+      operations) old=api ;;
+      access) old=auth ;;
+    esac
+    if [[ -z "$old" ]] || ! git -C "$REPO_ROOT" cat-file -e "${BC_CHECK_BASE}:packages/${old}" 2>/dev/null; then
+      echo "bc-check: infrastructure RED — ${BC_CHECK_BASE} has no packages/${dep}" >&2
+      return 1
+    fi
+    git -C "$REPO_ROOT" archive "${BC_CHECK_BASE}" "packages/${old}" | tar -x -C "$work"
+  }
+
+  for dep in "${dep_dirs[@]}"; do
+    archive_base_package "$dep" || return 1
+  done
+
+  BC_WORK="$work" bc_php '
+foreach(glob(getenv("BC_WORK")."/packages/*/composer.json")?:[] as $file){
+  $j=json_decode(file_get_contents($file),true,flags:JSON_THROW_ON_ERROR);
+  $j["version"]="1.0.x-dev";
+  file_put_contents($file,json_encode($j,JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES)."\n");
+}
+'
+
+  stage_package_vendors "$dir" "$work"
+
+  BC_WORK="$work" BC_CHECK_TARGET_DIR="$dir" BC_NEEDS_PHPSTAN="$needs_phpstan" bc_php '
+$r=getenv("BC_REPO_ROOT"); $d=getenv("BC_CHECK_TARGET_DIR");
+$archived=getenv("BC_WORK")."/packages/$d/composer.json";
+$pkg=json_decode(file_get_contents(is_file($archived)?$archived:"$r/packages/$d/composer.json"),true);
+$requireDev=[];
+foreach($pkg["require-dev"]??[] as $name=>$constraint){
+  if(str_starts_with($name,"axiomasoft/corex")||str_starts_with($name,"corex/")||str_starts_with($name,"flex/")){$requireDev[$name]=$constraint;}
+}
+$src=getenv("BC_WORK")."/packages/$d/src";
+if(is_dir($src)&&isset($pkg["require-dev"]["orchestra/testbench"])){
+  $it=new RecursiveIteratorIterator(new RecursiveDirectoryIterator($src));
+  foreach($it as $file){
+    if(!$file->isFile()||!str_ends_with($file->getFilename(),".php")){continue;}
+    if(str_contains((string)file_get_contents($file->getPathname()),"Orchestra\\Testbench")){
+      $requireDev["orchestra/testbench"]=$pkg["require-dev"]["orchestra/testbench"];
+      break;
+    }
+  }
+}
+$repos=[["type"=>"path","url"=>"packages/*"]];
+$require=$pkg["require"]??[];
+$work=getenv("BC_WORK");
+foreach($pkg["repositories"]??[] as $repo){
+  if(($repo["type"]??"")==="path"&&str_starts_with((string)($repo["url"]??""),"../")){continue;}
+  if(is_dir("$work/packages/_vendor/azguard-core")&&($repo["type"]??"")==="vcs"&&str_contains((string)($repo["url"]??""),"azguard")){continue;}
+  $repos[]=$repo;
+}
+foreach(glob("$work/packages/_vendor/*/composer.json")?:[] as $composerPath){
+  $vc=json_decode((string)file_get_contents($composerPath),true);
+  $vName=is_array($vc)?($vc["name"]??""):"";
+  if($vName===""){continue;}
+  if(!isset($require[$vName])&&!isset($requireDev[$vName])&&$vName!=="axiomasoft/stancl-jobpipeline"){continue;}
+  $repos[]=["type"=>"path","url"=>"packages/_vendor/".basename(dirname($composerPath))];
+  if($vName==="axioma-studio/azguard-core"){$require[$vName]="@dev";}
+}
+if(is_dir($src)){
+  $blob="";
+  $it=new RecursiveIteratorIterator(new RecursiveDirectoryIterator($src));
+  foreach($it as $file){
+    if(!$file->isFile()||!str_ends_with($file->getFilename(),".php")){continue;}
+    $blob.=(string)file_get_contents($file->getPathname());
+  }
+  $illum=[
+    "Illuminate\\Foundation\\"=>"laravel/framework",
+    "Illuminate\\Console\\"=>"illuminate/console",
+    "Illuminate\\Queue\\"=>"illuminate/queue",
+  ];
+  foreach($illum as $needle=>$pkgName){
+    if(str_contains($blob,$needle)&&!isset($require[$pkgName])){
+      $require[$pkgName]="^12.0|^13.0";
+    }
+  }
+}
+if(getenv("BC_NEEDS_PHPSTAN")==="1"){$requireDev["phpstan/phpstan"]="@dev";$repos[]=["type"=>"path","url"=>"packages/_vendor/phpstan"]; }
+$root=["name"=>"corex/bc-compare-root","type"=>"project","license"=>"MIT","require"=>$require,"repositories"=>$repos,"autoload"=>[],"minimum-stability"=>"dev","prefer-stable"=>true];
+if($requireDev!==[]){$root["require-dev"]=$requireDev;}
+if(isset($pkg["extra"]["corex"]["public-api"])){$root["extra"]["corex"]["public-api"]=$pkg["extra"]["corex"]["public-api"];}
+foreach($pkg["autoload"]["psr-4"]??[] as $prefix=>$rel){
+  $paths=is_array($rel)?$rel:[$rel];
+  $mapped=[];
+  foreach($paths as $one){$mapped[]="packages/$d/".ltrim((string)$one,"./");}
+  $root["autoload"]["psr-4"][$prefix]=count($mapped)===1?$mapped[0]:$mapped;
+  foreach($mapped as $path){$root["autoload"]["classmap"][]=$path;}
+}
+foreach(["classmap","files","exclude-from-classmap"] as $kind){
+  foreach($pkg["autoload"][$kind]??[] as $rel){
+    $root["autoload"][$kind][]="packages/$d/".ltrim((string)$rel,"./");
+  }
+}
+echo json_encode($root,JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES)."\n";
+' > "${work}/composer.json"
+
+  if [[ -n "${BC_CHECK_PROBE_INFRA:-}" && "$dir" == "core" ]]; then
+    echo '{' >> "${work}/composer.json"
+  fi
+
+  git -C "$work" add -A
+  git -C "$work" commit -q -m "base"
+  base_sha="$(git -C "$work" rev-parse HEAD)"
+
+  # Historical api/auth trees belong only to the base commit.
+  rm -rf "${work}/packages/api" "${work}/packages/auth"
+  for dep in "${dep_dirs[@]}"; do
+    mkdir -p "${work}/packages/${dep}"
+    rsync -a --delete --exclude=/vendor --exclude=/tests "${REPO_ROOT}/packages/${dep}/" "${work}/packages/${dep}/"
+  done
+
+  BC_WORK="$work" bc_php '
+foreach(glob(getenv("BC_WORK")."/packages/*/composer.json")?:[] as $file){
+  $j=json_decode(file_get_contents($file),true,flags:JSON_THROW_ON_ERROR);
+  $j["version"]="1.0.x-dev";
+  file_put_contents($file,json_encode($j,JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES)."\n");
+}
+'
+
+  stage_package_vendors "$dir" "$work"
+
+  BC_WORK="$work" BC_CHECK_TARGET_DIR="$dir" BC_NEEDS_PHPSTAN="$needs_phpstan" bc_php '
+$r=getenv("BC_REPO_ROOT"); $d=getenv("BC_CHECK_TARGET_DIR");
+$pkg=json_decode(file_get_contents("$r/packages/$d/composer.json"),true);
+$requireDev=[];
+foreach($pkg["require-dev"]??[] as $name=>$constraint){
+  if(str_starts_with($name,"axiomasoft/corex")||str_starts_with($name,"corex/")||str_starts_with($name,"flex/")){$requireDev[$name]=$constraint;}
+}
+$src=getenv("BC_WORK")."/packages/$d/src";
+if(is_dir($src)&&isset($pkg["require-dev"]["orchestra/testbench"])){
+  $it=new RecursiveIteratorIterator(new RecursiveDirectoryIterator($src));
+  foreach($it as $file){
+    if(!$file->isFile()||!str_ends_with($file->getFilename(),".php")){continue;}
+    if(str_contains((string)file_get_contents($file->getPathname()),"Orchestra\\Testbench")){
+      $requireDev["orchestra/testbench"]=$pkg["require-dev"]["orchestra/testbench"];
+      break;
+    }
+  }
+}
+$repos=[["type"=>"path","url"=>"packages/*"]];
+$require=$pkg["require"]??[];
+$work=getenv("BC_WORK");
+foreach($pkg["repositories"]??[] as $repo){
+  if(($repo["type"]??"")==="path"&&str_starts_with((string)($repo["url"]??""),"../")){continue;}
+  if(is_dir("$work/packages/_vendor/azguard-core")&&($repo["type"]??"")==="vcs"&&str_contains((string)($repo["url"]??""),"azguard")){continue;}
+  $repos[]=$repo;
+}
+foreach(glob("$work/packages/_vendor/*/composer.json")?:[] as $composerPath){
+  $vc=json_decode((string)file_get_contents($composerPath),true);
+  $vName=is_array($vc)?($vc["name"]??""):"";
+  if($vName===""){continue;}
+  if(!isset($require[$vName])&&!isset($requireDev[$vName])&&$vName!=="axiomasoft/stancl-jobpipeline"){continue;}
+  $repos[]=["type"=>"path","url"=>"packages/_vendor/".basename(dirname($composerPath))];
+  if($vName==="axioma-studio/azguard-core"){$require[$vName]="@dev";}
+}
+if(is_dir($src)){
+  $blob="";
+  $it=new RecursiveIteratorIterator(new RecursiveDirectoryIterator($src));
+  foreach($it as $file){
+    if(!$file->isFile()||!str_ends_with($file->getFilename(),".php")){continue;}
+    $blob.=(string)file_get_contents($file->getPathname());
+  }
+  $illum=[
+    "Illuminate\\Foundation\\"=>"laravel/framework",
+    "Illuminate\\Console\\"=>"illuminate/console",
+    "Illuminate\\Queue\\"=>"illuminate/queue",
+  ];
+  foreach($illum as $needle=>$pkgName){
+    if(str_contains($blob,$needle)&&!isset($require[$pkgName])){
+      $require[$pkgName]="^12.0|^13.0";
+    }
+  }
+}
+if(getenv("BC_NEEDS_PHPSTAN")==="1"){$requireDev["phpstan/phpstan"]="@dev";$repos[]=["type"=>"path","url"=>"packages/_vendor/phpstan"]; }
+$root=["name"=>"corex/bc-compare-root","type"=>"project","license"=>"MIT","require"=>$require,"repositories"=>$repos,"autoload"=>[],"minimum-stability"=>"dev","prefer-stable"=>true];
+if($requireDev!==[]){$root["require-dev"]=$requireDev;}
+if(isset($pkg["extra"]["corex"]["public-api"])){$root["extra"]["corex"]["public-api"]=$pkg["extra"]["corex"]["public-api"];}
+foreach($pkg["autoload"]["psr-4"]??[] as $prefix=>$rel){
+  $paths=is_array($rel)?$rel:[$rel];
+  $mapped=[];
+  foreach($paths as $one){$mapped[]="packages/$d/".ltrim((string)$one,"./");}
+  $root["autoload"]["psr-4"][$prefix]=count($mapped)===1?$mapped[0]:$mapped;
+  foreach($mapped as $path){$root["autoload"]["classmap"][]=$path;}
+}
+foreach(["classmap","files","exclude-from-classmap"] as $kind){
+  foreach($pkg["autoload"][$kind]??[] as $rel){
+    $root["autoload"][$kind][]="packages/$d/".ltrim((string)$rel,"./");
+  }
+}
+echo json_encode($root,JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES)."\n";
+' > "${work}/composer.json"
+
+  if [[ -n "${BC_CHECK_PROBE_INFRA:-}" && "$dir" == "core" ]]; then
+    echo '{' >> "${work}/composer.json"
+  fi
+
+  git -C "$work" add -A
+  git -C "$work" commit -q -m "candidate"
+  cand_sha="$(git -C "$work" rev-parse HEAD)"
+
+  roave_flags=(--from="${base_sha}" --to="${cand_sha}" --format=json)
+  if grep -q '"require-dev"' "${work}/composer.json"; then
+    roave_flags+=(--install-development-dependencies)
+  fi
+
+  set +e
+  roave_out="$(cd "$work" && php "$REPO_ROOT/scripts/bc/roave.php" "${roave_flags[@]}" 2>&1)"
+  roave_exit=$?
+  set -e
+
+  classified="$(printf '%s\n' "$roave_out" | python3 "$REPO_ROOT/scripts/bc/classify.py" "$roave_exit")"
+
+  if [[ "$classified" == "bc-break" ]]; then
+    contract_hint="$(printf '%s\n' "$roave_out" | grep -oE "packages/${dir}/src/Contracts/[^\"']+" | head -1 || true)"
+  fi
+
+  echo "bc-check: ${pkg_name} (${dir}) |${classified}| stability=${stability} base=${base_sha} candidate=${cand_sha}"
+  if [[ -n "$contract_hint" ]]; then
+    echo "bc-check:   contract-surface: ${contract_hint}"
+  fi
+  if [[ "$classified" != "compatible" ]]; then
+    printf '%s\n' "$roave_out" | tail -20
+  fi
+
+  if [[ "$classified" == "infrastructure" ]]; then
+    return 1
+  fi
+  if [[ "$classified" == "bc-break" ]]; then
+    if printf '%s\n' "$roave_out" | python3 "$REPO_ROOT/scripts/bc/approved-delta.py" --root "$REPO_ROOT" --package "$pkg_name" --base "$(git -C "$REPO_ROOT" rev-parse "${BC_CHECK_BASE}^{commit}")"; then
+      echo "bc-check: exact decision-bound unpublished delta — ${pkg_name}"
+    elif [[ "$stability" == "experimental" ]] && grep -Eq 'Breaking.*PLAN3[.]P04|PLAN3[.]P04.*[Bb]reaking' "$REPO_ROOT/packages/$dir/CHANGELOG.md"; then
+      echo "bc-check: declared pre-1.0 delta in packages/$dir/CHANGELOG.md"
+    else
+      echo "bc-check: undeclared or stable BC break — ${pkg_name}" >&2
+      return 1
+    fi
+  fi
+  return 0
+}
+
+overall=0
+
+for dir in "${PACKAGE_DIRS[@]}"; do
+  if [[ -n "${BC_CHECK_ONLY:-}" && "$dir" != "$BC_CHECK_ONLY" ]]; then
+    continue
+  fi
+
+  meta="$(BC_CHECK_TARGET_DIR="$dir" bc_php '
+$r=getenv("BC_REPO_ROOT"); $d=getenv("BC_CHECK_TARGET_DIR");
+$pkg=json_decode(file_get_contents("$r/packages/$d/composer.json"),true);
+$name=$pkg["name"]??"";
+$st=$pkg["extra"]["corex"]["stability"]??"experimental";
+echo "$name|$st";
+')"
+  pkg_name="${meta%%|*}"
+  stability="${meta#*|}"
+  if [[ -n "${BC_CHECK_FORCE_STABLE:-}" && "$pkg_name" == "$BC_CHECK_FORCE_STABLE" ]]; then
+    stability="stable"
+  fi
+
+  work="$(mktemp -d "${TMPDIR:-/tmp}/corex-bc-check.XXXXXX")"
+  set +e
+  run_one_package "$dir" "$pkg_name" "$stability" "$work"
+  pkg_exit=$?
+  set -e
+  rm -rf "$work" 2>/dev/null || true
+
+  if [[ $pkg_exit -ne 0 ]]; then
+    overall=1
+  fi
+done
+
+if [[ $overall -ne 0 ]]; then
+  echo "bc-check: failed" >&2
+  exit 1
+fi
+
+echo "bc-check: OK"
+exit 0
+
+===== SOURCE scripts/bc/accepted-base.json SHA256 e4312a96dbb104fa75b030f5738b89854d4b73ffb2b4f22f0498314e199f00c4 =====
+{
+    "schema": "corex-bc-base/1",
+    "revision": "76f8bdde496154c0a8901e459175cf306bedd860",
+    "decisions": ["PLAN3.D01", "PLAN3.D63", "PLAN3.D64"],
+    "reason": "Accepted unpublished P04.2/P04.3 source surface before strict cutover; no compatibility with superseded pre-kernel names. Stable changes after this anchor must pass Roave. BC_CHECK_BASE can select a release revision explicitly."
+}
+
+===== SOURCE plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design-remediation/bc-admission-proof.py SHA256 ebef07120e006e75453c2abaab7c3c55df379ed49d0a26e7a81e637001916a7f =====
+#!/usr/bin/env python3
+"""Exercise installed exact approval checker on isolated carrier. Fixture errors are NOT actual Roave results."""
+from pathlib import Path
+import json,tempfile,subprocess,hashlib
+root=Path(__file__).resolve().parents[4];plan=Path('plans/2026.09.27-№1-COREX-KERNEL')
+checks={}
+def check(name,condition):
+ checks[name]=bool(condition)
+ if not condition:raise AssertionError(name)
+with tempfile.TemporaryDirectory(prefix='corex-p07-bc-') as temp:
+ t=Path(temp);(t/'scripts/bc').mkdir(parents=True)
+ base=json.loads((root/'scripts/bc/accepted-base.json').read_text())['revision']
+ paths=[str(plan/'decisions/D102-p07-rereview-contract-completeness.md'),str(plan/'decisions/D103-p07-stable-bc-admission-review.md')]
+ decisions=[]
+ for path in paths:
+  dest=t/path;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes((root/path).read_bytes())
+  decisions.append({'path':path,'sha256':hashlib.sha256(dest.read_bytes()).hexdigest()})
+ # Deliberately a labelled fixture; future product step MUST capture real descriptions from Roave.
+ errors=[{'path':'/packages/tenancy/src/Laravel/Http/Middleware/AccountStatusGate.php','modificationType':'changed','description':'FIXTURE ONLY: AccountStatusGate constructor optional policy -> required five arguments'}]
+ rule={'base_revision':base,'decisions':decisions,'changes':[{'path':e['path'],'modificationType':e['modificationType'],'description_sha256':hashlib.sha256(e['description'].encode()).hexdigest()} for e in errors]}
+ carrier={'schema':'corex-bc-approved-deltas/1','packages':{'axiomasoft/corex-tenancy':rule}}
+ c=t/'scripts/bc/approved-deltas.json'
+ def run(rows=errors,selected_base=base,selected_package='axiomasoft/corex-tenancy'):
+  c.write_text(json.dumps(carrier))
+  r=subprocess.run(['python3',str(root/'scripts/bc/approved-delta.py'),'--root',str(t),'--package',selected_package,'--base',selected_base],input=json.dumps({'errors':rows},separators=(',',':'))+'\n',capture_output=True,text=True)
+  return r.returncode
+ check('exact_fixture_decision_bound_set_accepted',run()==0)
+ check('unknown_description_denied',run([{**errors[0],'description':'UNKNOWN BREAK'}])==1)
+ check('additional_break_denied',run(errors+[{'path':None,'modificationType':'removed','description':'UNKNOWN'}])==1)
+ check('empty_break_set_denied',run([])==1)
+ check('wrong_base_denied',run(selected_base='wrong')==1)
+ check('unlisted_package_denied',run(selected_package='axiomasoft/unknown')==1)
+ first=t/paths[0];original=first.read_bytes();first.write_bytes(original+b'\nmutation\n')
+ check('changed_decision_hash_denied',run()==1)
+ first.write_bytes(original.replace(b'\nstatus: accepted\n',b'\nstatus: proposed\n'));decisions[0]['sha256']=hashlib.sha256(first.read_bytes()).hexdigest()
+ check('nonaccepted_decision_even_with_matching_hash_denied',run()==1)
+print(json.dumps({'passed':len(checks),'checks':checks,'checker_sha256':hashlib.sha256((root/'scripts/bc/approved-delta.py').read_bytes()).hexdigest(),'limits':'Actual unmodified checker; temp approval carrier and clearly labelled Roave-shaped fixture. No product approval, real Roave report, stable-gate GREEN or base mutation claimed.'},indent=2))
+
+===== SOURCE plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design-remediation/bc-admission-proof.json SHA256 8b82ae4dc785f996ac3264975290509c897e25ed3b266e24276e34fa7192f625 =====
+{
+  "passed": 8,
+  "checks": {
+    "exact_fixture_decision_bound_set_accepted": true,
+    "unknown_description_denied": true,
+    "additional_break_denied": true,
+    "empty_break_set_denied": true,
+    "wrong_base_denied": true,
+    "unlisted_package_denied": true,
+    "changed_decision_hash_denied": true,
+    "nonaccepted_decision_even_with_matching_hash_denied": true
+  },
+  "checker_sha256": "1c0fafccb9978ea6536790fd904d5c149d72189b2c7b1d1d170977e3b587d179",
+  "limits": "Actual unmodified checker; temp approval carrier and clearly labelled Roave-shaped fixture. No product approval, real Roave report, stable-gate GREEN or base mutation claimed."
+}
+
+===== SOURCE plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design-remediation/prove.php SHA256 af5601b89a0d9e230c58dd085fdd15fb2c1baf748665f84f5534234a2c76328d =====
+<?php
+
+declare(strict_types=1);
+
+// Read-only design counterexamples. No application bootstrap or database connection.
+namespace CoreX\Tenancy\Runtime\Contracts {
+    interface TenantBootstrapper
+    {
+        public function bootstrap(\CoreX\Context\Data\TenantContext $context, \CoreX\Context\Data\DatabaseConnectionConfig $database): void;
+        public function revert(): void;
+    }
+}
+namespace CoreX\Tenancy\Runtime\Events {
+    final readonly class TenantContextInitialized { public function __construct(public string $accountId) {} }
+    final readonly class TenantContextEnded { public function __construct(public string $accountId) {} }
+}
+namespace CoreX\Tenancy\Runtime\Exceptions {
+    final class TenantContextUnavailable extends \RuntimeException
+    {
+        public static function missingAccount(string $id): self { return new self('missing-account:'.$id); }
+        public static function runtimePoisoned(): self { return new self('runtime-poisoned'); }
+        public static function notInitialized(): self { return new self('not-initialized'); }
+        public static function missingWorkspace(string $id): self { return new self('missing-workspace:'.$id); }
+        public static function invalidPayload(): self { return new self('invalid-payload'); }
+    }
+}
+namespace {
+    require dirname(__DIR__, 4).'/vendor/autoload.php';
+
+    use CoreX\Context\Contracts\AccountConnectionResolver;
+    use CoreX\Context\Contracts\TenancyManager;
+    use CoreX\Context\Data\AccountRef;
+    use CoreX\Context\Data\DatabaseConnectionConfig;
+    use CoreX\Context\Data\TenantContext;
+    use CoreX\Tenancy\Account\Contracts\AccountRead;
+    use CoreX\Tenancy\Runtime\Contracts\TenantBootstrapper;
+    use CoreX\Tenancy\Runtime\Internal\DatabaseTenancyManager;
+    use Illuminate\Container\Container;
+    use Illuminate\Events\Dispatcher;
+
+    $examples = file_get_contents(dirname(__DIR__).'/P07-design/examples.md');
+    preg_match('/## 1\. `DatabaseTenancyManager`.*?```php\n(.*?)\n```/s', $examples, $match);
+    if (! isset($match[1])) { throw new RuntimeException('Manager example not found'); }
+    preg_match('/### 1c\..*?```php\n(.*?)\n```/s', $examples, $diagnostic);
+    eval(preg_replace('/^<\?php\s*/', '', $diagnostic[1], 1));
+    // Execute exactly the current normative example, never a corrected copy.
+    eval(preg_replace('/^<\?php\s*/', '', $match[1], 1));
+
+    final class Accounts implements AccountRead
+    {
+        public function find(string $accountId, ?string $connectionName = null): ?AccountRef
+        {
+            return $accountId === 'missing' ? null : account($accountId);
+        }
+        public function ownerIdentityId(string $accountId, ?string $connectionName = null): ?string { return null; }
+    }
+    final class Connections implements AccountConnectionResolver
+    {
+        public function resolve(AccountRef $account): DatabaseConnectionConfig
+        {
+            if ($account->id === 'bad-resolver') { throw new RuntimeException('resolve-failed'); }
+            return new DatabaseConnectionConfig('pgsql', 'unused', 5432, $account->id, 'unused');
+        }
+    }
+    final class Facility implements TenantBootstrapper
+    {
+        public string $state = 'central';
+        public int $reverts = 0;
+        public bool $failRevert = false;
+        public ?string $failFor = null;
+        public function bootstrap(TenantContext $context, DatabaseConnectionConfig $database): void
+        {
+            $this->state = $context->account->id;
+            if ($this->failFor === $this->state) { throw new RuntimeException('bootstrap-failed'); }
+        }
+        public function revert(): void { $this->reverts++; $this->state = 'central'; if ($this->failRevert) { throw new RuntimeException('revert-failed'); } }
+    }
+    function account(string $id): AccountRef { return new AccountRef($id, $id, 'active', [], []); }
+    function manager(Container $container, array $bootstrappers): DatabaseTenancyManager
+    {
+        return new DatabaseTenancyManager($bootstrappers, new Accounts(), new Connections(), $container, new Dispatcher($container), 'central', new \Psr\Log\NullLogger());
+    }
+
+    $checks = [];
+    function check(string $name, bool $condition): void {
+        global $checks;
+        $checks[$name] = $condition;
+        if (! $condition) { throw new RuntimeException('FAILED: '.$name); }
+    }
+    $workspace = new CoreX\Context\Data\WorkspaceRef('W', 'w', 'team', '/w', null);
+    foreach (['missing', 'bad-resolver', 'B'] as $target) {
+        $c = new Container(); $events = new Dispatcher($c); $f = new Facility();
+        $m = new DatabaseTenancyManager([$f], new Accounts(), new Connections(), $c, $events, 'central', new \Psr\Log\NullLogger());
+        $m->initialize(account('A')); $m->setWorkspace($workspace);
+        if ($target === 'B') { $f->failFor = 'B'; }
+        $called = false;
+        try { $m->runFor(account($target), null, static function () use (&$called) { $called = true; }); } catch (Throwable $e) {}
+        check('runFor_restores_'.$target, ! $called && $m->context()?->account->id === 'A' && $m->context()?->workspace === $workspace && $f->state === 'A');
+    }
+    $c = new Container(); $events = new Dispatcher($c); $f = new Facility();
+    $m = new DatabaseTenancyManager([$f], new Accounts(), new Connections(), $c, $events, 'central', new \Psr\Log\NullLogger());
+    $m->initialize(account('A')); $m->setWorkspace($workspace);
+    $events->listen(CoreX\Tenancy\Runtime\Events\TenantContextInitialized::class, static function ($event) { if ($event->accountId === 'B') { throw new RuntimeException('event-failed'); } });
+    try { $m->runFor(account('B'), null, static fn () => null); } catch (Throwable $e) {}
+    check('runFor_restores_event_failure', $m->context()?->account->id === 'A' && $m->context()?->workspace === $workspace && $f->state === 'A');
+
+    $c = new Container(); $f1 = new Facility(); $f2 = new Facility(); $f2->failFor = 'B';
+    $m = manager($c, [$f1, $f2]);
+    $c->scoped('writer', static fn () => new stdClass()); $held = $c->make('writer');
+    try { $m->initialize(account('B')); } catch (Throwable $e) {}
+    check('partial_bootstrap_reverted_and_scope_reset', $f1->state === 'central' && $f2->state === 'central' && $f1->reverts === 1 && $f2->reverts === 1 && ! $m->initialized() && $c->make('writer') !== $held);
+    $f1->failRevert = true; $f2->failFor = null; $m->initialize(account('B'));
+    try { $m->end(); } catch (Throwable $e) {}
+    try { $m->initialize(account('C')); $poisoned = false; } catch (Throwable $e) { $poisoned = $e->getMessage() === 'runtime-poisoned'; }
+    check('cleanup_attempts_all_then_poison', $f2->reverts === 2 && $poisoned);
+
+    // Normative mutation, exactly one shared reset call. Original B, mutant A.
+    $mutant = str_replace('final class DatabaseTenancyManager ', 'final class DatabaseTenancyManagerMutant ', $match[1]);
+    $mutant = str_replace('$this->container->forgetScopedInstances();', '', $mutant, $removed);
+    check('scope_mutation_single_match', $removed === 1);
+    eval(preg_replace('/^<\?php\s*/', '', $mutant, 1));
+    foreach ([DatabaseTenancyManager::class => 'B', CoreX\Tenancy\Runtime\Internal\DatabaseTenancyManagerMutant::class => 'A'] as $class => $expected) {
+        $c = new Container(); $f = new Facility();
+        $m = new $class([$f], new Accounts(), new Connections(), $c, new Dispatcher($c), 'central', new \Psr\Log\NullLogger());
+        $c->scoped('writer', static fn () => (object) ['database' => $f->state]);
+        $m->initialize(account('A')); $held = $c->make('writer');
+        $inside = $m->runFor(account('B'), null, static fn () => $c->make('writer')->database);
+        check('scope_boundary_'.($expected === 'B' ? 'original_passes' : 'mutant_writes_wrong_database'), $inside === $expected);
+    }
+    // Acyclic eager registrar graph, no workspace bootstrapper dependency.
+    $c = new Container();
+    foreach (['connection', 'cache', 'session'] as $key) { $c->singleton($key, static fn () => new Facility()); }
+    $c->singleton(TenancyManager::class, static fn (Container $c) => manager($c, [$c->make('connection'), $c->make('cache'), $c->make('session')]));
+    check('eager_di_acyclic', $c->make(TenancyManager::class) === $c->make(TenancyManager::class));
+
+    // Execute exact cache example against installed Laravel FileStore and locks.
+    preg_match('/```php\n(final class CachePrefixBootstrapper.*?)\n```/s', $examples, $cacheMatch);
+    eval('use CoreX\Context\Data\TenantContext; use CoreX\Context\Data\DatabaseConnectionConfig; use CoreX\Tenancy\Runtime\Contracts\TenantBootstrapper; '.$cacheMatch[1]);
+    $directory = sys_get_temp_dir().'/corex-p07-repair-'.bin2hex(random_bytes(8));
+    mkdir($directory);
+    try {
+        $c = new Container();
+        $base = ['driver' => 'file', 'path' => $directory.'/data', 'lock_path' => $directory.'/locks'];
+        $config = new Illuminate\Config\Repository(['cache' => ['default' => 'file', 'stores' => ['file' => $base]]]);
+        $c->instance('config', $config); $c->instance('files', new Illuminate\Filesystem\Filesystem());
+        $cache = new Illuminate\Cache\CacheManager($c);
+        $b = new CachePrefixBootstrapper($cache, $config, ['file'], 'tenant_%tenant%_');
+        $db = (new Connections())->resolve(account('A'));
+        $cache->store()->put('k', 'central', 60);
+        $b->bootstrap(new TenantContext(account('A')), $db); $cache->store()->put('k', 'A', 60);
+        $lockA = $cache->store()->lock('k', 60); check('cache_A_lock', $lockA->get());
+        $b->revert(); $b->bootstrap(new TenantContext(account('B')), $db);
+        check('cache_B_has_no_A_value', $cache->store()->get('k') === null);
+        $lockB = $cache->store()->lock('k', 60); check('cache_B_lock_isolated', $lockB->get()); $lockB->release();
+        $b->revert(); $b->bootstrap(new TenantContext(account('A')), $db);
+        check('cache_A_value_restored', $cache->store()->get('k') === 'A');
+        check('cache_A_lock_persists', ! $cache->store()->lock('k', 60)->get()); $lockA->release();
+        $b->revert();
+        check('cache_central_and_full_config_restored', $cache->store()->get('k') === 'central' && $config->get('cache.stores.file') === $base);
+        $config->set('cache.stores.bad', ['driver' => 'array']);
+        try { (new CachePrefixBootstrapper($cache, $config, ['bad'], 'tenant_%tenant%_'))->bootstrap(new TenantContext(account('A')), $db); $denied = false; } catch (CoreX\Config\Exceptions\InvalidConfiguration $e) { $denied = true; }
+        check('unsupported_cache_driver_denied', $denied);
+    } finally { (new Illuminate\Filesystem\Filesystem())->deleteDirectory($directory); }
+
+    preg_match('/```php\n(final class QueueTenantContext.*?)\n```/s', $examples, $queueMatch);
+    eval('use CoreX\Context\Contracts\TenancyManager; use CoreX\Tenancy\Account\Contracts\AccountRead; use CoreX\Tenancy\Runtime\Exceptions\TenantContextUnavailable; '.$queueMatch[1]);
+    $c = new Container(); $m = manager($c, [new Facility()]);
+    $listener = new QueueTenantContext($m, new Accounts(), static fn (string $id) => $id === 'W' ? $workspace : null, 'central');
+    function syncJob(Container $c, ?array $tenant): Illuminate\Queue\Jobs\SyncJob {
+        return new Illuminate\Queue\Jobs\SyncJob($c, json_encode(['corex_tenant' => $tenant], JSON_THROW_ON_ERROR), 'sync', null);
+    }
+    $m->initialize(account('A')); $m->setWorkspace($workspace);
+    $outer = syncJob($c, ['account' => 'B', 'workspace' => null]);
+    $listener->processing(new Illuminate\Queue\Events\JobProcessing('sync', $outer));
+    check('sync_job_inside_B', $m->context()?->account->id === 'B');
+    $inner = syncJob($c, ['account' => 'missing', 'workspace' => null]);
+    try { $listener->processing(new Illuminate\Queue\Events\JobProcessing('sync', $inner)); } catch (Throwable $e) {}
+    $listener->finished(new Illuminate\Queue\Events\JobAttempted('sync', $inner, $e ?? null));
+    check('nested_failure_restores_B', $m->context()?->account->id === 'B');
+    $listener->finished(new Illuminate\Queue\Events\JobAttempted('sync', $inner));
+    check('repeated_completion_does_not_pop_outer', $m->context()?->account->id === 'B');
+    $listener->finished(new Illuminate\Queue\Events\JobAttempted('sync', $outer));
+    check('sync_restores_A_workspace', $m->context()?->account->id === 'A' && $m->context()?->workspace === $workspace);
+    $central = syncJob($c, null);
+    $listener->processing(new Illuminate\Queue\Events\JobProcessing('sync', $central)); check('sync_central_inside', $m->context() === null);
+    $listener->finished(new Illuminate\Queue\Events\JobAttempted('sync', $central)); check('sync_central_restores_A', $m->context()?->workspace === $workspace);
+
+
+    preg_match('/## 9\..*?```php\n(.*?)\n```/s', $examples, $allowedMatch);
+    $allowed = str_replace('#[Override]', '', $allowedMatch[1]);
+    eval('use CoreX\Access\Contracts\Principal; use CoreX\Access\Enums\Scope; class AllowedProbe { public function __construct(public object $activity, public object $directGrants, public bool $matrix) {} private function activeRoleIds($p) { return ["role"]; } private function matrixQuery($ids,$entity,$action) { return new class($this->matrix) { public function __construct(private bool $found) {} public function where(...$args) { return $this; } public function exists() { return $this->found; } }; } private function panel() { return "crm"; } '.$allowed.'}');
+    $principal = new class implements CoreX\Access\Contracts\Principal {
+        public function principalType(): CoreX\Access\Enums\PrincipalType { return CoreX\Access\Enums\PrincipalType::User; }
+        public function principalId(): string { return 'user'; }
+    };
+    $activity = new class { public bool $active = false; public function isActive($key) { return $this->active; } };
+    $grants = new class { public bool $granted = true; public function hasActive(...$args) { return $this->granted; } };
+    $probe = new AllowedProbe($activity, $grants, true);
+    check('inactive_entity_denies_stale_matrix_and_direct_grant', ! $probe->allowed($principal, 'disabled', 'view'));
+    $activity->active = true;
+    check('active_entity_matrix_allows', $probe->allowed($principal, 'deals', 'view'));
+    $probe->matrix = false;
+    check('active_entity_direct_grant_allows', $probe->allowed($principal, 'deals', 'view'));
+    $grants->granted = false;
+    check('active_entity_without_matrix_or_grant_denies', ! $probe->allowed($principal, 'deals', 'view'));
+    echo json_encode(['php' => PHP_VERSION, 'example_sha256' => hash('sha256', $examples), 'checks' => $checks, 'passed' => count($checks), 'database_connections' => 0], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR)."\n";
+}
+
+===== SOURCE plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design-remediation/rereview-contract-proof.php SHA256 9459158546c40658908418112f55518022954f27343322aa028368570e2b85e6 =====
+<?php
+// Design-only: execute normative Markdown; no DB access. Reuse installed Laravel and prior harness classes.
+ob_start(); require __DIR__.'/prove.php'; ob_end_clean(); $checks = []; check('queue_constructor_exact_arity', (new ReflectionClass(QueueTenantContext::class))->getConstructor()->getNumberOfParameters() === 4);
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Tenancy\Runtime\Internal\DatabaseTenancyManager;
+use CoreX\Tenancy\Runtime\Internal\TenantCleanupFailure;
+use Illuminate\Container\Container;
+use Illuminate\Events\Dispatcher;
+
+foreach (['initialize', 'runFor-central', 'runFor-outer', 'logger-fails', 'callback-and-cleanup', 'callback-and-cleanup-outer'] as $scenario) {
+    $c = new Container(); $f1 = new Facility(); $f2 = new Facility();
+    $logger = new class extends Psr\Log\AbstractLogger {
+        public array $entries = []; public bool $fails = false;
+        public function log($level, string|Stringable $message, array $context = []): void {
+            $this->entries[] = [$level, $message, $context]; if ($this->fails) { throw new RuntimeException('log-failed'); }
+        }
+    };
+    $m = new DatabaseTenancyManager([$f1,$f2],new Accounts(),new Connections(),$c,new Dispatcher($c),'central',$logger);
+    if (in_array($scenario, ['runFor-outer','callback-and-cleanup-outer'], true)) { $m->initialize(account('A')); }
+    $f2->failFor = str_starts_with($scenario, 'callback-and-cleanup') ? null : 'B';
+    // For outer context do not fail its initial end; fail only after B mutates.
+    $bootstrapper = new class($f1,$f2) implements CoreX\Tenancy\Runtime\Contracts\TenantBootstrapper {
+        public function __construct(private Facility $f1, private Facility $f2) {}
+        public function bootstrap(TenantContext $context, CoreX\Context\Data\DatabaseConnectionConfig $db): void { $this->f1->failRevert = $this->f2->failRevert = true; }
+        public function revert(): void {}
+    };
+    // Include this before the failing facility so bootstrap failure has failing revert causes.
+    $m = new DatabaseTenancyManager([$f1,$bootstrapper,$f2],new Accounts(),new Connections(),$c,new Dispatcher($c),'central',$logger);
+    if (in_array($scenario, ['runFor-outer','callback-and-cleanup-outer'], true)) { $m->initialize(account('A')); $f1->failRevert=$f2->failRevert=false; }
+    $logger->fails = $scenario === 'logger-fails';
+    $before1 = $f1->reverts; $before2 = $f2->reverts;
+    try {
+        if ($scenario === 'initialize' || $scenario === 'logger-fails') { $m->initialize(account('B')); }
+        else { $m->runFor(account('B'),null,static function () use ($scenario) { if (str_starts_with($scenario, 'callback-and-cleanup')) { if ($scenario === 'callback-and-cleanup-outer') { global $checks; check('outer_callback_reached', true); } throw new RuntimeException('callback-failed'); } }); }
+        check($scenario.'_throws',false);
+    } catch (TenantCleanupFailure $e) {
+        $expected = str_starts_with($scenario, 'callback-and-cleanup') ? 'callback-failed' : 'bootstrap-failed';
+        check($scenario.'_causes', $e->getPrevious()?->getMessage()===$expected && $e->cleanup->getMessage()==='revert-failed');
+        $entry = end($logger->entries);
+        check($scenario.'_logs_exact_causes', $entry[0]==='error' && $entry[2]['exception']===$e->cleanup && $entry[2]['original_exception']===$e->getPrevious());
+        check($scenario.'_all_reverts', $f1->reverts>$before1 && $f2->reverts>$before2);
+    }
+    try { $m->context(); check($scenario.'_poisoned',false); } catch (Throwable $e) { check($scenario.'_poisoned',$e->getMessage()==='runtime-poisoned'); }
+}
+
+preg_match('/### 6c\..*?```php\n(.*?)\n```/s',$examples,$code);
+// Rename class only to coexist with installed baseline; its method bodies are unmodified.
+$code=str_replace('final class AccountStatusGate','final class AccountStatusGateDesign',$code[1]);
+eval(preg_replace('/^<\?php\s*/','',$code,1));
+$app = new Illuminate\Foundation\Application(dirname(__DIR__,4)); Container::setInstance($app);
+$contexts = new class implements TenantContextResolver { public TenantContext $ctx; public function current(): TenantContext { return $this->ctx; } };
+$accounts = new class implements CoreX\Tenancy\Account\Contracts\AccountRead {
+    public ?string $owner='owner'; public array $reads=[];
+    public function find(string $id,?string $connectionName=null): ?AccountRef { return null; }
+    public function ownerIdentityId(string $id,?string $connectionName=null): ?string { $this->reads[]=[$id,$connectionName]; return $this->owner; }
+};
+$auth=new class implements Illuminate\Contracts\Auth\Factory {
+    public object $g;
+    public function __construct() { $this->g=new class implements Illuminate\Contracts\Auth\Guard {
+        public ?string $identity='owner'; public function id(){return $this->identity;}
+        public function check(){return $this->identity!==null;} public function guest(){return !$this->check();}
+        public function user(){return null;} public function validate(array $credentials=[]){return false;}
+        public function hasUser(){return $this->check();} public function setUser(Illuminate\Contracts\Auth\Authenticatable $user){return $this;}
+    }; }
+    public function guard($name=null){return $this->g;} public function shouldUse($name){}
+};
+$policy=new CoreX\Tenancy\Laravel\Support\StatusGatePolicy('billing','export',['GET','HEAD','OPTIONS']);
+$gate=new CoreX\Tenancy\Laravel\Http\Middleware\AccountStatusGateDesign($policy,$contexts,$accounts,$auth,'explicit-central');
+$rows=[
+ ['trial','other','owner','POST','other',null,200],['active',null,null,'POST','other',null,200],
+ ['suspended','owner','owner','POST','billing',null,200],['suspended','owner','owner','GET','else','billing',200],
+ ['suspended','owner','owner','GET','other',null,403],['suspended','other','owner','GET','billing',null,403],
+ ['suspended','owner',null,'GET','billing',null,403],['suspended',null,null,'GET','billing',null,403],
+ ['grace','owner','owner','GET','other',null,200],['grace','owner','owner','HEAD','other',null,200],
+ ['grace','owner','owner','POST','export',null,200],['grace','owner','owner','POST','else','export',200],
+ ['grace','owner','owner','POST','other',null,403],['grace','other','owner','GET','other',null,403],
+ ['grace','owner',null,'GET','other',null,403],['grace',null,null,'GET','other',null,403],
+ ['exporting','owner','owner','GET','other',null,410],['deleted','owner','owner','GET','other',null,410],
+ ['pending','owner','owner','GET','other',null,403],['provisioning','owner','owner','GET','other',null,403],['bogus','owner','owner','GET','other',null,403],
+];
+foreach($rows as $i=>[$status,$user,$owner,$method,$path,$name,$expected]) {
+    $contexts->ctx=new TenantContext(new AccountRef('A','a',$status,[],[]));$accounts->owner=$owner;$auth->g->identity=$user;
+    $request=Illuminate\Http\Request::create('/'.$path,$method);
+    if($name!==null) { $route=new Illuminate\Routing\Route($method,$path,static fn()=>null); $route->name($name); $request->setRouteResolver(static fn()=>$route); }
+    try{$result=$gate->handle($request,static fn()=>new Illuminate\Http\Response('',200));$actual=$result->getStatusCode();}
+    catch(Symfony\Component\HttpKernel\Exception\HttpException $e){$actual=$e->getStatusCode();}
+    check('status_matrix_'.$i,$actual===$expected);
+}
+check('owner_reads_explicit_central',count($accounts->reads)>0 && array_all($accounts->reads,static fn($read)=>$read===['A','explicit-central']));
+// Execute the exact middleware body in a typed manager wrapper; exercise the null branch.
+preg_match('/## 6\. `ScopeSessionToTenant`.*?```php\n(.*?)\n```/s',$examples,$scope);
+eval('use Illuminate\Http\Request; use Symfony\Component\HttpFoundation\Response; use CoreX\Tenancy\Runtime\Exceptions\TenantContextUnavailable; final class SessionScopeNullProbe { public function __construct(private CoreX\Context\Contracts\TenancyManager $manager) {} '.$scope[1].'}');
+$m=manager(new Container(),[]);
+try{(new SessionScopeNullProbe($m))->handle(Illuminate\Http\Request::create('/'),static fn()=>new Symfony\Component\HttpFoundation\Response());check('null_context_domain_error',false);}
+catch(CoreX\Tenancy\Runtime\Exceptions\TenantContextUnavailable $e){check('null_context_domain_error',$e->getMessage()==='not-initialized');}
+echo json_encode(['example_sha256'=>hash('sha256',$examples),'passed'=>count($checks),'checks'=>$checks,'database_connections'=>0,'limits'=>'Exact Markdown manager/status/scope bodies; fake read/auth ports, actual Laravel Request/Route/Application/abort. Full provider boot and PostgreSQL deferred to product execution.'],JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES)."\n";
+
+===== SOURCE plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design-remediation/rereview-contract-proof.json SHA256 bac6eeafc42edffb34b29c109d9973b79546fad0701b3c241f801f573607e410 =====
+{
+    "example_sha256": "5840bd1f14ff6651996c365a057742f865620e4157b6194046cdd0e30ae24cc3",
+    "passed": 49,
+    "checks": {
+        "queue_constructor_exact_arity": true,
+        "initialize_causes": true,
+        "initialize_logs_exact_causes": true,
+        "initialize_all_reverts": true,
+        "initialize_poisoned": true,
+        "runFor-central_causes": true,
+        "runFor-central_logs_exact_causes": true,
+        "runFor-central_all_reverts": true,
+        "runFor-central_poisoned": true,
+        "runFor-outer_causes": true,
+        "runFor-outer_logs_exact_causes": true,
+        "runFor-outer_all_reverts": true,
+        "runFor-outer_poisoned": true,
+        "logger-fails_causes": true,
+        "logger-fails_logs_exact_causes": true,
+        "logger-fails_all_reverts": true,
+        "logger-fails_poisoned": true,
+        "callback-and-cleanup_causes": true,
+        "callback-and-cleanup_logs_exact_causes": true,
+        "callback-and-cleanup_all_reverts": true,
+        "callback-and-cleanup_poisoned": true,
+        "outer_callback_reached": true,
+        "callback-and-cleanup-outer_causes": true,
+        "callback-and-cleanup-outer_logs_exact_causes": true,
+        "callback-and-cleanup-outer_all_reverts": true,
+        "callback-and-cleanup-outer_poisoned": true,
+        "status_matrix_0": true,
+        "status_matrix_1": true,
+        "status_matrix_2": true,
+        "status_matrix_3": true,
+        "status_matrix_4": true,
+        "status_matrix_5": true,
+        "status_matrix_6": true,
+        "status_matrix_7": true,
+        "status_matrix_8": true,
+        "status_matrix_9": true,
+        "status_matrix_10": true,
+        "status_matrix_11": true,
+        "status_matrix_12": true,
+        "status_matrix_13": true,
+        "status_matrix_14": true,
+        "status_matrix_15": true,
+        "status_matrix_16": true,
+        "status_matrix_17": true,
+        "status_matrix_18": true,
+        "status_matrix_19": true,
+        "status_matrix_20": true,
+        "owner_reads_explicit_central": true,
+        "null_context_domain_error": true
+    },
+    "database_connections": 0,
+    "limits": "Exact Markdown manager/status/scope bodies; fake read/auth ports, actual Laravel Request/Route/Application/abort. Full provider boot and PostgreSQL deferred to product execution."
+}
+
+===== SOURCE plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design-remediation/extra-arg-counterexample.php SHA256 a4dcaa75157d95262d802f2df6f80d337b950665ecd1f819e0ffa6bb56c3b644 =====
+<?php
+ob_start(); require __DIR__.'/prove.php'; ob_end_clean();
+$m=manager(new Illuminate\Container\Container(),[]);
+$reflection=new ReflectionClass(QueueTenantContext::class);
+try {
+    $listener=new QueueTenantContext($m,new Accounts(),static fn(string $id)=>null,'central',new Psr\Log\NullLogger());
+    echo json_encode(['php'=>PHP_VERSION,'declared_parameters'=>$reflection->getConstructor()->getNumberOfParameters(),'supplied_arguments'=>5,'exception'=>null,'constructed'=>$listener instanceof QueueTenantContext,'interpretation'=>'Surplus argument is unintended and removed from current proof; claimed ArgumentCountError is not reproduced on this runtime. Original raw review remains historical.'],JSON_PRETTY_PRINT)."\n";
+} catch(Throwable $e) { echo json_encode(['php'=>PHP_VERSION,'exception'=>$e::class,'message'=>$e->getMessage()])."\n";exit(1); }
+
+===== SOURCE plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design-remediation/extra-arg-counterexample.json SHA256 21435e7a4876210a80276ba3b42875a20e8b9e17ac6b6e4bcb80d8bf3f7f8cad =====
+{
+    "php": "8.4.26",
+    "declared_parameters": 4,
+    "supplied_arguments": 5,
+    "exception": null,
+    "constructed": true,
+    "interpretation": "Surplus argument is unintended and removed from current proof; claimed ArgumentCountError is not reproduced on this runtime. Original raw review remains historical."
+}
+
+===== EXACT EXCERPTS plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design/examples.md SHA256 WHOLEFILE 5840bd1f14ff6651996c365a057742f865620e4157b6194046cdd0e30ae24cc3 =====
+## 1. `DatabaseTenancyManager` (P07.1)
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Tenancy\Runtime\Internal;
+
+use Closure;
+use CoreX\Context\Contracts\AccountConnectionResolver;
+use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use CoreX\Context\Data\WorkspaceRef;
+use CoreX\Tenancy\Account\Contracts\AccountRead;
+use CoreX\Tenancy\Runtime\Contracts\TenantBootstrapper;
+use CoreX\Tenancy\Runtime\Events\TenantContextEnded;
+use CoreX\Tenancy\Runtime\Events\TenantContextInitialized;
+use CoreX\Tenancy\Runtime\Exceptions\TenantContextUnavailable;
+use Illuminate\Contracts\Container\Container;
+use Illuminate\Contracts\Events\Dispatcher;
+use Override;
+use Throwable;
+
+/**
+ * Own DB-per-account engine. Every switch forgets scoped instances, so a scoped service
+ * resolved inside a context always holds that context's connection (PLAN3.D95 п.3).
+ */
+final class DatabaseTenancyManager implements TenancyManager
+{
+    private ?AccountRef $account = null;
+
+    private ?WorkspaceRef $workspace = null;
+
+    /** @var list<TenantBootstrapper> Includes a bootstrapper BEFORE calling bootstrap(). */
+    private array $started = [];
+
+    private bool $poisoned = false;
+
+    /** @param list<TenantBootstrapper> $bootstrappers fixed order from TenancyOptions */
+    public function __construct(
+        private readonly array $bootstrappers,
+        private readonly AccountRead $accounts,
+        private readonly AccountConnectionResolver $connections,
+        private readonly Container $container,
+        private readonly Dispatcher $events,
+        private readonly string $centralConnection,
+        private readonly \Psr\Log\LoggerInterface $logger,
+    ) {}
+
+    #[Override]
+    public function context(): ?TenantContext
+    {
+        $this->assertHealthy();
+
+        return $this->account === null ? null : new TenantContext($this->account, $this->workspace);
+    }
+
+    #[Override]
+    public function initialized(): bool
+    {
+        $this->assertHealthy();
+
+        return $this->account !== null;
+    }
+
+    #[Override]
+    public function initialize(AccountRef $account): void
+    {
+        $this->assertHealthy();
+
+        if ($this->account?->id === $account->id) {
+            return;
+        }
+
+        $this->end();
+
+        try {
+            $current = $this->accounts->find($account->id, $this->centralConnection)
+                ?? throw TenantContextUnavailable::missingAccount($account->id);
+            $database = $this->connections->resolve($current);
+            $context = new TenantContext($current);
+            foreach ($this->bootstrappers as $bootstrapper) {
+                $this->started[] = $bootstrapper;
+                $bootstrapper->bootstrap($context, $database);
+            }
+
+            $this->account = $current;
+            $this->workspace = null;
+            $this->resetScope();
+            $this->events->dispatch(new TenantContextInitialized($current->id));
+        } catch (Throwable $failure) {
+            $this->account = null;
+            $this->workspace = null;
+            try {
+                $this->revertAll(array_reverse($this->started));
+            } catch (Throwable $cleanup) {
+                $this->reportCleanupFailure($failure, $cleanup);
+            } finally {
+                $this->started = [];
+                $this->resetScope();
+            }
+
+            throw $failure;
+        }
+    }
+
+    #[Override]
+    public function setWorkspace(?WorkspaceRef $workspace): void
+    {
+        $this->assertHealthy();
+        if ($workspace !== null && $this->account === null) {
+            throw TenantContextUnavailable::notInitialized();
+        }
+        $this->workspace = $workspace;
+    }
+
+    #[Override]
+    public function end(): void
+    {
+        $this->assertHealthy();
+        $accountId = $this->account?->id;
+        $this->account = null;
+        $this->workspace = null;
+
+        try {
+            $this->revertAll(array_reverse($this->started));
+        } finally {
+            $this->started = [];
+            $this->resetScope();
+        }
+        if ($accountId !== null) {
+            $this->events->dispatch(new TenantContextEnded($accountId));
+        }
+    }
+
+    #[Override]
+    public function runFor(AccountRef $account, ?WorkspaceRef $workspace, Closure $callback): mixed
+    {
+        $previousAccount = $this->account;
+        $previousWorkspace = $this->workspace;
+        $original = null;
+
+        try {
+            $this->initialize($account);
+            $this->setWorkspace($workspace);
+            return $callback();
+        } catch (Throwable $failure) {
+            $original = $failure;
+            throw $failure;
+        } finally {
+            // A failed revert poisons the runtime; restoration must not mask its causes.
+            if (! $this->poisoned) {
+                try {
+                    if ($previousAccount === null) {
+                        $this->end();
+                    } else {
+                        $this->initialize($previousAccount);
+                        $this->setWorkspace($previousWorkspace);
+                    }
+                } catch (Throwable $cleanup) {
+                    if ($original !== null) {
+                        $this->reportCleanupFailure($original, $cleanup);
+                    }
+                    throw $cleanup;
+                }
+            }
+        }
+    }
+
+    private function reportCleanupFailure(Throwable $original, Throwable $cleanup): never
+    {
+        try {
+            $this->logger->error('Tenant runtime cleanup failed', [
+                'exception' => $cleanup,
+                'original_exception' => $original,
+            ]);
+        } catch (Throwable) {
+            // A failing log transport must not replace either runtime cause.
+        }
+        throw new TenantCleanupFailure($original, $cleanup);
+    }
+
+    /** @param list<TenantBootstrapper> $bootstrappers already in revert order */
+    private function revertAll(array $bootstrappers): void
+    {
+        $first = null;
+
+        foreach ($bootstrappers as $bootstrapper) {
+            try {
+                $bootstrapper->revert();
+            } catch (Throwable $failure) {
+                $first ??= $failure;
+            }
+        }
+
+        if ($first !== null) {
+            $this->poisoned = true;
+            throw $first;
+        }
+    }
+
+    private function resetScope(): void
+    {
+        $this->container->forgetScopedInstances();
+    }
+
+    private function assertHealthy(): void
+    {
+        if ($this->poisoned) {
+            throw TenantContextUnavailable::runtimePoisoned();
+        }
+    }
+}
+```
+
+Worked example (в `TenancyEngineTest`): `initialize(A)` → `context()->account->id === 'A'`, default connection `tenant`, database = `db_name` A;
+`runFor(B, ws, fn)` внутри → в fn `context()->account->id === 'B'`, workspace `ws`; после → снова A, workspace прежний;
+исключение в fn → то же восстановление; `end()` → default connection = central, `context() === null`;
+bootstrapper №2 мутирует facility и бросает при `initialize` → №2 и №1 откатаны в обратном порядке, scoped-кэш очищен, `initialized() === false`.
+Отдельно: `runFor(missing)` из A/workspace W, resolver failure и `TenantContextInitialized` listener failure восстанавливают A/W, callback не запускается.
+`revert()` failure: остальные revert выполняются, scoped-кэш очищается; manager помечен poisoned и все следующие context/initialized/initialize/end/setWorkspace бросают `runtimePoisoned()`.
+Этот отказ не считается восстановленным central: resident host обязан завершить текущий процесс/пересоздать приложение перед следующим запросом/job; повторный `runFor` не разрешён. При двойном отказе TenantCleanupFailure сохраняет исходную ошибку в getPrevious(), cleanup — в readonly property; PSR logger получает обе причины. Отказ log transport не маскирует их. runFor не пытается восстановить poisoned runtime и сохраняет это исключение. RuntimeRegistrar передаёт существующий PSR LoggerInterface (psr/log уже declared); full provider-boot test проверяет binding.
+Bootstrapper не зависит от `TenancyManager` или `TenantContextResolver`, прямо либо транзитивно; событие не инициирует reentrant switch. Options и DI-тест проверяют штатный граф; SPI документирует эти ограничения для host-реализаций.
+
+### 1c. Внутренняя диагностика двойного отказа (D102)
+
+```php
+<?php
+namespace CoreX\Tenancy\Runtime\Internal;
+
+final class TenantCleanupFailure extends \RuntimeException
+{
+    public function __construct(\Throwable $original, public readonly \Throwable $cleanup)
+    {
+        parent::__construct('Tenant runtime cleanup failed; application must be recreated', 0, $original);
+    }
+}
+```
+
+## 4. Контекст очередей
+
+```php
+// RuntimeRegistrar::boot()
+$queue = $app->make(QueueManager::class);
+$queue->createPayloadUsing(static function (string $connection, ?string $queue, array $payload): array {
+    $context = Container::getInstance()->make(TenancyManager::class)->context();
+
+    return $context === null ? [] : ['corex_tenant' => [
+        'account' => $context->account->id,
+        'workspace' => $context->workspace?->id,
+    ]];
+});
+
+$events = $app->make(Dispatcher::class);
+$events->listen(JobProcessing::class, [QueueTenantContext::class, 'processing']);
+$events->listen(JobAttempted::class, [QueueTenantContext::class, 'finished']);
+```
+
+Единственная точка cleanup — `JobAttempted`, отправляемый в `finally` как Worker::process, так и SyncQueue::executeJob (установленный Laravel). `JobFailed`, `JobProcessed`, `JobExceptionOccurred` не завершают контекст: failed callbacks ещё могут работать в контексте job. `QueueTenantContext` singleton экземпляр без static-состояния, stack рамок с job object identity.
+
+```php
+final class QueueTenantContext
+{
+    private array $frames = [];
+
+    public function __construct(
+        private readonly TenancyManager $manager,
+        private readonly AccountRead $accounts,
+        private readonly \Closure $workspaceResolver, // (?id) -> ?WorkspaceRef, tenant query after initialize
+        private readonly string $centralConnection,
+    ) {}
+
+    public function processing(\Illuminate\Queue\Events\JobProcessing $event): void
+    {
+        $restore = $event->job instanceof \Illuminate\Queue\Jobs\SyncJob || $this->frames !== [];
+        $previous = $restore ? $this->manager->context() : null;
+        $this->frames[] = ['job' => $event->job, 'previous' => $previous]; // before end/find/initialize
+        $this->manager->end();
+        $payload = $event->job->payload()['corex_tenant'] ?? null;
+        if ($payload === null) {
+            return; // central job; sync caller is restored only after this job finishes
+        }
+        if (! is_array($payload) || ! is_string($payload['account'] ?? null)
+            || ! array_key_exists('workspace', $payload)
+            || ($payload['workspace'] !== null && ! is_string($payload['workspace']))) {
+            throw TenantContextUnavailable::invalidPayload();
+        }
+        $ref = $this->accounts->find($payload['account'], $this->centralConnection)
+            ?? throw TenantContextUnavailable::missingAccount($payload['account']);
+        $this->manager->initialize($ref);
+        if ($payload['workspace'] !== null) {
+            $workspace = ($this->workspaceResolver)($payload['workspace'])
+                ?? throw TenantContextUnavailable::missingWorkspace($payload['workspace']);
+            $this->manager->setWorkspace($workspace);
+        }
+    }
+
+    public function finished(\Illuminate\Queue\Events\JobAttempted $event): void
+    {
+        $frame = end($this->frames);
+        if ($frame === false || $frame['job'] !== $event->job) {
+            return; // unrelated/repeated completion cannot pop another job's frame
+        }
+        array_pop($this->frames);
+        $this->manager->end();
+        if ($frame['previous'] !== null) {
+            $this->manager->initialize($frame['previous']->account);
+            $this->manager->setWorkspace($frame['previous']->workspace);
+        }
+    }
+}
+```
+
+Factory workspaceResolver использует `Workspace::query()->find($id)` и создаёт `WorkspaceRef(id, slug, type, path, parentId)`. Она вызывается только после initialize. Async top-level игнорирует оставшийся контекст до job и после завершения всегда central; отсутствующий account не исполняет job в старой базе. Sync, включая вложенный sync, сохраняет account/workspace вызывающего кода и восстанавливает его после успешного или неуспешного завершения. Ошибка cleanup/restoration пробрасывается, worker/request прекращается; poisoned manager требует перезапуска приложения. Queue retry сохраняет исходный `corex_tenant`; отдельный `JobRetryRequested` listener отсутствует.
+
+## 6. `ScopeSessionToTenant`
+
+Конструктор `__construct(private readonly TenancyManager $manager)`; HttpRegistrar binding передаёт TenancyManager. Nullable context() сохраняет notInitialized(); current() у TenantContextResolver non-null и бросает другой exception, поэтому здесь не используется.
+
+```php
+public function handle(Request $request, Closure $next): Response
+{
+    $context = $this->manager->context() ?? throw TenantContextUnavailable::notInitialized();
+    $session = $request->session();
+    $bound = $session->get('corex.tenancy.account_id');
+
+    if ($bound === null) {
+        $session->invalidate();
+        $session->regenerateToken();
+        $session->put('corex.tenancy.account_id', $context->account->id);
+    } elseif ($bound !== $context->account->id) {
+        $session->invalidate();
+        abort(403);
+    }
+
+    return $next($request);
+}
+```
+
+### 6b. Промежуточная правка impersonation (P07.1, до портов P07.3)
+
+Конструктор DatabaseImpersonationService получает дополнительный `TenantContextResolver $contexts`; фабрика AuthenticationRegistrar передаёт `$app->make(TenantContextResolver::class)`. Удалить import Stancl Account и оба docblock этой модели. В start: `$account = $this->contexts->current()->account`, остальные обращения только к `$account->id`, так что подходит AccountRef. В stop прежний nullable central-path сохраняется:
+```php
+try {
+    $accountId = $this->contexts->current()->account->id;
+} catch (\CoreX\Context\Exceptions\CentralContextException) {
+    $accountId = null;
+}
+```
+Baseline G2 сервиса остаётся 19: tenancy отсутствует в helper list сканера (D99). Удаление двух вызовов проверяет отдельный grep; baseline не меняется до P07.3. Existing ImpersonationTest проходит уже на P07.1 и входит в основной package test. Helper-ы DB/auth/session и порты меняются только в P07.3.
+
+### 6c. `AccountStatusGate` без hydrated Stancl Account (D102)
+
+AccountRef не расширяется owner_identity_id. Owner читается через существующий AccountRead::ownerIdentityId(id, centralConnection), явно central. Не-null authenticated user и строгое совпадение id обязательны; null owner никогда не разрешает. Статусы и payment/export/read-only routes сохраняют прежнюю политику.
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Tenancy\Laravel\Http\Middleware;
+
+use Closure;
+use CoreX\Attributes\Spi;
+use CoreX\Attributes\SpiKind;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Tenancy\Account\Contracts\AccountRead;
+use Illuminate\Contracts\Auth\Factory as AuthFactory;
+use CoreX\Tenancy\Laravel\Support\StatusGatePolicy;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+
+/**
+ * B-11 §5.1 access rules, status read from AccountRef; owner identity read through the central AccountRead port. Fail-closed: `match` carries no default-pass
+ * branch, an unknown status (including `pending`/`provisioning`, which
+ * should never reach this middleware — cache/domain already reject them)
+ * falls through to 403.
+ */
+#[Spi(kind: SpiKind::Call, since: '1.0')]
+final class AccountStatusGate
+{
+    public function __construct(
+        private readonly StatusGatePolicy $statusGate,
+        private readonly TenantContextResolver $contexts,
+        private readonly AccountRead $accounts,
+        private readonly AuthFactory $auth,
+        private readonly string $centralConnection,
+    ) {}
+
+    /** @return Response|mixed */
+    public function handle(Request $request, Closure $next): mixed
+    {
+        $account = $this->contexts->current()->account;
+
+        return match ($account->status) {
+            'trial', 'active' => $next($request),
+            'suspended' => $this->ownerOnRoute(
+                $request,
+                $next,
+                $account,
+                $this->statusGate->paymentRoute,
+            ),
+            'grace' => $this->graceGate($request, $next, $account),
+            'exporting', 'deleted' => abort(410),
+            default => abort(403),
+        };
+    }
+
+    /** @return Response|mixed */
+    private function ownerOnRoute(
+        Request $request,
+        Closure $next,
+        AccountRef $account,
+        ?string $route,
+    ): mixed {
+        if (! $this->isOwner($account) || ! $this->matchesConfiguredRoute($request, $route)) {
+            abort(403);
+        }
+
+        return $next($request);
+    }
+
+    /** @return Response|mixed */
+    private function graceGate(Request $request, Closure $next, AccountRef $account): mixed
+    {
+        if (! $this->isOwner($account)) {
+            abort(403);
+        }
+
+        $readOnly = $this->statusGate->isReadOnlyMethod($request->method());
+        $onExportRoute = $this->matchesConfiguredRoute($request, $this->statusGate->exportRoute);
+
+        if (! $readOnly && ! $onExportRoute) {
+            abort(403);
+        }
+
+        return $next($request);
+    }
+
+    private function isOwner(AccountRef $account): bool
+    {
+        $userId = $this->auth->guard()->id();
+
+        return $userId !== null && $this->accounts->ownerIdentityId($account->id, $this->centralConnection) === $userId;
+    }
+
+    private function matchesConfiguredRoute(Request $request, mixed $routeConfig): bool
+    {
+        if (! is_string($routeConfig) || $routeConfig === '') {
+            return false;
+        }
+
+        if ($request->route()?->getName() === $routeConfig) {
+            return true;
+        }
+
+        return $request->is(ltrim($routeConfig, '/'));
+    }
+}
+```
+
+HttpRegistrar factory передаёт StatusGatePolicy, TenantContextResolver, AccountRead, AuthFactory, TenancyOptions::centralConnection в указанном порядке. Public SpiKind::Call constructor меняется с optional policy на пять required args: явная BC/CHANGELOG/php-api/Golden delta P07.1; обновить все new AccountStatusGate и HttpRegistrar tests, не скрывать несовместимость. Matrix: trial/active any; suspended owner only payment (named/path), nonowner/nullowner deny; grace owner readonly/export only, nonowner/nullowner deny; exporting/deleted 410; unknown 403. Central read arguments проверяются spy даже при tenant default.
+
+D103 stable constructor admission: P07.1 scripts/bc/approved-deltas.json tenancy entry uses actual resolved BC_CHECK_BASE (not the item base-commit unless identical), D102/D103 accepted source hashes and exact actual Roave description/path/modificationType set for declared constructor delta only. Populate after product implementation; preserve existing entries; no checker/baseline/base changes. Public Golden/CHANGELOG alone is insufficient. P07.6 independently checks the finite admission, enum and constructor.

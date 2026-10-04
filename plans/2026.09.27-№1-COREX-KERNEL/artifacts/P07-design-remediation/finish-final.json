@@ -1,0 +1,575 @@
+{
+  "plan_id": "2026.09.27-№1-COREX-KERNEL",
+  "phase_id": "finish",
+  "supporting_artifacts": {
+    "contract": "self-contained-design/v1",
+    "phases": {
+      "P00": {
+        "normative": [
+          "research/P00-design.md",
+          "research/P00-design-rag.md",
+          "artifacts/P00-design/examples.md"
+        ],
+        "capture": "artifacts/P00-design-rag/README.md",
+        "present": [
+          "research/P00-design.md",
+          "research/P00-design-rag.md",
+          "artifacts/P00-design/examples.md",
+          "artifacts/P00-design-rag/README.md"
+        ]
+      },
+      "P01": {
+        "normative": [
+          "research/P01-design.md",
+          "research/P01-design-rag.md",
+          "artifacts/P01-design/examples.md"
+        ],
+        "capture": "artifacts/P01-design-rag/README.md",
+        "present": [
+          "research/P01-design.md",
+          "research/P01-design-rag.md",
+          "artifacts/P01-design/examples.md",
+          "artifacts/P01-design-rag/README.md"
+        ]
+      },
+      "P02": {
+        "normative": [
+          "research/P02-design.md",
+          "research/P02-design-rag.md",
+          "artifacts/P02-design/examples.md"
+        ],
+        "capture": "artifacts/P02-design-rag/README.md",
+        "present": [
+          "research/P02-design.md",
+          "research/P02-design-rag.md",
+          "artifacts/P02-design/examples.md",
+          "artifacts/P02-design-rag/README.md"
+        ]
+      },
+      "P03": {
+        "normative": [
+          "research/P03-design.md",
+          "research/P03-design-rag.md",
+          "artifacts/P03-design/examples.md"
+        ],
+        "capture": "artifacts/P03-design-rag/README.md",
+        "present": [
+          "research/P03-design.md",
+          "research/P03-design-rag.md",
+          "artifacts/P03-design/examples.md",
+          "artifacts/P03-design-rag/README.md"
+        ]
+      },
+      "P04": {
+        "normative": [
+          "research/P04-design.md",
+          "research/P04-design-rag.md",
+          "artifacts/P04-design/examples.md"
+        ],
+        "capture": "artifacts/P04-design-rag/README.md",
+        "present": [
+          "research/P04-design.md",
+          "research/P04-design-rag.md",
+          "artifacts/P04-design/examples.md",
+          "artifacts/P04-design-rag/README.md"
+        ]
+      },
+      "P05": {
+        "normative": [
+          "research/P05-design.md",
+          "research/P05-design-rag.md",
+          "artifacts/P05-design/examples.md"
+        ],
+        "capture": "artifacts/P05-design-rag/README.md",
+        "present": [
+          "research/P05-design.md",
+          "research/P05-design-rag.md",
+          "artifacts/P05-design/examples.md",
+          "artifacts/P05-design-rag/README.md"
+        ]
+      },
+      "P06": {
+        "normative": [
+          "research/P06-design.md",
+          "research/P06-design-rag.md",
+          "artifacts/P06-design/examples.md"
+        ],
+        "capture": "artifacts/P06-design-rag/README.md",
+        "present": [
+          "research/P06-design.md",
+          "research/P06-design-rag.md",
+          "artifacts/P06-design/examples.md",
+          "artifacts/P06-design-rag/README.md"
+        ]
+      },
+      "P07": {
+        "normative": [
+          "research/P07-design.md",
+          "research/P07-design-rag.md",
+          "artifacts/P07-design/examples.md"
+        ],
+        "capture": "artifacts/P07-design-rag/README.md",
+        "present": [
+          "research/P07-design.md",
+          "research/P07-design-rag.md",
+          "artifacts/P07-design/examples.md",
+          "artifacts/P07-design-rag/README.md"
+        ]
+      },
+      "P10": {
+        "normative": [
+          "research/P10-design.md",
+          "research/P10-design-rag.md",
+          "artifacts/P10-design/examples.md"
+        ],
+        "capture": "artifacts/P10-design-rag/README.md",
+        "present": [
+          "research/P10-design.md",
+          "research/P10-design-rag.md",
+          "artifacts/P10-design/examples.md",
+          "artifacts/P10-design-rag/README.md"
+        ]
+      }
+    },
+    "errors": [],
+    "complete": true
+  },
+  "execution_sheet": {
+    "contract": "execution-sheet/v1",
+    "path": "roadmap.md",
+    "rows": [
+      {
+        "batch_id": "B00-A",
+        "items": [
+          "P00.1",
+          "P00.2",
+          "P00.3"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P00.1 P00.2 P00.3",
+        "route": {
+          "model_class": "frontier",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P01.1"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P01.1",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "B01-B",
+        "items": [
+          "P01.2",
+          "P01.3"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P01.2 P01.3",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P01.4"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P01.4",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "B02-A",
+        "items": [
+          "P02.1",
+          "P02.2"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P02.1 P02.2",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P02.3"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P02.3",
+        "route": {
+          "model_class": "implementation",
+          "effort": "xhigh"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P02.4"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P02.4",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P03.1"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P03.1",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P03.2"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P03.2",
+        "route": {
+          "model_class": "implementation",
+          "effort": "xhigh"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P04.1"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P04.1",
+        "route": {
+          "model_class": "frontier",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P04.2"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P04.2",
+        "route": {
+          "model_class": "frontier",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P04.3"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P04.3",
+        "route": {
+          "model_class": "frontier",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P04.4"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P04.4",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P10.1"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P10.1",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "light",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P10.2"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P10.2",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P10.3"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P10.3",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P10.4"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P10.4",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "light",
+        "recommended": true
+      },
+      {
+        "batch_id": "B05-A",
+        "items": [
+          "P05.1",
+          "P05.2"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P05.1 P05.2",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "light",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P05.3"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P05.3",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P05.4"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P05.4",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "light",
+        "recommended": true
+      },
+      {
+        "batch_id": "B06-A",
+        "items": [
+          "P06.1",
+          "P06.2"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P06.1 P06.2",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "light",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P06.3"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P06.3",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "light",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P06.4"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P06.4",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "light",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P06.5"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P06.5",
+        "route": {
+          "model_class": "frontier",
+          "effort": "high"
+        },
+        "review": "none",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P07.1"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P07.1",
+        "route": {
+          "model_class": "implementation",
+          "effort": "xhigh"
+        },
+        "review": "light",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P07.2"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P07.2",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "light",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P07.3"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P07.3",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "light",
+        "recommended": true
+      },
+      {
+        "batch_id": "B07-A",
+        "items": [
+          "P07.4",
+          "P07.5"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P07.4 P07.5",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "light",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P07.6"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P07.6",
+        "route": {
+          "model_class": "frontier",
+          "effort": "high"
+        },
+        "review": "none",
+        "recommended": true
+      }
+    ],
+    "errors": [],
+    "complete": true
+  },
+  "design_fingerprint": "830e2cb881f05da62be0f5b03dfb2dec2fdacab9fef449186a6418d8d9ca925f",
+  "ready_items": [
+    "P07.1"
+  ],
+  "receipt": {
+    "schema_version": "handoff-recommendation-receipt/v1",
+    "plan_id": "2026.09.27-№1-COREX-KERNEL",
+    "subject": "P10",
+    "status": "handoff-persisted",
+    "next_exact": "manual: независимый формальный design audit текущего finish fingerprint на frontier/xhigh; до исполнения P07 закрыть P06 по D94",
+    "recommendation": "**Next:** manual: независимый формальный design audit текущего finish fingerprint на frontier/xhigh; до исполнения P07 закрыть P06 по D94\n\n| Parameter | Meaning |\n|:--|:--|\n| Batch | n/a |\n| Model | frontier |\n| Thinking | xhigh |\n| Context | continue-root |\n| Суть | Ремонт дизайна завершён; независимый формальный audit текущего fingerprint, затем P06 acceptance до исполнения P07. |",
+    "route": {
+      "batch": "n/a",
+      "model": "frontier",
+      "thinking": "xhigh",
+      "context": "continue-root",
+      "command": null
+    },
+    "continuity": {
+      "outcome": "continue-root",
+      "reason": "compatible-active-work",
+      "evidence": [
+        "persisted-context:continue-root"
+      ],
+      "runnable": true,
+      "schema_version": "session-continuity-decision/v1"
+    },
+    "rationale": {
+      "remaining": "Independent formal frontier/xhigh audit of actual current finish fingerprint (artifacts/P07-design-remediation/finish-final.json); Grok 4.7/high/500k is technical review only and grants no formal GREEN. D89 old waiver is stale, design gate denied. P06 full owner review + final hosted CI/acceptance remain open (D73, D91, D94); P07 execution waits for both P06 closure and valid design gate. Actual PostgreSQL isolation/concurrency/uncertain commits, full provider/provisioning/HTTP resident pipeline and real Redis/Memcached tests are declared product-item acceptance, not claimed proven by standalone design checks. P08/P09 remain backlog.",
+      "open_risks": "Full integration proof requires item execution after admission. P06 repair can change P07 code facts (D94: regenerate p07-facts.sh first). Access-azguard CI requires private repository access; verify Stancl version at P07.2 execution. Saving an HTTP session explicitly inside nested runFor/sync contexts requires care: normal StartSession saves after outer restoration; tenant session attributes are HTTP-scope, not a portable job payload (see raw review nonblocking risks). No new product requirement/claim inferred for P08/P09 release policy."
+    },
+    "commit_sha": "4137d2412497aa9348cf19322b26f1d074b5ad2c",
+    "journal": null,
+    "adapter_attestation": null,
+    "digests": {
+      "plan": "sha256:a7861d5e98c9669747a13196cec387faa37a82d7164b2d209967729eb213f351",
+      "handoff": "sha256:0da6eb66e2687758f1c9eec10c74a06339fc72c8904fd0438b35d3c239eb74c7",
+      "state": null,
+      "closure": null
+    }
+  },
+  "receipt_path": "plans/2026.09.27-№1-COREX-KERNEL/.plan-cache/design-receipt.json",
+  "warnings": [
+    "plans/2026.09.27-№1-COREX-KERNEL/phases/P04/P04.md: phase P04 states orchestration (multi-agent/fan-out), but no workflow-script in `plans/2026.09.27-№1-COREX-KERNEL/workflows/` — DoR §7 (D29)"
+  ],
+  "baseline_errors": []
+}

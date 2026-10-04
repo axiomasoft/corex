@@ -1,0 +1,61 @@
+{
+  "snapshot": {
+    "fingerprint": "830e2cb881f05da62be0f5b03dfb2dec2fdacab9fef449186a6418d8d9ca925f",
+    "phases": [
+      "P00",
+      "P01",
+      "P02",
+      "P03",
+      "P04",
+      "P05",
+      "P06",
+      "P07",
+      "P10"
+    ],
+    "items": 36
+  },
+  "head_matches": true,
+  "fingerprint_matches": true,
+  "carrier_freshness": {
+    "status": {
+      "fresh": true
+    },
+    "bundles": {
+      "fresh": false,
+      "error": "view is obsolete: /home/vostrikov/projects/packages/corex/plans/2026.09.27-№1-COREX-KERNEL/bundles/P00.1.json"
+    },
+    "states": {
+      "fresh": true
+    },
+    "decision_views": {
+      "fresh": true
+    }
+  },
+  "p07_states": {
+    "P07.1.state.md": {
+      "sha256": "e1504daa0891420f199229b549b1919bc6b921881063e8fb9fa75433dafe6388",
+      "not_started": true
+    },
+    "P07.2.state.md": {
+      "sha256": "4c40db578d6db9be252e01084b20c560a96923d6179cca110a890439aa3823dd",
+      "not_started": true
+    },
+    "P07.3.state.md": {
+      "sha256": "5f14f3d99621cfe8fb9044ee67ef37fc45a8ae8a9f0a2143247cb20892821c30",
+      "not_started": true
+    },
+    "P07.4.state.md": {
+      "sha256": "9044831bfc9576961034593f2cedefc89e9c5415988bbc48be55b0cc2f26bfc9",
+      "not_started": true
+    },
+    "P07.5.state.md": {
+      "sha256": "8a94c5b814eeb2bbb7b05273bb72260619d4f1bb5c350f590ea371e932384d31",
+      "not_started": true
+    },
+    "P07.6.state.md": {
+      "sha256": "dbfd211ef6745d63c520b9f9a67fb0c214902bd009b0bc3ee2194f3db0af0c56",
+      "not_started": true
+    }
+  },
+  "p06_closure_files": []
+}

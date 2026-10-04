@@ -1,0 +1,27 @@
+{
+  "passed": 5,
+  "checks": {
+    "ten_moved_files": true,
+    "closed_enum_15_to_16_only_scheduling": true,
+    "old_list_rejects_scheduling_R1": true,
+    "new_list_accepts_all_ten": true,
+    "unknown_module_still_rejected_R1": true
+  },
+  "gate_sha256": "551e9efcfaed0481eec0d76d9964875ae3785dca905dac79aac5b023772553e3",
+  "old_enum": {
+    "exit_code": 1,
+    "stdout": "new R1 packages/core/src/Scheduling/Contracts/DueWakeupHandler.php\nnew R1 packages/core/src/Scheduling/Contracts/DueWakeupSource.php\nnew R1 packages/core/src/Scheduling/Contracts/WakeupScheduler.php\nnew R1 packages/core/src/Scheduling/Data/CancelResult.php\nnew R1 packages/core/src/Scheduling/Data/ScheduleResult.php\nnew R1 packages/core/src/Scheduling/Data/SweepResult.php\nnew R1 packages/core/src/Scheduling/Data/WakeupDelivery.php\nnew R1 packages/core/src/Scheduling/Data/WakeupHandlerDefinition.php\nnew R1 packages/core/src/Scheduling/Data/WakeupRequest.php\nnew R1 packages/core/src/Scheduling/Data/WakeupWindow.php\nmodule-layout FAIL: 10 files, 10 violations, 0 baselined, 10 new, 0 stale; R0 0, R1 10, R2 0, R3 0, R4 0, R5 0, R6 0\n",
+    "stderr": ""
+  },
+  "candidate_enum": {
+    "exit_code": 0,
+    "stdout": "module-layout OK: 10 files, 0 violations, 0 baselined, 0 new, 0 stale; R0 0, R1 0, R2 0, R3 0, R4 0, R5 0, R6 0\n",
+    "stderr": ""
+  },
+  "unknown_module": {
+    "exit_code": 1,
+    "stdout": "new R1 packages/core/src/UnknownModule/Contracts/Unknown.php\nmodule-layout FAIL: 11 files, 1 violations, 0 baselined, 1 new, 0 stale; R0 0, R1 1, R2 0, R3 0, R4 0, R5 0, R6 0\n",
+    "stderr": ""
+  },
+  "limits": "Exact existing CLI gate, isolated projected files and empty baseline. Does not simulate full repository public API/import transfer; product gates required in P07.5."
+}

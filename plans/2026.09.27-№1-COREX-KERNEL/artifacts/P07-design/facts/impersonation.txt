@@ -1,0 +1,43 @@
+# base: 4137d2412497aa9348cf19322b26f1d074b5ad2c
+## runtime-globals baseline (P05 D70 p.9)
+{
+    "packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php": {
+        "G1": 2,
+        "G2": 19,
+        "G3": 2
+    },
+    "packages/tenancy/src/Impersonation/Internal/ImpersonatedModelWriteGuard.php": {
+        "G4": 1
+    },
+    "packages/tenancy/src/Impersonation/Internal/Models/ImpersonationGrant.php": {
+        "G2": 1
+    }
+}
+## facade/helper use in Impersonation
+packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:109:        session()->regenerate();
+packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:110:        session([
+packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:121:        $authenticated = Auth::guard($this->guard())->loginUsingId($targetUserId);
+packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:129:        event(new ImpersonationStarted($grantId, $staffIdentityId, $targetUserId, $reason));
+packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:142:        $account = tenancy()->tenant;
+packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:151:        event(new ImpersonationEnded($state->grantId, $state->staffIdentityId, $state->targetUserId, $state->reason));
+packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:169:        $grantId = session(self::SESSION_GRANT_ID);
+packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:170:        $staffId = session(self::SESSION_STAFF_ID);
+packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:171:        $targetId = session(self::SESSION_TARGET_ID);
+packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:172:        $expiresAt = session(self::SESSION_EXPIRES_AT);
+packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:178:        $reason = session(self::SESSION_REASON);
+packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:189:            session([self::SESSION_REASON => $reason]);
+packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:203:        Auth::guard($this->guard())->logout();
+packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:204:        session()->forget([
+packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:211:        session()->invalidate();
+packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:212:        session()->regenerateToken();
+packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:219:        $reason = DB::connection($this->centralConnection())
+packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:236:        DB::connection($this->centralConnection())->table('root_account_events')->insert([
+packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:242:            'created_at' => now(),
+packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:243:            'updated_at' => now(),
+packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:71:        $account = tenancy()->tenant;
+packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:75:        $affected = DB::connection($central)->table('root_impersonation_grants')
+packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:81:            ->where('expires_at', '>', now())
+packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:90:            ->update(['used_at' => now(), 'updated_at' => now()]);
+packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:96:        $row = DB::connection($central)->table('root_impersonation_grants')->where('id', $grantId)->first();
+packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:98:        $targetUserId = $row->target_user_id ?? app(AccountRead::class)->ownerIdentityId((string) $account->id, $central);
+packages/tenancy/src/Impersonation/Internal/Models/ImpersonationGrant.php:50:        return ($this->options ?? app(TenancyOptions::class))->centralConnection;

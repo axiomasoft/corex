@@ -1,0 +1,1135 @@
+{
+  "plan_id": "2026.09.27-№1-COREX-KERNEL",
+  "phase_id": "finish",
+  "schema": {
+    "layout": "v2",
+    "item_fields": [
+      "Intent",
+      "Why",
+      "Scope Included",
+      "Scope Excluded",
+      "Inputs",
+      "Files",
+      "Required Reads",
+      "Implementation Rules",
+      "Code Guidance",
+      "Validation",
+      "Deliverables"
+    ],
+    "handoff_fields": [
+      "Next",
+      "Done",
+      "Remaining",
+      "Sources of truth"
+    ],
+    "supporting_artifacts": "self-contained-design/v1",
+    "reference": "runtime/plan-protocol/references/plan-layout-v2.md"
+  },
+  "phases": {
+    "P00": [
+      "P00.1",
+      "P00.2",
+      "P00.3"
+    ],
+    "P01": [
+      "P01.1",
+      "P01.2",
+      "P01.3",
+      "P01.4"
+    ],
+    "P02": [
+      "P02.1",
+      "P02.2",
+      "P02.3",
+      "P02.4"
+    ],
+    "P03": [
+      "P03.1",
+      "P03.2"
+    ],
+    "P04": [
+      "P04.1",
+      "P04.2",
+      "P04.3",
+      "P04.4"
+    ],
+    "P05": [
+      "P05.1",
+      "P05.2",
+      "P05.3",
+      "P05.4"
+    ],
+    "P06": [
+      "P06.1",
+      "P06.2",
+      "P06.3",
+      "P06.4",
+      "P06.5"
+    ],
+    "P07": [
+      "P07.1",
+      "P07.2",
+      "P07.3",
+      "P07.4",
+      "P07.5",
+      "P07.6"
+    ],
+    "P10": [
+      "P10.1",
+      "P10.2",
+      "P10.3",
+      "P10.4"
+    ]
+  },
+  "routing": {
+    "P00.1": {
+      "item_id": "P00.1",
+      "batch": "B00-A",
+      "batch_key": "B00-A",
+      "route": {
+        "model_class": "frontier",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "full",
+      "line": 138,
+      "recommended": true
+    },
+    "P00.2": {
+      "item_id": "P00.2",
+      "batch": "B00-A",
+      "batch_key": "B00-A",
+      "route": {
+        "model_class": "frontier",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "full",
+      "line": 139,
+      "recommended": true
+    },
+    "P00.3": {
+      "item_id": "P00.3",
+      "batch": "B00-A",
+      "batch_key": "B00-A",
+      "route": {
+        "model_class": "frontier",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "light",
+      "line": 140,
+      "recommended": true
+    },
+    "P01.1": {
+      "item_id": "P01.1",
+      "batch": "solo",
+      "batch_key": "solo:P01.1",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "full",
+      "line": 141,
+      "recommended": true
+    },
+    "P01.2": {
+      "item_id": "P01.2",
+      "batch": "B01-B",
+      "batch_key": "B01-B",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "full",
+      "line": 142,
+      "recommended": true
+    },
+    "P01.3": {
+      "item_id": "P01.3",
+      "batch": "B01-B",
+      "batch_key": "B01-B",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "full",
+      "line": 143,
+      "recommended": true
+    },
+    "P01.4": {
+      "item_id": "P01.4",
+      "batch": "solo",
+      "batch_key": "solo:P01.4",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "full",
+      "line": 144,
+      "recommended": true
+    },
+    "P02.1": {
+      "item_id": "P02.1",
+      "batch": "B02-A",
+      "batch_key": "B02-A",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "full",
+      "line": 145,
+      "recommended": true
+    },
+    "P02.2": {
+      "item_id": "P02.2",
+      "batch": "B02-A",
+      "batch_key": "B02-A",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "full",
+      "line": 146,
+      "recommended": true
+    },
+    "P02.3": {
+      "item_id": "P02.3",
+      "batch": "solo",
+      "batch_key": "solo:P02.3",
+      "route": {
+        "model_class": "implementation",
+        "effort": "xhigh"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "full",
+      "line": 147,
+      "recommended": true
+    },
+    "P02.4": {
+      "item_id": "P02.4",
+      "batch": "solo",
+      "batch_key": "solo:P02.4",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "full",
+      "line": 148,
+      "recommended": true
+    },
+    "P03.1": {
+      "item_id": "P03.1",
+      "batch": "solo",
+      "batch_key": "solo:P03.1",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "full",
+      "line": 149,
+      "recommended": true
+    },
+    "P03.2": {
+      "item_id": "P03.2",
+      "batch": "solo",
+      "batch_key": "solo:P03.2",
+      "route": {
+        "model_class": "implementation",
+        "effort": "xhigh"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "full",
+      "line": 150,
+      "recommended": true
+    },
+    "P04.1": {
+      "item_id": "P04.1",
+      "batch": "solo",
+      "batch_key": "solo:P04.1",
+      "route": {
+        "model_class": "frontier",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "full",
+      "line": 151,
+      "recommended": true
+    },
+    "P04.2": {
+      "item_id": "P04.2",
+      "batch": "solo",
+      "batch_key": "solo:P04.2",
+      "route": {
+        "model_class": "frontier",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "full",
+      "line": 152,
+      "recommended": true
+    },
+    "P04.3": {
+      "item_id": "P04.3",
+      "batch": "solo",
+      "batch_key": "solo:P04.3",
+      "route": {
+        "model_class": "frontier",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "full",
+      "line": 153,
+      "recommended": true
+    },
+    "P04.4": {
+      "item_id": "P04.4",
+      "batch": "solo",
+      "batch_key": "solo:P04.4",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "full",
+      "line": 154,
+      "recommended": true
+    },
+    "P10.1": {
+      "item_id": "P10.1",
+      "batch": "solo",
+      "batch_key": "solo:P10.1",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "light",
+      "line": 155,
+      "recommended": true
+    },
+    "P10.2": {
+      "item_id": "P10.2",
+      "batch": "solo",
+      "batch_key": "solo:P10.2",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "full",
+      "line": 156,
+      "recommended": true
+    },
+    "P10.3": {
+      "item_id": "P10.3",
+      "batch": "solo",
+      "batch_key": "solo:P10.3",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "full",
+      "line": 157,
+      "recommended": true
+    },
+    "P10.4": {
+      "item_id": "P10.4",
+      "batch": "solo",
+      "batch_key": "solo:P10.4",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "light",
+      "line": 158,
+      "recommended": true
+    },
+    "P05.1": {
+      "item_id": "P05.1",
+      "batch": "B05-A",
+      "batch_key": "B05-A",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "light",
+      "line": 159,
+      "recommended": true
+    },
+    "P05.2": {
+      "item_id": "P05.2",
+      "batch": "B05-A",
+      "batch_key": "B05-A",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "light",
+      "line": 160,
+      "recommended": true
+    },
+    "P05.3": {
+      "item_id": "P05.3",
+      "batch": "solo",
+      "batch_key": "solo:P05.3",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "full",
+      "line": 161,
+      "recommended": true
+    },
+    "P05.4": {
+      "item_id": "P05.4",
+      "batch": "solo",
+      "batch_key": "solo:P05.4",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "light",
+      "line": 162,
+      "recommended": true
+    },
+    "P06.1": {
+      "item_id": "P06.1",
+      "batch": "B06-A",
+      "batch_key": "B06-A",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "light",
+      "line": 163,
+      "recommended": true
+    },
+    "P06.2": {
+      "item_id": "P06.2",
+      "batch": "B06-A",
+      "batch_key": "B06-A",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "light",
+      "line": 164,
+      "recommended": true
+    },
+    "P06.3": {
+      "item_id": "P06.3",
+      "batch": "solo",
+      "batch_key": "solo:P06.3",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "light",
+      "line": 165,
+      "recommended": true
+    },
+    "P06.4": {
+      "item_id": "P06.4",
+      "batch": "solo",
+      "batch_key": "solo:P06.4",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "light",
+      "line": 166,
+      "recommended": true
+    },
+    "P06.5": {
+      "item_id": "P06.5",
+      "batch": "solo",
+      "batch_key": "solo:P06.5",
+      "route": {
+        "model_class": "frontier",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "none",
+      "line": 167,
+      "recommended": true
+    },
+    "P07.1": {
+      "item_id": "P07.1",
+      "batch": "solo",
+      "batch_key": "solo:P07.1",
+      "route": {
+        "model_class": "implementation",
+        "effort": "xhigh"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "light",
+      "line": 168,
+      "recommended": true
+    },
+    "P07.2": {
+      "item_id": "P07.2",
+      "batch": "solo",
+      "batch_key": "solo:P07.2",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "light",
+      "line": 169,
+      "recommended": true
+    },
+    "P07.3": {
+      "item_id": "P07.3",
+      "batch": "solo",
+      "batch_key": "solo:P07.3",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "light",
+      "line": 170,
+      "recommended": true
+    },
+    "P07.4": {
+      "item_id": "P07.4",
+      "batch": "B07-A",
+      "batch_key": "B07-A",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "light",
+      "line": 171,
+      "recommended": true
+    },
+    "P07.5": {
+      "item_id": "P07.5",
+      "batch": "B07-A",
+      "batch_key": "B07-A",
+      "route": {
+        "model_class": "implementation",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "light",
+      "line": 172,
+      "recommended": true
+    },
+    "P07.6": {
+      "item_id": "P07.6",
+      "batch": "solo",
+      "batch_key": "solo:P07.6",
+      "route": {
+        "model_class": "frontier",
+        "effort": "high"
+      },
+      "exec": "run",
+      "declared_exec": "manual",
+      "review": "none",
+      "line": 173,
+      "recommended": true
+    }
+  },
+  "supporting_artifacts": {
+    "contract": "self-contained-design/v1",
+    "phases": {
+      "P00": {
+        "normative": [
+          "research/P00-design.md",
+          "research/P00-design-rag.md",
+          "artifacts/P00-design/examples.md"
+        ],
+        "capture": "artifacts/P00-design-rag/README.md",
+        "present": [
+          "research/P00-design.md",
+          "research/P00-design-rag.md",
+          "artifacts/P00-design/examples.md",
+          "artifacts/P00-design-rag/README.md"
+        ]
+      },
+      "P01": {
+        "normative": [
+          "research/P01-design.md",
+          "research/P01-design-rag.md",
+          "artifacts/P01-design/examples.md"
+        ],
+        "capture": "artifacts/P01-design-rag/README.md",
+        "present": [
+          "research/P01-design.md",
+          "research/P01-design-rag.md",
+          "artifacts/P01-design/examples.md",
+          "artifacts/P01-design-rag/README.md"
+        ]
+      },
+      "P02": {
+        "normative": [
+          "research/P02-design.md",
+          "research/P02-design-rag.md",
+          "artifacts/P02-design/examples.md"
+        ],
+        "capture": "artifacts/P02-design-rag/README.md",
+        "present": [
+          "research/P02-design.md",
+          "research/P02-design-rag.md",
+          "artifacts/P02-design/examples.md",
+          "artifacts/P02-design-rag/README.md"
+        ]
+      },
+      "P03": {
+        "normative": [
+          "research/P03-design.md",
+          "research/P03-design-rag.md",
+          "artifacts/P03-design/examples.md"
+        ],
+        "capture": "artifacts/P03-design-rag/README.md",
+        "present": [
+          "research/P03-design.md",
+          "research/P03-design-rag.md",
+          "artifacts/P03-design/examples.md",
+          "artifacts/P03-design-rag/README.md"
+        ]
+      },
+      "P04": {
+        "normative": [
+          "research/P04-design.md",
+          "research/P04-design-rag.md",
+          "artifacts/P04-design/examples.md"
+        ],
+        "capture": "artifacts/P04-design-rag/README.md",
+        "present": [
+          "research/P04-design.md",
+          "research/P04-design-rag.md",
+          "artifacts/P04-design/examples.md",
+          "artifacts/P04-design-rag/README.md"
+        ]
+      },
+      "P05": {
+        "normative": [
+          "research/P05-design.md",
+          "research/P05-design-rag.md",
+          "artifacts/P05-design/examples.md"
+        ],
+        "capture": "artifacts/P05-design-rag/README.md",
+        "present": [
+          "research/P05-design.md",
+          "research/P05-design-rag.md",
+          "artifacts/P05-design/examples.md",
+          "artifacts/P05-design-rag/README.md"
+        ]
+      },
+      "P06": {
+        "normative": [
+          "research/P06-design.md",
+          "research/P06-design-rag.md",
+          "artifacts/P06-design/examples.md"
+        ],
+        "capture": "artifacts/P06-design-rag/README.md",
+        "present": [
+          "research/P06-design.md",
+          "research/P06-design-rag.md",
+          "artifacts/P06-design/examples.md",
+          "artifacts/P06-design-rag/README.md"
+        ]
+      },
+      "P07": {
+        "normative": [
+          "research/P07-design.md",
+          "research/P07-design-rag.md",
+          "artifacts/P07-design/examples.md"
+        ],
+        "capture": "artifacts/P07-design-rag/README.md",
+        "present": [
+          "research/P07-design.md",
+          "research/P07-design-rag.md",
+          "artifacts/P07-design/examples.md",
+          "artifacts/P07-design-rag/README.md"
+        ]
+      },
+      "P10": {
+        "normative": [
+          "research/P10-design.md",
+          "research/P10-design-rag.md",
+          "artifacts/P10-design/examples.md"
+        ],
+        "capture": "artifacts/P10-design-rag/README.md",
+        "present": [
+          "research/P10-design.md",
+          "research/P10-design-rag.md",
+          "artifacts/P10-design/examples.md",
+          "artifacts/P10-design-rag/README.md"
+        ]
+      }
+    },
+    "errors": [],
+    "complete": true
+  },
+  "execution_sheet": {
+    "contract": "execution-sheet/v1",
+    "path": "roadmap.md",
+    "rows": [
+      {
+        "batch_id": "B00-A",
+        "items": [
+          "P00.1",
+          "P00.2",
+          "P00.3"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P00.1 P00.2 P00.3",
+        "route": {
+          "model_class": "frontier",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P01.1"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P01.1",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "B01-B",
+        "items": [
+          "P01.2",
+          "P01.3"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P01.2 P01.3",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P01.4"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P01.4",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "B02-A",
+        "items": [
+          "P02.1",
+          "P02.2"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P02.1 P02.2",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P02.3"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P02.3",
+        "route": {
+          "model_class": "implementation",
+          "effort": "xhigh"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P02.4"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P02.4",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P03.1"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P03.1",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P03.2"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P03.2",
+        "route": {
+          "model_class": "implementation",
+          "effort": "xhigh"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P04.1"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P04.1",
+        "route": {
+          "model_class": "frontier",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P04.2"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P04.2",
+        "route": {
+          "model_class": "frontier",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P04.3"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P04.3",
+        "route": {
+          "model_class": "frontier",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P04.4"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P04.4",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P10.1"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P10.1",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "light",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P10.2"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P10.2",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P10.3"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P10.3",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P10.4"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P10.4",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "light",
+        "recommended": true
+      },
+      {
+        "batch_id": "B05-A",
+        "items": [
+          "P05.1",
+          "P05.2"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P05.1 P05.2",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "light",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P05.3"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P05.3",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "full",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P05.4"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P05.4",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "light",
+        "recommended": true
+      },
+      {
+        "batch_id": "B06-A",
+        "items": [
+          "P06.1",
+          "P06.2"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P06.1 P06.2",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "light",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P06.3"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P06.3",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "light",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P06.4"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P06.4",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "light",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P06.5"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P06.5",
+        "route": {
+          "model_class": "frontier",
+          "effort": "high"
+        },
+        "review": "none",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P07.1"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P07.1",
+        "route": {
+          "model_class": "implementation",
+          "effort": "xhigh"
+        },
+        "review": "light",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P07.2"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P07.2",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "light",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P07.3"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P07.3",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "light",
+        "recommended": true
+      },
+      {
+        "batch_id": "B07-A",
+        "items": [
+          "P07.4",
+          "P07.5"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P07.4 P07.5",
+        "route": {
+          "model_class": "implementation",
+          "effort": "high"
+        },
+        "review": "light",
+        "recommended": true
+      },
+      {
+        "batch_id": "solo",
+        "items": [
+          "P07.6"
+        ],
+        "command": "task:plan-run 2026.09.27-№1-COREX-KERNEL P07.6",
+        "route": {
+          "model_class": "frontier",
+          "effort": "high"
+        },
+        "review": "none",
+        "recommended": true
+      }
+    ],
+    "errors": [],
+    "complete": true
+  },
+  "design_gate": {
+    "allowed": false,
+    "code": "PLAN_DESIGN_FINISH_MISSING",
+    "fingerprint": "0d4f79305f4cb08bafa010918d3fc09e335636c0030f1b33517083e82c121237",
+    "phases": [
+      "P00",
+      "P01",
+      "P02",
+      "P03",
+      "P04",
+      "P05",
+      "P06",
+      "P07",
+      "P10"
+    ],
+    "items": 36,
+    "mode": "audit-required"
+  },
+  "handoff": "# HANDOFF — 2026-10-04 — after P07\n\n**Next:** audit-design: task:plan-audit 2026.09.27-№1-COREX-KERNEL design\n\n| Parameter | Meaning |\n|:--|:--|\n| Batch | n/a |\n| Model | frontier, свежий reviewer, не автор дизайна |\n| Thinking | xhigh |\n| Context | isolated-child-return |\n| Суть | Независимый design audit fingerprint finish 2026-10-04 (`**Design Audit:** required`); delta — P07 и строки 25–29 execution-sheet. |\n\n```text\ntask:plan-audit 2026.09.27-№1-COREX-KERNEL design\n```\n\n**Done:** P07 детализирована до закрытия P06 по решению владельца (D94): `phases/P07/` P07.1–P07.6; D95–D98. Finish 2026-10-04: весь граф фаз пересмотрен, строки 1–24 execution-sheet без изменений, добавлены строки 25–29 (P07.1 → P07.2 → P07.3 → B07-A → P07.6) по D97; design fingerprint записан finalize-design. Коррекция A1–A10 по D98 выполнена в этом root; standalone PHP self-check 27 проверок (proof.json), без подключений к БД. Продукт не менялся, package/PG тесты не запускались.\n\n**Remaining:** Owner-requested broad Grok 4.7/high/500k review of completed design work is authorized next inside this root; its technical report is not a formal design-audit GREEN. Независимый design audit нового fingerprint. Отдельно и раньше исполнения P07: полное ревью фазы P06 владельцем и финальный hosted CI P06 с закрытием фазы (D73, D91 п.4) — P06 acceptance по-прежнему открыта; строка 25 (P07.1) не стартует до закрытия P06 (D94 п.2). P08–P09 — backlog.\n\n**Sources of truth:** roadmap.md execution-sheet строки 25–29; phases/P07/P07.md и P07.1–P07.6; decisions/D94–D98; research/P07-design.md; research/P07-design-rag.md; artifacts/P07-design/{examples.md,facts/,scripts/p07-facts.sh}; artifacts/P07-design-rag/README.md. Для P06: artifacts/P06.5-review/verdict.md, reviewed candidate 2a0265d57c93514f518ace028999debe52a4df2d.\n\n**Open risks:** Ремонт по итогам ревью P06 может сдвинуть факты карты кода P07 (D94 п.3 — сверка `p07-facts.sh` первым шагом P07.1). Мост access-azguard в CI зависит от доступа к приватному репозиторию AzGuard (§5 F6). Stancl v4 может выйти до P07.2 (VERIFY-AT-EXEC, F5).\n\n**Workarounds/Deferred/Open questions:** Удаление `root_accounts.data` и baseline новых таблиц — P08. Публикация AzGuard и включение моста в релиз — owner-gate Q2/P09. Preexisting CLAUDE/config/gitignore changes, .grok, untracked historical PHP proofs and generated graph dirt remain outside our commit.\n\n```session-continuity-decision/v1\n{\n  \"outcome\": \"isolated-child-return\",\n  \"reason\": \"independent-review\",\n  \"evidence\": [\n    \"batch:86f7ed4b1310eefe2f629568f6db9a1a55d97592be1b2d8820a90c4c0f8bd36d\",\n    \"loaded-inputs:reusable\",\n    \"cold-start-cost:0\",\n    \"reviewer:independent-design-audit-of-current-finish\"\n  ],\n  \"runnable\": true,\n  \"schema_version\": \"session-continuity-decision/v1\"\n}\n```\n",
+  "baseline_errors": []
+}

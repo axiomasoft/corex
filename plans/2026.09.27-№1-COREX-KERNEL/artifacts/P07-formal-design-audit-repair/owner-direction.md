@@ -1,0 +1,15 @@
+# Owner repair and no-repeat-audit direction — 2026-10-04
+
+Source: actual user messages in the current conversation, following the audit admission report.
+
+The owner requested:
+
+> исправляй все здесь до green! т.е. все что нашел и завершайся
+
+When asked whether to authorize one additional independent audit on codex/gpt-6-astra/xhigh, the owner answered:
+
+> аудит уже был, больше не надо. доделай свою задачу!!!
+
+Scope: complete the local repair of the reported carrier/admission issues, then stop. The second message explicitly refuses another audit. It is recorded as the owner's waiver of a repeated whole-plan design audit, not as evidence that an independent formal GREEN audit happened. No new model, subagent, Grok session, product execution or P06 acceptance work is authorized here. P06 closure remains required before P07 execution.
+
+The existing audit-attention event, technical reports and prior decisions remain historical evidence. The current admission uses a new accepted decision bound to the actual post-repair whole-plan fingerprint; no audit-green event is created.

@@ -1,0 +1,43 @@
+{
+  "route": {
+    "exit_code": 0,
+    "output": {
+      "cwd": "/home/vostrikov/projects/packages/corex",
+      "effort": "xhigh",
+      "invocation": "$ task:plan-audit 2026.09.27-№1-COREX-KERNEL design",
+      "model": "gpt-6.1-sol",
+      "model_class": "frontier",
+      "source": "provider-thread-state",
+      "source_version": "codex-turn-context-v1",
+      "thread_id": "01a10707-81b0-7da3-84c8-873ea6cde1f4",
+      "ts": "2026-10-04T13:09:39Z"
+    }
+  },
+  "design_gate": {
+    "exit_code": 0,
+    "output": {
+      "allowed": false,
+      "code": "PLAN_DESIGN_AUDIT_WAIVER_STALE",
+      "owner_decision": "D89",
+      "fingerprint": "830e2cb881f05da62be0f5b03dfb2dec2fdacab9fef449186a6418d8d9ca925f",
+      "phases": [
+        "P00",
+        "P01",
+        "P02",
+        "P03",
+        "P04",
+        "P05",
+        "P06",
+        "P07",
+        "P10"
+      ],
+      "items": 36,
+      "mode": "audit-required",
+      "metrics": {
+        "operation": "design-gate",
+        "wall_ms": 47,
+        "payload_bytes": 282
+      }
+    }
+  }
+}
