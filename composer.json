@@ -27,9 +27,7 @@
         "axiomasoft/corex-transfer": "^1.0@dev",
         "axiomasoft/corex-search-meilisearch": "^1.0@dev",
         "axiomasoft/corex-recurrence": "^1.0@dev",
-        "axiomasoft/corex-search": "^1.0@dev",
-        "axiomasoft/stancl-tenancy": ">=4.0.0-alpha1 <=4.0.0-alpha1",
-        "axiomasoft/stancl-jobpipeline": ">=2.0.0-alpha1 <=2.0.0-alpha1"
+        "axiomasoft/corex-search": "^1.0@dev"
     },
     "require-dev": {
         "axiomasoft/corex-workflow": "^1.0@dev",
@@ -146,11 +144,7 @@
         }
     ],
     "extra": {
-        "laravel": {
-            "dont-discover": [
-                "axiomasoft/stancl-tenancy"
-            ]
-        },
+        "laravel": {},
         "phpstan/extension-installer": {
             "ignore": [
                 "axiomasoft/corex",

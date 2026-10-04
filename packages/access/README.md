@@ -61,7 +61,7 @@ Auth-мост между [`axiomasoft/corex`] и [AzGuard] (ADR-009). AzGuard �
   `id`/`email`/`password`/`active`/`deleted_at`) и отдающий `Access\PrincipalIdentity(user,
   <id>)`. Пакет не импортирует ни одну модель `axiomasoft/corex-tenancy` — имя таблицы приходит строкой,
   тот же приём, что и `workspace_scope_class`. Это ЕДИНСТВЕННЫЙ шов, которым конструируется
-  принципал-пользователь: облачный OIDC-лейн (`axiomasoft/corex-tenancy`, под `tenancy.oidc.enabled`)
+  принципал-пользователь: облачный OIDC-лейн (`axiomasoft/corex-tenancy`, под `corex-tenancy.oidc.enabled`)
   заканчивается штатным `Auth::loginUsingId($sub)`, который резолвится через ЭТОТ ЖЕ
   провайдер — так оба входа (локальный `Auth::attempt()` и облачный OIDC) собирают ровно один
   класс `Principal` (premortem C4). Чтобы включить лейн, приложение указывает драйвер в

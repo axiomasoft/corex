@@ -24,12 +24,12 @@ final class ConfigReportSectionTest extends TestCase
         $owned = array_values(array_filter($sections, static fn (ConfigReportSection $section): bool => $section instanceof TenancyConfigSection));
         self::assertCount(1, $owned);
         self::assertSame(10, $owned[0]->order());
-        config(['tenancy.oidc.client_secret' => 'a-private-section-secret']);
+        config(['corex-tenancy.oidc.client_secret' => 'a-private-section-secret']);
         self::assertSame(0, Artisan::call('corex:config:validate'));
-        self::assertStringContainsString('secret tenancy.oidc.client_secret=present', Artisan::output());
+        self::assertStringContainsString('secret corex-tenancy.oidc.client_secret=present', Artisan::output());
         self::assertStringNotContainsString('a-private-section-secret', Artisan::output());
-        config(['tenancy.oidc.client_secret' => null]);
+        config(['corex-tenancy.oidc.client_secret' => null]);
         self::assertSame(0, Artisan::call('corex:config:validate'));
-        self::assertStringContainsString('secret tenancy.oidc.client_secret=absent', Artisan::output());
+        self::assertStringContainsString('secret corex-tenancy.oidc.client_secret=absent', Artisan::output());
     }
 }

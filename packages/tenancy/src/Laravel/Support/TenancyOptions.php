@@ -8,34 +8,24 @@ use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Config\Data\SecretRef;
 use CoreX\Config\Laravel\ConfigurationValidator;
-use CoreX\Tenancy\Account\Internal\Jobs\CreateDatabaseFromTemplate;
 use CoreX\Tenancy\Runtime\Contracts\TenantBootstrapper;
 use CoreX\Tenancy\Runtime\Internal\Bootstrappers\CachePrefixBootstrapper;
 use CoreX\Tenancy\Runtime\Internal\Bootstrappers\ConnectionBootstrapper;
 use CoreX\Tenancy\Runtime\Internal\Bootstrappers\SessionConnectionBootstrapper;
-use Stancl\Tenancy\Contracts\UniqueIdentifierGenerator;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final readonly class TenancyOptions
 {
     /**
-     * @param  class-string  $tenantModel
-     * @param  class-string  $idGenerator
-     * @param  class-string  $tenantDatabaseManager
      * @param  list<class-string<TenantBootstrapper>>  $bootstrappers
      * @param  list<string>  $cacheStores
-     * @param  list<class-string>  $provisioningPipeline
      * @param  list<string>  $oidcAllowedAlgs
      * @param  array<string, string>  $templateIntegrityTrustedKeys
      * @param  array<string, array<string, mixed>>  $templateIntegrityManifests
      */
     public function __construct(
         public string $centralConnection,
-        public string $tenantModel,
-        public string $idGenerator,
-        public string $tenantDatabaseManager,
         public array $bootstrappers,
-        public array $provisioningPipeline,
         public string $cachePrefix,
         public array $cacheStores,
         public string $storageDurableDriver,
@@ -74,46 +64,24 @@ final readonly class TenancyOptions
     ) {}
 
     /**
-     * @param  array<string, mixed>  $tenancy
-     * @param  array<string, mixed>  $corexTenancy
+     * @param  array<string, mixed>  $config
      */
-    public static function fromArray(array $tenancy, array $corexTenancy): self
+    public static function fromArray(array $config): self
     {
         $violations = new ConfigurationValidator;
 
-        $centralConnection = self::nonEmpty($violations, 'central_connection', $tenancy['central_connection'] ?? 'pgsql');
-        $tenantModel = self::classString($violations, 'tenant_model', $tenancy['tenant_model'] ?? null);
-        $idGenerator = self::classString(
-            $violations,
-            'id_generator',
-            $tenancy['id_generator'] ?? null,
-            UniqueIdentifierGenerator::class,
-        );
-        $tenantDatabaseManager = self::classString(
-            $violations,
-            'tenant_database_manager',
-            $tenancy['tenant_database_manager'] ?? null,
-        );
+        $centralConnection = self::nonEmpty($violations, 'central_connection', $config['central_connection'] ?? 'pgsql');
+        $bootstrappers = self::bootstrappers($violations, $config['bootstrappers'] ?? null);
 
-        $bootstrappers = self::bootstrappers($violations, $tenancy['bootstrappers'] ?? null);
-
-        $provisioning = is_array($tenancy['provisioning'] ?? null) ? $tenancy['provisioning'] : [];
-        $provisioningPipeline = self::classList(
-            $violations,
-            'provisioning.pipeline',
-            $provisioning['pipeline'] ?? [CreateDatabaseFromTemplate::class],
-            required: true,
-        );
-
-        $cachePrefix = self::nonEmpty($violations, 'cache_prefix', $tenancy['cache_prefix'] ?? 'tenant_%tenant%_');
+        $cachePrefix = self::nonEmpty($violations, 'cache_prefix', $config['cache_prefix'] ?? 'tenant_%tenant%_');
 
         if (! str_contains($cachePrefix, '%tenant%')) {
             $violations->add('corex-tenancy.cache_prefix', 'must contain %tenant%');
         }
 
-        $cacheStores = self::cacheStores($violations, $tenancy['cache_stores'] ?? []);
+        $cacheStores = self::cacheStores($violations, $config['cache_stores'] ?? []);
 
-        $storage = is_array($tenancy['storage'] ?? null) ? $tenancy['storage'] : [];
+        $storage = is_array($config['storage'] ?? null) ? $config['storage'] : [];
         $storageDurableDriver = self::nonEmpty(
             $violations,
             'storage.durable_driver',
@@ -130,8 +98,8 @@ final readonly class TenancyOptions
             $storage['ephemeral_root'] ?? 'storage/app/corex/tenancy-ephemeral',
         );
 
-        $hostIdentification = is_array($tenancy['host_identification'] ?? null)
-            ? $tenancy['host_identification']
+        $hostIdentification = is_array($config['host_identification'] ?? null)
+            ? $config['host_identification']
             : [];
         $hostIdentificationEnabled = self::bool(
             $violations,
@@ -158,7 +126,7 @@ final readonly class TenancyOptions
             $violations->add('corex-tenancy.host_identification.cache_store', 'must not be one of cache_stores');
         }
 
-        $domainTrust = is_array($tenancy['domain_trust'] ?? null) ? $tenancy['domain_trust'] : [];
+        $domainTrust = is_array($config['domain_trust'] ?? null) ? $config['domain_trust'] : [];
         $domainTrustEnabled = self::bool($violations, 'domain_trust.enabled', $domainTrust['enabled'] ?? false);
         $domainTrustChallengeTtlSeconds = self::positiveInt(
             $violations,
@@ -166,9 +134,9 @@ final readonly class TenancyOptions
             $domainTrust['challenge_ttl_seconds'] ?? 300,
         );
 
-        $statusGate = self::statusGate($violations, $tenancy);
+        $statusGate = self::statusGate($violations, $config);
 
-        $oidc = is_array($tenancy['oidc'] ?? null) ? $tenancy['oidc'] : [];
+        $oidc = is_array($config['oidc'] ?? null) ? $config['oidc'] : [];
         $oidcEnabled = self::bool($violations, 'oidc.enabled', $oidc['enabled'] ?? false);
         $oidcIssuer = self::nullableNonEmptyString($oidc['issuer'] ?? null);
         $oidcClientId = self::nullableNonEmptyString($oidc['client_id'] ?? null);
@@ -233,16 +201,16 @@ final readonly class TenancyOptions
             }
         }
 
-        $workspace = is_array($tenancy['workspace'] ?? null) ? $tenancy['workspace'] : [];
+        $workspace = is_array($config['workspace'] ?? null) ? $config['workspace'] : [];
         $workspacePathSegment = self::nullableNonEmptyString($workspace['path_segment'] ?? 'w');
 
         $lifecycle = new AccountLifecyclePolicy(
-            trialDays: self::nonNegativeInt($violations, 'trial_days', $tenancy['trial_days'] ?? 14),
-            graceDays: self::nonNegativeInt($violations, 'grace_days', $tenancy['grace_days'] ?? 30),
-            platformDomain: self::nonEmpty($violations, 'platform_domain', $tenancy['platform_domain'] ?? 'example.test'),
+            trialDays: self::nonNegativeInt($violations, 'trial_days', $config['trial_days'] ?? 14),
+            graceDays: self::nonNegativeInt($violations, 'grace_days', $config['grace_days'] ?? 30),
+            platformDomain: self::nonEmpty($violations, 'platform_domain', $config['platform_domain'] ?? 'example.test'),
         );
 
-        $wakeup = is_array($corexTenancy['wakeup'] ?? null) ? $corexTenancy['wakeup'] : [];
+        $wakeup = is_array($config['wakeup'] ?? null) ? $config['wakeup'] : [];
         $wakeupDriver = is_string($wakeup['driver'] ?? null) ? $wakeup['driver'] : 'local_sweep';
 
         if (! in_array($wakeupDriver, ['local_sweep', 'root_registry'], true)) {
@@ -260,14 +228,14 @@ final readonly class TenancyOptions
 
         $wakeupLeaseSeconds = self::positiveInt($violations, 'wakeup.lease_seconds', $wakeup['lease_seconds'] ?? 60);
 
-        $templateIntegrity = is_array($tenancy['template_integrity'] ?? null)
-            ? $tenancy['template_integrity']
+        $templateIntegrity = is_array($config['template_integrity'] ?? null)
+            ? $config['template_integrity']
             : [];
         $templateIntegrityTrustedKeys = self::stringMap($templateIntegrity['trusted_keys'] ?? []);
         $templateIntegrityManifests = self::arrayMap($templateIntegrity['manifests'] ?? []);
 
-        $membershipGuardConfig = is_array($tenancy['membership_guard'] ?? null)
-            ? $tenancy['membership_guard']
+        $membershipGuardConfig = is_array($config['membership_guard'] ?? null)
+            ? $config['membership_guard']
             : [];
         $membershipGuard = self::nonEmpty(
             $violations,
@@ -279,11 +247,7 @@ final readonly class TenancyOptions
 
         return new self(
             centralConnection: $centralConnection,
-            tenantModel: $tenantModel,
-            idGenerator: $idGenerator,
-            tenantDatabaseManager: $tenantDatabaseManager,
             bootstrappers: $bootstrappers,
-            provisioningPipeline: $provisioningPipeline,
             cachePrefix: $cachePrefix,
             cacheStores: $cacheStores,
             storageDurableDriver: $storageDurableDriver,
@@ -322,10 +286,10 @@ final readonly class TenancyOptions
         );
     }
 
-    /** @param array<string, mixed> $tenancy */
-    private static function statusGate(ConfigurationValidator $violations, array $tenancy): StatusGatePolicy
+    /** @param array<string, mixed> $config */
+    private static function statusGate(ConfigurationValidator $violations, array $config): StatusGatePolicy
     {
-        $statusGate = is_array($tenancy['status_gate'] ?? null) ? $tenancy['status_gate'] : [];
+        $statusGate = is_array($config['status_gate'] ?? null) ? $config['status_gate'] : [];
         $paymentRoute = self::nullableNonEmptyString($statusGate['payment_route'] ?? null);
         $exportRoute = self::nullableNonEmptyString($statusGate['export_route'] ?? null);
         $methods = self::stringList($statusGate['read_only_methods'] ?? ['GET', 'HEAD', 'OPTIONS']);
@@ -449,65 +413,6 @@ final readonly class TenancyOptions
         $violations->add($path, 'must be a string or null');
 
         return null;
-    }
-
-    /** @return class-string */
-    private static function classString(
-        ConfigurationValidator $violations,
-        string $path,
-        mixed $value,
-        ?string $contract = null,
-    ): string {
-        if (is_string($value) && $value !== '' && class_exists($value)) {
-            if ($contract !== null && ! is_a($value, $contract, true)) {
-                $violations->add($path, 'must be a class implementing '.$contract);
-
-                return $contract;
-            }
-
-            return $value;
-        }
-
-        $message = $contract === null
-            ? 'must be an existing class-string'
-            : 'must be a class implementing '.$contract;
-        $violations->add($path, $message);
-
-        return $contract ?? 'invalid';
-    }
-
-    /**
-     * @return list<class-string>
-     */
-    private static function classList(
-        ConfigurationValidator $violations,
-        string $path,
-        mixed $value,
-        bool $required,
-    ): array {
-        if (! is_array($value)) {
-            $violations->add($path, 'must be a list of class names');
-
-            return [];
-        }
-
-        if ($required && $value === []) {
-            $violations->add($path, 'must not be empty');
-        }
-
-        $resolved = [];
-
-        foreach ($value as $index => $class) {
-            if (! is_string($class) || $class === '' || ! class_exists($class)) {
-                $violations->add($path.'.'.$index, 'must be an existing class-string');
-
-                continue;
-            }
-
-            $resolved[] = $class;
-        }
-
-        return $resolved;
     }
 
     /** @return list<string> */

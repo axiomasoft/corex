@@ -291,30 +291,12 @@ parameters:
 		-
 			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
 			identifier: offsetAccess.nonOffsetAccessible
-			count: 2
+			count: 1
 			path: src/Laravel/RuntimeRegistrar.php
 
 		-
 			rawMessage: 'Cannot call method get() on mixed.'
 			identifier: method.nonObject
-			count: 1
-			path: src/Laravel/RuntimeRegistrar.php
-
-		-
-			rawMessage: 'Cannot call method set() on mixed.'
-			identifier: method.nonObject
-			count: 1
-			path: src/Laravel/RuntimeRegistrar.php
-
-		-
-			rawMessage: 'Parameter $corexTenancy of static method CoreX\Tenancy\Laravel\Support\TenancyOptions::fromArray() expects array<string, mixed>, array<mixed> given.'
-			identifier: argument.type
-			count: 1
-			path: src/Laravel/RuntimeRegistrar.php
-
-		-
-			rawMessage: 'Parameter $tenancy of static method CoreX\Tenancy\Laravel\Support\TenancyOptions::fromArray() expects array<string, mixed>, array<mixed> given.'
-			identifier: argument.type
 			count: 1
 			path: src/Laravel/RuntimeRegistrar.php
 
@@ -328,12 +310,6 @@ parameters:
 			rawMessage: 'Method CoreX\Tenancy\Laravel\Support\TenancyOptions::arrayMap() should return array<string, array<string, mixed>> but returns array<string, array<mixed, mixed>>.'
 			identifier: return.type
 			count: 1
-			path: src/Laravel/Support/TenancyOptions.php
-
-		-
-			rawMessage: 'Method CoreX\Tenancy\Laravel\Support\TenancyOptions::classString() should return class-string but returns string.'
-			identifier: return.type
-			count: 2
 			path: src/Laravel/Support/TenancyOptions.php
 
 		-
@@ -703,30 +679,6 @@ parameters:
 			path: src/Provisioning/Internal/Database/SchemaCatalogueSerializer.php
 
 		-
-			rawMessage: Access to an undefined property object::$app_db_user.
-			identifier: property.notFound
-			count: 3
-			path: src/Provisioning/Internal/Database/TemplateClonePostgreSQLManager.php
-
-		-
-			rawMessage: Access to an undefined property object::$db_name.
-			identifier: property.notFound
-			count: 2
-			path: src/Provisioning/Internal/Database/TemplateClonePostgreSQLManager.php
-
-		-
-			rawMessage: 'Parameter #2 $templateDbName of method CoreX\Tenancy\Provisioning\Internal\Database\TemplateClonePostgreSQLManager::cloneTemplate() expects string, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: src/Provisioning/Internal/Database/TemplateClonePostgreSQLManager.php
-
-		-
-			rawMessage: 'Part $cluster->app_db_user (mixed) of encapsed string cannot be cast to string.'
-			identifier: encapsedStringPart.nonString
-			count: 2
-			path: src/Provisioning/Internal/Database/TemplateClonePostgreSQLManager.php
-
-		-
 			rawMessage: Access to an undefined property object::$cluster_id.
 			identifier: property.notFound
 			count: 1
@@ -827,18 +779,6 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: src/Provisioning/Internal/Database/TemplateManifest.php
-
-		-
-			rawMessage: Casting to int something that's already int.
-			identifier: cast.useless
-			count: 1
-			path: src/Account/Internal/Jobs/CreateDatabaseFromTemplate.php
-
-		-
-			rawMessage: Casting to string something that's already string.
-			identifier: cast.useless
-			count: 1
-			path: src/Account/Internal/Jobs/CreateDatabaseFromTemplate.php
 
 		-
 			rawMessage: Cannot cast mixed to string.
@@ -946,19 +886,19 @@ parameters:
 			rawMessage: Cannot cast mixed to int.
 			identifier: cast.int
 			count: 1
-			path: src/Provisioning/Internal/StanclTenantDatabaseLifecycle.php
+			path: src/Provisioning/Internal/DatabaseTenantLifecycle.php
 
 		-
 			rawMessage: Cannot cast mixed to string.
 			identifier: cast.string
 			count: 1
-			path: src/Provisioning/Internal/StanclTenantDatabaseLifecycle.php
+			path: src/Provisioning/Internal/DatabaseTenantLifecycle.php
 
 		-
 			rawMessage: 'Only booleans are allowed in a negated boolean, int|false given.'
 			identifier: booleanNot.exprNotBoolean
 			count: 1
-			path: src/Provisioning/Internal/StanclTenantDatabaseLifecycle.php
+			path: src/Provisioning/Internal/DatabaseTenantLifecycle.php
 
 		-
 			rawMessage: 'Binary operation "+=" between (float|int) and mixed results in an error.'
@@ -987,7 +927,7 @@ parameters:
 		-
 			rawMessage: Cannot access offset 'config' on Illuminate\Contracts\Foundation\Application.
 			identifier: offsetAccess.nonOffsetAccessible
-			count: 2
+			count: 1
 			path: src/TenancyServiceProvider.php
 
 		-
@@ -1005,7 +945,7 @@ parameters:
 		-
 			rawMessage: 'Cannot call method get() on mixed.'
 			identifier: method.nonObject
-			count: 2
+			count: 1
 			path: src/TenancyServiceProvider.php
 
 		-

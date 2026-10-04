@@ -19,12 +19,12 @@ final class TenancyConfigSection implements ConfigReportSection
 
     public function options(): array
     {
-        return [TenancyOptions::class => ['tenancy', 'corex-tenancy']];
+        return [TenancyOptions::class => ['corex-tenancy']];
     }
 
     public function secretKeys(): array
     {
-        return ['tenancy.oidc.client_secret'];
+        return ['corex-tenancy.oidc.client_secret'];
     }
 
     public function secretDefaults(): array
@@ -35,9 +35,9 @@ final class TenancyConfigSection implements ConfigReportSection
     public function drivers(): array
     {
         $driver = config('corex-tenancy.wakeup.driver');
-        $enabled = config('tenancy.oidc.enabled');
+        $enabled = config('corex-tenancy.oidc.enabled');
 
-        return ['driver tenancy.wakeup.driver='.$this->scalar($driver), 'driver tenancy.oidc.enabled='.$this->scalar($enabled)];
+        return ['driver corex-tenancy.wakeup.driver='.$this->scalar($driver), 'driver corex-tenancy.oidc.enabled='.$this->scalar($enabled)];
     }
 
     public function adapters(): array

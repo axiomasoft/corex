@@ -44,9 +44,9 @@ afterEach(function (): void {
 
 it('keeps local and fake-cloud durable storage semantically identical', function (string $driver): void {
     config([
-        'tenancy.storage.durable_driver' => $driver,
-        'tenancy.storage.durable_root' => $this->storageRoot.'/durable',
-        'tenancy.storage.ephemeral_root' => $this->storageRoot.'/ephemeral',
+        'corex-tenancy.storage.durable_driver' => $driver,
+        'corex-tenancy.storage.durable_root' => $this->storageRoot.'/durable',
+        'corex-tenancy.storage.ephemeral_root' => $this->storageRoot.'/ephemeral',
     ]);
     app()->forgetInstance(TenancyOptions::class);
     app()->forgetScopedInstances();
@@ -75,9 +75,9 @@ it('keeps local and fake-cloud durable storage semantically identical', function
 
 it('rejects traversal and a retained worker handle after tenancy clears', function (): void {
     config([
-        'tenancy.storage.durable_driver' => 'fake-s3',
-        'tenancy.storage.durable_root' => $this->storageRoot.'/durable',
-        'tenancy.storage.ephemeral_root' => $this->storageRoot.'/ephemeral',
+        'corex-tenancy.storage.durable_driver' => 'fake-s3',
+        'corex-tenancy.storage.durable_root' => $this->storageRoot.'/durable',
+        'corex-tenancy.storage.ephemeral_root' => $this->storageRoot.'/ephemeral',
     ]);
     app()->forgetInstance(TenancyOptions::class);
     app()->forgetScopedInstances();

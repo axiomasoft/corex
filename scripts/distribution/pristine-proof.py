@@ -15,7 +15,6 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parents[2]
 EXPORTER = ROOT / "scripts/distribution/export.py"
-P41_SOURCE = ROOT / "plans/2026.09.12-№2-COREX-APPROVED-SPECS/findings/P4.1-source"
 VERSION = "0.1.0-p4.3"
 PACKAGES = ("axiomasoft/corex", "axiomasoft/corex", "axiomasoft/corex-tasks", "axiomasoft/corex-tenancy")
 POLICY = ROOT / "scripts/distribution/export-policy.json"
@@ -45,20 +44,6 @@ def build_repository(root: Path) -> dict:
         for package in versions.values():
             package["dist"]["url"] = (staging / package["dist"]["url"]).as_uri()
 
-    p41 = json.loads((P41_SOURCE / "packages.json").read_text(encoding="utf-8"))
-    copies = {
-        "axiomasoft/stancl-tenancy": P41_SOURCE / "tenancy-candidate.zip",
-        "axiomasoft/stancl-jobpipeline": P41_SOURCE / "jobpipeline-candidate.zip",
-    }
-    artifact_dir = staging / "artifacts"
-    for name, archive in copies.items():
-        if not archive.is_file():
-            raise ProofError(f"sealed provider candidate missing: {name}")
-        destination = artifact_dir / archive.name
-        shutil.copyfile(archive, destination)
-        package = next(iter(p41["packages"][name].values()))
-        package["dist"]["url"] = destination.as_uri()
-        metadata["packages"][name] = {package["version"]: package}
     metadata_path.write_text(json.dumps(metadata, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return {"staging": staging, "metadata_sha256": sha256(metadata_path), "export_map": json.loads((staging / "export-map.json").read_text(encoding="utf-8"))}
 

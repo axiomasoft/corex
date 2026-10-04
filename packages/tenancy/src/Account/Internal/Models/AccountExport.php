@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * `root_account_exports` — offboarding/pre-purge/manual data-export
  * bookkeeping (central connection, B-11 §7.3). {@see
- * \CoreX\Tenancy\Provisioning\Internal\StanclTenantDatabaseLifecycle::drop()} refuses
+ * \CoreX\Tenancy\Provisioning\Internal\DatabaseTenantLifecycle::drop()} refuses
  * to run unless the account's most recent row here is `status=ready`
  * (D13/AC-7).
  *

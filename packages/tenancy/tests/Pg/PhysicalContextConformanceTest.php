@@ -50,7 +50,7 @@ beforeEach(function (): void {
     $this->accounts = [];
     $this->workspaceId = (string) Str::uuid();
     $this->storageRoot = sys_get_temp_dir().'/corex-physical-context-'.bin2hex(random_bytes(12));
-    config(['tenancy.storage.durable_root' => $this->storageRoot.'/durable', 'tenancy.storage.ephemeral_root' => $this->storageRoot.'/ephemeral']);
+    config(['corex-tenancy.storage.durable_root' => $this->storageRoot.'/durable', 'corex-tenancy.storage.ephemeral_root' => $this->storageRoot.'/ephemeral']);
 
     foreach (['archive', 'lab'] as $name) {
         $database = 'corex_p3_context_'.bin2hex(random_bytes(6)).'_test';

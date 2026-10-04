@@ -32,10 +32,10 @@ beforeEach(function (): void {
 
     // Host identification with its explicit cache; options are lazy, so rebuild the snapshot.
     config([
-        'tenancy.host_identification.enabled' => true,
-        'tenancy.host_identification.cache' => true,
-        'tenancy.host_identification.cache_ttl' => 300,
-        'tenancy.host_identification.cache_store' => null,
+        'corex-tenancy.host_identification.enabled' => true,
+        'corex-tenancy.host_identification.cache' => true,
+        'corex-tenancy.host_identification.cache_ttl' => 300,
+        'corex-tenancy.host_identification.cache_store' => null,
     ]);
     app()->forgetInstance(TenancyOptions::class);
 });

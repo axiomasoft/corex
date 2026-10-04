@@ -120,9 +120,7 @@
             "tag_prefix": "corex-tenancy-",
             "env_prefix": "COREX_TENANCY_",
             "command_prefix": "corex:tenancy:",
-            "upstream_config": [
-                "tenancy"
-            ]
+            "upstream_config": []
         },
         "axiomasoft/corex-transfer": {
             "dir": "transfer",

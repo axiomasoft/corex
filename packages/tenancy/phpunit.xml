@@ -20,7 +20,7 @@
             <directory>tests/Pg</directory>
         </testsuite>
 
-        <!-- P2.13 — статические гейты изоляции (stancl, cross-DB FK, партиция
+        <!-- P2.13 — статические гейты изоляции (cross-DB FK, партиция
              путей миграций): без БД и контейнера, поэтому вне pg-лейна. -->
         <testsuite name="Arch">
             <directory>tests/Arch</directory>

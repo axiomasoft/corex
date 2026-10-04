@@ -6,17 +6,17 @@ namespace CoreX\Tenancy\Account\Laravel;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
+use CoreX\Context\Data\AccountRef;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Provisioning\Data\TemplateAccountView;
-use Stancl\Tenancy\Database\Contracts\TenantWithDatabase;
 
-/** @corex-model-extension Exact Stancl Account template_version, cluster_id and db_name columns; Account remains final/private. */
+/** @corex-model-extension Exact Account template_version, cluster_id and db_name columns; Account remains final/private. */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class AccountTemplateSnapshot
 {
-    public static function capture(TenantWithDatabase $tenant): TemplateAccountView
+    public static function capture(AccountRef $account, string $centralConnection): TemplateAccountView
     {
-        assert($tenant instanceof Account);
+        $tenant = Account::on($centralConnection)->findOrFail($account->id);
 
         return new TemplateAccountView($tenant->template_version, $tenant->cluster_id, $tenant->db_name);
     }

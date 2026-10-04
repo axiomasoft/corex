@@ -11,16 +11,16 @@ use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantDatabaseLifecycle;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Modules\Laravel\RegistersNothingOnBoot;
+use CoreX\Tenancy\Account\Internal\DatabaseTenantProvisioner;
 use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycle;
 use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycleFsm;
 use CoreX\Tenancy\Account\Internal\PendingPool;
-use CoreX\Tenancy\Account\Internal\StanclTenantDatabaseProvisioner;
 use CoreX\Tenancy\Account\Laravel\MigrationWaveOrchestrator;
 use CoreX\Tenancy\Laravel\Support\AccountLifecyclePolicy;
 use CoreX\Tenancy\Laravel\Support\HostResolverCacheInvalidator;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
-use CoreX\Tenancy\Provisioning\Internal\StanclTenantDatabaseLifecycle;
+use CoreX\Tenancy\Provisioning\Internal\DatabaseTenantLifecycle;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\ConnectionResolverInterface;
@@ -37,11 +37,10 @@ final class ProvisioningRegistrar implements PackageRegistrar
     public function register(Application $app): void
     {
         $app->singleton(
-            StanclTenantDatabaseProvisioner::class,
-            static fn (Application $app): StanclTenantDatabaseProvisioner => new StanclTenantDatabaseProvisioner(
+            DatabaseTenantProvisioner::class,
+            static fn (Application $app): DatabaseTenantProvisioner => new DatabaseTenantProvisioner(
                 centralConnection: $app->make(TenancyOptions::class)->centralConnection,
                 templateIntegrityVerifier: $app->make(TemplateIntegrityVerifier::class),
-                events: $app->make(Dispatcher::class),
             ),
         );
 
@@ -49,15 +48,15 @@ final class ProvisioningRegistrar implements PackageRegistrar
             PendingPool::class,
             static fn (Application $app): PendingPool => new PendingPool(
                 centralConnection: $app->make(TenancyOptions::class)->centralConnection,
-                provisioner: $app->make(StanclTenantDatabaseProvisioner::class),
+                provisioner: $app->make(DatabaseTenantProvisioner::class),
                 templateIntegrityVerifier: $app->make(TemplateIntegrityVerifier::class),
                 connections: $app->make(ConnectionResolverInterface::class),
             ),
         );
 
         $app->singleton(
-            StanclTenantDatabaseLifecycle::class,
-            static fn (Application $app): StanclTenantDatabaseLifecycle => new StanclTenantDatabaseLifecycle(
+            DatabaseTenantLifecycle::class,
+            static fn (Application $app): DatabaseTenantLifecycle => new DatabaseTenantLifecycle(
                 centralConnection: $app->make(TenancyOptions::class)->centralConnection,
                 connections: $app->make(ConnectionResolverInterface::class),
                 clock: $app->make(ClockInterface::class),
@@ -66,8 +65,8 @@ final class ProvisioningRegistrar implements PackageRegistrar
         );
         $app->singleton(
             TenantDatabaseLifecycle::class,
-            static fn (Application $app): StanclTenantDatabaseLifecycle => $app->make(
-                StanclTenantDatabaseLifecycle::class,
+            static fn (Application $app): DatabaseTenantLifecycle => $app->make(
+                DatabaseTenantLifecycle::class,
             ),
         );
 

@@ -24,7 +24,7 @@ use Override;
 /**
  * Cloud implementation of support impersonation (B-11 §5.9, D139). Rebound
  * over the boxed `NullImpersonationService` in `TenancyServiceProvider`
- * under `tenancy.oidc.impersonation.enabled` (D10). `start()`/`stop()`
+ * under `corex-tenancy.oidc.impersonation.enabled` (D10). `start()`/`stop()`
  * follow research/12 §4 EXACTLY — atomic claim → dual-log mirror BEFORE the
  * session opens (D146) → session state + login; `stop()` reverses the
  * mirror order (session first) because the tenant session, not the audit

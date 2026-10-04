@@ -12,3 +12,6 @@
 # item, см. Code Guidance P2.15) — allowance без D# запрещена.
 
 97fdc77 sqlite -4 D79 P2.14 — удалён packages/access/tests/Feature/TenantBoundaryTest.php вместе со снесённым legacy row-level каркасом
+
+1f42e01d10d21582746b31f89525f59e5ab024ff sqlite -5 D95 P07.2 — retired boundary/rule tests; source: plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.2-execution/retired-test-inventory.json
+1f42e01d10d21582746b31f89525f59e5ab024ff pg -1 D95 P07.2 — retired provider discovery assertion, native engine test preserved; source: plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.2-execution/retired-test-inventory.json

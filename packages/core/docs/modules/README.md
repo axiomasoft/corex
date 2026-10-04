@@ -29,7 +29,7 @@ php artisan migrate --database=<tenant>
 Тег `corex-migrations-tenant` — синоним, явно называющий скоуп
 коннекшена (`mod_*` — тенант-схема). Коннекшн, на котором работает hot-path
 реестра и lifecycle, задаётся `config('corex.modules.connection')` (`null` =
-дефолтный; под P2 stancl подменяет дефолт на базу тенанта).
+дефолтный; под P2 TenancyManager подменяет дефолт на базу тенанта).
 
 ### Версия схемы и апгрейды
 

@@ -43,7 +43,7 @@ beforeEach(function (): void {
         '--force' => true,
     ])->run();
 
-    config(['tenancy.workspace.path_segment' => 'w']);
+    config(['corex-tenancy.workspace.path_segment' => 'w']);
     app()->forgetInstance(TenancyOptions::class);
 });
 
@@ -348,7 +348,7 @@ it('л: маркер глубже в пути → тот же результат
 });
 
 it('м: кастомный маркер path_segment=ws — /ws/{slug} резолвит, /w/{slug} трактуется как «без маркера» (default)', function (): void {
-    config(['tenancy.workspace.path_segment' => 'ws']);
+    config(['corex-tenancy.workspace.path_segment' => 'ws']);
     app()->forgetInstance(TenancyOptions::class);
 
     initializedAccountRW();
@@ -380,7 +380,7 @@ it('н: post-condition — TenancyManager с no-op setWorkspace() → 403, не 
         public function current(): TenantContext
         {
             return new TenantContext(new AccountRef(
-                id: (string) $this->account->getTenantKey(),
+                id: (string) $this->account->getKey(),
                 slug: (string) $this->account->slug,
                 status: (string) $this->account->status,
                 features: [],
@@ -413,9 +413,9 @@ it('о: под резолвленным контекстом WorkspaceScope на
         ->and($visibleIds)->not->toContain($deptB->id);
 });
 
-it('п: алиас tenancy.workspace зарегистрирован (Router::getMiddleware()), но НЕ входит в группу tenant (AC-28)', function (): void {
-    expect(config('tenancy.host_identification.enabled'))->toBeFalse()
-        ->and(config('tenancy.oidc.enabled'))->toBeFalse()
+it('п: алиас corex-tenancy.workspace зарегистрирован (Router::getMiddleware()), но НЕ входит в группу tenant (AC-28)', function (): void {
+    expect(config('corex-tenancy.host_identification.enabled'))->toBeFalse()
+        ->and(config('corex-tenancy.oidc.enabled'))->toBeFalse()
         ->and(app('router')->getMiddleware())->toHaveKey('tenancy.workspace')
         ->and(app('router')->getMiddlewareGroups()['tenant'] ?? [])->not->toContain(ResolveWorkspace::class);
 });

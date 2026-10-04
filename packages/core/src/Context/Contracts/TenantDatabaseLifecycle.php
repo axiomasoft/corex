@@ -11,7 +11,7 @@ use CoreX\Context\Data\AccountRef;
 /**
  * Physical DB-per-account drop/export (B-11 §5.1/§7.3, D13/AC-7). Lives in
  * axiomasoft/corex so `AccountLifecycle` (core-level FSM consumer) can depend on
- * the seam without importing `Stancl\*`/S3/`pg_dump` — those stay isolated
+ * the seam without importing physical database/S3/`pg_dump` — those stay isolated
  * to the axiomasoft/corex-tenancy implementation (D13).
  */
 #[Spi(kind: SpiKind::Implement, since: '1.0')]

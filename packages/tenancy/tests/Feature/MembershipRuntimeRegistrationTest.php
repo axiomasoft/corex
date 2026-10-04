@@ -17,5 +17,5 @@ it('does not register unfinished membership runtime consumers', function (): voi
         ->and(app()->bound(CentralApiClient::class))->toBeFalse()
         ->and($router->getMiddleware())->not->toHaveKey('tenancy.membership')
         ->and($router->getMiddlewareGroups()['tenant'] ?? [])->not->toContain(RequireActiveMembership::class)
-        ->and(config('tenancy.membership_guard'))->toBeNull();
+        ->and(config('corex-tenancy.membership_guard'))->toBeNull();
 });

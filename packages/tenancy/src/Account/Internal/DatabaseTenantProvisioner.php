@@ -5,27 +5,21 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Account\Internal;
 
 use CoreX\Context\Contracts\TenantDatabaseProvisioner;
+use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\ProvisionParams;
+use CoreX\Tenancy\Account\Internal\Jobs\CreateDatabaseFromTemplate;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Provisioning\Contracts\TemplateIntegrityChecks;
-use Illuminate\Contracts\Events\Dispatcher;
-use Stancl\Tenancy\Events\TenantCreated;
 
 /**
- * Fixes embedding_model/dim (and cluster/template/vertical/locale) onto the
- * `root_accounts` row FROM {@see ProvisionParams} at provisioning time
- * (AC-10, R-16 — never from global config on the fly), then fires
- * `TenantCreated` to trigger the stancl JobPipeline
- * ({@see CoreX\Tenancy\Account\Internal\Jobs\CreateDatabaseFromTemplate}). Idempotent/
- * replayable (premortem B4): a repeated call re-fires the pipeline, whose
- * job no-ops if the database already exists.
+ * Persists verified provisioning parameters, then clones synchronously. Replays verify the
+ * existing account database instead of cloning again.
  */
-final class StanclTenantDatabaseProvisioner implements TenantDatabaseProvisioner
+final class DatabaseTenantProvisioner implements TenantDatabaseProvisioner
 {
     public function __construct(
         private readonly string $centralConnection,
         private readonly TemplateIntegrityChecks $templateIntegrityVerifier,
-        private readonly Dispatcher $events,
     ) {}
 
     public function provision(ProvisionParams $params): void
@@ -46,6 +40,9 @@ final class StanclTenantDatabaseProvisioner implements TenantDatabaseProvisioner
             'locale' => $params->locale,
         ])->save();
 
-        $this->events->dispatch(new TenantCreated($account));
+        CreateDatabaseFromTemplate::dispatchSync(
+            new AccountRef($account->id, $account->slug ?? '', $account->status, [], []),
+            $params,
+        );
     }
 }

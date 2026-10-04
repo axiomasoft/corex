@@ -13,15 +13,15 @@ use CoreX\Tenancy\Account\Events\AccountPurged;
 use CoreX\Tenancy\Account\Events\AccountSuspended;
 use CoreX\Tenancy\Account\Events\GraceStarted;
 use CoreX\Tenancy\Account\Events\TrialStarted;
+use CoreX\Tenancy\Account\Internal\DatabaseTenantProvisioner;
 use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycle;
 use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycleFsm;
 use CoreX\Tenancy\Account\Internal\PendingPool;
-use CoreX\Tenancy\Account\Internal\StanclTenantDatabaseProvisioner;
 use CoreX\Tenancy\Laravel\Support\AccountLifecyclePolicy;
 use CoreX\Tenancy\Laravel\Support\HostResolverCacheInvalidator;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
-use CoreX\Tenancy\Provisioning\Internal\StanclTenantDatabaseLifecycle;
+use CoreX\Tenancy\Provisioning\Internal\DatabaseTenantLifecycle;
 use CoreX\Tenancy\Runtime\Internal\HostAccountResolver;
 use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -165,15 +165,14 @@ function lcLifecycle(?ImpersonationService $impersonation = null, ?TenantDatabas
         pendingPool: new PendingPool(
             connections: app(ConnectionResolverInterface::class),
             centralConnection: 'pgsql',
-            provisioner: new StanclTenantDatabaseProvisioner(
-                events: app(Dispatcher::class),
+            provisioner: new DatabaseTenantProvisioner(
                 centralConnection: 'pgsql',
                 templateIntegrityVerifier: $templateIntegrityVerifier,
             ),
             templateIntegrityVerifier: $templateIntegrityVerifier,
         ),
         fsm: new AccountLifecycleFsm,
-        tenantDatabaseLifecycle: $tenantDatabaseLifecycle ?? new StanclTenantDatabaseLifecycle(connections: app(ConnectionResolverInterface::class), clock: app(ClockInterface::class), events: app(Dispatcher::class), centralConnection: 'pgsql'),
+        tenantDatabaseLifecycle: $tenantDatabaseLifecycle ?? new DatabaseTenantLifecycle(connections: app(ConnectionResolverInterface::class), clock: app(ClockInterface::class), events: app(Dispatcher::class), centralConnection: 'pgsql'),
         impersonationGuard: app()->makeWith(ImpersonationGuard::class, ['impersonation' => $impersonation ?? new NullImpersonationService]),
         templateIntegrityVerifier: $templateIntegrityVerifier,
     );
@@ -188,8 +187,7 @@ function activateLcAccount(): AccountRef
     (new PendingPool(
         connections: app(ConnectionResolverInterface::class),
         centralConnection: 'pgsql',
-        provisioner: new StanclTenantDatabaseProvisioner(
-            events: app(Dispatcher::class),
+        provisioner: new DatabaseTenantProvisioner(
             centralConnection: 'pgsql',
             templateIntegrityVerifier: $templateIntegrityVerifier,
         ),
@@ -218,7 +216,7 @@ it('activateFromPool() claims, sets slug/owner/vertical, transitions provisionin
 
     $domain = DB::table('root_domains')->where('account_id', $account->id)->first();
     expect($domain)->not->toBeNull()
-        ->and($domain->host)->toBe($account->slug.'.'.config('tenancy.platform_domain'))
+        ->and($domain->host)->toBe($account->slug.'.'.config('corex-tenancy.platform_domain'))
         ->and($domain->type)->toBe('platform')
         ->and($domain->verified_at)->not->toBeNull()
         ->and($domain->tls_status)->toBe('issued');
@@ -315,7 +313,7 @@ it('purge() after a ready export drops the DB, soft-deletes the account, removes
     $archive = tempnam(sys_get_temp_dir(), 'corex-export-test-');
     file_put_contents($archive, 'test archive');
     $digest = hash_file('sha256', $archive);
-    $database = new StanclTenantDatabaseLifecycle(
+    $database = new DatabaseTenantLifecycle(
         connections: app(ConnectionResolverInterface::class), clock: app(ClockInterface::class), events: app(Dispatcher::class),
         centralConnection: 'pgsql',
         writer: static fn (): array => ['storage_path' => $archive, 'size_bytes' => 12],
@@ -355,7 +353,7 @@ it('default export cannot become ready or authorize purge', function (): void {
 
 it('refuses ready and DROP when an archive is unavailable', function (): void {
     $account = activateLcAccount();
-    $database = new StanclTenantDatabaseLifecycle(
+    $database = new DatabaseTenantLifecycle(
         connections: app(ConnectionResolverInterface::class), clock: app(ClockInterface::class), events: app(Dispatcher::class),
         centralConnection: 'pgsql',
         writer: static fn (): array => ['storage_path' => '/missing/archive.dump', 'size_bytes' => 12],
@@ -391,15 +389,15 @@ it('retries failed physical purge without publishing a terminal account state', 
 
 it('invalidates a warmed host cache entry only when a status transition commits', function (): void {
     config([
-        'tenancy.host_identification.enabled' => true,
-        'tenancy.host_identification.cache' => true,
-        'tenancy.host_identification.cache_store' => null,
+        'corex-tenancy.host_identification.enabled' => true,
+        'corex-tenancy.host_identification.cache' => true,
+        'corex-tenancy.host_identification.cache_store' => null,
     ]);
     app()->forgetInstance(TenancyOptions::class);
     $account = activateLcAccount();
     lcLifecycle()->activate($account);
     $resolver = app(HostAccountResolver::class);
-    $host = $account->slug.'.'.config('tenancy.platform_domain');
+    $host = $account->slug.'.'.config('corex-tenancy.platform_domain');
     $key = HostAccountResolver::key(strtolower($host));
     expect($resolver->resolve($host))->toBe($account->id)
         ->and(Cache::has($key))->toBeTrue();

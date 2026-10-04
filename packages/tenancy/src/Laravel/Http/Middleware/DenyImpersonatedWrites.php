@@ -16,7 +16,7 @@ use Illuminate\Http\Response;
  * L1 — HTTP layer of the read-only invariant (D141, research/12 §2): an
  * unsafe method under an active impersonation is denied UNLESS the matched
  * route carries the {@see AllowImpersonatedWrites} marker (by alias or
- * FQCN). Reuses `tenancy.status_gate.read_only_methods` (already the
+ * FQCN). Reuses `corex-tenancy.status_gate.read_only_methods` (already the
  * project's one definition of "these HTTP methods are read-only") rather
  * than inventing a second config surface for the same fact (D116/D121).
  */

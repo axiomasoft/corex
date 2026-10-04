@@ -15,7 +15,7 @@ use CoreX\Context\Data\WorkspaceRef;
  * the active workspace context on demand. `axiomasoft/corex`'s own boxed default
  * (NullTenancyManager) makes setWorkspace() a deliberate no-op — it cannot
  * stand in here, axiomasoft/corex-access does not depend on axiomasoft/corex-tenancy (AC-28) so
- * there is no real StanclTenancyManager available in this package's tests.
+ * there is no real DatabaseTenancyManager available in this package's tests.
  */
 final class FakeTenancyManager implements TenancyManager
 {

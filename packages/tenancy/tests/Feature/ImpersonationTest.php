@@ -492,7 +492,7 @@ it('з: is_staff=false у предъявителя → 403', function (): void {
 });
 
 it('и: require_approved_by=true и approved_by=NULL → 403; approved_by задан → проходит', function (): void {
-    config(['tenancy.oidc.impersonation.require_approved_by' => true]);
+    config(['corex-tenancy.oidc.impersonation.require_approved_by' => true]);
     app()->forgetInstance(TenancyOptions::class);
 
     $account = initAccountWithTenantIM();
@@ -743,7 +743,7 @@ it('я: revoked_at выставлен извне mid-session → следующ�
 });
 
 it('а: imp в токене при impersonation.enabled=false → 403 (регресс P2.22)', function (): void {
-    config(['tenancy.oidc.impersonation.enabled' => false]);
+    config(['corex-tenancy.oidc.impersonation.enabled' => false]);
     app()->forgetInstance(TenancyOptions::class);
 
     $account = initAccountWithTenantIM();

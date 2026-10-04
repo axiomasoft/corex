@@ -296,10 +296,10 @@ it('refuses an unsafe facility configuration before the first switch', function 
     }
 })->with([
     'array tenant cache' => [static function (): void {
-        config(['cache.stores.array_probe' => ['driver' => 'array'], 'tenancy.cache_stores' => ['array_probe']]);
+        config(['cache.stores.array_probe' => ['driver' => 'array'], 'corex-tenancy.cache_stores' => ['array_probe']]);
     }, 'corex-tenancy.cache_stores.array_probe: unsupported tenant cache driver'],
     'unconfigured tenant store' => [static function (): void {
-        config(['tenancy.cache_stores' => ['ghost']]);
+        config(['corex-tenancy.cache_stores' => ['ghost']]);
     }, 'corex-tenancy.cache_stores.ghost: store is not configured'],
     'relative file store' => [static function (): void {
         config(['cache.stores.tenant_file.path' => 'relative/path']);
@@ -319,7 +319,7 @@ it('refuses an unsafe facility configuration before the first switch', function 
     'session store shared with the tenant stores' => [static function (): void {
         config([
             'cache.stores.shared' => ['driver' => 'redis', 'connection' => 'cache'],
-            'tenancy.cache_stores' => ['shared'],
+            'corex-tenancy.cache_stores' => ['shared'],
             'session.driver' => 'redis',
             'session.store' => 'shared',
             'session.connection' => 'default',
@@ -327,15 +327,15 @@ it('refuses an unsafe facility configuration before the first switch', function 
     }, 'must be separate from the tenant cache and host stores'],
     'host store that is a tenant store' => [static function (): void {
         config([
-            'tenancy.host_identification.enabled' => true,
-            'tenancy.host_identification.cache_store' => null,
+            'corex-tenancy.host_identification.enabled' => true,
+            'corex-tenancy.host_identification.cache_store' => null,
             'cache.default' => 'tenant_file',
         ]);
     }, 'the host store must not be a per-account store'],
 ]);
 
 it('accepts the supported tenant cache drivers', function (string $driver, array $store): void {
-    config(['cache.stores.drv_probe' => $store + ['driver' => $driver], 'tenancy.cache_stores' => ['drv_probe']]);
+    config(['cache.stores.drv_probe' => $store + ['driver' => $driver], 'corex-tenancy.cache_stores' => ['drv_probe']]);
     app()->forgetInstance(TenancyOptions::class);
     app()->forgetInstance(DatabaseTenancyManager::class);
 

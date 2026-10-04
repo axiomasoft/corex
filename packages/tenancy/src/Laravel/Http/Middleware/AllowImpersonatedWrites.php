@@ -17,7 +17,7 @@ use Illuminate\Http\Response;
  * execution order: group-middleware run BEFORE route-middleware, so a
  * "permit" middleware attached to the route could never physically outrun
  * a "deny" middleware from the group). Precedent for an empty middleware
- * used purely as a route-context flag: stancl's own `'tenant'` group
+ * used purely as a route-context flag: the package's own `'tenant'` group
  * registration ({@see TenancyServiceProvider}).
  */
 #[Spi(kind: SpiKind::Call, since: '1.0')]

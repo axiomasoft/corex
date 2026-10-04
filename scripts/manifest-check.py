@@ -18,10 +18,7 @@ MONO_CONSTRAINT = '^1.0@dev'
 PHP = '^8.4'
 ILLUMINATE = '^12.0|^13.0'
 # Temporary pinned upstream exceptions for packages without stable releases.
-ALLOWED_PRERELEASE = {
-    'axiomasoft/stancl-tenancy': '4.0.0-alpha1',
-    'axiomasoft/stancl-jobpipeline': '2.0.0-alpha1',
-}
+ALLOWED_PRERELEASE = {}
 STACK = {
     'pestphp/pest': '^5.2',
     'orchestra/testbench': '^10.12|^11.3',
@@ -107,18 +104,6 @@ def main() -> int:
             for name in sorted(closure(data)):
                 if packages[name][0] not in paths:
                     bad('path-repo', f'no path repository ../{packages[name][0]} for {name}')
-
-        # Stability flags only apply in the installing root: a root that installs
-        # tenancy/access must pin their pre-release upstreams itself.
-        installs = closure(data) | ({data['name']} if data.get('name') in mono else set())
-        needed = {}
-        if 'axiomasoft/corex-tenancy' in installs:
-            needed.update({k: ALLOWED_PRERELEASE[k] for k in ('axiomasoft/stancl-tenancy', 'axiomasoft/stancl-jobpipeline')})
-        for name, constraint in sorted(needed.items()):
-            if not pinned(requires.get(name), constraint):
-                bad('prerelease-root', f'root installing this closure must require {name}={constraint!r}')
-        for name in sorted(set(ALLOWED_PRERELEASE) & set(requires) - set(needed)):
-            bad('prerelease', f'{name} required without the package that needs it')
 
     for line in violations:
         print(line)

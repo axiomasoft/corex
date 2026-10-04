@@ -26,7 +26,7 @@ use RuntimeException;
  * digest and tenant ownership to a trusted durable archive manifest. Size
  * alone never authorizes ready or DROP, including local archives.
  */
-final class StanclTenantDatabaseLifecycle implements TenantDatabaseLifecycle
+final class DatabaseTenantLifecycle implements TenantDatabaseLifecycle
 {
     /**
      * @param  Closure(AccountRef, string):array{storage_path: string, size_bytes: int}|null  $writer

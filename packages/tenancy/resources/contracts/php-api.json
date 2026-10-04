@@ -562,8 +562,17 @@
                     "by_reference": false,
                     "parameters": [
                         {
-                            "name": "tenant",
-                            "type": "Stancl\\Tenancy\\Database\\Contracts\\TenantWithDatabase",
+                            "name": "account",
+                            "type": "CoreX\\Context\\Data\\AccountRef",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        },
+                        {
+                            "name": "centralConnection",
+                            "type": "string",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -4494,6 +4503,23 @@
             "enum_backing": null,
             "enum_cases": []
         },
+        "CoreX\\Tenancy\\Laravel\\Support\\ResolvesTenancyOptions": {
+            "kind": "trait",
+            "layer": "spi-call",
+            "since": "1.0",
+            "final": false,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": [],
+            "properties": [],
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
         "CoreX\\Tenancy\\Laravel\\Support\\StatusGatePolicy": {
             "kind": "class",
             "layer": "spi-call",
@@ -4726,43 +4752,7 @@
                             "flags": 1
                         },
                         {
-                            "name": "tenantModel",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "idGenerator",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "tenantDatabaseManager",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
                             "name": "bootstrappers",
-                            "type": "array",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "provisioningPipeline",
                             "type": "array",
                             "by_reference": false,
                             "variadic": false,
@@ -5091,11 +5081,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5109,16 +5095,7 @@
                     "by_reference": false,
                     "parameters": [
                         {
-                            "name": "tenancy",
-                            "type": "array",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        },
-                        {
-                            "name": "corexTenancy",
+                            "name": "config",
                             "type": "array",
                             "by_reference": false,
                             "variadic": false,
@@ -5130,8 +5107,7 @@
                     "return": "self(CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions)",
                     "doc": {
                         "@param": [
-                            "array<string, mixed> $corexTenancy",
-                            "array<string, mixed> $tenancy"
+                            "array<string, mixed> $config"
                         ]
                     }
                 }
@@ -5148,11 +5124,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5170,11 +5142,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5192,11 +5160,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5214,11 +5178,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5236,11 +5196,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5258,11 +5214,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5280,11 +5232,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5302,11 +5250,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5324,11 +5268,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5346,33 +5286,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
-                            "list<string> $cacheStores",
-                            "list<string> $oidcAllowedAlgs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "idGenerator": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5390,11 +5304,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5412,11 +5322,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5434,11 +5340,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5456,11 +5358,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5478,11 +5376,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5500,11 +5394,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5522,11 +5412,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5544,11 +5430,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5566,11 +5448,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5588,11 +5466,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5610,11 +5484,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5632,11 +5502,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5654,11 +5520,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5676,11 +5538,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5698,11 +5556,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5720,11 +5574,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5742,33 +5592,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
-                            "list<string> $cacheStores",
-                            "list<string> $oidcAllowedAlgs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "provisioningPipeline": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5786,11 +5610,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5808,11 +5628,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5830,11 +5646,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5852,11 +5664,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5874,11 +5682,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5896,55 +5700,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
-                            "list<string> $cacheStores",
-                            "list<string> $oidcAllowedAlgs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "tenantDatabaseManager": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
-                            "list<string> $cacheStores",
-                            "list<string> $oidcAllowedAlgs"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "tenantModel": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, array<string, mixed>> $templateIntegrityManifests",
-                            "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
-                            "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5962,11 +5718,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -5984,11 +5736,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -6006,11 +5754,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -6028,11 +5772,7 @@
                         "@param": [
                             "array<string, array<string, mixed>> $templateIntegrityManifests",
                             "array<string, string> $templateIntegrityTrustedKeys",
-                            "class-string $idGenerator",
-                            "class-string $tenantDatabaseManager",
-                            "class-string $tenantModel",
                             "list<class-string<\\CoreX\\Tenancy\\Runtime\\Contracts\\TenantBootstrapper>> $bootstrappers",
-                            "list<class-string> $provisioningPipeline",
                             "list<string> $cacheStores",
                             "list<string> $oidcAllowedAlgs"
                         ]
@@ -8858,100 +8598,6 @@
                     "doc": {
                         "@param": [
                             "array<string, mixed> $payload"
-                        ]
-                    }
-                }
-            },
-            "properties": [],
-            "constants": [],
-            "enum_backing": null,
-            "enum_cases": []
-        },
-        "CoreX\\Tenancy\\PHPStan\\Rules\\StanclImportBoundaryRule": {
-            "kind": "class",
-            "layer": "spi-call",
-            "since": "1.0",
-            "final": true,
-            "readonly": false,
-            "abstract": false,
-            "extends": [],
-            "implements": [
-                "PHPStan\\Rules\\Rule"
-            ],
-            "uses": [],
-            "doc": {
-                "@implements": [
-                    "\\PHPStan\\Rules\\Rule<\\PHPStan\\Node\\FileNode>"
-                ]
-            },
-            "methods": {
-                "__construct": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "allowedPathFragments",
-                            "type": "array",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 68
-                        }
-                    ],
-                    "return": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $allowedPathFragments"
-                        ]
-                    }
-                },
-                "getNodeType": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "string",
-                    "doc": []
-                },
-                "processNode": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "node",
-                            "type": "PhpParser\\Node",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        },
-                        {
-                            "name": "scope",
-                            "type": "PHPStan\\Analyser\\Scope",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "array",
-                    "doc": {
-                        "@param": [
-                            "\\PHPStan\\Node\\FileNode $node"
-                        ],
-                        "@return": [
-                            "list<\\PHPStan\\Rules\\IdentifierRuleError>"
                         ]
                     }
                 }

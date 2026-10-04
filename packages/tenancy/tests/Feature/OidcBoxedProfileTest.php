@@ -7,7 +7,7 @@ use CoreX\Tenancy\Authentication\Internal\Http\Controllers\OidcLoginController;
 use CoreX\Tenancy\Laravel\Http\Middleware\EnforceSessionLifetime;
 use Illuminate\Support\Facades\Route;
 
-// AC-28 — `tenancy.oidc.enabled` defaults to false (config/tenancy.php).
+// AC-28 — `corex-tenancy.oidc.enabled` defaults to false (config/corex-tenancy.php).
 // This file deliberately never touches `TestCase::$oidcEnabled` (its sibling
 // files OidcLoginTest.php/GlobalLogoutTest.php flip it in their own
 // beforeAll()/afterAll()) — the boxed-profile assertions for BOTH
@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 uses()->group('pg');
 
 it('р: oidc.enabled=false → OIDC routes are not registered, the app still boots', function (): void {
-    expect(config('tenancy.oidc.enabled'))->toBeFalse()
+    expect(config('corex-tenancy.oidc.enabled'))->toBeFalse()
         ->and(Route::has('corex.tenancy.oidc.login'))->toBeFalse()
         ->and(Route::has('corex.tenancy.oidc.callback'))->toBeFalse()
         ->and(Route::has('corex.tenancy.oidc.logout'))->toBeFalse()
@@ -25,7 +25,7 @@ it('р: oidc.enabled=false → OIDC routes are not registered, the app still boo
 });
 
 it('е: oidc.enabled=false → EnforceSessionLifetime is absent from the tenant middleware group', function (): void {
-    expect(config('tenancy.oidc.enabled'))->toBeFalse()
+    expect(config('corex-tenancy.oidc.enabled'))->toBeFalse()
         ->and(app('router')->getMiddlewareGroups()['tenant'] ?? [])->not->toContain(EnforceSessionLifetime::class)
         ->and(app('router')->getMiddleware())->not->toHaveKey('tenancy.oidc.session_lifetime');
 });

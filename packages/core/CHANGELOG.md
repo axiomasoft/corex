@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — PLAN3.P07.2 tenancy implementation cleanup
+
+- TenantDatabaseLifecycle documentation refers to the physical database implementation; the kernel contract
+  signatures and boxed implementation are unchanged. Module connection documentation names TenancyManager.
+
 ## Unreleased — CloudEvents wire (P06.3)
 
 - CloudEvents 1.0 structured JSON codec with internal/external profiles; MessageContract dataSchema, MessageEnvelope source URI-reference validation and withPayload. MessagePublisher wire uses application/cloudevents+json (PLAN3.D90/D92).

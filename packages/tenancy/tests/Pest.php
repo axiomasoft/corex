@@ -12,13 +12,12 @@ uses(TestCase::class)->group('pg')->in('Feature');
 uses()->group('pg')->in('Pg');
 
 /**
- * Enters the account's tenant context through the package engine (the test-side stand-in for the
- * former stancl `Tenancy::initialize()`): resolves the AccountRef from the central database.
+ * Enters the account's tenant context through the package engine: resolves the AccountRef from the central database.
  */
 function initTenantContext(Account|string $account): void
 {
     $id = is_string($account) ? $account : (string) $account->id;
-    $ref = app(AccountRead::class)->find($id, (string) config('tenancy.central_connection', 'pgsql'))
+    $ref = app(AccountRead::class)->find($id, (string) config('corex-tenancy.central_connection', 'pgsql'))
         ?? throw new RuntimeException("Account [{$id}] is not in the central database.");
 
     app(DatabaseTenancyManager::class)->initialize($ref);

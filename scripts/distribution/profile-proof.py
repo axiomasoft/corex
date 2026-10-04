@@ -669,27 +669,6 @@ def execute_cell(cell: dict, profile: dict | None, repository: Path, workspace: 
         }
 
 
-def merge_sealed_providers(repository: Path) -> None:
-    source = ROOT / "plans/archive/2026.09.12-№2-COREX-APPROVED-SPECS/findings/P4.1-source"
-    metadata = load_json(source / "packages.json")
-    archives = {
-        "axiomasoft/stancl-tenancy": "tenancy-candidate.zip",
-        "axiomasoft/stancl-jobpipeline": "jobpipeline-candidate.zip",
-    }
-    packages = load_json(repository / "packages.json")
-    artifacts = repository / "artifacts"
-    for name, archive_name in archives.items():
-        archive = source / archive_name
-        if not archive.is_file():
-            raise ProfileError(f"missing package: {name}")
-        destination = artifacts / archive_name
-        shutil.copyfile(archive, destination)
-        payload = next(iter(metadata["packages"][name].values()))
-        payload["dist"]["url"] = destination.resolve().as_uri()
-        packages["packages"][name] = {payload["version"]: payload}
-    (repository / "packages.json").write_text(json.dumps(packages) + "\n", encoding="utf-8")
-
-
 def merge_azguard(repository: Path) -> None:
     package = Path(os.environ.get("COREX_AZGUARD_LOCAL", "/home/vostrikov/projects/packages/azguard")) / "packages/core"
     if not (package / "composer.json").is_file():
@@ -771,7 +750,6 @@ def prove(candidate: Path | None, *, mode: str, only: str | None, php: str | Non
         binding = extensions.candidate_binding(built)
         repository = root / "repository"
         extensions.materialize_repository(built, repository)
-        merge_sealed_providers(repository)
         merge_azguard(repository)
         composers = archive_composers(built)
         profiles = {profile["id"]: profile for profile in manifest["profiles"]}

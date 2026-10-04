@@ -1,5 +1,19 @@
 # Changelog
 
+## Unreleased — PLAN3.P07.2 (D95/D98; pre-1.0 BC delta)
+
+- Removed Stancl and its prerelease provider dependencies, runtime model projections, identifier binding,
+  JobPipeline wiring and the obsolete PHPStan import rule. Account/Domain are plain central Eloquent models;
+  Account uses UUIDv7, explicit fillable columns and immutable date/integer casts. Model attributes no longer
+  use the legacy data column; signup claim and pool cleanup SQL still require it for idempotency and crash
+  recovery until P08 (D107). Retain the column and these writes until that migration is complete.
+- Configuration moves from `tenancy` to `corex-tenancy`, including wakeup, under one published file. Removed
+  tenantModel/idGenerator/tenantDatabaseManager/provisioningPipeline options; `TenancyOptions::fromArray()`
+  now accepts one configuration array. Middleware aliases and route/error identifiers retain their existing names.
+- `AccountTemplateSnapshot::capture()` now accepts AccountRef and the explicit central connection. Provisioning
+  synchronously runs CreateDatabaseFromTemplate with AccountRef/ProvisionParams; template integrity, replay
+  verification, WAL_LOG cloning, export-before-drop and cache invalidation are preserved.
+
 ## Unreleased — thin providers and registrars (P05.2)
 
 ### PLAN3.P07.1 — own tenancy engine (BC delta, unpublished; D95, D98, D100–D103)

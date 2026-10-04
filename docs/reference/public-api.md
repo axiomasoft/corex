@@ -814,6 +814,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Tenancy\Laravel\Support\AccountLifecyclePolicy` | spi-call | 1.0 |
 | `CoreX\Tenancy\Laravel\Support\HostResolverCacheInvalidator` | spi-call | 1.0 |
 | `CoreX\Tenancy\Laravel\Support\ImpersonationPolicy` | spi-call | 1.0 |
+| `CoreX\Tenancy\Laravel\Support\ResolvesTenancyOptions` | spi-call | 1.0 |
 | `CoreX\Tenancy\Laravel\Support\StatusGatePolicy` | spi-call | 1.0 |
 | `CoreX\Tenancy\Laravel\Support\TenancyConfigSection` | spi-call | 1.0 |
 | `CoreX\Tenancy\Laravel\Support\TenancyOptions` | spi-call | 1.0 |
@@ -852,7 +853,6 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Tenancy\Membership\Exceptions\RevokeUncertain` | api | 1.0 |
 | `CoreX\Tenancy\Membership\Laravel\MembershipSnapshotFactory` | spi-call | 1.0 |
 | `CoreX\Tenancy\Membership\Laravel\RevokeMembershipReceiptFactory` | spi-call | 1.0 |
-| `CoreX\Tenancy\PHPStan\Rules\StanclImportBoundaryRule` | spi-call | 1.0 |
 | `CoreX\Tenancy\Provisioning\Contracts\TemplateIntegrityChecks` | spi-call | 1.0 |
 | `CoreX\Tenancy\Provisioning\Data\ClaimRequest` | api | 1.0 |
 | `CoreX\Tenancy\Provisioning\Data\ClaimResult` | api | 1.0 |

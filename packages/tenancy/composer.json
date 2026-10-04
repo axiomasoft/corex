@@ -1,12 +1,11 @@
 {
     "name": "axiomasoft/corex-tenancy",
-    "description": "CoreX physical DB-per-account tenancy — root-schema control plane on stancl/tenancy v4 (B-11, D13).",
+    "description": "CoreX physical DB-per-account tenancy — root-schema control plane (B-11, D13).",
     "type": "library",
     "license": "MIT",
     "keywords": [
         "laravel",
         "multi-tenancy",
-        "stancl",
         "saas"
     ],
     "authors": [
@@ -24,8 +23,6 @@
         "ext-sodium": "*",
         "php": "^8.4",
         "axiomasoft/corex": "^1.0@dev",
-        "axiomasoft/stancl-jobpipeline": ">=2.0.0-alpha1 <=2.0.0-alpha1",
-        "axiomasoft/stancl-tenancy": ">=4.0.0-alpha1 <=4.0.0-alpha1",
         "firebase/php-jwt": "^7.1",
         "laravel/framework": "^12.0|^13.0",
         "nesbot/carbon": "^3.0",

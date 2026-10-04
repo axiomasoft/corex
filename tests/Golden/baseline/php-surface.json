@@ -65646,6 +65646,51 @@
         },
         "readonly": true
     },
+    "CoreX\\Tenancy\\Account\\Internal\\DatabaseTenantProvisioner": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Context\\Contracts\\TenantDatabaseProvisioner"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "centralConnection",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "templateIntegrityVerifier",
+                        "type": "CoreX\\Tenancy\\Provisioning\\Contracts\\TemplateIntegrityChecks",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "provision": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "params",
+                        "type": "CoreX\\Context\\Data\\ProvisionParams",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Tenancy\\Account\\Internal\\Jobs\\CreateDatabaseFromTemplate": {
         "abstract": false,
         "constants": [],
@@ -65660,8 +65705,14 @@
                 "params": [
                     {
                         "byRef": false,
-                        "name": "tenant",
-                        "type": "CoreX\\Tenancy\\Account\\Internal\\Models\\Account",
+                        "name": "account",
+                        "type": "CoreX\\Context\\Data\\AccountRef",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "params",
+                        "type": "CoreX\\Context\\Data\\ProvisionParams",
                         "variadic": false
                     }
                 ],
@@ -65935,6 +65986,12 @@
                         "name": "options",
                         "type": "CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "manager",
+                        "type": "CoreX\\Tenancy\\Provisioning\\Internal\\Database\\TemplateClonePostgreSQLManager",
+                        "variadic": false
                     }
                 ],
                 "return": "bool",
@@ -66086,6 +66143,12 @@
         },
         "parent": null,
         "properties": {
+            "account": {
+                "name": "account",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Context\\Data\\AccountRef"
+            },
             "afterCommit": {
                 "name": "afterCommit",
                 "readonly": false,
@@ -66158,17 +66221,17 @@
                 "static": false,
                 "type": ""
             },
+            "params": {
+                "name": "params",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Context\\Data\\ProvisionParams"
+            },
             "queue": {
                 "name": "queue",
                 "readonly": false,
                 "static": false,
                 "type": ""
-            },
-            "tenant": {
-                "name": "tenant",
-                "readonly": true,
-                "static": false,
-                "type": "CoreX\\Tenancy\\Account\\Internal\\Models\\Account"
             },
             "uniqueLockOwner": {
                 "name": "uniqueLockOwner",
@@ -66446,70 +66509,73 @@
             "Illuminate\\Contracts\\Support\\CanBeEscapedWhenCastToString",
             "Illuminate\\Contracts\\Support\\Jsonable",
             "JsonSerializable",
-            "Stancl\\Tenancy\\Contracts\\Tenant",
-            "Stancl\\Tenancy\\Database\\Contracts\\TenantWithDatabase",
             "Stringable"
         ],
         "internal": true,
         "kind": "class",
         "methods": {
-            "bootInvalidatesResolverCache": {
-                "params": [],
-                "return": "void",
-                "static": true
-            },
-            "database": {
-                "params": [],
-                "return": "Stancl\\Tenancy\\Database\\DatabaseConfig",
-                "static": false
-            },
             "domains": {
                 "params": [],
                 "return": "Illuminate\\Database\\Eloquent\\Relations\\HasMany",
                 "static": false
             },
-            "getCustomColumns": {
-                "params": [],
-                "return": "array",
-                "static": true
-            },
-            "getInternal": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "key",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "mixed",
-                "static": false
-            },
-            "internalPrefix": {
+            "getConnectionName": {
                 "params": [],
                 "return": "string",
-                "static": true
+                "static": false
             },
-            "setInternal": {
+            "getIncrementing": {
+                "params": [],
+                "return": "",
+                "static": false
+            },
+            "getKeyType": {
+                "params": [],
+                "return": "",
+                "static": false
+            },
+            "initializeHasUniqueStringIds": {
+                "params": [],
+                "return": "",
+                "static": false
+            },
+            "newUniqueId": {
+                "params": [],
+                "return": "",
+                "static": false
+            },
+            "resolveRouteBindingQuery": {
                 "params": [
                     {
                         "byRef": false,
-                        "name": "key",
-                        "type": "string",
+                        "name": "query",
+                        "type": "",
                         "variadic": false
                     },
                     {
                         "byRef": false,
                         "name": "value",
-                        "type": "mixed",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "field",
+                        "type": "",
                         "variadic": false
                     }
                 ],
-                "return": "static",
+                "return": "",
+                "static": false
+            },
+            "uniqueIds": {
+                "params": [],
+                "return": "",
                 "static": false
             }
         },
-        "parent": "Stancl\\Tenancy\\Database\\Models\\Tenant",
+        "parent": "Illuminate\\Database\\Eloquent\\Model",
         "properties": [],
         "readonly": false
     },
@@ -66607,7 +66673,7 @@
                     {
                         "byRef": false,
                         "name": "provisioner",
-                        "type": "CoreX\\Tenancy\\Account\\Internal\\StanclTenantDatabaseProvisioner",
+                        "type": "CoreX\\Tenancy\\Account\\Internal\\DatabaseTenantProvisioner",
                         "variadic": false
                     },
                     {
@@ -66741,57 +66807,6 @@
         "properties": [],
         "readonly": false
     },
-    "CoreX\\Tenancy\\Account\\Internal\\StanclTenantDatabaseProvisioner": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "CoreX\\Context\\Contracts\\TenantDatabaseProvisioner"
-        ],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "centralConnection",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "templateIntegrityVerifier",
-                        "type": "CoreX\\Tenancy\\Provisioning\\Contracts\\TemplateIntegrityChecks",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "events",
-                        "type": "Illuminate\\Contracts\\Events\\Dispatcher",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "provision": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "params",
-                        "type": "CoreX\\Context\\Data\\ProvisionParams",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
     "CoreX\\Tenancy\\Account\\Laravel\\AccountRelations": {
         "abstract": false,
         "constants": [],
@@ -66850,8 +66865,14 @@
                 "params": [
                     {
                         "byRef": false,
-                        "name": "tenant",
-                        "type": "Stancl\\Tenancy\\Database\\Contracts\\TenantWithDatabase",
+                        "name": "account",
+                        "type": "CoreX\\Context\\Data\\AccountRef",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "centralConnection",
+                        "type": "string",
                         "variadic": false
                     }
                 ],
@@ -68799,14 +68820,9 @@
                 "return": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
                 "static": false
             },
-            "bootInvalidatesTenantsResolverCache": {
+            "getConnectionName": {
                 "params": [],
-                "return": "void",
-                "static": true
-            },
-            "tenant": {
-                "params": [],
-                "return": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
+                "return": "string",
                 "static": false
             }
         },
@@ -71877,6 +71893,18 @@
         },
         "readonly": true
     },
+    "CoreX\\Tenancy\\Laravel\\Support\\ResolvesTenancyOptions": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "trait",
+        "methods": [],
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Tenancy\\Laravel\\Support\\StatusGatePolicy": {
         "abstract": false,
         "constants": [],
@@ -72008,31 +72036,7 @@
                     },
                     {
                         "byRef": false,
-                        "name": "tenantModel",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "idGenerator",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "tenantDatabaseManager",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
                         "name": "bootstrappers",
-                        "type": "array",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "provisioningPipeline",
                         "type": "array",
                         "variadic": false
                     },
@@ -72254,13 +72258,7 @@
                 "params": [
                     {
                         "byRef": false,
-                        "name": "tenancy",
-                        "type": "array",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "corexTenancy",
+                        "name": "config",
                         "type": "array",
                         "variadic": false
                     }
@@ -72330,12 +72328,6 @@
                 "readonly": true,
                 "static": false,
                 "type": "bool"
-            },
-            "idGenerator": {
-                "name": "idGenerator",
-                "readonly": true,
-                "static": false,
-                "type": "string"
             },
             "impersonation": {
                 "name": "impersonation",
@@ -72439,12 +72431,6 @@
                 "static": false,
                 "type": "?string"
             },
-            "provisioningPipeline": {
-                "name": "provisioningPipeline",
-                "readonly": true,
-                "static": false,
-                "type": "array"
-            },
             "statusGate": {
                 "name": "statusGate",
                 "readonly": true,
@@ -72480,18 +72466,6 @@
                 "readonly": true,
                 "static": false,
                 "type": "array"
-            },
-            "tenantDatabaseManager": {
-                "name": "tenantDatabaseManager",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "tenantModel": {
-                "name": "tenantModel",
-                "readonly": true,
-                "static": false,
-                "type": "string"
             },
             "wakeupDriver": {
                 "name": "wakeupDriver",
@@ -77229,56 +77203,6 @@
         "properties": [],
         "readonly": false
     },
-    "CoreX\\Tenancy\\PHPStan\\Rules\\StanclImportBoundaryRule": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "PHPStan\\Rules\\Rule"
-        ],
-        "internal": false,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "allowedPathFragments",
-                        "type": "array",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "getNodeType": {
-                "params": [],
-                "return": "string",
-                "static": false
-            },
-            "processNode": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "node",
-                        "type": "PhpParser\\Node",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "scope",
-                        "type": "PHPStan\\Analyser\\Scope",
-                        "variadic": false
-                    }
-                ],
-                "return": "array",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
     "CoreX\\Tenancy\\Provisioning\\Contracts\\TemplateIntegrityChecks": {
         "abstract": false,
         "constants": [],
@@ -77721,6 +77645,95 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Tenancy\\Provisioning\\Internal\\DatabaseTenantLifecycle": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Context\\Contracts\\TenantDatabaseLifecycle"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "centralConnection",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "events",
+                        "type": "Illuminate\\Contracts\\Events\\Dispatcher",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "writer",
+                        "type": "?Closure",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "verifier",
+                        "type": "?Closure",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "drop": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "account",
+                        "type": "CoreX\\Context\\Data\\AccountRef",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "export": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "account",
+                        "type": "CoreX\\Context\\Data\\AccountRef",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "kind",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Tenancy\\Provisioning\\Internal\\Database\\SchemaCatalogueSerializer": {
         "abstract": false,
         "constants": [],
@@ -77774,10 +77787,7 @@
         "abstract": false,
         "constants": [],
         "final": true,
-        "interfaces": [
-            "Stancl\\Tenancy\\Database\\Contracts\\StatefulTenantDatabaseManager",
-            "Stancl\\Tenancy\\Database\\Contracts\\TenantDatabaseManager"
-        ],
+        "interfaces": [],
         "internal": true,
         "kind": "class",
         "methods": {
@@ -77809,8 +77819,50 @@
                 "params": [
                     {
                         "byRef": false,
-                        "name": "tenant",
-                        "type": "Stancl\\Tenancy\\Database\\Contracts\\TenantWithDatabase",
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "templateDbName",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            },
+            "createForAccount": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "account",
+                        "type": "CoreX\\Context\\Data\\AccountRef",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            },
+            "databaseExists": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            },
+            "deleteDatabase": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
                         "variadic": false
                     }
                 ],
@@ -77818,7 +77870,7 @@
                 "static": false
             }
         },
-        "parent": "Stancl\\Tenancy\\Database\\TenantDatabaseManagers\\PostgreSQLDatabaseManager",
+        "parent": null,
         "properties": [],
         "readonly": false
     },
@@ -78104,95 +78156,6 @@
                 "type": ""
             }
         },
-        "readonly": false
-    },
-    "CoreX\\Tenancy\\Provisioning\\Internal\\StanclTenantDatabaseLifecycle": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "CoreX\\Context\\Contracts\\TenantDatabaseLifecycle"
-        ],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "centralConnection",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "connections",
-                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "clock",
-                        "type": "Psr\\Clock\\ClockInterface",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "events",
-                        "type": "Illuminate\\Contracts\\Events\\Dispatcher",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "writer",
-                        "type": "?Closure",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "verifier",
-                        "type": "?Closure",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "drop": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "account",
-                        "type": "CoreX\\Context\\Data\\AccountRef",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
-                "static": false
-            },
-            "export": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "account",
-                        "type": "CoreX\\Context\\Data\\AccountRef",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "kind",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "string",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
         "readonly": false
     },
     "CoreX\\Tenancy\\Provisioning\\Laravel\\MigrationBatchRelations": {

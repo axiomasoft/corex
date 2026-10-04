@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 require getcwd().'/vendor/autoload.php';
@@ -23,7 +24,11 @@ foreach ([['maxAttempts' => 3, 'horizon' => 3600, 'attempt' => 3, 'age' => 120],
     $query = Mockery::mock(Builder::class);
     $query->shouldReceive('where', 'orderBy', 'lockForUpdate')->andReturnSelf();
     $query->shouldReceive('get')->andReturn(new Collection([$row]));
-    $query->shouldReceive('update')->andReturnUsing(function (array $values) use (&$writes): int { $writes[] = $values; return 1; });
+    $query->shouldReceive('update')->andReturnUsing(function (array $values) use (&$writes): int {
+        $writes[] = $values;
+
+        return 1;
+    });
     $connection = Mockery::mock(Connection::class);
     $connection->shouldReceive('table')->andReturn($query);
     $class = new ReflectionClass(SqlWebhookDeliveryStore::class);

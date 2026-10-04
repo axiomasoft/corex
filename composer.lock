@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "206ead12b1f28c451a3c070cc405a6ea",
+    "content-hash": "28babfa62f31e4b7fedecf5c62bb7341",
     "packages": [
         {
             "name": "axiomasoft/corex",
@@ -1053,8 +1053,6 @@
             },
             "require": {
                 "axiomasoft/corex": "^1.0@dev",
-                "axiomasoft/stancl-jobpipeline": ">=2.0.0-alpha1 <=2.0.0-alpha1",
-                "axiomasoft/stancl-tenancy": ">=4.0.0-alpha1 <=4.0.0-alpha1",
                 "ext-filter": "*",
                 "ext-mbstring": "*",
                 "ext-openssl": "*",
@@ -1141,12 +1139,11 @@
                     "email": "dv.vostrikov@gmail.com"
                 }
             ],
-            "description": "CoreX physical DB-per-account tenancy — root-schema control plane on stancl/tenancy v4 (B-11, D13).",
+            "description": "CoreX physical DB-per-account tenancy — root-schema control plane (B-11, D13).",
             "keywords": [
                 "laravel",
                 "multi-tenancy",
-                "saas",
-                "stancl"
+                "saas"
             ],
             "transport-options": {
                 "relative": true
@@ -1363,191 +1360,6 @@
             "transport-options": {
                 "relative": true
             }
-        },
-        {
-            "name": "axiomasoft/stancl-jobpipeline",
-            "version": "2.0.0-alpha1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/axiomasoft/stancl-jobpipeline.git",
-                "reference": "683de91ca7f80eb77f24b6b0b97733eecf726ac7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": ".composer-provider-staging/artifacts/jobpipeline-candidate.zip",
-                "reference": "683de91ca7f80eb77f24b6b0b97733eecf726ac7",
-                "shasum": "e3f9c92d957889d2d88239fa119eaa7025dcbbb7"
-            },
-            "require": {
-                "illuminate/support": "^10.0|^11.0|^12.0|^13.0",
-                "php": "^8.0"
-            },
-            "require-dev": {
-                "ext-redis": "*",
-                "orchestra/testbench": "^8.0|^9.0|^10.0|^11.0",
-                "spatie/valuestore": "^1.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Stancl\\JobPipeline\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Stancl\\JobPipeline\\Tests\\": "tests/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "email": "samuel.stancl@gmail.com",
-                    "name": "Samuel Štancl"
-                }
-            ],
-            "description": "Turn any series of jobs into Laravel listeners."
-        },
-        {
-            "name": "axiomasoft/stancl-tenancy",
-            "version": "4.0.0-alpha1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/axiomasoft/stancl-tenancy.git",
-                "reference": "7d596a145ee1e8251a64785e66ff40cf24c92078"
-            },
-            "dist": {
-                "type": "zip",
-                "url": ".composer-provider-staging/artifacts/tenancy-candidate.zip",
-                "reference": "7d596a145ee1e8251a64785e66ff40cf24c92078",
-                "shasum": "ef69374969eef0a39a7df24538b07b4805ba0156"
-            },
-            "require": {
-                "axiomasoft/stancl-jobpipeline": "2.0.0-alpha1",
-                "ext-json": "*",
-                "illuminate/support": "^12.0|^13.0",
-                "laravel/prompts": "0.*",
-                "laravel/tinker": "^2.0|^3.0",
-                "php": "^8.4",
-                "ramsey/uuid": "^4.7.3",
-                "spatie/invade": "*",
-                "stancl/virtualcolumn": "^1.5.0"
-            },
-            "require-dev": {
-                "doctrine/dbal": "^3.6.0",
-                "larastan/larastan": "^3.0",
-                "laravel/framework": "^13.0",
-                "league/flysystem-aws-s3-v3": "^3.12.2",
-                "league/flysystem-path-prefixing": "^3.0",
-                "orchestra/testbench": "^10.0|^11.0",
-                "pestphp/pest": "^4.0",
-                "spatie/valuestore": "^1.2.5"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "aliases": {
-                        "GlobalCache": "Stancl\\Tenancy\\Facades\\GlobalCache",
-                        "Tenancy": "Stancl\\Tenancy\\Facades\\Tenancy"
-                    },
-                    "providers": [
-                        "Stancl\\Tenancy\\TenancyServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "files": [
-                    "src/helpers.php"
-                ],
-                "psr-4": {
-                    "Stancl\\Tenancy\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Stancl\\Tenancy\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "act": [
-                    "Composer\\Config::disableProcessTimeout",
-                    "act -j tests --matrix 'laravel:^11.0'"
-                ],
-                "act-input": [
-                    "Composer\\Config::disableProcessTimeout",
-                    "act -j tests --matrix 'laravel:^11.0' --input"
-                ],
-                "coverage": [
-                    "open coverage/phpunit/html/index.html"
-                ],
-                "cs": [
-                    "PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix --config=.php-cs-fixer.php"
-                ],
-                "docker-down": [
-                    "docker compose down"
-                ],
-                "docker-m1": [
-                    "ln -s docker-compose-m1.override.yml docker-compose.override.yml"
-                ],
-                "docker-rebuild": [
-                    "Composer\\Config::disableProcessTimeout",
-                    "docker compose up -d --no-deps --build"
-                ],
-                "docker-rebuild-with-xdebug": [
-                    "Composer\\Config::disableProcessTimeout",
-                    "XDEBUG_ENABLED=true docker compose up -d --no-deps --build"
-                ],
-                "docker-restart": [
-                    "docker compose down && docker compose up -d"
-                ],
-                "docker-up": [
-                    "docker compose up -d"
-                ],
-                "php85-patch": [
-                    "php -r '$file=\"vendor/orchestra/testbench-core/laravel/config/database.php\"; file_put_contents($file, str_replace(\"PDO::MYSQL_ATTR_SSL_CA\", \"Pdo\\\\Mysql::ATTR_SSL_CA\", file_get_contents($file)));'"
-                ],
-                "phpstan": [
-                    "vendor/bin/phpstan --memory-limit=256M"
-                ],
-                "phpstan-pro": [
-                    "vendor/bin/phpstan --memory-limit=256M --pro"
-                ],
-                "test": [
-                    "Composer\\Config::disableProcessTimeout",
-                    "./test --no-coverage"
-                ],
-                "test-full": [
-                    "Composer\\Config::disableProcessTimeout",
-                    "./test"
-                ],
-                "testbench-link": [
-                    "ln -s /var/www/html/vendor ./vendor/orchestra/testbench-core/laravel/vendor"
-                ],
-                "testbench-repair": [
-                    "mkdir -p ./vendor/orchestra/testbench-core/laravel/storage/framework/sessions && mkdir -p ./vendor/orchestra/testbench-core/laravel/storage/framework/views && mkdir -p ./vendor/orchestra/testbench-core/laravel/storage/framework/cache"
-                ],
-                "testbench-unlink": [
-                    "rm ./vendor/orchestra/testbench-core/laravel/vendor"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "email": "samuel@archte.ch",
-                    "name": "Samuel Štancl"
-                }
-            ],
-            "description": "Automatic multi-tenancy for your Laravel application.",
-            "keywords": [
-                "laravel",
-                "multi-database",
-                "multi-tenancy",
-                "multitenancy",
-                "tenancy"
-            ]
         },
         {
             "name": "brick/math",
@@ -5324,109 +5136,6 @@
                 "source": "https://github.com/rlanvin/php-rrule/tree/v3.0.0"
             },
             "time": "2026-07-29T06:25:26+00:00"
-        },
-        {
-            "name": "spatie/invade",
-            "version": "2.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/spatie/invade.git",
-                "reference": "f929c7b6e75fceeefa7b41a491e91274bafb17af"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/spatie/invade/zipball/f929c7b6e75fceeefa7b41a491e91274bafb17af",
-                "reference": "f929c7b6e75fceeefa7b41a491e91274bafb17af",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^8.0"
-            },
-            "require-dev": {
-                "pestphp/pest": "^1.20",
-                "phpstan/phpstan": "^1.4",
-                "spatie/ray": "^1.28"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "src/functions.php"
-                ],
-                "psr-4": {
-                    "Spatie\\Invade\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Freek Van der Herten",
-                    "email": "freek@spatie.be",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A PHP function to work with private properties and methods",
-            "homepage": "https://github.com/spatie/invade",
-            "keywords": [
-                "invade",
-                "spatie"
-            ],
-            "support": {
-                "source": "https://github.com/spatie/invade/tree/2.1.1"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/spatie",
-                    "type": "github"
-                }
-            ],
-            "time": "2026-08-24T12:39:05+00:00"
-        },
-        {
-            "name": "stancl/virtualcolumn",
-            "version": "v1.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/archtechx/virtualcolumn.git",
-                "reference": "75718edcfeeb19abc1970f5395043f7d43cce5bc"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/archtechx/virtualcolumn/zipball/75718edcfeeb19abc1970f5395043f7d43cce5bc",
-                "reference": "75718edcfeeb19abc1970f5395043f7d43cce5bc",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/database": ">=10.0",
-                "illuminate/support": ">=10.0"
-            },
-            "require-dev": {
-                "orchestra/testbench": ">=8.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Stancl\\VirtualColumn\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Samuel Štancl",
-                    "email": "samuel.stancl@gmail.com"
-                }
-            ],
-            "description": "Eloquent virtual column.",
-            "support": {
-                "issues": "https://github.com/archtechx/virtualcolumn/issues",
-                "source": "https://github.com/archtechx/virtualcolumn/tree/v1.5.0"
-            },
-            "time": "2025-02-25T13:12:44+00:00"
         },
         {
             "name": "symfony/clock",

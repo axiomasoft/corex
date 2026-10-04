@@ -10,14 +10,17 @@ deployment may explicitly select `root_registry`; this enables the advisory `roo
 table and the `corex:tenancy:wakeup-root-sweep` command. Hints never replace a tenant-local request or
 provide authority to select an account connection.
 
-## Local immutable provider proof
+## Package engine and configuration
 
-The unreleased `4.0.0-alpha1` tenancy candidate is tested only through the
-sealed local Composer transport described in the distribution proof. It is not
-a public package channel: consumers must configure an independently approved
-root repository before resolving `axiomasoft/stancl-tenancy` and
-`axiomasoft/stancl-jobpipeline`. This package does not declare a path, file, or
-development-sibling repository and never falls back to the moving Stancl branch.
+CoreX owns the account/domain models, physical tenancy engine and synchronous golden-template
+provisioning. Account identifiers use UUIDv7; account fields are explicit typed columns. The legacy
+`root_accounts.data` column is no longer used for model attributes. Existing signup claim and pool
+cleanup SQL still use it for idempotency and crash recovery until P08 (D107); retain the column and
+these writes until that migration is complete. Saved/deleting model events invalidate the central host cache.
+
+Publish configuration with `php artisan vendor:publish --tag=corex-tenancy-config`. All settings,
+including wakeup, use `config/corex-tenancy.php` under `corex-tenancy`. Migrate host overrides from the
+previous `tenancy` key; the old key and model/provider configuration knobs have been removed.
 
 ## Template integrity
 
@@ -28,8 +31,8 @@ following:
 - a configured Ed25519-signed manifest from a configured trusted key; and
 - a matching canonical, read-only PostgreSQL catalogue hash.
 
-`tenancy.template_integrity.trusted_keys` and
-`tenancy.template_integrity.manifests` are deliberately empty defaults.
+`corex-tenancy.template_integrity.trusted_keys` and
+`corex-tenancy.template_integrity.manifests` are deliberately empty defaults.
 Existing ready rows with a NULL hash are not compatible fallback templates.
 Consumer write-path adoption is intentionally separate. Operational rollback
 preserves the integrity metadata; the additive migration has no destructive
@@ -43,7 +46,7 @@ constitute a publication promise.
 
 ## Installation
 
-Install with `composer require axiomasoft/corex-tenancy` after configuring the approved immutable provider channels described below. Prepare PostgreSQL root and physical account databases with separate trusted connection configuration. Apply each schema only to its declared owner connection; provider discovery is not permission to migrate a customer database.
+Install with `composer require axiomasoft/corex-tenancy`. Prepare PostgreSQL root and physical account databases with separate trusted connection configuration. Apply each schema only to its declared owner connection; provider discovery is not permission to migrate a customer database.
 
 ## Extension contracts
 

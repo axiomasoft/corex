@@ -29,7 +29,7 @@ use Illuminate\Support\Str;
 // P2.11 — L1/L2/L3 read-only-invariant layers (D141/D142), tested directly
 // against the middleware/listener/guard classes rather than through the
 // package's own boot()-time conditional registration (that registration is
-// gated by `tenancy.oidc.impersonation.enabled`, which — like `oidc.enabled`
+// gated by `corex-tenancy.oidc.impersonation.enabled`, which — like `oidc.enabled`
 // itself, see TestCase::$oidcEnabled's docblock — would need to be true
 // BEFORE this file's very first createApplication(); routes/listeners are
 // wired here ad hoc instead so no TestCase change is needed). `state()` only
@@ -271,8 +271,8 @@ it('ь: L3 ImpersonationGuard::assertAllowed() throws under impersonation and st
 // ── аа — boxed/oidc-off profile carries zero impersonation surface ──────
 
 it('аа: with oidc disabled, no impersonation middleware in the tenant group and no Eloquent listeners are registered (AC-28)', function (): void {
-    expect(config('tenancy.oidc.enabled'))->toBeFalse()
-        ->and(config('tenancy.oidc.impersonation.enabled'))->toBeFalse();
+    expect(config('corex-tenancy.oidc.enabled'))->toBeFalse()
+        ->and(config('corex-tenancy.oidc.impersonation.enabled'))->toBeFalse();
 
     $router = app()->make(Router::class);
     $tenantGroup = $router->getMiddlewareGroups()['tenant'] ?? [];

@@ -21,8 +21,7 @@ use RuntimeException;
  * `CREATE DATABASE … TEMPLATE` (p95 < 3с). Pending болванки carry
  * `status='pending'`, `slug`/`owner_identity_id` NULL — the frozen
  * DB_SCHEMA table-CHECK on `root_accounts` already allows that state
- * (D14/P2.2), so no `pending_since` column (stancl's own `HasPending`
- * trait) is needed: `status` alone encodes "not yet claimed".
+ * (D14/P2.2), so no `pending_since` column is needed: `status` alone encodes "not yet claimed".
  *
  * Claiming (premortem A6): {@see pullPending()} flips `status`
  * `pending → provisioning` inside a `SELECT … FOR UPDATE SKIP LOCKED`
@@ -36,7 +35,7 @@ final class PendingPool
 {
     public function __construct(
         private readonly string $centralConnection,
-        private readonly StanclTenantDatabaseProvisioner $provisioner,
+        private readonly DatabaseTenantProvisioner $provisioner,
         private readonly TemplateIntegrityChecks $templateIntegrityVerifier,
         private readonly ConnectionResolverInterface $connections,
     ) {}

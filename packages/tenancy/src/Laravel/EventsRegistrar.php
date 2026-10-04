@@ -18,8 +18,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Queue\Events\JobAttempted;
 use Illuminate\Queue\Events\JobProcessing;
 use Override;
-use Stancl\JobPipeline\JobPipeline;
-use Stancl\Tenancy\Events\TenantCreated;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class EventsRegistrar implements PackageRegistrar
@@ -32,14 +30,6 @@ final class EventsRegistrar implements PackageRegistrar
     {
         $options = $app->make(TenancyOptions::class);
         $events = $app->make(Dispatcher::class);
-
-        $events->listen(
-            TenantCreated::class,
-            JobPipeline::make($options->provisioningPipeline)
-                ->send(static fn (TenantCreated $event): mixed => $event->tenant)
-                ->shouldBeQueued(false)
-                ->toListener(),
-        );
 
         // Resolved from the container per event: QueueTenantContext is a singleton frame stack.
         // JobAttempted (dispatched from the `finally` of Worker::process and SyncQueue::executeJob)
