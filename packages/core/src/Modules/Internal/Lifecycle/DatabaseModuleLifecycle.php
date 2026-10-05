@@ -560,7 +560,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
         if ($names !== []) {
             /** @var Migrator $migrator */
             $migrator = $this->container->make('migrator');
-            $migrator->usingConnection($this->connection, static function () use ($migrator, $names): void {
+            $migrator->usingConnection($this->connection ?? $this->connections->getDefaultConnection(), static function () use ($migrator, $names): void {
                 $repository = $migrator->getRepository();
                 foreach ($names as $name) {
                     $repository->delete((object) ['migration' => $name]);
@@ -610,7 +610,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
         /** @var Migrator $migrator */
         $migrator = $this->container->make('migrator');
 
-        return $migrator->usingConnection($this->connection, function () use ($migrator, $path, $module): array {
+        return $migrator->usingConnection($this->connection ?? $this->connections->getDefaultConnection(), function () use ($migrator, $path, $module): array {
             $repository = $migrator->getRepository();
 
             if (! $repository->repositoryExists()) {

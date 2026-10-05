@@ -4,6 +4,7 @@ Baseline changes require an intentional surface change under PLAN3.D40.
 
 | Дата | Решение | Слои | Причина |
 |:--|:--|:--|:--|
+| 2026-10-05 | PLAN3.D95 / PLAN3.D64; owner-authorized P07.6 corrections | php-surface | Record only the existing additive Internal HostAccountResolver::generationKey(): string method from repair commit 32e1817c. No source API change in this rebaseline; routes/events/wire preserved. |
 | 2026-09-28 | PLAN3.D40 | all | initial baseline P01.2 |
 | 2026-09-28 | PLAN3.D44 | php-surface | P02.1: package-owned compiler/config sections and public Testing factories; routes/events/wire preserved |
 | 2026-09-29 | PLAN3.D44 | php-surface | P02.2: +6 types, ~2 changed (golden-delta OK); api/v1, routes/events/wire preserved |

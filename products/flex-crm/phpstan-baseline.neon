@@ -13,18 +13,6 @@ parameters:
 			path: database/migrations/2026_09_14_000002_company_contact_parity.php
 
 		-
-			rawMessage: Cannot access offset 'name' on mixed.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: database/migrations/2026_09_15_000001_full_storage_parity.php
-
-		-
-			rawMessage: Cannot access offset 'type_name' on mixed.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: database/migrations/2026_09_15_000001_full_storage_parity.php
-
-		-
 			rawMessage: Cannot access property $server_version_num on mixed.
 			identifier: property.nonObject
 			count: 1
@@ -33,12 +21,6 @@ parameters:
 		-
 			rawMessage: Cannot cast mixed to int.
 			identifier: cast.int
-			count: 1
-			path: database/migrations/2026_09_15_000001_full_storage_parity.php
-
-		-
-			rawMessage: 'Part $column[''name''] (mixed) of encapsed string cannot be cast to string.'
-			identifier: encapsedStringPart.nonString
 			count: 1
 			path: database/migrations/2026_09_15_000001_full_storage_parity.php
 

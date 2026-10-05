@@ -5,12 +5,12 @@
             "base_revision": "76f8bdde496154c0a8901e459175cf306bedd860",
             "decisions": [
                 {
-                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D90-p06-wire-contract.md",
-                    "sha256": "48de99cb1572fa290b975ccdc6ee6d95e85d4c44c5a68fbd710956cdea3d281a"
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D90.json",
+                    "sha256": "0f3e85ccd43402c7987afd228aee8bdf484ef7b6330859139a6f433fb9f5a8b6"
                 },
                 {
-                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D92-p06-design-audit-remediation.md",
-                    "sha256": "f57b0685ddf78671924891d30736b10e979278789c2023436387157698225415"
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D92.json",
+                    "sha256": "a83bfd36573e259a72837e38a068dca1bdac976aa767372886000dd64a92d866"
                 }
             ],
             "changes": [
@@ -50,16 +50,16 @@
             "base_revision": "76f8bdde496154c0a8901e459175cf306bedd860",
             "decisions": [
                 {
-                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D90-p06-wire-contract.md",
-                    "sha256": "48de99cb1572fa290b975ccdc6ee6d95e85d4c44c5a68fbd710956cdea3d281a"
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D90.json",
+                    "sha256": "0f3e85ccd43402c7987afd228aee8bdf484ef7b6330859139a6f433fb9f5a8b6"
                 },
                 {
-                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D92-p06-design-audit-remediation.md",
-                    "sha256": "f57b0685ddf78671924891d30736b10e979278789c2023436387157698225415"
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D92.json",
+                    "sha256": "a83bfd36573e259a72837e38a068dca1bdac976aa767372886000dd64a92d866"
                 },
                 {
-                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D93-p06-2-guard-taxonomy.md",
-                    "sha256": "cc7a3d16ac6c15291d93cf17f5eb3cb023d2a6ce7c8bd4bc5ba8909697c4536d"
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D93.json",
+                    "sha256": "6974cb94317ea4eb196d738119a8125fc1dfe27b8d0324e28c331a65fcec52dd"
                 }
             ],
             "changes": [
@@ -94,12 +94,12 @@
             "base_revision": "76f8bdde496154c0a8901e459175cf306bedd860",
             "decisions": [
                 {
-                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D96-p07-impersonation-access-edges.md",
-                    "sha256": "79c6e71c6250162b82945901e51f62029dc8a334701da02a7915ca5039b17525"
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D96.json",
+                    "sha256": "795f1e6b2c10f484d0322016e854446b812248d6d0850a1ef431af131bcc7b24"
                 },
                 {
-                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D100-p07-grok-design-remediation.md",
-                    "sha256": "c6036d8746643d497efd2fb5194c6cb252d4d1084ce3c5338c35dd8eb8b9dd2c"
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D100.json",
+                    "sha256": "ada26e2f6faf8fd58943b639d96aea086c139186e4fd424551dc12d023aec47f"
                 }
             ],
             "changes": [
@@ -121,12 +121,12 @@
             "base_revision": "76f8bdde496154c0a8901e459175cf306bedd860",
             "decisions": [
                 {
-                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D90-p06-wire-contract.md",
-                    "sha256": "48de99cb1572fa290b975ccdc6ee6d95e85d4c44c5a68fbd710956cdea3d281a"
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D90.json",
+                    "sha256": "0f3e85ccd43402c7987afd228aee8bdf484ef7b6330859139a6f433fb9f5a8b6"
                 },
                 {
-                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D92-p06-design-audit-remediation.md",
-                    "sha256": "f57b0685ddf78671924891d30736b10e979278789c2023436387157698225415"
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D92.json",
+                    "sha256": "a83bfd36573e259a72837e38a068dca1bdac976aa767372886000dd64a92d866"
                 }
             ],
             "changes": [
@@ -156,32 +156,32 @@
             "base_revision": "76f8bdde496154c0a8901e459175cf306bedd860",
             "decisions": [
                 {
-                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D95-p07-tenancy-engine.md",
-                    "sha256": "b7f35499ba0149e65742df648b50a7bf6c8c5f8e8a55c56f97bae25032bfcf0e"
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D95.json",
+                    "sha256": "c4b694b5c0d4df4231abea6760e5193927623844b745716ae1552d6247f7299d"
                 },
                 {
-                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D102-p07-rereview-contract-completeness.md",
-                    "sha256": "5b3393a94d7231a77ddc3649795b8aec7e4b3017ade3e1002930329656206fa7"
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D102.json",
+                    "sha256": "66fd787002111e85ce3bfa706528c1525106cbed83952270cb8ae7777b0c6e79"
                 },
                 {
-                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D103-p07-stable-bc-admission-review.md",
-                    "sha256": "9a044681191c020fc52199ebd4ae8bc20f46c7028753f686ab93f69382d0b7de"
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D103.json",
+                    "sha256": "3f10f0bb58eb6679f58bf5c9dcb8b678c8df46730fcf8d6567164aefef0f5792"
                 },
                 {
-                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D98-p07-design-audit-remediation.md",
-                    "sha256": "762e169c3f6a233a0e4c3fe0c415f78ca4c0259749550414e1dd9b3d28c69f10"
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D98.json",
+                    "sha256": "cd6595de9e6724e81e2925bf81ccb8dc6bca3fca72bbfa3362a988c3aa101c20"
                 },
                 {
-                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D107-p07-data-persistence-until-p08.md",
-                    "sha256": "210b1e4c57dc93f1efe6f2de16ec45ebc86502670d79d3c4a1ebff598748c1da"
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D107.json",
+                    "sha256": "15b01f3b63bdc5a2bca2fd2c413c65cebbd96ba451d1c9bf742947b48a1974c8"
                 },
                 {
-                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D96-p07-impersonation-access-edges.md",
-                    "sha256": "79c6e71c6250162b82945901e51f62029dc8a334701da02a7915ca5039b17525"
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D96.json",
+                    "sha256": "795f1e6b2c10f484d0322016e854446b812248d6d0850a1ef431af131bcc7b24"
                 },
                 {
-                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D100-p07-grok-design-remediation.md",
-                    "sha256": "c6036d8746643d497efd2fb5194c6cb252d4d1084ce3c5338c35dd8eb8b9dd2c"
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D100.json",
+                    "sha256": "ada26e2f6faf8fd58943b639d96aea086c139186e4fd424551dc12d023aec47f"
                 }
             ],
             "changes": [
@@ -451,16 +451,16 @@
             "base_revision": "76f8bdde496154c0a8901e459175cf306bedd860",
             "decisions": [
                 {
-                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D96-p07-impersonation-access-edges.md",
-                    "sha256": "79c6e71c6250162b82945901e51f62029dc8a334701da02a7915ca5039b17525"
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D96.json",
+                    "sha256": "795f1e6b2c10f484d0322016e854446b812248d6d0850a1ef431af131bcc7b24"
                 },
                 {
-                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D98-p07-design-audit-remediation.md",
-                    "sha256": "762e169c3f6a233a0e4c3fe0c415f78ca4c0259749550414e1dd9b3d28c69f10"
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D98.json",
+                    "sha256": "cd6595de9e6724e81e2925bf81ccb8dc6bca3fca72bbfa3362a988c3aa101c20"
                 },
                 {
-                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D100-p07-grok-design-remediation.md",
-                    "sha256": "c6036d8746643d497efd2fb5194c6cb252d4d1084ce3c5338c35dd8eb8b9dd2c"
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D100.json",
+                    "sha256": "ada26e2f6faf8fd58943b639d96aea086c139186e4fd424551dc12d023aec47f"
                 }
             ],
             "changes": [

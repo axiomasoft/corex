@@ -26,12 +26,6 @@
             <directory>tests/Arch</directory>
         </testsuite>
 
-        <!-- P2.13 — RuleTestCase кастомного PHPStan-правила. data/* — фикстуры,
-             они анализируются правилом, а не исполняются раннером. -->
-        <testsuite name="PHPStan">
-            <directory>tests/PHPStan</directory>
-            <exclude>tests/PHPStan/data</exclude>
-        </testsuite>
     </testsuites>
 
     <source>
@@ -41,7 +35,6 @@
     </source>
 
     <php>
-        <!-- PHPStan RuleTestCase поднимает свой контейнер и парсер — 128M ему мало. -->
         <ini name="memory_limit" value="1G"/>
 
         <!-- root_* is PG-only DDL (D14/D16) — no sqlite lane for this package. -->

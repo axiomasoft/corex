@@ -80453,6 +80453,11 @@
                 "return": "",
                 "static": false
             },
+            "generationKey": {
+                "params": [],
+                "return": "string",
+                "static": true
+            },
             "key": {
                 "params": [
                     {

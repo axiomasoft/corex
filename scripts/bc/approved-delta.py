@@ -24,7 +24,11 @@ def admitted(root, package, base, errors):
         if hashlib.sha256(path.read_bytes()).hexdigest() != decision['sha256']:
             return False
         source = path.read_text()
-        if '\nstatus: accepted\n' not in source:
+        if path.suffix == '.json':
+            record = json.loads(source)
+            if record.get('$schema') != 'urn:swissknifeman:task:plan:decision:v1' or record.get('status') != 'accepted':
+                return False
+        elif '\nstatus: accepted\n' not in source:
             return False
     def signature(row):
         return (hashlib.sha256(row['description'].encode()).hexdigest(), row['path'], row['modificationType'])
