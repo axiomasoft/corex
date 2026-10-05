@@ -20,9 +20,6 @@
     "D41",
     "D40"
   ],
-  "skills": [
-    "scripts:php84"
-  ],
   "reads": [
     {
       "path": "@plan/decisions/D41.json",
@@ -94,7 +91,8 @@
     "Коллектор не трогает БД-состояние других тестов; временные каталоги — `sys_get_temp_dir()` с pid, удаляются.",
     "sourceClasses читает реальные декларации token_get_all и строит process-local Composer classmap; FQCN из пути не выводить.",
     "wire использует public-error fixture, проверяет exit/наличие всех документов и удаляет tmp в finally.",
-    "Слой не отключается ради зелёного; проблемный класс — в `tests/Golden/Support/skip.php` с причиной (≤5, иначе эскалация)."
+    "Слой не отключается ради зелёного; проблемный класс — в `tests/Golden/Support/skip.php` с причиной (≤5, иначе эскалация).",
+    "Skills (перенесено из поля skills, не поддерживаемого схемой item v1): scripts:php84."
   ],
   "guidance": "Скелеты — examples §3.1 (`RenameMap`), §3.2 (`GoldenSnapshot`), §3.3 (`GoldenTest`, `GoldenTestCase`),\n§3.4 (`REBASELINE.md`), `Normalizer` в §3.2 (строго scoped derived fields). Провайдеры `GoldenTestCase` — `jq -r '.extra.laravel.providers[]?' packages/*/composer.json` +\n`ToolServiceProvider`. `events` дополняется контрактами `MessageContractRegistry`, если он привязан в контейнере.",
   "validation": [
@@ -256,7 +254,7 @@
       }
     ]
   },
-  "updated_at": "2026-09-28T12:48:54Z",
+  "updated_at": "2026-10-05T17:28:20Z",
   "sections": [
     {
       "id": "Intent",

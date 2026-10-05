@@ -19,7 +19,6 @@
     "D45",
     "D32"
   ],
-  "skills": [],
   "reads": [
     {
       "path": "@plan/knowledge/research-P02-design.json",
@@ -316,7 +315,7 @@
       }
     ]
   },
-  "updated_at": "2026-09-28T20:52:30Z",
+  "updated_at": "2026-10-05T17:27:51Z",
   "sections": [
     {
       "id": "Intent",

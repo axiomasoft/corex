@@ -20,7 +20,6 @@
     "D92",
     "D90"
   ],
-  "skills": [],
   "reads": [
     {
       "path": "@plan/decisions/D92.json",
@@ -407,7 +406,7 @@
       }
     ]
   },
-  "updated_at": "2026-10-03T20:22:06Z",
+  "updated_at": "2026-10-05T17:28:03Z",
   "sections": [
     {
       "id": "Intent",

@@ -30,7 +30,15 @@ Execution sheet: run the batches in order. Route is the maximum class/effort of 
 | 23 | P07 | BP07-3 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P07.3` | implementation/high | done |
 | 24 | P07 | B07-A | `task:plan-run 2026.09.27-№1-COREX-KERNEL P07.4 P07.5` | implementation/high | done |
 | 25 | P07 | BP07-6 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P07.6` | frontier/high | done |
-| 26 | P10 | BP10-1 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P10.1` | implementation/high | done |
-| 27 | P10 | BP10-2 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P10.2` | implementation/high | done |
-| 28 | P10 | BP10-3 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P10.3` | implementation/high | done |
-| 29 | P10 | BP10-4 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P10.4` | implementation/high | done |
+| 26 | P08 | BP08-1 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P08.1` | implementation/xhigh | waiting: P07 |
+| 27 | P08 | BP08-2 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P08.2` | implementation/high | waiting: P07 |
+| 28 | P08 | BP08-3 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P08.3` | implementation/high | waiting: P07 |
+| 29 | P08 | BP08-4 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P08.4` | implementation/high | waiting: P07 |
+| 30 | P08 | BP08-5 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P08.5` | implementation/xhigh | waiting: P07 |
+| 31 | P08 | B08-A | `task:plan-run 2026.09.27-№1-COREX-KERNEL P08.6 P08.7 P08.8` | implementation/high | waiting: P07 |
+| 32 | P08 | BP08-9 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P08.9` | implementation/high | waiting: P07 |
+| 33 | P08 | BP08-10 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P08.10` | frontier/high | waiting: P07 |
+| 34 | P10 | BP10-1 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P10.1` | implementation/high | done |
+| 35 | P10 | BP10-2 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P10.2` | implementation/high | done |
+| 36 | P10 | BP10-3 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P10.3` | implementation/high | done |
+| 37 | P10 | BP10-4 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P10.4` | implementation/high | done |

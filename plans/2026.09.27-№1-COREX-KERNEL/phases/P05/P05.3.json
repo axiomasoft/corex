@@ -20,7 +20,6 @@
     "D70",
     "D74"
   ],
-  "skills": [],
   "reads": [
     {
       "path": "@plan/knowledge/research-P05-design.json",
@@ -445,7 +444,7 @@
       }
     ]
   },
-  "updated_at": "2026-10-03T12:15:33Z",
+  "updated_at": "2026-10-05T17:28:00Z",
   "sections": [
     {
       "id": "Intent",

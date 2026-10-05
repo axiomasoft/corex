@@ -21,7 +21,6 @@
     "D37",
     "D39"
   ],
-  "skills": [],
   "reads": [
     {
       "path": "@plan/decisions/D41.json",
@@ -250,7 +249,7 @@
       }
     ]
   },
-  "updated_at": "2026-09-28T13:34:49Z",
+  "updated_at": "2026-10-05T17:27:50Z",
   "sections": [
     {
       "id": "Intent",

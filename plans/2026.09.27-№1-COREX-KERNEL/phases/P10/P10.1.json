@@ -20,7 +20,6 @@
     "D42",
     "D78"
   ],
-  "skills": [],
   "reads": [
     {
       "path": "@plan/knowledge/research-P10-design.json",
@@ -379,7 +378,7 @@
       }
     ]
   },
-  "updated_at": "2026-10-01T15:55:32Z",
+  "updated_at": "2026-10-05T17:28:09Z",
   "sections": [
     {
       "id": "Intent",

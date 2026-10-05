@@ -21,7 +21,6 @@
     "D63",
     "D64"
   ],
-  "skills": [],
   "reads": [
     {
       "path": "@plan/knowledge/research-P04-design.json",
@@ -344,7 +343,7 @@
       }
     ]
   },
-  "updated_at": "2026-10-01T09:08:19Z",
+  "updated_at": "2026-10-05T17:27:58Z",
   "sections": [
     {
       "id": "Intent",

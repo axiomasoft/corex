@@ -1,0 +1,279 @@
+# base: 52564bffdef85a62043f354b0efc291caea00b8f
+## tests that name migration paths/files (must follow the baseline)
+packages/access-azguard/tests/Feature/AzGuardBridgeTest.php:50:    (require dirname(__DIR__, 2).'/database/migrations/tenant/2026_10_04_000001_create_aut_azguard_role_links_table.php')->up();
+packages/access-azguard/tests/TestCase.php:48:    protected function defineDatabaseMigrations(): void
+packages/access-azguard/tests/TestCase.php:50:        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
+packages/access/tests/Feature/PermissionSurfaceTest.php:28:// 'projects' (tests/database/migrations) has no owner_id/workspace_id, so own/dept/
+packages/access/tests/Feature/PrincipalUserProviderTest.php:19:// dependency on axiomasoft/corex-tenancy's `users` model. `tests/database/migrations`
+packages/access/tests/Feature/ScopeAvailabilityTest.php:23:        table: 'projects', // no owner_id/workspace_id column (tests/database/migrations)
+packages/access/tests/Pest.php:7:use Illuminate\Foundation\Testing\RefreshDatabase;
+packages/access/tests/Pest.php:9:uses(TestCase::class, RefreshDatabase::class)->in('Feature');
+packages/access/tests/PgTestCase.php:17: * rather than RefreshDatabase: `--path` migrate runs ONLY the given path.
+packages/access/tests/PgTestCase.php:51:        $this->migratePath(__DIR__.'/../database/migrations/tenant');
+packages/access/tests/PgTestCase.php:57:        $this->migratePath(__DIR__.'/../database/migrations/tenant-cloud');
+packages/access/tests/PgTestCase.php:63:        $this->migratePath(__DIR__.'/database/migrations/pg');
+packages/access/tests/PgTestCase.php:76:        $this->migratePath(__DIR__.'/../vendor/axiomasoft/corex/database/migrations/pg');
+packages/access/tests/PgTestCase.php:83:            '--path' => realpath($path),
+packages/access/tests/TestCase.php:11:    protected function defineDatabaseMigrations(): void
+packages/access/tests/TestCase.php:13:        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
+packages/core/tests/Feature/AuditImpersonationTest.php:34:    $this->artisan('migrate', ['--path' => realpath(__DIR__.'/../../database/migrations/pg'), '--realpath' => true, '--force' => true])->assertSuccessful();
+packages/core/tests/Feature/DeliveryRemediationTest.php:22:    $this->artisan('migrate', ['--path' => realpath(__DIR__.'/../../database/migrations/pg'), '--realpath' => true, '--force' => true])->assertSuccessful();
+packages/core/tests/Feature/PublishIsolationTest.php:21:    $shared = $root.'/vendor/orchestra/testbench-core/laravel/database/migrations';
+packages/core/tests/Modules/Feature/LifecycleRemediationTest.php:40:    foreach ([__DIR__.'/../../../database/migrations', __DIR__.'/../../../database/migrations/pg'] as $path) {
+packages/core/tests/Modules/Feature/LifecycleRemediationTest.php:41:        $this->artisan('migrate', ['--path' => realpath($path), '--realpath' => true, '--force' => true])->assertSuccessful();
+packages/core/tests/Modules/Feature/RegistryIntrospectionTest.php:197:        ->and($encoded)->not->toContain('database/migrations')
+packages/core/tests/Pg/InboxConcurrencyTest.php:14:        '--path' => realpath(__DIR__.'/../../database/migrations/pg'),
+packages/core/tests/Pg/MessagingSchemaTest.php:16:        '--path' => realpath(__DIR__.'/../../database/migrations/pg'),
+packages/core/tests/Pg/MessagingSchemaTest.php:114:            '--path' => realpath(__DIR__.'/../../database/migrations/pg'),
+packages/core/tests/Pg/OutboxAppendPgTest.php:15:        '--path' => realpath(__DIR__.'/../../database/migrations/pg'),
+packages/core/tests/Pg/OutboxRelayTest.php:27:        '--path' => realpath(__DIR__.'/../../database/migrations/pg'),
+packages/custom-fields/tests/Pg/AttributeBackfillPgTestCase.php:14:    protected function defineDatabaseMigrations(): void
+packages/custom-fields/tests/Pg/AttributeBackfillPgTestCase.php:20:        parent::defineDatabaseMigrations();
+packages/custom-fields/tests/Pg/AttributeEvolutionPgTestCase.php:14:    protected function defineDatabaseMigrations(): void
+packages/custom-fields/tests/Pg/AttributeEvolutionPgTestCase.php:20:        parent::defineDatabaseMigrations();
+packages/custom-fields/tests/Pg/AttributeOutboxTest.php:27:    $migration = require __DIR__.'/../../../core/database/migrations/pg/2026_09_20_100000_create_sys_outbox_messages_table.php';
+packages/custom-fields/tests/Pg/DatabaseFieldCataloguePgTestCase.php:14:    protected function defineDatabaseMigrations(): void
+packages/custom-fields/tests/Pg/DatabaseFieldCataloguePgTestCase.php:20:        parent::defineDatabaseMigrations();
+packages/custom-fields/tests/Pg/DatabaseFieldCatalogueTest.php:56:    $migration = require __DIR__.'/../../database/migrations/2026_09_24_000002_create_attribute_definitions.php';
+packages/custom-fields/tests/PgTestCase.php:46:    protected function defineDatabaseMigrations(): void
+packages/custom-fields/tests/PgTestCase.php:53:        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+packages/intl/tests/Pest.php:7:use Illuminate\Foundation\Testing\RefreshDatabase;
+packages/intl/tests/Pest.php:9:uses(TestCase::class, RefreshDatabase::class)->in('Address', 'Locale', 'Money', 'Reference');
+packages/intl/tests/PgTestCase.php:30:    protected function defineDatabaseMigrations(): void {}
+packages/intl/tests/PgTestCase.php:43:            '--path' => realpath(__DIR__.'/../database/migrations'),
+packages/intl/tests/TestCase.php:39:    protected function defineDatabaseMigrations(): void
+packages/intl/tests/TestCase.php:41:        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+packages/media/tests/PgTestCase.php:40:    protected function defineDatabaseMigrations(): void
+packages/media/tests/PgTestCase.php:47:        parent::defineDatabaseMigrations();
+packages/media/tests/TestCase.php:31:    protected function defineDatabaseMigrations(): void
+packages/media/tests/TestCase.php:33:        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+packages/notifications/tests/DisabledSchedulingCase.php:31:    protected function defineDatabaseMigrations(): void
+packages/notifications/tests/DisabledSchedulingCase.php:38:        $this->loadMigrationsFrom(dirname(__DIR__).'/database/migrations');
+packages/notifications/tests/PgTestCase.php:40:    protected function defineDatabaseMigrations(): void
+packages/notifications/tests/PgTestCase.php:49:        parent::defineDatabaseMigrations();
+packages/notifications/tests/TestCase.php:38:    protected function defineDatabaseMigrations(): void
+packages/notifications/tests/TestCase.php:44:        $this->loadMigrationsFrom(__DIR__.'/../../wakeup/database/migrations');
+packages/notifications/tests/TestCase.php:45:        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+packages/operations/tests/Feature/ApiRetentionTest.php:373:        $migration = require __DIR__."/../../database/migrations/{$directory}/{$file}";
+packages/operations/tests/Feature/ApiRoutesTest.php:50:        $migration = require __DIR__.'/../../database/migrations/create_sys_api_idempotency_table.php';
+packages/operations/tests/Feature/AuthorizationLayersTest.php:221:        $migration = require __DIR__.'/../../database/migrations/create_sys_api_idempotency_table.php';
+packages/operations/tests/Feature/BulkApiTest.php:48:        $migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_bulk_operations_table.php';
+packages/operations/tests/Feature/BulkResultAccessTest.php:56:        (require __DIR__.'/../../database/migrations/tenant/create_sys_api_bulk_operations_table.php')->up();
+packages/operations/tests/Feature/BulkStoreTest.php:49:        $this->migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_bulk_operations_table.php';
+packages/operations/tests/Feature/BulkStoreTest.php:238:            $migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_bulk_operations_table.php';
+packages/operations/tests/Feature/BulkTransferTest.php:47:        $migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_bulk_operations_table.php';
+packages/operations/tests/Feature/CostInvocationTest.php:80:        (require __DIR__.'/../../database/migrations/create_sys_api_idempotency_table.php')->up();
+packages/operations/tests/Feature/IdempotencyStoreTest.php:51:        $this->migration = require __DIR__.'/../../database/migrations/create_sys_api_idempotency_table.php';
+packages/operations/tests/Feature/IdempotencyStoreTest.php:252:            realpath(__DIR__.'/../../database/migrations/create_sys_api_idempotency_table.php') => database_path('migrations/tenant/create_sys_api_idempotency_table.php'),
+packages/operations/tests/Feature/IdempotencyStoreTest.php:253:            realpath(__DIR__.'/../../database/migrations/tenant') => database_path('migrations/tenant'),
+packages/operations/tests/Feature/IdempotencyStoreTest.php:272:        $migration = require __DIR__.'/../../database/migrations/create_sys_api_idempotency_table.php';
+packages/operations/tests/Feature/IdempotentInvocationTest.php:78:        $migration = require __DIR__.'/../../database/migrations/create_sys_api_idempotency_table.php';
+packages/operations/tests/Feature/LoadContourBootTest.php:81:        $migration = require dirname(__DIR__, 2).'/database/migrations/tenant/create_sys_api_bulk_operations_table.php';
+packages/operations/tests/Feature/LoadSchemaTest.php:52:            realpath(__DIR__.'/../../database/migrations/budget') => database_path('migrations/budget'),
+packages/operations/tests/Feature/LoadSchemaTest.php:55:            realpath(__DIR__.'/../../database/migrations/create_sys_api_idempotency_table.php') => database_path('migrations/tenant/create_sys_api_idempotency_table.php'),
+packages/operations/tests/Feature/LoadSchemaTest.php:56:            realpath(__DIR__.'/../../database/migrations/tenant') => database_path('migrations/tenant'),
+packages/operations/tests/Feature/LoadSchemaTest.php:205:        $budget = require __DIR__.'/../../database/migrations/budget/create_sys_api_budget_tables.php';
+packages/operations/tests/Feature/LoadSchemaTest.php:206:        $bulk = require __DIR__.'/../../database/migrations/tenant/create_sys_api_bulk_operations_table.php';
+packages/operations/tests/Feature/LoadSchemaTest.php:207:        $webhook = require __DIR__.'/../../../webhooks/database/migrations/tenant/create_sys_api_webhook_tables.php';
+packages/operations/tests/Feature/OperationBudgetTest.php:46:        $this->migration = require __DIR__.'/../../database/migrations/budget/create_sys_api_budget_tables.php';
+packages/operations/tests/Feature/OperationBudgetTest.php:237:            $migration = require __DIR__.'/../../database/migrations/budget/create_sys_api_budget_tables.php';
+packages/panels/tests/SavedViews/SavedViewPgSchemaTest.php:14:        '--path' => realpath(__DIR__.'/../../database/migrations/pg'),
+packages/search-intl/tests/TestCase.php:33:    protected function defineDatabaseMigrations(): void
+packages/search-intl/tests/TestCase.php:35:        $this->loadMigrationsFrom(dirname(__DIR__, 2).'/intl/database/migrations');
+packages/tasks-workflow/tests/Pest.php:6:use Illuminate\Foundation\Testing\RefreshDatabase;
+packages/tasks-workflow/tests/Pest.php:8:uses(TestCase::class, RefreshDatabase::class)->in('Feature');
+packages/tasks-workflow/tests/Pg/MaterializationPgTest.php:45:        ->and($this->migrateFile(__DIR__.'/../../tasks/database/migrations/2026_09_15_000071_create_task_operation_receipts.php'))->toBe(0)
+packages/tasks-workflow/tests/Pg/WorkUnitIsolationPgTest.php:63:        ->and($this->migrateFile(__DIR__.'/../../tasks/database/migrations/2026_09_15_000071_create_task_operation_receipts.php'))->toBe(0)
+packages/tasks-workflow/tests/PgTestCase.php:23:    protected function defineDatabaseMigrations(): void {}
+packages/tasks-workflow/tests/PgTestCase.php:34:        return $this->migratePath(__DIR__.'/../../tasks/tests/database/migrations');
+packages/tasks-workflow/tests/PgTestCase.php:39:        return $this->migratePath(__DIR__.'/../../tasks/database/migrations');
+packages/tasks-workflow/tests/PgTestCase.php:44:        return $this->migrateFile(__DIR__.'/../database/migrations/2026_09_15_000072_create_task_series_mapping.php');
+packages/tasks-workflow/tests/PgTestCase.php:49:        return $this->migratePath(__DIR__.'/../../wakeup/database/migrations');
+packages/tasks-workflow/tests/PgTestCase.php:54:        return $this->migratePath(__DIR__.'/../../workflow/database/migrations');
+packages/tasks-workflow/tests/PgTestCase.php:66:            '--path' => realpath($path),
+packages/tasks-workflow/tests/TestCase.php:95:    protected function defineDatabaseMigrations(): void
+packages/tasks-workflow/tests/TestCase.php:97:        $this->loadMigrationsFrom(__DIR__.'/../../tasks/tests/database/migrations');
+packages/tasks-workflow/tests/TestCase.php:98:        $this->loadMigrationsFrom(__DIR__.'/../../tasks/database/migrations');
+packages/tasks-workflow/tests/TestCase.php:99:        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+packages/tasks-workflow/tests/TestCase.php:100:        $this->loadMigrationsFrom(__DIR__.'/../../tasks/database/migrations/2026_09_15_000071_create_task_operation_receipts.php');
+packages/tasks/tests/Feature/TasksContractTest.php:482:        ->and($provider)->not->toContain('loadMigrationsFrom');
+packages/tasks/tests/Pest.php:7:use Illuminate\Foundation\Testing\RefreshDatabase;
+packages/tasks/tests/Pest.php:9:uses(TestCase::class, RefreshDatabase::class)->in('Feature');
+packages/tasks/tests/Pg/PlanningConcurrencyTest.php:26:        ->and($this->migrateFile(__DIR__.'/../../database/migrations/2026_09_15_000071_create_task_operation_receipts.php'))->toBe(0);
+packages/tasks/tests/Pg/TasksPgSchemaTest.php:101:        expect($this->migrateFile(__DIR__.'/../../database/migrations/'.$file))->toBe(0);
+packages/tasks/tests/Pg/TasksPgSchemaTest.php:113:        __DIR__.'/../../database/migrations/2026_09_11_000260_align_tasks_with_approved_schema.php',
+packages/tasks/tests/PgTestCase.php:24:    protected function defineDatabaseMigrations(): void {}
+packages/tasks/tests/PgTestCase.php:35:        return $this->migratePath(__DIR__.'/database/migrations');
+packages/tasks/tests/PgTestCase.php:40:        return $this->migratePath(__DIR__.'/../database/migrations');
+packages/tasks/tests/PgTestCase.php:52:            '--path' => realpath($path),
+packages/tasks/tests/Support/TasksTestCase.php:57:    protected function defineDatabaseMigrations(): void
+packages/tasks/tests/Support/TasksTestCase.php:59:        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+packages/tasks/tests/Support/TasksTestCase.php:60:        $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
+packages/tenancy/tests/Arch/NoCrossDbFkTest.php:27:$rootLayerDir = $packageRoot.'/database/migrations/root';
+packages/tenancy/tests/Arch/NoCrossDbFkTest.php:28:$tenantLayerDir = $packageRoot.'/database/migrations/tenant';
+packages/tenancy/tests/Arch/NoCrossDbFkTest.php:33:    '/database/migrations/root/',
+packages/tenancy/tests/Arch/NoCrossDbFkTest.php:177:        ? (array) glob($repoRoot.'/packages/*/database/migrations', GLOB_ONLYDIR)
+packages/tenancy/tests/Arch/NoCrossDbFkTest.php:178:        : [$packageRoot.'/database/migrations'];
+packages/tenancy/tests/Arch/NoCrossDbFkTest.php:293:    $all = $migrationFiles($packageRoot.'/database/migrations');
+packages/tenancy/tests/Arch/NoCrossDbFkTest.php:298:    // `database/migrations/`) быть не может — такой поехал бы обоими раннерами.
+packages/tenancy/tests/Arch/NoCrossDbFkTest.php:347:    // `$this->loadMigrationsFrom(...)` погнал бы root_ DDL на коннект по
+packages/tenancy/tests/Arch/NoCrossDbFkTest.php:350:    expect(preg_match('/\$this->loadMigrationsFrom\s*\(/', $provider))->toBe(0);
+packages/tenancy/tests/Feature/AccountLifecycleTest.php:45:const ROOT_MIGRATIONS_PATH_LC = __DIR__.'/../../database/migrations/root';
+packages/tenancy/tests/Feature/AccountLifecycleTest.php:60:        '--path' => realpath(ROOT_MIGRATIONS_PATH_LC),
+packages/tenancy/tests/Feature/AccountStatusGateTest.php:26:const ROOT_MIGRATIONS_PATH_ASG = __DIR__.'/../../database/migrations/root';
+packages/tenancy/tests/Feature/AccountStatusGateTest.php:35:        '--path' => realpath(ROOT_MIGRATIONS_PATH_ASG),
+packages/tenancy/tests/Feature/ClaimLifecycleConformanceTest.php:160:    $this->artisan('migrate', ['--database' => 'pgsql', '--path' => realpath(__DIR__.'/../../database/migrations/root'), '--realpath' => true, '--force' => true])->run();
+packages/tenancy/tests/Feature/DomainTrustTest.php:29:const ROOT_MIGRATIONS_PATH_DT = __DIR__.'/../../database/migrations/root';
+packages/tenancy/tests/Feature/DomainTrustTest.php:128:        '--path' => realpath(ROOT_MIGRATIONS_PATH_DT),
+packages/tenancy/tests/Feature/GlobalLogoutTest.php:28:const ROOT_MIGRATIONS_PATH_GL = __DIR__.'/../../database/migrations/root';
+packages/tenancy/tests/Feature/GlobalLogoutTest.php:37:        '--path' => realpath(ROOT_MIGRATIONS_PATH_GL),
+packages/tenancy/tests/Feature/HostResolutionTest.php:21:const ROOT_MIGRATIONS_PATH_HR = __DIR__.'/../../database/migrations/root';
+packages/tenancy/tests/Feature/HostResolutionTest.php:30:        '--path' => realpath(ROOT_MIGRATIONS_PATH_HR),
+packages/tenancy/tests/Feature/IdentitySyncerTest.php:18:const ROOT_MIGRATIONS_PATH_IS = __DIR__.'/../../database/migrations/root';
+packages/tenancy/tests/Feature/IdentitySyncerTest.php:19:const TENANT_MIGRATIONS_PATH_IS = __DIR__.'/../../database/migrations/tenant';
+packages/tenancy/tests/Feature/IdentitySyncerTest.php:22:const CORE_MIGRATIONS_PATH_IS = __DIR__.'/../../vendor/axiomasoft/corex/database/migrations/pg';
+packages/tenancy/tests/Feature/IdentitySyncerTest.php:33:        '--path' => realpath(ROOT_MIGRATIONS_PATH_IS),
+packages/tenancy/tests/Feature/IdentitySyncerTest.php:115:            '--path' => realpath(CORE_MIGRATIONS_PATH_IS),
+packages/tenancy/tests/Feature/IdentitySyncerTest.php:121:            '--path' => realpath(TENANT_MIGRATIONS_PATH_IS),
+packages/tenancy/tests/Feature/ImpersonationAuditTest.php:36:        '--path' => realpath(__DIR__.'/../../database/migrations/root'),
+packages/tenancy/tests/Feature/ImpersonationTest.php:84:const ROOT_MIGRATIONS_PATH_IM = __DIR__.'/../../database/migrations/root';
+packages/tenancy/tests/Feature/ImpersonationTest.php:85:const TENANT_MIGRATIONS_PATH_IM = __DIR__.'/../../database/migrations/tenant';
+packages/tenancy/tests/Feature/ImpersonationTest.php:86:const CORE_MIGRATIONS_PATH_IM = __DIR__.'/../../vendor/axiomasoft/corex/database/migrations/pg';
+packages/tenancy/tests/Feature/ImpersonationTest.php:95:        '--path' => realpath(ROOT_MIGRATIONS_PATH_IM),
+packages/tenancy/tests/Feature/ImpersonationTest.php:264:            '--path' => realpath(CORE_MIGRATIONS_PATH_IM),
+packages/tenancy/tests/Feature/ImpersonationTest.php:270:            '--path' => realpath(TENANT_MIGRATIONS_PATH_IM),
+packages/tenancy/tests/Feature/ImpersonationWriteGuardTest.php:95:        '--path' => realpath(__DIR__.'/../../database/migrations/root'),
+packages/tenancy/tests/Feature/ImpersonationWriteGuardTest.php:102:        '--path' => realpath(__DIR__.'/../../vendor/axiomasoft/corex/database/migrations/pg'),
+packages/tenancy/tests/Feature/MembershipProjectionTest.php:31:const ROOT_MIGRATIONS_PATH_MP = __DIR__.'/../../database/migrations/root';
+packages/tenancy/tests/Feature/MembershipProjectionTest.php:32:const TENANT_MIGRATIONS_PATH_MP = __DIR__.'/../../database/migrations/tenant';
+packages/tenancy/tests/Feature/MembershipProjectionTest.php:33:const CORE_MIGRATIONS_PATH_MP = __DIR__.'/../../vendor/axiomasoft/corex/database/migrations/pg';
+packages/tenancy/tests/Feature/MembershipProjectionTest.php:42:        '--path' => realpath(ROOT_MIGRATIONS_PATH_MP),
+packages/tenancy/tests/Feature/MembershipProjectionTest.php:105:            '--path' => realpath(CORE_MIGRATIONS_PATH_MP),
+packages/tenancy/tests/Feature/MembershipProjectionTest.php:111:            '--path' => realpath(TENANT_MIGRATIONS_PATH_MP),
+packages/tenancy/tests/Feature/MigrationWaveTest.php:23:const ROOT_MIGRATIONS_PATH_MW = __DIR__.'/../../database/migrations/root';
+packages/tenancy/tests/Feature/MigrationWaveTest.php:34:        '--path' => realpath(ROOT_MIGRATIONS_PATH_MW),
+packages/tenancy/tests/Feature/OidcLoginTest.php:42:const ROOT_MIGRATIONS_PATH_OL = __DIR__.'/../../database/migrations/root';
+packages/tenancy/tests/Feature/OidcLoginTest.php:43:const TENANT_MIGRATIONS_PATH_OL = __DIR__.'/../../database/migrations/tenant';
+packages/tenancy/tests/Feature/OidcLoginTest.php:44:const CORE_MIGRATIONS_PATH_OL = __DIR__.'/../../vendor/axiomasoft/corex/database/migrations/pg';
+packages/tenancy/tests/Feature/OidcLoginTest.php:53:        '--path' => realpath(ROOT_MIGRATIONS_PATH_OL),
+packages/tenancy/tests/Feature/OidcLoginTest.php:162:            '--path' => realpath(CORE_MIGRATIONS_PATH_OL),
+packages/tenancy/tests/Feature/OidcLoginTest.php:168:            '--path' => realpath(TENANT_MIGRATIONS_PATH_OL),
+packages/tenancy/tests/Feature/PackageEngineDiscoveryTest.php:17:    $this->artisan('migrate', ['--database' => 'pgsql', '--path' => realpath(__DIR__.'/../../database/migrations/root'), '--realpath' => true, '--force' => true])->run();
+packages/tenancy/tests/Feature/PendingPoolTest.php:18:const ROOT_MIGRATIONS_PATH_PENDING = __DIR__.'/../../database/migrations/root';
+packages/tenancy/tests/Feature/PendingPoolTest.php:29:        '--path' => realpath(ROOT_MIGRATIONS_PATH_PENDING),
+packages/tenancy/tests/Feature/PrincipalWorkspaceTest.php:35:            foreach ([__DIR__.'/../../vendor/axiomasoft/corex/database/migrations/pg', __DIR__.'/../../database/migrations/tenant'] as $path) {
+packages/tenancy/tests/Feature/PrincipalWorkspaceTest.php:36:                $this->artisan('migrate', ['--database' => $connection, '--path' => realpath($path), '--realpath' => true, '--force' => true])->assertExitCode(0);
+packages/tenancy/tests/Feature/ProvisioningTest.php:20:const ROOT_MIGRATIONS_PATH_PROVISIONING = __DIR__.'/../../database/migrations/root';
+packages/tenancy/tests/Feature/ProvisioningTest.php:31:        '--path' => realpath(ROOT_MIGRATIONS_PATH_PROVISIONING),
+packages/tenancy/tests/Feature/QueueTenancyRevertTest.php:17:const ROOT_MIGRATIONS_PATH_QTR = __DIR__.'/../../database/migrations/root';
+packages/tenancy/tests/Feature/QueueTenancyRevertTest.php:28:        '--path' => realpath(ROOT_MIGRATIONS_PATH_QTR),
+packages/tenancy/tests/Feature/QueueTenantContextTest.php:28:    $this->artisan('migrate', ['--database' => 'pgsql', '--path' => realpath(__DIR__.'/../../database/migrations/root'), '--realpath' => true, '--force' => true])->run();
+packages/tenancy/tests/Feature/ResolveWorkspaceTest.php:30:const ROOT_MIGRATIONS_PATH_RW = __DIR__.'/../../database/migrations/root';
+packages/tenancy/tests/Feature/ResolveWorkspaceTest.php:31:const TENANT_MIGRATIONS_PATH_RW = __DIR__.'/../../database/migrations/tenant';
+packages/tenancy/tests/Feature/ResolveWorkspaceTest.php:32:const CORE_MIGRATIONS_PATH_RW = __DIR__.'/../../vendor/axiomasoft/corex/database/migrations/pg';
+packages/tenancy/tests/Feature/ResolveWorkspaceTest.php:41:        '--path' => realpath(ROOT_MIGRATIONS_PATH_RW),
+packages/tenancy/tests/Feature/ResolveWorkspaceTest.php:113:        '--path' => realpath(CORE_MIGRATIONS_PATH_RW),
+packages/tenancy/tests/Feature/ResolveWorkspaceTest.php:119:        '--path' => realpath(TENANT_MIGRATIONS_PATH_RW),
+packages/tenancy/tests/Feature/RootSchemaTest.php:11:const ROOT_MIGRATIONS_PATH = __DIR__.'/../../database/migrations/root';
+packages/tenancy/tests/Feature/RootSchemaTest.php:46:        '--path' => realpath(ROOT_MIGRATIONS_PATH),
+packages/tenancy/tests/Feature/SignupIdempotencyTest.php:18:const ROOT_MIGRATIONS_PATH_SIGNUP = __DIR__.'/../../database/migrations/root';
+packages/tenancy/tests/Feature/SignupIdempotencyTest.php:27:        '--path' => realpath(ROOT_MIGRATIONS_PATH_SIGNUP),
+packages/tenancy/tests/Feature/TemplateIntegrityTest.php:14:const ROOT_MIGRATIONS_PATH_TEMPLATE_INTEGRITY = __DIR__.'/../../database/migrations/root';
+packages/tenancy/tests/Feature/TemplateIntegrityTest.php:24:        '--path' => realpath(ROOT_MIGRATIONS_PATH_TEMPLATE_INTEGRITY),
+packages/tenancy/tests/Feature/TenancyManagerTest.php:17:const ROOT_MIGRATIONS_PATH_TM = __DIR__.'/../../database/migrations/root';
+packages/tenancy/tests/Feature/TenancyManagerTest.php:28:        '--path' => realpath(ROOT_MIGRATIONS_PATH_TM),
+packages/tenancy/tests/Feature/TenantSessionScopeHttpTest.php:39:    $this->artisan('migrate', ['--database' => 'pgsql', '--path' => realpath(__DIR__.'/../../database/migrations/root'), '--realpath' => true, '--force' => true])->run();
+packages/tenancy/tests/Feature/TenantSessionScopeTest.php:22:const ROOT_MIGRATIONS_PATH_TSS = __DIR__.'/../../database/migrations/root';
+packages/tenancy/tests/Feature/TenantSessionScopeTest.php:23:const TENANT_MIGRATIONS_PATH_TSS = __DIR__.'/../../database/migrations/tenant';
+packages/tenancy/tests/Feature/TenantSessionScopeTest.php:24:const CORE_MIGRATIONS_PATH_TSS = __DIR__.'/../../vendor/axiomasoft/corex/database/migrations/pg';
+packages/tenancy/tests/Feature/TenantSessionScopeTest.php:33:        '--path' => realpath(ROOT_MIGRATIONS_PATH_TSS),
+packages/tenancy/tests/Feature/TenantSessionScopeTest.php:108:        '--path' => realpath(CORE_MIGRATIONS_PATH_TSS),
+packages/tenancy/tests/Feature/TenantSessionScopeTest.php:115:        '--path' => realpath(TENANT_MIGRATIONS_PATH_TSS),
+packages/tenancy/tests/Feature/WorkspaceResolverTest.php:22:const CORE_MIGRATIONS_PATH_WSP = __DIR__.'/../../vendor/axiomasoft/corex/database/migrations/pg';
+packages/tenancy/tests/Feature/WorkspaceResolverTest.php:23:const TENANT_MIGRATIONS_PATH_WSP = __DIR__.'/../../database/migrations/tenant';
+packages/tenancy/tests/Feature/WorkspaceResolverTest.php:36:        '--path' => realpath(CORE_MIGRATIONS_PATH_WSP),
+packages/tenancy/tests/Feature/WorkspaceResolverTest.php:43:        '--path' => realpath(TENANT_MIGRATIONS_PATH_WSP),
+packages/tenancy/tests/Pg/ClaimLifecycleConcurrencyTest.php:98:    $this->artisan('migrate', ['--database' => 'pgsql', '--path' => realpath(__DIR__.'/../../database/migrations/root'), '--realpath' => true, '--force' => true])->run();
+packages/tenancy/tests/Pg/ImpersonationProfileTest.php:21:        '--path' => realpath(__DIR__.'/../../database/migrations/root'),
+packages/tenancy/tests/Pg/PhysicalContextConformanceTest.php:46:    $this->artisan('migrate', ['--database' => 'pgsql', '--path' => realpath(__DIR__.'/../../database/migrations/root'), '--realpath' => true, '--force' => true])->run();
+packages/tenancy/tests/Pg/ProductionPairStoreConformanceTest.php:28:    $migration = require __DIR__.'/../../database/migrations/tenant/2026_09_15_000700_create_membership_adapter_tables.php';
+packages/tenancy/tests/Pg/ResidentTenantSwitchPgTest.php:74:    $this->artisan('migrate', ['--database' => 'pgsql', '--path' => realpath(__DIR__.'/../../database/migrations/root'), '--realpath' => true, '--force' => true])->run();
+packages/tenancy/tests/Pg/ResidentTenantSwitchPgTest.php:76:    $this->artisan('migrate', ['--database' => 'pgsql', '--path' => realpath(__DIR__.'/../../../core/database/migrations/pg'), '--realpath' => true, '--force' => true])->run();
+packages/tenancy/tests/Pg/ResidentTenantSwitchPgTest.php:97:            $this->artisan('migrate', ['--database' => 'tenant', '--path' => realpath(__DIR__.'/../../../core/database/migrations/pg'), '--realpath' => true, '--force' => true])->run();
+packages/tenancy/tests/Pg/ScopeBoundaryPgTest.php:30:    $this->artisan('migrate', ['--database' => 'pgsql', '--path' => realpath(__DIR__.'/../../database/migrations/root'), '--realpath' => true, '--force' => true])->run();
+packages/tenancy/tests/Pg/WakeupRoutingTest.php:32:        '--path' => realpath(__DIR__.'/../../database/migrations/root'),
+packages/tools/tests/Feature/ToolCostInvocationTest.php:85:        (require __DIR__.'/../../../operations/database/migrations/create_sys_api_idempotency_table.php')->up();
+packages/tools/tests/Feature/ToolCostInvocationTest.php:194:        (require __DIR__.'/../../../operations/database/migrations/budget/create_sys_api_budget_tables.php')->up();
+packages/tools/tests/Feature/ToolIdempotentInvocationTest.php:90:        $migration = require __DIR__.'/../../../operations/database/migrations/create_sys_api_idempotency_table.php';
+packages/transfer/tests/PgTestCase.php:23:        $migration = require __DIR__.'/../database/migrations/2026_09_15_000001_create_corex_transfer_tables.php';
+packages/transfer/tests/PgTestCase.php:25:        $exportMigration = require __DIR__.'/../database/migrations/2026_09_15_000002_create_corex_export_manifest_tables.php';
+packages/wakeup/tests/PgTestCase.php:40:    protected function defineDatabaseMigrations(): void
+packages/wakeup/tests/PgTestCase.php:45:        parent::defineDatabaseMigrations();
+packages/wakeup/tests/TestCase.php:42:    protected function defineDatabaseMigrations(): void
+packages/wakeup/tests/TestCase.php:44:        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+packages/webhooks/tests/Feature/WebhookApiRetentionTest.php:396:        $migration = require __DIR__."/../../database/migrations/{$directory}/{$file}";
+packages/webhooks/tests/Feature/WebhookConcurrencyTest.php:47:            $migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_webhook_tables.php';
+packages/webhooks/tests/Feature/WebhookDeliveryFixture.php:52:        $migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_webhook_tables.php';
+packages/webhooks/tests/Feature/WebhookFanoutTest.php:52:        $migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_webhook_tables.php';
+packages/webhooks/tests/Feature/WebhookFanoutTest.php:167:            $migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_webhook_tables.php';
+packages/webhooks/tests/Feature/WebhookLoadContourIntegrationTest.php:126:            $migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_webhook_tables.php';
+packages/webhooks/tests/Feature/WebhookLoadContourIntegrationTest.php:272:        $migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_webhook_tables.php';
+packages/webhooks/tests/Feature/WebhookManagementTest.php:64:        $migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_webhook_tables.php';
+packages/webhooks/tests/Feature/WebhookRedactionTest.php:32:        $migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_webhook_tables.php';
+packages/webhooks/tests/Feature/WebhookReplayTest.php:62:        $migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_webhook_tables.php';
+packages/webhooks/tests/Feature/WebhookReplayTest.php:218:            $migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_webhook_tables.php';
+packages/webhooks/tests/Feature/WebhookSubscriptionTest.php:50:        $migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_webhook_tables.php';
+packages/webhooks/tests/Feature/WebhookSubscriptionTest.php:185:            $migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_webhook_tables.php';
+packages/workflow/tests/TestCase.php:64:    protected function defineDatabaseMigrations(): void
+packages/workflow/tests/TestCase.php:66:        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+products/flex-crm/tests/Pest.php:6:use Illuminate\Foundation\Testing\RefreshDatabase;
+products/flex-crm/tests/Pest.php:8:uses(TestCase::class, RefreshDatabase::class)->in('Feature');
+products/flex-crm/tests/Pg/ActivityIdTest.php:27:    $this->artisan('migrate', ['--path' => realpath(__DIR__.'/../../database/migrations'), '--realpath' => true, '--force' => true])->assertSuccessful();
+products/flex-crm/tests/Pg/ActivityIdTest.php:40:    $this->artisan('migrate', ['--path' => realpath(__DIR__.'/../../database/migrations'), '--realpath' => true, '--force' => true])->assertSuccessful();
+products/flex-crm/tests/Pg/ActivityIdTest.php:56:    (require __DIR__.'/../../database/migrations/2026_06_14_000160_create_crm_activities_table.php')->up();
+products/flex-crm/tests/Pg/ActivityIdTest.php:58:    $migration = require __DIR__.'/../../database/migrations/2026_09_14_000001_widen_activity_subject_id.php';
+products/flex-crm/tests/Pg/ConversionConcurrencyTest.php:23:    $this->artisan('migrate', ['--path' => realpath(__DIR__.'/../../database/migrations'), '--realpath' => true, '--force' => true])->assertSuccessful();
+products/flex-crm/tests/Pg/FullStorageParityTest.php:21:    $this->artisan('migrate', ['--path' => realpath(__DIR__.'/../../database/migrations'), '--realpath' => true, '--force' => true])->assertSuccessful();
+products/flex-crm/tests/Pg/FullStorageParityTest.php:37:    foreach (glob(__DIR__.'/../../database/migrations/*.php') as $path) {
+products/flex-crm/tests/Pg/FullStorageParityTest.php:52:    $migration = require __DIR__.'/../../database/migrations/2026_09_15_000001_full_storage_parity.php';
+products/flex-crm/tests/Pg/ModuleLifecycleTest.php:25:    $this->artisan('migrate', ['--path' => realpath(__DIR__.'/../../vendor/axiomasoft/corex/database/migrations'), '--realpath' => true, '--force' => true])->assertSuccessful();
+products/flex-crm/tests/Pg/ParityContractTest.php:40:    $this->artisan('migrate', ['--path' => realpath(__DIR__.'/../../database/migrations'), '--realpath' => true, '--force' => true])->assertSuccessful();
+products/flex-crm/tests/Pg/UpgradeSafetyTest.php:16:        (require __DIR__.'/../../database/migrations/'.$file)->up();
+products/flex-crm/tests/Pg/UpgradeSafetyTest.php:23:    $migration = require __DIR__.'/../../database/migrations/2026_09_14_000002_company_contact_parity.php';
+products/flex-crm/tests/Pg/UpgradeSafetyTest.php:30:    $migration = require __DIR__.'/../../database/migrations/2026_09_14_000002_company_contact_parity.php';
+products/flex-crm/tests/Support/CrmTestCase.php:26:    protected function defineDatabaseMigrations(): void
+products/flex-crm/tests/Support/CrmTestCase.php:28:        $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
+products/flex-crm/tests/TestCase.php:21:        if (static::usesRefreshDatabaseTestingConcern()) {
+products/flex-crm/tests/TestCase.php:26:    protected function defineDatabaseMigrations(): void
+products/flex-crm/tests/TestCase.php:28:        if (! static::usesRefreshDatabaseTestingConcern()) {
+products/flex-crm/tests/TestCase.php:31:        $this->loadMigrationsFrom(__DIR__.'/database');
+products/flex-crm/tests/TestCase.php:32:        parent::defineDatabaseMigrations();
+tests/Arch/AchievedInvariantTest.php:163:    $probePath = $repoRoot.'/packages/core/database/migrations/pg/2099_01_01_000000_table_ownership_t1_probe.php';
+tests/Arch/AchievedInvariantTest.php:208:    $probePath = $repoRoot.'/packages/core/database/migrations/pg/2099_01_01_000001_table_ownership_t4_probe.php';
+tests/Feature/AuditLogTest.php:166:        '--path' => realpath(__DIR__.'/../../packages/core/database/migrations/pg'),
+tests/Feature/ConfigurableIdTest.php:157:        '--path' => realpath(__DIR__.'/../../packages/core/database/migrations/pg'),
+tests/Feature/DepartmentTest.php:77:        '--path' => realpath(__DIR__.'/../../packages/core/database/migrations/pg'),
+tests/Feature/DepartmentTest.php:163:    // (it assumes a RefreshDatabase wrapping transaction); these PG tests migrate
+tests/Feature/FeatureFlagsTest.php:47:        '--path' => realpath(__DIR__.'/../../packages/core/database/migrations/pg'),
+tests/Feature/ImpersonatedActorTest.php:112:        '--path' => realpath(__DIR__.'/../../packages/core/database/migrations/pg'),
+tests/Feature/ImpersonatedActorTest.php:156:        '--path' => realpath(__DIR__.'/../../packages/core/database/migrations'),
+tests/Feature/MigrationPublishTest.php:53:        '--path' => $dir,
+tests/Feature/MigrationPublishTest.php:122:        ->and(array_key_first($core))->toEndWith('database/migrations/pg')
+tests/Feature/MigrationPublishTest.php:124:        ->and(array_key_first($modules))->toEndWith('database/migrations');
+tests/Feature/MigrationPublishTest.php:133:        realpath(__DIR__.'/../../packages/core/database/migrations/pg'),
+tests/Feature/MigrationPublishTest.php:134:        realpath(__DIR__.'/../../packages/core/database/migrations'),
+tests/Feature/MigrationPublishTest.php:138:            '--path' => $path,
+tests/Feature/MigrationPublishTest.php:178:        '--path' => realpath(__DIR__.'/../../packages/core/database/migrations/pg'),
+tests/Feature/ModuleLifecycleTest.php:144:        '--path' => realpath(__DIR__.'/../../packages/core/database/migrations'),
+tests/Feature/ModuleLifecycleTest.php:678:        '--path' => realpath(__DIR__.'/../../packages/core/database/migrations/pg'),
+tests/Feature/OperationContractTest.php:61:        $migration = require __DIR__.'/../../packages/operations/database/migrations/create_sys_api_idempotency_table.php';
+tests/Feature/PubSubDatabasePollTest.php:43:        '--path' => realpath(__DIR__.'/../../packages/core/database/migrations/pg'),
+tests/Feature/SettingsTest.php:62:        '--path' => realpath(__DIR__.'/../../packages/core/database/migrations/pg'),
+tests/Feature/UlidGenerationTest.php:12:// this point RefreshDatabase has already migrated `widgets` under whichever
+tests/Feature/UlidGenerationTest.php:26:    (require __DIR__.'/../database/migrations/2026_06_14_100000_create_widgets_table.php')->up();
+tests/Pest.php:9:use Illuminate\Foundation\Testing\RefreshDatabase;
+tests/Pest.php:11:uses(TestCase::class, RefreshDatabase::class)->in('Feature');
+tests/Pest.php:15:uses(CoreX\TasksWorkflow\Tests\TestCase::class, RefreshDatabase::class)->in('../packages/tasks-workflow/tests/Feature');
+tests/Pest.php:16:uses(CoreX\Intl\Tests\TestCase::class, RefreshDatabase::class)->in('../packages/intl/tests/Locale', '../packages/intl/tests/Money', '../packages/intl/tests/Reference');
+tests/TestCase.php:11:    protected function defineDatabaseMigrations(): void
+tests/TestCase.php:13:        $this->loadMigrationsFrom(__DIR__.'/database/migrations');

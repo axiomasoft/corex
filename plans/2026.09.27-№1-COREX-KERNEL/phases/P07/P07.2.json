@@ -22,7 +22,6 @@
     "D95",
     "D01"
   ],
-  "skills": [],
   "reads": [
     {
       "path": "@plan/decisions/D100.json",
@@ -439,7 +438,7 @@
       }
     ]
   },
-  "updated_at": "2026-10-04T19:42:57Z",
+  "updated_at": "2026-10-05T17:28:06Z",
   "sections": [
     {
       "id": "Intent",

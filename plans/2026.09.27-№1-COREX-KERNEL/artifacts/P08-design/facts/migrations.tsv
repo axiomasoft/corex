@@ -1,0 +1,109 @@
+# base: 52564bffdef85a62043f354b0efc291caea00b8f
+file	package	scope_dir	timestamped	creates	alters	enum	raw_sql	unnamed_index	unnamed_fk	morphs	int32_cols	driver_branch	config_tables	has_down
+packages/access-azguard/database/migrations/tenant/2026_10_04_000001_create_aut_azguard_role_links_table.php	packages/access-azguard	tenant	True	'aut_azguard_role_links'		0	0	1	0	0		0		True
+packages/access-azguard/tests/database/migrations/2026_06_14_000000_create_projects_table.php	packages/access-azguard	(root)	True	'projects'		0	0	0	0	0		0		True
+packages/access/database/migrations/tenant-cloud/2026_07_26_200004_add_aut_cross_package_fks.php	packages/access	tenant-cloud	True			0	4	0	0	0		0		True
+packages/access/database/migrations/tenant/2026_07_26_200001_create_aut_roles_table.php	packages/access	tenant	True	'aut_roles'		0	3	0	0	0		0		True
+packages/access/database/migrations/tenant/2026_07_26_200002_create_aut_role_matrix_table.php	packages/access	tenant	True	'aut_role_matrix'		0	6	0	1	0		0		True
+packages/access/database/migrations/tenant/2026_07_26_200003_create_aut_role_assignments_table.php	packages/access	tenant	True	'aut_role_assignments'		0	4	0	1	0		0		True
+packages/access/database/migrations/tenant/2026_10_04_000001_create_aut_direct_grants_table.php	packages/access	tenant	True	'aut_direct_grants'		0	0	0	0	0		0		True
+packages/access/tests/database/migrations/2026_06_14_000000_create_projects_table.php	packages/access	(root)	True	'projects'		0	0	0	0	0		0		True
+packages/access/tests/database/migrations/pg/2026_07_26_100001_create_users_table_fixture.php	packages/access	pg	True	'users'		0	0	0	0	0		0		True
+packages/access/tests/database/migrations/pg/2026_07_26_100002_create_wsp_workspaces_table_fixture.php	packages/access	pg	True	'wsp_workspaces'		0	3	0	0	0		0		True
+packages/access/tests/database/migrations/pg/2026_07_27_100003_create_deals_table_fixture.php	packages/access	pg	True	'deals'		0	0	0	0	0		0		True
+packages/core/database/migrations/2026_07_13_000000_create_mod_modules_table.php	packages/core	(root)	True	'mod_modules'		0	3	0	0	0		0	corex.ids.strategy	True
+packages/core/database/migrations/2026_07_13_000001_create_mod_records_table.php	packages/core	(root)	True	'mod_records'		0	3	1	0	0		0		True
+packages/core/database/migrations/2026_07_13_000002_create_mod_lifecycle_log_table.php	packages/core	(root)	True	'mod_lifecycle_log'		0	4	0	0	0		0	corex.ids.strategy	True
+packages/core/database/migrations/2026_07_27_100001_widen_mod_lifecycle_actor_check.php	packages/core	(root)	True			0	4	0	0	0		0		True
+packages/core/database/migrations/pg/2026_07_13_100000_create_sys_settings_table.php	packages/core	pg	True	$table		0	4	0	0	0		0	corex.ids.strategy	True
+packages/core/database/migrations/pg/2026_07_13_110000_create_sys_audit_log_table.php	packages/core	pg	True	$table		0	7	0	0	0		0	corex.ids.strategy	True
+packages/core/database/migrations/pg/2026_07_13_120000_create_sys_feature_flags_table.php	packages/core	pg	True	app(CoreOptions::class)->featureFlagsTable		0	0	1	0	0		0	corex.ids.strategy	True
+packages/core/database/migrations/pg/2026_07_13_120001_create_sys_feature_overrides_table.php	packages/core	pg	True	$table		0	2	0	0	0		0	corex.ids.strategy	True
+packages/core/database/migrations/pg/2026_07_13_130000_create_sys_departments_table.php	packages/core	pg	True	$table,) defers the fluent ->primary()
+        // to after any inline ->constrained()		0	6	0	0	0	sort_order	0	corex.ids.strategy	True
+packages/core/database/migrations/pg/2026_07_13_130001_create_sys_department_user_table.php	packages/core	pg	True	$table		0	2	1	0	0		0	corex.ids.strategy	True
+packages/core/database/migrations/pg/2026_07_13_140000_create_sys_pubsub_messages_table.php	packages/core	pg	True	app(CoreOptions::class)->pubsubMessagesTable		0	0	1	0	0		0		True
+packages/core/database/migrations/pg/2026_07_15_090000_create_sys_pubsub_cursors_table.php	packages/core	pg	True	app(CoreOptions::class)->pubsubCursorsTable		0	0	1	0	0		0		True
+packages/core/database/migrations/pg/2026_07_27_100000_widen_sys_audit_actor_check.php	packages/core	pg	True			0	4	0	0	0		0		True
+packages/core/database/migrations/pg/2026_09_20_100000_create_sys_outbox_messages_table.php	packages/core	pg	True	$tableName		0	0	0	0	0	attempts,contract_version,envelope_version	0		False
+packages/core/database/migrations/pg/2026_09_20_100001_create_sys_inbox_messages_table.php	packages/core	pg	True	app(CoreOptions::class)->inboxMessagesTable		0	0	1	0	0		0		False
+packages/custom-fields/database/migrations/2026_09_16_000001_create_sys_attribute_documents.php	packages/custom-fields	(root)	True	'sys_attribute_documents','sys_attribute_write_tokens','sys_attribute_eav_records','sys_attribute_eav_values','sys_attribute_schema_operations'		0	0	4	0	0	attempts	0		True
+packages/custom-fields/database/migrations/2026_09_24_000002_create_attribute_definitions.php	packages/custom-fields	(root)	True	'sys_attribute_definitions','sys_attribute_key_reservations','sys_attribute_backfills'		0	0	5	0	0		0		True
+packages/intl/database/migrations/2026_09_15_000073_create_rate_snapshots.php	packages/intl	(root)	True	'corex_rate_snapshots','corex_rate_batches','corex_rate_current'		0	12	2	0	0		10		True
+packages/intl/database/migrations/2026_09_15_000074_create_reference_snapshots.php	packages/intl	(root)	True	'corex_reference_datasets','corex_reference_records','corex_reference_aliases','corex_reference_current'		0	13	2	0	0		10		True
+packages/media/database/migrations/2026_09_15_000000_create_med_files_table.php	packages/media	(root)	True	'med_files'		0	0	1	0	0		0		False
+packages/media/database/migrations/2026_09_15_000001_create_med_relations_table.php	packages/media	(root)	True	'med_relations'		0	0	1	1	0		0		False
+packages/media/database/migrations/2026_09_15_000002_create_med_operations_table.php	packages/media	(root)	True	'med_operations'		0	0	2	1	0	attempts	0		False
+packages/media/database/migrations/2026_09_15_000003_create_med_conversions_table.php	packages/media	(root)	True	'med_conversions'		0	0	1	1	0	height,width	0		False
+packages/notifications/database/migrations/2026_09_15_000000_create_ntf_notifications_table.php	packages/notifications	(root)	True	'ntf_notifications'		0	0	1	0	0		0		True
+packages/notifications/database/migrations/2026_09_15_000001_create_ntf_deliveries_table.php	packages/notifications	(root)	True	'ntf_deliveries'		0	0	1	1	0	attempts	0		True
+packages/notifications/database/migrations/2026_09_15_000002_create_ntf_recipient_state_table.php	packages/notifications	(root)	True	'ntf_recipient_state'		0	0	1	0	0		0		True
+packages/notifications/database/migrations/2026_09_15_000003_create_ntf_digest_runs_table.php	packages/notifications	(root)	True	'ntf_digest_runs'		0	0	1	0	0	batch_seq	0		True
+packages/notifications/database/migrations/2026_09_15_000004_create_ntf_digest_items_table.php	packages/notifications	(root)	True	'ntf_digest_items'		0	0	1	2	0		0		True
+packages/notifications/database/migrations/2026_09_15_000005_add_ntf_deliveries_digest_run_foreign_key.php	packages/notifications	(root)	True		'ntf_deliveries','ntf_deliveries'	0	0	0	1	0		0		True
+packages/operations/database/migrations/budget/create_sys_api_budget_tables.php	packages/operations	budget	False			0	0	0	0	0		5		True
+packages/operations/database/migrations/create_sys_api_idempotency_table.php	packages/operations	(root)	False	'sys_api_idempotency'		0	0	0	0	0	attempt	0		True
+packages/operations/database/migrations/tenant/create_sys_api_bulk_operations_table.php	packages/operations	tenant	False			0	0	0	0	0	attempt	5		True
+packages/panels/database/migrations/pg/2026_09_15_150000_create_sys_saved_views_table.php	packages/panels	pg	True	app(CoreOptions::class)->savedViewScopesTable,app(CoreOptions::class)->savedViewsTable		0	0	2	1	0	position	0		False
+packages/panels/database/migrations/pg/2026_09_15_150001_create_sys_saved_view_scopes_table.php	packages/panels	pg	True			0	0	0	0	0		0		False
+packages/search/database/migrations/2026_09_15_000001_create_corex_search_lifecycle_tables.php	packages/search	(root)	True	'corex_search_lanes','corex_search_dirty','corex_search_rebuilds'		0	0	3	0	0		0		True
+packages/tasks-workflow/database/migrations/2026_09_15_000072_create_task_series_mapping.php	packages/tasks-workflow	(root)	True	'corex_task_series','corex_task_series_state','corex_task_occurrences'		0	20	3	0	0		10		True
+packages/tasks/database/migrations/2026_06_14_000200_create_tsk_processes_table.php	packages/tasks	(root)	True	'tsk_processes'		0	0	1	0	0		0		True
+packages/tasks/database/migrations/2026_06_14_000210_create_tsk_stages_table.php	packages/tasks	(root)	True	'tsk_stages'		0	0	1	0	0	position	0		True
+packages/tasks/database/migrations/2026_06_14_000220_create_tsk_projects_table.php	packages/tasks	(root)	True	'tsk_projects'		0	0	1	0	0		0		True
+packages/tasks/database/migrations/2026_06_14_000230_create_tsk_tasks_table.php	packages/tasks	(root)	True	'tsk_tasks'		0	0	4	0	0	estimated_minutes,sort_order,spent_minutes	0		True
+packages/tasks/database/migrations/2026_06_14_000240_create_tsk_task_participants_table.php	packages/tasks	(root)	True	'tsk_task_participants'		0	0	1	0	0		0		True
+packages/tasks/database/migrations/2026_06_14_000250_create_tsk_project_participants_table.php	packages/tasks	(root)	True	'tsk_project_participants'		0	0	1	0	0		0		True
+packages/tasks/database/migrations/2026_09_11_000260_align_tasks_with_approved_schema.php	packages/tasks	(root)	True	'tsk_projects','tsk_stages','tsk_sprints','tsk_tasks','tsk_task_targets','tsk_task_watchers','tsk_time_logs','tsk_timers'	'tsk_tasks'	0	1	3	18	0	estimate_minutes,minutes,position,spent_minutes	4		True
+packages/tasks/database/migrations/2026_09_15_000071_create_task_operation_receipts.php	packages/tasks	(root)	True	'corex_task_operations'		0	6	1	0	0		5		True
+packages/tasks/tests/database/migrations/2026_06_14_000100_create_tasks_test_fixtures.php	packages/tasks	(root)	True	'users','wsp_workspaces'		0	0	0	0	0		0		True
+packages/tenancy/database/migrations/root/2026_07_18_170001_create_root_clusters_table.php	packages/tenancy	root	True	'root_clusters'		0	3	1	0	0	db_count,db_soft_limit,pending_pool_size,pg_port,pgbouncer_port,template_version	0		True
+packages/tenancy/database/migrations/root/2026_07_18_170002_create_root_templates_table.php	packages/tenancy	root	True	'root_templates'		0	2	1	0	0	embedding_dim,version	0		True
+packages/tenancy/database/migrations/root/2026_07_18_170003_create_root_identities_table.php	packages/tenancy	root	True	'root_identities'		0	1	0	0	0		0		True
+packages/tenancy/database/migrations/root/2026_07_18_170004_create_root_accounts_table.php	packages/tenancy	root	True	'root_accounts'		0	10	0	2	0	embedding_dim,template_version	0		True
+packages/tenancy/database/migrations/root/2026_07_18_170005_create_root_identity_accounts_table.php	packages/tenancy	root	True	'root_identity_accounts'		0	4	1	2	0		0		True
+packages/tenancy/database/migrations/root/2026_07_18_170006_create_root_account_products_table.php	packages/tenancy	root	True	'root_account_products'		0	2	1	1	0		0		True
+packages/tenancy/database/migrations/root/2026_07_18_170007_create_root_domains_table.php	packages/tenancy	root	True	'root_domains'		0	5	0	1	0		0		True
+packages/tenancy/database/migrations/root/2026_07_18_170008_create_root_oauth_clients_table.php	packages/tenancy	root	True	'root_oauth_clients'		0	1	1	0	0		0		True
+packages/tenancy/database/migrations/root/2026_07_18_170009_create_root_idp_sessions_table.php	packages/tenancy	root	True	'root_idp_sessions'		0	1	1	1	0		0		True
+packages/tenancy/database/migrations/root/2026_07_18_170010_create_root_oauth_refresh_tokens_table.php	packages/tenancy	root	True	'root_oauth_refresh_tokens'		0	0	1	1	0		0		True
+packages/tenancy/database/migrations/root/2026_07_18_170011_create_root_impersonation_grants_table.php	packages/tenancy	root	True	'root_impersonation_grants'		0	2	0	3	0		0		True
+packages/tenancy/database/migrations/root/2026_07_18_170012_create_root_feature_flags_table.php	packages/tenancy	root	True	'root_feature_flags'		0	1	0	1	0		0		True
+packages/tenancy/database/migrations/root/2026_07_18_170013_create_root_usage_snapshots_table.php	packages/tenancy	root	True	'root_usage_snapshots'		0	0	1	1	0		0		True
+packages/tenancy/database/migrations/root/2026_07_18_170014_create_root_migration_batches_table.php	packages/tenancy	root	True	'root_migration_batches'		0	2	0	0	0	from_version,to_version	0		True
+packages/tenancy/database/migrations/root/2026_07_18_170015_create_root_account_schema_state_table.php	packages/tenancy	root	True	'root_account_schema_state'		0	3	0	2	0	current_version,target_version	0		True
+packages/tenancy/database/migrations/root/2026_07_18_170016_create_root_account_events_table.php	packages/tenancy	root	True	'root_account_events'		0	1	0	1	0		0		True
+packages/tenancy/database/migrations/root/2026_07_18_170017_create_root_account_exports_table.php	packages/tenancy	root	True	'root_account_exports'		0	2	0	1	0		0		True
+packages/tenancy/database/migrations/root/2026_09_12_200001_add_schema_hash_to_root_templates_table.php	packages/tenancy	root	True			0	2	0	0	0		0		False
+packages/tenancy/database/migrations/root/2026_09_13_000001_add_signup_key_index.php	packages/tenancy	root	True			0	1	0	0	0		0		False
+packages/tenancy/database/migrations/root/2026_09_14_160001_add_domain_trust_generation_to_root_domains_table.php	packages/tenancy	root	True		(new Domain)->getTable()	0	0	0	0	0		0		False
+packages/tenancy/database/migrations/root/2026_09_15_000003_create_root_wakeup_hints_table.php	packages/tenancy	root	True	'root_wakeup_hints'		0	0	0	0	0		0		False
+packages/tenancy/database/migrations/root/2026_09_15_000004_create_root_wakeup_reconciliation_state_table.php	packages/tenancy	root	True	'root_wakeup_reconciliation_state'		0	0	0	0	0	attempts	0		False
+packages/tenancy/database/migrations/tenant/2026_07_18_180001_create_users_table.php	packages/tenancy	tenant	True	'users'		0	1	0	0	0		0		True
+packages/tenancy/database/migrations/tenant/2026_07_26_190001_create_wsp_workspaces_table.php	packages/tenancy	tenant	True	'wsp_workspaces',) would otherwise try to add
+        // this FK before wsp_workspaces.id has a PK to reference) — same
+        // ordering as sys_departments' self-referencing parent_id (P1.10).
+        DB::statement('ALTER TABLE wsp_workspaces ADD CONSTRAINT wsp_workspaces_parent_fk FOREIGN KEY (parent_id) REFERENCES wsp_workspaces (id) ON DELETE RESTRICT');
+
+        DB::statement("ALTER TABLE wsp_workspaces ADD CONSTRAINT wsp_workspaces_type_ck CHECK (type IN ('company'		0	8	0	0	0		0		True
+packages/tenancy/database/migrations/tenant/2026_07_26_190002_create_wsp_workspace_members_table.php	packages/tenancy	tenant	True	'wsp_workspace_members'		0	4	1	2	0		0		True
+packages/tenancy/database/migrations/tenant/2026_07_26_190003_create_wsp_invitations_table.php	packages/tenancy	tenant	True	'wsp_invitations'		0	4	1	2	0		0		True
+packages/tenancy/database/migrations/tenant/2026_07_26_190004_add_cross_package_fks_table.php	packages/tenancy	tenant	True			0	8	0	0	0		0		True
+packages/tenancy/database/migrations/tenant/2026_07_27_190005_create_sessions_table.php	packages/tenancy	tenant	True	'sessions'		0	0	2	0	0	last_activity	0		True
+packages/tenancy/database/migrations/tenant/2026_09_14_000001_add_identity_source_timestamp.php	packages/tenancy	tenant	True		'users','users'	0	0	0	0	0		0		True
+packages/tenancy/database/migrations/tenant/2026_09_15_000700_create_membership_adapter_tables.php	packages/tenancy	tenant	True	self::PairTable,self::InboxTable		0	8	1	0	0		0		True
+packages/transfer/database/migrations/2026_09_15_000001_create_corex_transfer_tables.php	packages/transfer	(root)	True	'corex_transfer_jobs','corex_transfer_rows','corex_transfer_refs','corex_transfer_outbox'		0	0	4	3	0		0		True
+packages/transfer/database/migrations/2026_09_15_000002_create_corex_export_manifest_tables.php	packages/transfer	(root)	True	'corex_export_manifests','corex_export_parts'		0	0	2	2	0		0		True
+packages/wakeup/database/migrations/2026_09_15_000001_create_sys_wakeup_requests_table.php	packages/wakeup	(root)	True	'sys_wakeup_requests'		0	0	2	0	0	attempt	0		False
+packages/webhooks/database/migrations/tenant/create_sys_api_webhook_tables.php	packages/webhooks	tenant	False			0	0	0	0	0	attempt,http_status,replay_count,topic_version	5		True
+packages/workflow/database/migrations/2026_09_15_000001_create_sys_workflow_intents_table.php	packages/workflow	(root)	True	'sys_workflow_intents'		0	0	2	0	0	attempt	0		False
+products/flex-crm/database/migrations/2026_06_14_000100_create_crm_pipelines_table.php	products/flex-crm	(root)	True	'crm_pipelines'		0	0	0	0	0	position	0		True
+products/flex-crm/database/migrations/2026_06_14_000110_create_crm_stages_table.php	products/flex-crm	(root)	True	'crm_stages'		0	0	1	0	0	position,probability	0		True
+products/flex-crm/database/migrations/2026_06_14_000120_create_crm_deals_table.php	products/flex-crm	(root)	True	'crm_deals'		0	0	4	0	0	position	0		True
+products/flex-crm/database/migrations/2026_06_14_000130_create_crm_companies_table.php	products/flex-crm	(root)	True	'crm_companies'		0	0	2	0	0		0		True
+products/flex-crm/database/migrations/2026_06_14_000140_create_crm_contacts_table.php	products/flex-crm	(root)	True	'crm_contacts'		0	0	3	0	0		0		True
+products/flex-crm/database/migrations/2026_06_14_000150_create_crm_leads_table.php	products/flex-crm	(root)	True	'crm_leads'		0	0	2	0	0	score	0		True
+products/flex-crm/database/migrations/2026_06_14_000160_create_crm_activities_table.php	products/flex-crm	(root)	True	'crm_activities'		0	0	2	0	0		0		True
+products/flex-crm/database/migrations/2026_09_14_000001_widen_activity_subject_id.php	products/flex-crm	(root)	True		'crm_activities'	0	0	0	0	0		0		True
+products/flex-crm/database/migrations/2026_09_14_000002_company_contact_parity.php	products/flex-crm	(root)	True	(new Source)->getTable(),(new Company)->getTable(),(new Contact)->getTable(),(new ContactCompany)->getTable()		0	9	1	0	0	position	8		True
+products/flex-crm/database/migrations/2026_09_15_000001_full_storage_parity.php	products/flex-crm	(root)	True	'crm_lost_reasons',(new Pipeline)->getTable(),(new Stage)->getTable(),(new Lead)->getTable(),(new Deal)->getTable(),'crm_deal_contacts',(new Activity)->getTable(),'crm_activity_targets'	(new Lead)->getTable()	0	12	3	1	0	duration_sec,position,probability	16		True

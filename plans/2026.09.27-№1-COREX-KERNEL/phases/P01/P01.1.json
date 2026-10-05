@@ -21,7 +21,6 @@
     "D36",
     "D37"
   ],
-  "skills": [],
   "reads": [
     {
       "path": "@plan/phases/P00/phase.json",
@@ -393,7 +392,7 @@
       }
     ]
   },
-  "updated_at": "2026-09-28T12:14:02Z",
+  "updated_at": "2026-10-05T17:27:48Z",
   "sections": [
     {
       "id": "Intent",

@@ -162,7 +162,7 @@ operations, независимые модули, детерминированн�
 | P05 | Typed config, композиция и порты | detailed | 4/4 | 🟢 Done |
 | P06 | Operations, tools, webhooks и wire | detailed | 5/5 | 🟠 Done with deviations |
 | P07 | Tenancy, access, независимость модулей | detailed | 6/6 | 🟡 In progress |
-| P08 | Схема: baseline v1 | skeleton | 0/0 | ⬜ Skeleton |
+| P08 | Схема: baseline v1 | detailed | 0/10 | ⬜ Not started |
 | P09 | Планка качества и release-квалификация `1.0.0-rc.1` | skeleton | 0/0 | ⬜ Skeleton |
 | P10 | Зелёный hosted CI на базе P04 | detailed | 4/4 | 🟢 Done |
 
@@ -279,3 +279,8 @@ operations, независимые модули, детерминированн�
 | D107 | Явное claim/cleanup хранение до P08 | accepted | 2026-10-04 |
 | D108 | Закрыть P07.2 без повторных проверок; новая сессия | accepted | 2026-10-04 |
 | D109 | P07.4: исключить CI и отменить дальнейшие review | accepted | 2026-10-05 |
+| D110 | P08: допуск дизайна до закрытия P07, маршруты и ревью | accepted | 2026-10-05 |
+| D111 | P08: механика схемы — наборы схемы, без publish, один журнал | accepted | 2026-10-05 |
+| D112 | P08: схема не конфигурируется — без имён таблиц и стратегии ключей в config | accepted | 2026-10-05 |
+| D113 | P08: форма baseline v1 — раскладка, имена, типы, драйверы | accepted | 2026-10-05 |
+| D114 | P08: явные колонки signup/cleanup вместо root_accounts.data (закрытие D107) | accepted | 2026-10-05 |

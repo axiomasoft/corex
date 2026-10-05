@@ -19,7 +19,6 @@
   "decisions": [
     "D70"
   ],
-  "skills": [],
   "reads": [
     {
       "path": "@plan/knowledge/research-P05-design.json",
@@ -441,7 +440,7 @@
       }
     ]
   },
-  "updated_at": "2026-10-03T04:34:43Z",
+  "updated_at": "2026-10-05T17:27:59Z",
   "sections": [
     {
       "id": "Intent",

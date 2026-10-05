@@ -17,7 +17,6 @@
   "decisions": [
     "D23"
   ],
-  "skills": [],
   "reads": [
     {
       "path": "@plan/artifacts/P00-design/scripts/check-supersede.py",
@@ -141,7 +140,7 @@
       }
     ]
   },
-  "updated_at": "2026-09-28T05:11:00Z",
+  "updated_at": "2026-10-05T17:27:48Z",
   "sections": [
     {
       "id": "Intent",

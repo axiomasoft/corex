@@ -20,7 +20,6 @@
     "D63",
     "D64"
   ],
-  "skills": [],
   "reads": [
     {
       "path": "@plan/artifacts/P04.2-execution/classification-result.tsv",
@@ -302,7 +301,7 @@
       }
     ]
   },
-  "updated_at": "2026-10-01T07:56:31Z",
+  "updated_at": "2026-10-05T17:27:57Z",
   "sections": [
     {
       "id": "Intent",

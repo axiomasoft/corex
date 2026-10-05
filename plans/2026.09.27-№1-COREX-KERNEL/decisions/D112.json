@@ -1,0 +1,43 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D112",
+  "title": "P08: схема не конфигурируется — без имён таблиц и стратегии ключей в config",
+  "date": "2026-10-05",
+  "status": "accepted",
+  "question": "Сохранять ли `corex.ids.strategy` и конфигурируемые имена таблиц, от которых зависит DDL baseline?",
+  "options": [
+    {
+      "id": "A",
+      "text": "Удалить `ids.strategy`, `IdStrategy`, `IdColumns`, `HasConfiguredId`, `corex.tables.*`, `CoreOptions::*Table`, `corex-custom-fields.tables`; ключи — `uuid` (`HasUuids`, UUIDv7), имена таблиц — литералы.",
+      "pros": "Детерминированный baseline; меньше публичной поверхности.",
+      "cons": "Хост не переименует таблицы; boxed-установки с int-ключами не поддерживаются (установок нет, D01)."
+    },
+    {
+      "id": "B",
+      "text": "Оставить стратегию и имена, фиксировать при первом migrate с отпечатком (как space_state chatom).",
+      "pros": "Гибкость.",
+      "cons": "Отпечаток/doctor ради параметров, которые никто не использует; golden-схема зависит от config."
+    }
+  ],
+  "context": "Миграции core читают `config('corex.ids.strategy')` и `app(CoreOptions::class)->*Table`; custom-fields — `corex-custom-fields.tables`; модели — `HasConfiguredId`/`IdColumns` (34 места). Baseline с DDL, зависящим от config, не детерминирован; D22: инварианты не конфигурируются, схема детерминирована; chatom D-P07-06 закрыл стратегию ключей.",
+  "decision": "1. Удаляются `corex.ids.strategy`, `CoreX\\Database\\Enums\\IdStrategy`, `CoreX\\Database\\Laravel\\IdColumns`, `CoreX\\Database\\Laravel\\HasConfiguredId`, `corex.tables.*` и поля `CoreOptions::*Table` (12), `corex-custom-fields.tables.*`. Ключи таблиц CoreX — `uuid`, генерация — Laravel `HasUuids` (UUIDv7); имена таблиц — литералы владельца в миграциях и моделях.\n2. Не затрагиваются: `corex-access.identity.table` (ссылка на таблицу хоста, не владение), `corex-access-azguard.azguard_pins.table_names` (схема upstream AzGuard).\n3. Тело `up()` миграции — чистая функция файла: без `config()`, `env()`, `app()`, моделей и классов пакетов (гейт S7).",
+  "rationale": "D22 §1.6–1.7, D01 (нет установок), chatom D-P07-06; детерминированная Golden-схема.",
+  "consequences": [
+    "P08.2 удаляет символы и ключи (Golden php-api delta).",
+    "Полиморфные пары — строковые `_id` (D113), а не тип ключа хоста."
+  ],
+  "applies_to": [
+    "P08",
+    "P08.2",
+    "P08.3",
+    "P08.4",
+    "P08.7",
+    "P08.8"
+  ],
+  "actor": {
+    "provider": "anthropic",
+    "model": "claude-opus-5-5",
+    "effort": "high"
+  },
+  "answered_by": "agent"
+}

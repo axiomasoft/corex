@@ -28,7 +28,6 @@
     "D96",
     "D97"
   ],
-  "skills": [],
   "reads": [
     {
       "path": "@plan/decisions/D103.json",
@@ -177,7 +176,7 @@
     "pending": [],
     "checks": []
   },
-  "updated_at": "2026-10-05T15:13:30Z",
+  "updated_at": "2026-10-05T17:28:09Z",
   "sections": [
     {
       "id": "Owner-execution-override-2026-10-05",

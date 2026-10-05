@@ -1,0 +1,269 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P08.8",
+  "title": "Baseline v1: tasks, tasks-workflow, transfer, flex/crm",
+  "status": "todo",
+  "summary": "Миграции пакетов axiomasoft/corex-tasks, axiomasoft/corex-tasks-workflow, axiomasoft/corex-transfer, flex/crm сквошены в baseline v1 по правилам D113: каталоги наборов, один файл на таблицу, явные имена ≤63, bigint-счётчики, без config, финальная форма цепочки; наборы объявлены с `version: 1`, тесты строят схему через `MigratesSchemaSets`.",
+  "why": "D113: самые длинные upgrade-цепочки (tasks align, crm parity) и полиморфные колонки ulid (аудит 2026-09-14: char(26) несовместим с uuid-ключами); fresh≡upgraded не требуется.",
+  "scope": {
+    "include": [
+      "Пакеты: axiomasoft/corex-tasks, axiomasoft/corex-tasks-workflow, axiomasoft/corex-transfer, flex/crm — runbook досье §6.4 шаги 1–8 (снимок до, сквош, снимок после и diff, финальные наборы и `drivers`, тесты, `table-ownership.md` индексы, Golden, README/CHANGELOG).",
+      "tasks: свёрнут `align_tasks_with_approved_schema` (финальная форма tsk_*); flex/crm: свёрнуты `widen_activity_subject_id`, `company_contact_parity`, `full_storage_parity`; `ulidMorphs`/`*Morphs` → пара string(64)+string(64) с явным индексом (D113 §4.3); transfer: файлы по таблице.",
+      "Удаление тестов upgrade-пути (`products/flex-crm/tests/Pg/UpgradeSafetyTest.php` и тесты отдельных ALTER-миграций); остальные тесты (`packages/{tasks,tasks-workflow,transfer}/tests/**`, `products/flex-crm/tests/**`) — на трейт."
+    ],
+    "exclude": [
+      "Новые таблицы/колонки/индексы вне досье §4.5 и D114; изменение поведения кода, кроме чтения новых имён объектов; пакеты других items."
+    ]
+  },
+  "depends_on": [
+    "P08.7"
+  ],
+  "related": [],
+  "decisions": [
+    "D113",
+    "D111",
+    "D112",
+    "D01"
+  ],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P08-design.json",
+      "section": "§4, §6.4, §8",
+      "why": "Правила формы, коды PP, runbook baseline, failure playbook.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/artifacts-P08-design-examples.json",
+      "section": "§5, §6, §10",
+      "why": "Объявление наборов, имя ≤63, снимок/diff.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D113.json",
+      "why": "Норма формы.",
+      "required": true
+    },
+    {
+      "path": "@plan/artifacts/P08-design/facts/migrations.tsv",
+      "why": "Инвентарь файлов пакета (scope, ALTER, raw SQL, 32-бит колонки).",
+      "required": true
+    },
+    {
+      "path": "@plan/artifacts/P08-design/facts/test-migration-refs.txt",
+      "why": "Тесты пакета, называющие пути миграций.",
+      "required": true
+    },
+    {
+      "path": "docs/architecture/table-ownership.md",
+      "section": "Каталог таблиц",
+      "why": "Владение и tenant_scope таблиц пакета.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/{tasks,tasks-workflow,transfer}/database/migrations/**",
+      "change": "any"
+    },
+    {
+      "path": "products/flex-crm/database/migrations/**",
+      "change": "any"
+    },
+    {
+      "path": "packages/{tasks,tasks-workflow,transfer}/src/**/*SchemaSets.php",
+      "change": "any"
+    },
+    {
+      "path": "products/flex-crm/src/**",
+      "change": "modify"
+    },
+    {
+      "path": "packages/{tasks,tasks-workflow,transfer}/tests/**",
+      "change": "any"
+    },
+    {
+      "path": "products/flex-crm/tests/**",
+      "change": "modify"
+    },
+    {
+      "path": "packages/{tasks,tasks-workflow,transfer}/{README,CHANGELOG}.md",
+      "change": "any"
+    },
+    {
+      "path": "products/flex-crm/{README,CHANGELOG}.md",
+      "change": "any"
+    },
+    {
+      "path": "scripts/schema-gate-pending.json",
+      "change": "any"
+    },
+    {
+      "path": "tests/Golden/schema/*.json",
+      "change": "modify"
+    },
+    {
+      "path": "docs/architecture/table-ownership.md",
+      "change": "modify"
+    },
+    {
+      "path": "@plan/artifacts/P08.8-execution/**",
+      "change": "create"
+    }
+  ],
+  "rules": [
+    "Состав baseline = финальная форма цепочки + нормализации D113 §4.2–4.4 (+ D114 для tenancy); любое иное изменение — F2 (стоп).",
+    "Снимок «до» делается до первой правки пакета; без него пакет не сквошится.",
+    "Пакеты item — по возрастанию PP; гейт, Golden и тесты пакета зелёные перед следующим пакетом.",
+    "Ни один пакет не теряет текущую SQLite-поддержку (D113); `drivers` подтверждается прогоном.",
+    "Удаляются только тесты, проверяющие upgrade-цепочку; тесты поведения переводятся."
+  ],
+  "guidance": "Досье §6.4 (общий runbook) и §4 (правила); коды PP — §4.1; классификация 32-бит колонок — §4.3; failure playbook — §8 (F2–F6). Имена длиннее 63 — функция examples §6, в файле литерал.",
+  "examples": [
+    {
+      "path": "@plan/knowledge/artifacts-P08-design-examples.json",
+      "section": "§5, §6, §10"
+    }
+  ],
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "scripts/php84 composer schema-gate",
+      "expect": "exit 0; пакеты item отсутствуют в `scripts/schema-gate-pending.json`",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "python3 -c \"import json;p=json.load(open('scripts/schema-gate-pending.json'));print(sorted(set(p)&set([\"axiomasoft/corex-tasks\", \"axiomasoft/corex-tasks-workflow\", \"axiomasoft/corex-transfer\", \"flex/crm\"])))\"",
+      "expect": "печатает `[]`",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "PGSQL_PORT=5434 scripts/php84 vendor/bin/pest tests/Golden/SchemaGoldenTest.php",
+      "expect": "exit 0 (golden обновлён в этом item с классом «baseline <pkg>»)",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "scripts/php84 vendor/bin/pest tests/Golden/SchemaSqliteGoldenTest.php",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "test ! -e products/flex-crm/tests/Pg/UpgradeSafetyTest.php",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "cmd": "git grep -n -E 'Morphs\\(' -- 'packages/*/database/migrations' 'products/*/database/migrations'",
+      "expect": "нет вывода (exit 1)",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "cmd": "PGSQL_PORT=5434 scripts/php84 composer --working-dir=products/flex-crm test",
+      "expect": "exit 0 (SQLite + PG)",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "cmd": "scripts/php84 composer lint:check",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "cmd": "scripts/php84 composer analyse",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "cmd": "scripts/php84 composer deps:analyse",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V11",
+      "cmd": "scripts/php84 composer test",
+      "expect": "exit 0 (root SQLite lane)",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V12",
+      "cmd": "PGSQL_PORT=5434 scripts/php84 composer test:pg",
+      "expect": "exit 0 (root PG lane, preflight done)",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V13",
+      "cmd": "scripts/php84 composer test:packages",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V14",
+      "cmd": "scripts/php84 composer test:arch",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V15",
+      "cmd": "scripts/php84 composer golden",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V16",
+      "cmd": "bash scripts/anti-weakening-gate.sh",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V17",
+      "cmd": "php scripts/package-docs-gate.php",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V18",
+      "cmd": "scripts/php84 composer table-ownership-gate",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V19",
+      "procedure": "Для каждого пакета (axiomasoft/corex-tasks, axiomasoft/corex-tasks-workflow, axiomasoft/corex-transfer, flex/crm): снимки до/после и `python3 plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08-design/scripts/schema-diff.py <pkg>-before.json <pkg>-after.json` сохранены в `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.8-execution/`; каждая строка diff относится к классу rename/int→bigint/morph (досье §6.4 шаг 3).",
+      "expect": "нет строк вне разрешённых классов",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V20",
+      "procedure": "Self-check (D110 п.2): каждая строка D111–D114, относящаяся к item → файл:строка и тест; строка `self-check: GREEN` в Completion Notes `@plan/knowledge/artifacts-P08.<n>-execution-completion.json`.",
+      "expect": "self-check: GREEN",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Baseline v1 пакетов axiomasoft/corex-tasks, axiomasoft/corex-tasks-workflow, axiomasoft/corex-transfer, flex/crm; финальные наборы `version: 1`; обновлённые golden-схемы и `table-ownership.md`; снимки и diff в `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.8-execution/`; Completion Notes `@plan/knowledge/artifacts-P08.8-execution-completion.json`."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed",
+    "notes": "Внешние факты собраны при дизайне: @plan/knowledge/research-P08-design-rag.json."
+  },
+  "result": null,
+  "updated_at": "2026-10-05T17:28:34Z"
+}

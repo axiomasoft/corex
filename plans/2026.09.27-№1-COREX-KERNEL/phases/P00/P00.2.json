@@ -17,7 +17,6 @@
     "P00.1"
   ],
   "decisions": [],
-  "skills": [],
   "reads": [
     {
       "path": "@plan/knowledge/artifacts-P00-design-facts-chatom-principles.json",
@@ -173,7 +172,7 @@
       }
     ]
   },
-  "updated_at": "2026-09-28T05:11:00Z",
+  "updated_at": "2026-10-05T17:27:47Z",
   "sections": [
     {
       "id": "Intent",

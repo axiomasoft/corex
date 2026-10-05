@@ -19,7 +19,6 @@
     "D58",
     "D57"
   ],
-  "skills": [],
   "reads": [
     {
       "path": "@plan/decisions/D60.json",
@@ -328,7 +327,7 @@
       }
     ]
   },
-  "updated_at": "2026-09-29T12:08:53Z",
+  "updated_at": "2026-10-05T17:27:54Z",
   "sections": [
     {
       "id": "Intent",

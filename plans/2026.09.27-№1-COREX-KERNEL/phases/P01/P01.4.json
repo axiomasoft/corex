@@ -20,7 +20,6 @@
     "D39",
     "D37"
   ],
-  "skills": [],
   "reads": [
     {
       "path": "scripts/quality-ceilings.json",
@@ -240,7 +239,7 @@
       }
     ]
   },
-  "updated_at": "2026-09-28T14:37:16Z",
+  "updated_at": "2026-10-05T17:27:51Z",
   "sections": [
     {
       "id": "Intent",

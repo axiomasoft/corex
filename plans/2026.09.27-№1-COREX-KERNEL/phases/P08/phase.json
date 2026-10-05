@@ -2,14 +2,85 @@
   "$schema": "urn:swissknifeman:task:plan:phase:v1",
   "id": "P08",
   "title": "Схема: baseline v1",
-  "design": "skeleton",
-  "goal": "> СКЕЛЕТ — не детализирован, разворачивается `design-phase: task:plan-design 2026.09.27-№1-COREX-KERNEL P08`\n\nСквош миграций каждого пакета в baseline v1 (установок нет, D20): явные имена индексов/FK/unique (≤63, hash-suffix), string вместо DB enum, bigint для счётчиков, владение таблицами (DATA-*), явный tenant/central scope; механика исполнения (publish vs load, журнал) — frontier-решение со сверкой chatom PLAN2.D25; `SCHEMA_VERSION` per package; fresh≡upgraded не требуется (нет upgrade-пути), fresh PG/SQLite-матрица обязательна.\n\n> **Контракт фазы (предварительный).** Потребляет: D01, D20, D22. Скоуп — ниже; детализация, досье, примеры и маршруты — при дизайне фазы.\n\n> Phase Assurance: data-contract; frontier: механика; full-ревью.",
-  "context": "> СКЕЛЕТ — не детализирован, разворачивается `design-phase: task:plan-design 2026.09.27-№1-COREX-KERNEL P08`\n\nСквош миграций каждого пакета в baseline v1 (установок нет, D20): явные имена индексов/FK/unique (≤63, hash-suffix), string вместо DB enum, bigint для счётчиков, владение таблицами (DATA-*), явный tenant/central scope; механика исполнения (publish vs load, журнал) — frontier-решение со сверкой chatom PLAN2.D25; `SCHEMA_VERSION` per package; fresh≡upgraded не требуется (нет upgrade-пути), fresh PG/SQLite-матрица обязательна.\n\n> **Контракт фазы (предварительный).** Потребляет: D01, D20, D22. Скоуп — ниже; детализация, досье, примеры и маршруты — при дизайне фазы.\n\n> Phase Assurance: data-contract; frontier: механика; full-ревью.",
+  "design": "detailed",
+  "goal": "Факты на `52564bff`: 101 shipped-файл миграций в 18 пакетах доставляются тремя несовместимыми путями (publish-теги, `loadMigrationsFrom`, module lifecycle по install-path); wave runner tenancy мигрирует только собственный каталог; DDL ядра зависит от `corex.ids.strategy` и `corex.tables.*`; ≈100 неназванных индексов/FK, 52 32-бит колонки, 4 файла без timestamp; `root_accounts.data` несёт поля идемпотентности signup (D107). Числа — ориентир; приёмка — команды Validation.\n\nЦель: схема каждого пакета — baseline v1 в наборах схемы (D111) без publish, с одним журналом Laravel `migrations` на базу, явным scope Central/Tenant/Dedicated, литеральной формой без конфигурации (D112), правилами формы D113 под `composer schema-gate` и Golden-схемой PG/SQLite, явными колонками signup/cleanup (D114). fresh≡upgraded не требуется (установок нет, D01, D20).\n\n> **Phase Assurance | v1.**\n> Impact: data-contract\n> Integration Seams: schema-sets · schema-migrator · module-lifecycle-paths · tenancy-wave-runner · central-schema · dedicated-budget · core-ids · table-names · signup-claim · pending-cleanup · table-ownership · golden-schema · golden-surface\n> Live or Irreversible: no (установок нет; с `1.0.0-rc.1` baseline становится неизменным — P09)\n> Audit Intent: auto\n> Rationale: меняются источник и форма схемы всех пакетов и хранение несущих полей idempotency signup. Риск закрывают снимки до/после со schema-diff по каждому пакету, `schema-gate` S1–S9 с негативами, Golden-схема PG/SQLite, тесты модели инвариантов I1–I6 и независимое read-only ревью P08.10 (D110).\n\n> Окружение: `scripts/php84`; python3; изолированная PostgreSQL `corex_test`, host-порт 5434 (`PGSQL_PORT=5434`); preflight до мутирующих тестов. Hosted CI — граница приёмки фазы (D73). Автор дизайна тестов не запускал.",
+  "context": "Факты на `52564bff`: 101 shipped-файл миграций в 18 пакетах доставляются тремя несовместимыми путями (publish-теги, `loadMigrationsFrom`, module lifecycle по install-path); wave runner tenancy мигрирует только собственный каталог; DDL ядра зависит от `corex.ids.strategy` и `corex.tables.*`; ≈100 неназванных индексов/FK, 52 32-бит колонки, 4 файла без timestamp; `root_accounts.data` несёт поля идемпотентности signup (D107). Числа — ориентир; приёмка — команды Validation.\n\nЦель: схема каждого пакета — baseline v1 в наборах схемы (D111) без publish, с одним журналом Laravel `migrations` на базу, явным scope Central/Tenant/Dedicated, литеральной формой без конфигурации (D112), правилами формы D113 под `composer schema-gate` и Golden-схемой PG/SQLite, явными колонками signup/cleanup (D114). fresh≡upgraded не требуется (установок нет, D01, D20).\n\n> **Phase Assurance | v1.**\n> Impact: data-contract\n> Integration Seams: schema-sets · schema-migrator · module-lifecycle-paths · tenancy-wave-runner · central-schema · dedicated-budget · core-ids · table-names · signup-claim · pending-cleanup · table-ownership · golden-schema · golden-surface\n> Live or Irreversible: no (установок нет; с `1.0.0-rc.1` baseline становится неизменным — P09)\n> Audit Intent: auto\n> Rationale: меняются источник и форма схемы всех пакетов и хранение несущих полей idempotency signup. Риск закрывают снимки до/после со schema-diff по каждому пакету, `schema-gate` S1–S9 с негативами, Golden-схема PG/SQLite, тесты модели инвариантов I1–I6 и независимое read-only ревью P08.10 (D110).\n\n> Окружение: `scripts/php84`; python3; изолированная PostgreSQL `corex_test`, host-порт 5434 (`PGSQL_PORT=5434`); preflight до мутирующих тестов. Hosted CI — граница приёмки фазы (D73). Автор дизайна тестов не запускал.",
   "depends_on": [
-    "P00"
+    "P00",
+    "P07"
   ],
-  "items": [],
-  "batches": [],
+  "items": [
+    "P08.1",
+    "P08.2",
+    "P08.3",
+    "P08.4",
+    "P08.5",
+    "P08.6",
+    "P08.7",
+    "P08.8",
+    "P08.9",
+    "P08.10"
+  ],
+  "batches": [
+    {
+      "id": "BP08-1",
+      "items": [
+        "P08.1"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP08-2",
+      "items": [
+        "P08.2"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP08-3",
+      "items": [
+        "P08.3"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP08-4",
+      "items": [
+        "P08.4"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP08-5",
+      "items": [
+        "P08.5"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "B08-A",
+      "items": [
+        "P08.6",
+        "P08.7",
+        "P08.8"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP08-9",
+      "items": [
+        "P08.9"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP08-10",
+      "items": [
+        "P08.10"
+      ],
+      "mode": "recommended"
+    }
+  ],
   "orchestration": {
     "strategy": "sequential"
   },
@@ -17,32 +88,57 @@
     {
       "id": "P08-baseline-v1",
       "title": "P08 — Схема: baseline v1",
-      "text": "> **Статус дизайна:** skeleton (D21); items детализируются `task:plan-design 2026.09.27-№1-COREX-KERNEL P08` после закрытия предыдущей фазы, по фактическому коду."
+      "text": "> **Статус дизайна:** detailed (2026-10-05, D110). Нормы: D01, D20, D22, D107, D110–D114. Досье — `@plan/knowledge/research-P08-design.json`, примеры — `@plan/knowledge/artifacts-P08-design-examples.json`, инварианты — `@plan/knowledge/artifacts-P08-invariant-model.json`, RAG — `@plan/knowledge/research-P08-design-rag.json`."
     },
     {
       "id": "Phase-Context",
       "title": "Phase Context",
-      "text": "> СКЕЛЕТ — не детализирован, разворачивается `design-phase: task:plan-design 2026.09.27-№1-COREX-KERNEL P08`\n\nСквош миграций каждого пакета в baseline v1 (установок нет, D20): явные имена индексов/FK/unique (≤63, hash-suffix), string вместо DB enum, bigint для счётчиков, владение таблицами (DATA-*), явный tenant/central scope; механика исполнения (publish vs load, журнал) — frontier-решение со сверкой chatom PLAN2.D25; `SCHEMA_VERSION` per package; fresh≡upgraded не требуется (нет upgrade-пути), fresh PG/SQLite-матрица обязательна.\n\n> **Контракт фазы (предварительный).** Потребляет: D01, D20, D22. Скоуп — ниже; детализация, досье, примеры и маршруты — при дизайне фазы.\n\n> Phase Assurance: data-contract; frontier: механика; full-ревью."
+      "text": "Факты на `52564bff`: 101 shipped-файл миграций в 18 пакетах доставляются тремя несовместимыми путями (publish-теги, `loadMigrationsFrom`, module lifecycle по install-path); wave runner tenancy мигрирует только собственный каталог; DDL ядра зависит от `corex.ids.strategy` и `corex.tables.*`; ≈100 неназванных индексов/FK, 52 32-бит колонки, 4 файла без timestamp; `root_accounts.data` несёт поля идемпотентности signup (D107). Числа — ориентир; приёмка — команды Validation.\n\nЦель: схема каждого пакета — baseline v1 в наборах схемы (D111) без publish, с одним журналом Laravel `migrations` на базу, явным scope Central/Tenant/Dedicated, литеральной формой без конфигурации (D112), правилами формы D113 под `composer schema-gate` и Golden-схемой PG/SQLite, явными колонками signup/cleanup (D114). fresh≡upgraded не требуется (установок нет, D01, D20).\n\n> **Phase Assurance | v1.**\n> Impact: data-contract\n> Integration Seams: schema-sets · schema-migrator · module-lifecycle-paths · tenancy-wave-runner · central-schema · dedicated-budget · core-ids · table-names · signup-claim · pending-cleanup · table-ownership · golden-schema · golden-surface\n> Live or Irreversible: no (установок нет; с `1.0.0-rc.1` baseline становится неизменным — P09)\n> Audit Intent: auto\n> Rationale: меняются источник и форма схемы всех пакетов и хранение несущих полей idempotency signup. Риск закрывают снимки до/после со schema-diff по каждому пакету, `schema-gate` S1–S9 с негативами, Golden-схема PG/SQLite, тесты модели инвариантов I1–I6 и независимое read-only ревью P08.10 (D110).\n\n> Окружение: `scripts/php84`; python3; изолированная PostgreSQL `corex_test`, host-порт 5434 (`PGSQL_PORT=5434`); preflight до мутирующих тестов. Hosted CI — граница приёмки фазы (D73). Автор дизайна тестов не запускал."
     },
     {
-      "id": "Scope-Included-planned",
-      "title": "Scope Included (planned)",
-      "text": "baseline-миграции; schema-гейты (имена, владение, scope); docs table-ownership; решение механики."
+      "id": "DoR",
+      "title": "DoR",
+      "text": "- [ ] P07 закрыта (`plan.py next` не `waiting: P07 closure`) — условие старта P08.1 (D110 п.1).\n- [x] D20/D22/D107 сверены с фактами; frontier-выбор механики выполнен при дизайне (D111–D114), развилок у исполнителей нет.\n- [x] Инвентарь воспроизводим (`artifacts/P08-design/scripts/p08-facts.py`); внешние/первичные факты W1–W6 (perplexity ×1, framework source ×1); VERIFY-AT-EXEC — первым шагом P08.1.\n- [x] Девять outcome-items + review-item; чтения ≤ 11 на item; досье, примеры и модель инвариантов привязаны в reads."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "SPI наборов схемы ядра, исполнитель и команды `corex:schema:migrate|status`, тестовый трейт; провайдеры наборов всех пакетов со схемой; удаление publish/load миграций и констант `SCHEMA_VERSION`; перевязка module lifecycle и wave runner tenancy; удаление конфигурации схемы (ids.strategy, имена таблиц); `schema-gate` S1–S9 и Golden-схема PG/SQLite; baseline v1 18 пакетов (core, panels, tenancy, access, access-azguard, operations, webhooks, custom-fields, intl, media, notifications, search, wakeup, workflow, tasks, tasks-workflow, transfer, flex/crm); перенос signup/cleanup из `root_accounts.data`; `schema-policy.md`, DATA-статьи, каталог владения; независимое ревью."
     },
     {
       "id": "Scope-Excluded",
       "title": "Scope Excluded",
-      "text": "Данные/перенос существующих установок (их нет)."
+      "text": "Перенос данных существующих установок и upgrade-путь (установок нет, D01/D20); новые таблицы (DATA-006); профильные индексы сверх финальной формы цепочки; заморозка хэшей выпущенных файлов и release-квалификация (P09); схема upstream AzGuard."
     },
     {
       "id": "Dependencies",
       "title": "Dependencies",
-      "text": "Предыдущая фаза закрыта; glossary/карты P00."
+      "text": "P07 закрыта (DoR); P00 glossary/карты; D107 (передаёт перенос signup/cleanup); hosted CI с PG 16/18 и SQLite-лейном (D73)."
     },
     {
-      "id": "Items",
-      "title": "Items",
-      "text": "| ID | Title | Status | Updated |\n|:--|:--|:--|:--|"
+      "id": "Planned-Items",
+      "title": "Planned Items",
+      "text": "| Item | Outcome | Route/review |\n|:--|:--|:--|\n| P08.1 | Наборы схемы: реестр, исполнитель, команды, без publish | implementation/xhigh, self-check |\n| P08.2 | Схема без конфигурации: литералы таблиц и uuid-ключи | implementation/high, self-check |\n| P08.3 | Гейт схемы S1–S9 и Golden-схема PG/SQLite | implementation/high, self-check |\n| P08.4 | Baseline v1: core и panels | implementation/high, self-check |\n| P08.5 | Baseline v1: tenancy и явные колонки signup/cleanup | implementation/xhigh, self-check |\n| P08.6 | Baseline v1: access, access-azguard, operations, webhooks | implementation/high, self-check |\n| P08.7 | Baseline v1: custom-fields, intl, media, notifications, search, wakeup, workflow | implementation/high, self-check |\n| P08.8 | Baseline v1: tasks, tasks-workflow, transfer, flex/crm | implementation/high, self-check |\n| P08.9 | Политика схемы, доктрина DATA и закрытие pending | implementation/high, self-check |\n| P08.10 | Review P08 | frontier/high, read-only |\n\nПорядок (D110 п.3): solo P08.1 → P08.2 → P08.3 → P08.4 → P08.5; `B08-A` = P08.6 → P08.7 → P08.8 (recommended: один маршрут, общий runbook §6.4, последовательно — общие golden и pending); solo P08.9; solo P08.10."
+    },
+    {
+      "id": "Code-Evidence-Map",
+      "title": "Code Evidence Map",
+      "text": "`@plan/knowledge/research-P08-design.json` §1 (карта кода), §2 (факты), §3 (механика), §4 (форма), §5 (гейт/Golden), §6 (runbook), §7 (Golden/BC), §8 (failure playbook), §9 (self-check). `@plan/knowledge/artifacts-P08-design-examples.json` §1–§11. `artifacts/P08-design/facts/*`, `artifacts/P08-design/scripts/{p08-facts.py,schema-diff.py}`."
+    },
+    {
+      "id": "Pitfalls",
+      "title": "Pitfalls",
+      "text": "- Migrator сортирует все пути по basename и схлопывает одинаковые имена (L1) — basename уникален глобально, коды PP задают порядок слоёв.\n- Простой `php artisan migrate` больше не создаёт таблицы пакетов — документация и тесты используют `corex:schema:migrate`/трейт.\n- `Dedicated` (budget) исполняется только на своём соединении; `--database` для него — ошибка.\n- Module-наборы создаёт `ModuleLifecycle::enable()`; `corex:schema:migrate` их не трогает без `--modules`.\n- Снимок «до» — до первой правки пакета; без него F2 не доказуем.\n- D114: маркер `pool_cleanup` фиксируется до DROP DATABASE; claim-UPDATE условный (=1 строка); CHECK «все или ничего».\n- SQLite: CHECK только в PG-ветке (L5); пакеты не теряют текущую SQLite-поддержку.\n- PG усекает имена до 63 (L4) — длиннее — hash-suffix литералом."
+    },
+    {
+      "id": "Validation-phase-level",
+      "title": "Validation (phase level)",
+      "text": "Validation каждого item GREEN; на финальном кандидате P08.9: `scripts/php84 composer schema-gate` (без pending), Golden-схема PG (16/18 в CI) и SQLite, `git grep` publish/load/`SCHEMA_VERSION`/конфигурации схемы пусто, `composer table-ownership-gate`, `ownership-gate`, `manifests:check`, `package-graph-gate`, `error-registry`, `php-api`, `bc-check` exit 0; тесты модели инвариантов I1–I6 зелёные; schema-diff каждого пакета только разрешённых классов; ни один порог не ослаблен; вердикт P08.10 GREEN; hosted CI на финальном commit фазы — все джобы `success` (D73)."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "SPI наборов схемы и команды; baseline v1 всех пакетов со схемой; схема без конфигурации; `schema-gate` и Golden-схема; явные колонки signup/cleanup; `docs/architecture/schema-policy.md`, DATA-статьи, `table-ownership.md`, README/CHANGELOG пакетов; снимки/diff `artifacts/P08.<n>-execution/`; Completion Notes P08.1–P08.9; `@plan/knowledge/artifacts-P08.10-review-verdict.json`."
     },
     {
       "id": "Phase-Handoff",
