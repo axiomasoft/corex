@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — PLAN3.P07.6 host-cache correction
+
+- Fence host mappings after committed account/domain saves and deletes, including cascade deletion.
+  Late cache publication cannot restore a revoked mapping; transactional resolutions bypass shared cache
+  to prevent publishing rolled-back verification. A shared generation invalidates all warmed host mappings
+  on account/domain changes; unchanged cache hits still issue no SQL. Existing public signatures are retained.
+
 ## Unreleased — PLAN3.P07.5 module layout
 
 - Added `CoreX\Tenancy\Provisioning\Contracts\TemplateDatabaseCloner`. Account provisioning calls that port; `TemplateClonePostgreSQLManager` stays inside Provisioning and implements it.

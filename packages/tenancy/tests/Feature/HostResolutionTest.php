@@ -9,6 +9,8 @@ use CoreX\Tenancy\Laravel\Http\Middleware\ResolveTenantFromHost;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Runtime\Exceptions\TenantCouldNotBeIdentifiedByHostException;
 use CoreX\Tenancy\Runtime\Internal\HostAccountResolver;
+use Illuminate\Cache\Events\WritingKey;
+use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -35,13 +37,22 @@ beforeEach(function (): void {
         'corex-tenancy.host_identification.enabled' => true,
         'corex-tenancy.host_identification.cache' => true,
         'corex-tenancy.host_identification.cache_ttl' => 300,
-        'corex-tenancy.host_identification.cache_store' => null,
+        'corex-tenancy.host_identification.cache_store' => 'host_file',
+        'cache.stores.host_file' => [
+            'driver' => 'file',
+            'path' => config('cache.stores.tenant_file.path').'/host-cache',
+        ],
     ]);
     app()->forgetInstance(TenancyOptions::class);
+    config(['database.connections.host_reader' => config('database.connections.pgsql')]);
 });
 
 afterEach(function (): void {
     endTenantContext();
+    while (DB::connection('pgsql')->transactionLevel() > 0) {
+        DB::connection('pgsql')->rollBack();
+    }
+    DB::purge('host_reader');
     DB::purge('pgsql');
     DB::purge('tenant');
 
@@ -86,7 +97,7 @@ function makeIdentityHR(): string
 /** @return array{0: Account, 1: ?Domain} */
 function makeAccountWithDomainHR(?string $host, array $accountOverrides = [], array $domainOverrides = []): array
 {
-    $dbName = 'acc_hr_'.Str::lower(Str::random(8));
+    $dbName = 'acc_hr_'.Str::lower(Str::random(8)).'_test';
     trackDbHR($dbName);
     DB::statement('DROP DATABASE IF EXISTS '.$dbName);
     DB::statement('CREATE DATABASE '.$dbName);
@@ -121,6 +132,97 @@ function resolverHR(): HostAccountResolver
 {
     return app(HostAccountResolver::class);
 }
+
+function readerResolverHR(): HostAccountResolver
+{
+    $options = TenancyOptions::fromArray(array_replace(config('corex-tenancy'), [
+        'central_connection' => 'host_reader',
+    ]));
+
+    return new HostAccountResolver(app('db'), app(CacheFactory::class), $options);
+}
+
+it('fences a host refilled by another connection before the writer commits', function (string $change): void {
+    [$account, $domain] = makeAccountWithDomainHR('race.example.test');
+    [$other] = makeAccountWithDomainHR(null);
+    $reader = readerResolverHR();
+    expect($reader->resolve('race.example.test'))->toBe($account->id);
+
+    DB::connection('pgsql')->beginTransaction();
+    match ($change) {
+        'revoke' => $domain->update(['verified_at' => null]),
+        'rename' => $domain->update(['host' => 'renamed.example.test']),
+        'reassign' => $domain->update(['account_id' => $other->id, 'verified_at' => null]),
+        'domain-delete' => $domain->delete(),
+        'account-pending' => $account->update(['slug' => null, 'status' => 'pending']),
+        'account-delete' => $account->delete(),
+    };
+
+    // A second PDO sees only the old committed row and may refill the shared cache.
+    expect($reader->resolve('race.example.test'))->toBe($account->id);
+    DB::connection('pgsql')->commit();
+
+    expect(fn () => $reader->resolve('race.example.test'))
+        ->toThrow(TenantCouldNotBeIdentifiedByHostException::class);
+})->with(['revoke', 'rename', 'reassign', 'domain-delete', 'account-pending', 'account-delete']);
+
+it('rejects a lookup whose cache publication arrives after revocation commits', function (): void {
+    [$account, $domain] = makeAccountWithDomainHR('late.example.test');
+    DB::connection('pgsql')->beginTransaction();
+    $domain->update(['verified_at' => null]);
+
+    $committed = false;
+    app('events')->listen(WritingKey::class, function (WritingKey $event) use (&$committed): void {
+        if (! $committed && $event->key === HostAccountResolver::key('late.example.test')) {
+            $committed = true;
+            DB::connection('pgsql')->commit();
+        }
+    });
+
+    $reader = readerResolverHR();
+    expect(fn () => $reader->resolve('late.example.test'))
+        ->toThrow(TenantCouldNotBeIdentifiedByHostException::class);
+    expect($committed)->toBeTrue();
+    expect(fn () => $reader->resolve('late.example.test'))
+        ->toThrow(TenantCouldNotBeIdentifiedByHostException::class);
+});
+
+it('never publishes an uncommitted verification into the shared host cache', function (): void {
+    [$account, $domain] = makeAccountWithDomainHR('rollback.example.test', domainOverrides: ['verified_at' => null]);
+    DB::connection('pgsql')->beginTransaction();
+    $domain->update(['verified_at' => now()]);
+    expect(resolverHR()->resolve('rollback.example.test'))->toBe($account->id);
+    DB::connection('pgsql')->rollBack();
+
+    expect(fn () => readerResolverHR()->resolve('rollback.example.test'))
+        ->toThrow(TenantCouldNotBeIdentifiedByHostException::class);
+});
+
+it('bypasses a warmed cache inside a transaction and preserves it after rollback', function (): void {
+    [$account, $domain] = makeAccountWithDomainHR('warm-rollback.example.test');
+    $reader = readerResolverHR();
+    expect($reader->resolve('warm-rollback.example.test'))->toBe($account->id);
+    DB::connection('pgsql')->beginTransaction();
+    $domain->update(['verified_at' => null]);
+    expect(fn () => resolverHR()->resolve('warm-rollback.example.test'))
+        ->toThrow(TenantCouldNotBeIdentifiedByHostException::class);
+    DB::connection('pgsql')->rollBack();
+    expect($reader->resolve('warm-rollback.example.test'))->toBe($account->id);
+});
+
+it('rejects late stale entries even if their generation was evicted', function (): void {
+    [$account, $domain] = makeAccountWithDomainHR('evicted.example.test');
+    $reader = readerResolverHR();
+    expect($reader->resolve('evicted.example.test'))->toBe($account->id);
+    $store = app(CacheFactory::class)->store('host_file');
+    $oldEntry = $store->get(HostAccountResolver::key('evicted.example.test'));
+    $domain->update(['verified_at' => null]);
+    $store->put(HostAccountResolver::key('evicted.example.test'), $oldEntry, 300);
+    $store->forget(HostAccountResolver::generationKey());
+
+    expect(fn () => $reader->resolve('evicted.example.test'))
+        ->toThrow(TenantCouldNotBeIdentifiedByHostException::class);
+});
 
 /** Runs the host middleware and returns the account id that was active INSIDE the request. */
 function accountSeenByHostMiddlewareHR(string $host, array $server = []): ?string

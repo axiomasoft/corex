@@ -37,12 +37,12 @@ final class EventsRegistrar implements PackageRegistrar
         $events->listen(JobProcessing::class, [QueueTenantContext::class, 'processing']);
         $events->listen(JobAttempted::class, [QueueTenantContext::class, 'finished']);
 
-        // Host → account entries are forgotten before a model's rows go away, and after any save.
+        // Fence host mappings after committed saves/deletes, including cascade deletion.
         // The invalidator itself is a no-op while host identification or its cache is off.
         $events->listen('eloquent.saved: '.Account::class, [HostResolverCacheInvalidator::class, 'accountChanged']);
-        $events->listen('eloquent.deleting: '.Account::class, [HostResolverCacheInvalidator::class, 'accountChanged']);
+        $events->listen('eloquent.deleted: '.Account::class, [HostResolverCacheInvalidator::class, 'accountChanged']);
         $events->listen('eloquent.saved: '.Domain::class, [HostResolverCacheInvalidator::class, 'domainChanged']);
-        $events->listen('eloquent.deleting: '.Domain::class, [HostResolverCacheInvalidator::class, 'domainChanged']);
+        $events->listen('eloquent.deleted: '.Domain::class, [HostResolverCacheInvalidator::class, 'domainChanged']);
 
         // Wildcard listeners stay inside the OIDC block: impersonation can be
         // configured while OIDC is off, and that profile registers nothing.

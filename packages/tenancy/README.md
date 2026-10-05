@@ -30,7 +30,10 @@ CoreX owns the account/domain models, physical tenancy engine and synchronous go
 provisioning. Account identifiers use UUIDv7; account fields are explicit typed columns. The legacy
 `root_accounts.data` column is no longer used for model attributes. Existing signup claim and pool
 cleanup SQL still use it for idempotency and crash recovery until P08 (D107); retain the column and
-these writes until that migration is complete. Saved/deleting model events invalidate the central host cache.
+these writes until that migration is complete. Saved/deleted model events fence the central host cache
+after commit. Positive entries carry a shared generation so late lookups cannot restore revoked mappings;
+account deletion cascades also invalidate them. Changes to any account/domain invalidate all warmed host
+mappings, which are rebuilt on demand. Resolutions inside transactions bypass the shared cache.
 
 Publish configuration with `php artisan vendor:publish --tag=corex-tenancy-config`. All settings,
 including wakeup, use `config/corex-tenancy.php` under `corex-tenancy`. Migrate host overrides from the

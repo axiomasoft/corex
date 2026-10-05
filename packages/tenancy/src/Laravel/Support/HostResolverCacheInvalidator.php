@@ -8,14 +8,16 @@ use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Tenancy\Runtime\Internal\HostAccountResolver;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
+use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Eloquent\Model;
+use RuntimeException;
 
 /**
- * @corex-model-extension Observes saved/deleting of the Account and Domain models; reads the Domain `host` and the Account key.
+ * @corex-model-extension Observes saved/deleted of the Account and Domain models; reads the Domain `host` and the Account key.
  *
- * Forgets cached host → account mappings. Wired as `saved`/`deleting` listener of the
- * Account and Domain models and called by lifecycle transitions after commit.
+ * Fences cached host → account mappings after commit. The shared generation also
+ * covers account deletion cascades, when no domain rows remain to enumerate.
  */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final readonly class HostResolverCacheInvalidator
@@ -33,20 +35,31 @@ final readonly class HostResolverCacheInvalidator
             return;
         }
 
-        foreach ([$domain->getAttribute('host'), $domain->getOriginal('host')] as $host) {
-            if (is_string($host) && $host !== '') {
-                $this->forgetHost($host);
-            }
+        // Capture before Eloquent syncs the original attributes after saved.
+        $hosts = [$domain->getAttribute('host'), $domain->getOriginal('host')];
+
+        // Prove cache invalidation is writable while a save can still roll back.
+        // The commit fence below must advance again after concurrent refills.
+        if ($domain->getConnection()->transactionLevel() > 0) {
+            $this->invalidate();
         }
+
+        $domain->getConnection()->afterCommit(function () use ($hosts): void {
+            $this->invalidate($hosts);
+        });
     }
 
-    /** An account row changed: every host of the account (soft-deleted rows included) is forgotten. */
+    /** Account changes fence all mappings, including hosts removed by a delete cascade. */
     public function accountChanged(Model $account): void
     {
-        $key = $account->getKey();
+        if ($this->enabled()) {
+            if ($account->getConnection()->transactionLevel() > 0) {
+                $this->invalidate();
+            }
 
-        if (is_string($key) || is_int($key)) {
-            $this->forgetAccount((string) $key);
+            $account->getConnection()->afterCommit(function (): void {
+                $this->invalidate();
+            });
         }
     }
 
@@ -56,14 +69,20 @@ final readonly class HostResolverCacheInvalidator
             return;
         }
 
-        $hosts = $this->connections->connection($this->options->centralConnection)
-            ->table('root_domains')->where('account_id', $accountId)->pluck('host');
+        $connection = $this->connections->connection($this->options->centralConnection);
 
-        foreach ($hosts as $host) {
-            if (is_string($host)) {
-                $this->forgetHost($host);
-            }
+        if (! $connection instanceof Connection) {
+            throw new RuntimeException('Host cache invalidation requires a Laravel database connection.');
         }
+
+        if ($connection->transactionLevel() > 0) {
+            $this->invalidate();
+        }
+
+        $connection->afterCommit(function () use ($connection, $accountId): void {
+            $hosts = $connection->table('root_domains')->where('account_id', $accountId)->pluck('host');
+            $this->invalidate($hosts);
+        });
     }
 
     private function enabled(): bool
@@ -71,9 +90,19 @@ final readonly class HostResolverCacheInvalidator
         return $this->options->hostIdentificationEnabled && $this->options->hostCache;
     }
 
-    private function forgetHost(string $host): void
+    /** @param iterable<mixed> $hosts */
+    private function invalidate(iterable $hosts = []): void
     {
-        $this->cache->store($this->options->hostCacheStore)
-            ->forget(HostAccountResolver::key(strtolower($host)));
+        $store = $this->cache->store($this->options->hostCacheStore);
+
+        if (! $store->forever(HostAccountResolver::generationKey(), bin2hex(random_bytes(16)))) {
+            throw new RuntimeException('Unable to invalidate the host resolver cache generation.');
+        }
+
+        foreach ($hosts as $host) {
+            if (is_string($host) && $host !== '') {
+                $store->forget(HostAccountResolver::key(strtolower($host)));
+            }
+        }
     }
 }
