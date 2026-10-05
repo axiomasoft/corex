@@ -2,11 +2,13 @@
 
 Verdict: findings:2
 
+Autofix status: GREEN — F1/F2 resolved by `32e1817c74abcd59d5a29b51c384c7cb93f89aaa`; no new review per owner.
+
 Date: 2026-10-05. Reviewer: Codex, current root session. Exact runtime model selector and reasoning effort are unavailable to the reviewer; the execution-sheet's `gpt-6-astra/high` route and model independence are **not attested**. No subagent or second reviewer was launched. This report does not claim formal GREEN admission.
 
 Reviewed range: `57369e086473d87d4a8ccc308cbd0ce55050a28f..ba929ef3a9ae89b1b3e570e925151dd882fcff95`.
 
-The base is P07.1's recorded preimage, the candidate is the final P07.5 closure commit. Reviewed current implementation, phase diff, tests, decisions D95–D103, and P07.1–P07.5 completion/evidence. D107's explicit claim/cleanup exception and D108/D109's review/CI exclusions are respected. Product defects below are returned to their owning items; this review changes only this file. P07 closure, hosted CI, phase audit, and repairs are outside this invocation.
+The base is P07.1's recorded preimage, the candidate is the final P07.5 closure commit. Reviewed current implementation, phase diff, tests, decisions D95–D103, and P07.1–P07.5 completion/evidence. D107's explicit claim/cleanup exception and D108/D109's review/CI exclusions are respected. The original read-only pass returned the defects below to their owning items. The owner subsequently authorized fixes and explicitly excluded a new review; the execution result is recorded below. P07 phase acceptance, hosted CI and phase audit are not asserted by these fixes.
 
 ## Findings
 
@@ -117,7 +119,7 @@ Inspected original negative outputs:
 
 These mutation/negative probes were inspected, not rerun or applied to the review tree. The finite retired-test allowance in P07.2 is base-bound and names its inventory; it is not a new permanent floor. The broad suites cited in completion notes are earlier evidence, not new validation performed by P07.6.
 
-## Fresh validation
+## Original read-only validation
 
 DB preflight: host mode, Docker `corex_pgsql_test` healthy, PostgreSQL accepting on `127.0.0.1:5434`. Queried postgres catalogue and proved `corex_test` exists. Both harnesses take this `_test` database from their test configuration, and the selected tests recreate their own schema/migrations. Tenancy then access executed sequentially. No dev/prod database was targeted.
 
@@ -134,8 +136,39 @@ DB preflight: host mode, Docker `corex_pgsql_test` healthy, PostgreSQL accepting
 
 Temporary stdout logs were kept outside the repository; the durable outputs/results are recorded here. Root lint/analyse, full suites, hosted CI, and fresh mutation tests were not run: this item's Validation allows the bounded checks above and inspection of predecessor evidence. The corrected native-permission lane was necessary to reach the named check after reproducing its erroneous carrier.
 
-## Manual execution and continuation
+## Owner-authorized corrections (execution, no new review)
 
-The current Task runtime was tried read-only with both the plan path and the bare plan ID; it returns `PLAN_NOT_FOUND`. It expects the new JSON protocol, while this plan retains the earlier Markdown/journal layout. Per the owner's current instruction concerning the skm rewrite, review execution proceeded manually. No protocol migration, generated state edit, fabricated journal event, owner approval, route receipt, or GREEN completion was manufactured.
+Owner instructions: «я же написал с автоисправлениями»; «ревью не делай, только исправления». The owner's prior instruction permits manual plan correction when the skm rewrite causes errors. The original findings/range above remain historical evidence; no second verdict or reviewer was produced.
 
-Only this verdict is delivered. Product and unrelated dirty worktree paths are outside the review changes. F1 requires an owning P07.1/P07.2 correction with concurrent host-cache proof, then an affected rereview. F2 requires correcting the native permission acceptance carrier. P07.6 and phase P07 are not closed GREEN. The existing generated handoff/state still names P07.6; this report is the manual review result to consume when the compatible state writer is available.
+Product correction commit: `32e1817c74abcd59d5a29b51c384c7cb93f89aaa`. F1 owning correction is in P07.1/P07.2 code, with unchanged public constructor/method signatures. Host cache entries carry a random shared generation. Successful commit advances the generation; a delayed cache publication retains its older generation and cannot authorize this or subsequent requests. Transactions bypass shared reads/writes. Saved/deleted events cover completed SQL and account deletion cascades. In-transaction invalidation proves cache writability while domain verification can still roll back; commit advances the fence again. The lifecycle's physical entry removal after commit is retained. A missing/evicted generation is freshly initialized, preventing reuse of old entries.
+
+Tradeoff: account/domain mutations invalidate all warmed host mappings, rebuilt on demand. Stable cache hits retain zero central SQL queries. Public SPI signatures, migrations and API manifests are unchanged. Package README/CHANGELOG document the behavior.
+
+F2 owning carrier now uses `PGSQL_PORT=5434 scripts/php84 composer --working-dir=packages/access test:pg -- --filter=NativePermission` in P07.6.md. The original no-tests failure remains recorded above.
+
+New regressions use two independent PostgreSQL connections to `corex_test` and one real file-backed host cache outside tenant stores. A one-shot framework WritingKey listener deterministically commits between SQL lookup and cache publication. The eight principal regressions fail on the prior product: revoke, rename, reassignment, domain deletion, account pending-shell transition, account cascade deletion, delayed publication and rolled-back verification. Additional cases cover warmed-cache transaction bypass and generation eviction. No sleeps or external services are required. Fixtures create tenant databases with `_test` suffix and clean them afterward.
+
+### Execution checks
+
+| Check | Result |
+|---|---|
+| Pre-fix eight regressions | RED as expected: 8 failed / 21 assertions; `autofix/regression-before.log` |
+| Host resolution + cache-failure rollback + lifecycle entry removal | GREEN: 23 passed / 99 assertions; `autofix/host-resolution-final.log` |
+| Full tenancy | GREEN: 599 passed / 2228 assertions, 6 optional Redis/native-object skips; `autofix/tenancy-tests-final.log` |
+| Root tests | GREEN: 1126 + 17 passed / 5646 + 79 assertions; `autofix/root-tests.log` |
+| Root PostgreSQL lane | GREEN: 242 passed / 1156 assertions; `autofix/root-pg.log` |
+| ScopeBoundary + ImpersonationProfile | GREEN: 8 passed / 109 assertions; `autofix/scope-impersonation.log` |
+| NativePermission corrected carrier | GREEN: 5 passed / 20 assertions; `autofix/native-permission.log` |
+| Root lint / all-package PHPStan + ceilings / tenancy PHPStan | GREEN; final logs in `autofix/` |
+| module-layout / php-api strict/check | GREEN; `autofix/module-layout-final.log`, `autofix/php-api-final.log` |
+| Architecture | GREEN: 135 passed / 455 assertions; `autofix/architecture-final.log` |
+| Mandatory mutation check | GREEN: 37/37 expected RED controls, original source/index restored; `autofix/mutation.log` |
+| Stancl grep / runtime globals | No tracked stancl matches; empty `{}` baseline; runtime-globals gate exit 0 |
+
+Machine-readable execution checks and log hashes: `autofix/validation-summary.json`, `autofix/log-digests.json`. These are manually recorded observed results, not fabricated Task admission receipts.
+
+The first full tenancy run found two compatibility regressions in the repair (cache failure must deny verification before commit; lifecycle must remove the physical mapping). Both were corrected and the full suite rerun GREEN. Initial module-layout/php-api/architecture checks observed temporary negative probes from overlapping root architecture tests. After those processes completed, final checks ran sequentially and passed. Initial failures remain in `autofix/`; oversized initial php-api stdout is preserved locally in `build/p07.6-initial-gates.log` with its hash in `autofix/gates.log`. No quality baseline or negative control was weakened.
+
+### Manual plan continuation
+
+Current Task runtime still returns `PLAN_NOT_FOUND`: it expects the new JSON layout while this plan uses Markdown/journal. Per owner authorization, journal/state/status/handoff are updated manually with explicit provenance. P07.6 is complete with deviations: both fixes and checks are done; new review was explicitly excluded; an independent frontier reviewer and hosted CI are not attested. P07 phase acceptance remains separate under D97/D109. No further review is scheduled by this handoff.

@@ -1,0 +1,86 @@
+[
+  {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.6-review/autofix/analyse-final.log",
+    "sha256": "19de74e64e97264121467c1be9db466fd3f31136ec36ddbc2cccd3817508f6df"
+  },
+  {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.6-review/autofix/analyse-final2.log",
+    "sha256": "19de74e64e97264121467c1be9db466fd3f31136ec36ddbc2cccd3817508f6df"
+  },
+  {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.6-review/autofix/analyse.log",
+    "sha256": "564a146597960b56ed62936e3c2920f6e8cff57c08944ecd066740055e44564f"
+  },
+  {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.6-review/autofix/architecture-final.log",
+    "sha256": "97f6c0f1a05f7fcf13a06790e0b1518f44da0e2e562b768d0fef6d6b36e27683"
+  },
+  {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.6-review/autofix/gates.log",
+    "sha256": "2e07995f39b9d3c5f040c2d374029a469ef54d83701f1dd6b79b4c27a934f173"
+  },
+  {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.6-review/autofix/host-resolution-final.log",
+    "sha256": "84eb7d916a9d6a0169e544f34ac5ef5c1e477ac0a0b0648b702abea2eddc8819"
+  },
+  {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.6-review/autofix/host-resolution.log",
+    "sha256": "9088379dd9a55547180985ced8d911b1da59917a79aec55ebf3e92f9999c8897"
+  },
+  {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.6-review/autofix/lint-final.log",
+    "sha256": "18b94ca6b64dc05fa6c861c92fa49242e090852a0c2b13c09a30ea6463c7de8c"
+  },
+  {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.6-review/autofix/lint.log",
+    "sha256": "18b94ca6b64dc05fa6c861c92fa49242e090852a0c2b13c09a30ea6463c7de8c"
+  },
+  {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.6-review/autofix/module-layout-final.log",
+    "sha256": "8c4fa32feeb15372d6f45a2221dfe628c37aa31f113577a62402569ff075b244"
+  },
+  {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.6-review/autofix/mutation.log",
+    "sha256": "da29e62dbc7527d85cfc7a174855e72138e3fdc7bec28a366e68eddab5293989"
+  },
+  {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.6-review/autofix/native-permission.log",
+    "sha256": "b8705947c132b5b0a5bcd9a4febfb47e616d55ac0f3d0dd07c068d13110fc2ac"
+  },
+  {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.6-review/autofix/php-api-final.log",
+    "sha256": "d936a82f16aa7e57529c853eca89b6348241312ab201474e11ff232702bbf676"
+  },
+  {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.6-review/autofix/regression-before.log",
+    "sha256": "567af37d323049a28790eab22d47ac9764e0c74770474bec933bdf7304471d81"
+  },
+  {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.6-review/autofix/root-pg.log",
+    "sha256": "4623093e060adb347e241536e7f63574bd3eb518143076d336bae139b0ade4e7"
+  },
+  {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.6-review/autofix/root-tests.log",
+    "sha256": "0d846f46ee5f708b107fd757fc56cd5bb6c6009e00e79457a9fa75fb25da9778"
+  },
+  {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.6-review/autofix/scope-impersonation.log",
+    "sha256": "cdb30342d45ced54917b90b99821c13e31020d9faecb49a7001751a6347a106f"
+  },
+  {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.6-review/autofix/task-runtime.log",
+    "sha256": "64dd95e8d0074b134df5e897e34a2ca546cd480ee5f44a3e5002cdcf80f764d3"
+  },
+  {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.6-review/autofix/tenancy-analyse-final.log",
+    "sha256": "e80d1ed8e101f607101f71ed1804d757438571cac4a8c2b710a207da75cce8db"
+  },
+  {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.6-review/autofix/tenancy-tests-final.log",
+    "sha256": "2e3b69d59920823682a3c1679979d04df48ba8eb562cfddc00aeddc4bd90beb2"
+  },
+  {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.6-review/autofix/tenancy-tests.log",
+    "sha256": "463bf03302b33d7eca56fcb2bf3bd5dd9eb39ac48189d6b26726f3383307183c"
+  }
+]

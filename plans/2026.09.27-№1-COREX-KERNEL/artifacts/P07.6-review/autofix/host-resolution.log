@@ -1,0 +1,29 @@
+> pest '--filter=HostResolution'
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\HostResolutionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects late stale entries even if their generation was evicted[39m[90m  [39m [90m0.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit з: два аккаунта × два домена, чередование запросов → 0 пересечен[39m[90m…[39m [90m0.62s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit й: подделанные X-Account-Id/X-Forwarded-Host не влияют на резолв[39m[90m [39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit е: второй запрос по тому же host делает 0 запросов в central-кон[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit г: deleted_at у домена → отказ[39m[90m                                   [39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never publishes an uncommitted verification into the shared host[39m[90m…[39m [90m0.55s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit а: неизвестный host → отказ резолва (наш exception)[39m[90m              [39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit д: валидный host → внутри запроса контекст account активен, посл[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit в: host с verified_at IS NULL → отказ[39m[90m                            [39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit б: host аккаунта с slug IS NULL (pending-болванка) → отказ (§7.3[39m[90m…[39m [90m0.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ж: смена домена → старый host больше не резолвится СРАЗУ (без ож[39m[90m…[39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit и: следующий host всегда читается из central после инициализации[39m[90m…[39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fences a host refilled by another connection before the writer c[39m[90m…[39m [90m0.53s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fences a host refilled by another connection before the writer c[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fences a host refilled by another connection before the writer c[39m[90m…[39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fences a host refilled by another connection before the writer c[39m[90m…[39m [90m0.62s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fences a host refilled by another connection before the writer c[39m[90m…[39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fences a host refilled by another connection before the writer c[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit bypasses a warmed cache inside a transaction and preserves it af[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a lookup whose cache publication arrives after revocatio[39m[90m…[39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit г: deleted_at у аккаунта → отказ[39m[90m                                 [39m [90m0.38s[39m  
+
+  [90mTests:[39m    [32;1m21 passed[39;22m[90m (93 assertions)[39m
+  [90mDuration:[39m [39m9.71s[39m
+  [90mRandom Order Seed:[39m [39m1791212363[39m
+

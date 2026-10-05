@@ -3,8 +3,8 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-10-05
-inputs_sha256: 0074c737e5cccee948921df4d1e0830aa4c1ee51b4e195815c4576ea6d5e5cb7
-generated_by: task plan-views status
+inputs_sha256: 1795d2ed8a114ca2c09b5043ee19a8d974db7bb5279ec1f5dd5ccd7f43f5c922
+generated_by: owner-authorized manual fallback for P07.6 (Task PLAN_NOT_FOUND)
 -->
 
 # Plan status
@@ -30,7 +30,7 @@ generated_by: task plan-views status
 | P04 | Application API, Extension SPI и типизированные ошибки | 4/4 | 🟢 Done |
 | P05 | Typed config, композиция и порты | 4/4 | 🟢 Done |
 | P06 | Operations, tools, webhooks и wire | 4/5 | 🟠 Done with deviations |
-| P07 | Tenancy, access, независимость модулей | 5/6 | 🟡 In progress |
+| P07 | Tenancy, access, независимость модулей | 6/6 | 🟡 Awaiting phase acceptance |
 | P10 | Зелёный hosted CI на базе P04 | 4/4 | 🟢 Done |
 
 ## Phase P00
@@ -103,7 +103,7 @@ generated_by: task plan-views status
 | P07.3 | Impersonation на портах с профилями и двойным аудитом | 🟢 Done | 2026-10-05 |
 | P07.4 | Access без AzGuard и мост access-azguard | 🟢 Done | 2026-10-05 |
 | P07.5 | Контракты пробуждения в ядре и граф без notifications → wakeup | 🟢 Done | 2026-10-05 |
-| P07.6 | Review P07 | ⬜ Not started | — |
+| P07.6 | Review P07 / owner-authorized fixes | 🟡 Done with deviations | 2026-10-05 |
 
 ## Phase P10
 
@@ -403,3 +403,5 @@ write-site: pre_mutation: allow · pre_final: allow |
 ## Owner Gates
 
 - P06.5: known deviation
+
+| 2026-10-05 | codex/GPT-6 | plan-run · closed-deviations · P07.6 F1/F2 fixed on 32e1817c, all affected/required checks GREEN; no new review per owner. Task PLAN_NOT_FOUND → owner-authorized manual bookkeeping. See artifacts/P07.6-review/verdict.md. |
