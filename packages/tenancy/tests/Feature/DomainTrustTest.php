@@ -268,7 +268,7 @@ it('denies verification and rolls back trusted state when resolver-cache invalid
         'cache_store' => 'domain_trust_failure',
     ]]);
     app()->forgetInstance(TenancyOptions::class);
-    app('cache')->extend('domain_trust_failure', static function (): never {
+    app('cache')->extend('domain_trust_failure', function (): never {
         throw new RuntimeException('The cache store is unavailable.');
     });
     config(['cache.stores.domain_trust_failure' => ['driver' => 'domain_trust_failure']]);
