@@ -1,0 +1,8 @@
+{
+  "effort": "high",
+  "executor_session": "01a10a9e-9c38-7e40-be6d-1c15c8c4c018",
+  "invocation": "task:plan-run 2026.09.27-№1-COREX-KERNEL P07.4 P07.5 --reviewer=grok/grok-4.7/500k",
+  "item_id": "P07.4",
+  "reviewer": "grok/grok-4.7/500000",
+  "schema_version": "owner-review-request/v1"
+}

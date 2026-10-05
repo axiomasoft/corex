@@ -9,6 +9,7 @@ use CoreX\Access\Contracts\Principal;
 use CoreX\Access\Data\RecordContext;
 use CoreX\Access\Laravel\AuthOptions;
 use CoreX\Access\Laravel\ScopeResolver;
+use CoreX\Access\Matrix\Contracts\EntityActivity;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Override;
@@ -32,6 +33,7 @@ final readonly class DefaultScopeResolver implements ScopeResolver
         private ScopeAvailability $availability,
         private DirectGrantLookup $directGrants,
         private AuthOptions $options,
+        private EntityActivity $activity,
     ) {}
 
     /**
@@ -41,6 +43,10 @@ final readonly class DefaultScopeResolver implements ScopeResolver
     #[Override]
     public function apply(Builder $q, Principal $p, string $entityKey, string $action, ?RecordContext $ctx = null): Builder
     {
+        if (! $this->activity->isActive($entityKey)) {
+            return $this->deny($q);
+        }
+
         $key = "{$this->panel()}.{$entityKey}.{$action}";
 
         if ($this->directGrants->hasActive($p, $key)) {
@@ -48,7 +54,7 @@ final readonly class DefaultScopeResolver implements ScopeResolver
         }
 
         if (! $this->accessChecker->allowed($p, $entityKey, $action)) {
-            return $q->whereRaw('1 = 0');
+            return $this->deny($q);
         }
 
         $scope = $this->availability->normalize($entityKey, $this->accessChecker->scopeFor($p, $entityKey, $action, $ctx));
@@ -59,5 +65,15 @@ final readonly class DefaultScopeResolver implements ScopeResolver
     private function panel(): string
     {
         return $this->options->panel;
+    }
+
+    /** @param Builder<Model> $q
+     * @return Builder<Model>
+     */
+    private function deny(Builder $q): Builder
+    {
+        $q->getQuery()->whereRaw('1 = 0');
+
+        return $q;
     }
 }

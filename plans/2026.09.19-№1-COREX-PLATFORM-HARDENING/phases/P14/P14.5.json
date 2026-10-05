@@ -1,0 +1,304 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P14.5",
+  "title": "Shared invocation cost admission",
+  "status": "done",
+  "summary": "Реализовать shared invocation cost admission по замороженному дизайну P14.",
+  "why": "`@plan/knowledge/research-P14-design.json` §2.3; D75. Закрывает соответствующую строку\nacceptance/threat matrix §14 без переноса проектных решений в execution.",
+  "scope": {
+    "include": [
+      "Только нормативный срез §2.3, перечисленные ниже Files и\nпроверки: HTTP/exposed-tool parity, no handler before reserve, rejection releases unstarted idempotency owner, replay charges base only, post-admission unknown keeps estimate. rate_limited/Retry-After distinct from store-unavailable; metadata excludes scope keys."
+    ],
+    "exclude": [
+      "Остальные срезы P14; GraphQL; naming P15; новые runtime зависимости;\nlive rollout, внешние webhook sends и production migration/rotation."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D75",
+    "D104"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P14-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D75.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D104.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P14/P14.4.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P13/P13.2.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P13/P13.6.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P13/P13.9.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P14/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P13-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/api/src/Internal/EnvelopeSerializer.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/api/src/Internal/GuardedToolInvoker.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/api/src/Internal/Cost/BudgetAdmission.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/src/Internal/IdempotentOperationInvoker.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/src/Data/OperationResult.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/src/Internal/EnvelopeSerializer.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/src/Internal/GuardedToolInvoker.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/tests/Feature/CostInvocationTest.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/src/Internal/DefaultOperationInvoker.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/src/Dispatcher.php",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Нормативный текст и алгоритмы — `@plan/knowledge/research-P14-design.json` §2.3; D75. Budget admission may release only an unstarted idempotency owner and must not split D104's effect/outcome transaction. Сохранять predecessor contracts и public signatures; no new runtime dependencies."
+  ],
+  "guidance": "`@plan/knowledge/research-P14-design.json` §15 задаёт общие safe codes/port shapes. Использовать точные DTO/подписи, state transitions, defaults и\nfailure rules §2.3. Новый interface только Contracts, implementation Internal,\nDTO final readonly. Время durable decisions — injected Clock; duration — monotonic.\nRequired Reads section-qualified; максимум 2500 строк, ≤14 inputs, ≤8 Files.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer lint:check",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "composer analyse",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "composer test",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "composer test:pg",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "HTTP/exposed-tool parity, safe cost metadata and scope-key exclusion",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "Reserve before handler, unstarted idempotency rollback, replay base charge and unknown settlement",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "rate_limited Retry-After remains distinct from budget-store failure",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "API package lint, analysis and full suite",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "procedure": "Root lint, analysis and non-PG suite",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "procedure": "Shared PostgreSQL budget concurrency lane",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Перечисленные Files реализуют §2.3; измеримые результаты\nValidation приложены к item receipt, включая команды, failures/skips и ограничения."
+  ],
+  "route": {
+    "class": "frontier",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-25T13:01:13Z",
+    "finished_at": "2026-09-25T13:18:29Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-run/codex-gpt-5.6-sol/high",
+      "effort": "high"
+    },
+    "notes": "P14.5 GREEN: shared budget admission orders reserve/handler/settlement, releases unstarted idempotency ownership, charges replay base only, and projects safe HTTP/tool cost metadata. API 162/1189, root 707/2887, PG 1/14. write-site: pre_mutation: allow · pre_final: allow",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-25T13:18:29Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-25T13:18:29Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-25T13:18:29Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-25T13:18:29Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-09-25T13:18:29Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-09-25T13:18:29Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-25T13:18:29Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Реализовать shared invocation cost admission по замороженному дизайну P14."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`@plan/knowledge/research-P14-design.json` §2.3; D75. Закрывает соответствующую строку\nacceptance/threat matrix §14 без переноса проектных решений в execution."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Только нормативный срез §2.3, перечисленные ниже Files и\nпроверки: HTTP/exposed-tool parity, no handler before reserve, rejection releases unstarted idempotency owner, replay charges base only, post-admission unknown keeps estimate. rate_limited/Retry-After distinct from store-unavailable; metadata excludes scope keys."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Остальные срезы P14; GraphQL; naming P15; новые runtime зависимости;\nlive rollout, внешние webhook sends и production migration/rotation."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P14-design.json`; `@plan/decisions/D75.json`; `@plan/decisions/D104.json`; `@plan/phases/P14/P14.4.json`; `@plan/phases/P13/P13.2.json`; `@plan/phases/P13/P13.6.json`; `@plan/phases/P13/P13.9.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/api/src/Internal/Cost/BudgetAdmission.php`; `packages/api/src/Internal/IdempotentOperationInvoker.php`; `packages/api/src/Data/OperationResult.php`; `packages/api/src/Internal/EnvelopeSerializer.php`; `packages/api/src/Internal/GuardedToolInvoker.php`; `packages/api/tests/Feature/CostInvocationTest.php`; `packages/api/src/Internal/DefaultOperationInvoker.php`; `packages/api/src/Dispatcher.php`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P14/phase.json`; 2) `@plan/knowledge/research-P14-design.json` §2.3; 3) `@plan/decisions/D75.json`; 3a) `@plan/decisions/D104.json`; 4) `@plan/phases/P14/P14.4.json`; 5) `@plan/phases/P13/P13.2.json`; 6) `@plan/phases/P13/P13.6.json`; 7) `@plan/phases/P13/P13.9.json`; 8) `@plan/knowledge/research-P13-design.json` §2 и §5; 9) `packages/api/src/Internal/EnvelopeSerializer.php`; 10) `packages/api/src/Internal/GuardedToolInvoker.php`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Нормативный текст и алгоритмы — `@plan/knowledge/research-P14-design.json` §2.3; D75. Budget admission may release only an unstarted idempotency owner and must not split D104's effect/outcome transaction. Сохранять predecessor contracts и public signatures; no new runtime dependencies."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "`@plan/knowledge/research-P14-design.json` §15 задаёт общие safe codes/port shapes. Использовать точные DTO/подписи, state transitions, defaults и\nfailure rules §2.3. Новый interface только Contracts, implementation Internal,\nDTO final readonly. Время durable decisions — injected Clock; duration — monotonic.\nRequired Reads section-qualified; максимум 2500 строк, ≤14 inputs, ≤8 Files."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "HTTP/exposed-tool parity, no handler before reserve, rejection releases unstarted idempotency owner, replay charges base only, post-admission unknown keeps estimate. rate_limited/Retry-After distinct from store-unavailable; metadata excludes scope keys. Затронутый пакет: `composer lint:check`, `composer analyse`,\n`composer test`; root equivalents обязательны по plan.md. SQL paths дополнительно\nпакетный `composer test:pg` после isolation preflight; если script ещё не произведён\nP2, использовать его declared package PG lane, не считать отсутствие script успехом.\nNegative fixtures доказывают конкретный отказ. Непройденный check раскрывается."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Перечисленные Files реализуют §2.3; измеримые результаты\nValidation приложены к item receipt, включая команды, failures/skips и ограничения."
+    }
+  ]
+}

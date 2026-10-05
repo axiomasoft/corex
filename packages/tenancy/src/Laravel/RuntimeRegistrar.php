@@ -6,6 +6,7 @@ namespace CoreX\Tenancy\Laravel;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
+use CoreX\Config\Contracts\RuntimeConfigCheck;
 use CoreX\Context\Contracts\AccountConnectionResolver;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
@@ -13,10 +14,13 @@ use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Storage\Contracts\TenantStorage;
 use CoreX\Tenancy\Account\Contracts\AccountRead;
+use CoreX\Tenancy\Impersonation\Internal\ImpersonatedModelWriteGuard;
+use CoreX\Tenancy\Internal\DangerousModesCheck;
 use CoreX\Tenancy\Laravel\Support\AccountLifecyclePolicy;
 use CoreX\Tenancy\Laravel\Support\ImpersonationPolicy;
 use CoreX\Tenancy\Laravel\Support\StatusGatePolicy;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
+use CoreX\Tenancy\Provisioning\Contracts\TemplateDatabaseCloner;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateClonePostgreSQLManager;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Runtime\Internal\Bootstrappers\CachePrefixBootstrapper;
@@ -37,7 +41,6 @@ use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Queue\QueueManager;
 use Illuminate\Session\SessionManager;
 use Override;
-use Stancl\Tenancy\Contracts\UniqueIdentifierGenerator;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class RuntimeRegistrar implements PackageRegistrar
@@ -50,14 +53,15 @@ final class RuntimeRegistrar implements PackageRegistrar
         $app->singleton(
             TenancyOptions::class,
             static fn (Application $app): TenancyOptions => TenancyOptions::fromArray(
-                tenancy: self::tenancySection($app),
-                corexTenancy: self::configSection($app, 'corex-tenancy'),
+                config: self::tenancySection($app),
             ),
         );
         $app->bind(
             ImpersonationPolicy::class,
             static fn (Application $app): ImpersonationPolicy => $app->make(TenancyOptions::class)->impersonation,
         );
+        $app->scoped(ImpersonatedModelWriteGuard::class);
+        $app->tag([DangerousModesCheck::class], RuntimeConfigCheck::class);
         $app->bind(
             AccountLifecyclePolicy::class,
             static fn (Application $app): AccountLifecyclePolicy => $app->make(TenancyOptions::class)->lifecycle,
@@ -148,6 +152,8 @@ final class RuntimeRegistrar implements PackageRegistrar
             ),
         );
 
+        $app->bind(TemplateDatabaseCloner::class, TemplateClonePostgreSQLManager::class);
+
         $app->bind(
             TemplateClonePostgreSQLManager::class,
             static fn (Application $app): TemplateClonePostgreSQLManager => new TemplateClonePostgreSQLManager(
@@ -161,19 +167,6 @@ final class RuntimeRegistrar implements PackageRegistrar
     #[Override]
     public function boot(Application $app): void
     {
-        $options = $app->make(TenancyOptions::class);
-
-        // Model/provisioning projections stay until the Account model is plain Eloquent (PLAN3.P07.2);
-        // there is no vendor runtime: no resolvers, middleware, bootstrappers or listeners.
-        $app['config']->set([
-            'tenancy.models.tenant' => $options->tenantModel,
-            'tenancy.database.central_connection' => $options->centralConnection,
-            'tenancy.database.managers.pgsql' => $options->tenantDatabaseManager,
-            'tenancy.database.template_tenant_connection' => null,
-        ]);
-
-        $app->bind(UniqueIdentifierGenerator::class, $options->idGenerator);
-
         $app->make(QueueManager::class)->createPayloadUsing(TenancyRuntimeFactory::payloadHook());
     }
 
@@ -181,11 +174,11 @@ final class RuntimeRegistrar implements PackageRegistrar
      * `cache_stores = null` means the application's default cache store: the secure default is to
      * isolate what the application actually uses.
      *
-     * @return array<array-key, mixed>
+     * @return array<string, mixed>
      */
     private static function tenancySection(Application $app): array
     {
-        $section = self::configSection($app, 'tenancy');
+        $section = self::configSection($app, 'corex-tenancy');
 
         if (($section['cache_stores'] ?? null) === null) {
             $default = TenancyRuntimeFactory::frameworkConfig()->get('cache.default');
@@ -195,11 +188,15 @@ final class RuntimeRegistrar implements PackageRegistrar
         return $section;
     }
 
-    /** @return array<array-key, mixed> */
+    /** @return array<string, mixed> */
     private static function configSection(Application $app, string $key): array
     {
         $section = $app['config']->get($key, []);
 
-        return is_array($section) ? $section : [];
+        if (! is_array($section)) {
+            return [];
+        }
+
+        return array_filter($section, static fn (mixed $key): bool => is_string($key), ARRAY_FILTER_USE_KEY);
     }
 }

@@ -18,8 +18,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Queue\Events\JobAttempted;
 use Illuminate\Queue\Events\JobProcessing;
 use Override;
-use Stancl\JobPipeline\JobPipeline;
-use Stancl\Tenancy\Events\TenantCreated;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class EventsRegistrar implements PackageRegistrar
@@ -33,26 +31,18 @@ final class EventsRegistrar implements PackageRegistrar
         $options = $app->make(TenancyOptions::class);
         $events = $app->make(Dispatcher::class);
 
-        $events->listen(
-            TenantCreated::class,
-            JobPipeline::make($options->provisioningPipeline)
-                ->send(static fn (TenantCreated $event): mixed => $event->tenant)
-                ->shouldBeQueued(false)
-                ->toListener(),
-        );
-
         // Resolved from the container per event: QueueTenantContext is a singleton frame stack.
         // JobAttempted (dispatched from the `finally` of Worker::process and SyncQueue::executeJob)
         // is the only point that ends a job's context.
         $events->listen(JobProcessing::class, [QueueTenantContext::class, 'processing']);
         $events->listen(JobAttempted::class, [QueueTenantContext::class, 'finished']);
 
-        // Host → account entries are forgotten before a model's rows go away, and after any save.
+        // Fence host mappings after committed saves/deletes, including cascade deletion.
         // The invalidator itself is a no-op while host identification or its cache is off.
         $events->listen('eloquent.saved: '.Account::class, [HostResolverCacheInvalidator::class, 'accountChanged']);
-        $events->listen('eloquent.deleting: '.Account::class, [HostResolverCacheInvalidator::class, 'accountChanged']);
+        $events->listen('eloquent.deleted: '.Account::class, [HostResolverCacheInvalidator::class, 'accountChanged']);
         $events->listen('eloquent.saved: '.Domain::class, [HostResolverCacheInvalidator::class, 'domainChanged']);
-        $events->listen('eloquent.deleting: '.Domain::class, [HostResolverCacheInvalidator::class, 'domainChanged']);
+        $events->listen('eloquent.deleted: '.Domain::class, [HostResolverCacheInvalidator::class, 'domainChanged']);
 
         // Wildcard listeners stay inside the OIDC block: impersonation can be
         // configured while OIDC is off, and that profile registers nothing.

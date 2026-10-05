@@ -1,0 +1,47 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D75",
+  "title": "Четыре бюджета резервируются атомарно; Q4 закрыт",
+  "date": "2026-09-20",
+  "status": "accepted",
+  "decision": "Global enforce, account/client/actor observe по умолчанию. Единая shared SQL authority, одна transaction; terminal CAS refund, unknown expiry без refund. Bulk оплачивает admission и каждый batch, а не удерживает full export estimate.",
+  "rationale": "`@plan/knowledge/research-P14-design.json` фиксирует проверенные ограничения дерева, failure modes\nи отвергнутые альтернативы. Решение сохраняет D7/D9/D14, физический tenant scope\nи одну contract authority; не вводит нового consumer-specific слоя.",
+  "applies_to": [
+    "P14",
+    "P14.4",
+    "P14.5"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/codex-gpt-6-astra/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D75\ndate: 2026-09-20\nstatus: accepted\nitem: P14\nitems: [P14, P14.4, P14.5]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D75-Q4",
+      "title": "D75 — Четыре бюджета резервируются атомарно; Q4 закрыт",
+      "text": "**Actor:** plan-designer/codex-gpt-6-astra/high\n**Evidence:** RAG:— repository reads и predecessor contracts; внешние patterns,\nгде применимы, подтверждены `@plan/knowledge/research-P14-design-rag.json`. Defaults — локальное решение."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "Global enforce, account/client/actor observe по умолчанию. Единая shared SQL authority, одна transaction; terminal CAS refund, unknown expiry без refund. Bulk оплачивает admission и каждый batch, а не удерживает full export estimate."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "`@plan/knowledge/research-P14-design.json` фиксирует проверенные ограничения дерева, failure modes\nи отвергнутые альтернативы. Решение сохраняет D7/D9/D14, физический tenant scope\nи одну contract authority; не вводит нового consumer-specific слоя."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "Items P14.4, P14.5 реализуют точный нормативный срез и negative matrix.\nЭтот design record не является owner grant для G-DDL/G-SECRET или live rollout."
+    }
+  ]
+}

@@ -1,0 +1,227 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P7.12",
+  "title": "D100 behavior proof: dynamic default connection and TTL matrix",
+  "status": "done",
+  "summary": "Prove the two corrected P7.1 behaviors without changing product code: dynamic\ndefault-connection resolution on one repository instance and distinct missing/null/zero/positive\nTTL semantics.",
+  "why": "DA01 and DA13 require executable witnesses, while P7.1 already owns eight product files.\nA separate proof item keeps the ordinary Files budget honest and prevents tests/receipt writes\noutside the owning contract.",
+  "scope": {
+    "include": [
+      "Focused unit/feature tests for `CoreOptions::fromArray()` and\n`SqlSavedViewRepository`; central→tenant→central lifecycle fixture; explicit-override fixture;\nP7 receipt rows with exact commands/results."
+    ],
+    "exclude": [
+      "Product-code repair; tenancy runtime relocation; new connection abstraction;\nchanges outside the three declared Files."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D100"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/phases/P7/P7.1.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D100.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Config/Data/CoreOptions.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Views/Internal/SqlSavedViewRepository.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P7/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P7-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/tests/Views/SqlSavedViewRepositoryTest.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/core/tests/Unit/CoreOptionsTest.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/tests/Views/SqlSavedViewRepositoryTest.php",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P7-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Tests consume the P7.1 seam as written and do not patch the\ncontainer between repository operations. Missing TTL resolves to 3600; explicit null stays null;\nzero stays zero; a positive integer is preserved. The same repository object observes the current\ndefault in central, tenant and restored-central contexts; an explicit override stays fixed. If a\nwitness is red, return it to P7.1 rather than changing product code here."
+  ],
+  "guidance": "Use a recording Laravel database manager/resolver fixture with three successive\ndefaults and assert the connection selected for each actual repository operation. Keep the TTL\nmatrix table-driven and include invalid-value accumulation already promised by P7.1.",
+  "validation": [
+    {
+      "id": "V1",
+      "procedure": "composer --working-dir=packages/core test",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "composer --working-dir=packages/core test:pg",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "composer --working-dir=packages/core analyse",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "composer --working-dir=packages/core lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "git diff --stat -- packages/core/src/ is empty for this item",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Two focused test carriers and a D100-bound receipt; no product writes."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-23T06:42:38Z",
+    "finished_at": "2026-09-23T06:53:07Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/grok-4.7/high",
+      "effort": "high"
+    },
+    "notes": "P7.12 GREEN: D100 TTL matrix, SecretRef redaction, one repository central→tenant→central. sqlite 93/223, pg 37/180. src diff is foreign baseline.\nwrite-site: pre_mutation: allow · pre_final: allow",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-09-23T06:53:07Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-23T06:53:07Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-23T06:53:07Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-23T06:53:07Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-23T06:53:07Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-23T06:53:07Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Prove the two corrected P7.1 behaviors without changing product code: dynamic\ndefault-connection resolution on one repository instance and distinct missing/null/zero/positive\nTTL semantics."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "DA01 and DA13 require executable witnesses, while P7.1 already owns eight product files.\nA separate proof item keeps the ordinary Files budget honest and prevents tests/receipt writes\noutside the owning contract."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Focused unit/feature tests for `CoreOptions::fromArray()` and\n`SqlSavedViewRepository`; central→tenant→central lifecycle fixture; explicit-override fixture;\nP7 receipt rows with exact commands/results."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Product-code repair; tenancy runtime relocation; new connection abstraction;\nchanges outside the three declared Files."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/phases/P7/P7.1.json`; `@plan/decisions/D100.json`;\n`packages/core/src/Support/CoreOptions.php`;\n`packages/core/src/Views/Internal/SqlSavedViewRepository.php`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/core/tests/Unit/CoreOptionsTest.php`;\n`packages/core/tests/Views/SqlSavedViewRepositoryTest.php`;\n`@plan/knowledge/findings-P7-receipts.json`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P7/phase.json`; 2) `@plan/phases/P7/P7.1.json`;\n3) `@plan/decisions/D100.json`;\n4) `@plan/knowledge/research-P7-design.json` §5.3; 5) `packages/core/src/Support/CoreOptions.php`;\n6) `packages/core/src/Views/Internal/SqlSavedViewRepository.php`;\n7) `packages/core/tests/Views/SqlSavedViewRepositoryTest.php`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Tests consume the P7.1 seam as written and do not patch the\ncontainer between repository operations. Missing TTL resolves to 3600; explicit null stays null;\nzero stays zero; a positive integer is preserved. The same repository object observes the current\ndefault in central, tenant and restored-central contexts; an explicit override stays fixed. If a\nwitness is red, return it to P7.1 rather than changing product code here."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Use a recording Laravel database manager/resolver fixture with three successive\ndefaults and assert the connection selected for each actual repository operation. Keep the TTL\nmatrix table-driven and include invalid-value accumulation already promised by P7.1."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Focused tests prove missing/null/zero/positive TTL, two violations in one\n`InvalidConfiguration`, SecretRef redaction, one repository instance across\ncentral→tenant→central, and immutable explicit override. `composer --working-dir=packages/core\ntest`; `composer --working-dir=packages/core test:pg`; `composer --working-dir=packages/core\nanalyse`; `composer --working-dir=packages/core lint:check`; `git diff --stat --\n'packages/core/src/'` is empty for this item."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Two focused test carriers and a D100-bound receipt; no product writes."
+    }
+  ]
+}

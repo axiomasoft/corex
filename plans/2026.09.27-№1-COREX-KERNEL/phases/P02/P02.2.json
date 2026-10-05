@@ -1,0 +1,338 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P02.2",
+  "title": "Operations отдаёт webhooks и tools через SPI",
+  "status": "done",
+  "summary": "Разорвать в текущей раскладке рёбра engine↔webhooks/tools (D31 швы 1, 2, 3, 5) и тестовую связность\noperations (D35): SPI `ContractSnapshotSection` + `WebhookSnapshotSection`, публичный `WebhooksServiceProvider`,\n`corex:webhooks:prune`, конфиг `corex-webhooks`, фабрика `ResolvedContexts` в `CoreX\\Api\\Testing`, разделение 7 смешанных\nтестов engine — так, чтобы из 136 швов остались только 18 строк `CoreX\\Api\\Tests\\TestCase`, которые снимает scaffold P02.3.",
+  "why": "D31: без швов split даёт цикл operations↔webhooks и `internal-edge` на engine; snapshot и провайдер — обязательные\nprerequisites P02, не P06 (backlog P02, D44 п.1). Шов 4 (Validation/Pagination) уже выражен строками карты и исполняется переносом.",
+  "scope": {
+    "include": [
+      "`examples.md` §2.1–§2.3: `packages/operations/src/OpenApi/Contracts/ContractSnapshotSection.php`,\n`ContractSnapshotBuilder` (tagged разделы), `packages/operations/src/Webhooks/Internal/WebhookSnapshotSection.php`,\n`packages/operations/src/Webhooks/WebhooksServiceProvider.php`, `packages/operations/src/Webhooks/Commands/PruneWebhooks.php`,\nправки `ApiServiceProvider`, `PruneApiOperations`, `WebhookRegistrar`/`WebhookRouteRegistrar` (prefix/middleware из `ApiOptions`),\n`packages/operations/config/corex-webhooks.php` и удаление раздела из `corex-api.php`, `extra.laravel.providers` operations,\npsr-4 `CoreX\\Api\\Contracts\\` += `src/OpenApi/Contracts/`; `packages/operations/src/Testing/ResolvedContexts.php`; тесты:\n6 строк `move` `ResolvedContext`, разделение `ApiRetentionTest`, `LoadContourIntegrationTest`, `AuthorizationLayersTest`,\n`CostInvocationTest`, `IdempotentInvocationTest`, `OperationParityTest`, `LoadContourBootTest` на engine/`Tool*`/`Webhook*`;\nстроки карты `new-map-rows.tsv` (P02.2) и по строке на каждый новый `Tool*`/`Webhook*` тест; регенерация рёбер, rename-map,\ngolden `php-surface` + строка `REBASELINE.md`."
+    ],
+    "exclude": [
+      "собственные `TestCase` tools/webhooks и 18 строк `CoreX\\Api\\Tests\\TestCase` (P02.3); переносы файлов\nмежду каталогами пакетов и namespace (P02.3); переименование `corex:api:*`, `corex-api` (P02.4); wire-коды `webhook_*` (P06)."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D31",
+    "D44"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P02-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P02-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/knowledge/artifacts-P02-design-examples.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/artifacts/P02-design/facts/seams.tsv",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/artifacts/P02-design/facts/new-map-rows.tsv",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/decisions/D31.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D44.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "packages/operations/src/OpenApi/Internal/ContractSnapshotBuilder.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/operations/src/ApiServiceProvider.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/operations/src/Laravel/Commands/PruneApiOperations.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/operations/config/corex-api.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/operations/src/{OpenApi,Webhooks,Laravel,Testing}/**",
+      "change": "any"
+    },
+    {
+      "path": "packages/operations/src/ApiServiceProvider.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/operations/config/{corex-api,corex-webhooks}.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/operations/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/operations/tests/**",
+      "change": "any"
+    },
+    {
+      "path": "@plan/artifacts/P00/{namespace-map,dependency-edges}.tsv",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Снимок `api/v1` и golden `routes/events/wire` не меняются (файлы, порядок, хэши `manifest.json`); порядок `FILES` = прежний при установленном webhooks.",
+    "`WebhooksServiceProvider` регистрирует всё, что раньше делал engine для webhooks, в том же порядке фаз register/boot; engine не импортирует ни одного символа `src/Webhooks/**` и `src/Tools/**`.",
+    "`corex:api:prune` больше не чистит webhooks; `corex:webhooks:prune` делает ровно прежнюю webhooks-ветку; если engine планирует prune, webhooks планирует свой с тем же расписанием.",
+    "Конфиг `corex-webhooks` = раздел `webhooks` `corex-api.php` без изменения ключей/значений/env; `config('corex-api.webhooks…')` не остаётся.",
+    "Разделение тестов — по правилу `examples.md` §2.3; ни один тест не удаляется и не помечается skip; число тестов sqlite/pg не уменьшается.",
+    "Новые файлы — в текущей раскладке; каталоги/файлы без строки карты → `new-map-rows.tsv` (P02.2) и строки `Tool*`/`Webhook*` тестов.",
+    "Комментарии — «почему», без ссылок на план."
+  ],
+  "guidance": "`examples.md` §2.1 (интерфейс, builder, секция), §2.2 (провайдер, prune, конфиг, providers), §2.3 (правило\nразбиения, имена `Tool<M>`/`Webhook<M>`); `ResolvedContexts` — статическая фабрика, возвращающая `ResolvedContext` через\nпубличный тип контекста запроса (`grep -n \"implements\" packages/operations/src/**/ResolvedContext.php`); досье §4.2 шаги 1–7.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "p02-transfer.py seams | tail -1",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "python3 plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/scripts/p02-transfer.py plan | tail -1",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "git diff --exit-code api/",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "git checkout",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "GOLDEN_UPDATE=1 … --testsuite=Golden",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "cmd": "golden-delta.py --base <коммит до item>",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "- `p02-transfer.py seams | tail -1` до → `seams: 89 unresolved (18 scaffold-owned, 71 blocking)`; после → `seams: 18 unresolved (18 scaffold-owned, 0 blocking)`, exit 0.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "- `python3 plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/scripts/p02-transfer.py plan | tail -1` → `plan: … 0 pending, 0 problems`.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "procedure": "- `scripts/php84 composer api-contract` и `scripts/php84 composer contract-guard` → exit 0 (снимок `api/v1` без диффа: `git diff --exit-code api/`).",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "procedure": "- Новый `packages/operations/tests/Feature/WebhooksProviderTest.php` (строка карты → webhooks): при `deliveryEnabled` в `Artisan::all()` есть `corex:webhooks:deliver` и `corex:webhooks:prune`, параметры `PruneApiOperations::handle()` (Reflection) не содержат `WebhookRetention` → `scripts/php84 vendor/bin/pest packages/operations/tests/Feature/WebhooksProviderTest.php` passed.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V11",
+      "procedure": "- Негативы: (a) импорт `WebhookTopic` обратно в `ContractSnapshotBuilder` → `check-maps.py --write-edges` + `--dependencies` → `dependency-cycle` или `internal-edge`, exit 1; (b) снять tag `WebhookSnapshotSection` → golden `wire` падает (нет `webhooks.json`); (c) убрать `WebhooksServiceProvider` из `extra.laravel.providers` → golden `routes` падает. После откатов — зелёно (`git checkout` карты рёбер).",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V12",
+      "procedure": "- `check-maps.py` → `maps OK`; `--write-edges`; `--dependencies` → OK; golden-rename-map регенерация + `--check`; `GOLDEN_UPDATE=1 … --testsuite=Golden` 4 passed; `golden-delta.py --base <коммит до item>` → OK; строка `REBASELINE.md`.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V13",
+      "procedure": "- Полный стек досье §4.5 → exit 0 (manifests 21 roots).",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V14",
+      "procedure": "- Independent review: reviewer/effort — из строки `roadmap.md` `execution-sheet/v1`; свежий контекст, reviewer model != executor; вход — item-spec + diff + вывод Validation; строка `review: <provider>/<model> <GREEN|findings:N>`; ≤2 раунда.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "SPI снимка и секция webhooks; `WebhooksServiceProvider`, `corex:webhooks:prune`, `corex-webhooks.php`;\n`CoreX\\Api\\Testing\\ResolvedContexts`; разделённые тесты; обновлённые карты/рёбра/rename-map/golden; Completion Notes:\nseams до/после, `plan` итог, `golden-delta`, негативы a–c, числа тестов sqlite/pg до/после, review."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "requested"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-28T20:37:38Z",
+    "finished_at": "2026-09-28T21:27:26Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "executor/codex/gpt-6-sol/high",
+      "effort": "high"
+    },
+    "notes": "9cabf10; seams89→18; sqlite821+10/PG240/package20 GREEN. review: cursor/grok-4.7 GREEN. Proof: artifacts/P02.2-execution/completion.md. D47: CI deferred.\nwrite-site: pre_mutation: allow · pre_final: allow",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-28T21:27:26Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-28T21:27:26Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-09-28T21:27:26Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-09-28T21:27:26Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V11",
+        "exit": 0,
+        "at": "2026-09-28T21:27:26Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V12",
+        "exit": 0,
+        "at": "2026-09-28T21:27:26Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V13",
+        "exit": 0,
+        "at": "2026-09-28T21:27:26Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V14",
+        "exit": 0,
+        "at": "2026-09-28T21:27:26Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-28T21:27:26Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Разорвать в текущей раскладке рёбра engine↔webhooks/tools (D31 швы 1, 2, 3, 5) и тестовую связность\noperations (D35): SPI `ContractSnapshotSection` + `WebhookSnapshotSection`, публичный `WebhooksServiceProvider`,\n`corex:webhooks:prune`, конфиг `corex-webhooks`, фабрика `ResolvedContexts` в `CoreX\\Api\\Testing`, разделение 7 смешанных\nтестов engine — так, чтобы из 136 швов остались только 18 строк `CoreX\\Api\\Tests\\TestCase`, которые снимает scaffold P02.3."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "D31: без швов split даёт цикл operations↔webhooks и `internal-edge` на engine; snapshot и провайдер — обязательные\nprerequisites P02, не P06 (backlog P02, D44 п.1). Шов 4 (Validation/Pagination) уже выражен строками карты и исполняется переносом."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "`examples.md` §2.1–§2.3: `packages/operations/src/OpenApi/Contracts/ContractSnapshotSection.php`,\n`ContractSnapshotBuilder` (tagged разделы), `packages/operations/src/Webhooks/Internal/WebhookSnapshotSection.php`,\n`packages/operations/src/Webhooks/WebhooksServiceProvider.php`, `packages/operations/src/Webhooks/Commands/PruneWebhooks.php`,\nправки `ApiServiceProvider`, `PruneApiOperations`, `WebhookRegistrar`/`WebhookRouteRegistrar` (prefix/middleware из `ApiOptions`),\n`packages/operations/config/corex-webhooks.php` и удаление раздела из `corex-api.php`, `extra.laravel.providers` operations,\npsr-4 `CoreX\\Api\\Contracts\\` += `src/OpenApi/Contracts/`; `packages/operations/src/Testing/ResolvedContexts.php`; тесты:\n6 строк `move` `ResolvedContext`, разделение `ApiRetentionTest`, `LoadContourIntegrationTest`, `AuthorizationLayersTest`,\n`CostInvocationTest`, `IdempotentInvocationTest`, `OperationParityTest`, `LoadContourBootTest` на engine/`Tool*`/`Webhook*`;\nстроки карты `new-map-rows.tsv` (P02.2) и по строке на каждый новый `Tool*`/`Webhook*` тест; регенерация рёбер, rename-map,\ngolden `php-surface` + строка `REBASELINE.md`."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "собственные `TestCase` tools/webhooks и 18 строк `CoreX\\Api\\Tests\\TestCase` (P02.3); переносы файлов\nмежду каталогами пакетов и namespace (P02.3); переименование `corex:api:*`, `corex-api` (P02.4); wire-коды `webhook_*` (P06)."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P02-design.json` (§1, §3, §4.2, §4.5, §5) · `@plan/knowledge/research-P02-design-rag.json` ·\n`@plan/knowledge/artifacts-P02-design-examples.json` (§2, §3) · `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/facts/seams.tsv` ·\n`plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/facts/new-map-rows.tsv` · `@plan/decisions/D31.json` ·\n`@plan/decisions/D44.json`"
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/operations/src/{OpenApi,Webhooks,Laravel,Testing}/**`, `packages/operations/src/ApiServiceProvider.php`,\n`packages/operations/config/{corex-api,corex-webhooks}.php`, `packages/operations/composer.json` (psr-4 список, providers),\n`packages/operations/tests/**` (split, `Testing`-импорты); `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P00/{namespace-map,dependency-edges}.tsv`;\n`tests/Golden/{rename-map.json,baseline/php-surface.json,REBASELINE.md}`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/knowledge/research-P02-design.json` §4.2, §5; 2) `@plan/knowledge/artifacts-P02-design-examples.json` §2, §3;\n3) `@plan/decisions/D31.json`; 4) `packages/operations/src/OpenApi/Internal/ContractSnapshotBuilder.php`;\n5) `packages/operations/src/ApiServiceProvider.php`; 6) `packages/operations/src/Laravel/Commands/PruneApiOperations.php`;\n7) `packages/operations/config/corex-api.php`; 8) `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/facts/seams.tsv` (строки P02.2)"
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "- Снимок `api/v1` и golden `routes/events/wire` не меняются (файлы, порядок, хэши `manifest.json`); порядок `FILES` = прежний при установленном webhooks.\n- `WebhooksServiceProvider` регистрирует всё, что раньше делал engine для webhooks, в том же порядке фаз register/boot; engine не импортирует ни одного символа `src/Webhooks/**` и `src/Tools/**`.\n- `corex:api:prune` больше не чистит webhooks; `corex:webhooks:prune` делает ровно прежнюю webhooks-ветку; если engine планирует prune, webhooks планирует свой с тем же расписанием.\n- Конфиг `corex-webhooks` = раздел `webhooks` `corex-api.php` без изменения ключей/значений/env; `config('corex-api.webhooks…')` не остаётся.\n- Разделение тестов — по правилу `examples.md` §2.3; ни один тест не удаляется и не помечается skip; число тестов sqlite/pg не уменьшается.\n- Новые файлы — в текущей раскладке; каталоги/файлы без строки карты → `new-map-rows.tsv` (P02.2) и строки `Tool*`/`Webhook*` тестов.\n- Комментарии — «почему», без ссылок на план."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "`examples.md` §2.1 (интерфейс, builder, секция), §2.2 (провайдер, prune, конфиг, providers), §2.3 (правило\nразбиения, имена `Tool<M>`/`Webhook<M>`); `ResolvedContexts` — статическая фабрика, возвращающая `ResolvedContext` через\nпубличный тип контекста запроса (`grep -n \"implements\" packages/operations/src/**/ResolvedContext.php`); досье §4.2 шаги 1–7."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "- `p02-transfer.py seams | tail -1` до → `seams: 89 unresolved (18 scaffold-owned, 71 blocking)`; после → `seams: 18 unresolved (18 scaffold-owned, 0 blocking)`, exit 0.\n- `python3 plans/2026.09.27-№1-COREX-KERNEL/artifacts/P02-design/scripts/p02-transfer.py plan | tail -1` → `plan: … 0 pending, 0 problems`.\n- `scripts/php84 composer api-contract` и `scripts/php84 composer contract-guard` → exit 0 (снимок `api/v1` без диффа: `git diff --exit-code api/`).\n- Новый `packages/operations/tests/Feature/WebhooksProviderTest.php` (строка карты → webhooks): при `deliveryEnabled` в `Artisan::all()` есть `corex:webhooks:deliver` и `corex:webhooks:prune`, параметры `PruneApiOperations::handle()` (Reflection) не содержат `WebhookRetention` → `scripts/php84 vendor/bin/pest packages/operations/tests/Feature/WebhooksProviderTest.php` passed.\n- Негативы: (a) импорт `WebhookTopic` обратно в `ContractSnapshotBuilder` → `check-maps.py --write-edges` + `--dependencies` → `dependency-cycle` или `internal-edge`, exit 1; (b) снять tag `WebhookSnapshotSection` → golden `wire` падает (нет `webhooks.json`); (c) убрать `WebhooksServiceProvider` из `extra.laravel.providers` → golden `routes` падает. После откатов — зелёно (`git checkout` карты рёбер).\n- `check-maps.py` → `maps OK`; `--write-edges`; `--dependencies` → OK; golden-rename-map регенерация + `--check`; `GOLDEN_UPDATE=1 … --testsuite=Golden` 4 passed; `golden-delta.py --base <коммит до item>` → OK; строка `REBASELINE.md`.\n- Полный стек досье §4.5 → exit 0 (manifests 21 roots).\n- Independent review: reviewer/effort — из строки `@plan/plan.json` `execution-sheet/v1`; свежий контекст, reviewer model != executor; вход — item-spec + diff + вывод Validation; строка `review: <provider>/<model> <GREEN|findings:N>`; ≤2 раунда."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "SPI снимка и секция webhooks; `WebhooksServiceProvider`, `corex:webhooks:prune`, `corex-webhooks.php`;\n`CoreX\\Api\\Testing\\ResolvedContexts`; разделённые тесты; обновлённые карты/рёбра/rename-map/golden; Completion Notes:\nseams до/после, `plan` итог, `golden-delta`, негативы a–c, числа тестов sqlite/pg до/после, review."
+    }
+  ]
+}

@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — native authorization (P07.4)
+
+- Breaking before 1.0: access evaluates its own role matrix and direct grants; AzGuard integration moved to the optional `corex-access-azguard` package.
+- Added `aut_direct_grants` and the `RoleMatrixCompiled` event. Compilation dispatches synchronously in the tenant transaction and invalidates scope versions after commit.
+- Removed `aut_roles.azguard_role_id`, `RoleView::azguardRoleId`, `RoleMatrixData::bindAzGuardRole`, and AzGuard options. Access checks deny inactive entities before reading cached scopes or grants.
+
 ## Unreleased — thin providers and registrars (P05.2)
 
 - `CoreAuthServiceProvider` delegates to `AccessBindingsRegistrar` and `AccessIntegrationRegistrar`; bindings, order and lifetimes are unchanged.

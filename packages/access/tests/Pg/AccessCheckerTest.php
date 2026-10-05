@@ -2,9 +2,6 @@
 
 declare(strict_types=1);
 
-use AzGuard\Contracts\AzGuardManagerInterface;
-use AzGuard\Contracts\PermissionLayer;
-use AzGuard\Panels\Panel;
 use CoreX\Access\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Data\RecordContext;
@@ -53,7 +50,7 @@ it('uses identical fail-closed capability normalization for record and list chec
         ->toThrow(ScopeCapabilityMismatch::class);
     expect(fn () => app(ScopeResolver::class)->apply(Deal::query(), $principal, 'crm.deal', 'read'))
         ->toThrow(ScopeCapabilityMismatch::class);
-    app(AzGuardManagerInterface::class)->forUser($principal)->on('app')->grant('app.crm.deal.read');
+    DB::table('aut_direct_grants')->insert(['id' => (string) Str::uuid7(), 'principal_type' => 'user', 'principal_id' => $principal->principalId(), 'permission_key' => 'app.crm.deal.read']);
     expect(app(AccessChecker::class)->canOnRecord($principal, 'read', $deal))->toBeTrue()
         ->and(app(ScopeResolver::class)->apply(Deal::query(), $principal, 'crm.deal', 'read')->toSql())->not->toContain('owner_id');
 });
@@ -125,12 +122,9 @@ it('excludes deleted broad roles when a live narrow role still grants access', f
 
 beforeEach(function (): void {
     $this->resetPgSchema();
-    $this->migrateAzGuard();
     $this->migrateAutSchema();
     $this->migrateFixtures();
     $this->migrateCoreDepartments();
-
-    app(AzGuardManagerInterface::class)->registerPanel(Panel::make()->id('app'));
 
     app(ArrayEntityRegistry::class)->register(new EntityDefinition(
         handle: 'crm.deal',
@@ -144,10 +138,7 @@ beforeEach(function (): void {
         titleAttribute: null,
     ));
 
-    // P2.21: the real ModuleRegistry (no compiled file in Testbench) would
-    // report every module inactive and hit tables never migrated here
-    // (mod_modules) — this fixture's module is active by fiat so the
-    // pre-P2.21 compiled-key expectations below stay valid.
+    // Keep the fixture module active without cross-package module migrations.
     app()->instance(ModuleRegistry::class, new FakeModuleRegistry(['corex/access-tests']));
 
     $this->compileRole = function (string $roleId): void {
@@ -187,9 +178,8 @@ beforeEach(function (): void {
     };
 });
 
-// AC-22 — the compiled key round-trips through the REAL public AzGuard path
-// (PrincipalIdentity::hasPermission), not a private lookup (premortem C1).
-it('resolves allowed() through the real AzGuard round-trip for a scoped action, and denies a scope-none action', function (): void {
+// Native matrix rows are the capability source; scope none does not grant.
+it('resolves allowed() from a native matrix row and denies scope none', function (): void {
     $role = ($this->newRole)();
     RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'account']);
     RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'delete', 'scope' => 'none']);
@@ -386,11 +376,11 @@ it('denies department scopes through AccessChecker when department tables are ab
 })->with([Scope::Dept, Scope::DeptTree]);
 
 // Code Guidance — canOnRecord grants via an active direct_grant even with no matching role at all.
-it('grants canOnRecord via an active AzGuard direct grant with no matching role', function (): void {
+it('grants canOnRecord via an active native direct grant with no matching role', function (): void {
     $principalId = (string) Str::uuid7();
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
 
-    app(AzGuardManagerInterface::class)->forUser($identity)->on('app')->grant('app.crm.deal.read');
+    DB::table('aut_direct_grants')->insert(['id' => (string) Str::uuid7(), 'principal_type' => 'user', 'principal_id' => $principalId, 'permission_key' => 'app.crm.deal.read']);
 
     $deal = Deal::query()->create(['id' => (string) Str::uuid7(), 'owner_id' => (string) Str::uuid7()]);
 
@@ -405,19 +395,14 @@ it('denies canOnRecord for a record whose model is not registered in EntityRegis
     expect(app(AccessChecker::class)->canOnRecord($identity, 'read', $unregistered))->toBeFalse();
 });
 
-// D103 — an active assignment of the system role `owner` passes any panel capability check.
-it('lets a principal with the active system owner role pass any allowed() check on the panel', function (): void {
+// A native role grants only capabilities present in its matrix, including system roles.
+it('does not grant a system owner role with an empty matrix', function (): void {
     Role::withSystemMutationAllowed(fn () => (new SystemRolesSeeder)->run());
     $owner = Role::query()->where('slug', 'owner')->firstOrFail();
-
     $principalId = (string) Str::uuid7();
     RoleAssignment::query()->create(['role_id' => $owner->id, 'principal_type' => 'user', 'principal_id' => $principalId]);
 
-    $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
-    $checker = app(AccessChecker::class);
-
-    expect($checker->allowed($identity, 'crm.deal', 'read'))->toBeTrue()
-        ->and($checker->allowed($identity, 'tsk.task', 'delete'))->toBeTrue();
+    expect(app(AccessChecker::class)->allowed(new PrincipalIdentity(PrincipalType::User, $principalId), 'crm.deal', 'read'))->toBeFalse();
 });
 
 // D103 — a clone of `owner` is not system-flagged and does NOT inherit the wildcard.
@@ -468,16 +453,8 @@ it('denies allowed() outside the workspace the role was assigned to', function (
     expect(app(AccessChecker::class)->allowed($identity, 'crm.deal', 'read'))->toBeFalse();
 });
 
-// D101 risk note — anti-self-deception negative proof (class P3.7/D85): show RED first.
-// Without WorkspacePermissionLayer, the resolver's per-request cache has no
-// workspace-discriminated key — a set resolved for workspace A is served,
-// stale, to a lookup made after switching to workspace B.
-it('without WorkspacePermissionLayer, a cached grant leaks across a workspace switch (negative proof)', function (): void {
-    // The config switch only decides CoreAuthServiceProvider::register()'s
-    // binding at boot, already past by the time a test body runs — unbind
-    // the container entry directly to simulate "no layer bound" here.
-    unset($this->app[PermissionLayer::class]);
-
+// Workspace assignment lookup is live against the active native tenancy context.
+it('rechecks native workspace assignments after a workspace switch', function (): void {
     $workspaceA = new WorkspaceRef((string) Str::uuid7(), 'a', 'team', 'a', null);
     $workspaceB = new WorkspaceRef((string) Str::uuid7(), 'b', 'team', 'b', null);
     $fakeTenancy = new FakeTenancyManager($workspaceA);
@@ -485,42 +462,12 @@ it('without WorkspacePermissionLayer, a cached grant leaks across a workspace sw
 
     $role = ($this->newRole)();
     RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'account']);
-    ($this->compileRole)($role->id);
-
     $principalId = (string) Str::uuid7();
     RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => 'user', 'principal_id' => $principalId, 'workspace_id' => $workspaceA->id]);
-
     $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
+    $checker = app(AccessChecker::class);
 
-    expect($identity->hasPermission('app.crm.deal.read', 'app'))->toBeTrue();
-
+    expect($checker->allowed($identity, 'crm.deal', 'read'))->toBeTrue();
     $fakeTenancy->setWorkspace($workspaceB);
-
-    // BUG proof, not the desired behaviour: workspace B has no assignment at
-    // all, yet the stale request-cache entry (discriminator '' either way) is
-    // served unchanged.
-    expect($identity->hasPermission('app.crm.deal.read', 'app'))->toBeTrue();
-});
-
-// The isolation half of the same proof: WorkspacePermissionLayer bound (default) fixes it.
-it('with WorkspacePermissionLayer, a workspace switch gets a fresh, correctly-scoped resolution', function (): void {
-    $workspaceA = new WorkspaceRef((string) Str::uuid7(), 'a', 'team', 'a', null);
-    $workspaceB = new WorkspaceRef((string) Str::uuid7(), 'b', 'team', 'b', null);
-    $fakeTenancy = new FakeTenancyManager($workspaceA);
-    app()->instance(TenancyManager::class, $fakeTenancy);
-
-    $role = ($this->newRole)();
-    RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'account']);
-    ($this->compileRole)($role->id);
-
-    $principalId = (string) Str::uuid7();
-    RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => 'user', 'principal_id' => $principalId, 'workspace_id' => $workspaceA->id]);
-
-    $identity = new PrincipalIdentity(PrincipalType::User, $principalId);
-
-    expect($identity->hasPermission('app.crm.deal.read', 'app'))->toBeTrue();
-
-    $fakeTenancy->setWorkspace($workspaceB);
-
-    expect($identity->hasPermission('app.crm.deal.read', 'app'))->toBeFalse();
+    expect($checker->allowed($identity, 'crm.deal', 'read'))->toBeFalse();
 });

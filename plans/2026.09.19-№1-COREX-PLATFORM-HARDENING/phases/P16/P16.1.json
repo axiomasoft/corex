@@ -1,0 +1,236 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P16.1",
+  "title": "Intl subsystem-first physical layout",
+  "status": "done",
+  "summary": "Move `corex/intl` into Locale, Translation, Currency, Formatting and Territory physical subsystems while preserving every FQCN.",
+  "why": "`@plan/knowledge/research-P16-design.json` §3; locale and rate use cases currently span Contracts/Data/Internal/Exceptions, violating STR-002 for profile B.",
+  "scope": {
+    "include": [
+      "`git mv` of intl source/tests as needed; explicit PSR-4 sub-prefix arrays; path-sensitive references; package receipt with before/after use-case spans."
+    ],
+    "exclude": [
+      "New TimeZone folder, class rename, public namespace/signature change, behavior, migrations, dataset schema and P15 vocabulary."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D91",
+    "D92"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P16-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D91.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/decisions/D92.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P15/P15.13.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P16/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P1-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/intl/composer.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/intl/src/**",
+      "change": "any"
+    },
+    {
+      "path": "packages/intl/tests/**",
+      "change": "any"
+    },
+    {
+      "path": "packages/intl/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/intl/phpstan.neon",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P16-move-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Move only rows in §3; no empty TimeZone/Shared folder; preserve FQCN manifest; Composer mappings use longest prefixes and arrays, never classmap."
+  ],
+  "guidance": "Capture manifest first, move one subsystem at a time, update only path-sensitive references, then rebuild autoload before tests.",
+  "validation": [
+    {
+      "id": "V1",
+      "procedure": "packages/intl lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "packages/intl analyse",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "packages/intl test 33 passed",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "packages/intl test:pg 2 passed",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "composer dump-autoload strict-psr for intl mappings",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Intl physical profile B and receipt rows for Locale/Translation/Currency/Formatting/Territory."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "medium"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-27T08:34:07Z",
+    "finished_at": "2026-09-27T08:34:08Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/cursor-composer-2.5/medium",
+      "effort": "medium"
+    },
+    "notes": "P16.1 GREEN from @plan/knowledge/findings-P16-move-receipts.json (E16a). The move session left no journal row; P16.13 records it.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-09-27T08:34:08Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-27T08:34:08Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-27T08:34:08Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-27T08:34:08Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-27T08:34:08Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-27T08:34:08Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Move `corex/intl` into Locale, Translation, Currency, Formatting and Territory physical subsystems while preserving every FQCN."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`@plan/knowledge/research-P16-design.json` §3; locale and rate use cases currently span Contracts/Data/Internal/Exceptions, violating STR-002 for profile B."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "`git mv` of intl source/tests as needed; explicit PSR-4 sub-prefix arrays; path-sensitive references; package receipt with before/after use-case spans."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "New TimeZone folder, class rename, public namespace/signature change, behavior, migrations, dataset schema and P15 vocabulary."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P16-design.json`; `@plan/decisions/D91.json`; `@plan/decisions/D92.json`; `@plan/phases/P15/P15.13.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/intl/src/**`; `packages/intl/tests/**`; `packages/intl/composer.json`; `packages/intl/phpstan.neon`; `@plan/knowledge/findings-P16-move-receipts.json`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P16/phase.json`; 2) `@plan/knowledge/research-P16-design.json` §0–§3; 3) `@plan/decisions/D92.json`; 4) `@plan/knowledge/research-P1-design.json` §4; 5) `@plan/phases/P15/P15.13.json`; 6) `packages/intl/composer.json`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Move only rows in §3; no empty TimeZone/Shared folder; preserve FQCN manifest; Composer mappings use longest prefixes and arrays, never classmap."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Capture manifest first, move one subsystem at a time, update only path-sensitive references, then rebuild autoload before tests."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Intl lint/analyse/test/test:pg green; strict and strict-ambiguous Composer dump green; FQCN/signature manifest identical; five named use-case spans are ≤2 top-level folders."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Intl physical profile B and receipt rows for Locale/Translation/Currency/Formatting/Territory."
+    }
+  ]
+}

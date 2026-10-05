@@ -1,0 +1,117 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "research-perplexity-2026-09-19",
+  "title": "Внешние подтверждения (Perplexity MCP) — 2026-09-19",
+  "sections": [
+    {
+      "id": "Perplexity-MCP-2026-09-19",
+      "title": "Внешние подтверждения (Perplexity MCP) — 2026-09-19",
+      "text": "**Сырые ответы — `../artifacts/rag-2026-09-19/`** (захват по файлам `q01-q05.md` … `q16-q19.md`,\nточные строки запросов, статусы, источники и SHA256 — в `manifest.json`). Эта страница —\nсводка с привязкой к пунктам вердиктов, а не первичный носитель.\n\nВсе запросы сформулированы нейтрально, без имени CoreX/FlexCRM, без внутренних путей, ID и\nсхем (правило D6, наследуется от PLAN1). Внешний источник подтверждает **только названную\nобщую практику**; применение к CoreX — отдельный локальный вывод с `RAG:—`.\n\nУспешных ответов: 19. Неуспешных попыток (таймаут транспорта MCP): 5 — все переспрошены\nкороткой формулировкой и закрыты успешным ответом; ни одно утверждение плана не опирается на\nнеполученный ответ."
+    },
+    {
+      "id": "Q1-Shopify-Admin-API",
+      "title": "Q1 — Версионирование Shopify Admin API",
+      "text": "**Поддержанное утверждение.** Формат версии — `YYYY-MM`, квартальные релизы (01/04/07/10),\nкаждая стабильная версия поддерживается **не менее 12 месяцев**, соседние стабильные версии\nперекрываются ≥9 месяцев; `publicApiVersions` возвращает `handle`/`displayName`/`supported`,\nпричём датовый handle сам по себе не доказывает поддержку. `unstable` — не датовый релиз.\n\n**Источник:** shopify.dev/docs/api/usage/versioning.\n**Где используется:** `@plan/knowledge/findings-audit-verdicts.json` S03, S04; решение D2."
+    },
+    {
+      "id": "Q2-Cost-based-throttling-GraphQL-Admin-API",
+      "title": "Q2 — Cost-based throttling GraphQL Admin API",
+      "text": "**Поддержанное утверждение.** Лимит считается по стоимости выбранных полей, не по числу\nHTTP-запросов; leaky bucket; скорость восстановления зависит от тарифа магазина\n(Standard 100 points/s, Advanced 200, Plus 1 000, enterprise/Commerce Components 2 000).\n\n**Источник:** shopify.dev/docs/apps/build/apis/graphql-admin/rate-limits.\n**Где используется:** S08–S11."
+    },
+    {
+      "id": "Q3-idempotency--Stripe",
+      "title": "Q3 — Семантика idempotency-ключей Stripe",
+      "text": "**Поддержанное утверждение.** Тот же ключ + тот же endpoint и параметры → возвращается\nсохранённый код и тело первого исполнения (включая сохранённую 500). Тот же ключ с другими\nпараметрами или другим endpoint → `idempotency_error`. Параллельный эквивалентный запрос →\nконфликт (409). Если валидация не прошла до начала исполнения, результат не сохраняется и\nключ можно переиспользовать. Ключи вычищаются по достижении ≥24 часов, поэтому idempotency —\nне долговременный механизм дедупликации.\n\n**Источник:** docs.stripe.com (idempotent requests, error types).\n**Где используется:** S23, S24."
+    },
+    {
+      "id": "Q4-BC--API-PHP",
+      "title": "Q4 — Инструменты BC-контроля публичного API в PHP",
+      "text": "**Поддержанное утверждение.** `roave/backward-compatibility-check` поддерживается и активно\nрелизится (8.22.0, 2026-09-16); сравнивает публичный API двух git-ревизий. `api-diff` —\nне PHP-инструмент (npm CLI для REST/JSON). `tomasvotruba/class-leak` — живой инструмент\nобнаружения случайно публичных классов. PHPStan поддерживает enforcement `@internal`\n(документировано для 2.1.13+/bleeding edge); `@api` — метаданные владения, не BC-дифф.\n\n**Источники:** packagist.org (roave/backward-compatibility-check, tomasvotruba/class-leak),\nphpstan.org.\n**Где используется:** A18, A83; решение D4."
+    },
+    {
+      "id": "Q5-PHP",
+      "title": "Q5 — Гейты границ пакетов в PHP-монорепо",
+      "text": "**Поддержанное утверждение.** Deptrac нативно моделирует граф слоёв/пакетов с явным\nruleset'ом, baseline и графовыми отчётами; PHPat — расширение PHPStan с читаемыми правилами\nвнутри модуля; собственные правила PHPStan работают на AST/Scope и нужны для запрета\nконкретного вызова, фасада или паттерна.\n\n**Источники:** github.com/qossmic/deptrac, phpat.dev, phpstan.org.\n**Где используется:** A85, P3 (выбор инструмента при детализации: собственный гейт уже есть,\nвнешний инструмент — только при доказанной выгоде)."
+    },
+    {
+      "id": "Q6-HTTP-API",
+      "title": "Q6 — Модель ошибок HTTP API",
+      "text": "**Поддержанное утверждение.** IETF RFC 9457 задаёт `application/problem+json` с `type`\nкак основным идентификатором; Zalando требует problem+json для 4xx и 5xx; Microsoft API\nGuidelines используют собственный конверт `{error:{code,message,innererror}}` со стабильной\nиерархией строковых кодов; Google JSON Style Guide — собственный объект ошибки.\n\n**Источники:** rfc-editor.org (RFC 9457), opensource.zalando.com, github.com/microsoft/api-guidelines,\ngoogle.github.io/styleguide/jsoncstyleguide.\n**Где используется:** S20–S22 (принято двухслойное решение: стабильные коды в конверте +\nproblem+json по контент-негоциации)."
+    },
+    {
+      "id": "Q7",
+      "title": "Q7 — Контракт курсорной пагинации",
+      "text": "**Поддержанное утверждение.** Курсор — подписанная continuation-capability для одной\nнеизменной формы запроса: кодируется полный кортеж сортировки с уникальным tie-breaker,\nверсия формата, версия порядка, привязка к tenant/фильтрам, expiry и подпись; резюмирование\nстрогим лексикографическим предикатом; base64 не является защитой; сервер строит SQL только\nиз собственного allowlist'а порядков, никогда из имён полей в курсоре; мутируемый ключ\nсортировки в принципе не даёт «без дублей и без пропусков».\n\n**Источники:** graphql.org/learn/pagination, postgresql.org (indexes-ordering), RFC 7519.\n**Где используется:** S25, S26."
+    },
+    {
+      "id": "Q8-Transactional-outbox",
+      "title": "Q8 — Transactional outbox",
+      "text": "**Поддержанное утверждение.** Бизнес-изменение и вставка в outbox — одна транзакция; relay\nберёт lease (`FOR UPDATE SKIP LOCKED`) и публикует вне транзакции; доставка at-least-once,\nпоэтому consumer обязан быть идемпотентным через inbox с unique-constraint в той же\nтранзакции, что бизнес-запись; `dispatch()->afterCommit()` не заменяет outbox; `event_type`\nне должен быть именем PHP-класса; нужен `event_version`.\n\n**Источник:** laravel.com/docs (queues) + сводка практики.\n**Где используется:** A91, A92, N05."
+    },
+    {
+      "id": "Q9-Laravel",
+      "title": "Q9 — Типизированная конфигурация в Laravel-пакете",
+      "text": "**Поддержанное утверждение.** Слои: `config/<pkg>.php` знает про дефолты и публикацию;\nфабрика/`Options::fromArray()` нормализует и валидирует, получая массив; service provider —\nединственное место, где вызывается `config()`; сервисы пакета получают Options через\nконструктор и про `config()` не знают.\n\n**Где используется:** A06, A20, A76, N12."
+    },
+    {
+      "id": "Q10-Octane",
+      "title": "Q10 — Octane и долгоживущие воркеры",
+      "text": "**Поддержанное утверждение.** Всё мутируемое за пределами текущего lifecycle (singleton,\nстатика, глобали, мутация конфига) может переехать в следующий запрос или job. `scoped()`\nсбрасывается на границе запроса/джоба, но **не** сбрасывает статику, собственные глобали,\nмутации репозитория конфига и состояние внутри произвольных singleton'ов. Инъекция\n`Application`/`Request`/`Config` в конструктор singleton'а — задокументированный антипаттерн.\nВосстановление locale — в `finally`. Payload джоба — скаляры, не живые контекстные объекты.\nПерезапуск воркеров — гигиена деплоя, не механизм изоляции.\n\n**Источники:** laravel.com/docs/12.x/container, laravel.com/docs/12.x/octane, laravel.com/docs (queues).\n**Где используется:** A19, P4."
+    },
+    {
+      "id": "Q11-Long-running-bulk",
+      "title": "Q11 — Long-running и bulk-операции у крупных платформ",
+      "text": "**Поддержанное утверждение.** Единый набор у четырёх независимых платформ: явный id операции,\nопрос статуса, типизированный результат, ошибка исполнения отдельно от ошибки старта, отмена\n(best effort), срок жизни результата. Google AIP-151 — универсальный `Operation`;\nMicrosoft Graph — 202 + monitor URL; Salesforce Bulk API 2.0 — job с состояниями\nOpen→UploadComplete→InProgress→JobComplete/Failed/Aborted и record-level CSV-результатами;\nShopify — `BulkOperation` с JSONL-результатом, доступным 7 дней.\n\n**Источники:** google.aip.dev/151, learn.microsoft.com (Graph LRO),\ndeveloper.salesforce.com (Bulk API 2.0), shopify.dev (bulk operations).\n**Где используется:** S12–S14, S19; решение D9."
+    },
+    {
+      "id": "Q12-webhooks",
+      "title": "Q12 — Практика доставки webhooks",
+      "text": "**Поддержанное утверждение.** Standard Webhooks: заголовки `webhook-id`,\n`webhook-timestamp`, `webhook-signature`; подпись HMAC-SHA256 над строкой\n`{id}.{timestamp}.{raw_body}`; окно проверки времени ~5 минут; `webhook-id` — ключ\nидемпотентности; список подписей в одном заголовке даёт zero-downtime ротацию секретов;\nуспех — только 2xx, 410 отключает endpoint, учитывается `Retry-After`; retry с\nэкспоненциальным backoff и jitter; обязательны история доставок, диагностика и ручной replay;\npayload обычно <20 KB, для больших сущностей — ссылка.\n\n**Источник:** github.com/standard-webhooks/standard-webhooks (spec).\n**Где используется:** S29, S30, N06."
+    },
+    {
+      "id": "Q13-Drupal-Symfony-Shopware",
+      "title": "Q13 — Реестры расширений: Drupal / Symfony / Shopware",
+      "text": "**Поддержанное утверждение.** Надёжный общий паттерн: discover/declare → normalize →\nvalidate uniqueness → sort по явным правилам → compile/cache → инвалидация на контролируемых\nграницах lifecycle. Symfony компилирует контейнер до обслуживания запросов (ошибки на\nwarmup/деплое), tagged services имеют `priority`, равный приоритет **не** является механизмом\nразрешения конфликтов — нужен стабильный tie-breaker. Drupal кеширует definitions и чистит\nпроизводные кеши (включая prototypes). Shopware даёт операционный lifecycle\ninstall/activate/deactivate/uninstall и требует идемпотентности по стабильному техническому\nключу, а также уважения `keepUserData()`. Отдельно подтверждено: durable-решение должно\nхранить id/версию расширения или fingerprint реестра, иначе повтор джоба может выполнить\nдругую реализацию.\n\n**Источники:** api.drupal.org (TypedDataManager), symfony.com/doc (tags, compiler passes),\ndeveloper.shopware.com (plugin lifecycle).\n**Где используется:** A21, A87–A89, S05; решение D5."
+    },
+    {
+      "id": "Q14-OpenTelemetry-PHP-cardinality",
+      "title": "Q14 — Зрелость OpenTelemetry PHP и cardinality метрик",
+      "text": "**Поддержанное утверждение.** API/SDK стабильны для traces, metrics и logs;\nавтоинструментация зрела для типового HTTP/DB-контура, поддержка Laravel 6–13; для OTLP\nhttp/protobuf доступен неблокирующий экспорт, `ext-protobuf` настоятельно рекомендуется.\nОтдельно подтверждено требование ограниченной cardinality: tenant id не должен быть\nнеограниченным label'ом.\n\n**Источники:** opentelemetry.io/docs/languages/php, документация PHP Distro.\n**Где используется:** A95, A96."
+    },
+    {
+      "id": "Q15-GraphQL-Laravel",
+      "title": "Q15 — GraphQL для Laravel",
+      "text": "**Поддержанное утверждение.** Lighthouse — активный Laravel-фреймворк GraphQL (6.70.1,\n2026-09-02; зависит от `webonyx/graphql-php` ^15; Laravel 9–13), но репозиторий планирует\nпереезд с `nuwave/lighthouse` на `spawnia/lighthouse`. В `webonyx/graphql-php`\n`QueryComplexity` и `QueryDepth` — отдельные validation rules, **по умолчанию выключенные**.\n\n**Источники:** packagist.org (nuwave/lighthouse), webonyx/graphql-php docs.\n**Где используется:** S18; решение D7 (отложить GraphQL)."
+    },
+    {
+      "id": "Q16-EAV-JSONB-PostgreSQL",
+      "title": "Q16 — EAV против JSONB в PostgreSQL",
+      "text": "**Поддержанное утверждение.** GIN ускоряет поиск по содержимому JSONB, но **не** отдаёт строки\nв порядке `ORDER BY` — сортировку из индекса умеет только B-tree. Практичная стратегия —\nтри слоя: JSONB для редких/гибких полей, B-tree expression/partial индексы (с точным\nсовпадением cast'а и направления) для полей, по которым реально фильтруют и сортируют,\nи продвижение продуктово важных полей в типизированные колонки. EAV оправдан, когда нужны\nкаталог полей, field-level права/аудит, отдельный lifecycle значения; типизированные колонки\nзначений и индексы по `(tenant, field_id, value, entity)` обязательны. Ловушки: cast, падающий\nна грязном значении; expression index без partial predicate; индексы без ведущего tenant-скоупа.\n\n**Источник:** postgresql.org/docs/current/indexes-ordering.\n**Где используется:** A55, A56."
+    },
+    {
+      "id": "Q17-Scope-FLS",
+      "title": "Q17 — Scope клиента против доменной авторизации и FLS",
+      "text": "**Поддержанное утверждение.** Решение об авторизации — пересечение слоёв, не замена: scope\nтокена ограничивает клиента, доменная политика решает про конкретную запись, field-level\nконтроль — про конкретный атрибут. Salesforce: даже `Full` ограничен данными, доступными\nвошедшему пользователю; object/field/record-sharing остаются основной моделью.\nGraphQL Foundation и GitLab: field-авторизация не заменяет object-авторизацию, а политика\nдолжна жить в бизнес-слое, единая для REST, GraphQL, очередей, экспортов и админки.\n\n**Источники:** developer.salesforce.com (connected app), graphql.org/learn/authorization,\ndocs.gitlab.com (graphql authorization).\n**Где используется:** S28, A100."
+    },
+    {
+      "id": "Q18-API-self-hosted-D2",
+      "title": "Q18 — Версионирование API self-hosted продукта *(несущий источник решения D2)*",
+      "text": "**Поддержанное утверждение.** Для сервера и клиентов, обновляющихся независимо, рекомендуется\nгибрид: небольшое число долгоживущих мажоров в пути + аддитивная эволюция внутри мажора +\ncapability-negotiation для всего, что зависит от установленных модулей, лицензии и флагов.\nGitLab держит `/api/v4` как долгоживущий мажор (несовместимость — только новый мажор,\nэкспериментальные и flag-gated поля вне процесса депрекации). Atlassian: URI и типы полей\nстабильны, новые параметры обязаны быть необязательными с сохранением поведения по умолчанию,\n**ответы не помечаются версией API**, и клиент обязан запрашивать capability и корректно\nобрабатывать её отсутствие, потому что доступная поверхность меняется вместе с плагинами —\nвплоть до изменения между запросами; депрекация сигнализируется заголовками\n`Deprecation`/`Sunset`/`Link`. Grafana: группы ресурсов и уровни `v1alpha1`/`v1beta1`/`v1`,\nGA-совместимость обещана, alpha за feature-флагом. Date-based версии уместны, когда провайдер\nцентрально контролирует раскатку (модель Shopify), и не должны быть основным механизмом\nсовместимости для on-prem.\n\n**Источники:** docs.gitlab.com/api/rest, developer.atlassian.com (REST API policy),\ngrafana.com/docs (apis).\n**Где используется:** решение D2; S03, S04, S06, S07, S31."
+    },
+    {
+      "id": "Q19-stancl-tenancy-v4",
+      "title": "Q19 — stancl/tenancy v4 и долгоживущие процессы",
+      "text": "**Поддержанное утверждение.** v4 — текущая мажорная линия, базис PHP 8.4+/Laravel 12+;\nbootstrapper'ы исполняются строго в порядке конфига и откатываются в обратном, поэтому\nзависящий от tenant-соединения bootstrapper обязан идти после database-bootstrapper'а;\nbootstrapper — singleton с состоянием, обязанный сохранить и восстановить центральное\nсостояние в `revert()`. Очередной `QueueTenancyBootstrapper` кладёт ключ tenant'а в payload и\nинициализирует контекст перед джобом, возвращая предыдущий после — это устраняет утечку\nконтекста между джобами v3-образца. Таблица `jobs` обязана жить в центральной БД; при Redis\ntenancy очередь — на непрефиксованном соединении; payload — скаляры; нельзя использовать\nEloquent-модель, возвращённую из `$tenant->run()`, после выхода из контекста.\n\n**Источник:** v4.tenancyforlaravel.com (changelog, bootstrappers, queue, multi-database).\n**Где используется:** P4 (worker/Octane reset proof), P9 (порядок bootstrapper'ов)."
+    },
+    {
+      "id": "section",
+      "title": "Неполученные ответы",
+      "text": "| Запрос | Что произошло | Как закрыт |\n|:--|:--|:--|\n| Версионирование Shopify (первая попытка) | таймаут MCP | переспрошен короткой формулировкой → Q1 |\n| deptrac/phpat (первая попытка) | таймаут MCP | переспрошен → Q5 |\n| outbox (первая попытка) | таймаут MCP | переспрошен → Q8 |\n| EAV/JSONB (первая попытка) | таймаут MCP | переспрошен → Q16 |\n| Akeneo/Pimcore (schema evolution) | таймаут MCP дважды | **не закрыт**; утверждение A53 опирается на общую практику стабильной идентичности атрибута и помечено к доп. проверке при детализации P10 |\n| GraphQL для Laravel (первая попытка) | таймаут MCP | переспрошен → Q15 |\n\nЕдинственный незакрытый внешний пробел — подтверждение практики Akeneo/Pimcore по эволюции\nопределений атрибутов. Он обязан быть закрыт отдельным запросом при детализации P10; до этого\nпункт A53 в спеках P10 несёт маркер `[UNVERIFIED]` на части «как это делают PIM-платформы»,\nсохраняя `RAG:—` на части «стабильного id в дереве нет»."
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "research/perplexity-2026-09-19.md",
+    "sha256": "71939fbfeb7abda5884be6fc066e4a27009a45910065beb76c0f017a1bc3894a"
+  }
+}

@@ -1,0 +1,59 @@
+diff --git a/packages/tenancy/CHANGELOG.md b/packages/tenancy/CHANGELOG.md
+index 94ad6365..5db04332 100644
+--- a/packages/tenancy/CHANGELOG.md
++++ b/packages/tenancy/CHANGELOG.md
+@@ -4,7 +4,9 @@
+ 
+ - Removed Stancl and its prerelease provider dependencies, runtime model projections, identifier binding,
+   JobPipeline wiring and the obsolete PHPStan import rule. Account/Domain are plain central Eloquent models;
+-  Account uses UUIDv7, explicit fillable columns and immutable date/integer casts. The legacy data column is unused.
++  Account uses UUIDv7, explicit fillable columns and immutable date/integer casts. Model attributes no longer
++  use the legacy data column; signup claim and pool cleanup SQL still require it for idempotency and crash
++  recovery until P08 (D107). Retain the column and these writes until that migration is complete.
+ - Configuration moves from `tenancy` to `corex-tenancy`, including wakeup, under one published file. Removed
+   tenantModel/idGenerator/tenantDatabaseManager/provisioningPipeline options; `TenancyOptions::fromArray()`
+   now accepts one configuration array. Middleware aliases and route/error identifiers retain their existing names.
+diff --git a/packages/tenancy/README.md b/packages/tenancy/README.md
+index be902aaf..c4cfeeae 100644
+--- a/packages/tenancy/README.md
++++ b/packages/tenancy/README.md
+@@ -14,7 +14,9 @@ provide authority to select an account connection.
+ 
+ CoreX owns the account/domain models, physical tenancy engine and synchronous golden-template
+ provisioning. Account identifiers use UUIDv7; account fields are explicit typed columns. The legacy
+-`root_accounts.data` column is unused. Saved/deleting model events invalidate the central host cache.
++`root_accounts.data` column is no longer used for model attributes. Existing signup claim and pool
++cleanup SQL still use it for idempotency and crash recovery until P08 (D107); retain the column and
++these writes until that migration is complete. Saved/deleting model events invalidate the central host cache.
+ 
+ Publish configuration with `php artisan vendor:publish --tag=corex-tenancy-config`. All settings,
+ including wakeup, use `config/corex-tenancy.php` under `corex-tenancy`. Migrate host overrides from the
+diff --git a/packages/tenancy/src/Account/Internal/Models/Account.php b/packages/tenancy/src/Account/Internal/Models/Account.php
+index 2d6c4134..e2eec512 100644
+--- a/packages/tenancy/src/Account/Internal/Models/Account.php
++++ b/packages/tenancy/src/Account/Internal/Models/Account.php
+@@ -14,7 +14,8 @@ use Override;
+ 
+ /**
+  * `root_accounts` is a physical DB-per-account tenant on the central connection.
+- * Only explicit typed columns are writable; the legacy data column is unused.
++ * Only explicit typed columns are writable through this model.
++ * Signup claim and pool cleanup SQL retain the data column until P08 (D107).
+  *
+  * @property string $id
+  * @property ?string $slug
+diff --git a/scripts/ownership-map.json b/scripts/ownership-map.json
+index b1f2898e..8d05b114 100644
+--- a/scripts/ownership-map.json
++++ b/scripts/ownership-map.json
+@@ -120,9 +120,7 @@
+             "tag_prefix": "corex-tenancy-",
+             "env_prefix": "COREX_TENANCY_",
+             "command_prefix": "corex:tenancy:",
+-            "upstream_config": [
+-                "tenancy"
+-            ]
++            "upstream_config": []
+         },
+         "axiomasoft/corex-transfer": {
+             "dir": "transfer",

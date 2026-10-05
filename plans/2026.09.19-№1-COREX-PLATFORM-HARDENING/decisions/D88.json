@@ -1,0 +1,46 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D88",
+  "title": "Core zone FQCN принимают semantic names",
+  "date": "2026-09-20",
+  "status": "accepted",
+  "decision": "P15.10 переносит `CoreX\\PubSub\\*`→`CoreX\\Messaging\\*`, audit contracts\nв `CoreX\\Audit\\Contracts\\*`, `AuditLog`→`CoreX\\Audit\\Internal\\AuditLog`,\n`CoreX\\Views\\*`→`CoreX\\SavedViews\\*` и `DataScopeAccessDecision`→\n`CoreX\\Support\\Data\\DataScopeAccessDecision`. Namespace-coherent `git mv` здесь\nявляется часть rename, а не rollout structure profiles P16.",
+  "rationale": "`Views` фактически владеет saved-view contract, а общий `Messaging`\nсовпадает с зоной P5/P6. Точечные PSR-4 карты оставили бы\nнеймспейс и файловую семантику расходящимися.",
+  "applies_to": [
+    "P15",
+    "P15.10"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/codex-gpt-5.6-sol/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D88\ndate: 2026-09-20\nstatus: accepted\nitem: P15.10\nitems: [P15, P15.10]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D88-Core-zone-FQCN-semantic-names",
+      "title": "D88 — Core zone FQCN принимают semantic names",
+      "text": "**Actor:** plan-designer/codex-gpt-5.6-sol/high\n**Evidence:** RAG:— D32, `@plan/knowledge/research-P6-design.json` §4, текущие\nPubSub/Audit/Views/Data surfaces и потребители."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "P15.10 переносит `CoreX\\PubSub\\*`→`CoreX\\Messaging\\*`, audit contracts\nв `CoreX\\Audit\\Contracts\\*`, `AuditLog`→`CoreX\\Audit\\Internal\\AuditLog`,\n`CoreX\\Views\\*`→`CoreX\\SavedViews\\*` и `DataScopeAccessDecision`→\n`CoreX\\Support\\Data\\DataScopeAccessDecision`. Namespace-coherent `git mv` здесь\nявляется часть rename, а не rollout structure profiles P16."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "`Views` фактически владеет saved-view contract, а общий `Messaging`\nсовпадает с зоной P5/P6. Точечные PSR-4 карты оставили бы\nнеймспейс и файловую семантику расходящимися."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "Item требует `[OWNER-GATE:G-API-P15]`, full review, обновление\n`extra.corex.public-api` и всех in-repo consumers; deprecated aliases нет."
+    }
+  ]
+}

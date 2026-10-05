@@ -1,0 +1,267 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P2.1",
+  "title": "Сканер символов и импортов, `files.csv`, самопроверка базы",
+  "status": "done",
+  "summary": "Создать плановый сканер на stdlib `token_get_all` и произвести\n`artifacts/architecture/files.csv` (21 колонка измерения), `symbols.csv` и\n`self-check.json`, который воспроизводит шесть чисел\n`@plan/knowledge/research-00-baseline-metrics.json`.",
+  "why": "Без машинного инвентаря последующие фазы классифицируют классы по памяти.\nСуществующий гейт графа читает `use` regex'ом и пропускает group-use\n(`RAG:—`, `scripts/package-graph-gate.php:364-366`). `RAG:✅` P2-Q1: резолв имён\nнужен, конкретный `nikic/php-parser` — нет; строковый FQCN — `convention`, не\nдоказанная зависимость (`@plan/knowledge/research-P2-design-rag.json` §1). D15 запрещает колонку\n`verdict` в этом CSV; D16 запрещает новую зависимость Composer.",
+  "scope": {
+    "include": [
+      "CLI `scripts/architecture/bin/inventory.php` с командой\n`inventory`; классы `InventoryScanner`, `CsvEmitter`, `SelfCheck`; пять фикстур\n`use` в `scripts/architecture/fixtures/use/`; три артефакта в\n`artifacts/architecture/`; append в `@plan/knowledge/findings-P2-inventory-receipts.json`."
+    ],
+    "exclude": [
+      "Команды `graphs`/`tables`/`config`/`verdicts`/`scorecard`\n(P2.2–P2.6); колонка `verdict`; правка `scripts/package-graph-gate.php`; любой\n`composer.json`; любой файл под `packages/*/src` и `docs/architecture/`;\nкорневой `artifacts/`; заполнение `suggested_*` чем-либо кроме `—`."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D15",
+    "D16"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P2-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D15.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D16.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/plan.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P2/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P2-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-00-baseline-metrics.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P1-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "scripts/package-graph-gate.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/composer.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "autoload.psr-4",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/search-intl/src/SearchIntlServiceProvider.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "scripts/architecture/bin/inventory.php",
+      "change": "any"
+    },
+    {
+      "path": "scripts/architecture/src/InventoryScanner.php",
+      "change": "any"
+    },
+    {
+      "path": "scripts/architecture/src/CsvEmitter.php",
+      "change": "any"
+    },
+    {
+      "path": "scripts/architecture/src/SelfCheck.php",
+      "change": "any"
+    },
+    {
+      "path": "@plan/artifacts/architecture/files.csv",
+      "change": "any"
+    },
+    {
+      "path": "@plan/artifacts/architecture/symbols.csv",
+      "change": "any"
+    },
+    {
+      "path": "@plan/artifacts/architecture/self-check.json",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P2-inventory-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Код CLI, `CsvEmitter` и `SelfCheck` переносится из\n`@plan/knowledge/research-P2-design.json` §3.1–§3.3 по смыслу дословно: константы `EXPECTED` и\nзаголовки `FILE_HEADERS` / `SYMBOL_HEADERS` байт-в-байт. `InventoryScanner`\nреализует алгоритм §3.4, включая пять референс-случаев `use`. Метод счёта\nсамопроверки — «строки, содержащие совпадение», не число вхождений. Миграции\nсчитаются только в миграциях пакетов, не в `tests/database`.\n`import-export` пропускается (нет `src`). `suggested_namespace` и\n`suggested_name` = `—`. Никакого `generated_at` в CSV/JSON. Никакого BOM, только\nLF. Ни один файл вне `Files` не изменяется."
+  ],
+  "guidance": "Готовый CLI — §3.1; эмиттер — §3.2; самопроверка — §3.3;\nалгоритм сканера и таблица референс-`use` — §3.4. Фикстуры кладутся в\n`scripts/architecture/fixtures/use/` (пять однострочных PHP); их пути не входят\nв лимит `Files`, потому что это данные генератора внутри уже объявленного\nкаталога `scripts/architecture/`. Ширина строки PHP ≤ 120, как в гейте графа;\nпроза receipt — ≤ 100.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "php plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/scripts/architecture/bin/inventory.php inventory",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "python3 -c \"import json; c=json.load(open('plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/architecture/self-check.json')); assert c['ok'] is True\"",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "git diff --stat -- 'packages/' 'scripts/package-graph-gate.php' 'tests/' '.github/' 'docs/' 'composer.json'",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "inventory + self-check ok",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "use fixtures",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "CSV cmp",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "работающий плановый сканер; `files.csv` и `symbols.csv`;\n`self-check.json` с `\"ok\": true`; receipt с выводом самопроверки и пяти\nфикстур `use`."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "medium"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "required",
+    "status": "complete"
+  },
+  "result": {
+    "started_at": "2026-09-21T09:37:14Z",
+    "finished_at": "2026-09-21T09:37:37Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/cursor-composer-2.5/medium",
+      "effort": "medium"
+    },
+    "notes": "P2.1 GREEN: inventory scanner, CSV artifacts, self-check, receipt",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-21T09:37:37Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-21T09:37:37Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-21T09:37:37Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-21T09:37:37Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Создать плановый сканер на stdlib `token_get_all` и произвести\n`artifacts/architecture/files.csv` (21 колонка измерения), `symbols.csv` и\n`self-check.json`, который воспроизводит шесть чисел\n`@plan/knowledge/research-00-baseline-metrics.json`."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "Без машинного инвентаря последующие фазы классифицируют классы по памяти.\nСуществующий гейт графа читает `use` regex'ом и пропускает group-use\n(`RAG:—`, `scripts/package-graph-gate.php:364-366`). `RAG:✅` P2-Q1: резолв имён\nнужен, конкретный `nikic/php-parser` — нет; строковый FQCN — `convention`, не\nдоказанная зависимость (`@plan/knowledge/research-P2-design-rag.json` §1). D15 запрещает колонку\n`verdict` в этом CSV; D16 запрещает новую зависимость Composer."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "CLI `scripts/architecture/bin/inventory.php` с командой\n`inventory`; классы `InventoryScanner`, `CsvEmitter`, `SelfCheck`; пять фикстур\n`use` в `scripts/architecture/fixtures/use/`; три артефакта в\n`artifacts/architecture/`; append в `@plan/knowledge/findings-P2-inventory-receipts.json`."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Команды `graphs`/`tables`/`config`/`verdicts`/`scorecard`\n(P2.2–P2.6); колонка `verdict`; правка `scripts/package-graph-gate.php`; любой\n`composer.json`; любой файл под `packages/*/src` и `docs/architecture/`;\nкорневой `artifacts/`; заполнение `suggested_*` чем-либо кроме `—`."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P2-design.json` §0, §2, §3 как нормативная спецификация схемы\nи готового кода; `@plan/decisions/D15.json`;\n`@plan/decisions/D16.json`; ожидаемые числа\n`SelfCheck::EXPECTED` из §3.3 (888 / 152 / 0 / 19 / 188 / 86)."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/scripts/architecture/bin/inventory.php`; `plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/scripts/architecture/src/InventoryScanner.php`; `plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/scripts/architecture/src/CsvEmitter.php`; `plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/scripts/architecture/src/SelfCheck.php`; `plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/architecture/files.csv`; `plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/architecture/symbols.csv`; `plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/architecture/self-check.json`; `@plan/knowledge/findings-P2-inventory-receipts.json`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/plan.json` §2 Execution Rules; 2) `@plan/phases/P2/phase.json`; 3) `@plan/knowledge/research-P2-design.json` §0, §2, §3; 4) `@plan/knowledge/research-P2-design-rag.json` §1 (P2-Q1); 5) `@plan/decisions/D15.json`; 6) `@plan/decisions/D16.json`; 7) `@plan/knowledge/research-00-baseline-metrics.json` §1, §2, §12-поправка в `@plan/knowledge/research-P1-design.json` §12; 8) `scripts/package-graph-gate.php` функция `parseUseImport`; 9) `packages/core/composer.json` (форма `name` / `autoload.psr-4`); 10) `packages/search-intl/src/SearchIntlServiceProvider.php` (не читать как конфиг — только что пакет живой)."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Код CLI, `CsvEmitter` и `SelfCheck` переносится из\n`@plan/knowledge/research-P2-design.json` §3.1–§3.3 по смыслу дословно: константы `EXPECTED` и\nзаголовки `FILE_HEADERS` / `SYMBOL_HEADERS` байт-в-байт. `InventoryScanner`\nреализует алгоритм §3.4, включая пять референс-случаев `use`. Метод счёта\nсамопроверки — «строки, содержащие совпадение», не число вхождений. Миграции\nсчитаются только в миграциях пакетов, не в `tests/database`.\n`import-export` пропускается (нет `src`). `suggested_namespace` и\n`suggested_name` = `—`. Никакого `generated_at` в CSV/JSON. Никакого BOM, только\nLF. Ни один файл вне `Files` не изменяется."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Готовый CLI — §3.1; эмиттер — §3.2; самопроверка — §3.3;\nалгоритм сканера и таблица референс-`use` — §3.4. Фикстуры кладутся в\n`scripts/architecture/fixtures/use/` (пять однострочных PHP); их пути не входят\nв лимит `Files`, потому что это данные генератора внутри уже объявленного\nкаталога `scripts/architecture/`. Ширина строки PHP ≤ 120, как в гейте графа;\nпроза receipt — ≤ 100."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "`php plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/scripts/architecture/bin/inventory.php inventory` — код 0. `python3 -c \"import json; c=json.load(open('plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/architecture/self-check.json')); assert c['ok'] is True\"`. Повторный прогон: `cmp` обоих CSV без вывода. Первая строка `files.csv` — ровно 21 заголовок §2.1, без `verdict`. Пять фикстур `use` дают пары §3.4. `git diff --stat -- 'packages/' 'scripts/package-graph-gate.php' 'tests/' '.github/' 'docs/' 'composer.json'` пуст."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "работающий плановый сканер; `files.csv` и `symbols.csv`;\n`self-check.json` с `\"ok\": true`; receipt с выводом самопроверки и пяти\nфикстур `use`."
+    }
+  ]
+}

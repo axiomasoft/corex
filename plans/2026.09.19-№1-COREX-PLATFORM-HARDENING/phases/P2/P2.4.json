@@ -1,0 +1,275 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P2.4",
+  "title": "Реестр конфигурации и сохранённый ключ `corex-intl-search`",
+  "status": "done",
+  "summary": "Произвести `docs/architecture/configuration.md` — продуктовый каталог\nкаждого ключа из `packages/*/config/*.php` и каждого литерала `config('…')` из\nинвентаря, с девятью полями A108 и явной строкой N11.",
+  "why": "`CFG-001` требует класс ключа, но реестра нет (`RAG:—`, 152 чтения\n`config(`, 0 классов `*Options`). `RAG:✅` P2-Q4: Laravel не даёт per-key схемы\nsecret/reloadable/deprecated — каталог обязан быть своим\n(`@plan/knowledge/research-P2-design-rag.json` §1). N11 нельзя «исправить» переименованием ключа:\nэто BC до мажора.",
+  "scope": {
+    "include": [
+      "команда `config` в CLI; `ConfigExtractor.php`;\n`artifacts/architecture/config-keys.csv`; продуктовый\n`docs/architecture/configuration.md` (шапка §6.3 + таблица); строка CHANGELOG;\nappend в receipt."
+    ],
+    "exclude": [
+      "введение `*Options` (P7); правка любого `config/*.php` и\nпровайдера; переименование `corex-intl-search`; гейт `config()` вне composition\n(P3); чтение `.env`."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P2-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "files.csv",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/knowledge/research-P1-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/search-intl/config/corex-intl-search.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/config/corex.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P2/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P2-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-00-baseline-metrics.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/search-intl/src/SearchIntlServiceProvider.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/config/corex-tenancy.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "CHANGELOG.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "scripts/architecture/bin/inventory.php",
+      "change": "any"
+    },
+    {
+      "path": "scripts/architecture/src/ConfigExtractor.php",
+      "change": "any"
+    },
+    {
+      "path": "@plan/artifacts/architecture/config-keys.csv",
+      "change": "any"
+    },
+    {
+      "path": "docs/architecture/configuration.md",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P2-inventory-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Слияние двух проходов §6. Ключ без объявления в\n`config/*.php` получает статус `undeclared-read` в `notes` и остаётся в каталоге.\nПоля — §6.1, правило `mode` — §6.2, без импровизации. `typed_options_field` = `—`\nво всех строках. `corex-intl-search` обязан присутствовать с\n`notes` про CFG-006. Шапка — §6.3. CHANGELOG:\n`P2.4: реестр конфигурации (docs/architecture/configuration.md)`. Секреты в\n`default` не печатаются: если значение похоже на секрет, `default` = `***`."
+  ],
+  "guidance": "Обход `config/*.php` — `token_get_all`, сборка вложенных\nмассивных ключей через стек `T_CONSTANT_ENCAPSED_STRING` перед `=>`.\n`env('NAME', default)` помечает `reloadable=no` и кладёт `NAME` в `notes`.\nТип — по токену значения (`T_STRING` true/false → `bool`, `T_LNUMBER` → `int`,\n`::class` → `class-string`). Не разобранное дерево — `type=unobserved`, не\nпропуск ключа.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "rg \"typed_options_field\" docs/architecture/configuration.md",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "git diff --stat -- 'packages/*/config' 'packages/*/src'",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "composer lint:check",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "corex-intl-search + CFG-006",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "undeclared-read=17",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "typed_options_field=— all rows",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "packages/config+src unchanged",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "composer lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "`config-keys.csv`; `docs/architecture/configuration.md`;\nстрока CHANGELOG; receipt со счётчиками ключей по `mode` и списком\n`undeclared-read`."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "medium"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "required",
+    "status": "complete"
+  },
+  "result": {
+    "started_at": "2026-09-21T12:11:00Z",
+    "finished_at": "2026-09-21T12:11:00Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/cursor-composer-2.5/medium",
+      "effort": "medium"
+    },
+    "notes": "P2.4 GREEN: ConfigExtractor, config-keys.csv 161 keys, configuration.md, CFG-006 note, 17 undeclared-read, lint green",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-21T12:11:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-21T12:11:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-21T12:11:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-21T12:11:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-21T12:11:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-21T12:11:00Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Произвести `docs/architecture/configuration.md` — продуктовый каталог\nкаждого ключа из `packages/*/config/*.php` и каждого литерала `config('…')` из\nинвентаря, с девятью полями A108 и явной строкой N11."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`CFG-001` требует класс ключа, но реестра нет (`RAG:—`, 152 чтения\n`config(`, 0 классов `*Options`). `RAG:✅` P2-Q4: Laravel не даёт per-key схемы\nsecret/reloadable/deprecated — каталог обязан быть своим\n(`@plan/knowledge/research-P2-design-rag.json` §1). N11 нельзя «исправить» переименованием ключа:\nэто BC до мажора."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "команда `config` в CLI; `ConfigExtractor.php`;\n`artifacts/architecture/config-keys.csv`; продуктовый\n`docs/architecture/configuration.md` (шапка §6.3 + таблица); строка CHANGELOG;\nappend в receipt."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "введение `*Options` (P7); правка любого `config/*.php` и\nпровайдера; переименование `corex-intl-search`; гейт `config()` вне composition\n(P3); чтение `.env`."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P2-design.json` §6; `files.csv` колонка `config_reads`;\n`@plan/knowledge/research-P1-design.json` §2.8 и §9; `packages/search-intl/config/corex-intl-search.php`;\n`packages/core/config/corex.php`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/scripts/architecture/bin/inventory.php`; `plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/scripts/architecture/src/ConfigExtractor.php`; `plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/architecture/config-keys.csv`; `docs/architecture/configuration.md`; `CHANGELOG.md`; `@plan/knowledge/findings-P2-inventory-receipts.json`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P2/phase.json`; 2) `@plan/knowledge/research-P2-design.json` §0, §6; 3) `@plan/knowledge/research-P2-design-rag.json` §1 (P2-Q4); 4) `@plan/knowledge/research-P1-design.json` §2.8, §9; 5) `@plan/knowledge/research-00-baseline-metrics.json` §2, §3; 6) `packages/core/config/corex.php`; 7) `packages/search-intl/config/corex-intl-search.php`; 8) `packages/search-intl/src/SearchIntlServiceProvider.php`; 9) `packages/tenancy/config/corex-tenancy.php` (первые 40 строк); 10) `CHANGELOG.md` (первые 30 строк)."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Слияние двух проходов §6. Ключ без объявления в\n`config/*.php` получает статус `undeclared-read` в `notes` и остаётся в каталоге.\nПоля — §6.1, правило `mode` — §6.2, без импровизации. `typed_options_field` = `—`\nво всех строках. `corex-intl-search` обязан присутствовать с\n`notes` про CFG-006. Шапка — §6.3. CHANGELOG:\n`P2.4: реестр конфигурации (docs/architecture/configuration.md)`. Секреты в\n`default` не печатаются: если значение похоже на секрет, `default` = `***`."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Обход `config/*.php` — `token_get_all`, сборка вложенных\nмассивных ключей через стек `T_CONSTANT_ENCAPSED_STRING` перед `=>`.\n`env('NAME', default)` помечает `reloadable=no` и кладёт `NAME` в `notes`.\nТип — по токену значения (`T_STRING` true/false → `bool`, `T_LNUMBER` → `int`,\n`::class` → `class-string`). Не разобранное дерево — `type=unobserved`, не\nпропуск ключа."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Каталог содержит ключ, чей путь начинается с `corex-intl-search`.\nЧисло `undeclared-read` записано в receipt. `typed_options_field` нигде не пуст\nи нигде не выдуман (везде `—`). `rg \"typed_options_field\" docs/architecture/configuration.md`\nпоказывает прозу шапки про «сегодня пуста». `git diff --stat -- 'packages/*/config' 'packages/*/src'` пуст. `composer lint:check` зелёный."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "`config-keys.csv`; `docs/architecture/configuration.md`;\nстрока CHANGELOG; receipt со счётчиками ключей по `mode` и списком\n`undeclared-read`."
+    }
+  ]
+}

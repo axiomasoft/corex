@@ -1,0 +1,551 @@
+[
+  {
+    "id": "candidate-anchor",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "python3",
+      "-c",
+      "import pathlib,subprocess,json,os\nbase=pathlib.Path('plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P07.4-execution/base-commit.txt').read_text().strip()\nhead=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()\nassert head==os.environ['CANDIDATE'], 'HEAD differs from the explicitly bound candidate'\nsubprocess.run(['git','merge-base','--is-ancestor',base,head],check=True)\nprint(json.dumps({'product_commit':head,'item_base':base,'compare':'item_base...HEAD'},sort_keys=True),flush=True)\nsubprocess.run(['git','show','--no-patch','--format=fuller',head],check=True)\nsubprocess.run(['git','diff','--stat',base+'...HEAD','--','packages/access','packages/access-azguard','composer.json','composer.lock','.github/workflows/ci.yml','scripts','docs','tests/Golden'],check=True)\nassert not pathlib.Path('scripts/.plan-close-deferred').exists(), 'Gate deferral flag must be absent'\n\nproduct_paths=['packages/access', 'packages/access-azguard', 'packages/*/composer.json', 'packages/*/resources/contracts/php-api.json', 'composer.json', 'composer.lock', 'phpunit.xml', '.github/workflows/ci.yml', 'scripts', 'docs/architecture', 'docs/reference/public-api.md', 'docs/dev-doctrine.md', 'tests/Golden', 'plans/2026.09.27-\u21161-COREX-KERNEL/research/03-glossary.md']\nstatus=subprocess.check_output(['git','status','--porcelain=v1','--untracked-files=all','--',*product_paths],text=True)\nprint('product_worktree_status='+repr(status),flush=True)\nassert not status, 'Commit final product changes before canonical validation'\n"
+    ],
+    "depends_on": []
+  },
+  {
+    "id": "dependency-lock",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "python3",
+      "-c",
+      "import json,pathlib,subprocess\nbase=pathlib.Path('plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P07.4-execution/base-commit.txt').read_text().strip()\nbefore=json.loads(subprocess.check_output(['git','show',base+':composer.lock'],text=True)); after=json.loads(pathlib.Path('composer.lock').read_text())\ndef third_party(lock):\n    return {p['name']:p for key in ['packages','packages-dev'] for p in lock[key] if not p['name'].startswith(('axiomasoft/','flex/'))}\na,b=third_party(before),third_party(after)\nchanged=sorted(name for name in a.keys()|b.keys() if a.get(name)!=b.get(name))\nprint(json.dumps({'item_base':base,'third_party_entry_count_before':len(a),'third_party_entry_count_after':len(b),'changed_third_party_entries':changed},sort_keys=True),flush=True)\nassert not changed, 'P07.4 must preserve third-party lock entries'\n"
+    ],
+    "depends_on": [
+      "candidate-anchor"
+    ]
+  },
+  {
+    "id": "api-write-1",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "python3",
+      "-c",
+      "import hashlib,json,pathlib,subprocess\npaths=sorted(list(pathlib.Path('packages').glob('*/resources/contracts/php-api.json'))+[pathlib.Path('docs/reference/public-api.md')])\ndef hashes():\n    return {p.as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}\nbefore=hashes()\nprint(json.dumps({'pass':1,'stage':'before','sha256':before},sort_keys=True),flush=True)\nimport hashlib,json,os,pathlib,subprocess\nrawdir=pathlib.Path(os.environ['VALIDATION_RAW_DIR'])\nassert not rawdir.is_absolute() and '..' not in rawdir.parts, 'Raw output must be repository-local'\nrawdir.mkdir(parents=True,exist_ok=True)\nraw=rawdir/'api-write-1.log'\nwith raw.open('xb') as output:\n    result=subprocess.run(['scripts/php84', 'php', 'scripts/php-api.php', '--write'],stdout=output,stderr=subprocess.STDOUT)\ncontent=raw.read_bytes(); text=content.decode('utf-8',errors='replace')\nsummary={'raw_log':raw.as_posix(),'raw_sha256':hashlib.sha256(content).hexdigest(),'raw_bytes':len(content),'exit_code':result.returncode,'product_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()}\ntry:\n    report=json.JSONDecoder().raw_decode(text[text.index('{'):])[0]\n    summary.update({'schema':report.get('schema'),'owners':len(report.get('owners',{})),'diagnostics':report.get('diagnostics',[]),'report_fields':sorted(report)})\nexcept (ValueError,KeyError):\n    summary['parse_error']='Raw output does not contain a JSON API report'\nprint(json.dumps(summary,sort_keys=True),flush=True)\nif result.returncode: raise SystemExit(result.returncode)\nassert 'parse_error' not in summary, summary['parse_error']\n\nafter=hashes()\nprint(json.dumps({'pass':1,'stage':'after','sha256':after,'identical_to_before':before==after},sort_keys=True),flush=True)\nassert before==after, 'Generation changed final candidate: regenerate, commit and use a new attempt'\n"
+    ],
+    "depends_on": [
+      "dependency-lock"
+    ]
+  },
+  {
+    "id": "api-write-2",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "python3",
+      "-c",
+      "import hashlib,json,pathlib,subprocess\npaths=sorted(list(pathlib.Path('packages').glob('*/resources/contracts/php-api.json'))+[pathlib.Path('docs/reference/public-api.md')])\ndef hashes():\n    return {p.as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}\nbefore=hashes()\nprint(json.dumps({'pass':2,'stage':'before','sha256':before},sort_keys=True),flush=True)\nimport hashlib,json,os,pathlib,subprocess\nrawdir=pathlib.Path(os.environ['VALIDATION_RAW_DIR'])\nassert not rawdir.is_absolute() and '..' not in rawdir.parts, 'Raw output must be repository-local'\nrawdir.mkdir(parents=True,exist_ok=True)\nraw=rawdir/'api-write-2.log'\nwith raw.open('xb') as output:\n    result=subprocess.run(['scripts/php84', 'php', 'scripts/php-api.php', '--write'],stdout=output,stderr=subprocess.STDOUT)\ncontent=raw.read_bytes(); text=content.decode('utf-8',errors='replace')\nsummary={'raw_log':raw.as_posix(),'raw_sha256':hashlib.sha256(content).hexdigest(),'raw_bytes':len(content),'exit_code':result.returncode,'product_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()}\ntry:\n    report=json.JSONDecoder().raw_decode(text[text.index('{'):])[0]\n    summary.update({'schema':report.get('schema'),'owners':len(report.get('owners',{})),'diagnostics':report.get('diagnostics',[]),'report_fields':sorted(report)})\nexcept (ValueError,KeyError):\n    summary['parse_error']='Raw output does not contain a JSON API report'\nprint(json.dumps(summary,sort_keys=True),flush=True)\nif result.returncode: raise SystemExit(result.returncode)\nassert 'parse_error' not in summary, summary['parse_error']\n\nafter=hashes()\nprint(json.dumps({'pass':2,'stage':'after','sha256':after,'identical_to_before':before==after},sort_keys=True),flush=True)\nassert before==after, 'Generation changed final candidate: regenerate, commit and use a new attempt'\n"
+    ],
+    "depends_on": [
+      "api-write-1"
+    ]
+  },
+  {
+    "id": "contract-head",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "bash",
+      "scripts/contract-guard.sh"
+    ],
+    "depends_on": [
+      "api-write-2"
+    ]
+  },
+  {
+    "id": "contract-base",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "bash",
+      "-c",
+      "set -euo pipefail\nitem_base=$(cat 'plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P07.4-execution/base-commit.txt')\nprintf \"item_base=%s\\n\" \"$item_base\"\nbash scripts/contract-guard.sh \"$item_base\""
+    ],
+    "depends_on": [
+      "contract-head"
+    ]
+  },
+  {
+    "id": "access-azguard-scan",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "bash",
+      "-c",
+      "set +e\ngit grep -n -i -E 'azguard|az_guard' -- packages/access ':!packages/access/CHANGELOG.md'\nactual=$?\nprintf 'grep_exit=%s expected=1\\n' \"$actual\"\ntest \"$actual\" -eq 1"
+    ],
+    "depends_on": [
+      "contract-base"
+    ]
+  },
+  {
+    "id": "access-closure",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "python3",
+      "-c",
+      "import json,pathlib\np=pathlib.Path('packages/access/vendor/composer/installed.json')\ndata=json.loads(p.read_text()); packages=data['packages'] if isinstance(data,dict) else data\nnames=sorted(row['name'] for row in packages)\nprint(json.dumps({'access_install':str(p),'installed_packages':names,'azguard_absent':not any('azguard' in n.lower() for n in names)},sort_keys=True))\nassert not any('azguard' in n.lower() for n in names), 'Access test closure contains AzGuard'\n"
+    ],
+    "depends_on": [
+      "access-azguard-scan"
+    ]
+  },
+  {
+    "id": "access-tests",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "scripts/php84",
+      "composer",
+      "--working-dir=packages/access",
+      "test"
+    ],
+    "depends_on": [
+      "access-closure"
+    ]
+  },
+  {
+    "id": "pg-preflight",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "bash",
+      "-c",
+      "set -euo pipefail\ndocker compose ps pgsql\ndocker compose exec -T pgsql pg_isready -U corex -d corex_test\nscripts/php84 php -r '$name=getenv('\"'\"'PGSQL_DATABASE'\"'\"'); if($name!=='\"'\"'corex_test'\"'\"'||!preg_match('\"'\"'/^[a-z0-9_]+_test$/D'\"'\"',$name)){throw new RuntimeException('\"'\"'Unsafe target'\"'\"');} $pdo=new PDO('\"'\"'pgsql:host='\"'\"'.getenv('\"'\"'PGSQL_HOST'\"'\"').'\"'\"';port='\"'\"'.getenv('\"'\"'PGSQL_PORT'\"'\"').'\"'\"';dbname='\"'\"'.$name,getenv('\"'\"'PGSQL_USERNAME'\"'\"'),getenv('\"'\"'PGSQL_PASSWORD'\"'\"'),[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]); $row=$pdo->query('\"'\"'select current_database() as database, inet_server_addr()::text as address, inet_server_port() as server_port'\"'\"')->fetch(PDO::FETCH_ASSOC); if($row['\"'\"'database'\"'\"']!==$name){throw new RuntimeException('\"'\"'Target mismatch'\"'\"');} echo json_encode(['\"'\"'mode'\"'\"'=>'\"'\"'host'\"'\"','\"'\"'host_port'\"'\"'=>getenv('\"'\"'PGSQL_PORT'\"'\"'),'\"'\"'connection'\"'\"'=>$row,'\"'\"'migrations'\"'\"'=>'\"'\"'Package and root PG TestCase fixtures apply migrations in isolated test database'\"'\"'],JSON_PRETTY_PRINT).PHP_EOL;'"
+    ],
+    "depends_on": [
+      "access-tests"
+    ]
+  },
+  {
+    "id": "access-pg",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "scripts/php84",
+      "composer",
+      "--working-dir=packages/access",
+      "test:pg"
+    ],
+    "depends_on": [
+      "pg-preflight"
+    ]
+  },
+  {
+    "id": "bridge-tests",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "scripts/php84",
+      "composer",
+      "--working-dir=packages/access-azguard",
+      "test"
+    ],
+    "depends_on": [
+      "access-pg"
+    ]
+  },
+  {
+    "id": "graph",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "python3",
+      "-c",
+      "import hashlib,pathlib,subprocess\np=pathlib.Path('artifacts/P12-package-graph/report.json'); existed=p.exists(); original=p.read_bytes() if existed else None\ntry:\n    result=subprocess.run(['scripts/php84','composer','package-graph-gate'])\nfinally:\n    if existed: p.write_bytes(original)\n    elif p.exists(): p.unlink()\nprint('graph_report_restored='+str(existed)+' sha256='+(hashlib.sha256(original).hexdigest() if existed else 'absent'),flush=True)\nraise SystemExit(result.returncode)\n"
+    ],
+    "depends_on": [
+      "bridge-tests"
+    ]
+  },
+  {
+    "id": "manifests",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "scripts/php84",
+      "composer",
+      "manifests:check"
+    ],
+    "depends_on": [
+      "graph"
+    ]
+  },
+  {
+    "id": "ownership",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "scripts/php84",
+      "composer",
+      "ownership-gate"
+    ],
+    "depends_on": [
+      "manifests"
+    ]
+  },
+  {
+    "id": "tables",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "scripts/php84",
+      "composer",
+      "table-ownership-gate"
+    ],
+    "depends_on": [
+      "ownership"
+    ]
+  },
+  {
+    "id": "naming",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "scripts/php84",
+      "composer",
+      "naming-gate"
+    ],
+    "depends_on": [
+      "tables"
+    ]
+  },
+  {
+    "id": "package-tests",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "scripts/php84",
+      "composer",
+      "test:packages"
+    ],
+    "depends_on": [
+      "naming"
+    ]
+  },
+  {
+    "id": "root-pg",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "scripts/php84",
+      "composer",
+      "test:pg"
+    ],
+    "depends_on": [
+      "package-tests"
+    ]
+  },
+  {
+    "id": "api",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "python3",
+      "-c",
+      "import hashlib,json,os,pathlib,subprocess\nrawdir=pathlib.Path(os.environ['VALIDATION_RAW_DIR'])\nassert not rawdir.is_absolute() and '..' not in rawdir.parts, 'Raw output must be repository-local'\nrawdir.mkdir(parents=True,exist_ok=True)\nraw=rawdir/'api-check.log'\nwith raw.open('xb') as output:\n    result=subprocess.run(['scripts/php84', 'composer', 'php-api'],stdout=output,stderr=subprocess.STDOUT)\ncontent=raw.read_bytes(); text=content.decode('utf-8',errors='replace')\nsummary={'raw_log':raw.as_posix(),'raw_sha256':hashlib.sha256(content).hexdigest(),'raw_bytes':len(content),'exit_code':result.returncode,'product_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()}\ntry:\n    report=json.JSONDecoder().raw_decode(text[text.index('{'):])[0]\n    summary.update({'schema':report.get('schema'),'owners':len(report.get('owners',{})),'diagnostics':report.get('diagnostics',[]),'report_fields':sorted(report)})\nexcept (ValueError,KeyError):\n    summary['parse_error']='Raw output does not contain a JSON API report'\nprint(json.dumps(summary,sort_keys=True),flush=True)\nif result.returncode: raise SystemExit(result.returncode)\nassert 'parse_error' not in summary, summary['parse_error']\n"
+    ],
+    "depends_on": [
+      "root-pg"
+    ]
+  },
+  {
+    "id": "bc",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "BC_CHECK_JOBS=1",
+      "python3",
+      "/tmp/corex-p074-bc-reuse-verify.py",
+      "--assert-session-tool-environment-unchanged"
+    ],
+    "depends_on": [
+      "api"
+    ]
+  },
+  {
+    "id": "golden-delta",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "bash",
+      "-c",
+      "set -euo pipefail\nitem_base=$(cat 'plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P07.4-execution/base-commit.txt')\nprintf \"golden_compare=%s...HEAD\\n\" \"$item_base\"\ngit diff \"$item_base...HEAD\" -- tests/Golden/baseline tests/Golden/REBASELINE.md"
+    ],
+    "depends_on": [
+      "bc"
+    ]
+  },
+  {
+    "id": "golden",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "scripts/php84",
+      "composer",
+      "golden"
+    ],
+    "depends_on": [
+      "golden-delta"
+    ]
+  },
+  {
+    "id": "lint",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "scripts/php84",
+      "composer",
+      "lint:check"
+    ],
+    "depends_on": [
+      "golden"
+    ]
+  },
+  {
+    "id": "analyse",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "scripts/php84",
+      "composer",
+      "analyse"
+    ],
+    "depends_on": [
+      "lint"
+    ]
+  },
+  {
+    "id": "dependencies",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "python3",
+      "-c",
+      "import subprocess,json,os\nnative=\"if (!extension_loaded('redis') || !extension_loaded('igbinary')) { throw new RuntimeException('Native Redis runtime missing'); } echo json_encode(['php'=>PHP_VERSION,'redis'=>phpversion('redis'),'igbinary'=>phpversion('igbinary'),'ini_scan_dir'=>getenv('PHP_INI_SCAN_DIR'),'redis_sha256'=>hash_file('sha256','/tmp/corex-p074-php-runtime/usr/lib/php/20240924/redis.so'),'igbinary_sha256'=>hash_file('sha256','/tmp/corex-p074-php-runtime/usr/lib/php/20240924/igbinary.so'),'origin'=>'apt package from configured ondrej/php PPA; extracted locally; no system configuration changed'], JSON_PRETTY_PRINT).PHP_EOL;\"\nsubprocess.run(['scripts/php84','php','-r',native],check=True)\nraise SystemExit(subprocess.run(['scripts/php84','composer','deps:analyse']).returncode)\n"
+    ],
+    "depends_on": [
+      "analyse"
+    ],
+    "env": {
+      "PHP_INI_SCAN_DIR": "/etc/php/8.4/cli/conf.d:/tmp/corex-p074-php-runtime/ini"
+    }
+  },
+  {
+    "id": "anti-weakening",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "bash",
+      "scripts/anti-weakening-gate.sh"
+    ],
+    "depends_on": [
+      "dependencies"
+    ]
+  },
+  {
+    "id": "docs",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "scripts/php84",
+      "php",
+      "scripts/package-docs-gate.php"
+    ],
+    "depends_on": [
+      "anti-weakening"
+    ]
+  },
+  {
+    "id": "mutation",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "scripts/php84",
+      "bash",
+      "scripts/mutation-check.sh",
+      "--all"
+    ],
+    "depends_on": [
+      "docs"
+    ]
+  }
+]

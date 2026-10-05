@@ -1,0 +1,17 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P9-design-rag-q03-composer-psr4",
+  "title": "Q3",
+  "sections": [
+    {
+      "id": "P9-Q3",
+      "title": "P9-Q3",
+      "text": "- URL: https://getcomposer.org/doc/04-schema.md#psr-4\n- Accessed: 2026-09-19\n- Source: Composer documentation\n- Claim: a PSR-4 namespace prefix maps to a path or an array of paths.\n- Use: supports physical context folders while retaining stable class namespaces."
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P9-design-rag/q03-composer-psr4.md",
+    "sha256": "30116556b86092e9826feb82e16b7061635f9cd017add64229c3481e12d6cf08"
+  }
+}

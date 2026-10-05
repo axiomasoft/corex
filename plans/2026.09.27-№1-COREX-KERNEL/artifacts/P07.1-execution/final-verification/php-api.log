@@ -1,0 +1,8 @@
+{
+  "command": "scripts/php84 composer php-api",
+  "exit_code": 0,
+  "stdout_bytes": 3931504,
+  "stdout_sha256": "290062143288d4974da9bced661535312ac67da47ca3b190648179fe0a86a41e",
+  "diagnostics": [],
+  "note": "Condensed successful stdout; full API snapshots remain in package resources/contracts/php-api.json."
+}

@@ -1,0 +1,606 @@
+{
+  "schema_version": "task-contract/v1",
+  "contract_id": "2026.09.27-№1-corex-kernel-p07-2",
+  "version": {
+    "revision": 1,
+    "content_hash": "a0264c697a5a559021f6a42fb997dbc8fa9892c6faa144dc9887e704f330c33c",
+    "supersedes": null
+  },
+  "goal": {
+    "outcome": "Убрать последний код и все следы stancl: модели `Account`/`Domain` становятся обычными Eloquent-моделями, provisioning и lifecycle работают без базовых классов и JobPipeline, config живёт под одним ключом `corex-tenancy`, а manifests, lock, скрипты, CI и PHPStan больше не знают о снимках stancl.",
+    "non_goals": [
+      "удаление колонки `root_accounts.data` и любые миграции (P08)",
+      "impersonation-порты (P07.3)",
+      "`docs/03_Dev/**`, `docs/audit-*.md`",
+      "обновление других зависимостей lock."
+    ]
+  },
+  "must": [
+    {
+      "id": "M1",
+      "requirement": "`Account` (`extends Model`, `HasUuids`, central connection, явные fillable/casts) и `Domain` без stancl-трейтов",
+      "source_ref": "phases/P07.md:7"
+    },
+    {
+      "id": "M2",
+      "requirement": "`HostResolverCacheInvalidator`",
+      "source_ref": "phases/P07.md:7"
+    },
+    {
+      "id": "M3",
+      "requirement": "`TemplateClonePostgreSQLManager` без базового класса",
+      "source_ref": "phases/P07.md:7"
+    },
+    {
+      "id": "M4",
+      "requirement": "`DatabaseTenantProvisioner`, `DatabaseTenantLifecycle`, `CreateDatabaseFromTemplate` на `AccountRef`",
+      "source_ref": "phases/P07.md:7"
+    },
+    {
+      "id": "M5",
+      "requirement": "`EventsRegistrar` без `JobPipeline`/`TenantCreated`",
+      "source_ref": "phases/P07.md:7"
+    },
+    {
+      "id": "M6",
+      "requirement": "`AccountTemplateSnapshot`",
+      "source_ref": "phases/P07.md:7"
+    },
+    {
+      "id": "M7",
+      "requirement": "слияние `config/tenancy.php` в `config/corex-tenancy.php`, `TenancyOptions::fromArray(array $config)`, удаление полей stancl",
+      "source_ref": "phases/P07.md:7"
+    },
+    {
+      "id": "M8",
+      "requirement": "удаление `StanclImportBoundaryRule`, его регистрации и тестов, `StanclIsolationTest`",
+      "source_ref": "phases/P07.md:7"
+    },
+    {
+      "id": "M9",
+      "requirement": "перевод 13 тестов со stancl-импортами",
+      "source_ref": "phases/P07.md:7"
+    },
+    {
+      "id": "M10",
+      "requirement": "удаление `axiomasoft/stancl-*` из root и tenancy `composer.json` и `composer.lock`, снятие `dont-discover`",
+      "source_ref": "phases/P07.md:7"
+    },
+    {
+      "id": "M11",
+      "requirement": "`ALLOWED_PRERELEASE = {}`",
+      "source_ref": "phases/P07.md:7"
+    },
+    {
+      "id": "M12",
+      "requirement": "удаление `scripts/distribution/stage-stancl-providers.py`, `.composer-provider-staging/` и шагов staging в workflows",
+      "source_ref": "phases/P07.md:7"
+    },
+    {
+      "id": "M13",
+      "requirement": "правка ссылок в скриптах из `facts/stancl-coupling.txt`",
+      "source_ref": "phases/P07.md:7"
+    },
+    {
+      "id": "M14",
+      "requirement": "docblock `TenantDatabaseLifecycle`",
+      "source_ref": "phases/P07.md:7"
+    },
+    {
+      "id": "M15",
+      "requirement": "`configuration.md` (регенерация), tenancy README/PACKAGE/CHANGELOG",
+      "source_ref": "phases/P07.md:7"
+    },
+    {
+      "id": "M16",
+      "requirement": "Golden delta P07.2.",
+      "source_ref": "phases/P07.md:7"
+    }
+  ],
+  "never": [
+    {
+      "id": "N1",
+      "prohibition": "удаление колонки `root_accounts.data` и любые миграции (P08)",
+      "source_ref": "phases/P07.md:9"
+    },
+    {
+      "id": "N2",
+      "prohibition": "impersonation-порты (P07.3)",
+      "source_ref": "phases/P07.md:9"
+    },
+    {
+      "id": "N3",
+      "prohibition": "`docs/03_Dev/**`, `docs/audit-*.md`",
+      "source_ref": "phases/P07.md:9"
+    },
+    {
+      "id": "N4",
+      "prohibition": "обновление других зависимостей lock.",
+      "source_ref": "phases/P07.md:9"
+    }
+  ],
+  "done": {
+    "public_acceptance": [
+      {
+        "id": "A1",
+        "predicate": "package changelogs; `artifacts/P07.2-execution/base-commit.txt` и candidate SHA; tenancy без stancl во всех слоях; пустой `ALLOWED_PRERELEASE`; один config-ключ `corex-tenancy`; Golden delta P07.2; `artifacts/P07.2-execution/completion.md`.",
+        "scope": "public",
+        "check": "- После продуктового commit: `bash scripts/contract-guard.sh` и `bash scripts/contract-guard.sh \"$(cat plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.2-execution/base-commit.txt)\"` → exit 0.",
+        "evidence_ref": "E18"
+      },
+      {
+        "id": "A2",
+        "predicate": "package changelogs; `artifacts/P07.2-execution/base-commit.txt` и candidate SHA; tenancy без stancl во всех слоях; пустой `ALLOWED_PRERELEASE`; один config-ключ `corex-tenancy`; Golden delta P07.2; `artifacts/P07.2-execution/completion.md`.",
+        "scope": "public",
+        "check": "- VERIFY-AT-EXEC → нет `v4*` (запись в Completion Notes).",
+        "evidence_ref": "E19"
+      },
+      {
+        "id": "A3",
+        "predicate": "package changelogs; `artifacts/P07.2-execution/base-commit.txt` и candidate SHA; tenancy без stancl во всех слоях; пустой `ALLOWED_PRERELEASE`; один config-ключ `corex-tenancy`; Golden delta P07.2; `artifacts/P07.2-execution/completion.md`.",
+        "scope": "public",
+        "check": "- `git grep -n -i stancl -- packages products scripts .github composer.json ':!**/CHANGELOG.md'` → пусто; `test ! -e .composer-provider-staging` → exit 0; `python3 -c \"import json;l=json.load(open('composer.lock'));print([p['name'] for p in l['packages']+l['packages-dev'] if 'stancl' in p['name']])\"` → `[]`; `git diff \"$(cat plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.2-execution/base-commit.txt)\" -- composer.lock` удаляет только пакеты, перечисленные в Completion Notes с выводом `composer why`.",
+        "evidence_ref": "E20"
+      },
+      {
+        "id": "A4",
+        "predicate": "package changelogs; `artifacts/P07.2-execution/base-commit.txt` и candidate SHA; tenancy без stancl во всех слоях; пустой `ALLOWED_PRERELEASE`; один config-ключ `corex-tenancy`; Golden delta P07.2; `artifacts/P07.2-execution/completion.md`.",
+        "scope": "public",
+        "check": "- `scripts/php84 composer manifests:check` → exit 0 при `ALLOWED_PRERELEASE = {}`; негатив: временно вернуть `\"axiomasoft/stancl-tenancy\": \">=4.0.0-alpha1 <=4.0.0-alpha1\"` в `packages/tenancy/composer.json` → exit ≠ 0 (`prerelease`), вернуть.",
+        "evidence_ref": "E21"
+      },
+      {
+        "id": "A5",
+        "predicate": "package changelogs; `artifacts/P07.2-execution/base-commit.txt` и candidate SHA; tenancy без stancl во всех слоях; пустой `ALLOWED_PRERELEASE`; один config-ключ `corex-tenancy`; Golden delta P07.2; `artifacts/P07.2-execution/completion.md`.",
+        "scope": "public",
+        "check": "- `scripts/php84 composer --working-dir=packages/tenancy test`, `PGSQL_PORT=5434 scripts/php84 composer --working-dir=packages/tenancy test -- --group=pg` → exit 0 (provisioning из шаблона, lifecycle export/drop, host resolution с инвалидацией).",
+        "evidence_ref": "E22"
+      },
+      {
+        "id": "A6",
+        "predicate": "package changelogs; `artifacts/P07.2-execution/base-commit.txt` и candidate SHA; tenancy без stancl во всех слоях; пустой `ALLOWED_PRERELEASE`; один config-ключ `corex-tenancy`; Golden delta P07.2; `artifacts/P07.2-execution/completion.md`.",
+        "scope": "public",
+        "check": "- `scripts/php84 composer config-cache-check`, `scripts/php84 composer configuration-reference` → exit 0, `docs/architecture/configuration.md` без ключа `tenancy.` и без stancl.",
+        "evidence_ref": "E23"
+      },
+      {
+        "id": "A7",
+        "predicate": "package changelogs; `artifacts/P07.2-execution/base-commit.txt` и candidate SHA; tenancy без stancl во всех слоях; пустой `ALLOWED_PRERELEASE`; один config-ключ `corex-tenancy`; Golden delta P07.2; `artifacts/P07.2-execution/completion.md`.",
+        "scope": "public",
+        "check": "- `scripts/php84 composer test:packages`, `PGSQL_PORT=5434 scripts/php84 composer test:pg`, `scripts/php84 composer test:arch` → exit 0.",
+        "evidence_ref": "E24"
+      },
+      {
+        "id": "A8",
+        "predicate": "package changelogs; `artifacts/P07.2-execution/base-commit.txt` и candidate SHA; tenancy без stancl во всех слоях; пустой `ALLOWED_PRERELEASE`; один config-ключ `corex-tenancy`; Golden delta P07.2; `artifacts/P07.2-execution/completion.md`.",
+        "scope": "public",
+        "check": "- `scripts/php84 php scripts/php-api.php --write` дважды → идентично; `scripts/php84 composer php-api`, `scripts/php84 composer bc-check` → exit 0; diff Golden — только строки P07.2 из досье §4.",
+        "evidence_ref": "E25"
+      },
+      {
+        "id": "A9",
+        "predicate": "package changelogs; `artifacts/P07.2-execution/base-commit.txt` и candidate SHA; tenancy без stancl во всех слоях; пустой `ALLOWED_PRERELEASE`; один config-ключ `corex-tenancy`; Golden delta P07.2; `artifacts/P07.2-execution/completion.md`.",
+        "scope": "public",
+        "check": "- `scripts/php84 composer lint:check`, `scripts/php84 composer analyse`, `scripts/php84 composer deps:analyse` → exit 0; `bash scripts/anti-weakening-gate.sh` → exit 0; `php scripts/package-docs-gate.php` → exit 0.",
+        "evidence_ref": "E26"
+      },
+      {
+        "id": "A10",
+        "predicate": "package changelogs; `artifacts/P07.2-execution/base-commit.txt` и candidate SHA; tenancy без stancl во всех слоях; пустой `ALLOWED_PRERELEASE`; один config-ключ `corex-tenancy`; Golden delta P07.2; `artifacts/P07.2-execution/completion.md`.",
+        "scope": "public",
+        "check": "- Review `light` (D97): self-check по досье §6; строка `review: self-check GREEN` в Completion Notes.",
+        "evidence_ref": "E27"
+      }
+    ]
+  },
+  "authority": {
+    "class": "routine",
+    "granted": true,
+    "granted_by": "phases/P07/P07.2.md:P07.2",
+    "auto_allowed": [
+      "write the item's declared Files",
+      "run the item's Validation",
+      "close the item with the two-commit topology"
+    ],
+    "stop_boundaries": [
+      "tag/push/release",
+      "fleet rollout",
+      "consumer repositories",
+      "FOREMAN outward parts"
+    ],
+    "loop_budget": {
+      "audit_rounds_max": 2,
+      "same_finding_max": 2
+    },
+    "observed_rounds": 0,
+    "audit_cap_remediation": false
+  },
+  "next": {
+    "form": "run-items",
+    "carrier": "task:plan-run 2026.09.27-№1-COREX-KERNEL P07.2",
+    "context": "continue-root",
+    "origin": "approved-goal",
+    "changed_by": null
+  },
+  "route": {
+    "required": {
+      "model_class": "implementation",
+      "effort": "high"
+    },
+    "actual": {
+      "model_class": "frontier",
+      "effort": "high"
+    },
+    "capabilities": []
+  },
+  "evidence": [
+    {
+      "id": "E1",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D100-p07-grok-design-remediation.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E2",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D98-p07-design-audit-remediation.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E3",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D95-p07-tenancy-engine.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E4",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P07-design.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E5",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P07-design-rag.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E6",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design/examples.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E7",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design/facts/stancl-coupling.txt",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E8",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design-rag/http-01-packagist-stancl-azguard.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E9",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.1-execution/completion.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E10",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P07-design.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E11",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P07-design-rag.md",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E12",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design/facts/stancl-coupling.txt",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E13",
+      "path": "packages/tenancy/src/Account/Internal/Models/Account.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E14",
+      "path": "packages/tenancy/src/Provisioning/Internal/Database/TemplateClonePostgreSQLManager.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E15",
+      "path": "packages/tenancy/src/Laravel/EventsRegistrar.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E16",
+      "path": "packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E17",
+      "path": "scripts/manifest-check.py",
+      "proof_class": "unknown",
+      "algorithm": "doc-citation"
+    },
+    {
+      "id": "E18",
+      "path": "- После продуктового commit: `bash scripts/contract-guard.sh` и `bash scripts/contract-guard.sh \"$(cat plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.2-execution/base-commit.txt)\"` → exit 0.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E19",
+      "path": "- VERIFY-AT-EXEC → нет `v4*` (запись в Completion Notes).",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E20",
+      "path": "- `git grep -n -i stancl -- packages products scripts .github composer.json ':!**/CHANGELOG.md'` → пусто; `test ! -e .composer-provider-staging` → exit 0; `python3 -c \"import json;l=json.load(open('composer.lock'));print([p['name'] for p in l['packages']+l['packages-dev'] if 'stancl' in p['name']])\"` → `[]`; `git diff \"$(cat plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.2-execution/base-commit.txt)\" -- composer.lock` удаляет только пакеты, перечисленные в Completion Notes с выводом `composer why`.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E21",
+      "path": "- `scripts/php84 composer manifests:check` → exit 0 при `ALLOWED_PRERELEASE = {}`; негатив: временно вернуть `\"axiomasoft/stancl-tenancy\": \">=4.0.0-alpha1 <=4.0.0-alpha1\"` в `packages/tenancy/composer.json` → exit ≠ 0 (`prerelease`), вернуть.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E22",
+      "path": "- `scripts/php84 composer --working-dir=packages/tenancy test`, `PGSQL_PORT=5434 scripts/php84 composer --working-dir=packages/tenancy test -- --group=pg` → exit 0 (provisioning из шаблона, lifecycle export/drop, host resolution с инвалидацией).",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E23",
+      "path": "- `scripts/php84 composer config-cache-check`, `scripts/php84 composer configuration-reference` → exit 0, `docs/architecture/configuration.md` без ключа `tenancy.` и без stancl.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E24",
+      "path": "- `scripts/php84 composer test:packages`, `PGSQL_PORT=5434 scripts/php84 composer test:pg`, `scripts/php84 composer test:arch` → exit 0.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E25",
+      "path": "- `scripts/php84 php scripts/php-api.php --write` дважды → идентично; `scripts/php84 composer php-api`, `scripts/php84 composer bc-check` → exit 0; diff Golden — только строки P07.2 из досье §4.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E26",
+      "path": "- `scripts/php84 composer lint:check`, `scripts/php84 composer analyse`, `scripts/php84 composer deps:analyse` → exit 0; `bash scripts/anti-weakening-gate.sh` → exit 0; `php scripts/package-docs-gate.php` → exit 0.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    },
+    {
+      "id": "E27",
+      "path": "- Review `light` (D97): self-check по досье §6; строка `review: self-check GREEN` в Completion Notes.",
+      "proof_class": "declared",
+      "algorithm": "shell-command"
+    }
+  ],
+  "portability": {
+    "tier": "committed-bundle",
+    "execution_inputs": [
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D100-p07-grok-design-remediation.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D100-p07-grok-design-remediation.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D100-p07-grok-design-remediation.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D98-p07-design-audit-remediation.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D98-p07-design-audit-remediation.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D98-p07-design-audit-remediation.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D95-p07-tenancy-engine.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D95-p07-tenancy-engine.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D95-p07-tenancy-engine.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P07-design.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/research/P07-design.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/research/P07-design.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P07-design-rag.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/research/P07-design-rag.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/research/P07-design-rag.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design/examples.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design/examples.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design/examples.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design/facts/stancl-coupling.txt",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design/facts/stancl-coupling.txt",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design/facts/stancl-coupling.txt",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design-rag/http-01-packagist-stancl-azguard.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design-rag/http-01-packagist-stancl-azguard.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design-rag/http-01-packagist-stancl-azguard.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.1-execution/completion.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.1-execution/completion.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.1-execution/completion.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P07-design.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/research/P07-design.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/research/P07-design.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/research/P07-design-rag.md",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/research/P07-design-rag.md",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/research/P07-design-rag.md",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design/facts/stancl-coupling.txt",
+        "kind": "committed",
+        "producer": null,
+        "original": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design/facts/stancl-coupling.txt",
+        "normalized": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design/facts/stancl-coupling.txt",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "packages/tenancy/src/Account/Internal/Models/Account.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "packages/tenancy/src/Account/Internal/Models/Account.php",
+        "normalized": "packages/tenancy/src/Account/Internal/Models/Account.php",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "packages/tenancy/src/Provisioning/Internal/Database/TemplateClonePostgreSQLManager.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "packages/tenancy/src/Provisioning/Internal/Database/TemplateClonePostgreSQLManager.php",
+        "normalized": "packages/tenancy/src/Provisioning/Internal/Database/TemplateClonePostgreSQLManager.php",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "packages/tenancy/src/Laravel/EventsRegistrar.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "packages/tenancy/src/Laravel/EventsRegistrar.php",
+        "normalized": "packages/tenancy/src/Laravel/EventsRegistrar.php",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+        "kind": "committed",
+        "producer": null,
+        "original": "packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+        "normalized": "packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+        "path_kind": "internal",
+        "rejection": null
+      },
+      {
+        "path": "scripts/manifest-check.py",
+        "kind": "committed",
+        "producer": null,
+        "original": "scripts/manifest-check.py",
+        "normalized": "scripts/manifest-check.py",
+        "path_kind": "internal",
+        "rejection": null
+      }
+    ],
+    "provenance_only": [],
+    "privacy": {
+      "minimized": true,
+      "excluded_classes": [
+        "chain-of-thought",
+        "raw-transcript-bodies",
+        "secrets",
+        "tool-payloads"
+      ]
+    },
+    "semantic_carrier": "task:plan-run",
+    "provider_renderers": {
+      "claude": "/task:plan-run 2026.09.27-№1-COREX-KERNEL P07.2",
+      "codex": "$ task:plan-run 2026.09.27-№1-COREX-KERNEL P07.2"
+    }
+  },
+  "conflicts": [],
+  "slice": {
+    "subagent_keys": [
+      "goal",
+      "must",
+      "never",
+      "done",
+      "authority",
+      "next",
+      "route",
+      "version"
+    ],
+    "root_only_keys": [
+      "evidence",
+      "portability",
+      "conflicts"
+    ]
+  },
+  "cold_start": {
+    "plan_id": "2026.09.27-№1-COREX-KERNEL",
+    "item_id": "P07.2",
+    "reads": [
+      "E10",
+      "E11",
+      "E12",
+      "E13",
+      "E14",
+      "E15",
+      "E16",
+      "E17"
+    ],
+    "carrier": "task:plan-run 2026.09.27-№1-COREX-KERNEL P07.2"
+  }
+}

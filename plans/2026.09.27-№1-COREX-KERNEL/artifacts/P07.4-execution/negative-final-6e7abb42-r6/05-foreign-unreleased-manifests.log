@@ -1,0 +1,11 @@
+candidate=6e7abb425640678e9a00347f7874ebfcc5cf6b29
+command=scripts/php84 composer manifests:check
+mutation=unreleased
+started=2026-10-05T09:45:45.123493+00:00
+> python3 scripts/manifest-check.py
+manifests FAIL: 1 violations
+access: stability: stability=unreleased is reserved for ['axiomasoft/corex-access-azguard']
+Script python3 scripts/manifest-check.py handling the manifests:check event returned with error code 1
+
+exit=1
+verified=true

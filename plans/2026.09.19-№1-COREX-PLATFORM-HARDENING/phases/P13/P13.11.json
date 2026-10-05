@@ -1,0 +1,251 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P13.11",
+  "title": "API compatibility gate and CI ratchet",
+  "status": "done",
+  "summary": "Reject every forbidden intra-major operation/error/pagination delta against committed\nsnapshots and run the gate in normal quality CI.",
+  "why": "`@plan/knowledge/research-P13-design.json` §9; D73/S36. A snapshot without a tested comparator is an archive,\nnot a compatibility boundary.",
+  "scope": {
+    "include": [
+      "Stdlib PHP comparator; eight rules; additive allowance; deterministic diagnostics;\nplanted fixtures; Composer/CI wiring; api-policy compatibility table; receipt section."
+    ],
+    "exclude": [
+      "PHP symbol BC (Roave P3); webhook rules before P14; major-version migration;\nautomatic baseline acceptance; external diff dependency."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/phases/P13/P13.10.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P13/P13.1.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P13/P13.7.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P13/P13.9.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P13/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P13-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D73.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P3/P3.4.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "scripts/check-api-contract.php",
+      "change": "any"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "change": "any"
+    },
+    {
+      "path": "docs/architecture/api-policy.md",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P13-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Exact eight rules and allowed additions from §9. Compare parsed canonical\nstructures, never line diff. Diagnostics name rule, operation/error and JSON pointer. Baseline update\nis a separate explicit generator action and cannot happen inside check. A deprecation marker does not\npermit removal inside major. Unknown schema construct fails closed with actionable path."
+  ],
+  "guidance": "Reuse root SourceScanner/CLI conventions but add no dependency. Fixture directory\ncontains minimal baseline/candidate pair per rule plus allowed-addition pair. Tests invoke the same CLI,\nnot a second comparator. P14 will extend the rule registry for webhooks.",
+  "validation": [
+    {
+      "id": "V1",
+      "procedure": "eight forbidden deltas exit 1",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "additive fixture api-contract OK",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "composer api-contract",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "Arch ApiContractCompatibilityTest 11 passed",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "corex:api-snapshots --check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "ci.yml yaml and composer api-contract step",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Blocking compatibility CLI/test/CI gate, eight red proofs, additive green proofs,\nnormative policy table and receipt evidence."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-25T09:28:21Z",
+    "finished_at": "2026-09-25T09:39:37Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/cursor-grok-4.7/high",
+      "effort": "high"
+    },
+    "notes": "P13.11 GREEN: api-contract gate, eight red proofs, additive OK, CI step. Snapshot --check green after contract_hash refresh.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-09-25T09:39:37Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-25T09:39:37Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-25T09:39:37Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-25T09:39:37Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-25T09:39:37Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-25T09:39:37Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-25T09:39:37Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Reject every forbidden intra-major operation/error/pagination delta against committed\nsnapshots and run the gate in normal quality CI."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`@plan/knowledge/research-P13-design.json` §9; D73/S36. A snapshot without a tested comparator is an archive,\nnot a compatibility boundary."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Stdlib PHP comparator; eight rules; additive allowance; deterministic diagnostics;\nplanted fixtures; Composer/CI wiring; api-policy compatibility table; receipt section."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "PHP symbol BC (Roave P3); webhook rules before P14; major-version migration;\nautomatic baseline acceptance; external diff dependency."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/phases/P13/P13.10.json`; `@plan/phases/P13/P13.1.json`;\n`@plan/phases/P13/P13.7.json`; `@plan/phases/P13/P13.9.json`; `.github/workflows/ci.yml`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`scripts/check-api-contract.php`;\n`tests/Arch/ApiContractCompatibilityTest.php`;\n`tests/fixtures/api-contract/`;\n`composer.json`;\n`.github/workflows/ci.yml`;\n`docs/architecture/api-policy.md`;\n`@plan/knowledge/findings-P13-receipts.json`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P13/phase.json`; 2) `@plan/knowledge/research-P13-design.json` §9;\n3) `@plan/decisions/D73.json`; 4) `@plan/phases/P13/P13.10.json`;\n5) `@plan/phases/P13/P13.1.json`; 6) `@plan/phases/P13/P13.7.json`;\n7) `@plan/phases/P13/P13.9.json`; 8) `@plan/knowledge/research-P13-design.json` §9;\n9) `@plan/phases/P3/P3.4.json`; 10) `.github/workflows/ci.yml`;\n11) `composer.json`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Exact eight rules and allowed additions from §9. Compare parsed canonical\nstructures, never line diff. Diagnostics name rule, operation/error and JSON pointer. Baseline update\nis a separate explicit generator action and cannot happen inside check. A deprecation marker does not\npermit removal inside major. Unknown schema construct fails closed with actionable path."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Reuse root SourceScanner/CLI conventions but add no dependency. Fixture directory\ncontains minimal baseline/candidate pair per rule plus allowed-addition pair. Tests invoke the same CLI,\nnot a second comparator. P14 will extend the rule registry for webhooks."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Plant and remove all eight deltas: operation removal/path reassignment, response field\nremoval, required input addition, type change, nullability change, enum removal, error contract drift,\npagination/order reinterpretation. Each exits 1 with exact rule/path. Optional field/operation/enum\naddition passes. Snapshot `--check`, root Arch/composer script and CI syntax green."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Blocking compatibility CLI/test/CI gate, eight red proofs, additive green proofs,\nnormative policy table and receipt evidence."
+    }
+  ]
+}

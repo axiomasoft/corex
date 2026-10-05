@@ -40,7 +40,6 @@ final class TenancyServiceProvider extends ServiceProvider
 
         $this->app->tag([TenancyConfigSection::class], ConfigReportSection::class);
 
-        $this->mergeConfigFrom(__DIR__.'/../config/tenancy.php', 'tenancy');
         $this->mergeConfigFrom(__DIR__.'/../config/corex-tenancy.php', 'corex-tenancy');
 
         foreach ($this->registrars() as $registrar) {
@@ -69,7 +68,7 @@ final class TenancyServiceProvider extends ServiceProvider
         ], 'corex-tenancy-migrations-tenant');
 
         $this->publishes([
-            __DIR__.'/../config/tenancy.php' => config_path('tenancy.php'),
+            __DIR__.'/../config/corex-tenancy.php' => config_path('corex-tenancy.php'),
         ], 'corex-tenancy-config');
 
         foreach ($this->registrars() as $registrar) {
@@ -80,8 +79,6 @@ final class TenancyServiceProvider extends ServiceProvider
     /** @return list<PackageRegistrar> */
     private function registrars(): array
     {
-        $tenancy = $this->app['config']->get('tenancy', []);
-        $tenancy = is_array($tenancy) ? $tenancy : [];
         $corexTenancy = $this->app['config']->get('corex-tenancy', []);
         $corexTenancy = is_array($corexTenancy) ? $corexTenancy : [];
 
@@ -99,7 +96,7 @@ final class TenancyServiceProvider extends ServiceProvider
 
         // TenancyOptions stays bind()-lazy (P7.2/P8.2): make() here would
         // validate OIDC before Testbench defineEnvironment fills issuer fields.
-        $oidcEnabled = (bool) ($tenancy['oidc']['enabled'] ?? false);
+        $oidcEnabled = (bool) ($corexTenancy['oidc']['enabled'] ?? false);
 
         if ($oidcEnabled) {
             $registrars[] = new AuthenticationRegistrar;

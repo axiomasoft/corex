@@ -1,0 +1,17 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P10-design-finish-owner-direction",
+  "title": "Указание владельца — 2026-10-01",
+  "sections": [
+    {
+      "id": "2026-10-01",
+      "title": "Указание владельца — 2026-10-01",
+      "text": "Источник: сообщение владельца в текущей сессии `task:plan-design 2026.09.27-№1-COREX-KERNEL finish`.\n\n> первый дизайн сделал CLAUDE, ты РАЦИОНАЛЬНО выполняешь еще один, трать силы на продумывание, а не на  ложные перепроверки SKM. СЕЙЧАС ПОСЛЕ БУДЕТ выполняться P10\n\nИнтерпретация исполнителя: повторный содержательный дизайн Codex, затем переход к P10; дополнительный круг SKM/design audit не назначается. Исполнение P10 остаётся отдельной командой."
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P10-design-finish/owner-direction.md",
+    "sha256": "38d61e8b780aa8b521e34ead65b8af3f8c3cbc1d42ced645a25779028a6f3c41"
+  }
+}

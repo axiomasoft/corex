@@ -1,0 +1,31 @@
+> bash scripts/bc-check.sh
+bc-check: BC_CHECK_BASE=76f8bdde496154c0a8901e459175cf306bedd860 (PHP 8.4)
+bc-check: roave 8.22.0
+Traceback (most recent call last):
+  File "/home/vostrikov/projects/packages/corex/scripts/bc/history-providers.py", line 71, in <module>
+    stage(args.root, args.base, args.work)
+  File "/home/vostrikov/projects/packages/corex/scripts/bc/history-providers.py", line 37, in stage
+    raise ValueError(f'Expected one digest-matched archive: {package["name"]}')
+ValueError: Expected one digest-matched archive: axiomasoft/stancl-jobpipeline
+bc-check: axiomasoft/corex-tenancy (tenancy) |infrastructure| stability=stable base=7974679414ee3a0e393fdd4c8d0fae4b7d6ecc76 candidate=9856b0c3b9636cb8b1c42410ce843456e632f76a
+  Problem 1
+    - Root composer.json requires axiomasoft/stancl-jobpipeline, it could not be found in any version, there may be a typo in the package name.
+  Problem 2
+    - Root composer.json requires axiomasoft/stancl-tenancy, it could not be found in any version, there may be a typo in the package name.
+
+Potential causes:
+ - A typo in the package name
+ - The package is not available in a stable-enough version according to your minimum-stability setting
+   see <https://getcomposer.org/doc/04-schema.md#minimum-stability> for more details.
+ - It's a private package and you forgot to add a custom repository to find it
+
+Read <https://getcomposer.org/doc/articles/troubleshooting.md> for further common problems.
+
+In MissingInstalledJson.php line 15:
+                                                                               
+  Could not locate a "composer/installed.json" file in "/tmp/api-compare-7974  
+  679414ee3a0e393fdd4c8d0fae4b7d6ecc766ac28f5f06d6c/vendor"                    
+                                                                               
+
+roave-backwards-compatibility-check:assert-backwards-compatible [--from [FROM]] [--to TO] [--format [FORMAT]] [--install-development-dependencies]
+Script bash scripts/bc-check.sh handling the bc-check event returned with error code 1

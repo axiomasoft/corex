@@ -29,7 +29,7 @@ use Illuminate\Support\Str;
 // P2.11 — L1/L2/L3 read-only-invariant layers (D141/D142), tested directly
 // against the middleware/listener/guard classes rather than through the
 // package's own boot()-time conditional registration (that registration is
-// gated by `tenancy.oidc.impersonation.enabled`, which — like `oidc.enabled`
+// gated by `corex-tenancy.oidc.impersonation.enabled`, which — like `oidc.enabled`
 // itself, see TestCase::$oidcEnabled's docblock — would need to be true
 // BEFORE this file's very first createApplication(); routes/listeners are
 // wired here ad hoc instead so no TestCase change is needed). `state()` only
@@ -231,7 +231,7 @@ it('ы: L2 allowing() lets an intentional write through, then blocks again after
     $guard = app()->make(ImpersonatedModelWriteGuard::class);
     Event::listen('eloquent.saving: *', [$guard, 'handle']);
 
-    ImpersonatedModelWriteGuard::allowing(function (): void {
+    $guard->allowing(function (): void {
         ImpersonationGuardWriteStub::create(['id' => (string) Str::uuid(), 'name' => 'inside-allowing']);
     });
 
@@ -239,7 +239,7 @@ it('ы: L2 allowing() lets an intentional write through, then blocks again after
 
     // Flag must be reset even when the callback itself throws.
     try {
-        ImpersonatedModelWriteGuard::allowing(function (): void {
+        $guard->allowing(function (): void {
             throw new RuntimeException('boom');
         });
     } catch (RuntimeException) {
@@ -248,6 +248,29 @@ it('ы: L2 allowing() lets an intentional write through, then blocks again after
 
     expect(fn () => ImpersonationGuardWriteStub::create(['id' => (string) Str::uuid(), 'name' => 'after-allowing']))
         ->toThrow(ImpersonationRestrictedException::class);
+});
+
+it('keeps allowing local to its scoped guard and restores an outer allowance after an inner exception', function (): void {
+    $fake = new WriteGuardFakeImpersonationService(wgActiveState());
+    $outer = new ImpersonatedModelWriteGuard($fake);
+    $other = new ImpersonatedModelWriteGuard($fake);
+    $payload = [new ImpersonationGuardWriteStub];
+
+    $outer->allowing(function () use ($outer, $other, $payload): void {
+        expect(fn () => $outer->handle('eloquent.saving', $payload))->not->toThrow(ImpersonationRestrictedException::class);
+        expect(fn () => $other->handle('eloquent.saving', $payload))->toThrow(ImpersonationRestrictedException::class);
+
+        try {
+            $outer->allowing(static function (): void {
+                throw new RuntimeException('inner');
+            });
+        } catch (RuntimeException) {
+            // The outer allowance must still be active here.
+        }
+        expect(fn () => $outer->handle('eloquent.saving', $payload))->not->toThrow(ImpersonationRestrictedException::class);
+    });
+
+    expect(fn () => $outer->handle('eloquent.saving', $payload))->toThrow(ImpersonationRestrictedException::class);
 });
 
 // ── L3 — semantic layer (ь) ─────────────────────────────────────────────
@@ -271,8 +294,8 @@ it('ь: L3 ImpersonationGuard::assertAllowed() throws under impersonation and st
 // ── аа — boxed/oidc-off profile carries zero impersonation surface ──────
 
 it('аа: with oidc disabled, no impersonation middleware in the tenant group and no Eloquent listeners are registered (AC-28)', function (): void {
-    expect(config('tenancy.oidc.enabled'))->toBeFalse()
-        ->and(config('tenancy.oidc.impersonation.enabled'))->toBeFalse();
+    expect(config('corex-tenancy.oidc.enabled'))->toBeFalse()
+        ->and(config('corex-tenancy.oidc.impersonation.enabled'))->toBeFalse();
 
     $router = app()->make(Router::class);
     $tenantGroup = $router->getMiddlewareGroups()['tenant'] ?? [];

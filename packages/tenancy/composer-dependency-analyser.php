@@ -17,4 +17,4 @@ return (new Configuration)
     // discovery: composer suggest; guarded optional adapter remains installable without league/flysystem-aws-s3-v3
     ->ignoreErrorsOnPackage('league/flysystem-aws-s3-v3', [ErrorType::DEV_DEPENDENCY_IN_PROD])
     // discovery: Pest loads local test classes and late use aliases when executing the recorded test files
-    ->ignoreUnknownClasses(['ImpersonationGuardWriteStub', 'RemediationProvisioningStep', 'WorkspaceScopedRecordStub']);
+    ->ignoreUnknownClasses(['ImpersonationGuardWriteStub', 'WorkspaceScopedRecordStub']);

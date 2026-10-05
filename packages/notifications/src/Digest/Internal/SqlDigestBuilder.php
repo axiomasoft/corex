@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Notifications\Digest\Internal;
 
+use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Notifications\Delivery\Data\RecipientReference;
 use CoreX\Notifications\Digest\Contracts\DigestBuilder;
@@ -11,9 +12,9 @@ use CoreX\Notifications\Digest\Data\DigestRef;
 use CoreX\Notifications\Digest\Data\DigestWindow;
 use CoreX\Notifications\Inbox\Data\NotificationContext;
 use CoreX\Notifications\Inbox\Exceptions\NotificationAccessDenied;
-use CoreX\Wakeup\Contracts\WakeupScheduler;
-use CoreX\Wakeup\Data\WakeupRequest;
-use CoreX\Wakeup\Data\WakeupWindow;
+use CoreX\Scheduling\Contracts\WakeupScheduler;
+use CoreX\Scheduling\Data\WakeupRequest;
+use CoreX\Scheduling\Data\WakeupWindow;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Str;
 use Psr\Clock\ClockInterface;
@@ -22,10 +23,16 @@ final class SqlDigestBuilder implements DigestBuilder
 {
     public function __construct(
         private readonly ConnectionInterface $connection,
-        private readonly WakeupScheduler $wakeup,
+        private readonly ?WakeupScheduler $wakeup,
         private readonly bool $enabled,
         private readonly ClockInterface $clock,
-    ) {}
+    ) {
+        if ($this->enabled && $this->wakeup === null) {
+            throw new InvalidConfiguration([
+                'corex-notifications.digest.enabled requires a bound CoreX\Scheduling\Contracts\WakeupScheduler',
+            ]);
+        }
+    }
 
     public function build(NotificationContext $context, DigestWindow $window): ?DigestRef
     {
@@ -71,7 +78,10 @@ final class SqlDigestBuilder implements DigestBuilder
             }
 
             if ($this->enabled) {
-                $this->wakeup->schedule(new WakeupRequest(
+                $wakeup = $this->wakeup ?? throw new InvalidConfiguration([
+                    'corex-notifications.digest.enabled requires a bound CoreX\Scheduling\Contracts\WakeupScheduler',
+                ]);
+                $wakeup->schedule(new WakeupRequest(
                     context: $context->tenant,
                     kind: 'notification.digest.v1',
                     requestKey: "notification.digest:{$runId}",

@@ -17,7 +17,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
 /**
- * Tenant-owned storage boundary for the Stancl profile.
+ * Tenant-owned storage boundary for the physical DB-per-account profile.
  *
  * The fake-s3 driver is deliberately a local test backend with object-prefix
  * semantics; it never represents a configured cloud provider.

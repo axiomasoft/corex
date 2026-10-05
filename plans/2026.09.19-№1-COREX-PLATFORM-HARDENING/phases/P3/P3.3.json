@@ -1,0 +1,268 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P3.3",
+  "title": "R4 / R4b / R5 в гейте графа",
+  "status": "done",
+  "summary": "Добавить в уже починенный гейт графа три правила: R4 (импорт\nчужого неймспейса вне `public-api`), R4b (новый тип вне поверхности /\nInternal / `@internal`), R5 (направление `package-type`).",
+  "why": "API-001/003 ждут R4; A85 — расширение существующего гейта, не\nновый инструмент. D12 требует разных сообщений R2 и R4. `RAG:✅` P3-Q5:\n«случайно публичный» — предикат R4b, не class-leak. D3 обещал R5 в этом\nгейсте. Текущий долг замораживается allowlist/снимком, новое — blocking\n(инвариант §0 п.3).",
+  "scope": {
+    "include": [
+      "правила R4/R4b/R5 в `scripts/package-graph-gate.php`;\nчтение `extra.corex` в `discoverPackages`; ключ `public_api_exceptions` в\nJSON гейта; снимок `scripts/package-graph-undeclared-surface.json`;\nнегативные тесты четырёх посадок; CHANGELOG; receipt."
+    ],
+    "exclude": [
+      "смена tokenizer'а (P3.2 обязан быть терминален);\nнативный PHPStan `@internal`; class-leak; Deptrac; заполнение\n`public-api` в пакетах (P1.2); пометка существующих классов `@internal`."
+    ]
+  },
+  "depends_on": [
+    "P3.2",
+    "P1.2"
+  ],
+  "decisions": [
+    "D12",
+    "D17"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P3-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P1-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "scripts/package-graph-gate.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P3/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D12.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D17.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D3.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/composer.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "scripts/package-graph-gate.php",
+      "change": "any"
+    },
+    {
+      "path": "scripts/package-graph-gate.json",
+      "change": "any"
+    },
+    {
+      "path": "scripts/package-graph-undeclared-surface.json",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P3-gate-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Код R4/R4b/R5 — §5.1–§5.3. R2 на Internal-ребре\nне дублируется сообщением R4. Prefix-match неймспейсов, не substring.\nРанги R5: foundation 0 … product 3; tooling/fixture пропускаются.\nСнимок R4b сортирован, растёт только с причиной в receipt. Невалидный\n`extra.corex` — EXIT_CONFIG. Посадки удаляются. Ни один файл вне `Files`\nне изменяется."
+  ],
+  "guidance": "Готовые функции и таблица негативов —\n`@plan/knowledge/research-P3-design.json` §5. Сообщения R4 содержат слово `непубличного`;\nR2 — `foreign Internal`. Не сливать.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer package-graph-gate",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "composer test:arch",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "composer lint:check",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "bash scripts/anti-weakening-gate.sh",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "composer package-graph-gate",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "PackageGraphTest 9 incl R4 R2 R4b R5 probes",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "composer test:arch",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "composer lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "procedure": "anti-weakening-gate",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "R4/R4b/R5 в гейте; снимок незаявленной поверхности;\nallowlist текущих R4 при необходимости; receipt с различимыми выводами\nчетырёх негативов."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "required",
+    "status": "complete"
+  },
+  "result": {
+    "started_at": "2026-09-21T10:30:00Z",
+    "finished_at": "2026-09-21T10:30:00Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/cursor-composer-2.5/high",
+      "effort": "high"
+    },
+    "notes": "P3.3 GREEN: R4/R4b/R5, extra.corex, 176 R4 exceptions, 318 R4b snapshot, 4 negative probes",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-21T10:30:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-21T10:30:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-21T10:30:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-21T10:30:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-09-21T10:30:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-21T10:30:00Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Добавить в уже починенный гейт графа три правила: R4 (импорт\nчужого неймспейса вне `public-api`), R4b (новый тип вне поверхности /\nInternal / `@internal`), R5 (направление `package-type`)."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "API-001/003 ждут R4; A85 — расширение существующего гейта, не\nновый инструмент. D12 требует разных сообщений R2 и R4. `RAG:✅` P3-Q5:\n«случайно публичный» — предикат R4b, не class-leak. D3 обещал R5 в этом\nгейсте. Текущий долг замораживается allowlist/снимком, новое — blocking\n(инвариант §0 п.3)."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "правила R4/R4b/R5 в `scripts/package-graph-gate.php`;\nчтение `extra.corex` в `discoverPackages`; ключ `public_api_exceptions` в\nJSON гейта; снимок `scripts/package-graph-undeclared-surface.json`;\nнегативные тесты четырёх посадок; CHANGELOG; receipt."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "смена tokenizer'а (P3.2 обязан быть терминален);\nнативный PHPStan `@internal`; class-leak; Deptrac; заполнение\n`public-api` в пакетах (P1.2); пометка существующих классов `@internal`."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P3-design.json` §0, §5; `@plan/knowledge/research-P1-design.json` §3.3\n(таблица package-type/public-api), §6.5 (два сообщения); D12, D17;\n`scripts/package-graph-gate.php`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`scripts/package-graph-gate.php`; `scripts/package-graph-gate.json`; `scripts/package-graph-undeclared-surface.json`; `tests/Arch/PackageGraphTest.php`; `CHANGELOG.md`; `@plan/knowledge/findings-P3-gate-receipts.json`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P3/phase.json`; 2) `@plan/knowledge/research-P3-design.json` §0, §5; 3) `@plan/knowledge/research-P1-design.json` §6.5 и §3.3; 4) `@plan/decisions/D12.json`; 5) `@plan/decisions/D17.json`; 6) `@plan/decisions/D3.json`; 7) `scripts/package-graph-gate.php` (после P3.2); 8) `tests/Arch/PackageGraphTest.php`; 9) `packages/core/composer.json` (форма extra.corex после P1.2)."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Код R4/R4b/R5 — §5.1–§5.3. R2 на Internal-ребре\nне дублируется сообщением R4. Prefix-match неймспейсов, не substring.\nРанги R5: foundation 0 … product 3; tooling/fixture пропускаются.\nСнимок R4b сортирован, растёт только с причиной в receipt. Невалидный\n`extra.corex` — EXIT_CONFIG. Посадки удаляются. Ни один файл вне `Files`\nне изменяется."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Готовые функции и таблица негативов —\n`@plan/knowledge/research-P3-design.json` §5. Сообщения R4 содержат слово `непубличного`;\nR2 — `foreign Internal`. Не сливать."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "`composer package-graph-gate` OK на чистом дереве.\nЧетыре посадки §5.4: каждая даёт свой код (R4/R2/R4b/R5) и имя файла;\nпосле теста посадок нет. Вывод R2-посадки не содержит `непубличного`.\n`composer test:arch` зелёный. `composer lint:check` зелёный.\n`bash scripts/anti-weakening-gate.sh` зелёный."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "R4/R4b/R5 в гейте; снимок незаявленной поверхности;\nallowlist текущих R4 при необходимости; receipt с различимыми выводами\nчетырёх негативов."
+    }
+  ]
+}

@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
-use AzGuard\Models\RolePermission;
+use CoreX\Access\Access\Laravel\PrincipalIdentity;
+use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Enums\PrincipalType;
 use CoreX\Access\Extend\Internal\PermissionsMerger;
-use CoreX\Access\Matrix\Laravel\AzGuardRoleModel;
+use CoreX\Access\Matrix\Events\RoleMatrixCompiled;
 use CoreX\Access\Roles\Internal\Models\Role;
+use CoreX\Access\Roles\Internal\Models\RoleAssignment;
 use CoreX\Access\Roles\Internal\Models\RoleMatrixRow;
 use CoreX\Access\Tests\Stubs\Deal;
 use CoreX\Access\Tests\Stubs\FakeModuleRegistry;
@@ -17,117 +19,86 @@ use CoreX\Modules\Enums\DisableReason;
 use CoreX\Modules\Events\ModuleDisabled;
 use CoreX\Modules\Events\ModuleEnabled;
 use CoreX\Modules\Testing\ArrayEntityRegistry;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Str;
 
 uses()->group('pg');
 
 beforeEach(function (): void {
     $this->resetPgSchema();
-    $this->migrateAzGuard();
     $this->migrateAutSchema();
 
     app(ArrayEntityRegistry::class)->register(new EntityDefinition(
-        handle: 'crm.deal',
-        model: Deal::class,
-        table: 'deals',
-        module: 'corex/access-tests',
-        labelSingular: 'Deal',
-        labelPlural: 'Deals',
-        capabilities: [],
-        fields: [],
-        titleAttribute: null,
+        handle: 'crm.deal', model: Deal::class, table: 'deals', module: 'corex/access-tests',
+        labelSingular: 'Deal', labelPlural: 'Deals', capabilities: [], fields: [], titleAttribute: null,
     ));
 });
 
-/** @return list<string> */
-function compiledKeysFor(string $roleId): array
+function mergerRole(): array
 {
-    $azguardRole = AzGuardRoleModel::query()->where('name', Role::query()->findOrFail($roleId)->slug)->first();
-
-    if ($azguardRole === null) {
-        return [];
-    }
-
-    return RolePermission::query()->where('role_id', $azguardRole->id)->pluck('permission_key')->all();
-}
-
-// AC-27, negative first (Code Guidance anti-self-deception): before any
-// lifecycle event, the fixture's module has never been reported active — the
-// matrix row exists but gives out no key, proving merge()'s recompile is not
-// vacuously green.
-it('gives out no key while the owning module has never been reported active', function (): void {
-    app()->instance(ModuleRegistry::class, new FakeModuleRegistry([]));
-
     $role = Role::query()->create([
-        'slug' => 'merger-role-'.uniqid(),
-        'name' => 'Merger role',
-        'is_system' => false,
+        'slug' => 'role-'.Str::uuid7(), 'name' => 'Role', 'is_system' => false,
         'assignable_to' => [PrincipalType::User->value],
     ]);
-
     RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'account']);
+    $principal = new PrincipalIdentity(PrincipalType::User, (string) Str::uuid7());
+    RoleAssignment::query()->create(['role_id' => $role->id, 'principal_type' => 'user', 'principal_id' => $principal->principalId()]);
+
+    return [$role, $principal];
+}
+
+it('keeps a native matrix row while inactive and denies its capability', function (): void {
+    $modules = new FakeModuleRegistry([]);
+    app()->instance(ModuleRegistry::class, $modules);
+    [$role, $principal] = mergerRole();
 
     app(PermissionsMerger::class)->merge();
 
-    expect(compiledKeysFor($role->id))->toBe([]);
+    expect(RoleMatrixRow::query()->where('role_id', $role->id)->count())->toBe(1)
+        ->and(app(AccessChecker::class)->allowed($principal, 'crm.deal', 'read'))->toBeFalse();
 });
 
-// AC-27 core, event-driven: enable ⇒ keys appear; disable ⇒ keys gone but the
-// matrix row count is unchanged (rows survive for re-enable, D113); re-enable
-// ⇒ keys return without any matrix-row edit.
-it('recompiles keys through the full enable -> disable -> re-enable lifecycle via events', function (): void {
-    $role = Role::query()->create([
-        'slug' => 'lifecycle-role-'.uniqid(),
-        'name' => 'Lifecycle role',
-        'is_system' => false,
-        'assignable_to' => [PrincipalType::User->value],
-    ]);
+it('reacts to enable, disable and re-enable events while preserving native matrix rows', function (): void {
+    $modules = new FakeModuleRegistry([]);
+    app()->instance(ModuleRegistry::class, $modules);
+    [$role, $principal] = mergerRole();
+    $compiled = [];
+    Event::listen(RoleMatrixCompiled::class, function (RoleMatrixCompiled $event) use (&$compiled): void {
+        $compiled[] = $event->roleId;
+    });
+    $checker = app(AccessChecker::class);
 
-    RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'account']);
-    $rowCountBefore = RoleMatrixRow::query()->where('role_id', $role->id)->count();
+    expect($checker->allowed($principal, 'crm.deal', 'read'))->toBeFalse();
 
-    app()->instance(ModuleRegistry::class, new FakeModuleRegistry(['corex/access-tests']));
+    $modules->setActive(['corex/access-tests']);
     event(new ModuleEnabled('corex/access-tests', 'community', []));
+    expect($checker->allowed($principal, 'crm.deal', 'read'))->toBeTrue();
 
-    expect(compiledKeysFor($role->id))->toBe(['app.crm.deal.read']);
+    $modules->setActive([]);
+    event(new ModuleDisabled('corex/access-tests', DisableReason::Manual));
+    expect($checker->allowed($principal, 'crm.deal', 'read'))->toBeFalse();
 
-    app()->instance(ModuleRegistry::class, new FakeModuleRegistry([]));
+    $modules->setActive(['corex/access-tests']);
+    event(new ModuleEnabled('corex/access-tests', 'community', []));
+    expect($checker->allowed($principal, 'crm.deal', 'read'))->toBeTrue()
+        ->and($compiled)->toBe([$role->id, $role->id, $role->id])
+        ->and(RoleMatrixRow::query()->where('role_id', $role->id)->count())->toBe(1);
+});
+
+it('recompiles on ModuleDisabled without a prior enable event', function (): void {
+    app()->instance(ModuleRegistry::class, new FakeModuleRegistry(['corex/access-tests']));
+    [$role] = mergerRole();
+    $compiled = [];
+    Event::listen(RoleMatrixCompiled::class, function (RoleMatrixCompiled $event) use (&$compiled): void {
+        $compiled[] = $event->roleId;
+    });
+
     event(new ModuleDisabled('corex/access-tests', DisableReason::Manual));
 
-    expect(compiledKeysFor($role->id))->toBe([])
-        ->and(RoleMatrixRow::query()->where('role_id', $role->id)->count())->toBe($rowCountBefore);
-
-    app()->instance(ModuleRegistry::class, new FakeModuleRegistry(['corex/access-tests']));
-    event(new ModuleEnabled('corex/access-tests', 'community', []));
-
-    expect(compiledKeysFor($role->id))->toBe(['app.crm.deal.read'])
-        ->and(RoleMatrixRow::query()->where('role_id', $role->id)->count())->toBe($rowCountBefore);
+    expect($compiled)->toBe([$role->id]);
 });
 
-it('recompiles on ModuleDisabled too — both lifecycle events are wired independently', function (): void {
-    $role = Role::query()->create([
-        'slug' => 'disabled-wiring-role-'.uniqid(),
-        'name' => 'Disabled wiring role',
-        'is_system' => false,
-        'assignable_to' => [PrincipalType::User->value],
-    ]);
-
-    RoleMatrixRow::query()->create(['role_id' => $role->id, 'entity_key' => 'crm.deal', 'action' => 'read', 'scope' => 'account']);
-
-    app()->instance(ModuleRegistry::class, new FakeModuleRegistry(['corex/access-tests']));
-
-    // No compiled AzGuard role exists yet — ModuleDisabled must still trigger
-    // recompileAll() and materialize the key, proving the listener reacts to
-    // ModuleDisabled on its own, not only piggy-backing on ModuleEnabled.
-    event(new ModuleDisabled('corex/access-tests', DisableReason::Manual));
-
-    expect(compiledKeysFor($role->id))->toBe(['app.crm.deal.read']);
-});
-
-// D113 — a declaration whose entity is unknown to EntityRegistry cannot be
-// attributed to any module (the compiled permissions slot carries no module
-// attribution of its own, findings/P2.9-seam-inventory §6); merge() skips it
-// fail-closed and surfaces it as a warning, never a log.
-it('returns a warning and creates no matrix row for a declaration with an unknown entity', function (): void {
+it('warns and creates no matrix row for a declaration with an unknown entity', function (): void {
     app()->instance(ModuleRegistry::class, new FakeModuleRegistry(
         active: ['ghost-module'],
         permissions: [Permissions::group('ghost.entity', ['read'])],
@@ -136,10 +107,11 @@ it('returns a warning and creates no matrix row for a declaration with an unknow
     $warnings = app(PermissionsMerger::class)->merge();
 
     expect($warnings)->toHaveCount(1)
-        ->and($warnings[0])->toContain('ghost.entity');
+        ->and($warnings[0])->toContain('ghost.entity')
+        ->and(RoleMatrixRow::query()->count())->toBe(0);
 });
 
-it('returns no warning for a declaration whose entity is known to EntityRegistry', function (): void {
+it('returns no warning for a declaration whose entity is registered', function (): void {
     app()->instance(ModuleRegistry::class, new FakeModuleRegistry(
         active: ['corex/access-tests'],
         permissions: [Permissions::group('crm.deal', ['read'])->scopeable()],

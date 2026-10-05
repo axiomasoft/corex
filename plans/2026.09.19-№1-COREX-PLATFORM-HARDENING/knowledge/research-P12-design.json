@@ -1,0 +1,109 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "research-P12-design",
+  "title": "нормативный дизайн ошибок и наблюдаемости",
+  "sections": [
+    {
+      "id": "P12",
+      "title": "P12 — нормативный дизайн ошибок и наблюдаемости",
+      "text": ""
+    },
+    {
+      "id": "0.",
+      "title": "0. Статус и границы",
+      "text": "Этот документ — исполнимый контракт P12. Он добавляет общий\nсловарь ошибок, lifecycle для длительной операции и адаптеры\nPSR-3/OpenTelemetry. Он **не** меняе внешний HTTP envelope: это единая\nauthority P13 (D61). Он не строит tracing platform, не требует exporter,\nне вводит SLO за библиотеку и не выдумывает licensing без authority.\n\n`Разведка:`\n\n- `ApiError` сейчас знает только code/status/message/details;\n- `ErrorMapper` выводит код из HTTP status и типа Laravel exception;\n- `RequestMetadata` не имеет correlation id;\n- `UnavailableAttributes` для всех методов бросает один\n  `UnsupportedAttributeCapability`, а `ScopeDenied` смешивает denial,\n  stale/not-ready и retry exhaustion;\n- `CurrentActor` умеет staff/target, но direct `AuditLogger` callers могут\n  обойти этот snapshot; reason в active state нет;\n- P5 производит `MessageEnvelope` correlation/causation, scalar `metadata` и\n  `DeliveryHealth`, но оставляет OTel export/span links P12."
+    },
+    {
+      "id": "1.-D60",
+      "title": "1. Модель ошибки (D60)",
+      "text": ""
+    },
+    {
+      "id": "1.1",
+      "title": "1.1 Общий словарь",
+      "text": "`packages/core/src/Enums/ErrorCategory.php`:\n\n```php\nenum ErrorCategory: string\n{\n    case Authentication = 'authentication';\n    case Authorization = 'authorization';\n    case Validation = 'validation';\n    case Conflict = 'conflict';\n    case NotFound = 'not_found';\n    case RateLimit = 'rate_limit';\n    case Unsupported = 'unsupported';\n    case Unavailable = 'unavailable';\n    case Internal = 'internal';\n}\n```\n\n`packages/core/src/Enums/UnavailabilityReason.php`:\n\n```php\nenum UnavailabilityReason: string\n{\n    case CapabilityUnavailable = 'capability_unavailable';\n    case CapabilityDisabled = 'capability_disabled';\n    case OperationUnsupported = 'operation_unsupported';\n    case AccessDenied = 'access_denied';\n    case FeatureNotEntitled = 'feature_not_entitled';\n}\n```\n\nПять значений не склеиваются:\n\n| Reason | Смысл | Category | Default retryable |\n|:--|:--|:--|:--|\n| `capability_unavailable` | package/provider/backend нет или он недоступен | `unavailable` | решает producer |\n| `capability_disabled` | capability есть, но выключена config/activation | `unavailable` | `false` |\n| `operation_unsupported` | выбранный driver не реализует операцию | `unsupported` | `false` |\n| `access_denied` | actor/policy запрещает | `authorization` | `false` |\n| `feature_not_entitled` | authoritative edition/license не даёт feature | `authorization` | `false` |\n\nP12 не эмитит `feature_not_entitled` без источника entitlement. P13\nпотребляет reason в capability catalogue. Это не шестой статус и не\nсиноним 403."
+    },
+    {
+      "id": "1.2-Descriptor-package-ownership",
+      "title": "1.2 Descriptor и package ownership",
+      "text": "```php\nfinal readonly class ErrorDescriptor\n{\n    /** @param array<string, scalar|list<scalar|null>|null> $details */\n    public function __construct(\n        public string $code,\n        public ErrorCategory $category,\n        public bool $retryable = false,\n        public ?string $path = null,\n        public array $details = [],\n    ) {}\n}\n\ninterface DescribesError\n{\n    public function errorDescriptor(): ErrorDescriptor;\n}\n```\n\nИнварианты конструктора:\n\n1. `code` — lower snake case, `^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$`, 1–120 bytes;\n2. `path` — `null` или RFC 6901 JSON Pointer (`''` означает root;\n   непустой путь начинается `/`; escape только `~0`/`~1`);\n3. details — bounded JSON-compatible documented map, без Throwable, secret,\n   raw request, SQL и stack trace;\n4. `retryable=true` означает только «тот же semantic input может\n   успеть позже». Это не permission на automatic retry: caller ещё\n   проверяет idempotency и `Retry-After`.\n\nStable code живёт у package-owner, а не в central enum. Исключение\nреализует `DescribesError`; типизированный result может нести\nтот же descriptor без exception. Так таксономия не становится\nгигантским `CoreXException` tree."
+    },
+    {
+      "id": "1.3-Compatibility",
+      "title": "1.3 Compatibility",
+      "text": "- breaking: удалить/переименовать code, сменить meaning/category/path\n  semantics/retryability или удалить documented detail key;\n- additive: новый code, новый optional detail key, более точный\n  human message;\n- message, exception class и stack trace не входят в public contract;\n- HTTP status — transport projection; response status авторитетен, если\n  problem body по P13 его дублирует."
+    },
+    {
+      "id": "1.4-Result-vs-exception",
+      "title": "1.4 Result vs exception",
+      "text": "| Situation | Form |\n|:--|:--|\n| Expected business denial | Typed result/decision with stable reason |\n| Normal query absence | nullable/optional result |\n| Programmer/configuration defect | typed exception |\n| Infrastructure failure | typed exception with safe descriptor |\n| Optimistic/concurrent conflict | domain conflict exception or explicit typed conflict |\n| Batch partial failure | report with per-record descriptors; do not throw away successes |\n\nP12.3 applies the rule only to measured attributes discrepancies. Repository-wide\nconversion is excluded: without a caller contract it would be speculative and likely\nbreaking."
+    },
+    {
+      "id": "2.-API-projection-and-correlation-D61",
+      "title": "2. API projection and correlation (D61)",
+      "text": "`ApiError` gains optional metadata **after** existing constructor parameters and\nimplements `DescribesError`. `ErrorMapper` order is:\n\n1. explicit `ApiError` — preserve status;\n2. `DescribesError` — copy descriptor, choose default HTTP status by category;\n3. Laravel framework exceptions — current safe mapping enriched with category;\n4. unknown — `internal_error`, report once, no original message/details.\n\nDefault status map is transport-only:\n\n| Category | Status |\n|:--|:--|\n| authentication | 401 |\n| authorization | 403 |\n| validation | 422 |\n| conflict | 409 |\n| not_found | 404 |\n| rate_limit | 429 |\n| unsupported | 422 |\n| unavailable | 503 |\n| internal | 500 |\n\nAn exception may need an explicit API status only by becoming an `ApiError` at the API\nboundary; core descriptor does not grow an HTTP field. `EnvelopeSerializer` remains\nunchanged in P12 and a regression compares exact JSON keys and headers.\n\n`RequestMetadata` appends `correlationId` with a compatible default. Incoming\n`X-Correlation-ID` uses the same opaque 1–128 validation as request id. Missing/invalid\ninput falls back to the generated/preserved request id. It is internal until P13."
+    },
+    {
+      "id": "3.-Concrete-attributes-corrections",
+      "title": "3. Concrete attributes corrections",
+      "text": "P12.3 is the bounded proof for A94/A97:\n\n| Current failure | New stable descriptor | Reason/outcome |\n|:--|:--|:--|\n| no qualified attributes engine | `attributes_engine_unavailable` | unavailable / `capability_unavailable`, non-retryable |\n| current scope/connection denies operation | `attributes_access_denied` | authorization / `access_denied`, non-retryable |\n| schema operation not ready or stale | `attribute_schema_conflict` | conflict; retryability decided by named constructor |\n| retry budget exhausted | `attribute_schema_retry_exhausted` | conflict, non-retryable |\n\n`ScopeDenied` stays for actual access denials. `SchemaOperationConflict` owns named\nconstructors `notReady`, `staleSnapshot`, `retryExhausted`; messages remain human-only.\nThe item updates only the two measured producers that currently misuse `ScopeDenied`.\nIt does not manufacture `capability_disabled` or `feature_not_entitled` producers."
+    },
+    {
+      "id": "4.-Vendor-neutral-operation-lifecycle-D62",
+      "title": "4. Vendor-neutral operation lifecycle (D62)",
+      "text": "`OperationContext`:\n\n```php\nfinal readonly class OperationContext\n{\n    public function __construct(\n        public string $operationId,\n        public string $correlationId,\n        public ?string $causationId,\n        public ?string $accountId,\n        public ?string $workspaceId,\n        public ActorType $actorType,\n        public ?string $actorId,\n        public string $package,\n        public string $operation,\n        public int $attempt,\n    ) {}\n}\n```\n\nIdentifiers are opaque/bounded; package/operation use lower dotted names; attempt is\nnon-negative. Account/workspace/actor may be null in boxed/system work, but the fields\nexist. Long-running callers create one context and reuse it in all events.\n\n```php\ninterface OperationObserver\n{\n    public function started(OperationStarted $event): void;\n    public function completed(OperationCompleted $event): void;\n    public function failed(OperationFailed $event): void;\n}\n```\n\n- `OperationStarted`: context + event time;\n- `OperationCompleted`: context + duration milliseconds + closed outcome\n  `succeeded|cancelled|skipped`;\n- `OperationFailed`: context + duration + `ErrorDescriptor`, but adapters export\n  only code/category/path/retryable and never descriptor details/message/Throwable.\n\nEvery start has exactly one terminal call by caller contract. Observer adapters must\nnot throw into the business operation: PSR-3/OTel adapter failures are caught,\nreported through their own logger/exporter policy and do not change the operation\noutcome. `NullOperationObserver` is the default.\n\nPSR-3 adapter messages are static:\n\n```text\ncorex.operation.started\ncorex.operation.completed\ncorex.operation.failed\n```\n\nContext keys are stable snake case. IDs stay structured context, not message text."
+    },
+    {
+      "id": "5.-Metrics-and-cardinality",
+      "title": "5. Metrics and cardinality",
+      "text": "`MetricAttributes` owns the only permitted metric dimension keys:\n\n```php\nprivate const ALLOWED = [\n    'package', 'operation', 'outcome', 'category', 'retry_bucket',\n];\n```\n\nConstruction rejects an unknown key and a value outside the bounded forms. The OTel\nadapter never accepts an arbitrary user map; it obtains dimensions from this type.\n`retry_bucket` maps exact attempts to `0`, `1`, `2-3`, `4+`.\n\nForbidden metric labels include `account_id`, `workspace_id`, `actor_id`,\n`correlation_id`, `causation_id`, `operation_id`, message id, subject and exception\nclass. They remain available in structured logs/traces where individual records do\nnot multiply time-series cardinality.\n\nP5 `DeliveryHealth` exports only aggregate gauges/histogram:\n\n```text\ncorex.messaging.outbox.oldest_pending.seconds\ncorex.messaging.outbox.pending\ncorex.messaging.outbox.publishing\ncorex.messaging.outbox.dead\ncorex.messaging.outbox.max_attempts\n```\n\nThe per-contract age map is not converted to a metric label. It remains health-command\nand structured-log detail."
+    },
+    {
+      "id": "6.-OpenTelemetry-and-async-messages-D63",
+      "title": "6. OpenTelemetry and async messages (D63)",
+      "text": "Both adapters are optional. `psr/log` and `open-telemetry/api` are `suggest` plus\n`require-dev` for qualification, never `require`: the plan-wide rule forbids new\nruntime dependencies. Their adapter classes are autoloaded only when a host explicitly\nbinds them. `CoreServiceProvider` binds no-op observer/trace bridge by default. An app\nwith the SDK explicitly binds `OpenTelemetryBridge`.\n\n`TraceContextBridge` is deliberately tiny:\n\n```php\ninterface TraceContextBridge\n{\n    /** @param array<string, scalar|null> $metadata */\n    public function inject(array $metadata): array;\n\n    /**\n     * Run one consumer operation with producer context linked at span creation.\n     *\n     * @template T\n     * @param array<string, scalar|null> $metadata\n     * @param \\Closure(): T $work\n     * @return T\n     */\n    public function linkedConsumer(\n        array $metadata,\n        OperationContext $operation,\n        \\Closure $work,\n    ): mixed;\n}\n```\n\nThe concrete OTel bridge uses the SDK propagator to write W3C `traceparent` and\noptional `tracestate` into the existing P5 `MessageEnvelope::$metadata`. `SqlOutbox`\ncalls `inject()` synchronously before persistence; the relayed metadata therefore\nsurvives process/queue boundaries. The consumer integration calls `linkedConsumer()`\naround the processing closure; the null bridge calls it exactly once, while the OTel\nbridge starts the linked span before invoking it and always closes the scope. Extraction,\nspan creation or shutdown failure must still invoke business work exactly once and cannot\nreplace its result or exception. `correlationId`/`causationId` are not parsed as trace ids\nand remain available when tracing is absent.\n\nMessaging semantic conventions are Development. The adapter pins the schema/version\nit was tested against in one constant and documents it in `docs/reference.md`; an SDK\nupgrade cannot silently change emitted names. CoreX custom health instruments use the\nstable `corex.messaging.*` namespace."
+    },
+    {
+      "id": "7.-Impersonation-matrix-D64",
+      "title": "7. Impersonation matrix (D64)",
+      "text": "| Invariant | Current state | P12 action |\n|:--|:--|:--|\n| original actor vs effective user | `CurrentActor` has staff + target | enforce again at universal audit enqueue seam |\n| immutable initiator/target | session fields exist | reject nested start before grant claim |\n| non-empty reason | grant claim checks it | carry reason in state/session, root mirror and every audit entry |\n| bounded expiry | checked at grant and request | retain; prove expired request stops before handler |\n| write policy | L1/L2/L3 guards exist | no semantic change; regression matrix |\n| revocation | root row checked each request | retain uncached check; claim only next protected request, not in-flight abort |\n| failed login cleanup | grant burned but session is set first | logout/forget/invalidate; write failed-start mirror; never leave active state |\n| every audit record | observer path only | enrich all `AuditLogger::record()` calls synchronously |"
+    },
+    {
+      "id": "7.1-Core-audit-stamp",
+      "title": "7.1 Core audit stamp",
+      "text": "`ImpersonationState` appends compatible `?string $reason = null`. The real service\nalways constructs it with the grant reason. `AuditEntry::withImpersonation()` returns\na copy with:\n\n```php\nactorType: ActorType::Support\nactorId: $state->staffIdentityId\ncontext['impersonation'] = [\n    'grant' => $state->grantId,\n    'target_user_id' => $state->targetUserId,\n    'reason' => $state->reason,\n]\n```\n\n`QueuedAuditLogger::record()` resolves the current state and applies that copy before\nevent-time/workspace snapshot. Caller-supplied `context` is preserved except the\nreserved `impersonation` key, which cannot override authority. The queued worker never\nre-resolves actor/session."
+    },
+    {
+      "id": "7.2-Tenancy-session-lifecycle",
+      "title": "7.2 Tenancy session lifecycle",
+      "text": "`DatabaseImpersonationService::start()` performs, in order:\n\n1. reject if `state()` is already non-null, before UPDATE;\n2. atomically claim grant with all existing predicates;\n3. read target, reason, expiry and mirror the attempt;\n4. rotate session id, store immutable grant/staff/target/reason/expiry;\n5. authenticate target;\n6. on failure, logout + forget + invalidate + failed mirror, keep grant consumed;\n7. on success, dispatch started event carrying reason.\n\n`state()` reads reason from session. A pre-P12 session with missing reason reads the\nclaimed grant once, validates a non-empty reason and backfills the session; if it\ncannot, it returns no valid state and the guard closes the session. `stop()` preserves\nreason in the ended mirror/event before clearing state.\n\nNo existing allow-write route/model/action becomes allowed. Tests prove the old guard\nmatrix byte-for-byte in behavior."
+    },
+    {
+      "id": "8.-Core-zone-placement",
+      "title": "8. Core-zone placement",
+      "text": "Error and operation types are generic level-0 primitives. P12.1/P12.4 classify their\nexact files as `Foundation` in the P6 map/gate; OTel/PSR adapters import no CoreX\ncapability zone and receive the same classification. P12 does not create an eleventh\nzone or move FQCN. `AuditEntry` remains Audit; `ImpersonationState` remains\nTenancyContracts."
+    },
+    {
+      "id": "9.-Item-map-and-dependency-order",
+      "title": "9. Item map and dependency order",
+      "text": "| Item | Normative sections | Package |\n|:--|:--|:--|\n| P12.1 | §1, §8 | core + root zone gate/docs |\n| P12.2 | §2 | api |\n| P12.3 | §1.4, §3 | attributes |\n| P12.4 | §4 | core |\n| P12.5 | §5–§6 | core |\n| P12.6 | §7.1 | core |\n| P12.7 | §7.2 | tenancy |\n| P12.8 | all | root proof/policy/reference |\n\nData order: `P12.1 → {P12.2, P12.3, P12.4}`; `P12.4 → P12.5`;\n`P12.1 → P12.6 → P12.7`; all → P12.8. B19 (`P12.2 + P12.3`) and\nB20 (`P12.4 + P12.5`) are recommended shared-context batches but closure remains\nper-item. P12.6/P12.7 stay solo/full because they change a security audit boundary."
+    },
+    {
+      "id": "10.-Acceptance-matrix",
+      "title": "10. Acceptance matrix",
+      "text": "1. Existing code rename/category/retry change makes error-contract fixture red.\n2. Invalid code/path/details shape is rejected before mapping.\n3. Existing API JSON and headers are unchanged in P12.\n4. Attributes cases map to three distinct machine outcomes; no message parsing.\n5. Start + exactly one terminal observer event contains the same identity/context.\n6. Raw Throwable/message/details never reach PSR-3/OTel adapters.\n7. `account_id` or arbitrary metric label is rejected; allowed five pass.\n8. OTel package absent: default boot/tests green; no exporter is required.\n9. Producer trace carrier survives P5 metadata and consumer span is created with link;\n   no correlation-to-trace fabrication.\n10. Delivery health emits global metrics without account/contract dimensions.\n11. Direct audit caller under impersonation is stamped with staff, target, grant and\n    reason before queue dispatch.\n12. Nested start does not consume second grant; failed login leaves no active session;\n    expiry/revocation blocks next request; existing write guards stay closed.\n13. P6 R-Z0/R-Z1/R-Z2 remains green and a planted unclassified observer file fails.\n14. No response-envelope/problem+json snapshot appears before P13."
+    },
+    {
+      "id": "11.-External-source-boundary",
+      "title": "11. External-source boundary",
+      "text": "Perplexity evidence and primary URLs are recorded in `P12-design-rag.md` and\n`artifacts/P12-design-rag/`. External sources constrain interoperability and security\nproperties; they do not choose CoreX namespaces, item boundaries, codes, retry values,\nHTTP mapping or audit storage. Those are D60–D64 and this repository's measured design."
+    }
+  ],
+  "applies_to": [
+    "P12"
+  ],
+  "provenance": {
+    "path": "research/P12-design.md",
+    "sha256": "c78f54e0a989df521e9cbe9a3f76a9cd91d3282ed01e7c130747896d974d75ab"
+  }
+}

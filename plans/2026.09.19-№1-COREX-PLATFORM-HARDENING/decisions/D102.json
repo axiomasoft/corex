@@ -1,0 +1,47 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D102",
+  "title": "Attribute history is append-only; current keys live in reservations",
+  "date": "2026-09-20",
+  "status": "accepted",
+  "decision": "`sys_attribute_definitions` keeps only unique `(attribute_id,revision)` and is append-\nonly. Mutable current ownership moves to `sys_attribute_key_reservations`, keyed by\n`(entity,key)` and pointing to attribute id/current revision plus reservation role.\nPublishing a revision and replacing its reservation set is one tenant transaction.\nDuring rename both old alias and new key may reserve to the same attribute; contract\nremoves the old reservation only after verification and grace.",
+  "rationale": "History and current uniqueness have different lifecycles. Separating them permits many\nrevisions while still rejecting two current attributes claiming the same entity/key.",
+  "applies_to": [
+    "P10",
+    "P10.3",
+    "P10.4"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/codex-gpt-5.6-sol/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D102\ndate: 2026-09-20\nstatus: accepted\nitem: P10.3\nitems: [P10, P10.3, P10.4]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D102-Attribute-history-is-append-only-current-keys-live-in-reservations",
+      "title": "D102 — Attribute history is append-only; current keys live in reservations",
+      "text": "**Actor:** plan-designer/codex-gpt-5.6-sol/high\n**Evidence:** `RAG:—` DA05 reproduces that a partial unique `(entity,key)` on the\nhistory table prevents a second revision of the same attribute/key."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "`sys_attribute_definitions` keeps only unique `(attribute_id,revision)` and is append-\nonly. Mutable current ownership moves to `sys_attribute_key_reservations`, keyed by\n`(entity,key)` and pointing to attribute id/current revision plus reservation role.\nPublishing a revision and replacing its reservation set is one tenant transaction.\nDuring rename both old alias and new key may reserve to the same attribute; contract\nremoves the old reservation only after verification and grace."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "History and current uniqueness have different lifecycles. Separating them permits many\nrevisions while still rejecting two current attributes claiming the same entity/key."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P10.3 owns three additive tables in one migration. P10.4 proves multiple same-key\nrevisions and the full expand→switch→contract reservation sequence."
+    }
+  ]
+}

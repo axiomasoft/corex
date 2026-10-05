@@ -1,0 +1,27 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P07-grok-review-triage",
+  "title": "Post-review status",
+  "sections": [
+    {
+      "id": "Post-review-status",
+      "title": "Post-review status",
+      "text": "Original A1–A10 design correction is complete. Grok finding 5/A8 is closed by D99 and the narrow independent follow-up; advisory counts corrected (23 service/25 total). Broad review remains technical, without formal Task GREEN.\n\n| Open Grok finding | Severity | Owner | Scope of next repair |\n|:--|:--|:--|:--|\n| 1 | Critical | P07.1 | Parse/remove or reject central URL before tenant overrides; add DB_URL isolation case |\n| 2 | Major | P07.1 | Rebuild live database/session cache handler and invalidate first tenant binding; central auth-cookie test |\n| 3 | Major | P07.3 | Durable synchronous tenant audit and acyclic composition; validate actual built-in writer behavior |\n| 4 | Major | P07.4 | Align bridge stability value with graph gate/taxonomy and Files |\n| 6 | Minor | P07.3 | Verify independent approver is staff in atomic regulated claim |\n| 7 | Minor | P07.5 | Disabled digest must resolve without WakeupScheduler |\n\nUnverified risks from the original report remain labelled as such. Product phase not executed. Next is repair of these new design findings, followed by finish and independent formal audit; P06 closure still gates execution."
+    },
+    {
+      "id": "D100-subsequent-status",
+      "title": "D100 subsequent status",
+      "text": "Six open findings repaired in design by D100; original triage above is historical. New proofs and broad independent review are in ../P07-design-remediation/ and ../P07-grok-rereview/. No formal audit GREEN."
+    },
+    {
+      "id": "Subsequent-D101-D103-independent-verification",
+      "title": "Subsequent D101–D103 independent verification",
+      "text": "Broad re-review confirms all six original findings closed; additional findings repaired by D102/D103 and rechecked in artifacts/P07-grok-rereview/. Historical original500k claim was not proven: unquoted TOML grok-4.7 key parses incorrectly; D101 documents cancelled ignored-window attempt and native corrected sessions. Original report remains preserved, no formal GREEN."
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P07-grok-review/triage.md",
+    "sha256": "9c4b9a6f4bf97fc5d06ca8909dae3713a03e0f14d9cc0b22545e3dfdc5c807d6"
+  }
+}

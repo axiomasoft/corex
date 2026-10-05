@@ -1,0 +1,135 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:phase:v1",
+  "id": "P9",
+  "title": "Tenancy: bounded contexts вместо смешанной оси",
+  "design": "detailed",
+  "goal": "`RAG:—` Post-P8 baseline будет снят P9.1; design-baseline 2026-09-19 —\n159 PHP-файлов и 26 прямых детей `src`. Верхний уровень смешивает\nдомены, framework adapters и горизонтальные каталоги; все 39 Membership-файлов\nспрятаны под `Internal`. `Central` (12) и `Database` (6) прежний эскиз\nне размещал.\n\n`RAG:✅` P9-Q1/Q2: крупная модель требует явных bounded contexts,\nа domain не должен зависеть от framework/infrastructure. `RAG:✅` P9-Q3\nпозволяет физическую раскладку без API-break через точечные PSR-4 maps.\n\n> **Контракт фазы.** Потребляет: профили P1, зоны P6, Options P7,\n> registrar-модель P8. Производит: 13 context-first каталогов,\n> атомарную карту 100% файлов, совместимую FQCN-проекцию и ratchet-гейт.\n> Границы: ни DDL, ни public API не меняются; единственная runtime-дельта —\n> сверка active connection в `TenantContextRestorer` по D22/D49.\n\n> **Phase Assurance | v1.**\n> Impact: public-contract\n> Integration Seams: tenancy-public-symbols · composer-psr4 · package-discovery · tenancy-bootstrapper-order · container-bindings · oidc-routes · middleware-aliases · event-listeners · wakeup-integration-allowlist · database-tree\n> Live or Irreversible: no\n> Audit Intent: direct-close-eligible\n> Rationale: физическая DB-per-account изоляция и очереди делают\n> даже перенос файлов рискованным; Review всех items — `full`.",
+  "context": "`RAG:—` Post-P8 baseline будет снят P9.1; design-baseline 2026-09-19 —\n159 PHP-файлов и 26 прямых детей `src`. Верхний уровень смешивает\nдомены, framework adapters и горизонтальные каталоги; все 39 Membership-файлов\nспрятаны под `Internal`. `Central` (12) и `Database` (6) прежний эскиз\nне размещал.\n\n`RAG:✅` P9-Q1/Q2: крупная модель требует явных bounded contexts,\nа domain не должен зависеть от framework/infrastructure. `RAG:✅` P9-Q3\nпозволяет физическую раскладку без API-break через точечные PSR-4 maps.\n\n> **Контракт фазы.** Потребляет: профили P1, зоны P6, Options P7,\n> registrar-модель P8. Производит: 13 context-first каталогов,\n> атомарную карту 100% файлов, совместимую FQCN-проекцию и ratchet-гейт.\n> Границы: ни DDL, ни public API не меняются; единственная runtime-дельта —\n> сверка active connection в `TenantContextRestorer` по D22/D49.\n\n> **Phase Assurance | v1.**\n> Impact: public-contract\n> Integration Seams: tenancy-public-symbols · composer-psr4 · package-discovery · tenancy-bootstrapper-order · container-bindings · oidc-routes · middleware-aliases · event-listeners · wakeup-integration-allowlist · database-tree\n> Live or Irreversible: no\n> Audit Intent: direct-close-eligible\n> Rationale: физическая DB-per-account изоляция и очереди делают\n> даже перенос файлов рискованным; Review всех items — `full`.",
+  "depends_on": [
+    "P6",
+    "P8"
+  ],
+  "items": [
+    "P9.1",
+    "P9.2",
+    "P9.3",
+    "P9.4",
+    "P9.5",
+    "P9.6",
+    "P9.7",
+    "P9.8"
+  ],
+  "batches": [
+    {
+      "id": "BP9-1",
+      "items": [
+        "P9.1"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP9-2",
+      "items": [
+        "P9.2"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP9-3",
+      "items": [
+        "P9.3"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP9-4",
+      "items": [
+        "P9.4"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP9-5",
+      "items": [
+        "P9.5"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP9-6",
+      "items": [
+        "P9.6"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP9-7",
+      "items": [
+        "P9.7"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP9-8",
+      "items": [
+        "P9.8"
+      ],
+      "mode": "recommended"
+    }
+  ],
+  "closed": {
+    "at": "2026-09-24T09:19:26Z",
+    "result": "done",
+    "summary": "<!-- plan-projection\nprojection: phase-closure\nprojection_version: v1\nsource_scope: phase P9 + item states + decisions\nthrough: P9: 🟢 Done\ninputs_sha256: d297c54d05648ebd486dd3ea84e27c5a4fe4415f2991671749f8bca7b75acd33\ngenerated_by: task plan-views closure\n-->\n\n# Закрытие фазы P9\n\n> Не править руками: это генерируемый вид.\n\n## Контракт фазы\n\n**Контракт фазы.** Потребляет: профили P1, зоны P6, Options P7,\nregistrar-модель P8. Производит: 13 context-first каталогов,\nатомарную карту 100% файлов, совместимую FQCN-проекцию и ratchet-гейт.\nГраницы: ни DDL, ни public API не меняются; единственная runtime-дельта —\nсверка active connection в `TenantContextRestorer` по D22/D49.\n\n## Произведено\n\n- P9.1 — Карта и compatibility baseline: карта, baseline JSON, каркас гейта, red fixtures, receipt.\n- P9.2 — Runtime и Laravel boundary: Runtime/Laravel tree, connection-guarded restorer, compatibility/isolation tests,\n- P9.3 — Membership без `Internal`: Membership tree, imports/tests, receipt, root CHANGELOG.\n- P9.4 — Account и Provisioning: Account/Provisioning tree, compatibility maps/tests, receipt, root CHANGELOG.\n- P9.5 — Identity и Authentication/OIDC: Authentication/Identity tree, compatibility maps/tests, receipt, root CHANGELOG.\n- P9.6 — Workspace, DomainTrust, Impersonation: three context trees, compatibility maps/tests, receipt, root CHANGELOG.\n- P9.7 — Integration/Wakeup: Integration/Wakeup tree, exact allowlist, negative fixture, receipt, CHANGELOG.\n- P9.8 — Финальный ratchet и compatibility proof: final JSON/diff, structure + DATA-003 ratchets, CI/PHPStan paths,\n\n## Known Deviations\n\n- —\n\n## Решения\n\n- [D46](../../decisions/D46-context-first-physical-compatible-fqcn.md)\n- [D47](../../decisions/D47-central-and-database-have-domain-owners.md)\n- [D48](../../decisions/D48-relay-control-plane-needs-measured-trigger.md)\n- [D49](../../decisions/D49-restorer-verifies-active-connection.md)\n- [D100](../../decisions/D100-dynamic-default-connection-and-null-ttl.md)\n"
+  },
+  "orchestration": {
+    "strategy": "sequential"
+  },
+  "sections": [
+    {
+      "id": "P9-Tenancy-bounded-contexts",
+      "title": "P9 — Tenancy: bounded contexts вместо смешанной оси",
+      "text": ""
+    },
+    {
+      "id": "Phase-Context",
+      "title": "Phase Context",
+      "text": "`RAG:—` Post-P8 baseline будет снят P9.1; design-baseline 2026-09-19 —\n159 PHP-файлов и 26 прямых детей `src`. Верхний уровень смешивает\nдомены, framework adapters и горизонтальные каталоги; все 39 Membership-файлов\nспрятаны под `Internal`. `Central` (12) и `Database` (6) прежний эскиз\nне размещал.\n\n`RAG:✅` P9-Q1/Q2: крупная модель требует явных bounded contexts,\nа domain не должен зависеть от framework/infrastructure. `RAG:✅` P9-Q3\nпозволяет физическую раскладку без API-break через точечные PSR-4 maps.\n\n> **Контракт фазы.** Потребляет: профили P1, зоны P6, Options P7,\n> registrar-модель P8. Производит: 13 context-first каталогов,\n> атомарную карту 100% файлов, совместимую FQCN-проекцию и ratchet-гейт.\n> Границы: ни DDL, ни public API не меняются; единственная runtime-дельта —\n> сверка active connection в `TenantContextRestorer` по D22/D49.\n\n> **Phase Assurance | v1.**\n> Impact: public-contract\n> Integration Seams: tenancy-public-symbols · composer-psr4 · package-discovery · tenancy-bootstrapper-order · container-bindings · oidc-routes · middleware-aliases · event-listeners · wakeup-integration-allowlist · database-tree\n> Live or Irreversible: no\n> Audit Intent: direct-close-eligible\n> Rationale: физическая DB-per-account изоляция и очереди делают\n> даже перенос файлов рискованным; Review всех items — `full`."
+    },
+    {
+      "id": "DoR",
+      "title": "DoR",
+      "text": "- [x] Целевая карта покрывает 26 исходных групп; `Central` и `Database`\n      имеют owners (D47).\n- [x] Public/serialized/config seams и способ сохранения FQCN объявлены\n      до переносов (D46, `P9-design.md` §3).\n- [x] Compatibility fingerprint и две негативные посадки определены.\n- [x] Каждая спека ссылается на `@plan/knowledge/research-P9-design.json`.\n- [x] Multi-account relay не выдан за закрытый долг; owner и триггеры\n      зафиксированы (D48).\n- [x] D22 закрыт явным выбором: caller инициализирует tenancy,\n      restorer сверяет semantic context и actual connection (D49).\n- [x] D19/DATA-003 имеет blocking-гейт и негативную посадку в P9.8.\n- [x] Ни один item не превышает 200K; Membership и final proof — `solo`."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Атомарная post-P8 карта; `Account`, `Authentication`, `Contracts`,\n`DomainTrust`, `Identity`, `Impersonation`, `Integration`, `Laravel`, `Membership`,\n`PHPStan`, `Provisioning`, `Runtime`, `Workspace`; расформирование\n`Membership/Internal`; `Central`→`Membership/Transport`; `Database`→\n`Provisioning/Database`; `Oidc`→`Authentication/Oidc`; `Wakeup/Internal`→\n`Integration/Wakeup`; PSR-4 compatibility maps; пути PHPStan/CI; package graph allowlist;\nstructure ratchet; root `CHANGELOG.md`; receipts."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Изменение `Contracts/**`, public/serialized/config FQCN, миграций, DDL, имён\nтаблиц, connections, bootstrapper order/lifetime, routes, middleware, commands,\nlisteners, bindings; alias-классы; выделение новых пакетов; переименования\nклассов P15; multi-account relay control plane до триггера D48.\nИсключение из запрета смены bindings — ровно одно: concrete\n`TenantContextRestorer` по D49; contract и `scoped` lifetime прежние."
+    },
+    {
+      "id": "Dependencies",
+      "title": "Dependencies",
+      "text": "P6 и P8 терминальны; вся стадия 2 закрыта (D14). Внутри:\n`P9.1 → P9.2 → P9.3 → B16(P9.4,P9.5,P9.6) → P9.7 → P9.8`.\nB16 исполняется как recommended batch и может взять готовое подмножество."
+    },
+    {
+      "id": "Items",
+      "title": "Items",
+      "text": "| Item | Назначение |\n|:--|:--|\n| P9.1 | Post-P8 inventory, compatibility baseline, атомарная карта и каркас гейта. |\n| P9.2 | Runtime/Laravel: adapters, bootstrappers, commands, middleware, connection-guarded restorer. |\n| P9.3 | Membership: убрать `Internal`, поглотить `Central` в Transport. |\n| P9.4 | Account/Provisioning: lifecycle, database/template/migration owners. |\n| P9.5 | Identity/Authentication: OIDC как protocol adapter. |\n| P9.6 | Workspace/DomainTrust/Impersonation: models/events рядом с owners. |\n| P9.7 | `Integration/Wakeup` и точный optional allowlist. |\n| P9.8 | Final fingerprint, structure + DATA-003 ratchets, CI/PHPStan paths, consumer sweep, receipt. |"
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Каждый item — package lint/analyse/test + корневой `composer test:pg`.\nP9.8 дополнительно исполняет всю цепочку `P9-design.md` §11,\nдве негативные посадки, compatibility diff и нулевой diff\n`packages/tenancy/database/**`. Пропущенный PostgreSQL lane не зелёный."
+    },
+    {
+      "id": "Phase-Handoff",
+      "title": "Phase Handoff",
+      "text": "При закрытии P9 receipt указывает: final корневые каталоги, compatibility diff,\nрезультаты обоих DB lanes, нулевой DDL-diff и открытый relay-риск D48."
+    }
+  ]
+}

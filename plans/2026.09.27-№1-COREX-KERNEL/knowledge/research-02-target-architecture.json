@@ -1,0 +1,77 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "research-02-target-architecture",
+  "title": "R2 — Целевая архитектура CoreX 1.0",
+  "sections": [
+    {
+      "id": "R2-CoreX-1.0",
+      "title": "R2 — Целевая архитектура CoreX 1.0",
+      "text": "Статус: **норма** по принятым D01–D23 (2026-09-27). При расхождении с D# побеждает D#. Имена пакетов/модулей,\nпомеченные `≈`, — предложения; окончательные имена фиксирует glossary P00.1 (`@plan/knowledge/research-03-glossary.json`), после чего P00.2\nпереносит этот документ в `@plan/knowledge/research-04-architecture.json` (переживает план).\n\n> **Карта решений.** D01 совместимость (нет) · D02 vendor `axiomasoft` · D03 PHP ^8.4 / Laravel ^12|^13 · D04 namespace =\n> путь, один корень на пакет · D05 feature modules + `Internal` · D06 `#[Api]/#[Spi]` + манифест · D07 DTO вместо моделей ·\n> D08 typed config без static · D09 тонкие providers, без фасадов в домене · D10 строковые коды + registry + RFC 9457 ·\n> D11 CloudEvents / Standard Webhooks / OpenAPI 3.1 · D12 split operations · D13 движок tenancy за адаптером · D14 access\n> без AzGuard · D15 flex/crm вне релиза · D16 зависимости · D17 планка качества · D18 CI supply chain · D19 релиз ·\n> D20 схема · D21 катящийся дизайн · D22 принципы экосистемы · D23 PLAN2 superseded."
+    },
+    {
+      "id": "1.-D22-chatom-PLAN2-1",
+      "title": "1. Принципы (сквозные, проверяемые; D22 = chatom PLAN2 §1)",
+      "text": "1. **Ядро ничего не знает о пакетах-расширениях.** Ни import, ни имени таблицы, ни config-ключа, ни строки в docs ядра о\n   конкретном пакете. Пакет подключается к ядру только через `#[Spi]` и реестры модулей.\n2. **Один владелец.** FQCN, таблица, config-ключ, publish-tag, artisan-команда, route-имя, wire `type`, код ошибки\n   однозначно определяют пакет-владельца (машинный гейт).\n3. **Пакет самодостаточен:** `composer.json` + `src/` + `config/` + `database/` + `resources/` + `tests/` + `README.md`;\n   `composer test` проходит из каталога пакета с ядром и объявленными зависимостями, без остальных пакетов.\n4. **Публичное — только объявленное** (`#[Api]`, `#[Spi]`), остальное internal; wire — отдельный версионируемый контракт.\n5. **Инварианты не конфигурируются.** Безопасность, транзакционность, outbox-запись, авторизация, строгость входа API не\n   отключаются config-ом; расширение — через именованные точки.\n6. **Compile at boot → immutable runtime.** Конфигурация и реестры собираются при boot/optimize, runtime читает типизированные\n   снимки из контейнера; ни `config()` в runtime-пути, ни static mutable state.\n7. **Схема детерминирована.** Выпущенная миграция не меняется; новая форма — новая миграция (с `1.0.0-rc.1`).\n8. **Стандарты вместо изобретений:** Standard Webhooks, CloudEvents 1.0, OpenAPI 3.1, JSON Schema 2020-12, RFC 9457,\n   PSR-20 (clock), SemVer.\n9. **Без алиасов и мостов до 1.0** (D01). После 1.0 — строгий SemVer + Roave per package.\n10. **Модули максимально независимы (B8).** Жёсткое ребро пакет→пакет — только если без него пакет бессмыслен; иначе контракт в\n    ядре + optional integration-пакет или `suggest` + условная регистрация."
+    },
+    {
+      "id": "2.-P00.1",
+      "title": "2. Пакеты (предложение, финал — P00.1)",
+      "text": "```text\naxiomasoft/corex                ядро (CoreX\\): Modules (система модулей, compiled registry — из corex/modules),\n  (packages/core)               Context (tenant/actor-контекст — из core Tenancy-зоны), Data (DataScope, RecordRef,\n                                WriteToken), Errors (ErrorCode, ProblemDefinition registry), Config (options infra,\n                                ViolationList, SecretRef), Time (PSR-20), Ids, Messaging (outbox/inbox/relay/pubsub),\n                                Settings, Features, Audit, Storage, Observability, Attributes (#[Api]/#[Spi])\naxiomasoft/corex-tenancy        физический DB-per-account: control plane, provisioning, identity, impersonation\naxiomasoft/corex-access         авторизация платформы (tenant-boundary, entity-context, scope) — без AzGuard (D14)\naxiomasoft/corex-access-azguard ≈ мост AzGuard (integration; публикация — после стабильного AzGuard)\naxiomasoft/corex-operations     ≈ operation engine: definition, invocation, idempotency, versioning, bulk, cost,\n                                validation, HTTP delivery, OpenAPI projection (из corex/operations, D12)\naxiomasoft/corex-tools          ≈ tool runtime: GuardedToolInvoker, schema validation, MCP projection (D12)\naxiomasoft/corex-webhooks       ≈ egress: подписки, доставка, SSRF-политика, Standard Webhooks (D12)\naxiomasoft/corex-custom-fields  ≈ бывш. corex/attributes (EAV/typed fields) — освобождает `CoreX\\Attributes` для #[Api]/#[Spi]\naxiomasoft/corex-intl           локали, валюты, форматирование, география (+ Money cast из ядра — ядро теряет brick/money)\naxiomasoft/corex-media · -notifications · -panels (+ SavedViews из ядра ≈) · -recurrence · -search · -transfer\naxiomasoft/corex-timers         ≈ бывш. corex/wakeup (durable local wakeup requests)\naxiomasoft/corex-workflow · corex-tasks\nintegration: corex-search-intl · corex-search-meilisearch · corex-tasks-workflow\naxiomasoft/corex-testkit        ≈ require-dev: фейки, фикстуры, contract-тесты SPI\naxiomasoft/corex-full           metapackage (lockstep)\nproducts/flex-crm               вне релизного набора (D15)\n```\n\nПравила рёбер: `пакет → ядро (#[Api]|#[Spi])`; `integration → оба соединяемых пакета (#[Api]|#[Spi])`;\n`пакет ↛ Internal другого пакета`; `ядро ↛ любой пакет`; циклов нет; `notifications ↛ timers` (контракт в ядре, D16).\n\nПочему `Modules` в ядре: система модулей — определяющая ответственность L0 («абстрактный загрузчик модулей»,\n`dev-doctrine.md` §1; Bitrix D7 `main`); отдельный пакет не имеет независимого потребителя (ядро без модулей не является\nплатформой, модули без ядра не существуют). P00.1 подтверждает замером (зависимости `corex/modules`, число потребителей).\n\nПочему Money/SavedViews/Departments могут уйти из ядра: ядро минимально по зависимостям и смыслу; `brick/money` — тяжёлая\nзависимость единственного cast; SavedViews — UI-состояние, потребитель panels. P00.1 решает по матрице потребителей зон."
+    },
+    {
+      "id": "3.",
+      "title": "3. Раскладка пакета",
+      "text": "```text\npackages/<name>/\n├── composer.json          # axiomasoft/corex-<name>; PSR-4 ровно одна запись: \"CoreX\\\\<Name>\\\\\": \"src/\"\n├── README.md  CHANGELOG.md  LICENSE\n├── config/corex-<name>.php\n├── database/migrations/   # baseline v1 (D20); tenant/central — явное разделение\n├── resources/contracts/   # php-api.json (D06), openapi.json (если есть HTTP), schemas/\n├── src/\n│   ├── <Name>ServiceProvider.php          # единственный публичный provider (D09)\n│   ├── <Module>/{Contracts,Data,Enums,Events,Exceptions}/   # публичное (#[Api]/#[Spi])\n│   ├── <Module>/Internal/…               # реализация, модели Eloquent, SQL, jobs, контроллеры\n│   └── Laravel/…                         # внутренние providers, команды, middleware (internal)\n└── tests/{Unit,Feature,Arch}/ + phpunit.xml + phpstan.neon (свой vendor)\n```\n\nКорень монорепо: `packages/*` (релизные), `products/*` (не релизные потребители), `tests/` — только кросс-пакетные\nархитектурные гейты и consumer-сценарии, `docs/` (+ `docs-public/`), `scripts/`, `plans/`."
+    },
+    {
+      "id": "4.-Namespaces",
+      "title": "4. Namespaces и классификация",
+      "text": "- Ядро: `CoreX\\` + закрытый список модулей §2; пакет `corex-<name>` владеет `CoreX\\<Name>\\` (PascalCase, без дефисов:\n  `corex-search-meilisearch` → `CoreX\\SearchMeilisearch\\`). Сегменты пакетов зарезервированы, в ядре запрещены.\n- Атрибуты `CoreX\\Attributes\\Api` (`since`), `CoreX\\Attributes\\Spi` (`kind: Implement|Call`, `since`) — та же семантика,\n  что `Chatom\\Attributes\\{Api,Spi}`.\n- Манифест `resources/contracts/php-api.json` на пакет строится сканером; тип вне `Internal` без атрибута — ошибка;\n  `#[Api]`-сигнатура, ссылающаяся на internal/Eloquent/`Illuminate\\Support\\Collection` — ошибка; межпакетный import\n  неклассифицированного символа — ошибка.\n- `#[Spi(Implement)]`-интерфейс не расширяется методами в minor (только новым интерфейсом); `#[Api]`-интерфейсы приложение\n  не реализует."
+    },
+    {
+      "id": "5.-Application-API",
+      "title": "5. Application API",
+      "text": "- Каждый пакет экспортирует интерфейсы модулей (`Contracts\\*`) с методами «один DTO → view/result», DTO `final readonly`\n  с инвариантами в конструкторе и именованными фабриками; результаты — `*View`/`*Result`; идентификаторы — value objects.\n- Контекст (tenant/actor) передаётся явно или через kernel-порт `Context`, никогда через static.\n- Ошибки — иерархия исключений с кодом `ErrorCode` (D10)."
+    },
+    {
+      "id": "6.-Extension-SPI",
+      "title": "6. Extension SPI",
+      "text": "- Механизмы расширения закрыты (EXT-001): compiled registries модулей (`collecting → compiled → frozen`, EXT-004),\n  `#[Spi(Implement)]`-порты с дефолтами через `bindIf`, декорация через `extend`, опубликованные сообщения outbox.\n- Точка расширения объявляет: id-тип, порядок (детерминированный), политику дубликата (ошибка), фазу жизни.\n- Замена ядра/инвариантов — только `unsafe*`-API, `@internal`."
+    },
+    {
+      "id": "7.-D08-D09",
+      "title": "7. Конфигурация и композиция (D08, D09)",
+      "text": "- `config/corex-<name>.php` → `<Name>Options::fromArray()` (immutable, typed, `ViolationList::failIfAny()`) в `register()` →\n  `instance(Options)`; runtime получает Options конструктором. Static `Config` удалён.\n- Один публичный provider → внутренние providers по обязанностям; без анонимных классов и логики в providers; фасады —\n  только в `Laravel\\` мосте; домен на портах (PSR-20 `ClockInterface`, `SessionPort`/`AuthPort`/`EventPort` ≈).\n- `production` + опасная комбинация → исключение при boot; CI: `config:cache`, Octane-сценарий «два запроса, разные tenant»."
+    },
+    {
+      "id": "8.-Operations-Tools-Webhooks-D12",
+      "title": "8. Operations / Tools / Webhooks (D12)",
+      "text": "- Engine: `Operation` definition (module, id, version, method, path, ability, handler, schemas, mode Query/Command/…,\n  idempotency, scopes, fields) → compiled registry → invoker chain (authorize → validate → idempotency → handler →\n  serialize). Строгость входа — инвариант; формат конверта — именованная политика (`InputEnvelope` ≈), не отключение.\n- Tools: публичный `ToolInvoker` (`#[Api]`) с contract-hash guard, schema validation in/out, execution guard, MCP-проекция.\n- Webhooks: SSRF-политика (HTTPS-only, DNS pinning `CURLOPT_RESOLVE`, peer-IP check, CIDR deny + tenant allowlist ≈),\n  Standard Webhooks подпись, retry budget + dead-letter как контракт, transient vs permanent failure в типе результата."
+    },
+    {
+      "id": "9.-Tenancy-Access-D13-D14",
+      "title": "9. Tenancy и Access (D13, D14)",
+      "text": "- Контракты tenant-контекста — ядро (`CoreX\\Context` ≈); DB-per-account движок — `corex-tenancy` за адаптером; выбор движка —\n  P07.\n- Impersonation на портах (`GrantStore`, `AuditSink`, `SessionStore`, `Clock`) + capability-профили (`dev|standard|regulated`)\n  как typed options; central + tenant audit mirror.\n- `corex-access` — контракты авторизации без AzGuard; AzGuard — integration-пакет."
+    },
+    {
+      "id": "10.-Wire-D11",
+      "title": "10. Wire (D11)",
+      "text": "- Опубликованные сообщения: CloudEvents 1.0 structured JSON (`specversion`, `id`, `source: corex://<app>/<account>`,\n  `type: corex.<package>.<event>`, `time`, `datacontenttype`, `dataschema`, `subject`, `data`) + extension-атрибуты\n  `corexaccount`, `corexactor`, `corextrace`. Breaking payload → `type` с суффиксом `.v2` + новый `dataschema`.\n- Webhooks: Standard Webhooks v1, тело = envelope.\n- REST: OpenAPI 3.1, ошибки RFC 9457 + `code`."
+    },
+    {
+      "id": "11.-D17-D18",
+      "title": "11. Планка качества (D17, D18)",
+      "text": "PHPStan max + strict + bleedingEdge, пустой baseline; Rector; Pint; `final` по умолчанию; readonly DTO; именованные\nаргументы; mutation MSI по зонам; Roave per package (блокирующий с rc); API-манифест; composer-dependency-analyser;\nunused-public; CI: SHA-pin, `permissions: {}`, zizmor, Dependabot, `composer audit --locked`, SBOM."
+    },
+    {
+      "id": "12.-chatom-D22",
+      "title": "12. Сверка с chatom (D22)",
+      "text": "| Тема | chatom PLAN2 | corex PLAN3 | Статус |\n|:--|:--|:--|:--|\n| Vendor | `axiomasoft/chatom*` (D17) | `axiomasoft/corex*` (D02) | совпадает |\n| PHP / Laravel | ^8.4 / ^12\\|^13 (D18) | ^8.4 / ^12\\|^13 (D03) | совпадает |\n| Namespace | `Chatom\\` + закрытый список, `Chatom\\<X>\\` на пакет (D22) | `CoreX\\` + закрытый список, `CoreX\\<X>\\` (D04) | совпадает |\n| Layout | feature modules + `Internal` (D21) | то же (D05) | совпадает |\n| API | `#[Api]/#[Spi]`, `php-api.json`, гейт R1–R6 (P04) | то же (D06) | совпадает; FQCN атрибутов раздельные (`Chatom\\Attributes`, `CoreX\\Attributes`) — общий пакет атрибутов экосистемы не вводится, пока нет третьего потребителя |\n| Модели | views, модели internal (D24) | то же (D07) | совпадает |\n| Config | typed compiled, без static (§9) | то же (D08) | совпадает |\n| Ошибки | строковый `errorCode()` + категория, companion-префикс (P04.3) | строковые коды + registry + RFC 9457 (D10) | совпадает по смыслу; форма `ProblemDefinition` сверяется при P04 обоих планов |\n| Wire | CloudEvents + Standard Webhooks + problem+json (D26) | то же (D11) | совпадает |\n| Схема | schema steps + Laravel migrations journal (D25) | baseline-сквош; механика — P08 (D20) | **открыто**: сверить при дизайне P08 |\n| Релиз | split + lockstep, `1.0.0-rc.1` (D28) | то же (D19) | совпадает |\n| Связь продуктов | — | chatom может стать потребителем corex (tenancy/operations) | вне scope; кандидат после rc обоих |"
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "research/02-target-architecture.md",
+    "sha256": "e902a1b6d1dbc610fb67de2520ec0752b192f3c99bcf11148b43ef449b429ea3"
+  }
+}

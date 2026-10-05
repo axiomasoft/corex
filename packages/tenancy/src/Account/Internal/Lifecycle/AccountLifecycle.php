@@ -36,7 +36,7 @@ use RuntimeException;
  * a dedicated {@see DomainEvent} subclass also fire it
  * (`startTrial`→TrialStarted, `suspend`→AccountSuspended,
  * `startGrace`→GraceStarted; `AccountPurged`/`ExportReady` are fired by
- * {@see CoreX\Tenancy\Provisioning\Internal\StanclTenantDatabaseLifecycle}, not
+ * {@see CoreX\Tenancy\Provisioning\Internal\DatabaseTenantLifecycle}, not
  * here — see that class's docblock). `activate()`/`resume()`/
  * `requestExport()` have no dedicated event class in this item's scope
  * (Files list, P2.12) — they still write a `root_account_events` row.

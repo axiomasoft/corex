@@ -1,0 +1,240 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P16.11",
+  "title": "Producer-adjusted compact/Profile-B matrix and Transfer growth map",
+  "status": "done",
+  "summary": "Prove compact packages should not move and publish Transfer's growth map without empty directories.",
+  "why": "`@plan/knowledge/research-P16-design.json` §11; profile rollout must record deliberate no-op decisions, not only moves.",
+  "scope": {
+    "include": [
+      "Post-producer counts/rationale for compact packages; explicit attributes\nProfile-B no-move proof against the P10.8 subsystem map; transfer future subsystem map; D13\ntombstone statement."
+    ],
+    "exclude": [
+      "Any package source move, transfer implementation, package creation/deletion, threshold changes and import-export resurrection."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D13",
+    "D107"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P16-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P1-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D13.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D107.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P10/P10.8.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P15/P15.13.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P16/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-00-baseline-metrics.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "docs/architecture/structure-profiles.md",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P16-profile-a-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Actual post-producer counts are authoritative; attributes (floor 44) is B,\nnever A. The no-move verdict must bind the mapped P10.8 subsystems and named use-case-span evidence;\nP16.11 neither invents a second physical move nor delegates one to metadata-only P16.12."
+  ],
+  "guidance": "Record one named use case and its current top-level span per package; add only Transfer's conditional future map.",
+  "validation": [
+    {
+      "id": "V1",
+      "procedure": "20-package census matrix",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "attributes profile B P10.8 spans",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "D13 import-export tombstone excluded",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "transfer growth map docs-only",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "no-move src digests recorded",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "zero src git mv in P16.11",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Complete profile-A receipt and Transfer growth map without new directories."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-27T06:25:00Z",
+    "finished_at": "2026-09-27T06:30:00Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/cursor-composer/direct"
+    },
+    "notes": "P16.11 GREEN: @plan/knowledge/findings-P16-profile-a-receipts.json + structure-profiles.md; 11 profile-A no-move; attributes B; transfer conditional map.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-09-27T06:30:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-27T06:30:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-27T06:30:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-27T06:30:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-27T06:30:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-27T06:30:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-27T06:30:00Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Prove compact packages should not move and publish Transfer's growth map without empty directories."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`@plan/knowledge/research-P16-design.json` §11; profile rollout must record deliberate no-op decisions, not only moves."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Post-producer counts/rationale for compact packages; explicit attributes\nProfile-B no-move proof against the P10.8 subsystem map; transfer future subsystem map; D13\ntombstone statement."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Any package source move, transfer implementation, package creation/deletion, threshold changes and import-export resurrection."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P16-design.json`; `@plan/knowledge/research-P1-design.json`; `@plan/decisions/D13.json`; `@plan/decisions/D107.json`; `@plan/phases/P10/P10.8.json`; `@plan/phases/P15/P15.13.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`docs/architecture/structure-profiles.md`; `@plan/knowledge/findings-P16-profile-a-receipts.json`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P16/phase.json`; 2) `@plan/knowledge/research-P16-design.json` §11; 3) `@plan/knowledge/research-P1-design.json` §4; 4) `@plan/decisions/D13.json`; 4a) `@plan/decisions/D107.json`; 5) `@plan/phases/P10/P10.8.json`; 6) `@plan/phases/P15/P15.13.json`; 7) `@plan/knowledge/research-00-baseline-metrics.json`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Actual post-producer counts are authoritative; attributes (floor 44) is B,\nnever A. The no-move verdict must bind the mapped P10.8 subsystems and named use-case-span evidence;\nP16.11 neither invents a second physical move nor delegates one to metadata-only P16.12."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Record one named use case and its current top-level span per package; add only Transfer's conditional future map."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Recompute census after all producers; matrix covers every live package exactly once;\nattributes is B with executable no-move evidence; P16.13 rejects profile mismatch; source\ndigests for actual no-move packages unchanged; import-export tombstone; docs checks green."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Complete profile-A receipt and Transfer growth map without new directories."
+    }
+  ]
+}

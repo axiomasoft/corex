@@ -1,0 +1,49 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D99",
+  "title": "Outbox completion requires durable handoff; reclaim is attempt-bounded",
+  "date": "2026-09-20",
+  "status": "accepted",
+  "decision": "`MessagePublisher` success means durable broker/store acceptance that survives an\noffline consumer. Core ships no lossy PubSub adapter as the outbox default; an absent or\nnon-durable publisher is a visible configuration failure and never marks a row published.\nExpired `publishing` rows with `attempts >= maxAttempts` transition directly to `dead`.\nOnly the remainder returns to `pending`. Envelope reconstruction is inside the fenced\nfailure path, so repeated corruption also exhausts attempts and becomes terminal.",
+  "rationale": "Inbox deduplication can absorb duplicates after a durable handoff, but cannot recover a\nmessage discarded before any durable consumer queue existed. Attempt accounting must\nadvance on claim and terminate independently of whether the dying worker ran cleanup.",
+  "applies_to": [
+    "P5",
+    "P5.6",
+    "P5.7",
+    "P5.12",
+    "P14.12"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/codex-gpt-5.6-sol/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D99\ndate: 2026-09-20\nstatus: accepted\nitem: P5.7\nitems: [P5, P5.6, P5.7, P5.12, P14.12]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D99-Outbox-completion-requires-durable-handoff-reclaim-is-attempt-bounded",
+      "title": "D99 — Outbox completion requires durable handoff; reclaim is attempt-bounded",
+      "text": "**Actor:** plan-designer/codex-gpt-5.6-sol/high\n**Evidence:** `RAG:—` DA04 proves Redis PUBLISH/null cannot acknowledge durable\nhandoff; DA11 proves crash/reclaim bypasses the old terminal-attempt branch."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "`MessagePublisher` success means durable broker/store acceptance that survives an\noffline consumer. Core ships no lossy PubSub adapter as the outbox default; an absent or\nnon-durable publisher is a visible configuration failure and never marks a row published.\nExpired `publishing` rows with `attempts >= maxAttempts` transition directly to `dead`.\nOnly the remainder returns to `pending`. Envelope reconstruction is inside the fenced\nfailure path, so repeated corruption also exhausts attempts and becomes terminal."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Inbox deduplication can absorb duplicates after a durable handoff, but cannot recover a\nmessage discarded before any durable consumer queue existed. Attempt accounting must\nadvance on claim and terminate independently of whether the dying worker ran cleanup."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P5.12 proves offline publish/restart delivery, crash-expiry-reclaim exhaustion and corrupt\nenvelope exhaustion. P14 may consume the envelope but may not reinterpret lossy PubSub as\ndurable acknowledgement."
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P12-design-rag-P12-Q2-observability",
+  "title": "Q2 — OpenTelemetry and PSR-3 constraints",
+  "sections": [
+    {
+      "id": "P12-Q2-OpenTelemetry-and-PSR-3-constraints",
+      "title": "P12-Q2 — OpenTelemetry and PSR-3 constraints",
+      "text": "**Tool:** Perplexity MCP. **Date:** 2026-09-20."
+    },
+    {
+      "id": "Query",
+      "title": "Query",
+      "text": "> Answer in at most 700 words using current official primary sources only.\n> Which OpenTelemetry and PSR-3 facts constrain a vendor-neutral operation\n> observer in PHP? Cover span links for asynchronous producer and consumer work,\n> Stable versus Development messaging conventions, log and trace correlation,\n> and metric cardinality with attribute allow-lists. Separate source facts from\n> design inference and include exact URLs."
+    },
+    {
+      "id": "Result-used",
+      "title": "Result used",
+      "text": "- OpenTelemetry messaging semantic conventions are Development. A producer must\n  attach creation context to the message carrier; producer and consumer work are\n  connected with links by default, including per-message links for batch work.\n- Links are supplied when a span is created and can affect sampling; a later\n  synthetic link or a trace id derived from a business correlation id is invalid.\n- Semantic-convention stability is explicit. A library must not silently change\n  emitted schema/names as dependencies move.\n- The OTel log model has dedicated TraceId/SpanId/TraceFlags correlation fields.\n- PSR-3 accepts structured context; static message templates keep aggregation\n  stable and exception data belongs in context only when intentionally exposed.\n- Messaging metrics guidance prefers bounded attributes such as destination\n  templates and error types. Unbounded identifiers create uncontrolled series.\n- Design inference accepted for CoreX: vendor-neutral events, a closed metric\n  allow-list, business IDs only in logs/traces, W3C context in P5 metadata, an\n  optional OTel adapter and a pinned Development-semconv mode."
+    },
+    {
+      "id": "Primary-sources-returned",
+      "title": "Primary sources returned",
+      "text": "- https://opentelemetry.io/docs/specs/semconv/messaging/messaging-spans/\n- https://opentelemetry.io/docs/specs/otel/trace/api/\n- https://opentelemetry.io/docs/specs/semconv/general/semantic-convention-groups/\n- https://opentelemetry.io/docs/specs/semconv/\n- https://opentelemetry.io/docs/specs/otel/logs/data-model/\n- https://www.php-fig.org/psr/psr-3/\n- https://www.php-fig.org/psr/psr-3/meta/\n- https://opentelemetry.io/docs/specs/semconv/messaging/messaging-metrics/\n\nNo source defined the CoreX event fields, metric names or retry buckets; those are D62–D63."
+    }
+  ],
+  "applies_to": [
+    "P12"
+  ],
+  "provenance": {
+    "path": "artifacts/P12-design-rag/P12-Q2-observability.md",
+    "sha256": "39612c400842b207f38860f9bd09355cee2125ac98f8aed2911d70c0b6fc4c2f"
+  }
+}

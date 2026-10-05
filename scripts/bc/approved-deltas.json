@@ -90,6 +90,33 @@
                 }
             ]
         },
+        "axiomasoft/corex-wakeup": {
+            "base_revision": "76f8bdde496154c0a8901e459175cf306bedd860",
+            "decisions": [
+                {
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D96-p07-impersonation-access-edges.md",
+                    "sha256": "79c6e71c6250162b82945901e51f62029dc8a334701da02a7915ca5039b17525"
+                },
+                {
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D100-p07-grok-design-remediation.md",
+                    "sha256": "c6036d8746643d497efd2fb5194c6cb252d4d1084ce3c5338c35dd8eb8b9dd2c"
+                }
+            ],
+            "changes": [
+                {"path": null, "modificationType": "removed", "description_sha256": "a176c63940ac9b75a23ed23968e0f2cbaafa1094765c3dc6ca50a25d784fe677"},
+                {"path": null, "modificationType": "removed", "description_sha256": "d6a9dc88f78c422dbe9fdb0cec9cd3b931ae3c5d4d0892c934b5e287eac87966"},
+                {"path": null, "modificationType": "removed", "description_sha256": "77d681da3daa8017fe5ad81f48378232488ab58fbfcee955422e8ba5d824d6ef"},
+                {"path": null, "modificationType": "removed", "description_sha256": "34ff39effa531c538d3952b82cd72da2f03efc1bcdb33420307c25e1fba794c4"},
+                {"path": null, "modificationType": "removed", "description_sha256": "7437d65ed047336d012964ac7976de38e881520a6c3ecc7fa71dd9b0b694816a"},
+                {"path": null, "modificationType": "removed", "description_sha256": "181500ad867b6b8e4f48272090c42db1cf78035228ec054ad1aca8e9d78c3928"},
+                {"path": null, "modificationType": "removed", "description_sha256": "f79a0dd70507ac8b6f3ddf930bf4328ae3b2f3f5430aa2c3aa7a20564f0ed6f7"},
+                {"path": "/packages/wakeup/src/Contracts/DueWakeupSweeper.php", "modificationType": "changed", "description_sha256": "0f02542df5bb34a5a6dec05abf6daefebd341173787b92929aa16fd78072d78d"},
+                {"path": "/packages/wakeup/src/Contracts/DueWakeupSweeper.php", "modificationType": "changed", "description_sha256": "4c14d296a12b7491c54dc80825d8d33d7d7f2541406d94a864c8b1f9ff032160"},
+                {"path": null, "modificationType": "removed", "description_sha256": "61c7555ab23cec1b85a48bb605526f138ba7d839aeaec79a780003beac09d76a"},
+                {"path": null, "modificationType": "removed", "description_sha256": "6c7c0de1f0df4527375546f333c8ce26a7b93b984271de6858c347291498228e"},
+                {"path": null, "modificationType": "removed", "description_sha256": "7269932723188956638e0142c9d07ad8681a48ad392b126b9569de0123a4dba0"}
+            ]
+        },
         "axiomasoft/corex-webhooks": {
             "base_revision": "76f8bdde496154c0a8901e459175cf306bedd860",
             "decisions": [
@@ -139,18 +166,64 @@
                 {
                     "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D103-p07-stable-bc-admission-review.md",
                     "sha256": "9a044681191c020fc52199ebd4ae8bc20f46c7028753f686ab93f69382d0b7de"
+                },
+                {
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D98-p07-design-audit-remediation.md",
+                    "sha256": "762e169c3f6a233a0e4c3fe0c415f78ca4c0259749550414e1dd9b3d28c69f10"
+                },
+                {
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D107-p07-data-persistence-until-p08.md",
+                    "sha256": "210b1e4c57dc93f1efe6f2de16ec45ebc86502670d79d3c4a1ebff598748c1da"
+                },
+                {
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D96-p07-impersonation-access-edges.md",
+                    "sha256": "79c6e71c6250162b82945901e51f62029dc8a334701da02a7915ca5039b17525"
+                },
+                {
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D100-p07-grok-design-remediation.md",
+                    "sha256": "c6036d8746643d497efd2fb5194c6cb252d4d1084ce3c5338c35dd8eb8b9dd2c"
                 }
             ],
             "changes": [
                 {
-                    "path": "/packages/tenancy/src/Errors/Enums/TenancyErrorCode.php",
-                    "modificationType": "added",
-                    "description_sha256": "cc3745f91a9a6e98cc12c76f1a8a832e316bb87f18866f153acdd06dab4ec8db"
+                    "path": "/packages/tenancy/src/Account/Laravel/AccountTemplateSnapshot.php",
+                    "modificationType": "changed",
+                    "description_sha256": "319176739466949da474ce7415874627a652044855b590ed940d651ff5842e86"
+                },
+                {
+                    "path": "/packages/tenancy/src/Account/Laravel/AccountTemplateSnapshot.php",
+                    "modificationType": "changed",
+                    "description_sha256": "a962a05429ceefc5c3f1063405b799306be8a68ad7c0167c5554db569c79adcf"
+                },
+                {
+                    "path": null,
+                    "modificationType": "removed",
+                    "description_sha256": "a89ae76ce5a4b60d2753baac9bf0415d224bc0260e8bee9ee6f0b801b0ca85f0"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "removed",
+                    "description_sha256": "faac53c1661a288a3a4cf319f81f7f239b095216de712cc80cf92fd3ba5e3086"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "removed",
+                    "description_sha256": "b7979410bccb5ff4fdf6f161e81438c5ea85ca13ae41acd9fdf5ecec06c426e3"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "removed",
+                    "description_sha256": "20d62bf7c2e1b39b3de68cffa656a7b63633304c5adba0c0564baabbbe60e86b"
                 },
                 {
                     "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
                     "modificationType": "removed",
                     "description_sha256": "eeb4e2fb3704467d48dfd9f6c4c8612f390f9b4b31d689a8c177e95a6253af05"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "removed",
+                    "description_sha256": "9b0fdd30c96f9a8eee7166e51a8f80235fe4c95828456bb0376b329298673b9c"
                 },
                 {
                     "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
@@ -170,62 +243,77 @@
                 {
                     "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
                     "modificationType": "changed",
-                    "description_sha256": "0713aac82a579858ad5f2f19ada0c3bf97376b4168acd7aa8f3c71f80179a469"
+                    "description_sha256": "d6aa2510fb270956efa1e6da9375400e817829f2ece1fdb8e1e0a1c0e34df7ec"
                 },
                 {
                     "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
                     "modificationType": "changed",
-                    "description_sha256": "1ac2e9ac833c23c71ffc7192f95dfd69dde23bf54c066c54d5400cb6d29cb5c6"
+                    "description_sha256": "de33da20d9e74df8b93ab75299eda11e184f877227de4ba94e55a1226221a601"
                 },
                 {
                     "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
                     "modificationType": "changed",
-                    "description_sha256": "3ce1d0c16a810a47912d3a05da99954a154198414022eb127972dbc07e8d3534"
+                    "description_sha256": "d2d25e1d31c82698cc085a51ad6bd9c195346891cba2ba1fd65ced911344568d"
                 },
                 {
                     "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
                     "modificationType": "changed",
-                    "description_sha256": "09d7b46bf69a16838e8a328c1e72f2569949ae91a511d482be94c19d8f6a58fa"
+                    "description_sha256": "515e0dc078bd12d6f9b61ca589a3d95c41250b75fca97c5f6b60c83c6415d85c"
                 },
                 {
                     "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
                     "modificationType": "changed",
-                    "description_sha256": "ad69416effb52b8b81de2069de20a2d570b3bccf6d8bef4a886ffc1cee69deab"
+                    "description_sha256": "61b1e50453c0630035b8e7bf6e20f135f549bd05eb46521c83324063bdc03a7e"
                 },
                 {
                     "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
                     "modificationType": "changed",
-                    "description_sha256": "fb8ff94ede50788d2f59d80a76ffc783f7ab0f779fd2410a66006c65d224bdad"
+                    "description_sha256": "51b210f9b55e801e92a49619fec7c4be29be388a0592f48e6351920ecc49f78f"
                 },
                 {
                     "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
                     "modificationType": "changed",
-                    "description_sha256": "a92ee1195577fb802da1a30f03b22d7e492ce00e7bab7327485ffe3aa37134a4"
+                    "description_sha256": "0488c692a7ff9b39adb94796d0283007b33f30ffa0977de038e61d84176990f3"
                 },
                 {
                     "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
                     "modificationType": "changed",
-                    "description_sha256": "44381e8a85ffaa6bb0c78a0921ba829cf676e2b7d81b492e3a9b65158050de12"
+                    "description_sha256": "3e51eaa0a4777154a783c5ce6ebe94a02c3ff4ae1cefb62317952ded182d62a3"
                 },
                 {
                     "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
                     "modificationType": "changed",
-                    "description_sha256": "7633c02738088091b8eab7525734f0a193ed6751f8e63b6fb2b9262baf8d2013"
+                    "description_sha256": "902178359de53f1a7a3a5453a165974f878823f3d0585b9b58bfbadfc6c5c5b6"
                 },
                 {
                     "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
                     "modificationType": "changed",
-                    "description_sha256": "6bca57da884b89cdcfe1c956bd231b4ce75d7b66cc569815e31161a9bfaf6ca8"
+                    "description_sha256": "9bf8162b98f816aad34bbeb419ebb358adeb2d147d275d97c162718254baf93b"
                 },
                 {
                     "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
                     "modificationType": "changed",
-                    "description_sha256": "d642b2e3660e48988a6b2eb255512c76e10c4f8d3f09d400d26873f9042bd0f2"
+                    "description_sha256": "9db4d302db7c5d6a51ba566311d16403b3c5f5030083821eeab7f1285d25de7c"
                 },
                 {
                     "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
                     "modificationType": "changed",
-                    "description_sha256": "5ac6ad14c01b91accbcbdc9e2ade306c003db8236d5fc16464d5e9b9628d0315"
+                    "description_sha256": "2122c487c507db3f6a452014583a4e3a70c964fda1e1cb01405a1a7eaff92e21"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "f4e011b08511bd977e38cdafbd4e6af0a3bd6b0aabe8f3735c84224400327f52"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "ff1f9b220d7f1fa12ab13143c031a3b5ef20f7f40c46f82dd5e3dd84240fae62"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "3d611e3f92aededcd8f8e6d3fc9b535c344b7b98e4e6c3efa86b46d3baa225fd"
                 },
                 {
                     "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
@@ -235,57 +323,47 @@
                 {
                     "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
                     "modificationType": "changed",
-                    "description_sha256": "ce2fc640f0b972e4897a4763f6c18c9e54ca0ad2d9f30d5fdddd09ec18486e29"
+                    "description_sha256": "17079757bb5775a71eca2aacd4b4033f074f15e654f44c9915b1792f53eec915"
                 },
                 {
                     "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
                     "modificationType": "changed",
-                    "description_sha256": "f678c755f77e430a136359708e754497150c1b333ef6cd6e4cc472654f9c4838"
+                    "description_sha256": "6bc4a77920a19dc9f8a921db892545386bc046421e4b06131875775414573cda"
                 },
                 {
                     "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
                     "modificationType": "changed",
-                    "description_sha256": "ee9f2afa8496137e15c852dcf3f72340059347e11448e56edd3e079883f160ac"
+                    "description_sha256": "79ef872d58590e535f1ffe4429cdf9f1fab1812241b724c493ac025c4e493c55"
                 },
                 {
                     "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
                     "modificationType": "changed",
-                    "description_sha256": "c77090f20c169c71a55bc6dc62ea0dcabd2277751709cb7e8b73b9f460456a45"
+                    "description_sha256": "35fcd5350c6d26a0580d08071d5c9fa6188f496534002f94629501a24657feb4"
                 },
                 {
                     "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
                     "modificationType": "changed",
-                    "description_sha256": "2367ac96fcf6c1065788e16905690c3813ecaa190816d4bf912ce31e86c880d5"
+                    "description_sha256": "ef4dacc7052ce117145ad422709629a5db258bcb915172553613f114f9f8001e"
                 },
                 {
                     "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
                     "modificationType": "changed",
-                    "description_sha256": "4651815f399e0e89d9459ae95216d0de268beeec06278809af9a2454d7f709c2"
+                    "description_sha256": "5b6d73251cb48577be4aeb532a40740fc4f52967a0f0ec0d6228d9836ea6155d"
                 },
                 {
                     "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
                     "modificationType": "changed",
-                    "description_sha256": "2a03585c3d7c0abcc7f326174d0d46212fa869735e91cb7f8d6a29124f859eca"
+                    "description_sha256": "22798a5cc3020081bbb7bf876081b4e9d96f3685a1fced7fcc4de428ae3f21c4"
                 },
                 {
                     "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
                     "modificationType": "changed",
-                    "description_sha256": "3d83924028bcc1b31995525ae3f0d22b34eb2ab9432c720f409c822246561ecd"
+                    "description_sha256": "17ed6ef42b1603ed0676d851c037e0bf6e0b35da547ea1b54cc7f729033b6d75"
                 },
                 {
                     "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
                     "modificationType": "changed",
-                    "description_sha256": "04cf020572bfa10a691424a650f3a811c895f35cdf1e9f935d079fb35309940e"
-                },
-                {
-                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
-                    "modificationType": "changed",
-                    "description_sha256": "0d45820e9f98f24745ce963e8facfe6aba52a303fba530237984888a4da2173f"
-                },
-                {
-                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
-                    "modificationType": "changed",
-                    "description_sha256": "9ce053356d76b529f4c50826bf668e90603ec83a89cd5e384e4ce23f9ce4a353"
+                    "description_sha256": "1513c3e292bdf89d644eaea2a63ccafd034beb57029386eb425c644b5cb60919"
                 },
                 {
                     "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
@@ -293,39 +371,9 @@
                     "description_sha256": "0fc708b23c27d28b096671a0d8fd85d02e7b307b3877d495237ef4caf8fcca80"
                 },
                 {
-                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
-                    "modificationType": "changed",
-                    "description_sha256": "72604653abb8c0749b803d84e064ddbd5842c8e76e98e787ec5437b103af7e4d"
-                },
-                {
-                    "path": "/packages/tenancy/src/Laravel/Support/TenancyOptions.php",
-                    "modificationType": "changed",
-                    "description_sha256": "b41aaf5190833ee4f58c69612d6468701b788832c82ec99bdac094e13b7f982d"
-                },
-                {
                     "path": null,
                     "modificationType": "removed",
                     "description_sha256": "6abd94a4235a2a6f8517c1f0d713811e2bc2facaa2df4656c2b52ab0bf518396"
-                },
-                {
-                    "path": null,
-                    "modificationType": "removed",
-                    "description_sha256": "9bf06cec348d3df899b70a78a166aee89be97f9449cdc9f99600bf4c1bb4c063"
-                },
-                {
-                    "path": null,
-                    "modificationType": "removed",
-                    "description_sha256": "a89ae76ce5a4b60d2753baac9bf0415d224bc0260e8bee9ee6f0b801b0ca85f0"
-                },
-                {
-                    "path": "/packages/tenancy/src/Laravel/Http/Middleware/AccountStatusGate.php",
-                    "modificationType": "changed",
-                    "description_sha256": "03d272bba3390c1fc31090bcb3b3ba26ed425a6adac2401a07a8ce4d5917ecf3"
-                },
-                {
-                    "path": "/packages/tenancy/src/Laravel/Http/Middleware/AccountStatusGate.php",
-                    "modificationType": "changed",
-                    "description_sha256": "d782ac39d6740e31b2545058211c8925ee6bf3f5986200d13b1593016655c840"
                 },
                 {
                     "path": "/packages/tenancy/src/Laravel/Http/Middleware/ResolveTenantFromHost.php",
@@ -358,9 +406,158 @@
                     "description_sha256": "82c52cd4ed6accecafa4b904976998b5b1af7c817dded7eb5458c667ae86094e"
                 },
                 {
+                    "path": "/packages/tenancy/src/Laravel/Http/Middleware/AccountStatusGate.php",
+                    "modificationType": "changed",
+                    "description_sha256": "03d272bba3390c1fc31090bcb3b3ba26ed425a6adac2401a07a8ce4d5917ecf3"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Http/Middleware/AccountStatusGate.php",
+                    "modificationType": "changed",
+                    "description_sha256": "d782ac39d6740e31b2545058211c8925ee6bf3f5986200d13b1593016655c840"
+                },
+                {
+                    "path": null,
+                    "modificationType": "removed",
+                    "description_sha256": "9bf06cec348d3df899b70a78a166aee89be97f9449cdc9f99600bf4c1bb4c063"
+                },
+                {
+                    "path": "/packages/tenancy/src/Errors/Enums/TenancyErrorCode.php",
+                    "modificationType": "added",
+                    "description_sha256": "cc3745f91a9a6e98cc12c76f1a8a832e316bb87f18866f153acdd06dab4ec8db"
+                },
+                {
                     "path": "/packages/tenancy/src/Runtime/Exceptions/TenantCouldNotBeIdentifiedByHostException.php",
                     "modificationType": "removed",
                     "description_sha256": "57d29c8f9c0570590cfddee210f3334a4920e3791035de339ab5eacb63a372d4"
+                },
+                {
+                    "path": null,
+                    "modificationType": "removed",
+                    "description_sha256": "c46e3077a37ded6b6a950f5078a5e03f040d5e9072f348b00abd0918f63db056"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/ImpersonationPolicy.php",
+                    "modificationType": "removed",
+                    "description_sha256": "e270e3a6bb8ace4c37b03f36ddb39471d322cd39925079a8a4b4110c4f9c9c04"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/ImpersonationPolicy.php",
+                    "modificationType": "changed",
+                    "description_sha256": "fa083b533f4e840c8d18183647ef56398b56ab58728d65e0287181658e2c4896"
+                }
+            ]
+        },
+        "axiomasoft/corex-access": {
+            "base_revision": "76f8bdde496154c0a8901e459175cf306bedd860",
+            "decisions": [
+                {
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D96-p07-impersonation-access-edges.md",
+                    "sha256": "79c6e71c6250162b82945901e51f62029dc8a334701da02a7915ca5039b17525"
+                },
+                {
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D98-p07-design-audit-remediation.md",
+                    "sha256": "762e169c3f6a233a0e4c3fe0c415f78ca4c0259749550414e1dd9b3d28c69f10"
+                },
+                {
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D100-p07-grok-design-remediation.md",
+                    "sha256": "c6036d8746643d497efd2fb5194c6cb252d4d1084ce3c5338c35dd8eb8b9dd2c"
+                }
+            ],
+            "changes": [
+                {
+                    "path": "/packages/access/src/Access/Laravel/PrincipalIdentity.php",
+                    "modificationType": "removed",
+                    "description_sha256": "0584c88072fe439c317dcb2ecc8b2d6cd69923a4709dcb4aca7ee914ebab4e25"
+                },
+                {
+                    "path": "/packages/access/src/Access/Laravel/PrincipalIdentity.php",
+                    "modificationType": "removed",
+                    "description_sha256": "29d14a3e9f35fa7e3efba1a0ce2820511b339cad8a0f1057118d7e38a45b0fec"
+                },
+                {
+                    "path": "/packages/access/src/Access/Laravel/PrincipalIdentity.php",
+                    "modificationType": "removed",
+                    "description_sha256": "31648903de5e84cbc86ae8bd0eb4144092fcfcb80c8414214a167d91ed671f2d"
+                },
+                {
+                    "path": "/packages/access/src/Access/Laravel/PrincipalIdentity.php",
+                    "modificationType": "removed",
+                    "description_sha256": "595e3059b1a5b3f95f36ad01b7698d2766e87f1cf72b8c32e5c74e391c941a10"
+                },
+                {
+                    "path": "/packages/access/src/Access/Laravel/PrincipalIdentity.php",
+                    "modificationType": "removed",
+                    "description_sha256": "789a74d962c43e9b5f674885fed63f060157ac1828e89ac5de5e5ecb86e3466b"
+                },
+                {
+                    "path": "/packages/access/src/Access/Laravel/PrincipalIdentity.php",
+                    "modificationType": "removed",
+                    "description_sha256": "841f7061fa923444a726e499169e40e963edc812e6ac68e65a59a4aec5748e53"
+                },
+                {
+                    "path": "/packages/access/src/Access/Laravel/PrincipalIdentity.php",
+                    "modificationType": "removed",
+                    "description_sha256": "850659bd85853c305390679e3acf845048f1cd81e457b8deb891e92a57cd899d"
+                },
+                {
+                    "path": "/packages/access/src/Access/Laravel/PrincipalIdentity.php",
+                    "modificationType": "removed",
+                    "description_sha256": "b88cf602373f672d7b6124fb76be3f3d46f0e1320ddb3b7cdc773673c43a9482"
+                },
+                {
+                    "path": "/packages/access/src/Access/Laravel/PrincipalIdentity.php",
+                    "modificationType": "removed",
+                    "description_sha256": "c5792e49bde5dd7b89f1386154ca347d3b8700a11f0adbc0f5be8aa98797b8fa"
+                },
+                {
+                    "path": "/packages/access/src/Laravel/AuthOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "07f62a4ab389a26153f0812bc3a3ab0e3211375d8f79442226b6ef37faae1144"
+                },
+                {
+                    "path": "/packages/access/src/Laravel/AuthOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "66111fcf3048f97aae88ac329a8db8953fceb20e9292d76f41f69d00dcb25073"
+                },
+                {
+                    "path": "/packages/access/src/Laravel/AuthOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "b6e76d614a0f0d8b2866e7490cc3745051853c489d775db7d8777da5681c9aaa"
+                },
+                {
+                    "path": "/packages/access/src/Laravel/AuthOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "e0ac69c306c8fc57e30df52596fa9aec61b39ec3e4e4efe2ae821676bfeec69c"
+                },
+                {
+                    "path": "/packages/access/src/Laravel/AuthOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "e3efdbef6a39501f8860112e832f56477060f8e06b1f58f1181e1c71fdd97fed"
+                },
+                {
+                    "path": "/packages/access/src/Laravel/AuthOptions.php",
+                    "modificationType": "removed",
+                    "description_sha256": "4bc7ec052d135ff55e6f08d925bf848c93e4cbfc929a757336ffced5d3a050d4"
+                },
+                {
+                    "path": "/packages/access/src/Laravel/AuthOptions.php",
+                    "modificationType": "removed",
+                    "description_sha256": "75c84ee6229a135f5a8c321be894e0f9c1e9456b2e3ee949f7bca3a7531490f1"
+                },
+                {
+                    "path": "/packages/access/src/Roles/Data/RoleView.php",
+                    "modificationType": "removed",
+                    "description_sha256": "a5d8d3445cb573913df3245fff009001bec04d9dc49452f506b1bb7751b8ebf9"
+                },
+                {
+                    "path": "/packages/access/src/Roles/Laravel/RoleMatrixData.php",
+                    "modificationType": "removed",
+                    "description_sha256": "f504aafa0fb9fac054a8198bec5ac1c725fbde02fd415b3e818607d42c402d30"
+                },
+                {
+                    "path": null,
+                    "modificationType": "removed",
+                    "description_sha256": "e5920f0bd7bf60ee07905d98186d9ba88268a8679d41ba928b8c4aceac1c31cc"
                 }
             ]
         }

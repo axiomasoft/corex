@@ -18,7 +18,7 @@ use CoreX\Tenancy\Provisioning\Exceptions\ClaimUnavailable;
 use CoreX\Tenancy\Provisioning\Exceptions\TemplateIntegrityException;
 use CoreX\Tenancy\Provisioning\Internal\ClaimAccountSignup;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
-use CoreX\Tenancy\Provisioning\Internal\StanclTenantDatabaseLifecycle;
+use CoreX\Tenancy\Provisioning\Internal\DatabaseTenantLifecycle;
 use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
@@ -73,7 +73,7 @@ function p32ArchiveCommand(array $command, string $path, bool $input = false): v
     expect($status)->toBe(0, (string) $message);
 }
 
-function p32Lifecycle(StanclTenantDatabaseLifecycle $database): AccountLifecycle
+function p32Lifecycle(DatabaseTenantLifecycle $database): AccountLifecycle
 {
     return new AccountLifecycle(
         lifecycle: app(AccountLifecyclePolicy::class), connections: app(ConnectionResolverInterface::class), clock: app(ClockInterface::class), events: app(Dispatcher::class), connectionFactory: app(ConnectionFactory::class), hostCache: app(HostResolverCacheInvalidator::class),
@@ -144,9 +144,9 @@ final class P32ArchiveFixture
             && hash_equals($manifest['sha256'], (string) hash_file('sha256', $path));
     }
 
-    public function adapter(): StanclTenantDatabaseLifecycle
+    public function adapter(): DatabaseTenantLifecycle
     {
-        return new StanclTenantDatabaseLifecycle(connections: app(ConnectionResolverInterface::class), clock: app(ClockInterface::class), events: app(Dispatcher::class), centralConnection: 'pgsql', writer: $this->write(...), verifier: $this->verify(...));
+        return new DatabaseTenantLifecycle(connections: app(ConnectionResolverInterface::class), clock: app(ClockInterface::class), events: app(Dispatcher::class), centralConnection: 'pgsql', writer: $this->write(...), verifier: $this->verify(...));
     }
 }
 
@@ -203,7 +203,7 @@ afterEach(function (): void {
 
 it('refuses size-only archives without a qualified integrity verifier', function (): void {
     $account = $this->p32Accounts[0];
-    $adapter = new StanclTenantDatabaseLifecycle(connections: app(ConnectionResolverInterface::class), clock: app(ClockInterface::class), events: app(Dispatcher::class), centralConnection: 'pgsql', writer: $this->p32Archive->write(...));
+    $adapter = new DatabaseTenantLifecycle(connections: app(ConnectionResolverInterface::class), clock: app(ClockInterface::class), events: app(Dispatcher::class), centralConnection: 'pgsql', writer: $this->p32Archive->write(...));
     expect(fn () => p32Lifecycle($adapter)->requestExport($account))->toThrow(RuntimeException::class, 'verifier');
     expect(DB::table('root_account_exports')->where('status', 'ready')->count())->toBe(0);
     expect(fn () => p32Lifecycle($adapter)->purge($account))->toThrow(ValidationException::class);

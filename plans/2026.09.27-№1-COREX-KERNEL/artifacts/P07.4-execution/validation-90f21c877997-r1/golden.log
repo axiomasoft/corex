@@ -1,0 +1,7 @@
+candidate=90f21c877997ccd69055ccb5cdda1b7e5ebe9d01
+command=scripts/php84 composer golden
+started=2026-10-05T06:57:48.882544+00:00
+> vendor/bin/pest --testsuite=Golden
+{"tool":"pest","result":"passed","tests":4,"passed":4,"assertions":1445,"duration_ms":7522}
+
+exit=0

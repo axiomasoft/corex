@@ -19,7 +19,6 @@ use CoreX\Tenancy\DomainTrust\Events\DomainTrustChanged;
 use CoreX\Tenancy\DomainTrust\Exceptions\DomainTrustDenied;
 use CoreX\Tenancy\DomainTrust\Exceptions\DomainTrustDisabled;
 use CoreX\Tenancy\DomainTrust\Internal\DomainTrustCoordinator;
-use CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
@@ -172,7 +171,7 @@ function domainTrustCoordinatorDT(): array
     $verifier = new FakeDomainOwnershipProofVerifierDT;
     $authorizer = new FakeDomainTrustAuthorizerDT;
 
-    config(['tenancy.domain_trust.enabled' => true]);
+    config(['corex-tenancy.domain_trust.enabled' => true]);
     app()->forgetInstance(TenancyOptions::class);
     app()->instance(DomainTrustPolicy::class, $policy);
     app()->instance(DomainChallengeStore::class, $store);
@@ -262,19 +261,17 @@ it('denies verification and rolls back trusted state when resolver-cache invalid
     $issued = $coordinator->issue(actor: $actor, accountId: $accountId, host: 'cache-failure.example.test');
     $verifier->token = $issued->token;
 
-    config(['tenancy.identification.resolvers.'.HostTenantResolver::class => [
+    config(['corex-tenancy.host_identification' => [
+        'enabled' => true,
         'cache' => true,
         'cache_ttl' => 300,
-        'cache_store' => null,
+        'cache_store' => 'domain_trust_failure',
     ]]);
     app()->forgetInstance(TenancyOptions::class);
-    app()->instance('globalCache', new class
-    {
-        public function store(?string $name): never
-        {
-            throw new RuntimeException('The cache store is unavailable.');
-        }
+    app('cache')->extend('domain_trust_failure', static function (): never {
+        throw new RuntimeException('The cache store is unavailable.');
     });
+    config(['cache.stores.domain_trust_failure' => ['driver' => 'domain_trust_failure']]);
 
     expect(fn (): mixed => $coordinator->verify(actor: $actor, accountId: $accountId, host: 'cache-failure.example.test'))
         ->toThrow(DomainTrustDenied::class)

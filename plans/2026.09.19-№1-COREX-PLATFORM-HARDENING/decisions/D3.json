@@ -1,0 +1,47 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D3",
+  "title": "Таксономия пакета объявляется в существующем `extra.corex`, без переноса каталогов",
+  "date": "2026-09-19",
+  "status": "accepted",
+  "decision": "Semantic kind пакета объявляется расширением уже существующего ключа:\n\n```json\n{\"extra\": {\"corex\": {\n  \"module\": \"CoreX\\\\Media\\\\MediaModule\",\n  \"package-type\": \"capability\",\n  \"stability\": \"experimental\",\n  \"public-api\": [\"CoreX\\\\Media\\\\Contracts\", \"CoreX\\\\Media\\\\Data\", \"CoreX\\\\Media\\\\Exceptions\"]\n}}}\n```\n\n`package-type` — закрытый набор `foundation | capability | integration | product | tooling | fixture`.\nМетаданные заполняются во всех 20 живых пакетах в P1; гейт направления зависимостей по типу\nпакета добавляется в P3 к существующему `scripts/package-graph-gate.php`.\n\nКаталоги `packages/capabilities/`, `packages/integrations/`, `packages/kernel/` не создаются.",
+  "rationale": "Новый корневой ключ (`extra.corex-package` или подобный) создал бы два места объявления\nметаданных CoreX в одном файле. Физический перенос каталогов потребовал бы правки 20\npath-репозиториев, всех путей CI-джобов, PHPStan-конфигов и split-рецептов — при нулевом\nизменении направления зависимостей, которое и так проверяется гейтом. Сам аудит называет\nфизический вариант организационным и необязательным.",
+  "applies_to": [
+    "P1",
+    "P2",
+    "P3"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/frontier/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D3\ndate: 2026-09-19\nstatus: accepted\nitem: P1\nitems: [P1, P2, P3]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D3-extra.corex",
+      "title": "D3 — Таксономия пакета объявляется в существующем `extra.corex`, без переноса каталогов",
+      "text": "**Actor:** plan-designer/frontier/high\n**Evidence:** RAG:— `extra.corex` присутствует в 9 из 21 `composer.json` и содержит\nединственный ключ `module`; корневой `composer.json` держит path-репозитории на 20 пакетов;\nCI имеет отдельные джобы, привязанные к путям пакетов."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "Semantic kind пакета объявляется расширением уже существующего ключа:\n\n```json\n{\"extra\": {\"corex\": {\n  \"module\": \"CoreX\\\\Media\\\\MediaModule\",\n  \"package-type\": \"capability\",\n  \"stability\": \"experimental\",\n  \"public-api\": [\"CoreX\\\\Media\\\\Contracts\", \"CoreX\\\\Media\\\\Data\", \"CoreX\\\\Media\\\\Exceptions\"]\n}}}\n```\n\n`package-type` — закрытый набор `foundation | capability | integration | product | tooling | fixture`.\nМетаданные заполняются во всех 20 живых пакетах в P1; гейт направления зависимостей по типу\nпакета добавляется в P3 к существующему `scripts/package-graph-gate.php`.\n\nКаталоги `packages/capabilities/`, `packages/integrations/`, `packages/kernel/` не создаются."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Новый корневой ключ (`extra.corex-package` или подобный) создал бы два места объявления\nметаданных CoreX в одном файле. Физический перенос каталогов потребовал бы правки 20\npath-репозиториев, всех путей CI-джобов, PHPStan-конфигов и split-рецептов — при нулевом\nизменении направления зависимостей, которое и так проверяется гейтом. Сам аудит называет\nфизический вариант организационным и необязательным."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P1 производит схему `extra.corex` и заполняет её; P2 использует `package-type` как колонку\nинвентаризации и оси scorecard; P3 расширяет гейт графа правилом направления\n`foundation ← capability ← integration ← product`."
+    }
+  ]
+}

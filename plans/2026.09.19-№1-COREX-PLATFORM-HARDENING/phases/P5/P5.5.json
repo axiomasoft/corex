@@ -1,0 +1,304 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P5.5",
+  "title": "`Outbox::append()` внутри бизнес-транзакции",
+  "status": "done",
+  "summary": "Ввести контракт `CoreX\\Messaging\\Contracts\\Outbox`, реализацию\n`SqlOutbox`, исключение `OutboxRefused` и привязку; `append()` отказывает вне открытой\nтранзакции, на необъявленном контракте и на превышении объявленного класса персональных\nданных.",
+  "why": "N05 и A92: вставка в outbox обязана происходить в той же транзакции, что\nбизнес-изменение — это единственный инвариант, ради которого механизм существует.\n`RAG:✅` P5-Q5: `dispatch()->afterCommit()` гарантирует порядок видимости, но не\nдолговременное намерение опубликовать; окно «коммит прошёл, процесс умер до enqueue»\nостаётся. `RAG:✅` P5-Q7: атомарность даёт одна локальная транзакция тенантной базы.\nD25: отказ на отсутствующей транзакции делает инвариант видимым в коде вызывающего, а не\nтолько в документации. D26: `append()` — единственная дверь в durable-поверхность, и\nотказ на необъявленной паре превращает `MSG-002` в машинное правило.",
+  "scope": {
+    "include": [
+      "контракт, реализация, исключение с двумя фабриками и привязка по\n§5.2; пять тестовых случаев sqlite-лейна и тест отката в pg-лейне по §5.3; строка в\n`CHANGELOG.md`; receipt."
+    ],
+    "exclude": [
+      "захват, публикация и отметка результата — это `OutboxRelay` (P5.6);\nпорт публикации и команда (P5.7); inbox (P5.8); retention (P5.9); наблюдаемость (P5.10);\nизменение `config/corex.php` и `Support/Config.php` — блок объявлен в P5.4; автоматическая\nзапись в outbox из `CoreX\\Events\\DomainEvent` или любого слушателя — повышение только\nобъявлением (D26); гарантия порядка (D28)."
+    ]
+  },
+  "depends_on": [
+    "P5.2",
+    "P5.3",
+    "P5.4",
+    "P4.9"
+  ],
+  "decisions": [
+    "D25",
+    "D26",
+    "D30"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P5-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P5-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/findings-audit-verdicts.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P5/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D25.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D26.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Messaging/Data/MessageEnvelope.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Messaging/Contracts/MessageContractRegistry.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Support/Config.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/wakeup/src/Internal/SqlWakeupScheduler.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/CoreServiceProvider.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/core/src/Messaging/Contracts/Outbox.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/SqlOutbox.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Messaging/Exceptions/OutboxRefused.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/CoreServiceProvider.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/tests/Feature/OutboxAppendTest.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/tests/Pg/OutboxAppendPgTest.php",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P5-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Код §5.2 переносится дословно. Порядок проверок в `append()`\nфиксирован и значим: сначала открытая транзакция, затем объявленность контракта, затем\nкласс персональных данных. Причина — диагностика: вызов вне транзакции с необъявленным\nконтрактом обязан сообщить о более фундаментальном нарушении первым. Оба текста\n`OutboxRefused` называют статью (`MSG-008` и `MSG-007` соответственно): исключение без\nссылки на статью читается как техническая ошибка, а не как нарушение правила. Время\nберётся **только** из инъектированного `ClockInterface`; `now()` в файле запрещён (D30), и\n`created_at`, `updated_at`, `available_at` присваиваются из одной переменной `$now` — одна\nточка времени на операцию. Привязка `SqlOutbox` — `scoped`, а не `singleton`: объект держит\nсоединение, а соединение тенантное и обязано пересоздаваться на границе единицы работы;\n`singleton` здесь дал бы ровно тот дефект, который ловит гейт P4.12. Ни один файл вне\n`packages/core` не трогается."
+  ],
+  "guidance": "Готовые контракт, реализация и исключение — `@plan/knowledge/research-P5-design.json`\n§5.2. Абзац «почему отказ, а не предупреждение» — там же, сразу после кода; он обязан\nпопасть в receipt как названная цена. Состав тестов — §5.3: пять случаев в sqlite-лейне,\nшестой (откат) — в pg-лейне. Формулировка запрета `afterCommit()` — §4.1; она уже записана\nв политике P5.1, здесь дублировать её в коде не нужно, достаточно ссылки в докблоке\nконтракта.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer test",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "composer test:pg",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "composer analyse",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "composer lint:check",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "rg -n '\\bnow\\(\\)' packages/core/src/Messaging",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "packages/core composer test 71 sqlite OutboxAppend 5 cases",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "packages/core composer test:pg OutboxAppend rollback",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "packages/core composer analyse+lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "procedure": "ClockInterface only now in Messaging src",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "procedure": "receipt MSG-008 transaction price paragraph",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "контракт `Outbox`, реализация с тремя различимыми отказами, исключение с\nдвумя фабриками, привязка `scoped`, пять тестов sqlite-лейна и тест отката в pg-лейне,\nстрока `CHANGELOG.md`; блок receipt'а с названной ценой обязательной транзакции."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "required",
+    "status": "complete"
+  },
+  "result": {
+    "started_at": "2026-09-21T16:15:00Z",
+    "finished_at": "2026-09-21T16:20:00Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/cursor-composer-2.5/high",
+      "effort": "high"
+    },
+    "notes": "P5.5 GREEN: Outbox/SqlOutbox append in txn, OutboxRefused MSG-008/007, scoped bind, OutboxAppendTest+Pg rollback, receipt §5.5 transaction price",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-21T16:20:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-21T16:20:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-21T16:20:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-09-21T16:20:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-09-21T16:20:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-21T16:20:00Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Ввести контракт `CoreX\\Messaging\\Contracts\\Outbox`, реализацию\n`SqlOutbox`, исключение `OutboxRefused` и привязку; `append()` отказывает вне открытой\nтранзакции, на необъявленном контракте и на превышении объявленного класса персональных\nданных."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "N05 и A92: вставка в outbox обязана происходить в той же транзакции, что\nбизнес-изменение — это единственный инвариант, ради которого механизм существует.\n`RAG:✅` P5-Q5: `dispatch()->afterCommit()` гарантирует порядок видимости, но не\nдолговременное намерение опубликовать; окно «коммит прошёл, процесс умер до enqueue»\nостаётся. `RAG:✅` P5-Q7: атомарность даёт одна локальная транзакция тенантной базы.\nD25: отказ на отсутствующей транзакции делает инвариант видимым в коде вызывающего, а не\nтолько в документации. D26: `append()` — единственная дверь в durable-поверхность, и\nотказ на необъявленной паре превращает `MSG-002` в машинное правило."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "контракт, реализация, исключение с двумя фабриками и привязка по\n§5.2; пять тестовых случаев sqlite-лейна и тест отката в pg-лейне по §5.3; строка в\n`CHANGELOG.md`; receipt."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "захват, публикация и отметка результата — это `OutboxRelay` (P5.6);\nпорт публикации и команда (P5.7); inbox (P5.8); retention (P5.9); наблюдаемость (P5.10);\nизменение `config/corex.php` и `Support/Config.php` — блок объявлен в P5.4; автоматическая\nзапись в outbox из `CoreX\\Events\\DomainEvent` или любого слушателя — повышение только\nобъявлением (D26); гарантия порядка (D28)."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "результат P5.2 (`MessageEnvelope`, `PiiClass`), P5.3 (реестр контрактов),\nP5.4 (таблица и аксессоры конфигурации), P4.9 (`Psr\\Clock\\ClockInterface`);\n`@plan/knowledge/research-P5-design.json` §0, §4.1, §5.1–§5.3; `@plan/knowledge/research-P5-design-rag.json` §1 (P5-Q1, P5-Q5,\nP5-Q7); `@plan/knowledge/findings-audit-verdicts.json` A92, N05; решения D25, D26, D30."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/core/src/Messaging/Contracts/Outbox.php`; `packages/core/src/Messaging/Internal/SqlOutbox.php`; `packages/core/src/Exceptions/OutboxRefused.php`; `packages/core/src/CoreServiceProvider.php`; `packages/core/tests/Feature/OutboxAppendTest.php`; `packages/core/tests/Pg/OutboxAppendPgTest.php`; `CHANGELOG.md`; `@plan/knowledge/findings-P5-receipts.json`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P5/phase.json`; 2) `@plan/knowledge/research-P5-design.json` §0, §4.1, §5.1–§5.3; 3) `@plan/knowledge/research-P5-design-rag.json` §1 (P5-Q1, P5-Q5, P5-Q7); 4) `@plan/decisions/D25.json`; 5) `@plan/decisions/D26.json`; 6) `packages/core/src/Messaging/Data/MessageEnvelope.php` (результат P5.2); 7) `packages/core/src/Messaging/Contracts/MessageContractRegistry.php` (результат P5.3); 8) `packages/core/src/Support/Config.php` (аксессоры, добавленные P5.4); 9) `packages/wakeup/src/Internal/SqlWakeupScheduler.php` (прецедент чтения `transactionLevel()` в `notifyHints()`); 10) `packages/core/src/CoreServiceProvider.php`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Код §5.2 переносится дословно. Порядок проверок в `append()`\nфиксирован и значим: сначала открытая транзакция, затем объявленность контракта, затем\nкласс персональных данных. Причина — диагностика: вызов вне транзакции с необъявленным\nконтрактом обязан сообщить о более фундаментальном нарушении первым. Оба текста\n`OutboxRefused` называют статью (`MSG-008` и `MSG-007` соответственно): исключение без\nссылки на статью читается как техническая ошибка, а не как нарушение правила. Время\nберётся **только** из инъектированного `ClockInterface`; `now()` в файле запрещён (D30), и\n`created_at`, `updated_at`, `available_at` присваиваются из одной переменной `$now` — одна\nточка времени на операцию. Привязка `SqlOutbox` — `scoped`, а не `singleton`: объект держит\nсоединение, а соединение тенантное и обязано пересоздаваться на границе единицы работы;\n`singleton` здесь дал бы ровно тот дефект, который ловит гейт P4.12. Ни один файл вне\n`packages/core` не трогается."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Готовые контракт, реализация и исключение — `@plan/knowledge/research-P5-design.json`\n§5.2. Абзац «почему отказ, а не предупреждение» — там же, сразу после кода; он обязан\nпопасть в receipt как названная цена. Состав тестов — §5.3: пять случаев в sqlite-лейне,\nшестой (откат) — в pg-лейне. Формулировка запрета `afterCommit()` — §4.1; она уже записана\nв политике P5.1, здесь дублировать её в коде не нужно, достаточно ссылки в докблоке\nконтракта."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "`composer test` пакета `core` зелёный, пять случаев §5.3(1–5) покрыты.\n`composer test:pg` пакета `core` зелёный, тест отката §5.3(6) покрыт: после прерванной\nтранзакции в таблице ноль строк. `composer analyse` зелёный. `composer lint:check`\nзелёный. `rg -n '\\bnow\\(\\)' packages/core/src/Messaging` пуст. Receipt содержит вывод всех\nкоманд и абзац «цена отказа на отсутствующей транзакции»."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "контракт `Outbox`, реализация с тремя различимыми отказами, исключение с\nдвумя фабриками, привязка `scoped`, пять тестов sqlite-лейна и тест отката в pg-лейне,\nстрока `CHANGELOG.md`; блок receipt'а с названной ценой обязательной транзакции."
+    }
+  ]
+}

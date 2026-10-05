@@ -6,16 +6,14 @@ namespace CoreX\Tenancy\DomainTrust\Internal\Models;
 
 use Carbon\CarbonImmutable;
 use CoreX\Tenancy\Account\Laravel\AccountRelations;
+use CoreX\Tenancy\Laravel\Support\ResolvesTenancyOptions;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Stancl\Tenancy\Database\Concerns\InvalidatesTenantsResolverCache;
+use Override;
 
 /**
  * `root_domains` — per-account host registry (central connection, D14).
- * Not a stancl `Contracts\Domain` implementation: {@see
- * \CoreX\Tenancy\Laravel\Resolvers\HostTenantResolver} owns host resolution
- * directly against this table, stancl's own `Domain` machinery is unused
- * here (D119).
+ * Host resolution uses the central host registry directly.
  *
  * @property string $id
  * @property string $account_id
@@ -33,7 +31,7 @@ use Stancl\Tenancy\Database\Concerns\InvalidatesTenantsResolverCache;
  */
 final class Domain extends Model
 {
-    use InvalidatesTenantsResolverCache;
+    use ResolvesTenancyOptions;
 
     protected $table = 'root_domains';
 
@@ -55,15 +53,9 @@ final class Domain extends Model
         return AccountRelations::belongsTo($this, 'account_id', null, 'account');
     }
 
-    /**
-     * Alias required by {@see InvalidatesTenantsResolverCache}'s boot hook
-     * (`$model->tenant`) — the trait is vendor-owned and reads exactly that
-     * accessor name; `account()` above is this item's own naming (D14).
-     *
-     * @return BelongsTo<covariant \Illuminate\Database\Eloquent\Model, $this>
-     */
-    public function tenant(): BelongsTo
+    #[Override]
+    public function getConnectionName(): string
     {
-        return $this->account();
+        return parent::getConnectionName() ?? $this->tenancyOptions()->centralConnection;
     }
 }

@@ -1,0 +1,17 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P02-design-rag-README",
+  "title": "P02 design RAG — captures index",
+  "sections": [
+    {
+      "id": "P02-design-RAG-captures-index",
+      "title": "P02 design RAG — captures index",
+      "text": "| # | File | Tool | Topic | Used by |\n|:--|:--|:--|:--|:--|\n| 1 | `pplx-01-rector-rename-class.md` | perplexity-web | RenameClassRector: references + docblocks renamed; declarations, string literals, files not | D44, E1 |\n| 2 | `context7-01-rector.md` | context7 | Rector docs lookup — no matching section (recorded, no fact used) | E1 provenance |\n\nAll other P02 decisions are repository facts (`RAG:—`): maps, gates, manifests, configs (`@plan/knowledge/research-P02-design.json` §2)."
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P02-design-rag/README.md",
+    "sha256": "d31871df9d20cd539c72e3fb17ae4f79a3bf31a209cddfe6f98453661f2ace70"
+  }
+}

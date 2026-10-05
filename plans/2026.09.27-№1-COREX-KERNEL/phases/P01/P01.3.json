@@ -1,0 +1,311 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P01.3",
+  "title": "Ratchet-гейты: ownership v2, PHPStan max, dependency-analyser",
+  "status": "done",
+  "summary": "Поставить три блокирующих с первого дня гейта, чей долг может только сокращаться: ownership v2 (namespace,\nтаблицы, config, publish-tags, команды, env → пакет по целевой конвенции glossary; ratchet-baseline), PHPStan level max +\nstrict-rules + bleedingEdge на каждом пакете с baseline и потолком `scripts/quality-ceilings.json`, composer-dependency-analyser\nв standalone-установке каждого пакета.",
+  "why": "D39 (ownership v2; коллизии имён — главный риск P02), D17/D37 (level max, baseline-guard только сужается —\nF00 X6), D16/D37 (shadow/unused deps — ошибка). P02 закрывается при `ownership-gate --strict` exit 0 — гейт должен\nсуществовать и иметь измеренный baseline до переименований.",
+  "scope": {
+    "include": [
+      "`scripts/ownership-gate.php`, `scripts/ownership-map.json` (из glossary), `scripts/ownership-gate-baseline.json`;\n`packages/*/phpstan.neon` (20, шаблон examples §5.1), `packages/*/phpstan-baseline.neon`, root `phpstan.neon` (tests/Support,\ntests/Golden, scripts) + `phpstan-baseline.neon`; root dev `phpstan/extension-installer`, `phpstan/phpstan-strict-rules`,\n`shipmonk/composer-dependency-analyser` (+ `allow-plugins`); `extra.phpstan.includes` в core/modules/tenancy;\n`scripts/phpstan-packages.sh`; `scripts/quality-ceilings.json`, `scripts/quality-ceiling-guard.php`;\n`packages/*/composer-dependency-analyser.php`, `scripts/dependency-analyser.sh`; объявление shadow-зависимостей;\nудаление `scripts/phpstan-contour.php` и `analyse:packages`; anti-weakening: замена строк 71–76 блоками ceilings/ownership\n(examples §6.3); composer-скрипты `analyse`, `ownership-gate`, `quality:ceilings`, `deps:analyse`."
+    ],
+    "exclude": [
+      "исправление ошибок PHPStan (baseline их фиксирует; чистый max — P09); переименования, устраняющие\nownership-нарушения (P02); развязка notifications→wakeup (P07); CI-jobs (P01.4)."
+    ]
+  },
+  "depends_on": [
+    "P01.2"
+  ],
+  "decisions": [
+    "D41",
+    "D37",
+    "D39"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/decisions/D41.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/knowledge/research-P01-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P01-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/knowledge/artifacts-P01-design-examples.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D37.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/decisions/D39.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-03-glossary.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "scripts/anti-weakening-gate.sh",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "scripts/table-ownership-gate.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/extension.neon",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "scripts/{ownership-gate.php,ownership-map.json,ownership-gate-baseline.json,quality-ceilings.json,quality-ceiling-guard.php,phpstan-packages.sh,dependency-analyser.sh,anti-weakening-gate.sh}",
+      "change": "any"
+    },
+    {
+      "path": "scripts/phpstan-contour.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/*/{phpstan.neon,phpstan-baseline.neon,composer-dependency-analyser.php,composer.json}",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Инвентарь ownership — только `src/`, `config/`, `database/migrations/` пакетов (не `tests/`, K6); вывод отсортирован и\n  стабилен; baseline создаётся `--write-baseline` один раз в этом item.",
+    "`ownership-map.json` — значения дословно из glossary; расхождение glossary и кода — нарушение в baseline, не правка\n  карты под код.",
+    "PHPStan baseline генерируется командой (`--generate-baseline`), не руками; `ignoreErrors` старых конфигов не переносятся.",
+    "Потолки пишет только `quality-ceiling-guard.php --tighten`; рост потолка/ownership baseline в диффе — отказ anti-weakening.",
+    "Analyser: shadow → объявить зависимость; unused → удалить, если нет не-PHP использования; discovery-ложное срабатывание →\n  ignore `// discovery: <где>`; архитектурный долг → ignore `// ratchet: <фаза> <причина>`. Глобальные `--ignore-*` запрещены.",
+    "Каждый новый гейт — негативный контроль (досье §4.3 п.5, п.9) с результатом в Completion Notes."
+  ],
+  "guidance": "ownership — PHP-скрипт в стиле `scripts/table-ownership-gate.php` (константы `EXIT_OK/EXIT_VIOLATION/EXIT_CONFIG`,\n`declare(strict_types=1)`), регулярки examples §4.2, формат вывода §4.3; ceilings guard — examples §6.2 дословно;\n`phpstan-packages.sh`, `dependency-analyser.sh` — examples §5.2, §7; PHPStan-шаблон — §5.1.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "ls packages/*/phpstan.neon | wc -l",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "grep -l \"level: max\" packages/*/phpstan.neon phpstan.neon | wc -l",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "phpstan.<p>: … > ceiling …",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "python3 scripts/manifest-check.py",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "bash -c 'if grep -rn \"phpstan-contour\\|analyse:packages\" scripts tests docs .github composer.json; then exit 1; else test \"$?\" -eq 1; fi'",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "cmd": "bash scripts/anti-weakening-gate.sh",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "ownership default/strict, O1+O2/O3/O4/new/stale controls and restoration",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "all 21 max PHPStan configs, command-generated baselines and measured ceiling guards",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "procedure": "all 20 standalone dependency analyses and install fail-closed cleanup",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "procedure": "first committed introduction and per-commit/worktree anti-weakening negatives",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V11",
+      "procedure": "root SQLite 808+10, isolated PostgreSQL 239, unchanged Golden 4",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V12",
+      "procedure": "lint and 21-root manifest / removed-reference / syntax checks",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V13",
+      "procedure": "fresh independent execution review cursor/grok-4.7/high",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "ownership v2 + map + baseline, 21 PHPStan-конфиг level max + baseline, ceilings + guard, analyser-конфиги\n20 пакетов, обновлённый anti-weakening; Completion Notes: размер ownership baseline по правилам, сумма PHPStan baseline\nпо пакетам, число `ratchet:`/`discovery:` ignore, результаты негативов, review."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "requested"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-28T12:52:43Z",
+    "finished_at": "2026-09-28T13:34:49Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "executor/codex/gpt-6-sol/high",
+      "effort": "high"
+    },
+    "notes": "Ownership 420/122; PHPStan 21/2732; deps 20; sqlite 808+10; PG 239; Golden 4; review: cursor/grok-4.7 GREEN.\nwrite-site: pre_mutation: allow · pre_final: allow\nEvidence: findings/P01.3-execution.md.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-28T13:34:49Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-28T13:34:49Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-09-28T13:34:49Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-09-28T13:34:49Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V11",
+        "exit": 0,
+        "at": "2026-09-28T13:34:49Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V12",
+        "exit": 0,
+        "at": "2026-09-28T13:34:49Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V13",
+        "exit": 0,
+        "at": "2026-09-28T13:34:49Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-28T13:34:49Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Поставить три блокирующих с первого дня гейта, чей долг может только сокращаться: ownership v2 (namespace,\nтаблицы, config, publish-tags, команды, env → пакет по целевой конвенции glossary; ratchet-baseline), PHPStan level max +\nstrict-rules + bleedingEdge на каждом пакете с baseline и потолком `scripts/quality-ceilings.json`, composer-dependency-analyser\nв standalone-установке каждого пакета."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "D39 (ownership v2; коллизии имён — главный риск P02), D17/D37 (level max, baseline-guard только сужается —\nF00 X6), D16/D37 (shadow/unused deps — ошибка). P02 закрывается при `ownership-gate --strict` exit 0 — гейт должен\nсуществовать и иметь измеренный baseline до переименований."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "`scripts/ownership-gate.php`, `scripts/ownership-map.json` (из glossary), `scripts/ownership-gate-baseline.json`;\n`packages/*/phpstan.neon` (20, шаблон examples §5.1), `packages/*/phpstan-baseline.neon`, root `phpstan.neon` (tests/Support,\ntests/Golden, scripts) + `phpstan-baseline.neon`; root dev `phpstan/extension-installer`, `phpstan/phpstan-strict-rules`,\n`shipmonk/composer-dependency-analyser` (+ `allow-plugins`); `extra.phpstan.includes` в core/modules/tenancy;\n`scripts/phpstan-packages.sh`; `scripts/quality-ceilings.json`, `scripts/quality-ceiling-guard.php`;\n`packages/*/composer-dependency-analyser.php`, `scripts/dependency-analyser.sh`; объявление shadow-зависимостей;\nудаление `scripts/phpstan-contour.php` и `analyse:packages`; anti-weakening: замена строк 71–76 блоками ceilings/ownership\n(examples §6.3); composer-скрипты `analyse`, `ownership-gate`, `quality:ceilings`, `deps:analyse`."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "исправление ошибок PHPStan (baseline их фиксирует; чистый max — P09); переименования, устраняющие\nownership-нарушения (P02); развязка notifications→wakeup (P07); CI-jobs (P01.4)."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`tests/Golden/rename-map.json` (P01.2) · `@plan/decisions/D41.json` · `@plan/knowledge/research-P01-design.json` (§1, §4.3, §5 K4, K6, K7) · `@plan/knowledge/research-P01-design-rag.json` (E4, E5) · `@plan/knowledge/artifacts-P01-design-examples.json` (§4–§7) ·\n`@plan/decisions/D37.json` · `@plan/decisions/D39.json` · `@plan/knowledge/research-03-glossary.json` (§Packages, §Kernel modules, §Root symbols, §Reserved segments, §Dev roots, §Identifiers per package)"
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`scripts/{ownership-gate.php,ownership-map.json,ownership-gate-baseline.json,quality-ceilings.json,quality-ceiling-guard.php,phpstan-packages.sh,dependency-analyser.sh,anti-weakening-gate.sh}`;\nудаление `scripts/phpstan-contour.php`; `phpstan.neon`, `phpstan-baseline.neon`; `packages/*/{phpstan.neon,phpstan-baseline.neon,composer-dependency-analyser.php,composer.json}`;\n`composer.json`, `composer.lock`; ссылки на удалённое (grep по scripts, tests, docs, .github и composer.json (точная команда — в Validation))."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/knowledge/research-P01-design.json` §4.3, §5; 2) `@plan/knowledge/artifacts-P01-design-examples.json` §4–§7;\n3) `@plan/knowledge/research-03-glossary.json` §Packages–§Identifiers per package; 4) `@plan/decisions/D39.json`;\n5) `scripts/anti-weakening-gate.sh`; 6) `scripts/table-ownership-gate.php` (чтение каталога таблиц); 7) `phpstan.neon`; 8) `packages/core/extension.neon`"
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "- Инвентарь ownership — только `src/`, `config/`, `database/migrations/` пакетов (не `tests/`, K6); вывод отсортирован и\n  стабилен; baseline создаётся `--write-baseline` один раз в этом item.\n- `ownership-map.json` — значения дословно из glossary; расхождение glossary и кода — нарушение в baseline, не правка\n  карты под код.\n- PHPStan baseline генерируется командой (`--generate-baseline`), не руками; `ignoreErrors` старых конфигов не переносятся.\n- Потолки пишет только `quality-ceiling-guard.php --tighten`; рост потолка/ownership baseline в диффе — отказ anti-weakening.\n- Analyser: shadow → объявить зависимость; unused → удалить, если нет не-PHP использования; discovery-ложное срабатывание →\n  ignore `// discovery: <где>`; архитектурный долг → ignore `// ratchet: <фаза> <причина>`. Глобальные `--ignore-*` запрещены.\n- Каждый новый гейт — негативный контроль (досье §4.3 п.5, п.9) с результатом в Completion Notes."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "ownership — PHP-скрипт в стиле `scripts/table-ownership-gate.php` (константы `EXIT_OK/EXIT_VIOLATION/EXIT_CONFIG`,\n`declare(strict_types=1)`), регулярки examples §4.2, формат вывода §4.3; ceilings guard — examples §6.2 дословно;\n`phpstan-packages.sh`, `dependency-analyser.sh` — examples §5.2, §7; PHPStan-шаблон — §5.1."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "- `scripts/php84 php scripts/ownership-gate.php` → `ownership OK: <N> identifiers, <B> baselined`, exit 0; `--strict` → exit 1,\n  число нарушений = `B`; негативы (a) дубль config-ключа → exit 1 (O1+O2), (b) удалённая живая строка baseline → exit 1,\n  (c) лишняя строка baseline → exit 1 `stale`; после отката → exit 0.\n- `scripts/php84 composer analyse` (= `scripts/phpstan-packages.sh`) → каждый конфиг `[OK] No errors`, затем `ceilings OK`, exit 0;\n  `ls packages/*/phpstan.neon | wc -l` → `20`; `grep -l \"level: max\" packages/*/phpstan.neon phpstan.neon | wc -l` → `21`.\n- Негатив ceilings: +1 к любому `count:` в baseline → guard exit 1 `phpstan.<p>: … > ceiling …`; откат → OK.\n- `scripts/php84 bash scripts/dependency-analyser.sh --all` → exit 0 (20 пакетов); после — `python3 scripts/manifest-check.py` → `manifests OK: 21 roots`.\n- `bash -c 'if grep -rn \"phpstan-contour\\|analyse:packages\" scripts tests docs .github composer.json; then exit 1; else test \"$?\" -eq 1; fi'` → пусто, exit 0; найдена ссылка или ошибка чтения → exit 1.\n- `bash scripts/anti-weakening-gate.sh` → exit 0; первое создание ownership-baseline допустимо только при отсутствии файла в base tree; негатив: +1 в `scripts/quality-ceilings.json` → exit 1; новая строка в\n  `ownership-gate-baseline.json` → exit 1.\n- `scripts/php84 composer test` → exit 0; `scripts/php84 composer golden` → 4 passed (P01.2 не сломан).\n- Analyser fail-closed: при ошибке install analyser не запускается; staging key снят в root и tenancy при любом результате.\n- Independent review: reviewer/effort — из строки `@plan/plan.json` `execution-sheet/v1`; свежий контекст, reviewer model !=\n  executor; вход — item-spec + diff + вывод Validation; строка `review: <provider>/<model> <GREEN|findings:N>`; ≤2 раунда."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "ownership v2 + map + baseline, 21 PHPStan-конфиг level max + baseline, ceilings + guard, analyser-конфиги\n20 пакетов, обновлённый anti-weakening; Completion Notes: размер ownership baseline по правилам, сумма PHPStan baseline\nпо пакетам, число `ratchet:`/`discovery:` ignore, результаты негативов, review."
+    }
+  ]
+}

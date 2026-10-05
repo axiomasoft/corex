@@ -1,0 +1,5 @@
+> bash scripts/ci-deferred-guard.sh php scripts/package-graph-gate.php
+package-graph-gate: OK
+HOST-RESERVED NAMESPACE: CoreX\SearchMeilisearch\ host=axiomasoft/corex-search owner=axiomasoft/corex-search-meilisearch — host-reserved adapter namespace; host defines zero classes under the prefix; class_counts={"axiomasoft/corex-search":0,"axiomasoft/corex-search-meilisearch":9}
+UNDECLARED DEPENDENCY EXCEPTION: axiomasoft/corex-tasks-workflow -> axiomasoft/corex-wakeup in packages/tasks-workflow/src/Internal/MaterializationWakeupHandler.php — ADR P12.1; expires when: handler registration guarded in TasksWorkflowServiceProvider or axiomasoft/corex-wakeup promoted to require
+graph_report_restored=True sha256=53a86c9f72f5e0eacdd5b3dcef2af894c945aa75bdef2c56cc1edb9b6450458a

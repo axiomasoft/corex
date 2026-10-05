@@ -1,0 +1,14 @@
+{
+  "pre": {
+    "packages/tenancy/tests/Feature/ImpersonationAuditTest.php": "c60fa8ad4a9cd10920843fbbad4bea1e1841ca45e2396db58007f9a57f9c87f6",
+    "packages/tenancy/tests/Feature/ImpersonationWriteGuardTest.php": "d791ccb3ca6ff288ea9607289cff26a9c0b8c7f76d27b66eca3b6e6763039437",
+    "plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P07-design-remediation/six-findings-proof.php": "ca7b5f1cae4723d2579a91583eed71fb47701e863047ae8addf2afbfbb53d0ed",
+    "plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P07-design-remediation/rereview-contract-proof.php": "36f09def35563986a1a505e1823047b879863e073345dbb5edf9ae0e11bd9b0a"
+  },
+  "post": {
+    "packages/tenancy/tests/Feature/ImpersonationAuditTest.php": "6a09878e691906b5a0912c5de237b94262c7d4ecea50416594d80e0cb67c4bd3",
+    "packages/tenancy/tests/Feature/ImpersonationWriteGuardTest.php": "dbabb16258139471a7c2170544b6491112b3bbf7a356749c6991841d751a6cbf",
+    "plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P07-design-remediation/six-findings-proof.php": "217521d8554fde2170162fccc2577b4ea2d088b655a556f86aba7c7a8022cf4b",
+    "plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P07-design-remediation/rereview-contract-proof.php": "4e638b4570ab9b980d4d42cfde8752bd427f975ed91bd588eb5787e31f27f3ae"
+  }
+}

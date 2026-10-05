@@ -1,0 +1,60 @@
+> bash scripts/bc-check.sh
+bc-check: BC_CHECK_BASE=76f8bdde496154c0a8901e459175cf306bedd860 (PHP 8.4)
+bc-check: roave 8.22.0
+bc-check: axiomasoft/corex-access (access) |compatible| stability=stable base=464a7becdfb0c3de54edbffe00501202e5aab2a5 candidate=d87441dce9beafa03e6f85d6dcbf6034ff68eac2
+bc-check: axiomasoft/corex (core) |compatible| stability=stable base=5c11c75aac8a4a1e65f67ba3b4779435be3ea5eb candidate=8791f190be49af397180898f046fdb6b0bb8af81
+bc-check: axiomasoft/corex-custom-fields (custom-fields) |compatible| stability=stable base=a52a8e0d114512d95f51936ea2c191f8d62433dd candidate=59556fb7f9242dda3129889c2c4db3f519a2208b
+bc-check: axiomasoft/corex-intl (intl) |compatible| stability=stable base=57f5ea2fb3eaa51917eb0120af43c722682ca699 candidate=0a956c06d0705a24f01a63347c46599580122cd4
+bc-check: axiomasoft/corex-media (media) |compatible| stability=stable base=b3e2c1ebccf4b6aef147c033005a308ec738151b candidate=4b70cbd3dbb63987adacc42867d581e781785aa4
+bc-check: axiomasoft/corex-notifications (notifications) |compatible| stability=stable base=fb1bbbd76b683ae4254b8a876ff01c801f3a6edc candidate=88e525697fa720cdaa3b3a2b79ca4ecae095cf48
+bc-check: axiomasoft/corex-operations (operations) |bc-break| stability=stable base=79a60f5f9d09b654dbbbdb3cf5f8c5e1e50e76c4 candidate=e7a3a21ff593b74f51680d866ce07a166be29548
+  - Installing guzzlehttp/uri-template (v2.0.1): Extracting archive
+  - Installing symfony/polyfill-php82 (v1.43.0): Extracting archive
+  - Installing guzzlehttp/psr7 (3.1.0): Extracting archive
+  - Installing guzzlehttp/promises (3.0.2): Extracting archive
+  - Installing psr/http-client (1.0.3): Extracting archive
+  - Installing guzzlehttp/guzzle (8.2.0): Extracting archive
+  - Installing fruitcake/php-cors (v1.4.0): Extracting archive
+  - Installing dragonmantank/cron-expression (v3.6.0): Extracting archive
+  - Installing doctrine/inflector (2.1.0): Extracting archive
+  - Installing laravel/framework (v13.34.0): Extracting archive
+  - Installing axiomasoft/corex (1.0.x-dev c97fcf0): Symlinking from packages/core
+  - Installing axiomasoft/corex-transfer (1.0.x-dev 2f63b8c): Symlinking from packages/transfer
+  - Installing axiomasoft/corex-operations (1.0.x-dev cfe4a32): Symlinking from packages/operations
+  - Installing axiomasoft/corex-webhooks (1.0.x-dev 5c1ee60): Symlinking from packages/webhooks
+58 package suggestions were added by new dependencies, use `composer suggest` to see details.
+54 packages you are using are looking for funding.
+Use the `composer fund` command to find out more!
+No security vulnerability advisories found.
+{"errors":[{"description":"Property CoreX\\Operations\\Laravel\\Support\\ApiOptions#$problemTypeBase was removed","path":"/packages/operations/src/Laravel/Support/ApiOptions.php","line":17,"column":1,"modificationType":"removed"},{"description":"The parameter $problemTypeBase of CoreX\\Operations\\Laravel\\Support\\ApiOptions#__construct() changed from string to a non-contravariant array","path":"/packages/operations/src/Laravel/Support/ApiOptions.php","line":26,"column":5,"modificationType":"changed"},{"description":"Class CoreX\\Operations\\Errors\\Laravel\\AcceptNegotiation has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Case CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode::InputEnvelopeInvalid was added","path":"/packages/operations/src/Errors/Enums/OperationsErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Case CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode::UndeclaredFields was added","path":"/packages/operations/src/Errors/Enums/OperationsErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Case CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode::UnsupportedMediaType was added","path":"/packages/operations/src/Errors/Enums/OperationsErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Property CoreX\\Operations\\Laravel\\Support\\ApiOptions#$problemTypeBase was removed","path":"/packages/operations/src/Laravel/Support/ApiOptions.php","line":17,"column":1,"modificationType":"removed"},{"description":"The parameter $problemTypeBase of CoreX\\Operations\\Laravel\\Support\\ApiOptions#__construct() changed from string to a non-contravariant array","path":"/packages/operations/src/Laravel/Support/ApiOptions.php","line":26,"column":5,"modificationType":"changed"},{"description":"Class CoreX\\Operations\\Errors\\Laravel\\AcceptNegotiation has been deleted","path":null,"line":null,"column":null,"modificationType":"removed"},{"description":"Case CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode::InputEnvelopeInvalid was added","path":"/packages/operations/src/Errors/Enums/OperationsErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Case CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode::UndeclaredFields was added","path":"/packages/operations/src/Errors/Enums/OperationsErrorCode.php","line":10,"column":1,"modificationType":"added"},{"description":"Case CoreX\\Operations\\Errors\\Enums\\OperationsErrorCode::UnsupportedMediaType was added","path":"/packages/operations/src/Errors/Enums/OperationsErrorCode.php","line":10,"column":1,"modificationType":"added"}]}
+12 backwards-incompatible changes detected
+bc-check: exact decision-bound unpublished delta — axiomasoft/corex-operations
+bc-check: axiomasoft/corex-panels (panels) |compatible| stability=stable base=78023f7167c562aee3b0037f9ace61f30205a3a5 candidate=366d8478bc6cbac8206dfcf8829b3009050e599b
+bc-check: axiomasoft/corex-recurrence (recurrence) |compatible| stability=stable base=ed0c6ec9ff011dfe151953bb30ba3f5f722e580b candidate=ad1c4648e06299bee2a5f6a0c21be2c59617a4fe
+bc-check: axiomasoft/corex-search-intl (search-intl) |compatible| stability=stable base=38d9e88d193161f8bf4b6524d98f00379cbdc8c1 candidate=a358a449e4e5f6bf06d896b874d808bdfc83a1e1
+bc-check: axiomasoft/corex-search-meilisearch (search-meilisearch) |compatible| stability=stable base=a5624b2cdaeb7d4836297ad35e23834bb7f3f246 candidate=496fe9c77cdb2b62d634fbf56b4d34bcfa394456
+bc-check: axiomasoft/corex-search (search) |compatible| stability=stable base=cf948092a0c0ae1cf212f4a4c23ca004c0a179f8 candidate=4b68207d0dc39bd6bd83299648b631f3cdbe6b46
+bc-check: axiomasoft/corex-tasks-workflow (tasks-workflow) |compatible| stability=stable base=7f664c093164228de5901a6948b5b78a70e1ad1e candidate=52c34a5fae44c80d7285a100035ed4a9689a2989
+bc-check: axiomasoft/corex-tasks (tasks) |compatible| stability=stable base=ffee7eae71a4b4b6bb6afe1e4f1c3da8cc6108bf candidate=6bcff3abf50c51dd08e31982c15eda274d480be7
+bc-check: axiomasoft/corex-tenancy (tenancy) |infrastructure| stability=stable base=4debd71e577d404cbc44c66639c3db5e4a38044b candidate=232e40276fbe37c7ae867d378c10cca05497d30d
+  Problem 1
+    - Root composer.json requires axiomasoft/stancl-jobpipeline, it could not be found in any version, there may be a typo in the package name.
+  Problem 2
+    - Root composer.json requires axiomasoft/stancl-tenancy, it could not be found in any version, there may be a typo in the package name.
+
+Potential causes:
+ - A typo in the package name
+ - The package is not available in a stable-enough version according to your minimum-stability setting
+   see <https://getcomposer.org/doc/04-schema.md#minimum-stability> for more details.
+ - It's a private package and you forgot to add a custom repository to find it
+
+Read <https://getcomposer.org/doc/articles/troubleshooting.md> for further common problems.
+
+In MissingInstalledJson.php line 15:
+                                                                               
+  Could not locate a "composer/installed.json" file in "/tmp/api-compare-4deb  
+  d71e577d404cbc44c66639c3db5e4a38044b6ac28c9193ed1/vendor"                    
+                                                                               
+
+roave-backwards-compatibility-check:assert-backwards-compatible [--from [FROM]] [--to TO] [--format [FORMAT]] [--install-development-dependencies]
+Script bash scripts/bc-check.sh handling the bc-check event returned with error code 1

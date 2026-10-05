@@ -1,0 +1,273 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P9.4",
+  "title": "Account и Provisioning",
+  "status": "done",
+  "summary": "Дать account lifecycle и physical-database provisioning явных owners,\nубрав корневые `Actions`, `Database`, `Lifecycle`, `Migrations` и связанные rows.",
+  "why": "`P9-design.md` §2, §6; D47. Место хранения или тип слоя\nне заменяют owner-возможность.",
+  "scope": {
+    "include": [
+      "Account models/events/lifecycle; Provisioning action/database/jobs/migrations/models;\nstable model/event/job FQCN maps; tests; receipt."
+    ],
+    "exclude": [
+      "files under `packages/tenancy/database/**`; schema/table/connection changes;\nrelay scheduling; account FSM behavior."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D46",
+    "D47"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/findings-P9-tenancy-map.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/findings/P9-compatibility-baseline.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P9-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P9/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D46.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D47.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/database/migrations/root/2026_07_18_170004_create_root_accounts_table.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/tests/Feature/AccountLifecycleTest.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/tenancy/src/Account/**",
+      "change": "any"
+    },
+    {
+      "path": "packages/tenancy/src/Provisioning/**",
+      "change": "any"
+    },
+    {
+      "path": "packages/tenancy/src/{Actions,Database,Lifecycle,Migrations,Models,Events,Jobs}/**",
+      "change": "any"
+    },
+    {
+      "path": "packages/tenancy/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/tenancy/tests/**",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P9-receipts.json",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Database migration tree read-only. Public/serialized FQCN из §3\nсохраняются. Не переносить membership/identity jobs в этом item."
+  ],
+  "guidance": "Model distribution и job ownership — таблица §2; проверять\nне только class load, но table/connection и FSM output.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer test:pg",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "git diff --exit-code -- packages/tenancy/database",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "composer --working-dir=packages/tenancy lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "composer --working-dir=packages/tenancy analyse",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "composer --working-dir=packages/tenancy test",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "composer test:pg",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "git diff --exit-code -- packages/tenancy/database",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "map coverage 20 account/provisioning php",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Account/Provisioning tree, compatibility maps/tests, receipt, root CHANGELOG."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-24T06:33:37Z",
+    "finished_at": "2026-09-24T06:50:08Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-run/cursor-grok-4.6/high",
+      "effort": "high"
+    },
+    "notes": "P9.4 GREEN: Account/Provisioning tree, classmap for TemplateClonePostgreSQLManager, PSR-4 maps for events/jobs/models.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-24T06:50:08Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-24T06:50:08Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-24T06:50:08Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-24T06:50:08Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-24T06:50:08Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-24T06:50:08Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-24T06:50:08Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Дать account lifecycle и physical-database provisioning явных owners,\nубрав корневые `Actions`, `Database`, `Lifecycle`, `Migrations` и связанные rows."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`P9-design.md` §2, §6; D47. Место хранения или тип слоя\nне заменяют owner-возможность."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Account models/events/lifecycle; Provisioning action/database/jobs/migrations/models;\nstable model/event/job FQCN maps; tests; receipt."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "files under `packages/tenancy/database/**`; schema/table/connection changes;\nrelay scheduling; account FSM behavior."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/findings-P9-tenancy-map.json`; `findings/P9-compatibility-baseline.json`; `@plan/knowledge/research-P9-design.json` §3, §6; D46/D47."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/tenancy/src/Account/**`; `packages/tenancy/src/Provisioning/**`;\n`packages/tenancy/src/{Actions,Database,Lifecycle,Migrations,Models,Events,Jobs}/**`;\n`packages/tenancy/composer.json`; `packages/tenancy/tests/**`;\n`@plan/knowledge/findings-P9-receipts.json`; `CHANGELOG.md`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P9/phase.json`; 2) `@plan/knowledge/research-P9-design.json` §0, §2, §3, §6;\n3) `@plan/knowledge/findings-P9-tenancy-map.json` `findings/P9-compatibility-baseline.json`; 4) `@plan/decisions/D46.json`; 5) `@plan/decisions/D47.json`; 6) `@plan/knowledge/findings-P9-tenancy-map.json`;\n7) `packages/tenancy/database/migrations/root/2026_07_18_170004_create_root_accounts_table.php`; 8) `packages/tenancy/tests/Feature/AccountLifecycleTest.php`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Database migration tree read-only. Public/serialized FQCN из §3\nсохраняются. Не переносить membership/identity jobs в этом item."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Model distribution и job ownership — таблица §2; проверять\nне только class load, но table/connection и FSM output."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "package lint/analyse/test; `composer test:pg`; account FSM/provisioning tests;\nstable FQCN green; `git diff --exit-code -- packages/tenancy/database`."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Account/Provisioning tree, compatibility maps/tests, receipt, root CHANGELOG."
+    }
+  ]
+}

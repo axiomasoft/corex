@@ -6,12 +6,13 @@ namespace CoreX\Tenancy\Laravel\Support;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
+use CoreX\Tenancy\Impersonation\Enums\ImpersonationProfile;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final readonly class ImpersonationPolicy
 {
     public function __construct(
         public bool $enabled,
-        public bool $requireApprovedBy,
+        public ImpersonationProfile $profile,
     ) {}
 }

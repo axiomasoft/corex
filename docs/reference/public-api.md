@@ -17,6 +17,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Audit\Contracts\AuditRetention` | spi-implement | 1.0 |
 | `CoreX\Audit\Contracts\Auditable` | spi-implement | 1.0 |
 | `CoreX\Audit\Contracts\CurrentActor` | spi-call | 1.0 |
+| `CoreX\Audit\Contracts\SynchronousAuditWriter` | spi-implement | 1.0 |
 | `CoreX\Audit\Data\AuditEntry` | api | 1.0 |
 | `CoreX\Audit\Enums\ActorType` | api | 1.0 |
 | `CoreX\Audit\Laravel\AuditRegistrar` | spi-call | 1.0 |
@@ -213,6 +214,16 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Observability\Data\OperationStarted` | api | 1.0 |
 | `CoreX\Observability\Enums\OperationOutcome` | api | 1.0 |
 | `CoreX\Observability\Laravel\ObservabilityRegistrar` | spi-call | 1.0 |
+| `CoreX\Scheduling\Contracts\DueWakeupHandler` | spi-implement | 1.0 |
+| `CoreX\Scheduling\Contracts\DueWakeupSource` | spi-implement | 1.0 |
+| `CoreX\Scheduling\Contracts\WakeupScheduler` | spi-implement | 1.0 |
+| `CoreX\Scheduling\Data\CancelResult` | api | 1.0 |
+| `CoreX\Scheduling\Data\ScheduleResult` | api | 1.0 |
+| `CoreX\Scheduling\Data\SweepResult` | api | 1.0 |
+| `CoreX\Scheduling\Data\WakeupDelivery` | api | 1.0 |
+| `CoreX\Scheduling\Data\WakeupHandlerDefinition` | api | 1.0 |
+| `CoreX\Scheduling\Data\WakeupRequest` | api | 1.0 |
+| `CoreX\Scheduling\Data\WakeupWindow` | api | 1.0 |
 | `CoreX\Settings\Contracts\SettingDefaultsProvider` | spi-implement | 1.0 |
 | `CoreX\Settings\Contracts\SettingsRepository` | api | 1.0 |
 | `CoreX\Settings\Data\SettingsScope` | api | 1.0 |
@@ -256,12 +267,21 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Access\Laravel\ScopeResolver` | spi-implement | 1.0 |
 | `CoreX\Access\Matrix\Contracts\EntityActivity` | spi-call | 1.0 |
 | `CoreX\Access\Matrix\Contracts\ScopeMapVersions` | spi-call | 1.0 |
-| `CoreX\Access\Matrix\Laravel\AzGuardRoleModel` | spi-call | 1.0 |
+| `CoreX\Access\Matrix\Events\RoleMatrixCompiled` | api | 1.0 |
 | `CoreX\Access\Matrix\Laravel\MatrixPortBindings` | spi-call | 1.0 |
 | `CoreX\Access\Roles\Data\RoleMatrixEntry` | api | 1.0 |
 | `CoreX\Access\Roles\Data\RoleView` | api | 1.0 |
 | `CoreX\Access\Roles\Laravel\RoleMatrixData` | spi-call | 1.0 |
 | `CoreX\Access\Roles\Laravel\SystemRoleImmutable` | spi-call | 1.0 |
+
+## axiomasoft/corex-access-azguard
+
+[Member manifest](../../packages/access-azguard/resources/contracts/php-api.json)
+
+| Symbol | Layer | Since |
+|:--|:--|:--|
+| `CoreX\AccessAzguard\AccessAzguardRegistrar` | spi-call | 1.0 |
+| `CoreX\AccessAzguard\AccessAzguardServiceProvider` | spi-call | 1.0 |
 
 ## axiomasoft/corex-custom-fields
 
@@ -786,6 +806,12 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Tenancy\Identity\Contracts\MembershipProjection` | spi-call | 1.0 |
 | `CoreX\Tenancy\Identity\Events\UserSynced` | spi-call | 1.0 |
 | `CoreX\Tenancy\Identity\Laravel\UserRelations` | spi-call | 1.0 |
+| `CoreX\Tenancy\Impersonation\Contracts\ImpersonationAuditSink` | spi-implement | 1.0 |
+| `CoreX\Tenancy\Impersonation\Contracts\ImpersonationGrantStore` | spi-implement | 1.0 |
+| `CoreX\Tenancy\Impersonation\Data\ClaimedGrant` | api | 1.0 |
+| `CoreX\Tenancy\Impersonation\Data\GrantClaim` | api | 1.0 |
+| `CoreX\Tenancy\Impersonation\Data\ImpersonationAuditEvent` | api | 1.0 |
+| `CoreX\Tenancy\Impersonation\Enums\ImpersonationProfile` | api | 1.0 |
 | `CoreX\Tenancy\Impersonation\Events\ImpersonationEnded` | spi-call | 1.0 |
 | `CoreX\Tenancy\Impersonation\Events\ImpersonationStarted` | spi-call | 1.0 |
 | `CoreX\Tenancy\Laravel\AuthenticationRegistrar` | spi-call | 1.0 |
@@ -814,6 +840,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Tenancy\Laravel\Support\AccountLifecyclePolicy` | spi-call | 1.0 |
 | `CoreX\Tenancy\Laravel\Support\HostResolverCacheInvalidator` | spi-call | 1.0 |
 | `CoreX\Tenancy\Laravel\Support\ImpersonationPolicy` | spi-call | 1.0 |
+| `CoreX\Tenancy\Laravel\Support\ResolvesTenancyOptions` | spi-call | 1.0 |
 | `CoreX\Tenancy\Laravel\Support\StatusGatePolicy` | spi-call | 1.0 |
 | `CoreX\Tenancy\Laravel\Support\TenancyConfigSection` | spi-call | 1.0 |
 | `CoreX\Tenancy\Laravel\Support\TenancyOptions` | spi-call | 1.0 |
@@ -852,7 +879,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Tenancy\Membership\Exceptions\RevokeUncertain` | api | 1.0 |
 | `CoreX\Tenancy\Membership\Laravel\MembershipSnapshotFactory` | spi-call | 1.0 |
 | `CoreX\Tenancy\Membership\Laravel\RevokeMembershipReceiptFactory` | spi-call | 1.0 |
-| `CoreX\Tenancy\PHPStan\Rules\StanclImportBoundaryRule` | spi-call | 1.0 |
+| `CoreX\Tenancy\Provisioning\Contracts\TemplateDatabaseCloner` | spi-call | 1.0 |
 | `CoreX\Tenancy\Provisioning\Contracts\TemplateIntegrityChecks` | spi-call | 1.0 |
 | `CoreX\Tenancy\Provisioning\Data\ClaimRequest` | api | 1.0 |
 | `CoreX\Tenancy\Provisioning\Data\ClaimResult` | api | 1.0 |
@@ -933,18 +960,8 @@ Attributes own membership. Members belong to this package; direct extends/implem
 
 | Symbol | Layer | Since |
 |:--|:--|:--|
-| `CoreX\Wakeup\Contracts\DueWakeupHandler` | spi-implement | 1.0 |
-| `CoreX\Wakeup\Contracts\DueWakeupSource` | spi-implement | 1.0 |
 | `CoreX\Wakeup\Contracts\DueWakeupSweeper` | spi-implement | 1.0 |
 | `CoreX\Wakeup\Contracts\WakeupScheduleHint` | spi-implement | 1.0 |
-| `CoreX\Wakeup\Contracts\WakeupScheduler` | spi-implement | 1.0 |
-| `CoreX\Wakeup\Data\CancelResult` | api | 1.0 |
-| `CoreX\Wakeup\Data\ScheduleResult` | api | 1.0 |
-| `CoreX\Wakeup\Data\SweepResult` | api | 1.0 |
-| `CoreX\Wakeup\Data\WakeupDelivery` | api | 1.0 |
-| `CoreX\Wakeup\Data\WakeupHandlerDefinition` | api | 1.0 |
-| `CoreX\Wakeup\Data\WakeupRequest` | api | 1.0 |
-| `CoreX\Wakeup\Data\WakeupWindow` | api | 1.0 |
 | `CoreX\Wakeup\Laravel\WakeupBindingsRegistrar` | spi-call | 1.0 |
 | `CoreX\Wakeup\Testing\WakeupFixtures` | spi-call | 1.0 |
 | `CoreX\Wakeup\WakeupModule` | spi-call | 1.0 |

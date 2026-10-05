@@ -1,0 +1,51 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D42",
+  "title": "PackageRegistrar не наследует ServiceProvider",
+  "date": "2026-09-19",
+  "status": "superseded",
+  "decision": "1. Вводится `CoreX\\Support\\PackageRegistrar` в пакете `corex/core`:\n   `register(Application $app): void` и `boot(Application $app): void`.\n   Пустой `boot` даёт trait `RegistersNothingOnBoot`, не default method\n   интерфейса. Интерфейс **не** лежит в `Contracts/`: это соглашение\n   composition root, не продуктовый контракт. В `extra.corex.public-api`\n   не входит.\n2. Реализация **не** наследует `Illuminate\\Support\\ServiceProvider` и\n   **не** попадает в `extra.laravel.providers`.\n3. Главный провайдер пакета вызывает registrar'ы из своих `register()` и\n   `boot()`. `mergeConfigFrom`, `publishes` и `optimizes` остаются на\n   провайдере: это хуки фреймворка (`RAG:✅` P8-Q3).\n4. Вложенный `$this->app->register(InternalProvider::class)` запрещён.",
+  "rationale": "Эскиз `01-shapes-runtime.md` §5 принят. Альтернатива «под-провайдер на\nмодуль» отклонена: тип врёт, класс можно случайно автодискаверить, unit-тест\nтянет lifecycle фреймворка. Альтернатива «только register(), boot остаётся\nв провайдере» отклонена: P8.4 как раз выносит команды, маршруты, middleware\nи подписки; без `boot()` на registrar'е провайдер снова станет складом.\nПустой default `boot()` не делает registrar самостоятельным lifecycle.",
+  "applies_to": [
+    "P8",
+    "P8.1",
+    "P8.2",
+    "P8.3",
+    "P8.4",
+    "P8.5"
+  ],
+  "supersedes": [],
+  "superseded_by": "D101",
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/cursor-grok-4.6/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D42\ndate: 2026-09-19\nstatus: superseded\nitem: P8\nitems: [P8, P8.1, P8.2, P8.3, P8.4, P8.5]\nsupersedes: []\nsuperseded_by: D101\n---"
+    },
+    {
+      "id": "D42-PackageRegistrar-ServiceProvider",
+      "title": "D42 — PackageRegistrar не наследует ServiceProvider",
+      "text": "**Actor:** plan-designer/cursor-grok-4.6/high\n**Evidence:** RAG:✅ P8-Q1 Laravel providers / packages, Symfony compiler\npasses. RAG:— в дереве 20 `*ServiceProvider.php`, ни одного registrar'а;\n`extra.laravel.providers` tenancy несёт ровно `TenancyServiceProvider`.\n`CoreX\\Contracts\\ModuleRegistrar` — другой контракт (регистрация дочерних\nпровайдеров модулей), его не расширяем и не переименовываем."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "1. Вводится `CoreX\\Support\\PackageRegistrar` в пакете `corex/core`:\n   `register(Application $app): void` и `boot(Application $app): void`.\n   Пустой `boot` даёт trait `RegistersNothingOnBoot`, не default method\n   интерфейса. Интерфейс **не** лежит в `Contracts/`: это соглашение\n   composition root, не продуктовый контракт. В `extra.corex.public-api`\n   не входит.\n2. Реализация **не** наследует `Illuminate\\Support\\ServiceProvider` и\n   **не** попадает в `extra.laravel.providers`.\n3. Главный провайдер пакета вызывает registrar'ы из своих `register()` и\n   `boot()`. `mergeConfigFrom`, `publishes` и `optimizes` остаются на\n   провайдере: это хуки фреймворка (`RAG:✅` P8-Q3).\n4. Вложенный `$this->app->register(InternalProvider::class)` запрещён."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Эскиз `01-shapes-runtime.md` §5 принят. Альтернатива «под-провайдер на\nмодуль» отклонена: тип врёт, класс можно случайно автодискаверить, unit-тест\nтянет lifecycle фреймворка. Альтернатива «только register(), boot остаётся\nв провайдере» отклонена: P8.4 как раз выносит команды, маршруты, middleware\nи подписки; без `boot()` на registrar'е провайдер снова станет складом.\nПустой default `boot()` не делает registrar самостоятельным lifecycle."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P8.1 пишет интерфейс. P8.2–P8.5 реализуют его. `ModuleRegistrar` не\nтрогается. P9 потребляет каталог `Laravel/` и не превращает registrar в\n`ServiceProvider`."
+    }
+  ]
+}

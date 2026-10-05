@@ -1,0 +1,29 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P13-design-rag-P13-Q2-deprecation-standards",
+  "title": "Q2 — HTTP deprecation standards",
+  "sections": [
+    {
+      "id": "P13-Q2-HTTP-deprecation-standards",
+      "title": "P13-Q2 — HTTP deprecation standards",
+      "text": "**Tool:** Perplexity browser MCP. **Date:** 2026-09-20."
+    },
+    {
+      "id": "Result-used",
+      "title": "Result used",
+      "text": "- RFC 9745 is the Standards Track definition of `Deprecation`; its value is a\n  Structured Field Date and describes the resource represented by the response.\n- RFC 8594 defines `Sunset` as an HTTP-date hint about likely unavailability; it\n  is not a guarantee of availability before or exact behavior after that date.\n- RFC 5829 defines `successor-version` as a version-navigation link relation; P13\n  uses it only when a successor is actually declared."
+    },
+    {
+      "id": "Sources-returned",
+      "title": "Sources returned",
+      "text": "- https://www.rfc-editor.org/rfc/rfc9745\n- https://www.rfc-editor.org/rfc/rfc8594\n- https://www.rfc-editor.org/rfc/rfc5829"
+    }
+  ],
+  "applies_to": [
+    "P13"
+  ],
+  "provenance": {
+    "path": "artifacts/P13-design-rag/P13-Q2-deprecation-standards.md",
+    "sha256": "1fd58f9809313797377c6a4de543b8d9d3a0f257b8732880d83dd0de14a2573a"
+  }
+}

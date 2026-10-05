@@ -1,0 +1,302 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P12.7",
+  "title": "Impersonation session invariants and cleanup",
+  "status": "done",
+  "summary": "Complete the real tenancy session with immutable initiator/target/reason,\nno nesting and fail-closed cleanup while retaining existing write guards.",
+  "why": "`@plan/knowledge/research-P12-design.json` §7.2; D64/A98. Grant validation/TTL/revocation\nexist, but nested start is not rejected explicitly, reason is lost after claim, and\nfailed target login can leave session state populated.",
+  "scope": {
+    "include": [
+      "Reject nested start before claim; reason in session/state/mirrors/events; session\nrotation; failed-login cleanup + failure mirror; legacy missing-reason recovery; expiry/revocation and\nwrite-policy regression."
+    ],
+    "exclude": [
+      "New grant DDL; changing approval predicates; allowing new writes; in-flight request\ninterruption; cross-account support policy redesign; audit enrichment (P12.6)."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/phases/P12/P12.6.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P9/P9.6.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Http/Middleware/ImpersonationSessionGuard.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P12/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P12-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D64.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/artifacts-P12-design-rag-P12-Q3-impersonation.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P9-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Context/Contracts/ImpersonationService.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Context/Data/ImpersonationState.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Impersonation/Internal/ImpersonatedModelWriteGuard.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/tests/Feature/ImpersonationTest.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/tests/Feature/ImpersonationWriteGuardTest.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Http/Middleware/ImpersonationSessionGuard.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/tenancy/src/Impersonation/Events/ImpersonationStarted.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/tenancy/src/Impersonation/Events/ImpersonationEnded.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/tenancy/tests/Feature/ImpersonationTest.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/tenancy/tests/Feature/ImpersonationWriteGuardTest.php",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Follow exact seven-step start sequence in §7.2. Nested denial occurs\nbefore the atomic UPDATE so the second grant remains unused. Real state reason is non-empty. Legacy\nsession recovery reads only its already-claimed grant; missing/invalid reason closes session. Failed\nlogin keeps grant consumed, clears auth/session/memo and writes a failure mirror. Expiry/revocation\nblocks before `$next`; no claim about killing in-flight work. Do not alter L1/L2/L3 allow semantics."
+  ],
+  "guidance": "Centralize session-key list and cleanup so stop/failure use the same forget path.\nUse named event parameters and append reason compatibly. Root mirror records initiator, target, grant,\nreason and outcome; do not put free-form reason in operational logs/metrics.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "test:pg",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "nested start denies and the second grant stays unused",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "successful start carries reason on the event; failed login leaves one failure mirror and no session",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "legacy missing reason backfills or closes the session",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "expired and revoked requests return 401 before the handler",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "write-guard positive and negative cases",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "composer --working-dir=packages/tenancy analyse",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "vendor/bin/pint --test on P12.7 files",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Complete impersonation lifecycle invariants, cleanup evidence and unchanged write-policy proof."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-25T04:02:30Z",
+    "finished_at": "2026-09-25T04:09:33Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-run/cursor-grok-4.7/high",
+      "effort": "high"
+    },
+    "notes": "P12.7 GREEN: nested start is denied before claim; reason stays on the session, mirrors and events; failed target login clears auth.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-25T04:09:33Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-25T04:09:33Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-25T04:09:33Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-25T04:09:33Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-25T04:09:33Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-25T04:09:33Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-25T04:09:33Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-25T04:09:33Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Complete the real tenancy session with immutable initiator/target/reason,\nno nesting and fail-closed cleanup while retaining existing write guards."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`@plan/knowledge/research-P12-design.json` §7.2; D64/A98. Grant validation/TTL/revocation\nexist, but nested start is not rejected explicitly, reason is lost after claim, and\nfailed target login can leave session state populated."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Reject nested start before claim; reason in session/state/mirrors/events; session\nrotation; failed-login cleanup + failure mirror; legacy missing-reason recovery; expiry/revocation and\nwrite-policy regression."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "New grant DDL; changing approval predicates; allowing new writes; in-flight request\ninterruption; cross-account support policy redesign; audit enrichment (P12.6)."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/phases/P12/P12.6.json`; `@plan/phases/P9/P9.6.json`;\n`packages/tenancy/src/Impersonation/DatabaseImpersonationService.php`;\n`packages/tenancy/src/Laravel/Http/Middleware/ImpersonationSessionGuard.php`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/tenancy/src/Impersonation/DatabaseImpersonationService.php`;\n`packages/tenancy/src/Laravel/Http/Middleware/ImpersonationSessionGuard.php`;\n`packages/tenancy/src/Impersonation/Events/ImpersonationStarted.php`;\n`packages/tenancy/src/Impersonation/Events/ImpersonationEnded.php`;\n`packages/tenancy/tests/Feature/ImpersonationTest.php`;\n`packages/tenancy/tests/Feature/ImpersonationWriteGuardTest.php`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P12/phase.json`; 2) `@plan/knowledge/research-P12-design.json` §7;\n3) `@plan/decisions/D64.json`;\n4) `@plan/knowledge/artifacts-P12-design-rag-P12-Q3-impersonation.json`;\n5) `@plan/knowledge/research-P9-design.json` relevant final tenancy paths;\n6) `packages/core/src/Tenancy/Contracts/ImpersonationService.php`;\n7) `packages/core/src/Tenancy/ImpersonationState.php`;\n8) `packages/tenancy/src/Impersonation/DatabaseImpersonationService.php`;\n9) `packages/tenancy/src/Laravel/Http/Middleware/ImpersonationSessionGuard.php`;\n10) `packages/tenancy/src/Impersonation/ImpersonatedModelWriteGuard.php`;\n11) `packages/tenancy/tests/Feature/ImpersonationTest.php`;\n12) `packages/tenancy/tests/Feature/ImpersonationWriteGuardTest.php`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Follow exact seven-step start sequence in §7.2. Nested denial occurs\nbefore the atomic UPDATE so the second grant remains unused. Real state reason is non-empty. Legacy\nsession recovery reads only its already-claimed grant; missing/invalid reason closes session. Failed\nlogin keeps grant consumed, clears auth/session/memo and writes a failure mirror. Expiry/revocation\nblocks before `$next`; no claim about killing in-flight work. Do not alter L1/L2/L3 allow semantics."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Centralize session-key list and cleanup so stop/failure use the same forget path.\nUse named event parameters and append reason compatibly. Root mirror records initiator, target, grant,\nreason and outcome; do not put free-form reason in operational logs/metrics."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Isolated PG cases: nested start denies and second grant unused; successful state/mirrors/\nevents carry reason; missing-reason legacy state recovers or closes; target-login failure leaves no auth,\nsession or memo and has one failure mirror; expired/revoked request never reaches handler; initiator/\ntarget cannot change; explicit stop idempotent; all prior write-guard positive/negative tests unchanged.\nTenancy lint/analyse/test and `test:pg` green after DB isolation preflight."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Complete impersonation lifecycle invariants, cleanup evidence and unchanged write-policy proof."
+    }
+  ]
+}

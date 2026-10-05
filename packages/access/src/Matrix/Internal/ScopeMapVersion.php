@@ -16,10 +16,9 @@ use Illuminate\Contracts\Cache\Repository;
 /**
  * Versioned cache key for one role's compiled scope-map (B-11 §5.5) — bumped
  * as the LAST step of {@see DatabaseRoleMatrixCompiler::compile()} (§7.3
- * п.8), never before the transaction that wrote the matching AzGuard keys
+ * п.8), never before the transaction that published the matrix event
  * commits. Carries an explicit tenant salt (the account id) rather than
- * relying on a cache-store prefix bootstrapper (findings/P2.8-azguard-
- * inventory-2026-07-26.md §5): `axiomasoft/corex-access` runs in boxed installs too,
+ * relying on a cache-store prefix bootstrapper: `axiomasoft/corex-access` runs in boxed installs too,
  * where no such bootstrapper is wired.
  */
 final readonly class ScopeMapVersion implements ScopeMapVersions

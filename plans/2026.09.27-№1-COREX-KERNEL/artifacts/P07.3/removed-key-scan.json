@@ -1,0 +1,6 @@
+{
+  "command": "git grep -n -E require_approved_by|requireApprovedBy -- packages docs",
+  "exit_code": 1,
+  "output": "",
+  "accepted": "empty result"
+}

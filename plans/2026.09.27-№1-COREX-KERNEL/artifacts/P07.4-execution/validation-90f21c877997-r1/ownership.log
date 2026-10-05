@@ -1,0 +1,7 @@
+candidate=90f21c877997ccd69055ccb5cdda1b7e5ebe9d01
+command=scripts/php84 composer ownership-gate
+started=2026-10-05T06:52:01.279483+00:00
+> php scripts/ownership-gate.php --strict
+ownership OK: 647 identifiers, 0 baselined
+
+exit=0

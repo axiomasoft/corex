@@ -1,0 +1,124 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "research-P6-design",
+  "title": "Дизайн фазы P6 — зоны `corex/core`",
+  "sections": [
+    {
+      "id": "P6-corex-core",
+      "title": "Дизайн фазы P6 — зоны `corex/core`",
+      "text": "**Статус:** нормативный вход items P6.1–P6.6. Это **источник готовой карты,\nготового кода гейтов и готовых формулировок документов**, а не эскиз. Каждый\nitem называет здесь свой параграф; спека без такого указателя — дефект дизайна.\n\n**Что этот документ НЕ делает.** Он не создаёт Composer-пакетов (D8). Он не\nменяет публичные FQCN существующих типов (D32) и не удаляет `CoreX\\Testing`\nиз production-autoload (D33). Он не меняет DDL и семантику Settings/Audit/\nViews. Он не исполняется до конца стадии 2 плана (D14).\n\n**Входы:** `01-shapes-runtime.md` §3; `P2-design.md` §7.1; `P3-design.md` §0;\n`P5-design.md` §11; `P6-design-rag.md`; `00-baseline-metrics.md` §1, §8;\n`@plan/knowledge/findings-audit-verdicts.json` A29–A32, N09; D8, D12, D17, D31–D34;\nлистинг `packages/core/src` (109 файлов, 17 каталогов).\n\n---"
+    },
+    {
+      "id": "0.-items",
+      "title": "0. Инварианты, обязательные для всех items фазы",
+      "text": "1. **Язык — русский**, идентификаторы зон, правил, классов — латиницей.\n2. **Ширина строки ≤ 100 символов.** Таблицы могут её превышать, проза — нет.\n3. **Публичный FQCN существующих типов не меняется (D32).** Карта и гейт\n   классифицируют файлы; P15 двигает имена.\n4. **Негативная проверка обязательна (`RAG:✅` P6-Q4).** Правило без посадки,\n   краснеющей с именем файла и символа, считается непроверенным.\n5. **Deptrac/PHPat/Pest Arch не вводятся (D17, LayerTest).** Гейт — Pest-тест\n   на `SourceScanner` (и tokenizer P3.2, когда тот терминален).\n6. **Ни один существующий порог не понижается.**\n   `bash scripts/anti-weakening-gate.sh` — обязательный Validation.\n7. **Один пакет на item**, кроме корневого гейта в `tests/Arch`.\n8. **Маркеры:** факт о репозитории — `RAG:—`; внешняя практика — `RAG:✅`\n   со ссылкой на `P6-design-rag.md`. Из `audits/*` не копируется ни код,\n   ни формулировка.\n9. **CHANGELOG.** Item, меняющий продукт, дописывает одну строку в корневой\n   `CHANGELOG.md` под `[Unreleased]` → `### Added`.\n10. **Семантика возможностей не меняется.** Settings, Audit, Views, Features,\n    Departments, Money делают то же, что делали; меняется только охрана\n    направления импорта.\n\n---"
+    },
+    {
+      "id": "1.",
+      "title": "1. Несущие решения детализации",
+      "text": "| ID | Решение | Где в коде |\n|:--|:--|:--|\n| D32 | Зона = карта + гейт; FQCN существующих типов не двигается; `PubSub/` ∈ Messaging по пути | §2, §3, §6 |\n| D33 | Testing: `autoload-dev` каноничен, production-autoload живёт до P16 | §8 |\n| D34 | Литмус №3 дисквалифицирует Foundation; зоны Features/Departments/Money; E-BASEMODEL | §2, §5, §9 |\n\nЭскиз `01-shapes-runtime.md` §3 **принят с расширением матрицы** (D34): три\nмалые зоны и Composition как именованное исключение, не зона.\n\n---"
+    },
+    {
+      "id": "2.",
+      "title": "2. Матрица зон",
+      "text": "Стрелка — «может зависеть от». Composition и Testing в матрицу не входят.\n\n```text\nFoundation        → (никого), кроме E-BASEMODEL → Audit\nTenancyContracts  → Foundation\nAudit             → Foundation, TenancyContracts\nSettings          → Foundation, TenancyContracts\nSavedViews        → Foundation, TenancyContracts\nStorage           → Foundation, TenancyContracts\nMessaging         → Foundation, TenancyContracts\nFeatures          → Foundation, TenancyContracts\nDepartments       → Foundation, TenancyContracts\nMoney             → Foundation, TenancyContracts\n```\n\n`RAG:✅` P6-Q1: такая матрица и есть граница модульного монолита.\n`RAG:—` эскиз перечислял семь зон; три добавленные — однофайловые/двухфайловые\nвозможности, которые литмус выводит из Foundation (D34), а D8 запрещает\nделать пакетами.\n\n**Composition** (не зона): `CoreServiceProvider.php`, `Support/Config.php`,\n`Support/CoreOptions.php`, `Support/ServiceProviderModuleRegistrar.php`; D101 также\nдобавляет два exact registrar-пути. Им можно импортировать любую зону\n(это composition root). Их `Internal` по-прежнему закрыт правилом R-Z2.\n\n**Testing** (не зона): `src/Testing/**`. Не участвует в R-Z1. R-T1 (P6.5)\nзапрещает новый production-импорт `CoreX\\Testing` вне `*/src/Testing`.\n\n**E-BASEMODEL:** единственный путь\n`packages/core/src/Models/BaseModel.php` может импортировать\n`CoreX\\Concerns\\HasAuditLog`. Любой другой файл Foundation, импортирующий\nAudit, — нарушение R-Z1.\n\nЗапланированные P4/P5 пути, которых в дереве ещё нет, входят в карту как\nчлены зон и не требуют файлов сегодня:\n\n- `src/Support/Time/**` — Foundation (D20)\n- `src/Messaging/**` — Messaging (D31); `src/PubSub/**` — тоже Messaging (D32)\n\n---"
+    },
+    {
+      "id": "3.-109",
+      "title": "3. Карта принадлежности (109 файлов)",
+      "text": "`RAG:—` числа D8/baseline: 109 PHP в `packages/core/src`. Каждый файл — ровно\nодна зона или Composition/Testing. Колонка «литмус» — применение §5 к\nкандидатам Foundation; для остальных зон «—»."
+    },
+    {
+      "id": "3.1",
+      "title": "3.1 Каталоги, совпадающие с зоной",
+      "text": "| Путь | Файлов | Зона |\n|:--|--:|:--|\n| `Audit/` | 6 | Audit |\n| `Departments/` | 2 | Departments |\n| `Features/` | 1 | Features |\n| `Money/` | 1 | Money |\n| `PubSub/` | 7 | Messaging |\n| `Settings/` | 2 | Settings |\n| `Storage/` | 6 | Storage |\n| `Tenancy/` | 16 | TenancyContracts |\n| `Testing/` | 2 | Testing |\n| `Views/` | 13 | SavedViews |"
+    },
+    {
+      "id": "3.2-Dump",
+      "title": "3.2 Dump-каталоги (явная принадлежность)",
+      "text": "**Contracts/ (18)** — пакетная поверхность API-009, зона по смыслу контракта:\n\n| Файл | Зона |\n|:--|:--|\n| `Auditable.php` `AuditEntry.php` `AuditLogger.php` `AuditRetention.php` | Audit |\n| `DataScopeAuthorizer.php` | Foundation |\n| `DepartmentRepository.php` | Departments |\n| `FeatureFlagDefinition.php` `FeatureFlags.php` | Features |\n| `ModuleRegistrar.php` | Foundation |\n| `PubSub.php` `WorkerRuntime.php` | Messaging |\n| `SavedViewRepository.php` `ViewAccessPolicy.php` `ViewSchemaProvider.php` | SavedViews |\n| `SettingDefaultsProvider.php` `SettingsRepository.php` `SettingsScope.php` | Settings |\n| `TenantStorage.php` | Storage |\n\n**Models/ (6):**\n\n| Файл | Зона | Литмус |\n|:--|:--|:--|\n| `BaseModel.php` | Foundation | warning:3 + E-BASEMODEL |\n| `AuditLog.php` | Audit | — |\n| `Department.php` | Departments | — |\n| `FeatureFlag.php` `FeatureOverride.php` | Features | — |\n| `Setting.php` | Settings | — |\n\n**Concerns/ (2):** `HasAuditLog.php` → Audit; `HasConfiguredId.php` →\nFoundation (warning:3; Eloquent, но identity-примитив для всех моделей).\n\n**Enums/ (5):** `ActorType` `IdStrategy` → Foundation; `PubSubDriver` →\nMessaging; `SettingScope` → Settings; `ImpersonationRestrictedAction` →\nTenancyContracts.\n\n**Events/ (5):** `DomainEvent` `Cancellable` → Foundation; `DepartmentMoved` →\nDepartments; `FeatureFlagToggled` → Features; `SettingChanged` → Settings.\n\n**Exceptions/ (6):** `CentralContextException` `ImpersonationRestrictedException`\n→ TenancyContracts; `CrossWorkspaceMoveException` `DepartmentCycleException` →\nDepartments; `SettingValueTooLargeException` `UnsupportedScopeException` →\nSettings.\n\n**Data/ (1):** `DataScopeAccessDecision.php` → Foundation. Каталог из одного\nкласса выражает границу Foundation (STR-004). Целевой FQCN для P15 —\n`CoreX\\Support\\Data\\DataScopeAccessDecision`. В P6 файл не двигается:\nон является return type публичного `DataScopeAuthorizer`.\n\n**Support/ (9):** `Config.php` и `ServiceProviderModuleRegistrar.php` →\nComposition. `Data/*` (6) → Foundation. `Schema/IdColumns.php` → Foundation\n(warning:3).\n\n**Корень:** `CoreServiceProvider.php` → Composition."
+    },
+    {
+      "id": "3.3",
+      "title": "3.3 Самопроверка карты",
+      "text": "Сумма §3.1 + §3.2 + корень = 109. Расхождение при исполнении P6.1 — дефект\nкарты, а не повод пропустить файл.\n\n---"
+    },
+    {
+      "id": "4.-Dump--API-009-P15",
+      "title": "4. Dump-каталоги, API-009 и P15",
+      "text": "`RAG:✅` P6-Q2: смена неймспейса публичного класса несовместима.\n`RAG:—` API-009: контракт пакета живёт в `src/Contracts/`.\n`RAG:—` все классы `final` — forwarding-subclass невозможен.\n\nP6 не разносит `Contracts/` и `Models/` по каталогам зон. Целевые FQCN\n(вход P15, писать в `docs/architecture/core-zones.md` §«P15») — таблица:\n\n| Сейчас | Цель | Условие |\n|:--|:--|:--|\n| `CoreX\\PubSub\\*` | `CoreX\\Messaging\\*` | G-API P15; гейт P6 уже считает путь Messaging |\n| `CoreX\\Contracts\\Audit*` `Auditable` | `CoreX\\Audit\\Contracts\\*` | G-API P15; API-009 уточняется статьёй либо исключение |\n| `CoreX\\Models\\AuditLog` | `CoreX\\Audit\\Internal\\AuditLog` | `@internal` уже по смыслу |\n| `CoreX\\Views\\*` | `CoreX\\SavedViews\\*` | только если P15 примет имя зоны, а не каталога |\n| `CoreX\\Data\\DataScopeAccessDecision` | `CoreX\\Support\\Data\\DataScopeAccessDecision` | нет внешних импортов кроме ядра |\n\n`Views` как имя каталога остаётся: переименование в `SavedViews` есть смена\nпубличного неймспейса `CoreX\\Views\\Data\\*`, которым пользуется `panels`.\n\n---"
+    },
+    {
+      "id": "5.-Core-Litmus-Test-A29",
+      "title": "5. Исполняемый Core Litmus Test (A29)",
+      "text": "Шесть условий P2-design.md §7.1 применяются **только** к типам, которые карта\n§3 кладёт в Foundation. Кодирование:\n\n1. На тип ссылаются ≥3 composer-пакета, либо он в Contracts/Enums/Exceptions\n   и его импортируют ≥2 пакета. В P6, до CSV P2, достаточно grep по\n   `packages/*/src` (не tests). Ненаблюдаемое = `unresolved`, не fail.\n2. Сегменты имени не содержат `Media Search Task Workflow Wakeup Panel Crm\n   Notification`. `Audit` в имени Foundation-типа — fail (зона, не foundation).\n3. **Жёсткое (D34):** нет импорта `Illuminate\\Database\\Eloquent`,\n   `Illuminate\\Http`, `Illuminate\\Foundation\\Application`. Fail → тип не имеет\n   права быть в Foundation, кроме путей allowlist `LITMUS_ELOQUENT`.\n4. `notes` не содержит `product-only`.\n5. Файл ≤ 200 строк или тип в Contracts/Enums/Data.\n6. `zone_or_context` не совпадает с именем живого пакета-соседа.\n\nAllowlist `LITMUS_ELOQUENT` (warning, не MOVE) — ровно три пути:\n\n```text\npackages/core/src/Models/BaseModel.php\npackages/core/src/Concerns/HasConfiguredId.php\npackages/core/src/Support/Schema/IdColumns.php\n```\n\nЛюбой другой Foundation-файл с Eloquent/HTTP/Application — красное R-L3.\nРасширение allowlist — запись в D-лог, не правка константы втихую\n(`anti-weakening-gate.sh`).\n\n\n---"
+    },
+    {
+      "id": "6.-Arch--P6.2",
+      "title": "6. Arch-гейт — готовый код (P6.2)",
+      "text": "Файл `tests/Arch/CoreZoneTest.php`. Сканер — существующий\n`tests/Support/SourceScanner.php`. Tokenizer P3.2, когда терминален, заменяет\nсбор импортов; до него — `filesMatching` по `use`. Это честно называется\n**import-scan** (`RAG:✅` P6-Q4: FQCN без `use` сканер не видит; полное ребро\nдаёт P3.2)."
+    },
+    {
+      "id": "6.1",
+      "title": "6.1 Данные матрицы",
+      "text": "```php\n/** @var array<string, list<string>> */\nprivate const ALLOWED = [\n    'Foundation' => [],\n    'TenancyContracts' => ['Foundation'],\n    'Audit' => ['Foundation', 'TenancyContracts'],\n    'Settings' => ['Foundation', 'TenancyContracts'],\n    'SavedViews' => ['Foundation', 'TenancyContracts'],\n    'Storage' => ['Foundation', 'TenancyContracts'],\n    'Messaging' => ['Foundation', 'TenancyContracts'],\n    'Features' => ['Foundation', 'TenancyContracts'],\n    'Departments' => ['Foundation', 'TenancyContracts'],\n    'Money' => ['Foundation', 'TenancyContracts'],\n];\n\n/** @var list<string> */\nprivate const COMPOSITION = [\n    'packages/core/src/CoreServiceProvider.php',\n    'packages/core/src/Support/Config.php',\n    'packages/core/src/Support/CoreOptions.php',\n    'packages/core/src/Support/ServiceProviderModuleRegistrar.php',\n    'packages/core/src/Support/PackageRegistrar.php',\n    'packages/core/src/Support/RegistersNothingOnBoot.php',\n];\n\nprivate const E_BASEMODEL = 'packages/core/src/Models/BaseModel.php';\n```\n\nПринадлежность файла зоне — функция `zoneOf(string $relative): ?string`:\n\n1. `src/Testing/` → `null` (не зона).\n2. Путь из `COMPOSITION` → `null`.\n3. Exact Support types `ViolationList.php`, `InvalidConfiguration.php`, `SecretRef.php`\n   → Foundation; then prefix: `Audit/`→Audit, `Departments/`→Departments, `Features/`→Features,\n   `Money/`→Money, `PubSub/`→Messaging, `Messaging/`→Messaging,\n   `Settings/`→Settings, `Storage/`→Storage, `Tenancy/`→TenancyContracts,\n   `Views/`→SavedViews, `Support/Time/`→Foundation, `Support/Data/`→Foundation.\n4. Иначе — таблица dump-файлов §3.2, зашитая как `DUMP_ZONE` (относительный\n   путь → зона). Файл вне таблицы — fail R-Z0 «неклассифицирован».\n\nИмпорт `CoreX\\X` режется до первого сегмента после `CoreX\\` и через ту же\nфункцию (для dump — по FQCN-таблице, зеркалу §3.2). Импорты не-`CoreX\\`\nигнорируются. Импорт своей зоны разрешён всегда."
+    },
+    {
+      "id": "6.2",
+      "title": "6.2 Правила",
+      "text": "- **R-Z0.** Каждый PHP под `packages/core/src` кроме Testing/Composition имеет\n  зону.\n- **R-Z1.** `use CoreX\\…` файла зоны A указывает на зону B, где B=A или B ∈\n  `ALLOWED[A]`. Исключение: путь E-BASEMODEL может указывать на Audit.\n- **R-Z2.** Файл вне каталогов своей зоны не импортирует\n  `CoreX\\<Ns>\\Internal\\*`. Composition — единственный allowlist, поимённо,\n  не шаблоном `*ServiceProvider.php`. Для Messaging каталоги зоны ∈\n  {`Messaging`, `PubSub`}. Для SavedViews каталог зоны = `Views`.\n\nСообщение обязано содержать код правила, относительный путь файла и\nзапрещённый символ.\n\nЧистый combined P6+P7+P8 прогон обязан показать, что exact-путь\n`Support/CoreOptions.php` принимает его 12 объявленных cross-zone imports.\nЭто позитивный witness закрытого `COMPOSITION`, а не исключение в R-Z1:\n`ALLOWED['Foundation']` остаётся `[]`, посадка Foundation → SavedViews/Internal\nиз §6.3 остаётся красной, а unknown `Support/Probe.php` — R-Z0.\n\n`tests/Arch/MessagingZoneTest.php` после P6.2 **удаляется**: его R-M1/R-M2\nпоглощены R-Z1/R-Z2. Это не ослабление: матрица строже (закрытый allow-list\nзон вместо восьми неймспейсов dump). В receipt записать, что P5.11\nsupersede'нут этим файлом."
+    },
+    {
+      "id": "6.3-GREEN",
+      "title": "6.3 Посадки (обязательны до GREEN)",
+      "text": "1. Временно добавить `use CoreX\\Views\\Internal\\SqlSavedViewRepository;` в\n   `packages/core/src/Support/Data/RecordRef.php` (Foundation). R-Z1 краснеет\n   с `RecordRef.php` и `SqlSavedViewRepository`. Снять.\n2. Временно добавить `use CoreX\\Views\\Internal\\SqlSavedViewRepository;` в\n   `packages/core/src/Tenancy/AccountRef.php`. R-Z1 краснеет: TenancyContracts\n   ↛ SavedViews. Снять.\n3. Для R-Z2: импорт `CoreX\\Views\\Internal\\SqlSavedViewRepository` в\n   `packages/core/src/Enums/ActorType.php`. R-Z2 краснеет. Снять.\n\nПосадки живут в `try/finally` как в `PackageGraphTest`. Вывод дословно в\n`@plan/knowledge/findings-P6-receipts.json`."
+    },
+    {
+      "id": "6.4",
+      "title": "6.4 Форма теста",
+      "text": "```php\n<?php\n\ndeclare(strict_types=1);\n\nuse CoreX\\Tests\\Support\\SourceScanner;\n\ntest('every core src file is classified into a zone or composition/testing',\n    function (): void {\n        $offenders = [];\n        foreach (corePhpFiles() as $relative) {\n            if (isSkipped($relative)) {\n                continue;\n            }\n            if (zoneOf($relative) === null) {\n                $offenders[] = $relative;\n            }\n        }\n        expect($offenders)->toBe([]);\n    });\n\ntest('zone files import only allowed CoreX zones (R-Z1)', function (): void {\n    expect(rz1Offenders())->toBe([]);\n});\n\ntest('foreign files do not import zone Internal (R-Z2)', function (): void {\n    expect(rz2Offenders())->toBe([]);\n});\n```\n\nФункции `corePhpFiles`, `zoneOf`, `rz1Offenders` — в том же файле, не в\nновом хелпере: один Files-слот. Готовые тела — перенос таблиц §2–§3.2\nв `const`. Не выносить матрицу в JSON: тогда появятся два источника.\n\n---"
+    },
+    {
+      "id": "7.-Messaging-PubSub",
+      "title": "7. Messaging поглощает PubSub по пути",
+      "text": "D31: P5 не трогает `CoreX\\PubSub\\**`. D32: P6 тоже не трогает FQCN.\n`zoneOf('src/PubSub/PubSubManager.php') === 'Messaging'`.\nR-Z1 для этих файлов — как для `src/Messaging/**`.\n\n`@plan/knowledge/findings-P5-zone-map.json` обещал отметку «перенос — P6». P6.2 в receipt\nпишет: «физический перенос не выполнен, D32; целевой FQCN — таблица §4».\nЭто не дефект P5.11, а уточнение следствия D31.\n\n`PrunePubSubMessages` продолжает брать время из `new DateTimeImmutable`.\nРасхождение с инъектированным Clock messaging-relay — именованный долг\n`@plan/knowledge/findings-P6-receipts.json`, адресат P7 (Options) / оставшиеся `now()` вне\nP4.10. P6 часы не инъектирует: это не граница зон.\n\n---"
+    },
+    {
+      "id": "8.-Testing-staging-N09-P6.5",
+      "title": "8. Testing — staging N09 (P6.5)",
+      "text": "`RAG:✅` P6-Q3: `autoload-dev` потребителю path-пакета не отдаётся.\n\nГотовый фрагмент `packages/core/composer.json`:\n\n```json\n\"autoload\": {\n    \"psr-4\": {\n        \"CoreX\\\\\": \"src/\"\n    }\n},\n\"autoload-dev\": {\n    \"psr-4\": {\n        \"CoreX\\\\Testing\\\\\": \"src/Testing/\"\n    }\n}\n```\n\nProduction `CoreX\\\\` → `src/` **сохраняется**, иначе `src/Testing` пропадает\nу потребителей. `autoload-dev` дублирует канон для того дня, когда P16 снимет\nproduction-покрытие (тогда останется только `autoload-dev`).\n\nГейт `tests/Arch/TestingAutoloadTest.php`:\n\n- **R-T1.** Файл `packages/*/src/**/*.php`, путь которого не содержит\n  `/Testing/`, не содержит `use CoreX\\Testing\\\\`. Текущие нарушители —\n  ровно три файла, allowlist `RT1_EXISTING`:\n  `packages/crm/src/Testing/CrmTestCase.php`,\n  `packages/auth/src/Testing/CoreAuthTestCase.php`,\n  `packages/tasks/src/Testing/TasksTestCase.php`.\n  Новый файл вне этих трёх — красное. Снятие allowlist — P16.\n- Посадка: временный `use CoreX\\Testing\\CoreXTestCase;` в\n  `packages/core/src/Enums/ActorType.php` → R-T1 с именем файла. Снять.\n\nКомментарий в `composer.json` над `autoload-dev`: «canonical mapping; production\npsr-4 still covers src/Testing until P16 (D33)».\n\n---"
+    },
+    {
+      "id": "9.-Support-Data",
+      "title": "9. Support и Data — обоснование, не расформирование",
+      "text": "Профиль C (STR-006) группирует `Data/` по домену. Здесь домен — Foundation:\n`DataScope`, `RecordRef`, `WriteToken`, authorizers, `DataScopeAccessDecision`.\nРасформирование с перемещением в `Support/Data` меняет FQCN решения доступа\nи контракта `DataScopeAuthorizer` — D32 запрещает.\n\n`Support/Config` — boot-адаптер до P7 (эскиз §4, скелет фазы). 31 ключ,\nединственное легальное место `config()` до типизированных Options. В матрице\nэто Composition, не Foundation: Config импортирует Audit, Settings, Features,\nDepartments, Tenancy — иначе гейт был бы красным в день включения.\n\n`Support/CoreOptions` — такой же exact Composition holder по D101: его\n`fromArray()` задаёт defaults из Audit, Settings, Features, Departments и\nTenancyContracts. Это не расширяет Foundation и не создаёт allowlist для\n`Support/**`: любой неназванный тип по-прежнему неклассифицирован.\n\n`ServiceProviderModuleRegistrar` принимает `Application` — литмус №3,\nComposition.\n\nИтог P6.1 в `core-zones.md`: каталоги `Support/` и `Data/` **обоснованы** как\nфизический дом Foundation + Composition; не удаляются и не переименовываются.\n\n---"
+    },
+    {
+      "id": "10.-Features-Departments-Money-P6.4",
+      "title": "10. Features, Departments, Money (P6.4)",
+      "text": "`RAG:✅` P6-Q5. Вердикты:\n\n| Зона | Почему не Foundation | Кандидат на пакет | Кандидат уровня 1 |\n|:--|:--|:--|:--|\n| Features | литмус №2 (имя возможности) и №3 (Eloquent) | нет: 1 файл / 121 строка | нет: движок оценки платформенный |\n| Departments | №2, №3; оргдерево с path/cycle/workspace | нет: 2 файла | **да** — продуктовая оргструктура |\n| Money | №3 (`CastsAttributes`); `brick/money` уже в `require` ядра | **да** — тяжёлая зависимость D8 | нет |\n\n`@plan/plan.json` §7 дополняется двумя строками (готовые формулировки):\n\n1. Выделение `corex/money`: условие — внешний или boxed-потребитель, которому\n   нужен `corex/core` без `brick/money`, и оплаченная стоимость split-зеркала.\n2. Вынесение Departments на уровень 1 (FlexCMS): условие — второй продукт\n   без оргдерева, либо подтверждённое расхождение смысла «отдел» между auth и\n   CRM. До условия зона остаётся в ядре.\n\nСемантика репозитория отделов не меняется.\n\n---"
+    },
+    {
+      "id": "11.-docs-architecture-core-zones.md-P6.1",
+      "title": "11. Документ `docs/architecture/core-zones.md` (P6.1)",
+      "text": "Готовая структура документа, исполнитель переносит разделы 2–5, 9–10 этого\nфайла без пересказа:\n\n1. Шапка: версия 1.0.0, статус нормативный, ссылки D8 D32 D33 D34.\n2. Матрица §2.\n3. Таблица принадлежности §3.\n4. Правила R-Z0 R-Z1 R-Z2 R-L3 R-T1 и исключения COMPOSITION, E-BASEMODEL,\n   LITMUS_ELOQUENT, RT1_EXISTING.\n5. Обоснование Support/Data.\n6. Целевые FQCN для P15 (§4).\n7. Кандидаты на пакет / уровень 1 (§10).\n8. Чего документ не обещает: пакеты, смена FQCN, вынос Testing в этом релизе,\n   DATA-003 (чужая таблица ORM — P9, D19).\n\nEnforcement статей: `composer test` → `tests/Arch/CoreZoneTest.php` и\n`TestingAutoloadTest.php`. Не PHPStan `@internal` (D12).\n\n---"
+    },
+    {
+      "id": "12.-items",
+      "title": "12. Соответствие items",
+      "text": "| Item | Параграф | Продукт |\n|:--|:--|:--|\n| P6.1 | §2–§5, §9–§11 | `docs/architecture/core-zones.md` |\n| P6.2 | §6–§7 | `tests/Arch/CoreZoneTest.php`; удаление `MessagingZoneTest.php` |\n| P6.3 | §5 | `tests/Arch/CoreLitmusTest.php` |\n| P6.4 | §10 | `@plan/plan.json` §7; `@plan/knowledge/findings-P6-departments.json` |\n| P6.5 | §8 | `packages/core/composer.json`; `tests/Arch/TestingAutoloadTest.php` |\n| P6.6 | §6.3, §13 | `@plan/knowledge/findings-P6-receipts.json` — свод посадок и `test:packages` |\n\nПорядок по данным: `P6.1 → P6.2 → P6.3 → P6.6`; `P6.4` и `P6.5` после P6.1,\nпараллельны между собой. P6.6 последний: читает все гейты.\n\n---"
+    },
+    {
+      "id": "13.",
+      "title": "13. Что фаза не обещает",
+      "text": "| Не обещано | Почему | Где |\n|:--|:--|:--|\n| Новые Composer-пакеты | D8, P6-Q1 | D8, §10 |\n| Смена публичного FQCN | `final` + Roave + Files | D32, §4 |\n| Полный вынос Testing из production-autoload | Composer autoload-dev root-only | D33, §8 |\n| DATA-003 «пакет не пишет в чужую таблицу ORM» | D19 адресовал полное — P9 | D19 |\n| Инъекция Clock в `PrunePubSubMessages` | не граница зон | §7, receipt |\n| Pest Arch / Deptrac | D17, вакуум LayerTest | §0, P6-Q4 |\n| Переименование `Views` → `SavedViews` | публичный неймспейс panels | §4 |\n| Снятие E-BASEMODEL | меняет семантику аудита BaseModel | D34 |"
+    }
+  ],
+  "applies_to": [
+    "P6"
+  ],
+  "provenance": {
+    "path": "research/P6-design.md",
+    "sha256": "924f600e55e321b0f76a4b2e16f5e2deb69bc9989aa69b280503f79b51e252f8"
+  }
+}

@@ -14,9 +14,6 @@
         "illuminate/database": "^12.0|^13.0",
         "illuminate/support": "^12.0|^13.0"
     },
-    "suggest": {
-        "axiomasoft/corex-wakeup": "Durable local wakeup bridge for scheduled materialization (MAT-06)."
-    },
     "require-dev": {
         "axiomasoft/corex-wakeup": "^1.0@dev",
         "larastan/larastan": "^3.12",

@@ -1,0 +1,53 @@
+candidate=90f21c877997ccd69055ccb5cdda1b7e5ebe9d01
+command=scripts/php84 composer analyse
+started=2026-10-05T07:02:25.457831+00:00
+> bash scripts/phpstan-packages.sh
+==> packages/access-azguard/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/access/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/core/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/custom-fields/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/intl/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/media/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/notifications/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/operations/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/panels/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/recurrence/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/search-intl/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/search-meilisearch/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/search/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/tasks-workflow/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/tasks/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/tenancy/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/tools/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/transfer/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/wakeup/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/webhooks/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> packages/workflow/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> products/flex-crm/phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+==> phpstan.neon
+{"tool":"phpstan","result":"passed","errors":0}
+ceilings OK
+
+exit=0

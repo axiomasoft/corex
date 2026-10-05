@@ -1,0 +1,25 @@
+# P07.4 completion
+
+## Candidate
+
+Product commit: `9e56afe69ef2525f7ec3a68ca3b252e6b9bf1078`. Base: `9fe70584928a409b9a6377655ceaa71e4e575cc2`. Product and closure evidence use separate commits because postcommit guards, review inventory and terminal projections must bind the completed product. The initial unpublished product candidate is retained as a binary patch in `artifacts/P07.4/first-candidate-product.patch`; its distinct validation logs remain available.
+
+## Product
+
+Access now evaluates native role matrices and `aut_direct_grants`, with entity activity guards before grants/memo on all four paths. Compilation dispatches `RoleMatrixCompiled` synchronously inside the tenant transaction and invalidates scope versions after commit. The unreleased `access-azguard` integration owns links, pins, mirroring, Blade directives and the five moved implementation classes. Its registered listener rollback and captured-tenant behavior have runtime tests.
+
+Metadata, CI/package aggregation, docs, migrations and public API/Golden artifacts reflect this boundary. Exactly 19 unique public BC changes are bound to the accepted base and D96/D98/D100. Supporting paths beyond the narrow Files list are generated public API/configuration docs, exact BC approvals, configuration registry ownership transfer, Golden harness/REBASELINE and comment-only removal of obsolete access coupling references. They are included in the independent review inventory.
+
+## Validation
+
+`composite-validation-9e56afe6-r1.json` selects actual GREEN results for all 29 final checks from canonical immutable receipts with identical candidate digest `0981013bf7583b33266b22b601bb1f7cd11cf7f39ff4469d5c7098eb4bae7da7`. The first final attempt stopped only at Composer platform resolution for tenancy: native PHP 8.4 lacked its pre-existing dev requirement `ext-redis`. A configured-APT Redis/igbinary package was extracted locally and loaded only for the dependency checker; its version, hashes and actual runtime are logged in the second receipt. No source, system configuration, platform requirement or gate was bypassed. Previously GREEN checks retain their original environments and receipts; the failed carrier and remaining carriers were rerun separately.
+
+Mandatory full package and PostgreSQL suites, API byte idempotence, BC, Golden, lint, PHPStan, dependency analysis, anti-weakening and package docs are GREEN. Both post-product contract guards are GREEN. Mutation `--all` passed all 37 cases. `negative-final-9e56afe6-r1/negative-summary.json` proves mystery rejection in graph/manifest, foreign unreleased rejection, bridge unreleased acceptance and exact restoration.
+
+review: self-check GREEN
+
+Fresh final-candidate independent static self-check: `self-check.md`. Selected owner reviewer: `grok/grok-4.7/500000`, high effort, fresh read-only native session. The canonical receipt under `artifacts/P07.4/owner-review/` is the authority for its verdict; these notes do not predeclare that verdict.
+
+## Scope and delivery
+
+No unresolved current product finding remains before independent owner review. Unrelated owner worktree changes are preserved. The existing tasks-workflow → wakeup exception belongs to P07.5. At the owner's explicit request, P07.5 will start in a new session after P07.4 is closed.

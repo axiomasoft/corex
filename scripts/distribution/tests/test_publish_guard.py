@@ -112,37 +112,37 @@ class PublicationBoundaryTest(unittest.TestCase):
 
 class LiveAdapterBoundaryTest(unittest.TestCase):
     def transport(self, *, write=True):
-        record = {'name': 'axiomasoft/stancl-jobpipeline', 'tag_proposal': 'v2.0.0-alpha1'}
+        record = {'name': 'axiomasoft/example-provider', 'tag_proposal': 'v2.0.0-alpha1'}
         return GitHubTransport('jobpipeline', record, Path('/virtual/staging'), write=write)
 
     def test_read_only_adapter_never_calls_write_transport(self):
-        operation = Operation('axiomasoft/stancl-jobpipeline', 'create', 'repository', 'public')
+        operation = Operation('axiomasoft/example-provider', 'create', 'repository', 'public')
         with patch('publish_exact.run') as command:
             with self.assertRaises(PublicationDenied):
                 self.transport(write=False).apply(operation)
             command.assert_not_called()
 
     def test_enabled_actions_prevent_any_push(self):
-        operation = Operation('axiomasoft/stancl-jobpipeline', 'push', 'refs/heads/main', 'commit')
+        operation = Operation('axiomasoft/example-provider', 'push', 'refs/heads/main', 'commit')
         with patch('publish_exact.api', return_value={'enabled': True}), patch('publish_exact.run') as command:
             with self.assertRaises(PublicationDenied):
                 self.transport().apply(operation)
             command.assert_not_called()
 
     def test_actions_disable_is_exact_repository_boolean_setting(self):
-        operation = Operation('axiomasoft/stancl-jobpipeline', 'actions-disable', 'actions/permissions', 'disabled')
+        operation = Operation('axiomasoft/example-provider', 'actions-disable', 'actions/permissions', 'disabled')
         with patch('publish_exact.run') as command:
             self.transport().apply(operation)
             self.assertEqual(command.call_args.args[0],
-                             ['gh', 'api', '-X', 'PUT', 'repos/axiomasoft/stancl-jobpipeline/actions/permissions', '-F', 'enabled=false'])
+                             ['gh', 'api', '-X', 'PUT', 'repos/axiomasoft/example-provider/actions/permissions', '-F', 'enabled=false'])
 
     def test_push_uses_only_exact_main_refspec_after_disabled_check(self):
-        operation = Operation('axiomasoft/stancl-jobpipeline', 'push', 'refs/heads/main', 'commit')
+        operation = Operation('axiomasoft/example-provider', 'push', 'refs/heads/main', 'commit')
         with patch('publish_exact.api', return_value={'enabled': False}) as read, patch('publish_exact.run') as command:
             self.transport().apply(operation)
-            read.assert_called_once_with('repos/axiomasoft/stancl-jobpipeline/actions/permissions')
+            read.assert_called_once_with('repos/axiomasoft/example-provider/actions/permissions')
             self.assertEqual(command.call_args.args[0],
-                             ['git', 'push', 'https://github.com/axiomasoft/stancl-jobpipeline.git', 'refs/heads/main:refs/heads/main'])
+                             ['git', 'push', 'https://github.com/axiomasoft/example-provider.git', 'refs/heads/main:refs/heads/main'])
 
 
 if __name__ == "__main__":

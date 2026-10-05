@@ -1,7 +1,7 @@
 # axiomasoft/corex-tasks-workflow
 
 Recurrence-to-task materialization for CoreX. Connects `axiomasoft/corex-recurrence` expansion with
-`axiomasoft/corex-tasks` `CreateTaskCommand`, durable operation receipts, optional `axiomasoft/corex-wakeup` scheduling,
+`axiomasoft/corex-tasks` `CreateTaskCommand`, durable operation receipts, optional scheduling through the kernel `WakeupScheduler` contract (no package dependency on `axiomasoft/corex-wakeup`),
 and optional `axiomasoft/corex-workflow` completion capture.
 
 ## Public API

@@ -1,0 +1,44 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D20",
+  "title": "schema (accepted)",
+  "date": "2026-09-27",
+  "status": "accepted",
+  "decision": "Перед rc — сквош миграций каждого пакета в baseline `v1` (установок нет); явные имена индексов/FK/unique (≤63, hash-suffix), string вместо DB enum, bigint для счётчиков; владение таблицами по DATA-*; tenant/central scope миграций — явный тег/путь. Механика исполнения (publish vs load, журнал) — frontier-решение P08 с ресерчем и сверкой с chatom PLAN2.D25.",
+  "rationale": "D01 (нет установок); DATA-005 «миграции неизменяемы» действует с rc; единая схема-политика экосистемы.",
+  "applies_to": [
+    "P08"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "author-choice (claude-opus-5-5/high) по мандату владельца «есть идеальное решение — утверждай» (`brief/00-brief.md` B6)"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D20\ndate: 2026-09-27\nstatus: accepted\nitem: P08\nitems: [P08]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D20-schema-accepted",
+      "title": "D20 — schema (accepted)",
+      "text": "**Actor:** author-choice (claude-opus-5-5/high) по мандату владельца «есть идеальное решение — утверждай» (`@plan/brief.json` B6)\n**Evidence:** RAG:— `@plan/knowledge/findings-00-audit-verification.json`, `artifacts/P00-design/facts/`; RAG:✅ `@plan/knowledge/research-01-external-research.json`, `artifacts/research-rag/`"
+    },
+    {
+      "id": "Solution",
+      "title": "Solution",
+      "text": "Перед rc — сквош миграций каждого пакета в baseline `v1` (установок нет); явные имена индексов/FK/unique (≤63, hash-suffix), string вместо DB enum, bigint для счётчиков; владение таблицами по DATA-*; tenant/central scope миграций — явный тег/путь. Механика исполнения (publish vs load, журнал) — frontier-решение P08 с ресерчем и сверкой с chatom PLAN2.D25."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "D01 (нет установок); DATA-005 «миграции неизменяемы» действует с rc; единая схема-политика экосистемы."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P08."
+    }
+  ]
+}

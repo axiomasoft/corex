@@ -18,15 +18,13 @@ use CoreX\Notifications\Inbox\Data\NotificationAction;
 use CoreX\Notifications\Inbox\Data\NotificationContext;
 use CoreX\Notifications\Inbox\Data\NotificationInput;
 use CoreX\Notifications\Inbox\Data\NotificationSubject;
+use CoreX\Notifications\Internal\NotificationsOptions;
 use CoreX\Notifications\Tests\TestCase;
+use CoreX\Scheduling\Data\WakeupDelivery;
+use CoreX\Scheduling\Data\WakeupRequest;
+use CoreX\Scheduling\Data\WakeupWindow;
 use CoreX\Settings\Contracts\SettingsRepository;
 use CoreX\Settings\Data\SettingsScope;
-use CoreX\Wakeup\Contracts\DueWakeupSweeper;
-use CoreX\Wakeup\Data\WakeupDelivery;
-use CoreX\Wakeup\Data\WakeupRequest;
-use CoreX\Wakeup\Data\WakeupWindow;
-use CoreX\Wakeup\Internal\WakeupOptions;
-use CoreX\Wakeup\Testing\WakeupFixtures;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -81,8 +79,8 @@ it('stamps new digest wakeups with notification-digest/1', function (): void {
         flags: JSON_THROW_ON_ERROR,
     );
 
-    expect($stored['_corex']['schema'])->toBe(WakeupFixtures::SCHEMA)
-        ->and($stored['_corex']['extension']['point'])->toBe(WakeupFixtures::POINT)
+    expect($stored['_corex']['schema'])->toBe(wakeup_bridge_schema())
+        ->and($stored['_corex']['extension']['point'])->toBe(wakeup_bridge_point())
         ->and($stored['_corex']['extension']['id'])->toBe('notification.digest.v1')
         ->and($stored['_corex']['extension']['version'])->toBe('notification-digest/1')
         ->and($stored['data'])->toBe(['run_id' => $digest->id]);
@@ -93,7 +91,7 @@ it('invokes the adapter on exact version match with the unwrapped payload DTO', 
     bindRecordingDigestAdapter($seen);
     $digest = freezeDigest('exact-match');
 
-    $result = app(DueWakeupSweeper::class)->sweep(digestContext()->tenant, 10);
+    $result = wakeup_bridge_sweep(digestContext()->tenant, 10);
 
     expect($result->completed)->toBeGreaterThanOrEqual(1)
         ->and($seen)->toHaveCount(1)
@@ -107,7 +105,7 @@ it('denies legacy unstamped rows by default without invoking the adapter', funct
     bindRecordingDigestAdapter($seen);
     insertLegacyDigestWakeup(requestKey: 'legacy-denied', payload: ['run_id' => 'legacy-run']);
 
-    $result = app(DueWakeupSweeper::class)->sweep(digestContext()->tenant, 10);
+    $result = wakeup_bridge_sweep(digestContext()->tenant, 10);
 
     expect($result->failed)->toBe(1)
         ->and($seen)->toBe([])
@@ -116,18 +114,14 @@ it('denies legacy unstamped rows by default without invoking the adapter', funct
 
 it('admits an explicit bounded legacy fixture for this definition only', function (): void {
     $seen = [];
-    app()['config']->set('corex-wakeup.handlers', [
-        'notification.digest.v1' => [
-            'handler' => DigestWakeupAdapter::class,
-            'version' => 'notification-digest/1',
-            'accept_legacy_unstamped' => true,
-        ],
-    ]);
-    app()->forgetInstance(WakeupOptions::class);
+    app()['config']->set('corex-notifications.digest.accept_legacy_unstamped', true);
+    app()->forgetInstance(NotificationsOptions::class);
+    app()->forgetInstance('corex.notifications.digest-wakeup-handler');
+    app()->forgetInstance(wakeup_bridge_registry());
     bindRecordingDigestAdapter($seen);
     insertLegacyDigestWakeup(requestKey: 'legacy-admitted', payload: ['run_id' => 'legacy-run']);
 
-    $result = app(DueWakeupSweeper::class)->sweep(digestContext()->tenant, 10);
+    $result = wakeup_bridge_sweep(digestContext()->tenant, 10);
 
     expect($result->completed)->toBe(1)
         ->and($seen)->toHaveCount(1)
@@ -137,13 +131,13 @@ it('admits an explicit bounded legacy fixture for this definition only', functio
 it('quarantines a version mismatch without invoking the adapter', function (): void {
     $seen = [];
     bindRecordingDigestAdapter($seen);
-    $registry = app(WakeupFixtures::registryClass());
+    $registry = app(wakeup_bridge_registry());
     $definition = $registry->definition('notification.digest.v1');
     $envelope = $registry->envelope(definition: $definition, data: ['run_id' => 'mismatch-run']);
     $envelope['_corex']['extension']['version'] = 'notification-digest/0';
     insertLegacyDigestWakeup(requestKey: 'version-mismatch', payload: $envelope);
 
-    $result = app(DueWakeupSweeper::class)->sweep(digestContext()->tenant, 10);
+    $result = wakeup_bridge_sweep(digestContext()->tenant, 10);
 
     expect($result->failed)->toBe(1)
         ->and($seen)->toBe([])
@@ -194,7 +188,7 @@ function bindRecordingDigestAdapter(array &$seen): void
     app()->instance(DigestWakeupAdapter::class, new DigestWakeupAdapter(function (DigestTick $tick) use (&$seen): void {
         $seen[] = $tick;
     }));
-    app()->forgetInstance(WakeupFixtures::registryClass());
+    app()->forgetInstance(wakeup_bridge_registry());
     app()->forgetScopedInstances();
 }
 

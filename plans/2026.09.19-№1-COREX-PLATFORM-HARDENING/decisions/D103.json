@@ -1,0 +1,48 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D103",
+  "title": "Registry fingerprint is stored provenance, never exact-work replay identity",
+  "date": "2026-09-20",
+  "status": "accepted",
+  "decision": "Workflow request hash and wakeup replay digest include schema, business payload and\nexact point/id/version, but exclude `registryFingerprint`. The fingerprint remains in\nstored metadata, is type-validated and reported diagnostically. A versioned identity\nschema selects the new algorithm; legacy unstamped/specific-version rows retain their\noriginal comparison algorithm and bounded admission rules.",
+  "rationale": "Exact implementation version is the durable compatibility boundary. Ambient catalogue\nmembership is valuable provenance but cannot change whether the same request key is the\nsame work.",
+  "applies_to": [
+    "P11",
+    "P11.4",
+    "P11.5",
+    "P11.8"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/codex-gpt-5.6-sol/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D103\ndate: 2026-09-20\nstatus: accepted\nitem: P11.4\nitems: [P11, P11.4, P11.5, P11.8]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D103-Registry-fingerprint-is-stored-provenance-never-exact-work-replay-identity",
+      "title": "D103 — Registry fingerprint is stored provenance, never exact-work replay identity",
+      "text": "**Actor:** plan-designer/codex-gpt-5.6-sol/high\n**Evidence:** `RAG:—` DA06 shows the old payload hash/digest contradicted D59 by\nincluding ambient registry fingerprint and conflicting after unrelated module changes."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "Workflow request hash and wakeup replay digest include schema, business payload and\nexact point/id/version, but exclude `registryFingerprint`. The fingerprint remains in\nstored metadata, is type-validated and reported diagnostically. A versioned identity\nschema selects the new algorithm; legacy unstamped/specific-version rows retain their\noriginal comparison algorithm and bounded admission rules."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Exact implementation version is the durable compatibility boundary. Ambient catalogue\nmembership is valuable provenance but cannot change whether the same request key is the\nsame work."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P11.4/P11.5 test replay after unrelated registry changes and legacy rows. Missing or\nmismatched exact id/version remains fail-closed."
+    }
+  ]
+}

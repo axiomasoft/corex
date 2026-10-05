@@ -1,0 +1,32 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P10.2-execution-checkpoint",
+  "title": "PLAN3.P10.2 — Completion Notes",
+  "sections": [
+    {
+      "id": "PLAN3.P10.2-Completion-Notes",
+      "title": "PLAN3.P10.2 — Completion Notes",
+      "text": "2026-10-01 · executor/codex/gpt-6.1-sol/high · status: GREEN for P10.2.\n\nwrite-site: pre_mutation: allow · pre_final: allow (effective owner overrides D81/D82).\n\nProduct candidate: `dd94f729078e966b6b8bfa6ac851e7c528e3e0d7`, published to origin/main. Base: `428f47dbbab1ea1663a673f0fa1d6c2709f8e148`. [Hosted CI 36907048899](https://github.com/axiomasoft/corex/actions/runs/36907048899): required Layer and dependency jobs success; all 22 jobs green after P10.1 remain success; PackageGraphTest and AttributesArchitectureGateTest explicitly PASS in all four root lanes. Final workflow: 24 success / 12 failure / 1 skipped; overall conclusion failure. Coverage was already red after P10.1 and remains assigned to P10.4. All P10.2 declared acceptance jobs are green."
+    },
+    {
+      "id": "Result",
+      "title": "Result",
+      "text": "- Manifests keep their own package declarations, expand same-owner inheritance/traits, omit foreign members and separately record direct extends/implements/uses under unchanged php-api/1. All 20 manifests and reference regenerate deterministically. Clean committed copies on Laravel 12/13: 1307 owners, 20 manifests, zero diagnostics.\n- Six development classes moved into Tooling/PHPStan with all consumers, maps and gates updated. R6 forbids runtime references to Tooling/PHPStan/Testing; shared registry implementation is Internal, Testing SPI delegates. Runtime consumer fixes restore access fixture sharing and CRM compiled entities.\n- All original 800 marked symbols and 3301 own declarations/signatures are conserved. Fifteen existing promoted-property omissions repaired. D82 separately authorizes one additive callable InboxRetention SPI; old signatures stay equal. Golden's named delta preserves existing records and routes/events/wire.\n- Actual dependencies declared without new analyser exceptions; all standalone dependency audits pass. Access PG suite: 112/293. CRM combined suite: 81/409, coverage 95.7% against unchanged 95% floor.\n- Owner-authorized CI repair D82 resolves 49 DATA-003 findings reproduced at base: exact Options FQCN/default resolution, correct migration owners in catalog and core-owned inbox deletion via a public callable SPI. No new writer exception, skipped package or ignored path. All 267 writes pass; six positive/negative gate regression tests preserve foreign/unknown/dynamic failures. Webhook retention: six SQLite/PG tests, 41 assertions; owner cleanup preserves unrelated IDs and consumers.\n- Tenancy test teardown releases every managed PDO after restoring public schema. Standalone disposable PG16 suite: 497 passed, six existing skips, 1800 assertions with max_connections=100. Both hosted PG18 tenancy lanes pass. The disposable cluster and its anonymous volume were stopped and removed.\n- Final architecture 101/378; Golden 4/1335; scanner 41/189; R0–R6 zero; complete Composer analyse, Pint, all 20 BC checks, contract guard, package docs and anti-weakening pass. Earlier RED and quota witnesses are retained; final positive proofs have distinct files."
+    },
+    {
+      "id": "Review-and-boundary",
+      "title": "Review and boundary",
+      "text": "review: executor self-check complete; independent review deferred to the completed P10 phase (D81). The single Cursor/Grok attempt failed on quota and supplied no verdict. E31's effective predicate is the explicit owner override, recorded in review-policy-override.json; no independent item GREEN is claimed. One independent whole-phase review remains required before P10 closure.\n\nD82 authorizes necessary CI repairs in this attempt. No worker protocol repair or successor item is executed. Known remaining failures: root PG methods in SQLite lanes and coverage/package cohort installation — P10.4; tools schema worker readiness — P10.3. Sources: ci-final-assessment.json, ci-final-jobs.json, ci-root-manifest-witnesses.json, own-members-diff.json, source-binding.json, validation-witnesses.json, self-check.md."
+    },
+    {
+      "id": "Continuation",
+      "title": "Continuation",
+      "text": "Next: run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P10.3\n\nThe authorized P10.2 solo scope is complete. P10.3 is a recommendation for this chat and requires its owner invocation. Runtime Task immutable ba841d9 remains the compatible admitted owner; no new prepare/start is run for this attempt. Unrelated CLAUDE.md and CLAUDE.md.bak stay untouched."
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P10.2-execution/checkpoint.md",
+    "sha256": "789384451f99eb2abd7f85da1582b67e3554bf6055bc9501ecda077ae228b9d2"
+  }
+}

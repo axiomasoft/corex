@@ -6,8 +6,8 @@ namespace CoreX\Wakeup\Internal;
 
 use Closure;
 use CoreX\Modules\Data\ExtensionStamp;
-use CoreX\Wakeup\Contracts\DueWakeupHandler;
-use CoreX\Wakeup\Data\WakeupHandlerDefinition;
+use CoreX\Scheduling\Contracts\DueWakeupHandler;
+use CoreX\Scheduling\Data\WakeupHandlerDefinition;
 use InvalidArgumentException;
 use RuntimeException;
 

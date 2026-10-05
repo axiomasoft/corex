@@ -1,0 +1,46 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D46",
+  "title": "P02 design audit A1–A4 remediation (accepted)",
+  "date": "2026-09-28",
+  "status": "accepted",
+  "decision": "1. P02.4: пять config-ренеймов включают basename `.php` во всех provider/publish/doc ссылках.\n   `p02-identifiers.py` и PHP rename-completeness распознают точные config-basename после `/`;\n   похожие имена вне карты не переименовываются. Возвращённый старый путь при уже новом config-ключе — RED обоих гейтов.\n2. P02.3: `manifests()` проецирует root `autoload`/`autoload-dev` `classmap/files` по file-moves, directory-renames\n   и merge `packages/modules/tests → packages/core/tests/Modules`; `verify` проверяет существование root autoload-путей.\n   Composer dev-autoload должен проходить после удаления старых каталогов.\n3. P02.4 Required Reads №7 — существующая `extra-moves.tsv`; обязательное execution-time чтение её destination `packages/core/config/corex-modules.php` объявлено в Implementation Rules. Файл создаёт P02.3; отсутствие результата блокирует P02.4. Design bundle разрешается до исполнения prerequisite без старой ссылки и без фиктивного файла.\n4. P02.3 проверяет неизменность только `tests/Golden/baseline/` и `tests/Golden/rename-map.json`.\n   Код Golden получает обязательные FQCN из карты. Baseline/map-дрейф остаётся RED; `composer golden` 4 passed сохраняется.",
+  "rationale": "Это уточняет реализацию D44/D45 и устраняет четыре воспроизведённых дефекта готовности.\nGolden-защита не ослабляется: запрещённые к изменению данные остаются frozen,\nа blanket-проверка кода сьюта противоречила обязательному namespace-переносу.\nИнструменты, spec, dossier и examples изменяются согласованно; продукт и topology Routing не меняются.",
+  "applies_to": [
+    "P02",
+    "P02.3",
+    "P02.4"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "owner-authorized fixer/codex/gpt-6-sol/high; запрос владельца после аудита: «исправляй в этой сессии»."
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D46\ndate: 2026-09-28\nstatus: accepted\nitem: P02\nitems: [P02, P02.3, P02.4]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D46-P02-design-audit-A1-A4-remediation-accepted",
+      "title": "D46 — P02 design audit A1–A4 remediation (accepted)",
+      "text": "**Actor:** owner-authorized fixer/codex/gpt-6-sol/high; запрос владельца после аудита: «исправляй в этой сессии».\n**Evidence:** RAG:— `@plan/knowledge/findings-P02-design-audit.json`, исходный fingerprint `83f9a46c53c7e2b70d55bddf263bf3d179e66f728cbe93a1201ec9f9d9ffed4d`;\n`artifacts/P02-design-audit/preimage/`; `artifacts/P02-design-remediation/{check.py,results.json}`."
+    },
+    {
+      "id": "Solution",
+      "title": "Solution",
+      "text": "1. P02.4: пять config-ренеймов включают basename `.php` во всех provider/publish/doc ссылках.\n   `p02-identifiers.py` и PHP rename-completeness распознают точные config-basename после `/`;\n   похожие имена вне карты не переименовываются. Возвращённый старый путь при уже новом config-ключе — RED обоих гейтов.\n2. P02.3: `manifests()` проецирует root `autoload`/`autoload-dev` `classmap/files` по file-moves, directory-renames\n   и merge `packages/modules/tests → packages/core/tests/Modules`; `verify` проверяет существование root autoload-путей.\n   Composer dev-autoload должен проходить после удаления старых каталогов.\n3. P02.4 Required Reads №7 — существующая `extra-moves.tsv`; обязательное execution-time чтение её destination `packages/core/config/corex-modules.php` объявлено в Implementation Rules. Файл создаёт P02.3; отсутствие результата блокирует P02.4. Design bundle разрешается до исполнения prerequisite без старой ссылки и без фиктивного файла.\n4. P02.3 проверяет неизменность только `tests/Golden/baseline/` и `tests/Golden/rename-map.json`.\n   Код Golden получает обязательные FQCN из карты. Baseline/map-дрейф остаётся RED; `composer golden` 4 passed сохраняется."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "Это уточняет реализацию D44/D45 и устраняет четыре воспроизведённых дефекта готовности.\nGolden-защита не ослабляется: запрещённые к изменению данные остаются frozen,\nа blanket-проверка кода сьюта противоречила обязательному namespace-переносу.\nИнструменты, spec, dossier и examples изменяются согласованно; продукт и topology Routing не меняются."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "Дизайн проходит повторный `finish`; GREEN нужен от независимого аудитора нового fingerprint.\nP02.1–P02.4 не исполняются в этой remediation; O-3 сохраняется.\nРемонт выполнен текущей implementation/high-сессией по прямому запросу владельца,\nрекомендованный frontier/high не выдаётся за фактический маршрут. Внешних решений не добавлено;\nсвежий E1/captures исходного дизайна переиспользуется."
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-architecture-graphs-discrepancies",
+  "title": "Расхождения графов",
+  "sections": [
+    {
+      "id": "section",
+      "title": "Расхождения графов",
+      "text": ""
+    },
+    {
+      "id": "G-IMPORT-UNDECLARED",
+      "title": "G-IMPORT-UNDECLARED",
+      "text": "вхождений нет"
+    },
+    {
+      "id": "G-IMPORT-STALE-REQUIRE",
+      "title": "G-IMPORT-STALE-REQUIRE",
+      "text": "вхождений нет"
+    },
+    {
+      "id": "G-RUNTIME-HIDDEN",
+      "title": "G-RUNTIME-HIDDEN",
+      "text": "вхождений нет"
+    },
+    {
+      "id": "G-RUNTIME-UNDECLARED",
+      "title": "G-RUNTIME-UNDECLARED",
+      "text": "вхождений нет"
+    },
+    {
+      "id": "G-GATE-BLIND",
+      "title": "G-GATE-BLIND",
+      "text": "Число рёбер: 0\n\nвхождений нет"
+    },
+    {
+      "id": "G-EXPLAINED",
+      "title": "G-EXPLAINED",
+      "text": "- corex/attributes → corex/modules (allowlist/reservation/legacy)\n- corex/tasks-workflow → corex/wakeup (allowlist/reservation/legacy)\n- corex/tenancy → corex/wakeup (allowlist/reservation/legacy)"
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/architecture/graphs/discrepancies.md",
+    "sha256": "0998fa9b654700e371e029cb894861a7827000a1315e650357aef1215f0217be"
+  }
+}

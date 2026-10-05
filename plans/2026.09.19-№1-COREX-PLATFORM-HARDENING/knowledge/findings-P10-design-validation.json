@@ -1,0 +1,29 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "findings-P10-design-validation",
+  "title": "P10 design — validation evidence",
+  "sections": [
+    {
+      "id": "P10-design-validation-evidence",
+      "title": "P10 design — validation evidence",
+      "text": "**Date:** 2026-09-20  \n**Actor:** plan-designer/codex-gpt-5.6-sol/high"
+    },
+    {
+      "id": "Green-checks",
+      "title": "Green checks",
+      "text": "- `plan-lint --gate all`: 0 errors, 0 warnings.\n- Generated views: 83 item states, four decision views, status and P1.1 required\n  bundle are fresh.\n- Dry bundle render: P10.1–P10.8 all exit 0; bundles were not persisted.\n- P10 RAG manifest: four SHA256 records match.\n- Stable item schema: eight specs × eleven required fields.\n- Product code diff under `packages/attributes`: none."
+    },
+    {
+      "id": "Environment-tooling-defect",
+      "title": "Environment/tooling defect",
+      "text": "`verify-plan-citations.py --strict` reported eight unresolved citations, all in\npre-P10 P2–P4/shape carriers. Inspection showed its `REPO_ROOT` is derived from the\nowning swissknifeman Task checkout, while this selected plan lives in the separate\nCoreX repository. It therefore searches `packages/attributes/**` under\nswissknifeman and reports even the existing CoreX\n`packages/attributes/src/AttributesServiceProvider.php` as missing.\n\nThis verifier result is **not green** and is not evidence against P10. No P10 carrier\nintroduced a line/symbol citation. Repair belongs to Task citation resolution: an\nexternal-plan invocation must accept or derive the selected plan's repository root.\nP10 does not patch that external package during a design-only run."
+    }
+  ],
+  "applies_to": [
+    "P10"
+  ],
+  "provenance": {
+    "path": "findings/P10-design-validation.md",
+    "sha256": "bb315196b3028896606809442a59c22809a90bfc7fb6c8e179a7dbb18f2b4e66"
+  }
+}

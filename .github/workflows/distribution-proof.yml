@@ -212,9 +212,6 @@ jobs:
           php-version: '8.4'
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
-      - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
-
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
 
@@ -240,8 +237,6 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
           tools: composer
-      - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
 

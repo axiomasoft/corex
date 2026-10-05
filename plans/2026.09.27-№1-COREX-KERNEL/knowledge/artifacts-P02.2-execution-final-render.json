@@ -1,0 +1,17 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P02.2-execution-final-render",
+  "title": "final-render",
+  "sections": [
+    {
+      "id": "Content",
+      "title": "Content",
+      "text": "Рекомендация следующего шага:\n**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P02.3\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | solo |\n| Model | implementation |\n| Thinking | xhigh |\n| Context | continue-root |\n\n```text\n$ task:plan-run 2026.09.27-№1-COREX-KERNEL P02.3\n```\n\n```session-continuity-decision/v1\n{\"evidence\": [\"batch:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\", \"loaded-inputs:reusable\", \"cold-start-cost:1\", \"lifecycle:scope-complete\", \"checkpoint:@plan/knowledge/artifacts-P02.2-execution-completion.json\"], \"outcome\": \"continue-root\", \"reason\": \"authorized-scope-complete\", \"runnable\": true, \"schema_version\": \"session-continuity-decision/v1\"}\n```"
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P02.2-execution/final-render.md",
+    "sha256": "80d103f8162178a95830d59bf013642b75ad4db0832503e472c71f5297ae54e1"
+  }
+}

@@ -42,7 +42,8 @@ it('applies the tenant/ aut_* migrations on a clean schema without users or wsp_
 
     expect(Schema::hasTable('aut_roles'))->toBeTrue()
         ->and(Schema::hasTable('aut_role_matrix'))->toBeTrue()
-        ->and(Schema::hasTable('aut_role_assignments'))->toBeTrue();
+        ->and(Schema::hasTable('aut_role_assignments'))->toBeTrue()
+        ->and(Schema::hasTable('aut_direct_grants'))->toBeTrue();
 });
 
 // AC-32 — DDL parity against findings/P2.8-spec-source-2026-07-26.md §1/§2.
@@ -53,7 +54,6 @@ it('matches DB_SCHEMA §3.5 aut_roles column-by-column', function (): void {
     expect(autColumn('aut_roles', 'id'))->toMatchArray(['data_type' => 'uuid', 'is_nullable' => 'NO'])
         ->and(autColumn('aut_roles', 'slug'))->toMatchArray(['data_type' => 'character varying', 'is_nullable' => 'NO'])
         ->and(autColumn('aut_roles', 'is_system'))->toMatchArray(['data_type' => 'boolean', 'is_nullable' => 'NO'])
-        ->and(autColumn('aut_roles', 'azguard_role_id'))->toMatchArray(['data_type' => 'bigint', 'is_nullable' => 'YES'])
         ->and(autColumn('aut_roles', 'assignable_to'))->toMatchArray(['data_type' => 'jsonb', 'is_nullable' => 'NO'])
         ->and(autColumn('aut_roles', 'deleted_at'))->toMatchArray(['data_type' => 'timestamp with time zone', 'is_nullable' => 'YES']);
 
@@ -63,6 +63,17 @@ it('matches DB_SCHEMA §3.5 aut_roles column-by-column', function (): void {
     // COMMENT ON COLUMN aut_roles.is_system (migration §1) — table itself carries no COMMENT ON TABLE.
     $columnComment = DB::selectOne("select col_description('aut_roles'::regclass, (select attnum from pg_attribute where attrelid = 'aut_roles'::regclass and attname = 'is_system')) as comment")?->comment;
     expect($columnComment)->not->toBeNull();
+});
+
+it('stores native direct grants with expiry and revocation fields', function (): void {
+    $this->resetPgSchema();
+    $this->migrateAutSchema();
+
+    expect(autColumn('aut_direct_grants', 'principal_type'))->toMatchArray(['data_type' => 'character varying', 'is_nullable' => 'NO'])
+        ->and(autColumn('aut_direct_grants', 'principal_id'))->toMatchArray(['data_type' => 'uuid', 'is_nullable' => 'NO'])
+        ->and(autColumn('aut_direct_grants', 'permission_key'))->toMatchArray(['data_type' => 'character varying', 'is_nullable' => 'NO'])
+        ->and(autColumn('aut_direct_grants', 'expires_at'))->toMatchArray(['data_type' => 'timestamp with time zone', 'is_nullable' => 'YES'])
+        ->and(autColumn('aut_direct_grants', 'revoked_at'))->toMatchArray(['data_type' => 'timestamp with time zone', 'is_nullable' => 'YES']);
 });
 
 it('matches DB_SCHEMA §3.5 aut_role_matrix column-by-column', function (): void {

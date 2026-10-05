@@ -1,0 +1,124 @@
+{
+  "signal_class": "acceptance",
+  "scope_class": "item",
+  "action": "close-green",
+  "recovered": true,
+  "terminal": true,
+  "terminal_evidence": {
+    "schema_version": "terminal-evidence/v1",
+    "spec_sha256": "8e91df8d19c2a13775d024c1d04eed01b4a44989ca5aa5000da5d1357c428a6b",
+    "validation": [
+      {
+        "carrier": "D103: capture actual Roave JSON; scripts/bc/approved-deltas.json tenancy entry binds actual resolved BC_CHECK_BASE and accepted D102/D103 SHA-256, exact finite constructor rows only; unknown description/base/decision-hash negatives reject. Preserve unrelated entries, no checker/base weakening; CHANGELOG/php-api/Golden and approval in same product commit. `scripts/php84 composer bc-check` → exit 0 with captured output.",
+        "status": "green",
+        "evidence_ids": [
+          "artifacts/P07.1-execution/validation-summary.md",
+          "artifacts/P07.1-execution/bc-check-tenancy.log",
+          "artifacts/P07.1-execution/final-verification/root-hermetic.log"
+        ]
+      },
+      {
+        "carrier": "AccountStatusGateTest + HttpRegistrar tests: suspended/grace owner/nonowner/nullowner, payment/export named/path routes, read-only vs writes, unknown/terminal status; AccountRead spy always central. Public constructor BC delta in CHANGELOG/php-api/Golden. Bootstrap+revert failure inside direct initialize and both runFor contexts preserves both Throwable objects, emits log context, attempts every revert; failing logger does not mask; poisoned context rejects reuse.",
+        "status": "green",
+        "evidence_ids": [
+          "artifacts/P07.1-execution/validation-summary.md",
+          "artifacts/P07.1-execution/final-verification/tenancy-tests.log"
+        ]
+      },
+      {
+        "carrier": "После продуктового commit: `bash scripts/contract-guard.sh` и `bash scripts/contract-guard.sh \"$(cat plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.1-execution/base-commit.txt)\"` → exit 0; в Unreleased `packages/tenancy/CHANGELOG.md` описан API delta.",
+        "status": "green",
+        "evidence_ids": [
+          "artifacts/P07.1-execution/validation-summary.md",
+          "artifacts/P07.1-execution/final-verification/contract-guard.log",
+          "artifacts/P07.1-execution/final-verification/contract-guard-base.log"
+        ]
+      },
+      {
+        "carrier": "`scripts/php84 composer --working-dir=packages/tenancy test -- --filter='TenancyEngine|QueueTenantContext|BootstrapperOrder|HostResolution|TenantSessionScope|QueueTenancyRevert|TenancyManager'` → exit 0: worked example examples §1, A затем B в одном worker, отсутствующий account → `TenantContextUnavailable` и default = central, sync и nested sync success/failure восстанавливают outer account/workspace; async завершается central; повторный completion не снимает outer frame; failure find/resolve/bootstrap/event восстанавливает runFor caller; повтор `queue:retry` исполняется под исходным account, сессия чужого tenant → 403; DB/cache/file live handler rebuilt; file directory создан 0700, actual read/write/gc проходят (D101); central cookie на tenant не сохраняет auth id; same-account cookie сохраняет вход; web+tenant priority и response save до end; resident A→B/exception не переносят auth (examples §3b).",
+        "status": "green",
+        "evidence_ids": [
+          "artifacts/P07.1-execution/validation-summary.md",
+          "artifacts/P07.1-execution/final-verification/tenancy-tests.log"
+        ]
+      },
+      {
+        "carrier": "`PGSQL_PORT=5434 scripts/php84 composer --working-dir=packages/tenancy test -- --group=pg --filter='ScopeBoundary|ResidentTenantSwitch'` → exit 0, включая DB_URL central + реальные базы A/B: tenant writes отсутствуют в URL DB, URL credentials/options перенесены, custom resolver overrides сохранены; под патчем без единственного `forgetScopedInstances()` в `resetScope()` `ScopeBoundaryPgTest` красный (mutation-кейс `P07-scope-boundary`, вывод в `artifacts/P07.1-execution/`).",
+        "status": "green",
+        "evidence_ids": [
+          "artifacts/P07.1-execution/validation-summary.md",
+          "artifacts/P07.1-execution/final-verification/tenancy-scope-pg.log",
+          "artifacts/P07.1-execution/mutation-P07-scope-boundary.log"
+        ]
+      },
+      {
+        "carrier": "`git grep -n -E 'Stancl\\\\\\\\Tenancy\\\\\\\\(Tenancy|Bootstrappers|Middleware|Listeners|Resolvers)|tenancy\\(\\)' -- packages/tenancy/src` → пусто.",
+        "status": "green",
+        "evidence_ids": [
+          "artifacts/P07.1-execution/validation-summary.md",
+          "artifacts/P07.1-execution/final-verification/runtime-scan.log"
+        ]
+      },
+      {
+        "carrier": "Cache fixture: file central/A/B/A keys и locks из examples §3; unsupported array отклонён; PackageManifest не содержит Stancl provider, модели генерируют UUID и provisioning проходит без vendor provider. Команда — основной tenancy test выше.",
+        "status": "green",
+        "evidence_ids": [
+          "artifacts/P07.1-execution/validation-summary.md",
+          "artifacts/P07.1-execution/final-verification/tenancy-tests.log"
+        ]
+      },
+      {
+        "carrier": "`scripts/php84 composer error-registry`, `scripts/php84 composer runtime-globals-gate`, `scripts/php84 composer config-cache-check` → exit 0.",
+        "status": "green",
+        "evidence_ids": [
+          "artifacts/P07.1-execution/validation-summary.md",
+          "artifacts/P07.1-execution/final-verification/error-registry.log",
+          "artifacts/P07.1-execution/final-verification/runtime-globals.log",
+          "artifacts/P07.1-execution/final-verification/root-hermetic.log"
+        ]
+      },
+      {
+        "carrier": "`scripts/php84 composer --working-dir=packages/tenancy test`, `scripts/php84 composer test:packages`, `PGSQL_PORT=5434 scripts/php84 composer test:pg` → exit 0.",
+        "status": "green",
+        "evidence_ids": [
+          "artifacts/P07.1-execution/validation-summary.md",
+          "artifacts/P07.1-execution/final-verification/tenancy-tests.log",
+          "artifacts/P07.1-execution/final-verification/root-hermetic.log",
+          "artifacts/P07.1-execution/final-verification/root-pg.log"
+        ]
+      },
+      {
+        "carrier": "`scripts/php84 php scripts/php-api.php --write` дважды → идентично; `scripts/php84 composer php-api`, `scripts/php84 composer bc-check` → exit 0; diff Golden baseline — только строки P07.1 из досье §4.",
+        "status": "green",
+        "evidence_ids": [
+          "artifacts/P07.1-execution/validation-summary.md",
+          "artifacts/P07.1-execution/final-verification/php-api.log",
+          "artifacts/P07.1-execution/bc-check-tenancy.log",
+          "artifacts/P07.1-execution/golden-semantic-delta.json"
+        ]
+      },
+      {
+        "carrier": "`scripts/php84 composer lint:check`, `scripts/php84 composer analyse` → exit 0; `bash scripts/anti-weakening-gate.sh` → exit 0; `php scripts/package-docs-gate.php` → exit 0.",
+        "status": "green",
+        "evidence_ids": [
+          "artifacts/P07.1-execution/validation-summary.md",
+          "artifacts/P07.1-execution/final-verification/lint-scoped.log",
+          "artifacts/P07.1-execution/final-verification/lint-root.log",
+          "artifacts/P07.1-execution/final-verification/lint-baseline-comparison.json",
+          "artifacts/P07.1-execution/final-verification/analyse-after-cache-refresh.log",
+          "artifacts/P07.1-execution/final-verification/anti-weakening.log",
+          "artifacts/P07.1-execution/final-verification/package-docs.log"
+        ]
+      },
+      {
+        "carrier": "Review `light` (D97): self-check по досье §6; строка `review: self-check GREEN` в Completion Notes.",
+        "status": "green",
+        "evidence_ids": [
+          "artifacts/P07.1-execution/validation-summary.md",
+          "artifacts/P07.1-execution/completion.md"
+        ]
+      }
+    ],
+    "repair_exhausted": null
+  }
+}

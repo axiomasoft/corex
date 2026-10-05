@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use CoreX\Notifications\Tests\Digest\DisabledDigestTestCase;
-use CoreX\Wakeup\Contracts\WakeupScheduler;
+use CoreX\Scheduling\Contracts\WakeupScheduler;
 
 uses(DisabledDigestTestCase::class);
 

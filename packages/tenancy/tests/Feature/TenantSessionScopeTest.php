@@ -222,7 +222,7 @@ it('е: без контекста аккаунта middleware отказывае
 it('в: host_identification.enabled=false (boxed) → middleware не зарегистрирована, приложение поднимается без root-БД', function (): void {
     // Our contribution to the tenant group and the aliases this package owns outright stay
     // absent under the flag.
-    expect(config('tenancy.host_identification.enabled'))->toBeFalse()
+    expect(config('corex-tenancy.host_identification.enabled'))->toBeFalse()
         ->and(app('router')->getMiddlewareGroups()['tenant'] ?? [])->not->toContain(ResolveTenantFromHost::class)
         ->and(app('router')->getMiddleware())->not->toHaveKey('tenancy.host')
         ->and(app('router')->getMiddleware())->not->toHaveKey('tenancy.status');

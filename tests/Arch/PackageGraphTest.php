@@ -20,7 +20,7 @@ test('package graph gate reports no violations', function (): void {
     expect($joined)->toContain('package-graph-gate: OK')
         ->and($joined)->not->toContain('LEGACY NAMESPACE SPLIT:')
         ->and($joined)->toContain('HOST-RESERVED NAMESPACE: CoreX\\SearchMeilisearch\\')
-        ->and($joined)->toContain('UNDECLARED DEPENDENCY EXCEPTION: axiomasoft/corex-tasks-workflow -> axiomasoft/corex-wakeup');
+        ->and($joined)->not->toContain('UNDECLARED DEPENDENCY EXCEPTION: axiomasoft/corex-tasks-workflow -> axiomasoft/corex-wakeup');
 
     $reportPath = $repoRoot.'/artifacts/P12-package-graph/report.json';
     expect(is_file($reportPath))->toBeTrue();
@@ -30,16 +30,20 @@ test('package graph gate reports no violations', function (): void {
     expect($report['violations'] ?? null)->toBe([])
         ->and($report['legacy_namespace_splits'] ?? null)->toBe([])
         ->and($report['reservations'] ?? null)->not->toBeEmpty()
-        ->and($report['undeclared_dependency_exceptions'] ?? null)->not->toBeEmpty();
+        ->and($report['undeclared_dependency_exceptions'] ?? null)->toBe([]);
 });
 
-test('package graph gate reports R1 when guard content is removed from guard file', function (): void {
+test('package graph gate forbids a notifications import of corex-wakeup', function (): void {
     $repoRoot = dirname(__DIR__, 2);
-    $guardPath = $repoRoot.'/packages/tasks-workflow/src/Internal/SqlTaskRecurrenceMaterializer.php';
-    $originalContents = (string) file_get_contents($guardPath);
-    $tamperedContents = str_replace('bound(WakeupScheduler::class)', 'bound(MissingWakeupScheduler::class)', $originalContents);
+    $probePath = $repoRoot.'/packages/notifications/src/Digest/Internal/DigestTick.php';
+    $originalContents = (string) file_get_contents($probePath);
+    $tamperedContents = str_replace(
+        'namespace CoreX\\Notifications\\Digest\\Internal;',
+        "namespace CoreX\\Notifications\\Digest\\Internal;\n\nuse CoreX\\Wakeup\\Contracts\\DueWakeupSweeper;",
+        $originalContents,
+    );
 
-    file_put_contents($guardPath, $tamperedContents);
+    file_put_contents($probePath, $tamperedContents);
 
     $command = escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/package-graph-gate.php').' 2>&1';
     $output = [];
@@ -47,14 +51,14 @@ test('package graph gate reports R1 when guard content is removed from guard fil
 
     exec($command, $output, $exitCode);
 
-    file_put_contents($guardPath, $originalContents);
+    file_put_contents($probePath, $originalContents);
     exec(escapeshellarg(PHP_BINARY).' '.escapeshellarg($repoRoot.'/scripts/package-graph-gate.php').' >/dev/null 2>&1');
 
     $joined = implode("\n", $output);
 
     expect($exitCode)->toBe(1, "gate exit {$exitCode}:\n".implode("\n", $output))
-        ->and($joined)->toContain('[R1]')
-        ->and($joined)->toContain('SqlTaskRecurrenceMaterializer.php');
+        ->and($joined)->toContain('axiomasoft/corex-notifications → axiomasoft/corex-wakeup')
+        ->and($joined)->toContain('DigestTick.php');
 });
 
 test('package graph gate reports R3 when host defines classes under reserved prefix', function (): void {

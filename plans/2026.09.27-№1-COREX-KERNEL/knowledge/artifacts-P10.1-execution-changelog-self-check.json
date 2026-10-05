@@ -1,0 +1,232 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P10.1-execution-changelog-self-check",
+  "title": "P10.1 changelog self-check",
+  "sections": [
+    {
+      "id": "P10.1-changelog-self-check",
+      "title": "P10.1 changelog self-check",
+      "text": "review: self-check GREEN\n\nCompared the concrete P02–P04 API/package migration entries against source history. All 20 package entries and flex-crm describe their own public changes. SKM review checks skipped by owner direction; no independent review claimed."
+    },
+    {
+      "id": "packages-access",
+      "title": "packages/access",
+      "text": ""
+    },
+    {
+      "id": "Unreleased-kernel-package-and-API-migration",
+      "title": "Unreleased — kernel package and API migration",
+      "text": "- Breaking (PLAN3.P02–P04, pre-1.0): Authorization now exposes Principal, RecordContext and AccessChecker ports plus typed AuthOptions and matrix registration; AzGuard identities and permission storage remain implementation details.\n- Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.\n\nSource history at baseline:\n```text\n76f8bdde feat(core): add typed package errors and frozen problem registry\nef69e78d refactor(core): close P04.2 public surface and DTO seams\ne21796a7 refactor: organize CoreX classes into feature modules\nb3354624 refactor(kernel): align package identifiers and strict gates\n90c3deea refactor(kernel): complete P02.3 package transfer\n173af94b refactor(core): extract package composition SPIs and test fixtures\nd2e84a1d fix(access): install the public AzGuard snapshot without a read token\na4a2cc68 build(platform): align PHP 8.4 and Laravel 12-13 manifests\n```"
+    },
+    {
+      "id": "packages-core",
+      "title": "packages/core",
+      "text": ""
+    },
+    {
+      "id": "Unreleased-kernel-package-and-API-migration-2",
+      "title": "Unreleased — kernel package and API migration",
+      "text": "- Breaking (PLAN3.P02–P04, pre-1.0): CoreX owns the kernel feature namespaces under one PSR-4 root; Api/Spi attributes, CoreOptions, ExtensionContribution and coded error descriptors declare the supported kernel and extension contracts. Runtime models and scanners no longer grant an implicit public contract.\n- Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.\n\nSource history at baseline:\n```text\n975cc3f0 feat(core): enforce source API and SPI contracts\n76f8bdde feat(core): add typed package errors and frozen problem registry\nef69e78d refactor(core): close P04.2 public surface and DTO seams\n31f5676d feat(core): add source-based API surface scanner\ne21796a7 refactor: organize CoreX classes into feature modules\nb3354624 refactor(kernel): align package identifiers and strict gates\n90c3deea refactor(kernel): complete P02.3 package transfer\n173af94b refactor(core): extract package composition SPIs and test fixtures\n```"
+    },
+    {
+      "id": "packages-custom-fields",
+      "title": "packages/custom-fields",
+      "text": ""
+    },
+    {
+      "id": "Unreleased-kernel-package-and-API-migration-3",
+      "title": "Unreleased — kernel package and API migration",
+      "text": "- Breaking (PLAN3.P02–P04, pre-1.0): AttributeStore, FieldCatalogue and SchemaOperations expose AttributeId, AttributeDefinition, FieldSelection and write-result DTOs; physical attribute storage and catalogue implementation are Internal.\n- Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.\n\nSource history at baseline:\n```text\n76f8bdde feat(core): add typed package errors and frozen problem registry\nef69e78d refactor(core): close P04.2 public surface and DTO seams\ne21796a7 refactor: organize CoreX classes into feature modules\nb3354624 refactor(kernel): align package identifiers and strict gates\n90c3deea refactor(kernel): complete P02.3 package transfer\n```"
+    },
+    {
+      "id": "packages-intl",
+      "title": "packages/intl",
+      "text": ""
+    },
+    {
+      "id": "Unreleased-kernel-package-and-API-migration-4",
+      "title": "Unreleased — kernel package and API migration",
+      "text": "- Breaking (PLAN3.P02–P04, pre-1.0): Currency/rate lookup and import ports return CurrencyInfo, RateBatch, RateSnapshot and receipt DTOs; translation and locale services use feature-owned namespaces and explicit Api/Spi declarations.\n- Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.\n\nSource history at baseline:\n```text\n76f8bdde feat(core): add typed package errors and frozen problem registry\nef69e78d refactor(core): close P04.2 public surface and DTO seams\ne21796a7 refactor: organize CoreX classes into feature modules\n90c3deea refactor(kernel): complete P02.3 package transfer\n173af94b refactor(core): extract package composition SPIs and test fixtures\n5db31fd4 refactor(corex): checkpoint platform hardening through P16\n769365cb feat(packages): внести P12.2–P12.9 и коррекции P12A.1–P12A.2\n904ac87a fix(packages): починить P0 границ пакетов (P12.1)\n```"
+    },
+    {
+      "id": "packages-media",
+      "title": "packages/media",
+      "text": ""
+    },
+    {
+      "id": "Unreleased-kernel-package-and-API-migration-5",
+      "title": "Unreleased — kernel package and API migration",
+      "text": "- Breaking (PLAN3.P02–P04, pre-1.0): MediaLibrary, MediaPolicy and ConversionDriver expose attachment, conversion and deletion DTOs; Eloquent media rows and conversion persistence are Internal.\n- Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.\n\nSource history at baseline:\n```text\nef69e78d refactor(core): close P04.2 public surface and DTO seams\ne21796a7 refactor: organize CoreX classes into feature modules\n90c3deea refactor(kernel): complete P02.3 package transfer\n173af94b refactor(core): extract package composition SPIs and test fixtures\n5db31fd4 refactor(corex): checkpoint platform hardening through P16\n79501673 feat(media): MediaOptions для library и conversion (P7.9)\n40d7d4cd feat(corex): add reusable extension adapters\n```"
+    },
+    {
+      "id": "packages-notifications",
+      "title": "packages/notifications",
+      "text": ""
+    },
+    {
+      "id": "Unreleased-kernel-package-and-API-migration-6",
+      "title": "Unreleased — kernel package and API migration",
+      "text": "- Breaking (PLAN3.P02–P04, pre-1.0): Delivery, digest and preference features expose recipient references, delivery outcomes and digest DTOs through declared ports; channel execution and persistence are Internal.\n- Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.\n\nSource history at baseline:\n```text\n76f8bdde feat(core): add typed package errors and frozen problem registry\nef69e78d refactor(core): close P04.2 public surface and DTO seams\ne21796a7 refactor: organize CoreX classes into feature modules\n90c3deea refactor(kernel): complete P02.3 package transfer\n5db31fd4 refactor(corex): checkpoint platform hardening through P16\n40d7d4cd feat(corex): add reusable extension adapters\n```"
+    },
+    {
+      "id": "packages-operations",
+      "title": "packages/operations",
+      "text": ""
+    },
+    {
+      "id": "Unreleased-kernel-package-and-API-migration-7",
+      "title": "Unreleased — kernel package and API migration",
+      "text": "- Breaking (PLAN3.P02–P04, pre-1.0): The package uses CoreX\\Operations as its sole PSR-4 root; authorization, operation catalogue, bulk execution and validation expose feature-owned ports and typed inputs/results. Extracted tools, webhooks, custom fields and transfer APIs belong to their own packages.\n- Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.\n\nSource history at baseline:\n```text\n76f8bdde feat(core): add typed package errors and frozen problem registry\nef69e78d refactor(core): close P04.2 public surface and DTO seams\ne21796a7 refactor: organize CoreX classes into feature modules\nb3354624 refactor(kernel): align package identifiers and strict gates\n90c3deea refactor(kernel): complete P02.3 package transfer\n9cabf107 refactor(operations): extract webhook composition and split transport tests\n173af94b refactor(core): extract package composition SPIs and test fixtures\n5db31fd4 refactor(corex): checkpoint platform hardening through P16\n```"
+    },
+    {
+      "id": "packages-panels",
+      "title": "packages/panels",
+      "text": ""
+    },
+    {
+      "id": "Unreleased-kernel-package-and-API-migration-8",
+      "title": "Unreleased — kernel package and API migration",
+      "text": "- Breaking (PLAN3.P02–P04, pre-1.0): PanelCatalogue and PanelProvider return PanelDescriptor/PanelReference DTOs; SavedViewRepository and view schema/policy ports return SavedQuery and SaveViewInput instead of exposing saved-view models.\n- Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.\n\nSource history at baseline:\n```text\nef69e78d refactor(core): close P04.2 public surface and DTO seams\nb3354624 refactor(kernel): align package identifiers and strict gates\n90c3deea refactor(kernel): complete P02.3 package transfer\n173af94b refactor(core): extract package composition SPIs and test fixtures\n5db31fd4 refactor(corex): checkpoint platform hardening through P16\n40d7d4cd feat(corex): add reusable extension adapters\n```"
+    },
+    {
+      "id": "packages-recurrence",
+      "title": "packages/recurrence",
+      "text": ""
+    },
+    {
+      "id": "Unreleased-kernel-package-and-API-migration-9",
+      "title": "Unreleased — kernel package and API migration",
+      "text": "- Breaking (PLAN3.P02–P04, pre-1.0): RecurrenceExpander exposes RecurrenceSet, windows, limits, cursors and occurrence pages; recurrence implementation remains Internal and cursor failures have package-owned error identities.\n- Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.\n\nSource history at baseline:\n```text\n76f8bdde feat(core): add typed package errors and frozen problem registry\nef69e78d refactor(core): close P04.2 public surface and DTO seams\n90c3deea refactor(kernel): complete P02.3 package transfer\n5d8f4b63 feat(recurrence): реализовать bounded adapter P7.2 (REC-01..12)\n```"
+    },
+    {
+      "id": "packages-search",
+      "title": "packages/search",
+      "text": ""
+    },
+    {
+      "id": "Unreleased-kernel-package-and-API-migration-10",
+      "title": "Unreleased — kernel package and API migration",
+      "text": "- Breaking (PLAN3.P02–P04, pre-1.0): SearchDocuments, SearchHydrator, SearchSchema and IndexDriver expose candidate/document/index DTOs; driver registry registration is explicit and search persistence stays Internal.\n- Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.\n\nSource history at baseline:\n```text\n76f8bdde feat(core): add typed package errors and frozen problem registry\nef69e78d refactor(core): close P04.2 public surface and DTO seams\ne21796a7 refactor: organize CoreX classes into feature modules\n90c3deea refactor(kernel): complete P02.3 package transfer\n173af94b refactor(core): extract package composition SPIs and test fixtures\n5db31fd4 refactor(corex): checkpoint platform hardening through P16\n769365cb feat(packages): внести P12.2–P12.9 и коррекции P12A.1–P12A.2\n39403c11 feat: portable utilities и data/wakeup слой P5–P7\n```"
+    },
+    {
+      "id": "packages-search-intl",
+      "title": "packages/search-intl",
+      "text": ""
+    },
+    {
+      "id": "Unreleased-kernel-package-and-API-migration-11",
+      "title": "Unreleased — kernel package and API migration",
+      "text": "- Breaking (PLAN3.P02–P04, pre-1.0): The bridge exposes SavedViewLabelReader and LocalizedFieldBinding with its own provider; label decoration is separate from the host search and localization implementations.\n- Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.\n\nSource history at baseline:\n```text\nef69e78d refactor(core): close P04.2 public surface and DTO seams\ne21796a7 refactor: organize CoreX classes into feature modules\nb3354624 refactor(kernel): align package identifiers and strict gates\n90c3deea refactor(kernel): complete P02.3 package transfer\n769365cb feat(packages): внести P12.2–P12.9 и коррекции P12A.1–P12A.2\n```"
+    },
+    {
+      "id": "packages-search-meilisearch",
+      "title": "packages/search-meilisearch",
+      "text": ""
+    },
+    {
+      "id": "Unreleased-kernel-package-and-API-migration-12",
+      "title": "Unreleased — kernel package and API migration",
+      "text": "- Breaking (PLAN3.P02–P04, pre-1.0): The bridge owns CoreX\\SearchMeilisearch and MeilisearchServiceProvider; configuration failures have package-owned typed codes and the concrete search driver is Internal.\n- Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.\n\nSource history at baseline:\n```text\n76f8bdde feat(core): add typed package errors and frozen problem registry\nef69e78d refactor(core): close P04.2 public surface and DTO seams\ne21796a7 refactor: organize CoreX classes into feature modules\n90c3deea refactor(kernel): complete P02.3 package transfer\n173af94b refactor(core): extract package composition SPIs and test fixtures\n5db31fd4 refactor(corex): checkpoint platform hardening through P16\n769365cb feat(packages): внести P12.2–P12.9 и коррекции P12A.1–P12A.2\n39403c11 feat: portable utilities и data/wakeup слой P5–P7\n```"
+    },
+    {
+      "id": "packages-tasks",
+      "title": "packages/tasks",
+      "text": ""
+    },
+    {
+      "id": "Unreleased-kernel-package-and-API-migration-13",
+      "title": "Unreleased — kernel package and API migration",
+      "text": "- Breaking (PLAN3.P02–P04, pre-1.0): Access and planning features expose TaskAccess, TaskPlanningCommand and TaskOperationReceipts with PlanningSubject/PlanningToken/TaskOperationReceipt DTOs; task rows and planning persistence are Internal.\n- Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.\n\nSource history at baseline:\n```text\n76f8bdde feat(core): add typed package errors and frozen problem registry\nef69e78d refactor(core): close P04.2 public surface and DTO seams\ne21796a7 refactor: organize CoreX classes into feature modules\n90c3deea refactor(kernel): complete P02.3 package transfer\n5db31fd4 refactor(corex): checkpoint platform hardening through P16\n39403c11 feat: portable utilities и data/wakeup слой P5–P7\nf63760c2 feat(tasks): добавили смену проекта задачи\na4625f30 feat: deliver CoreX tenancy identity baseline\n```"
+    },
+    {
+      "id": "packages-tasks-workflow",
+      "title": "packages/tasks-workflow",
+      "text": ""
+    },
+    {
+      "id": "Unreleased-kernel-package-and-API-migration-14",
+      "title": "Unreleased — kernel package and API migration",
+      "text": "- Breaking (PLAN3.P02–P04, pre-1.0): TaskRecurrenceCommand accepts SeriesReference and MaterializationWindow and returns MaterializationReceipt; completion bindings are explicit, and materialization conflicts use package-owned typed errors.\n- Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.\n\nSource history at baseline:\n```text\n76f8bdde feat(core): add typed package errors and frozen problem registry\nef69e78d refactor(core): close P04.2 public surface and DTO seams\ne21796a7 refactor: organize CoreX classes into feature modules\nb3354624 refactor(kernel): align package identifiers and strict gates\n90c3deea refactor(kernel): complete P02.3 package transfer\n5db31fd4 refactor(corex): checkpoint platform hardening through P16\n64789b1a fix(tasks-workflow): стабилизировать materialization-тесты для cohort proof\n769365cb feat(packages): внести P12.2–P12.9 и коррекции P12A.1–P12A.2\n```"
+    },
+    {
+      "id": "packages-tenancy",
+      "title": "packages/tenancy",
+      "text": ""
+    },
+    {
+      "id": "Unreleased-kernel-package-and-API-migration-15",
+      "title": "Unreleased — kernel package and API migration",
+      "text": "- Breaking (PLAN3.P02–P04, pre-1.0): CoreX\\Tenancy is owned exclusively by this package; AccountRead, central API and domain trust ports expose declared account/domain DTOs and events. TenancyOptions and feature-owned Laravel bindings replace implicit access to persistence internals.\n- Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.\n\nSource history at baseline:\n```text\n76f8bdde feat(core): add typed package errors and frozen problem registry\nef69e78d refactor(core): close P04.2 public surface and DTO seams\ne21796a7 refactor: organize CoreX classes into feature modules\nb3354624 refactor(kernel): align package identifiers and strict gates\n90c3deea refactor(kernel): complete P02.3 package transfer\n173af94b refactor(core): extract package composition SPIs and test fixtures\n5db31fd4 refactor(corex): checkpoint platform hardening through P16\n28bc8527 feat(core,tenancy): stamp impersonation provenance and close failed sessions\n```"
+    },
+    {
+      "id": "packages-tools",
+      "title": "packages/tools",
+      "text": ""
+    },
+    {
+      "id": "Unreleased-kernel-package-and-API-migration-16",
+      "title": "Unreleased — kernel package and API migration",
+      "text": "- Breaking (PLAN3.P02–P04, pre-1.0): Extracted tools into their own CoreX\\Tools package and provider; ToolCatalogue, ToolInvoker, ToolPolicy and schema/execution ports exchange ToolCall, ToolDescriptor and ToolResult DTOs. Execution and schema worker implementations remain Internal.\n- Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.\n\nSource history at baseline:\n```text\n76f8bdde feat(core): add typed package errors and frozen problem registry\nef69e78d refactor(core): close P04.2 public surface and DTO seams\ne21796a7 refactor: organize CoreX classes into feature modules\n90c3deea refactor(kernel): complete P02.3 package transfer\n```"
+    },
+    {
+      "id": "packages-transfer",
+      "title": "packages/transfer",
+      "text": ""
+    },
+    {
+      "id": "Unreleased-kernel-package-and-API-migration-17",
+      "title": "Unreleased — kernel package and API migration",
+      "text": "- Breaking (PLAN3.P02–P04, pre-1.0): Extracted transfer into its own CoreX\\Transfer package and provider; transfer/export ports expose canonical records, checkpoints, conflict rules and sealed export manifests, while codecs and persistence are Internal.\n- Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.\n\nSource history at baseline:\n```text\nef69e78d refactor(core): close P04.2 public surface and DTO seams\ne21796a7 refactor: organize CoreX classes into feature modules\n90c3deea refactor(kernel): complete P02.3 package transfer\n5db31fd4 refactor(corex): checkpoint platform hardening through P16\nbd4855a7 feat(transfer): bound import cancellation and public export capture\n769365cb feat(packages): внести P12.2–P12.9 и коррекции P12A.1–P12A.2\n```"
+    },
+    {
+      "id": "packages-wakeup",
+      "title": "packages/wakeup",
+      "text": ""
+    },
+    {
+      "id": "Unreleased-kernel-package-and-API-migration-18",
+      "title": "Unreleased — kernel package and API migration",
+      "text": "- Breaking (PLAN3.P02–P04, pre-1.0): WakeupScheduler and due-work ports exchange WakeupRequest, WakeupDelivery and schedule/cancel/sweep result DTOs; WakeupHandlerDefinition declares registrations and durable storage remains Internal.\n- Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.\n\nSource history at baseline:\n```text\nef69e78d refactor(core): close P04.2 public surface and DTO seams\ne21796a7 refactor: organize CoreX classes into feature modules\n90c3deea refactor(kernel): complete P02.3 package transfer\n173af94b refactor(core): extract package composition SPIs and test fixtures\n5db31fd4 refactor(corex): checkpoint platform hardening through P16\n39403c11 feat: portable utilities и data/wakeup слой P5–P7\n40d7d4cd feat(corex): add reusable extension adapters\n```"
+    },
+    {
+      "id": "packages-webhooks",
+      "title": "packages/webhooks",
+      "text": ""
+    },
+    {
+      "id": "Unreleased-kernel-package-and-API-migration-19",
+      "title": "Unreleased — kernel package and API migration",
+      "text": "- Breaking (PLAN3.P02–P04, pre-1.0): Extracted webhooks into their own CoreX\\Webhooks package and provider; subscription/delivery/transport/signing ports exchange WebhookSubscription, WebhookDelivery and signed-header DTOs. WebhookOptions and package-owned errors define the supported configuration/failure surface.\n- Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.\n\nSource history at baseline:\n```text\n76f8bdde feat(core): add typed package errors and frozen problem registry\nef69e78d refactor(core): close P04.2 public surface and DTO seams\ne21796a7 refactor: organize CoreX classes into feature modules\n90c3deea refactor(kernel): complete P02.3 package transfer\n```"
+    },
+    {
+      "id": "packages-workflow",
+      "title": "packages/workflow",
+      "text": ""
+    },
+    {
+      "id": "Unreleased-kernel-package-and-API-migration-20",
+      "title": "Unreleased — kernel package and API migration",
+      "text": "- Breaking (PLAN3.P02–P04, pre-1.0): EngineAdapter and WorkflowBinding use typed TriggerRequest, StartResult, SignalRequest/SignalResult and transition DTOs; workflow trigger persistence is Internal and the provider owns composition.\n- Package installation uses the `axiomasoft` Composer vendor and PHP 8.4–8.5 / Laravel 12–13 constraints; `resources/contracts/php-api.json` records the explicitly attributed API and SPI. Old names have no compatibility aliases.\n\nSource history at baseline:\n```text\nef69e78d refactor(core): close P04.2 public surface and DTO seams\n90c3deea refactor(kernel): complete P02.3 package transfer\n5db31fd4 refactor(corex): checkpoint platform hardening through P16\n255b4944 feat(workflow): pin trigger intents to definition id and version (P11.4)\n39403c11 feat: portable utilities и data/wakeup слой P5–P7\n```"
+    },
+    {
+      "id": "products-flex-crm",
+      "title": "products/flex-crm",
+      "text": ""
+    },
+    {
+      "id": "Unreleased",
+      "title": "[Unreleased]",
+      "text": ""
+    },
+    {
+      "id": "Changed",
+      "title": "Changed",
+      "text": "- Breaking (PLAN3.P02–P04, pre-1.0): CRM stays a `flex/crm` product with one `Flex\\Crm` PSR-4 root; lead/contact/company operations use typed request/result DTOs and explicit Api/Spi declarations. CRM model persistence is Internal, its errors use package-owned codes, and kernel dependencies use the `axiomasoft` Composer vendor.\n\n- **Breaking (next MINOR >=0.3.0, pre-1.0):** additive full enabled CRM storage parity,\n  canonical sales enums/fields/relations, lost reasons and activity targets; explicit\n  CreateLead and LogActivity named-argument migration. No guessed legacy status,\n  author, metadata or contact identity conversion. See UPGRADE.md.\n- Existing seven company/contact operations publish typed input/output schemas;\n  boolean inputs reject numeric/string lookalikes instead of reaching strict DTOs.\n- Sales Actions honor observer vetoes transactionally; nullable deal amount preserves\n  mandatory currency, and conversion pivot IDs use the owning configured-ID seam.\n\n- **Breaking (next MINOR, pre-1.0):** approved company/contact fields, B-13 `{source,id,name}`\n  provenance, deterministic display/channels/search and typed contact/company M2M replace\n  legacy scalar fields and single-company relationship. Create Actions now accept CompanyData/\n  ContactData; CompanyCreated/ContactCreated include Actor. ConvertLead is adapted explicitly.\n- New public `Contracts/CrmExecutionContext::current(): ExecutionContext` requires authenticated\n  execution and CoreX account context/connection bindings. Reads fail closed; nullable account\n  records require explicit capability, workspace membership is rechecked and locked on writes.\n- Additive parity migration verifies identity/workspace prerequisites, permits duplicate INN,\n  and enforces FK/pair/primary/index contracts. Populated legacy upgrade rejects before changing\n  data; no invented actors or silent metadata truncation. See UPGRADE.md.\n- Final insert/update attribute guards prevent late/quiet Eloquent observers from bypassing\n  admission/provenance invariants; owning Actions roll back observer veto without success events.\n\n- **Breaking:** пакет и namespace переименованы `corex/crm`/`CoreX\\Crm\\` → `flex/crm`/`Flex\\Crm\\`\n  (доктрина слоёв, D70/D72). Consumer-код обновляет `use`/`require` на новые имена (P2.0).\n\nSource history at baseline:\n```text\nef69e78d refactor(core): close P04.2 public surface and DTO seams\n90c3deea refactor(kernel): complete P02.3 package transfer\n```"
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P10.1-execution/changelog-self-check.md",
+    "sha256": "e0bdec6db73e6ad511ad08a824ab9bb965a169cd63c3dea892417ca4b4825295"
+  }
+}

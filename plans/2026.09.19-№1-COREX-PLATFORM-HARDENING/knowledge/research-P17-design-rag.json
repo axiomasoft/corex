@@ -1,0 +1,39 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "research-P17-design-rag",
+  "title": "bounded external evidence",
+  "sections": [
+    {
+      "id": "P17-bounded-external-evidence",
+      "title": "P17 — bounded external evidence",
+      "text": ""
+    },
+    {
+      "id": "1.-Boundary",
+      "title": "1. Boundary",
+      "text": "One focused Perplexity browser-MCP query was used for independently installable Laravel/Composer\nrelease checks. Repository state, CoreX package names, the DoD mapping, profile composition and\nrelease authority were derived only from repository evidence. The raw capture and exact query are\nstored in `@plan/knowledge/artifacts-P17-design-rag-P17-Q1.json`; official URLs were reachable directly on\n2026-09-20."
+    },
+    {
+      "id": "2.-Findings-used",
+      "title": "2. Findings used",
+      "text": "| Evidence | Design consequence |\n|:--|:--|\n| RAG:✅ Composer distinguishes locked `install` from dependency resolution by `update`; `--prefer-lowest` tests declared lower bounds. | P17.6 has both exact-candidate install and lower-bound resolution lanes. |\n| RAG:✅ Composer builds package autoload metadata from installed package mappings, and `autoload-dev` is root-only. | Every fixture installs dist archives in a fresh consumer and scans generated autoload metadata for workspace leakage. |\n| RAG:✅ Laravel package discovery is declared through `extra.laravel.providers`; provider `register`/`boot` effects are observable. | Pristine probes run discovery and assert package-specific boot effects, not only `class_exists`. |\n| RAG:✅ Composer derives VCS package versions from tags and advises against a manual `version` field. | Candidate packages receive immutable `1.0.0` tags; P17 does not add `version` to Composer metadata. |\n| RAG:✅ GitHub releases are tag-based immutable distribution records. | The publication packet binds exact tag/ref/artifact digests and forbids tag rewrite. |"
+    },
+    {
+      "id": "3.-Engineering-policy-not-attributed-as-an-external-requirement",
+      "title": "3. Engineering policy, not attributed as an external requirement",
+      "text": "Official docs do not prescribe CoreX's exact pristine-consumer layout, split-mirror provenance,\nprofile count, DoD count, external fixture set or cross-repository atomicity. Those are local\ncontrols in D95–D97. The source material supports the underlying Composer/Laravel/GitHub behavior,\nnot the project-specific gate policy."
+    },
+    {
+      "id": "4.-Primary-sources",
+      "title": "4. Primary sources",
+      "text": "- Composer CLI: <https://getcomposer.org/doc/03-cli.md>\n- Composer schema: <https://getcomposer.org/doc/04-schema.md>\n- Composer versions: <https://getcomposer.org/doc/articles/versions.md>\n- Laravel 12 package development: <https://laravel.com/docs/12.x/packages>\n- GitHub releases: <https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases>\n\nNo external code or prose is vendored into product files."
+    }
+  ],
+  "applies_to": [
+    "P17"
+  ],
+  "provenance": {
+    "path": "research/P17-design-rag.md",
+    "sha256": "b534ad77b4f8af702fd34309e2ea0204df7c75630e1873dc07beaadf5fb3f4cc"
+  }
+}

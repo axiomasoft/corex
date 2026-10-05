@@ -1,0 +1,34 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P12-design-rag-P12-Q1-error-contract",
+  "title": "Q1 — error contract",
+  "sections": [
+    {
+      "id": "P12-Q1-error-contract",
+      "title": "P12-Q1 — error contract",
+      "text": "**Tool:** Perplexity MCP. **Date:** 2026-09-20."
+    },
+    {
+      "id": "Query",
+      "title": "Query",
+      "text": "> Answer in at most 700 words using current official standards and published\n> API guidelines only. How should a public API combine stable machine-readable\n> error codes with RFC 9457 Problem Details? Address category, field path,\n> retryable, details, human message stability, HTTP status, and compatibility\n> rules. Separate normative facts from design inference and include exact URLs."
+    },
+    {
+      "id": "Result-used",
+      "title": "Result used",
+      "text": "Perplexity separated standard facts from design inference:\n\n- RFC 9457 defines `application/problem+json` and the standard members\n  `type`, `title`, `status`, `detail`, `instance`; `type` is the primary problem\n  identifier, while the HTTP response status remains authoritative.\n- `detail` is human-readable and clients should not parse it for machine behavior.\n- Extension members are permitted and unknown members must be tolerated. The RFC\n  includes validation-error examples with pointers into request content.\n- Retry timing belongs to HTTP semantics such as `Retry-After`; a boolean alone\n  does not authorize an unsafe automatic retry.\n- Design inference accepted for CoreX: retain a package-owned stable `code` beside\n  category/path/retryability/details, keep message non-contractual, and let P13\n  project the descriptor into both the existing envelope and Problem Details."
+    },
+    {
+      "id": "Primary-sources-returned",
+      "title": "Primary sources returned",
+      "text": "- https://www.rfc-editor.org/rfc/rfc9457\n- https://www.rfc-editor.org/rfc/rfc9110\n\nThe query did not establish CoreX-specific code names, PHP types or compatibility\nsnapshot mechanics; those remain D60–D61."
+    }
+  ],
+  "applies_to": [
+    "P12"
+  ],
+  "provenance": {
+    "path": "artifacts/P12-design-rag/P12-Q1-error-contract.md",
+    "sha256": "da44477080a3291ca533f7d78b4055d98f61c86f9f51f12009fdb02a22a8b5e5"
+  }
+}

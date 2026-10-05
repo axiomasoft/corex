@@ -1,0 +1,45 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D28",
+  "title": "savedviews-to-panels (accepted)",
+  "date": "2026-09-28",
+  "status": "accepted",
+  "decision": "`core/src/SavedViews/**` → `CoreX\\Panels\\SavedViews\\` (`packages/panels/src/SavedViews/`); контракты `SavedViewRepository`, `ViewAccessPolicy`, `ViewSchemaProvider` → `CoreX\\Panels\\SavedViews\\Contracts\\`; миграции `sys_saved_view*` → `packages/panels/database/migrations/pg/`; тесты `core/tests/Views` → `packages/panels/tests/SavedViews/`. Bindings из `CoreServiceProvider` переходят в `PanelsServiceProvider` (7 рёбер `remove`).",
+  "rationale": "- Единственный потребитель — panels (7 импортов); SavedViews — UI-состояние, не механизм платформы (F4).\n- Иначе ядро → panels (kernel-dependency).",
+  "applies_to": [
+    "P00.1",
+    "P02"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "author-choice (claude-opus-5-5/high, Claude Code, 2026-09-28) по мандату владельца «есть идеальное решение — утверждай» (`brief/00-brief.md` B6); frontier-вердикт P00.1 в пределах `research/P00-design.md` §2."
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D28\ndate: 2026-09-28\nstatus: accepted\nitem: P00.1\nitems: [P00.1, P02]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D28-savedviews-to-panels-accepted",
+      "title": "D28 — savedviews-to-panels (accepted)",
+      "text": "**Actor:** author-choice (claude-opus-5-5/high, Claude Code, 2026-09-28) по мандату владельца «есть идеальное решение — утверждай» (`@plan/brief.json` B6); frontier-вердикт P00.1 в пределах `@plan/knowledge/research-P00-design.json` §2.\n**Evidence:** RAG:— `artifacts/P00-design/facts/{import-matrix.txt,zone-consumers.tsv}`, `packages/*/composer.json`, `artifacts/P00/*.tsv`; `check-maps.py` (default/`--dependencies`) exit 0 на `b624936`+P00.1."
+    },
+    {
+      "id": "Solution",
+      "title": "Solution",
+      "text": "`core/src/SavedViews/**` → `CoreX\\Panels\\SavedViews\\` (`packages/panels/src/SavedViews/`); контракты `SavedViewRepository`, `ViewAccessPolicy`, `ViewSchemaProvider` → `CoreX\\Panels\\SavedViews\\Contracts\\`; миграции `sys_saved_view*` → `packages/panels/database/migrations/pg/`; тесты `core/tests/Views` → `packages/panels/tests/SavedViews/`. Bindings из `CoreServiceProvider` переходят в `PanelsServiceProvider` (7 рёбер `remove`)."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "- Единственный потребитель — panels (7 импортов); SavedViews — UI-состояние, не механизм платформы (F4).\n- Иначе ядро → panels (kernel-dependency)."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P02 перенос + provider wiring; таблицы — владение panels (сверка `table-ownership.md` в P08)."
+    }
+  ]
+}

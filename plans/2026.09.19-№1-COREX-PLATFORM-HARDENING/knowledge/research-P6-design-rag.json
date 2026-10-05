@@ -1,0 +1,34 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "research-P6-design-rag",
+  "title": "Внешние подтверждения фазы P6 — 2026-09-19",
+  "sections": [
+    {
+      "id": "P6-2026-09-19",
+      "title": "Внешние подтверждения фазы P6 — 2026-09-19",
+      "text": "Сводка пяти запросов детализации P6 с привязкой к пунктам `P6-design.md`.\nСырые ответы и точные строки запросов — `../artifacts/P6-design-rag/`\n(`manifest.json` несёт статусы, первичные источники и SHA256 файлов захвата).\n\nПравило чтения: `RAG:✅` — внешний источник подтверждает **названную общую практику**.\nВывод «поэтому в CoreX так» — всегда локальный (`RAG:—`), из кода и измерений.\nНи один ответ не является спецификацией CoreX."
+    },
+    {
+      "id": "1.",
+      "title": "1. Что подтвердилось и где это применено",
+      "text": "| ID | Что подтверждено | Первичный источник | Применено в |\n|:--|:--|:--|:--|\n| P6-Q1 | Внутренние модули с неймспейсом и arch-тестом — правильная граница, пока нет независимого релиза, потребителя или владения | Fowler Monolith First · Symfony bundles | D8 сохранён, D32: зоны, не пакеты |\n| P6-Q1 | Пакет на один файл добавляет версию, CI, BC-поверхность и координацию релиза без автономии | Composer libraries · Symfony | D8, `@plan/plan.json` §7 условие возврата |\n| P6-Q1 | Symfony: bundles не для организации приложения; для шаринга между приложениями | Symfony bundles | эскиз §3 принят |\n| P6-Q2 | Смена неймспейса публичного класса — несовместимое изменение; старое имя держат до мажора | Symfony BC promise | D32: FQCN не двигаем в P6, цель — P15 |\n| P6-Q2 | `class_alias` сохраняет runtime-идентичность, но Roave/PHPStan смотрят декларацию | PHP class_alias · Roave BCC · Composer files | D32: alias не вводим; типы `final` |\n| P6-Q2 | Forwarding-subclass — надёжный сигнал для статанализа; для `final` недоступен | Symfony deprecations · PHP | D32 |\n| P6-Q3 | `autoload-dev` и `require-dev` — только у корня; path-repo не меняет этого | Composer schema | D33 |\n| P6-Q3 | TestCase, наследующий Testbench, в production PSR-4 рекламирует класс без runtime-зависимости | Composer · Testbench · Laravel packages | D33, N09 staging |\n| P6-Q4 | Матрица allow-list + CI — fitness function; зелёный прогон без посадки не доказывает гейт | ThoughtWorks fitness functions | P6.2, инвариант негатива |\n| P6-Q4 | Посадка обязана назвать файл; `use`-скан не видит FQCN без `use` | Pest Arch · Deptrac contrast | P6.2: SourceScanner + P3.2 tokenizer уже в дереве; Deptrac не вводится (D17) |\n| P6-Q5 | Foundation — одинаковый смысл и инварианты; departments — capability org-структуры | Evans Shared Kernel · Microsoft | D34, зона Departments, roadmap §7 |\n| P6-Q5 | Money-примитив может быть foundation; Eloquent-cast и финансовая политика — нет | Evans value objects | D34, зона Money |\n| P6-Q5 | Feature-flags: движок оценки — платформа; определения флагов — capability | Microsoft layering | зона Features |\n| P6-Q5 | Audit/settings: транспорт и разрешение scope — платформа; словарь событий и ключей — владельцы | Drupal core vs modules | зоны Audit и Settings без смены семантики |"
+    },
+    {
+      "id": "2.",
+      "title": "2. Что НЕ подтвердилось внешне",
+      "text": "| Пробел | Статус | Как несёт дизайн |\n|:--|:--|:--|\n| Обязательность немедленного переноса публичного FQCN вместе с объявлением зоны | источника «зона = новый неймспейс в том же миноре» нет; Symfony против смены имени без депрекации | D32: зона = карта + гейт |\n| Что `autoload-dev` ядра протечёт в пакетные сьюты монорепо | источник прямо против | D33: production-autoload сохраняется до P16 |\n| Численный порог «достаточно потребителей для пакета» | внешней нормы нет; Q1 говорит «хотя бы два независимых приложения» | `@plan/plan.json` §7: свой lifecycle / внешний потребитель без ядра / `brick/money` как тяжёлая зависимость |\n| Что Pest Arch достаточен внутри одного path-пакета | в этом репозитории он уже вакуумно зелёный на Flex-импорте | P6.2 = SourceScanner, как LayerTest |"
+    },
+    {
+      "id": "3.",
+      "title": "3. Дефекты провайдера и транспорта",
+      "text": "Таймаут MCP на этой фазе **не воспроизвёлся**. Дефект «ответ, начатый таблицей,\nусекается» не воспроизвёлся: все пять запросов несли `no tables`.\n\nДефект транспорта P5 (один вызов = 5+ запросов провайдеру) не исправлялся;\nзафиксирован в `manifest.json` как `known_transport_defect`."
+    }
+  ],
+  "applies_to": [
+    "P6"
+  ],
+  "provenance": {
+    "path": "research/P6-design-rag.md",
+    "sha256": "e0dac7d50531274d4754d022bdeac1e5ccb20819bb8bf7cb132ba3ebce72762b"
+  }
+}

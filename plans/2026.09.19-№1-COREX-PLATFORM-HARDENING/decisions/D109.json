@@ -1,0 +1,45 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D109",
+  "title": "Owner-gate G-API на флип `DataScope` (P4.7)",
+  "date": "2026-09-21",
+  "status": "accepted",
+  "decision": "Владелец **выдаёт** `[OWNER-GATE:G-API]` на исполнение **только** item `P4.7` в ветке\n`main` в объёме, зафиксированном спецификацией `@plan/phases/P4/P4.7.json` и\n`@plan/knowledge/research-P4-design.json` §5:\n\n- скалярный versioned конструктор `DataScope`, удаление `public TenantContext $context`;\n- `implements CoreX\\Contracts\\DurablePayload`;\n- ужесточение `DurablePayloadRule` (идентификатор `corex.durablePayload.untypedArrayProperty`);\n- сопутствующие файлы из `Files` item'а P4.7 и breaking-строка в `CHANGELOG.md`.\n\nГейт **не** расширяет scope на P4.8+, другие контракты, FQCN-переносы (P15) или\nполную декомпозицию `DataScope` шире D6.\n\nУведомление потребителей `shared-data-foundation/1`: владелец поручает подготовить\nтекст в receipt P4.7; фактическая рассылка FlexCRM/внешним потребителям — действие\nвладельца после просмотра receipt (в монорепо потребители уже на `fromTenantContext`).",
+  "rationale": "D6 и дизайн фазы заранее описали ломающий флип; без owner-grant исполнение P4.7\nзапрещено полем `Authority` item'а. Явная фиксация отделяет принятое улучшение\nплатформы от неограниченного «менять что угодно».",
+  "applies_to": [
+    "P4",
+    "P4.7"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "owner/vostrikov (human)"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D109\ndate: 2026-09-21\nstatus: accepted\nitem: P4.7\nitems: [P4, P4.7]\nsupersedes: []\nsuperseded_by: null\nowner_gate: G-API\nbranch: main\nscope: packages/core/src/Support/Data/DataScope.php\n---"
+    },
+    {
+      "id": "D109-Owner-gate-G-API-DataScope-P4.7",
+      "title": "D109 — Owner-gate G-API на флип `DataScope` (P4.7)",
+      "text": "**Actor:** owner/vostrikov (human)\n\n**Evidence:** RAG:— сообщение владельца 2026-09-21: «Я за любые улучшения, зафиксируй»\nв контексте ожидания `G-API` перед `task:plan-exec P4.7`. RAG:— принятые D6, D21;\nмиграция P4.1–P4.6 закрыта (receipt `@plan/knowledge/findings-P4-receipts.json` §P4.6)."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "Владелец **выдаёт** `[OWNER-GATE:G-API]` на исполнение **только** item `P4.7` в ветке\n`main` в объёме, зафиксированном спецификацией `@plan/phases/P4/P4.7.json` и\n`@plan/knowledge/research-P4-design.json` §5:\n\n- скалярный versioned конструктор `DataScope`, удаление `public TenantContext $context`;\n- `implements CoreX\\Contracts\\DurablePayload`;\n- ужесточение `DurablePayloadRule` (идентификатор `corex.durablePayload.untypedArrayProperty`);\n- сопутствующие файлы из `Files` item'а P4.7 и breaking-строка в `CHANGELOG.md`.\n\nГейт **не** расширяет scope на P4.8+, другие контракты, FQCN-переносы (P15) или\nполную декомпозицию `DataScope` шире D6.\n\nУведомление потребителей `shared-data-foundation/1`: владелец поручает подготовить\nтекст в receipt P4.7; фактическая рассылка FlexCRM/внешним потребителям — действие\nвладельца после просмотра receipt (в монорепо потребители уже на `fromTenantContext`)."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "D6 и дизайн фазы заранее описали ломающий флип; без owner-grant исполнение P4.7\nзапрещено полем `Authority` item'а. Явная фиксация отделяет принятое улучшение\nплатформы от неограниченного «менять что угодно»."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "`task:plan-exec P4.7` допускается при зелёных проверках item'а. Исполнитель\nперепрогоняет команды полноты из receipt §P4.6 перед мутацией. Статус «Уведомлены»\nв `@plan/plan.json` §Contracts обновляется после receipt P4.7 (текст + отметка владельца)."
+    }
+  ]
+}

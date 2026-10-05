@@ -12,7 +12,11 @@ tenant-local recipient-state row, so an outdated preference write is rejected ra
 overwriting a newer choice. The built-in `in_app` channel is registered by default; consumer
 providers can add channel drivers and recipient resolution without changing the inbox schema.
 
-When `corex-notifications.digest.enabled` is enabled, the package registers the
+When `corex-notifications.digest.enabled` is enabled, the package tags a
+`WakeupHandlerDefinition` (`corex.scheduling.wakeup-handlers`) and a `DueWakeupSource`
+(`corex.scheduling.due-sources`). It does not depend on `axiomasoft/corex-wakeup` and does not
+write `corex-wakeup.handlers`. An enabled digest without a bound `WakeupScheduler` is a
+configuration violation. The package registers the
 `notification.digest.v1` wakeup consumer. A digest freezes at most 100 notification IDs per
 explicit UTC half-open window. The shared local wakeup runner admits a separate digest delivery;
 its durable SQL due source recreates residual and late closed-window batches after a restart,

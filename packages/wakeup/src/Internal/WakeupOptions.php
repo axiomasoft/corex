@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Wakeup\Internal;
 
 use CoreX\Config\Laravel\ConfigurationValidator;
-use CoreX\Wakeup\Data\WakeupHandlerDefinition;
+use CoreX\Scheduling\Data\WakeupHandlerDefinition;
 use InvalidArgumentException;
 
 /** @internal Package composition type: read only by the provider and runtime checks. */

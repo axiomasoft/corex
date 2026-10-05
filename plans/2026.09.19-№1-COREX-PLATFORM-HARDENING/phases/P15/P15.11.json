@@ -1,0 +1,191 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P15.11",
+  "title": "Conditional API package identity rename",
+  "status": "done",
+  "summary": "По owner outcome D89 либо переименовать `packages/api` / `corex/api` / split identity в `packages/operations` / `corex/operations`, либо закрыть item как skipped.",
+  "why": "Package identity — owner choice Q1 и не выводится из class vocabulary.",
+  "scope": {
+    "include": [
+      "При accept: directory, root/path repositories, Composer name/requirements, split/CI/docs references and lock metadata owned by repo. При reject: только evidence-backed skipped receipt."
+    ],
+    "exclude": [
+      "`CoreX\\\\Api` namespace, config/route keys, operation ids, automatic `replace`, runtime behavior and unrelated packages."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D89"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P15-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D89.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P15/P15.8.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P15/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P15-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "docs/dev-doctrine.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/api/**",
+      "change": "any"
+    },
+    {
+      "path": "packages/operations/**",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "No-answer blocks; reject skips; accept uses generator for generated manifests and records migration policy explicitly."
+  ],
+  "guidance": "Rename directory first with `git mv`, update source-of-truth metadata, regenerate derived outputs, then resolve dependencies.",
+  "validation": [
+    {
+      "id": "V1",
+      "procedure": "operations package tests and snapshot check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "package-graph and api-contract",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Accepted identity rename or skipped receipt with owner evidence."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-27T04:51:04Z",
+    "finished_at": "2026-09-27T04:51:04Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-run/grok-4.7/high",
+      "effort": "high"
+    },
+    "notes": "P15.11 D134 identity rename green. Namespace CoreX\\Api unchanged. Receipt findings/P15-receipts.md.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-09-27T04:51:04Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-27T04:51:04Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-27T04:51:04Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "По owner outcome D89 либо переименовать `packages/api` / `corex/api` / split identity в `packages/operations` / `corex/operations`, либо закрыть item как skipped."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "Package identity — owner choice Q1 и не выводится из class vocabulary."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "При accept: directory, root/path repositories, Composer name/requirements, split/CI/docs references and lock metadata owned by repo. При reject: только evidence-backed skipped receipt."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "`CoreX\\\\Api` namespace, config/route keys, operation ids, automatic `replace`, runtime behavior and unrelated packages."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P15-design.json`; `@plan/decisions/D89.json`; `@plan/phases/P15/P15.8.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/api/**`→`packages/operations/**`; root Composer metadata; split/CI manifests; docs references; root `CHANGELOG.md`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P15/phase.json`; 2) `@plan/knowledge/research-P15-design.json`; 3) `@plan/knowledge/research-P15-design-rag.json`; 4) `@plan/decisions/D89.json`; 5) `@plan/phases/P15/P15.8.json`; 6) `composer.json`; 7) `docs/dev-doctrine.md`."
+    },
+    {
+      "id": "Authority",
+      "title": "Authority",
+      "text": "[OWNER-GATE:G-PKG-API] branch=`main`; scope=`packages/api -> packages/operations and corex/api -> corex/operations`"
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "No-answer blocks; reject skips; accept uses generator for generated manifests and records migration policy explicitly."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Rename directory first with `git mv`, update source-of-truth metadata, regenerate derived outputs, then resolve dependencies."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Composer validate/install metadata green; split checks green; old package id absent outside migration/history allowlist; PHP namespace and wire identifiers unchanged."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Accepted identity rename or skipped receipt with owner evidence."
+    }
+  ]
+}

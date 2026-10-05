@@ -1,0 +1,46 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D45",
+  "title": "гейт размера считает только ServiceProvider, порог 20 плюс ratchet",
+  "date": "2026-09-19",
+  "status": "accepted",
+  "decision": "1. Гейт считает **call site** `$this->app->singleton|scoped|bind|bindIf`\n   только в классах, расширяющих `Illuminate\\Support\\ServiceProvider`,\n   под `packages/*/src`. Registrar'ы, трейты и замыкания вне провайдера\n   не считаются.\n2. Жёсткий порог — **20** (верхняя граница A74). Цикл\n   `foreach (... as $bootstrapper) { $app->singleton($bootstrapper); }`\n   — один call site.\n3. Ratchet: JSON-снимок числа call site на каждый `*ServiceProvider.php`.\n   Рост относительно снимка — нарушение, даже если число ≤ 20.\n4. `CoreServiceProvider` в P8 **не** дробится. Его число замораживается\n   ratchet'ом (E-CORE-PROVIDER). Декомпозиция ядра — не эта фаза.\n5. Посадка обязана назвать файл и выйти 1. Observational режим не\n   объявляется: после декомпозиции tenancy/modules правило сразу\n   блокирующее.",
+  "rationale": "Считать registrar'ы дало бы ложные срабатывания на связный модуль и\nнаучило бы прятать биндинги в хелперы, не уменьшая composition root\n(`RAG:✅` P8-Q5). Порог 15 заставил бы дробить ядро или intl в этой\nфазе — вне скоупа. Порог без ratchet оставил бы Core 18 с запасом\nроста. Альтернатива «перевести singleton в scoped в P8.6» отклонена:\nдоказательство неизменности фазы сравнивает lifetime; смена lifetime —\nработа allowlist P4.12, не декомпозиции.",
+  "applies_to": [
+    "P8",
+    "P8.6"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/cursor-grok-4.6/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D45\ndate: 2026-09-19\nstatus: accepted\nitem: P8\nitems: [P8, P8.6]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D45-ServiceProvider-20-ratchet",
+      "title": "D45 — гейт размера считает только ServiceProvider, порог 20 плюс ratchet",
+      "text": "**Actor:** plan-designer/cursor-grok-4.6/high\n**Evidence:** RAG:✅ P8-Q5 ThoughtWorks fitness functions, Pest Arch.\nRAG:— baseline `00-baseline-metrics.md` §3: tenancy 23/5/2, modules 12/0/0;\n`CoreServiceProvider` — 18 `singleton`/`scoped`. A74: симптом «>15–20\nbindings». D17: Deptrac/PHPat не вводятся; сканер — `token_get_all`."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "1. Гейт считает **call site** `$this->app->singleton|scoped|bind|bindIf`\n   только в классах, расширяющих `Illuminate\\Support\\ServiceProvider`,\n   под `packages/*/src`. Registrar'ы, трейты и замыкания вне провайдера\n   не считаются.\n2. Жёсткий порог — **20** (верхняя граница A74). Цикл\n   `foreach (... as $bootstrapper) { $app->singleton($bootstrapper); }`\n   — один call site.\n3. Ratchet: JSON-снимок числа call site на каждый `*ServiceProvider.php`.\n   Рост относительно снимка — нарушение, даже если число ≤ 20.\n4. `CoreServiceProvider` в P8 **не** дробится. Его число замораживается\n   ratchet'ом (E-CORE-PROVIDER). Декомпозиция ядра — не эта фаза.\n5. Посадка обязана назвать файл и выйти 1. Observational режим не\n   объявляется: после декомпозиции tenancy/modules правило сразу\n   блокирующее."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Считать registrar'ы дало бы ложные срабатывания на связный модуль и\nнаучило бы прятать биндинги в хелперы, не уменьшая composition root\n(`RAG:✅` P8-Q5). Порог 15 заставил бы дробить ядро или intl в этой\nфазе — вне скоупа. Порог без ratchet оставил бы Core 18 с запасом\nроста. Альтернатива «перевести singleton в scoped в P8.6» отклонена:\nдоказательство неизменности фазы сравнивает lifetime; смена lifetime —\nработа allowlist P4.12, не декомпозиции."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P8.6 пишет `scripts/provider-size-gate.php` и снимок после\nдекомпозиции. P4.12 по-прежнему владеет гейтом конструкторов\nsingleton'ов. Смена `singleton` → `scoped` в P8 не делается."
+    }
+  ]
+}

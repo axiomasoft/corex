@@ -1,0 +1,313 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P2.6",
+  "title": "Базовый scorecard 20 пакетов × 12 критериев",
+  "status": "done",
+  "summary": "Произвести `docs/architecture/scorecard.md` и\n`artifacts/architecture/scorecard.csv` — детерминированные оценки 0/1/2 по\nдвенадцати критериям для 20 живых пакетов плюс отчёт неоднородности, без\nсреднего балла.",
+  "why": "A12/A102 требуют измеримую карту пакета; в дереве её нет (`RAG:—`).\n`RAG:✅` P2-Q5: fitness function — свойство, измерение, порог; среднее как KPI\nзапрещено (`@plan/knowledge/research-P2-design-rag.json` §1). Базовый круг честно ставит потолок\n1 там, где гейта P3 ещё нет. P17 пересчитает тот же лист.",
+  "scope": {
+    "include": [
+      "команда `scorecard` в CLI; `Scorecard.php`; `scorecard.csv`;\nпродуктовый `docs/architecture/scorecard.md` (шапка §8.3 + таблица + §8.2);\nстрока CHANGELOG; append в receipt."
+    ],
+    "exclude": [
+      "финальный scorecard P17; превращение оценок в KPI или\nпорог «релиза»; тумбстоун `import-export` (D13); любые правки пакетов, чтобы\nподнять оценку."
+    ]
+  },
+  "depends_on": [
+    "P2.1",
+    "P2.5",
+    "P1.2"
+  ],
+  "decisions": [],
+  "skills": [
+    "test:packages"
+  ],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P2-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "extra.corex",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "P1-design.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P2/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P2-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/artifacts/architecture/files.csv",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/artifacts/architecture/tables.csv",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "docs/architecture/table-ownership.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "docs/architecture/configuration.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "config-keys.csv",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/artifacts/architecture/verdicts.csv",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "scripts.test:packages",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P1-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-00-baseline-metrics.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "CHANGELOG.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "scripts/architecture/bin/inventory.php",
+      "change": "any"
+    },
+    {
+      "path": "scripts/architecture/src/Scorecard.php",
+      "change": "any"
+    },
+    {
+      "path": "@plan/artifacts/architecture/scorecard.csv",
+      "change": "any"
+    },
+    {
+      "path": "docs/architecture/scorecard.md",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P2-inventory-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Таблица §8.1 — единственный источник оценок, без\n«экспертной» поправки. 20 строк, без `import-export`. Среднего, суммы и\n«рейтинга» в документе нет. Шапка — §8.3. Блок неоднородности — форма §8.2,\nчисла пересчитываются. CHANGELOG:\n`P2.6: базовый архитектурный scorecard пакетов (docs/architecture/scorecard.md)`.\nКритерии, где сегодня потолок 1 (`config`, `bc-policy` без гейта), не\nзавышаются до 2."
+  ],
+  "guidance": "Каждый критерий — чистая функция от уже существующих CSV/JSON\nи `composer.json` / `README.md` пакета. `responsibility`: первая непустая\nне-заголовочная строка README и наличие ключа `extra.corex.package-type`.\n`package-tests`: каталог `packages/<dir>/tests` плюс вхождение имени в\n`test:packages` (сегодня 2 у всех живых — N02 опровергнут, это измерить, не\nвспомнить). `naming`: суффиксы `Manager|Helper|Util|Common` в колонке `symbol`,\nallowlist — имена из гида P1.3 / `P1-design.md` §5, если файл ещё не создан.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "rg -i \"средн|total|итог из|/24|/36\" docs/architecture/scorecard.md",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "composer lint:check",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "git diff --stat -- 'packages/' 'scripts/package-graph-gate.php' 'tests/'",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "scorecard.csv rows=20",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "scorecard.csv cmp",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "forbidden KPI rg empty",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "heterogeneity section",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "packages/gate/tests diff empty",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "procedure": "composer lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "`scorecard.csv`; `docs/architecture/scorecard.md`; строка\nCHANGELOG; receipt с таблицей «критерий → сколько пакетов с 0/1/2» и списком\nпакетов, у которых ≥4 нулей (или «нет»)."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "medium"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "required",
+    "status": "complete"
+  },
+  "result": {
+    "started_at": "2026-09-21T09:41:00Z",
+    "finished_at": "2026-09-21T09:45:00Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/cursor-composer-2.5/medium",
+      "effort": "medium"
+    },
+    "notes": "P2.6 GREEN: Scorecard.php, scorecard 20x12, scorecard.md heterogeneity, cmp stable, lint green",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-21T09:45:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-21T09:45:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-21T09:45:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-21T09:45:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-21T09:45:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-09-21T09:45:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-21T09:45:00Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Произвести `docs/architecture/scorecard.md` и\n`artifacts/architecture/scorecard.csv` — детерминированные оценки 0/1/2 по\nдвенадцати критериям для 20 живых пакетов плюс отчёт неоднородности, без\nсреднего балла."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "A12/A102 требуют измеримую карту пакета; в дереве её нет (`RAG:—`).\n`RAG:✅` P2-Q5: fitness function — свойство, измерение, порог; среднее как KPI\nзапрещено (`@plan/knowledge/research-P2-design-rag.json` §1). Базовый круг честно ставит потолок\n1 там, где гейта P3 ещё нет. P17 пересчитает тот же лист."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "команда `scorecard` в CLI; `Scorecard.php`; `scorecard.csv`;\nпродуктовый `docs/architecture/scorecard.md` (шапка §8.3 + таблица + §8.2);\nстрока CHANGELOG; append в receipt."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "финальный scorecard P17; превращение оценок в KPI или\nпорог «релиза»; тумбстоун `import-export` (D13); любые правки пакетов, чтобы\nподнять оценку."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P2-design.json` §8; все артефакты P2.1–P2.5; `extra.corex`\n(после P1.2; до стадии 3 — таблица `P1-design.md` §3.3 как ожидаемое состояние\nна момент исполнения); корневой `composer.json` скрипт `test:packages`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/scripts/architecture/bin/inventory.php`; `plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/scripts/architecture/src/Scorecard.php`; `plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/architecture/scorecard.csv`; `docs/architecture/scorecard.md`; `CHANGELOG.md`; `@plan/knowledge/findings-P2-inventory-receipts.json`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P2/phase.json`; 2) `@plan/knowledge/research-P2-design.json` §0, §8; 3) `@plan/knowledge/research-P2-design-rag.json` §1 (P2-Q5); 4) `artifacts/architecture/files.csv` (заголовок); 5) `artifacts/architecture/tables.csv` (если уже есть) или `docs/architecture/table-ownership.md`; 6) `docs/architecture/configuration.md` либо `config-keys.csv`; 7) `artifacts/architecture/verdicts.csv`; 8) `composer.json` корневой, блок `scripts.test:packages`; 9) `@plan/knowledge/research-P1-design.json` §3.3, §4.1; 10) `@plan/knowledge/research-00-baseline-metrics.json` §1, §6; 11) `CHANGELOG.md` (первые 30 строк)."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Таблица §8.1 — единственный источник оценок, без\n«экспертной» поправки. 20 строк, без `import-export`. Среднего, суммы и\n«рейтинга» в документе нет. Шапка — §8.3. Блок неоднородности — форма §8.2,\nчисла пересчитываются. CHANGELOG:\n`P2.6: базовый архитектурный scorecard пакетов (docs/architecture/scorecard.md)`.\nКритерии, где сегодня потолок 1 (`config`, `bc-policy` без гейта), не\nзавышаются до 2."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Каждый критерий — чистая функция от уже существующих CSV/JSON\nи `composer.json` / `README.md` пакета. `responsibility`: первая непустая\nне-заголовочная строка README и наличие ключа `extra.corex.package-type`.\n`package-tests`: каталог `packages/<dir>/tests` плюс вхождение имени в\n`test:packages` (сегодня 2 у всех живых — N02 опровергнут, это измерить, не\nвспомнить). `naming`: суффиксы `Manager|Helper|Util|Common` в колонке `symbol`,\nallowlist — имена из гида P1.3 / `P1-design.md` §5, если файл ещё не создан."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "20 строк данных в `scorecard.csv`. `rg -i \"средн|total|итог из|/24|/36\" docs/architecture/scorecard.md` пуст. Блок `## Неоднородность` присутствует. Повторный прогон: `cmp scorecard.csv` без вывода. `composer lint:check` зелёный. `git diff --stat -- 'packages/' 'scripts/package-graph-gate.php' 'tests/'` пуст."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "`scorecard.csv`; `docs/architecture/scorecard.md`; строка\nCHANGELOG; receipt с таблицей «критерий → сколько пакетов с 0/1/2» и списком\nпакетов, у которых ≥4 нулей (или «нет»)."
+    }
+  ]
+}

@@ -1,0 +1,282 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P15.1",
+  "title": "Modules vocabulary и ModuleDefinition",
+  "status": "done",
+  "summary": "Применить modules-часть реестра: `Dep`→`ModuleDependency`, поля `$type/$target`→`$kind/$package`, `Manifest`→`ModuleManifest`, `GateDecision`→`ModuleActivationDecision`, `SettingDefault`→`DefaultSettingDefinition`, `ModuleContext`→`ModuleRuntimeContext`, `CorexModule`→`ModuleDefinition`, `WhyCommand`→`ExplainModuleCommand`.",
+  "why": "Базовый модульный язык расходится с фактической семантикой и распространяется на девять package consumers.",
+  "scope": {
+    "include": [
+      "Definitions, namespace-coherent filenames, imports/types/named arguments, module discovery metadata и tests во всех module consumers."
+    ],
+    "exclude": [
+      "Изменение composer module ids, `corex:modules:why`, manifest schema, DB/DDL, aliases и поведение resolver."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D85",
+    "D86"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P15-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D85.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D86.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P1/P1.3.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P6/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P15/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "docs/dev-doctrine.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/modules/composer.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/modules/src/CorexModule.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/modules/src/Commands/WhyCommand.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/modules/src/**",
+      "change": "any"
+    },
+    {
+      "path": "packages/modules/tests/**",
+      "change": "any"
+    },
+    {
+      "path": "packages/*/src/*Module.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/*/composer.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Revalidate every source token; use `git mv`; preserve `extra.corex.module` composer-name values and command signature; no forwarding classes."
+  ],
+  "guidance": "Rename base definitions before consumers, update named arguments atomically, then rebuild Composer autoload.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer dump-autoload --strict-psr",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "modules-lint-check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "modules-analyse",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "modules-test",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "nine-discovery",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "corex:modules:why",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "old-symbol-sweep",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "no-migration-diff",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Renamed modules surface, updated consumers/tests/metadata and item receipt with nine discovery results."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-26T19:59:07Z",
+    "finished_at": "2026-09-26T19:59:07Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/grok-4.7/high",
+      "effort": "high"
+    },
+    "notes": "P15.1 rename applied. Nine modules discover. No aliases, no migration diff. Item commit withheld on a dirty tree.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-26T19:59:07Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-26T19:59:07Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-26T19:59:07Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-26T19:59:07Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-26T19:59:07Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-26T19:59:07Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-26T19:59:07Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-26T19:59:07Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Применить modules-часть реестра: `Dep`→`ModuleDependency`, поля `$type/$target`→`$kind/$package`, `Manifest`→`ModuleManifest`, `GateDecision`→`ModuleActivationDecision`, `SettingDefault`→`DefaultSettingDefinition`, `ModuleContext`→`ModuleRuntimeContext`, `CorexModule`→`ModuleDefinition`, `WhyCommand`→`ExplainModuleCommand`."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "Базовый модульный язык расходится с фактической семантикой и распространяется на девять package consumers."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Definitions, namespace-coherent filenames, imports/types/named arguments, module discovery metadata и tests во всех module consumers."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Изменение composer module ids, `corex:modules:why`, manifest schema, DB/DDL, aliases и поведение resolver."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P15-design.json`; `@plan/decisions/D85.json`; `@plan/decisions/D86.json`; `@plan/phases/P1/P1.3.json`; `@plan/phases/P6/phase.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/modules/src/**`; `packages/modules/tests/**`; девять `packages/*/src/*Module.php`; соответствующие `packages/*/composer.json`; затронутые package tests."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P15/phase.json`; 2) `@plan/knowledge/research-P15-design.json`; 3) `@plan/decisions/D85.json`; 4) `@plan/decisions/D86.json`; 5) `@plan/phases/P1/P1.3.json`; 6) `@plan/phases/P6/phase.json`; 7) `docs/dev-doctrine.md`; 8) `packages/modules/composer.json`; 9) `packages/modules/src/CorexModule.php`; 10) `packages/modules/src/Commands/WhyCommand.php`."
+    },
+    {
+      "id": "Authority",
+      "title": "Authority",
+      "text": "[OWNER-GATE:G-API-P15] branch=`main`; scope=`P15.1 public modules FQCN rename set`"
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Revalidate every source token; use `git mv`; preserve `extra.corex.module` composer-name values and command signature; no forwarding classes."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Rename base definitions before consumers, update named arguments atomically, then rebuild Composer autoload."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "modules lint/analyse/test green; `composer dump-autoload --strict-psr`; all nine module entries discover; `corex:modules:why` works; exact old-symbol sweep empty outside approved history; no migration diff."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Renamed modules surface, updated consumers/tests/metadata and item receipt with nine discovery results."
+    }
+  ]
+}

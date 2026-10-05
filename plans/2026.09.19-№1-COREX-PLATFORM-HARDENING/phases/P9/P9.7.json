@@ -1,0 +1,301 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P9.7",
+  "title": "Integration/Wakeup",
+  "status": "done",
+  "summary": "Сделать optional dependency на `corex/wakeup` явной host-first\nintegration boundary и убрать бесполезный `Internal`.",
+  "why": "`P9-design.md` §2, §9; D12. Имя boundary должно показывать,\nчто tenancy интегрируется с чужим extension point.",
+  "scope": {
+    "include": [
+      "`Wakeup/Internal/**`→`Integration/Wakeup/**`; imports/tests;\npackage graph allowlist + negative fixture; receipt."
+    ],
+    "exclude": [
+      "`corex/wakeup` code/contracts; dependency promotion to `require`;\ndriver/predicate/tag/command behavior; class renames P15."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/findings-P9-tenancy-map.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/findings/P9-compatibility-baseline.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P9-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "scripts/package-graph-gate.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P9/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P8-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Integration/Internal/Wakeup/RootWakeupReconciler.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/composer.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/wakeup/src/Contracts/WakeupHint.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/tenancy/src/{Wakeup,Integration}/**",
+      "change": "any"
+    },
+    {
+      "path": "packages/tenancy/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/tenancy/tests/**",
+      "change": "any"
+    },
+    {
+      "path": "scripts/package-graph-gate.json",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P9-receipts.json",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "`corex/wakeup` остаётся `suggest` + dev-only. Allowlist\nразрешает только `Integration/Wakeup`; импорт из другого context — red fixture."
+  ],
+  "guidance": "Карта — §9. Сохранить optional predicate, tag\n`corex.wakeup.hints` и command signature; не создавать generic `Integration/Internal`.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer test:pg",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "composer --working-dir=packages/tenancy dump-autoload -o",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "composer --working-dir=packages/tenancy lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "composer --working-dir=packages/tenancy analyse",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "composer --working-dir=packages/tenancy test",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "composer test:pg",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "git diff --exit-code -- packages/tenancy/database",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "map coverage 3 integration/wakeup php",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "procedure": "vendor/bin/pest tests/Arch/PackageGraphTest.php --filter=wakeup import outside Integration/Wakeup",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "procedure": "rg -n Wakeup\\\\Internal packages/tenancy",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Integration/Wakeup tree, exact allowlist, negative fixture, receipt, CHANGELOG."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-24T07:17:32Z",
+    "finished_at": "2026-09-24T07:27:26Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/cursor-grok-4.6/high",
+      "effort": "high"
+    },
+    "notes": "P9.7 GREEN: Integration/Wakeup host-first adapters; optional wakeup predicate/tag/command unchanged; allowlist names only Integration/Wakeup; foreign-context fixture is R1.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-24T07:27:26Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-24T07:27:26Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-24T07:27:26Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-24T07:27:26Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-24T07:27:26Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-24T07:27:26Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-24T07:27:26Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-09-24T07:27:26Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-09-24T07:27:26Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-24T07:27:26Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Сделать optional dependency на `corex/wakeup` явной host-first\nintegration boundary и убрать бесполезный `Internal`."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`P9-design.md` §2, §9; D12. Имя boundary должно показывать,\nчто tenancy интегрируется с чужим extension point."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "`Wakeup/Internal/**`→`Integration/Wakeup/**`; imports/tests;\npackage graph allowlist + negative fixture; receipt."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "`corex/wakeup` code/contracts; dependency promotion to `require`;\ndriver/predicate/tag/command behavior; class renames P15."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/findings-P9-tenancy-map.json`; `findings/P9-compatibility-baseline.json`; `@plan/knowledge/research-P9-design.json` §9; `scripts/package-graph-gate.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/tenancy/src/{Wakeup,Integration}/**`; `packages/tenancy/composer.json`;\n`packages/tenancy/tests/**`; `scripts/package-graph-gate.json`;\n`tests/fixtures/package-graph/**`; `@plan/knowledge/findings-P9-receipts.json`; `CHANGELOG.md`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P9/phase.json`; 2) `@plan/knowledge/research-P9-design.json` §0, §2, §9;\n3) `@plan/knowledge/findings-P9-tenancy-map.json` `findings/P9-compatibility-baseline.json`; 4) D12; 5) `@plan/knowledge/research-P8-design.json` §2.1, §5.4;\n6) `packages/tenancy/src/Wakeup/Internal/RootWakeupReconciler.php`; 7) `scripts/package-graph-gate.json`;\n8) `packages/tenancy/composer.json`; 9) `packages/wakeup/src/Contracts/WakeupHint.php`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "`corex/wakeup` остаётся `suggest` + dev-only. Allowlist\nразрешает только `Integration/Wakeup`; импорт из другого context — red fixture."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Карта — §9. Сохранить optional predicate, tag\n`corex.wakeup.hints` и command signature; не создавать generic `Integration/Internal`."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "package lint/analyse/test; `composer test:pg`; package graph gate + negative\nfixture; enabled/disabled wakeup fingerprint equality; forbidden `Wakeup\\\\Internal` sweep empty."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Integration/Wakeup tree, exact allowlist, negative fixture, receipt, CHANGELOG."
+    }
+  ]
+}

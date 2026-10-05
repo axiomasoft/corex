@@ -1,0 +1,147 @@
+{
+  "record": {
+    "schema_version": "repair-decision/v1",
+    "plan_id": "2026.09.27-№1-COREX-KERNEL",
+    "item_id": "P07.2",
+    "origin": "validation",
+    "original_carrier": {
+      "command": "scripts/php84 composer lint:check",
+      "digest": "374920cfa60c7652159cdf247a6bcdfb667d17f329b4aac33e41c9a17e0b4d67",
+      "result": "red"
+    },
+    "baseline": {
+      "reproduced": true,
+      "carrier": {
+        "command": "scripts/php84 composer lint:check",
+        "digest": "374920cfa60c7652159cdf247a6bcdfb667d17f329b4aac33e41c9a17e0b4d67",
+        "result": "red"
+      }
+    },
+    "candidate": {
+      "delta_proved": false,
+      "evidence_ids": [
+        "artifacts/P07.2-execution/lint-baseline-identity.json",
+        "artifacts/P07.2-execution/lint-repair-resolved-ast.json"
+      ]
+    },
+    "affected_paths": [
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design-audit/webhook-lease-budget.php",
+        "owner_item": "P07.2",
+        "declared_file": false
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design-audit/http-415-registry.php",
+        "owner_item": "P07.2",
+        "declared_file": false
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design-audit/external-dataschema.php",
+        "owner_item": "P07.2",
+        "declared_file": false
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design-audit/tool-exception-code.php",
+        "owner_item": "P07.2",
+        "declared_file": false
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design-audit/reproduce-source-check.php",
+        "owner_item": "P07.2",
+        "declared_file": false
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design-remediation/file-session-directory.php",
+        "owner_item": "P07.2",
+        "declared_file": false
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design-remediation/six-findings-proof.php",
+        "owner_item": "P07.2",
+        "declared_file": false
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design-remediation/prove.php",
+        "owner_item": "P07.2",
+        "declared_file": false
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design-remediation/rereview-contract-proof.php",
+        "owner_item": "P07.2",
+        "declared_file": false
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design-remediation/extra-arg-counterexample.php",
+        "owner_item": "P07.2",
+        "declared_file": false
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design-remediation/http-415-registry.php",
+        "owner_item": "P07.2",
+        "declared_file": false
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design-remediation/independent-fixture-seam.php",
+        "owner_item": "P07.2",
+        "declared_file": false
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design-remediation/tool-exception-code.php",
+        "owner_item": "P07.2",
+        "declared_file": false
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design-remediation/uri-reference-proof.php",
+        "owner_item": "P07.2",
+        "declared_file": false
+      },
+      {
+        "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design-audit/reproduce.php",
+        "owner_item": "P07.2",
+        "declared_file": false
+      }
+    ],
+    "bounded_diff": {
+      "files_changed": 15,
+      "max_files": 15,
+      "reversible": true
+    },
+    "material_surface": {
+      "public": false,
+      "frozen": false,
+      "security": false,
+      "schema": false,
+      "dependency": false,
+      "authority": false,
+      "irreversible": false,
+      "product": false,
+      "test_topology": false
+    },
+    "pre_validation": [
+      {
+        "command": "scripts/php84 composer lint:check",
+        "digest": "374920cfa60c7652159cdf247a6bcdfb667d17f329b4aac33e41c9a17e0b4d67",
+        "result": "red"
+      }
+    ],
+    "post_validation": [
+      {
+        "command": "scripts/php84 composer lint:check",
+        "digest": "374920cfa60c7652159cdf247a6bcdfb667d17f329b4aac33e41c9a17e0b4d67",
+        "result": "green"
+      }
+    ],
+    "evidence_ids": [
+      "artifacts/P07.2-execution/lint-green.log",
+      "artifacts/P07.2-execution/lint-repair-resolved-ast.json"
+    ],
+    "design": null
+  },
+  "evaluation": {
+    "action": "repair-in-current-attempt",
+    "terminal_allowed": false,
+    "reason_code": "CLEAN_BASELINE_WITHOUT_CANDIDATE_DELTA",
+    "repair_digest": "6a049b1a452085c97fc65aec73cc1e1d476671f9a6998d5770c0d0b3220c110b",
+    "post_validation_required": true
+  }
+}

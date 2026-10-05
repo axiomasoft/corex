@@ -1,0 +1,304 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P4.10",
+  "title": "Часы в durable-путях `wakeup`: lease, backoff, наступление срока",
+  "status": "done",
+  "summary": "Заменить `now()` на инъектированные часы в `SweepRunner` и\n`SqlWakeupScheduler`, сделав детерминированными предикат истечения lease,\nпредикат наступления срока и расчёт backoff.",
+  "why": "`RAG:—` `SweepRunner:78` берёт один `now()` в PHP и использует его\nсразу как четыре разных решения (истечение lease, `fire_at <= now`,\n`retry_at <= now` и записываемое значение), а строка 156 считает\n`now()->addSeconds(min(300, 2 ** $attempt))` — тест на backoff без управления\nвременем невозможен. `RAG:✅` P4-Q6: обе стороны временного предиката обязаны\nжить в одном часовом домене. D23: P4 вводит часы приложения и честно называет\nпределом то, что серверное время БД было бы строже.",
+  "scope": {
+    "include": [
+      "`ClockInterface` в конструкторы двух классов; фабрики в\n`WakeupServiceProvider` именованными аргументами; замена четырёх групп вызовов\n§7.4; тест детерминированного backoff и границы истечения lease; CHANGELOG;\nreceipt с записью долга D23 и условием возврата."
+    ],
+    "exclude": [
+      "перевод предикатов на `now()`/`clock_timestamp()` в SQL\n(D23); изменение окна повторов, `maxAttempts`, порядка `for update skip locked`;\nзамена `now()` в `media`, `tenancy`, `search`, `notifications`, `transfer`,\n`crm`, `attributes` и остальных пакетах; изменение DDL `sys_wakeup_requests`."
+    ]
+  },
+  "depends_on": [
+    "P4.9"
+  ],
+  "decisions": [
+    "D20",
+    "D23"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P4-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/findings-audit-verdicts.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P4/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P4-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D23.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/wakeup/src/Internal/SweepRunner.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/wakeup/src/Internal/SqlWakeupScheduler.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/wakeup/src/WakeupServiceProvider.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Time/Testing/FrozenClock.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/wakeup/src/Internal/SweepRunner.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/wakeup/src/Internal/SqlWakeupScheduler.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/wakeup/src/WakeupServiceProvider.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/wakeup/tests/Feature/WakeupSchedulerTest.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/wakeup/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P4-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Таблица §7.4 — закрытый список точек замены; ни одна\nстрока вне `packages/wakeup` не трогается. Внутри одной попытки «сейчас»\nвычисляется **один раз** и переиспользуется: строки 145 и 167 берут уже\nвычисленный момент, а не зовут часы повторно. `now()->addSeconds($n)` становится\n`$this->clock->now()->add(new DateInterval(\"PT{$n}S\"))`; формула\n`min(300, 2 ** $attempt)` сохраняется без изменений. `DateTimeImmutable`\nпередаётся в query builder как есть — `Connection::prepareBindings()` приводит\nлюбой `DateTimeInterface` к формату грамматики; приводить к строке вручную\nзапрещено. `packages/wakeup/composer.json` получает `psr/clock` в `require`,\nесли его там нет."
+  ],
+  "guidance": "Точный список точек и форма правки — `@plan/knowledge/research-P4-design.json`\n§7.4; обоснование границы — §7.3 и D23. Тест: `FrozenClock` на известном\nмоменте; `retry_at` первой неудачной попытки = `now + 2s`, второй = `+4s`,\nтретьей = `+8s`, четвёртой = `+16s`; запрос с `lease_until` ровно на границе\nпереводится в `failed`, а на секунду позже — нет.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer test",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "composer test:pg",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "composer analyse",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "composer lint:check",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "composer package-graph-gate",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "cmd": "rg -n '\\bnow\\(' packages/wakeup/src",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "packages/wakeup composer test+test:pg",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "packages/wakeup composer analyse+lint",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "procedure": "global now() absent wakeup src",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "procedure": "tasks-workflow+tenancy composer test",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V11",
+      "procedure": "composer lint:check+package-graph-gate",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V12",
+      "procedure": "receipt D23 debt+return condition",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "два класса `wakeup` на инъектированных часах; детерминированный\nтест backoff и границы lease; строка CHANGELOG; блок receipt'а с записанным\nдолгом «серверное время БД» и условием его возврата."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "required",
+    "status": "complete"
+  },
+  "result": {
+    "started_at": "2026-09-21T15:20:00Z",
+    "finished_at": "2026-09-21T15:25:00Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/cursor-composer-2.5/high",
+      "effort": "high"
+    },
+    "notes": "P4.10 GREEN: wakeup ClockInterface lease/backoff, FrozenClock tests, receipt §P4.10 D23 debt, CHANGELOG",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-21T15:25:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-21T15:25:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-09-21T15:25:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-09-21T15:25:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V11",
+        "exit": 0,
+        "at": "2026-09-21T15:25:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V12",
+        "exit": 0,
+        "at": "2026-09-21T15:25:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-21T15:25:00Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Заменить `now()` на инъектированные часы в `SweepRunner` и\n`SqlWakeupScheduler`, сделав детерминированными предикат истечения lease,\nпредикат наступления срока и расчёт backoff."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`RAG:—` `SweepRunner:78` берёт один `now()` в PHP и использует его\nсразу как четыре разных решения (истечение lease, `fire_at <= now`,\n`retry_at <= now` и записываемое значение), а строка 156 считает\n`now()->addSeconds(min(300, 2 ** $attempt))` — тест на backoff без управления\nвременем невозможен. `RAG:✅` P4-Q6: обе стороны временного предиката обязаны\nжить в одном часовом домене. D23: P4 вводит часы приложения и честно называет\nпределом то, что серверное время БД было бы строже."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "`ClockInterface` в конструкторы двух классов; фабрики в\n`WakeupServiceProvider` именованными аргументами; замена четырёх групп вызовов\n§7.4; тест детерминированного backoff и границы истечения lease; CHANGELOG;\nreceipt с записью долга D23 и условием возврата."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "перевод предикатов на `now()`/`clock_timestamp()` в SQL\n(D23); изменение окна повторов, `maxAttempts`, порядка `for update skip locked`;\nзамена `now()` в `media`, `tenancy`, `search`, `notifications`, `transfer`,\n`crm`, `attributes` и остальных пакетах; изменение DDL `sys_wakeup_requests`."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "результат P4.9 (контракт и привязка); `@plan/knowledge/research-P4-design.json` §7.3,\n§7.4; `@plan/knowledge/findings-audit-verdicts.json` N01; D20, D23."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/wakeup/src/Internal/SweepRunner.php`; `packages/wakeup/src/Internal/SqlWakeupScheduler.php`; `packages/wakeup/src/WakeupServiceProvider.php`; `packages/wakeup/tests/Feature/WakeupSchedulerTest.php`; `packages/wakeup/composer.json`; `CHANGELOG.md`; `@plan/knowledge/findings-P4-receipts.json`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P4/phase.json`; 2) `@plan/knowledge/research-P4-design.json` §0, §7.3, §7.4; 3) `@plan/knowledge/research-P4-design-rag.json` §1 и §4 (P4-Q6); 4) `@plan/decisions/D23.json`; 5) `packages/wakeup/src/Internal/SweepRunner.php`; 6) `packages/wakeup/src/Internal/SqlWakeupScheduler.php`; 7) `packages/wakeup/src/WakeupServiceProvider.php`; 8) `packages/core/src/Support/Time/FrozenClock.php`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Таблица §7.4 — закрытый список точек замены; ни одна\nстрока вне `packages/wakeup` не трогается. Внутри одной попытки «сейчас»\nвычисляется **один раз** и переиспользуется: строки 145 и 167 берут уже\nвычисленный момент, а не зовут часы повторно. `now()->addSeconds($n)` становится\n`$this->clock->now()->add(new DateInterval(\"PT{$n}S\"))`; формула\n`min(300, 2 ** $attempt)` сохраняется без изменений. `DateTimeImmutable`\nпередаётся в query builder как есть — `Connection::prepareBindings()` приводит\nлюбой `DateTimeInterface` к формату грамматики; приводить к строке вручную\nзапрещено. `packages/wakeup/composer.json` получает `psr/clock` в `require`,\nесли его там нет."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Точный список точек и форма правки — `@plan/knowledge/research-P4-design.json`\n§7.4; обоснование границы — §7.3 и D23. Тест: `FrozenClock` на известном\nмоменте; `retry_at` первой неудачной попытки = `now + 2s`, второй = `+4s`,\nтретьей = `+8s`, четвёртой = `+16s`; запрос с `lease_until` ровно на границе\nпереводится в `failed`, а на секунду позже — нет."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "`composer test` и `composer test:pg` пакета `wakeup` зелёные.\n`composer analyse`, `composer lint:check`, `composer package-graph-gate` зелёные.\n`rg -n '\\bnow\\(' packages/wakeup/src` возвращает пусто. Пакетные сьюты\n`tasks-workflow` и `tenancy` зелёные — они потребители wakeup. Receipt содержит\nвывод команд и абзац долга D23 с условием возврата."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "два класса `wakeup` на инъектированных часах; детерминированный\nтест backoff и границы lease; строка CHANGELOG; блок receipt'а с записанным\nдолгом «серверное время БД» и условием его возврата."
+    }
+  ]
+}

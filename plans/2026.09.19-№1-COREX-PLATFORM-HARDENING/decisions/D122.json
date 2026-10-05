@@ -1,0 +1,39 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D122",
+  "title": "P13.12 uses a local-source G-API boundary",
+  "date": "2026-09-25",
+  "status": "accepted",
+  "decision": "P13.12 keeps `[OWNER-GATE:G-API]`, `branch=main` and\n`scope=operation-contract/1`. Its Authority additionally declares\n`boundary=owner-session`, `effect=local-source` and `environment=checkout`.\nThe item remains limited to its declared Files, Validation and local source\neffects. This amendment does not grant G-API and does not authorize a release,\ndeployment, production change or external publication. The Task runtime still\nrequires a fresh exact owner `task:plan-run` invocation for P13.12 before\nprotected product writes.",
+  "rationale": "The current provider cannot verify the default protected gate. The local\nboundary matches the actual checkout-only effect while retaining an exact\nsession-bound owner grant and the original contract scope.",
+  "applies_to": [
+    "P13.12"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "owner / human, with plan-maintenance / codex-gpt-6-sol/xhigh."
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D122\ndate: 2026-09-25\nstatus: accepted\nitem: P13.12\nitems: [P13.12]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D122-P13.12-uses-a-local-source-G-API-boundary",
+      "title": "D122 — P13.12 uses a local-source G-API boundary",
+      "text": "**Actor:** owner / human, with plan-maintenance / codex-gpt-6-sol/xhigh.\n\n**Evidence:** `RAG:—` P13.12 is a checkout-only contract freeze. The exact\n`task:plan-exec` invocation reached `AUTHORITY_BOUNDARY` before its durable\nstart. The Codex provider has no verifier or nonce store for the default\n`provider-proof` boundary (`AUTHORITY_PROVIDER_UNAVAILABLE`). The owner chose\nthe recommended local gate in this session and then directed the executor to\ndo the necessary work with quality, reliability and flexibility."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "P13.12 keeps `[OWNER-GATE:G-API]`, `branch=main` and\n`scope=operation-contract/1`. Its Authority additionally declares\n`boundary=owner-session`, `effect=local-source` and `environment=checkout`.\nThe item remains limited to its declared Files, Validation and local source\neffects. This amendment does not grant G-API and does not authorize a release,\ndeployment, production change or external publication. The Task runtime still\nrequires a fresh exact owner `task:plan-run` invocation for P13.12 before\nprotected product writes."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "The current provider cannot verify the default protected gate. The local\nboundary matches the actual checkout-only effect while retaining an exact\nsession-bound owner grant and the original contract scope."
+    }
+  ]
+}

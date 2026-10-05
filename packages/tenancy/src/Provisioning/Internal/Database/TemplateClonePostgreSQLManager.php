@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Provisioning\Internal\Database;
 
+use CoreX\Context\Data\AccountRef;
 use CoreX\Tenancy\Account\Laravel\AccountTemplateSnapshot;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
+use CoreX\Tenancy\Provisioning\Contracts\TemplateDatabaseCloner;
+use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
 use RuntimeException;
-use Stancl\Tenancy\Database\Contracts\TenantWithDatabase;
-use Stancl\Tenancy\Database\TenantDatabaseManagers\PostgreSQLDatabaseManager;
 use Throwable;
 
 /**
  * `CREATE DATABASE … TEMPLATE "tpl_v42" STRATEGY WAL_LOG` (golden-clone
- * provisioning) instead of stancl's default `TEMPLATE=template0` — `tpl_v42`
+ * provisioning) — `tpl_v42`
  * here is only an illustrative name; the real template name is read from
  * `root_templates.db_name`. `STRATEGY WAL_LOG` is mandatory — PG15+
  * defaults `CREATE DATABASE … TEMPLATE` to FILE_COPY, far slower for a
@@ -33,7 +34,7 @@ use Throwable;
  *
  * @internal spec: D24, premortem A3/B3, R-11 §2.3 п.2, F-DDL1
  */
-final class TemplateClonePostgreSQLManager extends PostgreSQLDatabaseManager
+final class TemplateClonePostgreSQLManager implements TemplateDatabaseCloner
 {
     private const int QUARANTINE_RETRIES = 5;
 
@@ -45,34 +46,36 @@ final class TemplateClonePostgreSQLManager extends PostgreSQLDatabaseManager
         private readonly TemplateIntegrityVerifier $integrity,
     ) {}
 
-    public function createDatabase(TenantWithDatabase $tenant): bool
+    public function createForAccount(AccountRef $account): bool
     {
-        $snapshot = AccountTemplateSnapshot::capture($tenant);
+        $snapshot = AccountTemplateSnapshot::capture($account, $this->centralConnection());
 
         $this->integrity->assertCurrent(
             version: $snapshot->templateVersion,
             clusterId: $snapshot->clusterId,
         );
 
-        $name = $tenant->database()->getName();
+        $name = $snapshot->databaseName;
         $this->validateParameter($name);
 
         $template = $this->resolveReadyTemplate($snapshot->templateVersion);
-        $this->validateParameter($template->db_name);
+        $this->validateParameter($template);
 
         $cluster = $this->resolveCluster($snapshot->clusterId);
-        $this->validateParameter($cluster->app_db_user);
+        $this->validateParameter($cluster);
 
-        $created = $this->cloneTemplate($name, $template->db_name);
+        $created = $this->createDatabase($name, $template);
 
-        $this->connection()->statement("GRANT ALL PRIVILEGES ON DATABASE \"{$name}\" TO \"{$cluster->app_db_user}\"");
-        $this->connection()->statement("ALTER DATABASE \"{$name}\" OWNER TO \"{$cluster->app_db_user}\"");
+        $this->connection()->statement("GRANT ALL PRIVILEGES ON DATABASE \"{$name}\" TO \"{$cluster}\"");
+        $this->connection()->statement("ALTER DATABASE \"{$name}\" OWNER TO \"{$cluster}\"");
 
         return $created;
     }
 
-    private function cloneTemplate(string $name, string $templateDbName): bool
+    public function createDatabase(string $name, string $templateDbName): bool
     {
+        $this->validateParameter($name);
+        $this->validateParameter($templateDbName);
         for ($attempt = 1; $attempt <= self::QUARANTINE_RETRIES; $attempt++) {
             $this->terminateTemplateBackends($templateDbName);
 
@@ -103,34 +106,61 @@ final class TemplateClonePostgreSQLManager extends PostgreSQLDatabaseManager
         );
     }
 
-    private function resolveReadyTemplate(int $version): object
+    private function resolveReadyTemplate(int $version): string
     {
         $template = $this->connections->connection($this->centralConnection())
             ->table('root_templates')
             ->where('version', $version)
             ->first();
 
-        if ($template === null || $template->status !== 'ready') {
+        if ($template === null || $template->status !== 'ready' || ! is_string($template->db_name)) {
             throw new RuntimeException(
                 "Template version [{$version}] is not ready for cloning (template-parity gate, D24).",
             );
         }
 
-        return $template;
+        return $template->db_name;
     }
 
-    private function resolveCluster(string $clusterId): object
+    private function resolveCluster(string $clusterId): string
     {
         $cluster = $this->connections->connection($this->centralConnection())
             ->table('root_clusters')
             ->where('id', $clusterId)
             ->first();
 
-        if ($cluster === null) {
+        if ($cluster === null || ! is_string($cluster->app_db_user)) {
             throw new RuntimeException("Cluster [{$clusterId}] not found in root_clusters.");
         }
 
-        return $cluster;
+        return $cluster->app_db_user;
+    }
+
+    public function deleteDatabase(string $name): bool
+    {
+        $this->validateParameter($name);
+
+        return $this->connection()->statement('DROP DATABASE IF EXISTS "'.$name.'"');
+    }
+
+    public function databaseExists(string $name): bool
+    {
+        return $this->connection()->selectOne('SELECT datname FROM pg_database WHERE datname = ?', [$name]) !== null;
+    }
+
+    private function validateParameter(string $value): void
+    {
+        if (preg_match('/\A[a-zA-Z0-9_]+\z/D', $value) !== 1 || strlen($value) > 63) {
+            throw new RuntimeException('Invalid PostgreSQL database or role identifier.');
+        }
+    }
+
+    private function connection(): Connection
+    {
+        /** @var Connection */
+        $connection = $this->connections->connection($this->centralConnection());
+
+        return $connection;
     }
 
     private function centralConnection(): string

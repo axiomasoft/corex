@@ -44,9 +44,6 @@ jobs:
         if: matrix.laravel == '12'
         run: composer require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
 
-      - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
-
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
 
@@ -111,9 +108,6 @@ jobs:
         if: matrix.laravel == '12'
         run: composer require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
 
-      - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
-
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
 
@@ -155,8 +149,6 @@ jobs:
           php-version: '8.4'
           extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd, xdebug
           coverage: xdebug
-      - name: Stage sealed stancl provider candidates
-        run: python3 scripts/distribution/stage-stancl-providers.py
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
 

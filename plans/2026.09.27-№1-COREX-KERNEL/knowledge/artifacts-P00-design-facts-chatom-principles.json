@@ -1,0 +1,22 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P00-design-facts-chatom-principles",
+  "title": "Chatom principles — source snapshot",
+  "sections": [
+    {
+      "id": "Chatom-principles-source-snapshot",
+      "title": "Chatom principles — source snapshot",
+      "text": "Source: `chatom:plans/2026.09.26-№1-CHATOM-STABLE-API/research/02-target-architecture.md` §1.\nSource commit: `21a6cca5e29e52f22a0f837cbbb46b41e4315350`; captured 2026-09-27. RAG:—; local repository text."
+    },
+    {
+      "id": "1.",
+      "title": "1. Принципы (сквозные, проверяемые)",
+      "text": "1. **Core ничего не знает о companions.** Ни import, ни имени таблицы, ни ключа config, ни строки\n   в документации core о конкретном companion. Companion подключается только через SPI.\n2. **Один пакет — один владелец.** FQCN, таблица, config-ключ, publish-tag, artisan-команда,\n   npm-подпуть, wire `type` события однозначно определяют пакет-владельца (машинная проверка).\n3. **Пакет самодостаточен:** `composer.json` + (опционально) `package.json` + `src/` + `js/` +\n   `config/` + `database/` + `resources/` + `tests/` + `README.md`; `composer test` и `pnpm test`\n   запускаются из каталога пакета и проходят без остальных companions.\n4. **Публичное — только объявленное.** Каждый публичный тип классифицирован атрибутом:\n   `#[Api]` (Application API), `#[Spi]` (Extension SPI), иначе internal. Wire — отдельный\n   контракт (JSON Schema/OpenAPI), версионируется отдельно.\n5. **Инварианты не конфигурируются.** Безопасность, транзакционность, outbox-запись,\n   авторизация — не удаляются config-ом; расширение — через именованные якоря.\n6. **Всё компилируется при boot/optimize, исполняется из immutable снимка.** Никакого\n   `config()` в runtime-пути, никаких static mutable кэшей.\n7. **Схема детерминирована.** Выпущенный шаг схемы не меняется никогда; новая форма = новый шаг.\n8. **Стандарты вместо изобретений** там, где стандарт есть: Standard Webhooks, CloudEvents-\n   совместимый envelope, OpenAPI 3.1, JSON Schema 2020-12, SemVer.\n9. **Никаких алиасов/deprecated-мостов до 1.0** (нет потребителей). После 1.0 — строгий SemVer."
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P00-design/facts/chatom-principles.md",
+    "sha256": "ff69791d0a672e0070ab557317c464f1a7e414de0f238c6c3f6b6f24c12283ee"
+  }
+}

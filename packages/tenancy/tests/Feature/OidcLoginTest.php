@@ -61,7 +61,7 @@ beforeEach(function (): void {
     // AccountStatusGate/ScopeSessions/EnforceSessionLifetime under this
     // package's own flags) — no session-starting middleware of its own. A
     // real consuming app is expected to compose these routes under ITS OWN
-    // 'web' group (stancl's ScopeSessions middleware, itself already part of
+    // 'web' group (ScopeSessionToTenant middleware, itself already part of
     // 'tenant' when host_identification is enabled, makes the same
     // assumption). Testbench has no such app-level route file, so this test
     // PREPENDS StartSession — and only StartSession, not the rest of 'web'
@@ -574,9 +574,9 @@ it('м: членства нет вовсе → 403', function (): void {
     callbackOL($state, $nonce)->assertStatus(403);
 });
 
-// (н) `imp` claim present while `tenancy.oidc.impersonation.enabled` stays at its false default (P2.11 fail-closed gate).
+// (н) `imp` claim present while `corex-tenancy.oidc.impersonation.enabled` stays at its false default (P2.11 fail-closed gate).
 it('н: imp в токене при impersonation.enabled=false → 403', function (): void {
-    expect(config('tenancy.oidc.impersonation.enabled'))->toBeFalse();
+    expect(config('corex-tenancy.oidc.impersonation.enabled'))->toBeFalse();
 
     $account = initAccountWithTenantOL();
     $sub = makeIdentityOL();

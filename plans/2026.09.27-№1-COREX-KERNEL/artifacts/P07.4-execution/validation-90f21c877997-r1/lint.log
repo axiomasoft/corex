@@ -1,0 +1,6 @@
+candidate=90f21c877997ccd69055ccb5cdda1b7e5ebe9d01
+command=scripts/php84 composer lint:check
+started=2026-10-05T06:57:56.988334+00:00
+> vendor/bin/pint --test
+{"tool":"pint","result":"passed"}
+exit=0

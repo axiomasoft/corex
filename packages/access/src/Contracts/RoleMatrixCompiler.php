@@ -8,10 +8,8 @@ use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 
 /**
- * Compiles aut_role_matrix rows into AzGuard's az_guard_role_permissions
- * (permission keys `{panel}.{entity_key}.{action}`, D100) — one role at a
- * time, transactionally (B-11 §7.3 п.8): AzGuard keys and the scope-map
- * version never diverge, the version bumps last.
+ * Publishes a native role matrix for one role inside a tenant transaction.
+ * The scope-map version changes after the transaction commits.
  */
 #[Spi(kind: SpiKind::Implement, since: '1.0')]
 interface RoleMatrixCompiler

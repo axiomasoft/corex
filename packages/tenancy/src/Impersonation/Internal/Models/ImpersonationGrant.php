@@ -5,17 +5,14 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Impersonation\Internal\Models;
 
 use Carbon\CarbonImmutable;
-use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Database\Eloquent\Model;
-use Override;
 
 /**
- * `root_impersonation_grants` — thin Eloquent read model on the CENTRAL
- * connection (D14; overridden here rather than relying on the ambient
- * default connection, because callers run this from ALREADY tenant-scoped
- * request context — P2.10 initializes tenancy before the OIDC lane runs).
+ * `root_impersonation_grants` — thin Eloquent read model. The registrar
+ * supplies the configured central connection when resolving an instance;
+ * callers of Eloquent's static API must select that connection explicitly.
  * The one-time atomic claim itself is a query-builder `UPDATE` in
- * {@see CoreX\Tenancy\Impersonation\Internal\DatabaseImpersonationService} (D143),
+ * {@see CoreX\Tenancy\Impersonation\Internal\DatabaseImpersonationGrantStore} (D143),
  * not an Eloquent write — this model exists for the L2 exempt-list
  * (`ImpersonatedModelWriteGuard`) and read access after the claim.
  *
@@ -36,19 +33,6 @@ final class ImpersonationGrant extends Model
     protected $table = 'root_impersonation_grants';
 
     protected $guarded = [];
-
-    public function __construct(
-        array $attributes = [],
-        private readonly ?TenancyOptions $options = null,
-    ) {
-        parent::__construct($attributes);
-    }
-
-    #[Override]
-    public function getConnectionName(): string
-    {
-        return ($this->options ?? app(TenancyOptions::class))->centralConnection;
-    }
 
     /** @return array<string, string> */
     protected function casts(): array

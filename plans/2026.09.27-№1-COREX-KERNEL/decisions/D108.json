@@ -1,0 +1,44 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D108",
+  "title": "Закрыть P07.2 без повторных проверок; новая сессия",
+  "date": "2026-10-04",
+  "status": "accepted",
+  "decision": "Владелец явно отменяет дополнительные аудиты/ревью и повторные прогоны для закрытия P07.2: «хватит аудитов, быстроо закрывай пункт без прогонов и стартуем новую сессию. 5 минут тебе на закрытие».\n\nОтозвать автоматическое owner-requested Grok close requirement из исходной invocation; архивировать request.json без изменения завершённых receipts. Два завершённых вердикта остаются FINDINGS, не GREEN. Все пять замечаний исправлены в product ef8a2869e0d7ee8f3a1ab5cbfddf60b78d1b4db6; локальная Validation уже GREEN. Закрыть пункт по сохранённым результатам, не запускать новые проверки или третий раунд. Это явное изменение owner review requirement, а не новый положительный вердикт.\n\nСохранить post-close checkpoint и передать P07.3 в новую Codex-сессию (`cold-start-root: owner-requested-new-session`), используя его Routing implementation/high. В текущей сессии P07.3 не исполнять.",
+  "rationale": "Владелец принял исправления и отменил дальнейшие проверки; approval-required boundary устранена его прямым указанием.",
+  "applies_to": [
+    "P07.2"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "owner, текущая Codex-сессия."
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D108\ndate: 2026-10-04\nstatus: accepted\nitem: P07.2\nitems: [P07.2]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D108-P07.2",
+      "title": "D108 — Закрыть P07.2 без повторных проверок; новая сессия",
+      "text": "**Actor:** owner, текущая Codex-сессия.\n**Owner evidence:** artifacts/P07.2-execution/owner-close-direction.md."
+    },
+    {
+      "id": "Solution",
+      "title": "Solution",
+      "text": "Владелец явно отменяет дополнительные аудиты/ревью и повторные прогоны для закрытия P07.2: «хватит аудитов, быстроо закрывай пункт без прогонов и стартуем новую сессию. 5 минут тебе на закрытие».\n\nОтозвать автоматическое owner-requested Grok close requirement из исходной invocation; архивировать request.json без изменения завершённых receipts. Два завершённых вердикта остаются FINDINGS, не GREEN. Все пять замечаний исправлены в product ef8a2869e0d7ee8f3a1ab5cbfddf60b78d1b4db6; локальная Validation уже GREEN. Закрыть пункт по сохранённым результатам, не запускать новые проверки или третий раунд. Это явное изменение owner review requirement, а не новый положительный вердикт.\n\nСохранить post-close checkpoint и передать P07.3 в новую Codex-сессию (`cold-start-root: owner-requested-new-session`), используя его Routing implementation/high. В текущей сессии P07.3 не исполнять."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "Владелец принял исправления и отменил дальнейшие проверки; approval-required boundary устранена его прямым указанием."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "История ревью и прежний waiting-owner checkpoint остаются в репозитории. Закрытие не утверждает независимый GREEN. D107/data до P08, существующие Redis skips, будущие gates P07.3–P07.6 и запрет release/push не меняются."
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P03-design-rag-README",
+  "title": "P03 design RAG — captures index",
+  "sections": [
+    {
+      "id": "P03-design-RAG-captures-index",
+      "title": "P03 design RAG — captures index",
+      "text": "| # | File | Tool | Topic | Used by |\n|:--|:--|:--|:--|:--|\n| 1 | `context7-01-pest-arch.md` | context7 (`/pestphp/docs` 5.x) | Pest arch expectations: `toBeInterfaces/Enums`, wildcards `App\\*\\X` in `expect()`, `toOnlyBeUsedIn` with fixed namespaces | E1 |\n| 2 | `pplx-01-pest-arch-vs-layout-gate.md` | perplexity-web | Pest arch cannot express depth/sibling layout or same-module backreference; custom check recommended; PHPArkitect for broad dependency policies | E1 |\n| 3 | `composer-lock.md` | web.run (official Composer CLI) | `update --lock`, no version changes, metadata refresh, `--no-install` | E3 / D58 A1 |\n\nReused without new search: `@plan/knowledge/artifacts-research-rag-pplx-10-phpstan-internal-api-attributes.json` (PHPStan `@internal` works per first namespace segment → too broad for `CoreX\\` monorepo; Deptrac/PHPArkitect/custom rule for package ownership)."
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P03-design-rag/README.md",
+    "sha256": "5f47a43383ec57aa6796b18ca33bbe80ec89d6407d4e5343f6987e9340c7311a"
+  }
+}

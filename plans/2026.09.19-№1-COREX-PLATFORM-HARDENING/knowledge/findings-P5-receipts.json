@@ -1,0 +1,249 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "findings-P5-receipts",
+  "title": "Receipts — фаза P5 (messaging foundation)",
+  "sections": [
+    {
+      "id": "Receipts-P5-messaging-foundation",
+      "title": "Receipts — фаза P5 (messaging foundation)",
+      "text": ""
+    },
+    {
+      "id": "P5.1-message-policy.md",
+      "title": "P5.1 — `message-policy.md` до исполнимого вида",
+      "text": "**Дата:** 2026-09-22 · **Actor:** plan-exec/codex-gpt-5.6-sol/high"
+    },
+    {
+      "id": "MSG-00-mentions",
+      "title": "MSG-00 mentions",
+      "text": "```text\n$ rg -c 'MSG-00' docs/architecture/message-policy.md   # до правки (P1.6 baseline)\n1\n\n$ rg -c 'MSG-00' docs/architecture/message-policy.md   # после P5.1\n3\n```\n\n(новые упоминания: `MSG-002`, `MSG-008` в добавленных разделах; строка P1.6 с `MSG-001`…`MSG-008` без изменений.)"
+    },
+    {
+      "id": "section",
+      "title": "Добавленные разделы",
+      "text": "1. Колонка «Тип и предел» в таблице обязательных полей конверта + типы необязательных полей и payload.\n2. «Как объявляется новый интеграционный контракт» — пять шагов, ломающие изменения (§3.3).\n3. «Чего механизм не обещает» — порядок, at-least-once, `afterCommit()` vs `MSG-008`.\n4. «Обязательная форма потребителя» — фрагмент §7.2 + `TenantContextRestorer` (`RUN-002`/`RUN-003`).\n5. «Retention» — два окна outbox, inbox по умолчанию без чистки, отличие от `sys_pubsub_messages`."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "```text\n$ git diff --stat -- 'packages/'\n(empty for P5.1 — item не менял `packages/`; в worktree есть несвязанные изменения P4/P3)\n\n$ composer lint:check\n{\"tool\":\"pint\",\"result\":\"passed\"}\n```\n\nКлючевые строки приёмки присутствуют: `name.vN`, `MSG-008`, `at-least-once`, явный отказ от гарантии порядка доставки."
+    },
+    {
+      "id": "P5.2-messaging-MessageEnvelope",
+      "title": "P5.2 — словарь messaging (`MessageEnvelope` и соседи)",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/high"
+    },
+    {
+      "id": "causationId",
+      "title": "Предел `causationId`",
+      "text": "`causationId` хранит только `messageId` непосредственного предшественника (UUIDv7, один генератор на запись), а не пару `(source, id)`. Условие возврата: когда в один outbox начнут писать два независимых продюсера с разными генераторами ID и коллизия станет реальной — тогда потребуется вторая компонента идентичности."
+    },
+    {
+      "id": "Validation-2",
+      "title": "Validation",
+      "text": "```text\n$ cd packages/core && composer test\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":66,\"passed\":66,...}\n\n$ composer analyse\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n\n$ composer lint:check\n{\"tool\":\"pint\",\"result\":\"passed\"}\n\n$ rg -n 'array<mixed>' packages/core/src/Messaging\n(empty)\n```\n\nТринадцать случаев §2.8 — `MessagingEnvelopeTest.php` (15 тестов, включая три отказа идентичности в одном файле)."
+    },
+    {
+      "id": "P5.3",
+      "title": "P5.3 — реестр объявленных контрактов",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/high"
+    },
+    {
+      "id": "section-2",
+      "title": "Апкастеры не пишутся — почему",
+      "text": "В дереве нет сериализованных сообщений ни одной версии (outbox отсутствует, N05). Писать преобразование формата без входных данных в БД — код без данных для проверки; то же решение, что P4.8 §6.3. Апкастеры появятся, когда появится первая durable-строка и контракт с мажорной сменой схемы."
+    },
+    {
+      "id": "CI",
+      "title": "Статический CI-гейт не заявляется — почему",
+      "text": "Принуждение — рантаймовое: будущий `Outbox::append()` отказывает на паре, которой нет в реестре. Статический гейт «ни одно необъявленное событие не пересекло границу» потребовал бы различать литерал и вычисляемое имя в потоке данных; плановый сканер (P2.1, stdlib, D16) этого не делает — ложно-зелёный гейт хуже отсутствия."
+    },
+    {
+      "id": "Validation-3",
+      "title": "Validation",
+      "text": "```text\n$ cd packages/core && composer test\n(same run as P5.2 — 66 tests green)\n\n$ composer analyse / lint:check\n(green)\n\n$ rg -n 'new MessageContract\\(' packages/core/src\n(empty)\n```\n\nШесть случаев §3.7 — `MessageContractRegistryTest.php`."
+    },
+    {
+      "id": "P5.4-DDL-outbox-inbox-corex.messaging",
+      "title": "P5.4 — DDL outbox/inbox, `corex.messaging`, владение",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/high"
+    },
+    {
+      "id": "Owner-gate-G-DDL",
+      "title": "Owner-gate G-DDL",
+      "text": "`@plan/decisions/D110.json` — владелец выдал гейт запуском\n`task:plan-exec P5.4` (scope: две новые миграции в `packages/core/database/migrations/pg/`)."
+    },
+    {
+      "id": "Validation-4",
+      "title": "Validation",
+      "text": "```text\n$ cd packages/core && composer test:pg -- --filter=MessagingSchema\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":4,\"passed\":4,...}\n\n$ composer test\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":66,\"passed\":66,...}\n\n$ composer analyse\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n\n$ composer lint:check\n{\"tool\":\"pint\",\"result\":\"passed\"}\n\n$ rg -n 'ordering_key|sequence_no' packages/core/database/migrations\n(empty)\n```\n\nЧетыре проверки §4.6 — `MessagingSchemaTest.php` (колонки, PK inbox, `WHERE` в четырёх partial index, duplicate PK)."
+    },
+    {
+      "id": "Schema-snapshot-corex_test-migrate",
+      "title": "Schema snapshot (`corex_test` после migrate)",
+      "text": "```text\n$ PGPASSWORD=corex psql -h 127.0.0.1 -p 5434 -U corex -d corex_test -c '\\d+ sys_outbox_messages'\n(Table: sys_outbox_messages — 24 колонки, см. миграцию 2026_09_20_100000)\n\n$ psql ... -c \"select indexname from pg_indexes where tablename='sys_outbox_messages' and indexname like '%_idx'\"\n sys_outbox_messages_claim_idx\n sys_outbox_messages_reclaim_idx\n sys_outbox_messages_published_idx\n sys_outbox_messages_dead_idx\n(все indexdef содержат WHERE)\n\n$ psql ... -c '\\d+ sys_inbox_messages'\n PRIMARY KEY (consumer, message_id); index sys_inbox_messages_processed_idx on (processed_at)\n```"
+    },
+    {
+      "id": "P5.5-Outbox-append",
+      "title": "P5.5 — `Outbox::append()` внутри бизнес-транзакции",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/high"
+    },
+    {
+      "id": "section-3",
+      "title": "Цена отказа на отсутствующей транзакции",
+      "text": "Проверка `transactionLevel() < 1` дешёвая; нарушение — запись outbox без атомарности с бизнес-изменением, то есть ровно тот дефект, ради которого строится фаза. Продюсер без иного изменения состояния обязан открыть транзакцию явно — одна строка, инвариант виден в коде вызывающего (`@plan/knowledge/research-P5-design.json` §5.2, D25)."
+    },
+    {
+      "id": "Validation-5",
+      "title": "Validation",
+      "text": "```text\n$ cd packages/core && composer test\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":71,\"passed\":71,...}\n\n$ composer test:pg -- --filter=OutboxAppend\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":1,\"passed\":1,...}\n\n$ composer analyse\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n\n$ composer lint:check\n{\"tool\":\"pint\",\"result\":\"passed\"}\n\n$ rg -n '\\bnow\\(\\)' packages/core/src/Messaging\npackages/core/src/Messaging/Internal/SqlOutbox.php:41:        $now = $this->clock->now();\n```\n\nЕдинственный `now()` — инъектированный `ClockInterface` (D30), не глобальный хелпер Laravel.\n\nШесть случаев §5.3 — `OutboxAppendTest.php` (1–5) и `OutboxAppendPgTest.php` (откат)."
+    },
+    {
+      "id": "P5.6-OutboxRelay-lease-fence-backoff-dead-letter",
+      "title": "P5.6 — `OutboxRelay`: lease, fence, backoff, dead-letter",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/high"
+    },
+    {
+      "id": "jitter-5.8",
+      "title": "Предел без jitter (§5.8)",
+      "text": "`RAG:✅` P5-Q1 рекомендует ограниченный экспоненциальный backoff **с jitter**. P5 берёт ту же формулу, что `SweepRunner`: `min(cap, 2 ** attempt)` **без jitter**, потому что jitter нужен против одновременного пробуждения многих воркеров, а сегодня на один аккаунт приходится один relay (§5.6), поэтому сходящегося стада нет, а детерминизм повторов проверяется тестом. **Условие возврата:** первый деплой с несколькими relay-воркерами на один аккаунт."
+    },
+    {
+      "id": "5.6",
+      "title": "Долг плоскости управления (§5.6, последний абзац)",
+      "text": "**P5 этой плоскости управления не строит.** `SqlOutboxRelay` работает с одним соединением — тем, которое ему дал контейнер, то есть текущим тенантным. Команда relay (§6.2) работает на текущем доверенном контексте — ровно как существующая `corex:wakeup:sweep`, которая берёт `$contexts->current()`. Честное планирование relay по многим аккаунтам (round-robin, приоритет по возрасту, backoff по аккаунту, ограниченная глобальная конкурентность) — вход **P9**; до него оператор запускает relay по аккаунту сам, и малый аккаунт может ждать за большим."
+    },
+    {
+      "id": "section-4",
+      "title": "Отклонение схемы",
+      "text": "`failure_class` для reclaim после исчерпания попыток: в коде `lease-expiry-attempts-exhausted` (31 символ) вместо черновика §5.5 `attempts-exhausted-after-lease-expiry` — колонка `varchar(32)` в миграции P5.4."
+    },
+    {
+      "id": "Validation-6",
+      "title": "Validation",
+      "text": "```text\n$ composer --working-dir=packages/core test:pg\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":36,\"passed\":36,\"assertions\":168,\"duration_ms\":36959}\n\n$ composer --working-dir=packages/core test\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":84,\"passed\":84,\"assertions\":197,\"duration_ms\":2135}\n\n$ composer --working-dir=packages/core analyse\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n\n$ composer --working-dir=packages/core lint:check\n{\"tool\":\"pint\",\"result\":\"passed\"}\n\n$ rg -n '\\bnow\\(\\)' packages/core/src/Messaging\npackages/core/src/Messaging/Commands/PruneOutboxMessages.php:43:        $now = $clock->now();\npackages/core/src/Messaging/Internal/SqlInbox.php:34:            'processed_at' => $this->clock->now(),\npackages/core/src/Messaging/Internal/SqlOutbox.php:41:        $now = $this->clock->now();\npackages/core/src/Messaging/Internal/SqlOutboxRelay.php:36:        $now = $this->clock->now();\npackages/core/src/Messaging/Internal/SqlOutboxRelay.php:125:        $now = $this->clock->now();\npackages/core/src/Messaging/Internal/SqlOutboxRelay.php:149:        $now = $this->clock->now();\npackages/core/src/Messaging/Internal/SqlOutboxRelay.php:185:                occurredAt: $this->clock->now(),\npackages/core/src/Messaging/Internal/SqlDeliveryHealth.php:24:        $now = $this->clock->now();\n\n$ rg --pcre2 -n '(?<!->)(?<!::)\\bnow\\(\\)' packages/core/src/Messaging\n(no matches; exit 1)\n```\n\nБуквальный smoke-поиск из item-spec не может быть пустым одновременно с обязательным D30: regex совпадает и с разрешённым `$clock->now()`. Все фактические совпадения идут через `ClockInterface`; уточнённый PCRE2-поиск глобального helper пуст.\n\nСемь сценариев §5.11 — `OutboxRelayTest.php` (9 pg-тестов, включая reclaim/dead, corrupt fence, backoff 2/4/8/16s, dead@8, `last_error` 2000, конкуренция PDO); полный PG lane — 36 тестов."
+    },
+    {
+      "id": "P5.7-MessagePublisher-relay",
+      "title": "P5.7 — порт `MessagePublisher` и команда relay",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/high"
+    },
+    {
+      "id": "D99-host-binding",
+      "title": "D99 / host binding",
+      "text": "Core не регистрирует lossy PubSub-адаптер. Relay требует `DurableMessagePublisher` (отдельный маркер от `MessagePublisher`); хост обязан `scoped`-привязку durable-реализации. Null/Redis-PUBLISH фикстуры (только `MessagePublisher`) отклоняются контейнером до `markPublished()`."
+    },
+    {
+      "id": "PubSub",
+      "title": "PubSub каталог",
+      "text": "```text\n$ git diff --stat -- 'packages/core/src/PubSub/'\n(empty)\n```"
+    },
+    {
+      "id": "Validation-7",
+      "title": "Validation",
+      "text": "```text\n$ cd packages/core && composer test\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":75,...}\n\n$ composer test:pg\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":22,...}\n\n$ composer analyse\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n\n$ composer lint:check\n{\"tool\":\"pint\",\"result\":\"passed\"}\n\n$ php artisan corex:messaging:relay --once\n(exit 0 in pg test `OutboxRelayCommandTest` with durable binding)\n```\n\nСемь случаев §6.3 — `MessagePublisherTest.php` (4 sqlite) + `OutboxRelayCommandTest.php` (4 pg, включая `--once` exit 0)."
+    },
+    {
+      "id": "P5.8-Inbox-claim-MSG-006",
+      "title": "P5.8 — `Inbox::claim()` (MSG-006)",
+      "text": "**Дата:** 2026-09-22 · **Actor:** plan-exec/cursor-composer-2.5/high"
+    },
+    {
+      "id": "SELECT",
+      "title": "Идемпотентность без предварительного SELECT",
+      "text": "`insertOrIgnore()` → `ON CONFLICT DO NOTHING` на паре `(consumer, message_id)`; возврат `false` на дубликат. Отметка и бизнес-эффект — одна транзакция (`InboxRefused` вне неё). Частоту дублей считает потребитель по `claim() === false`, не таблица (§9.1)."
+    },
+    {
+      "id": "P5.12",
+      "title": "Зависимость P5.12",
+      "text": "Контракт и `SqlInbox` появились в exec P5.12 для witnesses (2)(5); P5.8 добавляет докблок §7.2, комментарий P5-Q2, `InboxClaimTest` и `InboxConcurrencyTest`."
+    },
+    {
+      "id": "Validation-8",
+      "title": "Validation",
+      "text": "```text\n$ cd packages/core && composer test -- --filter=InboxClaim\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":4,\"passed\":4,...}\n\n$ composer test:pg -- --filter=InboxConcurrency\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":1,\"passed\":1,...}\n\n$ composer test\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":84,\"passed\":84,...}\n\n$ composer test:pg\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":36,\"passed\":36,...}\n\n$ composer analyse\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n\n$ composer lint:check\n{\"tool\":\"pint\",\"result\":\"passed\"}\n\n$ rg -n 'where.*consumer.*first\\(\\)|exists\\(\\)' packages/core/src/Messaging/Internal/SqlInbox.php\n(empty)\n```\n\nПять случаев §7.4 — `InboxClaimTest.php` (1–4), `InboxConcurrencyTest.php` (5, два PDO, autocommit)."
+    },
+    {
+      "id": "P5.9-retention-outbox-corex-messaging-prune",
+      "title": "P5.9 — retention outbox (`corex:messaging:prune`)",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/high"
+    },
+    {
+      "id": "PrunePubSubMessages-8-P6",
+      "title": "Расхождение источника времени с `PrunePubSubMessages` (§8, долг P6)",
+      "text": "`PruneOutboxMessages` берёт порог из инъектированного `ClockInterface` (D30). Существующая `PrunePubSubMessages` по-прежнему использует `new DateTimeImmutable` — это долг владельца pubsub (P6), здесь не исправлялось."
+    },
+    {
+      "id": "Retention-inbox-vs-pubsub-7.3",
+      "title": "Retention inbox vs pubsub (§7.3)",
+      "text": "Дефолт `corex.messaging.inbox_retention` — `null`: prune не читает `sys_inbox_messages`. Это отличается от дефолта pubsub (30 дней), потому что у pubsub удаление теряет **недоставленное**, а у inbox-отметок — **защиту от повтора уже доставленного** (D29)."
+    },
+    {
+      "id": "Validation-9",
+      "title": "Validation",
+      "text": "```text\n$ cd packages/core && composer test\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":80,...}\n\n$ composer test:pg\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":29,...}\n\n$ composer analyse\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n\n$ composer lint:check\n{\"tool\":\"pint\",\"result\":\"passed\"}\n\n$ rg -n 'inbox' packages/core/src/Messaging/Commands/PruneOutboxMessages.php\n20: * sys_inbox_messages эта команда НЕ трогает: ...\n```\n\nПять случаев §8 — `PruneOutboxTest.php` (published/dead окна, pending/publishing не трогаются, inbox не трогается, `FrozenClock` на границе)."
+    },
+    {
+      "id": "P5.10-corex-messaging-health",
+      "title": "P5.10 — наблюдаемость доставки (`corex:messaging:health`)",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/high"
+    },
+    {
+      "id": "9.1",
+      "title": "Пятое число фазой не производится (§9.1)",
+      "text": "Частоту дублей из таблиц прочитать нельзя: `INSERT … ON CONFLICT DO NOTHING` не оставляет следа. Счётчик дублей обязан вести **потребитель** по возврату `Inbox::claim() === false` (P5.8). P5 даёт только четыре агрегата из outbox и разрез возраста по `contract`."
+    },
+    {
+      "id": "P12-9.4",
+      "title": "Граница P12 (§9.4)",
+      "text": "Экспорт в OpenTelemetry, `messaging.*` метрики и span links — обязательство P12; команда и `DeliveryHealth` — вход для таксономии, не финальный экспорт."
+    },
+    {
+      "id": "Validation-10",
+      "title": "Validation",
+      "text": "```text\n$ cd packages/core && composer test:pg -- --filter=DeliveryHealth\n{\"tool\":\"pest\",\"result\":\"passed\",...}\n\n$ composer test\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":80,...}\n\n$ composer analyse + lint:check\ngreen\n\n$ rg -n 'messageId|subject|last_error' packages/core/src/Messaging/Internal/SqlDeliveryHealth.php\n(empty)\n\n$ corex:messaging:health --max-age=0\n(non-empty pending → exit 1; empty table → exit 0 in DeliveryHealthTest)\n```\n\nПять случаев §9.4 + probe — `DeliveryHealthTest.php` (7 pg-тестов)."
+    },
+    {
+      "id": "P5.11-Messaging-R-M1-R-M2",
+      "title": "P5.11 — зона `Messaging` (R-M1 / R-M2)",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/high"
+    },
+    {
+      "id": "section-5",
+      "title": "Негативные посадки (дословный вывод коллекторов)",
+      "text": "```text\nR-M1 (import CoreX\\Views\\Internal\\SqlSavedViewRepository в файл зоны):\npackages/core/src/Messaging/Data/P511Rm1Probe.php: CoreX\\Views\\Internal\\SqlSavedViewRepository\n\nR-M2 (import CoreX\\Messaging\\Internal\\SqlOutbox вне зоны):\npackages/core/src/Support/P511Rm2Probe.php: CoreX\\Messaging\\Internal\\SqlOutbox\n```\n\nОбе посадки выполнены в `MessagingZoneTest` probe-тестах; после `unlink` пробы гейт снова зелёный."
+    },
+    {
+      "id": "Validation-11",
+      "title": "Validation",
+      "text": "```text\n$ ./vendor/bin/pest tests/Arch/MessagingZoneTest.php\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":4,\"passed\":4,...}\n\n$ git diff --stat -- 'packages/core/src/PubSub/'\n(empty)\n\n$ git diff --stat -- 'tests/Support/'\n(empty)\n\n$ bash scripts/anti-weakening-gate.sh\nANTI-WEAKENING GATE: OK\n\n$ vendor/bin/pint --test tests/Arch/MessagingZoneTest.php\n{\"tool\":\"pint\",\"result\":\"passed\"}\n```\n\nDeliverables: `tests/Arch/MessagingZoneTest.php`, `@plan/knowledge/findings-P5-zone-map.json` (17 файлов `Messaging/**`, 7 `PubSub/**` с «перенос — P6»), `CHANGELOG.md`."
+    },
+    {
+      "id": "P5.12-12",
+      "title": "P5.12 — доказательства гарантий доставки (§12)",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/high"
+    },
+    {
+      "id": "witness",
+      "title": "Результат каждого witness",
+      "text": "| # | Утверждение | Фактический результат |\n|:--|:--|:--|\n| (1) | at-least-once после «брокер принял, процесс умер» | `RecordingPublisher` (throw after record) → строка остаётся `publishing`; после истечения lease повторный `lease()` + второй `publish()` с тем же `messageId` — **два** вызова, одна строка outbox → published. |\n| (2) | Дубль без второго бизнес-эффекта (§7.2) | `Inbox::claim()` → `true`, затем `false`; таблица `dg_business_effects` — **одна** строка. |\n| (3) | Конкуренция relay (не порядок, D28) | Два `SqlOutboxRelay` на независимых соединениях: пересечение захваченных id **пусто**; при удержании `FOR UPDATE` на pending relay-B не берёт заблокированную строку (`SKIP LOCKED`). |\n| (4) | Откат бизнес+outbox | Rollback: 0 business + 0 outbox; commit: по одной строке в обеих таблицах. |\n| (5) | Durable handoff (D99) | Durable publisher пишет в `dg_durable_store`, outbox → `published`; «restart» потребителя — один business effect; lossy `MessagePublisher` без `DurableMessagePublisher` → `BindingResolutionException`, outbox остаётся `pending`. |\n| (6) | Bounded reclaim | Истёкший `publishing` с `attempts=8` → `dead` без publish; corrupt envelope при `maxAttempts=1` → `dead` / `attempts-exhausted`, publish не вызывался. |"
+    },
+    {
+      "id": "P5.8",
+      "title": "Зависимость P5.8",
+      "text": "Witness (2) и (5) требуют `Inbox::claim()`. В worktree не было закрытого P5.8 — добавлены контракт `Inbox`, `SqlInbox`, `InboxRefused` и привязка в `CoreServiceProvider` (форма `@plan/knowledge/research-P5-design.json` §7.1). Отдельные тесты P5.8 (`InboxClaimTest`, `InboxConcurrencyTest`) — в item P5.8."
+    },
+    {
+      "id": "Validation-12",
+      "title": "Validation",
+      "text": "```text\n$ cd packages/core && composer test:pg -- --filter=DeliveryGuarantees\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":6,\"passed\":6,\"assertions\":38,...}\n\n$ cd packages/core && composer test:pg\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":35,\"passed\":35,...}\n\n$ cd packages/core && composer test + analyse + lint:check\ngreen (80 sqlite tests; phpstan 0 errors; pint passed after fix)\n\n$ git diff --stat -- 'packages/core/tests/Pg/DeliveryGuaranteesTest.php' 'packages/core/tests/Fixtures/RecordingPublisher.php'\n(new files in worktree)\n```\n\nDeliverables: `packages/core/tests/Pg/DeliveryGuaranteesTest.php`, `packages/core/tests/Fixtures/RecordingPublisher.php`, `CHANGELOG.md`, autoload `CoreX\\\\Testing\\\\Fixtures\\\\` в корневом `composer.json`."
+    }
+  ],
+  "applies_to": [
+    "P5"
+  ],
+  "provenance": {
+    "path": "findings/P5-receipts.md",
+    "sha256": "71bd4bd1c2e1e89b4464f4f8cddb5e1fa9d7c7f341f0d5dd6932d5ec4f318d0e"
+  }
+}

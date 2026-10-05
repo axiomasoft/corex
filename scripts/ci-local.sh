@@ -10,7 +10,6 @@ echo "ci-local: candidate $(git rev-parse HEAD), Laravel ${LARAVEL_VERSION:-defa
 if [[ "${LARAVEL_VERSION:-}" == 12.* ]]; then
     scripts/php84 composer require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
 fi
-python3 scripts/distribution/stage-stancl-providers.py
 update_args=(update --prefer-dist --no-interaction --no-progress)
 if [[ -n "${LARAVEL_VERSION:-}" ]]; then
     update_args+=(--with "illuminate/contracts:$LARAVEL_VERSION")

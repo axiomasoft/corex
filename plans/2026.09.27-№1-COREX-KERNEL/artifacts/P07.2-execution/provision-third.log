@@ -1,0 +1,33 @@
+> pest '--group=pg' '--filter=ProvisioningTest'
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\ProvisioningTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit re-provisioning an already-created database is idempotent (repla[39m[90m…[39m [90m1.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects an untrusted template before changing provisioning param[39m[90m…[39m [90m0.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fixes embedding_model/dim and other provisioning params onto the[39m[90m…[39m [90m0.81s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit provisions a database by cloning the golden template via STRATEG[39m[90m…[39m [90m0.69s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses to clone a template that is not ready (template-parity g[39m[90m…[39m [90m0.38s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit creates an Account with a UUIDv7 key and typed custom columns[39m[90m    [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves the tenant connection from root_clusters+db_name and fo[39m[90m…[39m [90m0.37s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ProvisioningTest[22m [90m>[39m it creates an Account with a UUI…   
+[39;1m  Failed asserting that '{}' is null.[39;22m
+
+  at [32mtests/Feature/ProvisioningTest.php[39m:[32m164[39m
+    160▕         ->and($account->id[14])->toBe('7');
+    161▕ 
+    162▕     $raw = DB::table('root_accounts')->where('id', $account->id)->first();
+    163▕     expect($raw->status)->toBe('pending')
+  ➜ 164▕         ->and($raw->data)->toBeNull();
+    165▕ });
+    166▕ 
+    167▕ it('provisions a database by cloning the golden template via STRATEGY WAL_LOG, without Migrate/Seed', function (): void {
+    168▕     $clusterId = makeClusterRow();
+
+  [33m1   [39m[39;1mtests/Feature/ProvisioningTest.php[39;22m:[39;1m164[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m6 passed[39;22m[90m (23 assertions)[39m
+  [90mDuration:[39m [39m4.55s[39m
+  [90mRandom Order Seed:[39m [39m1791133856[39m
+
+Script pest handling the test event returned with error code 1

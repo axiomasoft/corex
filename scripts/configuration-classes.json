@@ -2,6 +2,11 @@
     "schema": "configuration-classes/v1",
     "note": "Carried registry columns (owner, secret, mode, reloadable, validation, deprecated_aliases, notes) per key. Generated columns: key set, type, default (config files) and typed_options_field (Options reflection). Edit here, then run scripts/configuration-reference.php --write.",
     "options": {
+        "corex-access-azguard": [
+            {
+                "class": "CoreX\\AccessAzguard\\Internal\\AccessAzguardOptions"
+            }
+        ],
         "corex": [
             {
                 "class": "CoreX\\Modules\\Internal\\Support\\ModulesOptions",
@@ -98,47 +103,42 @@
             {
                 "class": "CoreX\\Workflow\\Internal\\WorkflowOptions"
             }
-        ],
-        "tenancy": [
-            {
-                "class": "CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions"
-            }
         ]
     },
     "rows": {
-        "corex-access.azguard_pins.column_names.morph_type": {
-            "owner": "axiomasoft/corex-access",
+        "corex-access-azguard.azguard_pins.column_names.morph_type": {
+            "owner": "axiomasoft/corex-access-azguard",
             "secret": "no",
             "mode": "product-policy",
             "reloadable": "unobserved",
-            "validation": "use-site",
+            "validation": "boot",
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-access.azguard_pins.models.role": {
-            "owner": "axiomasoft/corex-access",
+        "corex-access-azguard.azguard_pins.models.role": {
+            "owner": "axiomasoft/corex-access-azguard",
             "secret": "no",
             "mode": "product-policy",
             "reloadable": "unobserved",
-            "validation": "use-site",
+            "validation": "boot",
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-access.azguard_pins.table_names.roles": {
-            "owner": "axiomasoft/corex-access",
+        "corex-access-azguard.azguard_pins.table_names.roles": {
+            "owner": "axiomasoft/corex-access-azguard",
             "secret": "no",
             "mode": "product-policy",
             "reloadable": "unobserved",
-            "validation": "use-site",
+            "validation": "boot",
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-access.bind_permission_layer": {
-            "owner": "axiomasoft/corex-access",
+        "corex-access-azguard.bind_permission_layer": {
+            "owner": "axiomasoft/corex-access-azguard",
             "secret": "no",
             "mode": "deployment",
             "reloadable": "no",
-            "validation": "use-site",
+            "validation": "boot",
             "deprecated_aliases": "",
             "notes": ""
         },
@@ -1636,7 +1636,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.bootstrappers": {
+        "corex-tenancy.bootstrappers": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "product-policy",
@@ -1645,7 +1645,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.cache_prefix": {
+        "corex-tenancy.cache_prefix": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "product-policy",
@@ -1654,7 +1654,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.cache_stores": {
+        "corex-tenancy.cache_stores": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "product-policy",
@@ -1663,7 +1663,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.central_connection": {
+        "corex-tenancy.central_connection": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "deployment",
@@ -1672,7 +1672,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.domain_trust.challenge_ttl_seconds": {
+        "corex-tenancy.domain_trust.challenge_ttl_seconds": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "deployment",
@@ -1681,7 +1681,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.domain_trust.enabled": {
+        "corex-tenancy.domain_trust.enabled": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "deployment",
@@ -1690,7 +1690,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.grace_days": {
+        "corex-tenancy.grace_days": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "deployment",
@@ -1699,7 +1699,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.host_identification.cache": {
+        "corex-tenancy.host_identification.cache": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "product-policy",
@@ -1708,7 +1708,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.host_identification.cache_store": {
+        "corex-tenancy.host_identification.cache_store": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "product-policy",
@@ -1717,7 +1717,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.host_identification.cache_ttl": {
+        "corex-tenancy.host_identification.cache_ttl": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "product-policy",
@@ -1726,7 +1726,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.host_identification.enabled": {
+        "corex-tenancy.host_identification.enabled": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "deployment",
@@ -1735,16 +1735,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.id_generator": {
-            "owner": "axiomasoft/corex-tenancy",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "tenancy.oidc.allowed_algs": {
+        "corex-tenancy.oidc.allowed_algs": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "product-policy",
@@ -1753,7 +1744,7 @@
             "deprecated_aliases": "",
             "notes": "undeclared-read"
         },
-        "tenancy.oidc.client_id": {
+        "corex-tenancy.oidc.client_id": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "deployment",
@@ -1762,7 +1753,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.oidc.client_secret": {
+        "corex-tenancy.oidc.client_secret": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "yes",
             "mode": "secret",
@@ -1771,7 +1762,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.oidc.discovery.cache_store": {
+        "corex-tenancy.oidc.discovery.cache_store": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "deployment",
@@ -1780,7 +1771,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.oidc.discovery.cache_ttl": {
+        "corex-tenancy.oidc.discovery.cache_ttl": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "deployment",
@@ -1789,7 +1780,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.oidc.enabled": {
+        "corex-tenancy.oidc.enabled": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "deployment",
@@ -1798,7 +1789,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.oidc.guard": {
+        "corex-tenancy.oidc.guard": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "deployment",
@@ -1807,7 +1798,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.oidc.impersonation.enabled": {
+        "corex-tenancy.oidc.impersonation.enabled": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "deployment",
@@ -1816,7 +1807,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.oidc.impersonation.require_approved_by": {
+        "corex-tenancy.impersonation.profile": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "deployment",
@@ -1825,7 +1816,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.oidc.issuer": {
+        "corex-tenancy.oidc.issuer": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "deployment",
@@ -1834,7 +1825,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.oidc.jwks.cache_store": {
+        "corex-tenancy.oidc.jwks.cache_store": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "deployment",
@@ -1843,7 +1834,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.oidc.jwks.cache_ttl": {
+        "corex-tenancy.oidc.jwks.cache_ttl": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "deployment",
@@ -1852,7 +1843,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.oidc.jwks.refetch_cooldown_seconds": {
+        "corex-tenancy.oidc.jwks.refetch_cooldown_seconds": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "deployment",
@@ -1861,7 +1852,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.oidc.leeway_seconds": {
+        "corex-tenancy.oidc.leeway_seconds": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "deployment",
@@ -1870,7 +1861,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.oidc.max_session_lifetime_minutes": {
+        "corex-tenancy.oidc.max_session_lifetime_minutes": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "deployment",
@@ -1879,7 +1870,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.oidc.redirect_uri": {
+        "corex-tenancy.oidc.redirect_uri": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "deployment",
@@ -1888,7 +1879,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.platform_domain": {
+        "corex-tenancy.platform_domain": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "deployment",
@@ -1897,7 +1888,25 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.provisioning.pipeline": {
+        "corex-tenancy.status_gate.export_route": {
+            "owner": "axiomasoft/corex-tenancy",
+            "secret": "no",
+            "mode": "product-policy",
+            "reloadable": "unobserved",
+            "validation": "use-site",
+            "deprecated_aliases": "",
+            "notes": ""
+        },
+        "corex-tenancy.status_gate.payment_route": {
+            "owner": "axiomasoft/corex-tenancy",
+            "secret": "no",
+            "mode": "product-policy",
+            "reloadable": "unobserved",
+            "validation": "unobserved",
+            "deprecated_aliases": "",
+            "notes": ""
+        },
+        "corex-tenancy.status_gate.read_only_methods": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "product-policy",
@@ -1906,52 +1915,34 @@
             "deprecated_aliases": "",
             "notes": "undeclared-read"
         },
-        "tenancy.stancl.jobpipeline_pin": {
+        "corex-tenancy.storage.durable_driver": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "unobserved",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "tenancy.stancl.package": {
-            "owner": "axiomasoft/corex-tenancy",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "unobserved",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "tenancy.stancl.pin": {
-            "owner": "axiomasoft/corex-tenancy",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "unobserved",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "tenancy.status_gate.export_route": {
-            "owner": "axiomasoft/corex-tenancy",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
+            "mode": "deployment",
+            "reloadable": "no",
             "validation": "use-site",
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.status_gate.payment_route": {
+        "corex-tenancy.storage.durable_root": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "unobserved",
+            "mode": "deployment",
+            "reloadable": "no",
+            "validation": "use-site",
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.status_gate.read_only_methods": {
+        "corex-tenancy.storage.ephemeral_root": {
+            "owner": "axiomasoft/corex-tenancy",
+            "secret": "no",
+            "mode": "deployment",
+            "reloadable": "no",
+            "validation": "use-site",
+            "deprecated_aliases": "",
+            "notes": ""
+        },
+        "corex-tenancy.template_integrity.manifests": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "product-policy",
@@ -1960,43 +1951,7 @@
             "deprecated_aliases": "",
             "notes": "undeclared-read"
         },
-        "tenancy.storage.durable_driver": {
-            "owner": "axiomasoft/corex-tenancy",
-            "secret": "no",
-            "mode": "deployment",
-            "reloadable": "no",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "tenancy.storage.durable_root": {
-            "owner": "axiomasoft/corex-tenancy",
-            "secret": "no",
-            "mode": "deployment",
-            "reloadable": "no",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "tenancy.storage.ephemeral_root": {
-            "owner": "axiomasoft/corex-tenancy",
-            "secret": "no",
-            "mode": "deployment",
-            "reloadable": "no",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "tenancy.template_integrity.manifests": {
-            "owner": "axiomasoft/corex-tenancy",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": "undeclared-read"
-        },
-        "tenancy.template_integrity.trusted_keys": {
+        "corex-tenancy.template_integrity.trusted_keys": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "yes",
             "mode": "secret",
@@ -2005,25 +1960,7 @@
             "deprecated_aliases": "",
             "notes": "undeclared-read"
         },
-        "tenancy.tenant_database_manager": {
-            "owner": "axiomasoft/corex-tenancy",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "tenancy.tenant_model": {
-            "owner": "axiomasoft/corex-tenancy",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "tenancy.trial_days": {
+        "corex-tenancy.trial_days": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "deployment",
@@ -2032,7 +1969,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "tenancy.workspace.path_segment": {
+        "corex-tenancy.workspace.path_segment": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "deployment",
@@ -2070,17 +2007,7 @@
             "deprecated_aliases": "",
             "notes": "undeclared-read"
         },
-        "tenancy.identification.middleware": {
-            "owner": "axiomasoft/corex-tenancy",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": "undeclared-read",
-            "options_field": "TenancyOptions::$(registrar-read)"
-        },
-        "tenancy.membership_guard.guard": {
+        "corex-tenancy.membership_guard.guard": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "product-policy",
@@ -2092,6 +2019,10 @@
         }
     },
     "options_field_overrides": {
+        "corex-access-azguard.azguard_pins.column_names.morph_type": "AccessAzguardOptions::$morphType",
+        "corex-access-azguard.azguard_pins.models.role": "AccessAzguardOptions::$roleModel",
+        "corex-access-azguard.azguard_pins.table_names.roles": "AccessAzguardOptions::$rolesTable",
+        "corex-access-azguard.bind_permission_layer": "AccessAzguardOptions::$bindPermissionLayer",
         "corex-custom-fields.definitions": "CustomFieldsOptions::$composition",
         "corex-custom-fields.drivers.ddl": "CustomFieldsOptions::$composition",
         "corex-custom-fields.drivers.eav": "CustomFieldsOptions::$composition",
@@ -2126,16 +2057,13 @@
         "corex.tables.settings": "CoreOptions::$settingsTable",
         "corex.tenant_context.impersonation": "CoreOptions::$impersonationService",
         "corex.tenant_context.manager": "CoreOptions::$tenancyManager",
-        "tenancy.grace_days": "TenancyOptions::$lifecycle",
-        "tenancy.host_identification.cache": "TenancyOptions::$hostCache",
-        "tenancy.host_identification.cache_store": "TenancyOptions::$hostCacheStore",
-        "tenancy.host_identification.cache_ttl": "TenancyOptions::$hostCacheTtl",
-        "tenancy.oidc.impersonation.enabled": "TenancyOptions::$impersonation",
-        "tenancy.oidc.impersonation.require_approved_by": "TenancyOptions::$impersonation",
-        "tenancy.platform_domain": "TenancyOptions::$lifecycle",
-        "tenancy.stancl.jobpipeline_pin": "TenancyOptions::$(reference)",
-        "tenancy.stancl.package": "TenancyOptions::$(reference)",
-        "tenancy.stancl.pin": "TenancyOptions::$(reference)",
-        "tenancy.trial_days": "TenancyOptions::$lifecycle"
+        "corex-tenancy.grace_days": "TenancyOptions::$lifecycle",
+        "corex-tenancy.host_identification.cache": "TenancyOptions::$hostCache",
+        "corex-tenancy.host_identification.cache_store": "TenancyOptions::$hostCacheStore",
+        "corex-tenancy.host_identification.cache_ttl": "TenancyOptions::$hostCacheTtl",
+        "corex-tenancy.oidc.impersonation.enabled": "TenancyOptions::$impersonation",
+        "corex-tenancy.impersonation.profile": "TenancyOptions::$impersonation",
+        "corex-tenancy.platform_domain": "TenancyOptions::$lifecycle",
+        "corex-tenancy.trial_days": "TenancyOptions::$lifecycle"
     }
 }

@@ -1,0 +1,125 @@
+{
+  "ts": "2026-10-05T05:14:36Z",
+  "plan_id": "2026.09.27-№1-COREX-KERNEL",
+  "item_id": "P07.3",
+  "command": "plan-run",
+  "session_id": "01a10a43-0efd-7a13-83d9-73b5fbb62b4c",
+  "run_id": "55169b7319554e8d59250fcf4fbdeb8360cea0cde47411fc4498b8edc8f3b26d",
+  "attempt": 1,
+  "actor": "codex/gpt-6-sol/high",
+  "friction": [],
+  "result": "closed-green",
+  "cost_usd": null,
+  "num_turns": null,
+  "duration_ms": null,
+  "note": "P07.3 impersonation profiles, atomic claim, committed dual audit and zero runtime globals GREEN. Two Grok 4.7 review rounds returned GREEN; final candidate a8f44d91d63232d1c0dd17b0727c2a661d0e543cdf26cbe9e5593ff548e054bc. Evidence: artifacts/P07.3-execution/completion.md.",
+  "decision": {
+    "signal_class": "acceptance",
+    "scope_class": "item",
+    "action": "close-green",
+    "recovered": true,
+    "terminal": true,
+    "terminal_evidence": {
+      "schema_version": "terminal-evidence/v1",
+      "spec_sha256": "3c7891892a9fe8b1000498dc1d99912bce0c357382c7c9b655d855348bf8fa38",
+      "validation": [
+        {
+          "carrier": "После продуктового commit: `bash scripts/contract-guard.sh` и `bash scripts/contract-guard.sh \"$(cat plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.3-execution/base-commit.txt)\"` → exit 0.",
+          "status": "green",
+          "evidence_ids": [
+            "artifacts/P07.3-execution/contract-default.log",
+            "artifacts/P07.3-execution/contract-base.log"
+          ]
+        },
+        {
+          "carrier": "`PGSQL_PORT=5434 scripts/php84 composer --working-dir=packages/tenancy test -- --group=pg --filter=ImpersonationProfile` → exit 0: все 27 ячеек матрицы examples §8.",
+          "status": "green",
+          "evidence_ids": [
+            "artifacts/P07.3-execution/profile-final.log"
+          ]
+        },
+        {
+          "carrier": "`scripts/php84 composer --working-dir=packages/tenancy test -- --filter='Impersonation'` → exit 0: actual stock sink/writer: disabled general audit + async queue имеют committed rows до regenerate/login; central/tenant/commit/ambient transaction failure → отказ start без открытой сессии и consumed grant; central intent при tenant failure сохраняется; provider DI service→sink→writer и AuditLogger→service нецикличен; в `dev` зеркала нет; события started/ended/failed содержат профиль и `expires_at`; `allowing()` экземпляра восстанавливает guard после исключения; опасный режим `dev` в production без acknowledgement → violation, с acknowledgement — нет.",
+          "status": "green",
+          "evidence_ids": [
+            "artifacts/P07.3-execution/impersonation-final-after-named.log",
+            "artifacts/P07.3-execution/core-writer-second.log",
+            "artifacts/P07.3/self-check.json"
+          ]
+        },
+        {
+          "carrier": "`cat scripts/runtime-globals-baseline.json` → `{}`; `scripts/php84 composer runtime-globals-gate` → exit 0; негатив: добавить `now()` в `DatabaseImpersonationService` → exit ≠ 0, вернуть.",
+          "status": "green",
+          "evidence_ids": [
+            "artifacts/P07.3-execution/runtime-restored.log",
+            "artifacts/P07.3-execution/runtime-negative.log",
+            "artifacts/P07.3-execution/completion.md"
+          ]
+        },
+        {
+          "carrier": "`git grep -n -E 'require_approved_by|requireApprovedBy' -- packages docs` → пусто.",
+          "status": "green",
+          "evidence_ids": [
+            "artifacts/P07.3-execution/completion.md",
+            "artifacts/P07.3-execution/contract-default.log"
+          ]
+        },
+        {
+          "carrier": "`scripts/php84 composer --working-dir=packages/tenancy test`, `PGSQL_PORT=5434 scripts/php84 composer test:pg`, `scripts/php84 composer test:packages` → exit 0.",
+          "status": "green",
+          "evidence_ids": [
+            "artifacts/P07.3-execution/tenancy-full.log",
+            "artifacts/P07.3-execution/root-pg.log",
+            "artifacts/P07.3-execution/test-packages.log"
+          ]
+        },
+        {
+          "carrier": "`scripts/php84 php scripts/php-api.php --write` дважды → идентично; `scripts/php84 composer php-api`, `scripts/php84 composer bc-check` → exit 0; diff Golden — только строки P07.3 из досье §4.",
+          "status": "green",
+          "evidence_ids": [
+            "artifacts/P07.3-execution/php-api-first.log",
+            "artifacts/P07.3-execution/php-api-check.log",
+            "artifacts/P07.3-execution/bc-final.log",
+            "artifacts/P07.3-execution/golden-final.log",
+            "artifacts/P07.3-execution/golden-semantic-delta.json"
+          ]
+        },
+        {
+          "carrier": "`scripts/php84 composer lint:check`, `scripts/php84 composer analyse` → exit 0; `bash scripts/anti-weakening-gate.sh` → exit 0; `php scripts/package-docs-gate.php` → exit 0.",
+          "status": "green",
+          "evidence_ids": [
+            "artifacts/P07.3-execution/lint-final.log",
+            "artifacts/P07.3-execution/analyse-root.log",
+            "artifacts/P07.3-execution/anti-weakening.log",
+            "artifacts/P07.3-execution/docs-first.log"
+          ]
+        },
+        {
+          "carrier": "Review `light` (D97): self-check по досье §6; строка `review: self-check GREEN` в Completion Notes.",
+          "status": "green",
+          "evidence_ids": [
+            "artifacts/P07.3-execution/completion.md",
+            "artifacts/P07.3/self-check.json",
+            "artifacts/P07.3/owner-review/attempt-0002/output.json"
+          ]
+        }
+      ],
+      "repair_exhausted": null
+    }
+  },
+  "batch_receipt": {
+    "batch_id": "solo",
+    "completed_prefix": [
+      "P07.3"
+    ],
+    "handoff_digest": "33f9694d452e684cacae29ed556929d4c7c95fe83371b560d451828f8230f92d",
+    "invocation_digest": "40a6a5ecef22ac2f566cf5324413411673b454f00ba19f3be3f85f730c6cc5f0",
+    "membership": [
+      "P07.3"
+    ],
+    "routing_digest": "a9cd518ddade9e64fdd62b416850a7d830d347da38dc98a64aa5d211d70fd21d",
+    "schema_version": "batch-receipt/v1",
+    "spec_digest": "3c7891892a9fe8b1000498dc1d99912bce0c357382c7c9b655d855348bf8fa38",
+    "stop_disposition": "continue"
+  }
+}

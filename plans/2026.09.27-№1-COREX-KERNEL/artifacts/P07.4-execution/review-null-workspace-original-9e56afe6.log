@@ -1,0 +1,3 @@
+{"candidate_commit": "9e56afe69ef2525f7ec3a68ca3b252e6b9bf1078", "expression": "context()?->workspace->id ?? ''", "source_sha256": "228ea9bcc9c2d16c5976ad1da631c3558adb777b9a4f0c3a8f1b5c8e7bba8084"}
+{"original_expression_null_workspace":"safe","discriminator":"","php":"8.4.26"}
+exit_code=0

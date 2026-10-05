@@ -1,0 +1,272 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P4.1",
+  "title": "Транзитная форма `DataScope`: скаляры, `VERSION`, `fromTenantContext()`",
+  "status": "done",
+  "summary": "Дать `DataScope` публичные скаляры (`accountId`, `workspaceId`,\n`boxed`, `version`), константу `VERSION` и статический именованный конструктор\n`fromTenantContext()`, не трогая существующую сигнатуру конструктора.",
+  "why": "Одномоментная смена сигнатуры красит 21 точку конструирования в девяти\nпакетах и делает дерево красным между items (D21). `RAG:✅` P4-Q5: перестановка\nи переименование параметров ломают и позиционных, и именованных вызывающих, а\nрекомендованный путь эволюции — статический именованный конструктор. Скаляры,\nради которых существует фаза, появляются здесь и сразу доступны P4.2–P4.6.",
+  "scope": {
+    "include": [
+      "правка `packages/core/src/Support/Data/DataScope.php` по\n§2.2 дизайна; валидация новых скаляров теми же правилами, что у существующих;\nтесты формы и негативы в `packages/core/tests/Unit/SupportDataTest.php`;\nCHANGELOG; receipt."
+    ],
+    "exclude": [
+      "удаление `public TenantContext $context` (P4.7); маркер\n`DurablePayload` (P4.7); codec (P4.8); правка любого вызывающего кода\n(P4.3–P4.6); `@deprecated` на конструкторе — причина в §2.2 дизайна."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D21"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P4-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/findings-audit-verdicts.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/knowledge/research-00-baseline-metrics.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P4/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P4-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D21.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Data/Data/DataScope.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Context/Data/TenantContext.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Context/Data/AccountRef.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/tests/Unit/SupportDataTest.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/core/src/Data/Data/DataScope.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/tests/Unit/SupportDataTest.php",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P4-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Код §2.2 переносится дословно. Три существующих текста\nисключений (`Invalid connection identity.`, `Invalid actor identity.`,\n`Restore epoch must be a lowercase SHA-256 digest.`) и порядок проверок не\nменяются: сначала connection/actor, затем restoreEpoch, затем новые скаляры.\nНепромотированные свойства присваиваются после валидации через локальные\nпеременные — в `readonly`-классе присваивание однократно. `fromTenantContext()`\nповторяет порядок параметров прежнего конструктора; переставлять запрещено.\nНи один файл вне `packages/core` не трогается."
+  ],
+  "guidance": "Готовый класс целиком — `@plan/knowledge/research-P4-design.json` §2.2; состав\nновых тестов — §2.3. Образец стиля VO — `packages/core/src/Support/Data/RecordRef.php`.\nЕсли `public const int VERSION` не проходит анализ, это сигнал о несоответствии\n`php: ^8.3` в `packages/core/composer.json`, а не повод снять тип константы:\nрасхождение фиксируется в receipt и эскалируется.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer test",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "composer analyse",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "composer lint:check",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "rg -n 'new DataScope\\(' packages | wc -l",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "packages/core composer test",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "packages/core composer analyse",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "packages/core composer lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "no packages outside core modified",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "procedure": "migration fromTenantContext only P4.1 test",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "транзитная форма `DataScope` со скалярами и `VERSION`;\nименованный конструктор; тесты формы и негативы; строка CHANGELOG; блок receipt'а\nс измеренным числом непроведённых точек миграции."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "medium"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "required",
+    "status": "complete"
+  },
+  "result": {
+    "started_at": "2026-09-21T12:42:00Z",
+    "finished_at": "2026-09-21T12:42:00Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/cursor-composer-2.5/medium",
+      "effort": "medium"
+    },
+    "notes": "P4.1 GREEN: transit DataScope scalars VERSION fromTenantContext, SupportDataTest §2.3, receipt",
+    "deviations": [
+      "P4.1 GREEN: transit DataScope scalars VERSION fromTenantContext, SupportDataTest §2.3, receipt"
+    ],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-21T12:42:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-21T12:42:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-21T12:42:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-21T12:42:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-09-21T12:42:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-21T12:42:00Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Дать `DataScope` публичные скаляры (`accountId`, `workspaceId`,\n`boxed`, `version`), константу `VERSION` и статический именованный конструктор\n`fromTenantContext()`, не трогая существующую сигнатуру конструктора."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "Одномоментная смена сигнатуры красит 21 точку конструирования в девяти\nпакетах и делает дерево красным между items (D21). `RAG:✅` P4-Q5: перестановка\nи переименование параметров ломают и позиционных, и именованных вызывающих, а\nрекомендованный путь эволюции — статический именованный конструктор. Скаляры,\nради которых существует фаза, появляются здесь и сразу доступны P4.2–P4.6."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "правка `packages/core/src/Support/Data/DataScope.php` по\n§2.2 дизайна; валидация новых скаляров теми же правилами, что у существующих;\nтесты формы и негативы в `packages/core/tests/Unit/SupportDataTest.php`;\nCHANGELOG; receipt."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "удаление `public TenantContext $context` (P4.7); маркер\n`DurablePayload` (P4.7); codec (P4.8); правка любого вызывающего кода\n(P4.3–P4.6); `@deprecated` на конструкторе — причина в §2.2 дизайна."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P4-design.json` §0, §2; `@plan/knowledge/findings-audit-verdicts.json` A33, N13;\n`@plan/knowledge/research-00-baseline-metrics.json` §4; решение D21."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/core/src/Support/Data/DataScope.php`; `packages/core/tests/Unit/SupportDataTest.php`; `CHANGELOG.md`; `@plan/knowledge/findings-P4-receipts.json`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P4/phase.json`; 2) `@plan/knowledge/research-P4-design.json` §0, §2; 3) `@plan/knowledge/research-P4-design-rag.json` §1 (P4-Q5); 4) `@plan/decisions/D21.json`; 5) `packages/core/src/Support/Data/DataScope.php`; 6) `packages/core/src/Tenancy/TenantContext.php`; 7) `packages/core/src/Tenancy/AccountRef.php`; 8) `packages/core/tests/Unit/SupportDataTest.php`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Код §2.2 переносится дословно. Три существующих текста\nисключений (`Invalid connection identity.`, `Invalid actor identity.`,\n`Restore epoch must be a lowercase SHA-256 digest.`) и порядок проверок не\nменяются: сначала connection/actor, затем restoreEpoch, затем новые скаляры.\nНепромотированные свойства присваиваются после валидации через локальные\nпеременные — в `readonly`-классе присваивание однократно. `fromTenantContext()`\nповторяет порядок параметров прежнего конструктора; переставлять запрещено.\nНи один файл вне `packages/core` не трогается."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Готовый класс целиком — `@plan/knowledge/research-P4-design.json` §2.2; состав\nновых тестов — §2.3. Образец стиля VO — `packages/core/src/Support/Data/RecordRef.php`.\nЕсли `public const int VERSION` не проходит анализ, это сигнал о несоответствии\n`php: ^8.3` в `packages/core/composer.json`, а не повод снять тип константы:\nрасхождение фиксируется в receipt и эскалируется."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "`composer test` пакета `core` зелёный, включая прежние негативы.\n`composer analyse` зелёный. `composer lint:check` зелёный.\n`rg -n 'new DataScope\\(' packages | wc -l` = 21 (миграция ещё не начата — число\nподтверждает, что item ничего не сломал). Receipt содержит вывод всех трёх команд."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "транзитная форма `DataScope` со скалярами и `VERSION`;\nименованный конструктор; тесты формы и негативы; строка CHANGELOG; блок receipt'а\nс измеренным числом непроведённых точек миграции."
+    }
+  ]
+}

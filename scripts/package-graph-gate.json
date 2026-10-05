@@ -34,16 +34,6 @@
             "reason": "Optional wakeup integration guarded by interface_exists() before registration (P12.1 receipt)."
         },
         {
-            "from": "axiomasoft/corex-tasks-workflow",
-            "to": "axiomasoft/corex-wakeup",
-            "import_file": "packages/tasks-workflow/src/Internal/SqlTaskRecurrenceMaterializer.php",
-            "guard_file": "packages/tasks-workflow/src/Internal/SqlTaskRecurrenceMaterializer.php",
-            "guard_contains": [
-                "bound(WakeupScheduler::class)"
-            ],
-            "reason": "WakeupScheduler resolved only when config enables it and container is bound (P12.1 receipt)."
-        },
-        {
             "from": "axiomasoft/corex-tenancy",
             "to": "axiomasoft/corex-wakeup",
             "import_file": "packages/tenancy/src/Integration/Internal/Wakeup/RootRegistryWakeupHint.php",
@@ -88,14 +78,12 @@
             "reason": "ModuleFieldCatalogue is constructed only from the guarded FieldCatalogue binding in AttributesServiceProvider (P12.7 receipt)."
         }
     ],
-    "undeclared_dependency_exceptions": [
+    "undeclared_dependency_exceptions": [],
+    "forbidden_edges": [
         {
-            "from": "axiomasoft/corex-tasks-workflow",
+            "from": "axiomasoft/corex-notifications",
             "to": "axiomasoft/corex-wakeup",
-            "import_file": "packages/tasks-workflow/src/Internal/MaterializationWakeupHandler.php",
-            "adr": "P12.1",
-            "expires_when": "handler registration guarded in TasksWorkflowServiceProvider or axiomasoft/corex-wakeup promoted to require",
-            "reason": "DueWakeupHandler bridge wired only in tests; no runtime guard in product path (named exception per P12A.4)."
+            "reason": "Scheduling contracts live in the kernel; notifications must not depend on wakeup (D96.11)."
         }
     ],
     "reservations": [

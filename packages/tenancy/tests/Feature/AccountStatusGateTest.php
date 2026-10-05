@@ -38,12 +38,12 @@ beforeEach(function (): void {
     ])->run();
 
     config([
-        'tenancy.status_gate.payment_route' => '/billing',
-        'tenancy.status_gate.export_route' => '/export',
-        'tenancy.status_gate.read_only_methods' => ['GET', 'HEAD', 'OPTIONS'],
-        'tenancy.host_identification.enabled' => true,
-        'tenancy.host_identification.cache' => true,
-        'tenancy.host_identification.cache_store' => null,
+        'corex-tenancy.status_gate.payment_route' => '/billing',
+        'corex-tenancy.status_gate.export_route' => '/export',
+        'corex-tenancy.status_gate.read_only_methods' => ['GET', 'HEAD', 'OPTIONS'],
+        'corex-tenancy.host_identification.enabled' => true,
+        'corex-tenancy.host_identification.cache' => true,
+        'corex-tenancy.host_identification.cache_store' => null,
     ]);
     app()->forgetInstance(TenancyOptions::class);
 });

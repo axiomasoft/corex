@@ -1,0 +1,12 @@
+{
+  "outcome": "cold-start-root",
+  "reason": "owner-requested-new-session",
+  "evidence": [
+    "batch:125352c510fc40c36a0b028babb177b2b473d32ece640331105b2558a919868f",
+    "loaded-inputs:reusable",
+    "cold-start-cost:0",
+    "checkpoint:artifacts/P07.2-execution/completion.md"
+  ],
+  "runnable": true,
+  "schema_version": "session-continuity-decision/v1"
+}

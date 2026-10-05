@@ -1,0 +1,69 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "findings-P8-receipts",
+  "title": "P8.1 receipt",
+  "sections": [
+    {
+      "id": "P8.1-receipt",
+      "title": "P8.1 receipt",
+      "text": "`PackageRegistrar` и `RegistersNothingOnBoot` опубликованы двумя exact\nsymbol roots в `packages/core/composer.json`. Wildcard `Support/**` не\nдобавлен. Пустой `boot` свёрнут Pint-правилом `single_line_empty_body`.\nКаталог: `@plan/knowledge/findings-P8-binding-catalog.json`. Membership-модуль не заводился."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "```\ncomposer --working-dir=packages/core lint:check\nexit 0\n{\"tool\":\"pint\",\"result\":\"passed\"}\n```\n\n```\ncomposer --working-dir=packages/core analyse\nexit 0\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n```\n\nTrait попадает в анализ через `PackageRegistrarTest.php` в script `analyse`:\nбез use-site PHPStan пишет `trait.unused`.\n\n```\ncomposer --working-dir=packages/core test\nexit 0\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":98,\"passed\":98,\"assertions\":244}\n```\n\n```\nvendor/bin/pest --testsuite=Arch --filter=CoreZone\nexit 1\n{\"tool\":\"pest\",\"result\":\"failed\",\"tests\":7,\"passed\":6,\"failed\":1}\n```\n\nЕдинственный R-Z0: `Support/Console/ValidateConfigCommand.php`.\n`PackageRegistrar.php` и `RegistersNothingOnBoot.php` в списке offenders\nнет; оба пути уже в `CORE_ZONE_COMPOSITION`.\n\nПосадка R4: импорт `CoreX\\Support\\Probe` из tenancy — `[R4]`\n`импорт непубличного`. Импорт `PackageRegistrar` и\n`RegistersNothingOnBoot` строки R4 не дал. Пробы удалены.\n\n```\nbash scripts/anti-weakening-gate.sh\nANTI-WEAKENING GATE: OK\n```\n\n`rg` §2.5: tenancy 44, modules register 12. Сверка в каталоге §5."
+    },
+    {
+      "id": "P8.2-receipt",
+      "title": "P8.2 receipt",
+      "text": "Три registrar'а в `packages/tenancy/src/Laravel/`. Провайдер вызывает\n`registrars()` из трёх классов. Options/policy остаются `bind()` в\nпровайдере. `TenancyOptions` не материализуется в `register()` Runtime:\nиначе OIDC Testbench падает до `defineEnvironment`. Storage-замыкание\nчитает Options при resolve (P7.2). `AccountLifecycle` остаётся `scoped`."
+    },
+    {
+      "id": "Validation-2",
+      "title": "Validation",
+      "text": "```\ncomposer --working-dir=packages/tenancy lint:check\nexit 0\n{\"tool\":\"pint\",\"result\":\"passed\"}\n```\n\n```\ncomposer --working-dir=packages/tenancy analyse\nexit 0\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n```\n\n```\ncomposer --working-dir=packages/tenancy test\nexit 0\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":487,\"passed\":480,\"skipped\":7,\"assertions\":1623}\n```\n\n`CompositionBindingsTest`: 4 passed, 110 assertions — хелперы §9 на всех\nстроках Runtime/Database/Provisioning, включая `bootstrapperOrder`.\n\n```\ncomposer test:pg\nexit 2\n```\n\nЧужой baseline, не P8.2: `MigrationPublishTest` 12 vs 10 из-за\nнеотслеживаемых P5 outbox/inbox миграций; `ModuleLifecycleTest` —\n`hashtext` на sqlite. Tenancy pg-лейн зелёный внутри package test.\n\n```\nbash scripts/anti-weakening-gate.sh\nANTI-WEAKENING GATE: OK\n```"
+    },
+    {
+      "id": "P8.3-receipt",
+      "title": "P8.3 receipt",
+      "text": "Пять registrar'ов: Identity, Workspace, DomainTrust, Authentication,\nWakeup. Предикаты OIDC и wakeup — в `registrars()` провайдера по\nmerged config, без `make(TenancyOptions)` (P7.2/P8.2: иначе OIDC\nTestbench падает до `defineEnvironment`). `bindIf` Workspace сохранён.\nWakeup `boot` регистрирует `SweepRootWakeups` через `Artisan::starting`.\n\n`DomainTrustCoordinator`: membership + `isShared` без `make()` —\nпо умолчанию `DomainTrustDisabled`, интерфейсы policy/store не bound.\n`RootWakeupReconciler`: membership + `isShared` + tag; `make()`\nтребует `WakeupSweeper`, которого Testbench не биндит."
+    },
+    {
+      "id": "Validation-3",
+      "title": "Validation",
+      "text": "```\ncomposer --working-dir=packages/tenancy lint:check\nexit 0\n{\"tool\":\"pint\",\"result\":\"passed\"}\n```\n\n```\ncomposer --working-dir=packages/tenancy analyse\nexit 0\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n```\n\n```\ncomposer --working-dir=packages/tenancy test\nexit 0\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":494,\"passed\":487,\"skipped\":7,\"assertions\":1708}\n```\n\n`CompositionBindingsTest`: 11 passed, 195 assertions — оба режима\nOIDC и wakeup, хелперы §9 на Identity/Workspace/DomainTrust.\n\n```\ncomposer test:pg\n```\n\nЧужой baseline как P8.2: `MigrationPublishTest` 12 vs 10 (P5\noutbox/inbox), `ModuleLifecycleTest` sqlite `hashtext`. Tenancy pg\nзелёный в package test (487 passed).\n\n```\nbash scripts/anti-weakening-gate.sh\nANTI-WEAKENING GATE: OK\nsqlite 546 -> 581, pg 508 -> 508\n```"
+    },
+    {
+      "id": "P8.5-receipt",
+      "title": "P8.5 receipt",
+      "text": "Четыре registrar'а в `packages/modules/src/Laravel/`: Registry, Lifecycle,\nSettings, Boot. Провайдер оставляет SCHEMA_VERSION, `instance(ModulesOptions)`,\n`mergeConfigFrom`, `publishes`, `optimizes` и цикл `registrars()`.\n`loadMigrationsFrom` не добавлялся. `failIfMissing` по-прежнему\n`$app->environment('production')`. Closure-команда `corex:modules:repair`\nсохранила сигнатуру CLI. `registryVersion` живёт рядом с\n`CompiledModuleRegistry` (единственный caller); `moduleWiring` — в\nLifecycle; `isCompilingModules` — в Boot.\n\n`rg` call site `singleton|scoped|bind|bindIf` в\n`ModulesServiceProvider.php` — пуст.\n\nLaravel-registrar'ы не дают новых R4/R4b: `@internal`,\n`PackageRegistrar`/`RegistersNothingOnBoot` — exact public-api, без\nSupport wildcard. `TenantContextResolver` покрыт public-api tenancy\nContracts. CoreZone R-Z0 `ValidateConfigCommand.php` — чужой baseline."
+    },
+    {
+      "id": "Validation-4",
+      "title": "Validation",
+      "text": "```\ncomposer --working-dir=packages/modules lint:check\nexit 0\n{\"tool\":\"pint\",\"result\":\"passed\"}\n```\n\n```\ncomposer --working-dir=packages/modules analyse\nexit 0\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n```\n\n```\ncomposer --working-dir=packages/modules test\nexit 0\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":33,\"passed\":33,\"assertions\":178}\n```\n\n`CompositionBindingsTest`: хелперы §9 на всех 12 строках каталога §3\nплюс `corex-modules.wiring` и `ModulesOptions`.\n\n```\nbash scripts/anti-weakening-gate.sh\nANTI-WEAKENING GATE: OK\nsqlite 546 -> 581, pg 508 -> 508\n```"
+    },
+    {
+      "id": "P8.6-receipt",
+      "title": "P8.6 receipt",
+      "text": "Гейт `scripts/provider-size-gate.php` считает call site\n`singleton|scoped|bind|bindIf` как `T_STRING` после `->` только внутри\nкласса, который расширяет `Illuminate\\Support\\ServiceProvider`. Снимок\n`scripts/provider-size.json` записан измерением, не оценкой 18.\n`CoreServiceProvider` — 26 (20 `singleton` + 6 `scoped`); E-CORE-PROVIDER\nзамораживает это число и по-прежнему запрещает рост. Tenancy и modules — 0.\nФайл без ключа в снимке обязан быть ≤ 20. Посадка не названа\n`*ServiceProvider.php`, поэтому сканер обходит все `packages/*/src/**/*.php`."
+    },
+    {
+      "id": "section",
+      "title": "Посадка",
+      "text": "```\nphp scripts/provider-size-gate.php\nEXIT:1\nprovider-size-gate: packages/core/src/Support/ProviderSizeProbeProvider.php singleton=21 scoped=0 bind=0 bindIf=0 total=21 exceeds max_bindings=20\n```\n\nФайл посадки снят в `finally`. Повтор на чистом дереве:\n\n```\nphp scripts/provider-size-gate.php\nexit 0\nprovider-size-gate: OK\n```"
+    },
+    {
+      "id": "Validation-5",
+      "title": "Validation",
+      "text": "```\nvendor/bin/pest --testsuite=Arch --filter=ProviderSizeTest\nexit 0\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":3,\"passed\":3,\"assertions\":13}\n```\n\nЧистое дерево, ratchet tenancy=0, modules=0, max_bindings=20 — в том же\nтесте. Третий тест: `HelperServiceProvider` без `extends ServiceProvider`\nи с 21 `singleton` не краснит гейт.\n\n```\ncomposer test:arch\nexit 1\n{\"tool\":\"pest\",\"result\":\"failed\",\"tests\":52,\"passed\":48,\"failed\":4}\n```\n\nЧетыре красных — чужой baseline: CoreZone R-Z0\n`ValidateConfigCommand.php`, LayerTest `RuntimeRegistrar.php`\n`FilesystemManager`, PackageGraph R4/R4b Options и Laravel registrar'ы.\n`ProviderSizeTest` в этих четырёх нет.\n\n```\nbash scripts/anti-weakening-gate.sh\nANTI-WEAKENING GATE: OK\nsqlite 546 -> 586, pg 508 -> 508\n```"
+    }
+  ],
+  "applies_to": [
+    "P8"
+  ],
+  "provenance": {
+    "path": "findings/P8-receipts.md",
+    "sha256": "6ba6f718f6b2fe22b20f6926148d4aafa2347fed99c689bcbae8597d1859146c"
+  }
+}

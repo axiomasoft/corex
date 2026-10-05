@@ -14,9 +14,7 @@ use Override;
  * COMMENT ON — no sqlite equivalent, D105). Schema is reset and assembled
  * per test via explicit `--path` migrate calls (same golden-template
  * composition as packages/tenancy/tests/Feature/WorkspaceResolverTest.php)
- * rather than RefreshDatabase: `--path` migrate runs ONLY the given path,
- * so AzGuard's own loadMigrationsFrom()-registered migrations need their
- * own explicit call too — {@see migrateAzGuard()}.
+ * rather than RefreshDatabase: `--path` migrate runs ONLY the given path.
  */
 abstract class PgTestCase extends CoreAuthTestCase
 {
@@ -47,13 +45,7 @@ abstract class PgTestCase extends CoreAuthTestCase
         DB::purge('pgsql');
     }
 
-    /** AzGuard's own tables (az_guard_roles, az_guard_role_permissions, …) — the compiler's write target. */
-    protected function migrateAzGuard(): void
-    {
-        $this->migratePath(__DIR__.'/../vendor/axioma-studio/azguard-core/database/migrations');
-    }
-
-    /** The 3 tenant-DB aut_* migrations under test — no cross-package FK. */
+    /** Tenant-DB aut_* migrations under test — no cross-package FK. */
     protected function migrateAutSchema(): void
     {
         $this->migratePath(__DIR__.'/../database/migrations/tenant');

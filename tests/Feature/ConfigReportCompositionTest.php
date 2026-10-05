@@ -14,8 +14,8 @@ final class ConfigReportCompositionTest extends GoldenTestCase
         config([
             'corex.pubsub.driver' => 'redis',
             'corex-tenancy.wakeup.driver' => 'root_registry',
-            'tenancy.oidc.enabled' => false,
-            'tenancy.oidc.client_secret' => null,
+            'corex-tenancy.oidc.enabled' => false,
+            'corex-tenancy.oidc.client_secret' => null,
             'corex-intl.reference.cursor_secret' => '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
             'corex-search.cursor_secret' => null,
             'corex-search-meilisearch.key' => 'test-only-meilisearch-key',
@@ -24,11 +24,11 @@ final class ConfigReportCompositionTest extends GoldenTestCase
         self::assertSame(0, Artisan::call('corex:config:validate'));
         self::assertSame(<<<'REPORT'
 driver pubsub.driver=redis
-driver tenancy.wakeup.driver=root_registry
-driver tenancy.oidc.enabled=false
+driver corex-tenancy.wakeup.driver=root_registry
+driver corex-tenancy.oidc.enabled=false
 adapter pubsub.redis=available
 adapter wakeup.root_registry=available
-secret tenancy.oidc.client_secret=absent
+secret corex-tenancy.oidc.client_secret=absent
 secret corex-intl.reference.cursor_secret=present
 WARNING [secret-default] corex-intl.reference.cursor_secret
 secret corex-search.cursor_secret=absent

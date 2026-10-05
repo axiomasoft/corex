@@ -1,0 +1,44 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "research-P9-design-rag",
+  "title": "Внешние подтверждения P9",
+  "sections": [
+    {
+      "id": "P9",
+      "title": "Внешние подтверждения P9",
+      "text": "**Дата:** 2026-09-19. **Статус:** 4/4 первичных источника прочитаны.\nПолный provenance и digest'ы — `artifacts/P9-design-rag/manifest.json`.\n\nPerplexity в этой Codex-сессии не был подключён. Web-search transport дважды\nвернул `connection failed`; поэтому использован прямой read-only HTTP fetch\nпервичных страниц. Это ограничение зафиксировано, а не замаскировано\nпод Perplexity-ответ."
+    },
+    {
+      "id": "P9-Q1-context-first",
+      "title": "P9-Q1 — Зачем context-first",
+      "text": "**Источник:** Martin Fowler, *Bounded Context*.\n\n**Вывод:** крупную единую модель нужно делить на явные bounded contexts\nи явно называть отношения между ними. Это поддерживает выбор\n13 связных корневых групп вместо смешивания доменов и слоёв."
+    },
+    {
+      "id": "P9-Q2-Laravel",
+      "title": "P9-Q2 — Почему Laravel не домен",
+      "text": "**Источник:** Microsoft Learn, *Design a DDD-oriented microservice*.\n\n**Вывод:** domain layer должен быть независим от infrastructure; application layer\nкоординирует, а не содержит business rules. Это поддерживает\nотдельный `Laravel/` composition/adapters boundary и D44."
+    },
+    {
+      "id": "P9-Q3-PSR-4",
+      "title": "P9-Q3 — PSR-4 и совместимая физическая раскладка",
+      "text": "**Источник:** Composer schema, `autoload.psr-4`.\n\n**Вывод:** namespace prefix может указывать на один путь или массив путей.\nЗначит P9 может физически разложить models/events/jobs по контекстам,\nне ломая их стабильный FQCN и не вводя alias-классы."
+    },
+    {
+      "id": "P9-Q4-lifecycle-tenancy-bootstrappers",
+      "title": "P9-Q4 — Порядок и lifecycle tenancy bootstrappers",
+      "text": "**Источник:** Tenancy for Laravel v4, *Bootstrappers*.\n\n**Вывод:** bootstrapper'ы идут в порядке конфига, revert — в обратном;\nэкземпляр один и хранит исходное central state. Поэтому простой\n`class_exists` недостаточен: P9 проверяет порядок, lifetime и повторный cycle."
+    },
+    {
+      "id": "section",
+      "title": "Граница доказательства",
+      "text": "Источники не решают CoreX-специфичную карту, не доказывают, что\nкакой-либо текущий FQCN можно сломать, и не обосновывают relay scheduler.\nЭти решения опираются на репозиторий, D27/D44 и правила плана."
+    }
+  ],
+  "applies_to": [
+    "P9"
+  ],
+  "provenance": {
+    "path": "research/P9-design-rag.md",
+    "sha256": "3f1a8d710fcb84b2507aae1dc72c4a16241ffaad65e1f49595276d975f436925"
+  }
+}

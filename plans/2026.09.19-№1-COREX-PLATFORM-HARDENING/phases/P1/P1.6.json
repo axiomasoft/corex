@@ -1,0 +1,255 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P1.6",
+  "title": "Четыре политики: конфигурация, владение данными, сообщения, расширение",
+  "status": "done",
+  "summary": "Создать четыре коротких нормативных документа — `docs/architecture/config-policy.md`, `data-ownership-policy.md`, `message-policy.md`, `extension-policy.md` — каждый со своими процедурами и классификациями, ссылающийся на идентификаторы статей конституции и не переписывающий их.",
+  "why": "Четыре области несут правила, которых нет нигде в дереве, и каждая уже стоит предшественником у конкретной фазы. Классификации конфигурации нет, при этом 152 строки с `config(` и статический аксессор на 31 ключ в `core/src/Support/Config` (`RAG:—`, A20/N12) — без классов ключа P7 нечего типизировать. Владение таблицами не документировано, префикс `sys_` разделён между четырьмя пакетами (`RAG:—`, N10) — без правила владения P2 нечем заполнять реестр. Outbox и inbox отсутствуют полностью (`RAG:—`, N05) — без политики сообщений P5 будет проектировать формат с нуля. Freeze реестра отсутствует при существующем compile (`RAG:—`, A88) — без инвариантов реестра P11 не с чем сверяться. `RAG:✅` подтверждены: владение данными и запрет cross-boundary FK с формой исключения (P1-Q4), три класса сообщений и публикация после коммита (P1-Q5), обязательные атрибуты конверта и отделение имени контракта от имени класса (P1-Q6), компиляция и заморозка реестра (`perplexity-2026-09-19.md` Q13).",
+  "scope": {
+    "include": [
+      "`config-policy.md`: четыре класса ключа с владельцем и местом хранения, правило «ключ в двух классах — дефект», процедура введения нового ключа из пяти шагов, граница допустимого вызова конфигурации, требование валидации при загрузке. `data-ownership-policy.md`: процедура объявления владельца по таблице (не по префиксу), закрытый набор классификации объекта, запрет каталога «общих» таблиц, три способа получить эффект в чужих данных, правило FK через границу с пятью условиями исключения, правило изменения существующей схемы. `message-policy.md`: таблица трёх классов сообщений, обязательные и необязательные поля конверта, правило отделения имени контракта от имени PHP-класса, шесть обязательных правил. `extension-policy.md`: шесть свойств, обязательных к объявлению каждым реестром, три фазы жизни реестра, состав отпечатка, правило durable-решения, правило атомарной замены снапшота. Строка в корневом `CHANGELOG.md`."
+    ],
+    "exclude": [
+      "Создание `table-ownership.md` и `configuration.md` — это реестры, которые наполняет P2 по измерению, а не P1 по декларации; любое изменение PHP-кода, миграций и конфигурационных файлов; реализация outbox, envelope, freeze и типизированных опций (P5, P7, P11); создание гейтов (P3); переписывание статей `CFG-*`, `DATA-*`, `MSG-*`, `EXT-*` конституции; переписывание закрытого набора механизмов расширения — он принадлежит `docs/dev-doctrine.md` §4; создание записей исключений `CFG-006` и `DATA-004` — они созданы в P1.1."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D5",
+    "D6"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P1-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P1-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D5.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "docs/architecture/extension-policy.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/decisions/D6.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "docs/architecture/constitution.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/findings-audit-verdicts.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P1/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "docs/dev-doctrine.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-00-baseline-metrics.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/auth/database/migrations/tenant-cloud/2026_07_26_200004_add_aut_cross_package_fks.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/search-intl/src/SearchIntlServiceProvider.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "docs/architecture/config-policy.md",
+      "change": "any"
+    },
+    {
+      "path": "docs/architecture/data-ownership-policy.md",
+      "change": "any"
+    },
+    {
+      "path": "docs/architecture/message-policy.md",
+      "change": "any"
+    },
+    {
+      "path": "docs/architecture/extension-policy.md",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Каждый из четырёх документов открывается строкой вида «Инварианты — статьи `<ГРУППА>-001` … `<ГРУППА>-00N` конституции. Здесь — процедуры»: без неё документ выглядит вторым источником нормы. Ни одна нормативная фраза статьи не переписывается; документ объясняет, как выполнить, и ссылается на идентификатор (разделение владения, `@plan/phases/P1/phase.json`, Phase Context). `data-ownership-policy.md` обязан назвать владение по таблице, а не по префиксу, и объяснить это разделённым между четырьмя пакетами префиксом `sys_`; перечень полей записи владения даётся, но сам реестр не создаётся — он принадлежит P2. Пять условий исключения FK переносятся все пять: исключение, выданное по части условий, не исключение. `extension-policy.md` не перечисляет восемь extenders заново — закрытый набор принадлежит `docs/dev-doctrine.md` §4, документ ссылается. `message-policy.md` обязан явно сказать, что имя контракта не равно имени PHP-класса и что версия конверта — не версия схемы содержимого: обе ошибки типовые и обе дороги в исправлении. `config-policy.md` обязан объяснить, почему граница вызова конфигурации не стилистическая (значение, прочитанное глубоко внутри, нельзя ни подменить в тесте, ни увидеть в дампе, ни провалидировать при загрузке). Ни один файл вне `Files` не изменяется."
+  ],
+  "guidance": "Готовый текст каждого документа — `@plan/knowledge/research-P1-design.json`: §7 → `data-ownership-policy.md`, §8 → `message-policy.md`, §9 → `config-policy.md`, §10 → `extension-policy.md`. Все четыре переносятся целиком вместе с таблицами. В §7 сохраняются оба абзаца про «попросить результат, но не получить его самому» и про ORM-связь как тот же запрещённый прямой доступ. В §8 сохраняется таблица шести полей конверта и оба абзаца после неё. В §9 сохраняется таблица четырёх классов и процедура из пяти шагов. В §10 сохраняется таблица шести свойств реестра и абзац про durable-решение: именно он объясняет, зачем нужен отпечаток.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "rg -c \"Инварианты — статьи\" docs/architecture/*-policy.md",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "git diff --stat -- 'packages/'",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "composer lint:check",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "four policies + rg Инварианты — статьи = 4",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "composer lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "packages/ untouched by P1.6",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Четыре документа политик в `docs/architecture/`, каждый со своими процедурами и ссылками на идентификаторы статей; запись в корневом `CHANGELOG.md`. Receipt — append к `@plan/knowledge/findings-P1-receipts.json`: по каждому документу — какие статьи он обслуживает и результат сверки на отсутствие дублирования нормативных фраз."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "medium"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "required",
+    "status": "complete"
+  },
+  "result": {
+    "started_at": "2026-09-21T08:55:53Z",
+    "finished_at": "2026-09-21T08:55:53Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/cursor-composer-2.5/medium",
+      "effort": "medium"
+    },
+    "notes": "P1.6 GREEN: four policy docs + CHANGELOG + receipt",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-21T08:55:53Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-21T08:55:53Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-21T08:55:53Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-21T08:55:53Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Создать четыре коротких нормативных документа — `docs/architecture/config-policy.md`, `data-ownership-policy.md`, `message-policy.md`, `extension-policy.md` — каждый со своими процедурами и классификациями, ссылающийся на идентификаторы статей конституции и не переписывающий их."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "Четыре области несут правила, которых нет нигде в дереве, и каждая уже стоит предшественником у конкретной фазы. Классификации конфигурации нет, при этом 152 строки с `config(` и статический аксессор на 31 ключ в `core/src/Support/Config` (`RAG:—`, A20/N12) — без классов ключа P7 нечего типизировать. Владение таблицами не документировано, префикс `sys_` разделён между четырьмя пакетами (`RAG:—`, N10) — без правила владения P2 нечем заполнять реестр. Outbox и inbox отсутствуют полностью (`RAG:—`, N05) — без политики сообщений P5 будет проектировать формат с нуля. Freeze реестра отсутствует при существующем compile (`RAG:—`, A88) — без инвариантов реестра P11 не с чем сверяться. `RAG:✅` подтверждены: владение данными и запрет cross-boundary FK с формой исключения (P1-Q4), три класса сообщений и публикация после коммита (P1-Q5), обязательные атрибуты конверта и отделение имени контракта от имени класса (P1-Q6), компиляция и заморозка реестра (`perplexity-2026-09-19.md` Q13)."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "`config-policy.md`: четыре класса ключа с владельцем и местом хранения, правило «ключ в двух классах — дефект», процедура введения нового ключа из пяти шагов, граница допустимого вызова конфигурации, требование валидации при загрузке. `data-ownership-policy.md`: процедура объявления владельца по таблице (не по префиксу), закрытый набор классификации объекта, запрет каталога «общих» таблиц, три способа получить эффект в чужих данных, правило FK через границу с пятью условиями исключения, правило изменения существующей схемы. `message-policy.md`: таблица трёх классов сообщений, обязательные и необязательные поля конверта, правило отделения имени контракта от имени PHP-класса, шесть обязательных правил. `extension-policy.md`: шесть свойств, обязательных к объявлению каждым реестром, три фазы жизни реестра, состав отпечатка, правило durable-решения, правило атомарной замены снапшота. Строка в корневом `CHANGELOG.md`."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Создание `table-ownership.md` и `configuration.md` — это реестры, которые наполняет P2 по измерению, а не P1 по декларации; любое изменение PHP-кода, миграций и конфигурационных файлов; реализация outbox, envelope, freeze и типизированных опций (P5, P7, P11); создание гейтов (P3); переписывание статей `CFG-*`, `DATA-*`, `MSG-*`, `EXT-*` конституции; переписывание закрытого набора механизмов расширения — он принадлежит `docs/dev-doctrine.md` §4; создание записей исключений `CFG-006` и `DATA-004` — они созданы в P1.1."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P1-design.json` §7 (готовый текст политики владения данными), §8 (политика сообщений), §9 (политика конфигурации), §10 (политика расширения) как нормативная спецификация всех четырёх файлов; `@plan/knowledge/research-P1-design-rag.json` §1 как перечень внешних подтверждений по каждому разделу; `@plan/decisions/D5.json` как основание `extension-policy.md`; `@plan/decisions/D6.json` как связь политики сообщений со статьёй `RUN-002`; `docs/architecture/constitution.md` как владелец статей всех четырёх групп; `@plan/knowledge/findings-audit-verdicts.json` A17, A20, A21, A75, A86–A92, A107, A108, N05, N10, N11, N12 как источники."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`docs/architecture/config-policy.md` (новый); `docs/architecture/data-ownership-policy.md` (новый); `docs/architecture/message-policy.md` (новый); `docs/architecture/extension-policy.md` (новый); `CHANGELOG.md` (строка под `[Unreleased]` → `### Added`)."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P1/phase.json`; 2) `@plan/knowledge/research-P1-design.json` §0, §7, §8, §9, §10, §13; 3) `@plan/knowledge/research-P1-design-rag.json` §1; 4) `@plan/decisions/D5.json`; 5) `@plan/decisions/D6.json`; 6) `docs/architecture/constitution.md` (группы `CFG`, `DATA`, `MSG`, `EXT`); 7) `docs/dev-doctrine.md` §4, §5; 8) `@plan/knowledge/research-00-baseline-metrics.json` §2, §4, §7; 9) `packages/auth/database/migrations/tenant-cloud/2026_07_26_200004_add_aut_cross_package_fks.php`; 10) `packages/search-intl/src/SearchIntlServiceProvider.php`; 11) `@plan/knowledge/findings-audit-verdicts.json` §7 и §9."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Каждый из четырёх документов открывается строкой вида «Инварианты — статьи `<ГРУППА>-001` … `<ГРУППА>-00N` конституции. Здесь — процедуры»: без неё документ выглядит вторым источником нормы. Ни одна нормативная фраза статьи не переписывается; документ объясняет, как выполнить, и ссылается на идентификатор (разделение владения, `@plan/phases/P1/phase.json`, Phase Context). `data-ownership-policy.md` обязан назвать владение по таблице, а не по префиксу, и объяснить это разделённым между четырьмя пакетами префиксом `sys_`; перечень полей записи владения даётся, но сам реестр не создаётся — он принадлежит P2. Пять условий исключения FK переносятся все пять: исключение, выданное по части условий, не исключение. `extension-policy.md` не перечисляет восемь extenders заново — закрытый набор принадлежит `docs/dev-doctrine.md` §4, документ ссылается. `message-policy.md` обязан явно сказать, что имя контракта не равно имени PHP-класса и что версия конверта — не версия схемы содержимого: обе ошибки типовые и обе дороги в исправлении. `config-policy.md` обязан объяснить, почему граница вызова конфигурации не стилистическая (значение, прочитанное глубоко внутри, нельзя ни подменить в тесте, ни увидеть в дампе, ни провалидировать при загрузке). Ни один файл вне `Files` не изменяется."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Готовый текст каждого документа — `@plan/knowledge/research-P1-design.json`: §7 → `data-ownership-policy.md`, §8 → `message-policy.md`, §9 → `config-policy.md`, §10 → `extension-policy.md`. Все четыре переносятся целиком вместе с таблицами. В §7 сохраняются оба абзаца про «попросить результат, но не получить его самому» и про ORM-связь как тот же запрещённый прямой доступ. В §8 сохраняется таблица шести полей конверта и оба абзаца после неё. В §9 сохраняется таблица четырёх классов и процедура из пяти шагов. В §10 сохраняется таблица шести свойств реестра и абзац про durable-решение: именно он объясняет, зачем нужен отпечаток."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Все четыре файла существуют и каждый открывается ссылкой на группу статей конституции: `rg -c \"Инварианты — статьи\" docs/architecture/*-policy.md` = 4. Ни один из четырёх не содержит дословного повтора нормативной фразы статьи: проверяется выборочной сверкой по каждой группе, результат — в receipt. `data-ownership-policy.md` содержит пять условий исключения FK. `message-policy.md` содержит шесть обязательных полей конверта и утверждение об отличии имени контракта от имени класса. `extension-policy.md` содержит шесть свойств реестра и три фазы. `config-policy.md` содержит четыре класса ключа. `git diff --stat -- 'packages/'` пуст. `composer lint:check` из корня — зелёный."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Четыре документа политик в `docs/architecture/`, каждый со своими процедурами и ссылками на идентификаторы статей; запись в корневом `CHANGELOG.md`. Receipt — append к `@plan/knowledge/findings-P1-receipts.json`: по каждому документу — какие статьи он обслуживает и результат сверки на отсутствие дублирования нормативных фраз."
+    }
+  ]
+}

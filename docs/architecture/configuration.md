@@ -12,10 +12,10 @@
 | key | owner | type | default | secret | mode | reloadable | validation | typed_options_field | deprecated_aliases | notes |
 |:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|
 | auth.* | axiomasoft/corex-access | unobserved | unobserved | no | product-policy | unobserved | use-site | — |  | undeclared-read |
-| corex-access.azguard_pins.column_names.morph_type | axiomasoft/corex-access | string | uuid | no | product-policy | unobserved | use-site | AuthOptions::$azguardPins |  |  |
-| corex-access.azguard_pins.models.role | axiomasoft/corex-access | unobserved | unobserved | no | product-policy | unobserved | use-site | AuthOptions::$azguardPins |  |  |
-| corex-access.azguard_pins.table_names.roles | axiomasoft/corex-access | string | az_guard_roles | no | product-policy | unobserved | use-site | AuthOptions::$azguardPins |  |  |
-| corex-access.bind_permission_layer | axiomasoft/corex-access | unobserved | unobserved | no | deployment | no | use-site | AuthOptions::$bindPermissionLayer |  |  |
+| corex-access-azguard.azguard_pins.column_names.morph_type | axiomasoft/corex-access-azguard | string | uuid | no | product-policy | unobserved | boot | AccessAzguardOptions::$morphType |  |  |
+| corex-access-azguard.azguard_pins.models.role | axiomasoft/corex-access-azguard | unobserved | unobserved | no | product-policy | unobserved | boot | AccessAzguardOptions::$roleModel |  |  |
+| corex-access-azguard.azguard_pins.table_names.roles | axiomasoft/corex-access-azguard | string | az_guard_roles | no | product-policy | unobserved | boot | AccessAzguardOptions::$rolesTable |  |  |
+| corex-access-azguard.bind_permission_layer | axiomasoft/corex-access-azguard | unobserved | unobserved | no | deployment | no | boot | AccessAzguardOptions::$bindPermissionLayer |  |  |
 | corex-access.cache.store | axiomasoft/corex-access | unobserved | unobserved | no | deployment | no | use-site | AuthOptions::$cacheStore |  |  |
 | corex-access.identity.columns.active | axiomasoft/corex-access | string | is_active | no | product-policy | unobserved | unobserved | AuthOptions::$identityColumns |  |  |
 | corex-access.identity.columns.deleted_at | axiomasoft/corex-access | string | deleted_at | no | product-policy | unobserved | unobserved | AuthOptions::$identityColumns |  |  |
@@ -115,9 +115,48 @@
 | corex-tasks-workflow.wakeup.handler | axiomasoft/corex-tasks-workflow | string | CoreX\TasksWorkflow\Internal\MaterializationWakeupHandler | no | product-policy | unobserved | unobserved | TasksWorkflowOptions::$wakeupHandler |  |  |
 | corex-tasks-workflow.wakeup.handler_kind | axiomasoft/corex-tasks-workflow | string | task-recurrence.materialize | no | product-policy | unobserved | unobserved | TasksWorkflowOptions::$wakeupHandlerKind |  |  |
 | corex-tasks-workflow.wakeup.handler_version | axiomasoft/corex-tasks-workflow | string | task-materialization/1 | no | product-policy | unobserved | unobserved | TasksWorkflowOptions::$wakeupHandlerVersion |  |  |
+| corex-tenancy.bootstrappers | axiomasoft/corex-tenancy | array | unobserved | no | product-policy | unobserved | use-site | TenancyOptions::$bootstrappers |  |  |
+| corex-tenancy.cache_prefix | axiomasoft/corex-tenancy | string | tenant_%tenant%_ | no | product-policy | unobserved | use-site | TenancyOptions::$cachePrefix |  |  |
+| corex-tenancy.cache_stores | axiomasoft/corex-tenancy | null | null | no | product-policy | unobserved | use-site | TenancyOptions::$cacheStores |  |  |
+| corex-tenancy.central_connection | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$centralConnection |  |  |
+| corex-tenancy.domain_trust.challenge_ttl_seconds | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$domainTrustChallengeTtlSeconds |  |  |
+| corex-tenancy.domain_trust.enabled | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$domainTrustEnabled |  |  |
+| corex-tenancy.grace_days | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$lifecycle |  |  |
+| corex-tenancy.host_identification.cache | axiomasoft/corex-tenancy | bool | true | no | product-policy | unobserved | use-site | TenancyOptions::$hostCache |  |  |
+| corex-tenancy.host_identification.cache_store | axiomasoft/corex-tenancy | null | null | no | product-policy | unobserved | use-site | TenancyOptions::$hostCacheStore |  |  |
+| corex-tenancy.host_identification.cache_ttl | axiomasoft/corex-tenancy | int | 300 | no | product-policy | unobserved | use-site | TenancyOptions::$hostCacheTtl |  |  |
+| corex-tenancy.host_identification.enabled | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$hostIdentificationEnabled |  |  |
+| corex-tenancy.impersonation.profile | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$impersonation |  |  |
+| corex-tenancy.membership_guard.guard | axiomasoft/corex-tenancy | unobserved | unobserved | no | product-policy | unobserved | use-site | TenancyOptions::$membershipGuard |  | undeclared-read |
+| corex-tenancy.oidc.allowed_algs | axiomasoft/corex-tenancy | array | unobserved | no | product-policy | unobserved | use-site | TenancyOptions::$oidcAllowedAlgs |  | undeclared-read |
+| corex-tenancy.oidc.client_id | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$oidcClientId |  |  |
+| corex-tenancy.oidc.client_secret | axiomasoft/corex-tenancy | unobserved | unobserved | yes | secret | no | unobserved | TenancyOptions::$oidcClientSecret |  |  |
+| corex-tenancy.oidc.discovery.cache_store | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | unobserved | TenancyOptions::$oidcDiscoveryCacheStore |  |  |
+| corex-tenancy.oidc.discovery.cache_ttl | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$oidcDiscoveryCacheTtl |  |  |
+| corex-tenancy.oidc.enabled | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$oidcEnabled |  |  |
+| corex-tenancy.oidc.guard | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$oidcGuard |  |  |
+| corex-tenancy.oidc.impersonation.enabled | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$impersonation |  |  |
+| corex-tenancy.oidc.issuer | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$oidcIssuer |  |  |
+| corex-tenancy.oidc.jwks.cache_store | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | unobserved | TenancyOptions::$oidcJwksCacheStore |  |  |
+| corex-tenancy.oidc.jwks.cache_ttl | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$oidcJwksCacheTtl |  |  |
+| corex-tenancy.oidc.jwks.refetch_cooldown_seconds | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$oidcJwksRefetchCooldownSeconds |  |  |
+| corex-tenancy.oidc.leeway_seconds | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$oidcLeewaySeconds |  |  |
+| corex-tenancy.oidc.max_session_lifetime_minutes | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$oidcMaxSessionLifetimeMinutes |  |  |
+| corex-tenancy.oidc.redirect_uri | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$oidcRedirectUri |  |  |
+| corex-tenancy.platform_domain | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$lifecycle |  |  |
+| corex-tenancy.status_gate.export_route | axiomasoft/corex-tenancy | null | null | no | product-policy | unobserved | use-site | TenancyOptions::$statusGate |  |  |
+| corex-tenancy.status_gate.payment_route | axiomasoft/corex-tenancy | null | null | no | product-policy | unobserved | unobserved | TenancyOptions::$statusGate |  |  |
+| corex-tenancy.status_gate.read_only_methods | axiomasoft/corex-tenancy | array | unobserved | no | product-policy | unobserved | use-site | TenancyOptions::$statusGate |  | undeclared-read |
+| corex-tenancy.storage.durable_driver | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$storageDurableDriver |  |  |
+| corex-tenancy.storage.durable_root | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$storageDurableRoot |  |  |
+| corex-tenancy.storage.ephemeral_root | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$storageEphemeralRoot |  |  |
+| corex-tenancy.template_integrity.manifests | axiomasoft/corex-tenancy | array | [] | no | product-policy | unobserved | use-site | TenancyOptions::$templateIntegrityManifests |  | undeclared-read |
+| corex-tenancy.template_integrity.trusted_keys | axiomasoft/corex-tenancy | array | *** | yes | secret | unobserved | use-site | TenancyOptions::$templateIntegrityTrustedKeys |  | undeclared-read |
+| corex-tenancy.trial_days | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$lifecycle |  |  |
 | corex-tenancy.wakeup.driver | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$wakeupDriver |  |  |
 | corex-tenancy.wakeup.lease_seconds | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$wakeupLeaseSeconds |  |  |
 | corex-tenancy.wakeup.root_connection | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$wakeupRootConnection |  |  |
+| corex-tenancy.workspace.path_segment | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$workspacePathSegment |  |  |
 | corex-transfer.limits.batch_rows | axiomasoft/corex-transfer | int | 500 | no | product-policy | unobserved | unobserved | TransferOptions::$limitsBatchRows |  |  |
 | corex-transfer.limits.max_fields | axiomasoft/corex-transfer | int | 256 | no | product-policy | unobserved | unobserved | TransferOptions::$limitsMaxFields |  |  |
 | corex-transfer.limits.max_record_bytes | axiomasoft/corex-transfer | int | 1048576 | no | product-policy | unobserved | unobserved | TransferOptions::$limitsMaxRecordBytes |  |  |
@@ -184,50 +223,3 @@
 | corex.views.connection | axiomasoft/corex | null | null | no | product-policy | unobserved | use-site | CoreOptions::$viewsConnection |  |  |
 | database.default | axiomasoft/corex | unobserved | unobserved | no | product-policy | unobserved | use-site | — |  | undeclared-read |
 | flex-crm.search_language | flex/crm | unobserved | unobserved | no | product-policy | unobserved | use-site | — |  | undeclared-read |
-| tenancy.bootstrappers | axiomasoft/corex-tenancy | array | unobserved | no | product-policy | unobserved | use-site | TenancyOptions::$bootstrappers |  |  |
-| tenancy.cache_prefix | axiomasoft/corex-tenancy | string | tenant_%tenant%_ | no | product-policy | unobserved | use-site | TenancyOptions::$cachePrefix |  |  |
-| tenancy.cache_stores | axiomasoft/corex-tenancy | null | null | no | product-policy | unobserved | use-site | TenancyOptions::$cacheStores |  |  |
-| tenancy.central_connection | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$centralConnection |  |  |
-| tenancy.domain_trust.challenge_ttl_seconds | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$domainTrustChallengeTtlSeconds |  |  |
-| tenancy.domain_trust.enabled | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$domainTrustEnabled |  |  |
-| tenancy.grace_days | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$lifecycle |  |  |
-| tenancy.host_identification.cache | axiomasoft/corex-tenancy | bool | true | no | product-policy | unobserved | use-site | TenancyOptions::$hostCache |  |  |
-| tenancy.host_identification.cache_store | axiomasoft/corex-tenancy | null | null | no | product-policy | unobserved | use-site | TenancyOptions::$hostCacheStore |  |  |
-| tenancy.host_identification.cache_ttl | axiomasoft/corex-tenancy | int | 300 | no | product-policy | unobserved | use-site | TenancyOptions::$hostCacheTtl |  |  |
-| tenancy.host_identification.enabled | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$hostIdentificationEnabled |  |  |
-| tenancy.id_generator | axiomasoft/corex-tenancy | unobserved | unobserved | no | product-policy | unobserved | use-site | TenancyOptions::$idGenerator |  |  |
-| tenancy.identification.middleware | axiomasoft/corex-tenancy | unobserved | unobserved | no | product-policy | unobserved | use-site | TenancyOptions::$(registrar-read) |  | undeclared-read |
-| tenancy.membership_guard.guard | axiomasoft/corex-tenancy | unobserved | unobserved | no | product-policy | unobserved | use-site | TenancyOptions::$membershipGuard |  | undeclared-read |
-| tenancy.oidc.allowed_algs | axiomasoft/corex-tenancy | array | unobserved | no | product-policy | unobserved | use-site | TenancyOptions::$oidcAllowedAlgs |  | undeclared-read |
-| tenancy.oidc.client_id | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$oidcClientId |  |  |
-| tenancy.oidc.client_secret | axiomasoft/corex-tenancy | unobserved | unobserved | yes | secret | no | unobserved | TenancyOptions::$oidcClientSecret |  |  |
-| tenancy.oidc.discovery.cache_store | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | unobserved | TenancyOptions::$oidcDiscoveryCacheStore |  |  |
-| tenancy.oidc.discovery.cache_ttl | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$oidcDiscoveryCacheTtl |  |  |
-| tenancy.oidc.enabled | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$oidcEnabled |  |  |
-| tenancy.oidc.guard | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$oidcGuard |  |  |
-| tenancy.oidc.impersonation.enabled | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$impersonation |  |  |
-| tenancy.oidc.impersonation.require_approved_by | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$impersonation |  |  |
-| tenancy.oidc.issuer | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$oidcIssuer |  |  |
-| tenancy.oidc.jwks.cache_store | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | unobserved | TenancyOptions::$oidcJwksCacheStore |  |  |
-| tenancy.oidc.jwks.cache_ttl | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$oidcJwksCacheTtl |  |  |
-| tenancy.oidc.jwks.refetch_cooldown_seconds | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$oidcJwksRefetchCooldownSeconds |  |  |
-| tenancy.oidc.leeway_seconds | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$oidcLeewaySeconds |  |  |
-| tenancy.oidc.max_session_lifetime_minutes | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$oidcMaxSessionLifetimeMinutes |  |  |
-| tenancy.oidc.redirect_uri | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$oidcRedirectUri |  |  |
-| tenancy.platform_domain | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$lifecycle |  |  |
-| tenancy.provisioning.pipeline | axiomasoft/corex-tenancy | array | unobserved | no | product-policy | unobserved | use-site | TenancyOptions::$provisioningPipeline |  | undeclared-read |
-| tenancy.stancl.jobpipeline_pin | axiomasoft/corex-tenancy | string | 2.0.0-rc7 | no | product-policy | unobserved | unobserved | TenancyOptions::$(reference) |  |  |
-| tenancy.stancl.package | axiomasoft/corex-tenancy | string | stancl/tenancy | no | product-policy | unobserved | unobserved | TenancyOptions::$(reference) |  |  |
-| tenancy.stancl.pin | axiomasoft/corex-tenancy | string | dev-master#76e5f9655924271c6c9da54e2d4ccb82c6f71ea0 as 4.0.0 | no | product-policy | unobserved | unobserved | TenancyOptions::$(reference) |  |  |
-| tenancy.status_gate.export_route | axiomasoft/corex-tenancy | null | null | no | product-policy | unobserved | use-site | TenancyOptions::$statusGate |  |  |
-| tenancy.status_gate.payment_route | axiomasoft/corex-tenancy | null | null | no | product-policy | unobserved | unobserved | TenancyOptions::$statusGate |  |  |
-| tenancy.status_gate.read_only_methods | axiomasoft/corex-tenancy | array | unobserved | no | product-policy | unobserved | use-site | TenancyOptions::$statusGate |  | undeclared-read |
-| tenancy.storage.durable_driver | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$storageDurableDriver |  |  |
-| tenancy.storage.durable_root | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$storageDurableRoot |  |  |
-| tenancy.storage.ephemeral_root | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$storageEphemeralRoot |  |  |
-| tenancy.template_integrity.manifests | axiomasoft/corex-tenancy | array | [] | no | product-policy | unobserved | use-site | TenancyOptions::$templateIntegrityManifests |  | undeclared-read |
-| tenancy.template_integrity.trusted_keys | axiomasoft/corex-tenancy | array | *** | yes | secret | unobserved | use-site | TenancyOptions::$templateIntegrityTrustedKeys |  | undeclared-read |
-| tenancy.tenant_database_manager | axiomasoft/corex-tenancy | unobserved | unobserved | no | product-policy | unobserved | use-site | TenancyOptions::$tenantDatabaseManager |  |  |
-| tenancy.tenant_model | axiomasoft/corex-tenancy | unobserved | unobserved | no | product-policy | unobserved | use-site | TenancyOptions::$tenantModel |  |  |
-| tenancy.trial_days | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$lifecycle |  |  |
-| tenancy.workspace.path_segment | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$workspacePathSegment |  |  |

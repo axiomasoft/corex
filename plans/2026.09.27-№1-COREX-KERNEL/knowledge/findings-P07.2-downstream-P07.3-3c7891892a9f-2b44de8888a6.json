@@ -1,0 +1,25 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "findings-P07.2-downstream-P07.3-3c7891892a9f-2b44de8888a6",
+  "title": "Downstream gate — P07.2 → P07.3",
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nitem: P07.2\ndate: 2026-10-05\ngate: downstream-gate-v1\nproducer_commit: 2b44de8888a63a292d7e32295bb54c8a8e4c0af5\nconsumer_item: P07.3\nconsumer_spec_sha256: 3c7891892a9fe8b1000498dc1d99912bce0c357382c7c9b655d855348bf8fa38\noutcome: green\n---"
+    },
+    {
+      "id": "Downstream-gate-P07.2-P07.3",
+      "title": "Downstream gate — P07.2 → P07.3",
+      "text": "Outcome: `green`.\n\n| Applicable | Return | Command |\n|:--|:--|:--|\n| yes | 0 | `bash scripts/contract-guard.sh` |"
+    }
+  ],
+  "applies_to": [
+    "P07.2",
+    "P07.3"
+  ],
+  "provenance": {
+    "path": "findings/P07.2-downstream-P07.3-3c7891892a9f-2b44de8888a6.md",
+    "sha256": "d6d441d2a8292028d4373209439fceba268e62112fadd77a94c555469b2563ec"
+  }
+}

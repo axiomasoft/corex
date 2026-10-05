@@ -1,0 +1,54 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D118",
+  "title": "Батчи и модельный маршрут после P6",
+  "date": "2026-09-23",
+  "status": "accepted",
+  "decision": "С P7.1 живой маршрут уточняет D112/D114 только для будущих items —\n`@plan/knowledge/execution-batches.json`. Бюджетные Composer 2.5 и\nGrok 4.6 получают ограниченные rename, layout и DTO/DI items с готовыми\nрецептами. Grok 4.7 получает интеграционные seams. GPT-5.6 Sol остаётся на\nDDL, живых данных, durable/security переходах и квалификации рискованных\nфаз; ограниченные phase-final проверки P12/P15/P16 выполняет Grok 4.7.\nFreeze P13.12 и sealed release P17.11–P17.12 получают frontier projection:\nCodex GPT-6 Sol, Cursor GPT-5.6 Sol xhigh/max. Проверка\n`agent --list-models` 2026-09-23 показала, что Cursor GPT-6 Sol недоступен;\nдоступны exact `gpt-5.6-sol-xhigh` и `gpt-5.6-sol-max`. Grok 4.7\nдоступен как `grok-4.7-high`, без префикса `cursor-`.\nКаждый батч делит **чтение и сессию**, но не item state, receipt и acceptance.\nФазовые final items выполняются свежей сессией. Неявный downgrade запрещён.\n\n`@plan/plan.json` §3.3 задаёт точные native selectors/effort и Codex projection;\n`@plan/knowledge/execution-batches.json` задаёт конкретный batch → item → model и артефакты.\nВладелец не снимал ни один G-DDL, G-API, G-SECRET или G-RELEASE. События и\nрезультаты P1–P6 не переписываются. D112/D114 сохраняют провенанс прошлых\nзапусков; при конфликте pin для P7–P17 используется более поздний D118.",
+  "rationale": "Аудит P1–P5 показал дефект объединённого закрытия, пропуска корневого RED и\nслабого reverse-consumer proof. Снижение цены допустимо после того, как\nitem-спеки, phase designs и сохранённые артефакты стали явными входами;\nпроверка границы остаётся у более сильной отдельной сессии. Старый маршрут\nSol на каждый P9–P14 item тратит сильную модель на переносы и локальную\nмеханику без роста качества приёмки.",
+  "applies_to": [
+    "P7",
+    "P8",
+    "P9",
+    "P10",
+    "P11",
+    "P12",
+    "P13",
+    "P14",
+    "P15",
+    "P16",
+    "P17"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "owner (Dmitry Vostrikov), 2026-09-23; recorded in current plan\nmaintenance. **Evidence:** request to make the remaining plan executable by\nweaker models, reuse the plan's research/artifacts and group related items;\n`handoff.md` after P6.6; `findings/execution-audit-P1-P5-2026-09-22.md`.\n\n## Решение\n\nС P7.1 живой маршрут уточняет D112/D114 только для будущих items —\n`execution-batches.md`. Бюджетные Composer 2.5 и\nGrok 4.6 получают ограниченные rename, layout и DTO/DI items с готовыми\nрецептами. Grok 4.7 получает интеграционные seams. GPT-5.6 Sol остаётся на\nDDL, живых данных, durable/security переходах и квалификации рискованных\nфаз; ограниченные phase-final проверки P12/P15/P16 выполняет Grok 4.7.\nFreeze P13.12 и sealed release P17.11–P17.12 получают frontier projection:\nCodex GPT-6 Sol, Cursor GPT-5.6 Sol xhigh/max. Проверка\n`agent --list-models` 2026-09-23 показала, что Cursor GPT-6 Sol недоступен;\nдоступны exact `gpt-5.6-sol-xhigh` и `gpt-5.6-sol-max`. Grok 4.7\nдоступен как `grok-4.7-high`, без префикса `cursor-`.\nКаждый батч делит **чтение и сессию**, но не item state, receipt и acceptance.\nФазовые final items выполняются свежей сессией. Неявный downgrade запрещён.\n\n`plan.md` §3.3 задаёт точные native selectors/effort и Codex projection;\n`execution-batches.md` задаёт конкретный batch → item → model и артефакты.\nВладелец не снимал ни один G-DDL, G-API, G-SECRET или G-RELEASE. События и\nрезультаты P1–P6 не переписываются. D112/D114 сохраняют провенанс прошлых\nзапусков; при конфликте pin для P7–P17 используется более поздний D118.\n\n## Почему\n\nАудит P1–P5 показал дефект объединённого закрытия, пропуска корневого RED и\nслабого reverse-consumer proof. Снижение цены допустимо после того, как\nitem-спеки, phase designs и сохранённые артефакты стали явными входами;\nпроверка границы остаётся у более сильной отдельной сессии. Старый маршрут\nSol на каждый P9–P14 item тратит сильную модель на переносы и локальную\nмеханику без роста качества приёмки.\n\n## Consequences\n\n- `roadmap.md` показывает P7.1 как frontier и ссылку на исполняемый маршрут.\n- Блок `handoff.md` остаётся командой **текущего provider**; после смены\n  маршрута его нужно перегенерировать штатным владельцем handoff до launch.\n- Наличие связанного item в одном батче не разрешает читать отсутствующий\n  predecessor output или строить bundle до его checkpoint."
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D118\ndate: 2026-09-23\nstatus: accepted\nitem: P7\nitems: [P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D118-P6",
+      "title": "D118 — Батчи и модельный маршрут после P6",
+      "text": "**Actor:** owner (Dmitry Vostrikov), 2026-09-23; recorded in current plan\nmaintenance. **Evidence:** request to make the remaining plan executable by\nweaker models, reuse the plan's research/artifacts and group related items;\n`@plan/plan.json` after P6.6; `@plan/knowledge/findings-execution-audit-P1-P5-2026-09-22.json`."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "С P7.1 живой маршрут уточняет D112/D114 только для будущих items —\n`@plan/knowledge/execution-batches.json`. Бюджетные Composer 2.5 и\nGrok 4.6 получают ограниченные rename, layout и DTO/DI items с готовыми\nрецептами. Grok 4.7 получает интеграционные seams. GPT-5.6 Sol остаётся на\nDDL, живых данных, durable/security переходах и квалификации рискованных\nфаз; ограниченные phase-final проверки P12/P15/P16 выполняет Grok 4.7.\nFreeze P13.12 и sealed release P17.11–P17.12 получают frontier projection:\nCodex GPT-6 Sol, Cursor GPT-5.6 Sol xhigh/max. Проверка\n`agent --list-models` 2026-09-23 показала, что Cursor GPT-6 Sol недоступен;\nдоступны exact `gpt-5.6-sol-xhigh` и `gpt-5.6-sol-max`. Grok 4.7\nдоступен как `grok-4.7-high`, без префикса `cursor-`.\nКаждый батч делит **чтение и сессию**, но не item state, receipt и acceptance.\nФазовые final items выполняются свежей сессией. Неявный downgrade запрещён.\n\n`@plan/plan.json` §3.3 задаёт точные native selectors/effort и Codex projection;\n`@plan/knowledge/execution-batches.json` задаёт конкретный batch → item → model и артефакты.\nВладелец не снимал ни один G-DDL, G-API, G-SECRET или G-RELEASE. События и\nрезультаты P1–P6 не переписываются. D112/D114 сохраняют провенанс прошлых\nзапусков; при конфликте pin для P7–P17 используется более поздний D118."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Аудит P1–P5 показал дефект объединённого закрытия, пропуска корневого RED и\nслабого reverse-consumer proof. Снижение цены допустимо после того, как\nitem-спеки, phase designs и сохранённые артефакты стали явными входами;\nпроверка границы остаётся у более сильной отдельной сессии. Старый маршрут\nSol на каждый P9–P14 item тратит сильную модель на переносы и локальную\nмеханику без роста качества приёмки."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "- `@plan/plan.json` показывает P7.1 как frontier и ссылку на исполняемый маршрут.\n- Блок `@plan/plan.json` остаётся командой **текущего provider**; после смены\n  маршрута его нужно перегенерировать штатным владельцем handoff до launch.\n- Наличие связанного item в одном батче не разрешает читать отсутствующий\n  predecessor output или строить bundle до его checkpoint."
+    }
+  ]
+}

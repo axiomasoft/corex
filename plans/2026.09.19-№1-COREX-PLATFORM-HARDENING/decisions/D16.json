@@ -1,0 +1,48 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D16",
+  "title": "Плановый сканер на stdlib `token_get_all`, без `nikic/php-parser`",
+  "date": "2026-09-19",
+  "status": "accepted",
+  "decision": "Сканер фазы — плановый PHP на `token_get_all(..., TOKEN_PARSE)` плюс узкий разбор\nграмматики `use` (обычный, `as`, group, `function`/`const`). `nikic/php-parser` в\nкорневой `require-dev` не вводится. Закрытый набор восстанавливаемых конструкций и\nколонка `certainty` (`static` / `convention` / `unresolved`) заданы в\n`@plan/knowledge/research-P2-design.json` §3.\n\nСуществующий гейт графа не меняется. P2.2 считает рёбра, которые `parseUseImport`\nгейт не видит (`G-GATE-BLIND`), и отдаёт число в P3.",
+  "rationale": "Эскиз предлагал php-parser «уровня dev-зависимости либо token_get_all для узкого\nнабора». Второй вариант выбран, потому что сканер — обоснование плана, а не\nинструмент репозитория: зависимость в корневом Composer переживает план и меняет\nпродукт без owner-gate на состав поставки. Альтернатива «вендорнуть php-parser в\nпапку плана» отклонена как скрытая третья копия парсера. Альтернатива «оставить\nregex гейта» отклонена: именно его слепое пятно фаза обязана измерить.",
+  "applies_to": [
+    "P2",
+    "P2.1",
+    "P2.2",
+    "P3"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/cursor-grok-4.6/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D16\ndate: 2026-09-19\nstatus: accepted\nitem: P2.1\nitems: [P2, P2.1, P2.2, P3]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D16-stdlib-token_get_all-nikic-php-parser",
+      "title": "D16 — Плановый сканер на stdlib `token_get_all`, без `nikic/php-parser`",
+      "text": "**Actor:** plan-designer/cursor-grok-4.6/high\n\n**Evidence:** `RAG:✅` 2026-09-19 — P2-Q1: tokenizer не даёт дерева и резолва имён;\nPHP-Parser даёт NameResolver; строковые FQCN остаются convention. Источник требует\nрезолва, не конкретной библиотеки (захват `@plan/knowledge/artifacts-P2-design-rag-q01-q02.json`).\n`RAG:—` `scripts/package-graph-gate.php:364-366` пропускает group-use;\n`@plan/plan.json` §2 запрещает новые runtime-зависимости и допускает `require-dev` только\nназванием в решении; сканер по правилу плана живёт в `plans/<ID>/scripts/`."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "Сканер фазы — плановый PHP на `token_get_all(..., TOKEN_PARSE)` плюс узкий разбор\nграмматики `use` (обычный, `as`, group, `function`/`const`). `nikic/php-parser` в\nкорневой `require-dev` не вводится. Закрытый набор восстанавливаемых конструкций и\nколонка `certainty` (`static` / `convention` / `unresolved`) заданы в\n`@plan/knowledge/research-P2-design.json` §3.\n\nСуществующий гейт графа не меняется. P2.2 считает рёбра, которые `parseUseImport`\nгейт не видит (`G-GATE-BLIND`), и отдаёт число в P3."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Эскиз предлагал php-parser «уровня dev-зависимости либо token_get_all для узкого\nнабора». Второй вариант выбран, потому что сканер — обоснование плана, а не\nинструмент репозитория: зависимость в корневом Composer переживает план и меняет\nпродукт без owner-gate на состав поставки. Альтернатива «вендорнуть php-parser в\nпапку плана» отклонена как скрытая третья копия парсера. Альтернатива «оставить\nregex гейта» отклонена: именно его слепое пятно фаза обязана измерить."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P2.1–P2.6 не трогают корневой `composer.json`. P3 вправе отдельно решить, чинить\nли `parseUseImport` через тот же узкий разбор или через `require-dev` анализатор —\nэто уже продуктовый гейт, не плановый сканер."
+    }
+  ]
+}

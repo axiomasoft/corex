@@ -14,6 +14,7 @@
 #   BC_CHECK_FORCE_STABLE  — composer package name treated as stable (validation probe)
 #   BC_CHECK_PROBE_INFRA   — if set, corrupt comparison composer.json for core (probe)
 #   BC_CHECK_ONLY          — single package dir (debug)
+#   BC_CHECK_JOBS          — isolated comparisons in parallel (default: 4)
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -77,7 +78,7 @@ stage_package_vendors() {
       leaf="$(basename "${pkgpath}")"
       # Monorepo packages are already archived separately; only private
       # upstream providers need a local path repository for Roave.
-      [[ "$leaf" == stancl-* || "$leaf" == azguard-core ]] || continue
+      [[ "$leaf" == azguard-core ]] || continue
       mkdir -p "${work}/packages/_vendor/${leaf}"
       rsync -a --exclude=.git "${pkgpath}/" "${work}/packages/_vendor/${leaf}/"
     done
@@ -102,7 +103,7 @@ file_put_contents("$destination/composer.json",json_encode($manifest,JSON_PRETTY
 
   BC_WORK="$work" bc_php '
 $work=getenv("BC_WORK");
-$versions=["stancl-tenancy"=>"4.0.0-alpha1","stancl-jobpipeline"=>"2.0.0-alpha1","azguard-core"=>"0.2.0"];
+$versions=["azguard-core"=>"0.2.0"];
 foreach(glob("$work/packages/_vendor/*/composer.json")?:[] as $cp){
   $leaf=basename(dirname($cp));
   if(!isset($versions[$leaf])){continue;}
@@ -190,6 +191,7 @@ foreach(glob(getenv("BC_WORK")."/packages/*/composer.json")?:[] as $file){
 }
 '
 
+  python3 "$REPO_ROOT/scripts/bc/history-providers.py" --root "$REPO_ROOT" --base "$BC_CHECK_BASE" --work "$work"
   stage_package_vendors "$dir" "$work"
 
   BC_WORK="$work" BC_CHECK_TARGET_DIR="$dir" BC_NEEDS_PHPSTAN="$needs_phpstan" bc_php '
@@ -223,7 +225,7 @@ foreach(glob("$work/packages/_vendor/*/composer.json")?:[] as $composerPath){
   $vc=json_decode((string)file_get_contents($composerPath),true);
   $vName=is_array($vc)?($vc["name"]??""):"";
   if($vName===""){continue;}
-  if(!isset($require[$vName])&&!isset($requireDev[$vName])&&$vName!=="axiomasoft/stancl-jobpipeline"){continue;}
+  if(!isset($require[$vName])&&!isset($requireDev[$vName])){continue;}
   $repos[]=["type"=>"path","url"=>"packages/_vendor/".basename(dirname($composerPath))];
   if($vName==="axioma-studio/azguard-core"){$require[$vName]="@dev";}
 }
@@ -319,7 +321,7 @@ foreach(glob("$work/packages/_vendor/*/composer.json")?:[] as $composerPath){
   $vc=json_decode((string)file_get_contents($composerPath),true);
   $vName=is_array($vc)?($vc["name"]??""):"";
   if($vName===""){continue;}
-  if(!isset($require[$vName])&&!isset($requireDev[$vName])&&$vName!=="axiomasoft/stancl-jobpipeline"){continue;}
+  if(!isset($require[$vName])&&!isset($requireDev[$vName])){continue;}
   $repos[]=["type"=>"path","url"=>"packages/_vendor/".basename(dirname($composerPath))];
   if($vName==="axioma-studio/azguard-core"){$require[$vName]="@dev";}
 }
@@ -408,13 +410,8 @@ echo json_encode($root,JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES)."\n";
   return 0
 }
 
-overall=0
-
-for dir in "${PACKAGE_DIRS[@]}"; do
-  if [[ -n "${BC_CHECK_ONLY:-}" && "$dir" != "$BC_CHECK_ONLY" ]]; then
-    continue
-  fi
-
+check_package() {
+  local dir="$1" meta pkg_name stability work pkg_exit
   meta="$(BC_CHECK_TARGET_DIR="$dir" bc_php '
 $r=getenv("BC_REPO_ROOT"); $d=getenv("BC_CHECK_TARGET_DIR");
 $pkg=json_decode(file_get_contents("$r/packages/$d/composer.json"),true);
@@ -435,9 +432,43 @@ echo "$name|$st";
   set -e
   rm -rf "$work" 2>/dev/null || true
 
-  if [[ $pkg_exit -ne 0 ]]; then
+  return "$pkg_exit"
+}
+
+BC_CHECK_JOBS="${BC_CHECK_JOBS:-4}"
+if [[ ! "$BC_CHECK_JOBS" =~ ^[1-4]$ ]]; then
+  echo "bc-check: infrastructure RED — BC_CHECK_JOBS must be 1..4" >&2
+  exit 1
+fi
+
+# Each comparison owns its disposable Git/Composer tree. Preserve package
+# output order and collect every failure; concurrency never skips a gate.
+overall=0
+result_dir="$(mktemp -d "${TMPDIR:-/tmp}/corex-bc-results.XXXXXX")"
+trap 'rm -rf "$result_dir"' EXIT
+pids=()
+logs=()
+collect_first() {
+  if ! wait "${pids[0]}"; then
     overall=1
   fi
+  cat "${logs[0]}"
+  pids=("${pids[@]:1}")
+  logs=("${logs[@]:1}")
+}
+for dir in "${PACKAGE_DIRS[@]}"; do
+  if [[ -n "${BC_CHECK_ONLY:-}" && "$dir" != "$BC_CHECK_ONLY" ]]; then
+    continue
+  fi
+  check_package "$dir" > "$result_dir/$dir.log" 2>&1 &
+  pids+=("$!")
+  logs+=("$result_dir/$dir.log")
+  if [[ ${#pids[@]} -ge $BC_CHECK_JOBS ]]; then
+    collect_first
+  fi
+done
+while [[ ${#pids[@]} -gt 0 ]]; do
+  collect_first
 done
 
 if [[ $overall -ne 0 ]]; then

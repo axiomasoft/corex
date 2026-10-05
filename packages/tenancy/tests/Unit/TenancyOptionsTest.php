@@ -3,14 +3,10 @@
 declare(strict_types=1);
 
 use CoreX\Config\Exceptions\InvalidConfiguration;
-use CoreX\Tenancy\Account\Internal\Jobs\CreateDatabaseFromTemplate;
-use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
-use CoreX\Tenancy\Provisioning\Internal\Database\TemplateClonePostgreSQLManager;
 use CoreX\Tenancy\Runtime\Internal\Bootstrappers\CachePrefixBootstrapper;
 use CoreX\Tenancy\Runtime\Internal\Bootstrappers\ConnectionBootstrapper;
 use CoreX\Tenancy\Runtime\Internal\Bootstrappers\SessionConnectionBootstrapper;
-use Stancl\Tenancy\UniqueIdentifierGenerators\UUIDv7Generator;
 
 /**
  * @return array{0: array<string, mixed>, 1: array<string, mixed>}
@@ -20,11 +16,7 @@ function validTenancyConfigArrays(): array
     return [
         [
             'central_connection' => 'pgsql',
-            'tenant_model' => Account::class,
-            'id_generator' => UUIDv7Generator::class,
-            'tenant_database_manager' => TemplateClonePostgreSQLManager::class,
             'bootstrappers' => [ConnectionBootstrapper::class, CachePrefixBootstrapper::class, SessionConnectionBootstrapper::class],
-            'provisioning' => ['pipeline' => [CreateDatabaseFromTemplate::class]],
             'cache_prefix' => 'tenant_%tenant%_',
             'cache_stores' => ['tenant_file'],
             'storage' => [
@@ -59,7 +51,6 @@ function validTenancyConfigArrays(): array
                 ],
                 'impersonation' => [
                     'enabled' => false,
-                    'require_approved_by' => false,
                 ],
                 'max_session_lifetime_minutes' => 720,
             ],
@@ -85,7 +76,7 @@ function validTenancyConfigArrays(): array
 it('builds options from a valid tenancy snapshot', function (): void {
     [$tenancy, $corexTenancy] = validTenancyConfigArrays();
 
-    $options = TenancyOptions::fromArray($tenancy, $corexTenancy);
+    $options = TenancyOptions::fromArray([...$tenancy, ...$corexTenancy]);
 
     expect($options->centralConnection)->toBe('pgsql')
         ->and($options->wakeupDriver)->toBe('local_sweep')
@@ -104,7 +95,7 @@ it('rejects oidc enabled without client secret', function (): void {
     ];
 
     try {
-        TenancyOptions::fromArray($tenancy, $corexTenancy);
+        TenancyOptions::fromArray([...$tenancy, ...$corexTenancy]);
         $this->fail('Invalid configuration was accepted.');
     } catch (InvalidConfiguration $exception) {
         expect($exception->violations)->toContain(
@@ -122,7 +113,7 @@ it('rejects root_registry wakeup without root connection', function (): void {
     ];
 
     try {
-        TenancyOptions::fromArray($tenancy, $corexTenancy);
+        TenancyOptions::fromArray([...$tenancy, ...$corexTenancy]);
         $this->fail('Invalid configuration was accepted.');
     } catch (InvalidConfiguration $exception) {
         expect($exception->violations)->toContain(
@@ -148,7 +139,7 @@ it('accumulates oidc and wakeup violations in one exception', function (): void 
     ];
 
     try {
-        TenancyOptions::fromArray($tenancy, $corexTenancy);
+        TenancyOptions::fromArray([...$tenancy, ...$corexTenancy]);
         $this->fail('Invalid configuration was accepted.');
     } catch (InvalidConfiguration $exception) {
         expect($exception->violations)->toHaveCount(2)
@@ -162,7 +153,7 @@ it('accumulates oidc and wakeup violations in one exception', function (): void 
 it('exposes the closed stock bootstrapper order, tenant cache stores and the host cache settings', function (): void {
     [$tenancy, $corexTenancy] = validTenancyConfigArrays();
 
-    $options = TenancyOptions::fromArray($tenancy, $corexTenancy);
+    $options = TenancyOptions::fromArray([...$tenancy, ...$corexTenancy]);
 
     expect($options->bootstrappers)->toBe([ConnectionBootstrapper::class, CachePrefixBootstrapper::class, SessionConnectionBootstrapper::class])
         ->and($options->cacheStores)->toBe(['tenant_file'])
@@ -176,7 +167,7 @@ it('rejects bootstrapper lists that break the closed order', function (array $li
     $tenancy['bootstrappers'] = $list;
 
     try {
-        TenancyOptions::fromArray($tenancy, $corexTenancy);
+        TenancyOptions::fromArray([...$tenancy, ...$corexTenancy]);
         $this->fail('Invalid configuration was accepted.');
     } catch (InvalidConfiguration $exception) {
         expect(implode("\n", $exception->violations))->toContain($path);
@@ -196,7 +187,7 @@ it('rejects a cache prefix without %tenant%, duplicate stores and a host store t
     $tenancy['host_identification']['cache_store'] = 'a';
 
     try {
-        TenancyOptions::fromArray($tenancy, $corexTenancy);
+        TenancyOptions::fromArray([...$tenancy, ...$corexTenancy]);
         $this->fail('Invalid configuration was accepted.');
     } catch (InvalidConfiguration $exception) {
         expect($exception->violations)->toContain(

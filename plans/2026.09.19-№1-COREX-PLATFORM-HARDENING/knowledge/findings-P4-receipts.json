@@ -1,0 +1,289 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "findings-P4-receipts",
+  "title": "Receipts — фаза P4 (durable boundary)",
+  "sections": [
+    {
+      "id": "Receipts-P4-durable-boundary",
+      "title": "Receipts — фаза P4 (durable boundary)",
+      "text": ""
+    },
+    {
+      "id": "P4.1-DataScope",
+      "title": "P4.1 — Транзитная форма `DataScope`",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/medium"
+    },
+    {
+      "id": "section",
+      "title": "Продукт",
+      "text": "- `DataScope`: публичные скаляры `accountId`, `workspaceId`, `boxed`, `version`; `public const int VERSION = 2`; `fromTenantContext()` с тем же порядком параметров, что у конструктора; поле `TenantContext $context` сохранено (D21).\n- Тесты §2.3 в `SupportDataTest.php`: вывод скаляров, parity `fromTenantContext`, `Invalid account identity.`; прежние негативы connection/actor/restoreEpoch без изменений."
+    },
+    {
+      "id": "section-2",
+      "title": "Точки миграции (не начата)",
+      "text": "```text\n$ rg -n 'new DataScope\\(' packages | wc -l\n33\n\n$ rg -n 'fromTenantContext\\(' packages -g '*.php' | rg -v 'DataScope\\.php' | wc -l\n1\n```\n\n(единственный вызов `fromTenantContext` вне определения — тест parity P4.1.)\n\nБазовая метрика дизайна (2026-09-19): **21** (`@plan/knowledge/research-P4-design.json` §0). Текущее дерево шире (новые тесты/фичи с 2026-09-19); **ни один файл вне `packages/core` не менялся**. В `SupportDataTest.php` +3 намеренных `new DataScope(` для §2.3 (было 2, стало 5); одна строка `rg` — docblock в `DataScope.php`, не код."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "```text\n$ cd packages/core && composer test\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":30,\"passed\":30,\"assertions\":82}\n\n$ cd packages/core && composer analyse\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n\n$ cd packages/core && composer lint:check\n{\"tool\":\"pint\",\"result\":\"passed\"}\n\n$ cd ../.. && composer lint:check\n{\"tool\":\"pint\",\"result\":\"fail\",\"files\":[{\"path\":\"tests/Pest.php\"}]}\n(вне Files P4.1 — тот же долг, что P3.6/P3.7)\n```\n\n---"
+    },
+    {
+      "id": "P4.2-TenantContextRestorer",
+      "title": "P4.2 — `TenantContextRestorer` и сверяющая реализация",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/high"
+    },
+    {
+      "id": "section-3",
+      "title": "Продукт",
+      "text": "- Контракт `CoreX\\Tenancy\\Contracts\\TenantContextRestorer` (`restore(DataScope): TenantContext`).\n- `GuardedTenantContextRestorer`: сверяет `accountId`, `workspaceId`, `boxed` с `TenantContextResolver::current()`; при совпадении возвращает тот же объект контекста (D22).\n- `ScopeContextMismatch` с фабриками `account` / `workspace` / `profile` и тремя различимыми сообщениями.\n- `CoreServiceProvider`: `scoped`-привязка `TenantContextRestorer` → `GuardedTenantContextRestorer`.\n- `TenantContextRestorerTest`: 1 позитив + 3 негатива с проверкой текста."
+    },
+    {
+      "id": "D22",
+      "title": "Что не проверяется (D22)",
+      "text": "`connectionIdentity` и фактическое имя БД **не** сверяются в `restore()`: `ScopeConnectionGuard` живёт в `packages/attributes` и `packages/tasks-workflow` (две копии); втягивание в ядро — P6, полная сверка соединения при инициализации — P9. Долг зафиксирован здесь, а не подразумевается закрытым."
+    },
+    {
+      "id": "Validation-2",
+      "title": "Validation",
+      "text": "```text\n$ cd packages/core && composer test\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":34,\"passed\":34,\"assertions\":89}\n\n$ cd packages/core && composer analyse\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n\n$ cd packages/core && composer lint:check\n{\"tool\":\"pint\",\"result\":\"passed\"}\n\n$ rg -n 'function current\\(' packages/core/src/Tenancy/Contracts/TenantContextResolver.php\n15:    public function current(): TenantContext;\n```\n\n---"
+    },
+    {
+      "id": "P4.3-attributes-RegistryFieldCatalogue-restorer",
+      "title": "P4.3 — Миграция `attributes`: `RegistryFieldCatalogue` на restorer",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/medium"
+    },
+    {
+      "id": "section-4",
+      "title": "Продукт",
+      "text": "- `RegistryFieldCatalogue`: `TenantContextRestorer` перед `drivers`; один `restore($scope)` в начале `snapshot()`, обе бывшие точки `$scope->context` → `$context`.\n- `AttributesServiceProvider`: `contexts: $app->make(TenantContextRestorer::class)`; ранний guard по `EntityRegistry`/`ModuleRegistry` вместо `instanceof UnavailableAttributes` (PHPStan, поведение то же).\n- Тесты: `DataScope::fromTenantContext(` в пяти файлах; `fixedTenantContextRestorer()` в `tests/helpers.php` для unit-каталога.\n- **CHANGELOG:** не требуется — публичная поверхность `corex/attributes` не менялась (`RegistryFieldCatalogue` — `Internal`)."
+    },
+    {
+      "id": "section-5",
+      "title": "Поведение снимка",
+      "text": "Хеш/сортировка/набор полей не менялись: логика после восстановления контекста идентична прежним вызовам `$scope->context` при совпадающем restorer."
+    },
+    {
+      "id": "Bookkeeping-Files-item-package-graph-gate",
+      "title": "Bookkeeping (вне Files item, для зелёного `package-graph-gate`)",
+      "text": "- `scripts/package-graph-gate.json`: R4 exception `AttributesServiceProvider` → `TenantContextRestorer` (ADR P4.2).\n- `scripts/package-graph-undeclared-surface.json`: `TenantContextRestorer`, `GuardedTenantContextRestorer`; carryover R4b для PHPStan `DurablePayload*` (ветка P3.5)."
+    },
+    {
+      "id": "Validation-3",
+      "title": "Validation",
+      "text": "```text\n$ cd packages/attributes && composer test\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":16,\"passed\":16,\"assertions\":40}\n\n$ cd packages/attributes && composer test:pg\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":13,\"passed\":13,\"assertions\":36}\n\n$ cd packages/attributes && composer analyse\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n\n$ cd packages/attributes && composer lint:check\n{\"tool\":\"pint\",\"result\":\"passed\"}\n\n$ rg -n '\\$scope->context' packages/attributes/src\n(пусто)\n\n$ rg -n 'new DataScope\\(' packages/attributes\n(пусто)\n\n$ composer package-graph-gate\nexit 0\n```\n\n---"
+    },
+    {
+      "id": "P4.4-tasks-workflow-wakeup-handler",
+      "title": "P4.4 — Миграция `tasks-workflow`: материализатор и wakeup-handler",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/medium"
+    },
+    {
+      "id": "section-6",
+      "title": "Продукт",
+      "text": "- `SqlTaskRecurrenceMaterializer`: `TenantContextRestorer` последним параметром; один `restore($scope)` в начале `materialize()`, контекст вниз в `materializeOccurrence` / `scheduleWakeup`; бывшие `$scope->context` → `$context`.\n- `MaterializationWakeupHandler`: только `DataScope::fromTenantContext(` вместо `new DataScope(`; блок `try`/`finally`, подмена `DataScopeAuthorizer` и оба `forgetScopedInstances()` без изменений.\n- `TasksWorkflowServiceProvider`: `contexts: $app->make(TenantContextRestorer::class)`.\n- Тесты: `DataScope::fromTenantContext(` в `MaterializationTest.php` и `MaterializationPgTest.php`.\n- **CHANGELOG:** не требуется — публичная поверхность `corex/tasks-workflow` не менялась."
+    },
+    {
+      "id": "Bookkeeping-Files-item",
+      "title": "Bookkeeping (вне Files item)",
+      "text": "- `scripts/package-graph-gate.json`: R4 exceptions `TasksWorkflowServiceProvider` + `SqlTaskRecurrenceMaterializer` → `TenantContextRestorer` (ADR P4.2).\n- `tests/Pest.php`: `group('pg')` на уровне каталога `Pg` (снят дублирующий `uses(PgTestCase)` в `MaterializationPgTest.php`, иначе `composer test` 255)."
+    },
+    {
+      "id": "Validation-4",
+      "title": "Validation",
+      "text": "```text\n$ cd packages/tasks-workflow && composer test\nTests: 12 passed (57 assertions)\n\n$ cd packages/tasks-workflow && composer analyse\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n\n$ cd packages/tasks-workflow && composer lint:check\n{\"tool\":\"pint\",\"result\":\"passed\"}\n\n$ rg -n '\\$scope->context' packages/tasks-workflow/src\n(пусто)\n\n$ rg -n 'new DataScope\\(' packages/tasks-workflow\n(пусто)\n\n$ rg -n 'new DataScope\\(' packages/*/src\npackages/core/src/Support/Data/DataScope.php:59 (комментарий в docblock, не вызов)\n\n$ composer package-graph-gate\nexit 0\n```\n\n---"
+    },
+    {
+      "id": "P4.5-search-search-intl-search-meilisearch",
+      "title": "P4.5 — Миграция конструирования в тестах `search`, `search-intl`, `search-meilisearch`",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/medium"
+    },
+    {
+      "id": "section-7",
+      "title": "Продукт",
+      "text": "- Пять тестовых файлов: `new DataScope(` → `DataScope::fromTenantContext(` без перестановки аргументов (8 вхождений в `PostgresSearchProviderTest.php`, по одному в остальных четырёх).\n- `packages/search/src`, `packages/search-intl/src`, `packages/search-meilisearch/src` не менялись.\n- **CHANGELOG:** не требуется — публичная поверхность трёх пакетов не менялась."
+    },
+    {
+      "id": "Validation-5",
+      "title": "Validation",
+      "text": "```text\n$ rg -n 'new DataScope\\(' packages/search packages/search-intl packages/search-meilisearch\n(пусто)\n\n$ git diff --stat -- 'packages/search/src' 'packages/search-intl/src' 'packages/search-meilisearch/src'\n(пусто)\n\n$ cd packages/search && composer test\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":10,\"passed\":10,\"assertions\":21}\n\n$ cd packages/search && composer test:pg\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":6,\"passed\":6,\"assertions\":22}\n\n$ cd packages/search-intl && composer test\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":6,\"passed\":6,\"assertions\":14}\n\n$ cd packages/search-meilisearch && composer test\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":3,\"passed\":3,\"assertions\":3}\n\n$ cd packages/search && composer analyse\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n$ cd packages/search-intl && composer analyse\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n$ cd packages/search-meilisearch && composer analyse\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n\n$ cd packages/search && composer lint:check\n{\"tool\":\"pint\",\"result\":\"passed\"}\n$ cd packages/search-intl && composer lint:check\n{\"tool\":\"pint\",\"result\":\"passed\"}\n$ cd packages/search-meilisearch && composer lint:check\n{\"tool\":\"pint\",\"result\":\"passed\"}\n\n$ composer analyse\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n\n$ composer lint:check\n{\"tool\":\"pint\",\"result\":\"passed\"}\n```"
+    },
+    {
+      "id": "Bookkeeping-Files-item-2",
+      "title": "Bookkeeping (вне Files item)",
+      "text": "- `vendor/bin/pint tests/Pest.php` — снят carryover fail root `lint:check` (import order), без смены семантики Pg group из P4.4.\n\n---"
+    },
+    {
+      "id": "P4.6-intl-transfer",
+      "title": "P4.6 — Миграция конструирования в тестах `intl` и `transfer`",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/medium"
+    },
+    {
+      "id": "section-8",
+      "title": "Продукт",
+      "text": "- Семь тестовых файлов: `new DataScope(` → `DataScope::fromTenantContext(` без перестановки аргументов (по одному вхождению в каждом файле).\n- `packages/intl/src`, `packages/transfer/src` не менялись.\n- **CHANGELOG:** не требуется — публичная поверхность двух пакетов не менялась."
+    },
+    {
+      "id": "P4.7",
+      "title": "Готовность к флипу (вход P4.7)",
+      "text": "```text\n$ rg -n 'new DataScope\\(' packages/intl packages/transfer\n(пусто)\n\n$ rg -n '\\$scope->context' packages/*/src\n(пусто)\n\n$ rg -n 'new DataScope\\(' packages --glob '!packages/core/**'\n(пусто)\n\n$ rg -n 'new DataScope\\(' packages\npackages/core/tests/Unit/SupportDataTest.php:16\npackages/core/tests/Unit/SupportDataTest.php:75\npackages/core/tests/Unit/SupportDataTest.php:101\npackages/core/tests/Unit/SupportDataTest.php:124\npackages/core/tests/Unit/SupportDataTest.php:153\npackages/core/tests/Unit/TenantContextRestorerTest.php:25\npackages/core/src/Support/Data/DataScope.php:59\n```\n\nОстаток только в `packages/core` (тесты транзитной формы + docblock §3.1); вне ядра прямого конструирования нет — радиус P4.7 (D21)."
+    },
+    {
+      "id": "Validation-6",
+      "title": "Validation",
+      "text": "```text\n$ cd packages/intl && composer test\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":33,\"passed\":33,\"assertions\":96}\n\n$ cd packages/intl && composer test:pg\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":2,\"passed\":2,\"assertions\":10}\n(повтор после transient deadlock DROP SCHEMA)\n\n$ cd packages/transfer && composer test\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":7,\"passed\":7,\"assertions\":19}\n\n$ cd packages/transfer && composer test:pg\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":10,\"passed\":10,\"assertions\":30}\n\n$ cd packages/intl && composer analyse && composer lint:check\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n{\"tool\":\"pint\",\"result\":\"passed\"}\n\n$ cd packages/transfer && composer analyse && composer lint:check\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n{\"tool\":\"pint\",\"result\":\"passed\"}\n\n$ composer analyse\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n\n$ composer lint:check\n{\"tool\":\"pint\",\"result\":\"passed\"}\n\n$ git diff --stat -- 'packages/intl/src' 'packages/transfer/src'\n(пусто)\n```\n\n---"
+    },
+    {
+      "id": "P4.7-DataScope-DurablePayload-array-mixed",
+      "title": "P4.7 — Флип `DataScope`, маркер `DurablePayload`, правило на `array<mixed>`",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/high"
+    },
+    {
+      "id": "section-9",
+      "title": "Продукт",
+      "text": "- `DataScope`: скалярный promoted-конструктор (`accountId`, `workspaceId`, `connectionIdentity`, `actorId`, `restoreEpoch`, `boxed`, `version`), `implements DurablePayload`, удалены `TenantContext $context` и транзитная форма; `fromTenantContext()` строит скаляры; отказ на `version !== VERSION`.\n- `DurablePayloadRule`: идентификатор `corex.durablePayload.untypedArrayProperty` через `Type::getArrays()` + `MixedType` (отдельные сообщения для missing vs explicit mixed); promoted-обход без изменения текстов трёх legacy-исключений deny-list.\n- Фикстура PHPStan: четыре declared + три promoted array-случая; `ValidTypedArrayPayload` / `PromotedValidArrayPayload` без ошибок.\n- Тесты `SupportDataTest` / `TenantContextRestorerTest` на `fromTenantContext` и скалярный конструктор; негатив на unsupported version.\n- **CHANGELOG:** `### Changed` — **BREAKING** строка P4.7."
+    },
+    {
+      "id": "shared-data-foundation-1",
+      "title": "Уведомление потребителей `shared-data-foundation/1` (текст для владельца)",
+      "text": "> **Breaking:** `CoreX\\Support\\Data\\DataScope` больше не принимает `TenantContext` в конструкторе и не имеет свойства `$context`. Используйте `DataScope::fromTenantContext($context, $connectionIdentity, $actorId, $restoreEpoch)` на границе с живым контекстом или создавайте VO напрямую из скаляров. Тип помечен `CoreX\\Contracts\\DurablePayload`; неизвестная `version` в конструкторе отклоняется. См. CHANGELOG [Unreleased] и D6/D21. Codec для wire-формы — отдельно (P4.8)."
+    },
+    {
+      "id": "P4.6",
+      "title": "Полнота (перепрогон §P4.6 перед мутацией)",
+      "text": "```text\n$ rg -n 'new DataScope\\(' packages/intl packages/transfer\n(пусто)\n\n$ rg -n '\\$scope->context' packages/*/src\n(пусто)\n```"
+    },
+    {
+      "id": "Validation-7",
+      "title": "Validation",
+      "text": "```text\n$ cd packages/core && composer test\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":35,\"passed\":35,\"assertions\":91}\n\n$ ./vendor/bin/pest tests/PHPStan/DurablePayloadRuleTest.php\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":3,\"passed\":3,\"assertions\":3}\n\n$ vendor/bin/phpstan analyse --memory-limit=1G\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n\n$ composer lint:check && composer package-graph-gate && bash scripts/anti-weakening-gate.sh\n{\"tool\":\"pint\",\"result\":\"passed\"}\npackage-graph-gate: OK\nANTI-WEAKENING GATE: OK\n\n$ cd packages/attributes && composer test\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":16,\"passed\":16}\n\n$ cd packages/intl && composer test\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":33,\"passed\":33}\n\n$ cd packages/search && composer test\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":10,\"passed\":10}\n\n$ cd packages/search-intl && composer test\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":6,\"passed\":6}\n\n$ cd packages/search-meilisearch && composer test\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":3,\"passed\":3}\n\n$ cd packages/tasks-workflow && composer test\nTests: 12 passed\n\n$ cd packages/transfer && composer test\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":7,\"passed\":7}\n```\n\n---"
+    },
+    {
+      "id": "P4.8-DataScopeCodec",
+      "title": "P4.8 — `DataScopeCodec`: версия формата, отказ на неизвестной и на неполной",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/high"
+    },
+    {
+      "id": "section-10",
+      "title": "Продукт",
+      "text": "- `CoreX\\Contracts\\DataScopeCodec` — encode/decode между `DataScope` и `array<string, scalar|null>`.\n- `ArrayDataScopeCodec` — фиксированный порядок ключей `version, account, workspace, connection, actor, restoreEpoch, boxed`; отказ на `version !== 2` и на отсутствующий/неверно типизированный ключ; `optionalString()` различает отсутствующий ключ и явный `null`.\n- `InvalidScopePayload` — фабрики `unsupportedVersion()` и `missing()`.\n- `CoreServiceProvider`: `singleton(DataScopeCodec::class, ArrayDataScopeCodec::class)`.\n- `DataScopeCodecTest`: round-trip (с workspace и без) + шесть негативных/граничных кейсов из спецификации.\n- **CHANGELOG:** строка P4.8 в `### Added`."
+    },
+    {
+      "id": "section-11",
+      "title": "Апкастер не пишется — почему",
+      "text": "Версия 1 (форма с объектом контекста) никогда не сериализовалась в durable-хранилище: до P4.8 codec'а не существовало, а единственная durable-форма скоупа сегодня — `workspace_scope_key` в `sys_wakeup_requests`, строящаяся из контекста, а не из `DataScope`. Писать преобразование формата без строк в БД — код без входных данных; `decode()` отказывает на неизвестной версии, первая миграция версии появится при появлении второй (P5/P13). См. `@plan/knowledge/research-P4-design.json` §6.3."
+    },
+    {
+      "id": "JCS",
+      "title": "JCS не заявляется",
+      "text": "Codec работает с PHP-массивом скаляров; детерминированный порядок ключей достаточен для отпечатков idempotency внутри одного рантайма, но **RFC 8785 / JCS не заявляется** ни в докблоке, ни в CHANGELOG (§5.3 P4-design). Сериализация массива в JSON-строку — ответственность будущих потребителей (P5/P13)."
+    },
+    {
+      "id": "Validation-8",
+      "title": "Validation",
+      "text": "```text\n$ cd packages/core && composer test\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":41,\"passed\":41,\"assertions\":106}\n\n$ cd packages/core && composer analyse\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n\n$ cd packages/core && composer lint:check\n{\"tool\":\"pint\",\"result\":\"passed\"}\n```\n\n---"
+    },
+    {
+      "id": "P4.9-PSR-20-psr-clock-LaravelClock",
+      "title": "P4.9 — PSR-20: `psr/clock`, три реализации, привязка `LaravelClock`",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/high"
+    },
+    {
+      "id": "section-12",
+      "title": "Продукт",
+      "text": "- `packages/core/composer.json`: `require` `psr/clock` `^1.0`, `provide` `psr/clock-implementation` `1.0`.\n- `CoreX\\Support\\Time\\SystemClock`, `FrozenClock`, `LaravelClock` — по `@plan/knowledge/research-P4-design.json` §7.2 (D20).\n- `CoreServiceProvider`: `singleton(Psr\\Clock\\ClockInterface::class)` → `LaravelClock` + `DateFactory`.\n- `ClockTest`: UTC у `SystemClock`, `advance()` у `FrozenClock`, `travelTo` у контейнерного `ClockInterface`.\n- **CHANGELOG:** строка P4.9 в `### Added`."
+    },
+    {
+      "id": "composer-why-psr-clock-composer.json",
+      "title": "`composer why psr/clock` (до правки `composer.json`)",
+      "text": "```text\n$ composer why psr/clock\nnesbot/carbon 3.14.0 requires psr/clock (^1.0)\nsymfony/clock v8.1.0 requires psr/clock (^1.0)\n```"
+    },
+    {
+      "id": "composer-update---dry-run",
+      "title": "`composer update --dry-run` (после правки, корень монорепо)",
+      "text": "```text\n$ composer update --dry-run psr/clock\nLock file operations: 0 installs, 1 update, 0 removals\n  - Upgrading corex/core (dev-main … => dev-main …)\nPackage operations: 0 installs, 1 update, 0 removals\n```\n\nНовых устанавливаемых пакетов нет; единственное изменение lock — path-пакет `corex/core`."
+    },
+    {
+      "id": "Validation-9",
+      "title": "Validation",
+      "text": "```text\n$ cd packages/core && composer validate --strict\n./composer.json is valid\n\n$ cd packages/core && composer test\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":44,\"passed\":44,\"assertions\":111}\n\n$ cd packages/core && composer analyse\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n\n$ cd packages/core && composer lint:check\n{\"tool\":\"pint\",\"result\":\"passed\"}\n```\n\n---"
+    },
+    {
+      "id": "P4.10-durable--wakeup-lease-backoff",
+      "title": "P4.10 — Часы в durable-путях `wakeup`: lease, backoff, наступление срока",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/high"
+    },
+    {
+      "id": "section-13",
+      "title": "Продукт",
+      "text": "- `SweepRunner`, `SqlWakeupScheduler`: конструктор `Psr\\Clock\\ClockInterface`; все точки §7.4 переведены с глобального `now()`; один `$now` на транзакцию/`run`/`catch`.\n- `WakeupServiceProvider`: именованные аргументы `clock: $app->make(ClockInterface::class)`.\n- `packages/wakeup/composer.json`: `require` `psr/clock` `^1.0`.\n- `WakeupSchedulerTest`: backoff `2s/4s/8s/16s` и граница lease (`FrozenClock`); `TestCase` — дефолт `LaravelClock`.\n- **CHANGELOG:** строка P4.10 в `### Added`."
+    },
+    {
+      "id": "D23-PostgreSQL",
+      "title": "Долг D23 (серверное время PostgreSQL)",
+      "text": "P4 **не** переводит предикаты lease, backoff и `fire_at` на `now()` / `clock_timestamp()` в SQL. Решения по-прежнему в часах приложения (D20); при расхождении NTP между воркерами возможен ранний перехват lease — это **не** закрыто в P4.\n\n**Условие возврата:** первый мультихостовый деплой воркеров **или** первый зафиксированный ранний перехват lease; тогда перевод на серверное время выполняют **сразу** для `wakeup` и `messaging` (D23, D30)."
+    },
+    {
+      "id": "Bookkeeping-Files-item-package-graph-gate-2",
+      "title": "Bookkeeping (вне Files item, для зелёного `package-graph-gate`)",
+      "text": "- `scripts/package-graph-undeclared-surface.json`: R4b carryover `ArrayDataScopeCodec`, `FrozenClock`, `LaravelClock`, `SystemClock` (продукт P4.8/P4.9)."
+    },
+    {
+      "id": "Validation-10",
+      "title": "Validation",
+      "text": "```text\n$ rg '(^|[^>])now\\(' packages/wakeup/src\n(пусто — глобальный хелпер now() отсутствует)\n\n$ cd packages/wakeup && composer test\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":8,\"passed\":8,\"assertions\":34}\n\n$ cd packages/wakeup && composer test:pg\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":1,\"passed\":1,\"assertions\":1}\n\n$ cd packages/wakeup && composer analyse\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n\n$ cd packages/wakeup && composer lint:check\n{\"tool\":\"pint\",\"result\":\"passed\"}\n\n$ cd packages/tasks-workflow && composer test\n(passed)\n\n$ cd packages/tenancy && composer test\n(passed)\n\n$ composer lint:check && composer package-graph-gate\n{\"tool\":\"pint\",\"result\":\"passed\"}\npackage-graph-gate: OK (exceptions only)\n```\n\n---"
+    },
+    {
+      "id": "P4.11",
+      "title": "P4.11 — Доказательство изоляции контекста между единицами работы",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/medium"
+    },
+    {
+      "id": "8.2",
+      "title": "Тесты (§8.2)",
+      "text": "- `packages/core/tests/Feature/WorkUnitIsolationTest.php`: два прохода в одном приложении;\n  pass A бросает исключение; между проходами только `forgetScopedInstances()`; pass B\n  инспектирует **до** warmup второго прохода — `assertNotSame` на `TenantContextRestorer`,\n  `restore($scopeA)` → `ScopeContextMismatch`, авторизатор после A равен исходному,\n  конфиг без следов pass A (baseline `database.connections.testbench` + отсутствие\n  `corex.work_unit_isolation.leak_marker`).\n- `packages/tasks-workflow/tests/Pg/WorkUnitIsolationPgTest.php`: две материализации с разными\n  `accountId`/`restoreEpoch`, pass A падает после успешной материализации; pass B не видит\n  scoped-состояние A и материализует вторую серию (2 задачи в БД)."
+    },
+    {
+      "id": "static-assert",
+      "title": "Измерение `static $` (не assert)",
+      "text": "```text\n$ rg -n -- '^\\s*(private|protected|public)?\\s*static \\$' packages/*/src | wc -l\n0\n```"
+    },
+    {
+      "id": "config--CI",
+      "title": "Ручная проверка config-утечки (не в CI)",
+      "text": "При установке `corex.work_unit_isolation.leak_marker` в try pass A без очистки в `finally`\nмаркер **остаётся** после `forgetScopedInstances()` — ожидаемо для Laravel; граница джоба\nсама по себе конфиг не сбрасывает. Продуктовый тест сознательно не мутирует конфиг в pass A\n(как `MaterializationWakeupHandler`); адресат усиления доказательства / runtime-сброса — P6."
+    },
+    {
+      "id": "Validation-11",
+      "title": "Validation",
+      "text": "```text\n$ git diff --stat -- 'packages/*/src'\n(пусто)\n\n$ cd packages/core && composer test\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":45,\"passed\":45,\"assertions\":120}\n\n$ cd packages/core && composer analyse && composer lint:check\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n{\"tool\":\"pint\",\"result\":\"passed\"}\n\n$ composer test:pg --filter=WorkUnitIsolation\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":1,\"passed\":1,\"assertions\":11}\n\n$ composer test:pg\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":143,\"passed\":143,\"assertions\":486}\n\n$ composer analyse && composer lint:check\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n{\"tool\":\"pint\",\"result\":\"passed\"}\n```\n\n---"
+    },
+    {
+      "id": "P4.12-singleton-scoped",
+      "title": "P4.12 — Аудит `singleton`/`scoped` и гейт контекст-зависимых конструкторов",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/high"
+    },
+    {
+      "id": "section-14",
+      "title": "Измерение",
+      "text": "- Артефакт: `@plan/knowledge/findings-P4-binding-audit.json` — 115 строк биндингов из 13 пакетов с\n  `*ServiceProvider.php` в `src`; rollup по 20 живым пакетам + tombstone `import-export`.\n- Статически разбираемые `->singleton(` с литералом `::class`: **19** (остальные 48 singleton\n  — closure / `config()` / `Config::…Class()` → **не разбирается статически**, названный предел гейта).\n- Захват контекста в конструкторе (три запрещённых типа): **2** (`ServiceProviderModuleRegistrar`,\n  `PubSubManager` в `core`) → allowlist с `owner_phase` **P6**."
+    },
+    {
+      "id": "section-15",
+      "title": "Негативная посадка (обратима в тесте)",
+      "text": "```text\npackages/core/src/Internal/SingletonInjectionProbeServiceProvider.php: CoreX\\Internal\\SingletonInjectionProbe — app\n```\n\n(Воспроизведение: `vendor/bin/pest --filter 'singleton injection gate names probe'`.)"
+    },
+    {
+      "id": "Validation-12",
+      "title": "Validation",
+      "text": "```text\n$ vendor/bin/pest --filter SingletonInjectionTest\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":2,\"passed\":2,\"assertions\":4}\n\n$ composer analyse && composer lint:check\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n{\"tool\":\"pint\",\"result\":\"passed\"}\n\n$ bash scripts/anti-weakening-gate.sh\nANTI-WEAKENING GATE: OK\n\n$ git diff --stat -- 'packages/*/src'\n(пусто — продуктовый src не менялся)\n```\n\n---"
+    }
+  ],
+  "applies_to": [
+    "P4"
+  ],
+  "provenance": {
+    "path": "findings/P4-receipts.md",
+    "sha256": "46b07bc54f40f3b1527ce065e6133a230405d6196f7a672322f8037c8d522593"
+  }
+}

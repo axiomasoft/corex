@@ -1,0 +1,430 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P06.1",
+  "title": "Wire HTTP операций: конверт входа и единая ошибка RFC 9457",
+  "status": "done",
+  "summary": "Сделать конверт входа операции именованной политикой при неотключаемой строгости и оставить у ошибки одно представление — `application/problem+json`, где `type` и `title` берутся из реестра проблем, а сообщение случая уходит в `detail`.",
+  "why": "D90 п.1–п.2; D10, D11, D12; F00 A7.1–A7.2. Сейчас представление ошибки выбирается по `Accept`, тип строится из конфигурируемой базы и не совпадает с URN реестра, `title` повторяет сообщение, а три разных нарушения конверта возвращают один код `operations.validation_failed` (`artifacts/P06-design/facts/input-envelope.txt`, `error-serializer-consumers.txt`). RFC 9457 разрешает problem+json при `Accept: application/json` (`@plan/knowledge/research-P06-design-rag.json` W1–W4).",
+  "scope": {
+    "include": [
+      "`InputEnvelope` (enum, `#[Api]`), `QueryEnvelopeReader`, `JsonObjectEnvelopeReader` и internal interface reader-а; `Operation::$inputEnvelope` и его вывод в `OperationFactory`; коды `operations.unsupported_media_type`, `operations.input_envelope_invalid`, `operations.undeclared_fields` с определениями; `ProblemDetailsSerializer` по D90 п.1; новый Internal `HttpResponseSerializer` вместо `NegotiatingResponseSerializer`; удаление `AcceptNegotiation`, ветки ошибки `EnvelopeSerializer`, члена `error` в успешном ответе, `ErrorWire::type/instance`, `Vary: Accept` в ошибках, `ApiOptions::$problemTypeBase` и ключа `problem_type_base`; OpenAPI-ответы ошибок; перевод тестов из `facts/envelope-error-tests.txt`; регенерация `docs/architecture/configuration.md`; Golden delta P06.1."
+    ],
+    "exclude": [
+      "Выбор конверта в объявлении модуля; новые конверты помимо двух; изменение статусов и сообщений существующих кодов; tool runtime (P06.2); маршруты (слой routes Golden неизменен)."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D92",
+    "D90",
+    "D01"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/decisions/D92.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/knowledge/research-P06-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P06-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/knowledge/artifacts-P06-design-examples.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D90.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/artifacts/P06-design/facts/envelope-error-tests.txt",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "packages/operations/src/Invocation/Internal/OperationDispatcher.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/operations/src/Errors/Internal/ProblemDetailsSerializer.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Errors/Contracts/ProblemRegistry.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/operations/tests/Feature/ErrorRepresentationTest.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/operations/src/OpenApi/Internal/OpenApiDocumentGenerator.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/operations/src/Laravel/OperationsBindingsRegistrar.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/operations/CHANGELOG.md",
+      "change": "any"
+    },
+    {
+      "path": "packages/operations/src/Invocation/Enums/InputEnvelope.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/operations/src/Invocation/Internal/{InputEnvelopeReader,QueryEnvelopeReader,JsonObjectEnvelopeReader}.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/operations/src/Invocation/Internal/OperationDispatcher.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/operations/src/Definition/Data/Operation.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/operations/src/Definition/Laravel/OperationFactory.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/operations/src/Errors/Enums/OperationsErrorCode.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/operations/src/Errors/Internal/{PackageProblemDefinitions,ProblemDetailsSerializer,EnvelopeSerializer,ErrorWire}.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/operations/src/Errors/Internal/HttpResponseSerializer.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/operations/src/Errors/Internal/NegotiatingResponseSerializer.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/operations/src/Errors/Laravel/AcceptNegotiation.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/operations/src/Laravel/OperationsBindingsRegistrar.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/operations/src/Laravel/Support/ApiOptions.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/operations/config/corex-operations.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/operations/src/OpenApi/Internal/OpenApiDocumentGenerator.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/operations/tests/Feature/{ErrorRepresentationTest,InputEnvelopeTest}.php",
+      "change": "any"
+    },
+    {
+      "path": "facts/envelope-error-tests.txt",
+      "change": "any"
+    },
+    {
+      "path": "packages/operations/resources/contracts/php-api.json",
+      "change": "any"
+    },
+    {
+      "path": "docs/reference/public-api.md",
+      "change": "any"
+    },
+    {
+      "path": "docs/architecture/configuration.md",
+      "change": "any"
+    },
+    {
+      "path": "scripts/configuration-classes.json",
+      "change": "any"
+    },
+    {
+      "path": "scripts/rename-completeness.json",
+      "change": "any"
+    },
+    {
+      "path": "@plan/artifacts/P06.1-execution/**",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "D92 — обязательное уточнение D90. Manifest и changelog меняются вместе в одном продуктовом commit; исходный SHA сохраняется до правок, candidate SHA — в completion (§4 досье). Строгость (отказ необъявленным полям) живёт в диспетчере и одинакова для любого конверта; reader только читает и проверяет форму. Порядок проверок `JsonObjectEnvelopeReader` — query, тип содержимого, разбор, объект (examples §1). `title`/`type` — только из `ProblemRegistry::fromWire()`; сообщение случая — только `detail`. Удаляемые символы не получают алиасов и мостов (D01); каждая ссылка правится в этом item. Тесты меняют утверждения на члены problem+json, но не ослабляют проверяемое поведение (статус, код, детали). Слой routes Golden байт-идентичен. Новых зависимостей нет."
+  ],
+  "guidance": "Досье §3.1 шаги 1–10; examples §1 (enum, диспетчер, reader), §2 (коды и определения), §3 (сериализатор, before/after), §4 (тесты и негативный контроль). `HttpResponseSerializer::success()` делегирует `EnvelopeSerializer::success()`, `error()` — `ProblemDetailsSerializer::error()`.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "bash scripts/contract-guard.sh",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "bash scripts/contract-guard.sh \"$(cat plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06.1-execution/base-commit.txt)\"",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "bash plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/scripts/p06-facts.sh",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "grep -rn -e AcceptNegotiation -e NegotiatingResponseSerializer -e problemTypeBase -e problem_type_base packages products scripts docs --include='*.php' --include='*.json' --include='*.md' | grep -v /vendor/ | grep -v -e 'tests/Golden/rename-map.json' -e 'scripts/rename-completeness.json'",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "php scripts/quality-ceiling-guard.php",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "cmd": "bash scripts/anti-weakening-gate.sh",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "- После продуктового commit: `bash scripts/contract-guard.sh` и `bash scripts/contract-guard.sh \"$(cat plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06.1-execution/base-commit.txt)\"` → exit 0; в Unreleased каждого изменённого пакета описан объявленный API/wire delta.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "- `bash plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/scripts/p06-facts.sh` до правок → состав файлов как в досье §2; после правок `grep -rn -e AcceptNegotiation -e NegotiatingResponseSerializer -e problemTypeBase -e problem_type_base packages products scripts docs --include='*.php' --include='*.json' --include='*.md' | grep -v /vendor/ | grep -v -e 'tests/Golden/rename-map.json' -e 'scripts/rename-completeness.json'` → пусто.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "procedure": "- `scripts/php84 composer --working-dir=packages/operations test -- --filter='ErrorRepresentation|InputEnvelope'` → exit 0; 415/Validation резолвится и сериализуется через реальный ProblemRegistry; датасет `Accept` из пяти значений и шесть случаев таблицы examples §4b присутствуют.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "procedure": "- Негативный контроль (в Completion Notes): `title` из сообщения вместо реестра → `ErrorRepresentationTest` красный; откат → зелёный.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V11",
+      "procedure": "- `scripts/php84 composer error-registry` → exit 0; три новых кода в выводе `definitions`.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V12",
+      "procedure": "- `scripts/php84 composer --working-dir=packages/operations test` → exit 0; `scripts/php84 composer --working-dir=products/flex-crm test` → exit 0.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V13",
+      "procedure": "- `scripts/php84 php scripts/configuration-reference.php --check` → exit 0; `scripts/php84 php scripts/rename-completeness-gate.php` → exit 0.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V14",
+      "procedure": "- `scripts/php84 php scripts/php-api.php --write` дважды → идентично; `scripts/php84 composer php-api`, `scripts/php84 composer bc-check` → exit 0; diff baseline Golden содержит только строки P06.1 из досье §4.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V15",
+      "procedure": "- `scripts/php84 composer lint:check`, `scripts/php84 composer analyse` → exit 0; `php scripts/quality-ceiling-guard.php` → `ceilings OK`; `bash scripts/anti-weakening-gate.sh` → exit 0.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V16",
+      "procedure": "- Review `light` (D91): self-check по досье §6; строка `review: self-check GREEN` в Completion Notes.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Package changelog(s), `artifacts/P06.1-execution/base-commit.txt` и точный candidate SHA в completion; Конверт входа и три кода; единственный сериализатор ошибки; OpenAPI ошибок только problem+json; переведённые тесты; регенерированный `configuration.md`; Golden delta P06.1 с поимённым перечнем; `@plan/knowledge/artifacts-P06.1-execution-completion.json`."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "self"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-10-03T17:12:33Z",
+    "finished_at": "2026-10-03T18:00:54Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "executor/codex/gpt-6.1-sol/high",
+      "effort": "high"
+    },
+    "notes": "P06.1 GREEN; product d6ed2cde; final candidate a98f1a65370f3a2c046e4e4ed4bed8459a6e1a43; review: self-check GREEN; owner-requested Grok 4.7 High GREEN. Completion and validation-map in artifacts/P06.1-execution.\nwrite-site: pre_mutation: allow · pre_final: allow",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-10-03T18:00:54Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-10-03T18:00:54Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-10-03T18:00:54Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-10-03T18:00:54Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V11",
+        "exit": 0,
+        "at": "2026-10-03T18:00:54Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V12",
+        "exit": 0,
+        "at": "2026-10-03T18:00:54Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V13",
+        "exit": 0,
+        "at": "2026-10-03T18:00:54Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V14",
+        "exit": 0,
+        "at": "2026-10-03T18:00:54Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V15",
+        "exit": 0,
+        "at": "2026-10-03T18:00:54Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V16",
+        "exit": 0,
+        "at": "2026-10-03T18:00:54Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-10-03T18:00:54Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Сделать конверт входа операции именованной политикой при неотключаемой строгости и оставить у ошибки одно представление — `application/problem+json`, где `type` и `title` берутся из реестра проблем, а сообщение случая уходит в `detail`."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "D90 п.1–п.2; D10, D11, D12; F00 A7.1–A7.2. Сейчас представление ошибки выбирается по `Accept`, тип строится из конфигурируемой базы и не совпадает с URN реестра, `title` повторяет сообщение, а три разных нарушения конверта возвращают один код `operations.validation_failed` (`artifacts/P06-design/facts/input-envelope.txt`, `error-serializer-consumers.txt`). RFC 9457 разрешает problem+json при `Accept: application/json` (`@plan/knowledge/research-P06-design-rag.json` W1–W4)."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "`InputEnvelope` (enum, `#[Api]`), `QueryEnvelopeReader`, `JsonObjectEnvelopeReader` и internal interface reader-а; `Operation::$inputEnvelope` и его вывод в `OperationFactory`; коды `operations.unsupported_media_type`, `operations.input_envelope_invalid`, `operations.undeclared_fields` с определениями; `ProblemDetailsSerializer` по D90 п.1; новый Internal `HttpResponseSerializer` вместо `NegotiatingResponseSerializer`; удаление `AcceptNegotiation`, ветки ошибки `EnvelopeSerializer`, члена `error` в успешном ответе, `ErrorWire::type/instance`, `Vary: Accept` в ошибках, `ApiOptions::$problemTypeBase` и ключа `problem_type_base`; OpenAPI-ответы ошибок; перевод тестов из `facts/envelope-error-tests.txt`; регенерация `docs/architecture/configuration.md`; Golden delta P06.1."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Выбор конверта в объявлении модуля; новые конверты помимо двух; изменение статусов и сообщений существующих кодов; tool runtime (P06.2); маршруты (слой routes Golden неизменен)."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/decisions/D92.json` · `@plan/knowledge/research-P06-design.json` (§1, §3.1, §4, §5) · `@plan/knowledge/research-P06-design-rag.json` (W1–W4) · `@plan/knowledge/artifacts-P06-design-examples.json` (§1–§4) · `@plan/decisions/D90.json` · `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/facts/envelope-error-tests.txt`"
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/operations/CHANGELOG.md`; `packages/operations/src/Invocation/Enums/InputEnvelope.php`, `packages/operations/src/Invocation/Internal/{InputEnvelopeReader,QueryEnvelopeReader,JsonObjectEnvelopeReader}.php` (новые); `packages/operations/src/Invocation/Internal/OperationDispatcher.php`; `packages/operations/src/Definition/Data/Operation.php`; `packages/operations/src/Definition/Laravel/OperationFactory.php`; `packages/operations/src/Errors/Enums/OperationsErrorCode.php`; `packages/operations/src/Errors/Internal/{PackageProblemDefinitions,ProblemDetailsSerializer,EnvelopeSerializer,ErrorWire}.php`; `packages/operations/src/Errors/Internal/HttpResponseSerializer.php` (новый); `packages/operations/src/Errors/Internal/NegotiatingResponseSerializer.php`, `packages/operations/src/Errors/Laravel/AcceptNegotiation.php` (удаляются); `packages/operations/src/Laravel/OperationsBindingsRegistrar.php`; `packages/operations/src/Laravel/Support/ApiOptions.php`; `packages/operations/config/corex-operations.php`; `packages/operations/src/OpenApi/Internal/OpenApiDocumentGenerator.php`; `packages/operations/tests/Feature/{ErrorRepresentationTest,InputEnvelopeTest}.php` (второй новый); файлы из `facts/envelope-error-tests.txt`; `packages/operations/resources/contracts/php-api.json`; `docs/reference/public-api.md`; `docs/architecture/configuration.md`; `scripts/configuration-classes.json`; `scripts/rename-completeness.json`, `tests/Golden/rename-map.json`, `tests/Golden/baseline/*` (только строки перечня §4); `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06.1-execution/**`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/knowledge/research-P06-design.json` §3.1, §4, §5; 2) `@plan/knowledge/artifacts-P06-design-examples.json` §1–§4; 3) `packages/operations/src/Invocation/Internal/OperationDispatcher.php`; 4) `packages/operations/src/Errors/Internal/ProblemDetailsSerializer.php`; 5) `packages/core/src/Errors/Contracts/ProblemRegistry.php`; 6) `packages/operations/tests/Feature/ErrorRepresentationTest.php`; 7) `packages/operations/src/OpenApi/Internal/OpenApiDocumentGenerator.php` (стр. 50–125); 8) `packages/operations/src/Laravel/OperationsBindingsRegistrar.php`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "D92 — обязательное уточнение D90. Manifest и changelog меняются вместе в одном продуктовом commit; исходный SHA сохраняется до правок, candidate SHA — в completion (§4 досье). Строгость (отказ необъявленным полям) живёт в диспетчере и одинакова для любого конверта; reader только читает и проверяет форму. Порядок проверок `JsonObjectEnvelopeReader` — query, тип содержимого, разбор, объект (examples §1). `title`/`type` — только из `ProblemRegistry::fromWire()`; сообщение случая — только `detail`. Удаляемые символы не получают алиасов и мостов (D01); каждая ссылка правится в этом item. Тесты меняют утверждения на члены problem+json, но не ослабляют проверяемое поведение (статус, код, детали). Слой routes Golden байт-идентичен. Новых зависимостей нет."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Досье §3.1 шаги 1–10; examples §1 (enum, диспетчер, reader), §2 (коды и определения), §3 (сериализатор, before/after), §4 (тесты и негативный контроль). `HttpResponseSerializer::success()` делегирует `EnvelopeSerializer::success()`, `error()` — `ProblemDetailsSerializer::error()`."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "- После продуктового commit: `bash scripts/contract-guard.sh` и `bash scripts/contract-guard.sh \"$(cat plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06.1-execution/base-commit.txt)\"` → exit 0; в Unreleased каждого изменённого пакета описан объявленный API/wire delta.\n- `bash plans/2026.09.27-№1-COREX-KERNEL/artifacts/P06-design/scripts/p06-facts.sh` до правок → состав файлов как в досье §2; после правок `grep -rn -e AcceptNegotiation -e NegotiatingResponseSerializer -e problemTypeBase -e problem_type_base packages products scripts docs --include='*.php' --include='*.json' --include='*.md' | grep -v /vendor/ | grep -v -e 'tests/Golden/rename-map.json' -e 'scripts/rename-completeness.json'` → пусто.\n- `scripts/php84 composer --working-dir=packages/operations test -- --filter='ErrorRepresentation|InputEnvelope'` → exit 0; 415/Validation резолвится и сериализуется через реальный ProblemRegistry; датасет `Accept` из пяти значений и шесть случаев таблицы examples §4b присутствуют.\n- Негативный контроль (в Completion Notes): `title` из сообщения вместо реестра → `ErrorRepresentationTest` красный; откат → зелёный.\n- `scripts/php84 composer error-registry` → exit 0; три новых кода в выводе `definitions`.\n- `scripts/php84 composer --working-dir=packages/operations test` → exit 0; `scripts/php84 composer --working-dir=products/flex-crm test` → exit 0.\n- `scripts/php84 php scripts/configuration-reference.php --check` → exit 0; `scripts/php84 php scripts/rename-completeness-gate.php` → exit 0.\n- `scripts/php84 php scripts/php-api.php --write` дважды → идентично; `scripts/php84 composer php-api`, `scripts/php84 composer bc-check` → exit 0; diff baseline Golden содержит только строки P06.1 из досье §4.\n- `scripts/php84 composer lint:check`, `scripts/php84 composer analyse` → exit 0; `php scripts/quality-ceiling-guard.php` → `ceilings OK`; `bash scripts/anti-weakening-gate.sh` → exit 0.\n- Review `light` (D91): self-check по досье §6; строка `review: self-check GREEN` в Completion Notes."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Package changelog(s), `artifacts/P06.1-execution/base-commit.txt` и точный candidate SHA в completion; Конверт входа и три кода; единственный сериализатор ошибки; OpenAPI ошибок только problem+json; переведённые тесты; регенерированный `configuration.md`; Golden delta P06.1 с поимённым перечнем; `@plan/knowledge/artifacts-P06.1-execution-completion.json`."
+    }
+  ]
+}

@@ -1,0 +1,179 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "findings-P3-gate-receipts",
+  "title": "Receipts — фаза P3 (гейты)",
+  "sections": [
+    {
+      "id": "Receipts-P3",
+      "title": "Receipts — фаза P3 (гейты)",
+      "text": ""
+    },
+    {
+      "id": "P3.1-PHPStan-N03",
+      "title": "P3.1 — Контур PHPStan (N03)",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/high"
+    },
+    {
+      "id": "19-pass-1-debt",
+      "title": "Контур (19 pass / 1 debt)",
+      "text": "| dir | pass | exit | in root `phpstan.neon` |\n|:--|:--:|--:|:--|\n| api | yes | 0 | yes |\n| attributes | no | 1 | no (debt) |\n| auth | yes | 0 | yes |\n| core | yes | 0 | yes (+ migrations) |\n| crm | yes | 0 | yes |\n| intl | yes | 0 | yes |\n| media | yes | 0 | yes |\n| modules | yes | 0 | yes (+ migrations) |\n| notifications | yes | 0 | yes |\n| panels | yes | 0 | yes |\n| recurrence | yes | 0 | yes |\n| search | yes | 0 | yes |\n| search-intl | yes | 0 | yes |\n| search-meilisearch | yes | 0 | yes |\n| tasks | yes | 0 | yes |\n| tasks-workflow | yes | 0 | yes |\n| tenancy | yes | 0 | yes (+ migrations) |\n| transfer | yes | 0 | yes |\n| wakeup | yes | 0 | yes |\n| workflow | yes | 0 | yes (+ migrations) |\n\nАртефакт: `artifacts/architecture/phpstan-contour.json` (`phpstan-contour/1`, 20 пакетов).\n\nКорневой `phpstan.neon`: 19 `packages/*/src` (+ 4 migration-пути по правилу §3.1);\n`scanDirectories` → `packages/auth/vendor/axioma-studio/azguard-core/src` (AzGuard не в root\nvendor); именованные `ignoreErrors` только для intl/search-intl до починки типов в пакетах;\n`reportUnmatchedIgnoredErrors: false` — иначе пакетные прогоны с `-c phpstan.neon` на подмножестве\npaths падают на «unmatched ignore»."
+    },
+    {
+      "id": "3.2",
+      "title": "Негативная посадка (§3.2)",
+      "text": "```text\n$ composer analyse  # с PhpstanContourProbe.php\nexit 1 · PhpstanContourProbe.php в выводе\n$ test ! -f packages/core/src/Support/PhpstanContourProbe.php\nprobe_removed\n```"
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "```text\n$ php scripts/phpstan-contour.php\nexit 0\n\n$ composer analyse\n{\"result\":\"passed\"}\n\n$ bash scripts/anti-weakening-gate.sh\nANTI-WEAKENING GATE: OK\n\n$ composer lint:check\n{\"result\":\"passed\"}\n\n$ cmp (повторный contour → phpstan-contour.json)\nCMP_OK\n```\n\n---"
+    },
+    {
+      "id": "P3.2-Tokenizer--group-use-FQCN-extends",
+      "title": "P3.2 — Tokenizer-граф (group-use, FQCN, extends)",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/high"
+    },
+    {
+      "id": "section",
+      "title": "Сборщик",
+      "text": "- `scripts/package-graph-gate.php`: `extractReferences()` + `readUseClause` (алгоритм P2-design §3.4).\n- `parseUseImport`: **0 вхождений** (`rg -n parseUseImport scripts/package-graph-gate.php` — пусто).\n- Чистое дерево: `composer package-graph-gate` → OK (allowlist без изменений)."
+    },
+    {
+      "id": "4.2",
+      "title": "Негативные посадки (§4.2)",
+      "text": "| Probe | exit | имя в выводе | файл после теста |\n|:--|:--:|:--|:--|\n| `GroupUseProbe.php` (group-use → corex/wakeup) | 1 | GroupUseProbe.php | удалён |\n| `FqcnGraphProbe.php` (FQCN без use) | 1 | FqcnGraphProbe.php | удалён |\n\nРегрессия: R1 guard (SqlTaskRecurrenceMaterializer), R3 probe (ProbeMeilisearchViolation) — зелёные."
+    },
+    {
+      "id": "Validation-2",
+      "title": "Validation",
+      "text": "```text\n$ rg -n parseUseImport scripts/package-graph-gate.php\n(empty)\n\n$ composer package-graph-gate\nexit 0 · package-graph-gate: OK\n\n$ vendor/bin/pest tests/Arch/PackageGraphTest.php\n5 passed\n\n$ composer lint:check\npassed\n\n$ bash scripts/anti-weakening-gate.sh\nANTI-WEAKENING GATE: OK\n```\n\n---"
+    },
+    {
+      "id": "P3.3-R4-R4b-R5-public-api-surface-package-type",
+      "title": "P3.3 — R4 / R4b / R5 (public-api, surface, package-type)",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/high"
+    },
+    {
+      "id": "section-2",
+      "title": "Правила",
+      "text": "- `discoverPackages`: валидация `extra.corex` (`schema-version`, `package-type`, `stability`, `public-api`); невалидный блок → exit 2.\n- R4: сообщение содержит `непубличного`; R2 (`foreign Internal`) не дублируется R4.\n- R4b: снимок `scripts/package-graph-undeclared-surface.json` — **318** записей `package|fqcn` (ratchet на новые типы).\n- R5: ранги foundation→product; `tooling`/`fixture` пропускаются.\n- Allowlist R4: `scripts/package-graph-gate.json` → `public_api_exceptions` — **176** рёбер (ADR P3.3, frozen baseline)."
+    },
+    {
+      "id": "5.4",
+      "title": "Негативные посадки (§5.4)",
+      "text": "| Правило | Probe | ожидаемый фрагмент |\n|:--|:--|:--|\n| R4 | `PublicApiR4Probe.php` | `[R4]` + `непубличного` + имя файла |\n| R2 ≠ R4 | `InternalR2Probe.php` | `foreign Internal`, **без** `непубличного` |\n| R4b | `AccidentalPublic.php` | `[R4b]` + имя файла |\n| R5 | `PackageTypeR5Probe.php` | `[R5]` + `foundation` + `product` + имя файла |"
+    },
+    {
+      "id": "Validation-3",
+      "title": "Validation",
+      "text": "```text\n$ composer package-graph-gate\nexit 0 · package-graph-gate: OK\n\n$ vendor/bin/pest tests/Arch/PackageGraphTest.php\n9 passed\n\n$ composer lint:check\npassed\n\n$ bash scripts/anti-weakening-gate.sh\nANTI-WEAKENING GATE: OK\n```\n\n---"
+    },
+    {
+      "id": "P3.4-Roave-BC--PHP-8.4-blocking-stable",
+      "title": "P3.4 — Roave BC-дифф (PHP 8.4, blocking только `stable`)",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/high"
+    },
+    {
+      "id": "wrapper",
+      "title": "Зависимость и wrapper",
+      "text": "- `roave/backward-compatibility-check` **8.22.0** в корневом `require-dev`; `composer bc-check` → `scripts/bc-check.sh`.\n- Per-package disposable git repo (D98): `base` = `BC_CHECK_BASE` (default `merge-base HEAD origin/main`), `candidate` = worktree snapshot; comparison `composer.json` autoload только целевого пакета.\n- Sealed vendor: `packages/<pkg>/vendor/{axioma-studio,axiomasoft}/*` → `packages/_vendor/*` в temp repo (AzGuard, stancl).\n- PHP **8.3**: явный skip, exit 0. Roave exit **3** = BC break (report-only при `experimental`); иное nonzero = infrastructure RED."
+    },
+    {
+      "id": "CI",
+      "title": "CI",
+      "text": "- Job `backward-compatibility` в `.github/workflows/ci.yml`: PHP 8.4, `fetch-depth: 0`, `composer update`, `bash scripts/bc-check.sh`.\n- `contract-guard` не удалён."
+    },
+    {
+      "id": "6.4",
+      "title": "Негативные посадки (§6.4)",
+      "text": "| Probe | exit | ожидаемый сигнал |\n|:--|:--:|:--|\n| Удалён `Auditable::auditExcept()` в worktree, `BC_CHECK_ONLY=core` | 0 | `\\|bc-break\\|`, `Auditable.php`, общий OK |\n| То же + `BC_CHECK_FORCE_STABLE=corex/core` | 1 | `stability=stable`, имя `Auditable.php` |\n| `BC_CHECK_PROBE_INFRA=1` + `BC_CHECK_ONLY=core` | 1 | `\\|infrastructure\\|` |\n| `PATH=…/php8.3-as-php` | 0 | `skip — … requires PHP 8.4 or 8.5` |\n\nПосле посадок `packages/core/src/Contracts/Auditable.php` восстановлен; `git diff` пуст."
+    },
+    {
+      "id": "Validation-4",
+      "title": "Validation",
+      "text": "```text\n$ composer show roave/backward-compatibility-check\n8.22.0\n\n$ BC_CHECK_ONLY=core bash scripts/bc-check.sh\nexit 0 · |compatible|\n\n$ bash scripts/anti-weakening-gate.sh\nANTI-WEAKENING GATE: OK\n```\n\nПримечание: полный прогон 20 пакетов ~8–10 мин (Roave × Composer). На ветке впереди `origin/main` часть experimental-пакетов печатает `\\|bc-break\\|` без общего fail — по дизайну до 1.0.\n\n---"
+    },
+    {
+      "id": "P3.5-DurablePayload-PHPStan",
+      "title": "P3.5 — DurablePayload и PHPStan",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/high"
+    },
+    {
+      "id": "section-3",
+      "title": "Продукт",
+      "text": "- Маркер `CoreX\\Contracts\\DurablePayload` (`packages/core/src/Contracts/DurablePayload.php`).\n- Правила `DurablePayloadRule` (объявленные свойства) и\n  `DurablePayloadPromotedPropertyRule` (promoted) в `packages/core/src/PHPStan/Rules/`.\n- Identifier: `corex.durablePayload.nonSerializableProperty`.\n- Регистрация: `packages/core/extension.neon`; корневой `phpstan.neon` include рядом с\n  modules/tenancy.\n- Ни один существующий доменный класс не реализует маркер (DataScope — P4)."
+    },
+    {
+      "id": "Deny-list",
+      "title": "Deny-list (закрытый)",
+      "text": "`Model`, `Closure`, `Container` (Illuminate concrete + contracts + PSR-11),\n`Request` (Illuminate + Symfony), `CoreX\\Tenancy\\Contracts\\TenantContext`.\n\n**Предел (явный):** `array<mixed>` и прочие неименованные коллекции deny-list'ом\nне ловятся — allow-list скаляров и ужесточение в P4.7 (`P3-design.md` §7, P4-design §5.2)."
+    },
+    {
+      "id": "7.3",
+      "title": "Негативная проверка (§7.3)",
+      "text": "`tests/PHPStan/DurablePayloadRuleTest.php` + фикстуры `tests/PHPStan/data/durable-payload*.php`;\npromoted `TenantContext $ctx` на строке свойства; `NotAPayload` — 0 ошибок правила.\n`composer.json` `autoload-dev.classmap` → `tests/PHPStan/data` (ReflectionProvider для\n`implements DurablePayload` в RuleTestCase)."
+    },
+    {
+      "id": "Validation-5",
+      "title": "Validation",
+      "text": "```text\n$ ./vendor/bin/pest tests/PHPStan/DurablePayloadRuleTest.php\n{\"result\":\"passed\"}\n\n$ vendor/bin/phpstan analyse --memory-limit=1G\n{\"result\":\"passed\"}\n\n$ git diff --stat -- 'packages/core/src/Support' 'packages/core/src/Data'\n(пусто)\n```\n\n---"
+    },
+    {
+      "id": "P3.6-Naming-gate-observational-config",
+      "title": "P3.6 — Naming gate и observational `config()`",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/high"
+    },
+    {
+      "id": "Naming-scripts-naming-gate.php",
+      "title": "Naming (`scripts/naming-gate.php`)",
+      "text": "- Скоуп: top-level типы в `extra.corex.public-api`; запрещённые exact/suffix — `P3-design.md` §8.1.\n- Снимок долга: `scripts/naming-gate-grandfather.json` — **1** FQCN (`CoreX\\Intl\\Data\\CurrencyInfo`).\n- Composer: `composer naming-gate`."
+    },
+    {
+      "id": "Config-composition-scripts-config-composition-gate.php",
+      "title": "Config composition (`scripts/config-composition-gate.php`)",
+      "text": "- Allowlist: `scripts/composition-boundary.json` (`blocking: false`; N12 для `Support/Config.php`).\n- На чистом дереве: **C1 count=45** (вне composition boundary); литеральных `config(` в `packages/*/src` — 146 (`RAG:—`, `rg`).\n- Composer: `composer config-composition-gate`."
+    },
+    {
+      "id": "8",
+      "title": "Негативные посадки (§8)",
+      "text": "```text\n$ php scripts/naming-gate.php  # с ProbeHelper в Contracts\nexit 1 · ProbeHelper.php · N1\n\n$ php scripts/config-composition-gate.php  # с ConfigCompositionProbe\nexit 0 · ConfigCompositionProbe.php · C1\n```"
+    },
+    {
+      "id": "Validation-6",
+      "title": "Validation",
+      "text": "```text\n$ php scripts/naming-gate.php\nexit 0 · grandfather=1\n\n$ php scripts/config-composition-gate.php\nexit 0 · C1 count=45 · blocking=false\n\n$ composer test:arch -- --filter=NamingAndConfig\n{\"result\":\"passed\",\"tests\":4}\n\n$ bash scripts/anti-weakening-gate.sh\nANTI-WEAKENING GATE: OK\n\n$ vendor/bin/pint --test scripts/naming-gate.php scripts/config-composition-gate.php tests/Arch/NamingAndConfigGateTest.php\n{\"result\":\"passed\"}\n```\n\nПримечание: корневой `composer lint:check` падает на `tests/Pest.php` (вне `Files` P3.6; см. handoff Open risks).\n\n---"
+    },
+    {
+      "id": "P3.7-A57-A61-A99-table-ownership-gate-T1-T2-T4",
+      "title": "P3.7 — A57/A61/A99 и table-ownership-gate (T1/T2/T4)",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/medium"
+    },
+    {
+      "id": "Arch-tests-Arch-AchievedInvariantTest.php",
+      "title": "Arch (`tests/Arch/AchievedInvariantTest.php`)",
+      "text": "- **A57:** `packages/attributes/src` без `CoreX\\Search\\` и `Meilisearch`.\n- **A61:** реализации `SearchProvider` в `search` / `search-meilisearch` без `Illuminate\\Database\\Eloquent`; контракты в отдельных файлах `Contracts/`.\n- **A99:** `TrustedContextResolver` не читает tenant/account из request; резолв через `$this->tenants->current()` (`RAG:—`)."
+    },
+    {
+      "id": "Table-ownership-scripts-table-ownership-gate.php",
+      "title": "Table ownership (`scripts/table-ownership-gate.php`)",
+      "text": "- **T1/T2:** каждый `Schema::create` в `packages/*/database/migrations` в каталоге P2.3; владелец строки = пакет миграции.\n- **T4:** `foreign()` / `constrained()` на таблицу другого владельца запрещены; исключение D102 (aut_role_assignments → users/wsp через raw SQL вне сканера); frozen platform refs `users` / `wsp_workspaces` из пакетов ≠ `corex/core` (CRM/tasks parity).\n- **DATA-003:** полный ORM-запрет не введён (D19) — только каталог + FK в миграциях.\n- Composer: `composer table-ownership-gate`."
+    },
+    {
+      "id": "9",
+      "title": "Негативные посадки (§9)",
+      "text": "```text\n$ php scripts/table-ownership-gate.php  # probe Schema::create zzz_probe\nexit 1 · T1 · 2099_01_01_000000_table_ownership_t1_probe.php\n\n$ php scripts/table-ownership-gate.php  # probe core FK → wsp_workspaces\nexit 1 · T4 · 2099_01_01_000001_table_ownership_t4_probe.php\n\n$ vendor/bin/pest --testsuite=Arch --filter=AchievedInvariant  # A57/A61/A99 probes\n10 passed (временные посадки сняты)\n```"
+    },
+    {
+      "id": "Validation-7",
+      "title": "Validation",
+      "text": "```text\n$ php scripts/table-ownership-gate.php\nexit 0 · 102 creates · catalog 99 rows\n\n$ composer test:arch -- --filter=AchievedInvariant\n{\"result\":\"passed\",\"tests\":10}\n\n$ bash scripts/anti-weakening-gate.sh\nANTI-WEAKENING GATE: OK\n\n$ git diff --stat -- packages/*/database\n(пусто)\n\n$ vendor/bin/pint --test scripts/table-ownership-gate.php tests/Arch/AchievedInvariantTest.php\n{\"result\":\"passed\"}\n```\n\nПримечание: корневой `composer lint:check` по-прежнему падает на `tests/Pest.php` (вне `Files` P3.7)."
+    }
+  ],
+  "applies_to": [
+    "P3"
+  ],
+  "provenance": {
+    "path": "findings/P3-gate-receipts.md",
+    "sha256": "0f614a0a63101dcd15ec213a212a8a1319a9bd24e46e40e8a1ce409e4e0312b0"
+  }
+}

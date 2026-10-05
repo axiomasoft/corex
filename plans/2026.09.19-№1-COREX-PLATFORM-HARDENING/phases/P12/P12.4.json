@@ -1,0 +1,255 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P12.4",
+  "title": "Vendor-neutral operation lifecycle and PSR-3 adapter",
+  "status": "done",
+  "summary": "Define typed started/completed/failed events with one immutable\noperation context, a no-op default and a safe structured PSR-3 projection.",
+  "why": "`@plan/knowledge/research-P12-design.json` §4; D62. Long operations currently expose no\ncommon duration/outcome/retry context, and raw exception logging would make the\ncontract unsafe and vendor-specific.",
+  "scope": {
+    "include": [
+      "`OperationObserver`; context and three event DTOs; closed terminal outcomes;\nidentifier validation; null observer; static-message PSR-3 adapter; sequence/redaction tests."
+    ],
+    "exclude": [
+      "OTel SDK, metrics, message trace propagation, automatic instrumentation;\nSLO/alerts; forcing short CRUD calls through the observer."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/phases/P12/P12.1.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P5/P5.2.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/artifacts-P12-design-rag-P12-Q2-observability.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P12/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P12-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D62.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Audit/Enums/ActorType.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P5-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "vendor/psr/log/src/LoggerInterface.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/core/src/Observability/Contracts/OperationObserver.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Observability/Data/OperationContext.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Observability/Data/OperationStarted.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Observability/Data/OperationCompleted.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Observability/Data/OperationFailed.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Observability/Internal/NullOperationObserver.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Observability/Internal/PsrLogOperationObserver.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/tests/Unit/OperationObserverTest.php",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Use exact fields/outcomes from §4. Started has event time; only terminal\nevents have duration. Attempt/duration cannot be negative. Failed adapter output includes only\ncode/category/path/retryability, never message, descriptor details or Throwable. Static log messages\nare exact. Adapter failure cannot change the observed business outcome. No global/static current span."
+  ],
+  "guidance": "Events are final readonly. Reuse one private context-to-array projector inside\nthe PSR adapter. Preserve account/workspace/actor/operation ids in log context but mark them forbidden\nfor metrics in docblocks. Null adapter methods are explicit no-ops.",
+  "validation": [
+    {
+      "id": "V1",
+      "procedure": "start/complete and start/fail share context; invalid ids, negative attempt/duration and unknown outcome fail; canary stays out of PSR-3",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "composer --working-dir=packages/core test",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "composer --working-dir=packages/core analyse",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "composer --working-dir=packages/core lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "vendor/bin/pest tests/Arch/CoreZoneTest.php",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Framework-neutral lifecycle contract, safe PSR-3 bridge, default null behavior and\nredaction/sequence proof."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-25T03:22:33Z",
+    "finished_at": "2026-09-25T03:27:20Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-run/cursor-grok-4.7/high",
+      "effort": "high"
+    },
+    "notes": "P12.4 GREEN: operation lifecycle, null observer, static PSR-3 projection. core pest 133/358, zone 8/33, phpstan 0, pint ok.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-09-25T03:27:20Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-25T03:27:20Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-25T03:27:20Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-25T03:27:20Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-25T03:27:20Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-25T03:27:20Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Define typed started/completed/failed events with one immutable\noperation context, a no-op default and a safe structured PSR-3 projection."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`@plan/knowledge/research-P12-design.json` §4; D62. Long operations currently expose no\ncommon duration/outcome/retry context, and raw exception logging would make the\ncontract unsafe and vendor-specific."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "`OperationObserver`; context and three event DTOs; closed terminal outcomes;\nidentifier validation; null observer; static-message PSR-3 adapter; sequence/redaction tests."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "OTel SDK, metrics, message trace propagation, automatic instrumentation;\nSLO/alerts; forcing short CRUD calls through the observer."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/phases/P12/P12.1.json`; `@plan/phases/P5/P5.2.json`;\n`@plan/knowledge/artifacts-P12-design-rag-P12-Q2-observability.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/core/src/Contracts/OperationObserver.php`;\n`packages/core/src/Observability/OperationContext.php`;\n`packages/core/src/Observability/OperationStarted.php`;\n`packages/core/src/Observability/OperationCompleted.php`;\n`packages/core/src/Observability/OperationFailed.php`;\n`packages/core/src/Observability/NullOperationObserver.php`;\n`packages/core/src/Observability/PsrLogOperationObserver.php`;\n`packages/core/tests/Unit/OperationObserverTest.php`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P12/phase.json`; 2) `@plan/knowledge/research-P12-design.json` §4;\n3) `@plan/decisions/D62.json`;\n4) `@plan/knowledge/artifacts-P12-design-rag-P12-Q2-observability.json`;\n5) `packages/core/src/Enums/ActorType.php`; 6) `@plan/phases/P12/P12.1.json`;\n7) `@plan/knowledge/research-P5-design.json` §2.5, §9.4; 8) `@plan/phases/P5/P5.2.json`;\n9) PSR-3 interface under installed `vendor/psr/log/src/LoggerInterface.php`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Use exact fields/outcomes from §4. Started has event time; only terminal\nevents have duration. Attempt/duration cannot be negative. Failed adapter output includes only\ncode/category/path/retryability, never message, descriptor details or Throwable. Static log messages\nare exact. Adapter failure cannot change the observed business outcome. No global/static current span."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Events are final readonly. Reuse one private context-to-array projector inside\nthe PSR adapter. Preserve account/workspace/actor/operation ids in log context but mark them forbidden\nfor metrics in docblocks. Null adapter methods are explicit no-ops."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Valid start→complete and start→fail sequences retain identical context; invalid ids,\nnegative attempt/duration and unknown outcome fail. In-memory PSR logger sees exact static messages\nand keys. A failure whose message/details contain a canary secret produces no canary. Null adapter\ndoes not throw. Core lint/analyse/test green and P6 zone gate recognizes every new path."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Framework-neutral lifecycle contract, safe PSR-3 bridge, default null behavior and\nredaction/sequence proof."
+    }
+  ]
+}

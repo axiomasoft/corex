@@ -1,0 +1,17 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P01.4-rag-http-02-action-pin",
+  "title": "Action pin verification",
+  "sections": [
+    {
+      "id": "Action-pin-verification",
+      "title": "Action pin verification",
+      "text": "- Date: 2026-09-28\n- Source: https://raw.githubusercontent.com/zizmorcore/zizmor-action/cc914d7f3750a2d13d75c7f184a1060aa0e9d482/action.yml\n- Tool: urllib GET\n- Response SHA-256: a14afe28dc3b8bd64850918381b8094f5daf3a6dc52d6277c9f60f15b07e7226\n- Checked: byte-identical to v0.6.4 capture http-01."
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P01.4-rag/http-02-action-pin.md",
+    "sha256": "c402166d8509655c77db5894f65af12bb3dd39374f54bf2c7f39731c897f6955"
+  }
+}

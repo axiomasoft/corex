@@ -1,0 +1,64 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "findings-P16-api-layout-receipt",
+  "title": "P16 API profile C layout receipt",
+  "sections": [
+    {
+      "id": "P16-API-profile-C-layout-receipt",
+      "title": "P16 API profile C layout receipt",
+      "text": "Resolved package path after P15.11: `packages/operations` (`corex/operations`). PHP namespace remains `CoreX\\Api`. FQCN set is identical before/after (165 classes). GraphQL sweep of `src` is empty.\n\nMechanical helper: `artifacts/P16-E16b-physical-moves.php`.\n\nPath-sensitive follow-ups (file contents otherwise unchanged except `ToolSchemaWorker` autoload depths): error-contract `source` paths, `AchievedInvariantTest` TrustedContextResolver path, `package-graph-gate.json` import files, `provider-size.json` ToolServiceProvider, API mutation patches, Bulk/Webhook test `__DIR__` requires.\n\n`extra.corex.public-api` unchanged: `CoreX\\Api\\Contracts`, `CoreX\\Api\\Data`.\n\nPostgreSQL package cases stay skipped unless `PGSQL_DATABASE` names an isolated `*_test` database (10 skipped / 257 passed on the sqlite package lane, same as P15). `composer dump-autoload -o --strict-psr` still exits 1 on pre-existing test doubles; production class count is 12196.\n\n---"
+    },
+    {
+      "id": "P16.4-operation-surface-batch-E16b-2026-09-27",
+      "title": "P16.4 — operation surface (batch E16b, 2026-09-27)",
+      "text": "**Profile:** C · **FQCN:** unchanged (D92 multi-prefix PSR-4) · **Actor:** plan-run / cursor-grok-4.6 / high · owner waived model-check\n\n99 `git mv` operations. Package root keeps `ApiServiceProvider.php`."
+    },
+    {
+      "id": "Use-case-span",
+      "title": "Use-case span",
+      "text": "| Context | After layout |\n|:--|:--|\n| Definition | `Definition/{Contracts,Data,Enums,Internal}` plus `Operation`, `OperationRegistry` |\n| Invocation | `Invocation/{Contracts,Data,Internal}` plus `OperationDispatcher`, `InvocationMetadata` |\n| Authorization | `Authorization/{Contracts,Internal}` |\n| Validation | `Validation/{Data,Internal}` |\n| Versioning | `Versioning/{Data,Internal}` |\n| Idempotency | `Idempotency/{Contracts,Data,Enums,Internal}` |\n| Pagination | `Pagination/{Contracts,Data,Internal}` |\n| Errors | `Errors/{Contracts,Internal}` plus `ApiError`, `OperationErrorBoundary` |\n| Http | `Http/Internal` plus `ApiController`, `DiscoveryController` |\n| OpenApi | `OpenApi/{Commands,Internal}` plus `OpenApiDocumentGenerator` |\n| Tools | `Tools/{Contracts,Data,Internal}` plus `ToolServiceProvider` |\n| Laravel | `Laravel/ApiSchemaRegistrar` + `Laravel/Support/ApiOptions` (Cost/Bulk/Webhook registrars left for successors) |\n\nCost/Bulk/Webhook layer files were left in `src/{Contracts,Data,Internal,Commands,Laravel}` for P16.5–P16.6."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "| Lane | Result |\n|:--|:--|\n| `packages/operations` lint:check | pass |\n| `packages/operations` analyse | 165 files, 0 errors |\n| `packages/operations` test | 257 passed, 10 skipped (PG env), 1741 assertions |\n| Contract snapshot `--check` | pass (ContractSnapshotTest) |\n| FQCN set vs preimage | identical |\n| GraphQL in `src` | empty |\n\n---"
+    },
+    {
+      "id": "P16.5-Cost-and-Bulk-batch-E16b-2026-09-27",
+      "title": "P16.5 — Cost and Bulk (batch E16b, 2026-09-27)",
+      "text": "34 `git mv` operations. Nested `Internal\\Cost` / `Internal\\Bulk` use longer PSR-4 prefixes (`src/Cost/Internal/`, `src/Bulk/Internal/`), matching the intl Money pattern."
+    },
+    {
+      "id": "Use-case-span-2",
+      "title": "Use-case span",
+      "text": "| Context | After layout |\n|:--|:--|\n| Cost | `Cost/{Contracts,Data,Internal,Laravel}` |\n| Bulk | `Bulk/{Contracts,Data,Enums,Internal,Commands,Laravel}` |"
+    },
+    {
+      "id": "Validation-2",
+      "title": "Validation",
+      "text": "| Lane | Result |\n|:--|:--|\n| lint:check / analyse | pass |\n| test | 257 passed, 10 skipped, 1741 assertions |\n| FQCN set | identical |\n| DDL | untouched |\n\n---"
+    },
+    {
+      "id": "P16.6-Webhooks-batch-E16b-2026-09-27",
+      "title": "P16.6 — Webhooks (batch E16b, 2026-09-27)",
+      "text": "30 `git mv` operations. `PruneApiOperations` moved to `Laravel/Commands` as the remaining package-wide retention command. Empty layer-first directories (`src/{Contracts,Data,Internal,Enums,Commands,Support}`) removed."
+    },
+    {
+      "id": "Use-case-span-3",
+      "title": "Use-case span",
+      "text": "| Context | After layout |\n|:--|:--|\n| Webhooks | `Webhooks/{Contracts,Data,Internal,Commands,Laravel}` |\n\nPackage root after P16.6: `ApiServiceProvider.php` plus context directories `Authorization`, `Bulk`, `Cost`, `Definition`, `Errors`, `Http`, `Idempotency`, `Invocation`, `Laravel`, `OpenApi`, `Pagination`, `Tools`, `Validation`, `Versioning`, `Webhooks`."
+    },
+    {
+      "id": "Validation-3",
+      "title": "Validation",
+      "text": "| Lane | Result |\n|:--|:--|\n| lint:check / analyse | pass |\n| test | 257 passed, 10 skipped, 1741 assertions |\n| GraphQL in `src` | empty |\n| FQCN set | identical (165) |\n| `git apply --check` on four API mutation patches | pass |"
+    }
+  ],
+  "applies_to": [
+    "P16"
+  ],
+  "provenance": {
+    "path": "findings/P16-api-layout-receipt.md",
+    "sha256": "d8442f337dd079d53c8171c0ce2513450a124ab90cf11e3c306a840cec182d5a"
+  }
+}

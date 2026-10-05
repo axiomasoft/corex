@@ -1,0 +1,46 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D108",
+  "title": "P1.2 has one explicit bounded multi-package metadata manifest",
+  "date": "2026-09-20",
+  "status": "accepted",
+  "decision": "The ordinary ≤8-files/one-package rule remains unchanged. P1.2 is the sole bounded\nexception: an explicit sorted manifest names exactly 20 existing package\n`composer.json` files plus `docs/architecture/taxonomy.md`, root `CHANGELOG.md`, and\n`@plan/knowledge/findings-P1-receipts.json`.\nWrites in package files are mechanically limited to `extra.corex`; expansion to an\nunlisted package/file fails. Validation compares the actual write set to the manifest\nand proves all non-`extra.corex` JSON bytes semantically unchanged.",
+  "rationale": "Splitting identical metadata into 20 sessions would multiply shared-context risk while\nthe wildcard hid the true scope. A finite manifest makes the exceptional scope honest\nand machine-checkable without weakening the default budget.",
+  "applies_to": [
+    "P1",
+    "P1.2"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/codex-gpt-5.6-sol/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D108\ndate: 2026-09-20\nstatus: accepted\nitem: P1.2\nitems: [P1, P1.2]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D108-P1.2-has-one-explicit-bounded-multi-package-metadata-manifest",
+      "title": "D108 — P1.2 has one explicit bounded multi-package metadata manifest",
+      "text": "**Actor:** plan-designer/codex-gpt-5.6-sol/high\n**Evidence:** `RAG:—` DA14 expands the wildcard to 20 package manifests plus two\nroot documents, exceeding the ordinary item file/package limits."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "The ordinary ≤8-files/one-package rule remains unchanged. P1.2 is the sole bounded\nexception: an explicit sorted manifest names exactly 20 existing package\n`composer.json` files plus `docs/architecture/taxonomy.md`, root `CHANGELOG.md`, and\n`@plan/knowledge/findings-P1-receipts.json`.\nWrites in package files are mechanically limited to `extra.corex`; expansion to an\nunlisted package/file fails. Validation compares the actual write set to the manifest\nand proves all non-`extra.corex` JSON bytes semantically unchanged."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Splitting identical metadata into 20 sessions would multiply shared-context risk while\nthe wildcard hid the true scope. A finite manifest makes the exceptional scope honest\nand machine-checkable without weakening the default budget."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P1.2 lists every path literally, includes the receipt in that manifest, and emits an\nexpanded-write-set receipt. No owner gate or authority grant is created."
+    }
+  ]
+}

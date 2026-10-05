@@ -6,6 +6,7 @@ namespace CoreX\Tests\Golden;
 
 use AzGuard\AzGuardServiceProvider;
 use CoreX\Access\CoreAuthServiceProvider;
+use CoreX\AccessAzguard\AccessAzguardServiceProvider;
 use CoreX\CoreServiceProvider;
 use CoreX\CustomFields\AttributesServiceProvider;
 use CoreX\Intl\IntlServiceProvider;
@@ -36,6 +37,7 @@ abstract class GoldenTestCase extends TestCase
         return [
             AzGuardServiceProvider::class,
             CoreAuthServiceProvider::class,
+            AccessAzguardServiceProvider::class,
             AttributesServiceProvider::class,
             CoreServiceProvider::class,
             CrmServiceProvider::class,

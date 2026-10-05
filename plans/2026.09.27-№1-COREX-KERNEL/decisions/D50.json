@@ -1,0 +1,46 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D50",
+  "title": "Точная ownership тестов после разделения operations",
+  "date": "2026-09-28",
+  "status": "accepted",
+  "decision": "- Все три кейса LoadContourIntegrationTest проверяют tool/webhook поведение: один переносится в ToolLoadContourIntegrationTest, два — в WebhookLoadContourIntegrationTest. Пустой engine файл удаляется; исходные утверждения и PG group сохранены.\n- Смешанный кейс client/actor/field/tenant authorization также принадлежит tools, поскольку проверяет отказ ToolInvoker. HTTP assertions остаются в том же кейсе через публичный transport.\n- Новые split-файлы непосредственно используют Orchestra с теми же провайдерами и isolated environment. Собственные TestCase tools/webhooks и 18 прежних TestCase рёбер остаются P02.3.\n- CountingHandler и HeadlessWrappedHandler используются исключительно tool-кейсами; точные строки карты относят их к tools. Текущие FQN и реализации сохранены. Общие ModuleFixture и LoadContourModule отображаются в Operations\\Testing (dest=src/Testing), как ContextFixture/IdentityFixture/NoteHandler по D35.\n- InvocationFixtures отдаёт прежние DefaultOperationInvoker/BudgetAdmission, SqlOperationBudget и DeclaredCostEstimator через публичные OperationInvoker/OperationBudget/OperationCostEstimator. Новые tool-кейсы не импортируют Internal engine.\n- Новые файлы получают точные строки карты. Package Testbench и Golden читают дополнительные providers из operations composer manifest, поэтому удаление manifest provider обнаруживается golden routes. Существующий engine TestCase не получает статического обратного ребра к webhooks.\n- WebhookRouteRegistrar использует ApiOptions и существующую Route facade; три obsolete baseline записи старого raw-config чтения удалены, потолки не увеличены.",
+  "rationale": "Реальное разделение обнаружило дополнительные shared test-support edges и кейсы с tool/webhook assertions, которые невозможно сохранить в engine после split. Точное владение, публичные Testing фабрики и прямой Testbench сохраняют поведение и нулевое число blocking seams без новых исключений графа.",
+  "applies_to": [
+    "P02.2",
+    "P02.3",
+    "P04"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "executor/codex/gpt-6-sol/high, routine author-choice по plan.md §2."
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D50\ndate: 2026-09-28\nstatus: accepted\nitem: P02.2\nitems: [P02.2, P02.3, P04]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D50-ownership-operations",
+      "title": "D50 — Точная ownership тестов после разделения operations",
+      "text": "**Actor:** executor/codex/gpt-6-sol/high, routine author-choice по @plan/plan.json §2.\n**Evidence:** RAG:— `artifacts/P02.2-execution/`; D31/D35 и examples §2.3."
+    },
+    {
+      "id": "Solution",
+      "title": "Solution",
+      "text": "- Все три кейса LoadContourIntegrationTest проверяют tool/webhook поведение: один переносится в ToolLoadContourIntegrationTest, два — в WebhookLoadContourIntegrationTest. Пустой engine файл удаляется; исходные утверждения и PG group сохранены.\n- Смешанный кейс client/actor/field/tenant authorization также принадлежит tools, поскольку проверяет отказ ToolInvoker. HTTP assertions остаются в том же кейсе через публичный transport.\n- Новые split-файлы непосредственно используют Orchestra с теми же провайдерами и isolated environment. Собственные TestCase tools/webhooks и 18 прежних TestCase рёбер остаются P02.3.\n- CountingHandler и HeadlessWrappedHandler используются исключительно tool-кейсами; точные строки карты относят их к tools. Текущие FQN и реализации сохранены. Общие ModuleFixture и LoadContourModule отображаются в Operations\\Testing (dest=src/Testing), как ContextFixture/IdentityFixture/NoteHandler по D35.\n- InvocationFixtures отдаёт прежние DefaultOperationInvoker/BudgetAdmission, SqlOperationBudget и DeclaredCostEstimator через публичные OperationInvoker/OperationBudget/OperationCostEstimator. Новые tool-кейсы не импортируют Internal engine.\n- Новые файлы получают точные строки карты. Package Testbench и Golden читают дополнительные providers из operations composer manifest, поэтому удаление manifest provider обнаруживается golden routes. Существующий engine TestCase не получает статического обратного ребра к webhooks.\n- WebhookRouteRegistrar использует ApiOptions и существующую Route facade; три obsolete baseline записи старого raw-config чтения удалены, потолки не увеличены."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "Реальное разделение обнаружило дополнительные shared test-support edges и кейсы с tool/webhook assertions, которые невозможно сохранить в engine после split. Точное владение, публичные Testing фабрики и прямой Testbench сохраняют поведение и нулевое число blocking seams без новых исключений графа."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "Перенос файлов и namespace существующих классов остаётся P02.3. Все Validation P02.2 выполняются в текущем attempt. Новые factory API additive; wire, route и event контракты остаются прежними.\n\n- Объявлен публичный Webhooks namespace провайдера. Для pre-transfer ownership принят закрытый список шести идентификаторов с точными source_files: новые команды/config/tags webhooks и два старых namespace новых классов. Строгий режим не использует список; он не меняет baseline и не разрешает тот же идентификатор в другом файле. Исключение исчезает при удалении/смене исходной декларации; P02.3/P02.4 удаляют записи после переноса/переименования. Отрицательная проверка дополнительного source file сохраняет RED.\n\n- Ownership scanner проверяет SplFileInfo перед чтением source path; четыре соответствующие obsolete baseline записи удалены. Typed planned-entry validation не добавляет PHPStan долг.\n\n- Автообнаружение WebhooksServiceProvider не включает engine routes: WebhookRouteRegistrar возвращается до ApiOptions, если ручной ApiServiceProvider ещё не зарегистрирован. Иначе новый manifest provider ломал установку пакета без явного opt-in engine. Отдельная regression проверяет boot standalone Application без ApiOptions."
+    }
+  ]
+}

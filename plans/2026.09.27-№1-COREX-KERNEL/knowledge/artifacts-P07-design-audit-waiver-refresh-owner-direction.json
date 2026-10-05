@@ -1,0 +1,17 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P07-design-audit-waiver-refresh-owner-direction",
+  "title": "Owner direction — CI ignored, audit waiver extended — 2026-10-04",
+  "sections": [
+    {
+      "id": "Owner-direction-CI-ignored-audit-waiver-extended-2026-10-04",
+      "title": "Owner direction — CI ignored, audit waiver extended — 2026-10-04",
+      "text": "Source: actual user messages in the current conversation (task:plan-run P07.1).\n\nThe owner wrote, twice, while P07.1 admission was blocked by hosted-CI state (D94 п.2):\n\n> изнорируй CI\n\nWhen asked (in Russian, with detail) how to proceed with the design-audit gate after the design fingerprint\nmoved 6c53c420… → 2a5b824d… (P06 close/D105 edits to @plan/plan.json), the owner selected the option:\n\n> Продлить waiver (рекомендую)\n\nThat option stated: record a new decision with the same waiver for the new fingerprint, citing the owner's D104\nphrase («аудит уже был, больше не надо»), run Task finish, then run P07.1; no new audits, reviews or subagents;\nhosted CI is ignored.\n\nScope: (1) the repeated whole-plan design audit is waived for the new fingerprint (not an audit-green verdict);\n(2) the D94 п.2 / P07 DoR start prerequisite «P06 GREEN on hosted CI» is not a gate for starting P07.1.\nNot waived: item Validation, producer dependencies, Routing, phase checkpoints, terminal admission, independent\nreviews required by the plan (Review P07)."
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P07-design-audit-waiver-refresh/owner-direction.md",
+    "sha256": "18e48f0f52541282fe5cfc4999195eca98b3f93e0466298c134f7419eb51caca"
+  }
+}

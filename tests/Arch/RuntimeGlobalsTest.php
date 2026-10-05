@@ -63,7 +63,7 @@ test('runtime globals gate exits 0 on a clean tree', function (): void {
 test('runtime globals baseline only holds the Impersonation zone', function (): void {
     $baseline = json_decode((string) file_get_contents(dirname(__DIR__, 2).'/scripts/runtime-globals-baseline.json'), true, flags: JSON_THROW_ON_ERROR);
 
-    expect($baseline)->not->toBeEmpty();
+    expect($baseline)->toBeArray();
 
     foreach (array_keys($baseline) as $path) {
         expect($path)->toStartWith('packages/tenancy/src/Impersonation/');
@@ -150,15 +150,32 @@ PHP);
 });
 
 test('runtime globals gate exits 1 with baseline exceeded when a baselined file gains a finding', function (): void {
+    $relative = 'packages/tenancy/src/Impersonation/Internal/RuntimeGlobalsProbe.php';
+    $probePath = dirname(__DIR__, 2).'/'.$relative;
     $baselinePath = sys_get_temp_dir().'/runtime-globals-baseline-'.bin2hex(random_bytes(4)).'.json';
-    $baseline = json_decode((string) file_get_contents(dirname(__DIR__, 2).'/scripts/runtime-globals-baseline.json'), true, flags: JSON_THROW_ON_ERROR);
-    $file = 'packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php';
-    $baseline[$file]['G2']--;
-    file_put_contents($baselinePath, json_encode($baseline, JSON_THROW_ON_ERROR));
+    file_put_contents($probePath, <<<'PHP'
+<?php
+
+declare(strict_types=1);
+
+namespace CoreX\Tenancy\Impersonation\Internal;
+
+final class RuntimeGlobalsProbe
+{
+    public function read(): mixed
+    {
+        return app('probe') ?? app('other');
+    }
+}
+PHP);
+    file_put_contents($baselinePath, json_encode([$relative => ['G2' => 1]], JSON_THROW_ON_ERROR));
 
     try {
         [$exitCode, $output] = runtimeGlobalsGate('--baseline='.$baselinePath);
     } finally {
+        if (is_file($probePath)) {
+            unlink($probePath);
+        }
         unlink($baselinePath);
     }
 

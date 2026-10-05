@@ -1,0 +1,24 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "research-P00-design-rag",
+  "title": "Внешние факты дизайна (синтез)",
+  "sections": [
+    {
+      "id": "P00",
+      "title": "P00 — Внешние факты дизайна (синтез)",
+      "text": "Внешние решения P00 — только правила именования/границ пакетов; все покрыты свежими (2026-09-27) captures верхнего слоя\n`artifacts/research-rag/`. Новых запросов нет — no-search record: `@plan/knowledge/artifacts-P00-design-rag-README.json` (B7: «не ищется —\nпокрытое свежими captures»).\n\n| # | Факт | Влияние на P00 | Источник |\n|:--|:--|:--|:--|\n| E1 | Пакет = независимая capability или шов интеграции, не «пакет на слой»; contracts не зависят от фреймворка | критерий пакета P00.1 (F1, F9); merge `modules` в ядро | RAG:✅ `@plan/knowledge/artifacts-research-rag-pplx-02-php-platform-kernels.json` §1 (Sylius, Shopware) |\n| E2 | Public API / Extension SPI / Internal — три разных обещания; документированные namespace | `CoreX\\Attributes\\{Api,Spi}` (F12), зарезервированный сегмент `Internal` | RAG:✅ pplx-02 §2; pplx-01 (Symfony BC promise) |\n| E3 | PHPStan ≥2.1.13 (bleeding edge) проверяет `@internal` по **top-level namespace**; при общем корне (`CoreX\\`) граница слишком широка — нужна явная карта владения пакетов (Deptrac/кастомное правило) | `namespace-map.tsv.new_package` + правило «один `seg` — один пакет» (§5 п.3) — вход для гейта владения P03/P04 | RAG:✅ `@plan/knowledge/artifacts-research-rag-pplx-10-phpstan-internal-api-attributes.json` (phpstan.org phpdocs-basics) |\n| E4 | Split-репозитории — зеркала монорепо; lockstep-теги; path repositories + `self.version` только для umbrella | package-map `new_dir` = каталог split; имена composer одинаково префиксованы | RAG:✅ `@plan/knowledge/artifacts-research-rag-pplx-11-monorepo-split-lockstep.json` (getcomposer.org) |\n| E5 | Vendor `corex` на Packagist занят сторонним владельцем; `axiomasoft` пуст | composer-имена `axiomasoft/corex[-<name>]` (D02) | RAG:✅ `@plan/knowledge/artifacts-research-rag-http-01-registry-probes.json` |\n\nОграничение: доступность конкретных имён `axiomasoft/corex-*` на Packagist не проверялась — vendor пуст (E5), публикация — owner-gate P09."
+    },
+    {
+      "id": "Audit-remediation-2026-09-27",
+      "title": "Audit remediation 2026-09-27",
+      "text": "A1–A5 исправлены по коду checkout `b624936` и локальным статическим примерам (RAG:—).\nНовых внешних предпосылок не добавлено; исходные captures переиспользуются.\nПроверки — `findings/design-remediation-checks.json`; независимый delta-review следует после finish."
+    }
+  ],
+  "applies_to": [
+    "P00"
+  ],
+  "provenance": {
+    "path": "research/P00-design-rag.md",
+    "sha256": "57d8e2749fadea360c844f0f74754856711f9870dfa1ca0d1b2570dfd7230375"
+  }
+}

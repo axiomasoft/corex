@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 use CoreX\Tests\Support\SourceScanner;
 
-// P6.2 — ten-zone arch gate (D32/D101). Matrix is copied from the design, not read at runtime.
+// P6.2 — zone arch gate (D32/D101). Matrix is copied from the design, not read at runtime.
+// Scheduling is the P07.5 kernel module and may import Foundation and tenancy contracts.
 // PubSub/ is Messaging by path. ALLOWED['Foundation'] stays empty.
 
 /**
@@ -22,6 +23,7 @@ const CORE_ZONE_ALLOWED = [
     'Features' => ['Foundation', 'TenancyContracts'],
     'Departments' => ['Foundation', 'TenancyContracts'],
     'Money' => ['Foundation', 'TenancyContracts'],
+    'Scheduling' => ['Foundation', 'TenancyContracts'],
 ];
 
 /** @var list<string> */
@@ -157,6 +159,7 @@ const CORE_ZONE_PREFIX = [
     'Messaging/' => 'Messaging',
     'Modules/' => 'Modules',
     'Money/' => 'Money',
+    'Scheduling/' => 'Scheduling',
     'Settings/' => 'Settings',
     'Storage/' => 'Storage',
     'Time/' => 'Foundation',

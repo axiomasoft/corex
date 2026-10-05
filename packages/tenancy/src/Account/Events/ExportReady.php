@@ -12,7 +12,7 @@ use CoreX\Messaging\Events\DomainEvent;
 use Override;
 
 /**
- * Fired by {@see CoreX\Tenancy\Provisioning\Internal\StanclTenantDatabaseLifecycle::export()} once the
+ * Fired by {@see CoreX\Tenancy\Provisioning\Internal\DatabaseTenantLifecycle::export()} once the
  * `root_account_exports` row reaches `status=ready` (B-11 §7.3). Built with
  * an explicit {@see TenantContext} — see {@see AccountPurged}'s docblock
  * for why.

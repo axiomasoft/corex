@@ -491,8 +491,8 @@ it('з: is_staff=false у предъявителя → 403', function (): void {
     callbackIM($state, $nonce)->assertStatus(403);
 });
 
-it('и: require_approved_by=true и approved_by=NULL → 403; approved_by задан → проходит', function (): void {
-    config(['tenancy.oidc.impersonation.require_approved_by' => true]);
+it('и: regulated profile requires a separate staff approver', function (): void {
+    config(['corex-tenancy.impersonation.profile' => 'regulated']);
     app()->forgetInstance(TenancyOptions::class);
 
     $account = initAccountWithTenantIM();
@@ -505,7 +505,7 @@ it('и: require_approved_by=true и approved_by=NULL → 403; approved_by зад
     wireOidcHttpIM($jwksDoc, $idTokenResponse);
 
     // approved_by = NULL → denied.
-    $deniedGrant = makeGrantIM($staffId, $account->id, ['approved_by' => null]);
+    $deniedGrant = makeGrantIM($staffId, $account->id, ['approved_by' => null, 'expires_at' => now()->addMinutes(20)]);
     $state1 = Str::random(40);
     $nonce1 = Str::random(40);
     $claims1 = baseClaimsIM($staffId, $account->id, $nonce1, ['imp' => $deniedGrant]);
@@ -513,8 +513,8 @@ it('и: require_approved_by=true и approved_by=NULL → 403; approved_by зад
     callbackIM($state1, $nonce1)->assertStatus(403);
 
     // approved_by set → passes.
-    $approverId = makeIdentityIM();
-    $approvedGrant = makeGrantIM($staffId, $account->id, ['approved_by' => $approverId]);
+    $approverId = makeStaffIdentityIM();
+    $approvedGrant = makeGrantIM($staffId, $account->id, ['approved_by' => $approverId, 'expires_at' => now()->addMinutes(20)]);
     $state2 = Str::random(40);
     $nonce2 = Str::random(40);
     $claims2 = baseClaimsIM($staffId, $account->id, $nonce2, ['imp' => $approvedGrant]);
@@ -743,7 +743,7 @@ it('я: revoked_at выставлен извне mid-session → следующ�
 });
 
 it('а: imp в токене при impersonation.enabled=false → 403 (регресс P2.22)', function (): void {
-    config(['tenancy.oidc.impersonation.enabled' => false]);
+    config(['corex-tenancy.oidc.impersonation.enabled' => false]);
     app()->forgetInstance(TenancyOptions::class);
 
     $account = initAccountWithTenantIM();

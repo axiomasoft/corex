@@ -1,0 +1,28 @@
+
+COMMAND: scripts/php84 php scripts/package-graph-gate.php
+HOST-RESERVED NAMESPACE: CoreX\SearchMeilisearch\ host=axiomasoft/corex-search owner=axiomasoft/corex-search-meilisearch — host-reserved adapter namespace; host defines zero classes under the prefix; class_counts={"axiomasoft/corex-search":0,"axiomasoft/corex-search-meilisearch":9}
+package-graph-gate: OK
+EXIT: 0
+
+COMMAND: scripts/php84 php scripts/runtime-globals-gate.php
+runtime-globals-gate: G1 0, G2 0, G3 0, G4 0, G5 0 outside baseline
+runtime-globals-gate: baseline files=0 findings=0 (prefix packages/tenancy/src/Impersonation/)
+runtime-globals-gate: OK
+EXIT: 0
+
+COMMAND: python3 scripts/module-layout-gate.py
+new R3 packages/core/src/Config/FqcnGraphProbe.php
+module-layout FAIL: 1364 files, 1 violations, 0 baselined, 1 new, 0 stale; R0 0, R1 0, R2 0, R3 1, R4 0, R5 0, R6 0
+EXIT: 1
+
+COMMAND: scripts/php84 composer php-api
+EXIT: 1
+Diagnostic: API-UNCLASSIFIED packages/core/src/Config/FqcnGraphProbe.php:7 (temporary negative probe from concurrent root tests).
+Full stdout preserved locally: build/p07.6-initial-gates.log
+Full stdout SHA-256: c5831dda8277f2c5f6d64624f67aa01b24b5c98d14a3067192fcb10738456314
+
+COMMAND: scripts/php84 composer test:arch
+> bash scripts/ci-deferred-guard.sh vendor/bin/pest --testsuite=Arch
+{"tool":"pest","result":"failed","tests":135,"passed":134,"assertions":445,"duration_ms":165250,"failed":1,"failures":[{"test":"P\\Tests\\Arch\\PackageGraphTest::__pest_evaluable_package_graph_gate_reports_no_violations","file":"/home/vostrikov/projects/packages/corex/tests/Arch/PackageGraphTest.php","line":15,"message":"gate exit 1:\nHOST-RESERVED NAMESPACE: CoreX\\SearchMeilisearch\\ host=axiomasoft/corex-search owner=axiomasoft/corex-search-meilisearch \u2014 host-reserved adapter namespace; host defines zero classes under the prefix; class_counts={\"axiomasoft/corex-search\":0,\"axiomasoft/corex-search-meilisearch\":9}\npackages/core/src/Config/PackageTypeR5Probe.php:7: Flex\\Crm\\Contracts\\X [R1] \u2192 flex/crm (undeclared cross-package dependency)\npackages/core/src/Config/PackageTypeR5Probe.php:7: Flex\\Crm\\Contracts\\X [R4] \u2192 flex/crm (\u0438\u043c\u043f\u043e\u0440\u0442 \u043d\u0435\u043f\u0443\u0431\u043b\u0438\u0447\u043d\u043e\u0433\u043e Flex\\Crm\\Contracts\\X \u0438\u0437 \u043f\u0430\u043a\u0435\u0442\u0430 flex/crm)\npackages/core/src/Config/PackageTypeR5Probe.php:7: Flex\\Crm\\Contracts\\X [R5] \u2192 flex/crm (axiomasoft/corex (foundation) \u043d\u0435 \u0432\u043f\u0440\u0430\u0432\u0435 \u0437\u0430\u0432\u0438\u0441\u0435\u0442\u044c \u043e\u0442 flex/crm (product))\npackage-graph-gate: 3 violation(s)\nFailed asserting that 1 is identical to 0."}]}
+Script bash scripts/ci-deferred-guard.sh vendor/bin/pest --testsuite=Arch handling the test:arch event returned with error code 1
+EXIT: 1

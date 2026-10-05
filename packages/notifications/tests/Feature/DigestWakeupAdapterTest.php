@@ -6,13 +6,10 @@ use CoreX\CoreServiceProvider;
 use CoreX\Data\Data\JsonDocument;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Notifications\Tests\TestCase;
+use CoreX\Scheduling\Contracts\WakeupScheduler;
 use CoreX\Settings\Contracts\SettingsRepository;
 use CoreX\Settings\Data\SettingsScope;
 use CoreX\Time\Testing\FrozenClock;
-use CoreX\Wakeup\Contracts\DueWakeupSweeper;
-use CoreX\Wakeup\Contracts\WakeupScheduler;
-use CoreX\Wakeup\Testing\WakeupFixtures;
-use CoreX\Wakeup\WakeupServiceProvider;
 use Psr\Clock\ClockInterface;
 
 uses(TestCase::class);
@@ -45,14 +42,14 @@ it('resolves wakeup from the isolated notifications composition without CoreServ
 
     $clock = app(ClockInterface::class);
 
-    expect($clock::class)->toBe(WakeupFixtures::systemClockClass())
+    expect($clock::class)->toBe(wakeup_bridge_system_clock())
         ->and($clock->now())->toBeInstanceOf(DateTimeImmutable::class)
         ->and($clock->now()->getTimezone()->getName())->toBe('UTC');
 
     bindDigestClockSettings();
 
     expect(app(WakeupScheduler::class))->toBeInstanceOf(WakeupScheduler::class)
-        ->and(app(DueWakeupSweeper::class))->toBeInstanceOf(DueWakeupSweeper::class)
+        ->and(app(wakeup_bridge_sweeper()))->toBeInstanceOf(wakeup_bridge_sweeper())
         ->and(app(ClockInterface::class))->toBe($clock);
 });
 
@@ -60,14 +57,14 @@ it('preserves a FrozenClock already bound beside the notifications wakeup compos
     $clock = new FrozenClock(new DateTimeImmutable('2026-03-04T05:06:07Z'));
     app()->instance(ClockInterface::class, $clock);
     app()->forgetScopedInstances();
-    (new WakeupServiceProvider(app()))->register();
+    wakeup_bridge_register_bindings();
 
     expect(app(ClockInterface::class))->toBe($clock);
 
     bindDigestClockSettings();
 
     app(WakeupScheduler::class);
-    app(DueWakeupSweeper::class);
+    app(wakeup_bridge_sweeper());
 
     expect(app(ClockInterface::class))->toBe($clock)
         ->and($clock->now()->format(DateTimeImmutable::ATOM))->toBe('2026-03-04T05:06:07+00:00');

@@ -1,0 +1,22 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-research-rag-pplx-04-stancl-tenancy-v4",
+  "title": "pplx-04 — stancl/tenancy v4 статус",
+  "sections": [
+    {
+      "id": "pplx-04-stancl-tenancy-v4",
+      "title": "pplx-04 — stancl/tenancy v4 статус",
+      "text": "- Tool: perplexity-web `search` · Date: 2026-09-27\n- Query: \"stancl/tenancy v4 release status September 2026: is tenancy v4 stable on Packagist, what version, Laravel 13 support, stancl/jobpipeline version\"\n- Status: provenance; подтверждается первичным источником http-01 (Packagist JSON)."
+    },
+    {
+      "id": "Answer-verbatim",
+      "title": "Answer (verbatim)",
+      "text": "\"Question\",\"Verified status\"\n\"Stable v4 on Packagist?\",\"No. Packagist lists v3.10.1, 3.x-dev, and dev-master, but no v4 release or v4 development branch. packagist\"\n\"Current stable tenancy version\",\"v3.10.1, published August 5, 2026. packagist\"\n\"Laravel 13 support\",\"Yes, in v3.10.1: its package requirements include illuminate/support and the dev Laravel framework constraint ^13.0. packagist\"\n\"stancl/jobpipeline\",\"Packagist’s newest version is v2.0.0-rc7, still a release candidate. The latest stable is v1.9.0. packagist\""
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/research-rag/pplx-04-stancl-tenancy-v4.md",
+    "sha256": "57ca4875dd92ccfd8a5dd0c24fb97cef9b261b2e3cc6c16c5d6160c7e21b650c"
+  }
+}

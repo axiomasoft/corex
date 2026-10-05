@@ -1,0 +1,32 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P07-design-rag-pplx-01-stancl-v4-status",
+  "title": "pplx-01 — stancl/tenancy v4 release status, license, 3.10 compatibility",
+  "sections": [
+    {
+      "id": "pplx-01-stancl-tenancy-v4-release-status-license-3.10-compatibility",
+      "title": "pplx-01 — stancl/tenancy v4 release status, license, 3.10 compatibility",
+      "text": "- Date: 2026-10-04\n- Tool: perplexity-web (`mcp__perplexity__search`, default settings)\n- Query: `stancl/tenancy v4 release status 2026: is version 4 published on Packagist as a stable tag, what license, and does stancl/tenancy 3.10 support Laravel 12 and Laravel 13?`"
+    },
+    {
+      "id": "Answer-verbatim",
+      "title": "Answer (verbatim)",
+      "text": ""
+    },
+    {
+      "id": "Status-as-of-October-4-2026",
+      "title": "Status as of October 4, 2026",
+      "text": "- Version 4 is not published as a stable Packagist release. Packagist lists v3.10.1 as the latest stable tag; it does not list a v4 tag. The v4 documentation still labels the version “WIP.”\n- License: MIT.\n- stancl/tenancy 3.10 supports both Laravel 12 and Laravel 13. Packagist’s v3.10.1 requirements include illuminate/support: ^10.0|^11.0|^12.0|^13.0 and, among development requirements, laravel/framework: ^10.0|^11.0|^12.0|^13.0.\nSo if you need a stable tagged release today, use 3.10.1; Laravel 12 and 13 are in its declared compatibility range.\n\nSources:\n1. [packagist](https://packagist.org/packages/stancl/tenancy)"
+    },
+    {
+      "id": "Verification",
+      "title": "Verification",
+      "text": "Confirmed by primary capture `http-01-packagist-stancl-azguard.md` (no v4 tag; v3.10.1 MIT; Laravel ^10–^13)."
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P07-design-rag/pplx-01-stancl-v4-status.md",
+    "sha256": "bceed3172e4df38d9a2607c3bff572bb0b3a4995bd6d3d7e0026a129647f6759"
+  }
+}

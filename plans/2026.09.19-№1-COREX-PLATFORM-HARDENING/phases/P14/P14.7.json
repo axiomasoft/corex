@@ -1,0 +1,250 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P14.7",
+  "title": "Transfer import cancellation and enforced limits",
+  "status": "done",
+  "summary": "Реализовать transfer import cancellation and enforced limits по замороженному дизайну P14.",
+  "why": "`@plan/knowledge/research-P14-design.json` §5.1; D78. Закрывает соответствующую строку\nacceptance/threat matrix §14 без переноса проектных решений в execution.",
+  "scope": {
+    "include": [
+      "Только нормативный срез §5.1, перечисленные ниже Files и\nпроверки: No next target call after cancellation at boundary; oversized source batch rejected before writes. Inject monotonic/memory values: limit rollback preserves checkpoint and is not swallowed by row catch. Dry run writes none; import resume/fence tests on PG."
+    ],
+    "exclude": [
+      "Остальные срезы P14; GraphQL; naming P15; новые runtime зависимости;\nlive rollout, внешние webhook sends и production migration/rotation."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D78"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P14-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D78.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P4/P4.8.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P14/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/transfer/README.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/transfer/src/Internal/Transfer/DatabaseTransferRunner.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/transfer/src/Contracts/CancellationSignal.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/transfer/src/Internal/Transfer/NeverCancelled.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/transfer/src/Internal/Transfer/ExecutionGuard.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/transfer/src/Internal/Transfer/TransferLimitReached.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/transfer/src/Internal/Transfer/DatabaseTransferRunner.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/transfer/tests/Feature/TransferLimitsTest.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/transfer/tests/Feature/TransferCancellationTest.php",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Нормативный текст и алгоритмы — `@plan/knowledge/research-P14-design.json` §5.1; D78. Сохранять predecessor contracts и public signatures; no new runtime dependencies. SQL validation требует изолированных SQLite и PostgreSQL; scalar scope/restorer не открывает произвольную tenant DB."
+  ],
+  "guidance": "`@plan/knowledge/research-P14-design.json` §15 задаёт общие safe codes/port shapes. Использовать точные DTO/подписи, state transitions, defaults и\nfailure rules §5.1. Новый interface только Contracts, implementation Internal,\nDTO final readonly. Время durable decisions — injected Clock; duration — monotonic.\nRequired Reads section-qualified; максимум 2500 строк, ≤14 inputs, ≤8 Files.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer lint:check",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "composer analyse",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "composer test",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "composer test:pg",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "Cancellation stops before the next read or target call, including dry-run",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "Oversized batch rejected before writes; runtime and memory limits roll back the checkpoint outside the row catch",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "Transfer package lint, static analysis, sqlite and PostgreSQL suites",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "Root lint, static analysis, sqlite and PostgreSQL suites",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Перечисленные Files реализуют §5.1; измеримые результаты\nValidation приложены к item receipt, включая команды, failures/skips и ограничения."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-25T13:55:23Z",
+    "finished_at": "2026-09-25T14:07:42Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-run/cursor-grok-4.7/high",
+      "effort": "high"
+    },
+    "notes": "P14.7 GREEN: import cancellation at the read boundary and runtime/memory limits roll the batch back without a row-failure swallow. transfer pest 8/24, pg 23/83, root pest 712/2931, root pg 235/1100, phpstan 0, pint ok.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-25T14:07:42Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-25T14:07:42Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-25T14:07:42Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-25T14:07:42Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-25T14:07:42Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Реализовать transfer import cancellation and enforced limits по замороженному дизайну P14."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`@plan/knowledge/research-P14-design.json` §5.1; D78. Закрывает соответствующую строку\nacceptance/threat matrix §14 без переноса проектных решений в execution."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Только нормативный срез §5.1, перечисленные ниже Files и\nпроверки: No next target call after cancellation at boundary; oversized source batch rejected before writes. Inject monotonic/memory values: limit rollback preserves checkpoint and is not swallowed by row catch. Dry run writes none; import resume/fence tests on PG."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Остальные срезы P14; GraphQL; naming P15; новые runtime зависимости;\nlive rollout, внешние webhook sends и production migration/rotation."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P14-design.json`; `@plan/decisions/D78.json`; `@plan/phases/P4/P4.8.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/transfer/src/Contracts/CancellationSignal.php`; `packages/transfer/src/Internal/Transfer/NeverCancelled.php`; `packages/transfer/src/Internal/Transfer/ExecutionGuard.php`; `packages/transfer/src/Internal/Transfer/TransferLimitReached.php`; `packages/transfer/src/Internal/Transfer/DatabaseTransferRunner.php`; `packages/transfer/tests/Feature/TransferLimitsTest.php`; `packages/transfer/tests/Feature/TransferCancellationTest.php`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P14/phase.json`; 2) `@plan/knowledge/research-P14-design.json` §5.1; 3) `@plan/decisions/D78.json`; 4) `@plan/phases/P4/P4.8.json`; 5) `packages/transfer/README.md`; 6) `packages/transfer/src/Internal/Transfer/DatabaseTransferRunner.php`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Нормативный текст и алгоритмы — `@plan/knowledge/research-P14-design.json` §5.1; D78. Сохранять predecessor contracts и public signatures; no new runtime dependencies. SQL validation требует изолированных SQLite и PostgreSQL; scalar scope/restorer не открывает произвольную tenant DB."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "`@plan/knowledge/research-P14-design.json` §15 задаёт общие safe codes/port shapes. Использовать точные DTO/подписи, state transitions, defaults и\nfailure rules §5.1. Новый interface только Contracts, implementation Internal,\nDTO final readonly. Время durable decisions — injected Clock; duration — monotonic.\nRequired Reads section-qualified; максимум 2500 строк, ≤14 inputs, ≤8 Files."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "No next target call after cancellation at boundary; oversized source batch rejected before writes. Inject monotonic/memory values: limit rollback preserves checkpoint and is not swallowed by row catch. Dry run writes none; import resume/fence tests on PG. Затронутый пакет: `composer lint:check`, `composer analyse`,\n`composer test`; root equivalents обязательны по plan.md. SQL paths дополнительно\nпакетный `composer test:pg` после isolation preflight; если script ещё не произведён\nP2, использовать его declared package PG lane, не считать отсутствие script успехом.\nNegative fixtures доказывают конкретный отказ. Непройденный check раскрывается."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Перечисленные Files реализуют §5.1; измеримые результаты\nValidation приложены к item receipt, включая команды, failures/skips и ограничения."
+    }
+  ]
+}

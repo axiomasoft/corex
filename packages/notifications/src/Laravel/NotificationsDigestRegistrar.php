@@ -15,7 +15,9 @@ use CoreX\Notifications\Digest\Internal\NotificationDigestDueSource;
 use CoreX\Notifications\Digest\Internal\SqlDigestBuilder;
 use CoreX\Notifications\Internal\NotificationsOptions;
 use CoreX\Notifications\Preferences\Contracts\PreferenceRepository;
-use CoreX\Wakeup\Contracts\WakeupScheduler;
+use CoreX\Scheduling\Contracts\DueWakeupSource;
+use CoreX\Scheduling\Contracts\WakeupScheduler;
+use CoreX\Scheduling\Data\WakeupHandlerDefinition;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
@@ -44,18 +46,19 @@ final class NotificationsDigestRegistrar implements PackageRegistrar
         ));
 
         if ($options->digestEnabled) {
-            $handlers = (array) $app->make(Repository::class)->get('corex-wakeup.handlers', []);
-            $handlers['notification.digest.v1'] = [
-                'handler' => DigestWakeupAdapter::class,
-                'version' => 'notification-digest/1',
-                'accept_legacy_unstamped' => $options->digestAcceptLegacyUnstamped,
-            ];
-            $app->make(Repository::class)->set('corex-wakeup.handlers', $handlers);
+            $app->singleton('corex.notifications.digest-wakeup-handler', static fn (Application $app): WakeupHandlerDefinition => new WakeupHandlerDefinition(
+                kind: 'notification.digest.v1',
+                handler: DigestWakeupAdapter::class,
+                version: 'notification-digest/1',
+                acceptLegacyUnstamped: $app->make(NotificationsOptions::class)->digestAcceptLegacyUnstamped,
+            ));
+            $app->tag('corex.notifications.digest-wakeup-handler', WakeupHandlerDefinition::TAG);
+            $app->tag(NotificationDigestDueSource::class, DueWakeupSource::TAG);
         }
 
         $app->scoped(DigestBuilder::class, static fn (Application $app): SqlDigestBuilder => new SqlDigestBuilder(
             connection: $app->make(DatabaseManager::class)->connection(),
-            wakeup: $app->make(WakeupScheduler::class),
+            wakeup: $app->make(NotificationsOptions::class)->digestEnabled ? $app->make(WakeupScheduler::class) : null,
             enabled: $app->make(NotificationsOptions::class)->digestEnabled,
             clock: $app->make(ClockInterface::class),
         ));
@@ -65,9 +68,6 @@ final class NotificationsDigestRegistrar implements PackageRegistrar
             handler: $app->make(DigestWakeupHandler::class),
         ));
 
-        if ($options->digestEnabled) {
-            $app->tag(NotificationDigestDueSource::class, 'corex.wakeup.due-sources');
-        }
     }
 
     #[Override]

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Data\Laravel\JsonDocuments;
-use CoreX\Wakeup\Contracts\DueWakeupHandler;
+use CoreX\Scheduling\Contracts\DueWakeupHandler;
+use CoreX\Scheduling\Contracts\WakeupScheduler;
+use CoreX\Scheduling\Data\WakeupDelivery;
+use CoreX\Scheduling\Data\WakeupRequest;
 use CoreX\Wakeup\Contracts\DueWakeupSweeper;
-use CoreX\Wakeup\Contracts\WakeupScheduler;
-use CoreX\Wakeup\Data\WakeupDelivery;
-use CoreX\Wakeup\Data\WakeupRequest;
 use CoreX\Wakeup\Internal\WakeupOptions;
 use CoreX\Wakeup\Tests\PgTestCase;
 use Illuminate\Support\Facades\DB;

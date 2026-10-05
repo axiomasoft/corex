@@ -1,0 +1,48 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D49",
+  "title": "Restorer не открывает БД из payload, а сверяет активное соединение",
+  "date": "2026-09-19",
+  "status": "accepted",
+  "decision": "1. P9 **не** превращает `DataScope::accountId` в разрешение открыть БД.\n   Tenancy должна быть инициализирована trusted caller'ом до `restore()`.\n2. P9.2 добавляет в `Tenancy/Runtime` обёртку `TenantContextRestorer`,\n   которая сначала делегирует semantic-сверку P4, затем сравнивает\n   `DataScope::connectionIdentity` с фактическим active tenant connection.\n3. Cloud identity — `driver:database`; boxed identity — `boxed:<accountId>`. Любое\n   расхождение даёт тот же fail-closed `ScopeContextMismatch`.\n4. Tenancy `RuntimeRegistrar` заменяет concrete контракта с\n   core `GuardedTenantContextRestorer` на tenancy-обёртку, сохраняя `scoped` lifetime.\n   Это единственная разрешённая binding-дельта P9.",
+  "rationale": "Автоматическое открытие БД по недоверенному payload смешало бы identity и\nauthority. Вызывающий sweeper/worker владеет выбором аккаунта; restorer\nдоказывает, что выбор совпал с payload и фактической БД.",
+  "applies_to": [
+    "P9",
+    "P9.1",
+    "P9.2",
+    "P9.8"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/codex-gpt-5.6-sol/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D49\ndate: 2026-09-19\nstatus: accepted\nitem: P9.2\nitems: [P9, P9.1, P9.2, P9.8]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D49-Restorer-payload",
+      "title": "D49 — Restorer не открывает БД из payload, а сверяет активное соединение",
+      "text": "**Actor:** plan-designer/codex-gpt-5.6-sol/high\n\n**Evidence:** `RAG:—` D22 даёт P9 два допустимых исхода: построить\nвладельчески безопасную инициализацию или явно оставить её вызывающей\nстороне; в обоих случаях P9 обязан сверить фактическую БД. `RAG:—`\nдва текущих `ScopeConnectionGuard` уже строят identity как\n`driver:database`, но дублируют правило."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "1. P9 **не** превращает `DataScope::accountId` в разрешение открыть БД.\n   Tenancy должна быть инициализирована trusted caller'ом до `restore()`.\n2. P9.2 добавляет в `Tenancy/Runtime` обёртку `TenantContextRestorer`,\n   которая сначала делегирует semantic-сверку P4, затем сравнивает\n   `DataScope::connectionIdentity` с фактическим active tenant connection.\n3. Cloud identity — `driver:database`; boxed identity — `boxed:<accountId>`. Любое\n   расхождение даёт тот же fail-closed `ScopeContextMismatch`.\n4. Tenancy `RuntimeRegistrar` заменяет concrete контракта с\n   core `GuardedTenantContextRestorer` на tenancy-обёртку, сохраняя `scoped` lifetime.\n   Это единственная разрешённая binding-дельта P9."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Автоматическое открытие БД по недоверенному payload смешало бы identity и\nauthority. Вызывающий sweeper/worker владеет выбором аккаунта; restorer\nдоказывает, что выбор совпал с payload и фактической БД."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P9.2 получает isolation tests: wrong account/workspace/boxed/database — red;\nверный cloud и boxed context — green; несуществующий account не вызывает lookup.\nP9.8 и receipt явно фиксируют одну binding-дельту и отсутствие\nсамоинициализации."
+    }
+  ]
+}

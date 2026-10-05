@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — wakeup suggest removed (P07.5)
+
+- The package no longer suggests `axiomasoft/corex-wakeup`. Materialization schedules through the kernel `CoreX\Scheduling\Contracts\WakeupScheduler` when that binding exists.
+
 ## Unreleased — typed Options and runtime configuration checks (P05.1)
 
 - Added internal `TasksWorkflowOptions` and a `RuntimeConfigCheck`: in `production`, `corex-tasks-workflow.wakeup.accept_legacy_unstamped=true` stops the process unless that exact path is acknowledged. `CaptureTaskCompletion` and `SqlTaskRecurrenceMaterializer` receive values instead of the config repository.

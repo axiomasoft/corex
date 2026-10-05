@@ -1,0 +1,42 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "findings-design-audit-2026-09-28",
+  "title": "PLAN3 — design audit P00–P01 — 2026-09-28",
+  "sections": [
+    {
+      "id": "PLAN3-design-audit-P00-P01-2026-09-28",
+      "title": "PLAN3 — design audit P00–P01 — 2026-09-28",
+      "text": "РЕЖИМ: независимый design audit; read-only над дизайном и продуктом, запись только результатов аудита.\nВХОД: завершённый `finalize-design --finish`, fingerprint `1f1ad5233e42abd67cea016617880637728cfadb095fd62eba1fec594f81c027`.\nСКОУП: детализированные фазы P00 и P01 (7 items), их зависимости и строки execution-sheet. Дельта риска — P01 и finish-правки `@plan/plan.json` / `@plan/plan.json` / `@plan/phases/P01/phase.json`. Контракты P00.1–P00.3, `@plan/knowledge/research-P00-design.json`, `@plan/knowledge/research-P00-design-rag.json` и `@plan/knowledge/artifacts-P00-design-examples.json` с коммита GREEN-аудита `5893436` не менялись.\nНЕ ТРОГАТЬ: продукт, нормативные спецификации и решения, PLAN2. Исполнение P01 не начато.\n\nВердикт: **ATTENTION** (`audit-attention`): 1 Blocker, 2 Major. Текущий дизайн не получает GREEN.\n\nАвтор: `cursor/grok-4.7/high`, независим от автора дизайна P01 `claude-opus-5-5/high` и от finish `codex/gpt-6-astra/high`.\nProvider session id этой сессии не захвачен. Checkout: рабочее дерево поверх `9a1b2a8` с незакоммиченным finish. Выводы ниже — `RAG:—`, кроме явно названных команд."
+    },
+    {
+      "id": "B1-Blocker-issue-golden-baseline",
+      "title": "B1 · Blocker · issue — golden сравнивает текущий код с уже переименованным baseline",
+      "text": "**Место:** [`@plan/knowledge/artifacts-P01-design-examples.json`](../artifacts/P01-design/examples.md) §3.3 (запись baseline и сравнение);\n[`@plan/decisions/D38.json`](../decisions/D38-golden-rename-normalizer.md) п.2;\n[`@plan/phases/P01/P01.2.json`](../phases/P01/P01.2.md) Validation.\n\nD38 задаёт `normalize(apply(rename-map, baseline)) == normalize(current)`.\n`GOLDEN_UPDATE=1` записывает в baseline снимок **текущего** кода, без применения карты.\n`RenameMap::apply` затем переписывает в этом снимке каждый точный FQCN `from → to`.\nНа P01 код ещё носит старые имена, а генератор уже содержит 666 правил `final != current`.\n\nВоспроизведение из корня репозитория (файл карты не пишется):\n\n```bash\npython3 plans/2026.09.27-№1-COREX-KERNEL/findings/design-audit-2026-09-28-repro.py\n```\n\nПервое class-правило: `CoreX\\Api\\ApiController` → `CoreX\\Operations\\Http\\ApiController`.\nПосле `apply` ключ baseline — новое имя, ключ current — старое. Равенство ложно.\nПри этом Validation P01.2 требует `scripts/php84 composer golden` → `Tests: 4 passed` до каких-либо переносов P02.\nИсполнитель, скопировавший скелет, не может закрыть item. Сетка, которая должна быть зелёной перед P02, красная на коде P01 и становится осмысленной только после переименований, которые сама же должна стеречь.\n\n**Исправление дизайна:** зафиксировать одну проекцию, которая зелёная и до переноса, и после него. Рабочий вид: при записи и при сравнении применять карту к **обеим** сторонам (baseline хранит уже спроецированный снимок, current тоже проходит через `apply`). Префиксная замена по-прежнему запрещена.\n**Owning continuation:** дизайн P01 / P01.2 и D38. Evidence: JSON `B1`."
+    },
+    {
+      "id": "B2-Major-issue-php-surface",
+      "title": "B2 · Major · issue — скелет php-surface не содержит полей, которые требует досье",
+      "text": "**Место:** [`@plan/knowledge/research-P01-design.json`](../research/P01-design.md) §4.2 п.2 (`constants` name→value-type, `properties`, `params.default?`);\n[`@plan/knowledge/artifacts-P01-design-examples.json`](../artifacts/P01-design/examples.md) вступление и §3.2 `phpSurface()`;\n[`@plan/phases/P01/P01.2.json`](../phases/P01/P01.2.md) Code Guidance.\n\nДосье перечисляет публичные properties (`name`, `type`, `static`, `readonly`) и константы как `name→value-type`, у параметров — `default?`.\nСкелет `phpSurface()` свойства не собирает, константы сводит к списку имён, у параметра хранит `optional` вместо значения по умолчанию.\nТот же файл примеров разрешает исполнителю менять скелет только в местах `ADAPT`. Code Guidance указывает копировать этот скелет.\nСледование скелету выпускает golden, который не видит смену типа публичного свойства или значения константы при P02/P03. Следование досье нарушает правило «только ADAPT».\n\n**Исправление дизайна:** привести скелет к списку полей досье и пометить недостающие поля как обязательные, не как свободную адаптацию.\n**Owning continuation:** дизайн P01 / P01.2. Evidence: JSON `B2`."
+    },
+    {
+      "id": "B3-Major-issue-Validation--exit-1",
+      "title": "B3 · Major · issue — Validation-команды завершаются exit 1 на корректном дереве",
+      "text": "**Место:** [`@plan/phases/P01/P01.1.json`](../phases/P01/P01.1.md) Validation (`grep -c stancl-providers`, `grep -rnE` PHP 8.3);\n[`@plan/phases/P01/P01.3.json`](../phases/P01/P01.3.md) Validation (`grep -rn` contour);\n[`@plan/phases/P01/P01.4.json`](../phases/P01/P01.4.md) Validation и [`@plan/knowledge/research-P01-design.json`](../research/P01-design.md) §4.4 шаг 2 (pinact `grep -vcE`).\n\nЭто тот же класс, что закрытый A3: носитель приёмки на правильном результате печатает ожидаемый текст и возвращает exit 1, потому что `grep` без совпадений (и `grep -c`/`-vc` при счёте 0) завершается 1.\n\nИзмерено:\n\n| Команда | stdout | exit |\n|:--|:--|:--|\n| `grep -c stancl-providers composer.json packages/tenancy/composer.json` | `composer.json:0`, `packages/tenancy/composer.json:0` | 1 |\n| полностью запиненный `uses:` \\| `grep -vcE '@[0-9a-f]{40} # v?[0-9]'` | `0` | 1 |\n| `grep -nE \"'8\\\\.3'\\|Boxed profile\"` по строке без этих токенов | пусто | 1 |\n\n`grep -L '^permissions: {}'` при совпадении во всех файлах даёт пустой stdout и exit 0; эта команда в finding не входит.\n\n**Исправление дизайна:** для каждого такого носителя задать команду с exit 0 на корректном дереве и exit 1 при нарушении (отдельная проверка счёта/пустоты, не голый `grep`).\n**Owning continuation:** дизайн P01 / P01.1, P01.3, P01.4. Evidence: JSON `B3`."
+    },
+    {
+      "id": "section",
+      "title": "Покрытие и проверки",
+      "text": "- `design-gate` до записи этого аудита: `PLAN_DESIGN_AUDIT_MISSING`, fingerprint совпал с finish.\n- Routing compiler: P01.1 `solo` implementation/high full; B01-B = P01.2 → P01.3 implementation/high full; P01.4 `solo` implementation/high full. Совпадает с тремя новыми строками execution-sheet. Reviewer `cursor/grok-4.7/high` ≠ executor `codex/gpt-6-sol/high`.\n- P00: specs и досье/примеры не менялись с `5893436`. В fingerprint добавлен только Phase Handoff закрытия в `@plan/phases/P00/phase.json` (статус и указатели на карты). Прежний GREEN A1–A5 на `e8524b9f64353b897decff9a8246fa85c39ae888a7a244fefe4369c3979b40c2` переиспользован для контрактов P00.1–P00.3. B00-A уже закрыт исполнением.\n- P02–P09 остаются backlog по D24.\n- `golden-rename-map.py` build() без записи: `666 class, 16 package, 3 ambiguous` — заявленные числа генератора верны; дефект B1 в том, как тест эти правила применяет.\n- Сырой вывод — [`design-audit-2026-09-28-evidence.json`](design-audit-2026-09-28-evidence.json).\n\nГраницы: PHP/DB-тесты и `plan-lint` продукта не запускались; lint finish уже был exit 0 и не опровергает B1–B3. Внешние версии стека (E1–E7) заново не сверялись: findings от них не зависят. Нет утверждения о полноте дизайна P02–P09."
+    },
+    {
+      "id": "section-2",
+      "title": "Продолжение",
+      "text": "Владелец исправления — дизайн P01: устранить B1–B3, затем `finish` и design audit нового fingerprint.\nПовторная оценка проверяет изменённые риски; неизменённые контракты P00 переиспользуются.\nТекущая команда заканчивается артефактом аудита. Исполнение P01.1 не допускается, пока design-gate этого fingerprint не GREEN.\n\n`validate_design_handoff_target(P01)` возвращает `PLAN_DESIGN_NOT_NEEDED`, потому что items уже детализированы. Машинный Next — `manual` с заданием исправить дизайн. Это не допуск `plan-run`."
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "findings/design-audit-2026-09-28.md",
+    "sha256": "b44543828a01761564f1e4d3d679802bafda40a8b77ef0965a37e331b6f799ef"
+  }
+}

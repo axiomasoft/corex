@@ -1,0 +1,12 @@
+candidate=90f21c877997ccd69055ccb5cdda1b7e5ebe9d01
+command=bash scripts/anti-weakening-gate.sh
+started=2026-10-05T07:08:40.523873+00:00
+ANTI-WEAKENING GATE: база сравнения = 1f42e01d10d21582746b31f89525f59e5ab024ff
+ANTI-WEAKENING GATE: golden baseline changed without a REBASELINE.md entry (90f21c877997ccd69055ccb5cdda1b7e5ebe9d01^ 90f21c877997ccd69055ccb5cdda1b7e5ebe9d01)
+ANTI-WEAKENING GATE: allowance НЕАКТИВНА (sqlite -4, D79, sha=97fdc77) — база сравнения не совпадает
+ANTI-WEAKENING GATE: allowance применена (sqlite -5, D95) — база совпадает 1f42e01d10d21582746b31f89525f59e5ab024ff
+ANTI-WEAKENING GATE: allowance применена (pg -1, D95) — база совпадает 1f42e01d10d21582746b31f89525f59e5ab024ff
+ANTI-WEAKENING GATE: тесты sqlite 1184 -> 1193, pg 665 -> 664
+ANTI-WEAKENING GATE: FAILED
+
+exit=1

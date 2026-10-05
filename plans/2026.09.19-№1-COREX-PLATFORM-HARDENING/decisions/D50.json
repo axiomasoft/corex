@@ -1,0 +1,49 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D50",
+  "title": "Identity атрибута — UUIDv7, а key изменяем",
+  "date": "2026-09-20",
+  "status": "accepted",
+  "decision": "Новые определения получают явный UUIDv7 `AttributeId`, независимый от entity/key.\nПереименование сохраняет id и повышает revision. Старые module definitions без id\nполучают deterministic UUIDv5 compatibility bridge и `legacy_identity=true`;\nпереименование/DB evolution запрещены до явного pin UUIDv7.",
+  "rationale": "Key — адрес для человека и API, поэтому меняется. Генерация canonical identity из key\nделает rename скрытым delete+create. UUIDv7 согласован с платформой и не требует новой\nruntime dependency.",
+  "applies_to": [
+    "P10",
+    "P10.1",
+    "P10.2",
+    "P10.3",
+    "P10.4"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/codex-gpt-5.6-sol/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D50\ndate: 2026-09-20\nstatus: accepted\nitem: P10.2\nitems: [P10, P10.1, P10.2, P10.3, P10.4]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D50-Identity-UUIDv7-key",
+      "title": "D50 — Identity атрибута — UUIDv7, а key изменяем",
+      "text": "**Actor:** plan-designer/codex-gpt-5.6-sol/high\n\n**Evidence:** `RAG:✅` RFC 9562 §5.7 стандартизует UUIDv7; Laravel 12 предоставляет\n`Str::uuid7()`; фактический ADR-003 CoreX уже использует UUIDv7 по умолчанию."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "Новые определения получают явный UUIDv7 `AttributeId`, независимый от entity/key.\nПереименование сохраняет id и повышает revision. Старые module definitions без id\nполучают deterministic UUIDv5 compatibility bridge и `legacy_identity=true`;\nпереименование/DB evolution запрещены до явного pin UUIDv7."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Key — адрес для человека и API, поэтому меняется. Генерация canonical identity из key\nделает rename скрытым delete+create. UUIDv7 согласован с платформой и не требует новой\nruntime dependency."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "`FieldSnapshot` additively несёт id/key/revision; `code` остаётся alias до P15.\nQ6 закрыт. Legacy bridge тестируется как ограничение, а не как второй канон."
+    }
+  ]
+}

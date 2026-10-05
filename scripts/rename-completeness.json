@@ -1594,11 +1594,6 @@
                 "match": "fqcn"
             },
             {
-                "old": "CoreX\\Tenancy\\StanclTenancyManager",
-                "new": "CoreX\\Tenancy\\Runtime\\Internal\\StanclTenancyManager",
-                "match": "fqcn"
-            },
-            {
                 "old": "CoreX\\Tenancy\\Support\\AccountLifecyclePolicy",
                 "new": "CoreX\\Tenancy\\Laravel\\Support\\AccountLifecyclePolicy",
                 "match": "fqcn"
@@ -3209,23 +3204,8 @@
                 "match": "fqcn"
             },
             {
-                "old": "CoreX\\Tenancy\\Provisioning\\StanclTenantDatabaseLifecycle",
-                "new": "CoreX\\Tenancy\\Provisioning\\Internal\\StanclTenantDatabaseLifecycle",
-                "match": "fqcn"
-            },
-            {
-                "old": "CoreX\\Tenancy\\Provisioning\\StanclTenantDatabaseProvisioner",
-                "new": "CoreX\\Tenancy\\Provisioning\\Internal\\StanclTenantDatabaseProvisioner",
-                "match": "fqcn"
-            },
-            {
                 "old": "CoreX\\Tenancy\\Runtime\\ConnectionGuardedTenantContextRestorer",
                 "new": "CoreX\\Tenancy\\Runtime\\Internal\\ConnectionGuardedTenantContextRestorer",
-                "match": "fqcn"
-            },
-            {
-                "old": "CoreX\\Tenancy\\Runtime\\StanclTenancyManager",
-                "new": "CoreX\\Tenancy\\Runtime\\Internal\\StanclTenancyManager",
                 "match": "fqcn"
             },
             {

@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\ProvisionParams;
+use CoreX\Tenancy\Account\Internal\DatabaseTenantProvisioner;
 use CoreX\Tenancy\Account\Internal\Models\Account;
-use CoreX\Tenancy\Account\Internal\StanclTenantDatabaseProvisioner;
 use CoreX\Tenancy\Provisioning\Exceptions\TemplateIntegrityException;
 use CoreX\Tenancy\Provisioning\Internal\ClusterAccountConnectionResolver;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Tests\TestCase;
-use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Support\Facades\DB;
@@ -151,7 +150,7 @@ it('creates an Account with a UUIDv7 key and typed custom columns', function ():
         'template_version' => 1,
         'embedding_model' => 'bge-m3',
         'embedding_dim' => 1024,
-        'meta_note' => 'falls into jsonb data',
+        'meta_note' => 'must be ignored',
     ]);
 
     expect($account->id)->toBeString()
@@ -161,7 +160,7 @@ it('creates an Account with a UUIDv7 key and typed custom columns', function ():
 
     $raw = DB::table('root_accounts')->where('id', $account->id)->first();
     expect($raw->status)->toBe('pending')
-        ->and($raw->data)->toContain('meta_note');
+        ->and($raw->data)->toBe('{}');
 });
 
 it('provisions a database by cloning the golden template via STRATEGY WAL_LOG, without Migrate/Seed', function (): void {
@@ -172,8 +171,7 @@ it('provisions a database by cloning the golden template via STRATEGY WAL_LOG, w
     $targetDb = DB::table('root_accounts')->where('id', $accountId)->value('db_name');
     trackDatabase($targetDb);
 
-    (new StanclTenantDatabaseProvisioner(
-        events: app(Dispatcher::class),
+    (new DatabaseTenantProvisioner(
         centralConnection: 'pgsql',
         templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
     ))->provision(new ProvisionParams(
@@ -213,8 +211,7 @@ it('re-provisioning an already-created database is idempotent (replayable pipeli
     $targetDb = DB::table('root_accounts')->where('id', $accountId)->value('db_name');
     trackDatabase($targetDb);
 
-    $provisioner = new StanclTenantDatabaseProvisioner(
-        events: app(Dispatcher::class),
+    $provisioner = new DatabaseTenantProvisioner(
         centralConnection: 'pgsql',
         templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
     );
@@ -239,8 +236,7 @@ it('refuses to clone a template that is not ready (template-parity gate, D24)', 
 
     $accountId = makeAccountRow($clusterId, ['template_version' => 2]);
 
-    expect(fn () => (new StanclTenantDatabaseProvisioner(
-        events: app(Dispatcher::class),
+    expect(fn () => (new DatabaseTenantProvisioner(
         centralConnection: 'pgsql',
         templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
     ))->provision(new ProvisionParams(
@@ -267,8 +263,7 @@ it('rejects an untrusted template before changing provisioning parameters or dis
     ]);
     $targetDb = DB::table('root_accounts')->where('id', $accountId)->value('db_name');
 
-    expect(fn () => (new StanclTenantDatabaseProvisioner(
-        events: app(Dispatcher::class),
+    expect(fn () => (new DatabaseTenantProvisioner(
         centralConnection: 'pgsql',
         templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
     ))->provision(new ProvisionParams(
@@ -299,8 +294,7 @@ it('fixes embedding_model/dim and other provisioning params onto the account row
     ]);
     trackDatabase(DB::table('root_accounts')->where('id', $accountId)->value('db_name'));
 
-    (new StanclTenantDatabaseProvisioner(
-        events: app(Dispatcher::class),
+    (new DatabaseTenantProvisioner(
         centralConnection: 'pgsql',
         templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
     ))->provision(new ProvisionParams(

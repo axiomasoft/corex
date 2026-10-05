@@ -1,0 +1,49 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D56",
+  "title": "Registry authority отделён от проекций и фабрик драйверов",
+  "date": "2026-09-20",
+  "status": "accepted",
+  "decision": "Authority code-level реестра — один compiled module snapshot.\n\n- `OperationRegistry`, tool/panel/attribute catalogues — typed projections. Они не\n  получают параллельные registration/freeze/fingerprint lifecycles.\n- P10 composite attributes catalogue сохраняет свой `schemaHash` и source\n  fingerprint: это data schema, а не дубль module registry.\n- `SearchManager` классифицируется как driver factory и исключается из\n  registry compile/freeze policy.\n- Compiler normal form разрешён только как internal IR. Он не становится\n  runtime God Registry и не выходит в public API.",
+  "rationale": "Требование freeze от любого класса с именем `Manager`/`Catalogue`\nпорождает фальшивые layers и не даёт дополнительной гарантии. Один\nauthority и проекции с явными live policy inputs дают проверяемую границу.",
+  "applies_to": [
+    "P11",
+    "P11.1",
+    "P11.2",
+    "P11.3",
+    "P11.8"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/codex-gpt-5.6-sol/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D56\ndate: 2026-09-20\nstatus: accepted\nitem: P11\nitems: [P11, P11.1, P11.2, P11.3, P11.8]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D56-Registry-authority",
+      "title": "D56 — Registry authority отделён от проекций и фабрик драйверов",
+      "text": "**Actor:** plan-designer/codex-gpt-5.6-sol/high\n**Evidence:** RAG:— `RegistryCompiler`/`CompiledRegistry` уже владеют module\ndeclarations; `OperationRegistry`, `CompiledToolCatalogue` и `RegistryFieldCatalogue`\nчитают этот snapshot; `ModulePanelCatalogue` собирает typed providers в\nконструкторе; `SearchManager` создаёт один драйвер по config и не несёт\ndeclaration catalogue."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "Authority code-level реестра — один compiled module snapshot.\n\n- `OperationRegistry`, tool/panel/attribute catalogues — typed projections. Они не\n  получают параллельные registration/freeze/fingerprint lifecycles.\n- P10 composite attributes catalogue сохраняет свой `schemaHash` и source\n  fingerprint: это data schema, а не дубль module registry.\n- `SearchManager` классифицируется как driver factory и исключается из\n  registry compile/freeze policy.\n- Compiler normal form разрешён только как internal IR. Он не становится\n  runtime God Registry и не выходит в public API."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Требование freeze от любого класса с именем `Manager`/`Catalogue`\nпорождает фальшивые layers и не даёт дополнительной гарантии. Один\nauthority и проекции с явными live policy inputs дают проверяемую границу."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P11.8 проверяет матрицу, но не переписывает search/panels/api/attributes.\nP13 может строить API profile как проекцию над frozen declarations, а не\nкак второй источник операций."
+    }
+  ]
+}

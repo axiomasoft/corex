@@ -1,0 +1,19 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "findings-P01.1-environment-preflight",
+  "title": "остановка на O-1 (2026-09-28)",
+  "sections": [
+    {
+      "id": "P01.1-O-1-2026-09-28",
+      "title": "P01.1 — остановка на O-1 (2026-09-28)",
+      "text": "Actor: executor/codex/gpt-6-sol/high. RAG:— (локальное окружение).\n\nСоздан `scripts/php84` дословно по `@plan/knowledge/artifacts-P01-design-examples.json` §1;\nисполняемый файл использует PHP 8.4 через PATH-шим в игнорируемом `build/`.\n\nПроверки:\n\n- `php8.4 -v`: PHP 8.4.26.\n- `scripts/php84 --check`: exit 1, `php84: MISSING: gmp`.\n- `dpkg-query -W php8.4-gmp`: пакет не установлен.\n- `/etc/php/8.4/mods-available/gmp.ini` и `/usr/lib/php/20240924/gmp.so`: отсутствуют.\n- `bash -n scripts/php84`: exit 0.\n- `scripts/php84 php -r 'echo PHP_VERSION, PHP_EOL;'`: 8.4.26, exit 0.\n\nЭто воспроизведённая граница полномочий, а не падение продукта:\n`@plan/phases/P01/P01.1.json` Implementation Rules требует остановиться при провале\nшагов 1–3; `@plan/knowledge/research-P01-design.json` §4.1 шаг 2 относит установку системного ПО\nк owner-gate O-1. Проверка dpkg/файлов исключает обратимое подключение уже\nустановленного расширения. Установку системного ПО владелец отдельно не разрешал.\n\n**Owner action:**\n\n```bash\nsudo apt install php8.4-gmp\n```\n\n**Возобновление:** после установки `scripts/php84 --check` должен вернуть\n`php84 OK: 8.4.x, extensions complete`; продолжить P01.1 с проверки O-2\n(§4.1 шаг 3), затем снять baseline до изменения манифестов.\n\nPostgreSQL, baseline, Composer install/update, тесты и независимое ревью ещё\nне выполнялись: runbook требует шаги 1–9 строго по порядку. Манифесты,\n`composer.lock` и продуктовый код не изменены."
+    }
+  ],
+  "applies_to": [
+    "P01.1"
+  ],
+  "provenance": {
+    "path": "findings/P01.1-environment-preflight.md",
+    "sha256": "7c4dab44d9dcaa9b765d58761eb848b780b8d2238bdf42075e6cdcafc838e094"
+  }
+}

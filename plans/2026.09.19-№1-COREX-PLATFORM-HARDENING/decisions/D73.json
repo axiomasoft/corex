@@ -1,0 +1,49 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D73",
+  "title": "Committed snapshots pin the installed code profile",
+  "date": "2026-09-20",
+  "status": "accepted",
+  "decision": "- P13 commits `openapi.json`, `operations.json`, `errors.json` and digest manifest\n  per major. `webhooks.json` is added by P14, not as an empty placeholder.\n- Snapshots describe installed code declarations, not tenant activation or effective\n  permissions. `operations.json` is behavioral authority; OpenAPI is HTTP projection.\n- A stdlib PHP gate rejects removals/tightening and pagination/error reinterpretation;\n  allowed optional additions pass. Each rule has a planted red fixture.\n- Generator and gate add no runtime dependency and exclude timestamps, host paths,\n  activation epochs and secrets.",
+  "rationale": "Tenant-specific snapshots are non-reproducible and leak availability. OpenAPI alone\ncannot encode idempotency, authorization layers or cursor compatibility.",
+  "applies_to": [
+    "P13",
+    "P13.10",
+    "P13.11",
+    "P13.12",
+    "P14"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/codex-gpt-5.6-sol/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D73\ndate: 2026-09-20\nstatus: accepted\nitem: P13\nitems: [P13, P13.10, P13.11, P13.12, P14]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D73-Committed-snapshots-pin-the-installed-code-profile",
+      "title": "D73 — Committed snapshots pin the installed code profile",
+      "text": "**Actor:** plan-designer/codex-gpt-5.6-sol/high\n**Evidence:** RAG:— current OpenAPI is deterministic but uncommitted; no operation or\nerror compatibility gate exists. RAG:✅ platform comparison supports pinned schemas\nbut does not make them a complete behavioral contract."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "- P13 commits `openapi.json`, `operations.json`, `errors.json` and digest manifest\n  per major. `webhooks.json` is added by P14, not as an empty placeholder.\n- Snapshots describe installed code declarations, not tenant activation or effective\n  permissions. `operations.json` is behavioral authority; OpenAPI is HTTP projection.\n- A stdlib PHP gate rejects removals/tightening and pagination/error reinterpretation;\n  allowed optional additions pass. Each rule has a planted red fixture.\n- Generator and gate add no runtime dependency and exclude timestamps, host paths,\n  activation epochs and secrets."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Tenant-specific snapshots are non-reproducible and leak availability. OpenAPI alone\ncannot encode idempotency, authorization layers or cursor compatibility."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P13.10 generates and commits the v1 baseline; P13.11 installs the gate. P14 extends\nthe same manifest with webhooks without changing P13 semantics."
+    }
+  ]
+}

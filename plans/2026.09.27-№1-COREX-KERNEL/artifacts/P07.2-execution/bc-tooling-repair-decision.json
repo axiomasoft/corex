@@ -1,0 +1,83 @@
+{
+  "record": {
+    "schema_version": "repair-decision/v1",
+    "plan_id": "2026.09.27-№1-COREX-KERNEL",
+    "item_id": "P07.2",
+    "origin": "validation",
+    "original_carrier": {
+      "command": "scripts/php84 composer bc-check",
+      "digest": "fd40f0309cd93e15f8b66e44ad9341ec4edb07487c56d2e275daa2a035b0148f",
+      "result": "red"
+    },
+    "baseline": {
+      "reproduced": false,
+      "carrier": null
+    },
+    "candidate": {
+      "delta_proved": true,
+      "evidence_ids": [
+        "artifacts/P07.2-execution/bc-tenancy-actual.log",
+        "artifacts/P07.2-execution/bc-historical-archive-proof.json"
+      ]
+    },
+    "affected_paths": [
+      {
+        "path": "scripts/bc-check.sh",
+        "owner_item": "P07.2",
+        "declared_file": true
+      },
+      {
+        "path": "scripts/bc/history-providers.py",
+        "owner_item": "P07.2",
+        "declared_file": false
+      },
+      {
+        "path": "scripts/bc/approved-deltas.json",
+        "owner_item": "P07.2",
+        "declared_file": false
+      }
+    ],
+    "bounded_diff": {
+      "files_changed": 3,
+      "max_files": 3,
+      "reversible": true
+    },
+    "material_surface": {
+      "public": false,
+      "frozen": false,
+      "security": false,
+      "schema": false,
+      "dependency": false,
+      "authority": false,
+      "irreversible": false,
+      "product": false,
+      "test_topology": false
+    },
+    "pre_validation": [
+      {
+        "command": "scripts/php84 composer bc-check",
+        "digest": "fd40f0309cd93e15f8b66e44ad9341ec4edb07487c56d2e275daa2a035b0148f",
+        "result": "red"
+      }
+    ],
+    "post_validation": [
+      {
+        "command": "scripts/php84 composer bc-check",
+        "digest": "fd40f0309cd93e15f8b66e44ad9341ec4edb07487c56d2e275daa2a035b0148f",
+        "result": "green"
+      }
+    ],
+    "evidence_ids": [
+      "artifacts/P07.2-execution/bc-check-parallel-final.log",
+      "artifacts/P07.2-execution/bc-finite-delta.json"
+    ],
+    "design": null
+  },
+  "evaluation": {
+    "action": "repair-in-current-attempt",
+    "terminal_allowed": false,
+    "reason_code": "BOUNDED_NONMATERIAL_REPAIR",
+    "repair_digest": "0f628de7fa1ec0569be12ce428efa6aa787dfa2298ac46a6c770e31486b0c926",
+    "post_validation_required": true
+  }
+}

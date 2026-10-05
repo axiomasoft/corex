@@ -1,6 +1,6 @@
 {
     "schema": "package-graph-report/1",
-    "generated_at": "2026-10-04T15:00:49+00:00",
+    "generated_at": "2026-10-05T13:44:03+00:00",
     "legacy_namespace_splits": [],
     "reservations": [
         {
@@ -14,21 +14,12 @@
             }
         }
     ],
-    "undeclared_dependency_exceptions": [
-        {
-            "from": "axiomasoft/corex-tasks-workflow",
-            "to": "axiomasoft/corex-wakeup",
-            "import_file": "packages/tasks-workflow/src/Internal/MaterializationWakeupHandler.php",
-            "adr": "P12.1",
-            "expires_when": "handler registration guarded in TasksWorkflowServiceProvider or axiomasoft/corex-wakeup promoted to require",
-            "reason": "DueWakeupHandler bridge wired only in tests; no runtime guard in product path (named exception per P12A.4)."
-        }
-    ],
+    "undeclared_dependency_exceptions": [],
     "public_api_exceptions": [],
     "violations": [],
     "summary": {
-        "packages_scanned": 21,
-        "classes_indexed": 1401,
+        "packages_scanned": 22,
+        "classes_indexed": 1421,
         "violation_count": 0,
         "legacy_split_count": 0,
         "reservation_count": 1

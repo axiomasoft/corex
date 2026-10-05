@@ -1,0 +1,2 @@
+> vendor/bin/pest --testsuite=Golden '--filter=php-surface'
+{"tool":"pest","result":"passed","tests":1,"passed":1,"assertions":1,"duration_ms":3455}

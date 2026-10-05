@@ -63,15 +63,14 @@ abstract class TestCase extends Orchestra
             CoreServiceProvider::class,
             // Core's scoped semantic restorer is decorated by tenancy (D49).
             // Testbench disables package discovery, so register both owners.
-            // The stancl provider is deliberately absent: the runtime is the
-            // package's own engine (PLAN3.D95) and must boot without it.
+            // The package owns its physical tenancy engine (PLAN3.D95).
             TenancyServiceProvider::class,
         ];
     }
 
     /**
-     * `TenancyServiceProvider::register()` reads `config('tenancy.oidc.
-     * enabled')` — populated from `config/tenancy.php`'s
+     * `TenancyServiceProvider::register()` reads `config('corex-tenancy.oidc.
+     * enabled')` — populated from `config/corex-tenancy.php`'s
      * `env('COREX_TENANCY_OIDC_ENABLED', false)` at `mergeConfigFrom()` time —
      * BEFORE Testbench's `defineEnvironment()` hook ever runs (Testbench's
      * `resolveApplicationBootstrappers()` calls `RegisterProviders::
@@ -109,7 +108,7 @@ abstract class TestCase extends Orchestra
             'path' => $this->runtimeFixtures.'/cache',
             'lock_path' => $this->runtimeFixtures.'/cache',
         ]);
-        $app['config']->set('tenancy.cache_stores', ['tenant_file']);
+        $app['config']->set('corex-tenancy.cache_stores', ['tenant_file']);
         $app['config']->set('session.driver', 'file');
         $app['config']->set('session.files', $this->runtimeFixtures.'/sessions');
         $app['config']->set('database.default', 'pgsql');
@@ -126,7 +125,7 @@ abstract class TestCase extends Orchestra
             'prefix' => '',
             'schema' => 'public',
         ]);
-        $app['config']->set('tenancy.host_identification.enabled', static::$hostIdentificationEnabled);
+        $app['config']->set('corex-tenancy.host_identification.enabled', static::$hostIdentificationEnabled);
 
         if (! static::$oidcEnabled) {
             return;
@@ -136,10 +135,10 @@ abstract class TestCase extends Orchestra
         // long after this method returns) — safe to set via config()->set()
         // here despite the register()-time gate above being too late for
         // the 'enabled' flag itself.
-        $app['config']->set('tenancy.oidc.issuer', 'https://idp.corex.test');
-        $app['config']->set('tenancy.oidc.client_id', 'oidc-test-client');
-        $app['config']->set('tenancy.oidc.client_secret', 'oidc-test-client-secret');
-        $app['config']->set('tenancy.oidc.redirect_uri', 'https://app.example.test/auth/callback');
+        $app['config']->set('corex-tenancy.oidc.issuer', 'https://idp.corex.test');
+        $app['config']->set('corex-tenancy.oidc.client_id', 'oidc-test-client');
+        $app['config']->set('corex-tenancy.oidc.client_secret', 'oidc-test-client-secret');
+        $app['config']->set('corex-tenancy.oidc.redirect_uri', 'https://app.example.test/auth/callback');
 
         // Stands in for the app-configured `auth.provider` a real consumer
         // would wire to axiomasoft/corex-access's `corex-principal` driver (D125) —
@@ -221,8 +220,8 @@ abstract class TestCase extends Orchestra
 
         DB::table('root_templates')->where('id', $templateId)->update(['schema_hash' => $schemaHash]);
         config([
-            'tenancy.template_integrity.trusted_keys' => ['test' => $base64Url(sodium_crypto_sign_publickey($keypair))],
-            'tenancy.template_integrity.manifests' => [
+            'corex-tenancy.template_integrity.trusted_keys' => ['test' => $base64Url(sodium_crypto_sign_publickey($keypair))],
+            'corex-tenancy.template_integrity.manifests' => [
                 $templateId => [
                     'payload' => $payload,
                     'signature' => $base64Url($signature),

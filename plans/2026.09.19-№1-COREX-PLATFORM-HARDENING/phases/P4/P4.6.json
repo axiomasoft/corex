@@ -1,0 +1,295 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P4.6",
+  "title": "Миграция конструирования в тестах `intl` и `transfer`",
+  "status": "done",
+  "summary": "Заменить `new DataScope(` на `DataScope::fromTenantContext(` в семи\nтестовых файлах пакетов `intl` и `transfer` — последних точках прямого\nконструирования в дереве.",
+  "why": "Флип P4.7 трогает только `packages/core` ровно потому, что к его\nмоменту прямого конструирования не остаётся нигде (D21). Оба пакета принимают\n`DataScope` только параметром и `$scope->context` не читают.",
+  "scope": {
+    "include": [
+      "семь файлов §3.3 дизайна (строка P4.6); receipt с итоговой\nпроверкой полноты по всему дереву."
+    ],
+    "exclude": [
+      "любые файлы `src` этих пакетов; поведение импортёров курсов\nи географии; lease/fence-логика `DatabaseTransferRunner` и её метки времени —\nзамена `now()` в `transfer` в P4 не выполняется (D23)."
+    ]
+  },
+  "depends_on": [
+    "P4.1"
+  ],
+  "decisions": [
+    "D21",
+    "D23"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P4-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P4/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Data/Data/DataScope.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/intl/tests/Money/MoneyRatesTest.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/intl/tests/Pg/RateImportConcurrencyTest.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/transfer/tests/Pg/DatabaseTransferRunnerTest.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/intl/tests/Money/MoneyRatesTest.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/intl/tests/Locale/LocaleResolutionTest.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/intl/tests/Reference/GeographyTest.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/intl/tests/Pg/ReferencePublicationTest.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/intl/tests/Pg/RateImportConcurrencyTest.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/transfer/tests/Pg/ExportPgTest.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/transfer/tests/Pg/DatabaseTransferRunnerTest.php",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P4-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Замена текстовая, без перестановки аргументов. Два\nпакета в одном item'е — та же названная причина, что в P4.5. Ни одно ожидание\nтестов не меняется. `packages/intl/tests/TestCase.php` и другие файлы, которые\nиспользуют `DataScope` только как тип параметра, не трогаются: правка касается\nисключительно точек конструирования."
+  ],
+  "guidance": "Форма замены — `@plan/knowledge/research-P4-design.json` §3.1; список файлов —\n§3.3, строка P4.6.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer test",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "composer test:pg",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "composer analyse",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "composer lint:check",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "rg -n 'new DataScope\\(' packages",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "cmd": "rg -n -- '->context' packages/*/src",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "intl+transfer composer test+test:pg",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "intl+transfer analyse+lint",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "procedure": "root composer analyse+lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "procedure": "rg new DataScope empty intl transfer and non-core",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V11",
+      "procedure": "rg scope->context packages src empty",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V12",
+      "procedure": "src diff empty intl transfer",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "семь тестовых файлов на именованном конструкторе; блок\nreceipt'а с двумя пустыми выводами `rg`, подтверждающими готовность к флипу."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "medium"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-21T14:10:00Z",
+    "finished_at": "2026-09-21T14:12:00Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/cursor-composer-2.5/medium",
+      "effort": "medium"
+    },
+    "notes": "P4.6 GREEN: intl+transfer tests fromTenantContext, flip-readiness rg in receipt §P4.6",
+    "deviations": [
+      "P4.6 GREEN: intl+transfer tests fromTenantContext, flip-readiness rg in receipt §P4.6"
+    ],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-21T14:12:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-21T14:12:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-09-21T14:12:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-09-21T14:12:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V11",
+        "exit": 0,
+        "at": "2026-09-21T14:12:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V12",
+        "exit": 0,
+        "at": "2026-09-21T14:12:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-21T14:12:00Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Заменить `new DataScope(` на `DataScope::fromTenantContext(` в семи\nтестовых файлах пакетов `intl` и `transfer` — последних точках прямого\nконструирования в дереве."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "Флип P4.7 трогает только `packages/core` ровно потому, что к его\nмоменту прямого конструирования не остаётся нигде (D21). Оба пакета принимают\n`DataScope` только параметром и `$scope->context` не читают."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "семь файлов §3.3 дизайна (строка P4.6); receipt с итоговой\nпроверкой полноты по всему дереву."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "любые файлы `src` этих пакетов; поведение импортёров курсов\nи географии; lease/fence-логика `DatabaseTransferRunner` и её метки времени —\nзамена `now()` в `transfer` в P4 не выполняется (D23)."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P4-design.json` §3.1, §3.3; результат P4.1; D21, D23."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/intl/tests/Money/MoneyRatesTest.php`; `packages/intl/tests/Locale/LocaleResolutionTest.php`; `packages/intl/tests/Reference/GeographyTest.php`; `packages/intl/tests/Pg/ReferencePublicationTest.php`; `packages/intl/tests/Pg/RateImportConcurrencyTest.php`; `packages/transfer/tests/Pg/ExportPgTest.php`; `packages/transfer/tests/Pg/DatabaseTransferRunnerTest.php`; `@plan/knowledge/findings-P4-receipts.json`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P4/phase.json`; 2) `@plan/knowledge/research-P4-design.json` §0, §3.1, §3.3; 3) `packages/core/src/Support/Data/DataScope.php`; 4) `packages/intl/tests/Money/MoneyRatesTest.php`; 5) `packages/intl/tests/Pg/RateImportConcurrencyTest.php`; 6) `packages/transfer/tests/Pg/DatabaseTransferRunnerTest.php`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Замена текстовая, без перестановки аргументов. Два\nпакета в одном item'е — та же названная причина, что в P4.5. Ни одно ожидание\nтестов не меняется. `packages/intl/tests/TestCase.php` и другие файлы, которые\nиспользуют `DataScope` только как тип параметра, не трогаются: правка касается\nисключительно точек конструирования."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Форма замены — `@plan/knowledge/research-P4-design.json` §3.1; список файлов —\n§3.3, строка P4.6."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "`composer test` и `composer test:pg` пакетов `intl` и\n`transfer` зелёные. `composer analyse`, `composer lint:check` зелёные.\nИтоговая проверка полноты миграции: `rg -n 'new DataScope\\(' packages`\nвозвращает пусто, `rg -n -- '->context' packages/*/src` не содержит ни одного\nобращения к `DataScope::$context`. Оба вывода обязаны попасть в receipt — они\nявляются входом P4.7."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "семь тестовых файлов на именованном конструкторе; блок\nreceipt'а с двумя пустыми выводами `rg`, подтверждающими готовность к флипу."
+    }
+  ]
+}

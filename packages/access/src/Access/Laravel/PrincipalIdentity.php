@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Access\Laravel;
 
-use AzGuard\Concerns\HasPermissions as HasPermissionsConcern;
-use AzGuard\Contracts\HasPermissions as HasPermissionsContract;
 use CoreX\Access\Contracts\Principal;
 use CoreX\Access\Enums\PrincipalType;
 use CoreX\Attributes\Spi;
@@ -14,20 +12,12 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Override;
 
 /**
- * Principal carrier for the AzGuard resolution chain (D101) — a user, agent
- * (B-13) or api_key, none of which need a `users` row (AC-25): the morph
- * class is the principal type itself, the auth identifier its uuid. Wires
- * AzGuard's own HasPermissions concern so DefaultAccessChecker::allowed()
- * asks the REAL public AzGuard path (premortem C1's round-trip), not a
- * private lookup.
- *
- * @corex-model-extension AzGuard HasPermissions grant resolution exposes its Permission collection.
+ * Authentication carrier for user, agent and api_key principals. The morph
+ * class is the principal type and the auth identifier is its UUID.
  */
 #[Spi(kind: SpiKind::Call, since: '1.0')]
-final class PrincipalIdentity implements Authenticatable, HasPermissionsContract, Principal
+final class PrincipalIdentity implements Authenticatable, Principal
 {
-    use HasPermissionsConcern;
-
     public function __construct(
         private readonly PrincipalType $type,
         private readonly string $id,
@@ -51,7 +41,7 @@ final class PrincipalIdentity implements Authenticatable, HasPermissionsContract
         return $this->id;
     }
 
-    /** AzGuard's grant sources (e.g. DatabaseRoleGrantSource) key on this — a plain string, not a class-string, for these non-Eloquent principals. */
+    /** A plain principal type, never an Eloquent class name. */
     public function getMorphClass(): string
     {
         return $this->type->value;

@@ -1,0 +1,22 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P04.1-execution-scanner-contract",
+  "title": "PLAN3.P04.1 scanner contract",
+  "sections": [
+    {
+      "id": "PLAN3.P04.1-scanner-contract",
+      "title": "PLAN3.P04.1 scanner contract",
+      "text": "Executor: codex/gpt-6-astra/high, provider-thread-state. Scope: D63, D64, P04.1.\n\nThe source owner is `CoreX\\Attributes\\Internal\\SurfaceScanner`; CLI and generated documentation\nconsume its immutable SurfaceReport. Metadata classes have no parser dependency. The declared\nPHPDoc development dependency was synchronized through Composer with no unrelated updates.\n\nDiscovery uses production Composer paths plus configuration, not installed package classmaps.\nNamed types have unique case-insensitive ownership; products are consumers only. Source ASTs\nresolve attributes, imports, native types, inherited signatures, PHPDoc generic/shape/alias/template\nand virtual members. Diagnostics carry file, line, symbol and nested path. Source is not executed.\nVendor sources and internal PHP reflection resolve inherited members; unsupported adaptations,\ncycles and unknown types fail closed. Public/protected filtering happens after inheritance.\n\n`php-api/1` records preserve parameter names/order/defaults, flags, properties and hooks, enum\nbacking/cases, constants and resolved PHPDoc. Bodies/prose, absolute paths, timestamps and Git\nidentities do not enter manifests. CLI report/strict/write/check semantics and field schema are\nin `docs/reference/php-api-schema.md`. Report exit 0 is not strict success.\n\nTests plant classification, metadata, model/collection/internal payload, nested generic/alias,\nunknown/malformed doc, consumer implementation, duplicate ownership, stale snapshot, config\nclass-string, mutation/default/enum, immutable data, inheritance and property-hook cases.\nAll inspect observable diagnostics or bytes; scanner fixtures live only in random temporary trees."
+    },
+    {
+      "id": "Integration-repairs-discovered-by-required-checks",
+      "title": "Integration repairs discovered by required checks",
+      "text": "- `phpunit.xml`: register the new package-local Attributes directory; otherwise root filtering\n  never runs it. Composer's two-command test script now passes filters to the first command and\n  always runs the separate TasksWorkflow suite. No suite is removed.\n- `tests/Arch/CoreZoneTest.php`: seven exact new files join Foundation, whose outward dependency\n  allowance remains empty. The module-layout baseline remains exactly 159 records, byte unchanged.\n- `scripts/rename-completeness-gate.php`: D63 reclaims precisely the two namespace declaration\n  tokens Attributes and Attributes/Internal. Every old custom-fields FQCN/child namespace remains\n  forbidden. An isolated Git fixture proves both positive namespace cases and old-symbol negatives.\n- `pint.json`: exclude only the immutable, digest-bound P04 design inventory script, which was\n  already unformatted at the input commit. Its bytes and input-manifest hash remain unchanged;\n  production/test/tooling lint rules and quality ceilings remain unchanged.\n- The old namespace graph remains operational; only the three metadata FQCNs join the existing\n  public-api list. Source scanner does not replace R1–R5 or trust a previously generated JSON.\n\nGolden delta: exactly seven added Attribute/tooling records, no changed/removed existing record\n(after the existing rename projection). Candidate generation used an isolated checkout. Only\nphp-surface additions are proposed; routes/events/wire and promoted-fixtures remain byte-identical.\nPreimages, candidate, and semantic delta are preserved alongside this contract.\n\nThe initial full test attempt hit four schema worker timeouts while concurrent analysis and\nother host workloads were active. The seven affected tests and the complete serial SQLite run\nthen passed without application changes. Timings are retained in validation evidence."
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P04.1-execution/scanner-contract.md",
+    "sha256": "5ad51f2a0b27233aef479297613e373bf2c31d3923ff2344b03542ead238e480"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "research-P3-design-rag",
+  "title": "Внешние подтверждения фазы P3 — 2026-09-19",
+  "sections": [
+    {
+      "id": "P3-2026-09-19",
+      "title": "Внешние подтверждения фазы P3 — 2026-09-19",
+      "text": "Сводка шести запросов детализации P3 с привязкой к параграфам `P3-design.md`.\nСырые ответы и точные строки запросов — `../artifacts/P3-design-rag/`\n(`manifest.json` несёт статусы, первичные источники и SHA256 файлов захвата).\n\nПравило чтения: `RAG:✅` — внешний источник подтверждает **названную общую практику**.\nВывод «поэтому в CoreX так» — всегда локальный (`RAG:—`), из кода и измерений.\nНи один ответ не является спецификацией CoreX."
+    },
+    {
+      "id": "1.",
+      "title": "1. Что подтвердилось и где это применено",
+      "text": "| ID | Что подтверждено | Первичный источник | Применено в |\n|:--|:--|:--|:--|\n| P3-Q1 | Deptrac/PHPat не дают класс правил, недоступный PHPStan+графу; ценность — DSL и отчёт, не новая семантика | deptrac concepts · phpat.dev/rules · phpstan.org/developing-extensions/rules | D17, `P3-design.md` §2 |\n| P3-Q1 | Сканер одних `use`-строк не видит FQCN без импорта, `extends`/`implements`, vendor-coupling | deptrac concepts / collectors | `P3-design.md` §4 (extractor) |\n| P3-Q2 | Roave 8.22.0 — reflection-дифф двух git-ревизий по Composer-autoload, не changelog-guard | packagist · GitHub README | D18, `P3-design.md` §6 |\n| P3-Q2 | В монорепо дефолтный «последний тег репозитория» недостаточен | README Roave | wrapper per-package, merge-base |\n| P3-Q3 | PHPStan 2.x Rule: узкий AST-узел, `RuleErrorBuilder::identifier`, `RuleTestCase` с фикстурой | phpstan.org/developing-extensions/rules · apiref 2.1 | `P3-design.md` §7 |\n| P3-Q3 | Deny-list на свойствах маркера; класс без маркера молчит; promoted properties в фикстуре | тот же | негативная проверка P3.5 |\n| P3-Q4 | Гейт без посадки нарушения и проверки filename — не fitness function | nealford.com · thoughtworks fitness functions | инвариант §0 п.4; все items |\n| P3-Q5 | `class-leak` ≠ «случайно публичный»; предикат public-api / Internal / `@internal` валиден | phpstan phpdocs-basics · method.internal · class-leak README | D17, R4b §5.2 |\n| P3-Q6 | Roave 8.22 не ставится на PHP 8.3; checker и runtime пакета — разные оси | packagist 8.22.0 constraint | D18, CI-джоб на 8.4 |\n| P2-Q5 | Fitness function называет свойство, измерение, порог, реакцию (наследуется) | nealford / thoughtworks, захват P2 | форма негативной проверки |\n| P1-Q3 | Нативный `@internal` привязан к корню неймспейса (наследуется) | phpstan discussions, захват P1 | D12 сохранён, в P3 не пересматривается |"
+    },
+    {
+      "id": "2.",
+      "title": "2. Что НЕ подтвердилось внешне",
+      "text": "| Пробел | Статус | Как несёт дизайн |\n|:--|:--|:--|\n| Обязательность Deptrac именно как Composer-зависимости границ | не требуется источником | D17: критерий Q5 не выполнен |\n| Эквивалентность class-leak и R4b | источник прямо против | R4b — предикат намерения API, class-leak не вводится |\n| Поведенческий BC (смена семантики при той же сигнатуре) | Roave не покрывает | честно названо пределом D18; contract-guard + P13 snapshot |\n| Числовой порог «контур PHPStan полон» | нет внешней нормы | N03 измеряется по дереву: пакет в `paths` и зелёный `analyse` |"
+    },
+    {
+      "id": "3.",
+      "title": "3. Дефект провайдера",
+      "text": "Известный дефект P1 (ответ, начинающийся с таблицы, усекается) на этой фазе\n**не повторился**: все шесть ответов начаты прозой по явной просьбе в запросе.\nТаймаутов MCP не было."
+    },
+    {
+      "id": "4.",
+      "title": "4. Что внешнее подтверждение изменило в форме фазы",
+      "text": "**(1) P3-Q1 → D17.** Эскиз и DoR фазы оставляли Q5 открытым. Источник не дал\nправила, которого нельзя выразить гейтом+PHPStan после починки парсера.\nВнешний инструмент не вводится. Слепое пятно чинится tokenizer'ом (D16→P3.2).\n\n**(2) P3-Q5 → R4b без class-leak.** D4 упоминал class-leak как улику возможности.\nИсточник развёл два вопроса. Вторая dev-зависимость сверх D4 не нужна.\n\n**(3) P3-Q2/Q6 → D18.** Roave принимается, но не в матрице 8.3 и не как blocking\nна `experimental`. Иначе P15 упрётся в красный BC-гейт или обойдёт его.\n\n**(4) P3-Q4 → инвариант негативной проверки.** Уже был в скелете фазы (урок\nPLAN1 P12.3); источник подтвердил, что filename в красном выводе — часть\nприёмки, не украшение."
+    }
+  ],
+  "applies_to": [
+    "P3"
+  ],
+  "provenance": {
+    "path": "research/P3-design-rag.md",
+    "sha256": "bd3248f8b9265ca0aa8859ec4477f8b17cc5dc644be855d3a31614efae0d7063"
+  }
+}

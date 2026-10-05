@@ -1,0 +1,8 @@
+{
+  "context_tokens": 500000,
+  "cwd": "/home/vostrikov/projects/packages/corex",
+  "effort": "high",
+  "model": "grok-4.7",
+  "session_id": "01a10b1b-f36b-7041-a839-f6ccaf24dad9",
+  "source": "/home/vostrikov/.grok/sessions/%2Fhome%2Fvostrikov%2Fprojects%2Fpackages%2Fcorex/01a10b1b-f36b-7041-a839-f6ccaf24dad9/summary.json"
+}

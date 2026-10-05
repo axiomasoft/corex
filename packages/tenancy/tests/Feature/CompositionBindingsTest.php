@@ -11,9 +11,9 @@ use CoreX\Context\Contracts\TenantDatabaseLifecycle;
 use CoreX\Context\Internal\NullImpersonationService;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Storage\Contracts\TenantStorage;
+use CoreX\Tenancy\Account\Internal\DatabaseTenantProvisioner;
 use CoreX\Tenancy\Account\Internal\Lifecycle\AccountLifecycle;
 use CoreX\Tenancy\Account\Internal\PendingPool;
-use CoreX\Tenancy\Account\Internal\StanclTenantDatabaseProvisioner;
 use CoreX\Tenancy\Account\Laravel\MigrationWaveOrchestrator;
 use CoreX\Tenancy\Authentication\Internal\Http\Controllers\LogoutController;
 use CoreX\Tenancy\Authentication\Internal\Http\Controllers\OidcLoginController;
@@ -41,7 +41,7 @@ use CoreX\Tenancy\Laravel\WakeupRegistrar;
 use CoreX\Tenancy\Laravel\WorkspaceRegistrar;
 use CoreX\Tenancy\Provisioning\Internal\Database\SchemaCatalogueSerializer;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityLock;
-use CoreX\Tenancy\Provisioning\Internal\StanclTenantDatabaseLifecycle;
+use CoreX\Tenancy\Provisioning\Internal\DatabaseTenantLifecycle;
 use CoreX\Tenancy\Runtime\Internal\ConnectionGuardedTenantContextRestorer;
 use CoreX\Tenancy\Runtime\Internal\DatabaseTenancyManager;
 use CoreX\Tenancy\Runtime\Internal\QueueTenantContext;
@@ -107,19 +107,19 @@ it('keeps Provisioning register bindings on the measured key, concrete and lifet
     $app = $this->app;
     $this->assertSingletonBinding(
         $app,
-        StanclTenantDatabaseProvisioner::class,
-        StanclTenantDatabaseProvisioner::class,
+        DatabaseTenantProvisioner::class,
+        DatabaseTenantProvisioner::class,
     );
     $this->assertSingletonBinding($app, PendingPool::class, PendingPool::class);
     $this->assertSingletonBinding(
         $app,
-        StanclTenantDatabaseLifecycle::class,
-        StanclTenantDatabaseLifecycle::class,
+        DatabaseTenantLifecycle::class,
+        DatabaseTenantLifecycle::class,
     );
     $this->assertSingletonBinding(
         $app,
         TenantDatabaseLifecycle::class,
-        StanclTenantDatabaseLifecycle::class,
+        DatabaseTenantLifecycle::class,
     );
     $this->assertScopedBinding($app, AccountLifecycle::class, AccountLifecycle::class);
     $this->assertSingletonBinding(

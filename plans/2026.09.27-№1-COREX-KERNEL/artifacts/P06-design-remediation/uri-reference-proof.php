@@ -61,7 +61,16 @@ REGEX;
     }
 }
 
-$cases = [['corex/relay',true],['./1:foo',true],['urn:corex:source',true],['https://example.test/a%20b?q=x#f',true],['https://[::1]/',true],['https://[2001:db8::1]:443/a',true],['https://[::ffff:192.0.2.1]/',true],['https://[v1.a:b]/',true],['%',false],['%zz',false],['a%2',false],['1:foo',false],['http://[not-ip]/',false],['https://[::1',false],['https://[1::2::3]/',false],['https://host:port/',false],['https://host/a[b]',false],['https://host/#a#b',false],['has space',false]];
-foreach ($cases as [$value, $expected]) { $got = UriReference::isValid($value); if ($got !== $expected) { throw new RuntimeException('URI mismatch: '.$value); } }
-if (! UriReference::isAbsolute('urn:corex:schema:v1') || ! UriReference::isAbsolute('https://schemas.example.test/v1.json') || UriReference::isAbsolute('corex/relay') || UriReference::isAbsolute('https://schemas.example.test/v1.json#x')) { throw new RuntimeException('Absolute URI mismatch'); }
-echo json_encode(['uri_cases'=>count($cases),'absolute_cases'=>4,'verdict'=>'GREEN'], JSON_PRETTY_PRINT).PHP_EOL;
+$cases = [['corex/relay', true], ['./1:foo', true], ['urn:corex:source', true], ['https://example.test/a%20b?q=x#f', true], ['https://[::1]/', true], ['https://[2001:db8::1]:443/a', true], ['https://[::ffff:192.0.2.1]/', true], ['https://[v1.a:b]/', true], ['%', false], ['%zz', false], ['a%2', false], ['1:foo', false], ['http://[not-ip]/', false], ['https://[::1', false], ['https://[1::2::3]/', false], ['https://host:port/', false], ['https://host/a[b]', false], ['https://host/#a#b', false], ['has space', false]];
+foreach ($cases as [$value, $expected]) {
+    $got = UriReference::isValid($value);
+
+    if ($got !== $expected) {
+        throw new RuntimeException('URI mismatch: '.$value);
+    }
+}
+
+if (! UriReference::isAbsolute('urn:corex:schema:v1') || ! UriReference::isAbsolute('https://schemas.example.test/v1.json') || UriReference::isAbsolute('corex/relay') || UriReference::isAbsolute('https://schemas.example.test/v1.json#x')) {
+    throw new RuntimeException('Absolute URI mismatch');
+}
+echo json_encode(['uri_cases' => count($cases), 'absolute_cases' => 4, 'verdict' => 'GREEN'], JSON_PRETTY_PRINT).PHP_EOL;

@@ -1,0 +1,42 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P03.2-execution-completion",
+  "title": "PLAN3.P03.2 — execution evidence",
+  "sections": [
+    {
+      "id": "PLAN3.P03.2-execution-evidence",
+      "title": "PLAN3.P03.2 — execution evidence",
+      "text": "Executor: codex/gpt-6-sol/xhigh, attested provider-thread-state. Durable run:\n`fbd89d560f619302cce68ef7d1aae4594dee3d96437a4ede33ecac0d2c14133c`.\nInput/specification anchor: `65a673101b111a69df7e3b40ece6011f7f2f5f3d`."
+    },
+    {
+      "id": "Product-and-transfer",
+      "title": "Product and transfer",
+      "text": "The approved tool moved 278 classes/files and rewrote 278 namespaces, 53 namespace tokens\nand 53 vanished namespace records; plan and verify both reported zero problems.\nThe complete 1168-row TSV is unchanged; all 68 public-by-usage symbols and product paths remain.\nManifest now has 658 class and 110 namespace tokens. Golden received exactly 376 manual\nidentifier rules; generated/ambiguous fields and frozen baseline bytes remain unchanged versus\nboth the source anchor and `52446de`. Composer lock changes only the allowed local FQCN\nmetadata/path references, with unchanged dependency set and content hash. Six manifests match.\n\nThe tool preserved 12 implicit imports and projected eight NEON path files without rebaseline.\nFixture subjects and exact historical cross-zone edges follow PLAN3.D59. Five adapter hashes\nwere refreshed only after AST-equivalence checks. All 15 packages with moves received the\nprescribed CHANGELOG note. Pint formatted the changed PHP files.\n\nScratch setup used an independent root vendor and 21 copied package vendors, no hardlinks\nand no symlinks outside scratch; autoload was rebuilt for each. This proves the installed\nlocal dependency set. It is not fresh-install or hosted-CI evidence. Push/hosted CI remain\ndeferred under PLAN3.D47. Commands/durations are in dry/setup-checks.json,\ndry/transfer-checks.json and dry/stack/checks.json.\n\nThe main transfer repeated the same commands. Final path sets, diff stat and SHA-256 values\nmatch all 702 candidate paths byte for byte (main/candidate-equality.json). Historical\nP12 generated report bytes were restored after retaining current gate outputs in the logs."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "- Layout baseline equals the prediction byte for byte: 1112 files, 159 violations/baselined,\n  zero new/stale; R0/R1/R2/R4 zero, R3 68, R5 91.\n- Transfer regression suite: 3 tests; live layout negative suite: 8 tests. Lossless projection\n  reconstructs all eight columns/1168 rows. Removing a row or altering its source digest\n  fails; restoring the exact bytes returns GREEN (projection-negative.log).\n- Root SQLite: 822 + 10 passed / 3503 + 54 assertions; PostgreSQL: 240 passed / 1149 assertions.\n  Both counts equal the fresh before-transfer baseline. All 21 package suites passed:\n  1349 tests in both trees. Previous P03.1 logs total 1338; no package count decreased.\n  Per-package totals and the comparison are in package-counts.json.\n- Golden 4 and architecture 92 passed; full lint, PHPStan, dependency analysis, ceilings,\n  anti-weakening, package graph, strict ownership (553 identifiers, zero baselined), naming,\n  package docs, API contract and contract guard all returned exit 0.\n- Mutation cohort: all 34 sabotage cases turned RED and restored their sources, in both trees.\n- Rename completeness: 859 tokens; GREEN after the fixture repair. Planting a retired FQCN\n  in SourceScanner.php returned exit 1; restoring the exact original bytes returned exit 0.\n  main/rename-negative.log records both sides. Final verify also returned zero problems.\n- Plan-lint passed after the admission repair and on both completed candidates.\n\nExact commands, exit codes and times are in the dry/main check manifests and their logs."
+    },
+    {
+      "id": "Bounded-repairs",
+      "title": "Bounded repairs",
+      "text": "PLAN3.D61 fixes inherited read admission: a lossless 40420-byte projection replaces the\n119306-token full TSV reading carrier. It has 9376 estimated tokens; complete transfer work,\nthe TSV/hash, thresholds and calibration remain unchanged. The new bundle is admitted.\nThe four inherited adapter helper formatter findings were repaired; its parsed AST is identical\nto the old HEAD. Independent admission review is GREEN at fingerprint\n`4d18ef3f2456e4983d21ca2864f067985d01c35ee71fef1d7a2b20750daf50d3`.\nThe initial repair record's source count is corrected append-only from five to six in\nrepair-decision-final.json/journal; generated bookkeeping remains excluded.\n\nOne manual residue: scripts/tests/test_module_layout_gate.py's R1 planted path/namespace\n`Support` becomes `Unlisted`. The original main tree reproduced the retired namespace failure.\nBoth names take the same forbidden-kernel-root R1 branch; CONFIG, all rules/assertions and eight\ntests remain unchanged. Exact rename carrier and affected Python tests were rerun GREEN.\nresidual-repair.json records the owning reversible repair; original RED logs are retained.\nNo map/transfer tool defect or modification occurred beyond the authorized helper formatting."
+    },
+    {
+      "id": "Independent-full-review",
+      "title": "Independent full review",
+      "text": "review: cursor/grok-4.7/high GREEN (one product review round, fresh context).\nThe reviewer independently recomputed all 702 product hashes and sampled 20 moved files,\nchecked all 278 bodies under FQCN projection, short-name/resource references, all 68 retained\nsymbols, Golden/lock/baseline invariants and the retained negative control. No actionable finding.\nreview.json contains the exact verdict; main product bytes match its reviewed candidate.\n\nProduct and closure have separate anchors because declared helper/projection Files intersect\ndigest-bound Inputs. Closure evidence and the exact next recommendation are generated by Task."
+    },
+    {
+      "id": "Closure",
+      "title": "Closure",
+      "text": "Product commit: `e21796a78a363987b06a7b21474dacd813a5de5a`. Task admitted both write sites,\nrecorded P03.2 and P03 `closed-green`, generated fresh item/status/phase-closure views and\naccepted the terminal delivery receipt. Phase close uses the same durable P03.2 invocation;\nthe initial phase entry without run_id is retained and superseded by a bound lifecycle.\n`closure-byte-identity.json` proves unchanged product anchors; the 702 candidate hash set\nis independently retained in the dry/main evidence. Final plan-lint: zero errors/warnings.\nNo phase audit is required by the current GREEN candidate policy (phase-close-gate.json).\nNext: `design-phase: task:plan-design 2026.09.27-№1-COREX-KERNEL P04`, author role per\nroadmap/D56. Authorized scope is complete; continuity remains `continue-root`."
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P03.2-execution/completion.md",
+    "sha256": "d063c5a5f08cc3d8a5f55310b5a05496e1bce0aafefd7075b7bf7181d33a9ce6"
+  }
+}

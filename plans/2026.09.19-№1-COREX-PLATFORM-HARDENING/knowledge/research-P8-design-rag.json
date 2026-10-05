@@ -1,0 +1,34 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "research-P8-design-rag",
+  "title": "Внешние подтверждения фазы P8 — 2026-09-19",
+  "sections": [
+    {
+      "id": "P8-2026-09-19",
+      "title": "Внешние подтверждения фазы P8 — 2026-09-19",
+      "text": "Сводка пяти запросов детализации P8 с привязкой к пунктам `P8-design.md`.\nСырые ответы и точные строки запросов — `../artifacts/P8-design-rag/`\n(`manifest.json` несёт статусы, первичные источники и SHA256 файлов захвата).\n\nПравило чтения: `RAG:✅` — внешний источник подтверждает **названную общую практику**.\nВывод «поэтому в CoreX так» — всегда локальный (`RAG:—`), из кода и измерений.\nНи один ответ не является спецификацией CoreX."
+    },
+    {
+      "id": "1.",
+      "title": "1. Что подтвердилось и где это применено",
+      "text": "| ID | Что подтверждено | Первичный источник | Применено в |\n|:--|:--|:--|:--|\n| P8-Q1 | Внутренний helper биндингов не наследует ServiceProvider | Laravel providers · packages | D42, интерфейс §3 |\n| P8-Q1 | `extra.laravel.providers` — только публичный entry point | Laravel packages | D42, анти-цель вложенного провайдера |\n| P8-Q1 | Compiler pass — вклад в граф, не bundle; Laravel — runtime | Symfony DI workflow | эскиз принят; dump-контейнер не вводится |\n| P8-Q1 | Две узкие фазы register/boot вызывает один провайдер | Laravel providers | D42, форма §3 |\n| P8-Q2 | Модуль — связная возможность, не «два биндинга» | Seemann · Microsoft Add{Group} | D43, правило §4 |\n| P8-Q2 | Optional neighbor — отдельный omittable registrar | Seemann · Fowler BC | WakeupRegistrar, D43 |\n| P8-Q3 | Команды/маршруты/alias/listen доступны через Kernel/Router/Dispatcher | Laravel events · API | §6, P8.4 |\n| P8-Q3 | `loadRoutesFrom` пропускает файл при route cache; naked group — нет | Laravel packages | HttpRegistrar §6.2 |\n| P8-Q3 | `publishes` / `mergeConfigFrom` остаются на провайдере | Laravel packages | D42 |\n| P8-Q4 | Доказательство: bound + concrete + lifetime; `isShared` ≠ scoped | Laravel container | §9, P8.2/P8.3/P8.5 |\n| P8-Q4 | `class_exists` и один `assertInstanceOf` недостаточны | Laravel container | Validation фазы |\n| P8-Q5 | Гейт считает только ServiceProvider; посадка называет файл | ThoughtWorks · Pest Arch | D45, §10 |\n| P8-Q5 | Ratchet: не расти относительно снимка | ThoughtWorks | D45 |"
+    },
+    {
+      "id": "2.",
+      "title": "2. Что НЕ подтвердилось внешне",
+      "text": "| Пробел | Статус | Как несёт дизайн |\n|:--|:--|:--|\n| Универсальный порог «слишком большой провайдер» | коридор A74 15–20, не норма | D45: 20 + ratchet |\n| Обязательный Symfony compile-and-dump в Laravel | Q1: механика не эквивалентна | runtime-контейнер, без dump |\n| Что Membership должен иметь registrar | источника «контекст = registrar» нет | D43: нет биндингов — нет модуля |\n| Что P8 должен менять singleton на scoped | Q4 требует сохранить lifetime | смена lifetime — P4.12, не P8 |"
+    },
+    {
+      "id": "3.",
+      "title": "3. Дефекты провайдера и транспорта",
+      "text": "Таймаут MCP на этой фазе **не воспроизвёлся**. Инструкция `no tables`\nсоблюдена во всех пяти запросах.\n\nДефект транспорта P5 (один вызов = 5+ запросов провайдеру) не исправлялся;\nзафиксирован в `artifacts/P8-design-rag/manifest.json` как `known_transport_defect`."
+    }
+  ],
+  "applies_to": [
+    "P8"
+  ],
+  "provenance": {
+    "path": "research/P8-design-rag.md",
+    "sha256": "ddc3ec4dd5a178363b3ba2c0af847bfae0c8f12842252de50dcc7c6c9a358fc5"
+  }
+}

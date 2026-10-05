@@ -1,0 +1,19 @@
+<?php
+declare(strict_types=1);
+$native = '/tmp/corex-p074-native-l8jlykl8';
+$root = '/home/vostrikov/projects/packages/corex';
+require_once $native.'/vendor/autoload.php';
+$verify = static function (string $stage) use ($native, $root): void {
+    $loaders = array_keys(\Composer\Autoload\ClassLoader::getRegisteredLoaders());
+    if (!in_array($native.'/vendor', $loaders, true) || in_array($root.'/vendor', $loaders, true)) {
+        throw new \RuntimeException('native acceptance: wrong Composer loader at '.$stage);
+    }
+    $upstream = class_exists('AzGuard\\Models\\Role');
+    $installed = \Composer\InstalledVersions::isInstalled('axioma-studio/azguard-core');
+    if ($upstream || $installed) {
+        throw new \RuntimeException('native acceptance: upstream present at '.$stage);
+    }
+    file_put_contents(__DIR__.'/bootstrap-process-proof.jsonl', json_encode(['stage'=>$stage, 'pid'=>getmypid(), 'native_vendor'=>$native.'/vendor', 'registered_loaders'=>$loaders, 'azguard_role_exists'=>$upstream, 'azguard_installed'=>$installed], JSON_THROW_ON_ERROR)."\n", FILE_APPEND);
+};
+$verify('phpunit-bootstrap');
+register_shutdown_function(static function () use ($verify): void { $verify('process-shutdown'); });

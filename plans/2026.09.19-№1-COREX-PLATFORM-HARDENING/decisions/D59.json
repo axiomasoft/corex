@@ -1,0 +1,49 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D59",
+  "title": "Durable work пинит extension id+version, а fingerprint хранит как provenance",
+  "date": "2026-09-20",
+  "status": "accepted",
+  "decision": "- Durable record, зависящий от конкретного extension, хранит point, id,\n  explicit version и registry fingerprint.\n- Для replay решающий гейт — точная пара id+version. Изменение\n  несвязанного module и global fingerprint не блокирует точно пиннованный\n  handler/definition.\n- Fingerprint-only решение допустимо лишь при зависимости от всего\n  состава registry.\n- Mismatch никогда не вызывает current implementation: workflow отказывает\n  в capture/dispatch, wakeup терминализирует stable\n  `handler-version-mismatch`/`handler-stamp-missing`.\n- Legacy unstamped wakeup rows разрешаются только явным bounded флагом\n  конкретной handler definition; default fail closed. Префлайт ничего не\n  переписывает.\n- Existing JSON/`version_ref` carriers используются без DDL.",
+  "rationale": "Блокировать все pending jobs при любом изменении чужого module избыточно;\nзапустить их новой implementation опасно. Пара id+version даёт\nнужную compatibility boundary, а fingerprint остаётся проверяемой provenance.",
+  "applies_to": [
+    "P11",
+    "P11.4",
+    "P11.5",
+    "P11.6",
+    "P11.7"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/codex-gpt-5.6-sol/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D59\ndate: 2026-09-20\nstatus: accepted\nitem: P11\nitems: [P11, P11.4, P11.5, P11.6, P11.7]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D59-Durable-work-extension-id-version-fingerprint-provenance",
+      "title": "D59 — Durable work пинит extension id+version, а fingerprint хранит как provenance",
+      "text": "**Actor:** plan-designer/codex-gpt-5.6-sol/high\n**Evidence:** RAG:— workflow уже имеет `definition_ref`/`version_ref`, wakeup\nхранит JSON payload и `kind`, tasks-workflow хранит immutable revision/hash.\nОднако wakeup handler map сейчас `kind => class`, а tasks-workflow producer не\nпишет обязательный для handler `definitionHash`."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "- Durable record, зависящий от конкретного extension, хранит point, id,\n  explicit version и registry fingerprint.\n- Для replay решающий гейт — точная пара id+version. Изменение\n  несвязанного module и global fingerprint не блокирует точно пиннованный\n  handler/definition.\n- Fingerprint-only решение допустимо лишь при зависимости от всего\n  состава registry.\n- Mismatch никогда не вызывает current implementation: workflow отказывает\n  в capture/dispatch, wakeup терминализирует stable\n  `handler-version-mismatch`/`handler-stamp-missing`.\n- Legacy unstamped wakeup rows разрешаются только явным bounded флагом\n  конкретной handler definition; default fail closed. Префлайт ничего не\n  переписывает.\n- Existing JSON/`version_ref` carriers используются без DDL."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Блокировать все pending jobs при любом изменении чужого module избыточно;\nзапустить их новой implementation опасно. Пара id+version даёт\nнужную compatibility boundary, а fingerprint остаётся проверяемой provenance."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P11.4–P11.7 пишут и проверяют stamps в своих существующих\ncarriers. tasks-workflow дополнительно исправляет missing `definitionHash` и\nперестаёт молча завершать неполный payload."
+    }
+  ]
+}

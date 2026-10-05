@@ -6,29 +6,16 @@ namespace CoreX\Tenancy\Account\Internal\Models;
 
 use Carbon\CarbonImmutable;
 use CoreX\Tenancy\DomainTrust\Laravel\DomainRelations;
+use CoreX\Tenancy\Laravel\Support\ResolvesTenancyOptions;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Override;
-use Stancl\Tenancy\Database\Concerns\HasDatabase;
-use Stancl\Tenancy\Database\Concerns\InvalidatesResolverCache;
-use Stancl\Tenancy\Database\Contracts\TenantWithDatabase;
-use Stancl\Tenancy\Database\Models\Tenant;
-use Stancl\Tenancy\Events\CreatingTenant;
-use Stancl\Tenancy\Events\DeletingTenant;
-use Stancl\Tenancy\Events\SavingTenant;
-use Stancl\Tenancy\Events\TenantDeleted;
-use Stancl\Tenancy\Events\TenantSaved;
-use Stancl\Tenancy\Events\TenantUpdated;
-use Stancl\Tenancy\Events\UpdatingTenant;
 
 /**
- * `root_accounts` — physical DB-per-account tenant (B-11 §3.1, D14). Typed
- * columns are declared via {@see getCustomColumns()}; everything else the
- * base `Tenant` model would otherwise persist falls into the `data` jsonb
- * VirtualColumn (stancl/virtualcolumn).
- *
- * `internalPrefix()` is overridden to '' (default is `tenancy_`) because
- * `db_name` is a plain, unprefixed column in the frozen DB_SCHEMA contract —
- * stancl's HasDatabase/DatabaseConfig read/write it via `getInternal('db_name')`.
+ * `root_accounts` is a physical DB-per-account tenant on the central connection.
+ * Only explicit typed columns are writable through this model.
+ * Signup claim and pool cleanup SQL retain the data column until P08 (D107).
  *
  * @property string $id
  * @property ?string $slug
@@ -50,41 +37,26 @@ use Stancl\Tenancy\Events\UpdatingTenant;
  * @property CarbonImmutable $updated_at
  * @property ?CarbonImmutable $deleted_at
  */
-final class Account extends Tenant implements TenantWithDatabase
+final class Account extends Model
 {
-    use HasDatabase;
-
-    // Base Tenant already mixes this trait in (class_uses_recursive picks it
-    // up), so cache invalidation on save/delete is active either way —
-    // restated here so it's visible on this model without tracing the
-    // vendor base class (P2.10, D119).
-    use InvalidatesResolverCache;
+    use HasUuids;
+    use ResolvesTenancyOptions;
 
     protected $table = 'root_accounts';
 
-    /**
-     * `created` is deliberately NOT mapped to `Events\TenantCreated` here
-     * (unlike the base `Tenant` model): a `root_accounts` row can exist long
-     * before real provisioning starts (e.g. the P2.4 pending pool) —
-     * provisioning is triggered explicitly by
-     * {@see CoreX\Tenancy\Account\Internal\StanclTenantDatabaseProvisioner::provision()},
-     * not implicitly by row-creation.
-     */
-    protected $dispatchesEvents = ['saving' => SavingTenant::class, 'saved' => TenantSaved::class, 'creating' => CreatingTenant::class, 'updating' => UpdatingTenant::class, 'updated' => TenantUpdated::class, 'deleting' => DeletingTenant::class, 'deleted' => TenantDeleted::class];
+    protected $fillable = ['id', 'slug', 'name', 'cluster_id', 'db_name', 'status', 'owner_identity_id', 'vertical_code', 'template_version', 'embedding_model', 'embedding_dim', 'locale', 'trial_ends_at', 'suspended_at', 'grace_until', 'purge_after', 'deleted_at'];
 
     #[Override]
-    public static function internalPrefix(): string
+    public function getConnectionName(): string
     {
-        return '';
+        return parent::getConnectionName() ?? $this->tenancyOptions()->centralConnection;
     }
 
-    /**
-     * @return list<string>
-     */
+    /** @return array<string, string> */
     #[Override]
-    public static function getCustomColumns(): array
+    protected function casts(): array
     {
-        return ['id', 'slug', 'name', 'cluster_id', 'db_name', 'status', 'owner_identity_id', 'vertical_code', 'template_version', 'embedding_model', 'embedding_dim', 'locale', 'trial_ends_at', 'suspended_at', 'grace_until', 'purge_after', 'created_at', 'updated_at', 'deleted_at'];
+        return ['template_version' => 'integer', 'embedding_dim' => 'integer', 'trial_ends_at' => 'immutable_datetime', 'suspended_at' => 'immutable_datetime', 'grace_until' => 'immutable_datetime', 'purge_after' => 'immutable_datetime', 'created_at' => 'immutable_datetime', 'updated_at' => 'immutable_datetime', 'deleted_at' => 'immutable_datetime'];
     }
 
     /**

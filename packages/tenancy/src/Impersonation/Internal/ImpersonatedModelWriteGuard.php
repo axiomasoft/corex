@@ -38,7 +38,7 @@ final class ImpersonatedModelWriteGuard
         ImpersonationGrant::class,
     ];
 
-    private static bool $allowing = false;
+    private bool $allowing = false;
 
     public function __construct(
         private readonly ImpersonationService $impersonation,
@@ -47,7 +47,7 @@ final class ImpersonatedModelWriteGuard
     /** @param array<int, mixed> $payload */
     public function handle(string $eventName, array $payload): void
     {
-        if (self::$allowing || $this->impersonation->state() === null) {
+        if ($this->allowing || $this->impersonation->state() === null) {
             return;
         }
 
@@ -71,14 +71,15 @@ final class ImpersonatedModelWriteGuard
      * @param  Closure(): T  $callback
      * @return T
      */
-    public static function allowing(Closure $callback): mixed
+    public function allowing(Closure $callback): mixed
     {
-        self::$allowing = true;
+        $previous = $this->allowing;
+        $this->allowing = true;
 
         try {
             return $callback();
         } finally {
-            self::$allowing = false;
+            $this->allowing = $previous;
         }
     }
 }

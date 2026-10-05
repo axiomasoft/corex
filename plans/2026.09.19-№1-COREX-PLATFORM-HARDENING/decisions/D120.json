@@ -1,0 +1,42 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D120",
+  "title": "Repair two historical E11e batch receipts before P11.8",
+  "date": "2026-09-24",
+  "status": "accepted",
+  "decision": "Authorize exactly one `journal-migration/v1`,\n`corex-e11e-batch-receipts`, for this plan. Preserve the entire source journal\nas a sealed preimage. Replace only `batch_receipt` in lines 249 and 251,\nbinding before/after line digests and whole-file digests in the manifest and\nreceipt. Keep `batch_id`, membership, completed prefix, stop disposition,\nitem, command, actor, result, session, run, and all terminal records unchanged.\nBackfill the missing digest fields from the unchanged E11e routing and item\nspecification; retain `handoff_digest: null` where historical provenance is\nnot available. Reject a changed source digest, additional line, or semantic\nbatch change.\n\nPermit the narrowly constrained migration-tool repair at the Task package's\nowning source. This decision does not grant a new execution route, rewrite\nterminal evidence, or expand P11.8 product scope.",
+  "rationale": "The strict journal reader cannot reach P11.8 while either old start event is\nschema-invalid. An append cannot make those lines valid. The migration keeps\ntheir exact preimage and records the smallest correction needed to resume\nnormal plan validation.",
+  "applies_to": [
+    "P11",
+    "P11.6",
+    "P11.7",
+    "P11.8"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "owner/vostrikov (human), delegated the concrete repair choice to the executor on 2026-09-24."
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D120\ndate: 2026-09-24\nstatus: accepted\nitem: P11.8\nitems: [P11, P11.6, P11.7, P11.8]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D120-Repair-two-historical-E11e-batch-receipts-before-P11.8",
+      "title": "D120 — Repair two historical E11e batch receipts before P11.8",
+      "text": "**Actor:** owner/vostrikov (human), delegated the concrete repair choice to the executor on 2026-09-24.\n\n**Evidence:** `RAG:—` `task.plan_recovery.prepare()` failed with\n`JOURNAL_CORRUPT` at `@plan/log.jsonl:249`. A full schema scan found only lines\n249 and 251 invalid, both E11e `in-progress` events. Source journal SHA-256 is\n`0f17303bf7dc033c38a3adf85db8bfcceb50cf06767131411cbe9f432b36295b`;\nline digests are `9979a107f4f43677ba725be7851eb85a95339587610abe5759df094f3e4d7042`\nand `a266e9d3542b1e8e680180e5b2432e070be3f0f152526c3062a0ad8628042d51`.\nThe owner asked the executor to choose the best quality and efficiency outcome\nafter being shown the exact two-line repair and migration-tool scope."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "Authorize exactly one `journal-migration/v1`,\n`corex-e11e-batch-receipts`, for this plan. Preserve the entire source journal\nas a sealed preimage. Replace only `batch_receipt` in lines 249 and 251,\nbinding before/after line digests and whole-file digests in the manifest and\nreceipt. Keep `batch_id`, membership, completed prefix, stop disposition,\nitem, command, actor, result, session, run, and all terminal records unchanged.\nBackfill the missing digest fields from the unchanged E11e routing and item\nspecification; retain `handoff_digest: null` where historical provenance is\nnot available. Reject a changed source digest, additional line, or semantic\nbatch change.\n\nPermit the narrowly constrained migration-tool repair at the Task package's\nowning source. This decision does not grant a new execution route, rewrite\nterminal evidence, or expand P11.8 product scope."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "The strict journal reader cannot reach P11.8 while either old start event is\nschema-invalid. An append cannot make those lines valid. The migration keeps\ntheir exact preimage and records the smallest correction needed to resume\nnormal plan validation."
+    }
+  ]
+}

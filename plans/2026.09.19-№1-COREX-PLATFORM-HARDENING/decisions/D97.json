@@ -1,0 +1,47 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D97",
+  "title": "Release is a sealed preflight followed by forward-only publication",
+  "date": "2026-09-20",
+  "status": "accepted",
+  "decision": "P17.11 creates and verifies an immutable `publication-packet/v1` without external writes. P17.12 is\nthe only publication item, runs as `manual`, and requires G-RELEASE bound to the exact packet digest.\nIt reconciles every destination immediately before write, accepts only absent or byte-identical\nstate, records operations append-only and resumes partial progress from the same packet. It never\nforce-pushes, deletes or rewrites a published ref; a bad immutable release moves forward to a new\nversion.",
+  "rationale": "Local green checks cannot authorize live writes, while asking for approval before a sealed packet\ndoes not identify what will be published. Forward-only recovery preserves the meaning of Composer\nversions and GitHub releases after a partial multi-repository operation.",
+  "applies_to": [
+    "P17",
+    "P17.11",
+    "P17.12"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/codex-gpt-5.6-sol/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D97\ndate: 2026-09-20\nstatus: accepted\nitem: P17.12\nitems: [P17, P17.11, P17.12]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D97-Release-is-a-sealed-preflight-followed-by-forward-only-publication",
+      "title": "D97 — Release is a sealed preflight followed by forward-only publication",
+      "text": "**Actor:** plan-designer/codex-gpt-5.6-sol/high\n**Evidence:** RAG:— existing `scripts/distribution/publish_guard.py`, publication ledgers and\n`docs/distribution-dry-run.md`; RAG:✅ GitHub releases are based on Git tags."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "P17.11 creates and verifies an immutable `publication-packet/v1` without external writes. P17.12 is\nthe only publication item, runs as `manual`, and requires G-RELEASE bound to the exact packet digest.\nIt reconciles every destination immediately before write, accepts only absent or byte-identical\nstate, records operations append-only and resumes partial progress from the same packet. It never\nforce-pushes, deletes or rewrites a published ref; a bad immutable release moves forward to a new\nversion."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Local green checks cannot authorize live writes, while asking for approval before a sealed packet\ndoes not identify what will be published. Forward-only recovery preserves the meaning of Composer\nversions and GitHub releases after a partial multi-repository operation."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "G-RELEASE grants only the enumerated `1.0.0` operations and does not grant repository creation,\nvisibility changes, secret provisioning, force, deletion or an unlisted registry write. The root\n`CHANGELOG.md` is the release ledger; no per-package release ledger is added."
+    }
+  ]
+}

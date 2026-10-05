@@ -1,0 +1,332 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P16.13",
+  "title": "Full structural qualification and negative proofs",
+  "status": "done",
+  "summary": "Qualify all P16 outcomes, prove autoload/testing gates non-vacuous and issue the phase receipt.",
+  "why": "Physical moves can remain falsely green through permissive autoload or incomplete test discovery; two planted failures prove the enforcement path.",
+  "scope": {
+    "include": [
+      "All affected package lanes, root aggregate/PG/static/arch/graph/BC checks, post-producer profile counts, duplicate-FQCN and production-Testing planted fixtures, final receipt."
+    ],
+    "exclude": [
+      "Product repair owned by another item, release, P17 execution and weakening a gate to obtain green."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D91",
+    "D107",
+    "D92",
+    "D93",
+    "D94"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/phases/P16/P16.12.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D91.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/decisions/D107.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D92.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/decisions/D93.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/decisions/D94.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P16/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P16-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P16/P16.12.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/plan.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/plan.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "@plan/knowledge/findings-P16-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Baseline green first; each fixture must fail for its named diagnostic, be removed, then return green; mismatched count/profile or FQCN digest returns to owning item; skipped is red."
+  ],
+  "guidance": "Record commands, exit codes and bounded output; run package-local before aggregate; verify fixture cleanup and unchanged DDL/wire/public namespace manifests.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer test:packages",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "census 20 packages / 1129 files, attributes B",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "public-api digest unchanged",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "duplicate FQCN ambiguous class exit 2 then removed",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "R-T1 Testing plant then TestingAutoload 3 passed",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "composer test:packages exit 0",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "composer test:pg 239 passed 0 skipped",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "composer analyse exit 0",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "procedure": "composer test:arch 89 passed",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "procedure": "package-graph and naming-gate OK",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V11",
+      "procedure": "lint:check exit 0",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V12",
+      "procedure": "bc-check OK experimental",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V13",
+      "procedure": "dump-autoload -o --strict-psr",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "`@plan/knowledge/findings-P16-receipts.json`, refreshed generated plan views and provider-neutral Next to P17 design only."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-27T07:43:08Z",
+    "finished_at": "2026-09-27T08:22:28Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/grok-4.7/direct"
+    },
+    "notes": "P16.13 GREEN: census matches P16.11, attributes stays B, both plants observed and removed, serial packages/PG/analyse/arch/graph/naming/lint/bc green. Receipt findings/P16-receipts.md.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-27T08:22:28Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-27T08:22:28Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-27T08:22:28Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-27T08:22:28Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-27T08:22:28Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-27T08:22:28Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-27T08:22:28Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-09-27T08:22:28Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-09-27T08:22:28Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V11",
+        "exit": 0,
+        "at": "2026-09-27T08:22:28Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V12",
+        "exit": 0,
+        "at": "2026-09-27T08:22:28Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V13",
+        "exit": 0,
+        "at": "2026-09-27T08:22:28Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-27T08:22:28Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Qualify all P16 outcomes, prove autoload/testing gates non-vacuous and issue the phase receipt."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "Physical moves can remain falsely green through permissive autoload or incomplete test discovery; two planted failures prove the enforcement path."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "All affected package lanes, root aggregate/PG/static/arch/graph/BC checks, post-producer profile counts, duplicate-FQCN and production-Testing planted fixtures, final receipt."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Product repair owned by another item, release, P17 execution and weakening a gate to obtain green."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/phases/P16/P16.12.json`; `@plan/decisions/D91.json`; `@plan/decisions/D107.json`; `@plan/decisions/D92.json`; `@plan/decisions/D93.json`; `@plan/decisions/D94.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "Disposable fixtures under approved test temp paths; `@plan/knowledge/findings-P16-receipts.json`; generated plan state/continuity through plan tools."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P16/phase.json`; 2) `@plan/knowledge/research-P16-design.json` §12–§13; 3) `@plan/phases/P16/P16.12.json`; 4) `@plan/phases/P16/P16.12.json`; 5) `@plan/plan.json`; 6) `@plan/plan.json`; 7) `@plan/decisions/D107.json`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Baseline green first; each fixture must fail for its named diagnostic, be removed, then return green; mismatched count/profile or FQCN digest returns to owning item; skipped is red."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Record commands, exit codes and bounded output; run package-local before aggregate; verify fixture cleanup and unchanged DDL/wire/public namespace manifests."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Producer-adjusted census and P16.11 verdict agree for every package; attributes cannot\npass as Profile A. All declared lanes green; `composer test:packages` and required PG lanes green; root analyse/arch/graph/naming/BC/split gates green; both planted negatives observed; worktree contains no fixtures."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "`@plan/knowledge/findings-P16-receipts.json`, refreshed generated plan views and provider-neutral Next to P17 design only."
+    }
+  ]
+}

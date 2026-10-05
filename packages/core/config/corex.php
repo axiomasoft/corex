@@ -197,7 +197,7 @@ return [
         | Connection the module hot-path (mod_modules / mod_records /
         | mod_lifecycle_log) and the registry epoch read from. `null` = the app's
         | default connection — correct for boxed / single-DB P1 installs, and
-        | correct under P2 too (stancl rebinds the default connection to the
+        | correct under P2 too (TenancyManager rebinds the default connection to the
         | tenant's database per request). The DB-per-account map that lets a single
         | reader serve several accounts from one process arrives with axiomasoft/corex-tenancy
         | (D13) — see phases/P1.md P1.16 Pending Work.

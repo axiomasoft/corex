@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Notifications\Digest\Internal;
 
 use Closure;
-use CoreX\Wakeup\Contracts\DueWakeupHandler;
-use CoreX\Wakeup\Data\WakeupDelivery;
+use CoreX\Scheduling\Contracts\DueWakeupHandler;
+use CoreX\Scheduling\Data\WakeupDelivery;
 use RuntimeException;
 
 final class DigestWakeupAdapter implements DueWakeupHandler

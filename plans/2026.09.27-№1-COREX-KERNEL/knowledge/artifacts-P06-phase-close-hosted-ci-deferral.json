@@ -1,0 +1,17 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P06-phase-close-hosted-ci-deferral",
+  "title": "PLAN3.P06 — hosted CI deferral",
+  "sections": [
+    {
+      "id": "PLAN3.P06-hosted-CI-deferral",
+      "title": "PLAN3.P06 — hosted CI deferral",
+      "text": "**Final commit:** `4137d2412497aa9348cf19322b26f1d074b5ad2c`\n**Workflow:** `CI`\n**Run:** https://github.com/axiomasoft/corex/actions/runs/37204345391\n**Observed result:** `failure`; all required jobs completed without steps or runtime (`0 ms`).\n\nGitHub's check annotation states: “The job was not started because recent account payments have failed or your spending limit needs to be increased.”\n\nThe owner explicitly deferred this acceptance gate in the current conversation. D105 records the limited waiver. This artifact is evidence of unavailable CI capacity, not CI success."
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P06-phase-close/hosted-ci-deferral.md",
+    "sha256": "1213ce9a25396604903003c2c0aaea856f9f41cfad9ff360a0392763c4711a64"
+  }
+}

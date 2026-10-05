@@ -1,0 +1,1162 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P9.1",
+  "title": "Карта и compatibility baseline",
+  "status": "done",
+  "summary": "Снять post-P8 дерево, сопоставить каждый PHP-файл с ровно одной\nцелью и зафиксировать behavioral fingerprint до переносов.",
+  "why": "`P9-design.md` §1–§3, §11; D46/D47. Без baseline final diff\nподменил бы доказательство памятью исполнителя.",
+  "scope": {
+    "include": [
+      "inventory/map; JSON fingerprint; public/config/queue consumer sweep;\nкаркас `tenancy-structure-gate.py` с двумя красными fixtures; receipt section."
+    ],
+    "exclude": [
+      "перенос PHP-файлов; смена composer autoload; ослабление\nP8 gates; реализация relay control plane."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D46",
+    "D49"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P9-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/findings-P8-binding-catalog.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "packages/tenancy/composer.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P9/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P1-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P8-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D46.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D47.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D48.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D49.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Identity/Internal/Membership/ApplyMembershipProjection.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Provisioning/Internal/ClaimAccountSignup.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Bootstrappers/WorkspaceContextBootstrapper.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Data/ActorRef.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Enums/ActorType.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Exceptions/CentralProtocolViolation.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Exceptions/CentralUnauthorized.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Exceptions/CentralUnavailable.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Transport/CentralValue.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Data/MembershipQuery.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Enums/MembershipReason.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Data/MembershipSnapshot.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Enums/MembershipState.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Data/RevokeMembershipReceipt.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Data/RevokeMembershipRequest.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Commands/IdentitiesReconcileCommand.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Commands/PendingClearCommand.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Commands/PendingCreateCommand.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Commands/TenantsMigrateCommand.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Contracts/CentralApiClient.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Contracts/DomainChallengeStore.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Contracts/DomainOwnershipProofVerifier.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Contracts/DomainTrustAuthorizer.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Contracts/DomainTrustPolicy.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Contracts/PrincipalWorkspaceResolver.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Contracts/ProvisioningClaim.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Contracts/TemplateIntegrityVerifier.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Provisioning/Internal/Database/SchemaCatalogueSerializer.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Provisioning/Internal/Database/TemplateClonePostgreSQLManager.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Provisioning/Exceptions/TemplateIntegrityException.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Provisioning/Internal/Database/TemplateIntegrityLock.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Database/TemplateIntegrityVerifier.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Provisioning/Internal/Database/TemplateManifest.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/DomainTrust/Data/ChallengeConsumption.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/DomainTrust/Data/DomainChallenge.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/DomainTrust/Data/DomainChallengeBinding.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/DomainTrust/Data/DomainChallengeDraft.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/DomainTrust/Data/DomainTrustActor.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/DomainTrust/Enums/DomainTrustChangeReason.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/DomainTrust/Internal/DomainTrustCoordinator.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/DomainTrust/Exceptions/DomainTrustDenied.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/DomainTrust/Exceptions/DomainTrustDisabled.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/DomainTrust/Enums/DomainTrustOperation.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/DomainTrust/Internal/DomainTrustStateWriter.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/DomainTrust/Data/DomainTrustTransition.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/DomainTrust/Data/IssuedDomainChallenge.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/DomainTrust/Data/NormalizedHost.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/DomainTrust/Data/ObservedDomainProof.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Account/Events/AccountPurged.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Account/Events/AccountSuspended.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/DomainTrust/Events/DomainTrustChanged.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Account/Events/ExportReady.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Account/Events/GraceStarted.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Events/MembershipGranted.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Events/MembershipRevoked.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Impersonation/Events/ImpersonationEnded.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Impersonation/Events/ImpersonationStarted.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Account/Events/TrialStarted.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Identity/Events/UserSynced.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Authentication/Exceptions/OidcAuthenticationException.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Runtime/Exceptions/TenantCouldNotBeIdentifiedByHostException.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Authentication/Internal/Http/Controllers/LogoutController.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Authentication/Internal/Http/Controllers/OidcLoginController.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Http/Middleware/AccountStatusGate.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Http/Middleware/AllowImpersonatedWrites.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Http/Middleware/DenyImpersonatedWrites.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Http/Middleware/EnforceSessionLifetime.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Http/Middleware/ImpersonationSessionGuard.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Http/Middleware/RequireActiveMembership.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Http/Middleware/ResolveTenantFromHost.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Http/Middleware/ResolveWorkspace.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Identity/Internal/DatabaseIdentitySyncer.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Identity/Contracts/IdentitySyncer.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Impersonation/Internal/ImpersonatedModelWriteGuard.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Account/Internal/Jobs/CreateDatabaseFromTemplate.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Jobs/RefreshAccountMembership.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Identity/Internal/Jobs/SyncIdentityToAccount.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/AuthenticationRegistrar.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/ConsoleRegistrar.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/DatabaseRegistrar.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/DomainTrustRegistrar.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/EventsRegistrar.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/HttpRegistrar.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/IdentityRegistrar.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/ProvisioningRegistrar.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/RuntimeRegistrar.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/WakeupRegistrar.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/WorkspaceRegistrar.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Account/Internal/Lifecycle/AccountLifecycle.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Account/Internal/Lifecycle/AccountLifecycleFsm.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Listeners/RevertTenancyOnJobException.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Credentials/CredentialCookieQueue.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Exceptions/CredentialIssuanceDenied.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Credentials/FencedCredentialIssuer.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Credentials/FinalWriteAdmission.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Expiration/ExpiryScheduler.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Identity/Internal/Membership/ManagementIdentityHydrator.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Inbox/DurableInbox.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Exceptions/InboxConflict.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Data/PairKey.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Data/PairState.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Persistence/PairStore.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Exceptions/PairStoreViolation.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Data/PairWitness.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Exceptions/ProjectionDenied.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Projection/ReferenceMembershipProjection.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Refresh/RefreshCoordinator.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Contracts/AccountClickAuthorizer.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Data/AccountListEntry.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Switcher/AccountMenu.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Contracts/AccountMenuCache.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Switcher/AccountMenuReader.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Data/AccountsQuery.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Contracts/AccountsReadTransport.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Switcher/AccountsResult.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Switcher/RedisAccountMenuCache.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Switcher/StrictAccountsTransport.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Data/ClockReading.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Timing/Elapsed.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Timing/Lease.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Transport/AccessTokenValidator.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Transport/ChannelBinding.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Transport/JwsVerifier.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Enums/MembershipEventKind.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Transport/MembershipTrigger.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Exceptions/RevokeUncertain.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Transport/StrictJson.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Transport/StrictTransport.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Transport/TriggerParser.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Membership/Internal/Transport/Value.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Account/Laravel/MigrationWaveOrchestrator.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Account/Internal/Models/Account.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Account/Internal/Models/AccountExport.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Account/Internal/Models/AccountSchemaState.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/DomainTrust/Internal/Models/Domain.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Impersonation/Internal/Models/ImpersonationGrant.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Workspace/Internal/Models/Invitation.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Provisioning/Internal/Models/MigrationBatch.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Identity/Internal/Models/User.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Workspace/Internal/Models/Workspace.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Workspace/Internal/Models/WorkspaceMember.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Authentication/Internal/Oidc/IdTokenVerifier.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Authentication/Internal/Oidc/JwksKeySet.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Authentication/Internal/Oidc/OidcClient.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Authentication/Internal/Oidc/OidcDiscovery.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/PHPStan/Rules/StanclImportBoundaryRule.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Provisioning/Exceptions/ClaimConflict.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Provisioning/Data/ClaimRequest.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Provisioning/Data/ClaimResult.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Provisioning/Exceptions/ClaimUnavailable.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Provisioning/Internal/ClusterAccountConnectionResolver.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Account/Internal/PendingPool.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Provisioning/Data/QualifiedTemplate.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Provisioning/StanclTenantDatabaseLifecycle.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Provisioning/StanclTenantDatabaseProvisioner.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Resolvers/HostTenantResolver.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Scopes/WorkspaceScope.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/StanclTenancyManager.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Runtime/Internal/Storage/ContextTenantStorage.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Runtime/Internal/Storage/ObjectTenantStorage.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Support/AccountLifecyclePolicy.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Support/ImpersonationPolicy.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Support/StatusGatePolicy.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Runtime/Internal/TenancyManagerContextResolver.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/TenancyServiceProvider.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Integration/Internal/Wakeup/SweepRootWakeups.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Integration/Internal/Wakeup/RootRegistryWakeupHint.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Integration/Internal/Wakeup/RootWakeupReconciler.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Workspace/Internal/DatabaseWorkspaceResolver.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Workspace/Exceptions/InvitationNotAcceptableException.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Workspace/Exceptions/NoDefaultWorkspaceException.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Workspace/Contracts/WorkspaceResolver.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/config/corex-tenancy.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/config/tenancy.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/routes/oidc.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "@plan/knowledge/findings-P9-tenancy-map.json",
+      "change": "any"
+    },
+    {
+      "path": "@plan/findings/P9-compatibility-baseline.json",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P9-receipts.json",
+      "change": "any"
+    },
+    {
+      "path": "scripts/tenancy-structure-gate.py",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Карта имеет 100% coverage, уникальные `from`/`to`\nи owner/item на каждой строке. Fingerprint машиночитаемый и заранее\nпомечает concrete-дельту `TenantContextRestorer` по D49 как единственную разрешённую.\nГейт пока может быть red на текущем дереве, но обе негативные\nfixtures обязаны падать по своей причине."
+  ],
+  "guidance": "JSON-поля и алгоритм — `P9-design.md` §1/§11.\nДля FQCN и bindings переиспользовать P8 helpers, не писать второй scanner.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer test:pg",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "python3 scripts/tenancy-structure-gate.py check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "python3 scripts/tenancy-structure-gate.py fixture fourteenth-root",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "python3 scripts/tenancy-structure-gate.py fixture membership-internal",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "composer --working-dir=packages/tenancy lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "composer --working-dir=packages/tenancy analyse",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "composer --working-dir=packages/tenancy test",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "composer test:pg",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "карта, baseline JSON, каркас гейта, red fixtures, receipt."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-23T20:11:39Z",
+    "finished_at": "2026-09-23T20:28:56Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "grok-4.7-high/high",
+      "effort": "high"
+    },
+    "notes": "P9.1 GREEN: 174-file map, baseline, structure gate; both fixtures red for their own reason.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-23T20:28:56Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-23T20:28:56Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-23T20:28:56Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-23T20:28:56Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-23T20:28:56Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-23T20:28:56Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-23T20:28:56Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-23T20:28:56Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Снять post-P8 дерево, сопоставить каждый PHP-файл с ровно одной\nцелью и зафиксировать behavioral fingerprint до переносов."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`P9-design.md` §1–§3, §11; D46/D47. Без baseline final diff\nподменил бы доказательство памятью исполнителя."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "inventory/map; JSON fingerprint; public/config/queue consumer sweep;\nкаркас `tenancy-structure-gate.py` с двумя красными fixtures; receipt section."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "перенос PHP-файлов; смена composer autoload; ослабление\nP8 gates; реализация relay control plane."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P9-design.json` §0–§4.1, §10–§11; `@plan/knowledge/findings-P8-binding-catalog.json`;\n`packages/tenancy/composer.json`; D46–D49."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`@plan/knowledge/findings-P9-tenancy-map.json`; `findings/P9-compatibility-baseline.json`;\n`@plan/knowledge/findings-P9-receipts.json`; `scripts/tenancy-structure-gate.py`;\n`tests/fixtures/tenancy-structure/**`; `composer.json`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P9/phase.json`; 2) `@plan/knowledge/research-P9-design.json` §0–§3,\n§10–§11; 3) `@plan/knowledge/research-P1-design.json` STR-001–STR-006; 4) `@plan/knowledge/research-P8-design.json`\n§2, §9; 5) `@plan/decisions/D46.json`;\n6) `@plan/decisions/D47.json`;\n7) `@plan/decisions/D48.json`;\n8) `@plan/decisions/D49.json`; 9) `packages/tenancy/src/Actions/ApplyMembershipProjection.php` `packages/tenancy/src/Actions/ClaimAccountSignup.php` `packages/tenancy/src/Bootstrappers/WorkspaceContextBootstrapper.php` `packages/tenancy/src/Central/ActorRef.php` `packages/tenancy/src/Central/ActorType.php` `packages/tenancy/src/Central/CentralProtocolViolation.php` `packages/tenancy/src/Central/CentralUnauthorized.php` `packages/tenancy/src/Central/CentralUnavailable.php` `packages/tenancy/src/Central/CentralValue.php` `packages/tenancy/src/Central/MembershipQuery.php` `packages/tenancy/src/Central/MembershipReason.php` `packages/tenancy/src/Central/MembershipSnapshot.php` `packages/tenancy/src/Central/MembershipState.php` `packages/tenancy/src/Central/RevokeMembershipReceipt.php` `packages/tenancy/src/Central/RevokeMembershipRequest.php` `packages/tenancy/src/Commands/IdentitiesReconcileCommand.php` `packages/tenancy/src/Commands/PendingClearCommand.php` `packages/tenancy/src/Commands/PendingCreateCommand.php` `packages/tenancy/src/Commands/TenantsMigrateCommand.php` `packages/tenancy/src/Contracts/CentralApiClient.php` `packages/tenancy/src/Contracts/DomainChallengeStore.php` `packages/tenancy/src/Contracts/DomainOwnershipProofVerifier.php` `packages/tenancy/src/Contracts/DomainTrustAuthorizer.php` `packages/tenancy/src/Contracts/DomainTrustPolicy.php` `packages/tenancy/src/Contracts/PrincipalWorkspaceResolver.php` `packages/tenancy/src/Contracts/ProvisioningClaim.php` `packages/tenancy/src/Contracts/TemplateIntegrityVerifier.php` `packages/tenancy/src/Database/SchemaCatalogueSerializer.php` `packages/tenancy/src/Database/TemplateClonePostgreSQLManager.php` `packages/tenancy/src/Database/TemplateIntegrityException.php` `packages/tenancy/src/Database/TemplateIntegrityLock.php` `packages/tenancy/src/Database/TemplateIntegrityVerifier.php` `packages/tenancy/src/Database/TemplateManifest.php` `packages/tenancy/src/DomainTrust/ChallengeConsumption.php` `packages/tenancy/src/DomainTrust/DomainChallenge.php` `packages/tenancy/src/DomainTrust/DomainChallengeBinding.php` `packages/tenancy/src/DomainTrust/DomainChallengeDraft.php` `packages/tenancy/src/DomainTrust/DomainTrustActor.php` `packages/tenancy/src/DomainTrust/DomainTrustChangeReason.php` `packages/tenancy/src/DomainTrust/DomainTrustCoordinator.php` `packages/tenancy/src/DomainTrust/DomainTrustDenied.php` `packages/tenancy/src/DomainTrust/DomainTrustDisabled.php` `packages/tenancy/src/DomainTrust/DomainTrustOperation.php` `packages/tenancy/src/DomainTrust/DomainTrustStateWriter.php` `packages/tenancy/src/DomainTrust/DomainTrustTransition.php` `packages/tenancy/src/DomainTrust/IssuedDomainChallenge.php` `packages/tenancy/src/DomainTrust/NormalizedHost.php` `packages/tenancy/src/DomainTrust/ObservedDomainProof.php` `packages/tenancy/src/Events/AccountPurged.php` `packages/tenancy/src/Events/AccountSuspended.php` `packages/tenancy/src/Events/DomainTrustChanged.php` `packages/tenancy/src/Events/ExportReady.php` `packages/tenancy/src/Events/GraceStarted.php` `packages/tenancy/src/Events/Identity/MembershipGranted.php` `packages/tenancy/src/Events/Identity/MembershipRevoked.php` `packages/tenancy/src/Events/ImpersonationEnded.php` `packages/tenancy/src/Events/ImpersonationStarted.php` `packages/tenancy/src/Events/TrialStarted.php` `packages/tenancy/src/Events/UserSynced.php` `packages/tenancy/src/Exceptions/OidcAuthenticationException.php` `packages/tenancy/src/Exceptions/TenantCouldNotBeIdentifiedByHostException.php` `packages/tenancy/src/Http/Controllers/LogoutController.php` `packages/tenancy/src/Http/Controllers/OidcLoginController.php` `packages/tenancy/src/Http/Middleware/AccountStatusGate.php` `packages/tenancy/src/Http/Middleware/AllowImpersonatedWrites.php` `packages/tenancy/src/Http/Middleware/DenyImpersonatedWrites.php` `packages/tenancy/src/Http/Middleware/EnforceSessionLifetime.php` `packages/tenancy/src/Http/Middleware/ImpersonationSessionGuard.php` `packages/tenancy/src/Http/Middleware/RequireActiveMembership.php` `packages/tenancy/src/Http/Middleware/ResolveTenantFromHost.php` `packages/tenancy/src/Http/Middleware/ResolveWorkspace.php` `packages/tenancy/src/Identity/DatabaseIdentitySyncer.php` `packages/tenancy/src/Identity/IdentitySyncer.php` `packages/tenancy/src/Impersonation/DatabaseImpersonationService.php` `packages/tenancy/src/Impersonation/ImpersonatedModelWriteGuard.php` `packages/tenancy/src/Jobs/CreateDatabaseFromTemplate.php` `packages/tenancy/src/Jobs/RefreshAccountMembership.php` `packages/tenancy/src/Jobs/SyncIdentityToAccount.php` `packages/tenancy/src/Laravel/AuthenticationRegistrar.php` `packages/tenancy/src/Laravel/ConsoleRegistrar.php` `packages/tenancy/src/Laravel/DatabaseRegistrar.php` `packages/tenancy/src/Laravel/DomainTrustRegistrar.php` `packages/tenancy/src/Laravel/EventsRegistrar.php` `packages/tenancy/src/Laravel/HttpRegistrar.php` `packages/tenancy/src/Laravel/IdentityRegistrar.php` `packages/tenancy/src/Laravel/ProvisioningRegistrar.php` `packages/tenancy/src/Laravel/RuntimeRegistrar.php` `packages/tenancy/src/Laravel/WakeupRegistrar.php` `packages/tenancy/src/Laravel/WorkspaceRegistrar.php` `packages/tenancy/src/Lifecycle/AccountLifecycle.php` `packages/tenancy/src/Lifecycle/AccountLifecycleFsm.php` `packages/tenancy/src/Listeners/RevertTenancyOnJobException.php` `packages/tenancy/src/Membership/Internal/Credentials/CredentialCookieQueue.php` `packages/tenancy/src/Membership/Internal/Credentials/CredentialIssuanceDenied.php` `packages/tenancy/src/Membership/Internal/Credentials/FencedCredentialIssuer.php` `packages/tenancy/src/Membership/Internal/Credentials/FinalWriteAdmission.php` `packages/tenancy/src/Membership/Internal/Expiry/ExpiryScheduler.php` `packages/tenancy/src/Membership/Internal/Identity/ManagementIdentityHydrator.php` `packages/tenancy/src/Membership/Internal/Inbox/DurableInbox.php` `packages/tenancy/src/Membership/Internal/Inbox/InboxConflict.php` `packages/tenancy/src/Membership/Internal/Persistence/PairKey.php` `packages/tenancy/src/Membership/Internal/Persistence/PairState.php` `packages/tenancy/src/Membership/Internal/Persistence/PairStore.php` `packages/tenancy/src/Membership/Internal/Persistence/PairStoreViolation.php` `packages/tenancy/src/Membership/Internal/Persistence/PairWitness.php` `packages/tenancy/src/Membership/Internal/Projection/ProjectionDenied.php` `packages/tenancy/src/Membership/Internal/Projection/ReferenceMembershipProjection.php` `packages/tenancy/src/Membership/Internal/Refresh/RefreshCoordinator.php` `packages/tenancy/src/Membership/Internal/Switcher/AccountClickAuthorizer.php` `packages/tenancy/src/Membership/Internal/Switcher/AccountListEntry.php` `packages/tenancy/src/Membership/Internal/Switcher/AccountMenu.php` `packages/tenancy/src/Membership/Internal/Switcher/AccountMenuCache.php` `packages/tenancy/src/Membership/Internal/Switcher/AccountMenuReader.php` `packages/tenancy/src/Membership/Internal/Switcher/AccountsQuery.php` `packages/tenancy/src/Membership/Internal/Switcher/AccountsReadTransport.php` `packages/tenancy/src/Membership/Internal/Switcher/AccountsResult.php` `packages/tenancy/src/Membership/Internal/Switcher/RedisAccountMenuCache.php` `packages/tenancy/src/Membership/Internal/Switcher/StrictAccountsTransport.php` `packages/tenancy/src/Membership/Internal/Timing/ClockReading.php` `packages/tenancy/src/Membership/Internal/Timing/Elapsed.php` `packages/tenancy/src/Membership/Internal/Timing/Lease.php` `packages/tenancy/src/Membership/Internal/Transport/AccessTokenValidator.php` `packages/tenancy/src/Membership/Internal/Transport/ChannelBinding.php` `packages/tenancy/src/Membership/Internal/Transport/JwsVerifier.php` `packages/tenancy/src/Membership/Internal/Transport/MembershipEventKind.php` `packages/tenancy/src/Membership/Internal/Transport/MembershipTrigger.php` `packages/tenancy/src/Membership/Internal/Transport/RevokeUncertain.php` `packages/tenancy/src/Membership/Internal/Transport/StrictJson.php` `packages/tenancy/src/Membership/Internal/Transport/StrictTransport.php` `packages/tenancy/src/Membership/Internal/Transport/TriggerParser.php` `packages/tenancy/src/Membership/Internal/Transport/Value.php` `packages/tenancy/src/Migrations/MigrationWaveOrchestrator.php` `packages/tenancy/src/Models/Account.php` `packages/tenancy/src/Models/AccountExport.php` `packages/tenancy/src/Models/AccountSchemaState.php` `packages/tenancy/src/Models/Domain.php` `packages/tenancy/src/Models/ImpersonationGrant.php` `packages/tenancy/src/Models/Invitation.php` `packages/tenancy/src/Models/MigrationBatch.php` `packages/tenancy/src/Models/User.php` `packages/tenancy/src/Models/Workspace.php` `packages/tenancy/src/Models/WorkspaceMember.php` `packages/tenancy/src/Oidc/IdTokenVerifier.php` `packages/tenancy/src/Oidc/JwksKeySet.php` `packages/tenancy/src/Oidc/OidcClient.php` `packages/tenancy/src/Oidc/OidcDiscovery.php` `packages/tenancy/src/PHPStan/Rules/StanclImportBoundaryRule.php` `packages/tenancy/src/Provisioning/ClaimConflict.php` `packages/tenancy/src/Provisioning/ClaimRequest.php` `packages/tenancy/src/Provisioning/ClaimResult.php` `packages/tenancy/src/Provisioning/ClaimUnavailable.php` `packages/tenancy/src/Provisioning/ClusterAccountConnectionResolver.php` `packages/tenancy/src/Provisioning/PendingPool.php` `packages/tenancy/src/Provisioning/QualifiedTemplate.php` `packages/tenancy/src/Provisioning/StanclTenantDatabaseLifecycle.php` `packages/tenancy/src/Provisioning/StanclTenantDatabaseProvisioner.php` `packages/tenancy/src/Resolvers/HostTenantResolver.php` `packages/tenancy/src/Scopes/WorkspaceScope.php` `packages/tenancy/src/StanclTenancyManager.php` `packages/tenancy/src/Storage/ContextTenantStorage.php` `packages/tenancy/src/Storage/ObjectTenantStorage.php` `packages/tenancy/src/Support/AccountLifecyclePolicy.php` `packages/tenancy/src/Support/ImpersonationPolicy.php` `packages/tenancy/src/Support/StatusGatePolicy.php` `packages/tenancy/src/Support/TenancyOptions.php` `packages/tenancy/src/TenancyManagerContextResolver.php` `packages/tenancy/src/TenancyServiceProvider.php` `packages/tenancy/src/Wakeup/Commands/SweepRootWakeups.php` `packages/tenancy/src/Wakeup/Internal/RootRegistryWakeupHint.php` `packages/tenancy/src/Wakeup/Internal/RootWakeupReconciler.php` `packages/tenancy/src/Workspaces/DatabaseWorkspaceResolver.php` `packages/tenancy/src/Workspaces/InvitationNotAcceptableException.php` `packages/tenancy/src/Workspaces/NoDefaultWorkspaceException.php` `packages/tenancy/src/Workspaces/WorkspaceResolver.php`;\n10) `packages/tenancy/composer.json`; 11) `packages/tenancy/config/corex-tenancy.php` `packages/tenancy/config/tenancy.php`;\n12) `packages/tenancy/routes/oidc.php`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Карта имеет 100% coverage, уникальные `from`/`to`\nи owner/item на каждой строке. Fingerprint машиночитаемый и заранее\nпомечает concrete-дельту `TenantContextRestorer` по D49 как единственную разрешённую.\nГейт пока может быть red на текущем дереве, но обе негативные\nfixtures обязаны падать по своей причине."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "JSON-поля и алгоритм — `P9-design.md` §1/§11.\nДля FQCN и bindings переиспользовать P8 helpers, не писать второй scanner."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "гейт принимает baseline и отклоняет обе fixtures;\ncoverage = 100%, duplicates = 0; package lint/analyse/test; `composer test:pg`."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "карта, baseline JSON, каркас гейта, red fixtures, receipt."
+    }
+  ]
+}

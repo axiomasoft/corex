@@ -12,7 +12,7 @@ use CoreX\Messaging\Events\DomainEvent;
 use Override;
 
 /**
- * Fired by {@see CoreX\Tenancy\Provisioning\Internal\StanclTenantDatabaseLifecycle::drop()} once the account's
+ * Fired by {@see CoreX\Tenancy\Provisioning\Internal\DatabaseTenantLifecycle::drop()} once the account's
  * physical database has been dropped (B-11 §5.1/§7.3, D13/AC-7) — the
  * `AccountLifecycle::purge()` caller does the `root_accounts` soft-delete
  * and `root_domains` cleanup, not this event's source. Built with an

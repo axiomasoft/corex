@@ -1,0 +1,51 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D107",
+  "title": "Attributes is classified by producer-adjusted census as profile B",
+  "date": "2026-09-20",
+  "status": "accepted",
+  "decision": "D91's producer-adjusted rule remains, but `attributes` is explicitly a profile-B\npackage. P10.8 owns its physical-compatible subsystem structure. P16.11 consumes the\npost-P10 census and proves a B-conformant no-move verdict against that structure; it does\nnot leave an unowned conditional move. The remaining 11 compact packages stay in the\nProfile-A matrix. The threshold itself is unchanged.",
+  "rationale": "Known producer growth must be incorporated during design. Classification is not a\nruntime exception and does not force a gratuitous move when B is already satisfied.",
+  "applies_to": [
+    "P10.8",
+    "P16",
+    "P16.11",
+    "P16.13",
+    "P17.10"
+  ],
+  "supersedes": [
+    "D91"
+  ],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/codex-gpt-5.6-sol/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D107\ndate: 2026-09-20\nstatus: accepted\nitem: P16.11\nitems: [P10.8, P16, P16.11, P16.13, P17.10]\nsupersedes: [D91]\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D107-Attributes-is-classified-by-producer-adjusted-census-as-profile-B",
+      "title": "D107 — Attributes is classified by producer-adjusted census as profile B",
+      "text": "**Actor:** plan-designer/codex-gpt-5.6-sol/high\n**Evidence:** `RAG:—` DA12 establishes a deterministic lower bound above 40 PHP files\nafter P10 producers, so the profile-A premise is already false before execution."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "D91's producer-adjusted rule remains, but `attributes` is explicitly a profile-B\npackage. P10.8 owns its physical-compatible subsystem structure. P16.11 consumes the\npost-P10 census and proves a B-conformant no-move verdict against that structure; it does\nnot leave an unowned conditional move. The remaining 11 compact packages stay in the\nProfile-A matrix. The threshold itself is unchanged."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Known producer growth must be incorporated during design. Classification is not a\nruntime exception and does not force a gratuitous move when B is already satisfied."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P10.8/P16.11 share one post-P10 census; P16.13 and P17.10 verify the resulting profile\nmanifest rather than expecting 12 A packages."
+    }
+  ]
+}

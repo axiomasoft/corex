@@ -1,0 +1,58 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D36",
+  "title": "Бывший Opus (P13, P14, аудит) на Sol, не на Grok",
+  "date": "2026-09-19",
+  "status": "superseded",
+  "decision": "1. Оставшиеся слоты бывшего Opus — **P13, P14 и `task:plan-audit` стадии 2** —\n   идут на **GPT-5.6 Sol**. Cursor launch: `--model gpt-5.6-sol`.\n2. Лестница только для этих трёх: Sol → Astra (`gpt-6-astra`), если Sol\n   нельзя запустить → Grok 4.6, если нет ни Sol, ни Astra.\n3. Остальные незакрытые design-проходы (P7–P12, P15–P17) остаются на\n   **Grok 4.6 (effort `high`)**, как в исходном D10. Их лестница: Grok → Sol →\n   Astra.\n4. P1, P4, P5 на Opus не переигрываются. Items — Composer 2.5. Claude и\n   Gemini 3.1 Pro не используются. Astra не является дефолтом ни одной фазы.",
+  "rationale": "D35 сплющил все оставшиеся Claude-слоты в Grok. Это смешало две разные\nпричины D10: «дешёвый дефолт» и «ошибка необратима». Sol — ближайшая\nдоступная frontier-замена Opus. Astra сильнее по классу, но владелец уже\nограничил её крайним случаем (чувствительность к конфликтным инструкциям);\nпоэтому она запас P13/P14/аудита, не их первая модель.\n\nАльтернатива «P13/P14/аудит сразу на Astra» отклонена, пока владелец явно\nне снимет пометку «крайний случай». Альтернатива «оставить Grok» отклонена\nэтим указанием.",
+  "applies_to": [
+    "P13",
+    "P14",
+    "P7",
+    "P8",
+    "P9",
+    "P10",
+    "P11",
+    "P12",
+    "P15",
+    "P16",
+    "P17"
+  ],
+  "supersedes": [
+    "D35"
+  ],
+  "superseded_by": "D37",
+  "actor": {
+    "provider": "legacy",
+    "model": "owner (Dmitry Vostrikov), 2026-09-19 · зафиксировано plan-designer/cursor-grok-4.6/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D36\ndate: 2026-09-19\nstatus: superseded\nitem: P13\nitems: [P13, P14, P7, P8, P9, P10, P11, P12, P15, P16, P17]\nsupersedes: [D35]\nsuperseded_by: D37\n---"
+    },
+    {
+      "id": "D36-Opus-P13-P14-Sol-Grok",
+      "title": "D36 — Бывший Opus (P13, P14, аудит) на Sol, не на Grok",
+      "text": "**Actor:** owner (Dmitry Vostrikov), 2026-09-19 · зафиксировано plan-designer/cursor-grok-4.6/high\n**Evidence:** RAG:— владелец: замена Opus на Grok неверна; ждать Sol, а для\nреально важных фаз Astra. RAG:— D10 не утверждал равенства Grok и Opus/Sol:\nGrok был дешёвым дефолтом ($2/$6, без доплаты за длинный контекст), Opus —\nтам, где ошибка не локальна (P1, P4, P5, P13, P14 и аудит стадии 2).\nRAG:— Codex-адаптер плана мапит frontier → GPT-5.6 Sol. RAG:— Astra\n(`gpt-6-astra`) владелец ранее назвал крайним случаем; как дефолт P13/P14\nне ставится."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "1. Оставшиеся слоты бывшего Opus — **P13, P14 и `task:plan-audit` стадии 2** —\n   идут на **GPT-5.6 Sol**. Cursor launch: `--model gpt-5.6-sol`.\n2. Лестница только для этих трёх: Sol → Astra (`gpt-6-astra`), если Sol\n   нельзя запустить → Grok 4.6, если нет ни Sol, ни Astra.\n3. Остальные незакрытые design-проходы (P7–P12, P15–P17) остаются на\n   **Grok 4.6 (effort `high`)**, как в исходном D10. Их лестница: Grok → Sol →\n   Astra.\n4. P1, P4, P5 на Opus не переигрываются. Items — Composer 2.5. Claude и\n   Gemini 3.1 Pro не используются. Astra не является дефолтом ни одной фазы."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "D35 сплющил все оставшиеся Claude-слоты в Grok. Это смешало две разные\nпричины D10: «дешёвый дефолт» и «ошибка необратима». Sol — ближайшая\nдоступная frontier-замена Opus. Astra сильнее по классу, но владелец уже\nограничил её крайним случаем (чувствительность к конфликтным инструкциям);\nпоэтому она запас P13/P14/аудита, не их первая модель.\n\nАльтернатива «P13/P14/аудит сразу на Astra» отклонена, пока владелец явно\nне снимет пометку «крайний случай». Альтернатива «оставить Grok» отклонена\nэтим указанием."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "`@plan/plan.json` §3.1a/§3.1b/§3.3 и `@plan/plan.json` §3 несут Sol на P13, P14 и аудите.\nHandoff P7 не меняется: P7 была Sonnet-слотом и остаётся на Grok.\nD35 сохраняется как решение «Claude снят»; живой выбор модели для бывшего\nOpus уточняет это решение."
+    }
+  ]
+}

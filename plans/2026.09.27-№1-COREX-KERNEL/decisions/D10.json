@@ -1,0 +1,45 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D10",
+  "title": "errors (accepted)",
+  "date": "2026-09-27",
+  "status": "accepted",
+  "decision": "Коды ошибок — стабильные строки `<scope>.<code>` (`core.*` у ядра, `<package-slug>.*` у пакетов) как wire-контракт; каждый пакет объявляет коды backed enum (`implements ErrorCode`) и регистрирует `ProblemDefinition(code, type URI, default status, title, retryable)` в реестре, компилируемом при boot (дубль/чужой префикс — ошибка boot). Исключения несут код; HTTP-ответ — RFC 9457 `application/problem+json` c extension-полем `code`. Строковые литералы кодов в коде (`new ApiError('validation_failed', …)`) запрещены гейтом.",
+  "rationale": "F00 A9.2 (60+ литералов без реестра); `pplx-08` (enum не расширяется плагинами → string wire + registry + enum для удобства, RFC 9457); chatom PLAN2.D26/P04.3 — строковый `errorCode()` + категории.",
+  "applies_to": [
+    "P04",
+    "P06"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "author-choice (claude-opus-5-5/high) по мандату владельца «есть идеальное решение — утверждай» (`brief/00-brief.md` B6)"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D10\ndate: 2026-09-27\nstatus: accepted\nitem: P04\nitems: [P04, P06]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D10-errors-accepted",
+      "title": "D10 — errors (accepted)",
+      "text": "**Actor:** author-choice (claude-opus-5-5/high) по мандату владельца «есть идеальное решение — утверждай» (`@plan/brief.json` B6)\n**Evidence:** RAG:— `@plan/knowledge/findings-00-audit-verification.json`, `artifacts/P00-design/facts/`; RAG:✅ `@plan/knowledge/research-01-external-research.json`, `artifacts/research-rag/`"
+    },
+    {
+      "id": "Solution",
+      "title": "Solution",
+      "text": "Коды ошибок — стабильные строки `<scope>.<code>` (`core.*` у ядра, `<package-slug>.*` у пакетов) как wire-контракт; каждый пакет объявляет коды backed enum (`implements ErrorCode`) и регистрирует `ProblemDefinition(code, type URI, default status, title, retryable)` в реестре, компилируемом при boot (дубль/чужой префикс — ошибка boot). Исключения несут код; HTTP-ответ — RFC 9457 `application/problem+json` c extension-полем `code`. Строковые литералы кодов в коде (`new ApiError('validation_failed', …)`) запрещены гейтом."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "F00 A9.2 (60+ литералов без реестра); `pplx-08` (enum не расширяется плагинами → string wire + registry + enum для удобства, RFC 9457); chatom PLAN2.D26/P04.3 — строковый `errorCode()` + категории."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P04 (исключения, ErrorCode), P06 (problem+json в HTTP)."
+    }
+  ]
+}

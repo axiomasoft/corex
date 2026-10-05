@@ -1,0 +1,49 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "findings-P5-qualification-2026-09-22",
+  "title": "P5.18 joined qualification — 2026-09-22",
+  "sections": [
+    {
+      "id": "P5.18-joined-qualification-2026-09-22",
+      "title": "P5.18 joined qualification — 2026-09-22",
+      "text": ""
+    },
+    {
+      "id": "Verdict",
+      "title": "Verdict",
+      "text": "**RED — owning continuation: P5.13.** P6.1 remains blocked. P5.18 performed no product\nrepair and did not create a commit.\n\nThe joined package lane reproduces a Pest test-case double binding in\n`packages/tasks-workflow/tests/Pg/MaterializationPgTest.php`. The package-level\n`tests/Pest.php` binds `PgTestCase` to `Pg`, while the file binds the same test case again.\nPest exits before executing that package's tests."
+    },
+    {
+      "id": "Candidate",
+      "title": "Candidate",
+      "text": "- HEAD at qualification start: `9608b488bc1ab1fcf635cf08254b5f6687e0d60a`.\n- Worktree at qualification start: 199 changed/untracked paths.\n- Route: `gpt-5.6-sol/xhigh`, provider-thread-state.\n- Durable run: `7c6a4221694b9a6d1a5cd2da8b3186aa29d75f9f23fc2a813937981c00b2eb37`, attempt 1.\n- Product writes by P5.18: none."
+    },
+    {
+      "id": "Command-result-matrix",
+      "title": "Command/result matrix",
+      "text": "| Step | Command / carrier | Exit | Result |\n|:--|:--|--:|:--|\n| PostgreSQL isolation | `phpunit.xml` target + `_test` gate | 0 | `corex_test`; regex `^[a-z0-9_]+_test$` passed |\n| PostgreSQL readiness | `docker compose ps pgsql`; host `pg_isready`; database existence query | 0 | container healthy; `127.0.0.1:5434` accepting; `corex_test` exists |\n| Core SQLite | `composer --working-dir=packages/core test` | 0 | 84 tests, 197 assertions |\n| Core PostgreSQL | `composer --working-dir=packages/core test:pg` | 0 | 37 tests, 180 assertions |\n| Core analysis | `composer --working-dir=packages/core analyse` | 0 | 0 errors |\n| Core lint | `composer --working-dir=packages/core lint:check` | 0 | Pint passed |\n| Root lint | `composer lint:check` | 0 | isolated rerun passed; see concurrency note |\n| Root analysis | `composer analyse` | 0 | 0 errors |\n| Root architecture | `composer test:arch` | 0 | 35 tests, 95 assertions |\n| Package graph | `composer package-graph-gate` | 0 | `package-graph-gate: OK` |\n| Root SQLite | `composer test` | 0 | 403 tests, 1284 assertions |\n| All packages | `composer test:packages` | 1 | 431 tests / 1446 assertions passed before `tasks-workflow`; its runner exited 255 before tests |\n| Reproduction | `composer --working-dir=packages/tasks-workflow test` | 255 | duplicate `PgTestCase` binding reproduced |\n| Package analysis | `composer analyse:packages` | — | not run after fail-fast owning RED |\n| Naming/config/table/anti-weakening | declared gates | — | not run after fail-fast owning RED |\n| Diff/view/plan gates | remaining P5.18 gates | — | product diff check not claimed; lifecycle reconciliation follows the typed RED result |\n\nThe first root Pint invocation overlapped `composer test:arch` and observed that suite's temporary\nnegative fixture `packages/core/src/Support/ConfigCompositionProbe.php`. The Arch suite removed the\nfixture; an immediate isolated `composer lint:check` passed. This transient observation is not the\nblocking finding."
+    },
+    {
+      "id": "Ownership-and-acceptance-gap",
+      "title": "Ownership and acceptance gap",
+      "text": "The execution audit assigns the tasks-workflow PG harness to P5.13. P5.13's specification requires\nboth `tasks-workflow test` and its PG witness to pass, but its receipt recorded only direct Pest\ncommands split by `--exclude-group=pg` and `--group=pg`. Those commands do not exercise the package\n`composer test` entry point that P5.18 and `composer test:packages` use.\n\nCurrent bytes also implement both instructions that conflict at the Pest repository boundary:\n\n- `packages/tasks-workflow/tests/Pest.php` applies `PgTestCase` to the `Pg` directory;\n- `packages/tasks-workflow/tests/Pg/MaterializationPgTest.php` applies `PgTestCase` to the file.\n\nThe owning repair must make the root and package entry points agree, rerun the exact package\n`composer test` command, and then resume P5.18 from the full joined matrix. P5.18 does not select\nthe repair because product fixes and changes to P5.13's sealed guidance are outside its scope."
+    },
+    {
+      "id": "Corrective-continuation-attempt-2",
+      "title": "Corrective continuation — attempt 2",
+      "text": "**GREEN — the two formerly RED carriers now pass.** This continuation reused the unchanged\nGREEN results above exactly as directed by the owner; it did not replay the full P5.18 matrix and\ndid not perform product repair.\n\n- Candidate HEAD remained `9608b488bc1ab1fcf635cf08254b5f6687e0d60a`; the continuation began\n  with 200 changed/untracked paths, including Task's durable P5.18 start projection.\n- Route remained `gpt-5.6-sol/xhigh`, provider-thread-state. Durable run:\n  `0a68eb430fe74bff0ca327c734ea5883ffb2c55c58992f78cdcb91dbac452b1a`, attempt 2.\n- PostgreSQL preflight was refreshed before the serial package commands: Docker service `pgsql`\n  was healthy, `pg_isready` accepted `127.0.0.1:5434`, and the existing target `corex_test`\n  passed the `_test` isolation guard.\n- Exact former reproduction, `composer --working-dir=packages/tasks-workflow test`: exit 0,\n  13 tests / 68 assertions. The duplicate `PgTestCase` binding no longer occurs.\n- Exact joined carrier, `composer test:packages`: exit 0 after all 21 package entries completed;\n  its `tasks-workflow` entry also passed 13 tests / 68 assertions.\n- The unchanged GREEN rows from attempt 1 remain the qualification evidence for core SQLite/PG,\n  core analysis/lint, root lint/analysis/architecture/package graph/SQLite. Their product candidate\n  was not changed by P5.18 attempt 2, so they were intentionally not rerun.\n- Product writes and commit by P5.18 attempt 2: none. Only the qualification receipt and\n  Task-owned lifecycle carriers are reconciled below."
+    },
+    {
+      "id": "Lifecycle-continuation-boundary",
+      "title": "Lifecycle continuation boundary",
+      "text": "The owner stopped the session after both formerly RED carriers were GREEN because further lifecycle\ninspection was taking disproportionate time. Resume session\n`01a0c9a7-9738-7951-b0fa-ec325f815b9b` for terminal reconciliation only. Validation must not be\nrerun; after P5.18 closes, the next item is P6.1 on Codex `gpt-5.6-sol/high`."
+    }
+  ],
+  "applies_to": [
+    "P5"
+  ],
+  "provenance": {
+    "path": "findings/P5-qualification-2026-09-22.md",
+    "sha256": "0d7e8bf419fde3c8d2cffc651d4f8d7c1bd763f9cda1b0df2fc54e3e9e1b2a45"
+  }
+}

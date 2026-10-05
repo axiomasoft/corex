@@ -1,0 +1,22 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P7-design-rag-q04-q05",
+  "title": "Q4 — policy objects vs scattered keys",
+  "sections": [
+    {
+      "id": "P7-Q4-policy-objects-vs-scattered-keys",
+      "title": "P7-Q4 — policy objects vs scattered keys",
+      "text": "**Query:** Answer in prose, no tables. Why wrap several related configuration\nkeys (for example impersonation enabled, require-approved-by, max session\nlifetime, read-only HTTP methods) into one immutable policy object injected\ninto middleware, instead of each middleware calling config() for four keys?\nContrast with a generic Options bag. Cite Fowler encapsulated context/policy,\nMicrosoft options pattern, Laravel middleware docs. Name primary-source URLs.\n\n**Status:** success\n\nInject a small immutable policy object when those values jointly define one\nauthorization decision. Middleware then depends on “the impersonation rules”\nrather than four configuration paths. Laravel resolves middleware from the\ncontainer and allows constructor type-hinting.\n\nScattered `config()` calls couple middleware to exact key names, coercion,\ndefaults, cross-field rules and the timing of reads. A policy constructed once\nfrom one validated snapshot is seen by every method in the request. Fowler:\nan object bundles data with behavior and establishes a common context.\nMicrosoft Options pattern: related settings are read through an options type\nwith validation. An Options bag answers “what were the configured values?”\nA policy object answers “what rule applies?” Start with typed options at the\ninfrastructure boundary; promote to a policy when values interact, require\ncross-field validation, or have several consumers.\n\nDo not wrap a single feature flag used once. Do not build a mega-Application\nOptions object from unrelated tunables.\n\nPrimary sources: https://martinfowler.com/bliki/FunctionAsObject.html ·\nhttps://learn.microsoft.com/en-us/dotnet/core/extensions/options ·\nhttps://laravel.com/docs/13.x/middleware\n\n[листинг сокращён: ImpersonationPolicy vs четыре config() в middleware]"
+    },
+    {
+      "id": "P7-Q5-blocking-composition-gate",
+      "title": "P7-Q5 — blocking composition gate",
+      "text": "**Query:** Answer in prose, no tables. Architectural fitness functions that\nfail CI when a forbidden API such as Laravel config() is called outside an\nallow-list of composition-root files (service providers, console commands).\nWhy must the gate include a planted negative test that names the offending\nfile? Contrast observational (warn, exit 0) versus blocking (exit 1). Cite\nThoughtWorks fitness-function-driven development, Pest PHP arch testing.\nName primary-source URLs.\n\n**Status:** success\n\nA CI rule forbidding `config()` outside composition-root files is an\narchitectural fitness function: it turns “configuration is wired at the edge”\ninto an automated integrity check. ThoughtWorks: fitness functions belong in\ndelivery pipelines.\n\nThe gate must include a planted negative test that puts `config()` in a known\nforbidden file and asserts CI fails while naming that exact file. Without it,\ngreen CI is ambiguous: the glob may have narrowed, the parser may miss helper\ncalls, exclusions may be too broad, or the job may not invoke the gate. The\nplanted violation proves fixture discovery → detection → diagnostic →\nnon-zero status.\n\nObservational mode reports and exits 0; useful while measuring debt, but it\ndoes not preserve the boundary. Blocking mode exits 1 and is the governing\nforce. A practical rollout is observational, then block new violations, then\nremove the baseline. Keep the planted test in every phase. In blocking mode\nit must demonstrate detected, named, and non-zero exit.\n\nPest Arch is strong for namespace/class rules. The literal helper `config()`\nis often a token/AST scan. Run that scanner from Pest or as its own CI\ncommand; what matters is the planted offender and the path-bearing message.\n\nPrimary sources:\nhttps://www.thoughtworks.com/en-us/insights/articles/fitness-function-driven-development ·\nhttps://pestphp.com/docs/arch-testing"
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P7-design-rag/q04-q05.md",
+    "sha256": "5d409dfd632c8a8becbe400a37ce4d835a17a39fbca172434bdd2c31a34c4fde"
+  }
+}

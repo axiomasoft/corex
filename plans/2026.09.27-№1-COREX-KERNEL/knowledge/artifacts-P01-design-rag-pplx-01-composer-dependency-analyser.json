@@ -1,0 +1,42 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P01-design-rag-pplx-01-composer-dependency-analyser",
+  "title": "pplx-01 — shipmonk/composer-dependency-analyser в монорепо",
+  "sections": [
+    {
+      "id": "pplx-01-shipmonk-composer-dependency-analyser",
+      "title": "pplx-01 — shipmonk/composer-dependency-analyser в монорепо",
+      "text": "- **Дата:** 2026-09-28\n- **Инструмент:** perplexity-web `search`\n- **Запрос:** «shipmonk composer-dependency-analyser monorepo usage: per-package composer.json with path repositories,\n  configuration file composer-dependency-analyser.php options (ignoreErrorsOnPackage, addPathToScan,\n  disableExtensionsAnalysis), shadow dependency and unused dependency error types, CLI flags --composer-json»"
+    },
+    {
+      "id": "section",
+      "title": "Ответ (дословно)",
+      "text": "For a monorepo, run the analyser once per package, pointing --composer-json at that package’s manifest. Each package’s Composer install should resolve its own dependencies—including local path repositories—so the analyser checks that package’s dependency graph and autoload paths, rather than treating the monorepo root as the project. The CLI supports --composer-json; configuration can be loaded from the current working directory or explicitly selected with --config."
+    },
+    {
+      "id": "Per-package-setup",
+      "title": "Per-package setup",
+      "text": "A package manifest can declare a sibling package as a Composer path repository, for example:\n```\n{ \"repositories\": [ { \"type\": \"path\", \"url\": \"../shared\", \"options\": { \"symlink\": true } } ], \"require\": { \"acme/shared\": \"*\" } }\n```\nFrom the package directory, install dependencies and run:\n```\ncomposer install vendor/bin/composer-dependency-analyser \\ --composer-json packages/api/composer.json \\ --config packages/api/composer-dependency-analyser.php\n```\nUse paths relative to the command’s working directory—or absolute paths—to avoid ambiguity. --composer-json selects the manifest; it does not automatically select a matching config file."
+    },
+    {
+      "id": "Package-specific-configuration",
+      "title": "Package-specific configuration",
+      "text": "The config file must return a Configuration object. addPathToScan() adds scan paths, with isDev: true for paths used only in development. ignoreErrorsOnPackage() suppresses selected error types for a named dependency; disableExtensionsAnalysis() turns off ext-* dependency analysis.\n```\n<?php use ShipMonk\\ComposerDependencyAnalyser\\Config\\Configuration; use ShipMonk\\ComposerDependencyAnalyser\\Config\\ErrorType; return (new Configuration()) ->addPathToScan(__DIR__ . '/src', isDev: false) ->addPathToScan(__DIR__ . '/tests', isDev: true) ->ignoreErrorsOnPackage( 'acme/registered-by-config', [ErrorType::UNUSED_DEPENDENCY], ) ->disableExtensionsAnalysis();\n```\nKeep ignores narrow where possible: ignoring an unused dependency package-wide can hide future dead dependencies too. The tool also supports path-specific and package-plus-path ignores."
+    },
+    {
+      "id": "What-the-errors-mean",
+      "title": "What the errors mean",
+      "text": "- SHADOW_DEPENDENCY: code uses a package that is available transitively through another dependency but is not declared directly in this package’s composer.json. Add it to require or require-dev, as appropriate.\n- UNUSED_DEPENDENCY: a declared dependency has no detected usage in the scanned paths. Check whether the scan includes the relevant code before removing it; configuration-driven or non-PHP usage may need explicit handling.\n--disable-ext-analysis is the CLI equivalent of disabling extension analysis in config. The global CLI switches --ignore-shadow-deps and --ignore-unused-deps suppress those categories broadly; for a monorepo, package-local config is usually more precise."
+    },
+    {
+      "id": "section-2",
+      "title": "Источники",
+      "text": "1. [packagist](https://packagist.org/packages/shipmonk/composer-dependency-analyser)"
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P01-design-rag/pplx-01-composer-dependency-analyser.md",
+    "sha256": "cc5351fa39db8c6afea2b2befe8881b815534be6c5808dd350d9bebd7bc4dadc"
+  }
+}

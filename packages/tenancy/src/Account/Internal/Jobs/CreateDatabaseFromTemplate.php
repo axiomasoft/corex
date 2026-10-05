@@ -4,23 +4,19 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Account\Internal\Jobs;
 
-use CoreX\Tenancy\Account\Internal\Models\Account;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\ProvisionParams;
+use CoreX\Tenancy\Account\Laravel\AccountTemplateSnapshot;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
+use CoreX\Tenancy\Provisioning\Contracts\TemplateDatabaseCloner;
 use CoreX\Tenancy\Provisioning\Contracts\TemplateIntegrityChecks as TemplateIntegrityVerifier;
-use CoreX\Tenancy\Provisioning\Data\TemplateAccountView;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-/**
- * Provisioning pipeline step (`TenantCreated ⇒ JobPipeline::make([self::class])`,
- * R-11 §2.3 п.5) — deliberately WITHOUT `MigrateDatabase`/`SeedDatabase`,
- * the schema already lives in the golden template. Idempotent: a second run
- * against an already-provisioned account no-ops (replayable pipeline,
- * premortem B4) instead of re-cloning or erroring.
- */
+/** Synchronous, idempotent golden-template clone; never runs migrations or seeders. */
 final class CreateDatabaseFromTemplate implements ShouldQueue
 {
     use Dispatchable;
@@ -29,29 +25,30 @@ final class CreateDatabaseFromTemplate implements ShouldQueue
     use SerializesModels;
 
     public function __construct(
-        public readonly Account $tenant,
+        public readonly AccountRef $account,
+        public readonly ProvisionParams $params,
     ) {}
 
     public function handle(
         TemplateIntegrityVerifier $templateIntegrityVerifier,
         TenancyOptions $options,
+        TemplateDatabaseCloner $manager,
     ): bool {
-        $tenant = Account::on($options->centralConnection)->findOrFail($this->tenant->id);
+        $snapshot = AccountTemplateSnapshot::capture($this->account, $options->centralConnection);
 
         $templateIntegrityVerifier->verifyCurrent(
-            version: (int) $tenant->template_version,
-            clusterId: (string) $tenant->cluster_id,
+            version: $snapshot->templateVersion,
+            clusterId: $snapshot->clusterId,
         );
 
-        $manager = $tenant->database()->manager();
-        $name = $tenant->database()->getName();
+        $name = $snapshot->databaseName;
 
         if ($manager->databaseExists($name)) {
-            $templateIntegrityVerifier->verifyAccount(new TemplateAccountView($tenant->template_version, $tenant->cluster_id, $tenant->db_name));
+            $templateIntegrityVerifier->verifyAccount($snapshot);
 
             return true;
         }
 
-        return $manager->createDatabase($tenant);
+        return $manager->createForAccount($this->account);
     }
 }

@@ -1,0 +1,255 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P5.1",
+  "title": "`message-policy.md` до исполнимого вида: типы полей, процедура объявления, не-обещания",
+  "status": "done",
+  "summary": "Дополнить существующий `docs/architecture/message-policy.md` пятью разделами,\nкоторых в нём нет: типы и пределы полей конверта, процедура объявления нового\nинтеграционного контракта, перечень того, чего механизм не обещает, обязательная форма\nпотребителя, два окна retention и отсутствие чистки inbox.",
+  "why": "A90/A92: политика написана P1.6 на уровне нормы, но исполнителю items P5.2–P5.12\nнужны типы, пределы и процедуры, которых на момент P1 ещё не существовало. `RAG:✅` P5-Q3:\n`type` — единственная граница совместимости, и правила её эволюции обязаны быть записаны\nтам же, где живёт перечень полей. `RAG:✅` P5-Q1 и P5-Q5: отсутствие гарантии порядка и\nнеэквивалентность `afterCommit()` обязаны быть объявлены явно — молчание о них читается\nкак обещание, а `afterCommit()` это самый вероятный способ не построить outbox вовсе.",
+  "scope": {
+    "include": [
+      "пять разделов по §10 дизайна, добавляемых к существующему документу;\nстрока в корневом `CHANGELOG.md`; receipt."
+    ],
+    "exclude": [
+      "переписывание любой существующей нормативной фразы документа;\nпереписывание статей `MSG-001`…`MSG-008` конституции — документ по-прежнему на них\nссылается; любое изменение PHP-кода, миграций и конфигурации; создание\n`table-ownership.md` (P2.3) и записей в нём (P5.4); объявление конкретных контрактов\nсообщений — ядро не объявляет ни одного (D26)."
+    ]
+  },
+  "depends_on": [
+    "P1.6"
+  ],
+  "decisions": [
+    "D24",
+    "D25",
+    "D28",
+    "D29"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P5-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P5-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/findings-audit-verdicts.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P5/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D24.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D25.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D28.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D29.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "docs/architecture/message-policy.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "docs/architecture/constitution.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "docs/architecture/message-policy.md",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P5-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Документ **дополняется, а не переписывается**: существующие\nтаблица трёх классов, таблица шести обязательных полей и список шести обязательных правил\nсохраняются дословно. Новая колонка «тип и предел» добавляется к существующей таблице\nполей, а не заменяет её другой таблицей. Раздел «чего механизм не обещает» содержит ровно\nтри пункта, и каждый несёт свою причину, а не только запрет: без причины такой раздел\nчерез полгода читается как перестраховка и снимается. Фраза про `afterCommit()` формулируется\nутвердительно — «`dispatch()->afterCommit()` не является реализацией `MSG-008`, потому что\nгарантирует порядок видимости, а не долговременное намерение», — чтобы её нельзя было\nпрочитать как «afterCommit достаточно в простых случаях». Различие дефолтов retention\ninbox и `sys_pubsub_messages` объясняется явно (§7.3): без объяснения оно выглядит\nнепоследовательностью и будет «исправлено» первым же читателем. Ни один файл вне `Files`\nне изменяется."
+  ],
+  "guidance": "Готовый состав каждого из пяти разделов — `@plan/knowledge/research-P5-design.json` §10,\nпункты (1)–(5). Типы и пределы полей — §2.1 (таблица соответствия), §2.3 (форма имени),\n§2.6 (пределы payload'а). Перечень ломающих изменений схемы для раздела (2) — §3.3.\nФрагмент обязательной формы потребителя для раздела (4) переносится из §7.2 целиком,\nвместе с комментарием про подтверждение доставки. Формулировки не-обещаний — §5.9\n(порядок), §5.1 (exactly-once), §4.1 (`afterCommit`).",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "rg -c 'MSG-00' docs/architecture/message-policy.md",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "git diff --stat -- 'packages/'",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "composer lint:check",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "rg MSG-00 count >= baseline",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "acceptance strings name.vN MSG-008 at-least-once ordering",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "git diff packages empty for P5.1 scope",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "composer lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "дополненный `docs/architecture/message-policy.md` с пятью новыми\nразделами; строка в `CHANGELOG.md`; блок receipt'а с числом упоминаний `MSG-00` до и\nпосле правки и перечнем добавленных разделов."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "required",
+    "status": "complete"
+  },
+  "result": {
+    "started_at": "2026-09-21T16:49:39Z",
+    "finished_at": "2026-09-21T16:49:39Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/cursor-composer-2.5/high",
+      "effort": "high"
+    },
+    "notes": "P5.1 GREEN: message-policy five sections, MSG-00 1→3, receipt §P5.1",
+    "deviations": [
+      "P5.1 GREEN: message-policy five sections, MSG-00 1→3, receipt §P5.1"
+    ],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-21T16:49:39Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-21T16:49:39Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-21T16:49:39Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-21T16:49:39Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-21T16:49:39Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Дополнить существующий `docs/architecture/message-policy.md` пятью разделами,\nкоторых в нём нет: типы и пределы полей конверта, процедура объявления нового\nинтеграционного контракта, перечень того, чего механизм не обещает, обязательная форма\nпотребителя, два окна retention и отсутствие чистки inbox."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "A90/A92: политика написана P1.6 на уровне нормы, но исполнителю items P5.2–P5.12\nнужны типы, пределы и процедуры, которых на момент P1 ещё не существовало. `RAG:✅` P5-Q3:\n`type` — единственная граница совместимости, и правила её эволюции обязаны быть записаны\nтам же, где живёт перечень полей. `RAG:✅` P5-Q1 и P5-Q5: отсутствие гарантии порядка и\nнеэквивалентность `afterCommit()` обязаны быть объявлены явно — молчание о них читается\nкак обещание, а `afterCommit()` это самый вероятный способ не построить outbox вовсе."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "пять разделов по §10 дизайна, добавляемых к существующему документу;\nстрока в корневом `CHANGELOG.md`; receipt."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "переписывание любой существующей нормативной фразы документа;\nпереписывание статей `MSG-001`…`MSG-008` конституции — документ по-прежнему на них\nссылается; любое изменение PHP-кода, миграций и конфигурации; создание\n`table-ownership.md` (P2.3) и записей в нём (P5.4); объявление конкретных контрактов\nсообщений — ядро не объявляет ни одного (D26)."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P5-design.json` §0, §10 (готовый перечень пяти разделов), §2.1–§2.6,\n§3.3, §5.9, §7.2, §7.3; `@plan/knowledge/research-P5-design-rag.json` §1 (P5-Q1, P5-Q3, P5-Q5);\n`@plan/knowledge/findings-audit-verdicts.json` A90, A91, A92, N05; решения D24, D25, D28, D29."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`docs/architecture/message-policy.md`; `CHANGELOG.md`; `@plan/knowledge/findings-P5-receipts.json`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P5/phase.json`; 2) `@plan/knowledge/research-P5-design.json` §0, §2.1–§2.6, §3.3, §5.9, §7.2, §7.3, §10; 3) `@plan/knowledge/research-P5-design-rag.json` §1, §2; 4) `@plan/decisions/D24.json`; 5) `@plan/decisions/D25.json`; 6) `@plan/decisions/D28.json`; 7) `@plan/decisions/D29.json`; 8) `docs/architecture/message-policy.md` (текущее состояние после P1.6); 9) `docs/architecture/constitution.md` (группа `MSG`)."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Документ **дополняется, а не переписывается**: существующие\nтаблица трёх классов, таблица шести обязательных полей и список шести обязательных правил\nсохраняются дословно. Новая колонка «тип и предел» добавляется к существующей таблице\nполей, а не заменяет её другой таблицей. Раздел «чего механизм не обещает» содержит ровно\nтри пункта, и каждый несёт свою причину, а не только запрет: без причины такой раздел\nчерез полгода читается как перестраховка и снимается. Фраза про `afterCommit()` формулируется\nутвердительно — «`dispatch()->afterCommit()` не является реализацией `MSG-008`, потому что\nгарантирует порядок видимости, а не долговременное намерение», — чтобы её нельзя было\nпрочитать как «afterCommit достаточно в простых случаях». Различие дефолтов retention\ninbox и `sys_pubsub_messages` объясняется явно (§7.3): без объяснения оно выглядит\nнепоследовательностью и будет «исправлено» первым же читателем. Ни один файл вне `Files`\nне изменяется."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Готовый состав каждого из пяти разделов — `@plan/knowledge/research-P5-design.json` §10,\nпункты (1)–(5). Типы и пределы полей — §2.1 (таблица соответствия), §2.3 (форма имени),\n§2.6 (пределы payload'а). Перечень ломающих изменений схемы для раздела (2) — §3.3.\nФрагмент обязательной формы потребителя для раздела (4) переносится из §7.2 целиком,\nвместе с комментарием про подтверждение доставки. Формулировки не-обещаний — §5.9\n(порядок), §5.1 (exactly-once), §4.1 (`afterCommit`)."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Все пять разделов присутствуют. `rg -c 'MSG-00' docs/architecture/message-policy.md`\nне меньше значения после P1.6 (число фиксируется в receipt до и после). Документ содержит\nстроки `name.vN`, `MSG-008`, `at-least-once` и явное упоминание отсутствия гарантии\nпорядка. `git diff --stat -- 'packages/'` пуст. `composer lint:check` из корня зелёный."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "дополненный `docs/architecture/message-policy.md` с пятью новыми\nразделами; строка в `CHANGELOG.md`; блок receipt'а с числом упоминаний `MSG-00` до и\nпосле правки и перечнем добавленных разделов."
+    }
+  ]
+}

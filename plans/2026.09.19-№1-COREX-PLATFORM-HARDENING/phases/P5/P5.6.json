@@ -1,0 +1,284 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P5.6",
+  "title": "`OutboxRelay`: lease со `SKIP LOCKED`, fence-отметка, backoff, dead-letter",
+  "status": "done_with_deviations",
+  "summary": "Ввести контракт `CoreX\\Messaging\\Contracts\\OutboxRelay`, значение\n`LeasedMessage`, реализацию `SqlOutboxRelay` с короткой транзакцией захвата и\nfence-предикатом по владельцу аренды, исключение `OutboxLeaseLost` и привязку.",
+  "why": "N05: транспортной гарантии в дереве нет. `RAG:✅` P5-Q1: захват — короткая\nтранзакция, которая коммитит lease **до** сетевого I/O; удержание `FOR UPDATE` через\nсетевой вызов ставит длительность транзакции в зависимость от брокера и усиливает\nконкуренцию за блокировки. Отметка успеха выполняется предикатом\n`id = ? AND status = 'publishing' AND lease_owner = ?`, не дающим опоздавшему прежнему\nвладельцу затереть результат нового; воркер, потерявший аренду во время долгой публикации,\n**не** должен делать вывод, что публикация провалилась. D25: fence-предикат того же вида\nуже есть в дереве (`DatabaseTransferRunner`), и форма переиспользуется. D28: порядок\nдоставки не обещается — `SKIP LOCKED` выбран ради пропускной способности.",
+  "scope": {
+    "include": [
+      "контракт, `LeasedMessage`, реализация, исключение и привязка по §5.4–§5.5;\nвозврат просроченной аренды до выборки в той же транзакции; terminal `dead`\nдля expired `publishing` при исчерпанных attempts; fenced failure path для\nenvelope reconstruction; ограниченный экспоненциальный\nbackoff `min(cap, 2 ** attempt)` и перевод в `dead` на исчерпании попыток; семь тестовых\nслучаев §5.11, включая тест конкуренции на двух PDO-соединениях; фиксация в receipt'е двух\nназванных пределов — отсутствие jitter (§5.8) и отсутствие плоскости управления по\nаккаунтам (§5.6); строка в `CHANGELOG.md`."
+    ],
+    "exclude": [
+      "порт публикации и команда relay (P5.7) — этот item никуда не\nпубликует; inbox (P5.8); retention (P5.9); наблюдаемость (P5.10); jitter в backoff (§5.8);\nкаталог аккаунтов, round-robin, приоритет по возрасту и backoff по аккаунту (P9, D27);\n`ordering_key` и любая машинерия per-key порядка (D28); перевод предикатов на серверное\nвремя PostgreSQL (D30); изменение `config/corex.php` и `Support/Config.php` (P5.4)."
+    ]
+  },
+  "depends_on": [
+    "P5.2",
+    "P5.4",
+    "P5.5",
+    "P4.9"
+  ],
+  "decisions": [
+    "D25",
+    "D28",
+    "D30",
+    "D99"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/phases/P5/P5.2.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P5/P5.4.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P5/P5.5.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P4/P4.9.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/knowledge/research-P5-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P5-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/findings-audit-verdicts.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P5/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D25.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D28.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D30.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/wakeup/src/Internal/SweepRunner.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/transfer/src/Internal/Transfer/DatabaseTransferRunner.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/wakeup/tests/Pg/WakeupClaimTest.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Messaging/Data/MessageEnvelope.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Support/Config.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/core/src/Messaging/Contracts/OutboxRelay.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Messaging/Data/LeasedMessage.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/SqlOutboxRelay.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Messaging/Exceptions/OutboxLeaseLost.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/CoreServiceProvider.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/tests/Pg/OutboxRelayTest.php",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P5-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Код §5.5 с коррекцией D99. При recovery сначала\n`attempts >= maxAttempts` переводятся из expired `publishing` в `dead`; только\nостальные возвращаются в pending. Decode/reconstruction после claim находится\nвнутри того же fenced failure path, что и publish. Остальные требования §5.5, которые\nлегко потерять, обязаны быть прочитаны до правки: `envelopeVersion` передаётся из строки в\nконструктор конверта (relay старой версии, встретивший новый конверт, обязан упасть\nвидимо); `attempts` увеличивается **при захвате**, а не при отказе (иначе строка,\nброшенная умершим воркером, никогда не станет мёртвой); возврат просроченной аренды идёт\n**до** выборки и в той же транзакции; `OutboxLeaseLost` — не ошибка публикации, и её текст\nобязан говорить, что доставка могла состояться. Ветка по драйверу\n(`for update skip locked` на `pgsql`, `lockForUpdate()` иначе) повторяет\n`SweepRunner::claimDue()` — второй способ ветвиться в репозитории был бы дефектом. Формула\nbackoff — `min($backoffCapSeconds, 2 ** $attempt)`, та же, что в `SweepRunner`; jitter не\nдобавляется (§5.8). Внутри транзакции захвата **нет ни одного** сетевого вызова и ни\nодного обращения к публикатору. Время — только из `ClockInterface` (D30). Привязка —\n`scoped` по той же причине, что в P5.5. Ни один файл вне `packages/core` не трогается."
+  ],
+  "guidance": "Готовые контракт, `LeasedMessage`, реализация и исключение —\n`@plan/knowledge/research-P5-design.json` §5.5. Состав тестов — §5.11, семь случаев; тест конкуренции (7)\nстроится по образцу `packages/wakeup/tests/Pg/WakeupClaimTest.php`, включая второе\nPDO-соединение и `SET lock_timeout`. Формулировки для receipt'а: предел про jitter — §5.8\nцеликом, долг про плоскость управления — §5.6, последний абзац (переносится дословно, с\nадресом P9).",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer test:pg",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "composer test",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "composer analyse",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "composer lint:check",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "rg -n '\\bnow\\(\\)' packages/core/src/Messaging",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "P5.6 declared Validation: PG/non-PG tests, PHPStan, Pint, clock scan and receipt",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "контракт `OutboxRelay`, значение `LeasedMessage`, реализация с коротким\nзахватом и fence-отметкой, исключение с говорящим текстом, привязка, семь pg-тестов,\nстрока `CHANGELOG.md`; блок receipt'а с пределом про jitter и долгом плоскости управления,\nадресованным P9."
+  ],
+  "route": {
+    "class": "frontier",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "required",
+    "status": "complete"
+  },
+  "result": {
+    "started_at": "2026-09-22T09:03:46Z",
+    "finished_at": "2026-09-22T09:26:53Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/codex-gpt-5.6-sol/high",
+      "effort": "high"
+    },
+    "notes": "P5.6: OutboxRelay validated; 36 PG + 84 non-PG tests green. Deviations: varchar(32) failure class and overbroad now() acceptance regex.\nwrite-site: pre_mutation: allow · pre_final: allow",
+    "deviations": [
+      "P5.6: OutboxRelay validated; 36 PG + 84 non-PG tests green. Deviations: varchar(32) failure class and overbroad now() acceptance regex."
+    ],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-22T09:18:13Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-22T09:26:53Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Ввести контракт `CoreX\\Messaging\\Contracts\\OutboxRelay`, значение\n`LeasedMessage`, реализацию `SqlOutboxRelay` с короткой транзакцией захвата и\nfence-предикатом по владельцу аренды, исключение `OutboxLeaseLost` и привязку."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "N05: транспортной гарантии в дереве нет. `RAG:✅` P5-Q1: захват — короткая\nтранзакция, которая коммитит lease **до** сетевого I/O; удержание `FOR UPDATE` через\nсетевой вызов ставит длительность транзакции в зависимость от брокера и усиливает\nконкуренцию за блокировки. Отметка успеха выполняется предикатом\n`id = ? AND status = 'publishing' AND lease_owner = ?`, не дающим опоздавшему прежнему\nвладельцу затереть результат нового; воркер, потерявший аренду во время долгой публикации,\n**не** должен делать вывод, что публикация провалилась. D25: fence-предикат того же вида\nуже есть в дереве (`DatabaseTransferRunner`), и форма переиспользуется. D28: порядок\nдоставки не обещается — `SKIP LOCKED` выбран ради пропускной способности."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "контракт, `LeasedMessage`, реализация, исключение и привязка по §5.4–§5.5;\nвозврат просроченной аренды до выборки в той же транзакции; terminal `dead`\nдля expired `publishing` при исчерпанных attempts; fenced failure path для\nenvelope reconstruction; ограниченный экспоненциальный\nbackoff `min(cap, 2 ** attempt)` и перевод в `dead` на исчерпании попыток; семь тестовых\nслучаев §5.11, включая тест конкуренции на двух PDO-соединениях; фиксация в receipt'е двух\nназванных пределов — отсутствие jitter (§5.8) и отсутствие плоскости управления по\nаккаунтам (§5.6); строка в `CHANGELOG.md`."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "порт публикации и команда relay (P5.7) — этот item никуда не\nпубликует; inbox (P5.8); retention (P5.9); наблюдаемость (P5.10); jitter в backoff (§5.8);\nкаталог аккаунтов, round-robin, приоритет по возрасту и backoff по аккаунту (P9, D27);\n`ordering_key` и любая машинерия per-key порядка (D28); перевод предикатов на серверное\nвремя PostgreSQL (D30); изменение `config/corex.php` и `Support/Config.php` (P5.4)."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/phases/P5/P5.2.json` (producer: P5.2; `MessageEnvelope`,\n`MessagePayload`, `PiiClass`); `@plan/phases/P5/P5.4.json` (producer: P5.4; таблица,\nиндексы, аксессоры конфигурации); `@plan/phases/P5/P5.5.json` (producer: P5.5; строки в\nсостоянии `pending`); `@plan/phases/P4/P4.9.json` (producer: P4.9; часы PSR-20);\n`@plan/knowledge/research-P5-design.json` §0, §5.4–§5.11; `@plan/knowledge/research-P5-design-rag.json` §1\n(P5-Q1, P5-Q7); `@plan/knowledge/findings-audit-verdicts.json` A92, N05; решения D25, D28, D30, D99."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/core/src/Messaging/Contracts/OutboxRelay.php`; `packages/core/src/Messaging/Data/LeasedMessage.php`; `packages/core/src/Messaging/Internal/SqlOutboxRelay.php`; `packages/core/src/Exceptions/OutboxLeaseLost.php`; `packages/core/src/CoreServiceProvider.php`; `packages/core/tests/Pg/OutboxRelayTest.php`; `CHANGELOG.md`; `@plan/knowledge/findings-P5-receipts.json`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P5/phase.json`; 2) `@plan/knowledge/research-P5-design.json` §0, §5.1, §5.4–§5.11; 3) `@plan/knowledge/research-P5-design-rag.json` §1 (P5-Q1); 4) `@plan/decisions/D25.json`; 5) `@plan/decisions/D28.json`; 6) `@plan/decisions/D30.json`; 7) `packages/wakeup/src/Internal/SweepRunner.php` (форма `claimDue()`: возврат просроченной аренды, ветка по драйверу, формула backoff); 8) `packages/transfer/src/Internal/Transfer/DatabaseTransferRunner.php` (форма fence-предиката и текст «lease was superseded»); 9) `packages/wakeup/tests/Pg/WakeupClaimTest.php` (форма теста конкуренции на двух PDO-соединениях); 10) `packages/core/src/Messaging/Data/MessageEnvelope.php`; 11) `packages/core/src/Support/Config.php`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Код §5.5 с коррекцией D99. При recovery сначала\n`attempts >= maxAttempts` переводятся из expired `publishing` в `dead`; только\nостальные возвращаются в pending. Decode/reconstruction после claim находится\nвнутри того же fenced failure path, что и publish. Остальные требования §5.5, которые\nлегко потерять, обязаны быть прочитаны до правки: `envelopeVersion` передаётся из строки в\nконструктор конверта (relay старой версии, встретивший новый конверт, обязан упасть\nвидимо); `attempts` увеличивается **при захвате**, а не при отказе (иначе строка,\nброшенная умершим воркером, никогда не станет мёртвой); возврат просроченной аренды идёт\n**до** выборки и в той же транзакции; `OutboxLeaseLost` — не ошибка публикации, и её текст\nобязан говорить, что доставка могла состояться. Ветка по драйверу\n(`for update skip locked` на `pgsql`, `lockForUpdate()` иначе) повторяет\n`SweepRunner::claimDue()` — второй способ ветвиться в репозитории был бы дефектом. Формула\nbackoff — `min($backoffCapSeconds, 2 ** $attempt)`, та же, что в `SweepRunner`; jitter не\nдобавляется (§5.8). Внутри транзакции захвата **нет ни одного** сетевого вызова и ни\nодного обращения к публикатору. Время — только из `ClockInterface` (D30). Привязка —\n`scoped` по той же причине, что в P5.5. Ни один файл вне `packages/core` не трогается."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Готовые контракт, `LeasedMessage`, реализация и исключение —\n`@plan/knowledge/research-P5-design.json` §5.5. Состав тестов — §5.11, семь случаев; тест конкуренции (7)\nстроится по образцу `packages/wakeup/tests/Pg/WakeupClaimTest.php`, включая второе\nPDO-соединение и `SET lock_timeout`. Формулировки для receipt'а: предел про jitter — §5.8\nцеликом, долг про плоскость управления — §5.6, последний абзац (переносится дословно, с\nадресом P9)."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "`composer test:pg` пакета `core` зелёный, все случаи §5.11 покрыты —\nв том числе точные значения backoff `+2s`, `+4s`, `+8s`, `+16s` с `FrozenClock`, переход в\n`dead` на исчерпании попыток через release и через crash→expiry→reclaim, corrupt envelope\nисчерпывает тот же бюджет, отказ `markPublished()` с чужим владельцем без изменения\nстатуса строки, и тест конкуренции: запрос со `SKIP LOCKED` возвращает ноль строк, тот же\nзапрос без него блокируется по `lock_timeout`. `composer test` пакета `core` зелёный.\n`composer analyse` зелёный. `composer lint:check` зелёный.\n`rg -n '\\bnow\\(\\)' packages/core/src/Messaging` пуст. Receipt содержит вывод всех команд и\nдва названных предела с условиями возврата."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "контракт `OutboxRelay`, значение `LeasedMessage`, реализация с коротким\nзахватом и fence-отметкой, исключение с говорящим текстом, привязка, семь pg-тестов,\nстрока `CHANGELOG.md`; блок receipt'а с пределом про jitter и долгом плоскости управления,\nадресованным P9."
+    }
+  ]
+}

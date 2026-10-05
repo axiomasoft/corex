@@ -1,5 +1,147 @@
 {
-    "CoreX\\Access\\Access\\Internal\\AutMatrixGrantSource": {
+    "CoreX\\AccessAzguard\\AccessAzguardRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\AccessAzguard\\AccessAzguardServiceProvider": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": "Illuminate\\Support\\ServiceProvider",
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\AccessAzguard\\Internal\\AccessAzguardOptions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "bindPermissionLayer",
+                        "type": "bool",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "rolesTable",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "morphType",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "roleModel",
+                        "type": "?string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "fromArray": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "config",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "bindPermissionLayer": {
+                "name": "bindPermissionLayer",
+                "readonly": true,
+                "static": false,
+                "type": "bool"
+            },
+            "morphType": {
+                "name": "morphType",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "roleModel": {
+                "name": "roleModel",
+                "readonly": true,
+                "static": false,
+                "type": "?string"
+            },
+            "rolesTable": {
+                "name": "rolesTable",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\AccessAzguard\\Internal\\AutMatrixGrantSource": {
         "abstract": false,
         "constants": [],
         "final": true,
@@ -54,6 +196,340 @@
             "priority": {
                 "params": [],
                 "return": "int",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\AccessAzguard\\Internal\\AzGuardRoleModel": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "ArrayAccess",
+            "Illuminate\\Contracts\\Broadcasting\\HasBroadcastChannel",
+            "Illuminate\\Contracts\\Queue\\QueueableEntity",
+            "Illuminate\\Contracts\\Routing\\UrlRoutable",
+            "Illuminate\\Contracts\\Support\\Arrayable",
+            "Illuminate\\Contracts\\Support\\CanBeEscapedWhenCastToString",
+            "Illuminate\\Contracts\\Support\\Jsonable",
+            "JsonSerializable",
+            "Stringable"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "getTable": {
+                "params": [],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": "AzGuard\\Models\\Role",
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\AccessAzguard\\Internal\\Laravel\\AccessAzguardBindingsRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\AccessAzguard\\Internal\\MatrixPermissionCatalogBuilder": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "AzGuard\\Registry\\Contracts\\PermissionCatalogBuilder"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\Access\\Laravel\\AuthOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "activeEntities",
+                        "type": "CoreX\\Access\\Matrix\\Contracts\\EntityActivity",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "build": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "panelId",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            },
+            "supports": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "panelId",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\AccessAzguard\\Internal\\RoleLinkStore": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "upsert": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "roleId",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "azguardRoleId",
+                        "type": "int",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\AccessAzguard\\Internal\\SyncAzGuardRolePermissions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\Access\\Laravel\\AuthOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "activeEntities",
+                        "type": "CoreX\\Access\\Matrix\\Contracts\\EntityActivity",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "links",
+                        "type": "CoreX\\AccessAzguard\\Internal\\RoleLinkStore",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "event",
+                        "type": "CoreX\\Access\\Matrix\\Events\\RoleMatrixCompiled",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\AccessAzguard\\Internal\\TenantContextGuard": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "AzGuard\\Contracts\\ContextGuard"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "entities",
+                        "type": "CoreX\\Modules\\Contracts\\EntityRegistry",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "checkInContext": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "user",
+                        "type": "Illuminate\\Contracts\\Auth\\Authenticatable",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "contextType",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "contextId",
+                        "type": "string|int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "permission",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "panelId",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\AccessAzguard\\Internal\\WorkspacePermissionLayer": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "AzGuard\\Contracts\\PermissionLayer"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "tenancyManager",
+                        "type": "CoreX\\Context\\Contracts\\TenancyManager",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "apply": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "global",
+                        "type": "AzGuard\\Registry\\Values\\PermissionSet",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "user",
+                        "type": "Illuminate\\Contracts\\Auth\\Authenticatable",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "panelId",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "AzGuard\\Registry\\Values\\PermissionSet",
+                "static": false
+            },
+            "cacheDiscriminator": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "panelId",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
                 "static": false
             }
         },
@@ -119,6 +595,12 @@
                         "byRef": false,
                         "name": "clock",
                         "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "activity",
+                        "type": "CoreX\\Access\\Matrix\\Contracts\\EntityActivity",
                         "variadic": false
                     }
                 ],
@@ -250,6 +732,12 @@
                         "name": "options",
                         "type": "CoreX\\Access\\Laravel\\AuthOptions",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "activity",
+                        "type": "CoreX\\Access\\Matrix\\Contracts\\EntityActivity",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -309,8 +797,14 @@
                 "params": [
                     {
                         "byRef": false,
-                        "name": "options",
-                        "type": "CoreX\\Access\\Laravel\\AuthOptions",
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
                         "variadic": false
                     }
                 ],
@@ -516,69 +1010,6 @@
         "properties": [],
         "readonly": true
     },
-    "CoreX\\Access\\Access\\Internal\\WorkspacePermissionLayer": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "AzGuard\\Contracts\\PermissionLayer"
-        ],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "tenancyManager",
-                        "type": "CoreX\\Context\\Contracts\\TenancyManager",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "apply": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "global",
-                        "type": "AzGuard\\Registry\\Values\\PermissionSet",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "user",
-                        "type": "Illuminate\\Contracts\\Auth\\Authenticatable",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "panelId",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "AzGuard\\Registry\\Values\\PermissionSet",
-                "static": false
-            },
-            "cacheDiscriminator": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "panelId",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "string",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": true
-    },
     "CoreX\\Access\\Access\\Internal\\WorkspaceScopeWiring": {
         "abstract": false,
         "constants": [],
@@ -621,7 +1052,6 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "AzGuard\\Contracts\\HasPermissions",
             "CoreX\\Access\\Contracts\\Principal",
             "Illuminate\\Contracts\\Auth\\Authenticatable"
         ],
@@ -651,45 +1081,6 @@
                     }
                 ],
                 "return": "",
-                "static": false
-            },
-            "checkPermission": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "permission",
-                        "type": "UnitEnum|string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "panelId",
-                        "type": "BackedEnum|string|null",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "context",
-                        "type": "?AzGuard\\Contracts\\PermissionContext",
-                        "variadic": false
-                    }
-                ],
-                "return": "bool",
-                "static": false
-            },
-            "flushPermissions": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "panelId",
-                        "type": "BackedEnum|string|null",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
                 "static": false
             },
             "fromPrincipal": {
@@ -737,107 +1128,6 @@
             "getRememberTokenName": {
                 "params": [],
                 "return": "string",
-                "static": false
-            },
-            "hasContextGuard": {
-                "params": [],
-                "return": "bool",
-                "static": false
-            },
-            "hasPermission": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "permission",
-                        "type": "UnitEnum|string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "panelId",
-                        "type": "BackedEnum|string|null",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "context",
-                        "type": "?AzGuard\\Contracts\\PermissionContext",
-                        "variadic": false
-                    }
-                ],
-                "return": "bool",
-                "static": false
-            },
-            "hasPermissionIn": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "contextType",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "contextId",
-                        "type": "string|int",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "permission",
-                        "type": "UnitEnum|string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "panelId",
-                        "type": "BackedEnum|string|null",
-                        "variadic": false
-                    }
-                ],
-                "return": "bool",
-                "static": false
-            },
-            "isSuperAdmin": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "panelId",
-                        "type": "BackedEnum|string|null",
-                        "variadic": false
-                    }
-                ],
-                "return": "bool",
-                "static": false
-            },
-            "permissionSet": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "panelId",
-                        "type": "BackedEnum|string|null",
-                        "variadic": false
-                    }
-                ],
-                "return": "AzGuard\\Registry\\Values\\PermissionSet",
-                "static": false
-            },
-            "permissions": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "panelId",
-                        "type": "BackedEnum|string|null",
-                        "variadic": false
-                    }
-                ],
-                "return": "Illuminate\\Support\\Collection",
                 "static": false
             },
             "principalId": {
@@ -1750,12 +2040,6 @@
                     },
                     {
                         "byRef": false,
-                        "name": "bindPermissionLayer",
-                        "type": "bool",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
                         "name": "workspaceScopeClass",
                         "type": "?string",
                         "variadic": false
@@ -1783,12 +2067,6 @@
                         "name": "identityColumns",
                         "type": "array",
                         "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "azguardPins",
-                        "type": "array",
-                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -1809,18 +2087,6 @@
         },
         "parent": null,
         "properties": {
-            "azguardPins": {
-                "name": "azguardPins",
-                "readonly": true,
-                "static": false,
-                "type": "array"
-            },
-            "bindPermissionLayer": {
-                "name": "bindPermissionLayer",
-                "readonly": true,
-                "static": false,
-                "type": "bool"
-            },
             "cacheStore": {
                 "name": "cacheStore",
                 "readonly": true,
@@ -1966,6 +2232,38 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Access\\Matrix\\Events\\RoleMatrixCompiled": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "roleId",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "roleId": {
+                "name": "roleId",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": true
+    },
     "CoreX\\Access\\Matrix\\Internal\\ActiveEntityFilter": {
         "abstract": false,
         "constants": [],
@@ -2037,20 +2335,14 @@
                     },
                     {
                         "byRef": false,
-                        "name": "options",
-                        "type": "CoreX\\Access\\Laravel\\AuthOptions",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "activeEntities",
-                        "type": "CoreX\\Access\\Matrix\\Internal\\ActiveEntityFilter",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
                         "name": "connections",
                         "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "events",
+                        "type": "Illuminate\\Contracts\\Events\\Dispatcher",
                         "variadic": false
                     }
                 ],
@@ -2072,63 +2364,6 @@
             "recompileAll": {
                 "params": [],
                 "return": "void",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": true
-    },
-    "CoreX\\Access\\Matrix\\Internal\\MatrixPermissionCatalogBuilder": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "AzGuard\\Registry\\Contracts\\PermissionCatalogBuilder"
-        ],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "options",
-                        "type": "CoreX\\Access\\Laravel\\AuthOptions",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "activeEntities",
-                        "type": "CoreX\\Access\\Matrix\\Internal\\ActiveEntityFilter",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "build": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "panelId",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "array",
-                "static": false
-            },
-            "supports": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "panelId",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "bool",
                 "static": false
             }
         },
@@ -2254,34 +2489,6 @@
         "properties": [],
         "readonly": true
     },
-    "CoreX\\Access\\Matrix\\Laravel\\AzGuardRoleModel": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "ArrayAccess",
-            "Illuminate\\Contracts\\Broadcasting\\HasBroadcastChannel",
-            "Illuminate\\Contracts\\Queue\\QueueableEntity",
-            "Illuminate\\Contracts\\Routing\\UrlRoutable",
-            "Illuminate\\Contracts\\Support\\Arrayable",
-            "Illuminate\\Contracts\\Support\\CanBeEscapedWhenCastToString",
-            "Illuminate\\Contracts\\Support\\Jsonable",
-            "JsonSerializable",
-            "Stringable"
-        ],
-        "internal": false,
-        "kind": "class",
-        "methods": {
-            "getTable": {
-                "params": [],
-                "return": "string",
-                "static": false
-            }
-        },
-        "parent": "AzGuard\\Models\\Role",
-        "properties": [],
-        "readonly": false
-    },
     "CoreX\\Access\\Matrix\\Laravel\\MatrixPortBindings": {
         "abstract": false,
         "constants": [],
@@ -2390,12 +2597,6 @@
                         "name": "assignableTo",
                         "type": "array",
                         "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "azguardRoleId",
-                        "type": "?int",
-                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -2409,12 +2610,6 @@
                 "readonly": true,
                 "static": false,
                 "type": "array"
-            },
-            "azguardRoleId": {
-                "name": "azguardRoleId",
-                "readonly": true,
-                "static": false,
-                "type": "?int"
             },
             "id": {
                 "name": "id",
@@ -2700,24 +2895,6 @@
         "internal": false,
         "kind": "class",
         "methods": {
-            "bindAzGuardRole": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "roleId",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "azguardRoleId",
-                        "type": "int",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
-                "static": true
-            },
             "matrix": {
                 "params": [
                     {
@@ -2772,69 +2949,6 @@
                 ],
                 "return": "mixed",
                 "static": true
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
-    "CoreX\\Access\\Tenancy\\Internal\\TenantContextGuard": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "AzGuard\\Contracts\\ContextGuard"
-        ],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "entities",
-                        "type": "CoreX\\Modules\\Contracts\\EntityRegistry",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "checkInContext": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "user",
-                        "type": "Illuminate\\Contracts\\Auth\\Authenticatable",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "contextType",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "contextId",
-                        "type": "string|int",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "permission",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "panelId",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "bool",
-                "static": false
             }
         },
         "parent": null,
@@ -3421,6 +3535,37 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Audit\\Contracts\\SynchronousAuditWriter": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "record": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "entry",
+                        "type": "CoreX\\Audit\\Data\\AuditEntry",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connectionName",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Audit\\Data\\AuditEntry": {
         "abstract": false,
         "constants": [],
@@ -3932,6 +4077,51 @@
         "parent": null,
         "properties": [],
         "readonly": false
+    },
+    "CoreX\\Audit\\Internal\\DatabaseSynchronousAuditWriter": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Audit\\Contracts\\SynchronousAuditWriter"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "record": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "entry",
+                        "type": "CoreX\\Audit\\Data\\AuditEntry",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connectionName",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
     },
     "CoreX\\Audit\\Internal\\NullAuditRetention": {
         "abstract": false,
@@ -36988,7 +37178,7 @@
                     {
                         "byRef": false,
                         "name": "window",
-                        "type": "CoreX\\Wakeup\\Data\\WakeupWindow",
+                        "type": "CoreX\\Scheduling\\Data\\WakeupWindow",
                         "variadic": false
                     },
                     {
@@ -37020,7 +37210,7 @@
                 "name": "window",
                 "readonly": true,
                 "static": false,
-                "type": "CoreX\\Wakeup\\Data\\WakeupWindow"
+                "type": "CoreX\\Scheduling\\Data\\WakeupWindow"
             }
         },
         "readonly": true
@@ -37030,7 +37220,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Wakeup\\Contracts\\DueWakeupHandler"
+            "CoreX\\Scheduling\\Contracts\\DueWakeupHandler"
         ],
         "internal": true,
         "kind": "class",
@@ -37052,7 +37242,7 @@
                     {
                         "byRef": false,
                         "name": "delivery",
-                        "type": "CoreX\\Wakeup\\Data\\WakeupDelivery",
+                        "type": "CoreX\\Scheduling\\Data\\WakeupDelivery",
                         "variadic": false
                     }
                 ],
@@ -37651,7 +37841,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Wakeup\\Contracts\\DueWakeupSource"
+            "CoreX\\Scheduling\\Contracts\\DueWakeupSource"
         ],
         "internal": true,
         "kind": "class",
@@ -37713,7 +37903,7 @@
                         "variadic": false
                     }
                 ],
-                "return": "CoreX\\Wakeup\\Data\\SweepResult",
+                "return": "CoreX\\Scheduling\\Data\\SweepResult",
                 "static": false
             }
         },
@@ -37742,7 +37932,7 @@
                     {
                         "byRef": false,
                         "name": "wakeup",
-                        "type": "CoreX\\Wakeup\\Contracts\\WakeupScheduler",
+                        "type": "?CoreX\\Scheduling\\Contracts\\WakeupScheduler",
                         "variadic": false
                     },
                     {
@@ -38779,6 +38969,51 @@
                         "byRef": false,
                         "name": "core",
                         "type": "CoreX\\Config\\Data\\CoreOptions",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "violations": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "production",
+                        "type": "bool",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\Notifications\\Internal\\DigestSchedulerCheck": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Config\\Contracts\\RuntimeConfigCheck"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\Notifications\\Internal\\NotificationsOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
                         "variadic": false
                     }
                 ],
@@ -54368,6 +54603,586 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Scheduling\\Contracts\\DueWakeupHandler": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "delivery",
+                        "type": "CoreX\\Scheduling\\Data\\WakeupDelivery",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Scheduling\\Contracts\\DueWakeupSource": {
+        "abstract": false,
+        "constants": {
+            "TAG": {
+                "type": "string",
+                "value": "corex.scheduling.due-sources"
+            }
+        },
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "nextDue": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Context\\Data\\TenantContext",
+                        "variadic": false
+                    }
+                ],
+                "return": "?DateTimeImmutable",
+                "static": false
+            },
+            "sweep": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Context\\Data\\TenantContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "now",
+                        "type": "DateTimeImmutable",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "limit",
+                        "type": "int",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Scheduling\\Data\\SweepResult",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Scheduling\\Contracts\\WakeupScheduler": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "cancel": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Context\\Data\\TenantContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "requestKey",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Scheduling\\Data\\CancelResult",
+                "static": false
+            },
+            "schedule": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "request",
+                        "type": "CoreX\\Scheduling\\Data\\WakeupRequest",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Scheduling\\Data\\ScheduleResult",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Scheduling\\Data\\CancelResult": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "status",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "status": {
+                "name": "status",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Scheduling\\Data\\ScheduleResult": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "status",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "requestKey",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "requestKey": {
+                "name": "requestKey",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "status": {
+                "name": "status",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Scheduling\\Data\\SweepResult": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "claimed",
+                        "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "completed",
+                        "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "retried",
+                        "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "failed",
+                        "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "skipped",
+                        "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "remainingDue",
+                        "type": "bool",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "nextFireAt",
+                        "type": "?DateTimeImmutable",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "claimed": {
+                "name": "claimed",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            },
+            "completed": {
+                "name": "completed",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            },
+            "failed": {
+                "name": "failed",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            },
+            "nextFireAt": {
+                "name": "nextFireAt",
+                "readonly": true,
+                "static": false,
+                "type": "?DateTimeImmutable"
+            },
+            "remainingDue": {
+                "name": "remainingDue",
+                "readonly": true,
+                "static": false,
+                "type": "bool"
+            },
+            "retried": {
+                "name": "retried",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            },
+            "skipped": {
+                "name": "skipped",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Scheduling\\Data\\WakeupDelivery": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "request",
+                        "type": "CoreX\\Scheduling\\Data\\WakeupRequest",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "generation",
+                        "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "attempt",
+                        "type": "int",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "attempt": {
+                "name": "attempt",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            },
+            "generation": {
+                "name": "generation",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            },
+            "request": {
+                "name": "request",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Scheduling\\Data\\WakeupRequest"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Scheduling\\Data\\WakeupHandlerDefinition": {
+        "abstract": false,
+        "constants": {
+            "TAG": {
+                "type": "string",
+                "value": "corex.scheduling.wakeup-handlers"
+            }
+        },
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "kind",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "version",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "handler",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": false,
+                        "name": "acceptLegacyUnstamped",
+                        "type": "bool",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "acceptLegacyUnstamped": {
+                "name": "acceptLegacyUnstamped",
+                "readonly": true,
+                "static": false,
+                "type": "bool"
+            },
+            "handler": {
+                "name": "handler",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "kind": {
+                "name": "kind",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "version": {
+                "name": "version",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Scheduling\\Data\\WakeupRequest": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Context\\Data\\TenantContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "kind",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "requestKey",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "fireAt",
+                        "type": "DateTimeImmutable",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "window",
+                        "type": "?CoreX\\Scheduling\\Data\\WakeupWindow",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "payload",
+                        "type": "CoreX\\Data\\Data\\JsonDocument",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "context": {
+                "name": "context",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Context\\Data\\TenantContext"
+            },
+            "fireAt": {
+                "name": "fireAt",
+                "readonly": true,
+                "static": false,
+                "type": "DateTimeImmutable"
+            },
+            "kind": {
+                "name": "kind",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "payload": {
+                "name": "payload",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Data\\Data\\JsonDocument"
+            },
+            "requestKey": {
+                "name": "requestKey",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "window": {
+                "name": "window",
+                "readonly": true,
+                "static": false,
+                "type": "?CoreX\\Scheduling\\Data\\WakeupWindow"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Scheduling\\Data\\WakeupWindow": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "start",
+                        "type": "DateTimeImmutable",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "end",
+                        "type": "DateTimeImmutable",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "period",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "end": {
+                "name": "end",
+                "readonly": true,
+                "static": false,
+                "type": "DateTimeImmutable"
+            },
+            "period": {
+                "name": "period",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "start": {
+                "name": "start",
+                "readonly": true,
+                "static": false,
+                "type": "DateTimeImmutable"
+            }
+        },
+        "readonly": true
+    },
     "CoreX\\SearchIntl\\Contracts\\SavedViewLabelReader": {
         "abstract": false,
         "constants": [],
@@ -59933,7 +60748,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Wakeup\\Contracts\\DueWakeupHandler"
+            "CoreX\\Scheduling\\Contracts\\DueWakeupHandler"
         ],
         "internal": true,
         "kind": "class",
@@ -59967,7 +60782,7 @@
                     {
                         "byRef": false,
                         "name": "delivery",
-                        "type": "CoreX\\Wakeup\\Data\\WakeupDelivery",
+                        "type": "CoreX\\Scheduling\\Data\\WakeupDelivery",
                         "variadic": false
                     }
                 ],
@@ -65646,6 +66461,51 @@
         },
         "readonly": true
     },
+    "CoreX\\Tenancy\\Account\\Internal\\DatabaseTenantProvisioner": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Context\\Contracts\\TenantDatabaseProvisioner"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "centralConnection",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "templateIntegrityVerifier",
+                        "type": "CoreX\\Tenancy\\Provisioning\\Contracts\\TemplateIntegrityChecks",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "provision": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "params",
+                        "type": "CoreX\\Context\\Data\\ProvisionParams",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Tenancy\\Account\\Internal\\Jobs\\CreateDatabaseFromTemplate": {
         "abstract": false,
         "constants": [],
@@ -65660,8 +66520,14 @@
                 "params": [
                     {
                         "byRef": false,
-                        "name": "tenant",
-                        "type": "CoreX\\Tenancy\\Account\\Internal\\Models\\Account",
+                        "name": "account",
+                        "type": "CoreX\\Context\\Data\\AccountRef",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "params",
+                        "type": "CoreX\\Context\\Data\\ProvisionParams",
                         "variadic": false
                     }
                 ],
@@ -65935,6 +66801,12 @@
                         "name": "options",
                         "type": "CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "manager",
+                        "type": "CoreX\\Tenancy\\Provisioning\\Contracts\\TemplateDatabaseCloner",
+                        "variadic": false
                     }
                 ],
                 "return": "bool",
@@ -66086,6 +66958,12 @@
         },
         "parent": null,
         "properties": {
+            "account": {
+                "name": "account",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Context\\Data\\AccountRef"
+            },
             "afterCommit": {
                 "name": "afterCommit",
                 "readonly": false,
@@ -66158,17 +67036,17 @@
                 "static": false,
                 "type": ""
             },
+            "params": {
+                "name": "params",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Context\\Data\\ProvisionParams"
+            },
             "queue": {
                 "name": "queue",
                 "readonly": false,
                 "static": false,
                 "type": ""
-            },
-            "tenant": {
-                "name": "tenant",
-                "readonly": true,
-                "static": false,
-                "type": "CoreX\\Tenancy\\Account\\Internal\\Models\\Account"
             },
             "uniqueLockOwner": {
                 "name": "uniqueLockOwner",
@@ -66446,70 +67324,73 @@
             "Illuminate\\Contracts\\Support\\CanBeEscapedWhenCastToString",
             "Illuminate\\Contracts\\Support\\Jsonable",
             "JsonSerializable",
-            "Stancl\\Tenancy\\Contracts\\Tenant",
-            "Stancl\\Tenancy\\Database\\Contracts\\TenantWithDatabase",
             "Stringable"
         ],
         "internal": true,
         "kind": "class",
         "methods": {
-            "bootInvalidatesResolverCache": {
-                "params": [],
-                "return": "void",
-                "static": true
-            },
-            "database": {
-                "params": [],
-                "return": "Stancl\\Tenancy\\Database\\DatabaseConfig",
-                "static": false
-            },
             "domains": {
                 "params": [],
                 "return": "Illuminate\\Database\\Eloquent\\Relations\\HasMany",
                 "static": false
             },
-            "getCustomColumns": {
-                "params": [],
-                "return": "array",
-                "static": true
-            },
-            "getInternal": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "key",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "mixed",
-                "static": false
-            },
-            "internalPrefix": {
+            "getConnectionName": {
                 "params": [],
                 "return": "string",
-                "static": true
+                "static": false
             },
-            "setInternal": {
+            "getIncrementing": {
+                "params": [],
+                "return": "",
+                "static": false
+            },
+            "getKeyType": {
+                "params": [],
+                "return": "",
+                "static": false
+            },
+            "initializeHasUniqueStringIds": {
+                "params": [],
+                "return": "",
+                "static": false
+            },
+            "newUniqueId": {
+                "params": [],
+                "return": "",
+                "static": false
+            },
+            "resolveRouteBindingQuery": {
                 "params": [
                     {
                         "byRef": false,
-                        "name": "key",
-                        "type": "string",
+                        "name": "query",
+                        "type": "",
                         "variadic": false
                     },
                     {
                         "byRef": false,
                         "name": "value",
-                        "type": "mixed",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "field",
+                        "type": "",
                         "variadic": false
                     }
                 ],
-                "return": "static",
+                "return": "",
+                "static": false
+            },
+            "uniqueIds": {
+                "params": [],
+                "return": "",
                 "static": false
             }
         },
-        "parent": "Stancl\\Tenancy\\Database\\Models\\Tenant",
+        "parent": "Illuminate\\Database\\Eloquent\\Model",
         "properties": [],
         "readonly": false
     },
@@ -66607,7 +67488,7 @@
                     {
                         "byRef": false,
                         "name": "provisioner",
-                        "type": "CoreX\\Tenancy\\Account\\Internal\\StanclTenantDatabaseProvisioner",
+                        "type": "CoreX\\Tenancy\\Account\\Internal\\DatabaseTenantProvisioner",
                         "variadic": false
                     },
                     {
@@ -66741,57 +67622,6 @@
         "properties": [],
         "readonly": false
     },
-    "CoreX\\Tenancy\\Account\\Internal\\StanclTenantDatabaseProvisioner": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "CoreX\\Context\\Contracts\\TenantDatabaseProvisioner"
-        ],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "centralConnection",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "templateIntegrityVerifier",
-                        "type": "CoreX\\Tenancy\\Provisioning\\Contracts\\TemplateIntegrityChecks",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "events",
-                        "type": "Illuminate\\Contracts\\Events\\Dispatcher",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "provision": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "params",
-                        "type": "CoreX\\Context\\Data\\ProvisionParams",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
     "CoreX\\Tenancy\\Account\\Laravel\\AccountRelations": {
         "abstract": false,
         "constants": [],
@@ -66850,8 +67680,14 @@
                 "params": [
                     {
                         "byRef": false,
-                        "name": "tenant",
-                        "type": "Stancl\\Tenancy\\Database\\Contracts\\TenantWithDatabase",
+                        "name": "account",
+                        "type": "CoreX\\Context\\Data\\AccountRef",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "centralConnection",
+                        "type": "string",
                         "variadic": false
                     }
                 ],
@@ -68799,14 +69635,9 @@
                 "return": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
                 "static": false
             },
-            "bootInvalidatesTenantsResolverCache": {
+            "getConnectionName": {
                 "params": [],
-                "return": "void",
-                "static": true
-            },
-            "tenant": {
-                "params": [],
-                "return": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
+                "return": "string",
                 "static": false
             }
         },
@@ -70244,6 +71075,443 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Tenancy\\Impersonation\\Contracts\\ImpersonationAuditSink": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "record": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "event",
+                        "type": "CoreX\\Tenancy\\Impersonation\\Data\\ImpersonationAuditEvent",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Tenancy\\Impersonation\\Contracts\\ImpersonationGrantStore": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "claim": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "claim",
+                        "type": "CoreX\\Tenancy\\Impersonation\\Data\\GrantClaim",
+                        "variadic": false
+                    }
+                ],
+                "return": "?CoreX\\Tenancy\\Impersonation\\Data\\ClaimedGrant",
+                "static": false
+            },
+            "claimedReason": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "grantId",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "?string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Tenancy\\Impersonation\\Data\\ClaimedGrant": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "grantId",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "targetUserId",
+                        "type": "?string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "reason",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "expiresAt",
+                        "type": "DateTimeImmutable",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "expiresAt": {
+                "name": "expiresAt",
+                "readonly": true,
+                "static": false,
+                "type": "DateTimeImmutable"
+            },
+            "grantId": {
+                "name": "grantId",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "reason": {
+                "name": "reason",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "targetUserId": {
+                "name": "targetUserId",
+                "readonly": true,
+                "static": false,
+                "type": "?string"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Tenancy\\Impersonation\\Data\\GrantClaim": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "grantId",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "staffIdentityId",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "accountId",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "profile",
+                        "type": "CoreX\\Tenancy\\Impersonation\\Enums\\ImpersonationProfile",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "now",
+                        "type": "DateTimeImmutable",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "accountId": {
+                "name": "accountId",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "grantId": {
+                "name": "grantId",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "now": {
+                "name": "now",
+                "readonly": true,
+                "static": false,
+                "type": "DateTimeImmutable"
+            },
+            "profile": {
+                "name": "profile",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Tenancy\\Impersonation\\Enums\\ImpersonationProfile"
+            },
+            "staffIdentityId": {
+                "name": "staffIdentityId",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Tenancy\\Impersonation\\Data\\ImpersonationAuditEvent": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "event",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "accountId",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "grantId",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "staffIdentityId",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "targetUserId",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "reason",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "profile",
+                        "type": "CoreX\\Tenancy\\Impersonation\\Enums\\ImpersonationProfile",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "occurredAt",
+                        "type": "DateTimeImmutable",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "expiresAt",
+                        "type": "?DateTimeImmutable",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "accountId": {
+                "name": "accountId",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "event": {
+                "name": "event",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "expiresAt": {
+                "name": "expiresAt",
+                "readonly": true,
+                "static": false,
+                "type": "?DateTimeImmutable"
+            },
+            "grantId": {
+                "name": "grantId",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "occurredAt": {
+                "name": "occurredAt",
+                "readonly": true,
+                "static": false,
+                "type": "DateTimeImmutable"
+            },
+            "profile": {
+                "name": "profile",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Tenancy\\Impersonation\\Enums\\ImpersonationProfile"
+            },
+            "reason": {
+                "name": "reason",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "staffIdentityId": {
+                "name": "staffIdentityId",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "targetUserId": {
+                "name": "targetUserId",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Tenancy\\Impersonation\\Enums\\ImpersonationProfile": {
+        "abstract": false,
+        "constants": {
+            "Dev": {
+                "type": "CoreX\\Tenancy\\Impersonation\\Enums\\ImpersonationProfile",
+                "value": {
+                    "enum": "CoreX\\Tenancy\\Impersonation\\Enums\\ImpersonationProfile",
+                    "case": "Dev",
+                    "value": "dev"
+                }
+            },
+            "Regulated": {
+                "type": "CoreX\\Tenancy\\Impersonation\\Enums\\ImpersonationProfile",
+                "value": {
+                    "enum": "CoreX\\Tenancy\\Impersonation\\Enums\\ImpersonationProfile",
+                    "case": "Regulated",
+                    "value": "regulated"
+                }
+            },
+            "Standard": {
+                "type": "CoreX\\Tenancy\\Impersonation\\Enums\\ImpersonationProfile",
+                "value": {
+                    "enum": "CoreX\\Tenancy\\Impersonation\\Enums\\ImpersonationProfile",
+                    "case": "Standard",
+                    "value": "standard"
+                }
+            }
+        },
+        "final": true,
+        "interfaces": [
+            "BackedEnum",
+            "UnitEnum"
+        ],
+        "internal": false,
+        "kind": "enum",
+        "methods": {
+            "cases": {
+                "params": [],
+                "return": "array",
+                "static": true
+            },
+            "from": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "static",
+                "static": true
+            },
+            "maxGrantMinutes": {
+                "params": [],
+                "return": "int",
+                "static": false
+            },
+            "mirrorsToTenant": {
+                "params": [],
+                "return": "bool",
+                "static": false
+            },
+            "requiresIndependentApproval": {
+                "params": [],
+                "return": "bool",
+                "static": false
+            },
+            "tryFrom": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "?static",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "name": {
+                "name": "name",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "value": {
+                "name": "value",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": false
+    },
     "CoreX\\Tenancy\\Impersonation\\Events\\ImpersonationEnded": {
         "abstract": false,
         "constants": [],
@@ -70392,6 +71660,63 @@
         },
         "readonly": true
     },
+    "CoreX\\Tenancy\\Impersonation\\Internal\\DatabaseImpersonationGrantStore": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Tenancy\\Impersonation\\Contracts\\ImpersonationGrantStore"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "centralConnection",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "claim": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "claim",
+                        "type": "CoreX\\Tenancy\\Impersonation\\Data\\GrantClaim",
+                        "variadic": false
+                    }
+                ],
+                "return": "?CoreX\\Tenancy\\Impersonation\\Data\\ClaimedGrant",
+                "static": false
+            },
+            "claimedReason": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "grantId",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "?string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
     "CoreX\\Tenancy\\Impersonation\\Internal\\DatabaseImpersonationService": {
         "abstract": false,
         "constants": [],
@@ -70406,20 +71731,68 @@
                 "params": [
                     {
                         "byRef": false,
-                        "name": "impersonationPolicy",
+                        "name": "policy",
                         "type": "CoreX\\Tenancy\\Laravel\\Support\\ImpersonationPolicy",
                         "variadic": false
                     },
                     {
                         "byRef": false,
-                        "name": "options",
-                        "type": "CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
+                        "name": "grants",
+                        "type": "CoreX\\Tenancy\\Impersonation\\Contracts\\ImpersonationGrantStore",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "audit",
+                        "type": "CoreX\\Tenancy\\Impersonation\\Contracts\\ImpersonationAuditSink",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "accounts",
+                        "type": "CoreX\\Tenancy\\Account\\Contracts\\AccountRead",
                         "variadic": false
                     },
                     {
                         "byRef": false,
                         "name": "contexts",
                         "type": "CoreX\\Context\\Contracts\\TenantContextResolver",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "session",
+                        "type": "Illuminate\\Contracts\\Session\\Session",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "auth",
+                        "type": "Illuminate\\Contracts\\Auth\\Factory",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "events",
+                        "type": "Illuminate\\Contracts\\Events\\Dispatcher",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "guard",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "centralConnection",
+                        "type": "string",
                         "variadic": false
                     }
                 ],
@@ -70464,6 +71837,69 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Tenancy\\Impersonation\\Internal\\DualImpersonationAuditSink": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Tenancy\\Impersonation\\Contracts\\ImpersonationAuditSink"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "writer",
+                        "type": "CoreX\\Audit\\Contracts\\SynchronousAuditWriter",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "contexts",
+                        "type": "CoreX\\Context\\Contracts\\TenantContextResolver",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "id",
+                        "type": "Closure",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "centralConnection",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "record": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "event",
+                        "type": "CoreX\\Tenancy\\Impersonation\\Data\\ImpersonationAuditEvent",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
     "CoreX\\Tenancy\\Impersonation\\Internal\\ImpersonatedModelWriteGuard": {
         "abstract": false,
         "constants": [],
@@ -70494,7 +71930,7 @@
                     }
                 ],
                 "return": "mixed",
-                "static": true
+                "static": false
             },
             "handle": {
                 "params": [
@@ -70536,33 +71972,7 @@
         ],
         "internal": true,
         "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "default": [],
-                        "name": "attributes",
-                        "type": "array",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "options",
-                        "type": "?CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "getConnectionName": {
-                "params": [],
-                "return": "string",
-                "static": false
-            }
-        },
+        "methods": [],
         "parent": "Illuminate\\Database\\Eloquent\\Model",
         "properties": [],
         "readonly": false
@@ -70748,6 +72158,51 @@
         "parent": "Illuminate\\Console\\Command",
         "properties": [],
         "readonly": false
+    },
+    "CoreX\\Tenancy\\Internal\\DangerousModesCheck": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Config\\Contracts\\RuntimeConfigCheck"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\Tenancy\\Laravel\\Support\\TenancyOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "core",
+                        "type": "CoreX\\Config\\Data\\CoreOptions",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "violations": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "production",
+                        "type": "bool",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
     },
     "CoreX\\Tenancy\\Laravel\\AuthenticationRegistrar": {
         "abstract": false,
@@ -71851,8 +73306,8 @@
                     },
                     {
                         "byRef": false,
-                        "name": "requireApprovedBy",
-                        "type": "bool",
+                        "name": "profile",
+                        "type": "CoreX\\Tenancy\\Impersonation\\Enums\\ImpersonationProfile",
                         "variadic": false
                     }
                 ],
@@ -71868,14 +73323,26 @@
                 "static": false,
                 "type": "bool"
             },
-            "requireApprovedBy": {
-                "name": "requireApprovedBy",
+            "profile": {
+                "name": "profile",
                 "readonly": true,
                 "static": false,
-                "type": "bool"
+                "type": "CoreX\\Tenancy\\Impersonation\\Enums\\ImpersonationProfile"
             }
         },
         "readonly": true
+    },
+    "CoreX\\Tenancy\\Laravel\\Support\\ResolvesTenancyOptions": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "trait",
+        "methods": [],
+        "parent": null,
+        "properties": [],
+        "readonly": false
     },
     "CoreX\\Tenancy\\Laravel\\Support\\StatusGatePolicy": {
         "abstract": false,
@@ -72008,31 +73475,7 @@
                     },
                     {
                         "byRef": false,
-                        "name": "tenantModel",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "idGenerator",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "tenantDatabaseManager",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
                         "name": "bootstrappers",
-                        "type": "array",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "provisioningPipeline",
                         "type": "array",
                         "variadic": false
                     },
@@ -72254,13 +73697,7 @@
                 "params": [
                     {
                         "byRef": false,
-                        "name": "tenancy",
-                        "type": "array",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "corexTenancy",
+                        "name": "config",
                         "type": "array",
                         "variadic": false
                     }
@@ -72330,12 +73767,6 @@
                 "readonly": true,
                 "static": false,
                 "type": "bool"
-            },
-            "idGenerator": {
-                "name": "idGenerator",
-                "readonly": true,
-                "static": false,
-                "type": "string"
             },
             "impersonation": {
                 "name": "impersonation",
@@ -72439,12 +73870,6 @@
                 "static": false,
                 "type": "?string"
             },
-            "provisioningPipeline": {
-                "name": "provisioningPipeline",
-                "readonly": true,
-                "static": false,
-                "type": "array"
-            },
             "statusGate": {
                 "name": "statusGate",
                 "readonly": true,
@@ -72480,18 +73905,6 @@
                 "readonly": true,
                 "static": false,
                 "type": "array"
-            },
-            "tenantDatabaseManager": {
-                "name": "tenantDatabaseManager",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "tenantModel": {
-                "name": "tenantModel",
-                "readonly": true,
-                "static": false,
-                "type": "string"
             },
             "wakeupDriver": {
                 "name": "wakeupDriver",
@@ -77229,49 +78642,36 @@
         "properties": [],
         "readonly": false
     },
-    "CoreX\\Tenancy\\PHPStan\\Rules\\StanclImportBoundaryRule": {
+    "CoreX\\Tenancy\\Provisioning\\Contracts\\TemplateDatabaseCloner": {
         "abstract": false,
         "constants": [],
-        "final": true,
-        "interfaces": [
-            "PHPStan\\Rules\\Rule"
-        ],
+        "final": false,
+        "interfaces": [],
         "internal": false,
-        "kind": "class",
+        "kind": "interface",
         "methods": {
-            "__construct": {
+            "createForAccount": {
                 "params": [
                     {
                         "byRef": false,
-                        "name": "allowedPathFragments",
-                        "type": "array",
+                        "name": "account",
+                        "type": "CoreX\\Context\\Data\\AccountRef",
                         "variadic": false
                     }
                 ],
-                "return": "",
+                "return": "bool",
                 "static": false
             },
-            "getNodeType": {
-                "params": [],
-                "return": "string",
-                "static": false
-            },
-            "processNode": {
+            "databaseExists": {
                 "params": [
                     {
                         "byRef": false,
-                        "name": "node",
-                        "type": "PhpParser\\Node",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "scope",
-                        "type": "PHPStan\\Analyser\\Scope",
+                        "name": "name",
+                        "type": "string",
                         "variadic": false
                     }
                 ],
-                "return": "array",
+                "return": "bool",
                 "static": false
             }
         },
@@ -77721,6 +79121,95 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Tenancy\\Provisioning\\Internal\\DatabaseTenantLifecycle": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Context\\Contracts\\TenantDatabaseLifecycle"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "centralConnection",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "events",
+                        "type": "Illuminate\\Contracts\\Events\\Dispatcher",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "writer",
+                        "type": "?Closure",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "verifier",
+                        "type": "?Closure",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "drop": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "account",
+                        "type": "CoreX\\Context\\Data\\AccountRef",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "export": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "account",
+                        "type": "CoreX\\Context\\Data\\AccountRef",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "kind",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Tenancy\\Provisioning\\Internal\\Database\\SchemaCatalogueSerializer": {
         "abstract": false,
         "constants": [],
@@ -77775,8 +79264,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "Stancl\\Tenancy\\Database\\Contracts\\StatefulTenantDatabaseManager",
-            "Stancl\\Tenancy\\Database\\Contracts\\TenantDatabaseManager"
+            "CoreX\\Tenancy\\Provisioning\\Contracts\\TemplateDatabaseCloner"
         ],
         "internal": true,
         "kind": "class",
@@ -77809,8 +79297,50 @@
                 "params": [
                     {
                         "byRef": false,
-                        "name": "tenant",
-                        "type": "Stancl\\Tenancy\\Database\\Contracts\\TenantWithDatabase",
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "templateDbName",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            },
+            "createForAccount": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "account",
+                        "type": "CoreX\\Context\\Data\\AccountRef",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            },
+            "databaseExists": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            },
+            "deleteDatabase": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
                         "variadic": false
                     }
                 ],
@@ -77818,7 +79348,7 @@
                 "static": false
             }
         },
-        "parent": "Stancl\\Tenancy\\Database\\TenantDatabaseManagers\\PostgreSQLDatabaseManager",
+        "parent": null,
         "properties": [],
         "readonly": false
     },
@@ -78104,95 +79634,6 @@
                 "type": ""
             }
         },
-        "readonly": false
-    },
-    "CoreX\\Tenancy\\Provisioning\\Internal\\StanclTenantDatabaseLifecycle": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "CoreX\\Context\\Contracts\\TenantDatabaseLifecycle"
-        ],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "centralConnection",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "connections",
-                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "clock",
-                        "type": "Psr\\Clock\\ClockInterface",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "events",
-                        "type": "Illuminate\\Contracts\\Events\\Dispatcher",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "writer",
-                        "type": "?Closure",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "verifier",
-                        "type": "?Closure",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "drop": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "account",
-                        "type": "CoreX\\Context\\Data\\AccountRef",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
-                "static": false
-            },
-            "export": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "account",
-                        "type": "CoreX\\Context\\Data\\AccountRef",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "kind",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "string",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
         "readonly": false
     },
     "CoreX\\Tenancy\\Provisioning\\Laravel\\MigrationBatchRelations": {
@@ -84199,80 +85640,6 @@
         "properties": [],
         "readonly": false
     },
-    "CoreX\\Wakeup\\Contracts\\DueWakeupHandler": {
-        "abstract": false,
-        "constants": [],
-        "final": false,
-        "interfaces": [],
-        "internal": false,
-        "kind": "interface",
-        "methods": {
-            "handle": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "delivery",
-                        "type": "CoreX\\Wakeup\\Data\\WakeupDelivery",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
-    "CoreX\\Wakeup\\Contracts\\DueWakeupSource": {
-        "abstract": false,
-        "constants": [],
-        "final": false,
-        "interfaces": [],
-        "internal": false,
-        "kind": "interface",
-        "methods": {
-            "nextDue": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "context",
-                        "type": "CoreX\\Context\\Data\\TenantContext",
-                        "variadic": false
-                    }
-                ],
-                "return": "?DateTimeImmutable",
-                "static": false
-            },
-            "sweep": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "context",
-                        "type": "CoreX\\Context\\Data\\TenantContext",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "now",
-                        "type": "DateTimeImmutable",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "limit",
-                        "type": "int",
-                        "variadic": false
-                    }
-                ],
-                "return": "CoreX\\Wakeup\\Data\\SweepResult",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
     "CoreX\\Wakeup\\Contracts\\DueWakeupSweeper": {
         "abstract": false,
         "constants": [],
@@ -84308,7 +85675,7 @@
                         "variadic": false
                     }
                 ],
-                "return": "CoreX\\Wakeup\\Data\\SweepResult",
+                "return": "CoreX\\Scheduling\\Data\\SweepResult",
                 "static": false
             }
         },
@@ -84346,502 +85713,6 @@
         "parent": null,
         "properties": [],
         "readonly": false
-    },
-    "CoreX\\Wakeup\\Contracts\\WakeupScheduler": {
-        "abstract": false,
-        "constants": [],
-        "final": false,
-        "interfaces": [],
-        "internal": false,
-        "kind": "interface",
-        "methods": {
-            "cancel": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "context",
-                        "type": "CoreX\\Context\\Data\\TenantContext",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "requestKey",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "CoreX\\Wakeup\\Data\\CancelResult",
-                "static": false
-            },
-            "schedule": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "request",
-                        "type": "CoreX\\Wakeup\\Data\\WakeupRequest",
-                        "variadic": false
-                    }
-                ],
-                "return": "CoreX\\Wakeup\\Data\\ScheduleResult",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
-    "CoreX\\Wakeup\\Data\\CancelResult": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
-        "internal": false,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "status",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": {
-            "status": {
-                "name": "status",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            }
-        },
-        "readonly": true
-    },
-    "CoreX\\Wakeup\\Data\\ScheduleResult": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
-        "internal": false,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "status",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "requestKey",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": {
-            "requestKey": {
-                "name": "requestKey",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "status": {
-                "name": "status",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            }
-        },
-        "readonly": true
-    },
-    "CoreX\\Wakeup\\Data\\SweepResult": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
-        "internal": false,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "claimed",
-                        "type": "int",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "completed",
-                        "type": "int",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "retried",
-                        "type": "int",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "failed",
-                        "type": "int",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "skipped",
-                        "type": "int",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "remainingDue",
-                        "type": "bool",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "nextFireAt",
-                        "type": "?DateTimeImmutable",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": {
-            "claimed": {
-                "name": "claimed",
-                "readonly": true,
-                "static": false,
-                "type": "int"
-            },
-            "completed": {
-                "name": "completed",
-                "readonly": true,
-                "static": false,
-                "type": "int"
-            },
-            "failed": {
-                "name": "failed",
-                "readonly": true,
-                "static": false,
-                "type": "int"
-            },
-            "nextFireAt": {
-                "name": "nextFireAt",
-                "readonly": true,
-                "static": false,
-                "type": "?DateTimeImmutable"
-            },
-            "remainingDue": {
-                "name": "remainingDue",
-                "readonly": true,
-                "static": false,
-                "type": "bool"
-            },
-            "retried": {
-                "name": "retried",
-                "readonly": true,
-                "static": false,
-                "type": "int"
-            },
-            "skipped": {
-                "name": "skipped",
-                "readonly": true,
-                "static": false,
-                "type": "int"
-            }
-        },
-        "readonly": true
-    },
-    "CoreX\\Wakeup\\Data\\WakeupDelivery": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
-        "internal": false,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "request",
-                        "type": "CoreX\\Wakeup\\Data\\WakeupRequest",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "generation",
-                        "type": "int",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "attempt",
-                        "type": "int",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": {
-            "attempt": {
-                "name": "attempt",
-                "readonly": true,
-                "static": false,
-                "type": "int"
-            },
-            "generation": {
-                "name": "generation",
-                "readonly": true,
-                "static": false,
-                "type": "int"
-            },
-            "request": {
-                "name": "request",
-                "readonly": true,
-                "static": false,
-                "type": "CoreX\\Wakeup\\Data\\WakeupRequest"
-            }
-        },
-        "readonly": true
-    },
-    "CoreX\\Wakeup\\Data\\WakeupHandlerDefinition": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
-        "internal": false,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "kind",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "version",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "handler",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": false,
-                        "name": "acceptLegacyUnstamped",
-                        "type": "bool",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": {
-            "acceptLegacyUnstamped": {
-                "name": "acceptLegacyUnstamped",
-                "readonly": true,
-                "static": false,
-                "type": "bool"
-            },
-            "handler": {
-                "name": "handler",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "kind": {
-                "name": "kind",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "version": {
-                "name": "version",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            }
-        },
-        "readonly": true
-    },
-    "CoreX\\Wakeup\\Data\\WakeupRequest": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
-        "internal": false,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "context",
-                        "type": "CoreX\\Context\\Data\\TenantContext",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "kind",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "requestKey",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "fireAt",
-                        "type": "DateTimeImmutable",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "window",
-                        "type": "?CoreX\\Wakeup\\Data\\WakeupWindow",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "payload",
-                        "type": "CoreX\\Data\\Data\\JsonDocument",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": {
-            "context": {
-                "name": "context",
-                "readonly": true,
-                "static": false,
-                "type": "CoreX\\Context\\Data\\TenantContext"
-            },
-            "fireAt": {
-                "name": "fireAt",
-                "readonly": true,
-                "static": false,
-                "type": "DateTimeImmutable"
-            },
-            "kind": {
-                "name": "kind",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "payload": {
-                "name": "payload",
-                "readonly": true,
-                "static": false,
-                "type": "CoreX\\Data\\Data\\JsonDocument"
-            },
-            "requestKey": {
-                "name": "requestKey",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "window": {
-                "name": "window",
-                "readonly": true,
-                "static": false,
-                "type": "?CoreX\\Wakeup\\Data\\WakeupWindow"
-            }
-        },
-        "readonly": true
-    },
-    "CoreX\\Wakeup\\Data\\WakeupWindow": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
-        "internal": false,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "start",
-                        "type": "DateTimeImmutable",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "end",
-                        "type": "DateTimeImmutable",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "period",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": {
-            "end": {
-                "name": "end",
-                "readonly": true,
-                "static": false,
-                "type": "DateTimeImmutable"
-            },
-            "period": {
-                "name": "period",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "start": {
-                "name": "start",
-                "readonly": true,
-                "static": false,
-                "type": "DateTimeImmutable"
-            }
-        },
-        "readonly": true
     },
     "CoreX\\Wakeup\\Internal\\Commands\\SweepWakeups": {
         "abstract": false,
@@ -84959,7 +85830,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Wakeup\\Contracts\\WakeupScheduler"
+            "CoreX\\Scheduling\\Contracts\\WakeupScheduler"
         ],
         "internal": true,
         "kind": "class",
@@ -85015,7 +85886,7 @@
                         "variadic": false
                     }
                 ],
-                "return": "CoreX\\Wakeup\\Data\\CancelResult",
+                "return": "CoreX\\Scheduling\\Data\\CancelResult",
                 "static": false
             },
             "schedule": {
@@ -85023,11 +85894,11 @@
                     {
                         "byRef": false,
                         "name": "request",
-                        "type": "CoreX\\Wakeup\\Data\\WakeupRequest",
+                        "type": "CoreX\\Scheduling\\Data\\WakeupRequest",
                         "variadic": false
                     }
                 ],
-                "return": "CoreX\\Wakeup\\Data\\ScheduleResult",
+                "return": "CoreX\\Scheduling\\Data\\ScheduleResult",
                 "static": false
             }
         },
@@ -85120,7 +85991,7 @@
                         "variadic": false
                     }
                 ],
-                "return": "CoreX\\Wakeup\\Data\\SweepResult",
+                "return": "CoreX\\Scheduling\\Data\\SweepResult",
                 "static": false
             }
         },
@@ -85182,7 +86053,7 @@
                         "variadic": false
                     }
                 ],
-                "return": "?CoreX\\Wakeup\\Data\\WakeupHandlerDefinition",
+                "return": "?CoreX\\Scheduling\\Data\\WakeupHandlerDefinition",
                 "static": false
             },
             "envelope": {
@@ -85190,7 +86061,7 @@
                     {
                         "byRef": false,
                         "name": "definition",
-                        "type": "CoreX\\Wakeup\\Data\\WakeupHandlerDefinition",
+                        "type": "CoreX\\Scheduling\\Data\\WakeupHandlerDefinition",
                         "variadic": false
                     },
                     {
@@ -85212,7 +86083,7 @@
                         "variadic": false
                     }
                 ],
-                "return": "?CoreX\\Wakeup\\Contracts\\DueWakeupHandler",
+                "return": "?CoreX\\Scheduling\\Contracts\\DueWakeupHandler",
                 "static": false
             },
             "inspectPayload": {

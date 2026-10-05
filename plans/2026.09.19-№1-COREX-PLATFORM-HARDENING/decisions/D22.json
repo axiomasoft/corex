@@ -1,0 +1,50 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D22",
+  "title": "`TenantContextRestorer` сверяет контекст, а не инициализирует tenancy",
+  "date": "2026-09-19",
+  "status": "accepted",
+  "decision": "Вводится отдельный контракт `CoreX\\Tenancy\\Contracts\\TenantContextRestorer` с методом\n`restore(DataScope $scope): TenantContext`. Существующий `TenantContextResolver::current()`\nне переопределяется и не меняет сигнатуру.\n\nРеализация по умолчанию `GuardedTenantContextRestorer` (в `corex/core`) **сверяет**:\nконтекст процесса берётся у `TenantContextResolver`, и расхождение по `accountId`,\n`workspaceId` или признаку `boxed` даёт `CoreX\\Exceptions\\ScopeContextMismatch`.\nИнициализирующая реализация — та, что поднимает тенанта по идентификатору из корневого\nреестра и переключает соединение, — в P4 **не пишется** и явно отнесена к P9.\n\nСверка `connectionIdentity` в P4 тоже не выполняется: она остаётся там, где уже живёт,\nи записывается в `@plan/knowledge/findings-P4-receipts.json` как долг с адресатом P6/P9.",
+  "rationale": "Два вопроса — «какой контекст сейчас» и «какой контекст требует эта durable-запись» —\nразные, и склейка их в один интерфейс есть ровно тот класс ошибки, из которого выросла\nисходная проблема фазы. Отдельный контракт фиксирует различие в типе, а не в\nкомментарии.\n\nИнициализация tenancy в P4 не делается потому, что P4 не владеет `packages/tenancy`:\nпорядок bootstrapper'ов там — вопрос корректности (зависящий от соединения\nbootstrapper обязан идти после database-bootstrapper'а), и трогать его без владельца\nфазы значит менять поведение, которое P4 не может доказать. Целевой риск фазы —\n«воркер выполнил работу в чужом аккаунте» — закрывается сверкой полностью: скоуп,\nне совпавший с активным контекстом, отказывает до первой записи.\n\nАльтернатива «restore() поднимает тенанта сам» отклонена и как преждевременная, и как\nопасная: она превращает идентификатор из payload'а в команду открыть соединение, то\nесть ровно в то, против чего предупреждает внешний источник, — при этом без\nвладельческой проверки порядка инициализации.\n\nАльтернатива «не вводить контракт, читать скаляры прямо у скоупа» отклонена: два\nсуществующих потребителя (`RegistryFieldCatalogue`, `SqlTaskRecurrenceMaterializer`)\nпередают контекст дальше в чужие API (`EntityRegistry::all()`, `ModuleRegistry::isActive()`,\n`TaskAccess::authorizeCreate()`, `WakeupRequest`), и без контракта каждый из них\nсобирал бы `TenantContext` по-своему, а сверка не выполнялась бы нигде.",
+  "applies_to": [
+    "P4",
+    "P4.2",
+    "P4.3",
+    "P4.4",
+    "P4.11",
+    "P9"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/claude-opus-5/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D22\ndate: 2026-09-19\nstatus: accepted\nitem: P4.2\nitems: [P4, P4.2, P4.3, P4.4, P4.11, P9]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D22-TenantContextRestorer-tenancy",
+      "title": "D22 — `TenantContextRestorer` сверяет контекст, а не инициализирует tenancy",
+      "text": "**Actor:** plan-designer/claude-opus-5/high\n\n**Evidence:** `RAG:—` `CoreX\\Tenancy\\Contracts\\TenantContextResolver` объявляет один\nметод `current(): TenantContext` — «текущий контекст процесса» (вердикт A35).\n`RAG:—` вызывающие уже устанавливают контекст до построения скоупа:\n`MaterializationWakeupHandler` берёт `$this->contexts->current()`, а\n`SqlWakeupScheduler` принимает `TenantContextResolver` в конструктор и получает\n`TenantContext` параметром запроса. `RAG:—` сверка соединения существует в дереве\nдвумя копиями `ScopeConnectionGuard` — в `packages/attributes/src/Internal/Engine` и\nв `packages/tasks-workflow/src/Internal`, в ядре её нет. `RAG:✅` P4-Q4\n(`@plan/knowledge/research-P4-design-rag.json` §1): идентификатор тенанта в payload'е — утверждение,\nкоторое обязано совпасть с активным контекстом, а не разрешение открыть произвольную\nБД; проверять следует инициализированность tenancy, ключ тенанта и фактическое имя БД."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "Вводится отдельный контракт `CoreX\\Tenancy\\Contracts\\TenantContextRestorer` с методом\n`restore(DataScope $scope): TenantContext`. Существующий `TenantContextResolver::current()`\nне переопределяется и не меняет сигнатуру.\n\nРеализация по умолчанию `GuardedTenantContextRestorer` (в `corex/core`) **сверяет**:\nконтекст процесса берётся у `TenantContextResolver`, и расхождение по `accountId`,\n`workspaceId` или признаку `boxed` даёт `CoreX\\Exceptions\\ScopeContextMismatch`.\nИнициализирующая реализация — та, что поднимает тенанта по идентификатору из корневого\nреестра и переключает соединение, — в P4 **не пишется** и явно отнесена к P9.\n\nСверка `connectionIdentity` в P4 тоже не выполняется: она остаётся там, где уже живёт,\nи записывается в `@plan/knowledge/findings-P4-receipts.json` как долг с адресатом P6/P9."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Два вопроса — «какой контекст сейчас» и «какой контекст требует эта durable-запись» —\nразные, и склейка их в один интерфейс есть ровно тот класс ошибки, из которого выросла\nисходная проблема фазы. Отдельный контракт фиксирует различие в типе, а не в\nкомментарии.\n\nИнициализация tenancy в P4 не делается потому, что P4 не владеет `packages/tenancy`:\nпорядок bootstrapper'ов там — вопрос корректности (зависящий от соединения\nbootstrapper обязан идти после database-bootstrapper'а), и трогать его без владельца\nфазы значит менять поведение, которое P4 не может доказать. Целевой риск фазы —\n«воркер выполнил работу в чужом аккаунте» — закрывается сверкой полностью: скоуп,\nне совпавший с активным контекстом, отказывает до первой записи.\n\nАльтернатива «restore() поднимает тенанта сам» отклонена и как преждевременная, и как\nопасная: она превращает идентификатор из payload'а в команду открыть соединение, то\nесть ровно в то, против чего предупреждает внешний источник, — при этом без\nвладельческой проверки порядка инициализации.\n\nАльтернатива «не вводить контракт, читать скаляры прямо у скоупа» отклонена: два\nсуществующих потребителя (`RegistryFieldCatalogue`, `SqlTaskRecurrenceMaterializer`)\nпередают контекст дальше в чужие API (`EntityRegistry::all()`, `ModuleRegistry::isActive()`,\n`TaskAccess::authorizeCreate()`, `WakeupRequest`), и без контракта каждый из них\nсобирал бы `TenantContext` по-своему, а сверка не выполнялась бы нигде."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P4.3 и P4.4 получают `TenantContextRestorer` в конструкторы двух классов вместо чтения\n`$scope->context`. P4.11 использует отказ `restore()` как одно из утверждений\nизоляции. P9 обязан либо предоставить инициализирующую реализацию, либо явно\nподтвердить, что установка контекста остаётся ответственностью вызывающей стороны; и\nон же закрывает сверку фактического соединения. Требование внешнего источника\n«проверить фактическое имя БД» считается выполненным **частично** — это записано в\nreceipt'е P4.2, а не умолчано."
+    }
+  ]
+}

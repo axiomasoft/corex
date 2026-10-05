@@ -13,7 +13,6 @@ uses()->group('pg');
 
 beforeEach(function (): void {
     $this->resetPgSchema();
-    $this->migrateAzGuard();
     $this->migrateAutSchema();
 });
 

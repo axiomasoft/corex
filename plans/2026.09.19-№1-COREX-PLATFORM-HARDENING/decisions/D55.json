@@ -1,0 +1,49 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D55",
+  "title": "Attribute mutation message не несёт значений",
+  "date": "2026-09-20",
+  "status": "accepted",
+  "decision": "После non-replay mutation explicit translator создаёт\n`attributes.values.changed.v1` внутри той же DB transaction. Payload несёт scope,\n`RecordRef`, record version, schema hash и sorted ids/keys, но не old/new values.\nSearch и другие consumers находятся снаружи и перечитывают актуальное разрешённое\nсостояние.",
+  "rationale": "Так сообщение минимизирует утечку данных и сходится при duplicate/out-of-order\ndelivery, не создавая attributes→search dependency.",
+  "applies_to": [
+    "P5",
+    "P10",
+    "P10.6",
+    "P10.7",
+    "P13"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/codex-gpt-5.6-sol/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D55\ndate: 2026-09-20\nstatus: accepted\nitem: P10.7\nitems: [P5, P10, P10.6, P10.7, P13]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D55-Attribute-mutation-message",
+      "title": "D55 — Attribute mutation message не несёт значений",
+      "text": "**Actor:** plan-designer/codex-gpt-5.6-sol/high\n\n**Evidence:** `RAG:—` D25 требует transactional outbox, D26 — declared contract\nregistry, D28 не обещает ordering. Значения атрибутов могут быть чувствительными."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "После non-replay mutation explicit translator создаёт\n`attributes.values.changed.v1` внутри той же DB transaction. Payload несёт scope,\n`RecordRef`, record version, schema hash и sorted ids/keys, но не old/new values.\nSearch и другие consumers находятся снаружи и перечитывают актуальное разрешённое\nсостояние."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Так сообщение минимизирует утечку данных и сходится при duplicate/out-of-order\ndelivery, не создавая attributes→search dependency."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "Message registry расширяется additively. Write-token replay не добавляет второе\nсообщение. Тесты доказывают one mutation/one outbox row и отсутствие raw values."
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "base": "d6ed93fccd9b1ec50428d0f3d18c7c329895c2cd",
+  "retired_files": [
+    {
+      "path": "packages/tenancy/tests/Arch/StanclIsolationTest.php",
+      "tests": [
+        "test('the stancl detector actually detects (positive control on axiomasoft/corex-tenancy itself)', function () use ($packageRoot, $phpFiles, $stanclCodeReferences): void {",
+        "test('the stancl detector ignores comments and docblocks', function () use ($stanclCodeReferences): void {",
+        "test('no package outside axiomasoft/corex-tenancy references Stancl in code', function () use ($repoRoot, $packageRoot, $phpFiles, $stanclCodeReferences): void {"
+      ],
+      "pg": false
+    },
+    {
+      "path": "packages/tenancy/tests/PHPStan/StanclImportBoundaryRuleTest.php",
+      "tests": [
+        "public function test_stancl_import_outside_tenancy_is_reported(): void",
+        "public function test_stancl_import_inside_tenancy_is_silent(): void"
+      ],
+      "pg": false
+    },
+    {
+      "path": "packages/tenancy/tests/Feature/StanclDiscoveryTest.php",
+      "tests": [
+        "it('does not discover the stancl provider in the monorepo root package manifest', function (): void {",
+        "it('boots without any stancl provider and still generates account ids and resolves the tenancy engine', function (): void {"
+      ],
+      "pg": true
+    }
+  ],
+  "preserved_replacement": "packages/tenancy/tests/Feature/PackageEngineDiscoveryTest.php",
+  "delta": {
+    "sqlite": -5,
+    "pg": -1
+  },
+  "decision": "D95",
+  "item": "P07.2"
+}

@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Access\Internal;
 
-use AzGuard\Models\DirectGrant;
 use CoreX\Access\Contracts\Principal;
-use CoreX\Access\Laravel\AuthOptions;
+use Illuminate\Database\ConnectionResolverInterface;
+use Illuminate\Database\Query\Builder;
+use Psr\Clock\ClockInterface;
 
 /**
- * Whether a principal holds an active AzGuard direct grant for one compiled
+ * Whether a principal holds an active native direct grant for one compiled
  * permission key. Extracted out of `DefaultAccessChecker` (D110): both the
  * record path (`canOnRecord()`) and the new builder path
  * (`DefaultScopeResolver::apply()`) treat an active direct grant as a full
@@ -21,22 +22,22 @@ use CoreX\Access\Laravel\AuthOptions;
 final readonly class DirectGrantLookup
 {
     public function __construct(
-        private AuthOptions $options,
+        private ConnectionResolverInterface $connections,
+        private ClockInterface $clock,
     ) {}
 
     public function hasActive(Principal $p, string $key): bool
     {
-        return DirectGrant::query()
-            ->where('grantable_type', $p->principalType()->value)
-            ->where('grantable_id', $p->principalId())
-            ->where('panel_id', $this->panel())
-            ->where('permission_key', $key)
-            ->active()
-            ->exists();
-    }
+        $now = $this->clock->now();
 
-    private function panel(): string
-    {
-        return $this->options->panel;
+        return $this->connections->connection()->table('aut_direct_grants')
+            ->where('principal_type', $p->principalType()->value)
+            ->where('principal_id', $p->principalId())
+            ->where('permission_key', $key)
+            ->whereNull('revoked_at')
+            ->where(static function (Builder $q) use ($now): void {
+                $q->whereNull('expires_at')->orWhere('expires_at', '>', $now);
+            })
+            ->exists();
     }
 }

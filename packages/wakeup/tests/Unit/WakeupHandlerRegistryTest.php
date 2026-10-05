@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use CoreX\Wakeup\Contracts\DueWakeupHandler;
-use CoreX\Wakeup\Data\WakeupDelivery;
-use CoreX\Wakeup\Data\WakeupHandlerDefinition;
+use CoreX\Scheduling\Contracts\DueWakeupHandler;
+use CoreX\Scheduling\Data\WakeupDelivery;
+use CoreX\Scheduling\Data\WakeupHandlerDefinition;
 use CoreX\Wakeup\Internal\WakeupHandlerRegistry;
 
 final class RegistryTestHandler implements DueWakeupHandler

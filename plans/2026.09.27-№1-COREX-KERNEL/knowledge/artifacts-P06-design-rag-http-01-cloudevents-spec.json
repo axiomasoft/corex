@@ -1,0 +1,107 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P06-design-rag-http-01-cloudevents-spec",
+  "title": "http-01-cloudevents-spec — CloudEvents 1.0.2 core spec: naming, types, required/optional attributes, extensions",
+  "sections": [
+    {
+      "id": "http-01-cloudevents-spec-CloudEvents-1.0.2-core-spec-naming-types-required-optional-attributes-extensions",
+      "title": "http-01-cloudevents-spec — CloudEvents 1.0.2 core spec: naming, types, required/optional attributes, extensions",
+      "text": "- Tool: curl (primary source) · Date: 2026-10-03\n- URL: https://raw.githubusercontent.com/cloudevents/spec/v1.0.2/cloudevents/spec.md\n- SHA-256 of fetched document: `e327435c858d19fd171e4ab9781a01fc22dfa949d23c4220976529ebd16a1aa3` (573 lines)\n- Status: primary source; excerpts verbatim, line ranges of the fetched file."
+    },
+    {
+      "id": "Lines-162-215",
+      "title": "Lines 162-215",
+      "text": "```text"
+    },
+    {
+      "id": "Attribute-Naming-Convention",
+      "title": "Attribute Naming Convention",
+      "text": "The CloudEvents specifications define mappings to various protocols and\nencodings, and the accompanying CloudEvents SDK targets various runtimes and\nlanguages. Some of these treat metadata elements as case-sensitive while others\ndo not, and a single CloudEvent might be routed via multiple hops that involve a\nmix of protocols, encodings, and runtimes. Therefore, this specification limits\nthe available character set of all attributes such that case-sensitivity issues\nor clashes with the permissible character set for identifiers in common\nlanguages are prevented.\n\nCloudEvents attribute names MUST consist of lower-case letters ('a' to 'z') or\ndigits ('0' to '9') from the ASCII character set. Attribute names SHOULD be\ndescriptive and terse and SHOULD NOT exceed 20 characters in length."
+    },
+    {
+      "id": "Type-System",
+      "title": "Type System",
+      "text": "The following abstract data types are available for use in attributes. Each of\nthese types MAY be represented differently by different event formats and in\nprotocol metadata fields. This specification defines a canonical\nstring-encoding for each type that MUST be supported by all implementations.\n\n- `Boolean` - A boolean value of \"true\" or \"false\".\n  - String encoding: a case-sensitive value of `true` or `false`.\n- `Integer` - A whole number in the range -2,147,483,648 to +2,147,483,647\n  inclusive. This is the range of a signed, 32-bit, twos-complement encoding.\n  Event formats do not have to use this encoding, but they MUST only use\n  `Integer` values in this range.\n  - String encoding: Integer component of the JSON Number per\n    [RFC 7159, Section 6](https://tools.ietf.org/html/rfc7159#section-6)\n     optionally prefixed with a minus sign.\n- `String` - Sequence of allowable Unicode characters. The following characters\n  are disallowed:\n  - the \"control characters\" in the ranges U+0000-U+001F and U+007F-U+009F (both\n    ranges inclusive), since most have no agreed-on meaning, and some, such as\n    U+000A (newline), are not usable in contexts such as HTTP headers.\n  - code points\n    [identified as noncharacters by Unicode](http://www.unicode.org/faq/private_use.html#noncharacters).\n  - code points identifying Surrogates, U+D800-U+DBFF and U+DC00-U+DFFF, both\n    ranges inclusive, unless used properly in pairs. Thus (in JSON notation)\n    \"\\uDEAD\" is invalid because it is an unpaired surrogate, while\n    \"\\uD800\\uDEAD\" would be legal.\n- `Binary` - Sequence of bytes.\n  - String encoding: Base64 encoding per\n    [RFC4648](https://tools.ietf.org/html/rfc4648).\n- `URI` - Absolute uniform resource identifier.\n  - String encoding: `Absolute URI` as defined in\n    [RFC 3986 Section 4.3](https://tools.ietf.org/html/rfc3986#section-4.3).\n- `URI-reference` - Uniform resource identifier reference.\n  - String encoding: `URI-reference` as defined in\n    [RFC 3986 Section 4.1](https://tools.ietf.org/html/rfc3986#section-4.1).\n- `Timestamp` - Date and time expression using the Gregorian Calendar.\n  - String encoding: [RFC 3339](https://tools.ietf.org/html/rfc3339).\n\n```"
+    },
+    {
+      "id": "Lines-248-345",
+      "title": "Lines 248-345",
+      "text": "```text"
+    },
+    {
+      "id": "id",
+      "title": "id",
+      "text": "- Type: `String`\n- Description: Identifies the event. Producers MUST ensure that `source` + `id`\n  is unique for each distinct event. If a duplicate event is re-sent (e.g. due\n  to a network error) it MAY have the same `id`. Consumers MAY assume that\n  Events with identical `source` and `id` are duplicates.\n- Constraints:\n  - REQUIRED\n  - MUST be a non-empty string\n  - MUST be unique within the scope of the producer\n- Examples:\n  - An event counter maintained by the producer\n  - A UUID"
+    },
+    {
+      "id": "source",
+      "title": "source",
+      "text": "- Type: `URI-reference`\n- Description: Identifies the context in which an event happened. Often this\n  will include information such as the type of the event source, the\n  organization publishing the event or the process that produced the event. The\n  exact syntax and semantics behind the data encoded in the URI is defined by\n  the event producer.\n\n  Producers MUST ensure that `source` + `id` is unique for each distinct event.\n\n  An application MAY assign a unique `source` to each distinct producer, which\n  makes it easy to produce unique IDs since no other producer will have the same\n  source. The application MAY use UUIDs, URNs, DNS authorities or an\n  application-specific scheme to create unique `source` identifiers.\n\n  A source MAY include more than one producer. In that case the producers MUST\n  collaborate to ensure that `source` + `id` is unique for each distinct event.\n\n- Constraints:\n  - REQUIRED\n  - MUST be a non-empty URI-reference\n  - An absolute URI is RECOMMENDED\n- Examples\n  - Internet-wide unique URI with a DNS authority.\n    - `https://github.com/cloudevents`\n    - `mailto:cncf-wg-serverless@lists.cncf.io`\n  - Universally-unique URN with a UUID:\n    - `urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66`\n  - Application-specific identifiers\n    - `/cloudevents/spec/pull/123`\n    - `/sensors/tn-1234567/alerts`\n    - `1-555-123-4567`"
+    },
+    {
+      "id": "specversion",
+      "title": "specversion",
+      "text": "- Type: `String`\n- Description: The version of the CloudEvents specification which the event\n  uses. This enables the interpretation of the context. Compliant event\n  producers MUST use a value of `1.0` when referring to this version of the\n  specification.\n\n  Currently, this attribute will only have the 'major' and 'minor' version\n  numbers included in it. This allows for 'patch' changes to the specification\n  to be made without changing this property's value in the serialization.\n  Note: for 'release candidate' releases a suffix might be used for testing\n  purposes.\n\n- Constraints:\n  - REQUIRED\n  - MUST be a non-empty string"
+    },
+    {
+      "id": "type",
+      "title": "type",
+      "text": "- Type: `String`\n- Description: This attribute contains a value describing the type of event\n  related to the originating occurrence. Often this attribute is used for\n  routing, observability, policy enforcement, etc. The format of this is\n  producer defined and might include information such as the version of the\n  `type` - see\n  [Versioning of CloudEvents in the Primer](primer.md#versioning-of-cloudevents)\n  for more information.\n- Constraints:\n  - REQUIRED\n  - MUST be a non-empty string\n  - SHOULD be prefixed with a reverse-DNS name. The prefixed domain dictates the\n    organization which defines the semantics of this event type.\n- Examples\n  - com.github.pull_request.opened\n  - com.example.object.deleted.v2"
+    },
+    {
+      "id": "OPTIONAL-Attributes",
+      "title": "OPTIONAL Attributes",
+      "text": "The following attributes are OPTIONAL to appear in CloudEvents. See the\n[Notational Conventions](#notational-conventions) section for more information\non the definition of OPTIONAL."
+    },
+    {
+      "id": "datacontenttype",
+      "title": "datacontenttype",
+      "text": "- Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)\n- Description: Content type of `data` value. This attribute enables `data` to\n  carry any type of content, whereby format and encoding might differ from that\n  of the chosen event format. For example, an event rendered using the\n```"
+    },
+    {
+      "id": "Lines-375-430",
+      "title": "Lines 375-430",
+      "text": "```text"
+    },
+    {
+      "id": "dataschema",
+      "title": "dataschema",
+      "text": "- Type: `URI`\n- Description: Identifies the schema that `data` adheres to. Incompatible\n  changes to the schema SHOULD be reflected by a different URI. See\n  [Versioning of CloudEvents in the Primer](primer.md#versioning-of-cloudevents)\n  for more information.\n- Constraints:\n  - OPTIONAL\n  - If present, MUST be a non-empty URI"
+    },
+    {
+      "id": "subject",
+      "title": "subject",
+      "text": "- Type: `String`\n- Description: This describes the subject of the event in the context of the\n  event producer (identified by `source`). In publish-subscribe scenarios, a\n  subscriber will typically subscribe to events emitted by a `source`, but the\n  `source` identifier alone might not be sufficient as a qualifier for any\n  specific event if the `source` context has internal sub-structure.\n\n  Identifying the subject of the event in context metadata (opposed to only in\n  the `data` payload) is particularly helpful in generic subscription filtering\n  scenarios where middleware is unable to interpret the `data` content. In the\n  above example, the subscriber might only be interested in blobs with names\n  ending with '.jpg' or '.jpeg' and the `subject` attribute allows for\n  constructing a simple and efficient string-suffix filter for that subset of\n  events.\n\n- Constraints:\n  - OPTIONAL\n  - If present, MUST be a non-empty string\n- Example:\n  - A subscriber might register interest for when new blobs are created inside a\n    blob-storage container. In this case, the event `source` identifies the\n    subscription scope (storage container), the `type` identifies the \"blob\n    created\" event, and the `id` uniquely identifies the event instance to\n    distinguish separate occurrences of a same-named blob having been created;\n    the name of the newly created blob is carried in `subject`:\n    - `source`: `https://example.com/storage/tenant/container`\n    - `subject`: `mynewfile.jpg`"
+    },
+    {
+      "id": "time",
+      "title": "time",
+      "text": "- Type: `Timestamp`\n- Description: Timestamp of when the occurrence happened. If the time of the\n  occurrence cannot be determined then this attribute MAY be set to some other\n  time (such as the current time) by the CloudEvents producer, however all\n  producers for the same `source` MUST be consistent in this respect. In other\n  words, either they all use the actual time of the occurrence or they all use\n  the same algorithm to determine the value used.\n- Constraints:\n  - OPTIONAL\n  - If present, MUST adhere to the format specified in\n    [RFC 3339](https://tools.ietf.org/html/rfc3339)"
+    },
+    {
+      "id": "Extension-Context-Attributes",
+      "title": "Extension Context Attributes",
+      "text": "```"
+    },
+    {
+      "id": "Lines-430-470",
+      "title": "Lines 430-470",
+      "text": "```text"
+    },
+    {
+      "id": "Extension-Context-Attributes-2",
+      "title": "Extension Context Attributes",
+      "text": "A CloudEvent MAY include any number of additional context attributes with\ndistinct names, known as \"extension attributes\". Extension attributes MUST\nfollow the same [naming convention](#attribute-naming-convention) and use the\nsame [type system](#type-system) as standard attributes. Extension attributes\nhave no defined meaning in this specification, they allow external systems to\nattach metadata to an event, much like HTTP custom headers.\n\nExtension attributes are always serialized according to binding rules like\nstandard attributes. However this specification does not prevent an extension\nfrom copying event attribute values to other parts of a message, in order to\ninteract with non-CloudEvents systems that also process the message. Extension\nspecifications that do this SHOULD specify how receivers are to interpret\nmessages if the copied values differ from the cloud-event serialized values."
+    },
+    {
+      "id": "Defining-Extensions",
+      "title": "Defining Extensions",
+      "text": "See\n[CloudEvent Attributes Extensions](primer.md#cloudevent-attribute-extensions)\nfor additional information concerning the use and definition of extensions.\n\nThe definition of an extension SHOULD fully define all aspects of the\nattribute - e.g. its name, type, semantic meaning and possible values. New\nextension definitions SHOULD use a name that is descriptive enough to reduce the\nchances of name collisions with other extensions. In particular, extension\nauthors SHOULD check the [documented extensions](documented-extensions.md)\ndocument for the set of known extensions - not just for possible name conflicts\nbut for extensions that might be of interest.\n\nMany protocols support the ability for senders to include additional metadata,\nfor example as HTTP headers. While a CloudEvents receiver is not mandated to\nprocess and pass them along, it is RECOMMENDED that they do so via some\nmechanism that makes it clear they are non-CloudEvents metadata.\n\nHere is an example that illustrates the need for additional attributes. In many\nIoT and enterprise use cases, an event could be used in a serverless application\nthat performs actions across multiple types of events. To support such use\ncases, the event producer will need to add additional identity attributes to the\n\"context attributes\" which the event consumers can use to correlate this event\nwith the other events. If such identity attributes happen to be part of the\n```"
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P06-design-rag/http-01-cloudevents-spec.md",
+    "sha256": "316a1dc5b2dbb1ed5e3a9aef0f75c55fc7dd912efc71d354adc56e429b61d7d5"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "action": "approval-required",
+  "terminal": true,
+  "reason": "authority-approval-required",
+  "signal_class": "authority",
+  "scope_class": "item",
+  "recovered": false,
+  "reason_code": "REVIEW_BUDGET_EXHAUSTED",
+  "evidence_ids": [
+    "artifacts/P07.2-execution/review-run-repair.json",
+    "artifacts/P07.2-execution/second-review-remediation.json",
+    "artifacts/P07.2-execution/pending-review-candidate.json"
+  ],
+  "continuation": "waiting: owner authorizes one additional Grok 4.7/500k review round for P07.2"
+}

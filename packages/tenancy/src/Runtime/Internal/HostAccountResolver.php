@@ -14,8 +14,8 @@ use InvalidArgumentException;
 /**
  * Resolves `Request::getHost()` to an account id through `root_domains` (verified, not deleted)
  * and `root_accounts` (not deleted, slug set — §7.3 п.9: a pending shell has neither a verified
- * domain nor a slug, so it is unreachable by host). The cache holds the account id only and
- * never a miss; it lives in the explicit host store, outside the tenant cache stores.
+ * domain nor a slug, so it is unreachable by host). Positive entries are fenced by a
+ * shared generation; the explicit host store lives outside the tenant cache stores.
  */
 final readonly class HostAccountResolver
 {
@@ -29,18 +29,54 @@ final readonly class HostAccountResolver
     public function resolve(string $host): string
     {
         $host = self::normalizeHost($host);
+
+        // A transaction can see uncommitted data or an older snapshot. Neither belongs
+        // in a shared cache, even when that transaction will eventually commit.
+        if (! $this->options->hostCache
+            || $this->connections->connection($this->options->centralConnection)->transactionLevel() > 0) {
+            return $this->lookup($host) ?? throw TenantCouldNotBeIdentifiedByHostException::forHost($host);
+        }
+
         $store = $this->cache->store($this->options->hostCacheStore);
-        $id = $this->options->hostCache ? $store->get(self::key($host)) : null;
 
-        if (! is_string($id)) {
-            $id = $this->lookup($host);
+        for ($attempt = 0; $attempt < 3; $attempt++) {
+            $generation = $store->get(self::generationKey());
 
-            if ($id !== null && $this->options->hostCache) {
-                $store->put(self::key($host), $id, $this->options->hostCacheTtl);
+            if (! is_string($generation) || $generation === '') {
+                // A missing/evicted generation must never reuse an old entry's fence.
+                $generation = bin2hex(random_bytes(16));
+
+                if (! $store->forever(self::generationKey(), $generation)) {
+                    throw TenantCouldNotBeIdentifiedByHostException::forHost($host);
+                }
+            }
+
+            $entry = $store->get(self::key($host));
+            $id = is_array($entry) && ($entry['generation'] ?? null) === $generation
+                && is_string($entry['account'] ?? null) ? $entry['account'] : null;
+
+            if ($id === null) {
+                $id = $this->lookup($host);
+
+                if ($id !== null) {
+                    $store->put(self::key($host), ['generation' => $generation, 'account' => $id], $this->options->hostCacheTtl);
+                }
+            }
+
+            // A late miss may overwrite an entry after invalidation, but its old fence
+            // cannot authorize either this response or any subsequent cache hit.
+            if ($store->get(self::generationKey()) === $generation) {
+                return $id ?? throw TenantCouldNotBeIdentifiedByHostException::forHost($host);
             }
         }
 
-        return $id ?? throw TenantCouldNotBeIdentifiedByHostException::forHost($host);
+        throw TenantCouldNotBeIdentifiedByHostException::forHost($host);
+    }
+
+    public static function generationKey(): string
+    {
+        // '@' cannot occur in a normalized host, so this cannot alias a mapping key.
+        return self::key('@generation');
     }
 
     public static function key(string $host): string

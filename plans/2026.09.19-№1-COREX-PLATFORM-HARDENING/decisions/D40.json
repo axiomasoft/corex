@@ -1,0 +1,48 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D40",
+  "title": "`SecretRef` с тремя путями redaction; boot отказывает по форме, команда не заменяет boot",
+  "date": "2026-09-19",
+  "status": "accepted",
+  "decision": "1. `SecretRef` несёт `reveal()`, `__toString() = '[redacted]'`,\n   `__debugInfo() = ['value' => '[redacted]']`. `reveal()` и конструкторы,\n   принимающие plaintext, помечаются `#[SensitiveParameter]`.\n   `JsonSerializable` не реализуется. `serialize` бросает.\n2. Поле секрета в Options имеет тип `?SecretRef`, никогда `string`.\n   `tenancy.oidc.client_secret` оборачивается в P7.2. Ключи\n   `cursor_secret` / Meilisearch `key` редактируются командой по\n   эвристике P2.4, пока у пакета нет Options (D38).\n3. Невалидная форма, неизвестный драйвер, выбранный и отсутствующий\n   адаптер — отказ `fromArray` при boot (CFG-004). Команда\n   `corex:config:validate` накапливает те же нарушения, печатает\n   эффективный драйвер и доступность адаптеров и **никогда** значения\n   секретов. Живая досягаемость внешней системы командой не проверяется.",
+  "rationale": "Эскиз уже задал три метода; PHP 8.2 добавляет четвёртый канал (backtrace),\nего нельзя игнорировать. Команда без boot оставляет воркеры без защиты.\nOptionsResolver как библиотека не вводится: новых runtime-зависимостей нет,\nфабрика рукописная.",
+  "applies_to": [
+    "P7",
+    "P7.1",
+    "P7.2",
+    "P7.10"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/cursor-grok-4.6/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D40\ndate: 2026-09-19\nstatus: accepted\nitem: P7.10\nitems: [P7, P7.1, P7.2, P7.10]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D40-SecretRef-redaction-boot-boot",
+      "title": "D40 — `SecretRef` с тремя путями redaction; boot отказывает по форме, команда не заменяет boot",
+      "text": "**Actor:** plan-designer/cursor-grok-4.6/high\n**Evidence:** RAG:✅ P7-Q2 php.net `__toString`, `__debugInfo`,\n`SensitiveParameter` — три бытовых пути утечки плюс backtrace. RAG:✅\nP7-Q3 Symfony compile / Laravel `config:cache`: форма и выбранный драйвер\n— boot; живая досягаемость — diagnose/readiness. CFG-004, CFG-005."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "1. `SecretRef` несёт `reveal()`, `__toString() = '[redacted]'`,\n   `__debugInfo() = ['value' => '[redacted]']`. `reveal()` и конструкторы,\n   принимающие plaintext, помечаются `#[SensitiveParameter]`.\n   `JsonSerializable` не реализуется. `serialize` бросает.\n2. Поле секрета в Options имеет тип `?SecretRef`, никогда `string`.\n   `tenancy.oidc.client_secret` оборачивается в P7.2. Ключи\n   `cursor_secret` / Meilisearch `key` редактируются командой по\n   эвристике P2.4, пока у пакета нет Options (D38).\n3. Невалидная форма, неизвестный драйвер, выбранный и отсутствующий\n   адаптер — отказ `fromArray` при boot (CFG-004). Команда\n   `corex:config:validate` накапливает те же нарушения, печатает\n   эффективный драйвер и доступность адаптеров и **никогда** значения\n   секретов. Живая досягаемость внешней системы командой не проверяется."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Эскиз уже задал три метода; PHP 8.2 добавляет четвёртый канал (backtrace),\nего нельзя игнорировать. Команда без boot оставляет воркеры без защиты.\nOptionsResolver как библиотека не вводится: новых runtime-зависимостей нет,\nфабрика рукописная."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P7.1 вводит тип. P7.2 типизирует OIDC-секрет. P7.10 — команда и негативный\nтест «секрет в выводе отсутствует». Дефолт\n`COREX_INTL_CURSOR_SECRET` в дереве — warning команды, значение не меняется\n(Scope Excluded: дефолты)."
+    }
+  ]
+}

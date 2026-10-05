@@ -1,5 +1,34 @@
 # Changelog
 
+## Unreleased — PLAN3.P07.6 host-cache correction
+
+- Fence host mappings after committed account/domain saves and deletes, including cascade deletion.
+  Late cache publication cannot restore a revoked mapping; transactional resolutions bypass shared cache
+  to prevent publishing rolled-back verification. A shared generation invalidates all warmed host mappings
+  on account/domain changes; unchanged cache hits still issue no SQL. Existing public signatures are retained.
+
+## Unreleased — PLAN3.P07.5 module layout
+
+- Added `CoreX\Tenancy\Provisioning\Contracts\TemplateDatabaseCloner`. Account provisioning calls that port; `TemplateClonePostgreSQLManager` stays inside Provisioning and implements it.
+
+## Unreleased — PLAN3.P07.3 impersonation profiles and audit
+
+- Replaced the approval flag with `corex-tenancy.impersonation.profile` (`dev`, `standard`, `regulated`). Grant rules are enforced in one atomic claim; regulated approval requires a distinct staff identity. Added grant and audit ports, committed central plus tenant audit for standard/regulated, fail-closed access, and a production acknowledgement for dev. The Eloquent write guard is scoped with an instance `allowing()` method. This is an unpublished pre-1.0 PHP/configuration contract change.
+
+## Unreleased — PLAN3.P07.2 (D95/D98; pre-1.0 BC delta)
+
+- Removed Stancl and its prerelease provider dependencies, runtime model projections, identifier binding,
+  JobPipeline wiring and the obsolete PHPStan import rule. Account/Domain are plain central Eloquent models;
+  Account uses UUIDv7, explicit fillable columns and immutable date/integer casts. Model attributes no longer
+  use the legacy data column; signup claim and pool cleanup SQL still require it for idempotency and crash
+  recovery until P08 (D107). Retain the column and these writes until that migration is complete.
+- Configuration moves from `tenancy` to `corex-tenancy`, including wakeup, under one published file. Removed
+  tenantModel/idGenerator/tenantDatabaseManager/provisioningPipeline options; `TenancyOptions::fromArray()`
+  now accepts one configuration array. Middleware aliases and route/error identifiers retain their existing names.
+- `AccountTemplateSnapshot::capture()` now accepts AccountRef and the explicit central connection. Provisioning
+  synchronously runs CreateDatabaseFromTemplate with AccountRef/ProvisionParams; template integrity, replay
+  verification, WAL_LOG cloning, export-before-drop and cache invalidation are preserved.
+
 ## Unreleased — thin providers and registrars (P05.2)
 
 ### PLAN3.P07.1 — own tenancy engine (BC delta, unpublished; D95, D98, D100–D103)
@@ -204,8 +233,8 @@ tag `v0.2.0` per D17 default policy (no per-package split mirror configured).
   has no UI). Login lane (`OidcLoginController`) split `assertMembership` into `assertAccountClaim`
   (both lanes) + `assertMembership` (ordinary lane only) — the `imp` branch skips membership and
   `IdentitySyncer` entirely (support is not an account member, D145); the ordinary lane's own
-  Validation suite is unchanged. `require_approved_by` config (D148, default `false`) — optional
-  4-eyes deployment policy.
+  Validation suite is unchanged. The later profile contract supersedes the former optional
+  four-eyes deployment policy.
 - **`ResolveWorkspace`-middleware: `/w/{slug}` → workspace narrowing (P2.23, B-11 §5.4 п.4,
   D131–D136, AC-18).** Registered as the `tenancy.workspace` alias (D131) — always registered,
   never a member of the `'tenant'` group: a route with `->middleware(['tenant',

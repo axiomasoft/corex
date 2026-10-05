@@ -12,7 +12,7 @@ use Illuminate\Support\Carbon;
 use Override;
 
 /**
- * `aut_roles` — role overlay compiled into AzGuard (B-11 §2.3).
+ * `aut_roles` — native authorization role.
  *
  * @property string $id
  * @property string $slug
@@ -20,7 +20,6 @@ use Override;
  * @property ?string $description
  * @property bool $is_system
  * @property ?string $cloned_from_id
- * @property ?int $azguard_role_id
  * @property list<string> $assignable_to
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -39,7 +38,6 @@ final class Role extends BaseModel
         'description',
         'is_system',
         'cloned_from_id',
-        'azguard_role_id',
         'assignable_to',
     ];
 

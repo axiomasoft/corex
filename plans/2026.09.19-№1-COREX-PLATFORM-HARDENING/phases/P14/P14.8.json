@@ -1,0 +1,259 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P14.8",
+  "title": "Public export runner and bounded capture",
+  "status": "done",
+  "summary": "Реализовать public export runner and bounded capture по замороженному дизайну P14.",
+  "why": "`@plan/knowledge/research-P14-design.json` §5.2–§5.3; D78. Закрывает соответствующую строку\nacceptance/threat matrix §14 без переноса проектных решений в execution.",
+  "scope": {
+    "include": [
+      "Только нормативный срез §5.2–§5.3, перечисленные ниже Files и\nпроверки: Public port matches existing seal/emit exactly; cancel/runtime/memory checked per page, row/byte caps enforced independently of part count. Interrupted coherent capture starts a new manifest; sealed emit revalidates hash/scope. No API dependency or external I/O."
+    ],
+    "exclude": [
+      "Остальные срезы P14; GraphQL; naming P15; новые runtime зависимости;\nlive rollout, внешние webhook sends и production migration/rotation."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D78"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P14-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D78.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P14/P14.7.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P14/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/transfer/README.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/transfer/src/Internal/Export/DatabaseExportRunner.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/transfer/composer.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/transfer/src/Contracts/ExportRunner.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/transfer/src/Internal/Export/DatabaseExportRunner.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/transfer/tests/Feature/ExportLimitsTest.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/transfer/tests/Feature/ExportPortTest.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/transfer/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/transfer/src/Contracts/TransferResultReader.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/transfer/src/Internal/Transfer/SqlTransferResultReader.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/transfer/tests/Feature/TransferResultReaderTest.php",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Нормативный текст и алгоритмы — `@plan/knowledge/research-P14-design.json` §5.2–§5.3; D78. Сохранять predecessor contracts и public signatures; no new runtime dependencies. SQL validation требует изолированных SQLite и PostgreSQL; scalar scope/restorer не открывает произвольную tenant DB."
+  ],
+  "guidance": "`@plan/knowledge/research-P14-design.json` §15 задаёт общие safe codes/port shapes. Использовать точные DTO/подписи, state transitions, defaults и\nfailure rules §5.2–§5.3. Новый interface только Contracts, implementation Internal,\nDTO final readonly. Время durable decisions — injected Clock; duration — monotonic.\nRequired Reads section-qualified; максимум 2500 строк, ≤14 inputs, ≤8 Files.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer lint:check",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "composer analyse",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "composer test",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "composer test:pg",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "Public ExportRunner matches seal and emit; composer has no API dependency",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "Row and byte caps are independent of part count; cancel and memory limits roll capture back so a new manifest can seal",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "Result reader returns bounded failures and a typed manifest and denies a mismatched scope",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "Transfer package and root lint, static analysis, sqlite and PostgreSQL suites",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Перечисленные Files реализуют §5.2–§5.3; измеримые результаты\nValidation приложены к item receipt, включая команды, failures/skips и ограничения."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-25T14:09:38Z",
+    "finished_at": "2026-09-25T14:09:43Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-run/cursor-grok-4.7/high",
+      "effort": "high"
+    },
+    "notes": "P14.8 GREEN: public ExportRunner seal/emit, per-page cancel and memory limits, row/byte caps independent of part count, and a scope-checked transfer result reader. transfer pest 8/24, pg 23/83, root pest 712/2931, root pg 235/1100, phpstan 0, pint ok.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-25T14:09:43Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-25T14:09:43Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-25T14:09:43Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-25T14:09:43Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-25T14:09:43Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Реализовать public export runner and bounded capture по замороженному дизайну P14."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`@plan/knowledge/research-P14-design.json` §5.2–§5.3; D78. Закрывает соответствующую строку\nacceptance/threat matrix §14 без переноса проектных решений в execution."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Только нормативный срез §5.2–§5.3, перечисленные ниже Files и\nпроверки: Public port matches existing seal/emit exactly; cancel/runtime/memory checked per page, row/byte caps enforced independently of part count. Interrupted coherent capture starts a new manifest; sealed emit revalidates hash/scope. No API dependency or external I/O."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Остальные срезы P14; GraphQL; naming P15; новые runtime зависимости;\nlive rollout, внешние webhook sends и production migration/rotation."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P14-design.json`; `@plan/decisions/D78.json`; `@plan/phases/P14/P14.7.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/transfer/src/Contracts/ExportRunner.php`; `packages/transfer/src/Internal/Export/DatabaseExportRunner.php`; `packages/transfer/tests/Feature/ExportLimitsTest.php`; `packages/transfer/tests/Feature/ExportPortTest.php`; `packages/transfer/composer.json`; `packages/transfer/src/Contracts/TransferResultReader.php`; `packages/transfer/src/Internal/Transfer/SqlTransferResultReader.php`; `packages/transfer/tests/Feature/TransferResultReaderTest.php`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P14/phase.json`; 2) `@plan/knowledge/research-P14-design.json` §5.2–§5.3; 3) `@plan/decisions/D78.json`; 4) `@plan/phases/P14/P14.7.json`; 5) `packages/transfer/README.md`; 6) `packages/transfer/src/Internal/Export/DatabaseExportRunner.php`; 7) `packages/transfer/composer.json`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Нормативный текст и алгоритмы — `@plan/knowledge/research-P14-design.json` §5.2–§5.3; D78. Сохранять predecessor contracts и public signatures; no new runtime dependencies. SQL validation требует изолированных SQLite и PostgreSQL; scalar scope/restorer не открывает произвольную tenant DB."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "`@plan/knowledge/research-P14-design.json` §15 задаёт общие safe codes/port shapes. Использовать точные DTO/подписи, state transitions, defaults и\nfailure rules §5.2–§5.3. Новый interface только Contracts, implementation Internal,\nDTO final readonly. Время durable decisions — injected Clock; duration — monotonic.\nRequired Reads section-qualified; максимум 2500 строк, ≤14 inputs, ≤8 Files."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Public port matches existing seal/emit exactly; cancel/runtime/memory checked per page, row/byte caps enforced independently of part count. Interrupted coherent capture starts a new manifest; sealed emit revalidates hash/scope. No API dependency or external I/O. Затронутый пакет: `composer lint:check`, `composer analyse`,\n`composer test`; root equivalents обязательны по plan.md. SQL paths дополнительно\nпакетный `composer test:pg` после isolation preflight; если script ещё не произведён\nP2, использовать его declared package PG lane, не считать отсутствие script успехом.\nNegative fixtures доказывают конкретный отказ. Непройденный check раскрывается."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Перечисленные Files реализуют §5.2–§5.3; измеримые результаты\nValidation приложены к item receipt, включая команды, failures/skips и ограничения."
+    }
+  ]
+}

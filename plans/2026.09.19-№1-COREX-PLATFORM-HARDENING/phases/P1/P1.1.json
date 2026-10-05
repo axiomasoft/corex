@@ -1,0 +1,318 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P1.1",
+  "title": "Конституция: форма статьи, восемь групп инвариантов, анти-цели",
+  "status": "done",
+  "summary": "Создать `docs/architecture/constitution.md` — реестр архитектурных инвариантов CoreX, где каждая статья несёт стабильный идентификатор, нормативную фразу, владельца правила, честное поле `Enforcement` и условие исключения — плюс каталог `docs/architecture/exceptions/` с четырьмя записями уже существующих исключений.",
+  "why": "`docs/architecture/` в дереве не существует, а правила рассыпаны по `dev-doctrine.md`, `Architecture_CoreX.md`, 22 ADR и Decision Log двух планов (`RAG:—`, `@plan/knowledge/research-00-baseline-metrics.json` §6). Без единого реестра каждое последующее решение плана принимается заново и расходится с предыдущим. `RAG:✅` документ расходится с кодом именно тогда, когда совмещает объяснение, журнал решений и свод правил; лечится разделением ролей, полем enforcement у каждого правила и правилом одного канонического дома (`@plan/knowledge/research-P1-design-rag.json` §1, запрос P1-Q7). Отдельно: `Enforcement`, объявляющий несуществующий гейт, воспроизводит уже случившийся в этом репозитории дефект ложно-зелёного гейта, поэтому честность этого поля — не стиль, а требование приёмки.",
+  "scope": {
+    "include": [
+      "Файл `docs/architecture/constitution.md` целиком: шапка с правилами чтения и формой статьи, раздел об исключениях, восемь групп статей (`PKG-001`…`PKG-009`, `STR-001`…`STR-006`, `API-001`…`API-009`, `DATA-001`…`DATA-006`, `RUN-001`…`RUN-005`, `CFG-001`…`CFG-006`, `MSG-001`…`MSG-008`, `EXT-001`…`EXT-009`) и раздел анти-целей (`NON-001`…`NON-022`). Каталог `docs/architecture/exceptions/` с четырьмя записями: `STR-003/tenancy-src-children.md`, `STR-005/tenancy-membership-internal.md`, `DATA-004/aut-role-assignments-cloud-fk.md`, `CFG-006/corex-intl-search-key.md`. Строка в корневом `CHANGELOG.md`."
+    ],
+    "exclude": [
+      "Любой PHP-код и любая правка `packages/**`; создание документов политик — они принадлежат P1.4–P1.6 и в конституции только названы владельцами; создание `README.md` каталога и сводного реестра правил (P1.7); создание `taxonomy.md` (P1.2) и `rename-registry.md` (P1.3); создание любого гейта, скрипта, теста и CI-джоба (P3); правка `docs/dev-doctrine.md` и `docs/03_Dev/**` (P1.7); правка миграций; исправление чисел в `@plan/knowledge/research-00-baseline-metrics.json` — поправки уже внесены при детализации фазы, item их только читает."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D13",
+    "D102"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P1-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P1-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D13.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/findings-audit-verdicts.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/plan.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P1/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D1.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "docs/dev-doctrine.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-00-baseline-metrics.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "scripts/package-graph-gate.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/auth/database/migrations/tenant-cloud/2026_07_26_200004_add_aut_cross_package_fks.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/search-intl/src/SearchIntlServiceProvider.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "CHANGELOG.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "docs/architecture/constitution.md",
+      "change": "any"
+    },
+    {
+      "path": "docs/architecture/exceptions/STR-003/tenancy-src-children.md",
+      "change": "any"
+    },
+    {
+      "path": "docs/architecture/exceptions/STR-005/tenancy-membership-internal.md",
+      "change": "any"
+    },
+    {
+      "path": "docs/architecture/exceptions/DATA-004/aut-role-assignments-cloud-fk.md",
+      "change": "any"
+    },
+    {
+      "path": "docs/architecture/exceptions/CFG-006/corex-intl-search-key.md",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Текст статей берётся из `@plan/knowledge/research-P1-design.json` §2.3–§2.11 **дословно по смыслу**: колонки таблиц дизайна разворачиваются в форму статьи §2.2, ни одна статья не добавляется и не выбрасывается. Идентификаторы статей — ровно те, что в дизайне: они уже процитированы другими items и решениями, и их смена делает ссылки битыми. Поле `Владелец` у статей `PKG-002`, `PKG-003`, `PKG-006`, `PKG-007`, `PKG-008`, `CFG-006`, `EXT-001`, `EXT-008`, `EXT-009`, `API-009` указывает на `../dev-doctrine.md` с номером раздела — текст доктрины **не переносится** в конституцию; статья несёт одну нормативную фразу плюс ссылку. Поле `Enforcement` заполняется только из перечня существующих команд (`composer test:arch`, `composer package-graph-gate`, `composer test:packages`, `composer lint:check`, `scripts/contract-guard.sh`) либо строкой `нет — P<n> (<описание будущего гейта>)`. Имена тестов в `Enforcement` статей `PKG-002`/`PKG-003`/`PKG-007` берутся из `tests/Arch/LayerTest.php` **буквально** (проверить `rg \"^test\\(\" tests/Arch/LayerTest.php` перед записью). Каждая запись исключения несёт шесть полей: нарушаемая статья, затронутые пути, владелец, причина, компенсирующий контроль, условие снятия. Для `DATA-004` условие снятия — «постоянное по решению D102», и запись обязана назвать это прямо. Машинные исключения `scripts/package-graph-gate.json` в Markdown **не дублируются**: их дом — этот файл. Числа берутся только из `@plan/knowledge/research-00-baseline-metrics.json` с учётом поправок `P1-design.md` §12 — в частности, утверждение о неполноте контура `composer test:packages` в конституцию не переносится, оно опровергнуто. Ни один файл вне `Files` не изменяется."
+  ],
+  "guidance": "Готовый текст шапки — `@plan/knowledge/research-P1-design.json` §2.1, переносится в файл как есть. Шаблон статьи `PKG-001` — §2.2, воспроизводится для каждой статьи буквально по форме. Таблицы §2.3–§2.10 дают для каждой статьи колонки «Правило», «Владелец», «Enforcement» и «Почему»; поле «Исключения» заполняется путём `exceptions/<ID>/` там, где запись создаётся этим item'ом, и `—` во всех прочих. Примечания под таблицами (`PKG-008` про полный контур, `DATA-001` про разделённый префикс `sys_`, `DATA-004` про существующий FK, `CFG-002` про 152 вызова, `STR-003`/`STR-005` про долг tenancy) переносятся в текст соответствующих статей в поле «Почему» либо отдельным абзацем после статьи. Готовый текст раздела анти-целей — §2.11, переносится дословно вместе с таблицей и с проверкой «каждый `NON-*` имеет непустую колонку „Отменяется“». Ширина строки ≤100, язык русский, идентификаторы латиницей (§0).",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "rg -c \"^### (PKG|STR|API|DATA|RUN|CFG|MSG|EXT)-[0-9]{3} —\" docs/architecture/constitution.md",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "rg -c \"^\\| NON-0[0-9]{2} \\|\" docs/architecture/constitution.md",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "rg -A6 \"^### [A-Z]+-[0-9]{3}\" docs/architecture/constitution.md | rg -c \"\\*\\*Enforcement\\.\\*\\*\"",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "composer",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "composer.json",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "cmd": "composer lint:check",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "cmd": "git diff --stat -- 'packages/' 'scripts/' 'tests/' '.github/'",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "cmd": "git diff --name-only",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "procedure": "rg -c '^### (PKG|STR|API|DATA|RUN|CFG|MSG|EXT)-[0-9]{3} —' docs/architecture/constitution.md = 58",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "procedure": "rg -c '^| NON-0[0-9]{2} |' docs/architecture/constitution.md = 22",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V11",
+      "procedure": "rg -A6 Enforcement fields = 58",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V12",
+      "procedure": "composer lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V13",
+      "procedure": "git diff packages/scripts/tests empty",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "`docs/architecture/constitution.md` — 58 статей в восьми группах плюс 22 анти-цели, каждая с владельцем и честным enforcement; четыре записи исключений с условием снятия; запись в корневом `CHANGELOG.md`. Receipt item'а — `@plan/knowledge/findings-P1-receipts.json` (создаётся этим item'ом, дополняется последующими): вывод каждой команды Validation, отдельной строкой — сколько статей исполняется машинно сегодня и сколько несут «объявлено»."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "medium"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "required",
+    "status": "complete"
+  },
+  "result": {
+    "started_at": "2026-09-20T16:06:03Z",
+    "finished_at": "2026-09-20T16:06:03Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/cursor-composer-2.5/medium",
+      "effort": "medium"
+    },
+    "notes": "P1.1 GREEN: constitution 58+22, exceptions, CHANGELOG; prose ≤100 (Python check)",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-09-20T16:06:03Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-09-20T16:06:03Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V11",
+        "exit": 0,
+        "at": "2026-09-20T16:06:03Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V12",
+        "exit": 0,
+        "at": "2026-09-20T16:06:03Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V13",
+        "exit": 0,
+        "at": "2026-09-20T16:06:03Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-20T16:06:03Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Создать `docs/architecture/constitution.md` — реестр архитектурных инвариантов CoreX, где каждая статья несёт стабильный идентификатор, нормативную фразу, владельца правила, честное поле `Enforcement` и условие исключения — плюс каталог `docs/architecture/exceptions/` с четырьмя записями уже существующих исключений."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`docs/architecture/` в дереве не существует, а правила рассыпаны по `dev-doctrine.md`, `Architecture_CoreX.md`, 22 ADR и Decision Log двух планов (`RAG:—`, `@plan/knowledge/research-00-baseline-metrics.json` §6). Без единого реестра каждое последующее решение плана принимается заново и расходится с предыдущим. `RAG:✅` документ расходится с кодом именно тогда, когда совмещает объяснение, журнал решений и свод правил; лечится разделением ролей, полем enforcement у каждого правила и правилом одного канонического дома (`@plan/knowledge/research-P1-design-rag.json` §1, запрос P1-Q7). Отдельно: `Enforcement`, объявляющий несуществующий гейт, воспроизводит уже случившийся в этом репозитории дефект ложно-зелёного гейта, поэтому честность этого поля — не стиль, а требование приёмки."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Файл `docs/architecture/constitution.md` целиком: шапка с правилами чтения и формой статьи, раздел об исключениях, восемь групп статей (`PKG-001`…`PKG-009`, `STR-001`…`STR-006`, `API-001`…`API-009`, `DATA-001`…`DATA-006`, `RUN-001`…`RUN-005`, `CFG-001`…`CFG-006`, `MSG-001`…`MSG-008`, `EXT-001`…`EXT-009`) и раздел анти-целей (`NON-001`…`NON-022`). Каталог `docs/architecture/exceptions/` с четырьмя записями: `STR-003/tenancy-src-children.md`, `STR-005/tenancy-membership-internal.md`, `DATA-004/aut-role-assignments-cloud-fk.md`, `CFG-006/corex-intl-search-key.md`. Строка в корневом `CHANGELOG.md`."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Любой PHP-код и любая правка `packages/**`; создание документов политик — они принадлежат P1.4–P1.6 и в конституции только названы владельцами; создание `README.md` каталога и сводного реестра правил (P1.7); создание `taxonomy.md` (P1.2) и `rename-registry.md` (P1.3); создание любого гейта, скрипта, теста и CI-джоба (P3); правка `docs/dev-doctrine.md` и `docs/03_Dev/**` (P1.7); правка миграций; исправление чисел в `@plan/knowledge/research-00-baseline-metrics.json` — поправки уже внесены при детализации фазы, item их только читает."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P1-design.json` §2 как нормативная спецификация текста (§2.1 шапка, §2.2 шаблон статьи, §2.3–§2.10 таблицы статей по группам, §2.11 готовый текст анти-целей), §0 как инварианты формы, §12 как перечень поправленных чисел, §13 как границы; `@plan/knowledge/research-P1-design-rag.json` §1 как основание формы статьи; `@plan/decisions/D13.json` как основание статьи `PKG-009`; `@plan/knowledge/findings-audit-verdicts.json` A16/A17/A19/A20/A21/A25/A26/A27/A110 и S39 как перечень источников статей."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`docs/architecture/constitution.md` (новый); `docs/architecture/exceptions/STR-003/tenancy-src-children.md` (новый); `docs/architecture/exceptions/STR-005/tenancy-membership-internal.md` (новый); `docs/architecture/exceptions/DATA-004/aut-role-assignments-cloud-fk.md` (новый); `docs/architecture/exceptions/CFG-006/corex-intl-search-key.md` (новый); `CHANGELOG.md` (строка под `[Unreleased]` → `### Added`)."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/plan.json` §2 Execution Rules; 2) `@plan/phases/P1/phase.json`; 3) `@plan/knowledge/research-P1-design.json` §0, §2, §12, §13; 4) `@plan/knowledge/research-P1-design-rag.json` §1; 5) `@plan/decisions/D1.json`; 6) `@plan/decisions/D13.json`; 7) `docs/dev-doctrine.md` §1, §3, §4, §5, §6; 8) `@plan/knowledge/research-00-baseline-metrics.json` §1, §2, §4, §6; 9) `scripts/package-graph-gate.json`; 10) `composer.json` корневой, блок `scripts`; 11) `packages/auth/database/migrations/tenant-cloud/2026_07_26_200004_add_aut_cross_package_fks.php`; 12) `packages/search-intl/src/SearchIntlServiceProvider.php`; 13) `CHANGELOG.md` (первые 30 строк — формат записи)."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Текст статей берётся из `@plan/knowledge/research-P1-design.json` §2.3–§2.11 **дословно по смыслу**: колонки таблиц дизайна разворачиваются в форму статьи §2.2, ни одна статья не добавляется и не выбрасывается. Идентификаторы статей — ровно те, что в дизайне: они уже процитированы другими items и решениями, и их смена делает ссылки битыми. Поле `Владелец` у статей `PKG-002`, `PKG-003`, `PKG-006`, `PKG-007`, `PKG-008`, `CFG-006`, `EXT-001`, `EXT-008`, `EXT-009`, `API-009` указывает на `../dev-doctrine.md` с номером раздела — текст доктрины **не переносится** в конституцию; статья несёт одну нормативную фразу плюс ссылку. Поле `Enforcement` заполняется только из перечня существующих команд (`composer test:arch`, `composer package-graph-gate`, `composer test:packages`, `composer lint:check`, `scripts/contract-guard.sh`) либо строкой `нет — P<n> (<описание будущего гейта>)`. Имена тестов в `Enforcement` статей `PKG-002`/`PKG-003`/`PKG-007` берутся из `tests/Arch/LayerTest.php` **буквально** (проверить `rg \"^test\\(\" tests/Arch/LayerTest.php` перед записью). Каждая запись исключения несёт шесть полей: нарушаемая статья, затронутые пути, владелец, причина, компенсирующий контроль, условие снятия. Для `DATA-004` условие снятия — «постоянное по решению D102», и запись обязана назвать это прямо. Машинные исключения `scripts/package-graph-gate.json` в Markdown **не дублируются**: их дом — этот файл. Числа берутся только из `@plan/knowledge/research-00-baseline-metrics.json` с учётом поправок `P1-design.md` §12 — в частности, утверждение о неполноте контура `composer test:packages` в конституцию не переносится, оно опровергнуто. Ни один файл вне `Files` не изменяется."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Готовый текст шапки — `@plan/knowledge/research-P1-design.json` §2.1, переносится в файл как есть. Шаблон статьи `PKG-001` — §2.2, воспроизводится для каждой статьи буквально по форме. Таблицы §2.3–§2.10 дают для каждой статьи колонки «Правило», «Владелец», «Enforcement» и «Почему»; поле «Исключения» заполняется путём `exceptions/<ID>/` там, где запись создаётся этим item'ом, и `—` во всех прочих. Примечания под таблицами (`PKG-008` про полный контур, `DATA-001` про разделённый префикс `sys_`, `DATA-004` про существующий FK, `CFG-002` про 152 вызова, `STR-003`/`STR-005` про долг tenancy) переносятся в текст соответствующих статей в поле «Почему» либо отдельным абзацем после статьи. Готовый текст раздела анти-целей — §2.11, переносится дословно вместе с таблицей и с проверкой «каждый `NON-*` имеет непустую колонку „Отменяется“». Ширина строки ≤100, язык русский, идентификаторы латиницей (§0)."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "`rg -c \"^### (PKG|STR|API|DATA|RUN|CFG|MSG|EXT)-[0-9]{3} —\" docs/architecture/constitution.md` = 58 (9+6+9+6+5+6+8+9). `rg -c \"^\\| NON-0[0-9]{2} \\|\" docs/architecture/constitution.md` = 22. Ни одна статья не осталась без пяти полей: `rg -A6 \"^### [A-Z]+-[0-9]{3}\" docs/architecture/constitution.md | rg -c \"\\*\\*Enforcement\\.\\*\\*\"` = 58. Ни одно поле `Enforcement` не называет несуществующую команду: каждая строка с `composer ` в `Enforcement` присутствует в `scripts` корневого `composer.json`. Четыре файла исключений существуют и каждый содержит строку `Условие снятия`. `composer lint:check` из корня — зелёный. `git diff --stat -- 'packages/' 'scripts/' 'tests/' '.github/'` пуст. `git diff --name-only` не содержит путей вне объявленного `Files`."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "`docs/architecture/constitution.md` — 58 статей в восьми группах плюс 22 анти-цели, каждая с владельцем и честным enforcement; четыре записи исключений с условием снятия; запись в корневом `CHANGELOG.md`. Receipt item'а — `@plan/knowledge/findings-P1-receipts.json` (создаётся этим item'ом, дополняется последующими): вывод каждой команды Validation, отдельной строкой — сколько статей исполняется машинно сегодня и сколько несут «объявлено»."
+    }
+  ]
+}

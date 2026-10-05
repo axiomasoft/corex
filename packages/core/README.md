@@ -2,7 +2,8 @@
 
 Ядро CoreX для любого Laravel-приложения: `BaseModel` (ULID/UUIDv7/int-шов), `Settings` (каскад
 System→Tenant→User), append-only `Audit`, `MoneyCast`, департаменты (ltree),
-фичефлаги, PubSub-контракт и реестр сущностей. MIT.
+фичефлаги, PubSub-контракт, реестр сущностей и контракты отложенного пробуждения
+`CoreX\Scheduling` (исполнение — пакет `corex-wakeup`). MIT.
 
 Пакет ставится как зависимость приложения-потребителя; публичные контракты —
 в `<Module>/Contracts/`; DTO помечены `#[Api]`, адаптеры интеграции — `#[Spi]`.
@@ -64,6 +65,13 @@ php artisan migrate --database=<tenant>
 `CoreX\Database\Laravel\HasConfiguredId`, так что boxed/legacy-установка выравнивает
 ключи ядра под свой тип без форка миграций. Меняйте стратегию **до** первого
 `migrate` — она фиксирует тип колонок в БД.
+
+## Mandatory support audit
+
+Mandatory support-access events use `CoreX\Audit\Contracts\SynchronousAuditWriter`.
+The stock writer commits directly to the configured audit table, requires an event-time
+snapshot and rejects ambient transactions. It bypasses the optional audit logger and queue.
+Custom implementations must provide the same committed, fail-closed behavior.
 
 ## Точность времени
 

@@ -1,0 +1,45 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D17",
+  "title": "quality-bar (accepted)",
+  "date": "2026-09-27",
+  "status": "accepted",
+  "decision": "PHPStan level max + `phpstan-strict-rules` + bleedingEdge на всех пакетах, пустой baseline к rc; Rector (PHP 8.4 + Laravel sets) чистый; Pint; все классы `final`, кроме `#[Spi]`-баз; `readonly` DTO; именованные аргументы; комментарии только «почему»; mutation MSI: security/authz/tenancy ≥95%, operations/idempotency/messaging ≥90%, прочее ≥75%; Roave BC per package — блокирующий с `1.0.0-rc.1`; API-манифест-гейт; `unused-public`/dependency-analyser.",
+  "rationale": "F00 X6 (level 6), A13.1; chatom PLAN2 §11 — та же планка экосистемы; `pplx-09`, `pplx-10`.",
+  "applies_to": [
+    "P01",
+    "P09"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "author-choice (claude-opus-5-5/high) по мандату владельца «есть идеальное решение — утверждай» (`brief/00-brief.md` B6)"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D17\ndate: 2026-09-27\nstatus: accepted\nitem: P01\nitems: [P01, P09]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D17-quality-bar-accepted",
+      "title": "D17 — quality-bar (accepted)",
+      "text": "**Actor:** author-choice (claude-opus-5-5/high) по мандату владельца «есть идеальное решение — утверждай» (`@plan/brief.json` B6)\n**Evidence:** RAG:— `@plan/knowledge/findings-00-audit-verification.json`, `artifacts/P00-design/facts/`; RAG:✅ `@plan/knowledge/research-01-external-research.json`, `artifacts/research-rag/`"
+    },
+    {
+      "id": "Solution",
+      "title": "Solution",
+      "text": "PHPStan level max + `phpstan-strict-rules` + bleedingEdge на всех пакетах, пустой baseline к rc; Rector (PHP 8.4 + Laravel sets) чистый; Pint; все классы `final`, кроме `#[Spi]`-баз; `readonly` DTO; именованные аргументы; комментарии только «почему»; mutation MSI: security/authz/tenancy ≥95%, operations/idempotency/messaging ≥90%, прочее ≥75%; Roave BC per package — блокирующий с `1.0.0-rc.1`; API-манифест-гейт; `unused-public`/dependency-analyser."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "F00 X6 (level 6), A13.1; chatom PLAN2 §11 — та же планка экосистемы; `pplx-09`, `pplx-10`."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P01 baseline-guard (только сужается), P09 финальная планка."
+    }
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P03-design-cloud-package-shapes",
+  "title": "package-shapes",
+  "sections": [
+    {
+      "id": "package-shapes",
+      "title": "package-shapes",
+      "text": "Класс записи верхнего уровня `src/`: `module` (любой каталог не из списка корзин), `bucket` (Contracts/Data/Enums/Events/Exceptions/Internal/Support/Models/Commands/Jobs/Concerns/Http), `laravel`, `testing`, `root-file`. Класс определяется по имени каталога; в колонке `module-detail` — что внутри (cats = публичные категории, int = Internal, flat = файлы прямо в каталоге, sub = прочие подкаталоги)."
+    },
+    {
+      "id": "section",
+      "title": "Сводка",
+      "text": "| пакет | вердикт | файлов | modules | buckets |\n|:--|:--|--:|--:|--:|\n| axiomasoft/corex | modular | 256 | 14 | 0 |\n| axiomasoft/corex-access | mixed | 35 | 6 | 5 |\n| axiomasoft/corex-custom-fields | single-feature-in-buckets | 63 | 0 | 5 |\n| axiomasoft/corex-intl | modular | 69 | 6 | 0 |\n| axiomasoft/corex-media | single-feature-in-buckets | 37 | 0 | 6 |\n| axiomasoft/corex-notifications | modular | 44 | 4 | 0 |\n| axiomasoft/corex-operations | mixed | 134 | 11 | 1 |\n| axiomasoft/corex-panels | mixed | 28 | 1 | 3 |\n| axiomasoft/corex-recurrence | single-feature-in-buckets | 16 | 0 | 4 |\n| axiomasoft/corex-search | single-feature-in-buckets | 31 | 0 | 4 |\n| axiomasoft/corex-search-intl | single-feature-in-buckets | 8 | 0 | 3 |\n| axiomasoft/corex-search-meilisearch | single-feature-in-buckets | 5 | 0 | 2 |\n| axiomasoft/corex-tasks | modular | 63 | 6 | 0 |\n| axiomasoft/corex-tasks-workflow | single-feature-in-buckets | 16 | 0 | 4 |\n| axiomasoft/corex-tenancy | mixed | 176 | 11 | 1 |\n| axiomasoft/corex-tools | single-feature-in-buckets | 24 | 0 | 3 |\n| axiomasoft/corex-transfer | single-feature-in-buckets | 39 | 0 | 3 |\n| axiomasoft/corex-wakeup | single-feature-in-buckets | 21 | 0 | 4 |\n| axiomasoft/corex-webhooks | single-feature-in-buckets | 32 | 0 | 4 |\n| axiomasoft/corex-workflow | single-feature-in-buckets | 15 | 0 | 3 |\n| flex/crm | mixed | 56 | 7 | 1 |"
+    },
+    {
+      "id": "axiomasoft-corex-packages-core-CoreX",
+      "title": "axiomasoft/corex (`packages/core`, `CoreX\\`)",
+      "text": "| запись | класс | файлов | module-detail |\n|:--|:--|--:|:--|\n| `<root>` | root-file | 1 |  |\n| `Audit` | module | 13 | cats=Contracts,Enums; int=yes; flat=7; sub=- |\n| `Config` | module | 8 | cats=Contracts; int=no; flat=6; sub=Commands |\n| `Context` | module | 23 | cats=Contracts,Data,Enums,Exceptions; int=no; flat=8; sub=- |\n| `Data` | module | 11 | cats=Contracts,Exceptions; int=no; flat=8; sub=- |\n| `Database` | module | 4 | cats=Enums; int=no; flat=2; sub=Schema |\n| `Departments` | module | 7 | cats=Contracts,Events,Exceptions; int=no; flat=2; sub=Models |\n| `Errors` | module | 4 | cats=Contracts,Data,Enums; int=no; flat=0; sub=- |\n| `Features` | module | 6 | cats=Contracts,Events; int=no; flat=1; sub=Models |\n| `Messaging` | module | 44 | cats=Contracts,Data,Enums,Events,Exceptions; int=yes; flat=7; sub=Commands,PHPStan,Testing |\n| `Modules` | module | 105 | cats=Contracts,Data,Enums,Events,Exceptions; int=yes; flat=2; sub=Audit,Commands,Compiler,Definition,Discovery,Extend,Gate,Laravel,Lifecycle,PHPStan,Registry,Settings,Support,Testing |\n| `Observability` | module | 10 | cats=Contracts; int=no; flat=9; sub=- |\n| `Settings` | module | 10 | cats=Contracts,Enums,Events,Exceptions; int=no; flat=2; sub=Models |\n| `Storage` | module | 7 | cats=Contracts; int=no; flat=6; sub=- |\n| `Time` | module | 3 | cats=-; int=no; flat=3; sub=- |\n\nИтого: файлов 256; module=14, bucket=0, laravel=0, testing=0, root-file-групп=1. **Вердикт: modular.**"
+    },
+    {
+      "id": "axiomasoft-corex-access-packages-access-CoreX-Access",
+      "title": "axiomasoft/corex-access (`packages/access`, `CoreX\\Access\\`)",
+      "text": "| запись | класс | файлов | module-detail |\n|:--|:--|--:|:--|\n| `<root>` | root-file | 2 |  |\n| `Access` | module | 10 | cats=-; int=no; flat=10; sub=- |\n| `Contracts` | bucket | 4 |  |\n| `Enums` | bucket | 2 |  |\n| `Exceptions` | bucket | 1 |  |\n| `Extend` | module | 1 | cats=-; int=no; flat=1; sub=- |\n| `Identity` | module | 1 | cats=-; int=no; flat=1; sub=- |\n| `Matrix` | module | 6 | cats=-; int=no; flat=6; sub=- |\n| `Models` | bucket | 3 |  |\n| `Roles` | module | 2 | cats=-; int=no; flat=2; sub=- |\n| `Support` | bucket | 2 |  |\n| `Tenancy` | module | 1 | cats=-; int=no; flat=1; sub=- |\n\nИтого: файлов 35; module=6, bucket=5, laravel=0, testing=0, root-file-групп=1. **Вердикт: mixed.**"
+    },
+    {
+      "id": "axiomasoft-corex-custom-fields-packages-custom-fields-CoreX-CustomFields",
+      "title": "axiomasoft/corex-custom-fields (`packages/custom-fields`, `CoreX\\CustomFields\\`)",
+      "text": "| запись | класс | файлов | module-detail |\n|:--|:--|--:|:--|\n| `<root>` | root-file | 1 |  |\n| `Contracts` | bucket | 5 |  |\n| `Data` | bucket | 6 |  |\n| `Exceptions` | bucket | 1 |  |\n| `Internal` | bucket | 35 |  |\n| `Support` | bucket | 15 |  |\n\nИтого: файлов 63; module=0, bucket=5, laravel=0, testing=0, root-file-групп=1. **Вердикт: single-feature-in-buckets.**"
+    },
+    {
+      "id": "axiomasoft-corex-intl-packages-intl-CoreX-Intl",
+      "title": "axiomasoft/corex-intl (`packages/intl`, `CoreX\\Intl\\`)",
+      "text": "| запись | класс | файлов | module-detail |\n|:--|:--|--:|:--|\n| `<root>` | root-file | 3 |  |\n| `Currency` | module | 19 | cats=Contracts,Data,Exceptions; int=yes; flat=0; sub=- |\n| `Formatting` | module | 5 | cats=Contracts,Data,Exceptions; int=yes; flat=0; sub=- |\n| `Locale` | module | 9 | cats=Contracts,Data,Exceptions; int=yes; flat=0; sub=- |\n| `Money` | module | 1 | cats=-; int=no; flat=1; sub=- |\n| `Territory` | module | 28 | cats=Contracts,Data,Exceptions; int=yes; flat=0; sub=- |\n| `Translation` | module | 4 | cats=Contracts,Data; int=yes; flat=0; sub=- |\n\nИтого: файлов 69; module=6, bucket=0, laravel=0, testing=0, root-file-групп=1. **Вердикт: modular.**"
+    },
+    {
+      "id": "axiomasoft-corex-media-packages-media-CoreX-Media",
+      "title": "axiomasoft/corex-media (`packages/media`, `CoreX\\Media\\`)",
+      "text": "| запись | класс | файлов | module-detail |\n|:--|:--|--:|:--|\n| `<root>` | root-file | 2 |  |\n| `Commands` | bucket | 1 |  |\n| `Contracts` | bucket | 4 |  |\n| `Data` | bucket | 16 |  |\n| `Internal` | bucket | 10 |  |\n| `Jobs` | bucket | 2 |  |\n| `Support` | bucket | 2 |  |\n\nИтого: файлов 37; module=0, bucket=6, laravel=0, testing=0, root-file-групп=1. **Вердикт: single-feature-in-buckets.**"
+    },
+    {
+      "id": "axiomasoft-corex-notifications-packages-notifications-CoreX-Notifications",
+      "title": "axiomasoft/corex-notifications (`packages/notifications`, `CoreX\\Notifications\\`)",
+      "text": "| запись | класс | файлов | module-detail |\n|:--|:--|--:|:--|\n| `<root>` | root-file | 2 |  |\n| `Delivery` | module | 15 | cats=Contracts,Data; int=yes; flat=0; sub=Commands,Jobs |\n| `Digest` | module | 9 | cats=Contracts,Data; int=yes; flat=0; sub=Jobs |\n| `Inbox` | module | 14 | cats=Contracts,Data; int=yes; flat=0; sub=- |\n| `Preferences` | module | 4 | cats=Contracts,Data; int=yes; flat=0; sub=- |\n\nИтого: файлов 44; module=4, bucket=0, laravel=0, testing=0, root-file-групп=1. **Вердикт: modular.**"
+    },
+    {
+      "id": "axiomasoft-corex-operations-packages-operations-CoreX-Operations",
+      "title": "axiomasoft/corex-operations (`packages/operations`, `CoreX\\Operations\\`)",
+      "text": "| запись | класс | файлов | module-detail |\n|:--|:--|--:|:--|\n| `<root>` | root-file | 1 |  |\n| `Authorization` | module | 10 | cats=Contracts; int=yes; flat=0; sub=- |\n| `Bulk` | module | 19 | cats=Contracts,Data,Enums; int=yes; flat=0; sub=Commands,Laravel |\n| `Cost` | module | 17 | cats=Contracts,Data; int=yes; flat=0; sub=Laravel |\n| `Definition` | module | 11 | cats=Contracts,Data,Enums; int=yes; flat=4; sub=- |\n| `Errors` | module | 9 | cats=Contracts; int=yes; flat=2; sub=- |\n| `Http` | bucket | 4 |  |\n| `Idempotency` | module | 7 | cats=Contracts,Data,Enums; int=yes; flat=0; sub=- |\n| `Invocation` | module | 13 | cats=Contracts,Data; int=yes; flat=2; sub=- |\n| `Laravel` | laravel | 3 |  |\n| `OpenApi` | module | 5 | cats=Contracts; int=yes; flat=1; sub=Commands |\n| `Pagination` | module | 6 | cats=Contracts,Data; int=no; flat=2; sub=- |\n| `Testing` | testing | 15 |  |\n| `Validation` | module | 7 | cats=Data; int=no; flat=3; sub=- |\n| `Versioning` | module | 7 | cats=Data; int=yes; flat=0; sub=- |\n\nИтого: файлов 134; module=11, bucket=1, laravel=1, testing=1, root-file-групп=1. **Вердикт: mixed.**"
+    },
+    {
+      "id": "axiomasoft-corex-panels-packages-panels-CoreX-Panels",
+      "title": "axiomasoft/corex-panels (`packages/panels`, `CoreX\\Panels\\`)",
+      "text": "| запись | класс | файлов | module-detail |\n|:--|:--|--:|:--|\n| `<root>` | root-file | 2 |  |\n| `Contracts` | bucket | 2 |  |\n| `Data` | bucket | 5 |  |\n| `Internal` | bucket | 3 |  |\n| `SavedViews` | module | 16 | cats=Contracts,Data; int=yes; flat=0; sub=- |\n\nИтого: файлов 28; module=1, bucket=3, laravel=0, testing=0, root-file-групп=1. **Вердикт: mixed.**"
+    },
+    {
+      "id": "axiomasoft-corex-recurrence-packages-recurrence-CoreX-Recurrence",
+      "title": "axiomasoft/corex-recurrence (`packages/recurrence`, `CoreX\\Recurrence\\`)",
+      "text": "| запись | класс | файлов | module-detail |\n|:--|:--|--:|:--|\n| `<root>` | root-file | 1 |  |\n| `Contracts` | bucket | 1 |  |\n| `Data` | bucket | 10 |  |\n| `Exceptions` | bucket | 2 |  |\n| `Internal` | bucket | 2 |  |\n\nИтого: файлов 16; module=0, bucket=4, laravel=0, testing=0, root-file-групп=1. **Вердикт: single-feature-in-buckets.**"
+    },
+    {
+      "id": "axiomasoft-corex-search-packages-search-CoreX-Search",
+      "title": "axiomasoft/corex-search (`packages/search`, `CoreX\\Search\\`)",
+      "text": "| запись | класс | файлов | module-detail |\n|:--|:--|--:|:--|\n| `<root>` | root-file | 2 |  |\n| `Contracts` | bucket | 5 |  |\n| `Exceptions` | bucket | 1 |  |\n| `Internal` | bucket | 6 |  |\n| `Support` | bucket | 16 |  |\n| `Testing` | testing | 1 |  |\n\nИтого: файлов 31; module=0, bucket=4, laravel=0, testing=1, root-file-групп=1. **Вердикт: single-feature-in-buckets.**"
+    },
+    {
+      "id": "axiomasoft-corex-search-intl-packages-search-intl-CoreX-SearchIntl",
+      "title": "axiomasoft/corex-search-intl (`packages/search-intl`, `CoreX\\SearchIntl\\`)",
+      "text": "| запись | класс | файлов | module-detail |\n|:--|:--|--:|:--|\n| `<root>` | root-file | 1 |  |\n| `Contracts` | bucket | 1 |  |\n| `Data` | bucket | 1 |  |\n| `Internal` | bucket | 5 |  |\n\nИтого: файлов 8; module=0, bucket=3, laravel=0, testing=0, root-file-групп=1. **Вердикт: single-feature-in-buckets.**"
+    },
+    {
+      "id": "axiomasoft-corex-search-meilisearch-packages-search-meilisearch-CoreX-SearchMeilisearch",
+      "title": "axiomasoft/corex-search-meilisearch (`packages/search-meilisearch`, `CoreX\\SearchMeilisearch\\`)",
+      "text": "| запись | класс | файлов | module-detail |\n|:--|:--|--:|:--|\n| `<root>` | root-file | 2 |  |\n| `Exceptions` | bucket | 1 |  |\n| `Internal` | bucket | 2 |  |\n\nИтого: файлов 5; module=0, bucket=2, laravel=0, testing=0, root-file-групп=1. **Вердикт: single-feature-in-buckets.**"
+    },
+    {
+      "id": "axiomasoft-corex-tasks-packages-tasks-CoreX-Tasks",
+      "title": "axiomasoft/corex-tasks (`packages/tasks`, `CoreX\\Tasks\\`)",
+      "text": "| запись | класс | файлов | module-detail |\n|:--|:--|--:|:--|\n| `<root>` | root-file | 2 |  |\n| `Access` | module | 9 | cats=Contracts,Exceptions; int=yes; flat=0; sub=- |\n| `Planning` | module | 14 | cats=Contracts,Data,Exceptions; int=yes; flat=0; sub=- |\n| `Project` | module | 4 | cats=Data,Enums; int=no; flat=0; sub=Models |\n| `Sprint` | module | 4 | cats=Data,Enums; int=no; flat=0; sub=Models |\n| `Task` | module | 25 | cats=Contracts,Data,Enums,Events; int=no; flat=0; sub=Actions,Models |\n| `Time` | module | 5 | cats=Data,Enums; int=no; flat=0; sub=Models |\n\nИтого: файлов 63; module=6, bucket=0, laravel=0, testing=0, root-file-групп=1. **Вердикт: modular.**"
+    },
+    {
+      "id": "axiomasoft-corex-tasks-workflow-packages-tasks-workflow-CoreX-TasksWorkflow",
+      "title": "axiomasoft/corex-tasks-workflow (`packages/tasks-workflow`, `CoreX\\TasksWorkflow\\`)",
+      "text": "| запись | класс | файлов | module-detail |\n|:--|:--|--:|:--|\n| `<root>` | root-file | 2 |  |\n| `Contracts` | bucket | 1 |  |\n| `Data` | bucket | 3 |  |\n| `Exceptions` | bucket | 3 |  |\n| `Internal` | bucket | 7 |  |\n\nИтого: файлов 16; module=0, bucket=4, laravel=0, testing=0, root-file-групп=1. **Вердикт: single-feature-in-buckets.**"
+    },
+    {
+      "id": "axiomasoft-corex-tenancy-packages-tenancy-CoreX-Tenancy",
+      "title": "axiomasoft/corex-tenancy (`packages/tenancy`, `CoreX\\Tenancy\\`)",
+      "text": "| запись | класс | файлов | module-detail |\n|:--|:--|--:|:--|\n| `<root>` | root-file | 1 |  |\n| `Account` | module | 10 | cats=Events; int=no; flat=0; sub=Lifecycle,Models |\n| `Authentication` | module | 7 | cats=Exceptions; int=no; flat=0; sub=Http,Oidc |\n| `Contracts` | bucket | 8 |  |\n| `DomainTrust` | module | 17 | cats=Events; int=no; flat=15; sub=Models |\n| `Identity` | module | 5 | cats=Events; int=no; flat=2; sub=Jobs,Models |\n| `Impersonation` | module | 5 | cats=Events; int=no; flat=2; sub=Models |\n| `Integration` | module | 3 | cats=-; int=no; flat=0; sub=Wakeup |\n| `Laravel` | laravel | 32 |  |\n| `Membership` | module | 55 | cats=Events; int=no; flat=0; sub=Credentials,Expiration,Identity,Inbox,Jobs,Persistence,Projection,Refresh,Switcher,Timing,Transport |\n| `PHPStan` | module | 1 | cats=-; int=no; flat=0; sub=Rules |\n| `Provisioning` | module | 19 | cats=-; int=no; flat=10; sub=Database,Jobs,Migrations,Models |\n| `Runtime` | module | 6 | cats=Exceptions; int=no; flat=3; sub=Storage |\n| `Workspace` | module | 7 | cats=-; int=no; flat=4; sub=Models |\n\nИтого: файлов 176; module=11, bucket=1, laravel=1, testing=0, root-file-групп=1. **Вердикт: mixed.**"
+    },
+    {
+      "id": "axiomasoft-corex-tools-packages-tools-CoreX-Tools",
+      "title": "axiomasoft/corex-tools (`packages/tools`, `CoreX\\Tools\\`)",
+      "text": "| запись | класс | файлов | module-detail |\n|:--|:--|--:|:--|\n| `<root>` | root-file | 2 |  |\n| `Contracts` | bucket | 6 |  |\n| `Data` | bucket | 4 |  |\n| `Internal` | bucket | 12 |  |\n\nИтого: файлов 24; module=0, bucket=3, laravel=0, testing=0, root-file-групп=1. **Вердикт: single-feature-in-buckets.**"
+    },
+    {
+      "id": "axiomasoft-corex-transfer-packages-transfer-CoreX-Transfer",
+      "title": "axiomasoft/corex-transfer (`packages/transfer`, `CoreX\\Transfer\\`)",
+      "text": "| запись | класс | файлов | module-detail |\n|:--|:--|--:|:--|\n| `<root>` | root-file | 1 |  |\n| `Contracts` | bucket | 8 |  |\n| `Data` | bucket | 19 |  |\n| `Internal` | bucket | 11 |  |\n\nИтого: файлов 39; module=0, bucket=3, laravel=0, testing=0, root-file-групп=1. **Вердикт: single-feature-in-buckets.**"
+    },
+    {
+      "id": "axiomasoft-corex-wakeup-packages-wakeup-CoreX-Wakeup",
+      "title": "axiomasoft/corex-wakeup (`packages/wakeup`, `CoreX\\Wakeup\\`)",
+      "text": "| запись | класс | файлов | module-detail |\n|:--|:--|--:|:--|\n| `<root>` | root-file | 2 |  |\n| `Commands` | bucket | 2 |  |\n| `Contracts` | bucket | 5 |  |\n| `Data` | bucket | 7 |  |\n| `Internal` | bucket | 4 |  |\n| `Testing` | testing | 1 |  |\n\nИтого: файлов 21; module=0, bucket=4, laravel=0, testing=1, root-file-групп=1. **Вердикт: single-feature-in-buckets.**"
+    },
+    {
+      "id": "axiomasoft-corex-webhooks-packages-webhooks-CoreX-Webhooks",
+      "title": "axiomasoft/corex-webhooks (`packages/webhooks`, `CoreX\\Webhooks\\`)",
+      "text": "| запись | класс | файлов | module-detail |\n|:--|:--|--:|:--|\n| `<root>` | root-file | 1 |  |\n| `Commands` | bucket | 2 |  |\n| `Contracts` | bucket | 5 |  |\n| `Data` | bucket | 7 |  |\n| `Internal` | bucket | 15 |  |\n| `Laravel` | laravel | 2 |  |\n\nИтого: файлов 32; module=0, bucket=4, laravel=1, testing=0, root-file-групп=1. **Вердикт: single-feature-in-buckets.**"
+    },
+    {
+      "id": "axiomasoft-corex-workflow-packages-workflow-CoreX-Workflow",
+      "title": "axiomasoft/corex-workflow (`packages/workflow`, `CoreX\\Workflow\\`)",
+      "text": "| запись | класс | файлов | module-detail |\n|:--|:--|--:|:--|\n| `<root>` | root-file | 2 |  |\n| `Contracts` | bucket | 2 |  |\n| `Data` | bucket | 7 |  |\n| `Internal` | bucket | 4 |  |\n\nИтого: файлов 15; module=0, bucket=3, laravel=0, testing=0, root-file-групп=1. **Вердикт: single-feature-in-buckets.**"
+    },
+    {
+      "id": "flex-crm-products-flex-crm-Flex-Crm",
+      "title": "flex/crm (`products/flex-crm`, `Flex\\Crm\\`)",
+      "text": "| запись | класс | файлов | module-detail |\n|:--|:--|--:|:--|\n| `<root>` | root-file | 2 |  |\n| `Activity` | module | 5 | cats=Enums,Events; int=no; flat=0; sub=Actions,Models |\n| `ApiShared` | module | 2 | cats=-; int=no; flat=2; sub=- |\n| `Company` | module | 8 | cats=Data,Events; int=no; flat=0; sub=Actions,Api,Models |\n| `Contact` | module | 12 | cats=Data,Events; int=no; flat=0; sub=Actions,Api,Models |\n| `Context` | module | 10 | cats=Contracts,Data; int=yes; flat=3; sub=Models |\n| `Deal` | module | 9 | cats=Enums,Events; int=no; flat=0; sub=Actions,Casts,Models |\n| `Lead` | module | 7 | cats=Enums,Events; int=no; flat=0; sub=Actions,Models |\n| `Support` | bucket | 1 |  |\n\nИтого: файлов 56; module=7, bucket=1, laravel=0, testing=0, root-file-групп=1. **Вердикт: mixed.**"
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P03-design/cloud/package-shapes.md",
+    "sha256": "61f6f79abf4c306e9a8efb94e4dcbff4638b324a699d8435c07accbffbd77bd5"
+  }
+}

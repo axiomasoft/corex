@@ -1,0 +1,17 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P01-audit-request-README",
+  "title": "P01 independent phase audit — launch preparation",
+  "sections": [
+    {
+      "id": "P01-independent-phase-audit-launch-preparation",
+      "title": "P01 independent phase audit — launch preparation",
+      "text": "Owner request: «посмотри в плане, после выполнения фазы нужен аудит, вроде на grok, надо подготовить команду».\nPrepared only; no audit or owner grant has been recorded or consumed. Launching the command below supplies a NEW explicit owner prompt for one candidate-bound audit.\n\nSources: @plan/phases/P01/phase.json:28 (`Audit Intent: auto`, advisory under current Task); @plan/plan.json execution-sheet (item reviewer Cursor/grok-4.7/high); @plan/knowledge/session-routing.json pool; installed Task `configs/command-routing.json` (phase audit frontier/xhigh); canonical `audit_admission.py` (single-use owner-bound admission). Actual local `agent models` lists grok-4.7-xhigh.\n\nQuestion and scope: admission-proposal.json. Material candidate: candidate.json, fingerprint `22f49c2cab5a7e268f88bb22d250d67af6b1225a0f9a4fbc300655469346a0cb`. These are preparation artifacts, not an accepted decision or runnable audit admission. The actual owner-launched prompt must be recorded before journal start; the auditor creates the accepted D# only on that new invocation and checks candidate identity/admission.\n\nNative Cursor command:\n\n```bash\nagent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-xhigh --force --sandbox disabled --trust --approve-mcps \"$(cat /home/vostrikov/projects/packages/corex/plans/2026.09.27-№1-COREX-KERNEL/artifacts/P01-audit-request/launch.txt)\"\n```\n\nThe command pins the CoreX repository root and uses an absolute prompt path. Product is read-only; audit-owned bookkeeping may change. Reuse GREEN unchanged item evidence; record any product findings against their owning item. O-3 remains required before P02; this local audit does not prove live CI."
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P01-audit-request/README.md",
+    "sha256": "5cc1158952f7020c6a543ab40bf57b379e8bbd8ed1a254719aa7bc559616e68c"
+  }
+}

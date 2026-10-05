@@ -1,0 +1,114 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "research-P10-design",
+  "title": "нормативный дизайн Attributes",
+  "sections": [
+    {
+      "id": "P10-Attributes",
+      "title": "P10 — нормативный дизайн Attributes",
+      "text": ""
+    },
+    {
+      "id": "0.",
+      "title": "0. Статус и границы",
+      "text": "Этот документ — исполнимый контракт P10. Нельзя менять signatures\n`FieldCatalogue::snapshot()` и `AttributeStore::{read,write,loadMany}`. Новые public\nтипы только additive. Существующие миграции не редактировать. Любое расхождение\nмежду этим текстом и кодом останавливает item и возвращается в design."
+    },
+    {
+      "id": "1.",
+      "title": "1. Инварианты",
+      "text": "1. `AttributeId` — UUIDv7 и никогда не выводится из mutable key.\n2. `AttributeKey` уникален внутри entity среди effective definitions.\n3. Одна identity имеет append-only revisions; published revision не переписывается.\n4. Cached catalogue разрешён для чтения, но не является authority для write/DDL.\n5. Storage выбирается по entity до обработки patch; внутри record один engine.\n6. Любая запись проходит восемь checks в фиксированном порядке (§8).\n7. Evolution не удаляет старое представление до backfill verification и grace marker.\n8. Outbox append входит в ту же transaction, что и value mutation; payload не несёт values.\n9. `corex/attributes` не импортирует `corex/search` и не меняет чужие tables."
+    },
+    {
+      "id": "2.-Definition-model-module-free-composition-P10.1-P10.2",
+      "title": "2. Definition model и module-free composition (P10.1–P10.2)",
+      "text": ""
+    },
+    {
+      "id": "2.1-Public-additive-data-types",
+      "title": "2.1 Public additive data types",
+      "text": "```php\nenum AttributeLifecycle: string\n{\n    case Draft = 'draft';\n    case Active = 'active';\n    case Deprecated = 'deprecated';\n    case Migrating = 'migrating';\n    case Retired = 'retired';\n}\n\nfinal readonly class AttributeId\n{\n    public function __construct(public string $value) { /* strict UUIDv7 */ }\n    public static function generate(): self { return new self((string) Str::uuid7()); }\n}\n\nfinal readonly class AttributeDefinition\n{\n    /** @param list<string> $readKeys @param list<string> $writeKeys */\n    public function __construct(\n        public AttributeId $id,\n        public string $entity,\n        public string $key,\n        public int $revision,\n        public string $type,\n        public AttributeLifecycle $lifecycle,\n        public bool $required,\n        public bool $searchable,\n        public array $constraints,\n        public array $readKeys,\n        public array $writeKeys,\n        public IndexPolicy $index,\n        public array $meta = [],\n    ) {}\n}\n```\n\n`revision >= 1`. Canonical hash serialises sorted maps and definitions sorted by\n`id`, then revision. `FieldSnapshot` keeps all five constructor arguments and its\nlegacy `activeFields`; each row additively carries `id`, `key`, `revision`,\n`lifecycle`, `constraints`, `read_keys`, `write_keys`, `index`. `code` remains alias\nof `key` through P15. `schemaVersion = 'attributes/2'`; `schemaHash` is SHA-256."
+    },
+    {
+      "id": "2.2-Static-and-module-sources",
+      "title": "2.2 Static and module sources",
+      "text": "`StaticFieldCatalogue` accepts an immutable `array<string,list<AttributeDefinition>>`.\nIt needs no DB or modules. Empty entity is a valid empty snapshot, not\n`UnavailableAttributes`. `RegistryFieldCatalogue` remains named until P15 and maps\nmodule fields into the same canonical definition.\n\nModule descriptor reads `meta['attribute_id']`. When absent, compatibility mode\ncreates a deterministic UUIDv5 in a CoreX namespace from `entity + NUL + key`, marks\n`meta.legacy_identity=true`, and forbids key change or DB evolution until the owner\npins an explicit UUIDv7. UUIDv5 is only a stable bridge for already shipped keys;\nnew definitions must supply UUIDv7.\n\nProvider selection is a typed policy object built once from config in the service\nprovider. Default source is static empty; module source is appended only when both\nregistries exist. Absence of modules never disables `AttributeStore`."
+    },
+    {
+      "id": "3.-Composite-catalogue-DB-revisions-and-cache-P10.3",
+      "title": "3. Composite catalogue, DB revisions and cache (P10.3)",
+      "text": ""
+    },
+    {
+      "id": "3.1-Logical-schema-owner-gate-G-DDL",
+      "title": "3.1 Logical schema — owner gate G-DDL",
+      "text": "P10.3 owns one additive migration and the `AttributeTables` additions (D102):\n\n| Table | Key | Required columns | Purpose |\n|:--|:--|:--|:--|\n| `sys_attribute_definitions` | `(attribute_id, revision)` | UUID `attribute_id`; varchar entity/key/type/lifecycle; bigint revision; booleans required/searchable; jsonb constraints/read_keys/write_keys/index_policy/meta; char(64) definition_hash; timestamps | append-only definition revisions |\n| `sys_attribute_key_reservations` | `(entity,key)` | UUID attribute_id; bigint current_revision; varchar role; timestamps | mutable current-key/alias projection, separate from history |\n| `sys_attribute_backfills` | UUID `id` | attribute_id; from/to revision; entity; source/target keys; status; cursor_record_id; bigint attempted/changed/failed; char(64) source/target digest nullable; error nullable; timestamps | resumable evolution checkpoint |\n\nDefinition history has no `(entity,key)` uniqueness; it is unique only by\n`(attribute_id,revision)`. Current uniqueness lives in the reservation table. Publishing a\nrevision and replacing its complete reservation set is one tenant transaction; rename may\nreserve old and new keys to the same attribute but never to different attributes. Foreign key backfill→definition identity is not\nused because composite sources may be static/module. No cascade delete. Down drops\nonly these two new tables and is refused by release procedure after live rows exist."
+    },
+    {
+      "id": "3.2-Source-and-merge",
+      "title": "3.2 Source and merge",
+      "text": "`DatabaseFieldCatalogue` reads all latest revisions for entity from the active\ntenant connection guarded by `ScopeConnectionGuard`. `CompositeFieldCatalogue`\nreceives ordered named sources and a `CatalogueConflictPolicy`.\n\nExactly six distinguishable conflict reasons:\n\n| Reason | Default |\n|:--|:--|\n| same key, different id | reject |\n| same id, different key without migrating alias | reject |\n| same id+revision, different type | reject |\n| same id+revision, flags/constraints/index differ | reject |\n| canonical definitions byte-identical | merge once |\n| explicit retirement/deprecation shadow | higher-precedence source wins only when policy names both sources |\n\nNo last-write-wins. Source precedence is config, validated unique and complete.\nAn override record names `(higher,lower,attributeId,allowedDifference)`; wildcard\noverride is invalid."
+    },
+    {
+      "id": "3.3-Cache-authority",
+      "title": "3.3 Cache authority",
+      "text": "`CachedFieldCatalogue` key includes connection identity, account/workspace/boxed,\nentity, source fingerprint and policy version. Cache stores immutable snapshot with\nbounded TTL. Definition publish evicts by entity. `AttributeStore::write`,\n`SchemaOperations` and backfill resolve the uncached authoritative composite;\n`read/loadMany` may use the cached facade. Cache outage falls back to source; malformed\ncache fails closed and is evicted."
+    },
+    {
+      "id": "4.-Lifecycle-and-evolution-P10.4",
+      "title": "4. Lifecycle and evolution (P10.4)",
+      "text": "Allowed transitions:\n\n```text\ndraft -> active\nactive -> deprecated | migrating\ndeprecated -> active | migrating | retired\nmigrating -> active | deprecated\nretired -> (terminal)\n```\n\nDirect active→retired and any transition out of retired are rejected. Rename/type\nchange uses the same stable id and a new revision:\n\n1. **expand:** publish `migrating`; `readKeys=[new,old]`, `writeKeys=[old,new]`;\n2. **sync:** stores write both keys atomically; reads prefer new and compare old;\n3. **backfill:** batches order by stable record id; checkpoint advances only after commit;\n4. **verify:** require zero missing/divergent values and matching canonical digest;\n5. **switch:** publish new active revision with `readKeys=[new,old]`, `writeKeys=[new]`;\n6. **grace:** observe fallback counter until owner-defined window reaches zero;\n7. **contract:** publish active revision `readKeys=[new]`, then atomically remove the old alias reservation.\n\nExpand, switch and contract update the current-key projection without rewriting immutable history.\nThe validation fixture retains multiple historical revisions carrying the same entity/key.\n\nType changes require a registered pure `AttributeValueTransformer` identified in\nthe definition; absent transformer rejects transition. Backfill is idempotent:\nsame operation id + record version produces no second mutation. Concurrent user\nwrite locks the record and dual-writes; backfill rechecks record version before\ncommit and retries conflicts. Abort before switch restores previous active revision;\nafter switch rollback republishes migrating with reversed key order. Physical drop\nis never automatic and remains an explicit verified `SchemaOperations` request."
+    },
+    {
+      "id": "5.-Storage-and-indexing-P10.5",
+      "title": "5. Storage and indexing (P10.5)",
+      "text": "```php\ninterface AttributeStoreResolver\n{\n    public function forEntity(string $entity): AttributeStore;\n}\n\nfinal readonly class AttributeStoragePolicy\n{\n    /** @param array<string,'jsonb'|'eav'> $entities */\n    public function __construct(public string $default, public array $entities) {}\n}\n```\n\n`ResolvingAttributeStore` preserves the existing `AttributeStore` binding. For a\nsingle record it delegates by `RecordRef::entity`; `loadMany` partitions records by\nentity/driver, delegates, then restores input order. Unknown driver, mixed identity\nor unavailable DB fails closed. Existing global `storage_driver` becomes default;\n`storage_by_entity` is additive. Per-field choice is invalid.\n\n`IndexPolicy` modes:\n\n- `none`: default, no schema operation;\n- `expression_btree`: only measured equality/range/order shape, typed cast, optional\n  static partial predicate; query AST must emit byte-equivalent expression/predicate;\n- `promoted`: canonical value remains attributes-owned; subject package owns its\n  typed projection column and subscribes externally. Attributes never alters it.\n\nBefore an expression index: validate every existing value can cast, store measurement\nand `EXPLAIN` before/after receipt, create concurrently through existing queue, verify,\nthen activate policy revision. Index name derives from attribute id + revision, not key.\nOrdering adds record id as deterministic tie-breaker. A broad GIN index is outside P10."
+    },
+    {
+      "id": "6.-Query-and-read-semantics",
+      "title": "6. Query and read semantics",
+      "text": "Reads authorise subject and visible fields before loading values. Unknown/hidden\nfields are omitted from external bags; internal diagnostics retain reason codes.\nDuring migration, new key wins; if both exist and canonical values differ, read fails\nclosed for mutation callers and emits a drift diagnostic for read callers. Query\ncompilation uses only active/deprecated/migrating definitions and declared index policy."
+    },
+    {
+      "id": "7.-Revision-precondition",
+      "title": "7. Revision precondition",
+      "text": "`ValuePatch` receives additive nullable `expectedSchemaHash`. If supplied, it must\nequal authoritative snapshot hash. If absent, writes are allowed only to stable\n`active` definitions with one read/write key; migrating/deprecated definitions\nrequire the precondition. This preserves existing simple writes while preventing\nstale clients from mutating an evolving field."
+    },
+    {
+      "id": "8.-Eight-write-checks-P10.6",
+      "title": "8. Eight write checks (P10.6)",
+      "text": "The guard executes in this order and returns internal reason codes:\n\n1. field exists in authoritative snapshot;\n2. expected schema revision/hash is compatible;\n3. tenant scope owns subject (`DataScopeAuthorizer`, action `attributes.subject`);\n4. actor can view field (`attributes.view`);\n5. actor can write field (`attributes.write`);\n6. current operation can mutate it (`attributes.mutate`);\n7. value matches declared type;\n8. value satisfies constraints (required, enum, length/range, format/reference).\n\nThe existing authorizer contract is reused; resource is a canonical opaque string\ncontaining entity, record id and stable attribute id, never a PHP class. Batch denial\nis atomic. External exception is one `ScopeDenied`/`InvalidAttributeValue` family\nwithout revealing existence; logs/receipts keep the distinct reason. P13 later binds\noperation-aware policy to action `attributes.mutate`; P10 does not invent `onlyFields`."
+    },
+    {
+      "id": "9.-Mutation-event-and-outbox-P10.7",
+      "title": "9. Mutation event and outbox (P10.7)",
+      "text": "After a successful non-replay mutation, store creates internal\n`AttributeValuesChanged` and translates explicitly to `MessageEnvelope` type\n`attributes.values.changed.v1`. The resolved `MessageContractRegistry` is extended,\nnot replaced.\n\nPayload contains only scope identity, opaque `RecordRef`, record version,\n`schemaHash`, sorted changed stable attribute ids and keys, occurred-at and\ncorrelation/causation. It contains no old/new values, labels, constraints or actor PII.\nOutbox append occurs inside the same transaction as JSONB/EAV write and token commit.\nWrite-token replay returns prior result and does not append again.\n\nConsumers are outside attributes. Search projection re-reads current authorised state;\ntherefore duplicate or out-of-order messages converge to latest record version and no\nordering promise is added beyond D28. No search package symbol appears in attributes."
+    },
+    {
+      "id": "10.-Physical-subsystem-map-P10.8",
+      "title": "10. Physical subsystem map (P10.8)",
+      "text": "Public `Contracts`, `Data`, `Exceptions` remain. Internal code is grouped:\n\n| Subsystem | Owners |\n|:--|:--|\n| `Schema` | definitions, catalogues, merge/cache, lifecycle, operations |\n| `Values` | stores, validator, write guard, migration read/write |\n| `Query` | filter planning and index-aware compilation |\n| `Storage` | tables, resolver, connection guard, DB repositories |\n| `Integration` | domain event and message translator/registry contribution |\n| `Laravel` | registrar/composition only |\n\nP10.8 may move internal FQCNs after consumer sweep. `RegistryFieldCatalogue` rename is\nreserved for P15. Public namespaces and config keys remain compatible."
+    },
+    {
+      "id": "11.-Error-and-security-policy",
+      "title": "11. Error and security policy",
+      "text": "All definition/config errors fail boot or first resolution deterministically. Tenant\nconnection guard runs before DB read. Logs use stable id and reason, not value. Cache\nkeys contain hashed scope identity. Constraint regex is bounded and application-owned;\nno arbitrary callable/class from DB. Transformer/index identifiers resolve from\ndeclared registries only. Raw SQL identifiers come exclusively from validated tables,\ntypes and generated index names."
+    },
+    {
+      "id": "12.-Final-validation-recipe",
+      "title": "12. Final validation recipe",
+      "text": "1. Run test DB preflight; prove isolated tenant DB.\n2. Run package lint/analyse/test and root `composer test:pg`.\n3. Prove module-free static and DB catalogues work with no module bindings.\n4. Exercise all six conflict reasons and cache corruption/fallback.\n5. Run rename and type change through every state; interrupt/retry each backfill batch.\n6. Prove JSONB and EAV dual-write parity, rollback before/after switch, no early drop.\n7. Prove resolver rejects per-field/mixed driver and preserves `loadMany` order.\n8. Prove dirty cast blocks index; valid index matches query and ordering tie-breaker.\n9. Prove each of eight checks independently red and batch atomicity.\n10. Prove one mutation/one outbox row, token replay/no second row, no raw values.\n11. Run graph/config gates: zero `CoreX\\\\Search`, no runtime `config()`, no foreign DDL.\n12. Compare public API snapshot; only declared additive symbols; write final receipt."
+    },
+    {
+      "id": "13.-Decision-map",
+      "title": "13. Decision map",
+      "text": "D50 identity; D51 catalogue/conflicts/cache; D52 evolution; D53 storage/indexing;\nD54 eight checks; D55 outbox projection. External evidence: `P10-design-rag.md`."
+    }
+  ],
+  "applies_to": [
+    "P10"
+  ],
+  "provenance": {
+    "path": "research/P10-design.md",
+    "sha256": "b9ee38a8124e2d5b291c650699b1b6f0162b8ec28ce9ff3c826160c7bca1a651"
+  }
+}

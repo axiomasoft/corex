@@ -91,19 +91,19 @@ parameters:
 			path: src/Internal/SweepRunner.php
 
 		-
-			rawMessage: 'Parameter $kind of class CoreX\Wakeup\Data\WakeupRequest constructor expects string, mixed given.'
+			rawMessage: 'Parameter $kind of class CoreX\Scheduling\Data\WakeupRequest constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Internal/SweepRunner.php
 
 		-
-			rawMessage: 'Parameter $period of class CoreX\Wakeup\Data\WakeupWindow constructor expects string, mixed given.'
+			rawMessage: 'Parameter $period of class CoreX\Scheduling\Data\WakeupWindow constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Internal/SweepRunner.php
 
 		-
-			rawMessage: 'Parameter $requestKey of class CoreX\Wakeup\Data\WakeupRequest constructor expects string, mixed given.'
+			rawMessage: 'Parameter $requestKey of class CoreX\Scheduling\Data\WakeupRequest constructor expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: src/Internal/SweepRunner.php

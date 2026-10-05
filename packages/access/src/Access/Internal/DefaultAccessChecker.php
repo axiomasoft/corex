@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Access\Internal;
 
-use CoreX\Access\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Contracts\Principal;
 use CoreX\Access\Data\RecordContext;
 use CoreX\Access\Enums\PrincipalType;
 use CoreX\Access\Enums\Scope;
 use CoreX\Access\Laravel\AuthOptions;
+use CoreX\Access\Matrix\Contracts\EntityActivity;
 use CoreX\Access\Matrix\Contracts\ScopeMapVersions as ScopeMapVersion;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Modules\Contracts\EntityRegistry;
@@ -21,10 +21,8 @@ use Override;
 use Psr\Clock\ClockInterface;
 
 /**
- * Two-phase AccessChecker (D101, B-11 §5.5). allowed() asks the real AzGuard
- * chain through PrincipalIdentity — never a private lookup (premortem C1's
- * round-trip); scopeFor()/canOnRecord() compile `aut_role_matrix` rows
- * directly. Fail-closed throughout (Code Guidance): an unresolved entity,
+ * Two-phase AccessChecker. Permissions come from the native role matrix and
+ * direct grants. Fail-closed throughout: an unresolved or inactive entity,
  * absent role row or missing department table never widens to "the whole
  * scope" — it denies.
  *
@@ -32,9 +30,6 @@ use Psr\Clock\ClockInterface;
  * NOT decided here (P2.9, D110): it is delegated to {@see ScopePredicate},
  * the single owner shared with the builder path
  * ({@see DefaultScopeResolver}), so the two paths cannot silently diverge.
- * This class's own observable behaviour is UNCHANGED by that delegation —
- * its 20 pre-existing tests assert that.
- *
  * Bound `scoped` (CoreAuthServiceProvider) so the scopeFor() memo below is
  * request-scoped, never carried across requests on a reused worker.
  */
@@ -52,19 +47,33 @@ final class DefaultAccessChecker implements AccessChecker
         private readonly AuthOptions $options,
         private readonly ConnectionResolverInterface $connections,
         private readonly ClockInterface $clock,
+        private readonly EntityActivity $activity,
     ) {}
 
     #[Override]
     public function allowed(Principal $p, string $entityKey, string $action): bool
     {
-        $panel = $this->panel();
+        if (! $this->activity->isActive($entityKey)) {
+            return false;
+        }
 
-        return PrincipalIdentity::fromPrincipal($p)->hasPermission("{$panel}.{$entityKey}.{$action}", $panel);
+        $roleIds = $this->activeRoleIds($p);
+
+        if ($roleIds !== [] && $this->matrixQuery($roleIds, $entityKey, $action)
+            ->where('scope', '<>', Scope::None->value)->exists()) {
+            return true;
+        }
+
+        return $this->directGrants->hasActive($p, "{$this->panel()}.{$entityKey}.{$action}");
     }
 
     #[Override]
     public function scopeFor(Principal $p, string $entityKey, string $action, ?RecordContext $ctx = null): Scope
     {
+        if (! $this->activity->isActive($entityKey)) {
+            return Scope::None;
+        }
+
         $roleIds = $this->activeRoleIds($p);
 
         if ($roleIds === []) {
@@ -105,6 +114,10 @@ final class DefaultAccessChecker implements AccessChecker
         $entity = $this->entities->forModel($record::class);
 
         if ($entity === null) {
+            return false;
+        }
+
+        if (! $this->activity->isActive($entity->handle)) {
             return false;
         }
 

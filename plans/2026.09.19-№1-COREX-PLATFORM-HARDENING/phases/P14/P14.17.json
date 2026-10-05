@@ -1,0 +1,261 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P14.17",
+  "title": "Retention and recovery cleanup",
+  "status": "done",
+  "summary": "Реализовать retention and recovery cleanup по замороженному дизайну P14.",
+  "why": "`@plan/knowledge/research-P14-design.json` §6, 12; D84. Закрывает соответствующую строку\nacceptance/threat matrix §14 без переноса проектных решений в execution.",
+  "scope": {
+    "include": [
+      "Только нормативный срез §6, 12, перечисленные ниже Files и\nпроверки: Clock-controlled bulk result 24h/tombstone30d, webhook body7d/history30d; configurable safety inequalities. Active rows retained; expired body cannot replay; inbox/tombstone protects old event dedup. Reservation expiry never refunds, held reservation prevents bucket deletion."
+    ],
+    "exclude": [
+      "Остальные срезы P14; GraphQL; naming P15; новые runtime зависимости;\nlive rollout, внешние webhook sends и production migration/rotation."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D84"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P14-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D84.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P14/P14.10.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P14/P14.16.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P14/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/api/src/Commands/PruneApiOperations.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/src/Internal/Bulk/BulkRetention.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/src/Internal/Webhook/WebhookRetention.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/src/Internal/Cost/BudgetRetention.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/tests/Feature/ApiRetentionTest.php",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Нормативный текст и алгоритмы — `@plan/knowledge/research-P14-design.json` §6, 12; D84. Сохранять predecessor contracts и public signatures; no new runtime dependencies. SQL validation требует изолированных SQLite и PostgreSQL; scalar scope/restorer не открывает произвольную tenant DB. Webhook tests используют synthetic keys и только локальный receiver; live delivery/real secret rotation этим item не разрешены."
+  ],
+  "guidance": "`@plan/knowledge/research-P14-design.json` §15 задаёт общие safe codes/port shapes. Использовать точные DTO/подписи, state transitions, defaults и\nfailure rules §6, 12. Новый interface только Contracts, implementation Internal,\nDTO final readonly. Время durable decisions — injected Clock; duration — monotonic.\nRequired Reads section-qualified; максимум 2500 строк, ≤14 inputs, ≤8 Files.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer lint:check",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "composer analyse",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "composer test",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "composer test:pg",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "Clock-controlled bulk result 24h/tombstone 30d, active rows, ownership hash and batch 100",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "Webhook body 7d/history 30d, replay refusal, inbox/tombstone dedup",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "Reservation expiry never refunds; held reservation blocks bucket deletion; missing release does not refund",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "Isolated PostgreSQL retention on disposable schemas after preflight",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "procedure": "Targeted Pint and PHPStan on the new retention files",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "procedure": "Foreign dirty-worktree package analyse baseline",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Перечисленные Files реализуют §6, 12; измеримые результаты\nValidation приложены к item receipt, включая команды, failures/skips и ограничения."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-26T15:53:12Z",
+    "finished_at": "2026-09-26T16:05:07Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/grok-4.7-high/high",
+      "effort": "high"
+    },
+    "notes": "P14.17 GREEN: clock-controlled bulk 24h/30d, webhook body 7d/history 30d, budget expiry without refund; ApiRetentionTest 8/89 including isolated PG. Targeted pint and PHPStan clean. Package analyse still 5 CompiledRegistry::fingerprint errors from the foreign dirty baseline.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-26T16:05:07Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-26T16:05:07Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-26T16:05:07Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-26T16:05:07Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-09-26T16:05:07Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-09-26T16:05:07Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-26T16:05:07Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Реализовать retention and recovery cleanup по замороженному дизайну P14."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`@plan/knowledge/research-P14-design.json` §6, 12; D84. Закрывает соответствующую строку\nacceptance/threat matrix §14 без переноса проектных решений в execution."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Только нормативный срез §6, 12, перечисленные ниже Files и\nпроверки: Clock-controlled bulk result 24h/tombstone30d, webhook body7d/history30d; configurable safety inequalities. Active rows retained; expired body cannot replay; inbox/tombstone protects old event dedup. Reservation expiry never refunds, held reservation prevents bucket deletion."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Остальные срезы P14; GraphQL; naming P15; новые runtime зависимости;\nlive rollout, внешние webhook sends и production migration/rotation."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P14-design.json`; `@plan/decisions/D84.json`; `@plan/phases/P14/P14.10.json`; `@plan/phases/P14/P14.16.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/api/src/Commands/PruneApiOperations.php`; `packages/api/src/Internal/Bulk/BulkRetention.php`; `packages/api/src/Internal/Webhook/WebhookRetention.php`; `packages/api/src/Internal/Cost/BudgetRetention.php`; `packages/api/tests/Feature/ApiRetentionTest.php`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P14/phase.json`; 2) `@plan/knowledge/research-P14-design.json` §6, 12; 3) `@plan/decisions/D84.json`; 4) `@plan/phases/P14/P14.10.json`; 5) `@plan/phases/P14/P14.16.json`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Нормативный текст и алгоритмы — `@plan/knowledge/research-P14-design.json` §6, 12; D84. Сохранять predecessor contracts и public signatures; no new runtime dependencies. SQL validation требует изолированных SQLite и PostgreSQL; scalar scope/restorer не открывает произвольную tenant DB. Webhook tests используют synthetic keys и только локальный receiver; live delivery/real secret rotation этим item не разрешены."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "`@plan/knowledge/research-P14-design.json` §15 задаёт общие safe codes/port shapes. Использовать точные DTO/подписи, state transitions, defaults и\nfailure rules §6, 12. Новый interface только Contracts, implementation Internal,\nDTO final readonly. Время durable decisions — injected Clock; duration — monotonic.\nRequired Reads section-qualified; максимум 2500 строк, ≤14 inputs, ≤8 Files."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Clock-controlled bulk result 24h/tombstone30d, webhook body7d/history30d; configurable safety inequalities. Active rows retained; expired body cannot replay; inbox/tombstone protects old event dedup. Reservation expiry never refunds, held reservation prevents bucket deletion. Затронутый пакет: `composer lint:check`, `composer analyse`,\n`composer test`; root equivalents обязательны по plan.md. SQL paths дополнительно\nпакетный `composer test:pg` после isolation preflight; если script ещё не произведён\nP2, использовать его declared package PG lane, не считать отсутствие script успехом.\nNegative fixtures доказывают конкретный отказ. Непройденный check раскрывается."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Перечисленные Files реализуют §6, 12; измеримые результаты\nValidation приложены к item receipt, включая команды, failures/skips и ограничения."
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D65",
+  "title": "Operation contract extends compiled module declarations",
+  "date": "2026-09-20",
+  "status": "accepted",
+  "decision": "- `operation-contract/1` is an additive normal form over existing module\n  declarations, not `Operation::definition()` on handler classes.\n- Existing `Api::operation()` signature remains; mode, scopes, idempotency,\n  fields, pagination, capability and deprecation use fluent serializable metadata.\n- `OperationRegistry`, `ApiProfile`, OpenAPI and tools are projections of the same\n  compiled snapshot and upstream fingerprint.\n- Bulk modes are declared in P13 but fail `operation_unsupported` until P14 owns\n  lifecycle/store semantics.",
+  "rationale": "Moving authority into handler statics would duplicate discovery, break compile-time\nvalidation and make tools/OpenAPI disagree with module manifests. Fluent additions\npreserve callers while making the new semantics compiler-visible.",
+  "applies_to": [
+    "P13",
+    "P13.1",
+    "P13.3",
+    "P13.10",
+    "P13.12"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/codex-gpt-5.6-sol/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D65\ndate: 2026-09-20\nstatus: accepted\nitem: P13\nitems: [P13, P13.1, P13.3, P13.10, P13.12]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D65-Operation-contract-extends-compiled-module-declarations",
+      "title": "D65 — Operation contract extends compiled module declarations",
+      "text": "**Actor:** plan-designer/codex-gpt-5.6-sol/high\n**Evidence:** RAG:— the current authority is `Extend\\Api` compiled into one module\nsnapshot; D56 forbids a parallel mutable registry. Existing operation calls are\npositional and must remain readable."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "- `operation-contract/1` is an additive normal form over existing module\n  declarations, not `Operation::definition()` on handler classes.\n- Existing `Api::operation()` signature remains; mode, scopes, idempotency,\n  fields, pagination, capability and deprecation use fluent serializable metadata.\n- `OperationRegistry`, `ApiProfile`, OpenAPI and tools are projections of the same\n  compiled snapshot and upstream fingerprint.\n- Bulk modes are declared in P13 but fail `operation_unsupported` until P14 owns\n  lifecycle/store semantics."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Moving authority into handler statics would duplicate discovery, break compile-time\nvalidation and make tools/OpenAPI disagree with module manifests. Fluent additions\npreserve callers while making the new semantics compiler-visible."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P13.1 extends declaration validation and runtime projection. P13.3 builds an\nimmutable profile without a second registration lifecycle. P13.12 freezes the\nresult under G-API."
+    }
+  ]
+}

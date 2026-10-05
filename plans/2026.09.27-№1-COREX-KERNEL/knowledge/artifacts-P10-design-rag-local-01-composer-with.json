@@ -1,0 +1,27 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P10-design-rag-local-01-composer-with",
+  "title": "local-01 — Composer: временное ограничение версии без изменения манифеста",
+  "sections": [
+    {
+      "id": "local-01-Composer",
+      "title": "local-01 — Composer: временное ограничение версии без изменения манифеста",
+      "text": "- Tool: installed primary tool, `composer update --help` · Composer version 2.8.2 2024-10-29 · Date: 2026-10-01\n- Status: primary (вывод установленной программы)."
+    },
+    {
+      "id": "Output-verbatim-relevant-lines",
+      "title": "Output (verbatim, relevant lines)",
+      "text": "```text\n      --with=WITH                                      Temporary version constraint to add, e.g. foo/bar:1.0.0 or foo/bar=1.0.0 (multiple values allowed)\n  php composer.phar update --with vendor/package:1.0.*\n```"
+    },
+    {
+      "id": "Decision-impact",
+      "title": "Decision impact",
+      "text": "D74 п.6: шаги CI «Constrain Laravel version» (`composer require \"<package>:$LARAVEL_VERSION\" --no-update`) заменяются\n`composer update --with \"<package>:$LARAVEL_VERSION\"`: отслеживаемые `composer.json` не изменяются, тесты, сверяющие\nманифест, видят его исходным. Ограничение пересекается с корневым; пустое пересечение (Pest `^4.7` при корневом\n`^5.2`) таким способом не выражается — для него шаг `require --dev` остаётся (D42)."
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P10-design-rag/local-01-composer-with.md",
+    "sha256": "24ac3d156d8830a541fbb7781a246f75164b2ffafe838d74733731b743b33c8b"
+  }
+}
