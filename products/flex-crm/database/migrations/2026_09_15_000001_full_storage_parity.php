@@ -203,7 +203,7 @@ return new class extends Migration
                 // Historical company/contact parity used timestamp(0); the approved
                 // precision is unrestricted. All tables were proved empty above.
                 foreach (['crm_sources', 'crm_companies', 'crm_contacts', 'crm_contact_company', 'crm_lost_reasons', 'crm_pipelines', 'crm_stages', 'crm_leads', 'crm_deals', 'crm_deal_contacts', 'crm_activities', 'crm_activity_targets'] as $table) {
-                    /** @var list<array{name: string, type_name: string}> $columns */
+                    /** @var list<array{name: string, type: string, type_name: string, collation: string|null, nullable: bool, default: mixed, auto_increment: bool, comment: string|null, generation: array{type: string, expression: string|null}|null}> $columns */
                     $columns = Schema::getColumns($table);
                     foreach ($columns as $column) {
                         if ($column['type_name'] === 'timestamptz') {
