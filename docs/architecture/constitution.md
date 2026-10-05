@@ -79,7 +79,7 @@
 ### PKG-004 — Любая межпакетная зависимость объявлена в `composer.json` пакета-потребителя
 **Правило.** Любая межпакетная зависимость объявлена в `composer.json` пакета-потребителя
 **Владелец.** Этот документ.
-**Enforcement.** `composer package-graph-gate` → правило R1, на каждый PR
+**Enforcement.** `composer package-graph-gate` → правило R1, на каждый PR. Ребро `axiomasoft/corex-notifications → axiomasoft/corex-wakeup` запрещено (R6): контракты пробуждения живут в `CoreX\Scheduling`, пакет notifications их не импортирует из `corex-wakeup`.
 **Исключения.** —
 **Почему.** Неявная зависимость ломает установку по профилю (boxed без tenancy)
 
@@ -517,7 +517,7 @@
 **Правило.** Дубликат идентификатора в точке расширения — ошибка компиляции, а не молчаливое
   переопределение
 **Владелец.** extension-policy.md
-**Enforcement.** нет — P11
+**Enforcement.** `corex-wakeup` объединяет `corex-wakeup.handlers` с тегом `WakeupHandlerDefinition::TAG` (`corex.scheduling.wakeup-handlers`); повтор `kind` → `InvalidConfiguration` при boot. Источники срока — тег `DueWakeupSource::TAG` (`corex.scheduling.due-sources`).
 **Исключения.** —
 **Почему.** См. решения и политики, названные во владельце.
 

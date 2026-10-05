@@ -5,15 +5,11 @@ declare(strict_types=1);
 namespace CoreX\Notifications\Tests;
 
 use CoreX\Context\Contracts\TenantContextResolver;
-use CoreX\Context\Data\AccountRef;
-use CoreX\Context\Data\TenantContext;
-use CoreX\Notifications\Digest\Internal\DigestWakeupAdapter;
-use CoreX\Notifications\Digest\Internal\NotificationDigestDueSource;
 use CoreX\Notifications\Internal\NotificationsOptions;
 use CoreX\Notifications\NotificationsServiceProvider;
-use CoreX\Wakeup\Internal\WakeupOptions;
-use CoreX\Wakeup\WakeupServiceProvider;
 use Illuminate\Support\Facades\Schema;
+
+require_once __DIR__.'/../../wakeup/tests/Support/PackageBridge.php';
 use Orchestra\Testbench\TestCase as Orchestra;
 use Override;
 
@@ -22,7 +18,11 @@ abstract class TestCase extends Orchestra
     #[Override]
     protected function getPackageProviders($app): array
     {
-        return [WakeupServiceProvider::class, NotificationsServiceProvider::class];
+        // Package registration runs before defineEnvironment, and the digest tags are chosen then.
+        $app['config']->set('corex-notifications.digest.enabled', true);
+        $app['config']->set('corex-notifications.digest.accept_legacy_unstamped', false);
+
+        return [wakeup_bridge_provider(), NotificationsServiceProvider::class];
     }
 
     #[Override]
@@ -31,6 +31,8 @@ abstract class TestCase extends Orchestra
         $app['config']->set('database.default', 'sqlite');
         $app['config']->set('database.connections.sqlite.database', ':memory:');
         $app['config']->set('queue.default', 'sync');
+        $app['config']->set('corex-notifications.digest.enabled', true);
+        $app['config']->set('corex-notifications.digest.accept_legacy_unstamped', false);
     }
 
     protected function defineDatabaseMigrations(): void
@@ -48,27 +50,7 @@ abstract class TestCase extends Orchestra
     {
         parent::setUp();
         $this->app->instance(TenantContextResolver::class, new NotificationTenantContextResolver);
-        $this->app['config']->set('corex-notifications.digest.enabled', true);
         $this->app->forgetInstance(NotificationsOptions::class);
-        $this->app['config']->set('corex-notifications.digest.accept_legacy_unstamped', false);
-        $this->app->forgetInstance(NotificationsOptions::class);
-        $this->app['config']->set('corex-wakeup.handlers', [
-            'notification.digest.v1' => [
-                'handler' => DigestWakeupAdapter::class,
-                'version' => 'notification-digest/1',
-                'accept_legacy_unstamped' => false,
-            ],
-        ]);
-        $this->app->forgetInstance(WakeupOptions::class);
-        $this->app->tag(NotificationDigestDueSource::class, 'corex.wakeup.due-sources');
         $this->app->forgetScopedInstances();
-    }
-}
-
-final class NotificationTenantContextResolver implements TenantContextResolver
-{
-    public function current(): TenantContext
-    {
-        return new TenantContext(new AccountRef('11111111-1111-7111-8111-111111111111', 'notification-test', 'active', [], []));
     }
 }

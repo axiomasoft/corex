@@ -7,7 +7,7 @@ namespace CoreX\Wakeup\Contracts;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Wakeup\Data\SweepResult;
+use CoreX\Scheduling\Data\SweepResult;
 use DateTimeImmutable;
 
 #[Spi(kind: SpiKind::Implement, since: '1.0')]

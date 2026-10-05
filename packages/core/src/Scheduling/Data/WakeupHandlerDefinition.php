@@ -2,15 +2,17 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Wakeup\Data;
+namespace CoreX\Scheduling\Data;
 
 use CoreX\Attributes\Api;
-use CoreX\Wakeup\Contracts\DueWakeupHandler;
+use CoreX\Scheduling\Contracts\DueWakeupHandler;
 use InvalidArgumentException;
 
 #[Api(since: '1.0')]
 final readonly class WakeupHandlerDefinition
 {
+    public const string TAG = 'corex.scheduling.wakeup-handlers';
+
     /** @var class-string<DueWakeupHandler> */
     public string $handler;
 

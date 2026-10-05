@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Notifications\Digest\Internal;
 
 use CoreX\Context\Data\TenantContext;
-use CoreX\Wakeup\Data\WakeupWindow;
+use CoreX\Scheduling\Data\WakeupWindow;
 
 final readonly class DigestTick
 {

@@ -37178,7 +37178,7 @@
                     {
                         "byRef": false,
                         "name": "window",
-                        "type": "CoreX\\Wakeup\\Data\\WakeupWindow",
+                        "type": "CoreX\\Scheduling\\Data\\WakeupWindow",
                         "variadic": false
                     },
                     {
@@ -37210,7 +37210,7 @@
                 "name": "window",
                 "readonly": true,
                 "static": false,
-                "type": "CoreX\\Wakeup\\Data\\WakeupWindow"
+                "type": "CoreX\\Scheduling\\Data\\WakeupWindow"
             }
         },
         "readonly": true
@@ -37220,7 +37220,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Wakeup\\Contracts\\DueWakeupHandler"
+            "CoreX\\Scheduling\\Contracts\\DueWakeupHandler"
         ],
         "internal": true,
         "kind": "class",
@@ -37242,7 +37242,7 @@
                     {
                         "byRef": false,
                         "name": "delivery",
-                        "type": "CoreX\\Wakeup\\Data\\WakeupDelivery",
+                        "type": "CoreX\\Scheduling\\Data\\WakeupDelivery",
                         "variadic": false
                     }
                 ],
@@ -37841,7 +37841,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Wakeup\\Contracts\\DueWakeupSource"
+            "CoreX\\Scheduling\\Contracts\\DueWakeupSource"
         ],
         "internal": true,
         "kind": "class",
@@ -37903,7 +37903,7 @@
                         "variadic": false
                     }
                 ],
-                "return": "CoreX\\Wakeup\\Data\\SweepResult",
+                "return": "CoreX\\Scheduling\\Data\\SweepResult",
                 "static": false
             }
         },
@@ -37932,7 +37932,7 @@
                     {
                         "byRef": false,
                         "name": "wakeup",
-                        "type": "CoreX\\Wakeup\\Contracts\\WakeupScheduler",
+                        "type": "?CoreX\\Scheduling\\Contracts\\WakeupScheduler",
                         "variadic": false
                     },
                     {
@@ -38969,6 +38969,51 @@
                         "byRef": false,
                         "name": "core",
                         "type": "CoreX\\Config\\Data\\CoreOptions",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "violations": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "production",
+                        "type": "bool",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\Notifications\\Internal\\DigestSchedulerCheck": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Config\\Contracts\\RuntimeConfigCheck"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\Notifications\\Internal\\NotificationsOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
                         "variadic": false
                     }
                 ],
@@ -54558,6 +54603,586 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Scheduling\\Contracts\\DueWakeupHandler": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "delivery",
+                        "type": "CoreX\\Scheduling\\Data\\WakeupDelivery",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Scheduling\\Contracts\\DueWakeupSource": {
+        "abstract": false,
+        "constants": {
+            "TAG": {
+                "type": "string",
+                "value": "corex.scheduling.due-sources"
+            }
+        },
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "nextDue": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Context\\Data\\TenantContext",
+                        "variadic": false
+                    }
+                ],
+                "return": "?DateTimeImmutable",
+                "static": false
+            },
+            "sweep": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Context\\Data\\TenantContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "now",
+                        "type": "DateTimeImmutable",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "limit",
+                        "type": "int",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Scheduling\\Data\\SweepResult",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Scheduling\\Contracts\\WakeupScheduler": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "cancel": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Context\\Data\\TenantContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "requestKey",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Scheduling\\Data\\CancelResult",
+                "static": false
+            },
+            "schedule": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "request",
+                        "type": "CoreX\\Scheduling\\Data\\WakeupRequest",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Scheduling\\Data\\ScheduleResult",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Scheduling\\Data\\CancelResult": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "status",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "status": {
+                "name": "status",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Scheduling\\Data\\ScheduleResult": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "status",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "requestKey",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "requestKey": {
+                "name": "requestKey",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "status": {
+                "name": "status",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Scheduling\\Data\\SweepResult": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "claimed",
+                        "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "completed",
+                        "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "retried",
+                        "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "failed",
+                        "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "skipped",
+                        "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "remainingDue",
+                        "type": "bool",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "nextFireAt",
+                        "type": "?DateTimeImmutable",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "claimed": {
+                "name": "claimed",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            },
+            "completed": {
+                "name": "completed",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            },
+            "failed": {
+                "name": "failed",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            },
+            "nextFireAt": {
+                "name": "nextFireAt",
+                "readonly": true,
+                "static": false,
+                "type": "?DateTimeImmutable"
+            },
+            "remainingDue": {
+                "name": "remainingDue",
+                "readonly": true,
+                "static": false,
+                "type": "bool"
+            },
+            "retried": {
+                "name": "retried",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            },
+            "skipped": {
+                "name": "skipped",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Scheduling\\Data\\WakeupDelivery": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "request",
+                        "type": "CoreX\\Scheduling\\Data\\WakeupRequest",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "generation",
+                        "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "attempt",
+                        "type": "int",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "attempt": {
+                "name": "attempt",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            },
+            "generation": {
+                "name": "generation",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            },
+            "request": {
+                "name": "request",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Scheduling\\Data\\WakeupRequest"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Scheduling\\Data\\WakeupHandlerDefinition": {
+        "abstract": false,
+        "constants": {
+            "TAG": {
+                "type": "string",
+                "value": "corex.scheduling.wakeup-handlers"
+            }
+        },
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "kind",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "version",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "handler",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": false,
+                        "name": "acceptLegacyUnstamped",
+                        "type": "bool",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "acceptLegacyUnstamped": {
+                "name": "acceptLegacyUnstamped",
+                "readonly": true,
+                "static": false,
+                "type": "bool"
+            },
+            "handler": {
+                "name": "handler",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "kind": {
+                "name": "kind",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "version": {
+                "name": "version",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Scheduling\\Data\\WakeupRequest": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "context",
+                        "type": "CoreX\\Context\\Data\\TenantContext",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "kind",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "requestKey",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "fireAt",
+                        "type": "DateTimeImmutable",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "window",
+                        "type": "?CoreX\\Scheduling\\Data\\WakeupWindow",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "payload",
+                        "type": "CoreX\\Data\\Data\\JsonDocument",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "context": {
+                "name": "context",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Context\\Data\\TenantContext"
+            },
+            "fireAt": {
+                "name": "fireAt",
+                "readonly": true,
+                "static": false,
+                "type": "DateTimeImmutable"
+            },
+            "kind": {
+                "name": "kind",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "payload": {
+                "name": "payload",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Data\\Data\\JsonDocument"
+            },
+            "requestKey": {
+                "name": "requestKey",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "window": {
+                "name": "window",
+                "readonly": true,
+                "static": false,
+                "type": "?CoreX\\Scheduling\\Data\\WakeupWindow"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Scheduling\\Data\\WakeupWindow": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "start",
+                        "type": "DateTimeImmutable",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "end",
+                        "type": "DateTimeImmutable",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "period",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "end": {
+                "name": "end",
+                "readonly": true,
+                "static": false,
+                "type": "DateTimeImmutable"
+            },
+            "period": {
+                "name": "period",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "start": {
+                "name": "start",
+                "readonly": true,
+                "static": false,
+                "type": "DateTimeImmutable"
+            }
+        },
+        "readonly": true
+    },
     "CoreX\\SearchIntl\\Contracts\\SavedViewLabelReader": {
         "abstract": false,
         "constants": [],
@@ -60123,7 +60748,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Wakeup\\Contracts\\DueWakeupHandler"
+            "CoreX\\Scheduling\\Contracts\\DueWakeupHandler"
         ],
         "internal": true,
         "kind": "class",
@@ -60157,7 +60782,7 @@
                     {
                         "byRef": false,
                         "name": "delivery",
-                        "type": "CoreX\\Wakeup\\Data\\WakeupDelivery",
+                        "type": "CoreX\\Scheduling\\Data\\WakeupDelivery",
                         "variadic": false
                     }
                 ],
@@ -84976,80 +85601,6 @@
         "properties": [],
         "readonly": false
     },
-    "CoreX\\Wakeup\\Contracts\\DueWakeupHandler": {
-        "abstract": false,
-        "constants": [],
-        "final": false,
-        "interfaces": [],
-        "internal": false,
-        "kind": "interface",
-        "methods": {
-            "handle": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "delivery",
-                        "type": "CoreX\\Wakeup\\Data\\WakeupDelivery",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
-    "CoreX\\Wakeup\\Contracts\\DueWakeupSource": {
-        "abstract": false,
-        "constants": [],
-        "final": false,
-        "interfaces": [],
-        "internal": false,
-        "kind": "interface",
-        "methods": {
-            "nextDue": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "context",
-                        "type": "CoreX\\Context\\Data\\TenantContext",
-                        "variadic": false
-                    }
-                ],
-                "return": "?DateTimeImmutable",
-                "static": false
-            },
-            "sweep": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "context",
-                        "type": "CoreX\\Context\\Data\\TenantContext",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "now",
-                        "type": "DateTimeImmutable",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "limit",
-                        "type": "int",
-                        "variadic": false
-                    }
-                ],
-                "return": "CoreX\\Wakeup\\Data\\SweepResult",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
     "CoreX\\Wakeup\\Contracts\\DueWakeupSweeper": {
         "abstract": false,
         "constants": [],
@@ -85085,7 +85636,7 @@
                         "variadic": false
                     }
                 ],
-                "return": "CoreX\\Wakeup\\Data\\SweepResult",
+                "return": "CoreX\\Scheduling\\Data\\SweepResult",
                 "static": false
             }
         },
@@ -85123,502 +85674,6 @@
         "parent": null,
         "properties": [],
         "readonly": false
-    },
-    "CoreX\\Wakeup\\Contracts\\WakeupScheduler": {
-        "abstract": false,
-        "constants": [],
-        "final": false,
-        "interfaces": [],
-        "internal": false,
-        "kind": "interface",
-        "methods": {
-            "cancel": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "context",
-                        "type": "CoreX\\Context\\Data\\TenantContext",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "requestKey",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "CoreX\\Wakeup\\Data\\CancelResult",
-                "static": false
-            },
-            "schedule": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "request",
-                        "type": "CoreX\\Wakeup\\Data\\WakeupRequest",
-                        "variadic": false
-                    }
-                ],
-                "return": "CoreX\\Wakeup\\Data\\ScheduleResult",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
-    "CoreX\\Wakeup\\Data\\CancelResult": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
-        "internal": false,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "status",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": {
-            "status": {
-                "name": "status",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            }
-        },
-        "readonly": true
-    },
-    "CoreX\\Wakeup\\Data\\ScheduleResult": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
-        "internal": false,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "status",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "requestKey",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": {
-            "requestKey": {
-                "name": "requestKey",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "status": {
-                "name": "status",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            }
-        },
-        "readonly": true
-    },
-    "CoreX\\Wakeup\\Data\\SweepResult": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
-        "internal": false,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "claimed",
-                        "type": "int",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "completed",
-                        "type": "int",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "retried",
-                        "type": "int",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "failed",
-                        "type": "int",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "skipped",
-                        "type": "int",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "remainingDue",
-                        "type": "bool",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "nextFireAt",
-                        "type": "?DateTimeImmutable",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": {
-            "claimed": {
-                "name": "claimed",
-                "readonly": true,
-                "static": false,
-                "type": "int"
-            },
-            "completed": {
-                "name": "completed",
-                "readonly": true,
-                "static": false,
-                "type": "int"
-            },
-            "failed": {
-                "name": "failed",
-                "readonly": true,
-                "static": false,
-                "type": "int"
-            },
-            "nextFireAt": {
-                "name": "nextFireAt",
-                "readonly": true,
-                "static": false,
-                "type": "?DateTimeImmutable"
-            },
-            "remainingDue": {
-                "name": "remainingDue",
-                "readonly": true,
-                "static": false,
-                "type": "bool"
-            },
-            "retried": {
-                "name": "retried",
-                "readonly": true,
-                "static": false,
-                "type": "int"
-            },
-            "skipped": {
-                "name": "skipped",
-                "readonly": true,
-                "static": false,
-                "type": "int"
-            }
-        },
-        "readonly": true
-    },
-    "CoreX\\Wakeup\\Data\\WakeupDelivery": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
-        "internal": false,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "request",
-                        "type": "CoreX\\Wakeup\\Data\\WakeupRequest",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "generation",
-                        "type": "int",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "attempt",
-                        "type": "int",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": {
-            "attempt": {
-                "name": "attempt",
-                "readonly": true,
-                "static": false,
-                "type": "int"
-            },
-            "generation": {
-                "name": "generation",
-                "readonly": true,
-                "static": false,
-                "type": "int"
-            },
-            "request": {
-                "name": "request",
-                "readonly": true,
-                "static": false,
-                "type": "CoreX\\Wakeup\\Data\\WakeupRequest"
-            }
-        },
-        "readonly": true
-    },
-    "CoreX\\Wakeup\\Data\\WakeupHandlerDefinition": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
-        "internal": false,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "kind",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "version",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "handler",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": false,
-                        "name": "acceptLegacyUnstamped",
-                        "type": "bool",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": {
-            "acceptLegacyUnstamped": {
-                "name": "acceptLegacyUnstamped",
-                "readonly": true,
-                "static": false,
-                "type": "bool"
-            },
-            "handler": {
-                "name": "handler",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "kind": {
-                "name": "kind",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "version": {
-                "name": "version",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            }
-        },
-        "readonly": true
-    },
-    "CoreX\\Wakeup\\Data\\WakeupRequest": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
-        "internal": false,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "context",
-                        "type": "CoreX\\Context\\Data\\TenantContext",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "kind",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "requestKey",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "fireAt",
-                        "type": "DateTimeImmutable",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "window",
-                        "type": "?CoreX\\Wakeup\\Data\\WakeupWindow",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "payload",
-                        "type": "CoreX\\Data\\Data\\JsonDocument",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": {
-            "context": {
-                "name": "context",
-                "readonly": true,
-                "static": false,
-                "type": "CoreX\\Context\\Data\\TenantContext"
-            },
-            "fireAt": {
-                "name": "fireAt",
-                "readonly": true,
-                "static": false,
-                "type": "DateTimeImmutable"
-            },
-            "kind": {
-                "name": "kind",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "payload": {
-                "name": "payload",
-                "readonly": true,
-                "static": false,
-                "type": "CoreX\\Data\\Data\\JsonDocument"
-            },
-            "requestKey": {
-                "name": "requestKey",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "window": {
-                "name": "window",
-                "readonly": true,
-                "static": false,
-                "type": "?CoreX\\Wakeup\\Data\\WakeupWindow"
-            }
-        },
-        "readonly": true
-    },
-    "CoreX\\Wakeup\\Data\\WakeupWindow": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
-        "internal": false,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "start",
-                        "type": "DateTimeImmutable",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "end",
-                        "type": "DateTimeImmutable",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "period",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": {
-            "end": {
-                "name": "end",
-                "readonly": true,
-                "static": false,
-                "type": "DateTimeImmutable"
-            },
-            "period": {
-                "name": "period",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "start": {
-                "name": "start",
-                "readonly": true,
-                "static": false,
-                "type": "DateTimeImmutable"
-            }
-        },
-        "readonly": true
     },
     "CoreX\\Wakeup\\Internal\\Commands\\SweepWakeups": {
         "abstract": false,
@@ -85736,7 +85791,7 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "CoreX\\Wakeup\\Contracts\\WakeupScheduler"
+            "CoreX\\Scheduling\\Contracts\\WakeupScheduler"
         ],
         "internal": true,
         "kind": "class",
@@ -85792,7 +85847,7 @@
                         "variadic": false
                     }
                 ],
-                "return": "CoreX\\Wakeup\\Data\\CancelResult",
+                "return": "CoreX\\Scheduling\\Data\\CancelResult",
                 "static": false
             },
             "schedule": {
@@ -85800,11 +85855,11 @@
                     {
                         "byRef": false,
                         "name": "request",
-                        "type": "CoreX\\Wakeup\\Data\\WakeupRequest",
+                        "type": "CoreX\\Scheduling\\Data\\WakeupRequest",
                         "variadic": false
                     }
                 ],
-                "return": "CoreX\\Wakeup\\Data\\ScheduleResult",
+                "return": "CoreX\\Scheduling\\Data\\ScheduleResult",
                 "static": false
             }
         },
@@ -85897,7 +85952,7 @@
                         "variadic": false
                     }
                 ],
-                "return": "CoreX\\Wakeup\\Data\\SweepResult",
+                "return": "CoreX\\Scheduling\\Data\\SweepResult",
                 "static": false
             }
         },
@@ -85959,7 +86014,7 @@
                         "variadic": false
                     }
                 ],
-                "return": "?CoreX\\Wakeup\\Data\\WakeupHandlerDefinition",
+                "return": "?CoreX\\Scheduling\\Data\\WakeupHandlerDefinition",
                 "static": false
             },
             "envelope": {
@@ -85967,7 +86022,7 @@
                     {
                         "byRef": false,
                         "name": "definition",
-                        "type": "CoreX\\Wakeup\\Data\\WakeupHandlerDefinition",
+                        "type": "CoreX\\Scheduling\\Data\\WakeupHandlerDefinition",
                         "variadic": false
                     },
                     {
@@ -85989,7 +86044,7 @@
                         "variadic": false
                     }
                 ],
-                "return": "?CoreX\\Wakeup\\Contracts\\DueWakeupHandler",
+                "return": "?CoreX\\Scheduling\\Contracts\\DueWakeupHandler",
                 "static": false
             },
             "inspectPayload": {

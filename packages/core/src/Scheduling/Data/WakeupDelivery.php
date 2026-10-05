@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Wakeup\Data;
+namespace CoreX\Scheduling\Data;
 
 use CoreX\Attributes\Api;
 

@@ -214,6 +214,16 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Observability\Data\OperationStarted` | api | 1.0 |
 | `CoreX\Observability\Enums\OperationOutcome` | api | 1.0 |
 | `CoreX\Observability\Laravel\ObservabilityRegistrar` | spi-call | 1.0 |
+| `CoreX\Scheduling\Contracts\DueWakeupHandler` | spi-implement | 1.0 |
+| `CoreX\Scheduling\Contracts\DueWakeupSource` | spi-implement | 1.0 |
+| `CoreX\Scheduling\Contracts\WakeupScheduler` | spi-implement | 1.0 |
+| `CoreX\Scheduling\Data\CancelResult` | api | 1.0 |
+| `CoreX\Scheduling\Data\ScheduleResult` | api | 1.0 |
+| `CoreX\Scheduling\Data\SweepResult` | api | 1.0 |
+| `CoreX\Scheduling\Data\WakeupDelivery` | api | 1.0 |
+| `CoreX\Scheduling\Data\WakeupHandlerDefinition` | api | 1.0 |
+| `CoreX\Scheduling\Data\WakeupRequest` | api | 1.0 |
+| `CoreX\Scheduling\Data\WakeupWindow` | api | 1.0 |
 | `CoreX\Settings\Contracts\SettingDefaultsProvider` | spi-implement | 1.0 |
 | `CoreX\Settings\Contracts\SettingsRepository` | api | 1.0 |
 | `CoreX\Settings\Data\SettingsScope` | api | 1.0 |
@@ -949,18 +959,8 @@ Attributes own membership. Members belong to this package; direct extends/implem
 
 | Symbol | Layer | Since |
 |:--|:--|:--|
-| `CoreX\Wakeup\Contracts\DueWakeupHandler` | spi-implement | 1.0 |
-| `CoreX\Wakeup\Contracts\DueWakeupSource` | spi-implement | 1.0 |
 | `CoreX\Wakeup\Contracts\DueWakeupSweeper` | spi-implement | 1.0 |
 | `CoreX\Wakeup\Contracts\WakeupScheduleHint` | spi-implement | 1.0 |
-| `CoreX\Wakeup\Contracts\WakeupScheduler` | spi-implement | 1.0 |
-| `CoreX\Wakeup\Data\CancelResult` | api | 1.0 |
-| `CoreX\Wakeup\Data\ScheduleResult` | api | 1.0 |
-| `CoreX\Wakeup\Data\SweepResult` | api | 1.0 |
-| `CoreX\Wakeup\Data\WakeupDelivery` | api | 1.0 |
-| `CoreX\Wakeup\Data\WakeupHandlerDefinition` | api | 1.0 |
-| `CoreX\Wakeup\Data\WakeupRequest` | api | 1.0 |
-| `CoreX\Wakeup\Data\WakeupWindow` | api | 1.0 |
 | `CoreX\Wakeup\Laravel\WakeupBindingsRegistrar` | spi-call | 1.0 |
 | `CoreX\Wakeup\Testing\WakeupFixtures` | spi-call | 1.0 |
 | `CoreX\Wakeup\WakeupModule` | spi-call | 1.0 |

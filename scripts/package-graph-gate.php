@@ -26,6 +26,7 @@ use Throwable;
  *   R4 import outside source Api/Spi membership
  *   R4b source classification/type diagnostics and stale manifests
  *   R5 package-type dependency direction
+ *   R6 forbidden package edge
  */
 const EXIT_OK = 0;
 const EXIT_VIOLATION = 1;
@@ -95,6 +96,19 @@ foreach ($packages as $dirName => $meta) {
                 continue;
             }
 
+            $forbiddenEdge = forbiddenEdgeMessage($meta['name'], $ownerPackage, $config['forbidden_edges']);
+
+            if ($forbiddenEdge !== null) {
+                $violations[] = violation(
+                    rule: 'R6',
+                    file: $relativeFile,
+                    line: $ref['line'],
+                    import: $import,
+                    owner: $ownerPackage,
+                    message: $forbiddenEdge,
+                );
+            }
+
             if (violatesForeignInternal($import, $meta['name'], $ownerPackage)
                 && ! isInternalCompositionEdge($repoRoot, $relativeFile, $import, $meta['name'], $ownerPackage, $config['internal_composition_edges'])) {
                 $violations[] = violation(
@@ -150,6 +164,21 @@ foreach ($packages as $dirName => $meta) {
                     message: $r5Message,
                 );
             }
+        }
+    }
+
+    foreach ($meta['require'] as $dependency) {
+        $forbiddenEdge = forbiddenEdgeMessage($meta['name'], $dependency, $config['forbidden_edges']);
+
+        if ($forbiddenEdge !== null) {
+            $violations[] = violation(
+                rule: 'R6',
+                file: $meta['path'].'/composer.json',
+                line: 1,
+                import: $dependency,
+                owner: $dependency,
+                message: $forbiddenEdge,
+            );
         }
     }
 }
@@ -331,7 +360,8 @@ exit(EXIT_OK);
  *     public_api_exceptions: list<array<string, string>>,
  *     internal_composition_edges: list<array<string, string>>,
  *     reservations: list<array<string, string>>,
- *     legacy_namespace_splits: list<array<string, mixed>>
+ *     legacy_namespace_splits: list<array<string, mixed>>,
+ *     forbidden_edges: list<array<string, string>>
  * }
  */
 function loadConfig(string $path, string $repoRoot): array
@@ -355,9 +385,11 @@ function loadConfig(string $path, string $repoRoot): array
         'internal_composition_edges' => stringConfigRecords($decoded['internal_composition_edges'] ?? []),
         'reservations' => stringConfigRecords($decoded['reservations'] ?? []),
         'legacy_namespace_splits' => configRecords($decoded['legacy_namespace_splits'] ?? []),
+        'forbidden_edges' => stringConfigRecords($decoded['forbidden_edges'] ?? []),
     ];
 
     validateAllowlistEntries($config['allowlist'], $repoRoot);
+    validateForbiddenEdges($config['forbidden_edges']);
 
     return $config;
 }
@@ -1063,6 +1095,29 @@ function violatesPackageTypeDirection(string $fromPackage, string $toPackage, ar
     );
 }
 
+/** @param list<array<string, string>> $edges */
+function forbiddenEdgeMessage(string $fromPackage, string $toPackage, array $edges): ?string
+{
+    foreach ($edges as $edge) {
+        if (($edge['from'] ?? '') === $fromPackage && ($edge['to'] ?? '') === $toPackage) {
+            return $fromPackage.' → '.$toPackage;
+        }
+    }
+
+    return null;
+}
+
+/** @param list<array<string, string>> $edges */
+function validateForbiddenEdges(array $edges): void
+{
+    foreach ($edges as $edge) {
+        if (($edge['from'] ?? '') === '' || ($edge['to'] ?? '') === '' || ($edge['reason'] ?? '') === '') {
+            fwrite(STDERR, "package-graph-gate: forbidden edge requires from, to and reason\n");
+            exit(EXIT_CONFIG);
+        }
+    }
+}
+
 /**
  * @param  array{name: string, dir: string, path: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string}  $fromMeta
  * @param  list<array<string, mixed>>  $allowlist
@@ -1265,7 +1320,8 @@ function evaluateReservations(array $classIndex, array $packages, array $reserva
  *     public_api_exceptions: list<array<string, string>>,
  *     internal_composition_edges: list<array<string, string>>,
  *     reservations: list<array<string, string>>,
- *     legacy_namespace_splits: list<array<string, mixed>>
+ *     legacy_namespace_splits: list<array<string, mixed>>,
+ *     forbidden_edges: list<array<string, string>>
  * }  $config
  * @param  list<array<string, mixed>>  $activeReservations
  * @return list<array<string, mixed>>

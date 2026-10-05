@@ -11,7 +11,7 @@ use CoreX\Tenancy\Integration\Internal\Wakeup\RootWakeupReconciler;
 use CoreX\Tenancy\Integration\Internal\Wakeup\SweepRootWakeups;
 use CoreX\Tenancy\Tests\TestCase;
 use CoreX\Wakeup\Contracts\DueWakeupSweeper;
-use CoreX\Wakeup\Data\SweepResult;
+use CoreX\Scheduling\Data\SweepResult;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;

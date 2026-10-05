@@ -78,6 +78,7 @@ Merge: `packages/modules` → `packages/core` (`CoreX\Modules`, D25). Tombstone:
 | `CoreX\Messaging` | Доменные события, outbox/inbox/relay, pub/sub и контракты сообщений. | `core/src/Messaging`, `Events/{DomainEvent,Cancellable}`, `Contracts/{PubSub,WorkerRuntime,DurablePayload}`, `PHPStan` |
 | `CoreX\Modules` | Система модулей: манифесты, compiled registry, жизненный цикл, регистрация пакетов. | `packages/modules` (F1), `Contracts/ModuleRegistrar`, `Support/{PackageRegistrar,RegistersNothingOnBoot,ServiceProviderModuleRegistrar}` |
 | `CoreX\Observability` | Наблюдение за операциями: observer SPI, события исхода, OpenTelemetry-мост. | `core/src/Observability`, `Contracts/OperationObserver` |
+| `CoreX\Scheduling` | Контракты отложенного пробуждения: планировщик, источник срока, обработчик и запрос пробуждения. Исполнение остаётся в `corex-wakeup`. | `core/src/Scheduling` (P07.5, D96 п.8, D102) |
 | `CoreX\Settings` | Иерархические настройки user → workspace → account → default. | `core/src/Settings` + contracts/model/events/exceptions |
 | `CoreX\Storage` | Tenant-изолированное файловое хранилище и его capabilities. | `core/src/Storage`, `Contracts/TenantStorage` |
 | `CoreX\Time` | Часы PSR-20: системные, Laravel, замороженные. | `core/src/Support/Time` |

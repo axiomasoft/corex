@@ -1,0 +1,45 @@
+{
+  "schema": "p07.5-golden-semantic-delta/1",
+  "layer": "php-surface",
+  "added": [
+    "CoreX\\Notifications\\Internal\\DigestSchedulerCheck",
+    "CoreX\\Scheduling\\Contracts\\DueWakeupHandler",
+    "CoreX\\Scheduling\\Contracts\\DueWakeupSource",
+    "CoreX\\Scheduling\\Contracts\\WakeupScheduler",
+    "CoreX\\Scheduling\\Data\\CancelResult",
+    "CoreX\\Scheduling\\Data\\ScheduleResult",
+    "CoreX\\Scheduling\\Data\\SweepResult",
+    "CoreX\\Scheduling\\Data\\WakeupDelivery",
+    "CoreX\\Scheduling\\Data\\WakeupHandlerDefinition",
+    "CoreX\\Scheduling\\Data\\WakeupRequest",
+    "CoreX\\Scheduling\\Data\\WakeupWindow"
+  ],
+  "removed": [
+    "CoreX\\Wakeup\\Contracts\\DueWakeupHandler",
+    "CoreX\\Wakeup\\Contracts\\DueWakeupSource",
+    "CoreX\\Wakeup\\Contracts\\WakeupScheduler",
+    "CoreX\\Wakeup\\Data\\CancelResult",
+    "CoreX\\Wakeup\\Data\\ScheduleResult",
+    "CoreX\\Wakeup\\Data\\SweepResult",
+    "CoreX\\Wakeup\\Data\\WakeupDelivery",
+    "CoreX\\Wakeup\\Data\\WakeupHandlerDefinition",
+    "CoreX\\Wakeup\\Data\\WakeupRequest",
+    "CoreX\\Wakeup\\Data\\WakeupWindow"
+  ],
+  "changed_type_rename_only": [
+    "CoreX\\Notifications\\Digest\\Internal\\DigestTick",
+    "CoreX\\Notifications\\Digest\\Internal\\DigestWakeupAdapter",
+    "CoreX\\Notifications\\Digest\\Internal\\NotificationDigestDueSource",
+    "CoreX\\TasksWorkflow\\Internal\\MaterializationWakeupHandler",
+    "CoreX\\Wakeup\\Contracts\\DueWakeupSweeper",
+    "CoreX\\Wakeup\\Internal\\SqlWakeupScheduler",
+    "CoreX\\Wakeup\\Internal\\SweepRunner",
+    "CoreX\\Wakeup\\Internal\\WakeupHandlerRegistry"
+  ],
+  "changed_behavior": [
+    "CoreX\\Scheduling\\Contracts\\DueWakeupSource constant TAG",
+    "CoreX\\Scheduling\\Data\\WakeupHandlerDefinition constant TAG",
+    "CoreX\\Notifications\\Digest\\Internal\\SqlDigestBuilder nullable WakeupScheduler; enabled null throws InvalidConfiguration before writes"
+  ],
+  "preserved": ["routes", "events", "wire"]
+}

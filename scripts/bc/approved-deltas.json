@@ -90,6 +90,33 @@
                 }
             ]
         },
+        "axiomasoft/corex-wakeup": {
+            "base_revision": "76f8bdde496154c0a8901e459175cf306bedd860",
+            "decisions": [
+                {
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D96-p07-impersonation-access-edges.md",
+                    "sha256": "79c6e71c6250162b82945901e51f62029dc8a334701da02a7915ca5039b17525"
+                },
+                {
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D100-p07-grok-design-remediation.md",
+                    "sha256": "c6036d8746643d497efd2fb5194c6cb252d4d1084ce3c5338c35dd8eb8b9dd2c"
+                }
+            ],
+            "changes": [
+                {"path": null, "modificationType": "removed", "description_sha256": "a176c63940ac9b75a23ed23968e0f2cbaafa1094765c3dc6ca50a25d784fe677"},
+                {"path": null, "modificationType": "removed", "description_sha256": "d6a9dc88f78c422dbe9fdb0cec9cd3b931ae3c5d4d0892c934b5e287eac87966"},
+                {"path": null, "modificationType": "removed", "description_sha256": "77d681da3daa8017fe5ad81f48378232488ab58fbfcee955422e8ba5d824d6ef"},
+                {"path": null, "modificationType": "removed", "description_sha256": "34ff39effa531c538d3952b82cd72da2f03efc1bcdb33420307c25e1fba794c4"},
+                {"path": null, "modificationType": "removed", "description_sha256": "7437d65ed047336d012964ac7976de38e881520a6c3ecc7fa71dd9b0b694816a"},
+                {"path": null, "modificationType": "removed", "description_sha256": "181500ad867b6b8e4f48272090c42db1cf78035228ec054ad1aca8e9d78c3928"},
+                {"path": null, "modificationType": "removed", "description_sha256": "f79a0dd70507ac8b6f3ddf930bf4328ae3b2f3f5430aa2c3aa7a20564f0ed6f7"},
+                {"path": "/packages/wakeup/src/Contracts/DueWakeupSweeper.php", "modificationType": "changed", "description_sha256": "0f02542df5bb34a5a6dec05abf6daefebd341173787b92929aa16fd78072d78d"},
+                {"path": "/packages/wakeup/src/Contracts/DueWakeupSweeper.php", "modificationType": "changed", "description_sha256": "4c14d296a12b7491c54dc80825d8d33d7d7f2541406d94a864c8b1f9ff032160"},
+                {"path": null, "modificationType": "removed", "description_sha256": "61c7555ab23cec1b85a48bb605526f138ba7d839aeaec79a780003beac09d76a"},
+                {"path": null, "modificationType": "removed", "description_sha256": "6c7c0de1f0df4527375546f333c8ce26a7b93b984271de6858c347291498228e"},
+                {"path": null, "modificationType": "removed", "description_sha256": "7269932723188956638e0142c9d07ad8681a48ad392b126b9569de0123a4dba0"}
+            ]
+        },
         "axiomasoft/corex-webhooks": {
             "base_revision": "76f8bdde496154c0a8901e459175cf306bedd860",
             "decisions": [

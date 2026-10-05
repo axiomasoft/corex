@@ -2,7 +2,8 @@
 
 Ядро CoreX для любого Laravel-приложения: `BaseModel` (ULID/UUIDv7/int-шов), `Settings` (каскад
 System→Tenant→User), append-only `Audit`, `MoneyCast`, департаменты (ltree),
-фичефлаги, PubSub-контракт и реестр сущностей. MIT.
+фичефлаги, PubSub-контракт, реестр сущностей и контракты отложенного пробуждения
+`CoreX\Scheduling` (исполнение — пакет `corex-wakeup`). MIT.
 
 Пакет ставится как зависимость приложения-потребителя; публичные контракты —
 в `<Module>/Contracts/`; DTO помечены `#[Api]`, адаптеры интеграции — `#[Spi]`.

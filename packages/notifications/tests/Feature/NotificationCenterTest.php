@@ -29,7 +29,6 @@ use CoreX\Notifications\Preferences\Data\PreferenceInput;
 use CoreX\Notifications\Tests\TestCase;
 use CoreX\Settings\Contracts\SettingsRepository;
 use CoreX\Settings\Data\SettingsScope;
-use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use Illuminate\Support\Facades\DB;
 
 uses(TestCase::class);
@@ -271,7 +270,7 @@ it('admits a closed digest through the shared wakeup runner and freezes residual
     expect($first)->not->toBeNull()
         ->and(DB::table('ntf_digest_items')->where('run_id', $first->id)->count())->toBe(100);
 
-    app(DueWakeupSweeper::class)->sweep(notificationContext()->tenant, 100);
+    wakeup_bridge_sweep(notificationContext()->tenant, 100);
 
     expect(DB::table('ntf_digest_runs')->where('id', $first->id)->value('state'))->toBe('admitted')
         ->and(DB::table('ntf_deliveries')->where('digest_run_id', $first->id)->value('state'))->toBe('pending')
@@ -297,7 +296,7 @@ it('keeps an admitted digest effect when a later preference change disables futu
     ));
 
     expect($digest)->not->toBeNull();
-    app(DueWakeupSweeper::class)->sweep(notificationContext()->tenant, 100);
+    wakeup_bridge_sweep(notificationContext()->tenant, 100);
     $deliveryId = DB::table('ntf_deliveries')->where('digest_run_id', $digest->id)->value('id');
 
     $preferences->set(notificationContext(), new PreferenceInput(

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — scheduling contracts (P07.5)
+
+- Added kernel module `CoreX\Scheduling`. Moved `WakeupScheduler`, `DueWakeupSource`, `DueWakeupHandler`, `WakeupRequest`, `WakeupWindow`, `WakeupDelivery`, `WakeupHandlerDefinition`, `ScheduleResult`, `CancelResult` and `SweepResult` from `CoreX\Wakeup` with no aliases. `DueWakeupSource::TAG` is `corex.scheduling.due-sources`; `WakeupHandlerDefinition::TAG` is `corex.scheduling.wakeup-handlers`.
+
 ## Unreleased — PLAN3.P07.3 mandatory synchronous audit
 
 - Added the `SynchronousAuditWriter` SPI and stock committed database writer for mandatory support-access events. It bypasses optional audit disablement and queues, rejects ambient transactions, and requires an event-time snapshot.

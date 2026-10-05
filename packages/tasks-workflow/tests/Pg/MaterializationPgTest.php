@@ -26,12 +26,10 @@ use CoreX\TasksWorkflow\Internal\MaterializationWakeupHandler;
 use CoreX\TasksWorkflow\Internal\TasksWorkflowOptions;
 use CoreX\TasksWorkflow\Tests\PgTestCase;
 use CoreX\TasksWorkflow\Tests\Support\SeriesSeeder;
-use CoreX\Wakeup\Contracts\DueWakeupSweeper;
-use CoreX\Wakeup\Contracts\WakeupScheduler;
-use CoreX\Wakeup\Data\WakeupRequest;
-use CoreX\Wakeup\Internal\WakeupOptions;
-use CoreX\Wakeup\Testing\WakeupFixtures;
-use CoreX\Wakeup\WakeupServiceProvider;
+
+require_once __DIR__.'/../../../wakeup/tests/Support/PackageBridge.php';
+use CoreX\Scheduling\Contracts\WakeupScheduler;
+use CoreX\Scheduling\Data\WakeupRequest;
 use CoreX\Workflow\Internal\WorkflowOptions;
 use CoreX\Workflow\WorkflowServiceProvider;
 use Illuminate\Support\Facades\DB;
@@ -168,7 +166,7 @@ it('MAT-06 schedules a stamped complete payload and materializes through the han
         )),
     ))->status)->toBe('created');
 
-    $result = app(DueWakeupSweeper::class)->sweep($context, 10);
+    $result = wakeup_bridge_sweep($context, 10);
 
     expect($result->completed)->toBeGreaterThanOrEqual(1)
         ->and(Task::query()->where('title', 'Recurring maintenance')->count())->toBeGreaterThanOrEqual(2)
@@ -180,7 +178,7 @@ it('MAT-06b quarantines an exact handler version mismatch without invoking mater
     expect($this->migrateWakeup())->toBe(0);
     $set = SeriesSeeder::dailySet('series-pg-06b-mismatch', 'rev-1', 1);
     $series = SeriesSeeder::seed('series-pg-06b-mismatch', $set, $this->template, $this->restoreEpoch);
-    $registry = app(WakeupFixtures::registryClass());
+    $registry = app(wakeup_bridge_registry());
     $definition = $registry->definition(MaterializationHasher::HANDLER_KIND);
     $envelope = $registry->envelope(
         definition: $definition,
@@ -206,7 +204,7 @@ it('MAT-06b quarantines an exact handler version mismatch without invoking mater
         'updated_at' => $now,
     ]);
 
-    $result = app(DueWakeupSweeper::class)->sweep(app(TenantContextResolver::class)->current(), 10);
+    $result = wakeup_bridge_sweep(app(TenantContextResolver::class)->current(), 10);
 
     expect($result->failed)->toBe(1)
         ->and(Task::query()->count())->toBe(0)
@@ -257,7 +255,7 @@ it('MAT-08 denies cross-account restore epoch reuse on postgres', function (): v
 
 function registerMaterializationWakeup(): void
 {
-    app()->register(WakeupServiceProvider::class);
+    wakeup_bridge_register();
     app()['config']->set('corex-wakeup.handlers', [
         MaterializationHasher::HANDLER_KIND => [
             'handler' => MaterializationWakeupHandler::class,
@@ -265,7 +263,7 @@ function registerMaterializationWakeup(): void
             'accept_legacy_unstamped' => false,
         ],
     ]);
-    app()->forgetInstance(WakeupOptions::class);
-    app()->forgetInstance(WakeupFixtures::registryClass());
+    app()->forgetInstance(wakeup_bridge_options());
+    app()->forgetInstance(wakeup_bridge_registry());
     app()->forgetScopedInstances();
 }

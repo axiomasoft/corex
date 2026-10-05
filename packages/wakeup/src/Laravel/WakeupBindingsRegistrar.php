@@ -7,14 +7,16 @@ namespace CoreX\Wakeup\Laravel;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Config\Contracts\RuntimeConfigCheck;
+use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Contracts\PackageRegistrar;
+use CoreX\Scheduling\Contracts\DueWakeupSource;
+use CoreX\Scheduling\Contracts\WakeupScheduler;
+use CoreX\Scheduling\Data\WakeupHandlerDefinition;
 use CoreX\Time\Laravel\SystemClock;
-use CoreX\Wakeup\Contracts\DueWakeupSource;
 use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use CoreX\Wakeup\Contracts\WakeupScheduleHint;
-use CoreX\Wakeup\Contracts\WakeupScheduler;
 use CoreX\Wakeup\Internal\DangerousModesCheck;
 use CoreX\Wakeup\Internal\SqlWakeupScheduler;
 use CoreX\Wakeup\Internal\SweepRunner;
@@ -45,7 +47,7 @@ final class WakeupBindingsRegistrar implements PackageRegistrar
         $app->singleton(
             WakeupHandlerRegistry::class,
             static fn (Application $app): WakeupHandlerRegistry => WakeupHandlerRegistry::compile(
-                definitions: $app->make(WakeupOptions::class)->handlers,
+                definitions: self::definitions($app),
                 resolve: static fn (string $handler) => $app->make($handler),
                 registryFingerprint: self::registryFingerprint($app),
             ),
@@ -75,6 +77,33 @@ final class WakeupBindingsRegistrar implements PackageRegistrar
     public function boot(Application $app): void
     {
         $app->make(WakeupOptions::class);
+        self::definitions($app);
+    }
+
+    /** @return list<WakeupHandlerDefinition> */
+    private static function definitions(Application $app): array
+    {
+        $definitions = [
+            ...$app->make(WakeupOptions::class)->handlers,
+            ...$app->tagged(WakeupHandlerDefinition::TAG),
+        ];
+        $seen = [];
+
+        foreach ($definitions as $definition) {
+            if (! $definition instanceof WakeupHandlerDefinition) {
+                throw new RuntimeException('Wakeup handler definitions must be WakeupHandlerDefinition.');
+            }
+
+            if (isset($seen[$definition->kind])) {
+                throw new InvalidConfiguration([
+                    'corex-wakeup.handlers.'.$definition->kind.': duplicate wakeup handler kind',
+                ]);
+            }
+
+            $seen[$definition->kind] = true;
+        }
+
+        return array_values($definitions);
     }
 
     private static function registryFingerprint(Application $app): string
@@ -91,7 +120,7 @@ final class WakeupBindingsRegistrar implements PackageRegistrar
     {
         $sources = [];
 
-        foreach ($app->tagged('corex.wakeup.due-sources') as $source) {
+        foreach ($app->tagged(DueWakeupSource::TAG) as $source) {
             if (! $source instanceof DueWakeupSource) {
                 throw new RuntimeException('Wakeup due sources must implement DueWakeupSource.');
             }
