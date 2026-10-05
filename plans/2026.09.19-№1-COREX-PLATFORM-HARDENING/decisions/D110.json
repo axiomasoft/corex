@@ -1,0 +1,40 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D110",
+  "title": "Owner-gate G-DDL на DDL messaging (P5.4)",
+  "date": "2026-09-21",
+  "status": "accepted",
+  "decision": "Владелец **выдаёт** `[OWNER-GATE:G-DDL]` на исполнение **только** item `P5.4` в ветке\n`main` в объёме `packages/core/database/migrations/pg/`:\n\n- `2026_09_20_100000_create_sys_outbox_messages_table.php`;\n- `2026_09_20_100001_create_sys_inbox_messages_table.php`.\n\nГейт **не** расширяется на PHP-код relay/outbox (P5.5+), правки существующих миграций\nили таблицы `DB_SCHEMA.md` FROZEN v1.0.",
+  "rationale": "N05: durable outbox/inbox отсутствуют; без новых таблиц фаза P5 не исполнима. Размещение\nв tenant-schema согласовано D27; единственный DDL-item фазы несёт гейт по D14.",
+  "applies_to": [
+    "P5",
+    "P5.4"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "owner/vostrikov (human)"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D110\ndate: 2026-09-21\nstatus: accepted\nitem: P5.4\nitems: [P5, P5.4]\nsupersedes: []\nsuperseded_by: null\nowner_gate: G-DDL\nbranch: main\nscope: packages/core/database/migrations/pg\n---"
+    },
+    {
+      "id": "D110-Owner-gate-G-DDL-DDL-messaging-P5.4",
+      "title": "D110 — Owner-gate G-DDL на DDL messaging (P5.4)",
+      "text": "**Actor:** owner/vostrikov (human)\n\n**Evidence:** RAG:— явный запуск `task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P5.4`\n2026-09-21; D27 (tenant-schema placement); спецификация `@plan/phases/P5/P5.4.json`."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "Владелец **выдаёт** `[OWNER-GATE:G-DDL]` на исполнение **только** item `P5.4` в ветке\n`main` в объёме `packages/core/database/migrations/pg/`:\n\n- `2026_09_20_100000_create_sys_outbox_messages_table.php`;\n- `2026_09_20_100001_create_sys_inbox_messages_table.php`.\n\nГейт **не** расширяется на PHP-код relay/outbox (P5.5+), правки существующих миграций\nили таблицы `DB_SCHEMA.md` FROZEN v1.0."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "N05: durable outbox/inbox отсутствуют; без новых таблиц фаза P5 не исполнима. Размещение\nв tenant-schema согласовано D27; единственный DDL-item фазы несёт гейт по D14."
+    }
+  ]
+}

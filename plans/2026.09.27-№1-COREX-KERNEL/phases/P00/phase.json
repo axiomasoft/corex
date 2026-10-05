@@ -1,0 +1,100 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:phase:v1",
+  "id": "P00",
+  "title": "Glossary, карта пакетов/namespace, финальная архитектура",
+  "design": "detailed",
+  "goal": "P00 превращает принятые D01–D23 в **конкретные имена и карты**, на которых строятся все механические фазы: glossary\n(имена пакетов, composer-имена, namespace-корни, модули ядра, атрибуты, конфиг-ключи/publish-tags/команды по пакету),\nматрицу потребителей зон ядра и решение по составу ядра, карты переносов (namespace-префиксы и каталоги) для P02/P03,\nфинальную архитектуру `@plan/knowledge/research-04-architecture.json` (переживает план) и перевод PLAN2 в superseded. Evidence-only: пишет только\nplan-owned carriers (`findings/`, `research/`, `decisions/`, `artifacts/P00*/`) и `plans/ACTIVE.md` + Meta/handoff\nPLAN2; продуктовый код, манифесты, CI, docs не меняет.\n\n> **Контракт фазы.** Потребляет: `@plan/brief.json`, `@plan/knowledge/findings-00-audit-verification.json`, `research/01-*`, `research/02-*`,\n> D01–D24, `artifacts/P00-design/facts/import-matrix.txt`. Производит: `@plan/knowledge/research-03-glossary.json` (v1), `artifacts/P00/package-map.tsv`,\n> `artifacts/P00/namespace-map.tsv`, `artifacts/P00/dependency-edges.tsv`, `artifacts/P00/zone-consumers.tsv`, `@plan/knowledge/research-04-architecture.json`, `@plan/knowledge/artifacts-P00-doctrine-delta.json`\n> (что меняется в `docs/architecture/*` и в каких фазах), D25+ (решения P00), обновлённые `plans/ACTIVE.md` и PLAN2 Meta.\n> Границы: никаких правок `packages/**`, `docs/**`, `.github/**`, `composer.json`, `tests/**`, `scripts/**`.\n\n> **Phase Assurance | v1.**\n> Impact: public-contract\n> Integration Seams: package-topology · namespace-ownership · public-api · doctrine\n> Live or Irreversible: no\n> Audit Intent: direct-close-eligible\n> Rationale: имена ядра становятся SemVer-поверхностью после публикации; независимое full-ревью P00.1/P00.2 другой моделью.\n\n> **Окружение** (`RAG:—`, 2026-09-27): хост PHP 8.3, `vendor/` нет, Docker недоступен. P00 не требует PHP-рантайма:\n> факты — статическим разбором Python-скриптами (`artifacts/P00-design/scripts/`), воспроизводимыми из корня репозитория.\n\n> **Порядок.** P00.1 → P00.2 → P00.3, последовательно.",
+  "context": "P00 превращает принятые D01–D23 в **конкретные имена и карты**, на которых строятся все механические фазы: glossary\n(имена пакетов, composer-имена, namespace-корни, модули ядра, атрибуты, конфиг-ключи/publish-tags/команды по пакету),\nматрицу потребителей зон ядра и решение по составу ядра, карты переносов (namespace-префиксы и каталоги) для P02/P03,\nфинальную архитектуру `@plan/knowledge/research-04-architecture.json` (переживает план) и перевод PLAN2 в superseded. Evidence-only: пишет только\nplan-owned carriers (`findings/`, `research/`, `decisions/`, `artifacts/P00*/`) и `plans/ACTIVE.md` + Meta/handoff\nPLAN2; продуктовый код, манифесты, CI, docs не меняет.\n\n> **Контракт фазы.** Потребляет: `@plan/brief.json`, `@plan/knowledge/findings-00-audit-verification.json`, `research/01-*`, `research/02-*`,\n> D01–D24, `artifacts/P00-design/facts/import-matrix.txt`. Производит: `@plan/knowledge/research-03-glossary.json` (v1), `artifacts/P00/package-map.tsv`,\n> `artifacts/P00/namespace-map.tsv`, `artifacts/P00/dependency-edges.tsv`, `artifacts/P00/zone-consumers.tsv`, `@plan/knowledge/research-04-architecture.json`, `@plan/knowledge/artifacts-P00-doctrine-delta.json`\n> (что меняется в `docs/architecture/*` и в каких фазах), D25+ (решения P00), обновлённые `plans/ACTIVE.md` и PLAN2 Meta.\n> Границы: никаких правок `packages/**`, `docs/**`, `.github/**`, `composer.json`, `tests/**`, `scripts/**`.\n\n> **Phase Assurance | v1.**\n> Impact: public-contract\n> Integration Seams: package-topology · namespace-ownership · public-api · doctrine\n> Live or Irreversible: no\n> Audit Intent: direct-close-eligible\n> Rationale: имена ядра становятся SemVer-поверхностью после публикации; независимое full-ревью P00.1/P00.2 другой моделью.\n\n> **Окружение** (`RAG:—`, 2026-09-27): хост PHP 8.3, `vendor/` нет, Docker недоступен. P00 не требует PHP-рантайма:\n> факты — статическим разбором Python-скриптами (`artifacts/P00-design/scripts/`), воспроизводимыми из корня репозитория.\n\n> **Порядок.** P00.1 → P00.2 → P00.3, последовательно.",
+  "depends_on": [],
+  "items": [
+    "P00.1",
+    "P00.2",
+    "P00.3"
+  ],
+  "batches": [
+    {
+      "id": "B00-A",
+      "items": [
+        "P00.1",
+        "P00.2",
+        "P00.3"
+      ],
+      "mode": "recommended"
+    }
+  ],
+  "closed": {
+    "at": "2026-09-28T05:11:00Z",
+    "result": "done",
+    "summary": "<!-- plan-projection\nprojection: phase-closure\nprojection_version: v1\nsource_scope: phase P00 + item states + decisions\nthrough: P00: 🟢 Done\ninputs_sha256: 33181cc7ea385a7ba0a262aa9841d9c9f53b13e12dba8ebfe71c253cf432aa2f\ngenerated_by: task plan-views closure\n-->\n\n# Закрытие фазы P00\n\n> Не править руками: это генерируемый вид.\n\n## Контракт фазы\n\n**Контракт фазы.** Потребляет: `@plan/brief.json`, `@plan/knowledge/findings-00-audit-verification.json`, `research/01-*`, `research/02-*`,\nD01–D24, `artifacts/P00-design/facts/import-matrix.txt`. Производит: `@plan/knowledge/research-03-glossary.json` (v1), `artifacts/P00/package-map.tsv`,\n`artifacts/P00/namespace-map.tsv`, `artifacts/P00/dependency-edges.tsv`, `artifacts/P00/zone-consumers.tsv`, `@plan/knowledge/research-04-architecture.json`, `@plan/knowledge/artifacts-P00-doctrine-delta.json`\n(что меняется в `docs/architecture/*` и в каких фазах), D25+ (решения P00), обновлённые `plans/ACTIVE.md` и PLAN2 Meta.\nГраницы: никаких правок `packages/**`, `docs/**`, `.github/**`, `composer.json`, `tests/**`, `scripts/**`.\n\n## Произведено\n\n- P00.1 — Glossary v1 и карты переносов: glossary v1, три TSV-карты + `dependency-edges.tsv`, `check-maps.py` (`--doctrine`, `--dependencies`), D25+.\n- P00.2 — Финальная архитектура и delta доктрины: `@plan/knowledge/research-04-architecture.json`, `doctrine-delta.md`.\n- P00.3 — Supersede PLAN2: обновлённые `plans/ACTIVE.md`, Meta/handoff PLAN2, сохранённый execution baseline.\n\n## Known Deviations\n\n- —\n\n## Решения\n\n- [D04](../../decisions/D04-namespace.md)\n- [D12](../../decisions/D12-operations-split.md)\n- [D25](../../decisions/D25-kernel-modules-merge.md)\n- [D26](../../decisions/D26-context-module.md)\n- [D27](../../decisions/D27-money-to-intl.md)\n- [D28](../../decisions/D28-savedviews-to-panels.md)\n- [D29](../../decisions/D29-kernel-module-list.md)\n- [D30](../../decisions/D30-package-names.md)\n- [D31](../../decisions/D31-operations-split.md)\n- [D32](../../decisions/D32-kernel-independence-seams.md)\n- [D33](../../decisions/D33-identifiers.md)\n- [D34](../../decisions/D34-map-conventions.md)\n- [D35](../../decisions/D35-test-boundary.md)\n"
+  },
+  "orchestration": {
+    "strategy": "sequential"
+  },
+  "sections": [
+    {
+      "id": "P00-Glossary-namespace",
+      "title": "P00 — Glossary, карта пакетов/namespace, финальная архитектура",
+      "text": "> **Статус дизайна:** детализирована 2026-09-27 (`task:plan-design … P00`); контракты — `P00.1.md`…`P00.3.md`.\n> Frontier-фаза: без runbook; варианты/критерии/acceptance — в item-контрактах и досье: `@plan/knowledge/research-P00-design.json`,\n> `@plan/knowledge/research-P00-design-rag.json`, `@plan/knowledge/artifacts-P00-design-examples.json`, no-search record `@plan/knowledge/artifacts-P00-design-rag-README.json`."
+    },
+    {
+      "id": "Phase-Context",
+      "title": "Phase Context",
+      "text": "P00 превращает принятые D01–D23 в **конкретные имена и карты**, на которых строятся все механические фазы: glossary\n(имена пакетов, composer-имена, namespace-корни, модули ядра, атрибуты, конфиг-ключи/publish-tags/команды по пакету),\nматрицу потребителей зон ядра и решение по составу ядра, карты переносов (namespace-префиксы и каталоги) для P02/P03,\nфинальную архитектуру `@plan/knowledge/research-04-architecture.json` (переживает план) и перевод PLAN2 в superseded. Evidence-only: пишет только\nplan-owned carriers (`findings/`, `research/`, `decisions/`, `artifacts/P00*/`) и `plans/ACTIVE.md` + Meta/handoff\nPLAN2; продуктовый код, манифесты, CI, docs не меняет.\n\n> **Контракт фазы.** Потребляет: `@plan/brief.json`, `@plan/knowledge/findings-00-audit-verification.json`, `research/01-*`, `research/02-*`,\n> D01–D24, `artifacts/P00-design/facts/import-matrix.txt`. Производит: `@plan/knowledge/research-03-glossary.json` (v1), `artifacts/P00/package-map.tsv`,\n> `artifacts/P00/namespace-map.tsv`, `artifacts/P00/dependency-edges.tsv`, `artifacts/P00/zone-consumers.tsv`, `@plan/knowledge/research-04-architecture.json`, `@plan/knowledge/artifacts-P00-doctrine-delta.json`\n> (что меняется в `docs/architecture/*` и в каких фазах), D25+ (решения P00), обновлённые `plans/ACTIVE.md` и PLAN2 Meta.\n> Границы: никаких правок `packages/**`, `docs/**`, `.github/**`, `composer.json`, `tests/**`, `scripts/**`.\n\n> **Phase Assurance | v1.**\n> Impact: public-contract\n> Integration Seams: package-topology · namespace-ownership · public-api · doctrine\n> Live or Irreversible: no\n> Audit Intent: direct-close-eligible\n> Rationale: имена ядра становятся SemVer-поверхностью после публикации; независимое full-ревью P00.1/P00.2 другой моделью.\n\n> **Окружение** (`RAG:—`, 2026-09-27): хост PHP 8.3, `vendor/` нет, Docker недоступен. P00 не требует PHP-рантайма:\n> факты — статическим разбором Python-скриптами (`artifacts/P00-design/scripts/`), воспроизводимыми из корня репозитория.\n\n> **Порядок.** P00.1 → P00.2 → P00.3, последовательно."
+    },
+    {
+      "id": "DoR",
+      "title": "DoR",
+      "text": "- [x] Бриф, верификация аудита, ресерч (11 perplexity + 1 http captures), целевая архитектура, D01–D23 существуют.\n- [x] Факты межпакетных импортов собраны (`artifacts/P00-design/facts/import-matrix.txt`)."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "1. Glossary v1: пакеты (каталог, composer-имя, namespace-корень, назначение одним предложением, тип), модули ядра (закрытый\n   список), зарезервированные сегменты, FQCN атрибутов, имена config/publish/команд/env по пакету (P00.1).\n2. Состав ядра и пакетов: merge `corex/modules` в ядро; судьба зон ядра (Money, SavedViews, Departments, Features, Settings,\n   Storage, Audit, Messaging, Observability) по матрице потребителей; split operations (engine/tools/webhooks) — границы по\n   каталогам; переименования (access, attributes, wakeup, search-meilisearch); тумбстоун import-export; flex/crm → products\n   (P00.1).\n3. Карты переносов: `namespace-map.tsv` (старый префикс → новый префикс, пакет-владелец, фаза P02/P03) и `package-map.tsv`\n   (старый каталог/имя → новый), `dependency-edges.tsv` (оба направления, выбранная развязка и владелец P02) (P00.1).\n4. `@plan/knowledge/research-04-architecture.json` — финальная норма по glossary; `doctrine-delta.md` — статьи constitution/политик, которые\n   переписываются, и фаза-владелец (P00.2).\n5. PLAN2 → paused/superseded, `plans/ACTIVE.md` → PLAN3 (P00.3)."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Любые изменения продукта/CI/docs/манифестов (P01+); выбор движка tenancy (P07, D13); механика схемы (P08, D20); конкретные\nинтерфейсы Application API (P04)."
+    },
+    {
+      "id": "Dependencies",
+      "title": "Dependencies",
+      "text": "Нет входящих. P01 стартует после закрытия P00 и дизайна P01."
+    },
+    {
+      "id": "Planned-Items",
+      "title": "Planned Items (исходы)",
+      "text": "- **P00.1 — Glossary v1 и карты переносов** (frontier/high, full): `@plan/knowledge/research-03-glossary.json`, `package-map.tsv`, `namespace-map.tsv`,\n  `zone-consumers.tsv`, D25+ по составу.\n- **P00.2 — Финальная архитектура и delta доктрины** (frontier/high, full): `@plan/knowledge/research-04-architecture.json`, `doctrine-delta.md`.\n- **P00.3 — Supersede PLAN2** (frontier/high, light): `plans/ACTIVE.md`, PLAN2 Meta `Paused By`, PLAN2 handoff → PLAN3."
+    },
+    {
+      "id": "Code-Evidence-Map",
+      "title": "Code/Evidence Map",
+      "text": "`@plan/knowledge/research-P00-design.json` (факты §1, развилки F1–F12 с рекомендациями §2, правила имён §3, схемы карт/алгоритм `check-maps.py` §5,\nfailure playbook §6, self-check §7); `@plan/knowledge/research-P00-design-rag.json` (внешние факты E1–E5); `@plan/knowledge/artifacts-P00-design-examples.json` (строки карт,\nworked examples проверок, glossary/delta, diff P00.3); `@plan/knowledge/artifacts-P00-design-rag-README.json` (no-search record); `artifacts/P00-design/facts/import-matrix.txt` (межпакетные импорты, декларации public-api, коллизии namespace);\n`@plan/knowledge/findings-00-audit-verification.json`; `docs/architecture/{constitution,core-zones,naming,taxonomy,structure-profiles}.md`;\n`packages/*/composer.json`."
+    },
+    {
+      "id": "Pitfalls",
+      "title": "Pitfalls",
+      "text": "- Не плодить пакеты «на каждый слой» (pplx-02): пакет = независимый потребитель или шов интеграции.\n- Имя пакета = назначение (PKG-001), не технология; PascalCase namespace без дефисов.\n- `CoreX\\Attributes` освобождается только переименованием EAV-пакета — одновременно в одной карте.\n- Module id = composer-имя → переименование меняет значения в `mod_*`-таблицах (D01: установок нет, схема сквошится в P08).\n- Glossary — норма для P02/P03; каждое имя должно пройти правило §Naming rules glossary (гейт P03)."
+    },
+    {
+      "id": "Validation-phase-level",
+      "title": "Validation (phase-level)",
+      "text": "`python3 $P/artifacts/P00-design/scripts/check-maps.py` → exit 0 (каждый `*.php` пакетов покрыт ровно одной строкой карты,\nкаждый каталог `packages/*` — строкой package-map, нет коллизий целевых корней, каждый конечный FQCN/путь принадлежит одному пакету); `python3 $P/artifacts/P00-design/scripts/check-maps.py --dependencies` → exit 0, `dependencies OK: acyclic, kernel-independent`; `python3 <task>/scripts/plan-lint.py\nplans/2026.09.27-№1-COREX-KERNEL` без новых ошибок; независимое ревью P00.1/P00.2 — GREEN."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "`@plan/knowledge/research-03-glossary.json`, `@plan/knowledge/research-04-architecture.json`, `artifacts/P00/{package-map.tsv,namespace-map.tsv,dependency-edges.tsv,zone-consumers.tsv,doctrine-delta.md}`,\n`artifacts/P00-design/scripts/{zone-consumers.py,check-maps.py}`, D25+, `plans/ACTIVE.md`, PLAN2 Meta/handoff."
+    },
+    {
+      "id": "Items",
+      "title": "Items",
+      "text": "| ID | Title | Status | Updated |\n|:--|:--|:--|:--|\n| P00.1 | Glossary v1 и карты переносов | ⬜ Not started | 2026-09-27 |\n| P00.2 | Финальная архитектура и delta доктрины | ⬜ Not started | 2026-09-27 |\n| P00.3 | Supersede PLAN2 | ⬜ Not started | 2026-09-27 |"
+    },
+    {
+      "id": "Phase-Handoff",
+      "title": "Phase Handoff",
+      "text": "P00 закрыта (direct-close, 2026-09-28). Норма для P01+: `@plan/knowledge/research-03-glossary.json` (имена, 15 модулей ядра, 21 пакет,\nидентификаторы), `@plan/knowledge/research-04-architecture.json`, карты `artifacts/P00/{package-map,namespace-map,dependency-edges,zone-consumers}.tsv`\n(558 строк; 1756 целевых рёбер ацикличны и kernel-independent после resolutions), `@plan/knowledge/artifacts-P00-doctrine-delta.json`\n(58 статей + политики, NEW/NON, измеренный граф модулей ядра), решения D25–D35. Проверка — `check-maps.py`\n(default, `--dependencies`, `--doctrine`, `--write-edges`). Для дизайна P01/P02: все строки `dependency-edges.tsv` с\ndisposition ≠ keep — работа P02 до механического split (owner_phase P02); ownership-гейт P01 читает glossary §Kernel modules,\n§Root symbols, §Reserved segments, §Dev roots. PLAN2 приостановлен (PLAN3.D23), `plans/ACTIVE.md` → PLAN3."
+    }
+  ]
+}

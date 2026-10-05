@@ -1,0 +1,19 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "research-P02-design-rag",
+  "title": "внешние факты (RAG)",
+  "sections": [
+    {
+      "id": "P02-RAG",
+      "title": "P02 — внешние факты (RAG)",
+      "text": "Индекс captures: `@plan/knowledge/artifacts-P02-design-rag-README.json`. Остальные решения P02 — факты репозитория (`RAG:—`, досье §2).\nРемонт A1–A4 (D46) основан на локальных воспроизведениях; новых внешних развилок нет.\nE1 и существующие свежие captures переиспользуются без нового поиска.\n\n| # | Факт | Статус | Источник | Влияние |\n|:--|:--|:--|:--|:--|\n| E1 | Rector 2.x `RenameClassRector` переименовывает ссылки на класс в коде (use, type hints, `new`, `instanceof`, `::class`) и типы в PHPDoc; **не** меняет объявление `namespace` файла, строковые литералы и расположение файла. `withImportNames()` влияет только на форматирование. | `RAG:✅` (perplexity, 3 источника) · `VERIFY-AT-EXEC` (сухой прогон) | `pplx-01-rector-rename-class.md`; context7 без совпадений — `context7-01-rector.md` | D44 п.2: объявления, литералы и файлы — скрипт; Rector — только код; `withImportNames()` не используется (минимальный дифф), форматирование — Pint. |\n\nПроверка E1 при исполнении: runbook §4.3 шаг 3 — после `apply` в scratch-worktree `grep -rn \"^use CoreX\\\\\\\\Api\\\\\\\\\" packages products tests | head` пуст, `php -l` всех изменённых файлов без ошибок. Результат не зависит от того, переписывает ли Rector объявление сам: скрипт выставляет каждое объявление явно (идемпотентно)."
+    }
+  ],
+  "applies_to": [
+    "P02"
+  ],
+  "provenance": {
+    "path": "research/P02-design-rag.md",
+    "sha256": "991b8ea89b7346c33ad3646fc5b42c726d9aa6ad1a864b49782f599595cd5451"
+  }
+}

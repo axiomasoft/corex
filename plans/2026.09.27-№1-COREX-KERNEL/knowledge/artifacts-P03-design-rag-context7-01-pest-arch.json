@@ -1,0 +1,22 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P03-design-rag-context7-01-pest-arch",
+  "title": "context7-01 — Pest 5 arch testing expectations",
+  "sections": [
+    {
+      "id": "context7-01-Pest-5-arch-testing-expectations",
+      "title": "context7-01 — Pest 5 arch testing expectations",
+      "text": "- Tool: context7 `resolve-library-id` («Pest PHP») → `/pestphp/docs`; `query-docs` · Date: 2026-09-29\n- Query: «arch testing: expect namespace toOnlyBeUsedIn, toBeInterfaces, toBeEnums, ignoring, wildcards in namespace expectations, arch presets»"
+    },
+    {
+      "id": "Answer-verbatim-snippets",
+      "title": "Answer (verbatim snippets)",
+      "text": "- `toBeInterfaces()` — https://github.com/pestphp/docs/blob/5.x/arch-testing.md — «Ensures all files in a namespace are interfaces.» `arch('app')->expect('App\\Contracts')->toBeInterfaces();`\n- `toBeEnums()` — same source — `arch('app')->expect('App\\Enums')->toBeEnums();`\n- Wildcards in `expect()` — same source — «The first example matches any App\\*\\Traits namespace, while the second matches any App\\*\\*\\Traits namespace.» `arch()->expect('App\\*\\Traits')->toBeTraits(); arch()->expect('App\\*\\*\\Traits')->toBeTraits();`\n- `ignore()` / `ignoreGlobalFunctions()` in `tests/Pest.php` — same source.\n- Rules example: `arch()->expect('App\\Models')->toBeClasses()->toExtend('Illuminate\\Database\\Eloquent\\Model')->toOnlyBeUsedIn('App\\Repositories')->ignoring('App\\Models\\User'); arch()->expect('App\\Http')->toOnlyBeUsedIn('App\\Http'); arch()->preset()->php();`"
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P03-design-rag/context7-01-pest-arch.md",
+    "sha256": "11d792b07d55d67a56104d19b6d838bfd45253a8b2e8888ddc56a0eb92fbd79b"
+  }
+}

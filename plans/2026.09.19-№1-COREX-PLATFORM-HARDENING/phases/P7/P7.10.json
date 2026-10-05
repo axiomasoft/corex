@@ -1,0 +1,268 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P7.10",
+  "title": "Команда `corex:config:validate` и redaction",
+  "status": "done",
+  "summary": "Добавить `corex:config:validate`, которая проверяет связанные\nOptions, печатает эффективные драйверы и доступность адаптеров и не\nпечатает секреты.",
+  "why": "A76: команды не существует. `RAG:✅` P7-Q3: diagnose не заменяет\nboot; секреты не выводятся. D40. Review `full`.",
+  "scope": {
+    "include": [
+      "команда §12; регистрация в `CoreServiceProvider`;\nнегативный тест с заполненным секретом; warning на дефолт intl\ncursor_secret (значение не менять); CHANGELOG; receipt с выводом\nкоманды."
+    ],
+    "exclude": [
+      "`--check-connectivity`; Options на пакеты D38;\nизменение дефолта `COREX_INTL_CURSOR_SECRET`; печать DSN."
+    ]
+  },
+  "depends_on": [
+    "P7.1",
+    "P7.2"
+  ],
+  "decisions": [
+    "D40",
+    "D38"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P7-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P7/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P7-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D40.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D38.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Config/Data/SecretRef.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/CoreServiceProvider.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/core/src/Config/Internal/Commands/ValidateConfigCommand.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/CoreServiceProvider.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/tests/Feature/ValidateConfigCommandTest.php",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P7-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Алгоритм §12 переносится. Команда может\nвызывать `config()` (composition, glob гейта). Тест сажает\n`super-secret-value-test` в `tenancy.oidc.client_secret` и в\n`SecretRef`; stdout, stderr и message exception не содержат эту\nстроку. Дефолтный hex intl — WARNING, файл `corex-intl.php` не\nменяется. Ни один файл вне `Files` не изменяется."
+  ],
+  "guidance": "Готовый алгоритм и форма вывода — `@plan/knowledge/research-P7-design.json`\n§12. Редакция на границе печати, не в каждом `if`. Не использовать\n`var_export` / `print_r` на массиве конфига.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "php artisan corex:config:validate",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "bash scripts/anti-weakening-gate.sh",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "composer --working-dir=packages/core lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "composer --working-dir=packages/core analyse",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "composer --working-dir=packages/core test",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "secret redaction: super-secret-value-test absent from stdout, stderr, and exception message",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "corex:config:validate on the default test configuration exits 0",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "bash scripts/anti-weakening-gate.sh",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "команда; доказательство redaction; блок receipt'а с\nвыводом команды (секреты уже заменены на `present`)."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "required",
+    "status": "complete"
+  },
+  "result": {
+    "started_at": "2026-09-23T09:53:08Z",
+    "finished_at": "2026-09-23T10:10:01Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/grok-4.7/high",
+      "effort": "high"
+    },
+    "notes": "P7.10 GREEN: corex:config:validate redacts secrets. pint ok, phpstan 0, pest 97/243, anti-weakening ok.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-23T10:10:01Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-23T10:10:01Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-23T10:10:01Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-23T10:10:01Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-23T10:10:01Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-23T10:10:01Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-23T10:10:01Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Добавить `corex:config:validate`, которая проверяет связанные\nOptions, печатает эффективные драйверы и доступность адаптеров и не\nпечатает секреты."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "A76: команды не существует. `RAG:✅` P7-Q3: diagnose не заменяет\nboot; секреты не выводятся. D40. Review `full`."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "команда §12; регистрация в `CoreServiceProvider`;\nнегативный тест с заполненным секретом; warning на дефолт intl\ncursor_secret (значение не менять); CHANGELOG; receipt с выводом\nкоманды."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "`--check-connectivity`; Options на пакеты D38;\nизменение дефолта `COREX_INTL_CURSOR_SECRET`; печать DSN."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P7-design.json` §12; D40, D38 (результат P7.1 и P7.2)."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/core/src/Support/Console/ValidateConfigCommand.php`; `packages/core/src/CoreServiceProvider.php`; `packages/core/tests/Feature/ValidateConfigCommandTest.php`; `CHANGELOG.md`; `@plan/knowledge/findings-P7-receipts.json`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P7/phase.json`; 2) `@plan/knowledge/research-P7-design.json` §0, §12; 3) `@plan/knowledge/research-P7-design-rag.json` §1 (P7-Q2, P7-Q3); 4) `@plan/decisions/D40.json`; 5) `@plan/decisions/D38.json`; 6) `packages/core/src/Support/SecretRef.php`; 7) `packages/core/src/CoreServiceProvider.php`; 8) `packages/tenancy/src/Support/TenancyOptions.php`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Алгоритм §12 переносится. Команда может\nвызывать `config()` (composition, glob гейта). Тест сажает\n`super-secret-value-test` в `tenancy.oidc.client_secret` и в\n`SecretRef`; stdout, stderr и message exception не содержат эту\nстроку. Дефолтный hex intl — WARNING, файл `corex-intl.php` не\nменяется. Ни один файл вне `Files` не изменяется."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Готовый алгоритм и форма вывода — `@plan/knowledge/research-P7-design.json`\n§12. Редакция на границе печати, не в каждом `if`. Не использовать\n`var_export` / `print_r` на массиве конфига."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "пакетные lint, analyse, test ядра. Негатив секрета\nзелёный (строка отсутствует). `php artisan corex:config:validate`\nна дефолтной конфигурации тестов exit 0. `bash scripts/anti-weakening-gate.sh`\nзелёный."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "команда; доказательство redaction; блок receipt'а с\nвыводом команды (секреты уже заменены на `present`)."
+    }
+  ]
+}

@@ -1,0 +1,242 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P11.2",
+  "title": "Deterministic compiler and canonical frozen snapshot",
+  "status": "done",
+  "summary": "Нормализовать declarations в compiler-private IR, отклонять\nduplicates/invalid replacements и публиковать detached snapshot с одним\ncanonical SHA-256 fingerprint.",
+  "why": "`@plan/knowledge/research-P11-design.json` §3–§6; D57. `readonly` массивы с mutable\nextender objects не замораживают authority, а insertion order не является\nдопустимой семантикой.",
+  "scope": {
+    "include": [
+      "Normal form expansion; point-specific duplicate checks; replacement graph;\ndefault/priority/topological order; canonical bytes; schema/compiler/module provenance;\nfingerprint validation; detached hydration."
+    ],
+    "exclude": [
+      "Runtime collector freeze; worker refresh; tenant activation; durable payloads;\nAPI profile P13; adding common `priority` to extenders."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/phases/P11/P11.1.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "packages/modules/src/Compiler/RegistryCompiler.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/modules/src/Compiler/CompilationValidator.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/modules/src/Compiler/CompiledRegistry.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P11/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P11-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D57.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/modules/src/Manifest.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/modules/src/Compiler/NormalizedExtension.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/modules/src/Compiler/RegistryCompiler.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/modules/src/Compiler/CompilationValidator.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/modules/src/Compiler/CompiledRegistry.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/modules/src/Exceptions/CompilationException.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/modules/tests/Unit/RegistryCompilerDeterminismTest.php",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Normalize lists before collision checks. Diagnostics identify point, id\nand both owners. Replacement target/replacement must exist in one point; one incoming edge; owner\nmust own replacement; graph must be acyclic. Use §4 ordering only. Canonical hash is exactly §5;\nunknown schema, missing fingerprint and mismatch fail closed. Persist scalar arrays, never shared\nmutable extender objects."
+  ],
+  "guidance": "Keep IR internal and one-way: manifest → normalized records → validated\neffective records → typed slices. Compare canonical arrays/bytes in tests across shuffled module,\ndeclaration and associative-key order; separately preserve semantic lists.",
+  "validation": [
+    {
+      "id": "V1",
+      "procedure": "permutation fixtures yield one canonical fingerprint",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "duplicate identity, replacement, menu, corrupt artifact, detached mutation",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "composer --working-dir=packages/modules lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "composer --working-dir=packages/modules analyse",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "composer --working-dir=packages/modules test",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Deterministic compiler, complete diagnostics, canonical fingerprinted snapshot\nand proof that hydrated mutations cannot alter authority."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-24T13:41:38Z",
+    "finished_at": "2026-09-24T13:53:15Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-run/cursor-grok-4.6/high",
+      "effort": "high"
+    },
+    "notes": "P11.2 GREEN: NormalizedExtension IR, point-specific identity, explicit replacement, corex-registry/1 fingerprint, detached snapshot. write-site: pre_mutation: allow · pre_final: allow",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-09-24T13:53:15Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-24T13:53:15Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-24T13:53:15Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-24T13:53:15Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-24T13:53:15Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-24T13:53:15Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Нормализовать declarations в compiler-private IR, отклонять\nduplicates/invalid replacements и публиковать detached snapshot с одним\ncanonical SHA-256 fingerprint."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`@plan/knowledge/research-P11-design.json` §3–§6; D57. `readonly` массивы с mutable\nextender objects не замораживают authority, а insertion order не является\nдопустимой семантикой."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Normal form expansion; point-specific duplicate checks; replacement graph;\ndefault/priority/topological order; canonical bytes; schema/compiler/module provenance;\nfingerprint validation; detached hydration."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Runtime collector freeze; worker refresh; tenant activation; durable payloads;\nAPI profile P13; adding common `priority` to extenders."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/phases/P11/P11.1.json`;\n`packages/modules/src/Compiler/RegistryCompiler.php`;\n`packages/modules/src/Compiler/CompilationValidator.php`;\n`packages/modules/src/Compiler/CompiledRegistry.php`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/modules/src/Compiler/NormalizedExtension.php`;\n`packages/modules/src/Compiler/RegistryCompiler.php`;\n`packages/modules/src/Compiler/CompilationValidator.php`;\n`packages/modules/src/Compiler/CompiledRegistry.php`;\n`packages/modules/src/Exceptions/CompilationException.php`;\n`packages/modules/tests/Unit/RegistryCompilerDeterminismTest.php`;\n`tests/Feature/RegistryCompilerTest.php`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P11/phase.json`; 2) `@plan/knowledge/research-P11-design.json` §2–§6;\n3) `@plan/decisions/D57.json`;\n4) `packages/modules/src/Compiler/RegistryCompiler.php`;\n5) `packages/modules/src/Compiler/CompilationValidator.php`;\n6) `packages/modules/src/Compiler/CompiledRegistry.php`;\n7) `packages/modules/src/Manifest.php`; 8) `tests/Feature/RegistryCompilerTest.php`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Normalize lists before collision checks. Diagnostics identify point, id\nand both owners. Replacement target/replacement must exist in one point; one incoming edge; owner\nmust own replacement; graph must be acyclic. Use §4 ordering only. Canonical hash is exactly §5;\nunknown schema, missing fingerprint and mismatch fail closed. Persist scalar arrays, never shared\nmutable extender objects."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Keep IR internal and one-way: manifest → normalized records → validated\neffective records → typed slices. Compare canonical arrays/bytes in tests across shuffled module,\ndeclaration and associative-key order; separately preserve semantic lists."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Permutation/property fixtures yield one byte-identical artifact and fingerprint;\nnegative matrix covers every replacement error, duplicate normalized route/wire identity, menu\nmissing target/cycle, corrupt/old artifact and attempted mutation isolation; package/root module\nlint, analysis and tests."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Deterministic compiler, complete diagnostics, canonical fingerprinted snapshot\nand proof that hydrated mutations cannot alter authority."
+    }
+  ]
+}

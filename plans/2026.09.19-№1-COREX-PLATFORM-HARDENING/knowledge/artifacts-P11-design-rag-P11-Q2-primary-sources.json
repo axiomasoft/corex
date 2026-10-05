@@ -1,0 +1,39 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P11-design-rag-P11-Q2-primary-sources",
+  "title": "Q2 — primary-source verification",
+  "sections": [
+    {
+      "id": "P11-Q2-primary-source-verification",
+      "title": "P11-Q2 — primary-source verification",
+      "text": "**Accessed:** 2026-09-20  \n**Method:** direct official documentation search/open after the Perplexity response"
+    },
+    {
+      "id": "Symfony",
+      "title": "Symfony",
+      "text": "Source: https://symfony.com/doc/current/service_container/compiler_passes.html\n\n- Symfony first compiles configuration from enabled extensions, checks and optimizes it, then\n  caches the compiled container before normal service use.\n- Compiler passes operate on definitions before services are instantiated.\n- Definition mutation is permitted only before the container is compiled.\n- Compiler-pass type and priority order compiler passes, but this does not define identity,\n  duplicate or replacement semantics for an application-specific extension registry."
+    },
+    {
+      "id": "Laravel-queue-workers",
+      "title": "Laravel queue workers",
+      "text": "Source: https://laravel.com/docs/12.x/queues\n\n- `queue:work` is long-lived and retains the booted application and application static state.\n- Workers do not see deployed code changes until restart.\n- `queue:restart` asks workers to exit gracefully after the current job; a process manager starts\n  replacements, and the restart signal uses the configured cache.\n- This supports a job-boundary adoption rule. It does not specify a fleet-wide atomic switch."
+    },
+    {
+      "id": "Laravel-Octane",
+      "title": "Laravel Octane",
+      "text": "Source: https://laravel.com/docs/12.x/octane\n\n- Octane boots the application once and retains the same application instance across requests.\n- Application file changes require restart/reload; `octane:reload` gracefully restarts workers so\n  subsequent requests use the new deployment.\n- Octane resets first-party framework state but cannot generally reset application-created global\n  state.\n- This supports immutable per-request use plus deployment reload. It does not specify one atomic\n  cutover instant across all workers."
+    },
+    {
+      "id": "Design-consequence",
+      "title": "Design consequence",
+      "text": "The frameworks support compile-before-use and explicit long-worker refresh boundaries. They do not\nprovide CoreX with registry identity, duplicate, fingerprint, durable replay or cluster-wide atomic\npublication semantics. Those are explicit project decisions and must be tested locally."
+    }
+  ],
+  "applies_to": [
+    "P11"
+  ],
+  "provenance": {
+    "path": "artifacts/P11-design-rag/P11-Q2-primary-sources.md",
+    "sha256": "f3f3cafb52ed4088d2cf674270d592300102732eaf9e4cc4e635bea7cd135b2d"
+  }
+}

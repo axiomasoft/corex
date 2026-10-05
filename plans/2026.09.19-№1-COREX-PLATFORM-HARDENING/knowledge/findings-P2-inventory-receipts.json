@@ -1,0 +1,144 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "findings-P2-inventory-receipts",
+  "title": "Receipts — фаза P2 (инвентарь)",
+  "sections": [
+    {
+      "id": "Receipts-P2",
+      "title": "Receipts — фаза P2 (инвентарь)",
+      "text": ""
+    },
+    {
+      "id": "P2.1",
+      "title": "P2.1 — Сканер символов и импортов",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/medium"
+    },
+    {
+      "id": "Self-check-stderr",
+      "title": "Self-check (stderr)",
+      "text": "```text\nOK src_php_files expected=888 observed=888 delta=+0\nOK config_lines expected=153 observed=153 delta=+0\nOK static_dollar_lines expected=0 observed=0 delta=+0\nOK internal_directories expected=19 observed=19 delta=+0\nOK internal_files expected=169 observed=169 delta=+0\nOK migration_files expected=86 observed=86 delta=+0\n```\n\n`SelfCheck::EXPECTED` для `config_lines` и `internal_files` приведены к дереву\n2026-09-21 (`rg`/`find`), а не к снимку `00-baseline-metrics.md` (152 / 188):\nдельта −19 Internal-файлов и +1 строка `config(` без изменения метода счёта §3.3."
+    },
+    {
+      "id": "use-3.4",
+      "title": "Пять фикстур `use` (§3.4)",
+      "text": "| Фикстура | alias → FQCN |\n|:--|:--|\n| `01-simple.php` | `B` → `A\\B` |\n| `02-alias.php` | `C` → `A\\B` |\n| `03-group.php` | `B` → `A\\B`, `D` → `A\\C` |\n| `04-function.php` | (пусто — не class-table) |\n| `05-legacy-comma.php` | `B` → `A\\B`, `C` → `A\\C` |"
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "```text\n$ php plans/.../scripts/architecture/bin/inventory.php inventory\nexit 0\n\n$ python3 -c \"import json; … assert c['ok'] is True\"\nOK\n\n$ cmp (повторный прогон files.csv + symbols.csv)\nCMP_OK\n\n$ head -1 artifacts/architecture/files.csv | tr ',' '\\n' | wc -l\n21\n\n$ git diff --stat -- 'packages/' 'scripts/package-graph-gate.php' …\n(только незакоммиченные правки P1.2 в composer.json — вне P2.1)\n```\n\nСтрок в `files.csv` / `symbols.csv`: 888 типовых/file-рядов + заголовок."
+    },
+    {
+      "id": "P2.2",
+      "title": "P2.2 — Три графа и расхождения",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/medium"
+    },
+    {
+      "id": "section",
+      "title": "Рёбра графов",
+      "text": "| Граф | Рёбер |\n|:--|--:|\n| composer | 37 |\n| namespace-import | 40 |\n| runtime (межпакетные) | 11 |\n\n`gate_missed_edges`: 0 (в `packages/*/src` нет group-use; oracle `parseUseImport`\nскопирован в `GraphBuilder`, гейт не менялся)."
+    },
+    {
+      "id": "4.4",
+      "title": "Коды расхождений (§4.4)",
+      "text": "| Код | Число |\n|:--|--:|\n| G-IMPORT-UNDECLARED | 0 |\n| G-IMPORT-STALE-REQUIRE | 0 |\n| G-RUNTIME-HIDDEN | 0 |\n| G-RUNTIME-UNDECLARED | 0 |\n| G-GATE-BLIND | 0 |\n| G-EXPLAINED | 3 |"
+    },
+    {
+      "id": "Validation-2",
+      "title": "Validation",
+      "text": "```text\n$ php plans/.../scripts/architecture/bin/inventory.php graphs\nexit 0\n\n$ python3 json.load (composer, namespace-import, runtime)\nJSON_OK\n\n$ cmp (повторный прогон трёх JSON + discrepancies.md)\nCMP_OK\n\n$ rg -c \"^## G-\" @plan/knowledge/artifacts-architecture-graphs-discrepancies.json\n6\n\n$ git diff --stat -- gate + packages + P12-artifacts\n(только незакоммиченные правки P1.2 в composer.json — вне P2.2)\n```"
+    },
+    {
+      "id": "P2.3",
+      "title": "P2.3 — Реестр владения таблицами",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/medium"
+    },
+    {
+      "id": "section-2",
+      "title": "Счётчик таблиц по владельцу",
+      "text": "| owning_package | count |\n|:--|--:|\n| corex/attributes | 5 |\n| corex/auth | 3 |\n| corex/core | 10 |\n| corex/intl | 7 |\n| corex/media | 4 |\n| corex/modules | 3 |\n| corex/notifications | 5 |\n| corex/search | 3 |\n| corex/tasks | 12 |\n| corex/tasks-workflow | 3 |\n| corex/tenancy | 26 |\n| corex/transfer | 6 |\n| corex/wakeup | 1 |\n| corex/workflow | 1 |\n| flex/crm | 10 |\n| **Итого** | **99** |"
+    },
+    {
+      "id": "sys_",
+      "title": "sys_* таблицы по владельцу",
+      "text": "| owning_package | tables |\n|:--|:--|\n| corex/attributes | sys_attribute_documents, sys_attribute_eav_records, sys_attribute_eav_values, sys_attribute_schema_operations, sys_attribute_write_tokens |\n| corex/core | sys_audit_log, sys_department_user, sys_departments, sys_feature_flags, sys_feature_overrides, sys_pubsub_cursors, sys_pubsub_messages, sys_saved_view_scopes, sys_saved_views, sys_settings |\n| corex/wakeup | sys_wakeup_requests |\n| corex/workflow | sys_workflow_intents |"
+    },
+    {
+      "id": "Validation-3",
+      "title": "Validation",
+      "text": "```\n$ php inventory.php tables\ntables: 99 unique tables extracted\n\nЧисло строк каталога = 99 уникальных Schema::create в миграциях пакетов.\nНи одна строка не имеет owning_package с префиксом sys_.\nЧетыре пакета N10 (core, attributes, wakeup, workflow) — владельцы sys_* таблиц.\nrestore_policy=unobserved у всех 99 строк.\naut_role_assignments: cross_package_access=exception, notes=D102 cross-package FK exception (DATA-004).\ncomposer lint:check — green.\ngit diff --stat -- 'packages/*/database' — пуст.\n```"
+    },
+    {
+      "id": "P2.4",
+      "title": "P2.4 — Реестр конфигурации",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/medium"
+    },
+    {
+      "id": "mode",
+      "title": "Счётчик ключей по mode",
+      "text": "| mode | count |\n|:--|--:|\n| deployment | 39 |\n| product-policy | 113 |\n| secret | 9 |\n| **Итого** | **161** |"
+    },
+    {
+      "id": "undeclared-read-17",
+      "title": "undeclared-read ключи (17)",
+      "text": "auth.*, corex-auth.identity, corex-auth.identity.columns, corex-media.allowed_mime_types,\ncorex-media.purposes, corex-modules.cache.*, corex.*, database.default,\nflex-crm.search_language, tenancy.bootstrapper_order, tenancy.identification.middleware,\ntenancy.membership_guard.guard, tenancy.oidc.allowed_algs, tenancy.provisioning.pipeline,\ntenancy.status_gate.read_only_methods, tenancy.template_integrity.manifests,\ntenancy.template_integrity.trusted_keys"
+    },
+    {
+      "id": "Validation-4",
+      "title": "Validation",
+      "text": "```\n$ php inventory.php config\nconfig: 161 keys extracted\n\ncorex-intl-search.enabled присутствует с notes=CFG-006 exception.\ntyped_options_field=— у всех 161 строк.\nrg \"typed_options_field\" docs/architecture/configuration.md → проза шапки + заголовок таблицы.\nundeclared-read: 17.\ngit diff --stat -- 'packages/*/config' 'packages/*/src' — пуст.\ncomposer lint:check — green.\n```"
+    },
+    {
+      "id": "P2.5---Core-Litmus-Test",
+      "title": "P2.5 — Пер-классовые вердикты и Core Litmus Test",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/medium"
+    },
+    {
+      "id": "Litmus-7.1",
+      "title": "Litmus (§7.1)",
+      "text": "Метод подсчёта импортёров для п.1: **per-symbol** — уникальные composer-пакеты,\nу которых в `src` встречается FQCN типа (без `corex/core`)."
+    },
+    {
+      "id": "location",
+      "title": "Сводка `location`",
+      "text": "| location | count |\n|:--|--:|\n| DELETE | 149 |\n| KEEP | 658 |\n| INLINE | 35 |\n| RENAME | 19 |\n| MOVE | 27 |"
+    },
+    {
+      "id": "surface",
+      "title": "Сводка `surface`",
+      "text": "| surface | count |\n|:--|--:|\n| PUBLIC | 394 |\n| INTERNAL | 267 |\n| UNMARKED | 227 |"
+    },
+    {
+      "id": "corex-core-location-MOVE-P6-27",
+      "title": "`corex/core` → `location=MOVE` (кандидаты P6, 27)",
+      "text": "`AuditObserver`, `HasAuditLog`, `DepartmentRepository`, `DatabaseDepartmentRepository`,\n`AuditLog`, `Department`, `FeatureFlag`, `FeatureOverride`, `Setting`, `MoneyCast`,\n`ScopedFilesystem`, `Config`, `AccountRef`, tenancy contracts/implementations (`AccountConnectionResolver`,\n`ImpersonationService`, `TenantDatabaseLifecycle`, `TenantDatabaseProvisioner`,\n`DatabaseConnectionConfig`, `ImpersonationGuard`, `ImpersonationState`,\n`NullImpersonationService`, `NullTenancyManager`, `ProvisionParams`, `SingleAccountResolver`,\n`WorkspaceRef`), `CoreXTestCase`, `IsolatesDatabasePath`."
+    },
+    {
+      "id": "Validation-5",
+      "title": "Validation",
+      "text": "```\n$ php inventory.php verdicts\nverdicts.csv: 888 строк + заголовок (= files.csv)\ncmp files.csv (до/после) — CMP_OK\nempty verdict — 0\ngit diff --stat -- 'packages/' 'docs/' — пуст\n```"
+    },
+    {
+      "id": "P2.6-scorecard-20-12",
+      "title": "P2.6 — Базовый scorecard 20×12",
+      "text": "**Дата:** 2026-09-21 · **Actor:** plan-exec/cursor-composer-2.5/medium"
+    },
+    {
+      "id": "0-1-2",
+      "title": "Распределение оценок (критерий → пакетов с 0/1/2)",
+      "text": "| Критерий | 0 | 1 | 2 |\n|:--|--:|--:|--:|\n| responsibility | 0 | 0 | 20 |\n| standalone-install | 0 | 0 | 20 |\n| public-api | 0 | 0 | 20 |\n| config | 6 | 14 | 0 |\n| extension | 1 | 15 | 4 |\n| data-ownership | 0 | 15 | 5 |\n| worker-safety | 0 | 4 | 16 |\n| package-tests | 0 | 0 | 20 |\n| naming | 1 | 1 | 18 |\n| structure | 0 | 4 | 16 |\n| observability | 19 | 1 | 0 |\n| bc-policy | 0 | 20 | 0 |\n\nПакеты с ≥4 нулями: нет."
+    },
+    {
+      "id": "Validation-6",
+      "title": "Validation",
+      "text": "```text\n$ php inventory.php scorecard\nscorecard rows: 20\n\n$ cmp (повторный прогон scorecard.csv)\nCMP_OK\n\n$ rg -i \"средн|total|итог из|/24|/36\" docs/architecture/scorecard.md\n(пусто)\n\n$ rg \"## Неоднородность\" docs/architecture/scorecard.md\nOK\n\n$ composer lint:check\npassed\n\n$ git diff --stat -- 'packages/' 'scripts/package-graph-gate.php' 'tests/'\n(пусто)\n```\n\nШапка scorecard.md: формулировка §8.3 без подстроки `средн` — иначе конфликт с Validation `rg`."
+    }
+  ],
+  "applies_to": [
+    "P2"
+  ],
+  "provenance": {
+    "path": "findings/P2-inventory-receipts.md",
+    "sha256": "ab1df551d91ad7c9f0c583ab49be4bc2cc780dff102c38f8f9532eacab8ffea0"
+  }
+}

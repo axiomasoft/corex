@@ -1,0 +1,214 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P14.11",
+  "title": "Declared webhook topics and subscription policy",
+  "status": "done",
+  "summary": "Реализовать declared webhook topics and subscription policy по замороженному дизайну P14.",
+  "why": "`@plan/knowledge/research-P14-design.json` §7; D79. Закрывает соответствующую строку\nacceptance/threat matrix §14 без переноса проектных решений в execution.",
+  "scope": {
+    "include": [
+      "Только нормативный срез §7, перечисленные ниже Files и\nпроверки: Unknown message contract/version/schema rejected; sensitive topics denied without explicit ability; secret class always denied. Optimistic revision and tenant authorization; subscription cap=100. No arbitrary Laravel event/class accepted."
+    ],
+    "exclude": [
+      "Остальные срезы P14; GraphQL; naming P15; новые runtime зависимости;\nlive rollout, внешние webhook sends и production migration/rotation."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D79"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P14-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D79.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P5/P5.3.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P13/P13.3.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P14/P14.3.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P14/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/api/src/Data/WebhookTopic.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/src/Internal/Webhook/WebhookTopicCatalogue.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/src/Contracts/WebhookPayloadProjector.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/src/Contracts/WebhookSubscriptionStore.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/src/Data/WebhookSubscription.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/src/Internal/Webhook/SqlWebhookSubscriptionStore.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/tests/Feature/WebhookSubscriptionTest.php",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Нормативный текст и алгоритмы — `@plan/knowledge/research-P14-design.json` §7; D79. Сохранять predecessor contracts и public signatures; no new runtime dependencies. SQL validation требует изолированных SQLite и PostgreSQL; scalar scope/restorer не открывает произвольную tenant DB. Webhook tests используют synthetic keys и только локальный receiver; live delivery/real secret rotation этим item не разрешены."
+  ],
+  "guidance": "`@plan/knowledge/research-P14-design.json` §15 задаёт общие safe codes/port shapes. Использовать точные DTO/подписи, state transitions, defaults и\nfailure rules §7. Новый interface только Contracts, implementation Internal,\nDTO final readonly. Время durable decisions — injected Clock; duration — monotonic.\nRequired Reads section-qualified; максимум 2500 строк, ≤14 inputs, ≤8 Files.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer lint:check",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "composer analyse",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "composer test",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "composer test:pg",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "packages/api/tests/Feature/WebhookSubscriptionTest.php",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Перечисленные Files реализуют §7; измеримые результаты\nValidation приложены к item receipt, включая команды, failures/skips и ограничения."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-25T15:11:18Z",
+    "finished_at": "2026-09-25T15:17:54Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-run/grok-4.7/high",
+      "effort": "high"
+    },
+    "notes": "P14.11 GREEN: unknown contract/version/schema and class names rejected; sensitive topics need an ability; secret class always denied; optimistic revision, cap 100, foreign tenant denied. pest 6/6, phpstan 0, pint ok.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-25T15:17:54Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-25T15:17:54Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Реализовать declared webhook topics and subscription policy по замороженному дизайну P14."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`@plan/knowledge/research-P14-design.json` §7; D79. Закрывает соответствующую строку\nacceptance/threat matrix §14 без переноса проектных решений в execution."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Только нормативный срез §7, перечисленные ниже Files и\nпроверки: Unknown message contract/version/schema rejected; sensitive topics denied without explicit ability; secret class always denied. Optimistic revision and tenant authorization; subscription cap=100. No arbitrary Laravel event/class accepted."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Остальные срезы P14; GraphQL; naming P15; новые runtime зависимости;\nlive rollout, внешние webhook sends и production migration/rotation."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P14-design.json`; `@plan/decisions/D79.json`; `@plan/phases/P5/P5.3.json`; `@plan/phases/P13/P13.3.json`; `@plan/phases/P14/P14.3.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/api/src/Data/WebhookTopic.php`; `packages/api/src/Internal/Webhook/WebhookTopicCatalogue.php`; `packages/api/src/Contracts/WebhookPayloadProjector.php`; `packages/api/src/Contracts/WebhookSubscriptionStore.php`; `packages/api/src/Data/WebhookSubscription.php`; `packages/api/src/Internal/Webhook/SqlWebhookSubscriptionStore.php`; `packages/api/tests/Feature/WebhookSubscriptionTest.php`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P14/phase.json`; 2) `@plan/knowledge/research-P14-design.json` §7; 3) `@plan/decisions/D79.json`; 4) `@plan/phases/P5/P5.3.json`; 5) `@plan/phases/P13/P13.3.json`; 6) `@plan/phases/P14/P14.3.json`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Нормативный текст и алгоритмы — `@plan/knowledge/research-P14-design.json` §7; D79. Сохранять predecessor contracts и public signatures; no new runtime dependencies. SQL validation требует изолированных SQLite и PostgreSQL; scalar scope/restorer не открывает произвольную tenant DB. Webhook tests используют synthetic keys и только локальный receiver; live delivery/real secret rotation этим item не разрешены."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "`@plan/knowledge/research-P14-design.json` §15 задаёт общие safe codes/port shapes. Использовать точные DTO/подписи, state transitions, defaults и\nfailure rules §7. Новый interface только Contracts, implementation Internal,\nDTO final readonly. Время durable decisions — injected Clock; duration — monotonic.\nRequired Reads section-qualified; максимум 2500 строк, ≤14 inputs, ≤8 Files."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Unknown message contract/version/schema rejected; sensitive topics denied without explicit ability; secret class always denied. Optimistic revision and tenant authorization; subscription cap=100. No arbitrary Laravel event/class accepted. Затронутый пакет: `composer lint:check`, `composer analyse`,\n`composer test`; root equivalents обязательны по plan.md. SQL paths дополнительно\nпакетный `composer test:pg` после isolation preflight; если script ещё не произведён\nP2, использовать его declared package PG lane, не считать отсутствие script успехом.\nNegative fixtures доказывают конкретный отказ. Непройденный check раскрывается."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Перечисленные Files реализуют §7; измеримые результаты\nValidation приложены к item receipt, включая команды, failures/skips и ограничения."
+    }
+  ]
+}

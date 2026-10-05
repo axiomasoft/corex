@@ -1,0 +1,268 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P4.11",
+  "title": "Доказательство изоляции контекста между единицами работы",
+  "status": "done",
+  "summary": "Доказать тестом, что две последовательные единицы работы в одном\nпроцессе с разными аккаунтами не видят состояния друг друга, в том числе когда\nпервая завершилась исключением.",
+  "why": "A19/RUN-005. `RAG:—` единственная явная граница единицы работы в дереве —\n`try`/`finally` с `forgetScopedInstances()` в `MaterializationWakeupHandler`; она\nдоказывает только восстановление подменённого авторизатора. `RAG:✅` P4-Q3:\n`forgetScopedInstances()` не трогает singleton'ы, статику, мутации конфига и\n`instance()`-override, а тест, где второй проход инспектирует состояние после\nсобственной инициализации, пропускает утечку, замаскированную перезаписью.",
+  "scope": {
+    "include": [
+      "тест ядра `WorkUnitIsolationTest` по §8.2 с пятью\nутверждениями; pg-вариант с двумя последовательными материализациями разных\nаккаунтов, первая из которых падает; receipt с выводом обоих лейнов."
+    ],
+    "exclude": [
+      "изменение продуктового кода — item доказывает достигнутое;\nесли тест краснеет, это находка, и починка идёт через фазу-владельца, а не\nослаблением утверждений; запуск настоящего воркера или Octane; `Queue::fake()`\nкак доказательство (прямо отвергнут §8.2); гейт биндингов (P4.12)."
+    ]
+  },
+  "depends_on": [
+    "P4.7",
+    "P4.2"
+  ],
+  "decisions": [],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P4-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/findings-audit-verdicts.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/knowledge/research-00-baseline-metrics.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P4/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P4-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tasks-workflow/src/Internal/MaterializationWakeupHandler.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Context/Internal/GuardedTenantContextRestorer.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/CoreServiceProvider.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tasks-workflow/tests/Pg/MaterializationPgTest.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/core/tests/Feature/WorkUnitIsolationTest.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/tasks-workflow/tests/Pg/WorkUnitIsolationPgTest.php",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P4-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Второй проход инспектирует состояние **до** того, как\nзапишет собственный контекст — иначе тест проходит ошибочно. Между проходами\nвызывается ровно `forgetScopedInstances()`, то есть то, что делает Laravel на\nгранице джоба, и ничего сверх этого: искусственная очистка сверх реальной\nграницы обесценивает доказательство. Первый проход завершается `throw`, второй\nисполняется всё равно. Утверждения из таблицы §8.2 обязательны все пять;\nстрока про `static $` — измерение (`rg`), его результат идёт в receipt, а не в\n`assert`. Ни один продуктовый файл в Files не входит."
+  ],
+  "guidance": "Форма теста и таблица обязательных утверждений —\n`@plan/knowledge/research-P4-design.json` §8.2. Красное на любом из пяти утверждений — находка:\nона фиксируется в receipt с точным именем утечки и адресуется фазе-владельцу\n(P6 для ядра, P8/P9 для tenancy), а сам item закрывается как выявивший дефект,\nа не как «подправивший тест».",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer test",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "composer test:pg",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "composer analyse",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "composer lint:check",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "git diff --stat -- 'packages/*/src'",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "packages/core composer test+analyse+lint",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "composer test:pg WorkUnitIsolation+full pg lane",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "composer analyse+lint:check root",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "procedure": "git diff packages/*/src empty",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "procedure": "rg static $ packages/*/src = 0",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "тест изоляции с пятью утверждениями и веткой исключения;\npg-вариант на двух аккаунтах; блок receipt'а с доказательством неизменности\nпродуктового кода."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "medium"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "required",
+    "status": "complete"
+  },
+  "result": {
+    "started_at": "2026-09-21T15:30:00Z",
+    "finished_at": "2026-09-21T15:35:00Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/cursor-composer-2.5/medium",
+      "effort": "medium"
+    },
+    "notes": "P4.11 GREEN: WorkUnitIsolationTest+Pg, five §8.2 assertions, static $=0, receipt §P4.11 config note",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-21T15:35:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-21T15:35:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-21T15:35:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-09-21T15:35:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-09-21T15:35:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-21T15:35:00Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Доказать тестом, что две последовательные единицы работы в одном\nпроцессе с разными аккаунтами не видят состояния друг друга, в том числе когда\nпервая завершилась исключением."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "A19/RUN-005. `RAG:—` единственная явная граница единицы работы в дереве —\n`try`/`finally` с `forgetScopedInstances()` в `MaterializationWakeupHandler`; она\nдоказывает только восстановление подменённого авторизатора. `RAG:✅` P4-Q3:\n`forgetScopedInstances()` не трогает singleton'ы, статику, мутации конфига и\n`instance()`-override, а тест, где второй проход инспектирует состояние после\nсобственной инициализации, пропускает утечку, замаскированную перезаписью."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "тест ядра `WorkUnitIsolationTest` по §8.2 с пятью\nутверждениями; pg-вариант с двумя последовательными материализациями разных\nаккаунтов, первая из которых падает; receipt с выводом обоих лейнов."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "изменение продуктового кода — item доказывает достигнутое;\nесли тест краснеет, это находка, и починка идёт через фазу-владельца, а не\nослаблением утверждений; запуск настоящего воркера или Octane; `Queue::fake()`\nкак доказательство (прямо отвергнут §8.2); гейт биндингов (P4.12)."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "результат P4.7 (скалярный scope) и P4.2 (`restore()` с отказом);\n`@plan/knowledge/research-P4-design.json` §8; `@plan/knowledge/findings-audit-verdicts.json` A19;\n`@plan/knowledge/research-00-baseline-metrics.json` §2 (`static $` = 0)."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/core/tests/Feature/WorkUnitIsolationTest.php`; `packages/tasks-workflow/tests/Pg/WorkUnitIsolationPgTest.php`; `@plan/knowledge/findings-P4-receipts.json`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P4/phase.json`; 2) `@plan/knowledge/research-P4-design.json` §0, §8; 3) `@plan/knowledge/research-P4-design-rag.json` §1 и §4 (P4-Q3); 4) `packages/tasks-workflow/src/Internal/MaterializationWakeupHandler.php`; 5) `packages/core/src/Tenancy/GuardedTenantContextRestorer.php`; 6) `packages/core/src/CoreServiceProvider.php`; 7) `packages/tasks-workflow/tests/Pg/MaterializationPgTest.php` (образец pg-фикстуры)."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Второй проход инспектирует состояние **до** того, как\nзапишет собственный контекст — иначе тест проходит ошибочно. Между проходами\nвызывается ровно `forgetScopedInstances()`, то есть то, что делает Laravel на\nгранице джоба, и ничего сверх этого: искусственная очистка сверх реальной\nграницы обесценивает доказательство. Первый проход завершается `throw`, второй\nисполняется всё равно. Утверждения из таблицы §8.2 обязательны все пять;\nстрока про `static $` — измерение (`rg`), его результат идёт в receipt, а не в\n`assert`. Ни один продуктовый файл в Files не входит."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Форма теста и таблица обязательных утверждений —\n`@plan/knowledge/research-P4-design.json` §8.2. Красное на любом из пяти утверждений — находка:\nона фиксируется в receipt с точным именем утечки и адресуется фазе-владельцу\n(P6 для ядра, P8/P9 для tenancy), а сам item закрывается как выявивший дефект,\nа не как «подправивший тест»."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "`composer test` пакета `core` и `composer test:pg` пакета\n`tasks-workflow` зелёные. `composer analyse`, `composer lint:check` зелёные.\n`git diff --stat -- 'packages/*/src'` пуст — item не менял продуктовый код.\nReceipt содержит вывод обоих лейнов, результат измерения `static $` и, если\nчто-то покраснело, точное имя утечки с адресатом."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "тест изоляции с пятью утверждениями и веткой исключения;\npg-вариант на двух аккаунтах; блок receipt'а с доказательством неизменности\nпродуктового кода."
+    }
+  ]
+}

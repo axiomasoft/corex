@@ -1,0 +1,39 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "findings-P14-design-validation",
+  "title": "P14 design validation — 2026-09-20",
+  "sections": [
+    {
+      "id": "P14-design-validation-2026-09-20",
+      "title": "P14 design validation — 2026-09-20",
+      "text": ""
+    },
+    {
+      "id": "Authoring-and-scope",
+      "title": "Authoring and scope",
+      "text": "GPT-6 Astra/high, provider-thread-state; exact route is in P14-route-evidence.json.\n21 item contracts, normative design, D74–D84, three Perplexity captures and five direct\nprimary-source retrievals. CoreX runtime files were not changed; no product item executed."
+    },
+    {
+      "id": "Passed",
+      "title": "Passed",
+      "text": "- All P14.1–P14.21 bundles dry-render with the owning Task generator; none persisted\n  for future execution. Digest-bound metrics: P14-design-bundle-checks.json.\n- Maximum 8 Files, 10 Required Reads, 1990 selected input lines including conservative\n  duplicate selections; <=57484 estimated input tokens versus 200K item ceiling.\n- Generated state (132 plan items), decisions (4 views), status and current P1.1 bundle\n  regenerated and `--check` passed. All P14 states remain Not started.\n- All three raw Perplexity response SHA256 values match manifest; Q2 partial response\n  marked partial and completed through focused Q3/direct sources.\n- `git diff --check -- <plan-dir>` passed.\n- Task route/config/adapter focused qualification: 55 route tests, 12 Codex adapter\n  tests, 4 command catalog tests passed. Live adapter capture recognizes Astra/high;\n  default renderer remains unambiguous Sol. Unknown/ambiguous inventory models rejected.\n\nFinal `plan-lint.py --gate all`: 0 errors, 0 warnings. Handoff delivery receipt\nbuilt and verified by `plan-delivery.py --kind handoff --verify`; exact Next is P15.\nThe terminal-only `--render-final` flag correctly refused handoff kind; used the\nverified handoff receipt recommendation directly, without inventing a product terminal."
+    },
+    {
+      "id": "Repairs-and-limitations",
+      "title": "Repairs and limitations",
+      "text": "1. Initial Task route capture failed because gpt-6-astra was absent from its mapping.\n   First candidate placed two selectors in frontier and broke default-command adapter\n   qualification. Replaced by explicit-model classification through provider inventory;\n   class_selectors retains only Sol. Fixed owning source in swissknifeman:\n   command-routing.json, route_evidence_codex.py, test_route_evidence.py and root CHANGELOG.\n   No blanket environment upgrade or cache projection edit; changes left uncommitted.\n2. Installed cached adapter omits umbrella root in PYTHONPATH. Used existing corrected\n   owning-source runtime with explicit root+task/lib; provider evidence was not fabricated.\n3. Perplexity registered but not natively exposed. Registered stdio MCP succeeded.\n   Generic web connector failed; direct primary HTTPS succeeded. OWASP HTML403 resolved\n   via owning GitHub Markdown. Shopify overview now links to separate calculated-cost\n   page; that exact primary page was read before confirming refund mechanics.\n4. Early dry-bundle parse exposed prose in Inputs and a repeated path replacement in\n   P14.8 Required Reads; repaired those carriers. Early plan-lint exposed misplaced\n   Update Log heading and handoff field syntax; corrected to the owning v2 schema.\n   These red intermediate checks are not final GREEN evidence.\n5. P4/P5/P7/P11/P12/P13 product artifacts await stage3. Static bundle resolution is\n   design integrity only. SQLite/PG/PHP/integration/security-review remain execution\n   acceptance gates, not tests claimed to have run in this design invocation.\n6. Pre-existing uncommitted P2–P13 work preserved; no commit of unrelated work.\n   G-DDL/G-SECRET grants and live migration/rotation/external sends remain ungranted."
+    },
+    {
+      "id": "Next",
+      "title": "Next",
+      "text": "P15 design in a separate routed invocation (design-root-terminal); P15–P17 then stage2\nwhole-plan audit. Q1/Q2 remain scoped naming decisions for P15. No execution admitted."
+    }
+  ],
+  "applies_to": [
+    "P14"
+  ],
+  "provenance": {
+    "path": "findings/P14-design-validation.md",
+    "sha256": "84fdaf45710fec7b9c81a3c743592ff73b0c8704095c0d3a1af1501d583daf40"
+  }
+}

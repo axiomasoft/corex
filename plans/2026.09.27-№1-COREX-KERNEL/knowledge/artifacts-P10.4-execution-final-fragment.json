@@ -1,0 +1,17 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P10.4-execution-final-fragment",
+  "title": "final-fragment",
+  "sections": [
+    {
+      "id": "Content",
+      "title": "Content",
+      "text": "Рекомендация следующего шага:\n**Next:** run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P05.1 P05.2\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | B05-A |\n| Model | implementation |\n| Thinking | high |\n| Context | continue-root |"
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P10.4-execution/final-fragment.md",
+    "sha256": "91ca759e4a2a68c0c972b3e9c0dff34f8d14f93bf67352a04ec8198e69f0af00"
+  }
+}

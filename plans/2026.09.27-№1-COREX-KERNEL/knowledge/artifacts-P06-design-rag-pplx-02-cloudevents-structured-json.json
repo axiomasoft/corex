@@ -1,0 +1,47 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P06-design-rag-pplx-02-cloudevents-structured-json",
+  "title": "pplx-02 — CloudEvents 1.0.2 structured JSON, extension naming, breaking-change versioning, tracing",
+  "sections": [
+    {
+      "id": "pplx-02-CloudEvents-1.0.2-structured-JSON-extension-naming-breaking-change-versioning-tracing",
+      "title": "pplx-02 — CloudEvents 1.0.2 structured JSON, extension naming, breaking-change versioning, tracing",
+      "text": "- Tool: perplexity-web `search` · Date: 2026-10-03\n- Query: \"CloudEvents 1.0.2 structured content mode JSON format: required context attributes (id, source, specversion, type), optional (datacontenttype, dataschema, subject, time), extension attribute naming rules (lowercase a-z and 0-9 only, max length recommendation), and how to version event type for breaking payload changes (type suffix vs dataschema). Also the official CloudEvents extensions for distributed tracing (traceparent) and correlation. Cite cloudevents spec github.\"\n- Status: provenance (synthesized answer). Primary confirmation: `http-01-cloudevents-spec.md`, `http-02-cloudevents-json-format.md`, `http-05-cloudevents-distributed-tracing.md`."
+    },
+    {
+      "id": "Answer-verbatim",
+      "title": "Answer (verbatim)",
+      "text": ""
+    },
+    {
+      "id": "Structured-JSON-mode",
+      "title": "Structured JSON mode",
+      "text": "For CloudEvents 1.0.2, structured mode puts the whole event in a JSON object, with media type application/cloudevents+json. Required and included optional attributes become top-level properties; extension attributes also appear as top-level siblings—not inside an extensions object. For JSON payloads, data is represented as a JSON value; binary data uses data_base64.\nThe required context attributes are id, source, specversion, and type. For CloudEvents 1.0.x, specversion is \"1.0\"—the patch version of the specification does not change that value.\nOptional context attributes include:\n- datacontenttype: the payload’s media type. In JSON format, if omitted, JSON data is implicitly treated as application/json.\n- dataschema: a non-empty URI identifying the schema for data.\n- subject: a non-empty string identifying the subject within the source’s context.\n- time: the occurrence timestamp in RFC 3339 format.\nExample:\n```\n{ \"specversion\": \"1.0\", \"id\": \"evt-123\", \"source\": \"https://example.com/orders\", \"type\": \"com.example.order.created.v1\", \"datacontenttype\": \"application/json\", \"dataschema\": \"https://example.com/schemas/order-created/v1.json\", \"subject\": \"order-456\", \"time\": \"2026-10-03T08:00:00Z\", \"data\": { \"orderId\": \"order-456\" } }\n```"
+    },
+    {
+      "id": "Extension-naming",
+      "title": "Extension naming",
+      "text": "Extension attribute names must contain only lowercase ASCII letters a–z and digits 0–9. They should be descriptive and terse, and should not exceed 20 characters; 20 is a recommendation, not a hard maximum. Extensions follow the CloudEvents attribute type system and, in JSON, are top-level properties."
+    },
+    {
+      "id": "Breaking-payload-changes",
+      "title": "Breaking payload changes",
+      "text": "For a backward-incompatible payload change, the CloudEvents Primer recommends changing both type and dataschema. type is the primary discriminator consumers use for routing and handling, so a versioned type such as com.example.order.created.v2 clearly signals that consumers may need different handling. dataschema should point to a different URI for the incompatible schema. The Primer suggests keeping the old event available alongside the new one for a transition period when practical. For backward-compatible data changes, the type generally stays the same; the schema URI may change to reflect the evolution.\nSo, if choosing between a type suffix and a new dataschema URI for a breaking change: use both, rather than relying on dataschema alone. dataschema is primarily informational/tooling metadata; type is the stronger signal for consumers."
+    },
+    {
+      "id": "Tracing-and-correlation",
+      "title": "Tracing and correlation",
+      "text": "The official Distributed Tracing extension defines traceparent for carrying W3C Trace Context. It is a string and is required when using that extension; it carries the trace ID, parent span ID, and trace options.\nFor correlation, distinguish correlation metadata from distributed tracing: the v1.0.2 spec’s core id identifies one event, and its Primer says id is not intended to serve as a general correlation identifier for related events. Add a purpose-specific extension or put the value in data when appropriate. I could not verify a correlation extension in the official v1.0.2 extension set; the search result for a correlation.md file is on the repository’s current main branch, not the pinned v1.0.2 release."
+    },
+    {
+      "id": "Sources-as-returned",
+      "title": "Sources (as returned)",
+      "text": "1. https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md\n2. https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/primer.md\n3. https://github.com/cloudevents/spec/blob/main/cloudevents/extensions/distributed-tracing.md\n4. https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/formats/json-format.md\n5. https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/extensions/distributed-tracing.md"
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P06-design-rag/pplx-02-cloudevents-structured-json.md",
+    "sha256": "ca655abf047310620d7f39b42805e8af12a8af28ef9bf2c32c08021db835ac4c"
+  }
+}

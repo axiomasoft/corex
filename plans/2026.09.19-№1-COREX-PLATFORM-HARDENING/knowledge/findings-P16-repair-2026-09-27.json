@@ -1,0 +1,39 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "findings-P16-repair-2026-09-27",
+  "title": "P16 repair receipt — 2026-09-27",
+  "sections": [
+    {
+      "id": "P16-repair-receipt-2026-09-27",
+      "title": "P16 repair receipt — 2026-09-27",
+      "text": ""
+    },
+    {
+      "id": "Scope",
+      "title": "Scope",
+      "text": "Owner-authorized reopening of P16 validation before P17.1. The repair changes\ntest-only class/file layout in `packages/attributes/tests` and\n`packages/operations/tests`; no production FQCN, wire identifier, DDL or\npackage identity changes."
+    },
+    {
+      "id": "strict-psr",
+      "title": "strict-psr",
+      "text": "- Baseline: `composer dump-autoload -o --strict-psr --no-scripts` exited 1 and\n  identified exactly 11 test-only class/file mismatches.\n- Repair: extracted reusable test cases/doubles into PSR-4-matching\n  `Tests\\\\Pg` and `Tests\\\\Support` files; renamed the two private PHPUnit test\n  classes to match their existing filenames.\n- Result: `composer dump-autoload -o --strict-psr --no-scripts` exited 0 and\n  generated optimized autoload files containing 12,211 classes.\n- `packages/attributes` `lint:check`: passed.\n- `packages/operations` `lint:check`: passed.\n- `packages/attributes` non-PG suite: 70 passed, 243 assertions.\n- `packages/operations` suite: 257 passed, 10 environment-gated PG cases,\n  1,741 assertions."
+    },
+    {
+      "id": "postgresql",
+      "title": "postgresql",
+      "text": "- Connection mode: host PHP to `127.0.0.1:5434`, matching the test runner.\n- Docker service `pgsql`: running and healthy.\n- `pg_isready`: accepting connections.\n- Target database: `corex_test`; `_test` suffix gate passed; database exists\n  and resolves as user `corex`.\n- `composer test:pg`: 239 passed, 0 skipped, 1,149 assertions; exit 0."
+    },
+    {
+      "id": "Migration-tool-qualification",
+      "title": "Migration-tool qualification",
+      "text": "The Task journal migration allow-list now admits only an exact validation-row\nreplacement from `skipped` to `green` with an unchanged nonempty carrier and\nnonempty evidence IDs. `python3 -m unittest tests.test_journal_migration`:\n9 passed."
+    }
+  ],
+  "applies_to": [
+    "P16"
+  ],
+  "provenance": {
+    "path": "findings/P16-repair-2026-09-27.md",
+    "sha256": "0d2bd38011f27272677d47e7dc5bc83d03d5ddcbeb75367126ab5b319a20f427"
+  }
+}

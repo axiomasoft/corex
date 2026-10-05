@@ -1,0 +1,255 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P10.2",
+  "title": "Stable identity и canonical snapshot",
+  "status": "done",
+  "summary": "Ввести UUIDv7 identity, immutable revision/lifecycle и canonical definition,\nне ломая форму существующего `FieldSnapshot`.",
+  "why": "`P10-design.md` §2; D50. Key не переживает rename, а identity отсутствует.",
+  "scope": {
+    "include": [
+      "additive public data types; snapshot rows/hash; module mapping;\nlegacy UUIDv5 bridge и pinning rule; validation tests."
+    ],
+    "exclude": [
+      "DB DDL/source; backfill runtime; public renames P15."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/phases/P10/P10.1.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/knowledge/research-P10-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Database/Enums/IdStrategy.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/attributes/src/Internal/Registry/RegistryFieldCatalogue.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P10/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P10-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D50.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/attributes/src/Support/FieldSnapshot.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Database/Laravel/HasConfiguredId.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/attributes/src/Data/AttributeId.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/attributes/src/Data/AttributeDefinition.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/attributes/src/Data/AttributeLifecycle.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/attributes/src/Data/IndexPolicy.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/attributes/src/Support/FieldSnapshot.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/attributes/src/Internal/Registry/RegistryFieldCatalogue.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/attributes/tests/Unit/RegistryFieldCatalogueTest.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/attributes/tests/Unit/AttributeDefinitionTest.php",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "New definitions require explicit UUIDv7. Legacy UUIDv5\nis deterministic and flagged, never accepted for rename/evolution. Keep `code=key`;\ncanonical maps sorted recursively; snapshot stable across source order."
+  ],
+  "guidance": "Constructors and enum shape are normative in §2.1. Use `Str::uuid7()`\nand a fixed documented UUIDv5 namespace; no dependency.",
+  "validation": [
+    {
+      "id": "V1",
+      "procedure": "reject non-v7 new ids, duplicate key, invalid transition",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "same input gives same hash and key rename retains pinned id",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "composer --working-dir=packages/attributes lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "composer --working-dir=packages/attributes analyse",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "composer --working-dir=packages/attributes test",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Identity/model types, compatible snapshot, module mapper and tests."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-24T09:50:47Z",
+    "finished_at": "2026-09-24T09:54:22Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-run/grok-4.7/high",
+      "effort": "high"
+    },
+    "notes": "P10.2 GREEN: UUIDv7 identity, canonical snapshot, legacy UUIDv5 bridge. pest 23/57, phpstan 0, pint ok.\nwrite-site: pre_mutation: allow · pre_final: allow",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-09-24T09:54:22Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-24T09:54:22Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-24T09:54:22Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-24T09:54:22Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-24T09:54:22Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-24T09:54:22Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Ввести UUIDv7 identity, immutable revision/lifecycle и canonical definition,\nне ломая форму существующего `FieldSnapshot`."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`P10-design.md` §2; D50. Key не переживает rename, а identity отсутствует."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "additive public data types; snapshot rows/hash; module mapping;\nlegacy UUIDv5 bridge и pinning rule; validation tests."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "DB DDL/source; backfill runtime; public renames P15."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/phases/P10/P10.1.json`; `@plan/knowledge/research-P10-design-rag.json`;\n`packages/core/src/Enums/IdStrategy.php`;\n`packages/attributes/src/Internal/Registry/RegistryFieldCatalogue.php`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/attributes/src/Data/AttributeId.php`;\n`packages/attributes/src/Data/AttributeDefinition.php`;\n`packages/attributes/src/Data/AttributeLifecycle.php`;\n`packages/attributes/src/Data/IndexPolicy.php`;\n`packages/attributes/src/Support/FieldSnapshot.php`;\n`packages/attributes/src/Internal/Registry/RegistryFieldCatalogue.php`;\n`packages/attributes/tests/Unit/RegistryFieldCatalogueTest.php`;\n`packages/attributes/tests/Unit/AttributeDefinitionTest.php`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P10/phase.json`; 2) `@plan/knowledge/research-P10-design.json` §1–§2;\n3) `@plan/decisions/D50.json`;\n4) `@plan/knowledge/research-P10-design-rag.json` P10-Q1;\n5) `packages/attributes/src/Support/FieldSnapshot.php`;\n6) `packages/attributes/src/Internal/Registry/RegistryFieldCatalogue.php`;\n7) `packages/core/src/Enums/IdStrategy.php`;\n8) `packages/core/src/Concerns/HasConfiguredId.php`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "New definitions require explicit UUIDv7. Legacy UUIDv5\nis deterministic and flagged, never accepted for rename/evolution. Keep `code=key`;\ncanonical maps sorted recursively; snapshot stable across source order."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Constructors and enum shape are normative in §2.1. Use `Str::uuid7()`\nand a fixed documented UUIDv5 namespace; no dependency."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Reject non-v7 new ids, duplicate key/id, invalid transition; prove\nsame input gives same hash and key rename retains pinned id."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Identity/model types, compatible snapshot, module mapper and tests."
+    }
+  ]
+}

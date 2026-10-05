@@ -1,0 +1,280 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P13.6",
+  "title": "Idempotent operation invocation and replay",
+  "status": "done",
+  "summary": "Decorate the shared invoker with deterministic fingerprint, one-effect execution and\nsemantic replay for HTTP and exposed tools.",
+  "why": "`@plan/knowledge/research-P13-design.json` §5.1; D104; D105. A table alone does not prove admission order,\nhandler count or identical cross-transport outcomes.",
+  "scope": {
+    "include": [
+      "Fingerprint/scope builder; idempotent invoker decorator; HTTP key normalization;\ntool operation-key mapping; stored success/failure reconstruction; replay/conflict/in-progress errors;\nfull effect-count matrix."
+    ],
+    "exclude": [
+      "Store DDL; standalone tool idempotency policies; unsafe automatic retry;\nbulk lifecycle; exact HTTP-byte replay across media types."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/phases/P13/P13.2.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P13/P13.5.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P13/P13.1.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P12/P12.2.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P13/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P13-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D104.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D105.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/api/src/Internal/JsonCanonical.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/api/src/Dispatcher.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/api/src/Internal/GuardedToolInvoker.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P12-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/api/src/Internal/ErrorMapper.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/api/tests/Feature/ToolInvocationTest.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/api/src/Internal/IdempotentOperationInvoker.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/src/Internal/OperationFingerprint.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/src/Data/StoredOperationOutcome.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/src/Dispatcher.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/src/Internal/GuardedToolInvoker.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/src/Contracts/ReplayAuthorizer.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/src/ApiServiceProvider.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/tests/Feature/IdempotentInvocationTest.php",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Authenticate/authorize/validate before store begin. Required key missing\nfails before handler; forbidden key on query is rejected, not ignored. Scope/fingerprint exact §5.1.\nOnly owner lease invokes inner handler. Mutation and success outcome commit in one tenant\ntransaction; external effects are outbox-only. Replay validates contract hash, invokes the\nside-effect-free current-authority replay authorizer, applies denial/read pruning, and never invokes the handler.\nAmbiguous commit maps to `reconciliation_required`; never infer retry from lease expiry,\nThrowable/message, or a missing out-of-transaction terminal write."
+  ],
+  "guidance": "Decorator receives inner invoker, store, transaction boundary and replay authorizer.\nThere is no successful mutation outside the terminal-outcome transaction. Keep raw key out of logs/errors.",
+  "validation": [
+    {
+      "id": "V1",
+      "procedure": "HTTP and exposed-tool keys share one semantic outcome with one effect and current-authority pruning",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "authorization precedes store admission and auth or validation failures create no row",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "transaction rollback, persisted mapped failure and ambiguous commit reconciliation",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "API package lint, static analysis and full suite",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "PostgreSQL idempotency concurrency lane and public error contract",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Shared idempotency decorator/fingerprint, two transport key adapters and complete\nreplay/concurrency effect-count proof."
+  ],
+  "route": {
+    "class": "frontier",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-25T07:15:59Z",
+    "finished_at": "2026-09-25T07:40:57Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/codex-gpt-5.6-sol/high",
+      "effort": "high"
+    },
+    "notes": "P13.6 GREEN: shared transactional idempotency, semantic replay, current-authority projection, rollback and ambiguous-commit proof. API and PostgreSQL validation passed.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-09-25T07:40:57Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-25T07:40:57Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-25T07:40:57Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-25T07:40:57Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-25T07:40:57Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-25T07:40:57Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Decorate the shared invoker with deterministic fingerprint, one-effect execution and\nsemantic replay for HTTP and exposed tools."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`@plan/knowledge/research-P13-design.json` §5.1; D104; D105. A table alone does not prove admission order,\nhandler count or identical cross-transport outcomes."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Fingerprint/scope builder; idempotent invoker decorator; HTTP key normalization;\ntool operation-key mapping; stored success/failure reconstruction; replay/conflict/in-progress errors;\nfull effect-count matrix."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Store DDL; standalone tool idempotency policies; unsafe automatic retry;\nbulk lifecycle; exact HTTP-byte replay across media types."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/phases/P13/P13.2.json`; `@plan/phases/P13/P13.5.json`;\n`@plan/phases/P13/P13.1.json`; `@plan/phases/P12/P12.2.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/api/src/Internal/IdempotentOperationInvoker.php`;\n`packages/api/src/Internal/OperationFingerprint.php`;\n`packages/api/src/Data/StoredOperationOutcome.php`;\n`packages/api/src/Dispatcher.php`;\n`packages/api/src/Internal/GuardedToolInvoker.php`;\n`packages/api/src/Contracts/ReplayAuthorizer.php`;\n`packages/api/src/ApiServiceProvider.php`;\n`packages/api/tests/Feature/IdempotentInvocationTest.php`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P13/phase.json`; 2) `@plan/knowledge/research-P13-design.json` §5;\n3) `@plan/decisions/D104.json`; 3a) `@plan/decisions/D105.json`;\n4) `@plan/phases/P13/P13.2.json`; 5) `@plan/phases/P13/P13.5.json`;\n6) `packages/api/src/Internal/JsonCanonical.php`; 7) `packages/api/src/Dispatcher.php`;\n8) `packages/api/src/Internal/GuardedToolInvoker.php`;\n9) `@plan/knowledge/research-P12-design.json` §1–§2;\n10) `packages/api/src/Internal/ErrorMapper.php`;\n11) `packages/api/tests/Feature/ToolInvocationTest.php`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Authenticate/authorize/validate before store begin. Required key missing\nfails before handler; forbidden key on query is rejected, not ignored. Scope/fingerprint exact §5.1.\nOnly owner lease invokes inner handler. Mutation and success outcome commit in one tenant\ntransaction; external effects are outbox-only. Replay validates contract hash, invokes the\nside-effect-free current-authority replay authorizer, applies denial/read pruning, and never invokes the handler.\nAmbiguous commit maps to `reconciliation_required`; never infer retry from lease expiry,\nThrowable/message, or a missing out-of-transaction terminal write."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Decorator receives inner invoker, store, transaction boundary and replay authorizer.\nThere is no successful mutation outside the terminal-outcome transaction. Keep raw key out of logs/errors."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Same key/input over HTTP twice executes effect once. HTTP success then record/field\nrevocation then tool replay returns current denial/pruned outcome and handler count remains one.\nCrash after mutation before terminal rolls back and retry commits once; ambiguous commit returns\n`reconciliation_required` without a blind second effect; other input conflicts; concurrent request gets in-progress; validation/auth failure\ncreates no row; mapped 500 replays; contract hash mismatch fails; unknown post-effect store failure\ninside the transaction rolls back. API lint/analyse/test + P13.5 PG lane green."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Shared idempotency decorator/fingerprint, two transport key adapters and complete\nreplay/concurrency effect-count proof."
+    }
+  ]
+}

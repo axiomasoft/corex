@@ -1,0 +1,47 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D41",
+  "title": "Продуктовые правила — policy-объекты, не поля generic-Options",
+  "date": "2026-09-19",
+  "status": "accepted",
+  "decision": "1. В `corex/tenancy` кроме `TenancyOptions` вводятся три policy:\n   `ImpersonationPolicy` (`enabled`, `requireApprovedBy`),\n   `AccountLifecyclePolicy` (`trialDays`, `graceDays`, `platformDomain`),\n   `StatusGatePolicy` (`paymentRoute`, `exportRoute`, `readOnlyMethods`).\n2. Middleware и lifecycle получают policy (или `TenancyOptions`, из\n   которого policy достаётся), а не четыре вызова `config()`.\n3. `AuthOptions.panel` остаётся скаляром: одно значение, один смысл,\n   нет cross-field инварианта — отдельный `PanelPolicy` не вводится.",
+  "rationale": "Generic-bag отвечает «какие значения»; policy отвечает «какое правило».\nЧетыре ключа impersonation имеют смысл только вместе и читаются в\nнескольких местах — это A75. Один `panel` в auth не тянет класс.\nАльтернатива «все ключи tenancy в одном плоском DTO» отклонена: она\nоставляет правило в middleware.",
+  "applies_to": [
+    "P7",
+    "P7.2",
+    "P7.3"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/cursor-grok-4.6/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D41\ndate: 2026-09-19\nstatus: accepted\nitem: P7.2\nitems: [P7, P7.2, P7.3]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D41-policy--generic-Options",
+      "title": "D41 — Продуктовые правила — policy-объекты, не поля generic-Options",
+      "text": "**Actor:** plan-designer/cursor-grok-4.6/high\n**Evidence:** RAG:✅ P7-Q4 Fowler encapsulation, Microsoft Options vs\npolicy, Laravel middleware constructor injection. A75: impersonation\nчитается несколькими middleware по ключам. RAG:— `DenyImpersonatedWrites`,\n`AccountStatusGate`, `DatabaseImpersonationService`."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "1. В `corex/tenancy` кроме `TenancyOptions` вводятся три policy:\n   `ImpersonationPolicy` (`enabled`, `requireApprovedBy`),\n   `AccountLifecyclePolicy` (`trialDays`, `graceDays`, `platformDomain`),\n   `StatusGatePolicy` (`paymentRoute`, `exportRoute`, `readOnlyMethods`).\n2. Middleware и lifecycle получают policy (или `TenancyOptions`, из\n   которого policy достаётся), а не четыре вызова `config()`.\n3. `AuthOptions.panel` остаётся скаляром: одно значение, один смысл,\n   нет cross-field инварианта — отдельный `PanelPolicy` не вводится."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Generic-bag отвечает «какие значения»; policy отвечает «какое правило».\nЧетыре ключа impersonation имеют смысл только вместе и читаются в\nнескольких местах — это A75. Один `panel` в auth не тянет класс.\nАльтернатива «все ключи tenancy в одном плоском DTO» отклонена: она\nоставляет правило в middleware."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P7.2 создаёт три класса рядом с `TenancyOptions`. P7.3 переводит\nHTTP/impersonation-потребителей на policy. Провайдеры в P8 дробятся уже\nимея, что регистрировать."
+    }
+  ]
+}

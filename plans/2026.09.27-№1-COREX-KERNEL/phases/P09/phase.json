@@ -1,0 +1,53 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:phase:v1",
+  "id": "P09",
+  "title": "Планка качества и release-квалификация `1.0.0-rc.1`",
+  "design": "skeleton",
+  "goal": "> СКЕЛЕТ — не детализирован, разворачивается `design-phase: task:plan-design 2026.09.27-№1-COREX-KERNEL P09`\n\nДоводит код до D17 (PHPStan max + strict + bleedingEdge с пустым baseline, Rector, mutation MSI по зонам, Roave per package блокирующий, unused-public), финализирует docs (README каждого пакета, docs-public, upgrade-free release notes), настраивает split (`danharrin/monorepo-split-github-action`) и lockstep, metapackage, SBOM; квалифицирует `1.0.0-rc.1`. Публикация — owner-gate.\n\n> **Контракт фазы (предварительный).** Потребляет: D17, D18, D19. Скоуп — ниже; детализация, досье, примеры и маршруты — при дизайне фазы.\n\n> Phase Assurance: release; live action only under owner-gate.",
+  "context": "> СКЕЛЕТ — не детализирован, разворачивается `design-phase: task:plan-design 2026.09.27-№1-COREX-KERNEL P09`\n\nДоводит код до D17 (PHPStan max + strict + bleedingEdge с пустым baseline, Rector, mutation MSI по зонам, Roave per package блокирующий, unused-public), финализирует docs (README каждого пакета, docs-public, upgrade-free release notes), настраивает split (`danharrin/monorepo-split-github-action`) и lockstep, metapackage, SBOM; квалифицирует `1.0.0-rc.1`. Публикация — owner-gate.\n\n> **Контракт фазы (предварительный).** Потребляет: D17, D18, D19. Скоуп — ниже; детализация, досье, примеры и маршруты — при дизайне фазы.\n\n> Phase Assurance: release; live action only under owner-gate.",
+  "depends_on": [
+    "P00"
+  ],
+  "items": [],
+  "batches": [],
+  "orchestration": {
+    "strategy": "sequential"
+  },
+  "sections": [
+    {
+      "id": "P09-release--1.0.0-rc.1",
+      "title": "P09 — Планка качества и release-квалификация `1.0.0-rc.1`",
+      "text": "> **Статус дизайна:** skeleton (D21); items детализируются `task:plan-design 2026.09.27-№1-COREX-KERNEL P09` после закрытия предыдущей фазы, по фактическому коду."
+    },
+    {
+      "id": "Phase-Context",
+      "title": "Phase Context",
+      "text": "> СКЕЛЕТ — не детализирован, разворачивается `design-phase: task:plan-design 2026.09.27-№1-COREX-KERNEL P09`\n\nДоводит код до D17 (PHPStan max + strict + bleedingEdge с пустым baseline, Rector, mutation MSI по зонам, Roave per package блокирующий, unused-public), финализирует docs (README каждого пакета, docs-public, upgrade-free release notes), настраивает split (`danharrin/monorepo-split-github-action`) и lockstep, metapackage, SBOM; квалифицирует `1.0.0-rc.1`. Публикация — owner-gate.\n\n> **Контракт фазы (предварительный).** Потребляет: D17, D18, D19. Скоуп — ниже; детализация, досье, примеры и маршруты — при дизайне фазы.\n\n> Phase Assurance: release; live action only under owner-gate."
+    },
+    {
+      "id": "Scope-Included-planned",
+      "title": "Scope Included (planned)",
+      "text": "quality gates strict; docs; split/release workflow (dry-run); release notes; owner-gate публикации."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Публикация без owner-gate."
+    },
+    {
+      "id": "Dependencies",
+      "title": "Dependencies",
+      "text": "Предыдущая фаза закрыта; glossary/карты P00."
+    },
+    {
+      "id": "Items",
+      "title": "Items",
+      "text": "| ID | Title | Status | Updated |\n|:--|:--|:--|:--|"
+    },
+    {
+      "id": "Phase-Handoff",
+      "title": "Phase Handoff",
+      "text": "—"
+    }
+  ]
+}

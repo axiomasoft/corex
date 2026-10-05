@@ -1,0 +1,209 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P15.10",
+  "title": "Core semantic-zone FQCN moves",
+  "status": "done",
+  "summary": "Выполнить D88: PubSub→Messaging, audit contracts/Auditable→Audit\\\\Contracts, AuditLog→Audit\\\\Internal, Views→SavedViews, DataScopeAccessDecision→Support\\\\Data.",
+  "why": "P6 зафиксировал semantic zones, но сознательно оставил публичные FQCN moves на 1.0 rename phase.",
+  "scope": {
+    "include": [
+      "Namespace-coherent `git mv`, declarations/imports/string refs, tests, autoload/public API metadata and direct consumers for five finite groups."
+    ],
+    "exclude": [
+      "Behavior, profile composition P16, database tables/morph values, aliases and unrelated CoreX\\\\Data types."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D85",
+    "D88"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P15-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D85.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D88.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P6/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P15/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P6-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "docs/dev-doctrine.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/core/src/**",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/tests/**",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/composer.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Move only D88 groups; prove persisted morph/table identifiers unchanged; no broad namespace search/replace."
+  ],
+  "guidance": "Execute and validate one finite group at a time within the item, retaining one atomic final diff.",
+  "validation": [
+    {
+      "id": "V1",
+      "procedure": "core lint/analyse/test",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "package-graph and extension-contract",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "migration diff empty",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Five semantic-zone moves and group-by-group receipt."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-27T01:24:38Z",
+    "finished_at": "2026-09-27T01:24:38Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/grok-4.7/high",
+      "effort": "high"
+    },
+    "notes": "P15.10 D88 FQCN rename green. No alias, no migration diff. Receipt findings/P15-receipts.md.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-09-27T01:24:38Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-27T01:24:38Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-27T01:24:38Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-27T01:24:38Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Выполнить D88: PubSub→Messaging, audit contracts/Auditable→Audit\\\\Contracts, AuditLog→Audit\\\\Internal, Views→SavedViews, DataScopeAccessDecision→Support\\\\Data."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "P6 зафиксировал semantic zones, но сознательно оставил публичные FQCN moves на 1.0 rename phase."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Namespace-coherent `git mv`, declarations/imports/string refs, tests, autoload/public API metadata and direct consumers for five finite groups."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Behavior, profile composition P16, database tables/morph values, aliases and unrelated CoreX\\\\Data types."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P15-design.json`; `@plan/decisions/D85.json`; `@plan/decisions/D88.json`; `@plan/phases/P6/phase.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/core/src/**`; `packages/core/tests/**`; direct consumers; `packages/core/composer.json`; public API/PHPStan/architecture metadata."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P15/phase.json`; 2) `@plan/knowledge/research-P15-design.json`; 3) `@plan/decisions/D85.json`; 4) `@plan/decisions/D88.json`; 5) `@plan/phases/P6/phase.json`; 6) `@plan/knowledge/research-P6-design.json`; 7) `docs/dev-doctrine.md`."
+    },
+    {
+      "id": "Authority",
+      "title": "Authority",
+      "text": "[OWNER-GATE:G-API-P15] branch=`main`; scope=`P15.10 core public FQCN rename set D88`"
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Move only D88 groups; prove persisted morph/table identifiers unchanged; no broad namespace search/replace."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Execute and validate one finite group at a time within the item, retaining one atomic final diff."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "core and consumers green; strict PSR autoload; public API metadata targets only; old runtime FQCNs absent; persistence snapshots unchanged."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Five semantic-zone moves and group-by-group receipt."
+    }
+  ]
+}

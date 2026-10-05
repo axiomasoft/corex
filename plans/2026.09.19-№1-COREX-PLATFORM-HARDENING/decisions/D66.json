@@ -1,0 +1,51 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D66",
+  "title": "HTTP and exposed tools share one operation invoker",
+  "date": "2026-09-20",
+  "status": "accepted",
+  "decision": "- One transport-neutral `OperationInvoker` owns activation, authorization, field\n  policy, idempotency and exactly-once handler invocation per admitted attempt.\n- HTTP owns request parsing/status/headers/content negotiation. Tool projection owns\n  tool policy/schema/guard. Both delegate an exposed operation to the invoker.\n- Standalone tools retain the P11 `ToolExecutionGuard` path.\n- The invoker imports no HTTP request, route, status, header or media type.",
+  "rationale": "Parity cannot be proved while transports duplicate the handler seam. Routing every\ntool through HTTP would replace one coupling with another and break headless use.",
+  "applies_to": [
+    "P13",
+    "P13.2",
+    "P13.4",
+    "P13.6",
+    "P13.8",
+    "P13.9",
+    "P13.12"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/codex-gpt-5.6-sol/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D66\ndate: 2026-09-20\nstatus: accepted\nitem: P13\nitems: [P13, P13.2, P13.4, P13.6, P13.8, P13.9, P13.12]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D66-HTTP-and-exposed-tools-share-one-operation-invoker",
+      "title": "D66 — HTTP and exposed tools share one operation invoker",
+      "text": "**Actor:** plan-designer/codex-gpt-5.6-sol/high\n**Evidence:** RAG:— `Dispatcher` and `GuardedToolInvoker` currently call handlers\nindependently. The latter already distinguishes standalone tools from an operation\nprojection, so parity can be added without routing all tools through HTTP."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "- One transport-neutral `OperationInvoker` owns activation, authorization, field\n  policy, idempotency and exactly-once handler invocation per admitted attempt.\n- HTTP owns request parsing/status/headers/content negotiation. Tool projection owns\n  tool policy/schema/guard. Both delegate an exposed operation to the invoker.\n- Standalone tools retain the P11 `ToolExecutionGuard` path.\n- The invoker imports no HTTP request, route, status, header or media type."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Parity cannot be proved while transports duplicate the handler seam. Routing every\ntool through HTTP would replace one coupling with another and break headless use."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P13.2 introduces the seam and parity test. P13.6/P13.8 decorate the same invocation;\nP13.4/P13.9 remain projections."
+    }
+  ]
+}

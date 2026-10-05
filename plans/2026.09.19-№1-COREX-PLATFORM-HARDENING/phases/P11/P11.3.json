@@ -1,0 +1,273 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P11.3",
+  "title": "Runtime publication, collector freeze and refresh boundaries",
+  "status": "done",
+  "summary": "Сделать compiled snapshot единственным runtime authority, закрыть\nlate mutation entity collector и закрепить request/job/deploy refresh boundaries.",
+  "why": "`@plan/knowledge/research-P11-design.json` §6–§7; D58. `ArrayEntityRegistry::register()` сейчас\nдоступен после boot, а introspection считает второй revision hash.",
+  "scope": {
+    "include": [
+      "Validated snapshot loading; authority fingerprint propagation; entity collector\nduplicate/freeze rules; booted freeze; job memo reset/pinning; Octane deploy documentation;\nactivation epoch kept separate."
+    ],
+    "exclude": [
+      "Octane package dependency or hot reload; fleet-wide atomic cutover; tenant-specific\ncompiled files; second extension lifecycle FSM; durable stamp consumers."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/phases/P11/P11.2.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "packages/modules/src/Registry/CompiledModuleRegistry.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/modules/src/Lifecycle/DatabaseModuleLifecycle.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/knowledge/research-P11-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P11/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P11-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D58.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/modules/src/Registry/ArrayEntityRegistry.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/modules/src/ModulesServiceProvider.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/modules/src/Internal/ReadRegistryIntrospection.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/artifacts-P11-design-rag-P11-Q2-primary-sources.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/modules/src/Registry/CompiledModuleRegistry.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/modules/src/Registry/ArrayEntityRegistry.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/modules/src/ModulesServiceProvider.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/modules/src/Internal/ReadRegistryIntrospection.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/modules/src/Exceptions/RegistryFrozen.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/modules/tests/Unit/RegistryFreezeTest.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/modules/tests/Feature/RegistryIntrospectionTest.php",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "One request/job reads one snapshot. Existing `JobProcessing` boundary may\nclear memo before the job but never swaps during it. Freeze after compiled entity projection and\nmorph/audit setup. Late or duplicate registration throws before mutation. Introspection returns\nthe compiled fingerprint. Activation epoch continues to key live tenant state and never enters it."
+  ],
+  "guidance": "Preserve `EntityRegistry` read contract; `freeze()` stays implementation-side.\nHydrate from validated scalar snapshot and retain the pinned instance for the unit of work. Document\n`octane:reload`/queue restart as deployment obligations without runtime class references.",
+  "validation": [
+    {
+      "id": "V1",
+      "procedure": "duplicate and late register leave collector unchanged",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "introspection equals authority fingerprint; activation does not change it",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "job pin, next-job reload, corrupt artifact, activation off fingerprint",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "composer --working-dir=packages/modules lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "composer --working-dir=packages/modules analyse",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "composer --working-dir=packages/modules test",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Frozen entity projection, authoritative introspection, explicit worker refresh\ncontract and tests without an Octane dependency."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-24T13:53:15Z",
+    "finished_at": "2026-09-24T13:53:15Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-run/cursor-grok-4.6/high",
+      "effort": "high"
+    },
+    "notes": "P11.3 GREEN: entity collector freeze after projection, fingerprint introspection, JobProcessing pin, octane:reload documented. write-site: pre_mutation: allow · pre_final: allow",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-09-24T13:53:15Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-24T13:53:15Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-24T13:53:15Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-24T13:53:15Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-24T13:53:15Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-24T13:53:15Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-24T13:53:15Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Сделать compiled snapshot единственным runtime authority, закрыть\nlate mutation entity collector и закрепить request/job/deploy refresh boundaries."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`@plan/knowledge/research-P11-design.json` §6–§7; D58. `ArrayEntityRegistry::register()` сейчас\nдоступен после boot, а introspection считает второй revision hash."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Validated snapshot loading; authority fingerprint propagation; entity collector\nduplicate/freeze rules; booted freeze; job memo reset/pinning; Octane deploy documentation;\nactivation epoch kept separate."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Octane package dependency or hot reload; fleet-wide atomic cutover; tenant-specific\ncompiled files; second extension lifecycle FSM; durable stamp consumers."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/phases/P11/P11.2.json`;\n`packages/modules/src/Registry/CompiledModuleRegistry.php`;\n`packages/modules/src/Lifecycle/DatabaseModuleLifecycle.php`;\n`@plan/knowledge/research-P11-design-rag.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/modules/src/Registry/CompiledModuleRegistry.php`;\n`packages/modules/src/Registry/ArrayEntityRegistry.php`;\n`packages/modules/src/ModulesServiceProvider.php`;\n`packages/modules/src/Internal/ReadRegistryIntrospection.php`;\n`packages/modules/src/Exceptions/RegistryFrozen.php`;\n`packages/modules/tests/Unit/RegistryFreezeTest.php`;\n`packages/modules/tests/Feature/RegistryIntrospectionTest.php`;\n`tests/Feature/ModuleRegistryTest.php`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P11/phase.json`; 2) `@plan/knowledge/research-P11-design.json` §6–§7;\n3) `@plan/decisions/D58.json`;\n4) `packages/modules/src/Registry/CompiledModuleRegistry.php`;\n5) `packages/modules/src/Registry/ArrayEntityRegistry.php`;\n6) `packages/modules/src/ModulesServiceProvider.php`;\n7) `packages/modules/src/Internal/ReadRegistryIntrospection.php`;\n8) `@plan/knowledge/artifacts-P11-design-rag-P11-Q2-primary-sources.json`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "One request/job reads one snapshot. Existing `JobProcessing` boundary may\nclear memo before the job but never swaps during it. Freeze after compiled entity projection and\nmorph/audit setup. Late or duplicate registration throws before mutation. Introspection returns\nthe compiled fingerprint. Activation epoch continues to key live tenant state and never enters it."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Preserve `EntityRegistry` read contract; `freeze()` stays implementation-side.\nHydrate from validated scalar snapshot and retain the pinned instance for the unit of work. Document\n`octane:reload`/queue restart as deployment obligations without runtime class references."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Tests prove duplicate and late registration leave state/morph map unchanged; two\nreads inside a job are pinned while next job reloads; corrupt artifact fails; introspection equals\nauthority fingerprint; activation changes do not change fingerprint; modules/root feature checks."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Frozen entity projection, authoritative introspection, explicit worker refresh\ncontract and tests without an Octane dependency."
+    }
+  ]
+}

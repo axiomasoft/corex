@@ -1,0 +1,51 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D57",
+  "title": "Point-specific identity/order и один canonical fingerprint",
+  "date": "2026-09-20",
+  "status": "accepted",
+  "decision": "D5 заменяется этим полным контрактом:\n\n- каждая point имеет поимённую identity из `@plan/knowledge/research-P11-design.json` §2;\n- duplicate identity отвергается до projection; диагностика называет\n  обоих owners;\n- replacement только через manifest directive target→replacement в той же\n  point; target и replacement существуют, replacement принадлежит автору,\n  graph ацикличен;\n- default order — id ASC; точка с declared priority идёт `priority DESC,\n  id ASC`; `menu.after` идёт stable topological sort с id ASC frontier;\n- fingerprint — SHA-256 от canonical `corex-registry/1`: schema/compiler\n  version, module name/version/reference, normalized effective declarations и replacement\n  provenance;\n- timestamp, host path, tenant id, activation epoch и insertion/filesystem order в hash не\n  входят;\n- cache artifact с неизвестной schema, missing fingerprint или hash mismatch\n  не используется.",
+  "rationale": "Без point-specific identity общий `priority` ломает естественную семантику\nmenu/API/routes. Без module references два dev-build с одинаковой версией\nмогут дать один fingerprint. Без canonical bytes hash меряет порядок\nобхода, а не смысл snapshot.",
+  "applies_to": [
+    "P11",
+    "P11.1",
+    "P11.2",
+    "P11.3",
+    "P13"
+  ],
+  "supersedes": [
+    "D5"
+  ],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/codex-gpt-5.6-sol/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D57\ndate: 2026-09-20\nstatus: accepted\nitem: P11\nitems: [P11, P11.1, P11.2, P11.3, P13]\nsupersedes: [D5]\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D57-Point-specific-identity-order-canonical-fingerprint",
+      "title": "D57 — Point-specific identity/order и один canonical fingerprint",
+      "text": "**Actor:** plan-designer/codex-gpt-5.6-sol/high\n**Evidence:** RAG:— ни один из восьми extenders не имеет общего\n`priority`; `Menu` уже объявляет `afterHandle`; API и tool имеют свои\nsemantic identities; `InstalledPackages` сейчас теряет versions/references.\nRAG:✅ P11-Q1/Q2: Symfony подтверждает compile-before-use и ordering\nкомпиляционных шагов, но не задаёт identity policy приложения."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "D5 заменяется этим полным контрактом:\n\n- каждая point имеет поимённую identity из `@plan/knowledge/research-P11-design.json` §2;\n- duplicate identity отвергается до projection; диагностика называет\n  обоих owners;\n- replacement только через manifest directive target→replacement в той же\n  point; target и replacement существуют, replacement принадлежит автору,\n  graph ацикличен;\n- default order — id ASC; точка с declared priority идёт `priority DESC,\n  id ASC`; `menu.after` идёт stable topological sort с id ASC frontier;\n- fingerprint — SHA-256 от canonical `corex-registry/1`: schema/compiler\n  version, module name/version/reference, normalized effective declarations и replacement\n  provenance;\n- timestamp, host path, tenant id, activation epoch и insertion/filesystem order в hash не\n  входят;\n- cache artifact с неизвестной schema, missing fingerprint или hash mismatch\n  не используется."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Без point-specific identity общий `priority` ломает естественную семантику\nmenu/API/routes. Без module references два dev-build с одинаковой версией\nмогут дать один fingerprint. Без canonical bytes hash меряет порядок\nобхода, а не смысл snapshot."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "`ReadRegistryIntrospection` перестаёт иметь свой revision algorithm. P13 пинит\nupstream registry fingerprint в API profile вместо копирования declarations."
+    }
+  ]
+}

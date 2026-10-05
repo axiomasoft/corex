@@ -1,0 +1,40 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D130",
+  "title": "G-API-P15 for the P15.1 modules FQCN set",
+  "date": "2026-09-26",
+  "status": "accepted",
+  "decision": "[OWNER-GRANT:G-API-P15] branch=`main`; scope=`P15.1 public modules FQCN rename set`; owner-message=`@plan/brief.json#invocation-p151-grok`",
+  "rationale": "The owner authorized this Grok session to apply the declared P15.1 public modules rename. Composer module ids, `corex:modules:why`, and `mod_*` stay unchanged.",
+  "applies_to": [
+    "P15.1"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "owner / human, recorded by plan-exec / grok-4.7/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D130\ndate: 2026-09-26\nstatus: accepted\nitem: P15.1\nitems: [P15.1]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D130-G-API-P15-for-the-P15.1-modules-FQCN-set",
+      "title": "D130 — G-API-P15 for the P15.1 modules FQCN set",
+      "text": "**Actor:** owner / human, recorded by plan-exec / grok-4.7/high\n\n**Evidence:** owner message «разрешаю делать на grok, делай» after the P15.1 stop on `AUTHORITY_BOUNDARY`."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "[OWNER-GRANT:G-API-P15] branch=`main`; scope=`P15.1 public modules FQCN rename set`; owner-message=`@plan/brief.json#invocation-p151-grok`"
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "The owner authorized this Grok session to apply the declared P15.1 public modules rename. Composer module ids, `corex:modules:why`, and `mod_*` stay unchanged."
+    }
+  ]
+}

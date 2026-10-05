@@ -1,0 +1,17 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P05-header-fix-owner-direction",
+  "title": "Owner direction — Routing header and P05.1/P05.2 admission (2026-10-02)",
+  "sections": [
+    {
+      "id": "Owner-direction-Routing-header-and-P05.1-P05.2-admission-2026-10-02",
+      "title": "Owner direction — Routing header and P05.1/P05.2 admission (2026-10-02)",
+      "text": "Дословное сообщение владельца в сессии `19e0762c-b7c1-4622-88a4-6a1f538ece3c` (после отказа `plan-work.py prepare`, Task 0.26.2):\n\n> в skm в roadmap/ пропиши эту проблему, назавния заголовков, чтобы всегда были на английском, но названия на другом языке не должны быть причиной остановки. Исправь план в ручно режиме, чтобы не было припятствий для выполнения /task:plan-run 2026.09.27-№1-COREX-KERNEL P05.1 P05.2"
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P05-header-fix/owner-direction.md",
+    "sha256": "d907b23a2a2fb34c7299e3b716846d7f69db85231da25f69b835799fd71bde16"
+  }
+}

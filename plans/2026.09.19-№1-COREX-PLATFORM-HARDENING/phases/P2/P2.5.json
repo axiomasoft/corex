@@ -1,0 +1,280 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P2.5",
+  "title": "Пер-классовые вердикты и Core Litmus Test",
+  "status": "done",
+  "summary": "Произвести `artifacts/architecture/verdicts.csv` — суждение\n`location` + `surface` + совместимое поле `verdict` на каждый тип из `files.csv`,\nс обоснованием по правилам §7, включая шесть условий Litmus для `corex/core`.",
+  "why": "A104 требует закрытый набор KEEP/MOVE/…/PUBLIC/INTERNAL, но класть его\nв `files.csv` запрещено D15: повторный прогон сканера затёр бы интерпретацию.\n`RAG:—` формализации Litmus в дереве нет (A29). P6 читает этот файл как единственное\nразрешение на перенос класса. Текст аудита не копируется — правила переписаны в\n`@plan/knowledge/research-P2-design.json` §7.",
+  "scope": {
+    "include": [
+      "команда `verdicts` в CLI; `VerdictRules.php`;\n`verdicts.csv`; append в receipt. Заполнение `suggested_*` **только** в этом\nCSV."
+    ],
+    "exclude": [
+      "любое перемещение или переименование кода; правка `files.csv`;\nприменение реестра переименований (P15); вынос зон ядра (P6); вердикт как\nразрешение «сделать сейчас»."
+    ]
+  },
+  "depends_on": [
+    "P2.1",
+    "P2.2",
+    "P1.3"
+  ],
+  "decisions": [
+    "D8"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P2-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "files.csv",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "symbols.csv",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "graphs/namespace-import.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "docs/architecture/rename-registry.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/knowledge/research-P1-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "docs/architecture/taxonomy.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "P1-design.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P2/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D15.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D8.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/artifacts/architecture/files.csv",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "package=corex/core",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/artifacts/architecture/graphs/namespace-import.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-00-baseline-metrics.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/findings-audit-verdicts.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "scripts/architecture/bin/inventory.php",
+      "change": "any"
+    },
+    {
+      "path": "scripts/architecture/src/VerdictRules.php",
+      "change": "any"
+    },
+    {
+      "path": "@plan/artifacts/architecture/verdicts.csv",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P2-inventory-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Правила §7.1–§7.4 применяются без добавления новых\nпричин `MOVE`. Litmus — только к `corex/core`. Пункт 5 Litmus при\n`unresolved` **не** толкает в `MOVE` в одиночку. `verdict` вычисляется формулой\n§7.4. `files.csv` не перезаписывается (проверка Validation). `DELETE` и `MOVE` —\nкандидаты в receipt-сводке, не действия. `reason` — одно предложение на русском."
+  ],
+  "guidance": "Таблицы §7.2 и §7.3 — прямой match в коде, первое сработавшее.\nДля Litmus п.1 считать уникальные `from` в import-графе, чьё ребро ведёт в\n`corex/core` и чей файл ссылается на этот `symbol` (если граф не несёт\nper-symbol — считать per-package: ≥3 пакета-импортёра всего `core`, иначе\nper-file пересечение `cross_package_imports`; выбранный метод записать в\n`reason` один раз в шапке receipt). `suggested_namespace` при `MOVE` из `core` —\n`CoreX\\<Zone>` по `zone_or_context`, не новый composer-пакет (D8).",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "rg \"^corex/core,\" verdicts.csv | rg \",MOVE,\"",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "git diff --stat -- 'packages/' 'docs/'",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "verdicts rows=files rows",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "files.csv cmp unchanged",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "core MOVE list non-empty (27)",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "packages/docs diff empty",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "`verdicts.csv`; append в receipt со сводкой вердиктов и\nсписком `MOVE` для `corex/core`."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "medium"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-21T09:40:00Z",
+    "finished_at": "2026-09-21T09:45:00Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/cursor-composer-2.5/medium",
+      "effort": "medium"
+    },
+    "notes": "P2.5 GREEN: VerdictRules, verdicts.csv 888 rows, 27 core MOVE, files.csv unchanged, lint green",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-21T09:45:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-21T09:45:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-21T09:45:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-21T09:45:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-21T09:45:00Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Произвести `artifacts/architecture/verdicts.csv` — суждение\n`location` + `surface` + совместимое поле `verdict` на каждый тип из `files.csv`,\nс обоснованием по правилам §7, включая шесть условий Litmus для `corex/core`."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "A104 требует закрытый набор KEEP/MOVE/…/PUBLIC/INTERNAL, но класть его\nв `files.csv` запрещено D15: повторный прогон сканера затёр бы интерпретацию.\n`RAG:—` формализации Litmus в дереве нет (A29). P6 читает этот файл как единственное\nразрешение на перенос класса. Текст аудита не копируется — правила переписаны в\n`@plan/knowledge/research-P2-design.json` §7."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "команда `verdicts` в CLI; `VerdictRules.php`;\n`verdicts.csv`; append в receipt. Заполнение `suggested_*` **только** в этом\nCSV."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "любое перемещение или переименование кода; правка `files.csv`;\nприменение реестра переименований (P15); вынос зон ядра (P6); вердикт как\nразрешение «сделать сейчас»."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P2-design.json` §7; `files.csv` и `symbols.csv` (P2.1);\n`graphs/namespace-import.json` (P2.2); `docs/architecture/rename-registry.md`\n(после исполнения P1.3; до стадии 3 — `@plan/knowledge/research-P1-design.json` §5 как источник\nимён); `docs/architecture/taxonomy.md` / `P1-design.md` §3.3."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/scripts/architecture/bin/inventory.php`; `plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/scripts/architecture/src/VerdictRules.php`; `plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/architecture/verdicts.csv`; `@plan/knowledge/findings-P2-inventory-receipts.json`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P2/phase.json`; 2) `@plan/knowledge/research-P2-design.json` §0, §7; 3) `@plan/decisions/D15.json`; 4) `@plan/decisions/D8.json`; 5) `artifacts/architecture/files.csv` (заголовок + строки `package=corex/core`, первые 20); 6) `artifacts/architecture/graphs/namespace-import.json`; 7) `@plan/knowledge/research-P1-design.json` §5 (реестр имён) и §3.3; 8) `@plan/knowledge/research-00-baseline-metrics.json` §1 (объём `core` = 109); 9) `@plan/knowledge/findings-audit-verdicts.json` A29, A104."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Правила §7.1–§7.4 применяются без добавления новых\nпричин `MOVE`. Litmus — только к `corex/core`. Пункт 5 Litmus при\n`unresolved` **не** толкает в `MOVE` в одиночку. `verdict` вычисляется формулой\n§7.4. `files.csv` не перезаписывается (проверка Validation). `DELETE` и `MOVE` —\nкандидаты в receipt-сводке, не действия. `reason` — одно предложение на русском."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Таблицы §7.2 и §7.3 — прямой match в коде, первое сработавшее.\nДля Litmus п.1 считать уникальные `from` в import-графе, чьё ребро ведёт в\n`corex/core` и чей файл ссылается на этот `symbol` (если граф не несёт\nper-symbol — считать per-package: ≥3 пакета-импортёра всего `core`, иначе\nper-file пересечение `cross_package_imports`; выбранный метод записать в\n`reason` один раз в шапке receipt). `suggested_namespace` при `MOVE` из `core` —\n`CoreX\\<Zone>` по `zone_or_context`, не новый composer-пакет (D8)."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Число строк `verdicts.csv` = числу строк `files.csv` минус\nзаголовок. `files.csv` не изменился (`cmp` со копией до прогона или git).\nНи одна строка не имеет пустого `verdict`. Сводка receipt: счётчики каждого\n`location` и `surface`. `rg \"^corex/core,\" verdicts.csv | rg \",MOVE,\"` —\nсписок кандидатов P6, не пустой или явно «Litmus никого не сдвинул» с\nобъяснением. `git diff --stat -- 'packages/' 'docs/'` пуст."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "`verdicts.csv`; append в receipt со сводкой вердиктов и\nсписком `MOVE` для `corex/core`."
+    }
+  ]
+}

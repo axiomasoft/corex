@@ -1,0 +1,305 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P4.9",
+  "title": "Часы PSR-20: `psr/clock`, `SystemClock`, `FrozenClock`, `LaravelClock`",
+  "status": "done",
+  "summary": "Ввести в ядро инъектируемый источник времени: объявить `psr/clock` в\n`packages/core/composer.json`, добавить три реализации в `CoreX\\Support\\Time` и\nпривязать `Psr\\Clock\\ClockInterface` к `LaravelClock`.",
+  "why": "N01/RUN-004: инъектируемых часов в ядре нет, время берётся `now()` в\n151 месте, durable-логика недетерминирована и непроверяема. `RAG:✅` P4-Q1:\nсобственный интерфейс для «прочитать текущее время» не вводится — это ровно то,\nчто стандартизирует PSR-20 (D20); и заморозка Carbon не влияет на инъектированные\nчасы, поэтому дефолтом обязан быть адаптер, который её видит.",
+  "scope": {
+    "include": [
+      "`require` и `provide` в `packages/core/composer.json`; три\nкласса по §7.2; `singleton`-привязка контракта; тесты трёх реализаций, включая\nпроверку, что `LaravelClock` видит `travelTo()`; CHANGELOG; receipt с выводом\n`composer why psr/clock` **до** правки."
+    ],
+    "exclude": [
+      "замена любого вызова `now()` (P4.10); монотонные часы;\n`Carbon` в сигнатурах — контракт возвращает `DateTimeImmutable`; собственный\nинтерфейс `CoreX\\Contracts\\Clock` (отклонён D20); изменения в других пакетах;\n`corex/core` не начинает зависеть от `symfony/clock`."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D20"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P4-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/findings-audit-verdicts.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/knowledge/research-00-baseline-metrics.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P4/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P4-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D20.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/composer.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/CoreServiceProvider.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Data/Data/RecordRef.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/core/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Time/Laravel/SystemClock.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Time/Testing/FrozenClock.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Time/Laravel/LaravelClock.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/CoreServiceProvider.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/tests/Unit/ClockTest.php",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P4-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Код §7.2 переносится дословно. Перед правкой\n`composer.json` выполняется `composer why psr/clock`; его вывод (ожидается\n`nesbot/carbon` и `symfony/clock`) попадает в receipt — это доказательство, что\nновых устанавливаемых пакетов не появляется. После правки\n`composer update --dry-run psr/clock` не должен показывать установку новых\nпакетов; расхождение — стоп и эскалация, а не «всё равно добавим».\n`FrozenClock` кладётся в `Support/Time`, а не в `core/src/Testing`: последний\nуже назван дефектом production-autoload (N09) и переезжает в P6.\nПривязка — `singleton`, потому что `LaravelClock` не хранит времени и читает\n`DateFactory` в момент вызова."
+  ],
+  "guidance": "Готовые три класса, фрагмент `composer.json` и привязка —\n`@plan/knowledge/research-P4-design.json` §7.1–§7.2. Тесты: `SystemClock` возвращает UTC;\n`FrozenClock::advance()` сдвигает ровно на интервал; `LaravelClock` под\n`$this->travelTo('2026-01-01 00:00:00')` возвращает именно этот момент — это и\nесть проверка того, ради чего он выбран дефолтом.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer test",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "composer analyse",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "composer lint:check",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "composer validate --strict",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "composer why psr/clock",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "cmd": "composer update --dry-run",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "composer why psr/clock carbon+symfony",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "composer update --dry-run 0 installs",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "procedure": "packages/core composer test 44 incl ClockTest",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "procedure": "packages/core composer analyse",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V11",
+      "procedure": "packages/core composer lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V12",
+      "procedure": "packages/core composer validate --strict",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "объявленная зависимость `psr/clock` и `provide`\n`psr/clock-implementation`; три реализации; привязка контракта; три теста;\nстрока CHANGELOG; блок receipt'а, доказывающий отсутствие новых устанавливаемых\nпакетов."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "required",
+    "status": "complete"
+  },
+  "result": {
+    "started_at": "2026-09-21T15:15:00Z",
+    "finished_at": "2026-09-21T15:18:00Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/cursor-composer-2.5/high",
+      "effort": "high"
+    },
+    "notes": "P4.9 GREEN: psr/clock provide, SystemClock/FrozenClock/LaravelClock, singleton bind, ClockTest travelTo, receipt §P4.9",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-21T15:18:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-21T15:18:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-09-21T15:18:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-09-21T15:18:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V11",
+        "exit": 0,
+        "at": "2026-09-21T15:18:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V12",
+        "exit": 0,
+        "at": "2026-09-21T15:18:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-21T15:18:00Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Ввести в ядро инъектируемый источник времени: объявить `psr/clock` в\n`packages/core/composer.json`, добавить три реализации в `CoreX\\Support\\Time` и\nпривязать `Psr\\Clock\\ClockInterface` к `LaravelClock`."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "N01/RUN-004: инъектируемых часов в ядре нет, время берётся `now()` в\n151 месте, durable-логика недетерминирована и непроверяема. `RAG:✅` P4-Q1:\nсобственный интерфейс для «прочитать текущее время» не вводится — это ровно то,\nчто стандартизирует PSR-20 (D20); и заморозка Carbon не влияет на инъектированные\nчасы, поэтому дефолтом обязан быть адаптер, который её видит."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "`require` и `provide` в `packages/core/composer.json`; три\nкласса по §7.2; `singleton`-привязка контракта; тесты трёх реализаций, включая\nпроверку, что `LaravelClock` видит `travelTo()`; CHANGELOG; receipt с выводом\n`composer why psr/clock` **до** правки."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "замена любого вызова `now()` (P4.10); монотонные часы;\n`Carbon` в сигнатурах — контракт возвращает `DateTimeImmutable`; собственный\nинтерфейс `CoreX\\Contracts\\Clock` (отклонён D20); изменения в других пакетах;\n`corex/core` не начинает зависеть от `symfony/clock`."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P4-design.json` §7.1–§7.2; `@plan/knowledge/findings-audit-verdicts.json` N01;\n`@plan/knowledge/research-00-baseline-metrics.json` §2 и §4; D20."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/core/composer.json`; `packages/core/src/Support/Time/SystemClock.php`; `packages/core/src/Support/Time/FrozenClock.php`; `packages/core/src/Support/Time/LaravelClock.php`; `packages/core/src/CoreServiceProvider.php`; `packages/core/tests/Unit/ClockTest.php`; `CHANGELOG.md`; `@plan/knowledge/findings-P4-receipts.json`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P4/phase.json`; 2) `@plan/knowledge/research-P4-design.json` §0, §7.1, §7.2; 3) `@plan/knowledge/research-P4-design-rag.json` §1 и §4 (P4-Q1); 4) `@plan/decisions/D20.json`; 5) `packages/core/composer.json`; 6) `packages/core/src/CoreServiceProvider.php`; 7) `packages/core/src/Support/Data/RecordRef.php` (образец стиля `Support`)."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Код §7.2 переносится дословно. Перед правкой\n`composer.json` выполняется `composer why psr/clock`; его вывод (ожидается\n`nesbot/carbon` и `symfony/clock`) попадает в receipt — это доказательство, что\nновых устанавливаемых пакетов не появляется. После правки\n`composer update --dry-run psr/clock` не должен показывать установку новых\nпакетов; расхождение — стоп и эскалация, а не «всё равно добавим».\n`FrozenClock` кладётся в `Support/Time`, а не в `core/src/Testing`: последний\nуже назван дефектом production-autoload (N09) и переезжает в P6.\nПривязка — `singleton`, потому что `LaravelClock` не хранит времени и читает\n`DateFactory` в момент вызова."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Готовые три класса, фрагмент `composer.json` и привязка —\n`@plan/knowledge/research-P4-design.json` §7.1–§7.2. Тесты: `SystemClock` возвращает UTC;\n`FrozenClock::advance()` сдвигает ровно на интервал; `LaravelClock` под\n`$this->travelTo('2026-01-01 00:00:00')` возвращает именно этот момент — это и\nесть проверка того, ради чего он выбран дефолтом."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "`composer test` пакета `core` зелёный, включая тест\n`travelTo`. `composer analyse`, `composer lint:check` зелёные.\n`composer validate --strict` для `packages/core/composer.json` зелёный.\nReceipt содержит вывод `composer why psr/clock` и `composer update --dry-run`."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "объявленная зависимость `psr/clock` и `provide`\n`psr/clock-implementation`; три реализации; привязка контракта; три теста;\nстрока CHANGELOG; блок receipt'а, доказывающий отсутствие новых устанавливаемых\nпакетов."
+    }
+  ]
+}

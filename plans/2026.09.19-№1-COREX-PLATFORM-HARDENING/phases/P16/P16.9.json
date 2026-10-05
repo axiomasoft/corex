@@ -1,0 +1,233 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P16.9",
+  "title": "Panels research verdict and no-move proof",
+  "status": "done",
+  "summary": "Materialize the five-ecosystem naming result and prove that panels remains profile A without structural change.",
+  "why": "A69 and D93; the 11-file headless descriptor catalogue is not equivalent to a framework admin shell, Screen or Resource package.",
+  "scope": {
+    "include": [
+      "README terminology/boundaries, profile receipt and references to bounded external evidence."
+    ],
+    "exclude": [
+      "Package/FQCN rename, source directory moves, routes/UI/rendering, new Page/Resource/Dashboard concepts and dependency changes."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D93"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P16-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D93.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/panels/README.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P16/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P16-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/panels/composer.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/panels/README.md",
+      "change": "any"
+    },
+    {
+      "path": "docs/reference.md",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P16-profile-a-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Cite official sources as design provenance; do not copy framework code or imply feature parity; source tree remains byte-identical."
+  ],
+  "guidance": "Clarify what Panel means and explicitly list non-ownership; record file count and STR-004 rationale.",
+  "validation": [
+    {
+      "id": "V1",
+      "procedure": "packages/panels src digest unchanged",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "packages/panels lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "packages/panels analyse",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "packages/panels test 12 passed",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "five ecosystems named in receipt",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "docs/reference.md panel vocabulary URLs",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Clarified panels README, docs provenance and no-move profile-A receipt."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-27T05:26:00Z",
+    "finished_at": "2026-09-27T05:28:00Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/cursor-composer-2.5/direct"
+    },
+    "notes": "P16.9 GREEN: README boundaries + P16-profile-a-receipts; zero src/ edits; D93 keep corex/panels profile A. panels composer update corex/modules for P16.7 autoload in local vendor.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-09-27T05:28:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-27T05:28:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-27T05:28:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-27T05:28:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-27T05:28:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-27T05:28:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-27T05:28:00Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Materialize the five-ecosystem naming result and prove that panels remains profile A without structural change."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "A69 and D93; the 11-file headless descriptor catalogue is not equivalent to a framework admin shell, Screen or Resource package."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "README terminology/boundaries, profile receipt and references to bounded external evidence."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Package/FQCN rename, source directory moves, routes/UI/rendering, new Page/Resource/Dashboard concepts and dependency changes."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P16-design-rag.json`; `@plan/decisions/D93.json`; `packages/panels/README.md`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/panels/README.md`; `docs/reference.md`; `@plan/knowledge/findings-P16-profile-a-receipts.json`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P16/phase.json`; 2) `@plan/knowledge/research-P16-design.json` §9; 3) `@plan/knowledge/research-P16-design-rag.json`; 4) `@plan/decisions/D93.json`; 5) `packages/panels/README.md`; 6) `packages/panels/composer.json`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Cite official sources as design provenance; do not copy framework code or imply feature parity; source tree remains byte-identical."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Clarify what Panel means and explicitly list non-ownership; record file count and STR-004 rationale."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "panels source digest unchanged; package lint/analyse/test green; docs links valid; no new directory/class/dependency; receipt names all five ecosystems."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Clarified panels README, docs provenance and no-move profile-A receipt."
+    }
+  ]
+}

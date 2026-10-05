@@ -1,0 +1,327 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P5.7",
+  "title": "Порт `MessagePublisher` и команда relay с кооперативной остановкой",
+  "status": "done",
+  "summary": "Ввести контракт `CoreX\\Messaging\\Contracts\\MessagePublisher` с\ndurable-ack semantics, явную host binding validation, команду\n`corex:messaging:relay` с остановкой по `SIGTERM`/`SIGINT` и регистрацию обоих.",
+  "why": "N05: без запускаемого relay цепочка «изменение домена → событие → потребитель»\nостаётся незамкнутой. `RAG:✅` P5-Q5: форма кооперативной остановки — `pcntl_async_signals(true)`,\nобработчик сигнала только выставляет флаг, проверка флага **между** сообщениями, выход по\nбезопасной границе; непрерываемое блокирующее ожидание запрещено; сигнал не доказывает,\nчто публикация не дошла. `RAG:—` В дереве уже есть единственный канал межпроцессных\nуведомлений ядра — `CoreX\\Contracts\\PubSub` с тремя драйверами и запретом `LISTEN`/`NOTIFY`\n(R-15); второй транспорт вводить нельзя. Порт нужен, чтобы P14 подставила webhook-доставку,\nа P10 — поисковую проекцию, не переписывая relay (§6.1).",
+  "scope": {
+    "include": [
+      "контракт порта, где success = durable broker/store\nacceptance; команда по §6.2; регистрация команды в `CoreServiceProvider::boot()`;\nпроверка host binding без lossy default; тесты durable/unbound/lossy и команды;\nстрока в `CHANGELOG.md`;\nreceipt."
+    ],
+    "exclude": [
+      "webhook-доставка, подписи и ротация секретов (P14); поисковая проекция\n(P10); второй транспорт помимо существующего `PubSub`; изменение любого файла\n`packages/core/src/PubSub/**` (D31, перенос — P6); планировщик по многим аккаунтам (P9,\nD27); механика захвата и отметки — она в P5.6; изменение `config/corex.php` и\n`Support/Config.php` (P5.4)."
+    ]
+  },
+  "depends_on": [
+    "P5.3",
+    "P5.6"
+  ],
+  "decisions": [
+    "D24",
+    "D25",
+    "D31",
+    "D99"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P5-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P5-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/findings-audit-verdicts.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P5/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D25.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D31.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Messaging/Contracts/PubSub.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Messaging/Contracts/OutboxRelay.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Messaging/Data/MessageEnvelope.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/wakeup/src/Internal/Commands/SweepWakeups.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/PrunePubSubMessages.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/CoreServiceProvider.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D99.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/core/src/Messaging/Contracts/MessagePublisher.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/Commands/RelayOutbox.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/CoreServiceProvider.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/tests/Feature/MessagePublisherTest.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/tests/Pg/OutboxRelayCommandTest.php",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P5-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Код §6.2 с коррекцией D99. Core не связывает\n`PubSub`/null/Redis PUBLISH с `MessagePublisher`; отсутствующая или не-durable\nреализация отказывает до lease/markPublished. Три требования §6.2 обязаны быть\nпрочитаны до правки: арендованное, но не опубликованное при остановке сообщение **не**\nосвобождается явно — его подберёт следующий проход по истёкшей аренде, и явный «возврат\nпри остановке» ввёл бы четвёртый путь смены статуса; `OutboxLeaseLost` **не** считается\nотказом публикации и не ведёт к `releaseWithBackoff()`; `sleep()` вызывается только между\nпустыми проходами и только в цикле. Обработчик сигнала выставляет **только** флаг — ни\nодного обращения к БД, логу или выводу внутри него. Канал публикации берётся из объявления\nконтракта, а не из конверта: назначение — свойство контракта. Порядок ключей публикуемого\nмассива фиксирован и объявлен частью контракта в докблоке — по нему потребитель может\nсчитать отпечаток, поэтому перестановка ключей это ломающее изменение, а не форматирование\n(та же причина, что в `ArrayDataScopeCodec` P4.8). Команда регистрируется в\n`boot()` внутри `runningInConsole()`, рядом с существующими `PruneAuditLog` и\n`PrunePubSubMessages`. Привязка порта — `scoped`. Ни один файл вне `packages/core` не\nтрогается; каталог `packages/core/src/PubSub/` не изменяется вовсе."
+  ],
+  "guidance": "Готовые контракт, реализация и команда — `@plan/knowledge/research-P5-design.json` §6.1–§6.2.\nОбоснование отдельного порта («шов, названный заранее, а не прорубленный потом») — §6.1,\nпервые два абзаца. Состав тестов — §6.3: четыре случая публикатора в sqlite-лейне, три\nслучая команды в pg-лейне. Тест §6.3(7) требует публикатора-фикстуры, бросающего\n`OutboxLeaseLost`; его форма — тот же `RecordingPublisher`, который окончательно\nоформляется в P5.12, здесь достаточно локального анонимного класса в тесте.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer test",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "composer test:pg",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "composer analyse",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "composer lint:check",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "git diff --stat -- 'packages/core/src/PubSub/'",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "cmd": "php artisan corex:messaging:relay --once",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "packages/core composer test 75 sqlite MessagePublisher 4 cases",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "packages/core composer test:pg OutboxRelayCommand 4 cases + full pg 22",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "procedure": "packages/core composer analyse+lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "procedure": "git diff PubSub empty D31",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V11",
+      "procedure": "corex:messaging:relay --once exit 0",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V12",
+      "procedure": "receipt P5.7 D99 binding + validation output",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "durable-ack порт публикации без lossy default; host binding\nvalidation; команда relay с кооперативной\nостановкой; регистрация и привязка; семь тестовых случаев; строка `CHANGELOG.md`; блок\nreceipt'а, подтверждающий неизменность каталога `PubSub/`."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "required",
+    "status": "complete"
+  },
+  "result": {
+    "started_at": "2026-09-21T17:20:00Z",
+    "finished_at": "2026-09-21T17:35:00Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/cursor-composer-2.5/high",
+      "effort": "high"
+    },
+    "notes": "P5.7 GREEN: MessagePublisher/DurableMessagePublisher, RelayOutbox+SIGTERM, host binding fail-closed, §6.3 tests, PubSub/ unchanged",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-21T17:35:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-21T17:35:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-09-21T17:35:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-09-21T17:35:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V11",
+        "exit": 0,
+        "at": "2026-09-21T17:35:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V12",
+        "exit": 0,
+        "at": "2026-09-21T17:35:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-21T17:35:00Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Ввести контракт `CoreX\\Messaging\\Contracts\\MessagePublisher` с\ndurable-ack semantics, явную host binding validation, команду\n`corex:messaging:relay` с остановкой по `SIGTERM`/`SIGINT` и регистрацию обоих."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "N05: без запускаемого relay цепочка «изменение домена → событие → потребитель»\nостаётся незамкнутой. `RAG:✅` P5-Q5: форма кооперативной остановки — `pcntl_async_signals(true)`,\nобработчик сигнала только выставляет флаг, проверка флага **между** сообщениями, выход по\nбезопасной границе; непрерываемое блокирующее ожидание запрещено; сигнал не доказывает,\nчто публикация не дошла. `RAG:—` В дереве уже есть единственный канал межпроцессных\nуведомлений ядра — `CoreX\\Contracts\\PubSub` с тремя драйверами и запретом `LISTEN`/`NOTIFY`\n(R-15); второй транспорт вводить нельзя. Порт нужен, чтобы P14 подставила webhook-доставку,\nа P10 — поисковую проекцию, не переписывая relay (§6.1)."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "контракт порта, где success = durable broker/store\nacceptance; команда по §6.2; регистрация команды в `CoreServiceProvider::boot()`;\nпроверка host binding без lossy default; тесты durable/unbound/lossy и команды;\nстрока в `CHANGELOG.md`;\nreceipt."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "webhook-доставка, подписи и ротация секретов (P14); поисковая проекция\n(P10); второй транспорт помимо существующего `PubSub`; изменение любого файла\n`packages/core/src/PubSub/**` (D31, перенос — P6); планировщик по многим аккаунтам (P9,\nD27); механика захвата и отметки — она в P5.6; изменение `config/corex.php` и\n`Support/Config.php` (P5.4)."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "результат P5.3 (реестр контрактов — источник канала), P5.6 (`OutboxRelay`,\n`LeasedMessage`, `OutboxLeaseLost`); `@plan/knowledge/research-P5-design.json` §0, §6;\n`@plan/knowledge/research-P5-design-rag.json` §1 (P5-Q5); `@plan/knowledge/findings-audit-verdicts.json` A91, N05; решения\nD24, D25, D31, D99."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/core/src/Messaging/Contracts/MessagePublisher.php`; `packages/core/src/Messaging/Commands/RelayOutbox.php`; `packages/core/src/CoreServiceProvider.php`; `packages/core/tests/Feature/MessagePublisherTest.php`; `packages/core/tests/Pg/OutboxRelayCommandTest.php`; `CHANGELOG.md`; `@plan/knowledge/findings-P5-receipts.json`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P5/phase.json`; 2) `@plan/knowledge/research-P5-design.json` §0, §5.1, §6; 3) `@plan/knowledge/research-P5-design-rag.json` §1 (P5-Q5); 4) `@plan/decisions/D25.json`; 5) `@plan/decisions/D31.json`; 6) `packages/core/src/Contracts/PubSub.php`; 7) `packages/core/src/Messaging/Contracts/OutboxRelay.php` (результат P5.6); 8) `packages/core/src/Messaging/Data/MessageEnvelope.php`; 9) `packages/wakeup/src/Commands/SweepWakeups.php` (образец команды пакета: валидация опции, работа на текущем контексте, формат вывода); 10) `packages/core/src/PubSub/PrunePubSubMessages.php` (образец докблока команды с указанием на планировщик); 11) `packages/core/src/CoreServiceProvider.php`; 12) `@plan/decisions/D99.json`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Код §6.2 с коррекцией D99. Core не связывает\n`PubSub`/null/Redis PUBLISH с `MessagePublisher`; отсутствующая или не-durable\nреализация отказывает до lease/markPublished. Три требования §6.2 обязаны быть\nпрочитаны до правки: арендованное, но не опубликованное при остановке сообщение **не**\nосвобождается явно — его подберёт следующий проход по истёкшей аренде, и явный «возврат\nпри остановке» ввёл бы четвёртый путь смены статуса; `OutboxLeaseLost` **не** считается\nотказом публикации и не ведёт к `releaseWithBackoff()`; `sleep()` вызывается только между\nпустыми проходами и только в цикле. Обработчик сигнала выставляет **только** флаг — ни\nодного обращения к БД, логу или выводу внутри него. Канал публикации берётся из объявления\nконтракта, а не из конверта: назначение — свойство контракта. Порядок ключей публикуемого\nмассива фиксирован и объявлен частью контракта в докблоке — по нему потребитель может\nсчитать отпечаток, поэтому перестановка ключей это ломающее изменение, а не форматирование\n(та же причина, что в `ArrayDataScopeCodec` P4.8). Команда регистрируется в\n`boot()` внутри `runningInConsole()`, рядом с существующими `PruneAuditLog` и\n`PrunePubSubMessages`. Привязка порта — `scoped`. Ни один файл вне `packages/core` не\nтрогается; каталог `packages/core/src/PubSub/` не изменяется вовсе."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Готовые контракт, реализация и команда — `@plan/knowledge/research-P5-design.json` §6.1–§6.2.\nОбоснование отдельного порта («шов, названный заранее, а не прорубленный потом») — §6.1,\nпервые два абзаца. Состав тестов — §6.3: четыре случая публикатора в sqlite-лейне, три\nслучая команды в pg-лейне. Тест §6.3(7) требует публикатора-фикстуры, бросающего\n`OutboxLeaseLost`; его форма — тот же `RecordingPublisher`, который окончательно\nоформляется в P5.12, здесь достаточно локального анонимного класса в тесте."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "`composer test` пакета `core` зелёный: durable fixture admits,\nunbound/null/Redis-PUBLISH fixtures fail before `markPublished()`. `composer test:pg` пакета `core`\nзелёный, три случая §6.3(5–7) покрыты. `composer analyse` зелёный. `composer lint:check`\nзелёный. `git diff --stat -- 'packages/core/src/PubSub/'` пуст — подтверждение D31.\n`php artisan corex:messaging:relay --once` в тестовом окружении завершается кодом 0.\nReceipt содержит вывод всех команд."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "durable-ack порт публикации без lossy default; host binding\nvalidation; команда relay с кооперативной\nостановкой; регистрация и привязка; семь тестовых случаев; строка `CHANGELOG.md`; блок\nreceipt'а, подтверждающий неизменность каталога `PubSub/`."
+    }
+  ]
+}

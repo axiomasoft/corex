@@ -1,0 +1,256 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P1.5",
+  "title": "Политика публичной поверхности",
+  "status": "done",
+  "summary": "Создать `docs/architecture/api-policy.md`: три носителя публичной поверхности, обязательный раздел о том, что `@internal` не является машинной границей между пакетами, процедуры перехода между уровнями зрелости, закрытый список ломающих изменений и правило межпакетного импорта с двумя различимыми диагностиками.",
+  "why": "Публичная поверхность пакетов не зафиксирована ничем: `api/public.php` нет ни в одном пакете, `@api` — ноль вхождений, `scripts/contract-guard.sh` требует записи в CHANGELOG при диффе `src/Contracts/**`, но реального BC-анализа не делает (`RAG:—`, A03/A83). Без этого документа P3 нечего превращать в гейт, а P17 нечем обусловливать тег 1.0. Несущая причина выделить item в `full` review — D12: `RAG:✅` нативная проверка `@internal` статическим анализом сравнивает корневые неймспейсы, а все пакеты `corex/*` живут под одним корнем `CoreX\\`, поэтому такая проверка на межпакетной границе всегда зелёная (`@plan/knowledge/research-P1-design-rag.json` §1, §4, запрос P1-Q3). Политика, не назвавшая это различие, заставит P3 построить гейт, который ничего не проверяет, — тот же класс дефекта, из-за которого репозиторий уже отверг `pest-plugin-arch` за вакуумное прохождение правила.",
+  "scope": {
+    "include": [
+      "Файл `docs/architecture/api-policy.md`: раздел «чем объявляется публичная поверхность» (три носителя, роль `@api` как пояснения, а не носителя); обязательный раздел «граница `@internal` и граница пакета — разные границы» с таблицей «вопрос → носитель ответа» и с измеренным состоянием разметки в дереве; раздел процедур перехода между уровнями зрелости с явным запретом обратного перехода `stable` → `experimental`; раздел «что считается ломающим изменением» с закрытым списком из десяти пунктов; раздел правила межпакетного импорта с требованием двух различимых сообщений диагностики и с формой исключения. Строка в корневом `CHANGELOG.md`."
+    ],
+    "exclude": [
+      "Любое изменение PHP-кода, в том числе расстановка и снятие `@api`/`@internal` — существующие 250 вхождений остаются как есть и становятся входом P3; создание BC-гейта, правила гейта графа и любой конфигурации статанализа (P3); заполнение `extra.corex.public-api` — это P1.2; дублирование таблицы уровней `stability` — она принадлежит `taxonomy.md`, документ на неё ссылается; проектирование версионирования внешнего HTTP API и snapshot'ов схемы (P13); правка `scripts/contract-guard.sh`; изменение `packages/**`."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D12",
+    "D4",
+    "D2"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P1-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D12.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D4.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D2.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P1-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "docs/architecture/constitution.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P1/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "docs/architecture/taxonomy.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "docs/dev-doctrine.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "scripts/contract-guard.sh",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "scripts/package-graph-gate.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/findings-audit-verdicts.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "docs/architecture/api-policy.md",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Раздел «граница `@internal` и граница пакета — разные границы» обязателен: его отсутствие — дефект приёмки item'а (D12, пункт 3). Enforcement статей `API-002` и `API-003` в тексте политики описывается как правило гейта графа пакетов, а не как статический анализ; формулировка «`@internal` под статанализом» не используется нигде в документе. Измеренные числа разметки берутся из `@plan/knowledge/research-P1-design.json` §6.2 (`@internal` — 225 файлов, 250 вхождений, девять пакетов с разбивкой; `@api` — 0) и не перемеряются: измерение принадлежит P2. Таблица уровней `stability` не копируется из `taxonomy.md`: документ ссылается на неё и добавляет только таблицу переходов (разделение владения, `@plan/phases/P1/phase.json`, Phase Context). Закрытый список ломающих изменений переносится всеми десятью пунктами и объявляется входом гейтов P3 и P13, а не пожеланием; каждый пункт либо проверяем машинно, либо назван непроверяемым явно. Правило межпакетного импорта обязано требовать двух **разных** сообщений — чужой `Internal` и неперечисленный неймспейс: слияние их в одно вырождает диагностику. Ни одна строка PHP не меняется; ни один файл вне `Files` не изменяется."
+  ],
+  "guidance": "Готовый текст всех пяти разделов — `@plan/knowledge/research-P1-design.json` §6.1–§6.5, переносится по порядку. §6.2 переносится дословно вместе с таблицей «вопрос → носитель ответа» и с абзацем «правило, выраженное только через `@internal`, считается не выраженным». §6.4 переносится с нумерацией пунктов: на неё будут ссылаться item'ы P3 и P13. §6.5 переносится вместе с объяснением, почему сообщения должны различаться, и с правилом «исключение оформляется в конфигурации гейта, а не в коде потребителя».",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "rg -c \"разные границы\" docs/architecture/api-policy.md",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "rg -n \"@internal\" docs/architecture/api-policy.md",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "git diff --stat -- 'packages/'",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "composer lint:check",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "composer test:arch",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "api-policy boundaries + 10 BC items",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "composer lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "composer test:arch",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "`docs/architecture/api-policy.md` с тремя носителями публичной поверхности, обязательным разделом о разделении границ, процедурами перехода уровней зрелости, закрытым списком из десяти ломающих изменений и правилом межпакетного импорта; запись в корневом `CHANGELOG.md`. Receipt — append к `@plan/knowledge/findings-P1-receipts.json`: подтверждение наличия раздела о границах и явная строка о том, какие статьи группы `API` получили enforcement «нет — P3» и почему."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "medium"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "required",
+    "status": "complete"
+  },
+  "result": {
+    "started_at": "2026-09-21T08:49:49Z",
+    "finished_at": "2026-09-21T08:49:49Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/cursor-composer-2.5/medium",
+      "effort": "medium"
+    },
+    "notes": "P1.5 GREEN: api-policy.md + CHANGELOG",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-21T08:49:49Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-21T08:49:49Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-21T08:49:49Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-21T08:49:49Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Создать `docs/architecture/api-policy.md`: три носителя публичной поверхности, обязательный раздел о том, что `@internal` не является машинной границей между пакетами, процедуры перехода между уровнями зрелости, закрытый список ломающих изменений и правило межпакетного импорта с двумя различимыми диагностиками."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "Публичная поверхность пакетов не зафиксирована ничем: `api/public.php` нет ни в одном пакете, `@api` — ноль вхождений, `scripts/contract-guard.sh` требует записи в CHANGELOG при диффе `src/Contracts/**`, но реального BC-анализа не делает (`RAG:—`, A03/A83). Без этого документа P3 нечего превращать в гейт, а P17 нечем обусловливать тег 1.0. Несущая причина выделить item в `full` review — D12: `RAG:✅` нативная проверка `@internal` статическим анализом сравнивает корневые неймспейсы, а все пакеты `corex/*` живут под одним корнем `CoreX\\`, поэтому такая проверка на межпакетной границе всегда зелёная (`@plan/knowledge/research-P1-design-rag.json` §1, §4, запрос P1-Q3). Политика, не назвавшая это различие, заставит P3 построить гейт, который ничего не проверяет, — тот же класс дефекта, из-за которого репозиторий уже отверг `pest-plugin-arch` за вакуумное прохождение правила."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Файл `docs/architecture/api-policy.md`: раздел «чем объявляется публичная поверхность» (три носителя, роль `@api` как пояснения, а не носителя); обязательный раздел «граница `@internal` и граница пакета — разные границы» с таблицей «вопрос → носитель ответа» и с измеренным состоянием разметки в дереве; раздел процедур перехода между уровнями зрелости с явным запретом обратного перехода `stable` → `experimental`; раздел «что считается ломающим изменением» с закрытым списком из десяти пунктов; раздел правила межпакетного импорта с требованием двух различимых сообщений диагностики и с формой исключения. Строка в корневом `CHANGELOG.md`."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Любое изменение PHP-кода, в том числе расстановка и снятие `@api`/`@internal` — существующие 250 вхождений остаются как есть и становятся входом P3; создание BC-гейта, правила гейта графа и любой конфигурации статанализа (P3); заполнение `extra.corex.public-api` — это P1.2; дублирование таблицы уровней `stability` — она принадлежит `taxonomy.md`, документ на неё ссылается; проектирование версионирования внешнего HTTP API и snapshot'ов схемы (P13); правка `scripts/contract-guard.sh`; изменение `packages/**`."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P1-design.json` §6 как нормативная спецификация: §6.1 готовый текст о трёх носителях, §6.2 готовый текст обязательного раздела о границах с измеренными числами разметки, §6.3 процедуры перехода уровней, §6.4 закрытый список ломающих изменений, §6.5 правило межпакетного импорта; `@plan/decisions/D12.json` как основание §6.2 и как источник формулировки enforcement статей `API-002`/`API-003`; `@plan/decisions/D4.json` как исходное решение; `@plan/decisions/D2.json` как согласование пунктов 7–9 списка ломающих изменений; `@plan/knowledge/research-P1-design-rag.json` §1, §4 (2) как внешнее подтверждение; `docs/architecture/constitution.md` как владелец статей `API-001`…`API-009`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`docs/architecture/api-policy.md` (новый); `CHANGELOG.md` (строка под `[Unreleased]` → `### Added`)."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P1/phase.json`; 2) `@plan/knowledge/research-P1-design.json` §0, §6, §13; 3) `@plan/knowledge/research-P1-design-rag.json` §1, §4; 4) `@plan/decisions/D12.json`; 5) `@plan/decisions/D4.json`; 6) `@plan/decisions/D2.json`; 7) `docs/architecture/constitution.md` (группа `API`); 8) `docs/architecture/taxonomy.md` (таблица `stability`); 9) `docs/dev-doctrine.md` §5; 10) `scripts/contract-guard.sh`; 11) `scripts/package-graph-gate.json`; 12) `@plan/knowledge/findings-audit-verdicts.json` §6 и §8."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Раздел «граница `@internal` и граница пакета — разные границы» обязателен: его отсутствие — дефект приёмки item'а (D12, пункт 3). Enforcement статей `API-002` и `API-003` в тексте политики описывается как правило гейта графа пакетов, а не как статический анализ; формулировка «`@internal` под статанализом» не используется нигде в документе. Измеренные числа разметки берутся из `@plan/knowledge/research-P1-design.json` §6.2 (`@internal` — 225 файлов, 250 вхождений, девять пакетов с разбивкой; `@api` — 0) и не перемеряются: измерение принадлежит P2. Таблица уровней `stability` не копируется из `taxonomy.md`: документ ссылается на неё и добавляет только таблицу переходов (разделение владения, `@plan/phases/P1/phase.json`, Phase Context). Закрытый список ломающих изменений переносится всеми десятью пунктами и объявляется входом гейтов P3 и P13, а не пожеланием; каждый пункт либо проверяем машинно, либо назван непроверяемым явно. Правило межпакетного импорта обязано требовать двух **разных** сообщений — чужой `Internal` и неперечисленный неймспейс: слияние их в одно вырождает диагностику. Ни одна строка PHP не меняется; ни один файл вне `Files` не изменяется."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Готовый текст всех пяти разделов — `@plan/knowledge/research-P1-design.json` §6.1–§6.5, переносится по порядку. §6.2 переносится дословно вместе с таблицей «вопрос → носитель ответа» и с абзацем «правило, выраженное только через `@internal`, считается не выраженным». §6.4 переносится с нумерацией пунктов: на неё будут ссылаться item'ы P3 и P13. §6.5 переносится вместе с объяснением, почему сообщения должны различаться, и с правилом «исключение оформляется в конфигурации гейта, а не в коде потребителя»."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Документ содержит раздел о разделении границ: `rg -c \"разные границы\" docs/architecture/api-policy.md` больше нуля. Документ не содержит формулировки, объявляющей нативную проверку `@internal` межпакетным enforcement: `rg -n \"@internal\" docs/architecture/api-policy.md` проверяется построчно, и ни одна строка не называет её границей между пакетами. Закрытый список содержит ровно десять пунктов. Документ ссылается на `taxonomy.md` в разделе уровней и не содержит собственной таблицы значений `stability`. Числа разметки совпадают с `@plan/knowledge/research-P1-design.json` §6.2. `git diff --stat -- 'packages/'` пуст. `composer lint:check` из корня — зелёный. `composer test:arch` — зелёный."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "`docs/architecture/api-policy.md` с тремя носителями публичной поверхности, обязательным разделом о разделении границ, процедурами перехода уровней зрелости, закрытым списком из десяти ломающих изменений и правилом межпакетного импорта; запись в корневом `CHANGELOG.md`. Receipt — append к `@plan/knowledge/findings-P1-receipts.json`: подтверждение наличия раздела о границах и явная строка о том, какие статьи группы `API` получили enforcement «нет — P3» и почему."
+    }
+  ]
+}

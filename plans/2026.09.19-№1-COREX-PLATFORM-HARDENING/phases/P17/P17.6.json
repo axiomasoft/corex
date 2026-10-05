@@ -1,0 +1,238 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P17.6",
+  "title": "Pristine installation and compatibility profiles",
+  "status": "done",
+  "summary": "Boot six exact installation profiles from candidate dist archives and cover every package's declared PHP/Laravel lower and upper compatibility edges.",
+  "why": "`@plan/knowledge/research-P17-design.json` §6; D96; RAG:✅ P17-Q1. Monorepo green does not prove split installability, optionality or declared dependency ranges.",
+  "scope": {
+    "include": [
+      "Profile manifest/runner; clean Composer homes; strict autoload/discovery/boot; constraint-derived edge and prefer-lowest lanes; uninstall/reboot checks; CI matrix and receipts."
+    ],
+    "exclude": [
+      "Expanding version constraints; unsupported matrix cells; product repair; network service dependencies beyond disposable PostgreSQL; external writes."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/phases/P17/P17.1.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P17/P17.2.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P17/P17.5.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P1/P1.2.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P16/P16.13.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P17/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P17-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P17-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D96.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": ".github/workflows/distribution-proof.yml",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "scripts/distribution/pristine-proof.py",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "docs/dev-doctrine.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "scripts/distribution/install-profiles.json",
+      "change": "any"
+    },
+    {
+      "path": "scripts/distribution/profile-proof.py",
+      "change": "any"
+    },
+    {
+      "path": "scripts/distribution/tests/test_profile_proof.py",
+      "change": "any"
+    },
+    {
+      "path": ".github/workflows/distribution-proof.yml",
+      "change": "any"
+    },
+    {
+      "path": "@plan/artifacts/P17/profile-matrix.json",
+      "change": "any"
+    },
+    {
+      "path": "@plan/findings/P17-profile-receipt.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Six profiles and exact semantics are §6. Parse constraints; never hardcode a false all-packages cross-product. Every supported package gets min/max and prefer-lowest coverage. New temp consumer/cache/home per run; dist only; missing/unsupported is explicit red/excluded."
+  ],
+  "guidance": "Reuse candidate/export and current pristine proof helpers. Capture `composer show --locked`, discovery output, installed paths and probe results. For removal profiles require/remove, rebuild optimized autoload and boot again.",
+  "validation": [
+    {
+      "id": "V1",
+      "procedure": "Six profiles green on applicable Laravel 12/13 lanes",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "All cohort packages appear in edge coverage",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "Workspace path, missing profile/package, undeclared skip, Meilisearch, Search Intl and modules in bare-single fail by name",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Deterministic profile matrix, CI jobs and fresh receipts for DOD-14/15/26."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "required",
+    "status": "complete"
+  },
+  "result": {
+    "started_at": "2026-09-27T11:15:14Z",
+    "finished_at": "2026-09-27T13:03:48Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-run/grok-4.7/high",
+      "effort": "high"
+    },
+    "notes": "P17.6 GREEN: six install profiles and declared PHP/Laravel edges boot from the frozen candidate. Owner waived executor verification; route is grok-4.7/high via cursor-explicit-attestation-v1.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-09-27T13:03:48Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-27T13:03:48Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-27T13:03:48Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-27T13:03:48Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Boot six exact installation profiles from candidate dist archives and cover every package's declared PHP/Laravel lower and upper compatibility edges."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`@plan/knowledge/research-P17-design.json` §6; D96; RAG:✅ P17-Q1. Monorepo green does not prove split installability, optionality or declared dependency ranges."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Profile manifest/runner; clean Composer homes; strict autoload/discovery/boot; constraint-derived edge and prefer-lowest lanes; uninstall/reboot checks; CI matrix and receipts."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Expanding version constraints; unsupported matrix cells; product repair; network service dependencies beyond disposable PostgreSQL; external writes."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/phases/P17/P17.1.json`; `@plan/phases/P17/P17.2.json`; `@plan/phases/P17/P17.5.json`; `@plan/phases/P1/P1.2.json`; `@plan/phases/P16/P16.13.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`scripts/distribution/install-profiles.json`; `scripts/distribution/profile-proof.py`; `scripts/distribution/tests/test_profile_proof.py`; `.github/workflows/distribution-proof.yml`; `plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/P17/profile-matrix.json`; `plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-profile-receipt.json`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P17/phase.json`; 2) `@plan/knowledge/research-P17-design.json` §0, §6; 3) `@plan/knowledge/research-P17-design-rag.json` §2; 4) `@plan/decisions/D96.json`; 5) `@plan/phases/P17/P17.1.json`; 6) `@plan/phases/P17/P17.2.json`; 7) `@plan/phases/P17/P17.5.json`; 8) `.github/workflows/distribution-proof.yml`; 9) `scripts/distribution/pristine-proof.py`; 10) `docs/dev-doctrine.md` §1, §7."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Six profiles and exact semantics are §6. Parse constraints; never hardcode a false all-packages cross-product. Every supported package gets min/max and prefer-lowest coverage. New temp consumer/cache/home per run; dist only; missing/unsupported is explicit red/excluded."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Reuse candidate/export and current pristine proof helpers. Capture `composer show --locked`, discovery output, installed paths and probe results. For removal profiles require/remove, rebuild optimized autoload and boot again."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "All six profiles green on applicable Laravel 12/13 lanes; all cohort packages appear in edge coverage. Workspace path, missing profile/package, undeclared skip, accidental Meilisearch/Search Intl load and modules use in `bare-single` each fail by name."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Deterministic profile matrix, CI jobs and fresh receipts for DOD-14/15/26."
+    }
+  ]
+}

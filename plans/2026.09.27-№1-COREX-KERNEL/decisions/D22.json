@@ -1,0 +1,53 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D22",
+  "title": "ecosystem-principles (accepted)",
+  "date": "2026-09-27",
+  "status": "accepted",
+  "decision": "Принципы chatom PLAN2 `@plan/knowledge/research-02-target-architecture.json` §1 (core не знает о пакетах-расширениях; один владелец на FQCN/таблицу/config-ключ/tag/команду/wire-type; пакет самодостаточен; публичное — только объявленное `#[Api]/#[Spi]`; инварианты не конфигурируются; compile at boot → immutable runtime; схема детерминирована; стандарты вместо изобретений; без алиасов до 1.0) — нормы PLAN3 без изменения смысла. Расхождения экосистемы фиксируются в `@plan/knowledge/research-02-target-architecture.json` §12 «Сверка с chatom» и решаются новым D# в обоих планах.",
+  "rationale": "Владелец: «они оба будут из одной экосистемы, поэтому принципы должны быть общими» (B3).",
+  "applies_to": [
+    "P00",
+    "P01",
+    "P02",
+    "P03",
+    "P04",
+    "P05",
+    "P06",
+    "P07",
+    "P08",
+    "P09"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "owner 2026-09-27 (`brief/00-brief.md` REPOSITORY-OWNER-MESSAGE)"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D22\ndate: 2026-09-27\nstatus: accepted\nitem: P00\nitems: [P00, P01, P02, P03, P04, P05, P06, P07, P08, P09]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D22-ecosystem-principles-accepted",
+      "title": "D22 — ecosystem-principles (accepted)",
+      "text": "**Actor:** owner 2026-09-27 (`@plan/brief.json` REPOSITORY-OWNER-MESSAGE)\n**Evidence:** RAG:— `@plan/knowledge/findings-00-audit-verification.json`, `artifacts/P00-design/facts/`; RAG:✅ `@plan/knowledge/research-01-external-research.json`, `artifacts/research-rag/`"
+    },
+    {
+      "id": "Solution",
+      "title": "Solution",
+      "text": "Принципы chatom PLAN2 `@plan/knowledge/research-02-target-architecture.json` §1 (core не знает о пакетах-расширениях; один владелец на FQCN/таблицу/config-ключ/tag/команду/wire-type; пакет самодостаточен; публичное — только объявленное `#[Api]/#[Spi]`; инварианты не конфигурируются; compile at boot → immutable runtime; схема детерминирована; стандарты вместо изобретений; без алиасов до 1.0) — нормы PLAN3 без изменения смысла. Расхождения экосистемы фиксируются в `@plan/knowledge/research-02-target-architecture.json` §12 «Сверка с chatom» и решаются новым D# в обоих планах."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "Владелец: «они оба будут из одной экосистемы, поэтому принципы должны быть общими» (B3)."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "Все фазы; кросс-проектная сверка — `research/02` §12."
+    }
+  ]
+}

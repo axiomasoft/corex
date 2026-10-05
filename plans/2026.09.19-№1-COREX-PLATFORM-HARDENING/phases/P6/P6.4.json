@@ -1,0 +1,224 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P6.4",
+  "title": "Features, Departments, Money: вердикты и кандидаты `roadmap.md` §7",
+  "status": "done",
+  "summary": "Зафиксировать, почему три малые возможности — зоны, а не Foundation\nи не пакеты 1.0, и записать условия возврата в `@plan/plan.json` §7 плюс находку\nпо Departments.",
+  "why": "Скелет требовал «размещение по литмус-тесту» и проверку Departments на\nпродуктовую семантику. `RAG:✅` P6-Q5: оргструктура — capability, не shared\nkernel; money-cast не делает финансовую политику foundation; feature-flags\nделят движок и определения. D8 уже отклонил пакеты на один файл; без записи\nв §7 условие возврата потеряется.",
+  "scope": {
+    "include": [
+      "две новые строки `@plan/plan.json` §7 по готовым формулировкам\n§10; `@plan/knowledge/findings-P6-departments.json` (смысл «отдел» у auth vs tenancy vs ядро);\nстрока CHANGELOG, если §7 считается продуктом плана (план владеет roadmap);\nreceipt."
+    ],
+    "exclude": [
+      "любой PHP; перенос файлов; создание пакета `corex/money`;\nвынос Departments в FlexCMS; смена репозитория отделов."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D8",
+    "D34"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P6-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P6-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/plan.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Departments/Department.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/auth/src/Access/ScopePredicate.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P6/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D8.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D34.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Money/MoneyCast.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "@plan/plan.json",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P6-departments.json",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P6-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Формулировки двух строк §7 переносятся из §10\nдословно. Существующие строки §7 (GraphQL, money-пакет как общий пункт A30)\nне переписываются: пункт A30 про «выделение money/features/settings» сужается\nссылкой «Money — отдельная строка P6.4; Features/Settings пакетом не\nстановятся». Находка Departments называет трёх потребителей (ядро, auth,\ntenancy) и не объявляет вынос. Ни один файл вне `Files` не изменяется.\n`CHANGELOG.md` — одна строка `P6.4: roadmap candidates money package and\ndepartments level-1`. Если корневой CHANGELOG не принято трогать ради\nпланового roadmap — строка всё равно пишется: §7 есть обещание 1.0."
+  ],
+  "guidance": "Готовые две строки — `@plan/knowledge/research-P6-design.json` §10. Таблица\nвердиктов той же секции. Не копировать текст аудита про «вынести Departments\nпакетом».",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "git diff --stat -- 'packages/'",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "roadmap.md §7 содержит corex/money и Departments / уровень 1",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "findings/P6-departments.md существует и упоминает ScopePredicate",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "git diff --stat -- 'packages/' пуст",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "две строки §7; находка Departments; блок receipt'а."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "required",
+    "status": "complete"
+  },
+  "result": {
+    "started_at": "2026-09-22T20:17:17Z",
+    "finished_at": "2026-09-22T20:23:19Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/cursor-grok-4.7/high",
+      "effort": "high"
+    },
+    "notes": "P6.4: две строки roadmap §7 дословно из §10, находка Departments (ядро, auth, tenancy, ScopePredicate), CHANGELOG. packages/ не менялся.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-22T20:23:19Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-22T20:23:19Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-22T20:23:19Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-22T20:23:19Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Зафиксировать, почему три малые возможности — зоны, а не Foundation\nи не пакеты 1.0, и записать условия возврата в `@plan/plan.json` §7 плюс находку\nпо Departments."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "Скелет требовал «размещение по литмус-тесту» и проверку Departments на\nпродуктовую семантику. `RAG:✅` P6-Q5: оргструктура — capability, не shared\nkernel; money-cast не делает финансовую политику foundation; feature-flags\nделят движок и определения. D8 уже отклонил пакеты на один файл; без записи\nв §7 условие возврата потеряется."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "две новые строки `@plan/plan.json` §7 по готовым формулировкам\n§10; `@plan/knowledge/findings-P6-departments.json` (смысл «отдел» у auth vs tenancy vs ядро);\nстрока CHANGELOG, если §7 считается продуктом плана (план владеет roadmap);\nreceipt."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "любой PHP; перенос файлов; создание пакета `corex/money`;\nвынос Departments в FlexCMS; смена репозитория отделов."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P6-design.json` §0, §10; `@plan/knowledge/research-P6-design-rag.json` §1\n(P6-Q5); D8, D34; текущий `@plan/plan.json` §7;\n`packages/core/src/Departments/Department.php`;\n`packages/auth/src/Access/ScopePredicate.php`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`@plan/plan.json`; `@plan/knowledge/findings-P6-departments.json`; `CHANGELOG.md`; `@plan/knowledge/findings-P6-receipts.json`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P6/phase.json`; 2) `@plan/knowledge/research-P6-design.json` §0, §10; 3) `@plan/knowledge/research-P6-design-rag.json` §1 (P6-Q5); 4) `@plan/decisions/D8.json`; 5) `@plan/decisions/D34.json`; 6) `@plan/plan.json` §7; 7) `packages/core/src/Departments/Department.php`; 8) `packages/core/src/Money/MoneyCast.php`; 9) `packages/auth/src/Access/ScopePredicate.php`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Формулировки двух строк §7 переносятся из §10\nдословно. Существующие строки §7 (GraphQL, money-пакет как общий пункт A30)\nне переписываются: пункт A30 про «выделение money/features/settings» сужается\nссылкой «Money — отдельная строка P6.4; Features/Settings пакетом не\nстановятся». Находка Departments называет трёх потребителей (ядро, auth,\ntenancy) и не объявляет вынос. Ни один файл вне `Files` не изменяется.\n`CHANGELOG.md` — одна строка `P6.4: roadmap candidates money package and\ndepartments level-1`. Если корневой CHANGELOG не принято трогать ради\nпланового roadmap — строка всё равно пишется: §7 есть обещание 1.0."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Готовые две строки — `@plan/knowledge/research-P6-design.json` §10. Таблица\nвердиктов той же секции. Не копировать текст аудита про «вынести Departments\nпакетом»."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "`@plan/plan.json` §7 содержит `corex/money` и `Departments` /\n`уровень 1`. `@plan/knowledge/findings-P6-departments.json` существует и упоминает\n`ScopePredicate`. `git diff --stat -- 'packages/'` пуст."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "две строки §7; находка Departments; блок receipt'а."
+    }
+  ]
+}

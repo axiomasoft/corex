@@ -1,0 +1,221 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P15.14",
+  "title": "P15 full qualification and negative completeness proof",
+  "status": "done",
+  "summary": "Выполнить full phase qualification, доказать невакуозность old-name gate planted fixture и выпустить P15 receipt.",
+  "why": "Массовый public rename считается завершённым только при интеграционном green и наблюдаемом failure-path гейта.",
+  "scope": {
+    "include": [
+      "Affected package lanes, root arch/package graph/public API/naming gates, `composer test:packages`, strict PSR autoload, planted disposable old-name fixture, outcome/skip summary."
+    ],
+    "exclude": [
+      "Исправления вне owning P15 item; fleet release; P16 execution."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P15-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P15/P15.13.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P15/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/plan.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/plan.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "@plan/knowledge/findings-P15-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Baseline green first; plant one forbidden old token, require named red diagnostic, remove fixture, require green; skipped/failed checks never reported green; regressions return to owning item."
+  ],
+  "guidance": "Record command, exit status and bounded output for every gate; use isolated disposable fixture and verify cleanup.",
+  "validation": [
+    {
+      "id": "V1",
+      "procedure": "p15 completeness after probe removal",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "planted P15C CorexModule then removed",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "package-graph-gate",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "api-contract and naming-gate",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "composer test:arch",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "composer test:packages",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "`@plan/knowledge/findings-P15-receipts.json`, refreshed generated plan views and provider-neutral Next to P16 design only."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-27T05:20:33Z",
+    "finished_at": "2026-09-27T05:31:39Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/grok-4.7/high",
+      "effort": "high"
+    },
+    "notes": "P15.14 qualification green. Planted P15C removed. Arch 89, packages green. strict-psr residual exit 1. Receipt findings/P15-receipts.md.",
+    "deviations": [
+      "P15.14 qualification green. Planted P15C removed. Arch 89, packages green. strict-psr residual exit 1. Receipt findings/P15-receipts.md."
+    ],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-09-27T05:31:39Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-27T05:31:39Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-27T05:31:39Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-27T05:31:39Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-27T05:31:39Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-27T05:31:39Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-27T05:31:39Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Выполнить full phase qualification, доказать невакуозность old-name gate planted fixture и выпустить P15 receipt."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "Массовый public rename считается завершённым только при интеграционном green и наблюдаемом failure-path гейта."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Affected package lanes, root arch/package graph/public API/naming gates, `composer test:packages`, strict PSR autoload, planted disposable old-name fixture, outcome/skip summary."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Исправления вне owning P15 item; fleet release; P16 execution."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P15-design.json`; `@plan/phases/P15/P15.13.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "Disposable validation fixture under approved test temp path; `@plan/knowledge/findings-P15-receipts.json`; generated plan state/continuity through plan tools."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P15/phase.json`; 2) `@plan/knowledge/research-P15-design.json`; 3) `@plan/phases/P15/P15.13.json`; 4) `@plan/plan.json`; 5) `@plan/plan.json`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Baseline green first; plant one forbidden old token, require named red diagnostic, remove fixture, require green; skipped/failed checks never reported green; regressions return to owning item."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Record command, exit status and bounded output for every gate; use isolated disposable fixture and verify cleanup."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "All declared checks green after fixture removal; planted run is red for expected reason; worktree contains no fixture; receipt maps every item to terminal/skipped evidence and residual risk."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "`@plan/knowledge/findings-P15-receipts.json`, refreshed generated plan views and provider-neutral Next to P16 design only."
+    }
+  ]
+}

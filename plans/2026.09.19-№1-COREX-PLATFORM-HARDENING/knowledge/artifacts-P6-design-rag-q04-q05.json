@@ -1,0 +1,22 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P6-design-rag-q04-q05",
+  "title": "Q4 — fitness function направления зависимостей",
+  "sections": [
+    {
+      "id": "P6-Q4-fitness-function",
+      "title": "P6-Q4 — fitness function направления зависимостей",
+      "text": "**Query:** Answer in prose, no tables. Architectural fitness functions for\ninternal dependency direction inside one PHP package: how should an\nallowed-dependency matrix be enforced, and why must a gate include a planted\nnegative test that names the offending file? Contrast Pest Arch, Deptrac, PHPat,\nand a stdlib source scan of use statements. Cite ThoughtWorks evolutionary\narchitecture fitness functions, PHPUnit/Pest arch docs. Name primary-source\nURLs.\n\n**Status:** success\n\nTreat direction as an executable contract: a named-area allow-list matrix, run\nin CI, deny-by-default. ThoughtWorks: a fitness function is an objective\nintegrity check of an architectural characteristic.\n\nA green tool run is not proof the gate works. Config can match no files, use\nthe wrong regex, or become permissive. A planted illegal fixture must fail\nnonzero and name the planted filename (and preferably the forbidden FQCN).\nThat tests the enforcement mechanism, not production code.\n\nPest Arch is terse for simple `not->toUse` rules; in this monorepo it was\nalready rejected as vacuous on path packages (LayerTest). Deptrac/PHPat express\nthe matrix well but add a dependency. A `token_get_all` / `use`-scan is\ndependency-free and has excellent diagnostics; it does not see FQCN without\n`use`. Label it honestly as an import scan, or extend it (as P3.2 already does\nfor the package graph).\n\nPrimary sources: https://www.thoughtworks.com/en-us/radar/techniques/architectural-fitness-function ·\nhttps://www.thoughtworks.com/en-us/insights/articles/fitness-function-driven-development ·\nhttps://pestphp.com/docs/arch-testing ·\nhttps://deptrac.github.io/deptrac/ ·\nhttps://www.phpat.dev/getting-started/\n\n---"
+    },
+    {
+      "id": "P6-Q5-shared-kernel-vs-capability",
+      "title": "P6-Q5 — shared kernel vs capability",
+      "text": "**Query:** Answer in prose, no tables. DDD shared kernel versus capability\nmodules: which of money (currency VO plus Eloquent cast), feature flags,\nappend-only audit log, hierarchical settings, and organisational departments\ntypically belong in a platform foundation versus a bounded capability? What\nlitmus questions decide foundation membership? Cite Evans DDD shared kernel,\nMicrosoft .NET architecture modular monolith, Drupal core versus modules. Name\nprimary-source URLs.\n\n**Status:** success\n\nA Shared Kernel is an explicitly agreed subset of the model, not “common code”.\nEvans’s default is restraint.\n\nMoney: a small currency primitive may be foundation; financial policy\n(rounding, tax, settlement) is capability-owned. An Eloquent money cast is\ninfrastructure around that primitive, not a reason to pull billing into the\nkernel.\n\nFeature flags: evaluation/plumbing is platform; flag names, defaults and\nsunsets are capability-owned.\n\nAudit log: append-only envelope, actor, tenant, retention plumbing is\nplatform; event vocabulary and payload schema are capability-owned. Do not\nconflate audit, domain events, and an event-sourced store.\n\nHierarchical settings: the resolution engine (global → tenant → user) can be\nplatform; setting keys that carry invariants belong to the capability.\n\nOrganisational departments: usually an Organisation capability. Foundation\nshould keep an opaque id, not the full aggregate. HR cost centres, sales\nterritories and academic faculties are not the same concept.\n\nLitmus for foundation: same meaning, same invariants, stable for years,\nindependent of one workflow, ≥2 real consumers, low semantic volatility, clear\ngovernance. If modules only need an id or an event, do not share the model.\n\nPrimary sources:\nhttps://www.dddcommunity.org/wp-content/uploads/files/discussion/PatternSummariesUnderCreativeCommons.doc ·\nhttps://learn.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/common-web-application-architectures ·\nhttps://www.drupal.org/docs/user_guide/en/understanding-modules.html"
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P6-design-rag/q04-q05.md",
+    "sha256": "41a4c1b93490df1c0a3799611f8122948015571f454febcdd8c45655b9793482"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D20",
+  "title": "Часы CoreX — это `Psr\\Clock\\ClockInterface`, а не собственный контракт",
+  "date": "2026-09-19",
+  "status": "accepted",
+  "decision": "`corex/core` не объявляет собственный интерфейс часов. Сервисы типизируются против\n`Psr\\Clock\\ClockInterface`; `packages/core/composer.json` получает\n`\"psr/clock\": \"^1.0\"` в `require` и `\"psr/clock-implementation\": \"1.0\"` в `provide`.\n\nЯдро поставляет три реализации в `CoreX\\Support\\Time`: `SystemClock` (UTC, без\nфреймворка), `FrozenClock` (`advance()`, для тестов потребителя без dev-зависимости) и\n`LaravelClock` поверх `Illuminate\\Support\\DateFactory`. **Привязка по умолчанию —\n`LaravelClock`.**\n\nЭскиз `@plan/knowledge/research-01-shapes-runtime.json` §1 в части `interface Clock { public function\nnow(): DateTimeImmutable; }` **отклонён**; формы `SystemClock`/`FrozenClock` из эскиза\nприняты с заменой реализуемого интерфейса.",
+  "rationale": "Собственный интерфейс с той же сигнатурой, что у стандарта, даёт нулевую семантику и\nненулевую цену: потребитель, у которого уже есть `symfony/clock` или\n`lcobucci/clock`, вынужден писать адаптер к контракту, который ничем не отличается от\nPSR-20. Для пакета уровня 0, чья заявленная ценность — «полезен любому Laravel-проекту»,\nэто прямой антипаттерн.\n\nЗапрет плана на новые runtime-зависимости не нарушается: `psr/clock` физически уже\nустановлен транзитивно, объявление делает зависимость честной, а не добавляет пакет.\nИменно это и проверяет item: `composer why psr/clock` до правки уже называет\n`nesbot/carbon`.\n\n`LaravelClock` как дефолт выбран из-за ловушки, названной внешним источником: если\nдефолтом сделать `SystemClock`, то `travelTo()` в существующих тестах перестанет\nвлиять на код, переведённый на часы, и появится два несинхронных времени в одном\nпрогоне. `DateFactory` читает актуальное состояние Carbon в момент вызова, поэтому\nсуществующие тесты, управляющие временем через фреймворк, продолжают работать без\nправок.\n\nАльтернатива «оставить `now()` и мокать Carbon» отклонена: она работает только внутри\nLaravel-тестов, не выражает зависимость в сигнатуре и не даёт потребителю подменить\nисточник времени — ровно то, чего требует RUN-004.",
+  "applies_to": [
+    "P4",
+    "P4.9",
+    "P4.10",
+    "P5",
+    "P9"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/claude-opus-5/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D20\ndate: 2026-09-19\nstatus: accepted\nitem: P4.9\nitems: [P4, P4.9, P4.10, P5, P9]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D20-CoreX-Psr-Clock-ClockInterface",
+      "title": "D20 — Часы CoreX — это `Psr\\Clock\\ClockInterface`, а не собственный контракт",
+      "text": "**Actor:** plan-designer/claude-opus-5/high\n\n**Evidence:** `RAG:—` в `packages/core/src` нет ни `Clock`, ни `ClockInterface`\n(находка N01); 151 вызов `now(` в `packages/*/src`. `RAG:—` `psr/clock` версии 1.0.0\nуже присутствует в корневом `composer.lock` как транзитивная зависимость\n`nesbot/carbon` и `symfony/clock`; проверка — секция `packages` файла `composer.lock`\nи `require` пакета `nesbot/carbon`. `RAG:—` `Carbon\\FactoryImmutable` в дереве\nреализует `Symfony\\Component\\Clock\\ClockInterface`, который наследует PSR-20.\n`RAG:✅` P4-Q1 (`@plan/knowledge/research-P4-design-rag.json` §1): PSR-20 — завершённый стандарт\nPHP-FIG с одним методом `now(): \\DateTimeImmutable`; собственный интерфейс оправдан\nтолько при иной семантике (бизнес-календарь, монотонное время), и вводить локальный\n`ClockInterface` ради мокабельности прямо не рекомендуется. `RAG:✅` тот же ответ:\n`Carbon::setTestNow()` и хелперы `travelTo`/`freezeTime` не влияют на инъектированные\nPSR-часы, и наоборот."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "`corex/core` не объявляет собственный интерфейс часов. Сервисы типизируются против\n`Psr\\Clock\\ClockInterface`; `packages/core/composer.json` получает\n`\"psr/clock\": \"^1.0\"` в `require` и `\"psr/clock-implementation\": \"1.0\"` в `provide`.\n\nЯдро поставляет три реализации в `CoreX\\Support\\Time`: `SystemClock` (UTC, без\nфреймворка), `FrozenClock` (`advance()`, для тестов потребителя без dev-зависимости) и\n`LaravelClock` поверх `Illuminate\\Support\\DateFactory`. **Привязка по умолчанию —\n`LaravelClock`.**\n\nЭскиз `@plan/knowledge/research-01-shapes-runtime.json` §1 в части `interface Clock { public function\nnow(): DateTimeImmutable; }` **отклонён**; формы `SystemClock`/`FrozenClock` из эскиза\nприняты с заменой реализуемого интерфейса."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Собственный интерфейс с той же сигнатурой, что у стандарта, даёт нулевую семантику и\nненулевую цену: потребитель, у которого уже есть `symfony/clock` или\n`lcobucci/clock`, вынужден писать адаптер к контракту, который ничем не отличается от\nPSR-20. Для пакета уровня 0, чья заявленная ценность — «полезен любому Laravel-проекту»,\nэто прямой антипаттерн.\n\nЗапрет плана на новые runtime-зависимости не нарушается: `psr/clock` физически уже\nустановлен транзитивно, объявление делает зависимость честной, а не добавляет пакет.\nИменно это и проверяет item: `composer why psr/clock` до правки уже называет\n`nesbot/carbon`.\n\n`LaravelClock` как дефолт выбран из-за ловушки, названной внешним источником: если\nдефолтом сделать `SystemClock`, то `travelTo()` в существующих тестах перестанет\nвлиять на код, переведённый на часы, и появится два несинхронных времени в одном\nпрогоне. `DateFactory` читает актуальное состояние Carbon в момент вызова, поэтому\nсуществующие тесты, управляющие временем через фреймворк, продолжают работать без\nправок.\n\nАльтернатива «оставить `now()` и мокать Carbon» отклонена: она работает только внутри\nLaravel-тестов, не выражает зависимость в сигнатуре и не даёт потребителю подменить\nисточник времени — ровно то, чего требует RUN-004."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "`corex/core` становится поставщиком `psr/clock-implementation`; при разделении ядра на\nзоны (P6) часы попадают в `Foundation`. P4.10 переводит durable-пути `packages/wakeup`\nна инъектированные часы. P5 (outbox, `occurredAt`) и P9 (tenancy) получают готовый\nконтракт и не изобретают второй. Замена остальных вызовов `now()` за пределами\ndurable-путей в P4 не выполняется — граница названа в `@plan/knowledge/research-P4-design.json` §7.4."
+    }
+  ]
+}

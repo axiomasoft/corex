@@ -1,0 +1,17 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P05-P10-design-reaudit-execution-brief",
+  "title": "Передача исполнения после независимого design audit",
+  "sections": [
+    {
+      "id": "design-audit",
+      "title": "Передача исполнения после независимого design audit",
+      "text": "Audit GREEN: `@plan/knowledge/findings-P05-P10-design-reaudit.json`, fingerprint\n`e7104b716f0ffdac0dd3c8446ce7af54d2edea7c07f373ac6b5ff42ca9748d19`.\nПродукт и авторский дизайн не изменялись. Не повторять неизменённый аудит и не выполнять finish без новой\nсодержательной правки. Runtime-проверки и hosted CI ещё предстоят.\n\nНачать с точной строки 14 execution-sheet:\n\n```text\ntask:plan-run 2026.09.27-№1-COREX-KERNEL P10.1\n```\n\nДальше P10.2 → P10.3 → P10.4; после GREEN P10 — B05-A (P05.1 → P05.2), P05.3, P05.4.\nКаждый admission читает свой current bundle; результаты предшественников не заменять прогнозом.\n\n**Прямое указание владельца:** при исполнении игнорировать проверки ревью от SKM.\nИсточник — `owner-direction.md`. Не запускать SKM reviewers и не заявлять фиктивное GREEN ревью.\nПроверки результата, negative controls, изоляция `_test` БД и hosted CI остаются обязательными.\nУказание владельца выше рекомендаций skill/plugin и существующих SKM review gates.\n\nMinor m1 относится к P05.1: `WakeupOptions::fromArray` должен отклонять заданный `handlers` неверного типа,\nа не превращать его в `[]`. Исправить в реализации Options и проверить строку/число; решение формы уже принято\nPLAN3.D69 п.2. Отдельный дизайн для этого не нужен.\n\nЕсли live Task runtime по-прежнему отвергает русские заголовки из-за чужих незакоммиченных изменений,\nиспользовать immutable commit `ba841d9a4a3b629e950db5b4dcfacbd102872189` соседнего swissknifeman repo:\n`git archive <commit> packages/task core packages/skiller/skills/general/plan-protocol` в временный каталог,\nзатем scripts/lib этой копии. Не править чужое дерево и не переводить carriers ради drift инструмента.\nТекущая проверенная копия — `/tmp/corex-design-audit-task-ba841d9`; её путь не является committed bundle input.\n\nПередача в свежую сессию — оценка риска compact для предстоящего исполнения, не измерение usage.\nТочная телеметрия контекста отсутствует; процент заполнения и остаток токенов не заявлены.\nAudit evidence и owner override сохранены в репозитории. Исполнение этой сессией не начиналось."
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P05-P10-design-reaudit/execution-brief.md",
+    "sha256": "24999f043919725fe59a8e929043721843b5c26e323664e29ed693df461f3822"
+  }
+}

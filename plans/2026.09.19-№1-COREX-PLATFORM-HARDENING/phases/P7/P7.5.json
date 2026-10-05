@@ -1,0 +1,266 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P7.5",
+  "title": "Инъекция workspace и OIDC-контроллеров",
+  "status": "done",
+  "summary": "Перевести `ResolveWorkspace`, `OidcLoginController` и\n`LogoutController` с `config()` на Options/policy.",
+  "why": "После P7.3–P7.4 это последние не-command чтения tenancy вне\nпровайдера. Команды остаются composition (CFG-002).",
+  "scope": {
+    "include": [
+      "три класса §7.3; замыкания провайдера; CHANGELOG."
+    ],
+    "exclude": [
+      "`IdentitiesReconcileCommand`, `PendingCreateCommand`;\nсмена OIDC-инвариантов; регистрация маршрутов."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P7-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Support/ImpersonationPolicy.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P7/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Authentication/Internal/Http/Controllers/OidcLoginController.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Http/Middleware/ResolveWorkspace.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/tests/Feature/OidcLoginTest.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/tests/Feature/ResolveWorkspaceTest.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/tenancy/src/Laravel/Http/Middleware/ResolveWorkspace.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/tenancy/src/Authentication/Internal/Http/Controllers/OidcLoginController.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/tenancy/src/Authentication/Internal/Http/Controllers/LogoutController.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/tenancy/src/TenancyServiceProvider.php",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P7-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Таблица §7.3 дословно. `config(` в трёх файлах\nисчезает. Команды не трогать: glob гейта их покрывает. Ни один файл вне\n`Files` не изменяется. Receipt фиксирует оставшиеся `config(` пакета\n(провайдер + Commands) командой `rg -n 'config\\(' packages/tenancy/src`."
+  ],
+  "guidance": "Контроллеры резолвятся контейнером — constructor\ninjection штатный. Не читать `SecretRef->reveal()` в контроллере: OIDC\nклиентский секрет, если нужен, уже в объекте, собранном провайдером.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "test",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "test:pg",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "rg -n 'config\\('",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "rg",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "composer --working-dir=packages/tenancy lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "composer --working-dir=packages/tenancy analyse",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "composer --working-dir=packages/tenancy test",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "./vendor/bin/pest --group=pg (packages/tenancy)",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "procedure": "rg -n 'config(' on the three §7.3 HTTP files",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "три потребителя без `config()`; инвентарь остатка\nчтений пакета."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-23T09:00:23Z",
+    "finished_at": "2026-09-23T09:05:40Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-run/cursor-grok-4.6/high",
+      "effort": "high"
+    },
+    "notes": "P7.5 GREEN: workspace/OIDC on ImpersonationPolicy/TenancyOptions. Remainder: 2 Commands + provider stancl projection. pest 476/1513, pg 228/865, phpstan 0, pint ok.\nwrite-site: pre_mutation: allow · pre_final: allow",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-23T09:05:40Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-23T09:05:40Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-23T09:05:40Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-23T09:05:40Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-09-23T09:05:40Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-23T09:05:40Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Перевести `ResolveWorkspace`, `OidcLoginController` и\n`LogoutController` с `config()` на Options/policy."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "После P7.3–P7.4 это последние не-command чтения tenancy вне\nпровайдера. Команды остаются composition (CFG-002)."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "три класса §7.3; замыкания провайдера; CHANGELOG."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "`IdentitiesReconcileCommand`, `PendingCreateCommand`;\nсмена OIDC-инвариантов; регистрация маршрутов."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P7-design.json` §7.3;\n`packages/tenancy/src/Support/TenancyOptions.php`;\n`packages/tenancy/src/Support/ImpersonationPolicy.php`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/tenancy/src/Http/Middleware/ResolveWorkspace.php`; `packages/tenancy/src/Http/Controllers/OidcLoginController.php`; `packages/tenancy/src/Http/Controllers/LogoutController.php`; `packages/tenancy/src/TenancyServiceProvider.php`; `CHANGELOG.md`; `@plan/knowledge/findings-P7-receipts.json`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P7/phase.json`; 2) `@plan/knowledge/research-P7-design.json` §0, §7.3; 3) `packages/tenancy/src/Support/TenancyOptions.php`; 4) `packages/tenancy/src/Support/ImpersonationPolicy.php`; 5) `packages/tenancy/src/Http/Controllers/OidcLoginController.php`; 6) `packages/tenancy/src/Http/Middleware/ResolveWorkspace.php`; 7) `packages/tenancy/tests/Feature/OidcLoginTest.php`; 8) `packages/tenancy/tests/Feature/ResolveWorkspaceTest.php`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Таблица §7.3 дословно. `config(` в трёх файлах\nисчезает. Команды не трогать: glob гейта их покрывает. Ни один файл вне\n`Files` не изменяется. Receipt фиксирует оставшиеся `config(` пакета\n(провайдер + Commands) командой `rg -n 'config\\(' packages/tenancy/src`."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Контроллеры резолвятся контейнером — constructor\ninjection штатный. Не читать `SecretRef->reveal()` в контроллере: OIDC\nклиентский секрет, если нужен, уже в объекте, собранном провайдером."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "пакетные `test` и `test:pg`, lint, analyse.\n`rg -n 'config\\('` по трём HTTP-файлам пуст. Receipt содержит вывод\n`rg` по всему `packages/tenancy/src` после правки."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "три потребителя без `config()`; инвентарь остатка\nчтений пакета."
+    }
+  ]
+}

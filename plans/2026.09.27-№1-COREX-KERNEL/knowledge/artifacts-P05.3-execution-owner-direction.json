@@ -1,0 +1,17 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P05.3-execution-owner-direction",
+  "title": "Owner direction — hosted CI for P05.3 (2026-10-03)",
+  "sections": [
+    {
+      "id": "Owner-direction-hosted-CI-for-P05.3-2026-10-03",
+      "title": "Owner direction — hosted CI for P05.3 (2026-10-03)",
+      "text": "Verbatim owner messages in the P05.3 session (`claude-code`, session `31041047-fc13-4a11-89a9-73724f4ba20d`):\n\n- «hosted CI настроим после 5.4, основляй статус в плане»\n- «5.4 я выполню в новой сессии сам»"
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P05.3-execution/owner-direction.md",
+    "sha256": "74897810f3e20ec1ebfa5a1744ea0186483e1b12ea9af0fa271e9d00194e7f0e"
+  }
+}

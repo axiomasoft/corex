@@ -1,0 +1,74 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "findings-P14-receipts",
+  "title": "P14 receipts",
+  "sections": [
+    {
+      "id": "P14-receipts",
+      "title": "P14 receipts",
+      "text": ""
+    },
+    {
+      "id": "P14.1-Compiled-cost-recipes-2026-09-25",
+      "title": "P14.1 — Compiled cost recipes (2026-09-25)",
+      "text": "**Status:** GREEN · **Actor:** plan-run/cursor-grok-4.6/high · **Batch:** E14a\n\n`Api::cost()` stores serialized recipe metadata on the existing extender.\nThe compiler accepts only `base`, `row`, `field`, `relation`, `attribute_filter`,\n`highlight`, `side_effect`, `max_units` as integers `0..10000`, with `base` and\n`max_units` at least 1. Legacy declarations keep `cost = null`, so\n`operation-contract/1` bytes stay unchanged until a recipe is present. Bulk\nmodes fail closed without an explicit recipe. Reversed key order compiles to\nthe same canonical map.\n\n`packages/modules/composer.json` was listed and left unchanged: the extender is\nalready autoloaded and public."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "| Carrier | Evidence |\n|:--|:--|\n| Legacy defaults and unchanged hash | `packages/modules/tests/Unit/ApiOperationCostTest.php` |\n| Unknown keys, negative weights, overflow bounds, missing bulk recipe | same file, named CompilationException messages |\n| Reversed declarations compile deterministically | same file, canonical key order and matching contract hash |\n| `composer --working-dir=packages/modules lint:check` | pint passed |\n| `composer --working-dir=packages/modules analyse` | PHPStan 0 |\n| `composer --working-dir=packages/modules test` | 83 passed, 328 assertions |"
+    },
+    {
+      "id": "P14.2-Pure-estimator-and-API-projection-2026-09-25",
+      "title": "P14.2 — Pure estimator and API projection (2026-09-25)",
+      "text": "**Status:** GREEN · **Actor:** plan-run/cursor-grok-4.6/high · **Batch:** E14a\n\n`Operation` gained a trailing `?array $cost = null`. `DeclaredCostEstimator`\nis a pure `OperationCostEstimator`: `base + row*max(page,export) + field +\nrelation + attribute_filter + highlight + side_effect`, checked arithmetic,\n`max_units` denial, and bounded-export denial for bulk recipes with a row\nweight and no page/export count. Absent page size uses declared pagination\n`max` / `max_rows` / `limit`. `ActualCost` uses the same recipe on observed\ncounters. Presence of a compiled recipe is added to the contract hash.\n\nAdjacent hasher update: `packages/api/src/Internal/OperationContractHasher.php`\nis not in the item Files list; it is the existing hash authority and now\nincludes `cost` only when the compiled recipe is present. Consumer repair:\n`ApiProfileTest` bulk fixture now declares `cost(['base' => 1])`."
+    },
+    {
+      "id": "Validation-2",
+      "title": "Validation",
+      "text": "| Carrier | Evidence |\n|:--|:--|\n| Table-driven weights/page/export/field/relation/filter/highlight/side-effect | `packages/api/tests/Unit/OperationCostTest.php` 12 cases |\n| Overflow and absent bounded export denied | same file, `validation_failed` |\n| Database/cache/network spies see zero calls | same file, `DB::listen` / `Cache` / `Http::assertNothingSent` |\n| Old positional constructors still work | same file |\n| Additive cost hash | same file, legacy vs `cost(['base' => 1])` |\n| `composer --working-dir=packages/api lint:check` | pint passed |\n| `composer --working-dir=packages/api analyse` | PHPStan 0 |\n| `composer --working-dir=packages/api test` | 149 passed, 1 skipped, 1064 assertions |"
+    },
+    {
+      "id": "Root-lanes",
+      "title": "Root lanes",
+      "text": "| Carrier | Evidence |\n|:--|:--|\n| `composer lint:check` | pint passed |\n| `composer analyse` | PHPStan 0 after clearing a stale `build/phpstan` cache that still named a deleted P12 planted probe |\n| `composer test:arch` | 79 passed, 244 assertions |\n| `composer test` | 694 passed, 2762 assertions |\n\nNo SQL path: package `test:pg` not required for E14a. No new runtime\ndependencies. Live rollout, webhooks, and G-DDL remain out of scope."
+    },
+    {
+      "id": "P14.17-Retention-and-recovery-cleanup-2026-09-26",
+      "title": "P14.17 — Retention and recovery cleanup (2026-09-26)",
+      "text": "**Status:** GREEN · **Actor:** plan-exec/grok-4.7-high/high · **Batch:** solo\n\n`BulkRetention` clears an owned terminal result and its input reference 24h\nafter finish, then deletes the tombstone at 30d. Active rows, expired leases,\nand a result whose hash or account does not match the row are left in place.\nA pass examines at most 100 rows. `WebhookRetention` clears a terminal body\nat 7d and pulls `expires_at` back so replay returns `webhook_replay_expired`.\nAttempt history goes at 30d. The delivery tombstone stays, and the webhook\ninbox row is removed only after that tombstone is gone. Body retention and\nthe replay horizon must be equal, and both must fit inside history retention.\nBulk metadata retention must cover idempotency retention, and the result\nwindow must not outlive metadata. `BudgetRetention` abandons an expired held\nreservation without returning units. A missing id is not a refund. Idle\nbucket deletion skips every key still named by a held reservation.\n`corex:api:prune` refuses a batch above 100 and does not open a database from\nthe scope payload."
+    },
+    {
+      "id": "Validation-3",
+      "title": "Validation",
+      "text": "| Carrier | Evidence |\n|:--|:--|\n| Result 24h clear, 30d tombstone, active row, bad hash, foreign scope, batch 100 | `packages/api/tests/Feature/ApiRetentionTest.php` |\n| Body 7d, history 30d, replay refusal, inbox/tombstone dedup, shorter paired window | same file |\n| Expiry without refund, missing release, held reservation keeps buckets | same file |\n| Command `--max=101` rejected; restored scope clears one result | same file |\n| Isolated PostgreSQL schemas `api_p1417_*` after `pg_isready` on `corex_test` | same file, 1 passed, 11 assertions |\n| `PGSQL_*=corex_test ./vendor/bin/pest --filter=ApiRetentionTest` | 8 passed, 89 assertions |\n| Pint on the five new files | passed |\n| PHPStan on the four new source files | 0 errors |\n| `composer --working-dir=packages/api analyse` | 5 errors, all `CompiledRegistry::$fingerprint`; foreign dirty baseline already recorded at P14.16 |\n\nFull package and root suites were not treated as green. No new runtime\ndependency, migration, live webhook send, or production prune was performed."
+    },
+    {
+      "id": "P14.18-Load-contour-snapshots-and-compatibility-gate-2026-09-26",
+      "title": "P14.18 — Load-contour snapshots and compatibility gate (2026-09-26)",
+      "text": "**Status:** GREEN · **Actor:** plan-exec/grok-4.7-high/high · **Batch:** solo\n\nThe existing snapshot generator now writes `api/v1/webhooks.json` and includes\nits hash in `manifest.json`. The document pins the at-least-once/no-ordering\ndelivery, 20 KiB payload limit, retry/replay/rotation wire contract, bulk\nstates, and the installed topic list (empty until a catalogue is wired).\nOperations carry the D75 default enforcement (`global=enforce`, lower scopes\n`observe`) and the canonical cost recipe. OpenAPI lists the bulk and webhook\nroutes. `errors.json` adds the six stable load-contour codes from §15.\n`scripts/check-api-contract.php` still accepts the P13 four-file fixtures.\nWhen `webhooks.json` is present it rejects topic removal, required payload\naddition, response-field removal, type and nullability changes, PII widening,\nsignature or id semantic changes, and major rebind. A cost enforcement change\nis rejected. An optional topic or payload field is allowed."
+    },
+    {
+      "id": "Validation-4",
+      "title": "Validation",
+      "text": "| Carrier | Evidence |\n|:--|:--|\n| Two snapshot generations and manifest file hashes | Builder output is a pure projection; committed `api/v1` self-check `php scripts/check-api-contract.php --baseline api/v1 --candidate api/v1` exit 0. `ContractSnapshotTest` could not compile: foreign `CompiledRegistry::hashCanonical` / `$fingerprint` mismatch |\n| Planted topic, payload, PII, signature, id, major, and cost-enforcement failures | `tests/Arch/ApiContractCompatibilityTest.php` — each candidate exit 1 with the named rule and JSON pointer |\n| Additive optional topic and field | `webhook-allowed-addition` exit 0 |\n| Old P13 compatibility fixtures | same Arch file, baseline vs allowed-addition and the eight original deltas, exit 0 / exit 1 as before |\n| `./vendor/bin/pest tests/Arch/ApiContractCompatibilityTest.php` | 21 passed, 84 assertions |\n| Pint on the builder, writer, snapshot test, gate, and Arch test | passed |\n| PHPStan on `ContractSnapshotBuilder.php` and `WriteApiSnapshots.php` | 0 errors |\n| SQL | no SQL path; package `test:pg` not required |\n\nNo new runtime dependency. No live webhook send, secret rotation, or production migration. G-SECRET remains required before P14.19."
+    },
+    {
+      "id": "P14.20-Package-surfaces-and-integrated-contract-fixtures-2026-09-26",
+      "title": "P14.20 — Package surfaces and integrated contract fixtures (2026-09-26)",
+      "text": "**Status:** GREEN · **Actor:** plan-exec/cursor-grok-4.7/high · **Batch:** solo\n\n`corex/api` keeps public namespaces `CoreX\\Api\\Contracts` and `CoreX\\Api\\Data`. Runtime requires stay `php`, `corex/core`, `corex/modules`, and Illuminate HTTP/support/validation `^12.0|^13.0`. `corex/transfer` stays suggest-only. The package graph allowlist covers the two transfer imports, both guarded by `interface_exists` on `TransferRunner` and `ExportRunner`. A missing factory or `transferInstalled: false` throws `capability_unavailable` before `store->submit`. Delivery stays off; enabling it without `worker_ready` throws `InvalidConfiguration` and does not replace the disabled options. Boxed scope identity is `boxed:{account}` and cloud identity is `{driver}:{database}` on the configured connection; a foreign identity is refused. HTTP and the exposed tool share one handler. Declared cost `base=1,row=1,max_units=10` is 2 units for one page row and `validation_failed` at 100. Isolated schema `api_p1420_tenant_test` on `corex_test` fans out one delivery for a duplicate event; the in-process receiver accepts the synthetic HMAC once, ignores replay, and rejects a tampered body. Planted topic removal, id semantics, and required input fail the contract gate; an optional field passes. `CompiledRegistry` now exposes `fingerprint` so operation contracts can read it. The bulk executor decodes scopes through public `DataScopeCodec`."
+    },
+    {
+      "id": "Validation-5",
+      "title": "Validation",
+      "text": "| Carrier | Evidence |\n|:--|:--|\n| Public surface, Laravel 13.31, missing transfer, worker_ready refusal | `LoadContourBootTest` |\n| HTTP/tool handler, boxed/cloud scope, PostgreSQL local receiver | `LoadContourIntegrationTest` 3 passed, including `#[Group('pg')]` on `127.0.0.1:5434` / `corex_test` |\n| Planted webhook incompatibilities and additive topic | `WebhookCompatibilityTest` |\n| Focused Pest `LoadContour\\|WebhookCompatibility` with `PGSQL_*` | 7 passed, 62 assertions |\n| `composer --working-dir=packages/api lint:check` and `analyse` | pint passed; phpstan 0 errors |\n| `php scripts/package-graph-gate.php` | OK |\n| `php scripts/provider-size-gate.php` | OK |\n| `php scripts/check-api-contract.php --baseline api/v1 --candidate api/v1` | `api-contract: OK` |\n| `BC_CHECK_ONLY=api composer bc-check` | exit 0 (experimental package, breaks reported) |\n\n`composer --working-dir=packages/api test` and `composer test:arch` stay red on the foreign dirty `CompiledRegistry::hashCanonical()` gap and pre-existing error-contract / extension-gate drift. Those suites are not this item's green. No live webhook send, secret rotation, or production migration."
+    }
+  ],
+  "applies_to": [
+    "P14"
+  ],
+  "provenance": {
+    "path": "findings/P14-receipts.md",
+    "sha256": "fd5eb388b2c51d995a8e47bffa58ca3380d4579ad84e2ebf0e2599441c2ebdf7"
+  }
+}

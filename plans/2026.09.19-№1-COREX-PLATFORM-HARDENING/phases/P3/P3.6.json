@@ -1,0 +1,283 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P3.6",
+  "title": "Гейт имён и наблюдательный `config()`",
+  "status": "done",
+  "summary": "Запретить *новые* generic-имена в публичных неймспейсах по\nснимку текущего дерева и ввести наблюдательный гейт `config()` вне\ncomposition boundary.",
+  "why": "`P1-design.md` §5.3: гейт, краснеющий на уже принятом долге,\nотключают. CFG-002: 152 вызова `config(`; blocking в P3 отключат в тот\nже день. Эскиз §3.3 принимается. N12 (`Support/Config.php`) — именованное\nисключение, не молчаливый пропуск.",
+  "scope": {
+    "include": [
+      "`scripts/naming-gate.php` и\n`scripts/naming-gate-grandfather.json`; `scripts/config-composition-gate.php`\nи `scripts/composition-boundary.json`; composer-скрипты; Arch-тест\nнегативов; CHANGELOG; receipt."
+    ],
+    "exclude": [
+      "`--strict` для config (P7); переименование существующих\n`*Manager`/`Dep` (P15); правка 152 вызовов `config(`; имена локальных\nпеременных (A82)."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P3-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P1-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-00-baseline-metrics.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P3/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Support/Config.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "scripts/naming-gate.php",
+      "change": "any"
+    },
+    {
+      "path": "scripts/naming-gate-grandfather.json",
+      "change": "any"
+    },
+    {
+      "path": "scripts/config-composition-gate.php",
+      "change": "any"
+    },
+    {
+      "path": "scripts/composition-boundary.json",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P3-gate-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Запрещённые шаблоны и снимки — §8.1–§8.2.\nNaming blocking только для типов в `public-api` неймспейсе, отсутствующих\nв grandfather JSON. Config-гейт exit 0 всегда; ключ `blocking: false`.\n`Support/Config.php` в allowlist с reason N12. Посадки ProbeHelper и\nConfigCompositionProbe удаляются. Ни один файл вне `Files` не изменяется."
+  ],
+  "guidance": "Готовые списки, JSON allowlist и негативы —\n`@plan/knowledge/research-P3-design.json` §8. Не требовать в Pest exit 1 от config-гейта.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "php scripts/naming-gate.php",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "php scripts/config-composition-gate.php",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "composer test:arch",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "composer lint:check",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "bash scripts/anti-weakening-gate.sh",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "php scripts/naming-gate.php",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "ProbeHelper N1 negative",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "php scripts/config-composition-gate.php C1=45 exit 0",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "procedure": "ConfigCompositionProbe observational",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "procedure": "composer test:arch NamingAndConfig",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V11",
+      "procedure": "anti-weakening-gate",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V12",
+      "procedure": "pint scope scripts+Arch test",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "два CLI, два JSON, Arch-тест; receipt с размером\ngrandfather-снимка и числом observational `C1` на текущем дереве."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-21T13:22:01Z",
+    "finished_at": "2026-09-21T13:22:01Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/cursor-composer-2.5/high",
+      "effort": "high"
+    },
+    "notes": "P3.6 GREEN: naming gate grandfather=1, config C1=45 observational, Arch probes",
+    "deviations": [
+      "P3.6 GREEN: naming gate grandfather=1, config C1=45 observational, Arch probes"
+    ],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-21T13:22:01Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-21T13:22:01Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-21T13:22:01Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-09-21T13:22:01Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-09-21T13:22:01Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V11",
+        "exit": 0,
+        "at": "2026-09-21T13:22:01Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V12",
+        "exit": 0,
+        "at": "2026-09-21T13:22:01Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-21T13:22:01Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Запретить *новые* generic-имена в публичных неймспейсах по\nснимку текущего дерева и ввести наблюдательный гейт `config()` вне\ncomposition boundary."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`P1-design.md` §5.3: гейт, краснеющий на уже принятом долге,\nотключают. CFG-002: 152 вызова `config(`; blocking в P3 отключат в тот\nже день. Эскиз §3.3 принимается. N12 (`Support/Config.php`) — именованное\nисключение, не молчаливый пропуск."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "`scripts/naming-gate.php` и\n`scripts/naming-gate-grandfather.json`; `scripts/config-composition-gate.php`\nи `scripts/composition-boundary.json`; composer-скрипты; Arch-тест\nнегативов; CHANGELOG; receipt."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "`--strict` для config (P7); переименование существующих\n`*Manager`/`Dep` (P15); правка 152 вызовов `config(`; имена локальных\nпеременных (A82)."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P3-design.json` §0, §8; `@plan/knowledge/research-P1-design.json` §5.3 и\n§9 (где допустим вызов config); числа 152 из `@plan/knowledge/research-00-baseline-metrics.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`scripts/naming-gate.php`; `scripts/naming-gate-grandfather.json`; `scripts/config-composition-gate.php`; `scripts/composition-boundary.json`; `composer.json`; `tests/Arch/NamingAndConfigGateTest.php`; `CHANGELOG.md`; `@plan/knowledge/findings-P3-gate-receipts.json`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P3/phase.json`; 2) `@plan/knowledge/research-P3-design.json` §0, §8; 3) `@plan/knowledge/research-P1-design.json` §5.3; 4) `@plan/knowledge/research-P1-design.json` §2.8 CFG-002 и §9; 5) `@plan/knowledge/research-00-baseline-metrics.json` (152 `config(`); 6) `tests/Arch/PackageGraphTest.php` (образец посадки); 7) корневой `composer.json` scripts; 8) `packages/core/src/Support/Config.php` (N12, не читать целиком — только что файл существует)."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Запрещённые шаблоны и снимки — §8.1–§8.2.\nNaming blocking только для типов в `public-api` неймспейсе, отсутствующих\nв grandfather JSON. Config-гейт exit 0 всегда; ключ `blocking: false`.\n`Support/Config.php` в allowlist с reason N12. Посадки ProbeHelper и\nConfigCompositionProbe удаляются. Ни один файл вне `Files` не изменяется."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Готовые списки, JSON allowlist и негативы —\n`@plan/knowledge/research-P3-design.json` §8. Не требовать в Pest exit 1 от config-гейта."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "`php scripts/naming-gate.php` код 0 на чистом дереве.\nПосадка `ProbeHelper` в Contracts ядра: exit ≠ 0, вывод содержит\n`ProbeHelper.php` и `N1`; файла нет после теста. `php scripts/config-composition-gate.php`\nexit 0; посадка `config('probe-key')` печатает имя probe-файла и всё же\nexit 0. `composer test:arch` зелёный. `composer lint:check` зелёный.\n`bash scripts/anti-weakening-gate.sh` зелёный."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "два CLI, два JSON, Arch-тест; receipt с размером\ngrandfather-снимка и числом observational `C1` на текущем дереве."
+    }
+  ]
+}

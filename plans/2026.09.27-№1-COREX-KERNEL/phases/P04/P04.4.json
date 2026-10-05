@@ -1,0 +1,405 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P04.4",
+  "title": "Strict поверхность, manifests, SemVer и документация",
+  "status": "done",
+  "summary": "Переключить API/SPI enforcement на strict, удалить namespace public-api metadata, сгенерировать финальные manifests/docs и закрепить layer-specific SemVer/BC gates.",
+  "why": "D63/D64; strict cutover возможен только на zero-debt predecessor surface и typed error registry.",
+  "scope": {
+    "include": [
+      "Fixed rollout dossier §3.4: graph R4/R4b scanner reuse, all 21 manifest public-api removal, obsolete undeclared-surface retirement, 20 package php-api manifests + generated reference, composer/CI strict, docs policy/constitution/taxonomy/semver, Roave membership filter and negative fixtures. Reconcile predecessor rows with actual source and generated artifacts."
+    ],
+    "exclude": [
+      "Новый публичный API/DTO дизайн, изменения error semantics, typed config P05, HTTP wire policy P06, publication/live CI D47."
+    ]
+  },
+  "depends_on": [
+    "P04.2",
+    "P04.3"
+  ],
+  "decisions": [
+    "D63",
+    "D64"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P04-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P04-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/knowledge/artifacts-P04-design-examples.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/artifacts/P04-design/input-manifest.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/decisions/D63.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D64.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/artifacts/P04.2-execution/classification-result.tsv",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/artifacts/P04.3-execution/error-registry.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "scripts/package-graph-gate.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "scripts/bc-check.sh",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "docs/architecture/api-policy.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "scripts/package-graph-gate.php",
+      "change": "any"
+    },
+    {
+      "path": "scripts/package-graph-undeclared-surface.json",
+      "change": "any"
+    },
+    {
+      "path": "scripts/bc-check.sh",
+      "change": "any"
+    },
+    {
+      "path": "scripts/bc/**",
+      "change": "any"
+    },
+    {
+      "path": "packages/*/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "products/flex-crm/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/*/resources/contracts/php-api.json",
+      "change": "any"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "change": "any"
+    },
+    {
+      "path": "docs/architecture/{api-policy,semver-policy,constitution,taxonomy}.md",
+      "change": "any"
+    },
+    {
+      "path": "docs/reference/{public-api,php-api-schema}.md",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Single scanner owner. Remove old namespace source only after source strict zero. Graph existing rules remain independently negative-tested; stale generated manifests cannot authorize import. Never update classified snapshots without source match; regenerate twice idempotently. Roave preserves old revision membership for public deletions and dependencies. No blanket @internal filter on Api/Spi. BC infrastructure failure never green via experimental report-only."
+  ],
+  "guidance": "dossier §3.4 steps 1–9 is complete branch/runbook; examples §4 exact command/schema/SemVer matrix. No new architecture decision; producer discrepancy repairs owning outcome before final strict cutover. Capture final manifests/docs digests, full review evidence and no execution claim based on report exit.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "php scripts/package-graph-gate.php",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "git grep -n '\"public-api\"' -- packages/*/composer.json products/*/composer.json",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "composer module-layout-gate",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "php scripts/quality-ceiling-guard.php",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "php scripts/rename-completeness-gate.php",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "cmd": "php scripts/ownership-gate.php --strict",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "cmd": "php scripts/package-docs-gate.php",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "cmd": "bash scripts/anti-weakening-gate.sh",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "cmd": "bash scripts/mutation-check.sh --all",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "procedure": "- `scripts/php84 php scripts/php-api.php --write` twice → byte-identical; `scripts/php84 php scripts/php-api.php --strict --check`, `scripts/php84 php scripts/error-registry.php --check` → exit 0.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V11",
+      "procedure": "- `php scripts/package-graph-gate.php` + PackageGraphTest negatives → graph GREEN; internal import, undeclared dependency, unknown symbol, ownership and type direction mutations remain RED.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V12",
+      "procedure": "- `scripts/php84 composer validate --strict` + all package manifests validated; `git grep -n '\"public-api\"' -- packages/*/composer.json products/*/composer.json` returns no matches; other extra fields unchanged; obsolete undeclared snapshot removed.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V13",
+      "procedure": "- `scripts/php84 composer test -- --filter='Attributes|PackageGraph|ErrorContract'` → exit 0; manifest byte corruption/seeded unclassified/model/import cases fail exact strict diagnostic then restore GREEN.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V14",
+      "procedure": "- `scripts/php84 composer bc-check` → exit 0 with declared pre-1.0 deltas and preserved infrastructure checks; isolated fixtures prove Internal-only change pass, deleted base Api/Spi + new required Spi Implement member fail compatibility.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V15",
+      "procedure": "- `composer module-layout-gate` → zero residual; generated docs/reference/public-api.md and per-package manifests source-consistent; docs claim gate and SemVer examples pass.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V16",
+      "procedure": "- `scripts/php84 composer lint:check`, `scripts/php84 composer analyse` → exit 0; `php scripts/quality-ceiling-guard.php` → `ceilings OK`; no threshold weakening.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V17",
+      "procedure": "- `scripts/php84 composer test`, `PGSQL_PORT=5432 scripts/php84 composer test:pg`, `scripts/php84 composer test:packages`, `scripts/php84 composer test:arch` → exit 0; isolated `_test` DB preflight before DB tests, PHP8.4 required. Existing P03 count is reference, preserved behavior proven by affected assertions.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V18",
+      "procedure": "- `scripts/php84 composer golden` → 4 tests pass **without** GOLDEN_UPDATE. D64 preimage/candidate/semantic-delta/review proves each updated layer; routes byte-identical to item preimage.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V19",
+      "procedure": "- `php scripts/rename-completeness-gate.php`, `php scripts/ownership-gate.php --strict`, `php scripts/package-docs-gate.php`, `bash scripts/anti-weakening-gate.sh`, `bash scripts/mutation-check.sh --all` → exit 0 (new gates get negative controls; preserve 34 existing mutation cases).",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V20",
+      "procedure": "- Independent review: execution-sheet reviewer/effort, fresh context; reviewer model != executor; item-spec + diff + Validation + semantic delta; `review: <provider>/<model> <GREEN|findings:N>`; <=2 fix/recheck rounds, then concrete unresolved boundary evidence.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "20 per-package php-api.json; generated public-api reference; strict source/graph/BC CI and docs; `artifacts/P04.4-execution/final-surface.json`, `completion.md`; phase item/review acceptance evidence GREEN."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "requested"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-10-01T08:04:10Z",
+    "finished_at": "2026-10-01T09:08:19Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "executor/codex/gpt-6.1-sol/high",
+      "effort": "high"
+    },
+    "notes": "P04.4 strict/API/SPI/BC/docs GREEN; completion.md and final-surface.json. Independent review owner-waived D68; no extra audit/replay.\nwrite-site: pre_mutation: allow · pre_final: allow",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-10-01T09:08:19Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V11",
+        "exit": 0,
+        "at": "2026-10-01T09:08:19Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V12",
+        "exit": 0,
+        "at": "2026-10-01T09:08:19Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V13",
+        "exit": 0,
+        "at": "2026-10-01T09:08:19Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V14",
+        "exit": 0,
+        "at": "2026-10-01T09:08:19Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V15",
+        "exit": 0,
+        "at": "2026-10-01T09:08:19Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V16",
+        "exit": 0,
+        "at": "2026-10-01T09:08:19Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V17",
+        "exit": 0,
+        "at": "2026-10-01T09:08:19Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V18",
+        "exit": 0,
+        "at": "2026-10-01T09:08:19Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V19",
+        "exit": 0,
+        "at": "2026-10-01T09:08:19Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V20",
+        "exit": 0,
+        "at": "2026-10-01T09:08:19Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-10-01T09:08:19Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Переключить API/SPI enforcement на strict, удалить namespace public-api metadata, сгенерировать финальные manifests/docs и закрепить layer-specific SemVer/BC gates."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "D63/D64; strict cutover возможен только на zero-debt predecessor surface и typed error registry."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Fixed rollout dossier §3.4: graph R4/R4b scanner reuse, all 21 manifest public-api removal, obsolete undeclared-surface retirement, 20 package php-api manifests + generated reference, composer/CI strict, docs policy/constitution/taxonomy/semver, Roave membership filter and negative fixtures. Reconcile predecessor rows with actual source and generated artifacts."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Новый публичный API/DTO дизайн, изменения error semantics, typed config P05, HTTP wire policy P06, publication/live CI D47."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P04-design.json` (§1, §2, §3.4, §4, §5, §6) · `@plan/knowledge/research-P04-design-rag.json` · `@plan/knowledge/artifacts-P04-design-examples.json` (§2, §4) · `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P04-design/input-manifest.json` · `@plan/decisions/D63.json` · `@plan/decisions/D64.json` · `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P04.2-execution/classification-result.tsv` (producer: P04.2) · `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P04.3-execution/error-registry.json` (producer: P04.3)"
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`scripts/package-graph-gate.php`, reusable Attributes scanner (only strict integration corrections), `scripts/package-graph-undeclared-surface.json` (retire), `scripts/bc-check.sh`, `scripts/bc/**`; `tests/Arch/PackageGraphTest.php`, scanner/BC fixture tests; `packages/*/composer.json`, `products/flex-crm/composer.json`, `composer.lock`; `packages/*/resources/contracts/php-api.json`, package changelogs; `composer.json`, `.github/workflows/ci.yml`; `docs/architecture/{api-policy,semver-policy,constitution,taxonomy}.md`, `docs/reference/{public-api,php-api-schema}.md`, affected docs-public/package docs; own execution docs/gate evidence."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/decisions/D63.json` + `@plan/decisions/D64.json`; 2) `@plan/knowledge/research-P04-design.json` §3.4, §4, §5; 3) `@plan/knowledge/artifacts-P04-design-examples.json` §2, §4; 4) `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P04.2-execution/classification-result.tsv` (producer: P04.2); 5) `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P04.3-execution/error-registry.json` (producer: P04.3); 6) `scripts/package-graph-gate.php` + `tests/Arch/PackageGraphTest.php`; 7) `scripts/bc-check.sh`; 8) `docs/architecture/api-policy.md`"
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Single scanner owner. Remove old namespace source only after source strict zero. Graph existing rules remain independently negative-tested; stale generated manifests cannot authorize import. Never update classified snapshots without source match; regenerate twice idempotently. Roave preserves old revision membership for public deletions and dependencies. No blanket @internal filter on Api/Spi. BC infrastructure failure never green via experimental report-only."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "dossier §3.4 steps 1–9 is complete branch/runbook; examples §4 exact command/schema/SemVer matrix. No new architecture decision; producer discrepancy repairs owning outcome before final strict cutover. Capture final manifests/docs digests, full review evidence and no execution claim based on report exit."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "- `scripts/php84 php scripts/php-api.php --write` twice → byte-identical; `scripts/php84 php scripts/php-api.php --strict --check`, `scripts/php84 php scripts/error-registry.php --check` → exit 0.\n- `php scripts/package-graph-gate.php` + PackageGraphTest negatives → graph GREEN; internal import, undeclared dependency, unknown symbol, ownership and type direction mutations remain RED.\n- `scripts/php84 composer validate --strict` + all package manifests validated; `git grep -n '\"public-api\"' -- packages/*/composer.json products/*/composer.json` returns no matches; other extra fields unchanged; obsolete undeclared snapshot removed.\n- `scripts/php84 composer test -- --filter='Attributes|PackageGraph|ErrorContract'` → exit 0; manifest byte corruption/seeded unclassified/model/import cases fail exact strict diagnostic then restore GREEN.\n- `scripts/php84 composer bc-check` → exit 0 with declared pre-1.0 deltas and preserved infrastructure checks; isolated fixtures prove Internal-only change pass, deleted base Api/Spi + new required Spi Implement member fail compatibility.\n- `composer module-layout-gate` → zero residual; generated docs/reference/public-api.md and per-package manifests source-consistent; docs claim gate and SemVer examples pass.\n\n- `scripts/php84 composer lint:check`, `scripts/php84 composer analyse` → exit 0; `php scripts/quality-ceiling-guard.php` → `ceilings OK`; no threshold weakening.\n- `scripts/php84 composer test`, `PGSQL_PORT=5432 scripts/php84 composer test:pg`, `scripts/php84 composer test:packages`, `scripts/php84 composer test:arch` → exit 0; isolated `_test` DB preflight before DB tests, PHP8.4 required. Existing P03 count is reference, preserved behavior proven by affected assertions.\n- `scripts/php84 composer golden` → 4 tests pass **without** GOLDEN_UPDATE. D64 preimage/candidate/semantic-delta/review proves each updated layer; routes byte-identical to item preimage.\n- `php scripts/rename-completeness-gate.php`, `php scripts/ownership-gate.php --strict`, `php scripts/package-docs-gate.php`, `bash scripts/anti-weakening-gate.sh`, `bash scripts/mutation-check.sh --all` → exit 0 (new gates get negative controls; preserve 34 existing mutation cases).\n- Independent review: execution-sheet reviewer/effort, fresh context; reviewer model != executor; item-spec + diff + Validation + semantic delta; `review: <provider>/<model> <GREEN|findings:N>`; <=2 fix/recheck rounds, then concrete unresolved boundary evidence."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "20 per-package php-api.json; generated public-api reference; strict source/graph/BC CI and docs; `artifacts/P04.4-execution/final-surface.json`, `completion.md`; phase item/review acceptance evidence GREEN."
+    }
+  ]
+}

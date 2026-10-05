@@ -1,0 +1,44 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D62",
+  "title": "P04: разрешение владельца на Sol при дизайне",
+  "date": "2026-09-29",
+  "status": "accepted",
+  "decision": "Разрешён дизайн P04 в текущем root на codex/gpt-6-sol/high, вместо планового\nclaude-opus-5-5/high и command default frontier/high. Это scoped authoring override,\nне изменение будущих item routes, независимости design audit или scope.\nДизайн завершается на артефактах P04; finish и исполнение не запускаются автоматически.\n\nCLI `design-context` отклонил нестандартную строку `$ & task:…` и последующее steering\nсообщение (`ROUTE_LAUNCH_MISMATCH`). Для design-only использован тот же публичный\n`task.plan_work.design_context(..., finish=True)` без execution route proof: компактная\nсхема и существующий контекст; source plan/backlog прочитаны отдельно. Actual model взят\nиз provider turn_context, а не выдан за успешно attested execution admission.\nДефект parser не меняет продуктовые контракты; Task package не правится.",
+  "rationale": "Владелец явно разрешил Sol после выбора команды; provenance текущего дизайна должен соответствовать фактическому author, сохраняя scope и independent audit boundary.",
+  "applies_to": [
+    "P04"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "owner, current Codex session; реализация записи designer/codex/gpt-6-sol/high."
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D62\ndate: 2026-09-29\nstatus: accepted\nitem: P04\nitems: [P04]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D62-P04-Sol",
+      "title": "D62 — P04: разрешение владельца на Sol при дизайне",
+      "text": "**Actor:** owner, current Codex session; реализация записи designer/codex/gpt-6-sol/high.\n**Evidence:** owner message «разрешаю исполнение моделью sol» после явного\n`$ & task:plan-design 2026.09.27-№1-COREX-KERNEL P04`; текущий provider turn_context:\n`gpt-6-sol`, effort `high`, cwd `corex`, rollout\n`rollout-2026-09-29T16-21-47-01a0ed54-1b4b-7821-9974-44912db4e27d.jsonl`.\nHost rollout — provenance, не переносимый bundle input. RAG:—."
+    },
+    {
+      "id": "Solution",
+      "title": "Solution",
+      "text": "Разрешён дизайн P04 в текущем root на codex/gpt-6-sol/high, вместо планового\nclaude-opus-5-5/high и command default frontier/high. Это scoped authoring override,\nне изменение будущих item routes, независимости design audit или scope.\nДизайн завершается на артефактах P04; finish и исполнение не запускаются автоматически.\n\nCLI `design-context` отклонил нестандартную строку `$ & task:…` и последующее steering\nсообщение (`ROUTE_LAUNCH_MISMATCH`). Для design-only использован тот же публичный\n`task.plan_work.design_context(..., finish=True)` без execution route proof: компактная\nсхема и существующий контекст; source plan/backlog прочитаны отдельно. Actual model взят\nиз provider turn_context, а не выдан за успешно attested execution admission.\nДефект parser не меняет продуктовые контракты; Task package не правится."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "Владелец явно разрешил Sol после выбора команды; provenance текущего дизайна должен соответствовать фактическому author, сохраняя scope и independent audit boundary."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "Meta, Update Log и design journal actor фиксируют Sol/high. D56 default author остаётся\nдля других фаз; текущая рекомендация после P04 — finish. Установленная команда требует\nотдельный GREEN design audit до execution (D24); прежний fingerprint P03 не применим."
+    }
+  ]
+}

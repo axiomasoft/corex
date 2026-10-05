@@ -1,0 +1,267 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P13.10",
+  "title": "Deterministic v1 contract snapshots",
+  "status": "done",
+  "summary": "Generate and commit the installed-code v1 OpenAPI, operation, error and digest manifest\nfrom one profile.",
+  "why": "`@plan/knowledge/research-P13-design.json` §9; D73/S35. Deterministic runtime generation without a committed\nbaseline cannot prove compatibility to external clients.",
+  "scope": {
+    "include": [
+      "Snapshot builder/command; canonical output; v1 OpenAPI/operations/errors/manifest;\nP12 fixture consumption; repeat-generation and digest tests; build-time profile fixture."
+    ],
+    "exclude": [
+      "Tenant-effective capability snapshot; webhooks.json before P14; compatibility\nverdict (P13.11); client SDK generation; timestamps/host paths."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D57"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/phases/P13/P13.3.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P13/P13.9.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P12/P12.8.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D57.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P13/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P13-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D73.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P12-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/api/src/OpenApi.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/api/src/Internal/JsonCanonical.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/api/tests/Feature/PlatformTest.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/api/src/Internal/ContractSnapshotBuilder.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/src/Commands/WriteApiSnapshots.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/src/ApiServiceProvider.php",
+      "change": "any"
+    },
+    {
+      "path": "api/v1/openapi.json",
+      "change": "any"
+    },
+    {
+      "path": "api/v1/operations.json",
+      "change": "any"
+    },
+    {
+      "path": "api/v1/errors.json",
+      "change": "any"
+    },
+    {
+      "path": "api/v1/manifest.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/tests/Feature/ContractSnapshotTest.php",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Generator owns all `api/v1/*.json`; never hand-edit them. Exact contents/\nexclusions from §9. Operations snapshot is behavioral authority; OpenAPI is projection; errors derive\nfrom P12 fixture. Manifest hashes exact canonical bytes and includes no time/path/tenant/secret. Command\nfails on dirty target unless explicit `--check` or atomic replace succeeds."
+  ],
+  "guidance": "Encode via `JsonCanonical` then pretty-print only through one deterministic helper\nwhose bytes are covered by test. Sort operations/errors/properties where semantic order is irrelevant.\nUse a committed test profile assembled from module declarations, not live production tenant state.",
+  "validation": [
+    {
+      "id": "V1",
+      "procedure": "Generate twice into temporary directories: byte-identical",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "Manifest SHA-256 matches all three files; reverse module input is the same",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "Alter operation input changes the digest; --check passes current files and fails one-byte drift",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "No webhooks.json, host path, or secret",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "API lint, static analysis and full suite",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Generator/command, four generated v1 carriers and reproducibility/digest evidence."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-25T09:07:44Z",
+    "finished_at": "2026-09-25T09:13:04Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-run/cursor-grok-4.7/high",
+      "effort": "high"
+    },
+    "notes": "P13.10 GREEN: corex:api-snapshots writes deterministic v1 openapi, operations, errors and manifest. Repeat bytes match; --check fails one-byte drift. API pest 145/1023, phpstan 0, pint passed.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-09-25T09:13:04Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-25T09:13:04Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-25T09:13:04Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-25T09:13:04Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-25T09:13:04Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-25T09:13:04Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Generate and commit the installed-code v1 OpenAPI, operation, error and digest manifest\nfrom one profile."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`@plan/knowledge/research-P13-design.json` §9; D73/S35. Deterministic runtime generation without a committed\nbaseline cannot prove compatibility to external clients."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Snapshot builder/command; canonical output; v1 OpenAPI/operations/errors/manifest;\nP12 fixture consumption; repeat-generation and digest tests; build-time profile fixture."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Tenant-effective capability snapshot; webhooks.json before P14; compatibility\nverdict (P13.11); client SDK generation; timestamps/host paths."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/phases/P13/P13.3.json`; `@plan/phases/P13/P13.9.json`;\n`@plan/phases/P12/P12.8.json`; `@plan/decisions/D57.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/api/src/Internal/ContractSnapshotBuilder.php`;\n`packages/api/src/Commands/WriteApiSnapshots.php`;\n`packages/api/src/ApiServiceProvider.php`;\n`api/v1/openapi.json`;\n`api/v1/operations.json`;\n`api/v1/errors.json`;\n`api/v1/manifest.json`;\n`packages/api/tests/Feature/ContractSnapshotTest.php`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P13/phase.json`; 2) `@plan/knowledge/research-P13-design.json` §9;\n3) `@plan/decisions/D73.json`; 4) `@plan/phases/P13/P13.3.json`;\n5) `@plan/phases/P13/P13.9.json`; 6) `@plan/phases/P12/P12.8.json`;\n7) `@plan/knowledge/research-P12-design.json` §9; 8) `packages/api/src/OpenApi.php`;\n9) `packages/api/src/Internal/JsonCanonical.php`;\n10) `@plan/decisions/D57.json`;\n11) `packages/api/tests/Feature/PlatformTest.php`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Generator owns all `api/v1/*.json`; never hand-edit them. Exact contents/\nexclusions from §9. Operations snapshot is behavioral authority; OpenAPI is projection; errors derive\nfrom P12 fixture. Manifest hashes exact canonical bytes and includes no time/path/tenant/secret. Command\nfails on dirty target unless explicit `--check` or atomic replace succeeds."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Encode via `JsonCanonical` then pretty-print only through one deterministic helper\nwhose bytes are covered by test. Sort operations/errors/properties where semantic order is irrelevant.\nUse a committed test profile assembled from module declarations, not live production tenant state."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Generate twice into temporary directories: byte-identical. Manifest SHA-256 matches\nall three files; reverse module input same. Alter operation/error input changes expected digest. `--check`\npasses current files and fails one-byte drift. No `webhooks.json`, host path, date, activation or secret.\nAPI lint/analyse/test green."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Generator/command, four generated v1 carriers and reproducibility/digest evidence."
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D128",
+  "title": "P14.19 uses an item-specific local-source G-SECRET boundary",
+  "date": "2026-09-26",
+  "status": "accepted",
+  "decision": "P14.19 declares the item-specific `[OWNER-GATE:G-SECRET-P14.19]`, retaining\n`branch=main` and `scope=packages/api/config/corex-api.php`. Its Authority adds\n`boundary=owner-session`, `effect=local-source` and `environment=checkout`.\nThe item remains limited to its declared Files, Validation and local source\neffects. This amendment does not grant the gate and does not authorize real\nsecrets, live delivery, secret rotation, production migration, deployment,\nrelease or external publication. The Task runtime still requires a fresh exact\nowner `task:plan-run` invocation for P14.19 before protected product writes.",
+  "rationale": "The local boundary matches the actual reversible checkout-only effect while\nretaining an exact session-bound owner grant and preventing the generic\nG-SECRET risk-class name from becoming a reusable cross-item grant.",
+  "applies_to": [
+    "P14.19"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "owner / human, with plan-maintenance / codex-gpt-6-astra/high."
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D128\ndate: 2026-09-26\nstatus: accepted\nitem: P14.19\nitems: [P14.19]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D128-P14.19-uses-an-item-specific-local-source-G-SECRET-boundary",
+      "title": "D128 — P14.19 uses an item-specific local-source G-SECRET boundary",
+      "text": "**Actor:** owner / human, with plan-maintenance / codex-gpt-6-astra/high.\n\n**Evidence:** `RAG:—` P14.19 changes only checkout PHP/config source and runs\nsynthetic/local validation. Its frozen Scope Excluded and Implementation Rules\nforbid live webhook sends, real secret rotation, production migration, deployment\nand release. The exact `task:plan-exec` invocation reached `AUTHORITY_BOUNDARY`\nbefore durable start, and the Codex provider has no external verifier or nonce\nstore for the default `provider-proof` boundary\n(`AUTHORITY_PROVIDER_UNAVAILABLE`). The owner then explicitly directed the plan\ndesigner to perform the design correction and execution in the same root."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "P14.19 declares the item-specific `[OWNER-GATE:G-SECRET-P14.19]`, retaining\n`branch=main` and `scope=packages/api/config/corex-api.php`. Its Authority adds\n`boundary=owner-session`, `effect=local-source` and `environment=checkout`.\nThe item remains limited to its declared Files, Validation and local source\neffects. This amendment does not grant the gate and does not authorize real\nsecrets, live delivery, secret rotation, production migration, deployment,\nrelease or external publication. The Task runtime still requires a fresh exact\nowner `task:plan-run` invocation for P14.19 before protected product writes."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "The local boundary matches the actual reversible checkout-only effect while\nretaining an exact session-bound owner grant and preventing the generic\nG-SECRET risk-class name from becoming a reusable cross-item grant."
+    }
+  ]
+}

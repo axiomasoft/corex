@@ -1,0 +1,186 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P17.12",
+  "title": "G-RELEASE publication and exact-tag post-publication proof",
+  "status": "todo",
+  "summary": "Under an exact owner grant, publish only the sealed `1.0.0` split/root refs and releases, then prove consumers resolve the released artifacts.",
+  "why": "`@plan/knowledge/research-P17-design.json` §10; D97. Publication is externally visible and irreversible; a green local candidate is necessary but not authority.",
+  "scope": {
+    "include": [
+      "Live pre-write reconciliation; ordered idempotent packet operations; append-only ledger; partial resume; exact-tag public/private install; released digest match; final phase receipt."
+    ],
+    "exclude": [
+      "Undeclared repository/registry; repository creation or visibility change; secret provisioning; force/delete/rewrite; version substitution; product repair; live customer migration."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D97"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/phases/P17/P17.11.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D97.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P17/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P17-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "scripts/distribution/publish_guard.py",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "scripts/distribution/publish_exact.py",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "scripts/distribution/tests/test_publish_guard.py",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "docs/distribution-dry-run.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "CHANGELOG.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "scripts/distribution/publish_exact.py",
+      "change": "any"
+    },
+    {
+      "path": "scripts/distribution/publish_guard.py",
+      "change": "any"
+    },
+    {
+      "path": "scripts/distribution/tests/test_publish_guard.py",
+      "change": "any"
+    },
+    {
+      "path": "@plan/findings/P17-publication-ledger.jsonl",
+      "change": "any"
+    },
+    {
+      "path": "@plan/findings/P17-release-receipt.json",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Run as `manual`. Materialize owner invocation and verify the grant binds the current packet digest. Follow the exact order/forward-only constraints in §10. Before every operation re-read state; only absent or byte-identical no-op is allowed. Never log credentials."
+  ],
+  "guidance": "Extend the existing exact publisher rather than add a second release engine. Persist an fsynced append-only result before moving to the next operation. On interruption reconcile ledger and remote state, then resume the same packet; mismatch stops.",
+  "validation": [
+    {
+      "id": "V1",
+      "procedure": "Dry-run and synthetic partial-resume tests green before live work. Live ledger has one terminal result per packet operation and no unknown/collision. Fresh consumers install exact `1.0.0` tags on applicable profiles and match candidate archive/tree digests. Root tag/release note and split refs agree; G-RELEASE provenance is present.",
+      "expect": "Source acceptance condition as written.",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Immutable split/root `1.0.0` publication, complete append-only ledger, exact-tag consumer proof and terminal P17 phase receipt."
+  ],
+  "route": {
+    "class": "frontier",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "updated_at": "1970-01-01T00:00:00Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Under an exact owner grant, publish only the sealed `1.0.0` split/root refs and releases, then prove consumers resolve the released artifacts."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`@plan/knowledge/research-P17-design.json` §10; D97. Publication is externally visible and irreversible; a green local candidate is necessary but not authority."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Live pre-write reconciliation; ordered idempotent packet operations; append-only ledger; partial resume; exact-tag public/private install; released digest match; final phase receipt."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Undeclared repository/registry; repository creation or visibility change; secret provisioning; force/delete/rewrite; version substitution; product repair; live customer migration."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/phases/P17/P17.11.json`; `@plan/decisions/D97.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`scripts/distribution/publish_exact.py`; `scripts/distribution/publish_guard.py`; `scripts/distribution/tests/test_publish_guard.py`; `plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-publication-ledger.jsonl`; `plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-release-receipt.json`; `CHANGELOG.md`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P17/phase.json`; 2) `@plan/knowledge/research-P17-design.json` §0, §10; 3) `@plan/decisions/D97.json`; 4) `@plan/phases/P17/P17.11.json`; 5) `scripts/distribution/publish_guard.py`; 6) `scripts/distribution/publish_exact.py`; 7) `scripts/distribution/tests/test_publish_guard.py`; 8) `docs/distribution-dry-run.md`; 9) `CHANGELOG.md` release section."
+    },
+    {
+      "id": "Authority",
+      "title": "Authority",
+      "text": "[OWNER-GATE:G-RELEASE] branch=`main`; scope=`corex-1.0.0-publication-packet`"
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Run as `manual`. Materialize owner invocation and verify the grant binds the current packet digest. Follow the exact order/forward-only constraints in §10. Before every operation re-read state; only absent or byte-identical no-op is allowed. Never log credentials."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Extend the existing exact publisher rather than add a second release engine. Persist an fsynced append-only result before moving to the next operation. On interruption reconcile ledger and remote state, then resume the same packet; mismatch stops."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Dry-run and synthetic partial-resume tests green before live work. Live ledger has one terminal result per packet operation and no unknown/collision. Fresh consumers install exact `1.0.0` tags on applicable profiles and match candidate archive/tree digests. Root tag/release note and split refs agree; G-RELEASE provenance is present."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Immutable split/root `1.0.0` publication, complete append-only ledger, exact-tag consumer proof and terminal P17 phase receipt."
+    }
+  ]
+}

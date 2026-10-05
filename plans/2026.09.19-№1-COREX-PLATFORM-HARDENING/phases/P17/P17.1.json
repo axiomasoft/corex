@@ -1,0 +1,260 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P17.1",
+  "title": "Frozen release cohort and deterministic candidate repository",
+  "status": "done",
+  "summary": "Derive the post-P15 CoreX release cohort and build byte-reproducible package-only `1.0.0` dist archives plus Composer metadata.",
+  "why": "`@plan/knowledge/research-P17-design.json` §2; D96. Hardcoded current package names can be stale after D89/D90, while every later P17 proof needs one identical artifact boundary.",
+  "scope": {
+    "include": [
+      "Metadata/channel discovery; exclusion proof; deterministic export; dependency closure; local Composer repository; candidate manifest; wrong-file/path/non-determinism negatives."
+    ],
+    "exclude": [
+      "Stability flip; product/test code changes; remote writes; tags/releases; fixture execution; publication authorization."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D89",
+    "D90"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P17-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D89.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/decisions/D90.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P16/P16.13.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "scripts/distribution/remaining-cohort-policy.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "delivery/remaining-cohort-20260915/candidate.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P17/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D96.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P15/P15.11.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P15/P15.12.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "scripts/distribution/export-policy.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "scripts/distribution/remaining-cohort-export.py",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "docs/distribution-dry-run.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "scripts/distribution/release-1.0-policy.json",
+      "change": "any"
+    },
+    {
+      "path": "scripts/distribution/release_candidate.py",
+      "change": "any"
+    },
+    {
+      "path": "scripts/distribution/tests/test_release_candidate.py",
+      "change": "any"
+    },
+    {
+      "path": "@plan/artifacts/P17/release-cohort.json",
+      "change": "any"
+    },
+    {
+      "path": "@plan/findings/P17-candidate-receipt.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Use exactly the schema/CLI/rules in §2. Discover identities from executed metadata, retain distribution visibility and include every live CoreX package exactly once. Export the committed candidate source, never arbitrary dirty bytes. No `version` field or path repository."
+  ],
+  "guidance": "Extend/reuse existing stdlib-only exporter primitives. Sort packages/files and canonicalize JSON. Build twice in separate temp roots; compare archive and metadata digests. Scan archive members and generated metadata for absolute/root/sibling paths.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer validate --strict --no-check-publish",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "unit negatives: omitted/extra package, wrong channel, forbidden member, dependency gap, path leakage, one-byte nondeterminism",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "two independent candidate builds are byte-identical",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "every cohort package passes composer validate --strict --no-check-publish",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "candidate repository resolves every exact 1.0.0 package",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "`corex-release-cohort/1`, deterministic local repository, candidate receipt and explicit exclusions for FlexCRM/tombstone with no external write."
+  ],
+  "route": {
+    "class": "frontier",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-27T09:34:55Z",
+    "finished_at": "2026-09-27T09:48:50Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "executor/gpt-5.6-sol/high",
+      "effort": "high"
+    },
+    "notes": "P17.1 GREEN: 19-package post-P15 cohort frozen from committed source; deterministic dist-only repository rebuilt twice; strict Composer validation and exact 1.0.0 lookup pass; negative matrix pass; no external writes.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-27T09:48:50Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-27T09:48:50Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-27T09:48:50Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-27T09:48:50Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-27T09:48:50Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Derive the post-P15 CoreX release cohort and build byte-reproducible package-only `1.0.0` dist archives plus Composer metadata."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`@plan/knowledge/research-P17-design.json` §2; D96. Hardcoded current package names can be stale after D89/D90, while every later P17 proof needs one identical artifact boundary."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Metadata/channel discovery; exclusion proof; deterministic export; dependency closure; local Composer repository; candidate manifest; wrong-file/path/non-determinism negatives."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Stability flip; product/test code changes; remote writes; tags/releases; fixture execution; publication authorization."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P17-design.json` §2; `@plan/decisions/D89.json`; `@plan/decisions/D90.json`; `@plan/phases/P16/P16.13.json`; `scripts/distribution/remaining-cohort-policy.json`; `delivery/remaining-cohort-20260915/candidate.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`scripts/distribution/release-1.0-policy.json`; `scripts/distribution/release_candidate.py`; `scripts/distribution/tests/test_release_candidate.py`; `plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/artifacts/P17/release-cohort.json`; `plans/2026.09.19-№1-COREX-PLATFORM-HARDENING/findings/P17-candidate-receipt.json`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P17/phase.json`; 2) `@plan/knowledge/research-P17-design.json` §0, §2; 3) `@plan/decisions/D96.json`; 4) `@plan/phases/P15/P15.11.json`; 5) `@plan/phases/P15/P15.12.json`; 6) `@plan/phases/P16/P16.13.json`; 7) `scripts/distribution/remaining-cohort-policy.json`; 8) `scripts/distribution/export-policy.json`; 9) `scripts/distribution/remaining-cohort-export.py`; 10) `docs/distribution-dry-run.md`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Use exactly the schema/CLI/rules in §2. Discover identities from executed metadata, retain distribution visibility and include every live CoreX package exactly once. Export the committed candidate source, never arbitrary dirty bytes. No `version` field or path repository."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Extend/reuse existing stdlib-only exporter primitives. Sort packages/files and canonicalize JSON. Build twice in separate temp roots; compare archive and metadata digests. Scan archive members and generated metadata for absolute/root/sibling paths."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Unit negatives for omitted/extra package, wrong channel, forbidden member, dependency gap, path leakage and one-byte nondeterminism. Two builds match. Every package passes `composer validate --strict --no-check-publish`; candidate repository resolves all exact `1.0.0` packages."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "`corex-release-cohort/1`, deterministic local repository, candidate receipt and explicit exclusions for FlexCRM/tombstone with no external write."
+    }
+  ]
+}

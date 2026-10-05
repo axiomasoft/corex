@@ -1,0 +1,119 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "findings-P7-receipts",
+  "title": "P7 receipts",
+  "sections": [
+    {
+      "id": "P7-receipts",
+      "title": "P7 receipts",
+      "text": ""
+    },
+    {
+      "id": "P7.11-config",
+      "title": "P7.11 — блокирующий гейт `config()`",
+      "text": "`scripts/composition-boundary.json` перенесён из §13: `blocking: true`,\nglobs composition, `allow_paths` только для\n`packages/crm/src/Context/Internal/RecordRules.php` — closed in P16.8 via `CrmOptions` (`flex-crm.search_language` unchanged).\n`Support/Config.php` в allowlist нет. Сканер прежний: `token_get_all`,\n`T_STRING config` и `(`. `**` в glob — ноль или больше сегментов, поэтому\n`*/src/**/Commands/*.php` покрывает `src/Commands`. Класс §12\n`CoreX\\Support\\Console\\ValidateConfigCommand` сопоставляется с glob\n`*/src/Console/*.php` через путь `src/Support/Console`.\n\nЧистое дерево, exit 0:\n\n```\nconfig-composition-gate: blocking=true\nconfig-composition-gate: C1 count=0\nconfig-composition-gate: OK\n```\n\nПосадка `packages/core/src/Support/ConfigCompositionProbe.php`, exit 1\n(файл снят в `finally`):\n\n```\nC1 packages/core/src/Support/ConfigCompositionProbe.php:11 config()\nconfig-composition-gate: blocking=true\nconfig-composition-gate: C1 count=1\n```\n\n`vendor/bin/pest --testsuite=Arch --filter=ConfigComposition|NamingAndConfig`:\n6 passed, 19 assertions. `composer test:arch` целиком: 46 passed, 3 failed.\nПровалы не из файлов P7.11: `CoreZoneTest` R-Z0 на\n`ValidateConfigCommand.php`; `PackageGraphTest` — 16 R4/R4b на Options,\nдобавленных P7.1–P7.9.\n\nInputs-проза P7.1–P7.9 свёрнута на `@plan/knowledge/findings-P7-receipts.json`, иначе bundle\nне резолвится. Свидетель P3.6 в `NamingAndConfigGateTest` ждёт exit 1 на\nтой же посадке."
+    },
+    {
+      "id": "P7.10-corex-config-validate-redaction",
+      "title": "P7.10 — `corex:config:validate` и redaction",
+      "text": "`ValidateConfigCommand` регистрируется в `CoreServiceProvider`. Для связанных\nOptions (Core, Tenancy, Auth, Modules, Media — `class_exists` и `bound`) команда\nвызывает `fromArray` и печатает все нарушения за один проход. Эффективные\nдрайверы и доступность адаптеров идут в stdout; ошибки — в stderr. Секреты\nизвестных путей печатаются как `present`/`absent`. Дефолтный hex\n`corex-intl.reference.cursor_secret` даёт `WARNING [secret-default]`;\n`packages/intl/config/corex-intl.php` не менялся.\n\nНегатив сажает `super-secret-value-test` в `SecretRef` (`tenancy.oidc.client_secret`)\nи в строковый `corex-search.cursor_secret`. Строки нет в stdout, stderr и message\nexception. Два нарушения `settings.cache_store` и `settings.cache_ttl` печатаются\nвместе."
+    },
+    {
+      "id": "section",
+      "title": "Вывод команды",
+      "text": "Дефолтная конфигурация тестов, exit 0:\n\n```\ndriver pubsub.driver=null\ndriver tenancy.wakeup.driver=absent\ndriver tenancy.oidc.enabled=absent\nadapter pubsub.redis=not-selected\nadapter wakeup.root_registry=not-selected\nsecret tenancy.oidc.client_secret=absent\nsecret corex-intl.reference.cursor_secret=absent\nsecret corex-search.cursor_secret=absent\nsecret corex-search-meilisearch.key=absent\n```\n\nТот же прогон с секретом и дефолтным intl hex (значения заменены на `present`), exit 0:\n\n```\ndriver pubsub.driver=null\ndriver tenancy.wakeup.driver=absent\ndriver tenancy.oidc.enabled=absent\nadapter pubsub.redis=not-selected\nadapter wakeup.root_registry=not-selected\nsecret tenancy.oidc.client_secret=present\nsecret corex-intl.reference.cursor_secret=present\nWARNING [secret-default] corex-intl.reference.cursor_secret\nsecret corex-search.cursor_secret=absent\nsecret corex-search-meilisearch.key=absent\n```"
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "```\ncomposer --working-dir=packages/core lint:check\nexit 0\n{\"tool\":\"pint\",\"result\":\"passed\"}\n```\n\n```\ncomposer --working-dir=packages/core analyse\nexit 0\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n```\n\n```\ncomposer --working-dir=packages/core test\nexit 0\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":97,\"passed\":97,\"assertions\":243}\n```\n\n```\nbash scripts/anti-weakening-gate.sh\nANTI-WEAKENING GATE: OK\n```"
+    },
+    {
+      "id": "P7.9-MediaOptions-SqlMediaLibrary-ConversionCoordinator",
+      "title": "P7.9 — MediaOptions, SqlMediaLibrary, ConversionCoordinator",
+      "text": "`MediaOptions::fromArray` валидирует `corex-media`; `MediaServiceProvider` делает один\n`get('corex-media')` и `instance(MediaOptions::class)`. `SqlMediaLibrary` и\n`ConversionCoordinator` читают снимок Options. `rg -n 'config\\('` по\n`packages/media/src` пуст (composition — `$app['config']->get` только в провайдере).\n\n`packages/media/tests/Unit/MediaOptionsTest.php` — `max_upload_bytes <= 0`, пустой\n`allowed_mime_types`."
+    },
+    {
+      "id": "Validation-2",
+      "title": "Validation",
+      "text": "```\ncomposer --working-dir=packages/media lint:check\nexit 0\n{\"tool\":\"pint\",\"result\":\"passed\"}\n```\n\n```\ncomposer --working-dir=packages/media analyse\nexit 0\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n```\n\n```\ncomposer --working-dir=packages/media test\nexit 0\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":19,\"passed\":19,\"assertions\":54}\n```\n\n```\ncomposer --working-dir=packages/media test:pg\nexit 0\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":1,\"passed\":1,\"assertions\":1}\n```"
+    },
+    {
+      "id": "P7.8-ModulesOptions-registry-cache",
+      "title": "P7.8 — ModulesOptions, провайдер, registry cache",
+      "text": "`ModulesOptions::fromArray` валидирует `corex-modules` (ttl > 0, prefix непустой,\n`connection` nullable). `ModulesServiceProvider` — один `get('corex-modules')` и\n`instance(ModulesOptions::class)`; hot-path connection/cache через Options.\n`RepositoryModuleRegistryCache` получает `ModulesOptions`, без `config()`.\n\n`packages/modules/tests/Unit/ModulesOptionsTest.php` — ttl ≤ 0."
+    },
+    {
+      "id": "Validation-3",
+      "title": "Validation",
+      "text": "```\ncomposer --working-dir=packages/modules lint:check\nexit 0\n{\"tool\":\"pint\",\"result\":\"passed\"}\n```\n\n```\ncomposer --working-dir=packages/modules analyse\nexit 0\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n```\n\n```\ncomposer --working-dir=packages/modules test\nexit 0\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":28,\"passed\":28,\"assertions\":109}\n```\n\n```\nrg 'config\\(' packages/modules/src/Registry/RepositoryModuleRegistryCache.php\nexit 1\n(no matches)\n```"
+    },
+    {
+      "id": "P7.7-access-matrix-AuthOptions",
+      "title": "P7.7 — access/matrix на AuthOptions",
+      "text": "Семь потребителей `corex-auth.*` в access/matrix читают `AuthOptions`;\n`rg -n 'config\\('` по этим файлам пуст. В `packages/auth/src` вызовов\n`config(` нет (только docblock в провайдере)."
+    },
+    {
+      "id": "Validation-4",
+      "title": "Validation",
+      "text": "```\ncomposer --working-dir=packages/auth lint:check\nexit 0\n{\"tool\":\"pint\",\"result\":\"passed\"}\n```\n\n```\ncomposer --working-dir=packages/auth analyse\nexit 0\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n```\n\n```\ncomposer --working-dir=packages/auth test\nexit 0\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":38,\"passed\":38,\"assertions\":65}\n```\n\n```\ncomposer --working-dir=packages/auth test:pg\nexit 0\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":112,\"passed\":112,\"assertions\":293}\n```"
+    },
+    {
+      "id": "P7.6-AuthOptions-identity",
+      "title": "P7.6 — AuthOptions, провайдер, identity",
+      "text": "`AuthOptions::fromArray` валидирует `corex-auth`; `CoreAuthServiceProvider`\nделает один `get('corex-auth')` и `instance(AuthOptions::class)`;\n`PrincipalUserProvider` и проекция `az-guard.*` берут снимок Options.\n\n`packages/auth/tests/Unit/AuthOptionsTest.php` — пустой panel, неполные\n`identity.columns`, нормализация `workspace_scope_class`."
+    },
+    {
+      "id": "Validation-5",
+      "title": "Validation",
+      "text": "Те же команды, что в блоке P7.7 (пакетный прогон покрывает P7.6+P7.7)."
+    },
+    {
+      "id": "P7.5-workspace-OIDC-config-tenancy",
+      "title": "P7.5 — workspace/OIDC; остаток `config(` tenancy",
+      "text": "`ResolveWorkspace`, `OidcLoginController` и `LogoutController` больше не\nвызывают `config(`. После P7.3–P7.5 в `packages/tenancy/src` остаются\nтолько composition-чтения:\n\n```\n$ rg -n 'config\\(' packages/tenancy/src\npackages/tenancy/src/Commands/PendingCreateCommand.php:25:        $centralConnection = (string) config('tenancy.central_connection');\npackages/tenancy/src/Commands/IdentitiesReconcileCommand.php:25:        $centralConnection = (string) config('tenancy.central_connection');\npackages/tenancy/src/TenancyServiceProvider.php:483:        config([\npackages/tenancy/src/TenancyServiceProvider.php:553:            config([\npackages/tenancy/src/TenancyServiceProvider.php:562:                    ...config('tenancy.identification.middleware', []),\n```\n\nКоманды — CFG-002 (composition). Провайдер пишет проекцию stancl и\nмержит чужой `tenancy.identification.middleware`."
+    },
+    {
+      "id": "Validation-6",
+      "title": "Validation",
+      "text": "```\ncomposer --working-dir=packages/tenancy lint:check\nexit 0\n{\"tool\":\"pint\",\"result\":\"passed\"}\n```\n\n```\ncomposer --working-dir=packages/tenancy analyse\nexit 0\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n```\n\n```\ncomposer --working-dir=packages/tenancy test\nexit 0\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":476,\"passed\":476,\"assertions\":1513}\n```\n\n```\n./vendor/bin/pest --group=pg (packages/tenancy)\nexit 0\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":228,\"passed\":228,\"assertions\":865}\n```"
+    },
+    {
+      "id": "P7.2-TenancyOptions-policy",
+      "title": "P7.2 — TenancyOptions, три policy, провайдер",
+      "text": "`packages/tenancy/tests/Unit/TenancyOptionsTest.php`\n\n- valid snapshot resolves `centralConnection`, `wakeupDriver`, `status_gate` methods\n- `oidc.enabled` without `client_secret` → `oidc.client_secret` violation\n- `wakeup.driver=root_registry` with empty `root_connection` → violation\n- both cross-field failures accumulate in one `InvalidConfiguration`\n\n`TenancyServiceProvider` reads `tenancy` / `corex-tenancy` only at the\ncomposition boundary; service closures resolve `TenancyOptions` after\nTestbench `defineEnvironment()` so OIDC test fixtures stay valid."
+    },
+    {
+      "id": "Validation-7",
+      "title": "Validation",
+      "text": "```\ncomposer --working-dir=packages/tenancy lint:check\nexit 0\n{\"tool\":\"pint\",\"result\":\"passed\"}\n```\n\n```\ncomposer --working-dir=packages/tenancy analyse\nexit 0\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n```\n\n```\ncomposer --working-dir=packages/tenancy test\nexit 0\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":476,\"passed\":476,\"assertions\":1513}\n```\n\n```\n../../vendor/bin/pest --group=pg (packages/tenancy)\nexit 0\n```"
+    },
+    {
+      "id": "P7.12-D100-behavior-proof",
+      "title": "P7.12 — D100 behavior proof",
+      "text": "Witnesses consume `CoreOptions::fromArray()` and one `SqlSavedViewRepository`\ninstance. Product code under `packages/core/src/` was not written by this item."
+    },
+    {
+      "id": "TTL-and-SecretRef",
+      "title": "TTL and SecretRef",
+      "text": "`packages/core/tests/Unit/CoreOptionsTest.php`\n\n- missing `settings` and missing `settings.cache_ttl` resolve to `3600`\n- explicit `null` stays `null`\n- `0` stays `0`\n- `120` stays `120`\n- `cache_store: ''` and `cache_ttl: -1` accumulate in one `InvalidConfiguration`\n  with both violation strings\n- `SecretRef` interpolation, `(string)`, and `var_dump` show `[redacted]`;\n  `json_encode` does not contain the plaintext; `serialize` throws `LogicException`"
+    },
+    {
+      "id": "Dynamic-default-connection",
+      "title": "Dynamic default connection",
+      "text": "`packages/core/tests/Views/SqlSavedViewRepositoryTest.php`\n\n- one repository, injected recording `DatabaseManager`, no container rebind\n  between `viewsFor` calls\n- successive defaults `central` → `tenant` → `central` select those connection\n  names\n- explicit `views.connection = pinned` stays `pinned` on the same three defaults"
+    },
+    {
+      "id": "Validation-8",
+      "title": "Validation",
+      "text": "```\ncomposer --working-dir=packages/core lint:check\nexit 0\n{\"tool\":\"pint\",\"result\":\"passed\"}\n```\n\n```\ncomposer --working-dir=packages/core analyse\nexit 0\n{\"tool\":\"phpstan\",\"result\":\"passed\",\"errors\":0}\n```\n\n```\ncomposer --working-dir=packages/core test\nexit 0\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":93,\"passed\":93,\"assertions\":223,\"duration_ms\":964}\n```\n\n```\ncomposer --working-dir=packages/core test:pg\nexit 0\n{\"tool\":\"pest\",\"result\":\"passed\",\"tests\":37,\"passed\":37,\"assertions\":180,\"duration_ms\":7652}\n```\n\nPostgres preflight before `test:pg`: `pgsql` healthy, `pg_isready` on\n`127.0.0.1:5434` accepted connections, `corex_test` exists.\n\n```\ngit diff --stat -- packages/core/src/\n packages/core/src/Support/Data/DataScope.php       | 44 +++++++++++++++++++++-\n .../src/Tenancy/Contracts/ImpersonationService.php |  6 +--\n 2 files changed, 44 insertions(+), 6 deletions(-)\n```\n\nThat stat is the foreign baseline already present before P7.12. This item's\nwrites are `packages/core/tests/Unit/CoreOptionsTest.php`,\n`packages/core/tests/Views/SqlSavedViewRepositoryTest.php`, and this receipt.\n`CoreOptions.php` and `SqlSavedViewRepository.php` are absent from the diff."
+    }
+  ],
+  "applies_to": [
+    "P7"
+  ],
+  "provenance": {
+    "path": "findings/P7-receipts.md",
+    "sha256": "194d2d3e59ac6a3091a81d7ad2cf4cfc7be97ce2b7d22e231a125ff54865277b"
+  }
+}

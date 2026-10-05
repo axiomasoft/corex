@@ -1,0 +1,17 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P07.2-execution-review-self-check",
+  "title": "P07.2 self-check for independent review",
+  "sections": [
+    {
+      "id": "P07.2-self-check-for-independent-review",
+      "title": "P07.2 self-check for independent review",
+      "text": "Base: d6ed93fccd9b1ec50428d0f3d18c7c329895c2cd. Scope: D95/D98/D100, P07.2; no migrations or impersonation redesign.\n\n- Central Eloquent Account/Domain, UUIDv7 and typed fields: ProvisioningTest and PackageEngineDiscoveryTest; plain model writes leave data at its schema default; no virtual storage. D107 owner-approved exception preserves explicit existing SQL in ClaimAccountSignup and PendingPool until P08; do not interpret the model change as removal of durable signup/cleanup persistence.\n- Plain saved/deleting events retain host invalidation, including previous host. HostResolutionTest and DomainTrustTest; cache failure rolls back domain trust.\n- Synchronous clone/replay, integrity and ready-template checks: ProvisioningTest; export-before-drop unchanged in renamed DatabaseTenantLifecycle.\n- Config merge/publish uses one corex-tenancy namespace; TenancyOptions accepts one array. Route/middleware/error identifiers are preserved. ProviderRemediationTest and TenancyOptionsTest.\n- Root Composer versions/SHA remain unchanged for all retained dependencies. Removed provider packages, virtualcolumn and exclusively required spatie/invade; metadata for the path tenancy package necessarily drops the deleted requires/keywords/description.\n- Full tenancy: 582 passed, 6 existing Redis skips, 2113 assertions, random seed 1791134228. Architecture: 135 passed, 458 assertions. Golden: four passed, only named tenancy php-surface delta; routes/events/wire unchanged. Config-cache: 3 passed.\n- All declared validation lanes are GREEN; full logs and counts are recorded in completion.md. No behavior changed after those runs.\n- First completed Grok review returned exactly two findings. Both repaired: README, CHANGELOG and Account docblock now explicitly preserve durable claim/cleanup SQL in data until P08/D107; ownership-map removes the obsolete tenancy exemption. ownership-gate-final.log is GREEN, and an actual temporarily injected legacy mergeConfigFrom key was rejected by O2 (ownership-gate-negative.json/log), then byte-exact restored.\n- The second completed review confirmed the first repairs and found three additional missed references. These are now fixed: root ConfigReportCompositionTest uses and expects corex-tenancy (actual test GREEN: one passed, two assertions); access README uses the new OIDC key; root README bootstrap no longer invokes deleted staging code. No product runtime code or dependencies changed. All five findings across both completed reviews are repaired.\n- This is the final bounded repair review after owner admission, when granted. Verify these fixes and their changed dependency closure. Previous broad package/PG/BC checks remain GREEN for unchanged runtime code; affected root test, lint and guards are verified separately.\n\nreview: self-check and all declared Validation GREEN; item close remains pending independent repair-review verdict."
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P07.2-execution/review-self-check.md",
+    "sha256": "f5d389fcc064a654c4b489f3b692d33476d2da2c7b2eb66dff4a98a6fbf7703c"
+  }
+}

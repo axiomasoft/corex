@@ -1,0 +1,39 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D115",
+  "title": "P5.16 executes as bounded local source remediation",
+  "date": "2026-09-22",
+  "status": "accepted",
+  "decision": "Владелец явно поручил завершить P5.16 в текущей Codex-сессии без нового\nprovider launch. Для этого item разрешены только:\n\n- правка двух ещё не опубликованных migration source files, уже объявленных P5.16;\n- связанные test, CHANGELOG и plan receipt из той же item-спеки;\n- прогон миграций только на изолированной PostgreSQL базе `corex_test`.\n\nПрименение DDL к non-test/production базе, deploy, release, secrets и fleet-действия\nне разрешены и не входят в P5.16.",
+  "rationale": "Current Task authority path требует provider-owned verifier/nonce-store, которого\nCodex adapter не имеет, и поэтому не может материализовать объявленный\n`G-DDL-P5R`. Владелец отдельно зафиксировал этот Task runtime gap в Swiss Knife Man\nroadmap. Это решение не называет локальный transcript `security-boundary`; оно\nсужает текущее исполнение до обратимой source/test-работы.",
+  "applies_to": [
+    "P5.16"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "claude-opus-5/high (верхний слой, 2026-09-19, provider-attested); P14: gpt-6-astra/high; P15–P17 and DA01–DA14 remediation: gpt-5.6-sol/high (2026-09-20, provider-thread-state); DA09 closure: codex-gpt-6/effort-unverified (2026-09-20, `ROUTE_LAUNCH_MISMATCH` disclosed); roadmap D114: gpt-5.6-sol/high (2026-09-22, provider-thread-state); D118 execution batching: gpt-6-astra (2026-09-23, current session)"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D115\ndate: 2026-09-22\nstatus: accepted\nitem: P5.16\nitems: [P5.16]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D115-P5.16-executes-as-bounded-local-source-remediation",
+      "title": "D115 — P5.16 executes as bounded local source remediation",
+      "text": ""
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "Владелец явно поручил завершить P5.16 в текущей Codex-сессии без нового\nprovider launch. Для этого item разрешены только:\n\n- правка двух ещё не опубликованных migration source files, уже объявленных P5.16;\n- связанные test, CHANGELOG и plan receipt из той же item-спеки;\n- прогон миграций только на изолированной PostgreSQL базе `corex_test`.\n\nПрименение DDL к non-test/production базе, deploy, release, secrets и fleet-действия\nне разрешены и не входят в P5.16."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Current Task authority path требует provider-owned verifier/nonce-store, которого\nCodex adapter не имеет, и поэтому не может материализовать объявленный\n`G-DDL-P5R`. Владелец отдельно зафиксировал этот Task runtime gap в Swiss Knife Man\nroadmap. Это решение не называет локальный transcript `security-boundary`; оно\nсужает текущее исполнение до обратимой source/test-работы."
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P05.3-execution-completion",
+  "title": "completion notes",
+  "sections": [
+    {
+      "id": "P05.3-completion-notes",
+      "title": "P05.3 — completion notes",
+      "text": "Run `a4c9080ac4145d3cff9b7a0fa158ca014393d0324195e1769ac215def8382725` (solo, route `claude-code/claude-sonnet-5-5/high`, class `implementation/high`; the route is the owner invocation of `task:plan-run … P05.3`). Review by an independent model, see below."
+    },
+    {
+      "id": "Delivered",
+      "title": "Delivered",
+      "text": "- **Gate `runtime-globals`** (`scripts/runtime-globals-gate.php`, `scripts/runtime-globals.json`, `scripts/runtime-globals-baseline.json`, composer script `runtime-globals-gate`). Token based G1–G5; comments and strings never count; `use` statements are resolved (plain, grouped `use A\\{B}`, `use function … as`, class aliases). Exit 0 OK, 1 violation, 2 configuration error (a baseline path outside `packages/tenancy/src/Impersonation/` exits 2). Negative controls in `tests/Arch/RuntimeGlobalsTest.php`: G1, G2, G3, G4, G5, \"baseline exceeded\", \"baseline outside prefix\", plus the grouped-use, aliased-helper and aliased-Carbon bypasses.\n- **`SingletonInjectionGate` L2/L3** (`tests/Support/SingletonInjectionGate.php`): L2 singleton constructor takes a type registered `scoped`; L3 singleton constructor takes `Illuminate\\Database\\Connection|ConnectionInterface`; union and intersection constructor types are inspected; a singleton factory that only forwards `$app->make(X::class)` is analysed as X. `scripts/singleton-injection-allowlist.json` has `entries: []` (`PubSubManager` and the `ServiceProviderModuleRegistrar` `Application` capture are gone). Negative controls in `tests/Arch/SingletonInjectionTest.php` (L2, L3, union, forwarding factory, empty allowlist).\n- **Conversion** of the runtime code of `core`, `access`, `custom-fields`, `intl`, `media`, `notifications`, `operations`, `panels`, `search`, `tasks`, `tasks-workflow`, `transfer`, `wakeup`, `webhooks`, `workflow` and `tenancy` (outside `Impersonation/**`) to constructor dependencies: `ConnectionResolverInterface` with `connection()` called at operation time, `Psr\\Clock\\ClockInterface`, `Illuminate\\Contracts\\Events\\Dispatcher`, `Auth\\Factory`, `Cache\\Factory`, `Http\\Client\\Factory` (`createPendingRequest()`), `Debug\\ExceptionHandler`, `Psr\\Log\\LoggerInterface`. Host-visible bridges stay in `Laravel/` (`ApplicationLocator`, `CurrentActorResolver`, `DomainEventDefaults`, `ResolvesCoreOptions`).\n- `PubSubManager` removed; `PubSub` binds through a `match` on `CoreOptions::pubsubDriver`. `ServiceProviderModuleRegistrar` and `DefaultWorkerRuntime` take `Closure(): Application` (`ApplicationLocator::current(...)`). `SystemRoleMutationScope` (scoped) replaces the static flag of `SystemRoleImmutable`.\n- Wakeup `SystemClock` removed in favour of `CoreX\\Time\\Laravel\\SystemClock`."
+    },
+    {
+      "id": "Gate-numbers",
+      "title": "Gate numbers",
+      "text": "| | before (HEAD `f812a587`) | after |\n|:--|:--|:--|\n| G1 facades | 46 | 0 outside baseline |\n| G2 helpers | 232 | 0 outside baseline |\n| G3 static clock | 20 | 0 outside baseline |\n| G4 static mutable | 2 | 0 outside baseline |\n| G5 `new class` | 0 | 0 |\n| baseline | — | 25 findings in 3 files, all under `packages/tenancy/src/Impersonation/` (`DatabaseImpersonationService` G1 2 / G2 19 / G3 2, `ImpersonatedModelWriteGuard` G4 1, `Models/ImpersonationGrant` G2 1) — P07 zone, excluded by the spec |\n\nInitial L2/L3 numbers were not captured before conversion (the rules were added during it); the clean-tree run after conversion reported L2 2 (`OidcLoginController`, `RootWakeupReconciler`) and L3 5 (webhooks stores), all repaired below. Final: 0 / 0."
+    },
+    {
+      "id": "Binding-lifetime-changes",
+      "title": "Binding lifetime changes",
+      "text": "| Binding | Lifetime before → after | Package | Why |\n|:--|:--|:--|:--|\n| `SystemRoleMutationScope` | — → scoped | access | new; replaces a static mutable flag |\n| `CurrentActor`, `AuditObserver` | — → scoped | core | replace helper/static reads of the actor |\n| `AuditLogger` | singleton → scoped | core | depends on scoped `CurrentActor` (L2) |\n| `DigestWakeupHandler` | singleton → scoped | notifications | per-cycle connection; the wakeup adapter resolves it through the active container at call time |\n| `BulkOperationStore`, `BulkOperations`, `BulkRetention`, `BulkWorker`, `TransferBulkExecutor`, `BudgetAdmission`, `BudgetRetention`, `OperationBudget`, `ApiSchemaRegistrar` | singleton → scoped | operations | hold a `Connection` / scoped dependency |\n| `WebhookSubscriptionStore`, `WebhookDeliveryStore`, `WebhookDeliveryWorker`, `WebhookFanout`, `WebhookManagement`, `WebhookReplay`, `WebhookRetention` | singleton → scoped | webhooks | capture the tenant `Connection` (L3) |\n| `OidcLoginController` | singleton → scoped | tenancy | depends on scoped `ImpersonationService` (L2) |\n| `RootWakeupReconciler` | singleton → scoped | tenancy | depends on scoped `DueWakeupSweeper` (L2) |\n| `RootRegistryWakeupHint`, `DatabaseWorkspaceResolver`, `DatabaseIdentitySyncer`, `TemplateIntegrityVerifier`, … | singleton → singleton | tenancy | now take the resolver and a connection name instead of a `Connection` |\n\nNo new `Connection|ConnectionInterface` parameter or property was added: the spec command counting such lines per file returns `0` (docblock-only `@var Connection` annotations are nameless on purpose)."
+    },
+    {
+      "id": "Public-signatures",
+      "title": "Public signatures",
+      "text": "- `CoreX\\Database\\Laravel\\ResolvesCoreOptions` — new Spi trait (additive; core `CHANGELOG.md`).\n- `CoreX\\Operations\\Testing\\MutatingHandler::__construct(connections, clock)` — Testing fixture (operations `CHANGELOG.md`).\n- `CoreX\\Tasks\\Planning\\Laravel\\PlanningCommand::__construct` — optional trailing `?TaskOperationReceipts` (tasks `CHANGELOG.md`); a required parameter was rejected by `bc-check`, the optional form is source-compatible.\n- All other changed constructors are `Internal`. Named delta: `golden-semantic-delta.json` (2 removed, 5 added Internal records plus the Spi trait, 82 changed Internal/constructor records, ten promoted `Operations\\Testing` fixtures merged by regeneration); `tests/Golden/REBASELINE.md` has the log row.\n- Manifests: `psr/clock` added to `access`, `intl`, `media`, `notifications`, `panels`, `search`, `tasks`, `tenancy`, `transfer`, `workflow` (moved out of `require-dev` in notifications), `psr/log` to `tenancy`."
+    },
+    {
+      "id": "Deviations-and-findings-worth-keeping",
+      "title": "Deviations and findings worth keeping",
+      "text": "- **Test-induced lifetime seams.** Tests that rebind a service after a scoped/singleton consumer was resolved must reset the consumer (`Event::fake()` before building the coordinator, `forgetInstance(CurrentActor)`, `TestCase::trustTemplate()` forgets the template-integrity singletons). These are test harness changes, not product behavior.\n- **Time strings.** Comparing a database string with a `DateTimeImmutable` never orders (the object is always greater). Review round 1 found three such claims (notifications delivery, two in media) that would accept a future retry; fixed with `notYetDue()` and covered by a regression test in `NotificationCenterTest`.\n- `Illuminate\\Contracts\\Cache\\Repository` has no `lock()`: `ApplyMembershipProjection` obtains the lock through `getStore()` + `LockProvider` and throws when the store has none.\n- `TenancyPortBindings` still builds `ApplyMembershipProjection` through the container although its constructor takes a string; this predates P05.3 and was left alone.\n- Disk was full during the run: `bc-check` was run with `TMPDIR=/dev/shm`."
+    },
+    {
+      "id": "Evidence-scripts-php84",
+      "title": "Evidence (`scripts/php84`)",
+      "text": "| Check | Result |\n|:--|:--|\n| `runtime-globals-gate`, `RuntimeGlobalsTest` | OK; 12 tests |\n| `SingletonInjectionTest`, allowlist empty | 8 tests; `entries == []` |\n| baseline prefix check | exit 0 |\n| Connection-count `join` check | `0` |\n| facade `git grep`, `PubSubManager.php` | exit 1 / absent |\n| `provider-size-gate`, `config-composition-gate` | OK |\n| `module-layout-gate` (R0–R6 = 0), `package-graph-gate`, `deps:analyse` | OK |\n| `composer php-api` (after `--write`), `composer bc-check` (`TMPDIR=/dev/shm`, the root disk was full) | exit 0 |\n| `lint:check`, `analyse` (all packages and root), `quality-ceiling-guard` | exit 0; `ceilings OK` |\n| `test:packages` | all pass (tenancy 497 passed / 6 skipped, core 242, notifications 23, media 20) |\n| `test:hermetic` | 987 passed |\n| `test:pg` | 242 passed |\n| `test:arch` | 135 passed |\n| `composer golden` | 4 passed, no update mode (baseline regenerated once with `GOLDEN_UPDATE=1` for the named delta) |\n| `anti-weakening-gate` | OK |"
+    },
+    {
+      "id": "Independent-review",
+      "title": "Independent review",
+      "text": "review: codex/gpt-6.1-sol/xhigh findings:5 (round 1, read-only, fresh context, model differs from the executor) → all fixed; recheck findings:3 (round 2) → all fixed, **not re-verified by the reviewer** (the two-round limit of D71 is spent). Raw outputs: `validation/review-round1-codex-gpt-6.1-sol.md`, `validation/review-round2-codex-gpt-6.1-sol.md`. A first launch that died with its shell and a duplicate run produced a third, partial report (4 findings, all fixed too).\n\n| Finding | Fix |\n|:--|:--|\n| Round 1: digest wakeup adapter retained the registering application | resolves `DigestWakeupHandler` through `Container::getInstance()` at call time |\n| Round 1: `DomainEvent` with an explicit tenant needed a bound clock | `DomainEventDefaults::now()` falls back to `SystemClock` |\n| Round 1: gate G1–G3 ignored grouped `use`, `use function … as`, aliased Carbon | `collectImports()` resolves them; negative controls |\n| Round 1: L2/L3 skipped union/intersection types; forwarding factories | `namedMembers()` flattens unions, intersections and DNF; `$app->make(X::class)` and declared factory return types are analysed |\n| Extra (partial report): `modify('+N seconds')` crosses a DST rollback as 3660 s | seconds and minutes use `add(new DateInterval('PT…'))` (days stay calendar days) |\n| Extra: G4 missed intersection-typed static properties; typed helper factories bypassed L3 | tokens `T_AMPERSAND_*` accepted; return type of the factory closure analysed |\n| Round 2: bulk result/failure readers kept the first application | registered `scoped` |\n| Round 2: stored time strings parsed in the PHP default zone | parsed in the zone of the clock (`$now->getTimezone()`) |\n| Round 2: namespace aliases and case-insensitive aliases escaped G1/G3 | `resolveClassName()`; negative controls |\n\nUnresolved after round 2 (named for the owner): none known; the three round-2 fixes have no reviewer confirmation."
+    },
+    {
+      "id": "Hosted-CI",
+      "title": "Hosted CI",
+      "text": "Moved to P05.4 by owner decision D88 (`owner-direction-d88.md`; D87 superseded): the hosted-CI bullet is removed from the P05.3 spec and covered by the P05.4 carrier on the final commit of phase P05, which contains the P05.3 commit `a59c38b2`. The commit was not pushed. The design fingerprint changed with the spec edit; D88 carries the `design-audit-waiver/v1` for the new fingerprint and replaces D86 in `@plan/plan.json` (`plan-work design-gate` → `PLAN_DESIGN_AUDIT_WAIVED_BY_OWNER`)."
+    },
+    {
+      "id": "Closure",
+      "title": "Closure",
+      "text": "`task-contract-evaluation.json`: `pre_mutation: allow` (durable-start admission), `pre_final: allow` over 15 receipts (`validation-receipts.json`, E18–E32). The journal keeps two superseded `closed-deviations` rows (lines 172–173, attempt 1, appended before plan-lint's D76 rule was checked) and a reopening row; the closing row is attempt 2, `closed-green`.\n\nwrite-site: pre_mutation: allow · pre_final: allow"
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P05.3-execution/completion.md",
+    "sha256": "dee8257ed3d4bd0d7a9cf86bba59ca1f72abe52e767cb89b35f61b612b35d805"
+  }
+}

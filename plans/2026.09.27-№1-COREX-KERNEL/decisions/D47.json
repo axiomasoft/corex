@@ -1,0 +1,51 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D47",
+  "title": "Hosted CI отложен до восстановления лимитов",
+  "date": "2026-09-28",
+  "status": "superseded",
+  "decision": "Hosted CI и устранение его проблем откладываются до заключительной проверки,\nпосле восстановления лимитов GitHub Actions. O-3 не препятствует локальному\nисполнению и закрытию items/фаз PLAN3. Это решение отменяет прежнее требование\nGREEN hosted CI перед P02.1 и последующими локальными фазами; локальные Validation,\nнегативные контроли и независимое full review сохраняются полностью.",
+  "rationale": "Владелец явно выбрал продолжение реализации при недоступном hosted runner.\nЛокальные проверки дают доказательства только для реально проверенных окружений;\nих результат не объявляется доказательством hosted CI или всей CI-матрицы.",
+  "applies_to": [
+    "P01",
+    "P02",
+    "P02.1",
+    "P02.2",
+    "P02.3",
+    "P02.4",
+    "P09"
+  ],
+  "supersedes": [],
+  "superseded_by": "D73",
+  "actor": {
+    "provider": "legacy",
+    "model": "owner; recorded by executor/codex/gpt-6-sol/high."
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D47\ndate: 2026-09-28\nstatus: superseded\nitem: P02\nitems: [P01, P02, P02.1, P02.2, P02.3, P02.4, P09]\nsupersedes: []\nsuperseded_by: D73\n---"
+    },
+    {
+      "id": "D47-Hosted-CI",
+      "title": "D47 — Hosted CI отложен до восстановления лимитов",
+      "text": "**Actor:** owner; recorded by executor/codex/gpt-6-sol/high.\n**Evidence:** RAG:— прямое решение владельца в сессии выполнения B02-A:\n«про CI пока забей, будем допиливать в конце, как лимиты появятся. делай задачу»;\n`@plan/knowledge/research-P02-design.json` §7; GitHub run `36445217833` на `d2e84a1`\nотклонён до выполнения шагов из-за billing/spending limit."
+    },
+    {
+      "id": "Solution",
+      "title": "Solution",
+      "text": "Hosted CI и устранение его проблем откладываются до заключительной проверки,\nпосле восстановления лимитов GitHub Actions. O-3 не препятствует локальному\nисполнению и закрытию items/фаз PLAN3. Это решение отменяет прежнее требование\nGREEN hosted CI перед P02.1 и последующими локальными фазами; локальные Validation,\nнегативные контроли и независимое full review сохраняются полностью."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "Владелец явно выбрал продолжение реализации при недоступном hosted runner.\nЛокальные проверки дают доказательства только для реально проверенных окружений;\nих результат не объявляется доказательством hosted CI или всей CI-матрицы."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "Исходные спецификации и GREEN fingerprint дизайна сохраняются; это отдельное\nоперационное решение о внешнем предусловии. В Completion Notes и итоговом handoff\nсохраняется открытый hosted CI residual со ссылкой на D47. До публикации нужно\nвернуться к hosted CI и исправить реальные findings после запуска jobs.\nТекущий разрешённый workset остаётся P02.1 → P02.2. Push, изменение billing,\nпубликация и работа над P02.3/P02.4 текущим запросом не разрешаются."
+    }
+  ]
+}

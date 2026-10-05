@@ -1,0 +1,502 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P05.2",
+  "title": "Тонкие providers, registrars и именованные классы",
+  "status": "done",
+  "summary": "Сделать публичный provider каждого пакета тонким composition root, который делегирует registrars по обязанностям; ограничить фабрики одним `return`; заменить анонимные классы с логикой именованными; оставить ядру один публичный provider; вернуть lifetime-гейту видимость всех биндингов.",
+  "why": "D09, D70 п.1–4 и п.11. `CoreServiceProvider` держит 26 биндингов под замороженным исключением; `ApiServiceProvider` — два анонимных класса с логикой авторизации replay и keyring. `SingletonInjectionGate` сканирует только `*ServiceProvider.php`: 15 существующих registrars он уже не видит, а после деления не увидел бы почти ничего.",
+  "scope": {
+    "include": [
+      "Гейт `provider-size`: S1 ≤ 8 (providers), S2 и S3 (providers и registrars) с негативными контролями; расширение скана `SingletonInjectionGate` на registrars и ремонт найденных L1; деление providers `core`, `intl`, `notifications`, `operations`, `access`, `custom-fields`, `wakeup`, `media` и любого другого, нарушающего S1–S3; static-registrars → `PackageRegistrar` (включая `SavedViewsRegistrar` в panels); многооператорные фабрики → `Laravel/<Thing>Factory`; `DefaultReplayAuthorizer`, `ConfiguredCursorKeyring`, `HandlerFailure`; регистрация `ModulesServiceProvider` из `CoreServiceProvider`."
+    ],
+    "exclude": [
+      "Изменение состава и времени жизни биндингов, кроме ремонта L1; правила L2/L3 и обнуление allowlist (P05.3); авто-регистрация и разрез `operations` (P06); внутренние `ServiceProvider`-классы; фасады и хелперы (P05.3; файлы `Laravel/` — мост)."
+    ]
+  },
+  "depends_on": [
+    "P05.1"
+  ],
+  "decisions": [
+    "D70"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P05-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P05-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/knowledge/artifacts-P05-design-examples.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D70.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/artifacts/P05-design/facts/providers.tsv",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/artifacts/P05-design/facts/anonymous-classes.tsv",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/knowledge/artifacts-P05.1-execution-completion.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/RuntimeRegistrar.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Modules/Contracts/PackageRegistrar.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "scripts/provider-size-gate.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/CoreServiceProvider.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/operations/src/ApiServiceProvider.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/*/src/*ServiceProvider.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/<Module>/Laravel/<Module>Registrar.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/{intl,notifications,access,custom-fields,wakeup,media}/src/Laravel/*Registrar.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/operations/src/Laravel/{OperationsBindingsRegistrar,IdempotencyRegistrar,PaginationRegistrar,HttpRegistrar,IdempotencyStoreFactory}.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/operations/src/{Laravel/ApiSchemaRegistrar,Cost/Laravel/CostRegistrar,Bulk/Laravel/BulkRegistrar,Bulk/Laravel/BulkRouteRegistrar}.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/webhooks/src/Laravel/{WebhookRegistrar,WebhookRouteRegistrar}.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/custom-fields/src/Internal/Laravel/AttributeCompositionRegistrar.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/{tenancy,panels}/src/**/Laravel/*Registrar.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/{Modules/Laravel,Errors/Internal}/*Registrar.php",
+      "change": "any"
+    },
+    {
+      "path": "**/Laravel/*Factory.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/operations/src/Idempotency/Internal/{DefaultReplayAuthorizer,HandlerFailure,IdempotentOperationInvoker}.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/operations/src/Pagination/Internal/ConfiguredCursorKeyring.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "scripts/provider-size-gate.php",
+      "change": "any"
+    },
+    {
+      "path": "scripts/provider-size.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/*/resources/contracts/php-api.json",
+      "change": "any"
+    },
+    {
+      "path": "@plan/artifacts/P05.2-execution/**",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Перенос биндингов без изменения набора и порядка; `extend` и `bindIf` сохраняют относительную позицию; время жизни меняется только при ремонте L1 и фиксируется в Completion Notes. Тела анонимных классов переносятся дословно. Registrar и Factory — `final class` в `Laravel/` своего модуля; module-layout R0–R5 остаются нулевыми. Фабрика, разбирающая конфигурацию, отдаёт разбор в `fromArray` своего Options. Статические точки, вызываемые из чужих пакетов (`ProblemDefinitions::register`), не трогаются. `ModulesServiceProvider` остаётся регистрируемым напрямую. Ratchet в `provider-size.json` только уменьшается; `singleton-injection-allowlist.json` не растёт. Пороги и правила не ослабляются исключениями."
+  ],
+  "guidance": "Досье §3.2 шаги 1–10; `examples.md` §2 (provider с `REGISTRARS`, registrar), §6 (конфиг гейта, форматы, допустимая и недопустимая фабрика, негативные контроли, таблица L1–L3). Имена registrars: `<Module>Registrar` в ядре, `<Role>Registrar` (`Bindings`, `Http`, `Console`, `Integration`) в пакетах. Модуль ядра без биндингов registrar не получает.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "php scripts/provider-size-gate.php",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "git grep -n -E 'new (readonly )?class' -- 'packages/*/src/*' ':!packages/*/src/**/PHPStan/**'",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "git grep -n -E 'Registrar::(register|boot)\\(' -- 'packages/*/src/*'",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "python3 scripts/manifest-check.py",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "composer module-layout-gate",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "cmd": "php scripts/package-graph-gate.php",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "cmd": "php scripts/config-composition-gate.php",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "cmd": "php scripts/quality-ceiling-guard.php",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "cmd": "GOLDEN_UPDATE",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "cmd": "php scripts/package-docs-gate.php",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V11",
+      "cmd": "bash scripts/anti-weakening-gate.sh",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V12",
+      "cmd": "gh run view <id> --json jobs -q '[.jobs[] | select(.conclusion==\"failure\")] | length'",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V13",
+      "procedure": "- На входе: `php scripts/provider-size-gate.php` → `provider-size-gate: OK` со старыми порогами (иначе P05.1 не закрыт).",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V14",
+      "procedure": "- `php scripts/provider-size-gate.php` → нет строк `S1`/`S2`/`S3`, `provider-size-gate: OK`, exit 0; в `scripts/provider-size.json` `max_bindings` = 8, ключа `note` нет, ни одно значение `ratchet` не выросло.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V15",
+      "procedure": "- `scripts/php84 vendor/bin/pest tests/Arch/ProviderSizeTest.php` → exit 0: проба 9 биндингов → exit 1 с `total=9` и `max_bindings=8`; provider с `new class` → `S2`; provider с двухоператорным замыканием → `S3`; registrar с двухоператорным замыканием → `S3`; биндинги вне provider не считаются для S1.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V16",
+      "procedure": "- `scripts/php84 vendor/bin/pest tests/Arch/SingletonInjectionTest.php` → exit 0: гейт сканирует registrars (проба-registrar с singleton, захватывающим `Application`, называется в выводе); `scripts/singleton-injection-allowlist.json` не вырос.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V17",
+      "procedure": "- `git grep -n -E 'new (readonly )?class' -- 'packages/*/src/*' ':!packages/*/src/**/PHPStan/**'` → нет совпадений (Git exit 1).",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V18",
+      "procedure": "- `git grep -n -E 'Registrar::(register|boot)\\(' -- 'packages/*/src/*'` → нет совпадений (Git exit 1).",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V19",
+      "procedure": "- `python3 scripts/manifest-check.py` → exit 0; `packages/core/composer.json` `extra.laravel.providers` содержит ровно `CoreX\\\\CoreServiceProvider`.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V20",
+      "procedure": "- `composer module-layout-gate` → все R0–R5 = 0; `php scripts/package-graph-gate.php` → exit 0; `php scripts/config-composition-gate.php` → `config-composition-gate: OK`.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V21",
+      "procedure": "- `scripts/php84 php scripts/php-api.php --write` дважды → байт-идентично; `scripts/php84 composer php-api`, `scripts/php84 composer bc-check` → exit 0.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V22",
+      "procedure": "- `scripts/php84 composer lint:check`, `scripts/php84 composer analyse` → exit 0; `php scripts/quality-ceiling-guard.php` → `ceilings OK`.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V23",
+      "procedure": "- Один раз на финальном кандидате: `scripts/php84 composer test:hermetic`, `PGSQL_PORT=5434 scripts/php84 composer test:pg`, `scripts/php84 composer test:packages`, `scripts/php84 composer test:arch` → exit 0.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V24",
+      "procedure": "- `scripts/php84 composer golden` → без `GOLDEN_UPDATE`; delta P05.2 (досье §4) поимённо; routes байт-идентичны.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V25",
+      "procedure": "- `php scripts/package-docs-gate.php`, `bash scripts/anti-weakening-gate.sh` → exit 0.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V26",
+      "procedure": "- Hosted CI (D73 п.4, D76): commit item отправлен в `origin`; `gh run view <id> --json jobs -q '[.jobs[] | select(.conclusion==\"failure\")] | length'` → `0`; красный джоб чинится в этом item; id запуска и sha — в Completion Notes.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V27",
+      "procedure": "- Review `light` (D71): self-check по досье §6; строка `review: self-check GREEN` в Completion Notes.",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Registrars, фабрики и тонкие providers; три именованных класса operations; один публичный provider ядра; гейт S1–S3 с четырьмя негативными контролями; lifetime-гейт со сканом registrars; обновлённые манифесты и Golden baseline с delta; `@plan/knowledge/artifacts-P05.2-execution-completion.json` (таблица provider → registrars/фабрики, числа гейтов до и после, отремонтированные L1)."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "self"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-10-02T17:28:53Z",
+    "finished_at": "2026-10-03T04:34:43Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "executor/claude-code/claude-sonnet-5-5/high",
+      "effort": "high"
+    },
+    "notes": "P05.2 GREEN: product aea83241. Mirror CI 37091757720 success (36/0/1 skip); origin CI blocked by billing. Gate S1-S3, thin providers, bc-check and local stack green. See artifacts/P05.2-execution/completion.md. review: self-check GREEN.\nwrite-site: pre_mutation: allow · pre_final: allow",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V13",
+        "exit": 0,
+        "at": "2026-10-03T04:10:29Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V14",
+        "exit": 0,
+        "at": "2026-10-03T04:10:29Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V15",
+        "exit": 0,
+        "at": "2026-10-03T04:10:29Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V16",
+        "exit": 0,
+        "at": "2026-10-03T04:10:29Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V17",
+        "exit": 0,
+        "at": "2026-10-03T04:10:29Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V18",
+        "exit": 0,
+        "at": "2026-10-03T04:10:29Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V19",
+        "exit": 0,
+        "at": "2026-10-03T04:10:29Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V20",
+        "exit": 0,
+        "at": "2026-10-03T04:10:29Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V21",
+        "exit": 0,
+        "at": "2026-10-03T04:10:29Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V22",
+        "exit": 0,
+        "at": "2026-10-03T04:10:29Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V23",
+        "exit": 0,
+        "at": "2026-10-03T04:10:29Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V24",
+        "exit": 0,
+        "at": "2026-10-03T04:10:29Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V25",
+        "exit": 0,
+        "at": "2026-10-03T04:10:29Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V26",
+        "exit": 0,
+        "at": "2026-10-03T04:10:29Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V27",
+        "exit": 0,
+        "at": "2026-10-03T04:10:29Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-10-03T04:34:43Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Сделать публичный provider каждого пакета тонким composition root, который делегирует registrars по обязанностям; ограничить фабрики одним `return`; заменить анонимные классы с логикой именованными; оставить ядру один публичный provider; вернуть lifetime-гейту видимость всех биндингов."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "D09, D70 п.1–4 и п.11. `CoreServiceProvider` держит 26 биндингов под замороженным исключением; `ApiServiceProvider` — два анонимных класса с логикой авторизации replay и keyring. `SingletonInjectionGate` сканирует только `*ServiceProvider.php`: 15 существующих registrars он уже не видит, а после деления не увидел бы почти ничего."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Гейт `provider-size`: S1 ≤ 8 (providers), S2 и S3 (providers и registrars) с негативными контролями; расширение скана `SingletonInjectionGate` на registrars и ремонт найденных L1; деление providers `core`, `intl`, `notifications`, `operations`, `access`, `custom-fields`, `wakeup`, `media` и любого другого, нарушающего S1–S3; static-registrars → `PackageRegistrar` (включая `SavedViewsRegistrar` в panels); многооператорные фабрики → `Laravel/<Thing>Factory`; `DefaultReplayAuthorizer`, `ConfiguredCursorKeyring`, `HandlerFailure`; регистрация `ModulesServiceProvider` из `CoreServiceProvider`."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Изменение состава и времени жизни биндингов, кроме ремонта L1; правила L2/L3 и обнуление allowlist (P05.3); авто-регистрация и разрез `operations` (P06); внутренние `ServiceProvider`-классы; фасады и хелперы (P05.3; файлы `Laravel/` — мост)."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P05-design.json` (§1, §2, §3.2, §4, §5) · `@plan/knowledge/research-P05-design-rag.json` · `@plan/knowledge/artifacts-P05-design-examples.json` (§2, §6) · `@plan/decisions/D70.json` · `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/facts/providers.tsv` · `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05-design/facts/anonymous-classes.tsv` · результат P05.1 (`@plan/knowledge/artifacts-P05.1-execution-completion.json`, появляется после исполнения P05.1)"
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/*/src/*ServiceProvider.php`; `packages/core/src/<Module>/Laravel/<Module>Registrar.php` (новые, по модулям ядра с биндингами); `packages/{intl,notifications,access,custom-fields,wakeup,media}/src/Laravel/*Registrar.php` (новые); `packages/operations/src/Laravel/{OperationsBindingsRegistrar,IdempotencyRegistrar,PaginationRegistrar,HttpRegistrar,IdempotencyStoreFactory}.php` (новые), `packages/operations/src/{Laravel/ApiSchemaRegistrar,Cost/Laravel/CostRegistrar,Bulk/Laravel/BulkRegistrar,Bulk/Laravel/BulkRouteRegistrar}.php`; `packages/webhooks/src/Laravel/{WebhookRegistrar,WebhookRouteRegistrar}.php`; `packages/custom-fields/src/Internal/Laravel/AttributeCompositionRegistrar.php`; существующие registrars `packages/{tenancy,panels}/src/**/Laravel/*Registrar.php`, `packages/core/src/{Modules/Laravel,Errors/Internal}/*Registrar.php` (только нарушения S2/S3/L1 и static-вызов `SavedViewsRegistrar::register`); новые `**/Laravel/*Factory.php`; `packages/operations/src/Idempotency/Internal/{DefaultReplayAuthorizer,HandlerFailure,IdempotentOperationInvoker}.php`; `packages/operations/src/Pagination/Internal/ConfiguredCursorKeyring.php`; `packages/core/composer.json`; `scripts/provider-size-gate.php`, `scripts/provider-size.json`, `tests/Arch/ProviderSizeTest.php`; `tests/Support/SingletonInjectionGate.php`, `tests/Arch/SingletonInjectionTest.php`; `packages/*/resources/contracts/php-api.json`, `tests/Golden/baseline/*.json`; package docs и CHANGELOG затронутых пакетов; `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P05.2-execution/**`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/decisions/D70.json` п.1–4, п.11; 2) `@plan/knowledge/research-P05-design.json` §3.2, §4, §5; 3) `@plan/knowledge/artifacts-P05-design-examples.json` §2, §6; 4) `packages/tenancy/src/Laravel/RuntimeRegistrar.php` (образец); 5) `packages/core/src/Modules/Contracts/PackageRegistrar.php`; 6) `scripts/provider-size-gate.php`; 7) `tests/Support/SingletonInjectionGate.php`; 8) `packages/core/src/CoreServiceProvider.php` и `packages/operations/src/ApiServiceProvider.php`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Перенос биндингов без изменения набора и порядка; `extend` и `bindIf` сохраняют относительную позицию; время жизни меняется только при ремонте L1 и фиксируется в Completion Notes. Тела анонимных классов переносятся дословно. Registrar и Factory — `final class` в `Laravel/` своего модуля; module-layout R0–R5 остаются нулевыми. Фабрика, разбирающая конфигурацию, отдаёт разбор в `fromArray` своего Options. Статические точки, вызываемые из чужих пакетов (`ProblemDefinitions::register`), не трогаются. `ModulesServiceProvider` остаётся регистрируемым напрямую. Ratchet в `provider-size.json` только уменьшается; `singleton-injection-allowlist.json` не растёт. Пороги и правила не ослабляются исключениями."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Досье §3.2 шаги 1–10; `examples.md` §2 (provider с `REGISTRARS`, registrar), §6 (конфиг гейта, форматы, допустимая и недопустимая фабрика, негативные контроли, таблица L1–L3). Имена registrars: `<Module>Registrar` в ядре, `<Role>Registrar` (`Bindings`, `Http`, `Console`, `Integration`) в пакетах. Модуль ядра без биндингов registrar не получает."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "- На входе: `php scripts/provider-size-gate.php` → `provider-size-gate: OK` со старыми порогами (иначе P05.1 не закрыт).\n- `php scripts/provider-size-gate.php` → нет строк `S1`/`S2`/`S3`, `provider-size-gate: OK`, exit 0; в `scripts/provider-size.json` `max_bindings` = 8, ключа `note` нет, ни одно значение `ratchet` не выросло.\n- `scripts/php84 vendor/bin/pest tests/Arch/ProviderSizeTest.php` → exit 0: проба 9 биндингов → exit 1 с `total=9` и `max_bindings=8`; provider с `new class` → `S2`; provider с двухоператорным замыканием → `S3`; registrar с двухоператорным замыканием → `S3`; биндинги вне provider не считаются для S1.\n- `scripts/php84 vendor/bin/pest tests/Arch/SingletonInjectionTest.php` → exit 0: гейт сканирует registrars (проба-registrar с singleton, захватывающим `Application`, называется в выводе); `scripts/singleton-injection-allowlist.json` не вырос.\n- `git grep -n -E 'new (readonly )?class' -- 'packages/*/src/*' ':!packages/*/src/**/PHPStan/**'` → нет совпадений (Git exit 1).\n- `git grep -n -E 'Registrar::(register|boot)\\(' -- 'packages/*/src/*'` → нет совпадений (Git exit 1).\n- `python3 scripts/manifest-check.py` → exit 0; `packages/core/composer.json` `extra.laravel.providers` содержит ровно `CoreX\\\\CoreServiceProvider`.\n- `composer module-layout-gate` → все R0–R5 = 0; `php scripts/package-graph-gate.php` → exit 0; `php scripts/config-composition-gate.php` → `config-composition-gate: OK`.\n- `scripts/php84 php scripts/php-api.php --write` дважды → байт-идентично; `scripts/php84 composer php-api`, `scripts/php84 composer bc-check` → exit 0.\n- `scripts/php84 composer lint:check`, `scripts/php84 composer analyse` → exit 0; `php scripts/quality-ceiling-guard.php` → `ceilings OK`.\n- Один раз на финальном кандидате: `scripts/php84 composer test:hermetic`, `PGSQL_PORT=5434 scripts/php84 composer test:pg`, `scripts/php84 composer test:packages`, `scripts/php84 composer test:arch` → exit 0.\n- `scripts/php84 composer golden` → без `GOLDEN_UPDATE`; delta P05.2 (досье §4) поимённо; routes байт-идентичны.\n- `php scripts/package-docs-gate.php`, `bash scripts/anti-weakening-gate.sh` → exit 0.\n- Hosted CI (D73 п.4, D76): commit item отправлен в `origin`; `gh run view <id> --json jobs -q '[.jobs[] | select(.conclusion==\"failure\")] | length'` → `0`; красный джоб чинится в этом item; id запуска и sha — в Completion Notes.\n- Review `light` (D71): self-check по досье §6; строка `review: self-check GREEN` в Completion Notes."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Registrars, фабрики и тонкие providers; три именованных класса operations; один публичный provider ядра; гейт S1–S3 с четырьмя негативными контролями; lifetime-гейт со сканом registrars; обновлённые манифесты и Golden baseline с delta; `@plan/knowledge/artifacts-P05.2-execution-completion.json` (таблица provider → registrars/фабрики, числа гейтов до и после, отремонтированные L1)."
+    }
+  ]
+}

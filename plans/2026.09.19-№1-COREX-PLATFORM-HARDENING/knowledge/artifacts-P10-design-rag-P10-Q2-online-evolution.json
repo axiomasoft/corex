@@ -1,0 +1,19 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P10-design-rag-P10-Q2-online-evolution",
+  "title": "Q2 — online schema evolution",
+  "sections": [
+    {
+      "id": "P10-Q2-online-schema-evolution",
+      "title": "P10-Q2 — online schema evolution",
+      "text": "- Query: `site:docs.gitlab.com development database batched background migrations expand contract rename column dual write`\n- Accessed: 2026-09-20\n- Transport: web search + direct primary-source open\n- Source: https://docs.gitlab.com/development/database/avoiding_downtime_in_migrations/\n\nGitLab documents concurrent column rename/type change as multiple steps: create a\ntemporary representation and keep it in sync, migrate/cast data, and perform later\npost-deployment cleanup. It also warns that large-table changes need bounded background\nwork. CoreX inference: an attribute rename/type change needs explicit expand,\ndual-write, resumable backfill, verification and delayed contract."
+    }
+  ],
+  "applies_to": [
+    "P10"
+  ],
+  "provenance": {
+    "path": "artifacts/P10-design-rag/P10-Q2-online-evolution.md",
+    "sha256": "17fd602ce026e0445389f4d8a3d29c7d5ae6aecf1b6dce7802ba53941c631ace"
+  }
+}

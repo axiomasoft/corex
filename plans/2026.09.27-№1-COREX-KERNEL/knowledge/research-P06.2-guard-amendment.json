@@ -1,0 +1,19 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "research-P06.2-guard-amendment",
+  "title": "supplemental guard taxonomy and examples",
+  "sections": [
+    {
+      "id": "P06.2-supplemental-guard-taxonomy-and-examples",
+      "title": "P06.2 — supplemental guard taxonomy and examples",
+      "text": "Author: executor/codex/gpt-6.1-sol/high, 2026-10-03. RAG:— repository-only correction authorized by owner D93. D90/D92 and original dossier/examples remain in force except these explicit additions.\n\n| Case | Wire value | Status | Category | Retryable |\n|:--|:--|--:|:--|:--|\n| ApprovalRequired | tools.approval_required | 403 | Authorization | false |\n| ApprovalInvalid | tools.approval_invalid | 403 | Authorization | false |\n| Forbidden | tools.forbidden | 403 | Authorization | false |\n| IdempotencyConflict | tools.idempotency_conflict | 409 | Conflict | false |\n| UnknownEffect | tools.unknown_effect | 500 | Internal | false |\n\nExamples: the default guard refuses a side-effecting tool with `ToolOutcome::NotExecuted` and `ToolsErrorCode::ApprovalRequired->value`; the consumer fixture refuses revoked proof with `ApprovalInvalid`, changed idempotency binding with `IdempotencyConflict`, and revoked visibility with `Forbidden`. A provider-key exception/uncertain effect returns `ToolOutcome::Unknown` and `UnknownEffect`, keeping the original operation key. Committed output-contract failure keeps its existing committed outcome and uses `OutputContractFailed`. No approval or retry policy changes.\n\nUse typed `ToolSchemaFailure::$errorCode` for startup/deadline/memory errors. A generic `RuntimeException` whose message happens to equal a schema token still maps to `InternalError`. Only the private subprocess protocol translates the worker's enum-valued error token back to a typed schema failure; unknown/invalid worker failures retain the existing schema-limit classification. The worker protocol and exception message are not public tool error classification APIs.\n\n`ToolServiceProvider::register()` registers `PackageProblemDefinitions` using the established `ProblemDefinitions::register()` API before resolving `ProblemRegistry`. `boot()` is too late after a consumer freezes the registry.\n\nAcceptance supplement: real invocation tests cover original runtime refusals, typed schema failures and generic-message fallback, operation-code passthrough, default read-only refusal, consumer guard refusals and unknown effects; all thirteen enum cases resolve to matching definitions. Existing guard suites retain callback/effect/replay assertions. MCP serializes `$result->outcome->value`; codes come from the registered result or `ToolsErrorCode::InternalError->value`.\n\nPublic delta supplement: thirteen-case `ToolsErrorCode` (Api), three-case `ToolOutcome` (Api), `ToolResult` constructor/property outcome changes from string to enum and its three old constants are removed. Necessary new Internal `ToolSchemaFailure` and problem definitions are classified Internal. Routes/events and unrelated public symbols remain unchanged. Manifest/changelog and precise decision-bound BC allowance include this accepted pre-1.0 delta; unknown changes still fail closed."
+    }
+  ],
+  "applies_to": [
+    "P06.2"
+  ],
+  "provenance": {
+    "path": "research/P06.2-guard-amendment.md",
+    "sha256": "0f898a6ceae44194d9db856af331f4cf921a8e75f34dcfce26dcecb97e7de152"
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:phase:v1",
+  "id": "P11",
+  "title": "Модель расширения: typed registries, compile → frozen, durable stamps",
+  "design": "detailed",
+  "goal": "`RAG:—` В дереве уже есть правильная authority: `RegistryCompiler` →\n`CompiledRegistry` → `CompiledModuleRegistry`. API/tool/panel/attribute catalogues — её\nпроекции; `SearchManager` — factory драйвера, а не registry. Пробелы:\n`CompiledRegistry` shallow-readonly, `ArrayEntityRegistry` допускает late mutation,\nduplicate/replacement policy нет, `InstalledPackages` теряет version/reference,\nintrospection считает второй hash.\n\n`RAG:✅` Perplexity MCP и последующая проверка official Symfony/Laravel docs\nподтвердили compile-before-use и long-lived application state. Queue workers\nполучают новый code через graceful restart, Octane — через reload; global\natomic fleet cutover не обещан. External evidence не определяет CoreX\nidentity/fingerprint/mismatch semantics: это локальные D56–D59.\n\n> **Контракт фазы.** Потребляет: окончательную форму attribute catalogue P10,\ntyped composition P7, existing module lifecycle. Производит: один canonical\nfingerprinted registry snapshot; point-specific identity/order/replacement; deep freeze;\nrequest/job/deploy publication boundaries; exact extension stamps для workflow/wakeup;\ncontract suite и classification ratchet. Не вводит God Registry, новый DDL,\ntenant-specific snapshots или девятую extension point.\n\n> **Phase Assurance | v1.**\n> Impact: internal-integration\n> Integration Seams: module-extension-points · compiled-registry-cache · entity-projection · workflow-intent · wakeup-dispatch · long-running-workers\n> Live or Irreversible: no\n> Audit Intent: direct-close-eligible\n> Rationale: fingerprint/freeze/replay semantics влияют на воспроизводимость;\n> все восемь items имеют `full` review, P11.8 собирает final proof.",
+  "context": "`RAG:—` В дереве уже есть правильная authority: `RegistryCompiler` →\n`CompiledRegistry` → `CompiledModuleRegistry`. API/tool/panel/attribute catalogues — её\nпроекции; `SearchManager` — factory драйвера, а не registry. Пробелы:\n`CompiledRegistry` shallow-readonly, `ArrayEntityRegistry` допускает late mutation,\nduplicate/replacement policy нет, `InstalledPackages` теряет version/reference,\nintrospection считает второй hash.\n\n`RAG:✅` Perplexity MCP и последующая проверка official Symfony/Laravel docs\nподтвердили compile-before-use и long-lived application state. Queue workers\nполучают новый code через graceful restart, Octane — через reload; global\natomic fleet cutover не обещан. External evidence не определяет CoreX\nidentity/fingerprint/mismatch semantics: это локальные D56–D59.\n\n> **Контракт фазы.** Потребляет: окончательную форму attribute catalogue P10,\ntyped composition P7, existing module lifecycle. Производит: один canonical\nfingerprinted registry snapshot; point-specific identity/order/replacement; deep freeze;\nrequest/job/deploy publication boundaries; exact extension stamps для workflow/wakeup;\ncontract suite и classification ratchet. Не вводит God Registry, новый DDL,\ntenant-specific snapshots или девятую extension point.\n\n> **Phase Assurance | v1.**\n> Impact: internal-integration\n> Integration Seams: module-extension-points · compiled-registry-cache · entity-projection · workflow-intent · wakeup-dispatch · long-running-workers\n> Live or Irreversible: no\n> Audit Intent: direct-close-eligible\n> Rationale: fingerprint/freeze/replay semantics влияют на воспроизводимость;\n> все восемь items имеют `full` review, P11.8 собирает final proof.",
+  "depends_on": [
+    "P10"
+  ],
+  "items": [
+    "P11.1",
+    "P11.2",
+    "P11.3",
+    "P11.4",
+    "P11.5",
+    "P11.6",
+    "P11.7",
+    "P11.8"
+  ],
+  "batches": [
+    {
+      "id": "BP11-1",
+      "items": [
+        "P11.1"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP11-2",
+      "items": [
+        "P11.2"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP11-3",
+      "items": [
+        "P11.3"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP11-4",
+      "items": [
+        "P11.4"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP11-5",
+      "items": [
+        "P11.5"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP11-6",
+      "items": [
+        "P11.6"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP11-7",
+      "items": [
+        "P11.7"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP11-8",
+      "items": [
+        "P11.8"
+      ],
+      "mode": "recommended"
+    }
+  ],
+  "closed": {
+    "at": "2026-09-24T20:36:43Z",
+    "result": "done",
+    "summary": "<!-- plan-projection\nprojection: phase-closure\nprojection_version: v1\nsource_scope: phase P11 + item states + decisions\nthrough: P11: 🟢 Done\ninputs_sha256: e354f589b8fd3d2c6dec18214af29a673fa7061e4261e2c0ff612a21d4cdf70f\ngenerated_by: task plan-views closure\n-->\n\n# Закрытие фазы P11\n\n> Не править руками: это генерируемый вид.\n\n## Контракт фазы\n\n**Контракт фазы.** Потребляет: окончательную форму attribute catalogue P10,\n\n## Произведено\n\n- P11.1 — Registry vocabulary, identity and version metadata: Additive declaration primitives, version discovery, extension stamp, policy\n- P11.2 — Deterministic compiler and canonical frozen snapshot: Deterministic compiler, complete diagnostics, canonical fingerprinted snapshot\n- P11.3 — Runtime publication, collector freeze and refresh boundaries: Frozen entity projection, authoritative introspection, explicit worker refresh\n- P11.4 — Workflow definition stamps in existing durable carriers: Version-pinned workflow intents, deterministic hash/provenance and backward-compatible\n- P11.5 — Versioned wakeup handler registry and stamped envelopes: Frozen handler catalogue, versioned wakeup envelope, fail-closed replay and\n- P11.6 — Complete tasks-workflow materialization provenance: Complete materialization payload, exact handler version, strict failure behavior\n- P11.7 — Versioned notification digest wakeups: Stamped digest scheduling, versioned handler declaration and compatibility/mismatch\n- P11.8 — Extension contract suite, ratchet gate and final proof: Reusable contract suite, registry-classification ratchet, complete P11 receipt,\n\n## Known Deviations\n\n- —\n\n## Решения\n\n- [D56](../../decisions/D56-registry-authority-not-every-manager.md)\n- [D57](../../decisions/D57-point-specific-order-and-canonical-fingerprint.md)\n- [D58](../../decisions/D58-publication-and-activation-are-separate.md)\n- [D59](../../decisions/D59-durable-work-pins-extension-version.md)\n- [D103](../../decisions/D103-registry-fingerprint-is-provenance-only.md)\n- [D120](../../decisions/D120-e11e-batch-receipt-journal-migration.md)\n"
+  },
+  "orchestration": {
+    "strategy": "sequential"
+  },
+  "sections": [
+    {
+      "id": "P11-typed-registries-compile-frozen-durable-stamps",
+      "title": "P11 — Модель расширения: typed registries, compile → frozen, durable stamps",
+      "text": ""
+    },
+    {
+      "id": "Phase-Context",
+      "title": "Phase Context",
+      "text": "`RAG:—` В дереве уже есть правильная authority: `RegistryCompiler` →\n`CompiledRegistry` → `CompiledModuleRegistry`. API/tool/panel/attribute catalogues — её\nпроекции; `SearchManager` — factory драйвера, а не registry. Пробелы:\n`CompiledRegistry` shallow-readonly, `ArrayEntityRegistry` допускает late mutation,\nduplicate/replacement policy нет, `InstalledPackages` теряет version/reference,\nintrospection считает второй hash.\n\n`RAG:✅` Perplexity MCP и последующая проверка official Symfony/Laravel docs\nподтвердили compile-before-use и long-lived application state. Queue workers\nполучают новый code через graceful restart, Octane — через reload; global\natomic fleet cutover не обещан. External evidence не определяет CoreX\nidentity/fingerprint/mismatch semantics: это локальные D56–D59.\n\n> **Контракт фазы.** Потребляет: окончательную форму attribute catalogue P10,\ntyped composition P7, existing module lifecycle. Производит: один canonical\nfingerprinted registry snapshot; point-specific identity/order/replacement; deep freeze;\nrequest/job/deploy publication boundaries; exact extension stamps для workflow/wakeup;\ncontract suite и classification ratchet. Не вводит God Registry, новый DDL,\ntenant-specific snapshots или девятую extension point.\n\n> **Phase Assurance | v1.**\n> Impact: internal-integration\n> Integration Seams: module-extension-points · compiled-registry-cache · entity-projection · workflow-intent · wakeup-dispatch · long-running-workers\n> Live or Irreversible: no\n> Audit Intent: direct-close-eligible\n> Rationale: fingerprint/freeze/replay semantics влияют на воспроизводимость;\n> все восемь items имеют `full` review, P11.8 собирает final proof."
+    },
+    {
+      "id": "DoR",
+      "title": "DoR",
+      "text": "- [x] Authority/projection/driver-factory surfaces классифицированы D56 и §1.\n- [x] Identity, collision, replacement и order заданы поимённо в §2–§4; D57\n      supersedes избыточное общее order-правило D5.\n- [x] Canonical bytes, module version/reference, exclusions и corrupt-artifact outcome\n      закреплены §5.\n- [x] Code publication и tenant activation разделены D58; fleet-wide atomicity не обещана.\n- [x] Durable rule id+version vs diagnostic fingerprint и legacy policy закреплены D59.\n- [x] Найден и назначен P11.6 defect: producer не пишет `definitionHash`.\n- [x] Каждая item-спека ссылается на нормативный параграф `P11-design.md`.\n- [x] Каждый item: один package (или package + root gate), ≤8 Files, ≤14 Required Reads,\n      отдельный validation contract."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Additive manifest replacement/version primitives; canonical compiler-private normal form; explicit\nduplicate/replacement diagnostics; default lexical, declared-priority and menu topological ordering;\n`corex-registry/1` fingerprint; scalar detached snapshot; entity collector freeze; authoritative\nintrospection; queue-job and Octane-deploy refresh contract; workflow stamp in existing payload;\ntyped/versioned wakeup handler map and envelope; read-only legacy preflight; fixes for tasks-workflow\nmaterialization and notification digest consumers; reusable contract suite, ratchet gate, root\nchangelog and receipt."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "New extension points; rename `Extend`/`Gate` (P15); God Registry or public normal form; fake freeze\nfor `SearchManager`; replacement of P10 `schemaHash`; tenant-specific compiled artifacts; hot-swap\ninside request/job; fleet-wide atomic deploy; generic extension FSM; workflow engine; DDL/backfill;\nimplicit legacy wakeup admission; API profile P13; external acceptance fixtures P17."
+    },
+    {
+      "id": "Dependencies",
+      "title": "Dependencies",
+      "text": "P10 детализирована; исполнение всей фазы ждёт конца D14 stage 2.\nВнутри: `P11.1 → P11.2 → P11.3`; `P11.3 → P11.4` и `P11.5`; `P11.5 →\nP11.6` и `P11.7`; все → P11.8. Рекомендованы shared-context batches: B17\n`P11.2 + P11.3`, B18 `P11.6 + P11.7`; каждый item закрывается отдельно."
+    },
+    {
+      "id": "Items",
+      "title": "Items",
+      "text": "| Item | Назначение |\n|:--|:--|\n| P11.1 | Identity vocabulary, replacement declarations, Composer version/reference и `ExtensionStamp`. |\n| P11.2 | Deterministic normalization, duplicate/replacement validation, canonical fingerprint и detached snapshot. |\n| P11.3 | Authority publication, entity freeze, introspection и worker refresh boundaries. |\n| P11.4 | Exact workflow definition stamps в existing JSON/refs без DDL. |\n| P11.5 | Typed frozen wakeup handlers, stamped envelope, mismatch quarantine и preflight. |\n| P11.6 | tasks-workflow `definitionHash`/window/version fix и устранение silent no-op. |\n| P11.7 | Versioned notification digest wakeup и bounded legacy/mismatch proof. |\n| P11.8 | Framework-neutral contract suite, classification ratchet и final receipt. |"
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Каждый item выполняет package `composer lint`, `composer analyse`, `composer test`;\nDB-mutating lanes — только после test-isolation preflight. P11.8 дополнительно\nпрогоняет root checks и `composer test:pg` dependency closure. Обязательны negative\nfixtures: duplicate owners, replacement errors/cycle, shuffled compile equality, corrupt snapshot,\nlate mutation, fingerprint/activation separation, workflow/wakeup version mismatch, missing stamp,\nlegacy opt-in, incomplete materialization payload, no handler invocation and unclassified new surface.\nПропущенный PG/consumer lane не считается green."
+    },
+    {
+      "id": "Phase-Handoff",
+      "title": "Phase Handoff",
+      "text": "Receipt перечисляет: authority/projection matrix; canonical schema/fingerprint;\nduplicate/replacement/order negative cases; frozen publication и deployment obligations;\nactivation epoch separation; durable stamp compatibility table; legacy pending-row preflight;\ntasks-workflow defect regression; notifications proof; contract-suite consumers; root gate,\npackage/PG commands и remaining risks."
+    }
+  ]
+}

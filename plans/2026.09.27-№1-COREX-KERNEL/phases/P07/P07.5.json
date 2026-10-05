@@ -1,0 +1,467 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P07.5",
+  "title": "Контракты пробуждения в ядре и граф без notifications → wakeup",
+  "status": "done",
+  "summary": "Вынести контракты отложенного пробуждения в модуль ядра `CoreX\\Scheduling`, перевести регистрацию обработчиков и источников пакетов на теги, отвязать `corex-notifications` и `corex-tasks-workflow` от `corex-wakeup` и закрепить отсутствие ребра `notifications → wakeup` гейтом графа с негативным контролем.",
+  "why": "D16 и D96 C (п.8–п.11); `@plan/knowledge/research-04-architecture.json` §4 («notifications ↛ wakeup, контракт в ядре»); notifications пишет config-ключ `corex-wakeup.handlers` — скрытое ребро (`facts/package-edges.txt`).",
+  "scope": {
+    "include": [
+      "`git mv` трёх контрактов и семи data-классов wakeup в `packages/core/src/Scheduling/{Contracts,Data}` с namespace `CoreX\\Scheduling\\…`; константы `DueWakeupSource::TAG`, `WakeupHandlerDefinition::TAG`; правка всех импортов (src и tests); `WakeupBindingsRegistrar` объединяет config хоста и тегированные определения, повтор kind → `InvalidConfiguration`; `NotificationsDigestRegistrar` на тегах; `packages/notifications/src/Internal/DigestSchedulerCheck.php`; notifications и tasks-workflow composer без wakeup; `scripts/package-graph-gate.{php,json}` с правилом и удалённым allowlist tasks-workflow → wakeup; `scripts/ownership-map.json` `kernel.modules` + `Scheduling` and `scripts/module-layout.json` `kernel_modules` 15 → 16 (D102 amendment D29/D57); glossary §Kernel modules; `docs/architecture/constitution.md`; README/CHANGELOG notifications, wakeup, tasks-workflow, core; Golden delta P07.5; package-root `*Registrar.php` является root entry гейта раскладки; `CreateDatabaseFromTemplate` зависит от `TemplateDatabaseCloner`, а не от Internal провижининга."
+    ],
+    "exclude": [
+      "изменение поведения wakeup (lease, retries, sweeper); optional integration tenancy → wakeup (остаётся allowlist); рёбра `tools → operations`, `webhooks → operations` (D96 п.10 — остаются); схема."
+    ]
+  },
+  "depends_on": [
+    "P07.4"
+  ],
+  "decisions": [
+    "D102",
+    "D100",
+    "D98",
+    "D96",
+    "D16",
+    "D01"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/decisions/D102.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/decisions/D100.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/decisions/D98.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/decisions/D96.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/decisions/D16.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/knowledge/research-P07-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P07-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/knowledge/artifacts-P07-design-examples.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/artifacts/P07-design/facts/package-edges.txt",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/artifacts-P07.4-execution-completion.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "packages/wakeup/src/Laravel/WakeupBindingsRegistrar.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/wakeup/src/Internal/WakeupOptions.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/notifications/src/Laravel/NotificationsDigestRegistrar.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "scripts/package-graph-gate.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "scripts/package-graph-gate.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/{core,wakeup,notifications,tasks-workflow}/CHANGELOG.md",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Scheduling/Contracts/{WakeupScheduler,DueWakeupSource,DueWakeupHandler}.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Scheduling/Data/{WakeupRequest,WakeupWindow,WakeupDelivery,WakeupHandlerDefinition,ScheduleResult,CancelResult,SweepResult}.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/wakeup/src/**",
+      "change": "any"
+    },
+    {
+      "path": "packages/notifications/src/Digest/Internal/{DigestTick,DigestWakeupAdapter,NotificationDigestDueSource,SqlDigestBuilder}.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/notifications/src/Laravel/{NotificationsDigestRegistrar,NotificationsBindingsRegistrar}.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/notifications/src/Internal/DigestSchedulerCheck.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/tasks-workflow/src/Internal/{MaterializationWakeupHandler,SqlTaskRecurrenceMaterializer}.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/tenancy/src/**",
+      "change": "any"
+    },
+    {
+      "path": "packages/*/tests/**",
+      "change": "any"
+    },
+    {
+      "path": "packages/{notifications,tasks-workflow}/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "scripts/package-graph-gate.php",
+      "change": "any"
+    },
+    {
+      "path": "scripts/package-graph-gate.json",
+      "change": "any"
+    },
+    {
+      "path": "scripts/ownership-map.json",
+      "change": "any"
+    },
+    {
+      "path": "scripts/module-layout.json",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/research-03-glossary.json",
+      "change": "any"
+    },
+    {
+      "path": "docs/architecture/constitution.md",
+      "change": "any"
+    },
+    {
+      "path": "packages/{notifications,wakeup,tasks-workflow}/README.md",
+      "change": "any"
+    },
+    {
+      "path": "packages/{core,wakeup,notifications,tasks-workflow}/resources/contracts/php-api.json",
+      "change": "any"
+    },
+    {
+      "path": "@plan/artifacts/P07.5-execution/**",
+      "change": "any"
+    },
+    {
+      "path": "packages/tenancy/CHANGELOG.md",
+      "change": "any"
+    },
+    {
+      "path": "packages/tenancy/resources/contracts/php-api.json",
+      "change": "any"
+    },
+    {
+      "path": "docs/reference/public-api.md",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Перенос — `git mv` + правка ссылок по карте examples §13, без алиасов (D01); `rename-completeness` ловит остатки. `kind`/`since` атрибутов `#[Api]/#[Spi]` не меняются. Ни один пакет, кроме wakeup, не пишет и не читает `corex-wakeup.*`. D100/examples §13b: nullable scheduler во внутреннем SqlDigestBuilder и условный resolve в factory, disabled build не вызывает schedule; enabled null отказывает в constructor до writes. Включённый digest без `WakeupScheduler` — violation, не тихое отключение. Allowlist графа только сокращается. Manifest и changelog — в одном продуктовом commit; base SHA — до правок."
+  ],
+  "guidance": "Досье §3.5 шаги 1–5; examples §13 (карта, тегированная регистрация, объединение определений), §14 (негатив графа).",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "bash plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.5-execution/layout-negatives.sh",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "bash scripts/contract-guard.sh && bash scripts/contract-guard.sh \"$(cat plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.5-execution/base-commit.txt)\"",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "! git grep -F -n 'CoreX\\Wakeup\\' -- packages/notifications packages/tasks-workflow && ! git grep -F -n 'corex-wakeup.' -- 'packages/*/src' ':!packages/wakeup' && ! git grep -E -n 'CoreX\\\\Wakeup\\\\(Contracts\\\\(WakeupScheduler|DueWakeupSource|DueWakeupHandler)|Data\\\\)' -- packages products docs",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "scripts/php84 composer rename-completeness && scripts/php84 composer ownership-gate && scripts/php84 composer manifests:check && scripts/php84 composer module-layout-gate",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "bash plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.5-execution/graph-negative.sh",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "cmd": "scripts/php84 composer --working-dir=packages/wakeup test && scripts/php84 composer --working-dir=packages/notifications test && scripts/php84 composer --working-dir=packages/tasks-workflow test",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "cmd": "scripts/php84 composer test:packages && PGSQL_PORT=5434 scripts/php84 composer test:pg && scripts/php84 composer test:arch",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "cmd": "scripts/php84 php scripts/php-api.php --write && scripts/php84 php scripts/php-api.php --write && git diff --exit-code -- docs/reference/public-api.md packages/core/resources/contracts/php-api.json packages/wakeup/resources/contracts/php-api.json packages/tenancy/resources/contracts/php-api.json && scripts/php84 composer php-api && scripts/php84 composer bc-check && scripts/php84 vendor/bin/pest --filter=GoldenTest tests/Golden/GoldenTest.php",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "cmd": "scripts/php84 composer lint:check && scripts/php84 composer analyse && COMPOSER_IGNORE_PLATFORM_REQS=1 scripts/php84 composer deps:analyse && bash scripts/anti-weakening-gate.sh && scripts/php84 php scripts/package-docs-gate.php",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "procedure": "bash plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.5-execution/layout-negatives.sh",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V11",
+      "procedure": "bash scripts/contract-guard.sh && bash scripts/contract-guard.sh \"$(cat plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.5-execution/base-commit.txt)\"",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V12",
+      "procedure": "! git grep -F -n 'CoreX\\Wakeup\\' -- packages/notifications packages/tasks-workflow && ! git grep -F -n 'corex-wakeup.' -- 'packages/*/src' ':!packages/wakeup' && ! git grep -E -n 'CoreX\\\\Wakeup\\\\(Contracts\\\\(WakeupScheduler|DueWakeupSource|DueWakeupHandler)|Data\\\\)' -- packages products docs",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V13",
+      "procedure": "scripts/php84 composer rename-completeness && scripts/php84 composer ownership-gate && scripts/php84 composer manifests:check && scripts/php84 composer module-layout-gate",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V14",
+      "procedure": "bash plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.5-execution/graph-negative.sh",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V15",
+      "procedure": "scripts/php84 composer --working-dir=packages/wakeup test && scripts/php84 composer --working-dir=packages/notifications test && scripts/php84 composer --working-dir=packages/tasks-workflow test",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V16",
+      "procedure": "scripts/php84 composer test:packages && PGSQL_PORT=5434 scripts/php84 composer test:pg && scripts/php84 composer test:arch",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V17",
+      "procedure": "scripts/php84 php scripts/php-api.php --write && scripts/php84 php scripts/php-api.php --write && git diff --exit-code -- docs/reference/public-api.md packages/core/resources/contracts/php-api.json packages/wakeup/resources/contracts/php-api.json packages/tenancy/resources/contracts/php-api.json && scripts/php84 composer php-api && scripts/php84 composer bc-check && scripts/php84 vendor/bin/pest --filter=GoldenTest tests/Golden/GoldenTest.php",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V18",
+      "procedure": "scripts/php84 composer lint:check && scripts/php84 composer analyse && COMPOSER_IGNORE_PLATFORM_REQS=1 scripts/php84 composer deps:analyse && bash scripts/anti-weakening-gate.sh && scripts/php84 php scripts/package-docs-gate.php",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V19",
+      "procedure": "command grep -F 'review: self-check GREEN' plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.5-execution/completion.md",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "package changelogs; `artifacts/P07.5-execution/base-commit.txt` и candidate SHA; модуль `CoreX\\Scheduling`; регистрация тегами; notifications и tasks-workflow без wakeup; правило графа с негативом; обновлённые glossary, ownership-map, constitution; Golden delta P07.5; `@plan/knowledge/artifacts-P07.5-execution-completion.json`."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "self"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-10-05T09:58:20Z",
+    "finished_at": "2026-10-05T12:35:18Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "grok/grok-4.7"
+    },
+    "notes": "P07.5 closed on local evidence. Scheduling contracts live in CoreX\\Scheduling; module-layout gate is green.\nwrite-site: pre_mutation: allow · pre_final: allow",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-10-05T12:35:18Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V11",
+        "exit": 0,
+        "at": "2026-10-05T12:35:18Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V12",
+        "exit": 0,
+        "at": "2026-10-05T12:35:18Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V13",
+        "exit": 0,
+        "at": "2026-10-05T12:35:18Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V14",
+        "exit": 0,
+        "at": "2026-10-05T12:35:18Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V15",
+        "exit": 0,
+        "at": "2026-10-05T12:35:18Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V16",
+        "exit": 0,
+        "at": "2026-10-05T12:35:18Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V17",
+        "exit": 0,
+        "at": "2026-10-05T12:35:18Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V18",
+        "exit": 0,
+        "at": "2026-10-05T12:35:18Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V19",
+        "exit": 0,
+        "at": "2026-10-05T12:35:18Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-10-05T12:35:18Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Вынести контракты отложенного пробуждения в модуль ядра `CoreX\\Scheduling`, перевести регистрацию обработчиков и источников пакетов на теги, отвязать `corex-notifications` и `corex-tasks-workflow` от `corex-wakeup` и закрепить отсутствие ребра `notifications → wakeup` гейтом графа с негативным контролем."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "D16 и D96 C (п.8–п.11); `@plan/knowledge/research-04-architecture.json` §4 («notifications ↛ wakeup, контракт в ядре»); notifications пишет config-ключ `corex-wakeup.handlers` — скрытое ребро (`facts/package-edges.txt`)."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "`git mv` трёх контрактов и семи data-классов wakeup в `packages/core/src/Scheduling/{Contracts,Data}` с namespace `CoreX\\Scheduling\\…`; константы `DueWakeupSource::TAG`, `WakeupHandlerDefinition::TAG`; правка всех импортов (src и tests); `WakeupBindingsRegistrar` объединяет config хоста и тегированные определения, повтор kind → `InvalidConfiguration`; `NotificationsDigestRegistrar` на тегах; `packages/notifications/src/Internal/DigestSchedulerCheck.php`; notifications и tasks-workflow composer без wakeup; `scripts/package-graph-gate.{php,json}` с правилом и удалённым allowlist tasks-workflow → wakeup; `scripts/ownership-map.json` `kernel.modules` + `Scheduling` and `scripts/module-layout.json` `kernel_modules` 15 → 16 (D102 amendment D29/D57); glossary §Kernel modules; `docs/architecture/constitution.md`; README/CHANGELOG notifications, wakeup, tasks-workflow, core; Golden delta P07.5; package-root `*Registrar.php` является root entry гейта раскладки; `CreateDatabaseFromTemplate` зависит от `TemplateDatabaseCloner`, а не от Internal провижининга."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "изменение поведения wakeup (lease, retries, sweeper); optional integration tenancy → wakeup (остаётся allowlist); рёбра `tools → operations`, `webhooks → operations` (D96 п.10 — остаются); схема."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/decisions/D102.json` · `@plan/decisions/D100.json` · `@plan/decisions/D98.json` · `@plan/decisions/D96.json` (C) · `@plan/decisions/D16.json` · `@plan/knowledge/research-P07-design.json` (§1.5, §2, §3.5, §4, §5) · `@plan/knowledge/research-P07-design-rag.json` (внешних фактов для Scheduling нет — раздел «Не искалось»; граница W7 для access) · `@plan/knowledge/artifacts-P07-design-examples.json` (§13–§14) · `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design/facts/package-edges.txt` · результат P07.4 (`@plan/knowledge/artifacts-P07.4-execution-completion.json`, появляется после его исполнения)"
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/{core,wakeup,notifications,tasks-workflow}/CHANGELOG.md`; `packages/core/src/Scheduling/Contracts/{WakeupScheduler,DueWakeupSource,DueWakeupHandler}.php`; `packages/core/src/Scheduling/Data/{WakeupRequest,WakeupWindow,WakeupDelivery,WakeupHandlerDefinition,ScheduleResult,CancelResult,SweepResult}.php`; `packages/wakeup/src/**` (импорты, Laravel/WakeupBindingsRegistrar.php, Internal/WakeupOptions.php); `packages/notifications/src/Digest/Internal/{DigestTick,DigestWakeupAdapter,NotificationDigestDueSource,SqlDigestBuilder}.php`; `packages/notifications/src/Laravel/{NotificationsDigestRegistrar,NotificationsBindingsRegistrar}.php`; `packages/notifications/src/Internal/DigestSchedulerCheck.php` (новый); `packages/tasks-workflow/src/Internal/{MaterializationWakeupHandler,SqlTaskRecurrenceMaterializer}.php` и его registrar; `packages/tenancy/src/**` импорты перенесённых символов; `packages/*/tests/**` импорты; `packages/{notifications,tasks-workflow}/composer.json`; `composer.lock` (только path-пакеты); `scripts/package-graph-gate.php`, `scripts/package-graph-gate.json`, `scripts/ownership-map.json`, `scripts/module-layout.json`; `@plan/knowledge/research-03-glossary.json`; `docs/architecture/constitution.md`; `packages/{notifications,wakeup,tasks-workflow}/README.md`; `packages/{core,wakeup,notifications,tasks-workflow}/resources/contracts/php-api.json`; `tests/Golden/baseline/*` (строки P07.5 из §4); `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.5-execution/**`; `packages/tenancy/CHANGELOG.md`; `packages/tenancy/resources/contracts/php-api.json`; `docs/reference/public-api.md`; `tests/Golden/REBASELINE.md`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/knowledge/research-P07-design.json` §1.5, §3.5; 2) `@plan/knowledge/artifacts-P07-design-examples.json` §13–§14; 3) `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07-design/facts/package-edges.txt`; 4) `packages/wakeup/src/Laravel/WakeupBindingsRegistrar.php`; 5) `packages/wakeup/src/Internal/WakeupOptions.php`; 6) `packages/notifications/src/Laravel/NotificationsDigestRegistrar.php`; 7) `scripts/package-graph-gate.php`; 8) `scripts/package-graph-gate.json`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Перенос — `git mv` + правка ссылок по карте examples §13, без алиасов (D01); `rename-completeness` ловит остатки. `kind`/`since` атрибутов `#[Api]/#[Spi]` не меняются. Ни один пакет, кроме wakeup, не пишет и не читает `corex-wakeup.*`. D100/examples §13b: nullable scheduler во внутреннем SqlDigestBuilder и условный resolve в factory, disabled build не вызывает schedule; enabled null отказывает в constructor до writes. Включённый digest без `WakeupScheduler` — violation, не тихое отключение. Allowlist графа только сокращается. Manifest и changelog — в одном продуктовом commit; base SHA — до правок."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Досье §3.5 шаги 1–5; examples §13 (карта, тегированная регистрация, объединение определений), §14 (негатив графа)."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "- `bash plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.5-execution/layout-negatives.sh` → exit 0. Старый enum даёт R1 на десяти файлах Scheduling, UnknownModule даёт R1, новый enum и baseline не ослаблены.\n- `bash scripts/contract-guard.sh && bash scripts/contract-guard.sh \"$(cat plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.5-execution/base-commit.txt)\"` → exit 0.\n- `! git grep -F -n 'CoreX\\Wakeup\\' -- packages/notifications packages/tasks-workflow && ! git grep -F -n 'corex-wakeup.' -- 'packages/*/src' ':!packages/wakeup' && ! git grep -E -n 'CoreX\\\\Wakeup\\\\(Contracts\\\\(WakeupScheduler|DueWakeupSource|DueWakeupHandler)|Data\\\\)' -- packages products docs` → пусто.\n- `scripts/php84 composer rename-completeness && scripts/php84 composer ownership-gate && scripts/php84 composer manifests:check && scripts/php84 composer module-layout-gate` → exit 0.\n- `bash plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.5-execution/graph-negative.sh` → exit 0. Негатив examples §14 завершается ненулевым кодом и содержит ребро axiomasoft/corex-notifications → axiomasoft/corex-wakeup и DigestTick.php, затем гейт снова зелёный.\n- `scripts/php84 composer --working-dir=packages/wakeup test && scripts/php84 composer --working-dir=packages/notifications test && scripts/php84 composer --working-dir=packages/tasks-workflow test` → exit 0.\n- `scripts/php84 composer test:packages && PGSQL_PORT=5434 scripts/php84 composer test:pg && scripts/php84 composer test:arch` → exit 0.\n- `scripts/php84 php scripts/php-api.php --write && scripts/php84 php scripts/php-api.php --write && git diff --exit-code -- docs/reference/public-api.md packages/core/resources/contracts/php-api.json packages/wakeup/resources/contracts/php-api.json packages/tenancy/resources/contracts/php-api.json && scripts/php84 composer php-api && scripts/php84 composer bc-check && scripts/php84 vendor/bin/pest --filter=GoldenTest tests/Golden/GoldenTest.php` → exit 0.\n- `scripts/php84 composer lint:check && scripts/php84 composer analyse && COMPOSER_IGNORE_PLATFORM_REQS=1 scripts/php84 composer deps:analyse && bash scripts/anti-weakening-gate.sh && scripts/php84 php scripts/package-docs-gate.php` → exit 0.\n- `command grep -F 'review: self-check GREEN' @plan/knowledge/artifacts-P07.5-execution-completion.json` → exit 0."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "package changelogs; `artifacts/P07.5-execution/base-commit.txt` и candidate SHA; модуль `CoreX\\Scheduling`; регистрация тегами; notifications и tasks-workflow без wakeup; правило графа с негативом; обновлённые glossary, ownership-map, constitution; Golden delta P07.5; `@plan/knowledge/artifacts-P07.5-execution-completion.json`."
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "findings-P9.6-downstream-P14.21-cff33597f578-7a802cf32c86",
+  "title": "Downstream gate — P9.6 → P14.21",
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nitem: P9.6\ndate: 2026-09-26\ngate: downstream-gate-v1\nproducer_commit: 7a802cf32c865a487d3a4a8c4a3a25c8d45c0158\nconsumer_item: P14.21\nconsumer_spec_sha256: cff33597f578b34a78499f75aa1576434ef41115399560fb27dd8758c585cabe\noutcome: green\n---"
+    },
+    {
+      "id": "Downstream-gate-P9.6-P14.21",
+      "title": "Downstream gate — P9.6 → P14.21",
+      "text": "Outcome: `green`.\n\n| Applicable | Return | Command |\n|:--|:--|:--|\n| yes | 0 | `composer lint:check` |"
+    }
+  ],
+  "applies_to": [
+    "P9.6",
+    "P14.21"
+  ],
+  "provenance": {
+    "path": "findings/P9.6-downstream-P14.21-cff33597f578-7a802cf32c86.md",
+    "sha256": "fe3e274d30fbc59ba3fe5c4827bce1ebd5613b0578d2c69f8af31f6144475951"
+  }
+}

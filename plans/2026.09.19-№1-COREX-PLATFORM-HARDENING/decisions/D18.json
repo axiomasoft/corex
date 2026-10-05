@@ -1,0 +1,48 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D18",
+  "title": "BC-дифф Roave 8.22 в отдельном CI-джобе на PHP 8.4; блокирует только `stable`",
+  "date": "2026-09-19",
+  "status": "superseded",
+  "decision": "Единственная новая dev-зависимость плана (D4) — `roave/backward-compatibility-check: ^8.22`.\nОна ставится в корневой `require-dev`. Джоб BC-диффа в CI:\n\n1. Бежит **только** на PHP 8.4, `fetch-depth: 0`.\n2. Не входит в матрицу PHP 8.3: checker не является runtime-требованием пакетов.\n3. Сравнивает каждый живой пакет с merge-base `origin/main`; если тегов нет —\n   это валидный pre-1.0 режим, не skip всего джоба.\n4. Exit non-zero **только** у пакета с `extra.corex.stability=stable`.\n   Для `experimental` печатает отчёт и выходит 0. P17 переводит пакеты в\n   `stable` — тот же джоб становится блокирующим без новой работы.\n5. `scripts/contract-guard.sh` сохраняется как дешёвый changelog-прокси; Roave\n   его не заменяет.\n\nBaseline-файл `.roave-backward-compatibility-check.xml` в P3 не заводится:\nанти-ослабляющий гейт запрещает phpstan-baseline, и XML-ignore того же класса\nскрытого долга здесь не вводится. Исключение — только именованная запись в\nконфиге гейта с причиной, как у графа.",
+  "rationale": "Пинить `<8.22` ради локального `composer install` на PHP 8.3 — заморозить\nchecker на версии, которую апстрим уже оставил. Отдельный 8.4-джоб сохраняет\nматрицу пакетов и берёт текущий Roave. Блокировать experimental до 1.0 нельзя:\nP15 ещё будет переименовывать публичные символы, и красный BC-гейт его\nостановит либо будет обойдён. Observational на experimental + blocking на\nstable — та же схема, что CFG-002 (наблюдательный, пока P7 не починит 152\nвызова).",
+  "applies_to": [
+    "P3",
+    "P3.4",
+    "P17"
+  ],
+  "supersedes": [],
+  "superseded_by": "D98",
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/cursor-grok-4.6/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D18\ndate: 2026-09-19\nstatus: superseded\nitem: P3.4\nitems: [P3, P3.4, P17]\nsupersedes: []\nsuperseded_by: D98\n---"
+    },
+    {
+      "id": "D18-BC--Roave-8.22-CI--PHP-8.4-stable",
+      "title": "D18 — BC-дифф Roave 8.22 в отдельном CI-джобе на PHP 8.4; блокирует только `stable`",
+      "text": "**Actor:** plan-designer/cursor-grok-4.6/high\n\n**Evidence:** `RAG:✅` 2026-09-19 — P3-Q2: `roave/backward-compatibility-check`\n8.22.0 (2026-09-16) сравнивает две git-ревизии через reflection публичной\nповерхности Composer-autoload; это не changelog-guard. Дефолт — последний\nSemVer-тег против HEAD; в монорепо нужен per-package baseline.\n`RAG:✅` P3-Q6: 8.22.0 требует PHP `~8.4.0 || ~8.5.0` и не ставится на 8.3;\nбиблиотека при этом вправе поддерживать 8.3–8.5, а checker — отдельный джоб\nна 8.4. Источники: packagist.org/packages/roave/backward-compatibility-check,\ngithub.com/Roave/BackwardCompatibilityCheck.\n`RAG:—` ADR-001 / `composer.json`: PHP `^8.3`; корневой `require-dev` не содержит\nRoave; `scripts/contract-guard.sh` — warn-прокси на диффе `src/Contracts/**`.\n`RAG:—` P1.2 назначает всем 20 пакетам `stability=experimental` до 1.0."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "Единственная новая dev-зависимость плана (D4) — `roave/backward-compatibility-check: ^8.22`.\nОна ставится в корневой `require-dev`. Джоб BC-диффа в CI:\n\n1. Бежит **только** на PHP 8.4, `fetch-depth: 0`.\n2. Не входит в матрицу PHP 8.3: checker не является runtime-требованием пакетов.\n3. Сравнивает каждый живой пакет с merge-base `origin/main`; если тегов нет —\n   это валидный pre-1.0 режим, не skip всего джоба.\n4. Exit non-zero **только** у пакета с `extra.corex.stability=stable`.\n   Для `experimental` печатает отчёт и выходит 0. P17 переводит пакеты в\n   `stable` — тот же джоб становится блокирующим без новой работы.\n5. `scripts/contract-guard.sh` сохраняется как дешёвый changelog-прокси; Roave\n   его не заменяет.\n\nBaseline-файл `.roave-backward-compatibility-check.xml` в P3 не заводится:\nанти-ослабляющий гейт запрещает phpstan-baseline, и XML-ignore того же класса\nскрытого долга здесь не вводится. Исключение — только именованная запись в\nконфиге гейта с причиной, как у графа."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Пинить `<8.22` ради локального `composer install` на PHP 8.3 — заморозить\nchecker на версии, которую апстрим уже оставил. Отдельный 8.4-джоб сохраняет\nматрицу пакетов и берёт текущий Roave. Блокировать experimental до 1.0 нельзя:\nP15 ещё будет переименовывать публичные символы, и красный BC-гейт его\nостановит либо будет обойдён. Observational на experimental + blocking на\nstable — та же схема, что CFG-002 (наблюдательный, пока P7 не починит 152\nвызова)."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P3.4 добавляет зависимость, wrapper `scripts/bc-check.sh` и джоб\n`.github/workflows/ci.yml` (или соседний workflow, вызываемый оттуда).\nЛокальный прогон на PHP 8.3 не требуется и в Validation item'а не входит.\nP17 обязан сменить `stability` на `stable` только вместе с зелёным blocking\nпрогоном этого джоба. D4 пункт 2 («`@internal` plus enforcement статическим\nанализом») по-прежнему читается через D12: межпакетный enforcement — гейт\nграфа, не PHPStan `@internal`."
+    }
+  ]
+}

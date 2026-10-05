@@ -1,0 +1,29 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "research-P10-design-rag",
+  "title": "RAG и внешние подтверждения",
+  "sections": [
+    {
+      "id": "P10-RAG",
+      "title": "P10 — RAG и внешние подтверждения",
+      "text": "**Снято:** 2026-09-20. **Метод:** первичные источники через web search/direct open;\nPerplexity в доступных инструментах сессии отсутствовал. Сжатые source records и\nSHA256 находятся в `artifacts/P10-design-rag/manifest.json`.\n\n| Query | Verdict | Влияние на дизайн |\n|:--|:--|:--|\n| P10-Q1 stable identity | confirmed | RFC 9562 определяет UUIDv7 как time-ordered UUID; Laravel 12 имеет `Str::uuid7()`. Pimcore отделяет key definitions от object values. Выбран UUIDv7 отдельно от mutable key; legacy bridge не становится каноном. |\n| P10-Q2 online evolution | confirmed | GitLab документирует multi-release concurrent rename/type change, синхронизацию, backfill и поздний cleanup. P10 делает expand/sync/backfill/verify/contract обязательным и обратимым. |\n| P10-Q3 JSONB indexes | confirmed | PostgreSQL: GIN ищет JSONB contents; expression indexes ускоряют конкретное выражение ценой write cost; partial predicate должен совпасть с query; только B-tree выдаёт sorted output. Поэтому default `none`, точечный expression/partial B-tree и внешний promoted projection. |\n| P10-Q4 durable projection | reused | P5 уже подтвердил transactional outbox и запрет полагаться на after-commit. P10 переиспользует `@plan/knowledge/research-P5-design-rag.json`, не дублируя внешний поиск. |"
+    },
+    {
+      "id": "Primary-sources",
+      "title": "Primary sources",
+      "text": "- RFC 9562 §5.7: https://www.rfc-editor.org/rfc/rfc9562.html\n- Laravel 12 `Str::uuid7`: https://api.laravel.com/docs/12.x/Illuminate/Support/Str.html\n- Pimcore Classification Store: https://docs.pimcore.com/platform/next/Pimcore/Objects/Object_Classes/Data_Types/Classification_Store/\n- GitLab avoiding downtime in migrations: https://docs.gitlab.com/development/database/avoiding_downtime_in_migrations/\n- PostgreSQL JSONB: https://www.postgresql.org/docs/current/datatype-json.html\n- PostgreSQL expression indexes: https://www.postgresql.org/docs/current/indexes-expressional.html\n- PostgreSQL partial indexes: https://www.postgresql.org/docs/current/indexes-partial.html\n- PostgreSQL indexes and ORDER BY: https://www.postgresql.org/docs/current/indexes-ordering.html"
+    },
+    {
+      "id": "section",
+      "title": "Граница подтверждения",
+      "text": "Источники подтверждают primitives и operational patterns, но не CoreX policy.\nSource precedence, шесть конфликтов, восемь checks, payload без values и subsystem\nlayout — проектные решения D50–D55. Performance benefit индекса не считается\nдоказанным до измерения на query/data shape конкретного consumer."
+    }
+  ],
+  "applies_to": [
+    "P10"
+  ],
+  "provenance": {
+    "path": "research/P10-design-rag.md",
+    "sha256": "f462bbe119ee07fc7ad135378f514c1bb0beca94f39149318230a692cd83103d"
+  }
+}

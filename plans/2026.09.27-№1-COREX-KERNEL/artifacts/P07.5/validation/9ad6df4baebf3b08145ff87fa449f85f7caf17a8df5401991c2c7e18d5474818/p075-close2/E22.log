@@ -1,0 +1,8 @@
+> php scripts/rename-completeness-gate.php
+rename-completeness OK: 855 tokens, 11065 files, sections classes,namespaces,packages,paths,identifiers
+> php scripts/ownership-gate.php --strict
+ownership OK: 649 identifiers, 0 baselined
+> python3 scripts/manifest-check.py
+manifests OK: 23 roots
+> python3 scripts/module-layout-gate.py
+module-layout OK: 1363 files, 0 violations, 0 baselined, 0 new, 0 stale; R0 0, R1 0, R2 0, R3 0, R4 0, R5 0, R6 0

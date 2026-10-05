@@ -1,0 +1,282 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P5.10",
+  "title": "Наблюдаемость доставки: четыре числа и команда-probe (вход P12)",
+  "status": "done",
+  "summary": "Ввести значение `DeliveryHealth`, читателя `SqlDeliveryHealth` и команду\n`corex:messaging:health`, печатающую возраст старейшего ожидающего первым и по каждому\nконтракту отдельно; с опцией `--max-age` команда работает как probe.",
+  "why": "A92 требует наблюдаемости доставки. `RAG:✅` P5-Q6: возраст старейшего pending —\nглавный сигнал пейджинга, глубина — сигнал ёмкости; глубина 100 000 при возрасте в секунды\nздорова, глубина 1 при возрасте 45 минут — нет. Общая метрика возраста скрывает застрявший\nмалообъёмный маршрут за здоровым высокообъёмным, поэтому нужен разрез по классу событий.\nМетрику нельзя размечать UUID события, ID агрегата или текстом исключения — только\nнизкокардинальными измерениями. `RAG:—` Скелет фазы перечислял пять чисел списком, где\nглубина стояла первой; внешний источник переставил акцент, и порядок в выводе обязан это\nотражать.",
+  "scope": {
+    "include": [
+      "значение, читатель и команда по §9.3; разрез возраста по контракту;\nопция `--max-age`, превращающая команду в probe с ненулевым кодом возврата; регистрация\nкоманды; пять тестовых случаев §9.4; фиксация в receipt'е того, что частота дублей фазой\n**не производится** (§9.1); строка в `CHANGELOG.md`."
+    ],
+    "exclude": [
+      "экспорт в OpenTelemetry, имена спанов, `span links` и метрики\n`messaging.*` — это P12 (§9.4); частота дублей как число фазы — её нельзя прочитать из\nтаблиц, и она считается потребителем по возврату `Inbox::claim() === false` (§9.1);\nразрез по `messageId`, `subject`, `source` или тексту ошибки (§9.2); алерты, пороги SLO и\nих конфигурация; чтение `sys_inbox_messages`; изменение `config/corex.php` и\n`Support/Config.php` (P5.4)."
+    ]
+  },
+  "depends_on": [
+    "P5.4",
+    "P5.6",
+    "P4.9",
+    "P5.8"
+  ],
+  "decisions": [
+    "D30"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P5-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P5-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/findings-audit-verdicts.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P5/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D30.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Messaging/Contracts/Inbox.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Support/Config.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/wakeup/src/Internal/Commands/SweepWakeups.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/CoreServiceProvider.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/core/src/Messaging/Data/DeliveryHealth.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/SqlDeliveryHealth.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/Commands/ShowDeliveryHealth.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/CoreServiceProvider.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/tests/Pg/DeliveryHealthTest.php",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P5-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Код §9.3 переносится дословно. Возраст старейшего ожидающего —\n**первое** свойство `DeliveryHealth`, первая строка вывода команды и первый разрез; порядок\nздесь несёт смысл, а не стиль (§9.1). Разрез — только по `contract` (`name.vN`), число\nкоторых ограничено числом объявленных записей реестра; `messageId`, `subject` и\n`last_error` в разрез не попадают ни при каком флаге (§9.2). Строка с `available_at` в\nбудущем в возраст **не** входит: она не опаздывает, она запланирована. Пустая таблица даёт\n`null`, а не ноль: ноль означал бы «старейшее только что появилось», и алерт на нулевой\nвозраст читался бы как здоровье. `ksort()` по контракту делает вывод детерминированным.\nВремя — только из `ClockInterface` (D30). Частота дублей **не добавляется** ни в объект,\nни в вывод: `INSERT … ON CONFLICT DO NOTHING` не оставляет следа, подавленный дубликат не\nотличим от несостоявшейся попытки, и подстановка похожего числа была бы ложным сигналом.\nПривязка читателя — `scoped`. Ни один файл вне `packages/core` не трогается."
+  ],
+  "guidance": "Готовые значение, читатель и описание команды — `@plan/knowledge/research-P5-design.json`\n§9.3. Обоснование порядка «возраст первым» — §9.1, второй абзац; оно обязано попасть в\nдокблок `DeliveryHealth`. Формулировка про отсутствие частоты дублей для receipt'а — §9.1,\nпоследний абзац. Граница с P12 — §9.4; она записывается в докблок команды одной фразой,\nчтобы следующая фаза не искала, кто владеет экспортом метрик.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer test:pg",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "composer test",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "composer analyse",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "composer lint:check",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "php artisan corex:messaging:health --max-age=0",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "cmd": "rg -n 'messageId|subject|last_error' packages/core/src/Messaging/Internal/SqlDeliveryHealth.php",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "packages/core composer test:pg DeliveryHealth 7 tests",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "packages/core composer test+analyse+lint",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "procedure": "rg low-cardinality SqlDeliveryHealth empty",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "procedure": "receipt fifth metric boundary P12 OTel",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "значение из четырёх чисел с разрезом по контракту; читатель; команда,\nпригодная как probe; регистрация; пять pg-тестов; строка `CHANGELOG.md`; блок receipt'а с\nназванной границей по частоте дублей и по экспорту в OpenTelemetry."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "required",
+    "status": "complete"
+  },
+  "result": {
+    "started_at": "2026-09-21T18:45:00Z",
+    "finished_at": "2026-09-21T18:45:00Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/cursor-composer-2.5/high",
+      "effort": "high"
+    },
+    "notes": "P5.10 GREEN: DeliveryHealth SqlDeliveryHealth corex:messaging:health probe, pg §9.4, duplicate rate not produced receipt",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-21T18:45:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-21T18:45:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-09-21T18:45:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-09-21T18:45:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-21T18:45:00Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Ввести значение `DeliveryHealth`, читателя `SqlDeliveryHealth` и команду\n`corex:messaging:health`, печатающую возраст старейшего ожидающего первым и по каждому\nконтракту отдельно; с опцией `--max-age` команда работает как probe."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "A92 требует наблюдаемости доставки. `RAG:✅` P5-Q6: возраст старейшего pending —\nглавный сигнал пейджинга, глубина — сигнал ёмкости; глубина 100 000 при возрасте в секунды\nздорова, глубина 1 при возрасте 45 минут — нет. Общая метрика возраста скрывает застрявший\nмалообъёмный маршрут за здоровым высокообъёмным, поэтому нужен разрез по классу событий.\nМетрику нельзя размечать UUID события, ID агрегата или текстом исключения — только\nнизкокардинальными измерениями. `RAG:—` Скелет фазы перечислял пять чисел списком, где\nглубина стояла первой; внешний источник переставил акцент, и порядок в выводе обязан это\nотражать."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "значение, читатель и команда по §9.3; разрез возраста по контракту;\nопция `--max-age`, превращающая команду в probe с ненулевым кодом возврата; регистрация\nкоманды; пять тестовых случаев §9.4; фиксация в receipt'е того, что частота дублей фазой\n**не производится** (§9.1); строка в `CHANGELOG.md`."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "экспорт в OpenTelemetry, имена спанов, `span links` и метрики\n`messaging.*` — это P12 (§9.4); частота дублей как число фазы — её нельзя прочитать из\nтаблиц, и она считается потребителем по возврату `Inbox::claim() === false` (§9.1);\nразрез по `messageId`, `subject`, `source` или тексту ошибки (§9.2); алерты, пороги SLO и\nих конфигурация; чтение `sys_inbox_messages`; изменение `config/corex.php` и\n`Support/Config.php` (P5.4)."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "результат P5.4 (таблица и индексы), P5.6 (строки во всех четырёх состояниях),\nP4.9 (часы PSR-20); `@plan/knowledge/research-P5-design.json` §0, §9; `@plan/knowledge/research-P5-design-rag.json` §1\n(P5-Q6); `@plan/knowledge/findings-audit-verdicts.json` A92; решение D30."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/core/src/Messaging/Data/DeliveryHealth.php`; `packages/core/src/Messaging/Internal/SqlDeliveryHealth.php`; `packages/core/src/Messaging/Commands/ShowDeliveryHealth.php`; `packages/core/src/CoreServiceProvider.php`; `packages/core/tests/Pg/DeliveryHealthTest.php`; `CHANGELOG.md`; `@plan/knowledge/findings-P5-receipts.json`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P5/phase.json`; 2) `@plan/knowledge/research-P5-design.json` §0, §9; 3) `@plan/knowledge/research-P5-design-rag.json` §1 (P5-Q6); 4) `@plan/decisions/D30.json`; 5) `packages/core/src/Messaging/Contracts/Inbox.php` (результат P5.8 — точка измерения дублей, которую фаза не агрегирует); 6) `packages/core/src/Support/Config.php`; 7) `packages/wakeup/src/Commands/SweepWakeups.php` (образец команды: валидация опции, формат вывода, коды возврата); 8) `packages/core/src/CoreServiceProvider.php`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Код §9.3 переносится дословно. Возраст старейшего ожидающего —\n**первое** свойство `DeliveryHealth`, первая строка вывода команды и первый разрез; порядок\nздесь несёт смысл, а не стиль (§9.1). Разрез — только по `contract` (`name.vN`), число\nкоторых ограничено числом объявленных записей реестра; `messageId`, `subject` и\n`last_error` в разрез не попадают ни при каком флаге (§9.2). Строка с `available_at` в\nбудущем в возраст **не** входит: она не опаздывает, она запланирована. Пустая таблица даёт\n`null`, а не ноль: ноль означал бы «старейшее только что появилось», и алерт на нулевой\nвозраст читался бы как здоровье. `ksort()` по контракту делает вывод детерминированным.\nВремя — только из `ClockInterface` (D30). Частота дублей **не добавляется** ни в объект,\nни в вывод: `INSERT … ON CONFLICT DO NOTHING` не оставляет следа, подавленный дубликат не\nотличим от несостоявшейся попытки, и подстановка похожего числа была бы ложным сигналом.\nПривязка читателя — `scoped`. Ни один файл вне `packages/core` не трогается."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Готовые значение, читатель и описание команды — `@plan/knowledge/research-P5-design.json`\n§9.3. Обоснование порядка «возраст первым» — §9.1, второй абзац; оно обязано попасть в\nдокблок `DeliveryHealth`. Формулировка про отсутствие частоты дублей для receipt'а — §9.1,\nпоследний абзац. Граница с P12 — §9.4; она записывается в докблок команды одной фразой,\nчтобы следующая фаза не искала, кто владеет экспортом метрик."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "`composer test:pg` пакета `core` зелёный, все пять случаев §9.4 покрыты —\nв том числе `null` на пустой таблице, исключение будущего `available_at` из возраста и\nподсчёт `maxAttempts` только по `pending` и `publishing`. `composer test` пакета `core`\nзелёный. `composer analyse` зелёный. `composer lint:check` зелёный.\n`php artisan corex:messaging:health --max-age=0` на непустой таблице возвращает ненулевой\nкод; на пустой — нулевой. `rg -n 'messageId|subject|last_error' packages/core/src/Messaging/Internal/SqlDeliveryHealth.php`\nпуст — подтверждение низкой кардинальности. Receipt содержит вывод команд и абзац «пятое\nчисло фазой не производится — почему и где оно считается»."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "значение из четырёх чисел с разрезом по контракту; читатель; команда,\nпригодная как probe; регистрация; пять pg-тестов; строка `CHANGELOG.md`; блок receipt'а с\nназванной границей по частоте дублей и по экспорту в OpenTelemetry."
+    }
+  ]
+}

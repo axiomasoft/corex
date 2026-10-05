@@ -1,0 +1,17 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P06-design-audit-rfc3986-source-verification",
+  "title": "URI-reference source verification",
+  "sections": [
+    {
+      "id": "URI-reference-source-verification",
+      "title": "URI-reference source verification",
+      "text": "RAG:✅ primary RFC Editor source opened and checked on 2026-10-03:\n[RFC 3986 §2.1](https://www.rfc-editor.org/rfc/rfc3986.html#section-2.1).\nThe percent escape grammar is `pct-encoded = \"%\" HEXDIG HEXDIG`.\nInference applied to the local reproduction: bare `%` and `%zz` cannot be valid percent\nescapes, while the exact proposed allow-character regex accepts both.\nLocal proof: reproduce-source-check.php and source-check-repro.log.\nThis audit does not replace the phase's normative research note or captures."
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P06-design-audit/rfc3986-source-verification.md",
+    "sha256": "0d55e5f06174dad81d18711840a156e54439f1c35de4ffddf013659c72b83168"
+  }
+}

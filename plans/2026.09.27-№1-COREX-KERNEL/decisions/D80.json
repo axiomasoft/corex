@@ -1,0 +1,44 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D80",
+  "title": "Аудитор текущего дизайна: gpt-6.1-sol в новой сессии",
+  "date": "2026-10-01",
+  "status": "accepted",
+  "decision": "1. Текущий независимый design audit после D79 запускается в новой сессии Codex с selector gpt-6.1-sol вместо gpt-6-astra. Effort xhigh сохраняется. Это явный owner override конкретного provider selector для данного аудита.\n2. Semantic route frontier/xhigh сохраняется; классы исполнения P10.1–P10.4 и их reviewers не меняются. Модель добавляется в @plan/knowledge/session-routing.json только для текущего audit.\n3. Авторские контракты, fingerprint finish и требование GREEN до P10.1 не меняются. Аудит этой правкой не запускается.",
+  "rationale": "Владелец прямо выбрал модель для следующего запуска. Его указание приоритетнее default provider mapping Task.",
+  "applies_to": [
+    "P10"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "repository owner; запись designer/codex/GPT-6."
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D80\ndate: 2026-10-01\nstatus: accepted\nitem: P10\nitems: [P10]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D80-gpt-6.1-sol",
+      "title": "D80 — Аудитор текущего дизайна: gpt-6.1-sol в новой сессии",
+      "text": "**Actor:** repository owner; запись designer/codex/GPT-6.\n**Evidence:** сообщение владельца «не astra, а gpt-6.1-sol» после команды аудита; требование новой сессии — D79; RAG:—."
+    },
+    {
+      "id": "Solution",
+      "title": "Solution",
+      "text": "1. Текущий независимый design audit после D79 запускается в новой сессии Codex с selector gpt-6.1-sol вместо gpt-6-astra. Effort xhigh сохраняется. Это явный owner override конкретного provider selector для данного аудита.\n2. Semantic route frontier/xhigh сохраняется; классы исполнения P10.1–P10.4 и их reviewers не меняются. Модель добавляется в @plan/knowledge/session-routing.json только для текущего audit.\n3. Авторские контракты, fingerprint finish и требование GREEN до P10.1 не меняются. Аудит этой правкой не запускается."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "Владелец прямо выбрал модель для следующего запуска. Его указание приоритетнее default provider mapping Task."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "Команда в handoff и актуальный delivery receipt используют gpt-6.1-sol. Исторические носители сохраняются."
+    }
+  ]
+}

@@ -1,0 +1,191 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P15.12",
+  "title": "Conditional Auth package identity rename",
+  "status": "done",
+  "summary": "По owner outcome D90 либо переименовать `packages/auth` / `corex/auth` / split identity в `packages/access` / `corex/access`, либо закрыть item как skipped.",
+  "why": "Package identity — owner choice Q2; subject namespace Auth остаётся самостоятельной поверхностью.",
+  "scope": {
+    "include": [
+      "При accept: directory, root/path repositories, Composer name/requirements, split/CI/docs references and owned lock metadata. При reject: evidence-backed skipped receipt."
+    ],
+    "exclude": [
+      "`CoreX\\\\Auth` namespace, config/database prefixes, authorization semantics, automatic `replace` and unrelated access concepts."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D90"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P15-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D90.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P1/P1.3.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P15/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P15-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "docs/dev-doctrine.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/auth/**",
+      "change": "any"
+    },
+    {
+      "path": "packages/access/**",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "No-answer blocks; reject skips; accept changes generated outputs only through owners and preserves DB/config identifiers."
+  ],
+  "guidance": "Apply directory/name change at SSOT, regenerate split metadata, then verify dependency graph and consumer constraints.",
+  "validation": [
+    {
+      "id": "V1",
+      "procedure": "access package tests",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "package-graph",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Accepted identity rename or skipped receipt with owner evidence."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-27T04:51:04Z",
+    "finished_at": "2026-09-27T04:51:04Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-run/grok-4.7/high",
+      "effort": "high"
+    },
+    "notes": "P15.12 D135 identity rename green. Namespace CoreX\\Auth and corex-auth config unchanged. Receipt findings/P15-receipts.md.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-09-27T04:51:04Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-27T04:51:04Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-27T04:51:04Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "По owner outcome D90 либо переименовать `packages/auth` / `corex/auth` / split identity в `packages/access` / `corex/access`, либо закрыть item как skipped."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "Package identity — owner choice Q2; subject namespace Auth остаётся самостоятельной поверхностью."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "При accept: directory, root/path repositories, Composer name/requirements, split/CI/docs references and owned lock metadata. При reject: evidence-backed skipped receipt."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "`CoreX\\\\Auth` namespace, config/database prefixes, authorization semantics, automatic `replace` and unrelated access concepts."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P15-design.json`; `@plan/decisions/D90.json`; `@plan/phases/P1/P1.3.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/auth/**`→`packages/access/**`; root Composer metadata; split/CI manifests; docs references; root `CHANGELOG.md`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P15/phase.json`; 2) `@plan/knowledge/research-P15-design.json`; 3) `@plan/knowledge/research-P15-design-rag.json`; 4) `@plan/decisions/D90.json`; 5) `@plan/phases/P1/P1.3.json`; 6) `composer.json`; 7) `docs/dev-doctrine.md`."
+    },
+    {
+      "id": "Authority",
+      "title": "Authority",
+      "text": "[OWNER-GATE:G-PKG-AUTH] branch=`main`; scope=`packages/auth -> packages/access and corex/auth -> corex/access`"
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "No-answer blocks; reject skips; accept changes generated outputs only through owners and preserves DB/config identifiers."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Apply directory/name change at SSOT, regenerate split metadata, then verify dependency graph and consumer constraints."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Composer and split checks green; old package id absent outside allowlist; `CoreX\\\\Auth`, config and DB prefixes unchanged; package tests green."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Accepted identity rename or skipped receipt with owner evidence."
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "findings-P11-receipts",
+  "title": "P11 receipts",
+  "sections": [
+    {
+      "id": "P11-receipts",
+      "title": "P11 receipts",
+      "text": ""
+    },
+    {
+      "id": "P11.2-Deterministic-compiler-and-canonical-frozen-snapshot-2026-09-24",
+      "title": "P11.2 — Deterministic compiler and canonical frozen snapshot (2026-09-24)",
+      "text": "**Status:** GREEN · **Actor:** plan-run/cursor-grok-4.6/high · **Batch:** E11b\n\nCompiler-private `NormalizedExtension` expands every §2 point before collision\nchecks. Identity is point-specific (`entity`, `entity.field`, `filament.*`,\n`workflow.event`, `workflow.listener`, `api.operation`/`tool`/`resource` including\nwire identity). Diagnostics name the point, id and both owners.\n\n`Manifest::replace()` is applied after identity validation: target and replacement\nmust exist in one point, the owner must own the replacement, one incoming edge,\nacyclic. Menu `afterHandle` is a stable topo; missing target and cycles fail.\nDefault order is id ASC. Canonical bytes are `corex-registry/1\\0` plus JSON\n(`JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE`).\n`CompiledRegistry::fromArray` fail-closes on unknown/missing schema or fingerprint\nmismatch; empty `[]` is a missing artifact and hydrates as `empty()`. Hydrated\nextender objects are detached copies; later mutation does not change\n`toArray()`/fingerprint.\n\n`fromArray([])` returning `empty()` is the missing-cache path used by feature\nboot, not a corrupt payload."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "| Carrier | Evidence |\n|:--|:--|\n| Permutation / canonical fingerprint | `packages/modules/tests/Unit/RegistryCompilerDeterminismTest.php` |\n| Duplicate identity, replacement, menu, corrupt artifact, detached mutation | `tests/Feature/RegistryCompilerTest.php` |\n| Pint | `composer --working-dir=packages/modules lint:check` passed |\n| PHPStan | `composer --working-dir=packages/modules analyse` 0 errors |\n| Modules package suite | `composer --working-dir=packages/modules test` 53/53 then 56/56 after P11.3 |\n\nP11.3 consumes the fingerprinted detached snapshot."
+    },
+    {
+      "id": "P11.3-Runtime-publication-collector-freeze-and-refresh-boundaries-2026-09-24",
+      "title": "P11.3 — Runtime publication, collector freeze and refresh boundaries (2026-09-24)",
+      "text": "**Status:** GREEN · **Actor:** plan-run/cursor-grok-4.6/high · **Batch:** E11b\n\n`ArrayEntityRegistry::register()` throws `RegistryFrozen` for late and duplicate\nregistration before mutation. `ModulesServiceProvider` registers a `booted`\ncallback after `ModulesBootRegistrar::boot()`, so freeze runs after compiled\nentity projection, morph map and audit wiring.\n\n`ReadRegistryIntrospection::revisionFor()` returns the compiled fingerprint.\nActivation epoch stays off that hash. `CompiledModuleRegistry` documents\n`octane:reload` and queue restart as deploy obligations; `JobProcessing` still\nflushes the memo before a job and the first `compiled()` pins the instance for\nthat job. Empty `[]` remains missing, not corrupt."
+    },
+    {
+      "id": "Validation-2",
+      "title": "Validation",
+      "text": "| Carrier | Evidence |\n|:--|:--|\n| Duplicate / late freeze leave collector unchanged | `packages/modules/tests/Unit/RegistryFreezeTest.php` |\n| Introspection equals fingerprint; activation does not change it | `packages/modules/tests/Feature/RegistryIntrospectionTest.php` |\n| Job pin, next-job reload, corrupt artifact, activation off fingerprint | `tests/Feature/ModuleRegistryTest.php` |\n| Pint | `composer --working-dir=packages/modules lint:check` passed |\n| PHPStan | `composer --working-dir=packages/modules analyse` 0 errors |\n| Modules package suite | `composer --working-dir=packages/modules test` 56/56, 250 assertions |\n| Root feature | `vendor/bin/pest --filter=ModuleRegistryTest` 20/20, 59 assertions |"
+    },
+    {
+      "id": "Remaining-risk",
+      "title": "Remaining risk",
+      "text": "Consumer tests that call `ArrayEntityRegistry::register()` after the application\nis fully booted will now throw `RegistryFrozen`. That is the intended publication\nboundary. Auth/CRM suites were not re-run as a full package lane in this item\n(`Files` is modules + root `ModuleRegistryTest`). Measure those consumers in\nE11c if they fail after this freeze.\n\nP11.4 consumes the published fingerprint as diagnostic provenance only (D103)."
+    },
+    {
+      "id": "P11.6-Complete-tasks-workflow-materialization-provenance-2026-09-24",
+      "title": "P11.6 — Complete tasks-workflow materialization provenance (2026-09-24)",
+      "text": "**Status:** GREEN · **Actor:** plan-run/cursor-grok-4.6/high · **Batch:** E11e\n\nProducer always emits `seriesId`, `immutableRevision`, `definitionHash` and the full\nwindow. `MaterializationHasher` is the single encode/decode site. Missing or empty\nrequired fields throw `UnsupportedMaterialization`/`StaleMaterialization`; the handler\nnever returns as success. Wakeup `WriteToken` uses `MaterializationHasher::payload()`\nso definition hash, window and handler version `task-materialization/1` (§11.1; item\ntext `tasks-materialization/1` is the same existing hasher/receipt version) participate\nin the operation hash. Completion capture stores `definitionRef`/`versionRef` =\n`task-completion/1`. Structured P11.5 handler config is declared in\n`corex-task-recurrence.php` and registered in PG tests. Idempotency keys stay\n`wakeup:<requestKey>` / `materialize:<seriesId>`."
+    },
+    {
+      "id": "Validation-3",
+      "title": "Validation",
+      "text": "| Carrier | Evidence |\n|:--|:--|\n| Complete payload and window round-trip | `packages/tasks-workflow/tests/Feature/MaterializationTest.php` MAT-10 |\n| Valid handler materialize + duplicate delivery | Feature MAT-11 |\n| Missing/tampered payload, no write | Feature MAT-12 |\n| Stamped schedule, handler sweep, mismatch quarantine | PG MAT-06, MAT-06b |\n| Completion `task-completion/1` | PG MAT-07 |\n| Pint | `composer --working-dir=packages/tasks-workflow lint:check` passed |\n| PHPStan | `composer --working-dir=packages/tasks-workflow analyse` 0 errors |\n| Feature suite | `composer --working-dir=packages/tasks-workflow test -- --exclude-group=pg` 10/54 |\n| Isolated PG | `composer --working-dir=packages/tasks-workflow test -- --group=pg` 7/74 |"
+    },
+    {
+      "id": "P11.7-Versioned-notification-digest-wakeups-2026-09-24",
+      "title": "P11.7 — Versioned notification digest wakeups (2026-09-24)",
+      "text": "**Status:** GREEN · **Actor:** plan-run/cursor-grok-4.6/high · **Batch:** E11e\n\nDigest kind stays `notification.digest.v1`. Implementation version is\n`notification-digest/1`. The provider writes a structured P11.5 definition; legacy\nadmission is `corex-notifications.digest.accept_legacy_unstamped` and defaults false.\nNew rows are stamped by wakeup (`wakeup-payload/2`). Version mismatch and missing\nstamp never reach `DigestWakeupAdapter`. Adapter still receives the unwrapped\n`DigestTick` DTO. No notifications-side registry or stamp serializer was added.\n`SqlDigestBuilder` scheduling payload is unchanged (`run_id` only)."
+    },
+    {
+      "id": "Validation-4",
+      "title": "Validation",
+      "text": "| Carrier | Evidence |\n|:--|:--|\n| Canonical declaration/stamp | `packages/notifications/tests/Digest/WakeupBridgeTest.php` |\n| Exact match + unwrapped DTO | WakeupBridgeTest |\n| Default-denied legacy | WakeupBridgeTest |\n| Explicit legacy bridge | WakeupBridgeTest |\n| Version mismatch, no invocation | WakeupBridgeTest |\n| PG digest concurrency / no duplicate lock | `packages/notifications/tests/Pg/DigestConcurrencyTest.php` |\n| Pint | `composer --working-dir=packages/notifications lint:check` passed |\n| PHPStan | `composer --working-dir=packages/notifications analyse` 0 errors |\n| Notifications suite | `composer --working-dir=packages/notifications test` 19/73 |\n| Isolated PG | `composer --working-dir=packages/notifications test:pg` 2/2 |"
+    },
+    {
+      "id": "P11.8-Final-extension-contract-proof-2026-09-24",
+      "title": "P11.8 — Final extension contract proof (2026-09-24)",
+      "text": "**Status:** GREEN · **Actor:** plan-exec/codex-gpt-6-sol/xhigh"
+    },
+    {
+      "id": "Authority-publication-and-durable-compatibility",
+      "title": "Authority, publication and durable compatibility",
+      "text": "| Producer / consumer | Evidence and boundary |\n|:--|:--|\n| P11.1 vocabulary | `Manifest::replace`, `InstalledPackageVersion`, `ExtensionStamp`; modules 37 tests / 200 assertions, PHPStan 0, Pint green. |\n| P11.2 compiler | `corex-registry/1` canonical JSON; point-specific duplicate owners, replacement graph, menu topological order, scalar detached snapshot. |\n| P11.3 publication | `CompiledRegistry` is the code authority; `ArrayEntityRegistry` freezes after boot projection. Queue job flushes memo before its next job; Octane deploy reload is required. Activation epoch remains separate from code fingerprint. |\n| P11.4 workflow | Stored `definitionRef`/`versionRef` and `workflow.trigger` stamp; unrelated registry fingerprint does not change replay hash. Existing legacy refs keep their identity algorithm. Workflow suite 15/39. |\n| P11.5 wakeup | Frozen typed handler map; `wakeup-payload/2` exact kind/version; missing/mismatch quarantines without handler invocation. Legacy unstamped requires per-handler opt-in, and read-only preflight leaves rows unchanged. Wakeup unit/feature 21/91 and isolated PG 2/5. |\n| P11.6 tasks-workflow | `definitionHash`, immutable revision and window are persisted; incomplete payload throws rather than silently succeeding. Feature 10/54 and PG 7/74. |\n| P11.7 notifications | `notification-digest/1` exact handler version; default-denied legacy, explicit bridge, mismatch without adapter invocation. Feature 19/73 and PG 2/2. |\n\n`SearchManager` is a driver factory. API tool/operation and entity registries are projections\nof the compiled code snapshot. Panel catalogue is built at boot; P10 field catalogues\nown data-schema fingerprints. The gate classifies 27 current `*Registry|*Catalogue|*Manager`\ntypes; the injected `CoreX\\Fixture\\SurpriseRegistry` exits 1."
+    },
+    {
+      "id": "Reusable-suite-and-negative-fixtures",
+      "title": "Reusable suite and negative fixtures",
+      "text": "`CoreX\\Modules\\Testing\\ExtensionContract` takes manifests plus explicit installed\npackage versions, returns `passed()`, `summary()` and a fingerprint, and has no\ntest-runner or container dependency. The optional compiler metadata parameter is\nadditive and keeps existing calls unchanged. `CoreX\\Modules\\Testing` is declared\nin `corex/modules` `public-api` for external extension tests.\n\n| Fixture | Expected | Fingerprint / diagnostic |\n|:--|:--|:--|\n| `positive.json` | pass | `d0f99736274b923e70f793875fa8a377b5eb6e242b66c1c36f5d0babc72da0df` |\n| `replacement.json` | pass | `625e608da6dfc886b325217505c36719d4f5a746f26b1a95ee170d664651b533` |\n| `duplicate.json` | fail | canonical id plus both owners |\n| `replacement-cycle.json` | fail | cyclic replacement graph |\n| `unclassified.php` | fail | unclassified `SurpriseRegistry` |\n\nThe suite reverses module, extender and replacement order; compares bytes and\nfingerprint; reloads the artifact; rejects unknown schema and wrong hash;\nasserts collector duplicate/late rejection and snapshot detachment; and probes\ninstalled version sensitivity. Exact point/id/version accepts replay after an\nunrelated fingerprint change and rejects a version change."
+    },
+    {
+      "id": "Validation-carriers",
+      "title": "Validation carriers",
+      "text": "| Carrier | Result |\n|:--|:--|\n| `composer --working-dir=packages/modules lint:check` | passed |\n| `composer --working-dir=packages/modules analyse` | 0 errors |\n| `composer --working-dir=packages/modules test` | 62 tests / 265 assertions |\n| `composer --working-dir=packages/workflow test` | 15 / 39 |\n| `composer --working-dir=packages/wakeup test` | 21 / 91 |\n| `composer --working-dir=packages/tasks-workflow test -- --exclude-group=pg` | 10 / 54 |\n| `composer --working-dir=packages/notifications test` | 19 / 73 |\n| `php scripts/extension-contract-gate.php` | 27 classified, both positive fingerprints stable |\n| injected unclassified fixture | exit 1, names `SurpriseRegistry` |\n| `composer lint:check` | passed after formatting a pre-existing wakeup scheduler change and this item's fixture |\n| `composer analyse` | 0 errors |\n| `composer test` | 540 / 1817 after repair of three inherited gate failures |\n| `composer test:pg` | 211 / 910 on isolated `corex_test`; host `pg_isready` and DB existence passed |\n| `BC_CHECK_ONLY=modules composer bc-check` | compatible against `BC_CHECK_BASE=9608b488bc1ab1fcf635cf08254b5f6687e0d60a` |\n\nThe full monorepo `composer bc-check` ran but stopped in the unrelated\n`corex/tenancy` Roave checker with a syntax error. The affected `corex/modules`\nlane completed independently and is compatible; this full-checker limitation\ndoes not change the P11.8 package compatibility result.\n\nThe inherited root gate failures were `ValidateWakeupStamps` being treated as\nundeclared public API and a stale provider-size ratchet after P11.5's new\nhandler binding. The command is now explicitly internal; the measured wakeup\nratchet is 4. This item's public testing helper was added to the declared\n`corex/modules` public surface. Exact original gates were rerun green."
+    }
+  ],
+  "applies_to": [
+    "P11"
+  ],
+  "provenance": {
+    "path": "findings/P11-receipts.md",
+    "sha256": "c8738974a19199a9858f0a494717fef1b82f63f6a66896a3588f81a3573b9699"
+  }
+}

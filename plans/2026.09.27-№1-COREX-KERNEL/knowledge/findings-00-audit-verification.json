@@ -1,0 +1,67 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "findings-00-audit-verification",
+  "title": "F00 — Верификация аудита `audits/2026-09-27-perplexity-1.md`",
+  "sections": [
+    {
+      "id": "F00-audits-2026-09-27-perplexity-1.md",
+      "title": "F00 — Верификация аудита `audits/2026-09-27-perplexity-1.md`",
+      "text": "**Дата:** 2026-09-27 · **Коммит:** `ea0b024` (аудит писался по `091ec90`; расхождение — P17 docs/gates, продуктовый код не менялся)\n**Метод:** каждое утверждение проверено чтением кода/манифестов (`RAG:—`) или первичным источником (`RAG:✅`, `artifacts/research-rag/`).\nСырые факты: `artifacts/P00-design/facts/import-matrix.txt`. Аудит — **вход, не норматив**: его рекомендации принимаются только через D#."
+    },
+    {
+      "id": "section",
+      "title": "Вердикты",
+      "text": "Легенда: ✅ подтверждено · 🟡 частично / неточно · ❌ опровергнуто · ➕ пропущено аудитом (найдено при проверке)."
+    },
+    {
+      "id": "2",
+      "title": "§2 Инвентаризация и зависимости",
+      "text": "| # | Тезис аудита | Вердикт | Факт |\n|:--|:--|:--|:--|\n| A2.1 | 20 пакетов: `corex/ai`, `ledger`, `pipeline`, `scheduler`, `import`, `export`, `testing`, `devtools`, `corex/crm` | ❌ | Таких пакетов нет. Реально 20 каталогов: `access attributes core crm(flex/crm) import-export(тумбстоун, только CHANGELOG) intl media modules notifications operations panels recurrence search search-intl search-meilisearch tasks tasks-workflow tenancy transfer wakeup workflow` → **20 живых composer-пакетов + 1 тумбстоун** |\n| A2.2 | notifications жёстко зависит от wakeup | ✅ | `packages/notifications/composer.json` require `corex/wakeup`; 10 импортов `CoreX\\Wakeup\\*` |\n| A2.3 | L13-блокер в access/tenancy | 🟡 | Только `corex/access`: `illuminate/* ^12.0`. tenancy — `^12.0\\|^13.0` |\n| A2.4 | azguard через VCS `@dev` | ✅ | `access/composer.json`: `axioma-studio/azguard-core ^0.2@dev` + `vcs https://github.com/axiomasoft/azguard.git`; на Packagist vendor `axioma-studio` пуст (`http-01`) |\n| A2.5 | alpha-pin stancl в `corex/ai` | 🟡 | Пакета `ai` нет; alpha-pin — в **tenancy**: `axiomasoft/stancl-tenancy 4.0.0-alpha1`, `axiomasoft/stancl-jobpipeline 2.0.0-alpha1` — zip-снимки upstream `dev-master#76e5f96…` из `plans/archive/…/P4.1-source` (`scripts/distribution/stage-stancl-providers.py`). Upstream v4 **не опубликован** (Packagist: последний `v3.10.1`, jobpipeline `v2.0.0-rc7`) — `http-01`, `pplx-04`, `pplx-06` |"
+    },
+    {
+      "id": "3",
+      "title": "§3 Конфигурация",
+      "text": "| # | Тезис | Вердикт | Факт |\n|:--|:--|:--|:--|\n| A3.1 | `CoreOptions` — typed immutable fail-fast snapshot | ✅ | `packages/core/src/Support/CoreOptions.php`, `ViolationList::failIfAny()` |\n| A3.2 | `Config` — static holder, 30+ геттеров | ✅ | 43 `public static function`; 41 файл импортирует `CoreX\\Support\\Config` (в т.ч. `flex/crm`, `access`) |\n| A3.3 | `$octaneOptInOverride` — runtime concern в config | ✅ | `Config::enableOctaneWorkerOptIn()` |\n| ➕ A3.4 | — | ➕ | `Config::options()` **на каждый вызов** перечитывает `app('config')->get('corex')` и заново строит `CoreOptions::fromArray()` (скрытый глобальный доступ + повторная валидация в горячем пути) |\n| ➕ A3.5 | — | ➕ | `config(` в runtime-коде: core 12, tenancy 2 вызова вне провайдеров (нарушение собственной `CFG-002`) |\n| A3.6 | Добавить `corex.schema_version` в config | 🟡 | Уже есть `CoreServiceProvider::SCHEMA_VERSION` (схема миграций) и `extra.corex.schema-version`; версия опубликованного config — отдельный вопрос, решается typed-config фазой |"
+    },
+    {
+      "id": "4-5-CoreServiceProvider-Contracts",
+      "title": "§4–§5 CoreServiceProvider и Contracts",
+      "text": "| # | Тезис | Вердикт | Факт |\n|:--|:--|:--|:--|\n| A4.1 | Провайдер перегружен (bindings, messaging, storage, views, commands, publish) | ✅ | 218 строк, ~30 биндингов, 6 команд, 2 publish-группы |\n| A5.1 | 19 контрактов в одном `CoreX\\Contracts` из разных контекстов | ✅ | Список совпадает; при этом часть контекстов уже вынесена (`Audit\\Contracts`, `Messaging\\Contracts`, `Tenancy\\Contracts`) — смешанная модель |\n| ➕ A5.2 | — | ➕ | **Коллизия namespace:** core владеет `CoreX\\Tenancy\\{AccountRef,TenantContext,…,Contracts\\*}`, пакет `corex/tenancy` владеет `CoreX\\Tenancy\\` → FQCN не определяет пакет; core объявляет PSR-4 корень `CoreX\\` (префикс всех пакетов) |\n| ➕ A5.3 | — | ➕ | `CoreX\\Models` (Eloquent) объявлены public API core; `Tasks\\Models`, `Tenancy\\Models`, `Flex\\Crm\\Models` — тоже. Eloquent-модели как SemVer-поверхность |"
+    },
+    {
+      "id": "6-9-Operations-API-Tools",
+      "title": "§6–§9 Operations / API / Tools",
+      "text": "| # | Тезис | Вердикт | Факт |\n|:--|:--|:--|:--|\n| A6.1 | `corex/operations` — 15 поддоменов, god-package | ✅ | 165 файлов / 14 687 LOC — крупнейший пакет |\n| A6.2 | Пакет `operations`, namespace `CoreX\\Api` | ✅ | `packages/operations/composer.json` psr-4 |\n| ➕ A6.3 | — | ➕ | **PSR-4 folding:** в 7 пакетах (`operations, tenancy, notifications, intl, tasks, flex/crm`, частично `access`) один namespace собирается из 2–11 каталогов (`CoreX\\Api\\Contracts\\` ← 10 каталогов). Путь ≠ namespace: фича-каталоги на диске, «слоевые корзины» в FQCN. Непредсказуемо для IDE/читателя, допускает дубли FQCN, делает split невозможным без массового churn |\n| A7.1 | `OperationDispatcher` жёстко зашивает input policy | ✅ | `OperationDispatcher.php:92–114`: GET→query only; non-GET → JSON без query; unknown fields → 422 |\n| A7.2 | Ввести `InputEnvelopePolicy`/`UnknownFieldPolicy` | 🟡 | Строгость — осознанный инвариант безопасности API; расширяемым делается **формат конверта**, не отключение строгости (принцип «инварианты не конфигурируются») |\n| A8.1 | Анонимные классы с логикой в `ApiServiceProvider` | ✅ | `ReplayAuthorizer` (стр. 77), `CursorKeyring` (стр. 137) |\n| A9.1 | `GuardedToolInvoker` — сильная часть, но в `Internal` | ✅ | `Tools/Internal/GuardedToolInvoker.php` (303 LOC) |\n| A9.2 | Строковые коды ошибок tools | ✅ | 8 кодов литералами; `ApiError('validation_failed', 422, …)` — 60+ литералов кодов по пакету, без реестра |\n| A9.3 | Выделить tool-runtime в линейку из 4 пакетов | 🟡 | Выделение — да; 4 пакета — избыточно (правило pplx-02: пакет = независимый потребитель/шов) |"
+    },
+    {
+      "id": "10-11-Webhooks-tenancy-impersonation",
+      "title": "§10–§11 Webhooks, tenancy, impersonation",
+      "text": "| # | Тезис | Вердикт | Факт |\n|:--|:--|:--|:--|\n| A10.1 | SSRF-политика, DNS pinning `CURLOPT_RESOLVE`, peer-IP check | ✅ | `WebhookUrlPolicy.php` (326 LOC), `CurlWebhookTransport.php` |\n| A10.2 | Подпись `webhook-id/-timestamp/-signature` | ✅ | Standard Webhooks заголовки (`Webhooks/Data/ValidatedWebhookRequest.php`) |\n| A11.1 | `DatabaseImpersonationService` на фасадах | ✅ | `DB::`, `session()`, `Auth::`, `event()`, `now()` — стр. 74–168 |\n| A11.2 | Фасады в src вообще | ✅ | Файлов с `Illuminate\\Support\\Facades\\*`: tenancy 25, access 9, core 7, modules 5, operations 3, crm 2 |"
+    },
+    {
+      "id": "12-13-Supply-chain-CI",
+      "title": "§12–§13 Supply chain и CI",
+      "text": "| # | Тезис | Вердикт | Факт |\n|:--|:--|:--|:--|\n| A12.1 | root `minimum-stability: dev` | ✅ | `composer.json`: `dev` + `prefer-stable` |\n| A12.2 | Несогласованный PHP | 🟡 | tenancy `^8.4`, остальные `^8.3` (не 8.2). Roave 8.22 требует PHP `~8.4\\|~8.5` (`pplx-09`) |\n| A12.3 | Actions по тегам, не SHA | ✅ | `actions/checkout@v4`, `shivammathur/setup-php@v2` во всех 3 workflow |\n| A12.4 | Нет `permissions` | 🟡 | Есть только в `remaining-cohort-proof.yml`; `ci.yml`, `distribution-proof.yml` — без |\n| A12.5 | Нет `composer audit` | ✅ | Ни в workflow, ни в scripts |\n| A13.1 | Roave в report-only | ✅ | `ci.yml:529` job «Roave BC diff (experimental report-only)» |\n| ➕ A12.6 | — | ➕ | **Vendor `corex` на Packagist занят** сторонним владельцем (`github.com/corex/*`, 17 пакетов, в т.ч. `corex/support`, `corex/testing`, `corex/config`) — `http-01`. Текущие имена `corex/*` **нельзя опубликовать** |\n| ➕ A12.7 | — | ➕ | Хост исполнения: PHP 8.3, нет `vendor/`, Docker недоступен текущему пользователю → PHP 8.4-окружение — предусловие P01 |"
+    },
+    {
+      "id": "14-17",
+      "title": "§14–§17 Именование, безопасность, паттерны",
+      "text": "| # | Тезис | Вердикт | Факт |\n|:--|:--|:--|:--|\n| A14.1 | `CoreX\\Auth` читается как authentication | ✅ | Пакет `corex/access`, namespace `CoreX\\Auth` — разрыв имени |\n| A14.2 | `Config` конфликтует с Laravel `Config` | ✅ | Фасад `Config` в Laravel; удаляется вместе со static-слоем |\n| A14.3 | Версию в publish-tag (`corex-migrations-v1-tenant`) | ❌ | Противоречит собственному правилу аудита §14.2 и `SCHEMA_VERSION`; отклонено |\n| A14.4 | Переименовать `wakeup` | 🟡 | Имя решается glossary P00 по назначению пакета |\n| A16.1 | Tenant isolation opt-in → `TenantAwareModel` global scope | 🟡 | Основная модель — физическая DB-per-account (`corex/tenancy`); global scope уместен только для boxed/workspace (`Tenancy\\Scopes\\WorkspaceScope` уже есть) |\n| A16.4 | JSON depth/size limits | 🟡 | `JsonCanonical::decode` — depth 512 по умолчанию; в `attributes` явные 16/32. Нет единого лимита на границе API |\n| A16.8 | Нет rate-limit контракта | 🟡 | `Cost/Internal/BudgetAdmission` + `rate_limited` в tools существуют; публичного контракта нет |\n| A17.C | CQRS для operations отсутствует | ❌ | `OperationMode {Query, Command, AsyncCommand, BulkQuery, BulkCommand}` уже есть (`@internal`) |\n| A17.D | Нет cross-module event bus | ❌ | Есть `PubSub`, transactional `Outbox`/`Inbox`/`OutboxRelay`, `MessageContractRegistry` (core `Messaging`) |\n| A17.E | Install profiles | 🟡 | Профили уже доказываются (`structure-profiles.md`, 6 профилей в CI); как first-class API — нет |\n| A18 | 5 слоёв + dependency direction | ✅ (принцип) | Совпадает с принятым в экосистеме (chatom PLAN2 `@plan/knowledge/research-02-target-architecture.json` §1) |"
+    },
+    {
+      "id": "section-2",
+      "title": "Дополнительно найдено при проверке (➕)",
+      "text": "| # | Факт | Источник |\n|:--|:--|:--|\n| ➕ X1 | ~100 межпакетных импортов символов **вне** объявленного `extra.corex.public-api` (напр. `modules → CoreX\\Money\\MoneyCast`, `search-meilisearch → CoreX\\Search\\SearchManager`, `panels → CoreX\\SavedViews\\Data\\*`) — декларация публичной поверхности неполна | `facts/import-matrix.txt` |\n| ➕ X2 | Публичная поверхность объявляется **списком namespace** в `composer.json`, а не на символе; нет атрибутов `#[Api]/#[Spi]` (в chatom принято `#[Api]/#[Spi]`) | `api-policy.md`, grep: 0 атрибутов |\n| ➕ X3 | Каталог `packages/import-export` — тумбстоун (только CHANGELOG) | `PKG-009` |\n| ➕ X4 | Пакет `corex/attributes` (EAV) занимает `CoreX\\Attributes\\` — коллизия с конвенцией «атрибуты PHP» при введении `#[Api]` | psr-4 |\n| ➕ X5 | `flex/crm` (продукт) живёт в `packages/crm` платформенного монорепо, импортирует static `CoreX\\Support\\Config` | psr-4, import-matrix |\n| ➕ X6 | PHPStan `level: 6` в корне | `phpstan.neon:38` |"
+    },
+    {
+      "id": "section-3",
+      "title": "Итог",
+      "text": "Направление аудита (слои, узкие контракты, typed DI-config, split operations, supply-chain гейты) **подтверждено**;\nинвентарь пакетов §2 и ряд рекомендаций (A14.3, A17.C/D) — **ошибочны**. Самые существенные проблемы, которых нет в аудите:\nзанятый vendor `corex` (A12.6), коллизия `CoreX\\Tenancy` core↔tenancy и корень `CoreX\\` у core (A5.2), PSR-4 folding (A6.3),\nнеполная декларация public API (X1), Eloquent-модели в public API (A5.3), unreleased-upstream снимок stancl (A2.5)."
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "findings/00-audit-verification.md",
+    "sha256": "29a4558f880da52feab7b622daa7a12be383918ad9cf63cb8083c5ab50453253"
+  }
+}

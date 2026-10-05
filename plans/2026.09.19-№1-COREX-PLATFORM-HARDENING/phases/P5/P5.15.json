@@ -1,0 +1,210 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P5.15",
+  "title": "Classify the Messaging public surface",
+  "status": "done",
+  "summary": "Align P5 Messaging symbols with machine-controlled package public API metadata.",
+  "why": "EA01 reproduces fourteen R4b violations; P5 introduced public contracts/data and internal\ncommands without updating the public/internal classification gate.",
+  "scope": {
+    "include": [
+      "exact public roots for Messaging contracts/data; explicit internal command\ndocblocks; focused package graph witnesses; CHANGELOG and receipt."
+    ],
+    "exclude": [
+      "broad `CoreX\\Messaging` wildcard; exceptions/allowlist; FQCN moves; behavioral\nchanges; promoting Internal or Commands to supported API."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D4",
+    "D12",
+    "D31"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P4-P5-execution-remediation.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/findings-execution-audit-P1-P5-2026-09-22.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P5/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D4.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D12.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/composer.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "scripts/package-graph-gate.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/findings-P5-zone-map.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/core/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/Commands/PruneOutboxMessages.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/Commands/RelayOutbox.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/Commands/ShowDeliveryHealth.php",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P5-remediation-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Add only `CoreX\\Messaging\\Contracts` and\n`CoreX\\Messaging\\Data` to public-api. Add class-level `@internal` to the three commands. Do not\nsilence violations with exceptions or the parent Messaging prefix. Preserve JSON ordering/style."
+  ],
+  "guidance": "Follow §4 and existing package public-api arrays. Confirm every reported symbol\nis either under an exact declared root or explicitly internal for a justified implementation role.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer package-graph-gate",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "composer test:arch",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "composer package-graph-gate and composer test:arch with zero Messaging R4/R4b; core test/analyse/lint; temporary undeclared Messaging top-level fixture removed in finally",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "minimal public API metadata; internal command classification; negative gate\nwitness; CHANGELOG and receipt."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-22T11:52:34Z",
+    "finished_at": "2026-09-22T12:04:36Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "grok-4.7/high",
+      "effort": "high"
+    },
+    "notes": "P5.15 GREEN: Messaging Contracts/Data public roots, command @internal, R4b final-docblock lookup",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-22T12:04:36Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-22T12:04:36Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Align P5 Messaging symbols with machine-controlled package public API metadata."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "EA01 reproduces fourteen R4b violations; P5 introduced public contracts/data and internal\ncommands without updating the public/internal classification gate."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "exact public roots for Messaging contracts/data; explicit internal command\ndocblocks; focused package graph witnesses; CHANGELOG and receipt."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "broad `CoreX\\Messaging` wildcard; exceptions/allowlist; FQCN moves; behavioral\nchanges; promoting Internal or Commands to supported API."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P4-P5-execution-remediation.json` §4; D4/D12/D31; `@plan/knowledge/findings-execution-audit-P1-P5-2026-09-22.json` EA01."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/core/composer.json`; `packages/core/src/Messaging/Commands/PruneOutboxMessages.php`; `packages/core/src/Messaging/Commands/RelayOutbox.php`; `packages/core/src/Messaging/Commands/ShowDeliveryHealth.php`; `CHANGELOG.md`; `@plan/knowledge/findings-P5-remediation-receipts.json`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P5/phase.json`; 2) `@plan/knowledge/research-P4-P5-execution-remediation.json` §4; 3) `@plan/knowledge/findings-execution-audit-P1-P5-2026-09-22.json` EA01; 4) `@plan/decisions/D4.json`; 5) `@plan/decisions/D12.json`; 6) `packages/core/composer.json`; 7) `scripts/package-graph-gate.php` R4b classification; 8) `@plan/knowledge/findings-P5-zone-map.json` (измеренный список Messaging classes пакета core)."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Add only `CoreX\\Messaging\\Contracts` and\n`CoreX\\Messaging\\Data` to public-api. Add class-level `@internal` to the three commands. Do not\nsilence violations with exceptions or the parent Messaging prefix. Preserve JSON ordering/style."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Follow §4 and existing package public-api arrays. Confirm every reported symbol\nis either under an exact declared root or explicitly internal for a justified implementation role."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "`composer package-graph-gate` and `composer test:arch` pass with zero new Messaging\nR4/R4b violations; core test/analyse/lint pass; a temporary undeclared Messaging top-level fixture\nstill makes R4b red and is removed in `finally`."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "minimal public API metadata; internal command classification; negative gate\nwitness; CHANGELOG and receipt."
+    }
+  ]
+}

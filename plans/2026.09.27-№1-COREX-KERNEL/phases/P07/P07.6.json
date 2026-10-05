@@ -1,0 +1,243 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P07.6",
+  "title": "Review P07",
+  "status": "done_with_deviations",
+  "summary": "Независимо и только чтением проверить, что результат P07.1–P07.5 согласован как одна граница безопасности: движок изолирует tenant во всех путях входа, stancl удалён полностью, impersonation fail-closed и аудируется, access не зависит от AzGuard, граф модулей соответствует D16.",
+  "why": "D97 п.2: независимое full-ревью фазы — отдельный read-only item другой моделью; риск фазы — изоляция tenant и обход аудита, которые видны только при сквозном чтении движка, очередей, сессий, impersonation и прав.",
+  "scope": {
+    "include": [
+      "D102/D103 closed Scheduling module enum 15→16 with unchanged R1/baseline, AccountStatusGate constructor BC + exact decision-bound stable admission; чтение diff фазы от base P07.1 до финального candidate P07.5; сверка каждого актуального пункта D95/D96/D98–D103 с кодом и тестами; проверка негативных контролей (`P07-scope-boundary`, manifest-check, runtime-globals, package-graph) по их записанным выводам; повторный запуск только перечисленных в Validation проверок; запись `@plan/knowledge/artifacts-P07.6-review-verdict.json` с вердиктом `GREEN` или findings (severity, файл:строка, сценарий отказа)."
+    ],
+    "exclude": [
+      "любые правки продукта, плана или тестов; ремонт по findings (выполняет владеющий item P07.1–P07.5); hosted CI и закрытие фазы (D97 п.4); phase audit."
+    ]
+  },
+  "depends_on": [
+    "P07.2",
+    "P07.1",
+    "P07.5"
+  ],
+  "decisions": [
+    "D103",
+    "D102",
+    "D101",
+    "D100",
+    "D98",
+    "D95",
+    "D96",
+    "D97"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/decisions/D103.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/decisions/D102.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/decisions/D101.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/decisions/D100.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/decisions/D98.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/decisions/D95.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D96.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D97.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/knowledge/research-P07-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P07-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/knowledge/artifacts-P07-design-examples.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/knowledge/artifacts-P07.-n--execution-completion.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/knowledge/artifacts-P07.1-execution-completion.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/artifacts-P07.3-execution-completion.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/artifacts-P07.5-execution-completion.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Runtime/Internal/DatabaseTenancyManager.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "@plan/knowledge/artifacts-P07.6-review-verdict.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Read-only: единственная запись — verdict-файл. Модель ревьюера отличается от исполнителей P07.1–P07.5 (строка execution-sheet). Finding требует воспроизводимого сценария (вход → неверный выход) либо точной ссылки на нарушенный пункт D95/D96; стилистика не является finding. Вердикт фиксирует exact reviewed range `<base>..<candidate>`."
+  ],
+  "guidance": "Порядок чтения: движок и bootstrappers (D95 п.2–п.4) → очереди и HTTP (п.5–п.6) → удаление stancl (п.1, п.7–п.8) → impersonation (D96 п.1–п.5) → access и мост (п.6–п.7) → граф (п.8–п.11). Для каждого пункта: файл:строка реализации, тест, негатив.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "test -s plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.6-review/verdict.md",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "git status --porcelain -- packages products scripts tests docs .github composer.json composer.lock",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "git grep -n -i stancl -- packages products scripts .github composer.json ':!**/CHANGELOG.md'",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "`@plan/knowledge/artifacts-P07.6-review-verdict.json`."
+  ],
+  "route": {
+    "class": "frontier",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-10-05T15:13:30Z",
+    "finished_at": "2026-10-05T15:13:30Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "codex/GPT-6 (runtime selector/effort unavailable)"
+    },
+    "notes": "F1/F2 исправлены; продукт `32e1817c74abcd59d5a29b51c384c7cb93f89aaa`. Tenancy 599 passed, root 1143 + PG 242, Arch 135, mutation 37/37; lint/analyse/module-layout/php-api GREEN. Результат и логи: `@plan/knowledge/artifacts-P07.6-review-verdict.json`, `artifacts/P07.6-review/autofix/validation-summary.json`.",
+    "deviations": [
+      "Новый Task JSON runtime не читает legacy Markdown/journal; учёт выполнен вручную по указанию владельца. Новое ревью прямо исключено владельцем. Независимость/route исходного ревью и hosted CI не аттестованы; phase acceptance остаётся отдельной границей."
+    ],
+    "pending": [],
+    "checks": []
+  },
+  "updated_at": "2026-10-05T15:13:30Z",
+  "sections": [
+    {
+      "id": "Owner-execution-override-2026-10-05",
+      "title": "Owner execution override (2026-10-05)",
+      "text": "«я же написал с автоисправлениями», затем «ревью не делай, только исправления». После исходного отчёта разрешены ограниченные исправления F1 (host-cache, владелец P07.1/P07.2) и F2 (validation carrier), регрессионные тесты и затронутые проверки. Новое ревью не выполняется. При несовместимости перерабатываемого skm результат фиксируется вручную в journal/state/status/handoff по указанию владельца «если будут ошибки, то свой план корректируй в ручном режиме». Исходный read-only contract ниже описывает уже выполненное ревью; повторное независимое GREEN и hosted CI этим override не заявляются."
+    },
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Независимо и только чтением проверить, что результат P07.1–P07.5 согласован как одна граница безопасности: движок изолирует tenant во всех путях входа, stancl удалён полностью, impersonation fail-closed и аудируется, access не зависит от AzGuard, граф модулей соответствует D16."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "D97 п.2: независимое full-ревью фазы — отдельный read-only item другой моделью; риск фазы — изоляция tenant и обход аудита, которые видны только при сквозном чтении движка, очередей, сессий, impersonation и прав."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "D102/D103 closed Scheduling module enum 15→16 with unchanged R1/baseline, AccountStatusGate constructor BC + exact decision-bound stable admission; чтение diff фазы от base P07.1 до финального candidate P07.5; сверка каждого актуального пункта D95/D96/D98–D103 с кодом и тестами; проверка негативных контролей (`P07-scope-boundary`, manifest-check, runtime-globals, package-graph) по их записанным выводам; повторный запуск только перечисленных в Validation проверок; запись `@plan/knowledge/artifacts-P07.6-review-verdict.json` с вердиктом `GREEN` или findings (severity, файл:строка, сценарий отказа)."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "любые правки продукта, плана или тестов; ремонт по findings (выполняет владеющий item P07.1–P07.5); hosted CI и закрытие фазы (D97 п.4); phase audit."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/decisions/D103.json` · `@plan/decisions/D102.json` · `@plan/decisions/D101.json` · `@plan/decisions/D100.json` · `@plan/decisions/D98.json` · `@plan/decisions/D95.json` · `@plan/decisions/D96.json` · `@plan/decisions/D97.json` · `@plan/knowledge/research-P07-design.json` (§4, §5, §6) · `@plan/knowledge/research-P07-design-rag.json` (W1–W7, VERIFY-AT-EXEC — сверка с Completion Notes P07.2) · `@plan/knowledge/artifacts-P07-design-examples.json` (§1, §8, §9, §12) · результаты P07.1–P07.5 (`plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.<n>-execution/completion.md`, появляются после их исполнения)"
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`@plan/knowledge/artifacts-P07.6-review-verdict.json`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/decisions/D95.json`; 2) `@plan/decisions/D96.json`; 3) `@plan/knowledge/research-P07-design.json` §4–§6; 4) `@plan/knowledge/artifacts-P07.1-execution-completion.json`; 5) `@plan/knowledge/artifacts-P07.3-execution-completion.json`; 6) `@plan/knowledge/artifacts-P07.5-execution-completion.json`; 7) `packages/tenancy/src/Runtime/Internal/DatabaseTenancyManager.php`; 8) `packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Read-only: единственная запись — verdict-файл. Модель ревьюера отличается от исполнителей P07.1–P07.5 (строка execution-sheet). Finding требует воспроизводимого сценария (вход → неверный выход) либо точной ссылки на нарушенный пункт D95/D96; стилистика не является finding. Вердикт фиксирует exact reviewed range `<base>..<candidate>`."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Порядок чтения: движок и bootstrappers (D95 п.2–п.4) → очереди и HTTP (п.5–п.6) → удаление stancl (п.1, п.7–п.8) → impersonation (D96 п.1–п.5) → access и мост (п.6–п.7) → граф (п.8–п.11). Для каждого пункта: файл:строка реализации, тест, негатив."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "- D102/D103: module-layout enum contains exactly Scheduling addition and R1/ratchet remain unchanged; positive ten-file transfer and old/unknown enum negatives captured. AccountStatusGate optional-policy → five-required constructor matches §4 and finite tenancy entry in approved-deltas.json, actual resolved BC_CHECK_BASE, decision hashes and actual Roave rows; unknown/unlisted delta rejects. Review CHANGELOG/php-api/Golden with same public delta, status-owner matrix and outer restoration cause/log evidence; table covers D98–D103 corrections explicitly.\n- `test -s @plan/knowledge/artifacts-P07.6-review-verdict.json` → exit 0; файл содержит строку `Verdict: GREEN` либо `Verdict: findings:<N>`, reviewed range и таблицу пунктов D95/D96 с файлом и тестом для каждого.\n- `git status --porcelain -- packages products scripts tests docs .github composer.json composer.lock` до и после ревью совпадают (нет продуктовых правок).\n- `git grep -n -i stancl -- packages products scripts .github composer.json ':!**/CHANGELOG.md'` → пусто; `cat scripts/runtime-globals-baseline.json` → `{}`; `scripts/php84 php scripts/package-graph-gate.php` → exit 0.\n- `PGSQL_PORT=5434 scripts/php84 composer --working-dir=packages/tenancy test -- --group=pg --filter='ScopeBoundary|ImpersonationProfile'` и `PGSQL_PORT=5434 scripts/php84 composer --working-dir=packages/access test:pg -- --filter=NativePermission` → exit 0 (выводы в verdict)."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "`@plan/knowledge/artifacts-P07.6-review-verdict.json`."
+    }
+  ]
+}

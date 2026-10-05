@@ -1,0 +1,188 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P15.7",
+  "title": "Wakeup public contract vocabulary",
+  "status": "done",
+  "summary": "Rename `DueSource`→`DueWakeupSource`, `WakeupHandler`→`DueWakeupHandler`, `WakeupHint`→`WakeupScheduleHint`, `WakeupSweeper`→`DueWakeupSweeper`.",
+  "why": "D87 closes the incomplete A70 vocabulary while preserving the best-effort nature of the hint contract.",
+  "scope": {
+    "include": [
+      "Four contract definitions/files, every implementation/consumer, imports/types, tests, docs and public API metadata."
+    ],
+    "exclude": [
+      "Package name, scheduling behavior, persistence schema, delivery guarantees and aliases."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D85",
+    "D87"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P15-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D85.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D87.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P1/P1.3.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P15/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "docs/dev-doctrine.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/wakeup/src/**",
+      "change": "any"
+    },
+    {
+      "path": "packages/wakeup/tests/**",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "All four contracts move atomically; do not strengthen hint guarantees; no alias or package rename."
+  ],
+  "guidance": "Inventory implementers first, move interfaces, then update implementers and container bindings before tests.",
+  "validation": [
+    {
+      "id": "V1",
+      "procedure": "wakeup lint/analyse/test",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "package-graph-gate",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Complete wakeup vocabulary rollout and consumer/manifest receipt."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-27T01:24:38Z",
+    "finished_at": "2026-09-27T01:24:38Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-run/grok-4.7/high",
+      "effort": "high"
+    },
+    "notes": "P15.7 wakeup vocabulary rename green. Receipt findings/P15-receipts.md.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-09-27T01:24:38Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-27T01:24:38Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-27T01:24:38Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Rename `DueSource`→`DueWakeupSource`, `WakeupHandler`→`DueWakeupHandler`, `WakeupHint`→`WakeupScheduleHint`, `WakeupSweeper`→`DueWakeupSweeper`."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "D87 closes the incomplete A70 vocabulary while preserving the best-effort nature of the hint contract."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Four contract definitions/files, every implementation/consumer, imports/types, tests, docs and public API metadata."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Package name, scheduling behavior, persistence schema, delivery guarantees and aliases."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P15-design.json`; `@plan/decisions/D85.json`; `@plan/decisions/D87.json`; `@plan/phases/P1/P1.3.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/wakeup/src/**`; `packages/wakeup/tests/**`; direct consumer packages; public API/docs metadata."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P15/phase.json`; 2) `@plan/knowledge/research-P15-design.json`; 3) `@plan/decisions/D85.json`; 4) `@plan/decisions/D87.json`; 5) `@plan/phases/P1/P1.3.json`; 6) `docs/dev-doctrine.md`."
+    },
+    {
+      "id": "Authority",
+      "title": "Authority",
+      "text": "[OWNER-GATE:G-API-P15] branch=`main`; scope=`P15.7 four public wakeup contract renames`"
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "All four contracts move atomically; do not strengthen hint guarantees; no alias or package rename."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Inventory implementers first, move interfaces, then update implementers and container bindings before tests."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "wakeup and consumer lanes green; strict PSR autoload; public API manifest has four targets; exact old-token sweep empty."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Complete wakeup vocabulary rollout and consumer/manifest receipt."
+    }
+  ]
+}

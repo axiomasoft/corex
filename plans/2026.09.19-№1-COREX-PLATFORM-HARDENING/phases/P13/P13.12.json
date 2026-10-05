@@ -1,0 +1,364 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P13.12",
+  "title": "Final operation-contract ratchets and freeze",
+  "status": "done",
+  "summary": "Prove the complete P13 contract across HTTP/tools, freeze `operation-contract/1`\nunder owner authority and publish one evidence/reference/release record.",
+  "why": "`@plan/knowledge/research-P13-design.json` §10–§12. Individual suites can remain green while a second\nauthority, transport bypass, GraphQL artifact or stale snapshot enters elsewhere.",
+  "scope": {
+    "include": [
+      "Cross-transport matrix; registry/profile authority ratchet; GraphQL absence;\nroute/idempotency/cursor/auth/error/snapshot dependency closure; P14 consumer check; policy/reference/\nREADME/changelog updates; complete receipt and G-API decision evidence."
+    ],
+    "exclude": [
+      "P14 budgets/bulk/webhooks; P15 renames; P17 client fixtures/release/tag;\nwhole-plan audit stage 2."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/phases/P13/P13.1.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P13/P13.2.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P13/P13.3.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P13/P13.4.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P13/P13.5.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P13/P13.6.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P13/P13.7.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P13/P13.8.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P13/P13.9.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P13/P13.10.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P13/P13.11.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P14/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P13/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P13-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D65.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D66.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D67.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D104.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D70.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D105.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D106.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D72.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D73.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P13-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "CHANGELOG.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "docs/architecture/api-policy.md",
+      "change": "any"
+    },
+    {
+      "path": "docs/reference.md",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/README.md",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P13-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Freeze exactly the descriptor/profile/invoker/idempotency/cursor/auth/error/\nsnapshot contracts documented in §1–§9; no release. Ratchet forbids second mutable API authority,\ndirect handler calls from HTTP/exposed-tool adapters, tenant fields in code-profile hash and any GraphQL\npath/dependency/capability/snapshot. P14 consumer compile fixture may consume only frozen public surface.\nOnly root changelog; external sources go to `docs/reference.md` with date/purpose."
+  ],
+  "guidance": "Root tests inspect actual bindings/routes/snapshots and execute one query, command,\nasync command and exposed tool. Reuse P3 tokenizer scanner for authority/GraphQL/direct-call checks.\nReceipt is result evidence, not expected-output prose; planted failures run in `try/finally`.",
+  "validation": [
+    {
+      "id": "V1",
+      "procedure": "D123 exact owner G-API grant, route and checkout-only authority",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "13 acceptance rows: descriptor/profile/routes/invoker/idempotency/cursor/auth/error/snapshot/GraphQL",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "modules/api/core affected lint, analyse and test",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "isolated API PostgreSQL concurrency lane",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "root Arch and full root tests",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "byte-stable snapshot --check and committed compatibility gate",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "P14 public-surface consumer compile",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "planted negatives: registry, adapter, tenant hash, field bypass, GraphQL and stale snapshot",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Frozen `operation-contract/1`, authority/parity/anti-GraphQL ratchets, complete policy/\nreference/README/changelog updates and P13 receipt with gates, commands, skips and risks."
+  ],
+  "route": {
+    "class": "frontier",
+    "effort": "xhigh"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-25T10:19:14Z",
+    "finished_at": "2026-09-25T10:58:03Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-run/codex-gpt-6-sol/xhigh",
+      "effort": "xhigh"
+    },
+    "notes": "P13.12 GREEN: operation-contract/1 local freeze; 13-row matrix, cross-transport parity, anti-GraphQL and root gates. Adjacent predecessor repairs and experimental BC report are explicit in P13 receipt.\nwrite-site: pre_mutation: allow · pre_final: allow",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-09-25T10:45:55Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-25T10:45:55Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-25T10:45:55Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-25T10:45:55Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-25T10:45:55Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-25T10:45:55Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-25T10:45:55Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-25T10:45:55Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-25T10:58:03Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Prove the complete P13 contract across HTTP/tools, freeze `operation-contract/1`\nunder owner authority and publish one evidence/reference/release record."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`@plan/knowledge/research-P13-design.json` §10–§12. Individual suites can remain green while a second\nauthority, transport bypass, GraphQL artifact or stale snapshot enters elsewhere."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Cross-transport matrix; registry/profile authority ratchet; GraphQL absence;\nroute/idempotency/cursor/auth/error/snapshot dependency closure; P14 consumer check; policy/reference/\nREADME/changelog updates; complete receipt and G-API decision evidence."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "P14 budgets/bulk/webhooks; P15 renames; P17 client fixtures/release/tag;\nwhole-plan audit stage 2."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/phases/P13/P13.1.json`; `@plan/phases/P13/P13.2.json`; `@plan/phases/P13/P13.3.json`;\n`@plan/phases/P13/P13.4.json`; `@plan/phases/P13/P13.5.json`; `@plan/phases/P13/P13.6.json`;\n`@plan/phases/P13/P13.7.json`; `@plan/phases/P13/P13.8.json`; `@plan/phases/P13/P13.9.json`;\n`@plan/phases/P13/P13.10.json`; `@plan/phases/P13/P13.11.json`; `@plan/phases/P14/phase.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`tests/Feature/OperationContractTest.php`;\n`tests/Arch/ApiContractTest.php`;\n`docs/architecture/api-policy.md`;\n`docs/reference.md`;\n`packages/api/README.md`;\n`CHANGELOG.md`;\n`@plan/knowledge/findings-P13-receipts.json`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P13/phase.json`; 2) `@plan/knowledge/research-P13-design.json` §10–§12;\n3) `@plan/decisions/D65.json`;\n4) `@plan/decisions/D66.json`;\n5) `@plan/decisions/D67.json`;\n6) `@plan/decisions/D104.json`;\n7) `@plan/decisions/D70.json`;\n8) `@plan/decisions/D105.json`;\n8a) `@plan/decisions/D106.json`;\n9) `@plan/decisions/D72.json`;\n10) `@plan/decisions/D73.json`;\n11) `@plan/knowledge/research-P13-design-rag.json`; 12) `@plan/phases/P13/P13.11.json`;\n13) `@plan/phases/P14/phase.json`; 14) `CHANGELOG.md` `[Unreleased]`."
+    },
+    {
+      "id": "Authority",
+      "title": "Authority",
+      "text": "[OWNER-GATE:G-API] branch=`main`; scope=`operation-contract/1`; boundary=`owner-session`; effect=`local-source`; environment=`checkout`"
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Freeze exactly the descriptor/profile/invoker/idempotency/cursor/auth/error/\nsnapshot contracts documented in §1–§9; no release. Ratchet forbids second mutable API authority,\ndirect handler calls from HTTP/exposed-tool adapters, tenant fields in code-profile hash and any GraphQL\npath/dependency/capability/snapshot. P14 consumer compile fixture may consume only frozen public surface.\nOnly root changelog; external sources go to `docs/reference.md` with date/purpose."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Root tests inspect actual bindings/routes/snapshots and execute one query, command,\nasync command and exposed tool. Reuse P3 tokenizer scanner for authority/GraphQL/direct-call checks.\nReceipt is result evidence, not expected-output prose; planted failures run in `try/finally`."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Resolve G-API with exact decision provenance. Run modules/api/core affected lint/analyse/\ntest, isolated API PG lane, root Arch, snapshot `--check`, compatibility gate and P14 consumer compile.\nPlant/remove second registry, direct adapter→handler, tenant hash input, GraphQL file/dependency/string,\nfield bypass and stale snapshot. Verify all 13 phase acceptance rows and no skipped lane."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Frozen `operation-contract/1`, authority/parity/anti-GraphQL ratchets, complete policy/\nreference/README/changelog updates and P13 receipt with gates, commands, skips and risks."
+    }
+  ]
+}

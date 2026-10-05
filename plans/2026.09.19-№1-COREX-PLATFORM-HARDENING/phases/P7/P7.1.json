@@ -1,0 +1,299 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P7.1",
+  "title": "Шаблон Options, SecretRef, CoreOptions, Config::bind",
+  "status": "done",
+  "summary": "Ввести `ViolationList`, `InvalidConfiguration`, `SecretRef`,\n`CoreOptions::fromArray` и превратить `Support/Config` в holder над\nсвязанным снимком; перевести `SqlSavedViewRepository` на конструктор.",
+  "why": "N12/A76: 31 `config(` в одном статическом аксессоре. `RAG:✅`\nP7-Q1: фабрика без `config()` тестируется без контейнера. D39: модели\nи миграции оставляют `Config::`. D40: три пути redaction плюс\n`SensitiveParameter`.",
+  "scope": {
+    "include": [
+      "классы §3–§5; bind/unbind/options; override\noctane-worker (§15); биндинг в `CoreServiceProvider`;\n`SqlSavedViewRepository`; строка CHANGELOG. Фокусные behavior-доказательства\nD100 и receipt вынесены в P7.12, чтобы этот product-item остался в лимите\nвосьми Files."
+    ],
+    "exclude": [
+      "инъекция `CoreOptions` в модели, миграции, audit,\npubsub, departments; Options других пакетов; команда validate (P7.10);\nгейт (P7.11); смена ключей."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D39",
+    "D40",
+    "D100",
+    "D101"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P7-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P7-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/config/corex.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P7/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D39.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D40.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Support/Config.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/CoreServiceProvider.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Views/Internal/SqlSavedViewRepository.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P5-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D100.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D101.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/core/src/Support/ViolationList.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Config/Exceptions/InvalidConfiguration.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Config/Data/SecretRef.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Config/Data/CoreOptions.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Support/Config.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/CoreServiceProvider.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Views/Internal/SqlSavedViewRepository.php",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Код §3–§5 с коррекцией D100: `cache_ttl` читается через\n`array_key_exists` (missing=3600, explicit null=null); хелперы `fromArray` —\nв том же файле `CoreOptions` по контракту §5.1. По D101 exact-путь\n`packages/core/src/Support/CoreOptions.php` — COMPOSITION: его defaults могут\nимпортировать объявленные типы разных зон; это не меняет\n`ALLOWED['Foundation']` и не разрешает другие `Support/*`. `config()` исчезает из\n`Config.php` и из `SqlSavedViewRepository`. Repository хранит только explicit\nconnection override; при null каждую операцию берёт current default из injected\nDB manager и не фиксирует mutable default в singleton. Аксессор\n`pubsubOctaneWorkerOptIn` использует override §15, не повторный\n`config()`. Соединение views резолвит провайдер. Ни один файл вне\n`Files` не изменяется. P7.1 не пишет receipt и не изменяет тесты;\nэти writes принадлежат P7.12."
+  ],
+  "guidance": "Готовые классы — `@plan/knowledge/research-P7-design.json` §3, §4, §5.\nПровайдер — §5.3. Octane override — §15. Тесты без Testbench для\n`fromArray` и `SecretRef`.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer --working-dir=packages/core lint:check && composer --working-dir=packages/core analyse && composer --working-dir=packages/core test",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "composer --working-dir=packages/core test:pg",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "rg -n 'config\\(' packages/core/src/Support/Config.php packages/core/src/Views/Internal/SqlSavedViewRepository.php",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "bash scripts/anti-weakening-gate.sh",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "composer --working-dir=packages/core lint:check && analyse && test",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "composer --working-dir=packages/core test:pg",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "rg config( in Config.php and SqlSavedViewRepository.php",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "bash scripts/anti-weakening-gate.sh",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "procedure": "tests/Arch/CoreZoneTest.php CoreOptions composition and Foundation plantings",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "шаблон и CoreOptions; Config без `config()`; репозиторий\nsaved views на конструкторе; строка CHANGELOG."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "required",
+    "status": "complete"
+  },
+  "result": {
+    "started_at": "2026-09-23T06:11:04Z",
+    "finished_at": "2026-09-23T06:26:54Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-run/grok-4.7/high",
+      "effort": "high"
+    },
+    "notes": "P7.1 GREEN: CoreOptions, SecretRef, Config holder, saved-view constructor. sqlite 84/197, pg 37/180, CoreZoneTest 7/26.\nwrite-site: pre_mutation: allow · pre_final: allow",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-23T06:26:54Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-23T06:26:54Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-23T06:26:54Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-23T06:26:54Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-09-23T06:26:54Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-23T06:26:54Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Ввести `ViolationList`, `InvalidConfiguration`, `SecretRef`,\n`CoreOptions::fromArray` и превратить `Support/Config` в holder над\nсвязанным снимком; перевести `SqlSavedViewRepository` на конструктор."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "N12/A76: 31 `config(` в одном статическом аксессоре. `RAG:✅`\nP7-Q1: фабрика без `config()` тестируется без контейнера. D39: модели\nи миграции оставляют `Config::`. D40: три пути redaction плюс\n`SensitiveParameter`."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "классы §3–§5; bind/unbind/options; override\noctane-worker (§15); биндинг в `CoreServiceProvider`;\n`SqlSavedViewRepository`; строка CHANGELOG. Фокусные behavior-доказательства\nD100 и receipt вынесены в P7.12, чтобы этот product-item остался в лимите\nвосьми Files."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "инъекция `CoreOptions` в модели, миграции, audit,\npubsub, departments; Options других пакетов; команда validate (P7.10);\nгейт (P7.11); смена ключей."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P7-design.json` §0, §3–§5, §15; `@plan/knowledge/research-P7-design-rag.json`\n§1 (P7-Q1, P7-Q2); D39, D40, D100, D101; `packages/core/config/corex.php`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/core/src/Support/ViolationList.php`; `packages/core/src/Support/InvalidConfiguration.php`; `packages/core/src/Support/SecretRef.php`; `packages/core/src/Support/CoreOptions.php`; `packages/core/src/Support/Config.php`; `packages/core/src/CoreServiceProvider.php`; `packages/core/src/Views/Internal/SqlSavedViewRepository.php`; `CHANGELOG.md`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P7/phase.json`; 2) `@plan/knowledge/research-P7-design.json` §0, §3–§5, §15; 3) `@plan/knowledge/research-P7-design-rag.json` §1; 4) `@plan/decisions/D39.json`; 5) `@plan/decisions/D40.json`; 6) `packages/core/src/Support/Config.php`; 7) `packages/core/src/CoreServiceProvider.php`; 8) `packages/core/src/Views/Internal/SqlSavedViewRepository.php`; 9) `packages/core/config/corex.php`; 10) `@plan/knowledge/research-P5-design.json` блок `messaging` (дефолты); 11) `@plan/decisions/D100.json`; 12) `@plan/decisions/D101.json`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Код §3–§5 с коррекцией D100: `cache_ttl` читается через\n`array_key_exists` (missing=3600, explicit null=null); хелперы `fromArray` —\nв том же файле `CoreOptions` по контракту §5.1. По D101 exact-путь\n`packages/core/src/Support/CoreOptions.php` — COMPOSITION: его defaults могут\nимпортировать объявленные типы разных зон; это не меняет\n`ALLOWED['Foundation']` и не разрешает другие `Support/*`. `config()` исчезает из\n`Config.php` и из `SqlSavedViewRepository`. Repository хранит только explicit\nconnection override; при null каждую операцию берёт current default из injected\nDB manager и не фиксирует mutable default в singleton. Аксессор\n`pubsubOctaneWorkerOptIn` использует override §15, не повторный\n`config()`. Соединение views резолвит провайдер. Ни один файл вне\n`Files` не изменяется. P7.1 не пишет receipt и не изменяет тесты;\nэти writes принадлежат P7.12."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Готовые классы — `@plan/knowledge/research-P7-design.json` §3, §4, §5.\nПровайдер — §5.3. Octane override — §15. Тесты без Testbench для\n`fromArray` и `SecretRef`."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "`composer --working-dir=packages/core lint:check && composer --working-dir=packages/core analyse && composer --working-dir=packages/core test` и `composer --working-dir=packages/core test:pg`. `rg -n 'config\\(' packages/core/src/Support/Config.php packages/core/src/Views/Internal/SqlSavedViewRepository.php` пуст как вызов. `bash scripts/anti-weakening-gate.sh` зелёный. Combined P6+P7+P8 witness принимает cross-zone defaults `CoreOptions`, а существующие Foundation → SavedViews/Internal и unknown `Support/Probe.php` witnesses остаются красными. Focused D100 witnesses обязательны в P7.12 до закрытия фазы."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "шаблон и CoreOptions; Config без `config()`; репозиторий\nsaved views на конструкторе; строка CHANGELOG."
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D15",
+  "title": "Измерение и суждение — разные артефакты",
+  "date": "2026-09-19",
+  "status": "accepted",
+  "decision": "`artifacts/architecture/files.csv` несёт ровно 21 колонку измерения из\n`@plan/knowledge/research-P2-design.json` §2.1. Колонки `verdict` в нём нет.\n\nСуждение живёт в `verdicts.csv` (P2.5) и в `scorecard.csv` (P2.6). Повторный прогон\nсканера не имеет права перезаписать вердикт. Продуктовые Markdown-каталоги —\nсгенерированная таблица плюс шапка со ссылкой на статьи конституции; они не вводят\nновых правил.\n\nНенаблюдаемое поле каталога записывается как `unobserved`, а не угадывается.\nИсключение: `upgrade_strategy=expand-migrate-contract` помечается `policy-default`,\nпотому что политика уже принята в P1.",
+  "rationale": "Смешение измерения и суждения в одном CSV делает инвентарь неидемпотентным:\nпересчёт базы затирает интерпретацию. Эскиз отклоняется в этой точке; набор A103\nпринимается. Альтернатива «хранить вердикт в той же строке и не перезаписывать\nколонку» отклонена: два прохода с разной семантикой обязаны иметь разных\nвладельцев файла, иначе исполнитель класса implementation сольёт их обратно.",
+  "applies_to": [
+    "P2",
+    "P2.1",
+    "P2.5",
+    "P2.6"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/cursor-grok-4.6/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D15\ndate: 2026-09-19\nstatus: accepted\nitem: P2.1\nitems: [P2, P2.1, P2.5, P2.6]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D15",
+      "title": "D15 — Измерение и суждение — разные артефакты",
+      "text": "**Actor:** plan-designer/cursor-grok-4.6/high\n\n**Evidence:** `RAG:✅` 2026-09-19 — P1-Q7 «generated output is evidence, not canonical\nprose»; P2-Q5 fitness function называет свойство и измерение, средний балл запрещён\nкак KPI (захват `@plan/knowledge/artifacts-P2-design-rag-q03-q05.json`). `RAG:—` эскиз\n`@plan/knowledge/research-02-shapes-platform.json` §2 клал `verdict` в ту же строку, что и\n`config_reads`; A103 называет 21 колонку без вердикта."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "`artifacts/architecture/files.csv` несёт ровно 21 колонку измерения из\n`@plan/knowledge/research-P2-design.json` §2.1. Колонки `verdict` в нём нет.\n\nСуждение живёт в `verdicts.csv` (P2.5) и в `scorecard.csv` (P2.6). Повторный прогон\nсканера не имеет права перезаписать вердикт. Продуктовые Markdown-каталоги —\nсгенерированная таблица плюс шапка со ссылкой на статьи конституции; они не вводят\nновых правил.\n\nНенаблюдаемое поле каталога записывается как `unobserved`, а не угадывается.\nИсключение: `upgrade_strategy=expand-migrate-contract` помечается `policy-default`,\nпотому что политика уже принята в P1."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Смешение измерения и суждения в одном CSV делает инвентарь неидемпотентным:\nпересчёт базы затирает интерпретацию. Эскиз отклоняется в этой точке; набор A103\nпринимается. Альтернатива «хранить вердикт в той же строке и не перезаписывать\nколонку» отклонена: два прохода с разной семантикой обязаны иметь разных\nвладельцев файла, иначе исполнитель класса implementation сольёт их обратно."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P2.1 пишет `files.csv` / `symbols.csv` / `self-check.json` без вердикта.\n`suggested_namespace` и `suggested_name` в P2.1 равны `—` и заполняются только в\n`verdicts.csv`. P2.6 не считает среднее. P3 читает измерение и суждение как два\nвхода."
+    }
+  ]
+}

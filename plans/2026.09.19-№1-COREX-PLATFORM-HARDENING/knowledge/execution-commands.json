@@ -1,0 +1,492 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "execution-commands",
+  "title": "Команды исполнения PLAN2: P7–P17",
+  "sections": [
+    {
+      "id": "PLAN2-P7-P17",
+      "title": "Команды исполнения PLAN2: P7–P17",
+      "text": "**Проверено:** 2026-09-23 по `agent --list-models` и\n`@plan/knowledge/execution-batches.json`. Это отдельные запуски, выполняемые по одному\nпосле терминального checkpoint предыдущего item. Не вставлять весь список\nв shell одним блоком. В группе `task:plan-run` каждый item получает свой\nreceipt/commit/closure; при недоступном predecessor или owner gate выполнять\nтолько готовое подмножество согласно `@plan/plan.json` и заново сформированному handoff.\n\nCLI `agent` — Cursor. Для Codex использовать projection `@plan/plan.json` §3.3.\nКоманды ниже не предоставляют owner gates: перед помеченным запуском\nтребуется уже принятый точный grant. P15.11/P15.12 — условные ветки;\nP17.12 — реальная внешняя публикация только после G-RELEASE.\n\nТекущий frontier: P7.1. После P17.12 выполнить архивирование плана\nотдельной командой в конце."
+    },
+    {
+      "id": "P7",
+      "title": "P7",
+      "text": "```bash"
+    },
+    {
+      "id": "E07a",
+      "title": "E07a",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P7.1'"
+    },
+    {
+      "id": "E07b",
+      "title": "E07b",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P7.12'"
+    },
+    {
+      "id": "E07c",
+      "title": "E07c",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P7.2'"
+    },
+    {
+      "id": "E07d",
+      "title": "E07d",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model cursor-grok-4.6-high --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P7.3-P7.5'"
+    },
+    {
+      "id": "E07e",
+      "title": "E07e",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model composer-2.5 --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P7.6-P7.7'"
+    },
+    {
+      "id": "E07f",
+      "title": "E07f",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model composer-2.5 --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P7.8-P7.9'"
+    },
+    {
+      "id": "E07g",
+      "title": "E07g",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P7.10'"
+    },
+    {
+      "id": "E07h-fresh-review",
+      "title": "E07h — fresh review",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P7.11'\n```"
+    },
+    {
+      "id": "P8",
+      "title": "P8",
+      "text": "```bash"
+    },
+    {
+      "id": "E08a",
+      "title": "E08a",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P8.1'"
+    },
+    {
+      "id": "E08b",
+      "title": "E08b",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model cursor-grok-4.6-high --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P8.2-P8.3'"
+    },
+    {
+      "id": "E08c",
+      "title": "E08c",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P8.4'"
+    },
+    {
+      "id": "E08d",
+      "title": "E08d",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model cursor-grok-4.6-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P8.5'"
+    },
+    {
+      "id": "E08e-fresh-review",
+      "title": "E08e — fresh review",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P8.6'\n```"
+    },
+    {
+      "id": "P9",
+      "title": "P9",
+      "text": "```bash"
+    },
+    {
+      "id": "E09a",
+      "title": "E09a",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P9.1'"
+    },
+    {
+      "id": "E09b",
+      "title": "E09b",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P9.2'"
+    },
+    {
+      "id": "E09c",
+      "title": "E09c",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P9.3'"
+    },
+    {
+      "id": "E09d",
+      "title": "E09d",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model cursor-grok-4.6-high --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P9.4-P9.6'"
+    },
+    {
+      "id": "E09e",
+      "title": "E09e",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P9.7'"
+    },
+    {
+      "id": "E09f-fresh-review",
+      "title": "E09f — fresh review",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model gpt-5.6-sol-xhigh --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P9.8'\n```"
+    },
+    {
+      "id": "P10",
+      "title": "P10",
+      "text": "```bash"
+    },
+    {
+      "id": "E10a",
+      "title": "E10a",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P10.1-P10.2'"
+    },
+    {
+      "id": "E10b-grant-G-DDL",
+      "title": "E10b — grant G-DDL требуется",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model gpt-5.6-sol-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P10.3'"
+    },
+    {
+      "id": "E10c",
+      "title": "E10c",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model gpt-5.6-sol-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P10.4'"
+    },
+    {
+      "id": "E10d",
+      "title": "E10d",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P10.5'"
+    },
+    {
+      "id": "E10e",
+      "title": "E10e",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model gpt-5.6-sol-high --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P10.6-P10.7'"
+    },
+    {
+      "id": "E10f-fresh-review",
+      "title": "E10f — fresh review",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model gpt-5.6-sol-xhigh --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P10.8'\n```"
+    },
+    {
+      "id": "P11",
+      "title": "P11",
+      "text": "```bash"
+    },
+    {
+      "id": "E11a",
+      "title": "E11a",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P11.1'"
+    },
+    {
+      "id": "E11b",
+      "title": "E11b",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P11.2-P11.3'"
+    },
+    {
+      "id": "E11c",
+      "title": "E11c",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P11.4'"
+    },
+    {
+      "id": "E11d",
+      "title": "E11d",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model gpt-5.6-sol-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P11.5'"
+    },
+    {
+      "id": "E11e",
+      "title": "E11e",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model cursor-grok-4.6-high --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P11.6-P11.7'"
+    },
+    {
+      "id": "E11f-fresh-review",
+      "title": "E11f — fresh review",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model gpt-5.6-sol-xhigh --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P11.8'\n```"
+    },
+    {
+      "id": "P12",
+      "title": "P12",
+      "text": "```bash"
+    },
+    {
+      "id": "E12a",
+      "title": "E12a",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P12.1'"
+    },
+    {
+      "id": "E12b",
+      "title": "E12b",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model cursor-grok-4.6-high --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P12.2-P12.3'"
+    },
+    {
+      "id": "E12c",
+      "title": "E12c",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P12.4-P12.5'"
+    },
+    {
+      "id": "E12d",
+      "title": "E12d",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P12.6-P12.7'"
+    },
+    {
+      "id": "E12e-fresh-review",
+      "title": "E12e — fresh review",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P12.8'\n```"
+    },
+    {
+      "id": "P13",
+      "title": "P13",
+      "text": "```bash"
+    },
+    {
+      "id": "E13a",
+      "title": "E13a",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P13.1-P13.2'"
+    },
+    {
+      "id": "E13b",
+      "title": "E13b",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P13.3-P13.4'"
+    },
+    {
+      "id": "E13c-grant-G-DDL",
+      "title": "E13c — grant G-DDL требуется",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model gpt-5.6-sol-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P13.5'"
+    },
+    {
+      "id": "E13d",
+      "title": "E13d",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model gpt-5.6-sol-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P13.6'"
+    },
+    {
+      "id": "E13e",
+      "title": "E13e",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P13.7'"
+    },
+    {
+      "id": "E13f",
+      "title": "E13f",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model gpt-5.6-sol-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P13.8'"
+    },
+    {
+      "id": "E13g",
+      "title": "E13g",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P13.9-P13.10'"
+    },
+    {
+      "id": "E13h",
+      "title": "E13h",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P13.11'"
+    },
+    {
+      "id": "E13i-grant-G-API-fresh-review",
+      "title": "E13i — grant G-API требуется — fresh review",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model gpt-5.6-sol-xhigh --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P13.12'\n```"
+    },
+    {
+      "id": "P14",
+      "title": "P14",
+      "text": "```bash"
+    },
+    {
+      "id": "E14a",
+      "title": "E14a",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model cursor-grok-4.6-high --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P14.1-P14.2'"
+    },
+    {
+      "id": "E14b-grant-G-DDL",
+      "title": "E14b — grant G-DDL требуется",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model gpt-5.6-sol-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P14.3'"
+    },
+    {
+      "id": "E14c",
+      "title": "E14c",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model gpt-5.6-sol-high --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P14.4-P14.5'"
+    },
+    {
+      "id": "E14d",
+      "title": "E14d",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model gpt-5.6-sol-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P14.6'"
+    },
+    {
+      "id": "E14e",
+      "title": "E14e",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P14.7-P14.8'"
+    },
+    {
+      "id": "E14f",
+      "title": "E14f",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P14.9-P14.10'"
+    },
+    {
+      "id": "E14g",
+      "title": "E14g",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P14.11-P14.12'"
+    },
+    {
+      "id": "E14h",
+      "title": "E14h",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model gpt-5.6-sol-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P14.13'"
+    },
+    {
+      "id": "E14i",
+      "title": "E14i",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model gpt-5.6-sol-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P14.14'"
+    },
+    {
+      "id": "E14j",
+      "title": "E14j",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model gpt-5.6-sol-high --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P14.15-P14.16'"
+    },
+    {
+      "id": "E14k",
+      "title": "E14k",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P14.17'"
+    },
+    {
+      "id": "E14l",
+      "title": "E14l",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P14.18'"
+    },
+    {
+      "id": "E14m-grant-G-SECRET",
+      "title": "E14m — grant G-SECRET требуется",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model gpt-5.6-sol-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P14.19'"
+    },
+    {
+      "id": "E14n",
+      "title": "E14n",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P14.20'"
+    },
+    {
+      "id": "E14o-fresh-review",
+      "title": "E14o — fresh review",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model gpt-5.6-sol-xhigh --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P14.21'\n```"
+    },
+    {
+      "id": "P15",
+      "title": "P15",
+      "text": "```bash"
+    },
+    {
+      "id": "E15a-grant-G-API-P15",
+      "title": "E15a — grant G-API-P15 требуется",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P15.1'"
+    },
+    {
+      "id": "E15b",
+      "title": "E15b",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model composer-2.5 --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P15.2-P15.6'"
+    },
+    {
+      "id": "E15c-grant-G-API-P15",
+      "title": "E15c — grant G-API-P15 требуется",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P15.7-P15.8'"
+    },
+    {
+      "id": "E15d",
+      "title": "E15d",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model composer-2.5 --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P15.9'"
+    },
+    {
+      "id": "E15e-grant-G-API-P15",
+      "title": "E15e — grant G-API-P15 требуется",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P15.10'"
+    },
+    {
+      "id": "E15f-grant-G-PKG-API-G-PKG-AUTH",
+      "title": "E15f — grant G-PKG-API, G-PKG-AUTH требуется",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P15.11-P15.12'"
+    },
+    {
+      "id": "E15g",
+      "title": "E15g",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model cursor-grok-4.6-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P15.13'"
+    },
+    {
+      "id": "E15h-fresh-review",
+      "title": "E15h — fresh review",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P15.14'\n```"
+    },
+    {
+      "id": "P16",
+      "title": "P16",
+      "text": "```bash"
+    },
+    {
+      "id": "E16a",
+      "title": "E16a",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model composer-2.5 --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P16.1-P16.3'"
+    },
+    {
+      "id": "E16b",
+      "title": "E16b",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model cursor-grok-4.6-high --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P16.4-P16.6'"
+    },
+    {
+      "id": "E16c",
+      "title": "E16c",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model composer-2.5 --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P16.7-P16.8'"
+    },
+    {
+      "id": "E16d",
+      "title": "E16d",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model composer-2.5 --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P16.9'"
+    },
+    {
+      "id": "E16e",
+      "title": "E16e",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P16.10'"
+    },
+    {
+      "id": "E16f",
+      "title": "E16f",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model composer-2.5 --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P16.11'"
+    },
+    {
+      "id": "E16g",
+      "title": "E16g",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model cursor-grok-4.6-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P16.12'"
+    },
+    {
+      "id": "E16h-fresh-review",
+      "title": "E16h — fresh review",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P16.13'\n```"
+    },
+    {
+      "id": "P17",
+      "title": "P17",
+      "text": "```bash"
+    },
+    {
+      "id": "E17a",
+      "title": "E17a",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model gpt-5.6-sol-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P17.1'"
+    },
+    {
+      "id": "E17b",
+      "title": "E17b",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P17.2-P17.5'"
+    },
+    {
+      "id": "E17c",
+      "title": "E17c",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P17.6-P17.7'"
+    },
+    {
+      "id": "E17d",
+      "title": "E17d",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model cursor-grok-4.6-high --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P17.8'"
+    },
+    {
+      "id": "E17e",
+      "title": "E17e",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P17.9-P17.10'"
+    },
+    {
+      "id": "E17f-fresh-review",
+      "title": "E17f — fresh review",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model gpt-5.6-sol-max --force --sandbox disabled --trust --approve-mcps 'task:plan-exec 2026.09.19-№1-COREX-PLATFORM-HARDENING P17.11'"
+    },
+    {
+      "id": "E17g-grant-G-RELEASE",
+      "title": "E17g — grant G-RELEASE требуется",
+      "text": "agent --workspace /home/vostrikov/projects/packages/corex --model gpt-5.6-sol-max --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.19-№1-COREX-PLATFORM-HARDENING P17.12'\n```"
+    },
+    {
+      "id": "section",
+      "title": "Закрытие плана",
+      "text": "После терминального P17.12 и сверки release receipt:\n\n```bash\nagent --workspace /home/vostrikov/projects/packages/corex --model grok-4.7-high --force --sandbox disabled --trust --approve-mcps 'task:plan-close archive 2026.09.19-№1-COREX-PLATFORM-HARDENING'\n```"
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "execution-commands.md",
+    "sha256": "f162545e6b2fd467730d6e996d09df298eaeb8178aba4deea0eb99e6c68b0b07"
+  }
+}

@@ -1,0 +1,307 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P11.7",
+  "title": "Versioned notification digest wakeups",
+  "status": "done",
+  "summary": "Перевести notification digest bridge на versioned wakeup definition и\nдоказать exact-version/legacy behavior без изменения digest semantics.",
+  "why": "`@plan/knowledge/research-P11-design.json` §11.2; D59. Notifications — второй реальный\nwakeup producer/handler; без него contract suite доказывает только\ntasks-workflow case.",
+  "scope": {
+    "include": [
+      "Structured handler declaration `notification-digest/1`; stamped scheduling;\nadapter compatibility; explicit bounded legacy fixture; mismatch/no-invocation tests."
+    ],
+    "exclude": [
+      "Digest selection/delivery policy; notification DDL; channel drivers; generic\nwakeup mechanics; enabling legacy admission by default in production."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/phases/P11/P11.5.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "packages/notifications/src/NotificationsServiceProvider.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/notifications/src/Digest/Internal/SqlDigestBuilder.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/notifications/src/Digest/Internal/DigestWakeupAdapter.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P11/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P11-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D59.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/notifications/README.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/notifications/tests/Digest/WakeupBridgeTest.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/notifications/src/NotificationsServiceProvider.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/notifications/src/Digest/Internal/SqlDigestBuilder.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/notifications/src/Digest/Internal/DigestWakeupAdapter.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/notifications/config/corex-notifications.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/notifications/tests/Digest/WakeupBridgeTest.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/notifications/tests/Pg/DigestConcurrencyTest.php",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Canonical kind remains `notification.digest.v1`; implementation version\nis `notification-digest/1`. New rows are always stamped. Legacy admission is test/config explicit,\nbounded to this definition and false by default. Version mismatch/missing stamp never reaches the\nadapter; existing digest idempotency/concurrency semantics stay unchanged."
+  ],
+  "guidance": "Reuse P11.5 config shape; do not add a notifications-side registry or duplicate\nstamp serializer. Assert the adapter receives the same unwrapped payload DTO as before.",
+  "validation": [
+    {
+      "id": "V1",
+      "procedure": "canonical declaration and stamp",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "exact match unwrapped DTO",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "default-denied legacy",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "explicit legacy bridge",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "version mismatch no invocation",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "PG digest concurrency",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "composer --working-dir=packages/notifications lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "composer --working-dir=packages/notifications analyse",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "procedure": "composer --working-dir=packages/notifications test",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "procedure": "composer --working-dir=packages/notifications test:pg",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Stamped digest scheduling, versioned handler declaration and compatibility/mismatch\nproof for the second wakeup consumer."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-24T20:06:15Z",
+    "finished_at": "2026-09-24T20:06:15Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-run/cursor-grok-4.6/high",
+      "effort": "high"
+    },
+    "notes": "P11.7 GREEN: notification-digest/1 stamp, default-denied legacy, explicit opt-in, mismatch quarantine. pest 19/73, pg 2/2, phpstan 0, pint ok.\nwrite-site: pre_mutation: allow · pre_final: allow",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-09-24T20:06:15Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-24T20:06:15Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-24T20:06:15Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-24T20:06:15Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-24T20:06:15Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-24T20:06:15Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-24T20:06:15Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-24T20:06:15Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-09-24T20:06:15Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-09-24T20:06:15Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-24T20:06:15Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Перевести notification digest bridge на versioned wakeup definition и\nдоказать exact-version/legacy behavior без изменения digest semantics."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`@plan/knowledge/research-P11-design.json` §11.2; D59. Notifications — второй реальный\nwakeup producer/handler; без него contract suite доказывает только\ntasks-workflow case."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Structured handler declaration `notification-digest/1`; stamped scheduling;\nadapter compatibility; explicit bounded legacy fixture; mismatch/no-invocation tests."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Digest selection/delivery policy; notification DDL; channel drivers; generic\nwakeup mechanics; enabling legacy admission by default in production."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/phases/P11/P11.5.json`;\n`packages/notifications/src/NotificationsServiceProvider.php`;\n`packages/notifications/src/Internal/SqlDigestBuilder.php`;\n`packages/notifications/src/Internal/Digest/DigestWakeupAdapter.php`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/notifications/src/NotificationsServiceProvider.php`;\n`packages/notifications/src/Internal/SqlDigestBuilder.php`;\n`packages/notifications/src/Internal/Digest/DigestWakeupAdapter.php`;\n`packages/notifications/config/corex-notifications.php`;\n`packages/notifications/tests/Digest/WakeupBridgeTest.php`;\n`packages/notifications/tests/Pg/DigestConcurrencyTest.php`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P11/phase.json`; 2) `@plan/knowledge/research-P11-design.json` §11.2;\n3) `@plan/decisions/D59.json`;\n4) `packages/notifications/README.md`;\n5) `packages/notifications/src/NotificationsServiceProvider.php`;\n6) `packages/notifications/src/Internal/SqlDigestBuilder.php`;\n7) `packages/notifications/src/Internal/Digest/DigestWakeupAdapter.php`;\n8) `packages/notifications/tests/Digest/WakeupBridgeTest.php`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Canonical kind remains `notification.digest.v1`; implementation version\nis `notification-digest/1`. New rows are always stamped. Legacy admission is test/config explicit,\nbounded to this definition and false by default. Version mismatch/missing stamp never reaches the\nadapter; existing digest idempotency/concurrency semantics stay unchanged."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Reuse P11.5 config shape; do not add a notifications-side registry or duplicate\nstamp serializer. Assert the adapter receives the same unwrapped payload DTO as before."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Bridge tests cover canonical declaration/stamp, exact match, default-denied legacy,\nexplicit legacy bridge and version mismatch; PG digest concurrency remains green and proves no\nduplicate run; notifications lint/analyse/test and isolated PG lane."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Stamped digest scheduling, versioned handler declaration and compatibility/mismatch\nproof for the second wakeup consumer."
+    }
+  ]
+}

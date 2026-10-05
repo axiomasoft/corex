@@ -1,0 +1,328 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P5.4",
+  "title": "DDL `sys_outbox_messages` и `sys_inbox_messages`, блок `corex.messaging`, владение таблицами",
+  "status": "done",
+  "summary": "Создать две тенантные таблицы с частичными индексами горячего пути, объявить\nвесь блок конфигурации `corex.messaging` и девять аксессоров к нему, внести обе таблицы в\nреестр владения.",
+  "why": "N05: outbox и inbox отсутствуют полностью. `RAG:✅` P5-Q7: при физической базе на\nаккаунт таблицы обязаны жить в тенантной базе — центральное размещение возвращает окно\nдвойной записи, ради закрытия которого outbox и вводится. `RAG:✅` P5-Q1: индекс горячего\nпути обязан покрывать только захватываемые строки, иначе он растёт вместе с удержанной\nисторией; `payload` в ключевой индекс не кладётся. D27: размещение в тенантной схеме\nсовпадает с существующей конвенцией дерева — `CoreServiceProvider::boot()` объявляет весь\nнабор `sys_*` как tenant-schema DDL. Это единственный item фазы, создающий DDL, поэтому\nowner-gate `G-DDL` объявлен его полем `Authority` и обязан быть выдан до исполнения\n(стадия 3, D14); остальные одиннадцать items фазы от него не зависят.",
+  "scope": {
+    "include": [
+      "две миграции по §4.3 с четырьмя частичными индексами; две записи в\nсекцию `tables` и новая секция `messaging` в `config/corex.php` по §4.4; девять аксессоров\nв `Support/Config.php` по §4.4; две строки в `docs/architecture/table-ownership.md` по\n§4.5 с явной отметкой «вне `DB_SCHEMA.md` FROZEN v1.0»; четыре проверки схемы §4.6;\nстрока в `CHANGELOG.md`."
+    ],
+    "exclude": [
+      "любой PHP-код, читающий эти таблицы (P5.5–P5.10); колонки\n`ordering_key` и `sequence_no` — их отсутствие есть решение D28, а не упущение; метод\n`down()` — ни одна существующая миграция ядра его не имеет (§4.3(5)); enum PostgreSQL для\nстатуса (§4.3(3)); изменение любой существующей миграции и любой таблицы `DB_SCHEMA.md`\nFROZEN v1.0; регистрация команд (P5.7, P5.9, P5.10); типизированные Options вместо\nстатического аксессора — это P7 (§4.4)."
+    ]
+  },
+  "depends_on": [
+    "P2.3"
+  ],
+  "decisions": [
+    "D27",
+    "D28",
+    "D29"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "docs/architecture/table-ownership.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P5-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P5-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/findings-audit-verdicts.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P5/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D27.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D28.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D29.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/wakeup/database/migrations/2026_09_15_000001_create_sys_wakeup_requests_table.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/CoreServiceProvider.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/config/corex.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Support/Config.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/tests/Views/SavedViewPgSchemaTest.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/core/database/migrations/pg/2026_09_20_100000_create_sys_outbox_messages_table.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/database/migrations/pg/2026_09_20_100001_create_sys_inbox_messages_table.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/config/corex.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/src/Support/Config.php",
+      "change": "any"
+    },
+    {
+      "path": "docs/architecture/table-ownership.md",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/tests/Pg/MessagingSchemaTest.php",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P5-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "DDL §4.3 переносится дословно, включая имена индексов. Четыре\nчастичных индекса создаются **сырым SQL** через `Schema::getConnection()->statement()`:\nLaravel Schema Builder не выражает `WHERE` у индекса, а индекс без предиката создастся\nмолча и будет выглядеть рабочим — поэтому тест §4.6(3) проверяет наличие `WHERE` в\n`pg_indexes.indexdef`, а не просто существование индекса. Имена файлов миграций —\nбуквально те, что названы в `Files`: они пинятся спекой, чтобы порядок относительно\nсуществующих `2026_09_15_*` был детерминирован. `down()` не пишется. Колонки\n`ordering_key`/`sequence_no` не добавляются ни в каком виде, включая «nullable на будущее»\n(D28). Блок `messaging` в `config/corex.php` объявляется **целиком за один раз**, со всеми\nсемью ключами и комментарием §4.4: последующие items эту конфигурацию только читают, и\nвторой item, дописывающий сюда ключ, означал бы, что владение блоком размыто.\n`inbox_retention` объявляется со значением `null` и комментарием, объясняющим почему\n(D29). Записи в `table-ownership.md` следуют форме существующего реестра P2.3 и обязаны\nсодержать отметку «вне FROZEN v1.0»: без неё следующий читатель попытается сверить их с\n`DB_SCHEMA.md` и решит, что контракт нарушен."
+  ],
+  "guidance": "Готовые обе миграции — `@plan/knowledge/research-P5-design.json` §4.3; готовый блок\nконфигурации и девять аксессоров — §4.4; форма записей владения — §4.5; состав теста\nсхемы — §4.6, четыре проверки. Пять решений DDL, которые нельзя потерять, перечислены в\n§4.3 сразу после кода — каждое обязано быть прочитано перед правкой, а не после.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer test:pg",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "composer test",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "composer analyse",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "composer lint:check",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "rg -n 'ordering_key|sequence_no' packages/core/database/migrations",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "packages/core composer test:pg MessagingSchema 4 tests",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "packages/core composer test 66 sqlite lane",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "packages/core composer analyse+lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "procedure": "rg ordering_key sequence_no migrations empty",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "procedure": "table-ownership.md + D110 G-DDL",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V11",
+      "procedure": "pg_indexes WHERE partial indexes",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "две миграции в тенантной схеме с четырьмя частичными индексами; полный\nблок конфигурации `corex.messaging` с девятью аксессорами; две записи владения таблицами;\npg-тест схемы из четырёх проверок; строка `CHANGELOG.md`; блок receipt'а со снимком схемы\nобеих таблиц и отметкой о гейте."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "required",
+    "status": "complete"
+  },
+  "result": {
+    "started_at": "2026-09-21T16:00:00Z",
+    "finished_at": "2026-09-21T16:08:00Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/cursor-composer-2.5/high",
+      "effort": "high"
+    },
+    "notes": "P5.4 GREEN: outbox/inbox DDL partial indexes, corex.messaging+9 accessors, ownership, MessagingSchemaTest §4.6, D110 G-DDL, receipt §P5.4",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-21T16:08:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-21T16:08:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-21T16:08:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-09-21T16:08:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-09-21T16:08:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V11",
+        "exit": 0,
+        "at": "2026-09-21T16:08:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-21T16:08:00Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Создать две тенантные таблицы с частичными индексами горячего пути, объявить\nвесь блок конфигурации `corex.messaging` и девять аксессоров к нему, внести обе таблицы в\nреестр владения."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "N05: outbox и inbox отсутствуют полностью. `RAG:✅` P5-Q7: при физической базе на\nаккаунт таблицы обязаны жить в тенантной базе — центральное размещение возвращает окно\nдвойной записи, ради закрытия которого outbox и вводится. `RAG:✅` P5-Q1: индекс горячего\nпути обязан покрывать только захватываемые строки, иначе он растёт вместе с удержанной\nисторией; `payload` в ключевой индекс не кладётся. D27: размещение в тенантной схеме\nсовпадает с существующей конвенцией дерева — `CoreServiceProvider::boot()` объявляет весь\nнабор `sys_*` как tenant-schema DDL. Это единственный item фазы, создающий DDL, поэтому\nowner-gate `G-DDL` объявлен его полем `Authority` и обязан быть выдан до исполнения\n(стадия 3, D14); остальные одиннадцать items фазы от него не зависят."
+    },
+    {
+      "id": "Authority",
+      "title": "Authority",
+      "text": "[OWNER-GATE:G-DDL] branch=`main`; scope=`packages/core/database/migrations/pg`"
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "две миграции по §4.3 с четырьмя частичными индексами; две записи в\nсекцию `tables` и новая секция `messaging` в `config/corex.php` по §4.4; девять аксессоров\nв `Support/Config.php` по §4.4; две строки в `docs/architecture/table-ownership.md` по\n§4.5 с явной отметкой «вне `DB_SCHEMA.md` FROZEN v1.0»; четыре проверки схемы §4.6;\nстрока в `CHANGELOG.md`."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "любой PHP-код, читающий эти таблицы (P5.5–P5.10); колонки\n`ordering_key` и `sequence_no` — их отсутствие есть решение D28, а не упущение; метод\n`down()` — ни одна существующая миграция ядра его не имеет (§4.3(5)); enum PostgreSQL для\nстатуса (§4.3(3)); изменение любой существующей миграции и любой таблицы `DB_SCHEMA.md`\nFROZEN v1.0; регистрация команд (P5.7, P5.9, P5.10); типизированные Options вместо\nстатического аксессора — это P7 (§4.4)."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "результат P2.3 (`docs/architecture/table-ownership.md` как существующий\nреестр); `@plan/knowledge/research-P5-design.json` §0, §4; `@plan/knowledge/research-P5-design-rag.json` §1 (P5-Q1, P5-Q7);\n`@plan/knowledge/findings-audit-verdicts.json` N05, N10; решения D27, D28, D29."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/core/database/migrations/pg/2026_09_20_100000_create_sys_outbox_messages_table.php`; `packages/core/database/migrations/pg/2026_09_20_100001_create_sys_inbox_messages_table.php`; `packages/core/config/corex.php`; `packages/core/src/Support/Config.php`; `docs/architecture/table-ownership.md`; `packages/core/tests/Pg/MessagingSchemaTest.php`; `CHANGELOG.md`; `@plan/knowledge/findings-P5-receipts.json`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P5/phase.json`; 2) `@plan/knowledge/research-P5-design.json` §0, §4; 3) `@plan/knowledge/research-P5-design-rag.json` §1 (P5-Q1, P5-Q7); 4) `@plan/decisions/D27.json`; 5) `@plan/decisions/D28.json`; 6) `@plan/decisions/D29.json`; 7) `packages/wakeup/database/migrations/2026_09_15_000001_create_sys_wakeup_requests_table.php` (образец DDL со статусом, lease и attempts); 8) `packages/core/src/CoreServiceProvider.php` (комментарий `boot()` про tenant-schema DDL и теги публикации); 9) `packages/core/config/corex.php`; 10) `packages/core/src/Support/Config.php` (аксессоры `pubsub*` как образец); 11) `packages/core/tests/Views/SavedViewPgSchemaTest.php` (образец pg-теста схемы); 12) `docs/architecture/table-ownership.md`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "DDL §4.3 переносится дословно, включая имена индексов. Четыре\nчастичных индекса создаются **сырым SQL** через `Schema::getConnection()->statement()`:\nLaravel Schema Builder не выражает `WHERE` у индекса, а индекс без предиката создастся\nмолча и будет выглядеть рабочим — поэтому тест §4.6(3) проверяет наличие `WHERE` в\n`pg_indexes.indexdef`, а не просто существование индекса. Имена файлов миграций —\nбуквально те, что названы в `Files`: они пинятся спекой, чтобы порядок относительно\nсуществующих `2026_09_15_*` был детерминирован. `down()` не пишется. Колонки\n`ordering_key`/`sequence_no` не добавляются ни в каком виде, включая «nullable на будущее»\n(D28). Блок `messaging` в `config/corex.php` объявляется **целиком за один раз**, со всеми\nсемью ключами и комментарием §4.4: последующие items эту конфигурацию только читают, и\nвторой item, дописывающий сюда ключ, означал бы, что владение блоком размыто.\n`inbox_retention` объявляется со значением `null` и комментарием, объясняющим почему\n(D29). Записи в `table-ownership.md` следуют форме существующего реестра P2.3 и обязаны\nсодержать отметку «вне FROZEN v1.0»: без неё следующий читатель попытается сверить их с\n`DB_SCHEMA.md` и решит, что контракт нарушен."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Готовые обе миграции — `@plan/knowledge/research-P5-design.json` §4.3; готовый блок\nконфигурации и девять аксессоров — §4.4; форма записей владения — §4.5; состав теста\nсхемы — §4.6, четыре проверки. Пять решений DDL, которые нельзя потерять, перечислены в\n§4.3 сразу после кода — каждое обязано быть прочитано перед правкой, а не после."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "`composer test:pg` пакета `core` зелёный, все четыре проверки §4.6\nпокрыты — в частности, `pg_indexes.indexdef` каждого из четырёх индексов содержит `WHERE`.\n`composer test` пакета `core` зелёный (sqlite-лейн не деградировал: миграции PG-only и не\nзагружаются). `composer analyse` зелёный. `composer lint:check` зелёный.\n`rg -n 'ordering_key|sequence_no' packages/core/database/migrations` пуст. Обе таблицы\nприсутствуют в `docs/architecture/table-ownership.md` с владельцем `corex/core` и отметкой\n«вне FROZEN v1.0». Receipt содержит вывод всех команд, `\\d+ sys_outbox_messages` и\n`\\d+ sys_inbox_messages` из тестовой БД и запись о выданном owner-gate `G-DDL`."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "две миграции в тенантной схеме с четырьмя частичными индексами; полный\nблок конфигурации `corex.messaging` с девятью аксессорами; две записи владения таблицами;\npg-тест схемы из четырёх проверок; строка `CHANGELOG.md`; блок receipt'а со снимком схемы\nобеих таблиц и отметкой о гейте."
+    }
+  ]
+}

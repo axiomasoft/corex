@@ -1,0 +1,17 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P07-grok-rereview-triage",
+  "title": "P07 independent re-review triage",
+  "sections": [
+    {
+      "id": "P07-independent-re-review-triage",
+      "title": "P07 independent re-review triage",
+      "text": "Raw report.md/followup-report.md/finalcheck-report.md are preserved exactly (including reviewer preambles). They are technical review, not formal Task audit.\n\n| Review | Finding | Resolution |\n|:--|:--|:--|\n| Broad D100/D101 | Original findings 1–4, 6–7 | Independently closed; G2 finding5/D99 retained 19 |\n| Broad | Major module-layout closed enum; Major status owner identity; Minor nullable session context; Minor cleanup cause/log preservation | D102, 49 current contract checks +5 actual layout gate checks; followup independently confirms all four behaviors closed |\n| Followup | Major missing exact stable BC admission carrier | D103 finite execution carrier, actual accepted base/decision hashes/real future Roave only;8 actual checker fixture checks; finalcheck recheck |\n| Followup | Minor P07.6 missing enum/constructor cross-check | D103 Scope/Validation explicitly updated; finalcheck recheck |\n| Followup | Proof does not exercise outer restoration | Confirmed coverage gap repaired: callback-and-cleanup-outer reaches B callback from A then previous-account cleanup;49 current checks |\n| Followup | Claimed ArgumentCountError from extra QueueTenantContext argument | Not reproduced on installed PHP8.4; actual counterexample constructs with5/declares4/no error. Surplus logger removed anyway;27/49 current proofs rerun and SHA-bound. Do not treat raw assertion as verified defect |\n\n143 main checks are author-executed; external Grok reviews read sources/results and do not independently rerun them. Limits: full repository public transfer/import, provider boot, real PG/concurrency/commit uncertainty/cache daemons/resident HTTP still need item execution tests. Original historical TOML model key did not set500k; ignored attempt is cancelled/incomplete, corrected native sessions use quoted table with supported configured500000 and no warnings."
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P07-grok-rereview/triage.md",
+    "sha256": "6d585e071846cc3e33f791a14280879aefff1dd227811a483c4be13c94971376"
+  }
+}

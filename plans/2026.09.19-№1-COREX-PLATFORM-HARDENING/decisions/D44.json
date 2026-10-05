@@ -1,0 +1,49 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D44",
+  "title": "registrar'ы живут в `Laravel/`, P9 их не рассыпает по доменам",
+  "date": "2026-09-19",
+  "status": "accepted",
+  "decision": "1. Новые классы tenancy: `CoreX\\Tenancy\\Laravel\\*Registrar` в\n   `packages/tenancy/src/Laravel/`. Каталог создаётся в P8, до дизайна P9.\n2. Новые классы modules: `CoreX\\Modules\\Laravel\\*Registrar` в\n   `packages/modules/src/Laravel/`.\n3. P9 **потребляет** `tenancy/src/Laravel/` как composition-root слой и\n   не раскладывает registrar'ы по DomainTrust/Identity/Membership.\n   Перенос registrar'а в доменный каталог — дефект P9.\n4. FQCN registrar'ов — новые типы; публичные FQCN существующих классов\n   не меняются. Переименования — P15.",
+  "rationale": "Ждать P9, чтобы выбрать папку, оставило бы P8 без места записи. Класть\nregistrar рядом с доменным кодом смешало бы сборку контейнера с моделью\nи заставило бы P9 двигать те же файлы второй раз. Альтернатива\n`Internal/Registrars/` отклонена: P9 всё равно заводит `Laravel/` под\nтот же смысл.",
+  "applies_to": [
+    "P8",
+    "P8.2",
+    "P8.3",
+    "P8.4",
+    "P8.5"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/cursor-grok-4.6/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D44\ndate: 2026-09-19\nstatus: accepted\nitem: P8\nitems: [P8, P8.2, P8.3, P8.4, P8.5]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D44-registrar-Laravel-P9",
+      "title": "D44 — registrar'ы живут в `Laravel/`, P9 их не рассыпает по доменам",
+      "text": "**Actor:** plan-designer/cursor-grok-4.6/high\n**Evidence:** RAG:— скелет P8 уже называет `packages/tenancy/src/Laravel/**`;\nскелет P9 планирует bounded context `Laravel` для bootstrappers, resolvers,\nmiddleware и команд. RAG:✅ P8-Q1: composition helper — внутренний, не\nпубличный entry point."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "1. Новые классы tenancy: `CoreX\\Tenancy\\Laravel\\*Registrar` в\n   `packages/tenancy/src/Laravel/`. Каталог создаётся в P8, до дизайна P9.\n2. Новые классы modules: `CoreX\\Modules\\Laravel\\*Registrar` в\n   `packages/modules/src/Laravel/`.\n3. P9 **потребляет** `tenancy/src/Laravel/` как composition-root слой и\n   не раскладывает registrar'ы по DomainTrust/Identity/Membership.\n   Перенос registrar'а в доменный каталог — дефект P9.\n4. FQCN registrar'ов — новые типы; публичные FQCN существующих классов\n   не меняются. Переименования — P15."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Ждать P9, чтобы выбрать папку, оставило бы P8 без места записи. Класть\nregistrar рядом с доменным кодом смешало бы сборку контейнера с моделью\nи заставило бы P9 двигать те же файлы второй раз. Альтернатива\n`Internal/Registrars/` отклонена: P9 всё равно заводит `Laravel/` под\nтот же смысл."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P8.2–P8.4 создают `packages/tenancy/src/Laravel/`. P8.5 создаёт\n`packages/modules/src/Laravel/`. Спека P9 обязана назвать этот каталог\nво входных чтениях и в Scope Excluded для доменных переносов."
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D67",
+  "title": "API profile is immutable code projection; capability stays live",
+  "date": "2026-09-20",
+  "status": "accepted",
+  "decision": "- `ApiProfile` is an immutable typed projection of the compiled module snapshot and\n  typed API options; it has no register/replace/freeze API of its own.\n- Profile fingerprint excludes tenant activation, authorization and host paths.\n- Effective capability is resolved live for authenticated context and never exposes\n  driver, connection, class, table or secret details.\n- Version selection is an HTTP/tool projection; handlers receive one resolved\n  operation descriptor and contain no version branches.",
+  "rationale": "Code compatibility and tenant availability change on different clocks. Hashing live\nactivation into a code profile would manufacture per-tenant registry authority.",
+  "applies_to": [
+    "P13",
+    "P13.3",
+    "P13.4",
+    "P13.10"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/codex-gpt-5.6-sol/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D67\ndate: 2026-09-20\nstatus: accepted\nitem: P13\nitems: [P13, P13.3, P13.4, P13.10]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D67-API-profile-is-immutable-code-projection-capability-stays-live",
+      "title": "D67 — API profile is immutable code projection; capability stays live",
+      "text": "**Actor:** plan-designer/codex-gpt-5.6-sol/high\n**Evidence:** RAG:— D58 separates deployment code fingerprint from tenant activation.\nRAG:✅ current self-hosted API research supports stable major versions plus live\ncapability negotiation rather than inferring installation state from a version."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "- `ApiProfile` is an immutable typed projection of the compiled module snapshot and\n  typed API options; it has no register/replace/freeze API of its own.\n- Profile fingerprint excludes tenant activation, authorization and host paths.\n- Effective capability is resolved live for authenticated context and never exposes\n  driver, connection, class, table or secret details.\n- Version selection is an HTTP/tool projection; handlers receive one resolved\n  operation descriptor and contain no version branches."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Code compatibility and tenant availability change on different clocks. Hashing live\nactivation into a code profile would manufacture per-tenant registry authority."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P13.3 owns profile/options/capability/deprecation. Snapshots describe the installed\ncode profile, while `/capabilities` describes the effective caller view."
+    }
+  ]
+}

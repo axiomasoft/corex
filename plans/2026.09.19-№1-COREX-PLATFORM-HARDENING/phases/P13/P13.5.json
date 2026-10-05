@@ -1,0 +1,293 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P13.5",
+  "title": "Tenant idempotency store and schema",
+  "status": "done",
+  "summary": "Add the durable tenant-local store and lifecycle primitives required to admit\nmutation execution safely under one key.",
+  "why": "`@plan/knowledge/research-P13-design.json` §5.2; D104 supersedes D69 for effect/outcome atomicity.\nMemory/cache state cannot preserve replay\nacross workers or align naturally with physical DB-per-account isolation.",
+  "scope": {
+    "include": [
+      "Store contract and attempt/scope DTOs; tenant migration; SQL begin/\ncomplete/fail/takeover/prune; HMAC key digest; contract-hash binding; table ownership;\nSQLite behavioral and PostgreSQL concurrency tests."
+    ],
+    "exclude": [
+      "HTTP header parsing; invocation decorator; cross-account central index;\ndirect external/other-connection effects without same-transaction outbox intent or explicit\nreconciliation contract; permanent deduplication."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D104"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/phases/P4/P4.8.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P9/P9.2.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P13/P13.3.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/decisions/D104.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P12/P12.1.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P2/P2.3.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P13/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P13-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-perplexity-2026-09-19.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P5-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/wakeup/src/Internal/SqlWakeupScheduler.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/api/src/Internal/JsonCanonical.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/api/src/ApiServiceProvider.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/api/phpunit.xml",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/api/src/Contracts/IdempotencyStore.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/src/Data/IdempotencyScope.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/src/Data/IdempotencyAttempt.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/src/Internal/SqlIdempotencyStore.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/database/migrations/create_sys_api_idempotency_table.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/src/ApiServiceProvider.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/tests/Feature/IdempotencyStoreTest.php",
+      "change": "any"
+    },
+    {
+      "path": "docs/architecture/table-ownership.md",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Exact columns/unique key/state transitions from §5.2. Success outcome and handler mutation share one active-tenant connection and transaction; external effects use outbox. Store only key\nHMAC, never raw key. Every update predicates on lease token/state/fingerprint; a stale owner cannot\noverwrite a takeover. Terminal outcome and contract hash are canonical bytes. Prune terminal expired\nonly. Migration is published under explicit tenant tag, never auto-run or central."
+  ],
+  "guidance": "Follow P5 lease/fence and P4 clock patterns; use injected `ClockInterface` after\nP4/P12 dependency results. PostgreSQL unique/lease test uses two connections after isolation preflight.\nSQLite test proves state machine but is not concurrency evidence. An ambiguous commit outcome maps\nto `reconciliation_required`; lease expiry alone never admits a blind second effect. No new dependency.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "test:pg",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "G-DDL owner authority and tenant migration ownership",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "fresh/conflict/mismatch/live/stale/terminal/expired state matrix and rollback atomicity",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "two PostgreSQL connections admit one owner under the same key",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "API package lint, static analysis and full non-PG suite",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "explicit tenant migration publication and provider binding",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Tenant migration, durable store contract/implementation, concurrency/retention\nevidence and table-ownership record."
+  ],
+  "route": {
+    "class": "frontier",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-25T06:44:33Z",
+    "finished_at": "2026-09-25T07:01:52Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-run/codex-gpt-5.6-sol/high",
+      "effort": "high"
+    },
+    "notes": "P13.5 GREEN: tenant-local HMAC idempotency store, fenced leases, atomic outcomes, finite retention and explicit migration publication. SQLite/API/PostgreSQL validation passed.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-25T07:01:52Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-25T07:01:52Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-25T07:01:52Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-25T07:01:52Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-25T07:01:52Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-25T07:01:52Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Add the durable tenant-local store and lifecycle primitives required to admit\nmutation execution safely under one key."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`@plan/knowledge/research-P13-design.json` §5.2; D104 supersedes D69 for effect/outcome atomicity.\nMemory/cache state cannot preserve replay\nacross workers or align naturally with physical DB-per-account isolation."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Store contract and attempt/scope DTOs; tenant migration; SQL begin/\ncomplete/fail/takeover/prune; HMAC key digest; contract-hash binding; table ownership;\nSQLite behavioral and PostgreSQL concurrency tests."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "HTTP header parsing; invocation decorator; cross-account central index;\ndirect external/other-connection effects without same-transaction outbox intent or explicit\nreconciliation contract; permanent deduplication."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/phases/P4/P4.8.json`; `@plan/phases/P9/P9.2.json`; `@plan/phases/P13/P13.3.json`;\n`@plan/decisions/D104.json`;\n`@plan/phases/P12/P12.1.json`; `@plan/phases/P2/P2.3.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/api/src/Contracts/IdempotencyStore.php`;\n`packages/api/src/Data/IdempotencyScope.php`;\n`packages/api/src/Data/IdempotencyAttempt.php`;\n`packages/api/src/Internal/SqlIdempotencyStore.php`;\n`packages/api/database/migrations/create_sys_api_idempotency_table.php`;\n`packages/api/src/ApiServiceProvider.php`;\n`packages/api/tests/Feature/IdempotencyStoreTest.php`;\n`docs/architecture/table-ownership.md`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P13/phase.json`; 2) `@plan/knowledge/research-P13-design.json` §5;\n3) `@plan/decisions/D104.json`;\n4) `@plan/knowledge/research-perplexity-2026-09-19.json` Q3; 5) `@plan/phases/P4/P4.8.json`;\n6) `@plan/phases/P9/P9.2.json`; 7) `@plan/knowledge/research-P5-design.json` §4–§6;\n8) `packages/wakeup/src/Internal/SqlWakeupScheduler.php`;\n9) `packages/api/src/Internal/JsonCanonical.php`;\n10) `@plan/phases/P2/P2.3.json`;\n11) `packages/api/src/ApiServiceProvider.php`;\n12) `packages/api/phpunit.xml`."
+    },
+    {
+      "id": "Authority",
+      "title": "Authority",
+      "text": "[OWNER-GATE:G-DDL] branch=`main`; scope=`packages/api/database/migrations/create_sys_api_idempotency_table.php`; boundary=`owner-session`; effect=`local-source`; environment=`corex_test`"
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Exact columns/unique key/state transitions from §5.2. Success outcome and handler mutation share one active-tenant connection and transaction; external effects use outbox. Store only key\nHMAC, never raw key. Every update predicates on lease token/state/fingerprint; a stale owner cannot\noverwrite a takeover. Terminal outcome and contract hash are canonical bytes. Prune terminal expired\nonly. Migration is published under explicit tenant tag, never auto-run or central."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Follow P5 lease/fence and P4 clock patterns; use injected `ClockInterface` after\nP4/P12 dependency results. PostgreSQL unique/lease test uses two connections after isolation preflight.\nSQLite test proves state machine but is not concurrency evidence. An ambiguous commit outcome maps\nto `reconciliation_required`; lease expiry alone never admits a blind second effect. No new dependency."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "G-DDL evidence resolves before write. A crash after mutation but before terminal persistence rolls back both and retry commits exactly once. Fresh/same/different/live/stale/terminal/expired\nmatrix; two concurrent begin calls yield one owner; stale lease takeover fences prior token; wrong\nactive tenant connection fails; prune retains live rows. Rollback drops only new table. API lint/analyse/\ntest and isolated `test:pg` green; migration ownership recorded."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Tenant migration, durable store contract/implementation, concurrency/retention\nevidence and table-ownership record."
+    }
+  ]
+}

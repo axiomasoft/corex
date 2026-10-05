@@ -1,0 +1,47 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D49",
+  "title": "Согласование действующих гейтов с принятыми швами",
+  "date": "2026-09-28",
+  "status": "accepted",
+  "decision": "1. FieldCastRegistry классифицируется как boot-built catalogue; consumer Testing\n   namespaces Messaging/Search/Wakeup объявляются в public-api владельцев.\n   Новые разделы отчёта и компиляторы секций явно internal.\n2. Два новых места чтения effective config объявляются точными composition paths.\n   ConfigReportSection — Foundation; KernelConfigSection — composition.\n   Единственное ребро ImpersonationGuard → AuditLog разрешено по точному символу\n   и файлу для закрытого списка исключений write-guard (D32).\n3. Bindings остаются у Modules/Panel providers через именованные registrars;\n   provider-size ratchets не увеличиваются. Public-api exceptions для существующих\n   типов SPI добавляются только по конкретным composition files, до P02.3/P04.\n4. До физического переноса SavedViews разрешаются ровно четыре Internal-ребра\n   SavedViewsRegistrar panels → существующие реализации core. Пары file/symbol\n   закрыты; отсутствие старого target_file отключает исключение. Иные Internal\n   импорты остаются RED. P02.3 удаляет истёкшие internal_composition_edges.\n5. R-T1 разрешает consumer tests использовать только CoreX\\Testing\\Stubs;\n   чужие TestCase/harness по-прежнему запрещены в tests и production src.\n   Зависимые lifecycle-стабы копируются целиком; копия Widget для kernel tests\n   не содержит optional money cast. Исходные monorepo stubs сохранены, money-cast\n   поведение отдельно проверяет RegistryFieldCastsTest потребителя CRM.\n6. Перенесённые operation tests получают собственный StubOperationHandler;\n   новые tools unit tests используют Orchestra напрямую без зависимости на\n   tests/ другого будущего пакета. Общий introspection suite ядра сохраняется,\n   отдельная tools-регрессия проверяет identity, fingerprint и redaction через\n   публичный RegistryIntrospection. Это уточняет форму теста из D48.\n7. Три obsolete PHPStan entries извлечённой логики удаляются из modules baseline;\n   nullable provenance и лишний cast исправляются в реализациях секций.",
+  "rationale": "Полный стек воспроизвёл конкретные противоречия старых гейтов уже принятым\nграницам швов. Широкие namespace-исключения, повышение потолков и перенос\nPHPStan долга в новые пакеты не нужны. Отдельные отрицательные проверки\nсохраняют enforcement запретов вне точного разрешённого набора.",
+  "applies_to": [
+    "P02.1",
+    "P02.2",
+    "P02.3",
+    "P04"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "executor/codex/gpt-6-sol/high, routine author-choice по plan.md §2."
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D49\ndate: 2026-09-28\nstatus: accepted\nitem: P02.1\nitems: [P02.1, P02.2, P02.3, P04]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D49",
+      "title": "D49 — Согласование действующих гейтов с принятыми швами",
+      "text": "**Actor:** executor/codex/gpt-6-sol/high, routine author-choice по @plan/plan.json §2.\n**Evidence:** RAG:— `artifacts/P02.1-execution/`; старые гейты R-Z0/R-Z1/R-Z2,\nR-T1, R4/R4b, provider-size и extension-contract не учитывали D27/D28/D32/D35."
+    },
+    {
+      "id": "Solution",
+      "title": "Solution",
+      "text": "1. FieldCastRegistry классифицируется как boot-built catalogue; consumer Testing\n   namespaces Messaging/Search/Wakeup объявляются в public-api владельцев.\n   Новые разделы отчёта и компиляторы секций явно internal.\n2. Два новых места чтения effective config объявляются точными composition paths.\n   ConfigReportSection — Foundation; KernelConfigSection — composition.\n   Единственное ребро ImpersonationGuard → AuditLog разрешено по точному символу\n   и файлу для закрытого списка исключений write-guard (D32).\n3. Bindings остаются у Modules/Panel providers через именованные registrars;\n   provider-size ratchets не увеличиваются. Public-api exceptions для существующих\n   типов SPI добавляются только по конкретным composition files, до P02.3/P04.\n4. До физического переноса SavedViews разрешаются ровно четыре Internal-ребра\n   SavedViewsRegistrar panels → существующие реализации core. Пары file/symbol\n   закрыты; отсутствие старого target_file отключает исключение. Иные Internal\n   импорты остаются RED. P02.3 удаляет истёкшие internal_composition_edges.\n5. R-T1 разрешает consumer tests использовать только CoreX\\Testing\\Stubs;\n   чужие TestCase/harness по-прежнему запрещены в tests и production src.\n   Зависимые lifecycle-стабы копируются целиком; копия Widget для kernel tests\n   не содержит optional money cast. Исходные monorepo stubs сохранены, money-cast\n   поведение отдельно проверяет RegistryFieldCastsTest потребителя CRM.\n6. Перенесённые operation tests получают собственный StubOperationHandler;\n   новые tools unit tests используют Orchestra напрямую без зависимости на\n   tests/ другого будущего пакета. Общий introspection suite ядра сохраняется,\n   отдельная tools-регрессия проверяет identity, fingerprint и redaction через\n   публичный RegistryIntrospection. Это уточняет форму теста из D48.\n7. Три obsolete PHPStan entries извлечённой логики удаляются из modules baseline;\n   nullable provenance и лишний cast исправляются в реализациях секций."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "Полный стек воспроизвёл конкретные противоречия старых гейтов уже принятым\nграницам швов. Широкие namespace-исключения, повышение потолков и перенос\nPHPStan долга в новые пакеты не нужны. Отдельные отрицательные проверки\nсохраняют enforcement запретов вне точного разрешённого набора."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "Локальный ремонт остаётся в текущем attempt P02.1; исходные Validation повторяются.\nФизический перенос остаётся P02.3, полная symbol-классификация — P04.\nAcceptance и GREEN fingerprint исходного дизайна сохраняются; дополнительные\nдоказательства гейтов записываются в execution artifacts и Completion Notes.\n\n- Validation tooling: `golden-delta.py` uses explicit recursive Git glob paths for `packages/*/src/**/*.php`; the original pathspec returned zero changed sources. Allowed types still derive only from changed source declarations; routes/events/wire remain byte-identical. Root PHPStan config records are validated on load; three obsolete baseline entries are removed. CRM adds intl as a test dependency for the required money registration regression.\n\n- Standalone dependency analysis: copied kernel dev fixtures use the existing modules library via an explicit core require-dev edge; production require remains independent. The four existing module fixture unknown-class entries are rekeyed to CoreX\\Testing\\Stubs with unchanged budget, expiring on merged kernel autoload. New local fixtures use PSR-4 dev Support/Fixtures paths rather than declarations embedded in Pest files.\n- Pint excludes only `plans/*/artifacts/*/preimage/*`, immutable audit snapshots with historical PHP source bytes. Product source, tests, gates and active plan tooling remain linted; two active tooling scripts receive formatting only.\n\n- Dependency runner preserves exact manifest bytes around temporary Stancl repository staging (list-shaped repositories previously survived named `composer config --unset`). Modules explicitly declares Testbench Core for its new independent section test. No analyser ceilings increase."
+    }
+  ]
+}

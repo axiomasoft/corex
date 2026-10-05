@@ -1,0 +1,44 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D66",
+  "title": "P04: принятие GREEN finish владельцем без ещё одного design audit",
+  "date": "2026-09-29",
+  "status": "accepted",
+  "decision": "1. Для текущего P04 владелец принимает GREEN design finish P00–P04 и отменяет\n   обязательный повторный независимый design audit перед стартом. Это явное\n   исключение из D24 и D65 только для этого допуска; следующая команда — точная\n   строка 10 execution-sheet: `task:plan-run 2026.09.27-№1-COREX-KERNEL P04.1`.\n2. Принимается финальный fingerprint после согласования plan/roadmap/handoff по\n   этому решению, при GREEN plan-lint, supporting artifacts, execution-sheet,\n   digest/source freshness и готовности bundle P04.1. Fingerprint и результаты\n   сохраняются в `artifacts/P04-owner-acceptance/acceptance.json`.\n3. Task design gate умеет только `plan-audit/design/audit-green`, без отдельного\n   waiver enum. Через штатный journal writer сохраняется **принятие владельцем**\n   в этом совместимом носителе, actor `owner/design-acceptance/D66`, note явно\n   указывает waiver. Независимая проверка, reviewer или запуск plan-audit не\n   заявляются; это owner acceptance, а не доказательство независимого аудита.\n4. Прежние journal entries, finish и проверки неизменны. Проверки runtime,\n   item Validation, full independent reviews, маршруты P04.1–P04.4 и внешние\n   authority gates остаются обязательными. Runtime P04 не запускался этим изменением.",
+  "rationale": "Владелец явно снял процедурный блок после GREEN проверки finish. Его решение\nприоритетнее требований локального skill; ещё один audit не нужен для допуска.\nСовместимый GREEN carrier позволяет стандартному Task gate прочитать реальное\nпринятие владельцем без правки чужого пакета Task и без выдуманного reviewer proof.",
+  "applies_to": [
+    "P04"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "repository owner; запись designer/codex/gpt-6-sol/high."
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D66\ndate: 2026-09-29\nstatus: accepted\nitem: P04\nitems: [P04]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D66-P04-GREEN-finish-design-audit",
+      "title": "D66 — P04: принятие GREEN finish владельцем без ещё одного design audit",
+      "text": "**Actor:** repository owner; запись designer/codex/gpt-6-sol/high.\n**Evidence:** сообщение владельца после finish: «я сказал, забей на еще один аудит,\nесли green то подбей план, чтобы этого ограничения не было и могли стартоваать».\nПроверки finish: `artifacts/P04-design-finish/validation.json`; RAG:—."
+    },
+    {
+      "id": "Solution",
+      "title": "Solution",
+      "text": "1. Для текущего P04 владелец принимает GREEN design finish P00–P04 и отменяет\n   обязательный повторный независимый design audit перед стартом. Это явное\n   исключение из D24 и D65 только для этого допуска; следующая команда — точная\n   строка 10 execution-sheet: `task:plan-run 2026.09.27-№1-COREX-KERNEL P04.1`.\n2. Принимается финальный fingerprint после согласования plan/roadmap/handoff по\n   этому решению, при GREEN plan-lint, supporting artifacts, execution-sheet,\n   digest/source freshness и готовности bundle P04.1. Fingerprint и результаты\n   сохраняются в `artifacts/P04-owner-acceptance/acceptance.json`.\n3. Task design gate умеет только `plan-audit/design/audit-green`, без отдельного\n   waiver enum. Через штатный journal writer сохраняется **принятие владельцем**\n   в этом совместимом носителе, actor `owner/design-acceptance/D66`, note явно\n   указывает waiver. Независимая проверка, reviewer или запуск plan-audit не\n   заявляются; это owner acceptance, а не доказательство независимого аудита.\n4. Прежние journal entries, finish и проверки неизменны. Проверки runtime,\n   item Validation, full independent reviews, маршруты P04.1–P04.4 и внешние\n   authority gates остаются обязательными. Runtime P04 не запускался этим изменением."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "Владелец явно снял процедурный блок после GREEN проверки finish. Его решение\nприоритетнее требований локального skill; ещё один audit не нужен для допуска.\nСовместимый GREEN carrier позволяет стандартному Task gate прочитать реальное\nпринятие владельцем без правки чужого пакета Task и без выдуманного reviewer proof."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "Handoff указывает P04.1. Generated state/bundle/decision/status views и receipt\nсогласуются штатным tooling. Новая сессия читает D66 и acceptance, а не отменённую\nрекомендацию повторного аудита. При substantive изменении дизайна этот fingerprint\nстановится stale; текущая запись не разрешает любое будущее изменение."
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D70",
+  "title": "API cursor separates format, ordering and request scope",
+  "date": "2026-09-20",
+  "status": "accepted",
+  "decision": "- `api-cursor/1` is signed canonical payload with format version, ordering id,\n  direction, scalar values, scope hash, times and key id.\n- Field names/directions never come from the cursor; server ordering registry owns\n  them and requires a final unique tie-breaker.\n- Scope binds tenant, operation, major, filters and field selection. Invalid cursors\n  share one safe error; unknown ordering has a distinct migration error.\n- Cursor promises strict tuple continuation, not snapshot isolation.\n- Search cursor `v1` is not silently rewritten or made dependent on `corex/api`.",
+  "rationale": "Reusing search bytes would couple independent public contracts and break existing\ncursors. Copying field names from a client-controlled payload would create an\ninjection and compatibility boundary.",
+  "applies_to": [
+    "P13",
+    "P13.7",
+    "P13.10",
+    "P13.11"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/codex-gpt-5.6-sol/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D70\ndate: 2026-09-20\nstatus: accepted\nitem: P13\nitems: [P13, P13.7, P13.10, P13.11]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D70-API-cursor-separates-format-ordering-and-request-scope",
+      "title": "D70 — API cursor separates format, ordering and request scope",
+      "text": "**Actor:** plan-designer/codex-gpt-5.6-sol/high\n**Evidence:** RAG:✅ prior cursor research requires a unique tie-breaker, signature,\ntenant/filter binding and separate format/ordering versions. RAG:— search already\nowns a distinct encrypted `v1` durable format."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "- `api-cursor/1` is signed canonical payload with format version, ordering id,\n  direction, scalar values, scope hash, times and key id.\n- Field names/directions never come from the cursor; server ordering registry owns\n  them and requires a final unique tie-breaker.\n- Scope binds tenant, operation, major, filters and field selection. Invalid cursors\n  share one safe error; unknown ordering has a distinct migration error.\n- Cursor promises strict tuple continuation, not snapshot isolation.\n- Search cursor `v1` is not silently rewritten or made dependent on `corex/api`."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Reusing search bytes would couple independent public contracts and break existing\ncursors. Copying field names from a client-controlled payload would create an\ninjection and compatibility boundary."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P13.7 implements codec/registry/page helpers. Snapshots and compatibility gate pin\ncursor and ordering contracts."
+    }
+  ]
+}

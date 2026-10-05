@@ -1,0 +1,268 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P6.6",
+  "title": "Свод доказательств границ зон и неизменности потребителей",
+  "status": "done",
+  "summary": "Свести в `@plan/knowledge/findings-P6-receipts.json` повторный прогон всех посадок\nфазы, `package-graph-gate`, оба лейна `core` и `composer test:packages`, и\nзафиксировать названные долги §13.",
+  "why": "Гейт по определению может быть всегда-зелёным после того, как посадки\nP6.2/P6.3/P6.5 уже сняты в своих items. Отдельный item, как P4.11/P5.12,\nобязан уметь покраснеть и не имеет права «подправить тест». `RAG:—` фазовая\nприёмка требует доказать, что отсутствие смены FQCN оставило потребителей\nзелёными.",
+  "scope": {
+    "include": [
+      "повтор трёх посадок P6.2, посадки R-L3, посадки R-T1;\nкоманды `composer package-graph-gate`, `composer test`, `composer test:pg`\nпакета core, `composer test:packages`; запись долгов Clock/PubSub prune,\nN09/P16, DATA-003/P9, целевых FQCN P15; CHANGELOG не обязателен, если\nпродуктовых файлов нет — строка не пишется."
+    ],
+    "exclude": [
+      "любая правка `packages/` и `tests/Arch` кроме временных\nпосадок, которые снимаются в том же прогоне; ослабление allowlist'ов;\nинъекция Clock."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D32",
+    "D34"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/findings-P6-receipts.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/knowledge/research-P6-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P6/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P6/P6.2.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P6/P6.3.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P6/P6.5.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "scripts/anti-weakening-gate.sh",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "@plan/knowledge/findings-P6-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Посадки выполняются заново, не копируются текстом\nиз прошлых receipt'ов. Если любая посадка не краснеет — дефект гейта, чинится\nв P6.2/P6.3/P6.5 в том же attempt (не здесь). `test:packages` красный при\nпустом `git diff packages` — находка, адресуется владельцу пакета, тест не\nподгоняется. Files содержит только receipt: продуктовые правки этому item'у\nзапрещены. Никакой правки allowlist."
+  ],
+  "guidance": "Анти-подгонка — как P5.12. Список долгов к записи — §13\nплюс Clock/PubSub из §7. Форма receipt'а — `@plan/knowledge/findings-P5-receipts.json` после\nисполнения, до него — блоки предыдущих items этого файла.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer package-graph-gate",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "composer test",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "composer test:pg",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "composer test:packages",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "composer lint:check",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "cmd": "bash scripts/anti-weakening-gate.sh",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "five required plantings red and restored",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "composer package-graph-gate",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "procedure": "core sqlite and pg lanes",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "procedure": "composer test:packages",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V11",
+      "procedure": "composer lint:check and anti-weakening-gate",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V12",
+      "procedure": "item-local packages/tests diff empty",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "сводный блок receipt'а с выводами команд и перечнем долгов\nP7/P9/P15/P16."
+  ],
+  "route": {
+    "class": "frontier",
+    "effort": "medium"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-23T04:24:00Z",
+    "finished_at": "2026-09-23T04:32:21Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/gpt-6-sol/medium",
+      "effort": "medium"
+    },
+    "notes": "P6.6 GREEN: five required negative plantings red/restored; graph, core sqlite/pg, 20 package suites, root test/analyse/lint and anti-weakening green. Existing foreign packages/tests diff disclosed. write-site: pre_mutation: allow · pre_final: allow",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-23T04:32:21Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-23T04:32:21Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-09-23T04:32:21Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-09-23T04:32:21Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V11",
+        "exit": 0,
+        "at": "2026-09-23T04:32:21Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V12",
+        "exit": 0,
+        "at": "2026-09-23T04:32:21Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-23T04:32:21Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Свести в `@plan/knowledge/findings-P6-receipts.json` повторный прогон всех посадок\nфазы, `package-graph-gate`, оба лейна `core` и `composer test:packages`, и\nзафиксировать названные долги §13."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "Гейт по определению может быть всегда-зелёным после того, как посадки\nP6.2/P6.3/P6.5 уже сняты в своих items. Отдельный item, как P4.11/P5.12,\nобязан уметь покраснеть и не имеет права «подправить тест». `RAG:—` фазовая\nприёмка требует доказать, что отсутствие смены FQCN оставило потребителей\nзелёными."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "повтор трёх посадок P6.2, посадки R-L3, посадки R-T1;\nкоманды `composer package-graph-gate`, `composer test`, `composer test:pg`\nпакета core, `composer test:packages`; запись долгов Clock/PubSub prune,\nN09/P16, DATA-003/P9, целевых FQCN P15; CHANGELOG не обязателен, если\nпродуктовых файлов нет — строка не пишется."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "любая правка `packages/` и `tests/Arch` кроме временных\nпосадок, которые снимаются в том же прогоне; ослабление allowlist'ов;\nинъекция Clock."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/findings-P6-receipts.json`; `@plan/knowledge/research-P6-design.json` §6.3, §8, §13;\nD32–D34."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`@plan/knowledge/findings-P6-receipts.json`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P6/phase.json`; 2) `@plan/knowledge/research-P6-design.json` §0, §6.3, §8, §13; 3) `@plan/phases/P6/P6.2.json`; 4) `@plan/phases/P6/P6.3.json`; 5) `@plan/phases/P6/P6.5.json`; 6) `tests/Arch/CoreZoneTest.php`; 7) `tests/Arch/CoreLitmusTest.php`; 8) `tests/Arch/TestingAutoloadTest.php`; 9) `scripts/anti-weakening-gate.sh`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Посадки выполняются заново, не копируются текстом\nиз прошлых receipt'ов. Если любая посадка не краснеет — дефект гейта, чинится\nв P6.2/P6.3/P6.5 в том же attempt (не здесь). `test:packages` красный при\nпустом `git diff packages` — находка, адресуется владельцу пакета, тест не\nподгоняется. Files содержит только receipt: продуктовые правки этому item'у\nзапрещены. Никакой правки allowlist."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Анти-подгонка — как P5.12. Список долгов к записи — §13\nплюс Clock/PubSub из §7. Форма receipt'а — `@plan/knowledge/findings-P5-receipts.json` после\nисполнения, до него — блоки предыдущих items этого файла."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Пять посадок (3× R-Z, R-L3, R-T1) краснеют и снимаются.\n`composer package-graph-gate` OK. `composer test` и `composer test:pg` пакета\n`core` зелёные. `composer test:packages` зелёный. `composer lint:check` и\n`bash scripts/anti-weakening-gate.sh` зелёные. `git diff --stat -- 'packages/'\n'tests/'` пуст в конце item'а."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "сводный блок receipt'а с выводами команд и перечнем долгов\nP7/P9/P15/P16."
+    }
+  ]
+}

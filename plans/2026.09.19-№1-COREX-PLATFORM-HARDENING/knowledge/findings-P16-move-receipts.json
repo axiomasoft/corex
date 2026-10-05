@@ -1,0 +1,119 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "findings-P16-move-receipts",
+  "title": "P16 physical move receipts",
+  "sections": [
+    {
+      "id": "P16-physical-move-receipts",
+      "title": "P16 physical move receipts",
+      "text": ""
+    },
+    {
+      "id": "P16.1-Intl-batch-E16a-2026-09-27",
+      "title": "P16.1 — Intl (batch E16a, 2026-09-27)",
+      "text": "**Profile:** B · **FQCN:** unchanged (D92 multi-prefix PSR-4) · **Actor:** plan-exec / composer-2.5 / medium"
+    },
+    {
+      "id": "Use-case-span-top-level-src-folders-per-subsystem",
+      "title": "Use-case span (top-level `src/` folders per subsystem)",
+      "text": "| Subsystem | Before (layer-first) | After (subsystem-first) |\n|:--|:--|:--|\n| Locale resolution | `Contracts` + `Data` + `Internal/Locale` + `Exceptions` | `Locale/{Contracts,Data,Internal,Exceptions}` |\n| Translation read | `Contracts` + `Data` + `Internal/Locale` (reader) | `Translation/{Contracts,Data,Internal}` |\n| Currency / rates | `Contracts` + `Data` + `Internal/Money` (excl. formatter) + `Exceptions` | `Currency/{Contracts,Data,Internal,Exceptions}` |\n| Money formatting | `Contracts` + `Data` + `Internal/Money/PlainMoneyFormatter` + `Exceptions` | `Formatting/{Contracts,Data,Internal,Exceptions}` |\n| Territory / reference | `Contracts` + `Data` + `Internal/{Address,Reference}` + `Exceptions` | `Territory/{Contracts,Data,Internal,Exceptions}` |\n\nNo `TimeZone/` directory. `CurrencyInfo` class name unchanged (P15 vocabulary)."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "| Lane | Result |\n|:--|:--|\n| `packages/intl` lint:check | pass |\n| `packages/intl` analyse | pass |\n| `packages/intl` test | 33 pass |\n| `packages/intl` test:pg | 2 pass |\n| `composer dump-autoload -o --strict-psr` (root) | pass for intl mappings |\n\n---"
+    },
+    {
+      "id": "P16.2-Notifications-batch-E16a-2026-09-27",
+      "title": "P16.2 — Notifications (batch E16a, 2026-09-27)",
+      "text": "**Profile:** B · **FQCN:** unchanged · **Actor:** plan-exec / composer-2.5 / medium"
+    },
+    {
+      "id": "Use-case-span",
+      "title": "Use-case span",
+      "text": "| Subsystem | After layout |\n|:--|:--|\n| Inbox | `Inbox/{Contracts,Data,Internal}` |\n| Delivery | `Delivery/{Contracts,Data,Internal,Jobs,Commands}` |\n| Digest | `Digest/{Contracts,Data,Internal,Jobs}` |\n| Preferences | `Preferences/{Contracts,Data,Internal}` |\n\nNo `Template/` directory. No root `src/{Data,Internal,Jobs,Commands}` catch-alls remain."
+    },
+    {
+      "id": "Validation-2",
+      "title": "Validation",
+      "text": "| Lane | Result |\n|:--|:--|\n| `packages/notifications` lint:check | pass |\n| `packages/notifications` analyse | pass |\n| `packages/notifications` test | 19 pass |\n| `packages/notifications` test:pg | 2 pass |\n\n`autoload-dev` moved from classmap to `CoreX\\Notifications\\Tests\\` PSR-4.\n\n---"
+    },
+    {
+      "id": "P16.3-Tasks-batch-E16a-2026-09-27",
+      "title": "P16.3 — Tasks (batch E16a, 2026-09-27)",
+      "text": "**Profile:** B · **FQCN:** unchanged · **Actor:** plan-exec / composer-2.5 / medium"
+    },
+    {
+      "id": "Use-case-span-2",
+      "title": "Use-case span",
+      "text": "| Subsystem | After layout |\n|:--|:--|\n| Task lifecycle | `Task/{Actions,Contracts,Data,Models,Events,Enums}` |\n| Planning | `Planning/{Contracts,Data,Internal,Exceptions}` |\n| Project | `Project/{Data,Models,Enums}` |\n| Sprint | `Sprint/{Data,Models,Enums}` |\n| Time | `Time/{Data,Models,Enums}` |\n| Access | `Access/{Contracts,Internal,Exceptions}` (`CoreX\\Tasks\\Support\\` → `Access/Internal/`) |"
+    },
+    {
+      "id": "D94-D33-preparation-non-terminal",
+      "title": "D94 / D33 preparation (non-terminal)",
+      "text": "- Added `packages/tasks/tests/Support/TasksTestCase.php` (`CoreX\\Tasks\\Tests\\Support`).\n- Package tests (`TestCase`, `PgTestCase`) use the package-local harness.\n- Transitional `packages/tasks/src/Testing/TasksTestCase.php` (`CoreX\\Tasks\\Testing`) retained for cross-package consumers until **P16.10**."
+    },
+    {
+      "id": "Validation-3",
+      "title": "Validation",
+      "text": "| Lane | Result |\n|:--|:--|\n| `packages/tasks` lint:check | pass |\n| `packages/tasks` analyse | pass |\n| `packages/tasks` test | 33 pass |\n| `packages/tasks` test:pg | 3 pass |\n\n---"
+    },
+    {
+      "id": "P16.4-P16.6-API-profile-C-packages-operations-batch-E16b-2026-09-27",
+      "title": "P16.4–P16.6 — API profile C (`packages/operations`, batch E16b, 2026-09-27)",
+      "text": "See `@plan/knowledge/findings-P16-api-layout-receipt.json`. 165 FQCN unchanged. Package lint/analyse/test 257 passed / 10 PG skipped.\n\nMechanical helper: `artifacts/P16-E16b-physical-moves.php`.\n\n---"
+    },
+    {
+      "id": "P16.7-Modules-root-consistency-batch-E16c-2026-09-27",
+      "title": "P16.7 — Modules root consistency (batch E16c, 2026-09-27)",
+      "text": "**Profile:** B · **FQCN:** unchanged (D92 multi-prefix `CoreX\\\\Modules\\\\` PSR-4 roots) · **Actor:** plan-exec / direct / medium"
+    },
+    {
+      "id": "Root-definition-moves-8",
+      "title": "Root definition moves (8)",
+      "text": "| Target | Classes |\n|:--|:--|\n| `Definition/` | ModuleDefinition, ModuleManifest, ModuleDependency, ModuleRuntimeContext, ModuleStatus |\n| `Gate/` | ModuleActivationDecision |\n| `Settings/` | DefaultSettingDefinition |\n| `src/` root | ModulesServiceProvider only |"
+    },
+    {
+      "id": "Validation-4",
+      "title": "Validation",
+      "text": "| Lane | Result |\n|:--|:--|\n| `packages/modules` lint:check | pass |\n| `packages/modules` analyse | pass |\n| `packages/modules` test | 83 pass |\n| `composer update corex/modules` + `dump-autoload -o --strict-psr` | pass |\n\n---"
+    },
+    {
+      "id": "P16.8-CRM-feature-first-layout-batch-E16c-2026-09-27",
+      "title": "P16.8 — CRM feature-first layout (batch E16c, 2026-09-27)",
+      "text": "**Profile:** B · **FQCN:** unchanged · **Actor:** plan-exec / direct / medium"
+    },
+    {
+      "id": "Use-case-span-3",
+      "title": "Use-case span",
+      "text": "| Subsystem | After layout |\n|:--|:--|\n| Company / Contact / Lead / Deal / Activity | `{Entity}/{Actions,Api,Data,Events,Models,Enums}` as applicable |\n| Deal pipeline | Pipeline, Stage, DealAmount cast under `Deal/` |\n| Context | execution types, guards, scope, channels, RecordRules, Source model, model concerns |\n| ApiShared | CrmSchemas, CrmIdentifier |\n| Root | CrmModule, CrmServiceProvider |"
+    },
+    {
+      "id": "Config-D38",
+      "title": "Config / D38",
+      "text": "- Added `config/flex-crm.php` + `Flex\\\\Crm\\\\Support\\\\CrmOptions` composed in `CrmServiceProvider::register()`.\n- `RecordRules` reads `searchLanguage` from injected options; **`E-FLEX-CRM-SEARCH-LANGUAGE` allowlist entry removed** (`scripts/composition-boundary.json`)."
+    },
+    {
+      "id": "D94-D33-preparation-non-terminal-2",
+      "title": "D94 / D33 preparation (non-terminal)",
+      "text": "- Added `packages/crm/tests/Support/CrmTestCase.php` (`Flex\\\\Crm\\\\Tests\\\\Support`); package `TestCase` uses it.\n- Transitional `packages/crm/src/Testing/CrmTestCase.php` retained until **P16.10**.\n\nMechanical helper: `artifacts/P16-E16c-physical-moves.php` (53 `git mv` operations)."
+    },
+    {
+      "id": "Validation-5",
+      "title": "Validation",
+      "text": "| Lane | Result |\n|:--|:--|\n| `packages/crm` lint:check | pass |\n| `packages/crm` analyse | pass |\n| `packages/crm` test | 34 pass |\n| `config-composition-gate` | OK (C1 count=0) |\n| `composer update flex/crm` + root autoload refresh | pass |\n\n---"
+    },
+    {
+      "id": "Mechanical-helper",
+      "title": "Mechanical helper",
+      "text": "One-shot mover (idempotent on re-run): `artifacts/P16-E16a-physical-moves.php` (168 `git mv` operations).\nAPI profile C: `artifacts/P16-E16b-physical-moves.php`.\nE16c modules + CRM: `artifacts/P16-E16c-physical-moves.php` (CRM; modules moves are the eight root definitions)."
+    }
+  ],
+  "applies_to": [
+    "P16"
+  ],
+  "provenance": {
+    "path": "findings/P16-move-receipts.md",
+    "sha256": "38a95ba7ed4ae7c37568bd7c3a4decc08c2aec0f1edf16166e29b7eca753e093"
+  }
+}

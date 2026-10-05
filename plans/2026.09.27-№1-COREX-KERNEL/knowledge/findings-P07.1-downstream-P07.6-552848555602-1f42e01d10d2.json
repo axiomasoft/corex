@@ -1,0 +1,25 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "findings-P07.1-downstream-P07.6-552848555602-1f42e01d10d2",
+  "title": "Downstream gate — P07.1 → P07.6",
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nitem: P07.1\ndate: 2026-10-04\ngate: downstream-gate-v1\nproducer_commit: 1f42e01d10d21582746b31f89525f59e5ab024ff\nconsumer_item: P07.6\nconsumer_spec_sha256: 5528485556022c52c9730bb1087fba31aba053cef21cd4dd0851b9ac51530556\noutcome: unknown\n---"
+    },
+    {
+      "id": "Downstream-gate-P07.1-P07.6",
+      "title": "Downstream gate — P07.1 → P07.6",
+      "text": "Outcome: `unknown`.\n\n| Applicable | Return | Command |\n|:--|:--|:--|\n| no | — | `test -s @plan/knowledge/artifacts-P07.6-review-verdict.json` |"
+    }
+  ],
+  "applies_to": [
+    "P07.1",
+    "P07.6"
+  ],
+  "provenance": {
+    "path": "findings/P07.1-downstream-P07.6-552848555602-1f42e01d10d2.md",
+    "sha256": "43eaae8f9a63f2efc93ac14f6df16ec1382ccf603a9289b79711768bf1391482"
+  }
+}

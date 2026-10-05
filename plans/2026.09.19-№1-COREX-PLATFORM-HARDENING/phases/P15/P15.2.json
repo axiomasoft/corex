@@ -1,0 +1,162 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P15.2",
+  "title": "Attributes vocabulary",
+  "status": "done",
+  "summary": "Rename `RegistryFieldCatalogue`→`ModuleFieldCatalogue`, `StructuralAttributeFilter`→`SchemaAttributeFilter`, `WriteResult`→`AttributeWriteResult`, `OperationKey`→`SchemaOperationId`.",
+  "why": "Имена должны отражать module ownership, schema boundary и предмет результата, не меняя семантику атрибутов.",
+  "scope": {
+    "include": [
+      "Definitions, files, imports, types, named arguments, tests и public API metadata пакета attributes и прямых consumers."
+    ],
+    "exclude": [
+      "Schema behavior, storage format, operation-id values, P3 naming gate implementation и aliases."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D85"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P15-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D85.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P1/P1.3.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P9/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P15/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "docs/dev-doctrine.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/attributes/src/**",
+      "change": "any"
+    },
+    {
+      "path": "packages/attributes/tests/**",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Сохранить signatures и value semantics; перемещать файл вместе с declaration; менять только доказанные references."
+  ],
+  "guidance": "Выполнить четыре mappings одним package lane, затем проверить reflection/string references отдельно от PHP imports.",
+  "validation": [
+    {
+      "id": "V1",
+      "procedure": "attributes и consumer lanes green; strict PSR autoload; exact sweep четырёх old names пуст; public API manifest содержит только targets.",
+      "expect": "Source acceptance condition as written.",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Четыре renamed definitions с обновлёнными consumers/tests и receipt completeness."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-26T20:05:00Z",
+    "finished_at": "2026-09-26T20:05:00Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/composer-2.5"
+    },
+    "notes": "E15b batch P15.2-P15.6 closed-green; see @plan/knowledge/findings-P15-receipts.json",
+    "deviations": [],
+    "pending": [],
+    "checks": []
+  },
+  "updated_at": "2026-09-26T20:05:00Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Rename `RegistryFieldCatalogue`→`ModuleFieldCatalogue`, `StructuralAttributeFilter`→`SchemaAttributeFilter`, `WriteResult`→`AttributeWriteResult`, `OperationKey`→`SchemaOperationId`."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "Имена должны отражать module ownership, schema boundary и предмет результата, не меняя семантику атрибутов."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Definitions, files, imports, types, named arguments, tests и public API metadata пакета attributes и прямых consumers."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Schema behavior, storage format, operation-id values, P3 naming gate implementation и aliases."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P15-design.json`; `@plan/decisions/D85.json`; `@plan/phases/P1/P1.3.json`; `@plan/phases/P9/phase.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/attributes/src/**`; `packages/attributes/tests/**`; прямые consumer files; relevant Composer/public-api metadata."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P15/phase.json`; 2) `@plan/knowledge/research-P15-design.json`; 3) `@plan/decisions/D85.json`; 4) `@plan/phases/P1/P1.3.json`; 5) `@plan/phases/P9/phase.json`; 6) `docs/dev-doctrine.md`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Сохранить signatures и value semantics; перемещать файл вместе с declaration; менять только доказанные references."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Выполнить четыре mappings одним package lane, затем проверить reflection/string references отдельно от PHP imports."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "attributes и consumer lanes green; strict PSR autoload; exact sweep четырёх old names пуст; public API manifest содержит только targets."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Четыре renamed definitions с обновлёнными consumers/tests и receipt completeness."
+    }
+  ]
+}

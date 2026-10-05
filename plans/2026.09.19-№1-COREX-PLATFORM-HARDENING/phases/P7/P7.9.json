@@ -1,0 +1,259 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P7.9",
+  "title": "MediaOptions",
+  "status": "done",
+  "summary": "Ввести `MediaOptions::fromArray` и перевести\n`SqlMediaLibrary` и `ConversionCoordinator` на Options.",
+  "why": "6 чтений в двух internal-классах — прямое нарушение CFG-002.\nЛимиты upload имеют смысл только вместе.",
+  "scope": {
+    "include": [
+      "`MediaOptions`; два internal-класса;\n`MediaServiceProvider`; тест `max_upload_bytes <= 0`; CHANGELOG; receipt."
+    ],
+    "exclude": [
+      "смена дефолтных MIME и лимитов; новые драйверы\nконверсии."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P7-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/media/config/corex-media.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P7/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/media/src/Internal/SqlMediaLibrary.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/media/src/Internal/ConversionCoordinator.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/media/src/MediaServiceProvider.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/Support/ViolationList.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/media/src/Internal/Support/MediaOptions.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/media/src/Internal/SqlMediaLibrary.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/media/src/Internal/ConversionCoordinator.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/media/src/MediaServiceProvider.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/media/tests/Unit/MediaOptionsTest.php",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P7-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Класс — §9. `config(` исчезает из двух\ninternal-файлов. Провайдер: один `get('corex-media')` и `instance`.\nНи один файл вне `Files` не изменяется."
+  ],
+  "guidance": "Готовые поля — `@plan/knowledge/research-P7-design.json` §9. Оба класса\nполучают один `MediaOptions`, чтобы лимит upload в coordinator и\nlibrary не разъехался.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer --working-dir=packages/media lint:check && composer --working-dir=packages/media analyse && composer --working-dir=packages/media test",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "test:pg",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "rg -n 'config\\(' packages/media/src",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "composer --working-dir=packages/media lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "composer --working-dir=packages/media analyse",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "composer --working-dir=packages/media test",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "composer --working-dir=packages/media test:pg",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "rg -n config( packages/media/src",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "MediaOptions; два internal-класса без `config()`."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "medium"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-23T10:38:45Z",
+    "finished_at": "2026-09-23T10:38:45Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-run/cursor-composer-2.5/medium",
+      "effort": "medium"
+    },
+    "notes": "P7.9 GREEN: MediaOptions, SqlMediaLibrary, ConversionCoordinator. pest 19/54, pg 1/1, phpstan 0, pint ok.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-23T10:38:45Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-23T10:38:45Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-23T10:38:45Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-23T10:38:45Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-23T10:38:45Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-23T10:38:45Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Ввести `MediaOptions::fromArray` и перевести\n`SqlMediaLibrary` и `ConversionCoordinator` на Options."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "6 чтений в двух internal-классах — прямое нарушение CFG-002.\nЛимиты upload имеют смысл только вместе."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "`MediaOptions`; два internal-класса;\n`MediaServiceProvider`; тест `max_upload_bytes <= 0`; CHANGELOG; receipt."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "смена дефолтных MIME и лимитов; новые драйверы\nконверсии."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P7-design.json` §9; `packages/media/config/corex-media.php`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/media/src/Support/MediaOptions.php`; `packages/media/src/Internal/SqlMediaLibrary.php`; `packages/media/src/Internal/ConversionCoordinator.php`; `packages/media/src/MediaServiceProvider.php`; `packages/media/tests/Unit/MediaOptionsTest.php`; `CHANGELOG.md`; `@plan/knowledge/findings-P7-receipts.json`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P7/phase.json`; 2) `@plan/knowledge/research-P7-design.json` §0, §9; 3) `packages/media/config/corex-media.php`; 4) `packages/media/src/Internal/SqlMediaLibrary.php`; 5) `packages/media/src/Internal/ConversionCoordinator.php`; 6) `packages/media/src/MediaServiceProvider.php`; 7) `packages/core/src/Support/ViolationList.php`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Класс — §9. `config(` исчезает из двух\ninternal-файлов. Провайдер: один `get('corex-media')` и `instance`.\nНи один файл вне `Files` не изменяется."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Готовые поля — `@plan/knowledge/research-P7-design.json` §9. Оба класса\nполучают один `MediaOptions`, чтобы лимит upload в coordinator и\nlibrary не разъехался."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "`composer --working-dir=packages/media lint:check && composer --working-dir=packages/media analyse && composer --working-dir=packages/media test` и `test:pg` если есть.\n`rg -n 'config\\(' packages/media/src` — только провайдер."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "MediaOptions; два internal-класса без `config()`."
+    }
+  ]
+}

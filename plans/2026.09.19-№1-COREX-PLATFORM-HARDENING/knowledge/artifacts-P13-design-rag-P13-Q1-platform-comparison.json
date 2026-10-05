@@ -1,0 +1,29 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P13-design-rag-P13-Q1-platform-comparison",
+  "title": "Q1 — comparative platform pass",
+  "sections": [
+    {
+      "id": "P13-Q1-comparative-platform-pass",
+      "title": "P13-Q1 — comparative platform pass",
+      "text": "**Tool:** Perplexity browser MCP. **Date:** 2026-09-20."
+    },
+    {
+      "id": "Query",
+      "title": "Query",
+      "text": "> Compare current official documentation for GitHub REST, Slack Web API,\n> Twilio, HubSpot, Notion and Contentful for versioning, discovery,\n> pagination, idempotency, deprecation, errors and OpenAPI. Mark absent\n> guarantees and finish with adopt/adapt/reject guidance for a self-hosted\n> operation contract with HTTP and tool projections."
+    },
+    {
+      "id": "Result-used",
+      "title": "Result used",
+      "text": "- Retry/rate-limit guidance was consistently distinct from idempotency.\n- Vendor cursors/page tokens were response-provided and endpoint-specific; none\n  established a universal collection snapshot guarantee.\n- GitHub/Notion/Contentful expose explicit version selectors in different transport\n  locations; this reinforced keeping version selection out of handlers.\n- GitHub/Twilio/Contentful publish schema/OpenAPI assets; the answer warned that\n  schemas do not contain complete behavioral retry/lifecycle semantics.\n- The broad answer omitted part of its expected source list. No omitted claim was\n  promoted into a CoreX decision; P13-Q3–Q5 narrowed the evidence."
+    }
+  ],
+  "applies_to": [
+    "P13"
+  ],
+  "provenance": {
+    "path": "artifacts/P13-design-rag/P13-Q1-platform-comparison.md",
+    "sha256": "7bf8a0fdf77d3253a06a6391d406faa657356622ecfd79a7ec8c74b3e5f38087"
+  }
+}

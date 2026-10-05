@@ -1,0 +1,45 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D02",
+  "title": "vendor (accepted)",
+  "date": "2026-09-27",
+  "status": "accepted",
+  "decision": "Composer vendor — `axiomasoft`. Ядро — `axiomasoft/corex`; остальные пакеты — `axiomasoft/corex-<name>` (kebab-case, `<name>` из glossary P00). Module id = composer-имя (EXT-009 сохраняется, значения меняются). Split-репозитории — `axiomasoft/corex-*`.",
+  "rationale": "Vendor `corex` на Packagist занят сторонним владельцем (17 пакетов, `corex/support`, `corex/testing`, …) — опубликовать текущие имена невозможно (`http-01`, F00 A12.6). Единый vendor экосистемы с chatom (`axiomasoft/chatom*`, chatom PLAN2.D17).",
+  "applies_to": [
+    "P02",
+    "P09"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "author-choice (claude-opus-5-5/high) по мандату владельца «есть идеальное решение — утверждай» (`brief/00-brief.md` B6)"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D02\ndate: 2026-09-27\nstatus: accepted\nitem: P02\nitems: [P02, P09]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D02-vendor-accepted",
+      "title": "D02 — vendor (accepted)",
+      "text": "**Actor:** author-choice (claude-opus-5-5/high) по мандату владельца «есть идеальное решение — утверждай» (`@plan/brief.json` B6)\n**Evidence:** RAG:— `@plan/knowledge/findings-00-audit-verification.json`, `artifacts/P00-design/facts/`; RAG:✅ `@plan/knowledge/research-01-external-research.json`, `artifacts/research-rag/`"
+    },
+    {
+      "id": "Solution",
+      "title": "Solution",
+      "text": "Composer vendor — `axiomasoft`. Ядро — `axiomasoft/corex`; остальные пакеты — `axiomasoft/corex-<name>` (kebab-case, `<name>` из glossary P00). Module id = composer-имя (EXT-009 сохраняется, значения меняются). Split-репозитории — `axiomasoft/corex-*`."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "Vendor `corex` на Packagist занят сторонним владельцем (17 пакетов, `corex/support`, `corex/testing`, …) — опубликовать текущие имена невозможно (`http-01`, F00 A12.6). Единый vendor экосистемы с chatom (`axiomasoft/chatom*`, chatom PLAN2.D17)."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P02.* переименование composer-имён, module id, config/publish-идентификаторов по glossary; P09 split/release."
+    }
+  ]
+}

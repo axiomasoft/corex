@@ -1,0 +1,293 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P11.1",
+  "title": "Registry vocabulary, identity and version metadata",
+  "status": "done",
+  "summary": "Закрепить типизированную identity каждой extension point, explicit\nreplacement directives, module version/reference metadata и общий `ExtensionStamp`.",
+  "why": "`@plan/knowledge/research-P11-design.json` §2–§3, §5, §8; D56–D57. Текущий\ncompiler видит имена packages, но теряет version/reference и не имеет\nобщего словаря identity/replacement.",
+  "scope": {
+    "include": [
+      "Additive `Manifest::replace()`; immutable replacement/version/stamp data;\nversion discovery from Composer metadata; point identity table in extension policy; focused tests."
+    ],
+    "exclude": [
+      "Compile algorithm; cache publication; runtime freeze; durable consumer wiring;\nnew extension points; public registrar rename from P15."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [],
+  "skills": [],
+  "reads": [
+    {
+      "path": "packages/modules/src/Manifest.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/modules/src/Compiler/InstalledPackages.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P1-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "vendor/composer/installed.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P11/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P11-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D56.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D57.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/modules/README.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/modules/src/Manifest.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/modules/src/Compiler/ExtensionReplacement.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/modules/src/Compiler/InstalledPackageVersion.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/modules/src/Compiler/InstalledPackages.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/modules/src/Data/ExtensionStamp.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/modules/tests/Unit/ExtensionMetadataTest.php",
+      "change": "any"
+    },
+    {
+      "path": "docs/architecture/extension-policy.md",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Existing manifest methods and name-only discovery remain compatible.\nReplacement is repeatable additive API with point/target/replacement only. `ExtensionStamp` has no\nLaravel dependency and validates four non-empty scalars. No path, timestamp, tenant or activation\nstate is version metadata. Update the P1.6-produced policy; do not create a competing document."
+  ],
+  "guidance": "Implement the exact value shapes from §3/§5/§8. Resolve source reference\nbefore dist reference, normalize missing values to explicit `null`, and use named arguments for\nsame-typed parameters.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer lint",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "composer analyse",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "composer test",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "installed metadata and missing references",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "replacement accumulation",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "stamp round-trip and invalid values",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "composer lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "composer analyse",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "procedure": "composer test",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "procedure": "identity table covers every section 2 point",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Additive declaration primitives, version discovery, extension stamp, policy\nvocabulary and green focused tests."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-24T13:15:34Z",
+    "finished_at": "2026-09-24T13:20:00Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "executor/cursor-grok-4.7/high",
+      "effort": "high"
+    },
+    "notes": "P11.1 GREEN: Manifest::replace, InstalledPackageVersion discovery, ExtensionStamp, identity table. modules pest 37/200, phpstan 0, pint ok.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-24T13:20:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-24T13:20:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-24T13:20:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-24T13:20:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-24T13:20:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-09-24T13:20:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-09-24T13:20:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-24T13:20:00Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Закрепить типизированную identity каждой extension point, explicit\nreplacement directives, module version/reference metadata и общий `ExtensionStamp`."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`@plan/knowledge/research-P11-design.json` §2–§3, §5, §8; D56–D57. Текущий\ncompiler видит имена packages, но теряет version/reference и не имеет\nобщего словаря identity/replacement."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Additive `Manifest::replace()`; immutable replacement/version/stamp data;\nversion discovery from Composer metadata; point identity table in extension policy; focused tests."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Compile algorithm; cache publication; runtime freeze; durable consumer wiring;\nnew extension points; public registrar rename from P15."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`packages/modules/src/Manifest.php`;\n`packages/modules/src/Compiler/InstalledPackages.php`;\n`@plan/knowledge/research-P1-design.json` §10; `vendor/composer/installed.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/modules/src/Manifest.php`;\n`packages/modules/src/Compiler/ExtensionReplacement.php`;\n`packages/modules/src/Compiler/InstalledPackageVersion.php`;\n`packages/modules/src/Compiler/InstalledPackages.php`;\n`packages/modules/src/Data/ExtensionStamp.php`;\n`packages/modules/tests/Unit/ExtensionMetadataTest.php`;\n`docs/architecture/extension-policy.md`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P11/phase.json`; 2) `@plan/knowledge/research-P11-design.json` §0–§5, §8;\n3) `@plan/decisions/D56.json`;\n4) `@plan/decisions/D57.json`;\n5) `packages/modules/README.md`; 6) `packages/modules/src/Manifest.php`;\n7) `packages/modules/src/Compiler/InstalledPackages.php`;\n8) `@plan/knowledge/research-P1-design.json` §10."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Existing manifest methods and name-only discovery remain compatible.\nReplacement is repeatable additive API with point/target/replacement only. `ExtensionStamp` has no\nLaravel dependency and validates four non-empty scalars. No path, timestamp, tenant or activation\nstate is version metadata. Update the P1.6-produced policy; do not create a competing document."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Implement the exact value shapes from §3/§5/§8. Resolve source reference\nbefore dist reference, normalize missing values to explicit `null`, and use named arguments for\nsame-typed parameters."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "Unit matrix for installed metadata, missing references, replacement accumulation,\nstamp round-trip and invalid values; `composer lint`, `composer analyse`, `composer test` for\nmodules; docs identity table covers every §2 point."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Additive declaration primitives, version discovery, extension stamp, policy\nvocabulary and green focused tests."
+    }
+  ]
+}

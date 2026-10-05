@@ -1,0 +1,34 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P11-design-rag-P11-Q1-perplexity",
+  "title": "Q1 — Perplexity: compile/freeze and long-lived workers",
+  "sections": [
+    {
+      "id": "P11-Q1-Perplexity-compile-freeze-and-long-lived-workers",
+      "title": "P11-Q1 — Perplexity: compile/freeze and long-lived workers",
+      "text": "**Accessed:** 2026-09-20  \n**Transport:** local `perplexity-web-mcp`, pool `default`, tool `search`"
+    },
+    {
+      "id": "Failed-first-attempt",
+      "title": "Failed first attempt",
+      "text": "Query:\n\n> As of September 2026, what primary-source-backed design rules should a PHP/Laravel library apply to typed extension registries that collect declarations, compile a deterministic runtime catalogue, freeze it before serving work, and run under long-lived workers? Cover duplicate identifiers and explicit replacement, deterministic tie-breaking, stable fingerprints/version stamps, cache invalidation and atomic snapshot replacement. Cite only official documentation or source repositories (Symfony, Laravel Octane/queues, Drupal, Shopware, or standards). Clearly separate documented guarantees from your architectural inference; do not invent framework guarantees.\n\nResult after three MCP retries:\n\n```text\npage.waitForFunction: Timeout 10000ms exceeded.\n```\n\nNo claim is derived from this failed attempt."
+    },
+    {
+      "id": "Successful-retry",
+      "title": "Successful retry",
+      "text": "Query:\n\n> Primary official sources only: for Symfony extension compilation and Laravel Octane or queue long-lived workers, which guarantees support compile-before-use, deterministic ordering, immutable snapshots, cache invalidation, and refresh at a request/job boundary? Separate exact documented behavior from architecture inference. Include direct source links.\n\nPerplexity response, preserved verbatim as returned by the MCP transport:\n\n```csv\n\"Property\",\"Symfony extensions + compiler passes\",\"Laravel Octane\",\"Laravel queue:work\"\n\"Compile before runtime use\",\"Documented: extensions are processed during ContainerBuilder::compile(); compiler passes manipulate definitions before services are instantiated. Compiled container is then dumped/cached.\",\"Not applicable as a comparable mechanism: Octane boots Laravel once and retains the application in memory. No documented “compile all extensions before use” contract beyond Laravel’s normal bootstrap.\",\"Not applicable as a comparable mechanism: a worker boots the Laravel application and then processes jobs repeatedly. Job handle() dependencies are resolved by the container at processing time.\"\n\"Deterministic ordering\",\"Documented and configurable: pass type defines phase; within a phase, higher integer priority runs earlier.\",\"No general documented ordering guarantee for arbitrary app-level refresh/rebuild work between requests.\",\"No general documented ordering guarantee for arbitrary refresh/rebuild work between jobs. Queue priority such as --queue=high,default is selection priority, not a deterministic global execution order.\"\n\"Immutable snapshot\",\"Documented at DI-definition level: service definitions can only be modified before compilation; after compilation they cannot be manipulated. A dumped container is a concrete generated PHP artifact.\",\"No: the same application instance is reused. Octane resets first-party framework state, but explicitly may not know how to reset your application’s global state.\",\"No: long-lived worker process retains booted application state; jobs and static/process state must be treated as potentially persistent.\"\n\"Cache invalidation\",\"Documented for ConfigCache in debug mode: tracked resources include config files, extensions, and compiler passes; timestamp changes make cache stale and cause rebuild. In non-debug mode, existing cached container is always used.\",\"Documented reload mechanism: file changes are not reflected merely by browser refresh; octane:reload gracefully restarts application workers so subsequently served requests use newly loaded code. --watch restarts on watched changes for development.\",\"Documented restart mechanism: workers do not notice code changes until restarted. queue:restart tells workers to exit gracefully after their current job; a process manager must start replacements. Restart signals are stored/polled through the configured cache.\"\n\"Refresh boundary\",\"Framework lifecycle-dependent: Symfony gives a compile/cache boundary, but request-boundary adoption of a new build is not specified by DI docs as a cluster-wide atomic deployment primitive.\",\"Documented: graceful reload makes newly deployed code loaded into memory for subsequent requests. It does not document an atomic all-worker cutover or a request-to-single-version consistency guarantee across multiple workers.\",\"Documented: graceful restart occurs after the current job; polling happens on each job iteration. This is a job boundary for the exiting worker, not a global atomic fleet cutover.\"\n```"
+    },
+    {
+      "id": "Capture-boundary",
+      "title": "Capture boundary",
+      "text": "The MCP response did not include its source-link list despite the query. The factual rows were\ntherefore checked separately against the official Symfony and Laravel documentation in\n`P11-Q2-primary-sources.md`. The negative claim about fleet-wide atomic cutover remains an\narchitectural inference from the absence of such a guarantee, not a framework promise."
+    }
+  ],
+  "applies_to": [
+    "P11"
+  ],
+  "provenance": {
+    "path": "artifacts/P11-design-rag/P11-Q1-perplexity.md",
+    "sha256": "051aaa0d7f190857fc92957ae93cec0eca0394f0260314110cd4cf161e2a3483"
+  }
+}

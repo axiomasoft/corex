@@ -1,0 +1,159 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "research-P8-design",
+  "title": "Дизайн фазы P8 — registrar-модель composition roots",
+  "sections": [
+    {
+      "id": "P8-registrar--composition-roots",
+      "title": "Дизайн фазы P8 — registrar-модель composition roots",
+      "text": "**Статус:** нормативный вход items P8.1–P8.6. Это **источник готового кода\nинтерфейса, registrar'ов, доказательства биндингов и гейта**, а не эскиз.\nКаждый item называет здесь свой параграф; спека без указателя — дефект\nдизайна.\n\n**Что этот документ НЕ делает.** Он не меняет состав и классы реализации\nбиндингов. Он не меняет порядок bootstrapper'ов. Он не создаёт registrar\n«на каждые два биндинга». Он не переносит код между пакетами и не\nпереименовывает типы (P15). Он не раскладывает tenancy по bounded\ncontext'ам (P9). Он не дробит `CoreServiceProvider` (E-CORE-PROVIDER).\nОн не исполняется до конца стадии 2 (D14).\n\n**Входы:** `01-shapes-runtime.md` §5; `P7-design.md` §6 и §9 (Options);\n`P8-design-rag.md`; `00-baseline-metrics.md` §3; A40, A41, A74; D42–D45;\n`packages/tenancy/src/TenancyServiceProvider.php`;\n`packages/modules/src/ModulesServiceProvider.php`.\n\n---"
+    },
+    {
+      "id": "0.-items",
+      "title": "0. Инварианты, обязательные для всех items фазы",
+      "text": "1. **Язык — русский**, идентификаторы классов — латиницей.\n2. **Ширина строки ≤ 100 символов.** Таблицы могут её превышать, проза — нет.\n3. **Ключ, класс реализации и lifetime биндинга не меняются.**\n   `bindIf` остаётся `bindIf`, не `bind`.\n4. **Порядок `bootstrapper_order` совпадает байтово** с\n   `packages/tenancy/config/tenancy.php`.\n5. **Registrar не наследует ServiceProvider (D42).**\n6. **Негативная проверка обязательна у гейта** (`RAG:✅` P8-Q5).\n7. **Один пакет на item**, кроме корневого гейта в `scripts/` + `tests/Arch`.\n8. **Маркеры:** факт о репозитории — `RAG:—`; внешняя практика — `RAG:✅`\n   со ссылкой на `P8-design-rag.md`. Из `audits/*` не копируется ни код,\n   ни формулировка.\n9. **CHANGELOG.** Item, меняющий продукт, дописывает одну строку в корневой\n   `CHANGELOG.md` под `[Unreleased]` → `### Added`.\n10. **Пакетный сьют затронутого пакета зелёный.** Поведение валидной\n    конфигурации не меняется.\n11. **Новых runtime-зависимостей нет.** Symfony DI compiler не вводится\n    (`RAG:✅` P8-Q1: механика не эквивалентна).\n12. **После P7 registrar читает Options из контейнера**, не `config()`.\n\n---"
+    },
+    {
+      "id": "1.",
+      "title": "1. Несущие решения детализации",
+      "text": "| ID | Решение | Где в коде |\n|:--|:--|:--|\n| D101 (supersedes D42) | `PackageRegistrar`/trait — exact public composition API; boot с default | §3 |\n| D43 | Модули по измеренным биндингам; MembershipRegistrar нет | §2, §4 |\n| D44 | Каталог `Laravel/` в tenancy и modules; P9 не рассыпает | §5, §7 |\n| D45 | Гейт считает только провайдер; порог 20 + ratchet | §10 |\n\nЭскиз `01-shapes-runtime.md` §5 **принят**. Расширения: `boot()` на\nинтерфейсе (D42); отказ от пустого Membership (D43); место на диске\n(D44); измеримый гейт (D45).\n\n---"
+    },
+    {
+      "id": "2.-P8.1",
+      "title": "2. Каталог биндингов «до» (P8.1)",
+      "text": "`RAG:—` снято с `TenancyServiceProvider` и `ModulesServiceProvider`\n2026-09-19. После P7 ключи те же; чтение идёт из Options. Item P8.1\nпереносит таблицу в `@plan/knowledge/findings-P8-binding-catalog.json` и сверяет её с\nдеревом **после исполнения P7** командой ниже. Расхождение с этой\nтаблицей, если P7 добавил только `TenancyOptions` / policy `instance`,\nдописывается строками Options, не переписывает остальное.\n\n`instance()` Options и трёх policy — не call site `singleton|scoped|bind`\nи в гейт D45 не входит. В каталог доказательств фазы они входят:\nпосле декомпозиции `$app->make(TenancyOptions::class)` обязан\nразрешаться."
+    },
+    {
+      "id": "2.1-Tenancy-register",
+      "title": "2.1 Tenancy — register()",
+      "text": "| Abstract | Lifetime | Concrete | Модуль |\n|:--|:--|:--|:--|\n| `StanclTenantDatabaseProvisioner` | singleton | self | Provisioning |\n| `SchemaCatalogueSerializer` | singleton | self | Database |\n| `TemplateIntegrityLock` | singleton | self | Database |\n| `DatabaseTemplateIntegrityVerifier` | singleton | self | Database |\n| `TemplateIntegrityVerifier` | singleton | `DatabaseTemplateIntegrityVerifier` | Database |\n| `DomainTrustStateWriter` | scoped | self | DomainTrust |\n| `DomainTrustCoordinator` | scoped | self | DomainTrust |\n| `PendingPool` | singleton | self | Provisioning |\n| `StanclTenantDatabaseLifecycle` | singleton | self | Provisioning |\n| `TenantDatabaseLifecycle` | singleton | `StanclTenantDatabaseLifecycle` | Provisioning |\n| `AccountLifecycle` | scoped | self | Provisioning |\n| `MigrationWaveOrchestrator` | singleton | self | Provisioning |\n| `StanclTenancyManager` | singleton | self | Runtime |\n| `TenancyManager` | singleton | `StanclTenancyManager` | Runtime |\n| `TenantContextResolver` | singleton | `TenancyManagerContextResolver` | Runtime |\n| `TenantStorage` | scoped | `ContextTenantStorage` | Runtime |\n| `DatabaseIdentitySyncer` | singleton | self | Identity |\n| `IdentitySyncer` | singleton | `DatabaseIdentitySyncer` | Identity |\n| `WorkspaceResolver` | singleton | `DatabaseWorkspaceResolver` | Workspace |\n| `PrincipalWorkspaceResolver` | bindIf | `DatabaseWorkspaceResolver` | Workspace |\n| `RootRegistryWakeupHint` | singleton | self | Wakeup, optional |\n| `RootWakeupReconciler` | singleton | self | Wakeup, optional |\n| `OidcDiscovery` | singleton | self | Authentication, optional |\n| `JwksKeySet` | singleton | self | Authentication, optional |\n| `IdTokenVerifier` | singleton | self | Authentication, optional |\n| `OidcClient` | singleton | self | Authentication, optional |\n| `LogoutController` | singleton | self | Authentication, optional |\n| `ImpersonationService` | scoped | `DatabaseImpersonationService` | Authentication, optional |\n| каждый класс из `bootstrapperOrder` | singleton | class-string | Runtime |\n\nДополнительно, не lifetime-строка: `tag(RootRegistryWakeupHint, 'corex.wakeup.hints')`;\nкоманда `SweepRootWakeups` при wakeup; `WorkspaceContextBootstrapper::__constructStatic`\nровно один раз."
+    },
+    {
+      "id": "2.2-Tenancy-boot",
+      "title": "2.2 Tenancy — boot()",
+      "text": "| Abstract | Lifetime | Concrete | Модуль |\n|:--|:--|:--|:--|\n| `UniqueIdentifierGenerator` | bind | `$options->idGenerator` | Runtime |\n\nКоманды: `PendingCreateCommand`, `PendingClearCommand`,\n`IdentitiesReconcileCommand`, `TenantsMigrateCommand`.\nСобытия: `TenantCreated` → JobPipeline; `TenancyInitialized` →\n`BootstrapTenancy`; `TenancyEnded` → `RevertToCentralContext`;\n`JobExceptionOccurred` → `RevertTenancyOnJobException`; три wildcard\n`eloquent.*` при impersonation.\nMiddleware-алиасы: `tenancy.workspace` всегда; `tenancy.host`,\n`tenancy.status` при host identification; `tenancy.oidc.session_lifetime`\nпри OIDC; `tenancy.impersonation.allow` при impersonation.\nГруппа `tenant` мержится, не перезаписывается.\nМаршруты: `routes/oidc.php` при OIDC, с охраной route cache."
+    },
+    {
+      "id": "2.3-Modules-register",
+      "title": "2.3 Modules — register()",
+      "text": "| Abstract | Lifetime | Concrete | Модуль |\n|:--|:--|:--|:--|\n| `ArrayEntityRegistry` | singleton | self | Registry |\n| `EntityRegistry` | singleton | `ArrayEntityRegistry` | Registry |\n| `ModuleDiscovery` | singleton | self | Registry |\n| `ModuleActivationGate` | singleton | `AllowAllActivationGate` | Registry |\n| `ModuleStateReader` | singleton | `DatabaseModuleStateReader` | Lifecycle |\n| `RecordsRegistrar` | singleton | `DatabaseRecordsRegistrar` | Lifecycle |\n| `corex-modules.wiring` | singleton | array | Lifecycle |\n| `ModuleLifecycle` | singleton | `DatabaseModuleLifecycle` | Lifecycle |\n| `ModuleRegistryCache` | singleton | `RepositoryModuleRegistryCache` | Registry |\n| `ModuleRegistry` | singleton | `CompiledModuleRegistry` | Registry |\n| `RegistryIntrospection` | singleton | `ReadRegistryIntrospection` | Registry |\n| `SettingDefaultsProvider` | singleton | `CompiledSettingDefaultsProvider` | Settings |"
+    },
+    {
+      "id": "2.4-Modules-boot",
+      "title": "2.4 Modules — boot()",
+      "text": "Команды `CompileModulesCommand`, `WhyCommand`, closure\n`corex:modules:repair`. Publish tags без изменения. `JobProcessing` →\n`CompiledModuleRegistry::flush`. `optimizes(corex:modules:compile)`.\n`booted`: проекция compiled → EntityRegistry, `Relation::morphMap`,\n`AuditCapabilityWiring::wire`. `registryVersion()` остаётся с\n`Schema::hasTable` — ленивый epoch, не boot-time обход схемы всего\nприложения."
+    },
+    {
+      "id": "2.5-P8.1",
+      "title": "2.5 Сверка каталога при исполнении P8.1",
+      "text": "```bash\nrg -n '->(singleton|scoped|bind|bindIf)\\(' \\\n  packages/tenancy/src/TenancyServiceProvider.php \\\n  packages/modules/src/ModulesServiceProvider.php\n```\n\nЧисло совпадений tenancy register+boot и modules register должно\nсовпасть с таблицами §2 после добавления строк Options. Loop\nbootstrappers — одна строка `->singleton($bootstrapper)`.\n\n---"
+    },
+    {
+      "id": "3.-PackageRegistrar-P8.1-D42",
+      "title": "3. Контракт PackageRegistrar (P8.1, D42)",
+      "text": "`RAG:✅` P8-Q1. Готовый код — переносится дословно.\n\nD101 supersedes D42's private-surface consequence: both exact symbols are published\nin `extra.corex.public-api` because tenancy/modules import them. P3 R4 permits only\nthese names, and P6 classifies them in the closed COMPOSITION list; `Support/**` is not\nopened as a namespace wildcard.\n\n```php\n<?php\n\ndeclare(strict_types=1);\n\nnamespace CoreX\\Support;\n\nuse Illuminate\\Contracts\\Foundation\\Application;\n\ninterface PackageRegistrar\n{\n    public function register(Application $app): void;\n\n    public function boot(Application $app): void;\n}\n```\n\nPHP 8.3 допускает default в интерфейсе. Пустой `boot` — в trait, чтобы\nне тащить реализацию в контракт (интерфейс остаётся чистым, тест не\nзависит от default method):\n\n```php\n<?php\n\ndeclare(strict_types=1);\n\nnamespace CoreX\\Support;\n\nuse Illuminate\\Contracts\\Foundation\\Application;\nuse Override;\n\ntrait RegistersNothingOnBoot\n{\n    #[Override]\n    public function boot(Application $app): void\n    {\n    }\n}\n```\n\nТест без Testbench: анонимный класс с trait, `boot()` — no-op;\n`register()` записывает флаг. `ModuleRegistrar` не импортируется.\n\n---"
+    },
+    {
+      "id": "4.-composition--P8.1-D43",
+      "title": "4. Когда composition-модуль оправдан (P8.1, D43)",
+      "text": "`RAG:✅` P8-Q2. Правило записывается в каталог P8.1 и в Code Guidance\nвсех item'ов декомпозиции.\n\nМодуль оправдан, если истинен **хотя бы один** пункт:\n\n1. Его можно не включить, и пакет остаётся поддерживаемым (optional\n   integration: Wakeup, OIDC).\n2. Это связная возможность с одним владельцем и одним ответом на\n   «что пропадёт, если убрать вызов» (Runtime, Database, Provisioning,\n   Registry, Lifecycle).\n3. Это отдельная фаза lifecycle фреймворка (Console, Http, Events).\n\nМодуль **запрещён**, если:\n\n- в провайдере нет ни одного биндинга или хука этого имени\n  (Membership);\n- единственный мотив — уложиться в порог гейта;\n- два биндинга одного владельца разносятся «для красоты».\n\n---"
+    },
+    {
+      "id": "5.-Tenancy-register--registrar-P8.2-P8.3",
+      "title": "5. Tenancy register()-registrar'ы (P8.2, P8.3)",
+      "text": "Пространство имён `CoreX\\Tenancy\\Laravel` (D44). Каждый класс `final`,\n`implements PackageRegistrar`, для register-only — trait\n`RegistersNothingOnBoot`. Options: `$app->make(TenancyOptions::class)`.\n\nГлавный провайдер после P7 уже делает `instance` Options и policy.\nP8 это **не** переносит в registrar: это регистрация «что регистрировать»,\nона остаётся в провайдере (контракт фазы)."
+    },
+    {
+      "id": "5.1-P8.2-P8.4",
+      "title": "5.1 Форма провайдера (наращивается P8.2→P8.4)",
+      "text": "```php\n#[Override]\npublic function register(): void\n{\n    $this->mergeConfigFrom(__DIR__.'/../config/tenancy.php', 'tenancy');\n    $this->mergeConfigFrom(__DIR__.'/../config/corex-tenancy.php', 'corex-tenancy');\n\n    $tenancy = $this->app['config']->get('tenancy', []);\n    $wakeup = $this->app['config']->get('corex-tenancy', []);\n    $options = TenancyOptions::fromArray(\n        tenancy: is_array($tenancy) ? $tenancy : [],\n        corexTenancy: is_array($wakeup) ? $wakeup : [],\n    );\n    $this->app->instance(TenancyOptions::class, $options);\n    $this->app->instance(ImpersonationPolicy::class, $options->impersonation);\n    $this->app->instance(AccountLifecyclePolicy::class, $options->lifecycle);\n    $this->app->instance(StatusGatePolicy::class, $options->statusGate);\n\n    foreach ($this->registrars() as $registrar) {\n        $registrar->register($this->app);\n    }\n}\n\n#[Override]\npublic function boot(): void\n{\n    $this->publishes([\n        __DIR__.'/../database/migrations/root' => database_path('migrations/root'),\n    ], 'tenancy-migrations');\n    $this->publishes([\n        __DIR__.'/../database/migrations/tenant' => database_path('migrations/tenant'),\n    ], 'tenancy-migrations-tenant');\n    $this->publishes([\n        __DIR__.'/../config/tenancy.php' => config_path('tenancy.php'),\n    ], 'tenancy-config');\n\n    foreach ($this->registrars() as $registrar) {\n        $registrar->boot($this->app);\n    }\n}\n\n/** @return list<PackageRegistrar> */\nprivate function registrars(): array\n{\n    $options = $this->app->make(TenancyOptions::class);\n    $registrars = [\n        new RuntimeRegistrar(),\n        new DatabaseRegistrar(),\n        new ProvisioningRegistrar(),\n        new IdentityRegistrar(),\n        new WorkspaceRegistrar(),\n        new DomainTrustRegistrar(),\n        new ConsoleRegistrar(),\n        new HttpRegistrar(),\n        new EventsRegistrar(),\n    ];\n\n    if ($options->oidcEnabled) {\n        $registrars[] = new AuthenticationRegistrar();\n    }\n\n    if (\n        $options->wakeupDriver === 'root_registry'\n        && interface_exists(WakeupHint::class)\n        && interface_exists(WakeupSweeper::class)\n    ) {\n        $registrars[] = new WakeupRegistrar();\n    }\n\n    return $registrars;\n}\n```\n\nP8.2 добавляет первые три; P8.3 — Identity/Workspace/DomainTrust и\nусловные Authentication/Wakeup; P8.4 — Console/Http/Events. Пока\nitem не сдвинул группу, её код остаётся в провайдере."
+    },
+    {
+      "id": "5.2-RuntimeRegistrar-P8.2",
+      "title": "5.2 RuntimeRegistrar (P8.2)",
+      "text": "Перенос дословно замыканий manager/context/storage плюс цикл\nbootstrappers и `__constructStatic` для `WorkspaceContextBootstrapper`.\n`UniqueIdentifierGenerator` и проекция `config([...])` — **boot**, P8.4\n(тот же класс, метод `boot`). В P8.2 `boot` пустой через trait; P8.4\nснимает trait и пишет `boot`.\n\n```php\nfinal class RuntimeRegistrar implements PackageRegistrar\n{\n    use RegistersNothingOnBoot;\n\n    #[Override]\n    public function register(Application $app): void\n    {\n        $options = $app->make(TenancyOptions::class);\n\n        $app->singleton(\n            StanclTenancyManager::class,\n            static fn (Application $app): StanclTenancyManager => new StanclTenancyManager(\n                $app->make(Stancl::class),\n            ),\n        );\n        $app->singleton(\n            TenancyManager::class,\n            static fn (Application $app): StanclTenancyManager => $app->make(\n                StanclTenancyManager::class,\n            ),\n        );\n        $app->singleton(TenantContextResolver::class, TenancyManagerContextResolver::class);\n\n        $app->scoped(\n            TenantStorage::class,\n            static fn (Application $app): ContextTenantStorage => new ContextTenantStorage(\n                contexts: $app->make(TenantContextResolver::class),\n                filesystems: new FilesystemManager($app),\n                durableDriver: $options->storageDurableDriver,\n                durableRoot: $options->storageDurableRoot,\n                ephemeralRoot: $options->storageEphemeralRoot,\n            ),\n        );\n\n        foreach ($options->bootstrapperOrder as $bootstrapper) {\n            if ($bootstrapper === WorkspaceContextBootstrapper::class) {\n                WorkspaceContextBootstrapper::__constructStatic($app);\n            }\n\n            $app->singleton($bootstrapper);\n        }\n    }\n}\n```"
+    },
+    {
+      "id": "5.3-DatabaseRegistrar-ProvisioningRegistrar-P8.2",
+      "title": "5.3 DatabaseRegistrar и ProvisioningRegistrar (P8.2)",
+      "text": "Database: serializer, lock, `DatabaseTemplateIntegrityVerifier`,\nконтракт `TemplateIntegrityVerifier`. Provisioning: provisioner,\n`PendingPool`, оба lifecycle, orchestrator, `AccountLifecycle` (D43).\nЗамыкания — как в текущем провайдере, `centralConnection` из Options.\n`AccountLifecycle` остаётся `scoped`."
+    },
+    {
+      "id": "5.4-Identity-Workspace-DomainTrust-P8.3",
+      "title": "5.4 Identity, Workspace, DomainTrust (P8.3)",
+      "text": "Identity: `DatabaseIdentitySyncer` + alias `IdentitySyncer`.\nWorkspace: `WorkspaceResolver` + `bindIf(PrincipalWorkspaceResolver)`.\nDomainTrust: оба `scoped` writer и coordinator; coordinator бросает\n`DomainTrustDisabled`, если `!$options->domainTrustEnabled` — поведение\nне менять."
+    },
+    {
+      "id": "5.5-AuthenticationRegistrar-WakeupRegistrar-P8.3",
+      "title": "5.5 AuthenticationRegistrar и WakeupRegistrar (P8.3)",
+      "text": "Провайдер **не создаёт** эти объекты, если предикат ложен (D43).\nВнутри registrar'а повторный `if` не нужен. Authentication переносит\nпять OIDC singleton'ов и `scoped ImpersonationService`. Wakeup —\nhint, tag, reconciler; команду `SweepRootWakeups` регистрирует в\n`boot()` (P8.3 пишет и `boot` этого класса, без trait).\n\n---"
+    },
+    {
+      "id": "6.-Tenancy-boot--registrar-P8.4",
+      "title": "6. Tenancy boot()-registrar'ы (P8.4)",
+      "text": "`RAG:✅` P8-Q3. Review `full`: порядок bootstrapper'ов и проекция на\nstancl."
+    },
+    {
+      "id": "6.1-RuntimeRegistrar-boot-P8.4",
+      "title": "6.1 RuntimeRegistrar::boot (дописывается в P8.4)",
+      "text": "```php\n#[Override]\npublic function boot(Application $app): void\n{\n    $options = $app->make(TenancyOptions::class);\n\n    $app['config']->set([\n        'tenancy.models.tenant' => $options->tenantModel,\n        'tenancy.database.central_connection' => $options->centralConnection,\n        'tenancy.database.managers.pgsql' => $options->tenantDatabaseManager,\n        'tenancy.bootstrappers' => $options->bootstrapperOrder,\n        'tenancy.cache.prefix' => $options->cachePrefix,\n    ]);\n\n    $app->bind(UniqueIdentifierGenerator::class, $options->idGenerator);\n}\n```\n\nМассив `bootstrapperOrder` — тот же объект, что в конфиге. Тест\nсравнивает `config('tenancy.bootstrapper_order')` с\n`config('tenancy.bootstrappers')` поэлементно и с литералом §6.4."
+    },
+    {
+      "id": "6.2-ConsoleRegistrar",
+      "title": "6.2 ConsoleRegistrar",
+      "text": "Не вызывать `$this->commands()`. Эквивалент провайдера:\n\n```php\nuse Illuminate\\Console\\Application as Artisan;\n\n#[Override]\npublic function boot(Application $app): void\n{\n    if (! $app->runningInConsole()) {\n        return;\n    }\n\n    Artisan::starting(static function (Artisan $artisan): void {\n        $artisan->resolveCommands([\n            PendingCreateCommand::class,\n            PendingClearCommand::class,\n            IdentitiesReconcileCommand::class,\n            TenantsMigrateCommand::class,\n        ]);\n    });\n}\n```"
+    },
+    {
+      "id": "6.3-HttpRegistrar",
+      "title": "6.3 HttpRegistrar",
+      "text": "`aliasMiddleware('tenancy.workspace', ResolveWorkspace::class)` —\nвсегда. Блоки host identification и OIDC — по полям Options, с тем же\nmerge группы `tenant` (`...$existing`). Перед `group` маршрутов:\n\n```php\nif ($app->routesAreCached()) {\n    return;\n}\n$app->make(Router::class)->group(\n    $app->make(TenancyServiceProvider::class)->oidcRouteFile(),\n);\n```\n\nПуть к `routes/oidc.php` провайдер отдаёт узким методом\n`oidcRouteFile(): string` (один литерал `__DIR__`), чтобы registrar не\nсчитал `__DIR__` своего файла. Альтернатива — абсолютный путь\n`dirname(__DIR__, 2).'/routes/oidc.php'` от `Laravel/`. Второй вариант\nпроще и не расширяет публичную поверхность провайдера: использовать его.\n\nИмена middleware, порядок в группе `tenant` и\n`addToMiddlewarePriorityBefore` копируются без перестановки."
+    },
+    {
+      "id": "6.4-EventsRegistrar",
+      "title": "6.4 EventsRegistrar",
+      "text": "Четыре `Dispatcher::listen` плюс три wildcard при\n`$options->impersonation->enabled`. Listener wildcard по-прежнему\n`[ImpersonatedModelWriteGuard::class, 'handle']` — resolve per event,\nне captured instance (`RAG:—` комментарий текущего провайдера).\n\nПорядок `bootstrapper_order` (литерал приёмки):\n\n1. `DatabaseTenancyBootstrapper`\n2. `WorkspaceContextBootstrapper`\n3. `CacheTenancyBootstrapper`\n4. `DatabaseSessionBootstrapper`\n5. `QueueTenancyBootstrapper`\n6. `FilesystemTenancyBootstrapper`\n7. `ScoutPrefixBootstrapper`\n\n---"
+    },
+    {
+      "id": "7.-Modules-P8.5",
+      "title": "7. Modules (P8.5)",
+      "text": "`CoreX\\Modules\\Laravel`. Провайдер оставляет `mergeConfigFrom`,\n`publishes`, `optimizes`, SCHEMA_VERSION.\n\n```php\nforeach ($this->registrars() as $registrar) {\n    $registrar->register($this->app);\n}\n// boot:\nforeach ($this->registrars() as $registrar) {\n    $registrar->boot($this->app);\n}\n```\n\n`RegistryRegistrar`: ArrayEntityRegistry, EntityRegistry, Discovery,\nActivationGate, cache, CompiledModuleRegistry, Introspection.\n`LifecycleRegistrar`: StateReader, RecordsRegistrar, wiring,\nModuleLifecycle; методы `moduleWiring()` и `registryVersion()`\nпереезжают сюда как private.\n`SettingsRegistrar`: rebind `SettingDefaultsProvider`.\n`ModulesBootRegistrar`: команды, `JobProcessing` flush, `booted` morph\nmap и `AuditCapabilityWiring`. `isCompilingModules()` переезжает с ним.\n\n`ModulesOptions` из контейнера: `$app->make(ModulesOptions::class)`\nвместо `config('corex-modules.*')`.\n\n---"
+    },
+    {
+      "id": "8.",
+      "title": "8. Что остаётся на главном провайдере",
+      "text": "Tenancy: mergeConfigFrom ×2, instance Options/policy, publishes ×3,\nсписок registrar'ов, условное включение Authentication/Wakeup.\nModules: SCHEMA_VERSION, mergeConfigFrom, publishes, optimizes,\nсписок registrar'ов.\n\nПосле P8.4/P8.5 call site `singleton|scoped|bind|bindIf` в каждом\nпровайдере — **ноль** (Options — `instance`). Это и есть цель гейта.\n\n---"
+    },
+    {
+      "id": "9.-P8.2-P8.3-P8.5",
+      "title": "9. Доказательство неизменности (P8.2, P8.3, P8.5)",
+      "text": "`RAG:✅` P8-Q4. Хелперы — в `packages/tenancy/tests/Concerns/` и\nаналог modules. `class_exists` как единственная проверка запрещена.\n\n```php\nprivate function assertSingletonBinding(\n    Application $app,\n    string $abstract,\n    string $expectedConcrete,\n): void {\n    expect($app->getBindings())->toHaveKey($abstract);\n    expect($app->isShared($abstract))->toBeTrue();\n    $first = $app->make($abstract);\n    $second = $app->make($abstract);\n    expect($first)->toBeInstanceOf($expectedConcrete);\n    expect($first)->toBe($second);\n    $app->forgetScopedInstances();\n    expect($app->make($abstract))->toBe($first);\n}\n\nprivate function assertScopedBinding(\n    Application $app,\n    string $abstract,\n    string $expectedConcrete,\n): void {\n    expect($app->getBindings())->toHaveKey($abstract);\n    expect($app->isShared($abstract))->toBeTrue();\n    $first = $app->make($abstract);\n    expect($first)->toBeInstanceOf($expectedConcrete);\n    expect($app->make($abstract))->toBe($first);\n    $app->forgetScopedInstances();\n    $next = $app->make($abstract);\n    expect($next)->toBeInstanceOf($expectedConcrete);\n    expect($next)->not->toBe($first);\n}\n\nprivate function assertTransientBinding(\n    Application $app,\n    string $abstract,\n    string $expectedConcrete,\n): void {\n    expect($app->getBindings())->toHaveKey($abstract);\n    expect($app->isShared($abstract))->toBeFalse();\n    $first = $app->make($abstract);\n    $second = $app->make($abstract);\n    expect($first)->toBeInstanceOf($expectedConcrete);\n    expect($first)->not->toBe($second);\n}\n```\n\nOptional-строки каталога гоняются дважды: предикат истинен — abstract\nbound; предикат ложен — `getBindings()` ключа нет.\n`bindIf` для `PrincipalWorkspaceResolver`: если потребитель уже bound,\nтест не перезаписывает; в чистом Testbench пакета — bound на\n`DatabaseWorkspaceResolver`.\n\nСтроки, требующие PG или полного tenancy-контекста для `make()`,\nдоказывают membership + `isShared` + forgetScoped без обязательного\n`make()`, если `make()` краснит инфраструктурой. Такие строки\nперечисляются в receipt с причиной. Lifetime всё равно проверяется\n`isShared` + forgetScoped на тех, где `make()` зелёный.\n\n---"
+    },
+    {
+      "id": "10.-P8.6-D45",
+      "title": "10. Гейт порога (P8.6, D45)",
+      "text": "`RAG:✅` P8-Q5. Сканер — `token_get_all(..., TOKEN_PARSE)`, не regex\nпо тексту (D16/D17). Считает в файле, чья декларация `extends\nServiceProvider` (или FQCN `Illuminate\\Support\\ServiceProvider`),\nвызовы `singleton` / `scoped` / `bind` / `bindIf` как T_STRING после\n`->`.\n\n`scripts/provider-size.json`:\n\n```json\n{\n  \"max_bindings\": 20,\n  \"methods\": [\"singleton\", \"scoped\", \"bind\", \"bindIf\"],\n  \"ratchet\": {\n    \"packages/core/src/CoreServiceProvider.php\": 18,\n    \"packages/tenancy/src/TenancyServiceProvider.php\": 0,\n    \"packages/modules/src/ModulesServiceProvider.php\": 0\n  },\n  \"note\": \"Числа ratchet — после P8.5. P8.6 пересчитывает и записывает факт. E-CORE-PROVIDER: core не дробится.\"\n}\n```\n\n18 у core — оценка до исполнения P7 (`instance` Options может не\nувеличить call site). P8.6 **сначала измеряет**, потом пишет JSON;\nспека запрещает угадывать. Если измерение дало 19 — в JSON 19, не 18.\n\nСообщение нарушения называет **относительный путь файла**, метод и\nсчёт. Посадка: `packages/core/src/Support/ProviderSizeProbeProvider.php`\nс 21 `singleton`, restore в `finally`. Pest вызывает CLI, не копирует\nсканер.\n\nAllowlist сверх ratchet нет. Новый `*ServiceProvider.php` без ключа в\nJSON обязан быть ≤ 20; следующий прогон добавляет его в ratchet\nизмерением, не вручную «с запасом».\n\n---"
+    },
+    {
+      "id": "11.-items",
+      "title": "11. Карта файлов по items",
+      "text": "| Item | Пишет |\n|:--|:--|\n| P8.1 | `packages/core/src/Support/PackageRegistrar.php`, `RegistersNothingOnBoot.php`, unit-тест, `@plan/knowledge/findings-P8-binding-catalog.json`, CHANGELOG |\n| P8.2 | `Laravel/RuntimeRegistrar.php`, `DatabaseRegistrar.php`, `ProvisioningRegistrar.php`, провайдер tenancy, `CompositionBindingsTest.php`, CHANGELOG |\n| P8.3 | пять registrar'ов §5.4–§5.5, провайдер, дописка теста, CHANGELOG |\n| P8.4 | Console/Http/Events, `RuntimeRegistrar::boot`, провайдер, тест порядка, CHANGELOG |\n| P8.5 | четыре registrar'а modules, провайдер, тест, CHANGELOG |\n| P8.6 | `scripts/provider-size-gate.php`, `scripts/provider-size.json`, `tests/Arch/ProviderSizeTest.php`, CHANGELOG, receipt |\n\n---"
+    },
+    {
+      "id": "12.-P9",
+      "title": "12. Границы и вход P9",
+      "text": "P9 читает `packages/tenancy/src/Laravel/` как слой composition root и\nне переносит registrar'ы в DomainTrust/Identity/Membership (D44).\nКарта bounded context'ов P9 может совпасть с именами registrar'ов\nтолько случайно: Membership в P9 есть, registrar'а membership нет.\n\nP4.12 по-прежнему владеет гейтом «singleton не принимает Application/\nRequest/Config». P8 не конвертирует lifetime.\n\n`CoreAuthServiceProvider` и прочие провайдеры < 20 не дробятся.\nRatchet заморозит их измеренные числа в P8.6.\n\n---"
+    },
+    {
+      "id": "13.-items",
+      "title": "13. Соответствие items → параграфы",
+      "text": "| Item | Параграфы |\n|:--|:--|\n| P8.1 | §0, §2, §3, §4 |\n| P8.2 | §0, §5.1–§5.3, §9 |\n| P8.3 | §0, §5.1, §5.4–§5.5, §9 |\n| P8.4 | §0, §6, §8 |\n| P8.5 | §0, §7, §8, §9 |\n| P8.6 | §0, §10 |"
+    }
+  ],
+  "applies_to": [
+    "P8"
+  ],
+  "provenance": {
+    "path": "research/P8-design.md",
+    "sha256": "bcc159f0568b15f68b7cef69bf5df5bbe012966180afdf35c2317f80a7b48b02"
+  }
+}

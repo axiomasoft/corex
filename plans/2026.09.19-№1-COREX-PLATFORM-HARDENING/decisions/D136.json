@@ -1,0 +1,49 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D136",
+  "title": "Normalize historical P16 friction before P17.1",
+  "date": "2026-09-27",
+  "status": "superseded",
+  "decision": "Authorize exactly one `journal-migration/v1`,\n`corex-p16-friction-normalization`, for this plan. Preserve the complete source\njournal as a sealed preimage. On lines 391–406 replace only `friction`, changing\n`[\"owner-waived-model-check\"]` to `[\"deviation\"]`. Bind every before/after line\ndigest and both whole-file digests in the manifest and receipt. Keep item,\ncommand, actor, result, session, run, terminal evidence, timestamps and all\nother fields unchanged. Reject a changed source digest, any additional line or\nany additional operation.",
+  "rationale": "An append cannot make invalid historical rows schema-valid. The Task migration\nruntime admits only the conservative legacy-friction normalization to\n`deviation`; the sealed preimage retains the exact original classification text.\nThis bounded repair restores deterministic recovery without changing any P16\nproduct or terminal result.",
+  "applies_to": [
+    "P16",
+    "P16.4",
+    "P16.5",
+    "P16.6",
+    "P16.9",
+    "P16.10",
+    "P16.11",
+    "P16.12",
+    "P16.13",
+    "P17.1"
+  ],
+  "supersedes": [],
+  "superseded_by": "D137",
+  "actor": {
+    "provider": "legacy",
+    "model": "owner / human through this exact P17.1 `task:plan-exec` conversation,\nrecorded by plan-maintenance / codex-gpt-5.6-sol/high."
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D136\ndate: 2026-09-27\nstatus: superseded\nitem: P17.1\nitems: [P16, P16.4, P16.5, P16.6, P16.9, P16.10, P16.11, P16.12, P16.13, P17.1]\nsupersedes: []\nsuperseded_by: D137\n---"
+    },
+    {
+      "id": "D136-Normalize-historical-P16-friction-before-P17.1",
+      "title": "D136 — Normalize historical P16 friction before P17.1",
+      "text": "**Actor:** owner / human through this exact P17.1 `task:plan-exec` conversation,\nrecorded by plan-maintenance / codex-gpt-5.6-sol/high.\n\n**Evidence:** `RAG:—` P17.1 recovery failed before its durable start with\n`JOURNAL_CORRUPT` at `@plan/log.jsonl:391`. A complete schema scan found exactly\nlines 391–406 invalid, each solely because `friction` is\n`[\"owner-waived-model-check\"]`. The source journal SHA-256 is\n`00d58f1f097aefb28159083be791d05225e2d23be697b93f5539bbf20647df90`.\nThe owner first authorized a `route-deviation` normalization, then explicitly\naccepted the Task runtime's supported canonical target `[\"deviation\"]`."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "Authorize exactly one `journal-migration/v1`,\n`corex-p16-friction-normalization`, for this plan. Preserve the complete source\njournal as a sealed preimage. On lines 391–406 replace only `friction`, changing\n`[\"owner-waived-model-check\"]` to `[\"deviation\"]`. Bind every before/after line\ndigest and both whole-file digests in the manifest and receipt. Keep item,\ncommand, actor, result, session, run, terminal evidence, timestamps and all\nother fields unchanged. Reject a changed source digest, any additional line or\nany additional operation."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "An append cannot make invalid historical rows schema-valid. The Task migration\nruntime admits only the conservative legacy-friction normalization to\n`deviation`; the sealed preimage retains the exact original classification text.\nThis bounded repair restores deterministic recovery without changing any P16\nproduct or terminal result."
+    }
+  ]
+}

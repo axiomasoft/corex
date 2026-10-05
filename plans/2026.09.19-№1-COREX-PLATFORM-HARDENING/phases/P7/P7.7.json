@@ -1,0 +1,262 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P7.7",
+  "title": "Инъекция AuthOptions в access/matrix",
+  "status": "done",
+  "summary": "Перевести семь оставшихся читателей `corex-auth.*` на\n`AuthOptions`.",
+  "why": "`panel` читается в пяти местах одинаково — после P7.6 это поле\nOptions, не ключ. CFG-002.",
+  "scope": {
+    "include": [
+      "семь файлов §8 (access/matrix); замыкания провайдера\nэтих типов; CHANGELOG."
+    ],
+    "exclude": [
+      "новый policy-класс на `panel` (D41); смена AzGuard\npins; WorkspaceScope FQCN как импорт (строка сохраняется)."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P7-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/auth/src/CoreAuthServiceProvider.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P7/P7.6.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P7/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/auth/src/Access/DefaultAccessChecker.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/auth/src/Access/ScopePredicate.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/auth/src/Matrix/ScopeMapVersion.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D41.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/auth/src/Access/DefaultAccessChecker.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/auth/src/Access/DirectGrantLookup.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/auth/src/Access/DefaultScopeResolver.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/auth/src/Access/ScopePredicate.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/auth/src/Matrix/ScopeMapVersion.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/auth/src/Matrix/MatrixPermissionCatalogBuilder.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/auth/src/Matrix/DatabaseRoleMatrixCompiler.php",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Каждый класс получает `AuthOptions` named\nаргументом. `config(` в семи файлах исчезает. Провайдер правится только\nесли замыкание ещё не передаёт Options (после P7.6 singleton уже есть —\nдостаточно type-hint). Ни один файл вне `Files` не изменяется.\n`CoreAuthServiceProvider` не в Files: если без правки провайдера\nконструктор не резолвится, это дефект P7.6, не расширение Files."
+  ],
+  "guidance": "`panel`, `cacheStore`, `workspaceScopeClass` — поля\nOptions. Не вводить геттеры-обёртки.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "rg -n 'config\\('",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "rg -n 'config\\(' packages/auth/src",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "composer --working-dir=packages/auth lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "composer --working-dir=packages/auth analyse",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "composer --working-dir=packages/auth test",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "composer --working-dir=packages/auth test:pg",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "rg -n config( on seven access/matrix files",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "access/matrix без `config()`; строка CHANGELOG."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "medium"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-23T10:25:12Z",
+    "finished_at": "2026-09-23T10:27:19Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/cursor-composer-2.5/medium",
+      "effort": "medium"
+    },
+    "notes": "P7.7 GREEN: seven access/matrix readers on AuthOptions. pest 38/112 pg, phpstan 0.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-23T10:27:19Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-23T10:27:19Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-23T10:27:19Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-23T10:27:19Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-23T10:27:19Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-23T10:27:19Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Перевести семь оставшихся читателей `corex-auth.*` на\n`AuthOptions`."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`panel` читается в пяти местах одинаково — после P7.6 это поле\nOptions, не ключ. CFG-002."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "семь файлов §8 (access/matrix); замыкания провайдера\nэтих типов; CHANGELOG."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "новый policy-класс на `panel` (D41); смена AzGuard\npins; WorkspaceScope FQCN как импорт (строка сохраняется)."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P7-design.json` §8;\n`packages/auth/src/CoreAuthServiceProvider.php`;\n`@plan/phases/P7/P7.6.json`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/auth/src/Access/DefaultAccessChecker.php`; `packages/auth/src/Access/DirectGrantLookup.php`; `packages/auth/src/Access/DefaultScopeResolver.php`; `packages/auth/src/Access/ScopePredicate.php`; `packages/auth/src/Matrix/ScopeMapVersion.php`; `packages/auth/src/Matrix/MatrixPermissionCatalogBuilder.php`; `packages/auth/src/Matrix/DatabaseRoleMatrixCompiler.php`; `CHANGELOG.md`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P7/phase.json`; 2) `@plan/knowledge/research-P7-design.json` §0, §8; 3) `@plan/phases/P7/P7.6.json`; 4) `packages/auth/src/CoreAuthServiceProvider.php`; 5) `packages/auth/src/Access/DefaultAccessChecker.php`; 6) `packages/auth/src/Access/ScopePredicate.php`; 7) `packages/auth/src/Matrix/ScopeMapVersion.php`; 8) `@plan/decisions/D41.json`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Каждый класс получает `AuthOptions` named\nаргументом. `config(` в семи файлах исчезает. Провайдер правится только\nесли замыкание ещё не передаёт Options (после P7.6 singleton уже есть —\nдостаточно type-hint). Ни один файл вне `Files` не изменяется.\n`CoreAuthServiceProvider` не в Files: если без правки провайдера\nконструктор не резолвится, это дефект P7.6, не расширение Files."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "`panel`, `cacheStore`, `workspaceScopeClass` — поля\nOptions. Не вводить геттеры-обёртки."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "пакетные lint, analyse, test, test:pg.\n`rg -n 'config\\('` по семи файлам пуст.\n`rg -n 'config\\(' packages/auth/src` после item'а — только провайдер."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "access/matrix без `config()`; строка CHANGELOG."
+    }
+  ]
+}

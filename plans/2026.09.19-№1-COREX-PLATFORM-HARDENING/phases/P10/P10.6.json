@@ -1,0 +1,318 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P10.6",
+  "title": "Восемь write checks",
+  "status": "done",
+  "summary": "Сделать каждый слой write authority и validation отдельным, fail-closed\nи наблюдаемым без утечки существования скрытого поля.",
+  "why": "`P10-design.md` §7–§8; D54. Текущий общий action недостаточен.",
+  "scope": {
+    "include": [
+      "`expectedSchemaHash`; ordered guard; opaque resource/action mapping;\nconstraints; atomic batch behavior; eight negative test families."
+    ],
+    "exclude": [
+      "P13 operation contract/onlyFields; новый authorization interface;\nизменение public store methods."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/phases/P10/P10.2.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/phases/P10/P10.3.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "packages/core/src/Data/Contracts/DataScopeAuthorizer.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/attributes/src/Internal/Engine/FieldValueValidator.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P10/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P10-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D54.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/attributes/src/Internal/Engine/JsonbAttributeStore.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/attributes/src/Internal/Engine/EavAttributeStore.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/attributes/src/Support/ValuePatch.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P4-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-03-shapes-api.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/attributes/src/Support/ValuePatch.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/attributes/src/Internal/Engine/AttributeWriteGuard.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/attributes/src/Internal/Engine/FieldValueValidator.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/attributes/src/Internal/Engine/JsonbAttributeStore.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/attributes/src/Internal/Engine/EavAttributeStore.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/attributes/src/Internal/ScopeDenied.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/attributes/tests/Unit/AttributeWriteGuardTest.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/attributes/tests/Pg/AttributeWriteAuthorizationTest.php",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Fixed order from §8. Authoritative uncached snapshot.\nExternal denial normalised; internal reason distinct and value-free. Migrating or\ndeprecated write requires matching hash. Batch mutation is all-or-nothing."
+  ],
+  "guidance": "Build canonical resource from scope/entity/opaque record id/attribute\nid; no model FQCN. Keep type vs constraint validators distinct.",
+  "validation": [
+    {
+      "id": "V1",
+      "procedure": "eight ordered write checks and opaque authority resource",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "procedure": "hidden and unknown fields share one external error",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "procedure": "wrong tenant before catalogue or database mutation",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "stale schema and atomic batch rollback on both engines",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "attributes package unit suite",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "attributes package PostgreSQL suite",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "attributes static analysis and scoped style",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "root PostgreSQL integration suite",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "procedure": "task contract Validation receipt",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Patch precondition, guard/validator, store wiring, negative matrix."
+  ],
+  "route": {
+    "class": "frontier",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-24T11:37:36Z",
+    "finished_at": "2026-09-24T11:49:58Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "executor/gpt-5.6-sol/high",
+      "effort": "high"
+    },
+    "notes": "P10.6 GREEN: eight ordered fail-closed checks, schema precondition, opaque per-field authority, constraints and atomic both-engine denial; attributes 55/174 + pg 38/198; root pg 206/849; phpstan 0; scoped Pint passed. write-site: pre_mutation: allow · pre_final: allow",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-09-24T11:49:58Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-09-24T11:49:58Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-09-24T11:49:58Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-24T11:49:58Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-24T11:49:58Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-24T11:49:58Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-24T11:49:58Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-24T11:49:58Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-09-24T11:49:58Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-24T11:49:58Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Сделать каждый слой write authority и validation отдельным, fail-closed\nи наблюдаемым без утечки существования скрытого поля."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`P10-design.md` §7–§8; D54. Текущий общий action недостаточен."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "`expectedSchemaHash`; ordered guard; opaque resource/action mapping;\nconstraints; atomic batch behavior; eight negative test families."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "P13 operation contract/onlyFields; новый authorization interface;\nизменение public store methods."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/phases/P10/P10.2.json`; `@plan/phases/P10/P10.3.json`;\n`packages/core/src/Contracts/DataScopeAuthorizer.php`;\n`packages/attributes/src/Internal/Engine/FieldValueValidator.php`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/attributes/src/Support/ValuePatch.php`;\n`packages/attributes/src/Internal/Engine/AttributeWriteGuard.php`;\n`packages/attributes/src/Internal/Engine/FieldValueValidator.php`;\n`packages/attributes/src/Internal/Engine/JsonbAttributeStore.php`;\n`packages/attributes/src/Internal/Engine/EavAttributeStore.php`;\n`packages/attributes/src/Internal/ScopeDenied.php`;\n`packages/attributes/tests/Unit/AttributeWriteGuardTest.php`;\n`packages/attributes/tests/Pg/AttributeWriteAuthorizationTest.php`."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P10/phase.json`; 2) `@plan/knowledge/research-P10-design.json` §6–§8, §11;\n3) `@plan/decisions/D54.json`;\n4) `packages/core/src/Contracts/DataScopeAuthorizer.php`;\n5) `packages/attributes/src/Internal/Engine/JsonbAttributeStore.php`;\n6) `packages/attributes/src/Internal/Engine/EavAttributeStore.php`;\n7) `packages/attributes/src/Internal/Engine/FieldValueValidator.php`;\n8) `packages/attributes/src/Support/ValuePatch.php`;\n9) `@plan/knowledge/research-P4-design.json` DataScope; 10) `@plan/knowledge/research-03-shapes-api.json` onlyFields."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Fixed order from §8. Authoritative uncached snapshot.\nExternal denial normalised; internal reason distinct and value-free. Migrating or\ndeprecated write requires matching hash. Batch mutation is all-or-nothing."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Build canonical resource from scope/entity/opaque record id/attribute\nid; no model FQCN. Keep type vs constraint validators distinct."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "One red test per check plus hidden-vs-unknown same external error;\nwrong tenant before DB mutation; stale hash; batch rollback; both engines."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "Patch precondition, guard/validator, store wiring, negative matrix."
+    }
+  ]
+}

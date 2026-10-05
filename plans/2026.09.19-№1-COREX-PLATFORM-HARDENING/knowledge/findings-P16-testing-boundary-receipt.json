@@ -1,0 +1,34 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "findings-P16-testing-boundary-receipt",
+  "title": "Dev-only Testing boundary",
+  "sections": [
+    {
+      "id": "P16.10-Dev-only-Testing-boundary",
+      "title": "P16.10 — Dev-only Testing boundary",
+      "text": "**Batch:** E16e · **Decisions:** D33 closed, D94 applied · **Actor:** plan-exec / direct (owner waived model check)\n\nShared Testbench harnesses left production autoload. Each affected package suite boots from its own `tests/` tree. `autoload-dev` of a dependency is not used."
+    },
+    {
+      "id": "Carriers-removed",
+      "title": "Carriers removed",
+      "text": "| Former production class | Now |\n|:--|:--|\n| `CoreX\\Testing\\CoreXTestCase`, `IsolatesDatabasePath` | `packages/core/tests/Support/` via core and root `autoload-dev` only |\n| `CoreX\\Auth\\Testing\\CoreAuthTestCase` | `CoreX\\Auth\\Tests\\Support\\CoreAuthTestCase` |\n| `CoreX\\Tasks\\Testing\\TasksTestCase` | `CoreX\\Tasks\\Tests\\Support\\TasksTestCase` (no `CoreX\\Testing` parent) |\n| `Flex\\Crm\\Testing\\CrmTestCase` | `Flex\\Crm\\Tests\\Support\\CrmTestCase` (no `CoreX\\Testing` parent) |\n\nintl, search-intl, tenancy, and tasks-workflow each have a local `tests/Support` harness. They do not import another package's test class. `CoreX\\Modules\\Testing\\ExtensionContract` stays a production helper (P11), not a Testbench base.\n\nD33 staging comment and `RT1_EXISTING` allowlist are gone. `tests/Arch/TestingAutoloadTest.php` now fails if production `src` imports `CoreX\\Testing`, `CoreX\\Auth\\Testing`, `CoreX\\Tasks\\Testing`, or `Flex\\Crm\\Testing`, and if a package test outside core/root imports `CoreX\\Testing`."
+    },
+    {
+      "id": "Positive-negative-sweep",
+      "title": "Positive / negative sweep",
+      "text": "| Check | Result |\n|:--|:--|\n| `packages/*/src` harness namespaces above | empty (only `packages/modules/src/Testing/ExtensionContract.php` remains) |\n| `use CoreX\\Testing\\` outside `packages/core/tests` and root `tests/` | empty |\n| production `autoload.psr-4` keys/paths containing `Testing` | empty |\n| root classmap `CoreX\\Testing\\CoreXTestCase` | `packages/core/tests/Support/CoreXTestCase.php` |\n| `CoreX\\Auth\\Testing`, `CoreX\\Tasks\\Testing`, `Flex\\Crm\\Testing` in root classmap | absent |\n| Arch `TestingAutoload` | 3 passed, 14 assertions |\n| `packages/core` `composer validate --strict --no-check-publish` | valid |\n| `composer dump-autoload -o --strict-psr` | exit 1 on the pre-existing attributes/operations test-double skip list; no Testing class in that list |"
+    },
+    {
+      "id": "Package-tests",
+      "title": "Package tests",
+      "text": "| Command | Result |\n|:--|:--|\n| `packages/core` test | 139 passed (387 assertions), includes publish-isolation DB guard |\n| `packages/access` test | 38 passed (65 assertions) |\n| `packages/tasks` test | 33 passed (106 assertions) |\n| `packages/crm` test | 34 passed (135 assertions) |\n| `packages/intl` test | 33 passed (96 assertions) |\n| `packages/search-intl` test | 6 passed (14 assertions) |\n| `packages/tasks-workflow` test | 17 passed (128 assertions) |\n| `packages/tenancy` test | 496 passed, 7 skipped (1766 assertions) |\n| root `composer test:packages` | exit 0 (operations through workflow) |\n\nPackage vendors that still mapped `CoreX\\Modules\\` only to `src/` were refreshed with `composer update corex/modules` so the P16.7 multi-path prefix is what those suites load. `packages/access` was left on its lock: `axioma-studio/azguard-core` is not in the remote set, and its own test command was already green.\n\n`scripts/package-graph-gate.json` dropped the seven public-api exceptions whose files were the deleted `src/Testing` carriers, and retargeted six exceptions onto the post-P16.1/P16.8 paths (`RateImporter`, `SqlRateImporter`, `ConvertLead`, `CrmIdentifier`, `DealAmount`, `ContextGuard`). `package-graph-gate` then exits 0. Undeclared-surface snapshot no longer lists the five removed harness FQCNs."
+    }
+  ],
+  "applies_to": [
+    "P16"
+  ],
+  "provenance": {
+    "path": "findings/P16-testing-boundary-receipt.md",
+    "sha256": "fe5d5b52a2c3fa25d72ca2e9a4fb1aa2f1a42051a33dcb53907c9ddcac47e497"
+  }
+}

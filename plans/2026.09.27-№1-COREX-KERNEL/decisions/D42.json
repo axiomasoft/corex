@@ -1,0 +1,45 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D42",
+  "title": "Laravel 12 test stack correction (accepted)",
+  "date": "2026-09-28",
+  "status": "accepted",
+  "decision": "1. Уточнить D37: основные манифесты и Laravel 13 используют Pest `^5.2` / PHPUnit 13.\n   Только Laravel 12 test/CI-лейн в своём checkout переопределяет dev requirement на\n   Pest `^4.7` / PHPUnit 12 перед полным Composer update. PHP `^8.4`, Testbench\n   `^10.12|^11.3`, runtime-поддержка Laravel 12/13 и остальные правила D37 сохраняются.\n2. P01.1 runbook: require `illuminate/contracts:12.* --no-update`, затем\n   `composer require --dev pestphp/pest:^4.7 --no-update`, staged provider update,\n   cleanup и неизменённый `composer test`. P01.4 применяет то же переопределение\n   только в Laravel 12 ветке матрицы; CI-код выполняется в P01.4.\n3. Strict validation перебирает `composer.json` и `packages/*/composer.json`,\n   используя родительский каталог каждого манифеста. Это ровно 21 installable root.\n   Каталог с одним историческим CHANGELOG не является Composer-корнем.\n   Строгость Composer и все отрицательные контроли сохраняются.",
+  "rationale": "Pest 5.2.0/5.2.1 требует Symfony Process 8.1; Laravel 12 требует Process 7.x.\nРазрешение полного набора несовместимо даже с `--with-all-dependencies`.\nTestbench, принимающий PHPUnit 13, не устраняет конфликт Pest → Symfony.\nПроверенный Laravel 12 кандидат с Pest 4.7.8 проходит 808 + 10 корневых тестов\nбез изменения assertions. Исходная glob-команда strict-validation захватывает\n`packages/import-export/CHANGELOG.md`, хотя у этого каталога нет манифеста.",
+  "applies_to": [
+    "P01.1",
+    "P01.4"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "owner choice, 2026-09-28: «Разрешить Pest 4.7 только в Laravel 12-лейне; Pest 5.2 оставить для Laravel 13 (рекомендуется)».\nMechanical validation correction: executor/codex/gpt-6-sol/high under D41's inline-correction mandate."
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D42\ndate: 2026-09-28\nstatus: accepted\nitem: P01.1\nitems: [P01.1, P01.4]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D42-Laravel-12-test-stack-correction-accepted",
+      "title": "D42 — Laravel 12 test stack correction (accepted)",
+      "text": "**Actor:** owner choice, 2026-09-28: «Разрешить Pest 4.7 только в Laravel 12-лейне; Pest 5.2 оставить для Laravel 13 (рекомендуется)».\nMechanical validation correction: executor/codex/gpt-6-sol/high under D41's inline-correction mandate.\n**Evidence:** `artifacts/P01.1-execution/upstream-process-constraints.json`,\n`l12-update-with-dependencies.log`, `l12-proposal.json`, `l12-proposal-test.log`,\n`validate-clean-worktree.log`, `validate-clean-manifests.log` in the same artifact directory."
+    },
+    {
+      "id": "Solution",
+      "title": "Solution",
+      "text": "1. Уточнить D37: основные манифесты и Laravel 13 используют Pest `^5.2` / PHPUnit 13.\n   Только Laravel 12 test/CI-лейн в своём checkout переопределяет dev requirement на\n   Pest `^4.7` / PHPUnit 12 перед полным Composer update. PHP `^8.4`, Testbench\n   `^10.12|^11.3`, runtime-поддержка Laravel 12/13 и остальные правила D37 сохраняются.\n2. P01.1 runbook: require `illuminate/contracts:12.* --no-update`, затем\n   `composer require --dev pestphp/pest:^4.7 --no-update`, staged provider update,\n   cleanup и неизменённый `composer test`. P01.4 применяет то же переопределение\n   только в Laravel 12 ветке матрицы; CI-код выполняется в P01.4.\n3. Strict validation перебирает `composer.json` и `packages/*/composer.json`,\n   используя родительский каталог каждого манифеста. Это ровно 21 installable root.\n   Каталог с одним историческим CHANGELOG не является Composer-корнем.\n   Строгость Composer и все отрицательные контроли сохраняются."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "Pest 5.2.0/5.2.1 требует Symfony Process 8.1; Laravel 12 требует Process 7.x.\nРазрешение полного набора несовместимо даже с `--with-all-dependencies`.\nTestbench, принимающий PHPUnit 13, не устраняет конфликт Pest → Symfony.\nПроверенный Laravel 12 кандидат с Pest 4.7.8 проходит 808 + 10 корневых тестов\nбез изменения assertions. Исходная glob-команда strict-validation захватывает\n`packages/import-export/CHANGELOG.md`, хотя у этого каталога нет манифеста."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P01.1 получает исполнимый Laravel 12 acceptance lane; P01.4 потребляет эту поправку.\nStandalone package dev-манифесты остаются на Pest 5.2. Новая независимая проверка\nтекущего diff и evidence обязательна перед GREEN. Публикация и push не разрешаются."
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P06-design-rag-http-05-cloudevents-distributed-tracing",
+  "title": "http-05-cloudevents-distributed-tracing — CloudEvents 1.0.2 Distributed Tracing extension (traceparent, tracestate)",
+  "sections": [
+    {
+      "id": "http-05-cloudevents-distributed-tracing-CloudEvents-1.0.2-Distributed-Tracing-extension-traceparent-tracestate",
+      "title": "http-05-cloudevents-distributed-tracing — CloudEvents 1.0.2 Distributed Tracing extension (traceparent, tracestate)",
+      "text": "- Tool: curl (primary source) · Date: 2026-10-03\n- URL: https://raw.githubusercontent.com/cloudevents/spec/v1.0.2/cloudevents/extensions/distributed-tracing.md\n- SHA-256 of fetched document: `bf6cef7bc1a72c59eee126f5f5a3047f58d9961899fbfa9625c3ade3f28980a5` (55 lines)\n- Status: primary source; excerpts verbatim, line ranges of the fetched file."
+    },
+    {
+      "id": "Lines-1-55",
+      "title": "Lines 1-55",
+      "text": "```text"
+    },
+    {
+      "id": "Distributed-Tracing-extension",
+      "title": "Distributed Tracing extension",
+      "text": "This extension embeds context from\n[Distributed Tracing](https://w3c.github.io/trace-context/) so that distributed\nsystems can include traces that span an event-driven system. This extension is\nmeant to contain historical data of the parent trace, in order to diagnose\neventual failures of the system through tracing platforms like Jaeger, Zipkin,\netc."
+    },
+    {
+      "id": "Attributes",
+      "title": "Attributes",
+      "text": ""
+    },
+    {
+      "id": "traceparent",
+      "title": "traceparent",
+      "text": "- Type: `String`\n- Description: Contains a version, trace ID, span ID, and trace options as\n  defined in [section 3.2](https://w3c.github.io/trace-context/#traceparent-header)\n- Constraints\n  - REQUIRED"
+    },
+    {
+      "id": "tracestate",
+      "title": "tracestate",
+      "text": "- Type: `String`\n- Description: a comma-delimited list of key-value pairs, defined by\n  [section 3.3](https://w3c.github.io/trace-context/#tracestate-header).\n- Constraints\n  - OPTIONAL"
+    },
+    {
+      "id": "Using-the-Distributed-Tracing-Extension",
+      "title": "Using the Distributed Tracing Extension",
+      "text": "The Distributed Tracing Extension is not intended to replace the protocol specific headers for tracing, \nlike the ones described in [W3C Trace Context](https://w3c.github.io/trace-context/) for HTTP.\n\nGiven a single hop event transmission (from sink to source directly), the Distributed Tracing Extension, \nif used, MUST carry the same trace information contained in protocol specific tracing headers.\n\nGiven a multi hop event transmission, the Distributed Tracing Extension, if used, MUST \ncarry the trace information of the starting trace of the transmission. \nIn other words, it MUST NOT carry trace information of each individual hop, since this information is usually \ncarried using protocol specific headers, understood by tools like [OpenTelemetry](https://opentelemetry.io/).\n \nMiddleware between the source and the sink of the event could eventually add a Distributed Tracing Extension\nif the source didn't include any, in order to provide to the sink the starting trace of the transmission.\n\nAn example with HTTP:\n\n```bash\nCURL -X POST example/webhook.json \\\n-H 'ce-id: 1' \\\n-H 'ce-specversion: 1.0' \\\n-H 'ce-type: example' \\\n-H 'ce-source: http://localhost' \\\n-H 'ce-traceparent:  00-0af7651916cd43dd8448eb211c80319c-b9c7c989f97918e1-01' \\\n-H 'traceparent:  00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01' \\\n-H 'tracestate: rojo=00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01,congo=lZWRzIHRoNhcm5hbCBwbGVhc3VyZS4`\n```\n```"
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "artifacts/P06-design-rag/http-05-cloudevents-distributed-tracing.md",
+    "sha256": "36596a41dd4a79fcb8f2541d9a9b3d7a473016e359f80a9c6df00ed22c0637cc"
+  }
+}

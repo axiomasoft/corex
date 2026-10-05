@@ -1,0 +1,24 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "findings-P01.1-post-install-preflight",
+  "title": "O-1 выполнен; остановка на O-2 (2026-09-28)",
+  "sections": [
+    {
+      "id": "P01.1-O-1-O-2-2026-09-28",
+      "title": "P01.1 — O-1 выполнен; остановка на O-2 (2026-09-28)",
+      "text": "Actor: executor/codex/gpt-6-sol/high. RAG:—.\n\nВладелец сообщил об установке GMP. Повторная проверка:\n\n- `scripts/php84 --check` → `php84 OK: 8.4.26, extensions complete`, exit 0.\n- `pg_isready -h 127.0.0.1 -p 5432` → accepting connections, exit 0.\n- `PGPASSWORD=corex psql -h 127.0.0.1 -U corex -d corex_test -tAc 'select 1'`\n  → `FATAL: password authentication failed for user \"corex\"`, exit 2.\n- Read-only попытка проверить наличие роли и трёх тестовых БД через\n  `sudo -n -u postgres psql` → `sudo: a password is required`.\n\nОтсутствие роли не доказано: ошибка аутентификации не отличает отсутствующую\nроль от неверного пароля. Проверка повторяется в сохранённом\n`artifacts/P01.1-execution/post-install-preflight.txt`.\n\nO-1 закрыт. P01.1 остаётся заблокированным на O-2 по `@plan/knowledge/research-P01-design.json`\n§4.1 шаг 3 и §7. Административный доступ через sudo недоступен без участия\nвладельца. Baseline и изменения манифестов не начинались."
+    },
+    {
+      "id": "Owner-action",
+      "title": "Owner action",
+      "text": "Следующий скрипт выполняется владельцем; он настраивает только роль `corex`\nи три объявленные тестовые БД. Существующие БД не удаляются.\n\n```bash\nsudo -u postgres psql -v ON_ERROR_STOP=1 -d postgres <<'SQL'\nDO $$\nBEGIN\n    IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'corex') THEN\n        CREATE ROLE corex LOGIN PASSWORD 'corex' CREATEDB;\n    ELSE\n        ALTER ROLE corex WITH LOGIN PASSWORD 'corex' CREATEDB;\n    END IF;\nEND\n$$;\nSQL\nfor db in corex_test corex_search_a_test corex_search_b_test; do\n    exists=$(sudo -u postgres psql -v ON_ERROR_STOP=1 -d postgres -tAc \"SELECT 1 FROM pg_database WHERE datname = '$db'\") || exit 1\n    if [[ \"$exists\" != 1 ]]; then\n        sudo -u postgres createdb -O corex \"$db\" || exit 1\n    fi\ndone\nPGPASSWORD=corex psql -h 127.0.0.1 -U corex -d corex_test -tAc 'select 1'\n```\n\n**Возобновление:** после результата `1` на последней команде повторить preflight\nи перейти к §4.1 шагу 4: baseline на исходных манифестах и lock под PHP 8.4."
+    }
+  ],
+  "applies_to": [
+    "P01.1"
+  ],
+  "provenance": {
+    "path": "findings/P01.1-post-install-preflight.md",
+    "sha256": "15cbda30c56400180c36cb0d1bff6862596af0b973cdfc04bf9562ae255acfef"
+  }
+}

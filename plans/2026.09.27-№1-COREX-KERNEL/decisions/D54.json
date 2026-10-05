@@ -1,0 +1,39 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D54",
+  "title": "Исторические ключи проекции ratchet",
+  "date": "2026-09-29",
+  "status": "accepted",
+  "decision": "Дополнить разрешённые исключения D45 единственным точным файлом `scripts/ratchet-successors.json`. Его прежние package-ключи — входная историческая сторона преобразования, а не живые зависимости. Не менять ключи, значения, groups или source_transfers. Исключение не распространяется на другие scripts; негатив прежнего package-токена в живой документации остаётся RED.",
+  "rationale": "Удаление либо переименование исходных ключей лишает anti-weakening корректной проекции предыдущего дерева. Это та же историческая семантика, что у уже исключённых Golden rename-map и package-projection. Точный файл содержит только закрытую карту, не продуктовый код.",
+  "applies_to": [
+    "P02.4"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "executor/codex/gpt-6-sol/high по мандату B6, plan §2."
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D54\ndate: 2026-09-29\nstatus: accepted\nitem: P02.4\nitems: [P02.4]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D54-ratchet",
+      "title": "D54 — Исторические ключи проекции ratchet",
+      "text": "**Actor:** executor/codex/gpt-6-sol/high по мандату B6, plan §2.\n**Evidence:** RAG:— полный rename-completeness даёт ровно 19 package-токенов в `scripts/ratchet-successors.json`; `scripts/anti-weakening-gate.sh` читает `packages` как отображение идентификаторов предыдущего git-дерева в текущих владельцев. D44/D51 требуют сохранить эту проверку без ослабления."
+    },
+    {
+      "id": "Solution",
+      "title": "Solution",
+      "text": "Дополнить разрешённые исключения D45 единственным точным файлом `scripts/ratchet-successors.json`. Его прежние package-ключи — входная историческая сторона преобразования, а не живые зависимости. Не менять ключи, значения, groups или source_transfers. Исключение не распространяется на другие scripts; негатив прежнего package-токена в живой документации остаётся RED."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "Удаление либо переименование исходных ключей лишает anti-weakening корректной проекции предыдущего дерева. Это та же историческая семантика, что у уже исключённых Golden rename-map и package-projection. Точный файл содержит только закрытую карту, не продуктовый код."
+    }
+  ]
+}

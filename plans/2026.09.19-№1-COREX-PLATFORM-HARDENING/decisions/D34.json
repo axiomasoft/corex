@@ -1,0 +1,47 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D34",
+  "title": "Условие 3 литмуса (нет Eloquent/HTTP/Application) дисквалифицирует Foundation; одноимённые зоны Features/Departments/Money добавляются в матрицу",
+  "date": "2026-09-19",
+  "status": "accepted",
+  "decision": "1. Для **размещения в зоне Foundation** условие 3 литмуса жёсткое: импорт\n   `Illuminate\\Database\\Eloquent`, `Illuminate\\Http` или\n   `Illuminate\\Foundation\\Application` выводит тип из Foundation, даже если\n   остальные пять пунктов истинны. Вердикт инвентаря P2.5 (`KEEP` + warning)\n   этим не отменяется: это разные оси («удалять ли класс» vs «в какой зоне\n   он живёт»).\n2. К семи зонам эскиза добавляются три одноимённые: `Features`, `Departments`,\n   `Money`. Направления как у `Settings`: только `Foundation` и\n   `TenancyContracts`. Пакет из них не делается (D8).\n3. Именованное исключение **E-BASEMODEL:** `Models/BaseModel.php` принадлежит\n   Foundation с warning по условию 3 и **единственный** файл Foundation,\n   которому разрешён импорт `CoreX\\Concerns\\HasAuditLog` (зона Audit). Обратное\n   направление Audit → Foundation через `HasConfiguredId` разрешено матрицей.\n   Цикл Foundation ⇄ Audit кроме этого файла запрещён.\n4. `Departments` — кандидат уровня 1 (продуктовая оргструктура), не пакет 1.0.\n   Условие возврата — в `@plan/plan.json` §7. `Money` — кандидат на пакет при\n   потребителе, которому нужен `corex/core` без `brick/money`.",
+  "rationale": "Слепое применение P2.5 «один fail = оставить в Foundation» противоречило бы\nэскизу и A29, который P6 обязан сделать исполняемым. Вынести BaseModel из\nFoundation нельзя без смены семантики аудита (Scope Excluded). Три малых зоны\nдешевле десяти пакетов и честнее, чем прятать Eloquent-возможности в Foundation.\nАльтернатива «зона Persistence» отклонена: она плодит восьмую абстракцию ради\nтрёх файлов и всё равно требует исключения BaseModel → Audit.",
+  "applies_to": [
+    "P6",
+    "P6.1",
+    "P6.3"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/cursor-grok-4.6/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D34\ndate: 2026-09-19\nstatus: accepted\nitem: P6.3\nitems: [P6, P6.1, P6.3]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D34-3-Eloquent-HTTP-Application-Foundation-Features-Departments-Money",
+      "title": "D34 — Условие 3 литмуса (нет Eloquent/HTTP/Application) дисквалифицирует Foundation; одноимённые зоны Features/Departments/Money добавляются в матрицу",
+      "text": "**Actor:** plan-designer/cursor-grok-4.6/high\n**Evidence:** RAG:✅ 2026-09-19 P6-Q5 Evans Shared Kernel, Microsoft modular\nmonolith, Drupal core vs modules — foundation это стабильный примитив с тем же\nсмыслом у всех потребителей; org-departments и финансовая политика — capability.\nRAG:— эскиз `01-shapes-runtime.md` §3: «всё, что тянет Eloquent, HTTP или\nlifecycle приложения, в Foundation не входит по определению». RAG:— P2-design.md\n§7.1: один ложный пункт даёт `KEEP` + `litmus-warning`, два — `MOVE`. RAG:—\n`BaseModel` uses `HasAuditLog` (Audit); `HasConfiguredId` и `IdColumns` тянут\nEloquent; `MoneyCast` реализует `CastsAttributes`; `DatabaseFeatureFlags` и\n`Department` model — Eloquent. Эскиз не перечислял зоны Features, Departments,\nMoney."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "1. Для **размещения в зоне Foundation** условие 3 литмуса жёсткое: импорт\n   `Illuminate\\Database\\Eloquent`, `Illuminate\\Http` или\n   `Illuminate\\Foundation\\Application` выводит тип из Foundation, даже если\n   остальные пять пунктов истинны. Вердикт инвентаря P2.5 (`KEEP` + warning)\n   этим не отменяется: это разные оси («удалять ли класс» vs «в какой зоне\n   он живёт»).\n2. К семи зонам эскиза добавляются три одноимённые: `Features`, `Departments`,\n   `Money`. Направления как у `Settings`: только `Foundation` и\n   `TenancyContracts`. Пакет из них не делается (D8).\n3. Именованное исключение **E-BASEMODEL:** `Models/BaseModel.php` принадлежит\n   Foundation с warning по условию 3 и **единственный** файл Foundation,\n   которому разрешён импорт `CoreX\\Concerns\\HasAuditLog` (зона Audit). Обратное\n   направление Audit → Foundation через `HasConfiguredId` разрешено матрицей.\n   Цикл Foundation ⇄ Audit кроме этого файла запрещён.\n4. `Departments` — кандидат уровня 1 (продуктовая оргструктура), не пакет 1.0.\n   Условие возврата — в `@plan/plan.json` §7. `Money` — кандидат на пакет при\n   потребителе, которому нужен `corex/core` без `brick/money`."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Слепое применение P2.5 «один fail = оставить в Foundation» противоречило бы\nэскизу и A29, который P6 обязан сделать исполняемым. Вынести BaseModel из\nFoundation нельзя без смены семантики аудита (Scope Excluded). Три малых зоны\nдешевле десяти пакетов и честнее, чем прятать Eloquent-возможности в Foundation.\nАльтернатива «зона Persistence» отклонена: она плодит восьмую абстракцию ради\nтрёх файлов и всё равно требует исключения BaseModel → Audit."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P6.1 фиксирует десять зон плюс Composition и Testing. P6.3 кодирует условие 3\nкак fail-closed для Foundation, кроме E-BASEMODEL. P6.4 записывает кандидатов\nв `@plan/plan.json` §7. Эскиз §3 принимается с этим расширением матрицы."
+    }
+  ]
+}

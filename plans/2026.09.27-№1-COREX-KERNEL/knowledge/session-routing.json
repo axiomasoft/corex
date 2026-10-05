@@ -1,0 +1,42 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "session-routing",
+  "title": "Session routing — pool, native launch и review runbook",
+  "sections": [
+    {
+      "id": "Session-routing-pool-native-launch-review-runbook",
+      "title": "Session routing — pool, native launch и review runbook",
+      "text": "Единственное конкретное расписание — [`@plan/plan.json`](@plan/plan.json) `execution-sheet/v1`. Адресные принятые решения владельца имеют приоритет над default selectors листа: D85 назначает Sonnet 5.5 для строки 18 (B05-A, P05.1/P05.2). Этот файл — pool, mapping и\nrunbooks (по образцу chatom PLAN2 `@plan/knowledge/session-routing.json`)."
+    },
+    {
+      "id": "section",
+      "title": "Пул и роли",
+      "text": "Источник ролей — Task `packages/task/docs/reference/provider-model-roles.md` и `configs/command-routing.json`.\n\n| Provider | Model | Role в PLAN3 | Effort |\n|:--|:--|:--|:--|\n| claude-code | `opus` (claude-opus-5-5) | автор плана: дизайн фаз, frontier-решения P00, ведение процесса (D21) | `high` |\n| claude-code | `sonnet` (claude-sonnet-5-5) | исполнение и owning auto-fix P05.1/P05.2 (B05-A), owner D85 | `high` |\n| codex | `gpt-6-sol` | стандартная implementation и owning auto-fix | из sheet |\n| codex | `gpt-6.1-sol` | текущий независимый design audit после D79, owner override D80 | `xhigh` |\n| codex | `gpt-6-astra` | frontier execution P00 и review/audit | `high`/`xhigh` |\n| cursor | `grok-4.6` | bounded rename/tools/snapshots, ревью механических items | `high` |\n| cursor | `grok-4.7` | frontier execution и API/SPI/transactions/security ревью | `high` |\n\n`auto` и модели вне пула запрещены. Reviewer model всегда ≠ executor model."
+    },
+    {
+      "id": "Native-launch",
+      "title": "Native launch",
+      "text": "Codex (implementation/high):\n\n```bash\ncodex -C \"$(git rev-parse --show-toplevel)\" -m gpt-6-sol -c 'model_reasoning_effort=\"high\"' -a never -s danger-full-access '$ task:plan-run 2026.09.27-№1-COREX-KERNEL <exact-items-from-sheet>'\n```\n\nCursor (effort — нативным селектором до запуска):\n\n```bash\nagent --workspace \"$(git rev-parse --show-toplevel)\" --model grok-4.7 --force --sandbox disabled --trust --approve-mcps 'task:plan-run 2026.09.27-№1-COREX-KERNEL <exact-items-from-sheet>'\n```\n\nClaude Code для B05-A (D85): `claude --model claude-sonnet-5-5`, затем `task:plan-run 2026.09.27-№1-COREX-KERNEL P05.1 P05.2`.\n\nClaude Code для opus: `claude --model opus`, затем `task:plan-run 2026.09.27-№1-COREX-KERNEL <items>`."
+    },
+    {
+      "id": "Full-review-runbook",
+      "title": "Full review runbook",
+      "text": "1. После зелёной Validation, до finalize — свежий actor/context на reviewer model/effort из той же строки sheet.\n2. Вход: item-spec, diff (или артефакты), вывод Validation. Reviewer read-only, не чинит; prompt:\n   `read-only full review for <admission>; do not repair or finalize`.\n3. Findings → owning executor чинит в текущем Scope → affected checks → reviewer перепроверяет. ≤2 раунда, затем эскалация.\n4. Строка `review: <provider>/<model> <GREEN|findings:N>` в Completion Notes."
+    },
+    {
+      "id": "section-2",
+      "title": "Эстафета",
+      "text": "Любой агент завершает команду переписанным `@plan/plan.json` с одним semantic Next и launch-block из строки execution-sheet.\nСледующий агент стартует только по этому Next (`git pull --ff-only` из корня клона)."
+    },
+    {
+      "id": "2026-09-27",
+      "title": "Текущая сессия — 2026-09-27",
+      "text": "По запросу владельца завершить readiness в этой сессии B00-A выполняется Codex gpt-6-astra/high,\nнезависимый reviewer — Cursor grok-4.7/high. Семантические frontier/high и full сохранены.\nClaude CLI недоступен из-за истёкшего OAuth; это не снижает класс/effort и не требует нового root.\nИсполнение остаётся отдельным шагом после GREEN дизайна."
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "session-routing.md",
+    "sha256": "d7fb80e6657909ff0197f7bc5bee2bdaf36fcad7430465e01da8e32544f5ded1"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D48",
+  "title": "Карта дополнительных регрессионных тестов швов",
+  "date": "2026-09-28",
+  "status": "accepted",
+  "decision": "В карту P00 добавить точные строки `packages/operations/tests/Unit/OperationRegistryDeterminismTest.php`\n→ operations и `packages/operations/tests/Unit/ToolRegistryIntrospectionTest.php` → tools.\nТри целиком переносимых API/tools-теста получают текущие пути operations и namespace\nего тестового каталога; конечные владельцы сохраняются. Общие introspection-тесты\nядра используют entity-декларацию, tools-проекция отдельно проверяется владельцем tools.\nНовый `packages/crm/tests/Feature/RegistryFieldCastsTest.php` покрывается существующей\nстрокой тестов CRM. Фактические колонки zone-consumers регенерируются после швов,\nвердикты сохраняются; появившаяся зона Contracts? с новым SPI имеет verdict keep.",
+  "rationale": "Выделение секций не должно оставлять тесты ядра зависимыми от tools. Эти строки\nфиксируют владельцев дополнительных регрессий для последующего механического\nпереноса; тесты не удаляются и не пропускаются.",
+  "applies_to": [
+    "P02.1",
+    "P02.2"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "executor/codex/gpt-6-sol/high, routine author-choice по plan.md §2."
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D48\ndate: 2026-09-28\nstatus: accepted\nitem: P02.1\nitems: [P02.1, P02.2]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D48",
+      "title": "D48 — Карта дополнительных регрессионных тестов швов",
+      "text": "**Actor:** executor/codex/gpt-6-sol/high, routine author-choice по @plan/plan.json §2.\n**Evidence:** RAG:— `@plan/phases/P02/P02.1.json`, `@plan/knowledge/artifacts-P02-design-examples.json` §1.2;\nфактическое разделение RegistryCompilerDeterminismTest и RegistryIntrospectionTest."
+    },
+    {
+      "id": "Solution",
+      "title": "Solution",
+      "text": "В карту P00 добавить точные строки `packages/operations/tests/Unit/OperationRegistryDeterminismTest.php`\n→ operations и `packages/operations/tests/Unit/ToolRegistryIntrospectionTest.php` → tools.\nТри целиком переносимых API/tools-теста получают текущие пути operations и namespace\nего тестового каталога; конечные владельцы сохраняются. Общие introspection-тесты\nядра используют entity-декларацию, tools-проекция отдельно проверяется владельцем tools.\nНовый `packages/crm/tests/Feature/RegistryFieldCastsTest.php` покрывается существующей\nстрокой тестов CRM. Фактические колонки zone-consumers регенерируются после швов,\nвердикты сохраняются; появившаяся зона Contracts? с новым SPI имеет verdict keep."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "Выделение секций не должно оставлять тесты ядра зависимыми от tools. Эти строки\nфиксируют владельцев дополнительных регрессий для последующего механического\nпереноса; тесты не удаляются и не пропускаются."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "Массовый перенос остаётся P02.3. Спецификация, поведение и fingerprint дизайна\nне меняются; обновляются карты фактического дерева и тестовые доказательства.\n\n- Shared `StubOperationHandler` copy has an exact map row into operations Testing for the later scaffold. Tool declaration/introspection tests use this handler, which is autoloadable in the standalone operations suite; the original monorepo handler remains unchanged.\n\n- CRM money regression fixture is autoloaded from its own `tests/Fixtures/` directory; add that exact product-preserving map prefix.\n\n- Seven namespaced `ConfigReportSectionTest.php` files have precise rows so the existing namespace-free Pest directories retain their rules. The mapped test owners are their section packages; modules maps into the merged kernel test support."
+    }
+  ]
+}

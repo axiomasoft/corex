@@ -1,0 +1,19 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P10-design-rag-P10-Q1-stable-identity",
+  "title": "Q1 — stable attribute identity",
+  "sections": [
+    {
+      "id": "P10-Q1-stable-attribute-identity",
+      "title": "P10-Q1 — stable attribute identity",
+      "text": "- Query: `RFC 9562 UUID version 7 official`; `site:docs.pimcore.com data object classification store key id attribute definition`\n- Accessed: 2026-09-20\n- Transport: web search + direct primary-source open\n- Sources:\n  - https://www.rfc-editor.org/rfc/rfc9562.html\n  - https://api.laravel.com/docs/12.x/Illuminate/Support/Str.html\n  - https://docs.pimcore.com/platform/next/Pimcore/Objects/Object_Classes/Data_Types/Classification_Store/\n\nRFC 9562 §5.7 defines UUIDv7 with a Unix-epoch time-ordered field. Laravel 12 exposes\n`Str::uuid7()`. Pimcore models classification keys as definitions separate from\nobject values. CoreX inference: use explicit UUIDv7 identity independent from mutable\nkey; external sources do not prescribe CoreX conflict/evolution policy."
+    }
+  ],
+  "applies_to": [
+    "P10"
+  ],
+  "provenance": {
+    "path": "artifacts/P10-design-rag/P10-Q1-stable-identity.md",
+    "sha256": "a3dac2acc6aff7a86c44c04eec49cf40e39e06babfda24bd3dae7affff9bf20f"
+  }
+}

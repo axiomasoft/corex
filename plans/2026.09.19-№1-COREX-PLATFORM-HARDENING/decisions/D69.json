@@ -1,0 +1,49 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D69",
+  "title": "Idempotency is tenant-local semantic operation state",
+  "date": "2026-09-20",
+  "status": "superseded",
+  "decision": "- `sys_api_idempotency` lives in the tenant database and stores HMAC key digest,\n  scoped request fingerprint, lease and canonical semantic outcome.\n- Begin happens after authentication/authorization/validation and before handler.\n  Same key/fingerprint replays without another effect; mismatch conflicts.\n- Every terminal outcome after begin is retained, including internal failure.\n- Replay requires the same operation contract hash. HTTP headers/bytes are projected,\n  not stored as authority.\n- Retention and stale-lease takeover are finite. Prune removes only expired terminal\n  rows. P13.5 alone carries owner-gate G-DDL.",
+  "rationale": "Central state cannot be atomic or naturally isolated with tenant-local effects.\nStoring HTTP bytes would make transport the operation authority and prevent parity\nwith exposed tools.",
+  "applies_to": [
+    "P13",
+    "P13.5",
+    "P13.6",
+    "P13.12"
+  ],
+  "supersedes": [],
+  "superseded_by": "D104",
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/codex-gpt-5.6-sol/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D69\ndate: 2026-09-20\nstatus: superseded\nitem: P13\nitems: [P13, P13.5, P13.6, P13.12]\nsupersedes: []\nsuperseded_by: D104\n---"
+    },
+    {
+      "id": "D69-Idempotency-is-tenant-local-semantic-operation-state",
+      "title": "D69 — Idempotency is tenant-local semantic operation state",
+      "text": "**Actor:** plan-designer/codex-gpt-5.6-sol/high\n**Evidence:** RAG:✅ Stripe documents replay of the first result, parameter mismatch\nconflict, no record before execution and finite retention. RAG:— CoreX physical\ntenancy and mutation live in the tenant DB; current API has no durable store."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "- `sys_api_idempotency` lives in the tenant database and stores HMAC key digest,\n  scoped request fingerprint, lease and canonical semantic outcome.\n- Begin happens after authentication/authorization/validation and before handler.\n  Same key/fingerprint replays without another effect; mismatch conflicts.\n- Every terminal outcome after begin is retained, including internal failure.\n- Replay requires the same operation contract hash. HTTP headers/bytes are projected,\n  not stored as authority.\n- Retention and stale-lease takeover are finite. Prune removes only expired terminal\n  rows. P13.5 alone carries owner-gate G-DDL."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Central state cannot be atomic or naturally isolated with tenant-local effects.\nStoring HTTP bytes would make transport the operation authority and prevent parity\nwith exposed tools."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P13.5 owns DDL/store and table ownership; P13.6 owns the invoker decorator and replay\nmatrix. The gate remains expected, not implicitly granted by design."
+    }
+  ]
+}

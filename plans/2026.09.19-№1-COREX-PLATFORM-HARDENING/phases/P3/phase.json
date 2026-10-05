@@ -1,0 +1,127 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:phase:v1",
+  "id": "P3",
+  "title": "Исполняемые гейты: публичная поверхность, границы, сериализуемость, полнота контура",
+  "design": "detailed",
+  "goal": "RAG:— Фаза превращает нормативы P1 и измерения P2 в машинные проверки, чтобы\nкаждое последующее исправление проверялось автоматически. N02 снят:\nкорневой цикл пакетных тестов полон (`@plan/knowledge/research-P1-design.json` §12). Остаётся N03\n(корневой PHPStan на 7 пакетах) и отсутствие гейтов поверхности, BC-диффа,\nсериализуемости и каталожного владения таблицами.\n\nОшибочный гейт опаснее отсутствующего: он выдаёт ложно-зелёное по всему\nрепозиторию. Ровно этот дефект уже случался в PLAN1 (гейт графа, A1) и в\n`parseUseImport` (group-use → `null`, D16). `RAG:✅` P3-Q4: каждый\nблокирующий гейт обязан покраснеть на посаженном нарушении с именем файла.\n\nQ5 закрыт отрицательно (D17): Deptrac/PHPat/class-leak не вводятся. Парсер\nгейта становится tokenizer'ом; R4/R4b/R5 живут в нём. Roave 8.22 — отдельный\nPHP 8.4 джоб, blocking только для `stable` (D18). DATA-003 целиком не\nобещается (D19).\n\n> **Контракт фазы (contract-first).** Потребляет: политики P1\n> (`@plan/knowledge/research-P1-design.json`; в стадии 3 — `docs/architecture/{constitution,api-policy,naming,taxonomy,table-ownership}.md`),\n> расхождения P2 (`G-GATE-BLIND` и графы). Производит: расширенный\n> `package-graph-gate` (tokenizer, R4, R4b, R5), контур PHPStan по\n> currently-green пакетам, Roave BC-джоб, правило DurablePayload,\n> naming-гейт, наблюдательный `config()`-гейт, T1/T2/T4, contract-тесты\n> A57/A61/A99. Границы: гейты фиксируют достигнутое; чинить код пакетов —\n> фазы-владельцы; N02 не возвращается.\n\n> **Phase Assurance | v1.**\n> Impact: internal-integration\n> Integration Seams: gate-to-every-later-phase · ci-matrix · package-graph-gate-allowlist\n> Live or Irreversible: no\n> Audit Intent: direct-close-eligible\n> Rationale: Изменения обратимы, но ложно-зелёный гейт обесценивает приёмку\n> остальных фаз; Review всех items — `full`, негативная проверка обязательна.\n> Residual risk без owner-bound audit-admission остаётся рекомендацией.",
+  "context": "RAG:— Фаза превращает нормативы P1 и измерения P2 в машинные проверки, чтобы\nкаждое последующее исправление проверялось автоматически. N02 снят:\nкорневой цикл пакетных тестов полон (`@plan/knowledge/research-P1-design.json` §12). Остаётся N03\n(корневой PHPStan на 7 пакетах) и отсутствие гейтов поверхности, BC-диффа,\nсериализуемости и каталожного владения таблицами.\n\nОшибочный гейт опаснее отсутствующего: он выдаёт ложно-зелёное по всему\nрепозиторию. Ровно этот дефект уже случался в PLAN1 (гейт графа, A1) и в\n`parseUseImport` (group-use → `null`, D16). `RAG:✅` P3-Q4: каждый\nблокирующий гейт обязан покраснеть на посаженном нарушении с именем файла.\n\nQ5 закрыт отрицательно (D17): Deptrac/PHPat/class-leak не вводятся. Парсер\nгейта становится tokenizer'ом; R4/R4b/R5 живут в нём. Roave 8.22 — отдельный\nPHP 8.4 джоб, blocking только для `stable` (D18). DATA-003 целиком не\nобещается (D19).\n\n> **Контракт фазы (contract-first).** Потребляет: политики P1\n> (`@plan/knowledge/research-P1-design.json`; в стадии 3 — `docs/architecture/{constitution,api-policy,naming,taxonomy,table-ownership}.md`),\n> расхождения P2 (`G-GATE-BLIND` и графы). Производит: расширенный\n> `package-graph-gate` (tokenizer, R4, R4b, R5), контур PHPStan по\n> currently-green пакетам, Roave BC-джоб, правило DurablePayload,\n> naming-гейт, наблюдательный `config()`-гейт, T1/T2/T4, contract-тесты\n> A57/A61/A99. Границы: гейты фиксируют достигнутое; чинить код пакетов —\n> фазы-владельцы; N02 не возвращается.\n\n> **Phase Assurance | v1.**\n> Impact: internal-integration\n> Integration Seams: gate-to-every-later-phase · ci-matrix · package-graph-gate-allowlist\n> Live or Irreversible: no\n> Audit Intent: direct-close-eligible\n> Rationale: Изменения обратимы, но ложно-зелёный гейт обесценивает приёмку\n> остальных фаз; Review всех items — `full`, негативная проверка обязательна.\n> Residual risk без owner-bound audit-admission остаётся рекомендацией.",
+  "depends_on": [
+    "P1",
+    "P2"
+  ],
+  "items": [
+    "P3.1",
+    "P3.2",
+    "P3.3",
+    "P3.4",
+    "P3.5",
+    "P3.6",
+    "P3.7"
+  ],
+  "batches": [
+    {
+      "id": "BP3-1",
+      "items": [
+        "P3.1"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP3-2",
+      "items": [
+        "P3.2"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP3-3",
+      "items": [
+        "P3.3"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP3-4",
+      "items": [
+        "P3.4"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP3-5",
+      "items": [
+        "P3.5"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP3-6",
+      "items": [
+        "P3.6"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP3-7",
+      "items": [
+        "P3.7"
+      ],
+      "mode": "recommended"
+    }
+  ],
+  "closed": {
+    "at": "2026-09-21T13:22:01Z",
+    "result": "done",
+    "summary": "Derived from authentic terminal item states during migration; no new phase checks claimed."
+  },
+  "orchestration": {
+    "strategy": "sequential"
+  },
+  "sections": [
+    {
+      "id": "P3",
+      "title": "P3 — Исполняемые гейты: публичная поверхность, границы, сериализуемость, полнота контура",
+      "text": ""
+    },
+    {
+      "id": "Phase-Context",
+      "title": "Phase Context",
+      "text": "RAG:— Фаза превращает нормативы P1 и измерения P2 в машинные проверки, чтобы\nкаждое последующее исправление проверялось автоматически. N02 снят:\nкорневой цикл пакетных тестов полон (`@plan/knowledge/research-P1-design.json` §12). Остаётся N03\n(корневой PHPStan на 7 пакетах) и отсутствие гейтов поверхности, BC-диффа,\nсериализуемости и каталожного владения таблицами.\n\nОшибочный гейт опаснее отсутствующего: он выдаёт ложно-зелёное по всему\nрепозиторию. Ровно этот дефект уже случался в PLAN1 (гейт графа, A1) и в\n`parseUseImport` (group-use → `null`, D16). `RAG:✅` P3-Q4: каждый\nблокирующий гейт обязан покраснеть на посаженном нарушении с именем файла.\n\nQ5 закрыт отрицательно (D17): Deptrac/PHPat/class-leak не вводятся. Парсер\nгейта становится tokenizer'ом; R4/R4b/R5 живут в нём. Roave 8.22 — отдельный\nPHP 8.4 джоб, blocking только для `stable` (D18). DATA-003 целиком не\nобещается (D19).\n\n> **Контракт фазы (contract-first).** Потребляет: политики P1\n> (`@plan/knowledge/research-P1-design.json`; в стадии 3 — `docs/architecture/{constitution,api-policy,naming,taxonomy,table-ownership}.md`),\n> расхождения P2 (`G-GATE-BLIND` и графы). Производит: расширенный\n> `package-graph-gate` (tokenizer, R4, R4b, R5), контур PHPStan по\n> currently-green пакетам, Roave BC-джоб, правило DurablePayload,\n> naming-гейт, наблюдательный `config()`-гейт, T1/T2/T4, contract-тесты\n> A57/A61/A99. Границы: гейты фиксируют достигнутое; чинить код пакетов —\n> фазы-владельцы; N02 не возвращается.\n\n> **Phase Assurance | v1.**\n> Impact: internal-integration\n> Integration Seams: gate-to-every-later-phase · ci-matrix · package-graph-gate-allowlist\n> Live or Irreversible: no\n> Audit Intent: direct-close-eligible\n> Rationale: Изменения обратимы, но ложно-зелёный гейт обесценивает приёмку\n> остальных фаз; Review всех items — `full`, негативная проверка обязательна.\n> Residual risk без owner-bound audit-admission остаётся рекомендацией."
+    },
+    {
+      "id": "DoR-Definition-of-Ready",
+      "title": "DoR (Definition of Ready)",
+      "text": "- [x] Все `[NEEDS CLARIFICATION]` сняты (0 маркеров в фазе).\n- [x] Scope Included / Scope Excluded заполнены.\n- [x] Для каждого гейта в спеке описана негативная проверка и ожидаемое\n      красное сообщение.\n- [x] Q5 закрыт решением D17 с критерием «правило, которое существующий\n      гейт выразить не может».\n- [x] Alternatives несущих решений в D-логе (D17, D18, D19).\n- [x] Каждая item-спека называет параграф `@plan/knowledge/research-P3-design.json`.\n- [x] Ни один item не превышает бюджет 200K (≤14 Required Reads, ≤8 Files)."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Расширение корневого PHPStan на пакеты, чей пакетный `analyse` уже зелёный\n(N03). Починка сборщика рёбер гейта графа tokenizer'ом (group-use, FQCN,\nextends/implements). R4 (чужой неймспейс вне `public-api`) с отдельным\nсообщением от R2. R4b (незаявленная поверхность) как ratchet по снимку.\nR5 (направление `package-type`). Roave BC-дифф в CI на PHP 8.4, blocking\nтолько `stable`. Маркер `DurablePayload` и PHPStan-правило deny-list.\nГейт новых generic-имён в публичных неймспейсах. Наблюдательный гейт\n`config()` вне composition boundary. T1/T2/T4 по каталогу таблиц.\nContract-тесты A57, A61, A99."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Исправление кода, который гейт краснит, кроме обратимых посадок негативных\nпроверок; изменение поведения `LayerTest`, `contract-guard.sh`,\n`anti-weakening-gate.sh`, `mutation-check.sh`; phpstan-baseline; Deptrac /\nPHPat / class-leak / php-parser; нативный PHPStan `@internal` как\nмежпакетный firewall; перевод config-гейта в blocking (P7); пометка\nсуществующих классов `DurablePayload` (P4); полный DATA-003 (D19);\nповторное расширение корневого цикла пакетных тестов (N02 опровергнут); отдельные CI-джобы\nтестов recurrence/search-meilisearch; новые runtime-зависимости; изменение\nмиграций."
+    },
+    {
+      "id": "Dependencies",
+      "title": "Dependencies",
+      "text": "P1 и P2 терминальны к моменту **исполнения** (D14). Внутри фазы:\nP3.1 ∥ P3.2; P3.3 после P3.2; P3.4–P3.7 после P3.2 по смыслу поверхности,\nфайлы независимы кроме общего Validation-контура. P3.7 читает\n`table-ownership.md` из P2.3."
+    },
+    {
+      "id": "Item-Index",
+      "title": "Item Index",
+      "text": "| ID | Title | Файл дизайна |\n|:--|:--|:--|\n| P3.1 | Контур PHPStan по currently-green пакетам (N03) | `@plan/knowledge/research-P3-design.json` §3 |\n| P3.2 | Tokenizer-граф: group-use, FQCN, extends | `@plan/knowledge/research-P3-design.json` §4 |\n| P3.3 | R4 / R4b / R5 в гейте графа | `@plan/knowledge/research-P3-design.json` §5 |\n| P3.4 | Roave BC-дифф, PHP 8.4, blocking только stable | `@plan/knowledge/research-P3-design.json` §6 |\n| P3.5 | Маркер DurablePayload и PHPStan-правило | `@plan/knowledge/research-P3-design.json` §7 |\n| P3.6 | Гейт имён и наблюдательный `config()` | `@plan/knowledge/research-P3-design.json` §8 |\n| P3.7 | A57/A61/A99 и T1/T2/T4 владения таблицами | `@plan/knowledge/research-P3-design.json` §9 |"
+    },
+    {
+      "id": "Validation",
+      "title": "Validation (форма приёмки фазы)",
+      "text": "1. `composer analyse` зелёный; `phpstan-contour.json` содержит 20 живых\n   пакетов; каждый `pass=true` есть в корневом `phpstan.neon` paths.\n2. `composer package-graph-gate` зелёный; в исходнике гейта 0 вхождений\n   `parseUseImport`; негативы group-use и FQCN краснеют с именем файла.\n3. Посадки R4/R4b/R5 краснеют разными сообщениями; R2 не сливается с R4.\n4. `bash scripts/bc-check.sh` на PHP 8.4 сравнивает explicit per-package\n   base/candidate commits; exit 3 report-only на experimental и blocking на\n   force-stable, а любой другой nonzero красный для обоих. Candidate\n   видит незакоммиченную посадку; на PHP 8.3 скрипт skip/0.\n5. `DurablePayloadRuleTest` зелёный; `composer analyse` не регрессирует.\n6. Naming-гейт краснеет на `ProbeHelper`; config-гейт печатает probe и\n   выходит 0.\n7. Arch-тесты A57/A61/A99 зелёные; table-ownership-gate зелёный на\n   каталоге P2.3 и краснеет на T1/T4 посадках.\n8. `bash scripts/anti-weakening-gate.sh` зелёный; `composer lint:check`\n   зелёный. Ни один существующий порог не понижен."
+    },
+    {
+      "id": "Phase-Handoff",
+      "title": "Phase Handoff",
+      "text": "<Заполняется при закрытии фазы.>"
+    }
+  ]
+}

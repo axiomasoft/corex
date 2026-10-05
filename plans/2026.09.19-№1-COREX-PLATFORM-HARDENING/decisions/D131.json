@@ -1,0 +1,40 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D131",
+  "title": "G-API-P15 for the P15.7 wakeup contract set",
+  "date": "2026-09-26",
+  "status": "accepted",
+  "decision": "[OWNER-GRANT:G-API-P15] branch=`main`; scope=`P15.7 four public wakeup contract renames`; owner-message=`@plan/brief.json#invocation-p157-grok`",
+  "rationale": "The owner authorized this Grok session to apply the declared P15.7 wakeup renames. `WakeupScheduler` stays. No alias and no package rename.",
+  "applies_to": [
+    "P15.7"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "owner / human, recorded by plan-run / grok-4.7/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D131\ndate: 2026-09-26\nstatus: accepted\nitem: P15.7\nitems: [P15.7]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D131-G-API-P15-for-the-P15.7-wakeup-contract-set",
+      "title": "D131 — G-API-P15 for the P15.7 wakeup contract set",
+      "text": "**Actor:** owner / human, recorded by plan-run / grok-4.7/high\n\n**Evidence:** owner message «делай» after the P15.7 stop on `AUTHORITY_BOUNDARY`."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "[OWNER-GRANT:G-API-P15] branch=`main`; scope=`P15.7 four public wakeup contract renames`; owner-message=`@plan/brief.json#invocation-p157-grok`"
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "The owner authorized this Grok session to apply the declared P15.7 wakeup renames. `WakeupScheduler` stays. No alias and no package rename."
+    }
+  ]
+}

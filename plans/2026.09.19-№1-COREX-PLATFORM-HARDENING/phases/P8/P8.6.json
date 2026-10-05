@@ -1,0 +1,247 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P8.6",
+  "title": "Гейт порога размера провайдера",
+  "status": "done",
+  "summary": "Ввести блокирующий гейт: call site биндингов только в\n`ServiceProvider`, порог 20, ratchet снимка, посадка называет файл.",
+  "why": "A74. `RAG:✅` P8-Q5: считать helper'ы — ложный инвариант.\nD45, D17: `token_get_all`, не Deptrac. Review `full`: гейт без посадки\nвсегда зелёный.",
+  "scope": {
+    "include": [
+      "скрипт и JSON §10; Pest-тест посадки; измерение\nratchet по факту после P8.2–P8.5; CHANGELOG; receipt с выводом посадки."
+    ],
+    "exclude": [
+      "декомпозиция `CoreServiceProvider`; смена lifetime\nбиндингов; Deptrac/PHPat/Pest Arch DSL; observational режим."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [
+    "D45"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P8-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/TenancyServiceProvider.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "packages/modules/src/ModulesServiceProvider.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/knowledge/findings-P8-receipts.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": false
+    },
+    {
+      "path": "@plan/decisions/D45.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P8/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P8-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D17.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/src/CoreServiceProvider.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "scripts/provider-size-gate.php",
+      "change": "any"
+    },
+    {
+      "path": "scripts/provider-size.json",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P8-receipts.json",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Сначала измерение всех `*ServiceProvider.php`\nпод `packages/*/src`, потом запись `ratchet`. Число core не угадывать.\nПосадка `packages/core/src/Support/ProviderSizeProbeProvider.php` с 21\n`singleton`, restore в `finally`. Exit 1 на посадке, 0 на чистом дереве.\nСообщение содержит относительный путь. Ни один файл вне `Files` не\nизменяется — посадка не в Files, потому что временная."
+  ],
+  "guidance": "JSON и правило счёта — §10. Образец посадки —\n`tests/Arch/PackageGraphTest.php`. Анти-самообман: зелёный гейт без\nвызова CLI — дефект; Pest обязан вызвать скрипт.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer test",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "php scripts/provider-size-gate.php",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "bash scripts/anti-weakening-gate.sh",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "vendor/bin/pest --testsuite=Arch --filter=ProviderSizeTest",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "php scripts/provider-size-gate.php",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "plant packages/core/src/Support/ProviderSizeProbeProvider.php",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "bash scripts/anti-weakening-gate.sh",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "блокирующий гейт; снимок ratchet; доказанная посадка;\nстрока CHANGELOG."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "required",
+    "status": "complete"
+  },
+  "result": {
+    "started_at": "2026-09-23T15:28:49Z",
+    "finished_at": "2026-09-23T15:50:16Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "grok-4.7/high",
+      "effort": "high"
+    },
+    "notes": "P8.6 GREEN: provider-size gate, measured ratchet core=26 tenancy=0 modules=0, plant names ProviderSizeProbeProvider.php. Arch suite still red on foreign CoreZone/Layer/PackageGraph baseline.",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-23T15:50:16Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-23T15:50:16Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-23T15:50:16Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-23T15:50:16Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-23T15:50:16Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Ввести блокирующий гейт: call site биндингов только в\n`ServiceProvider`, порог 20, ratchet снимка, посадка называет файл."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "A74. `RAG:✅` P8-Q5: считать helper'ы — ложный инвариант.\nD45, D17: `token_get_all`, не Deptrac. Review `full`: гейт без посадки\nвсегда зелёный."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "скрипт и JSON §10; Pest-тест посадки; измерение\nratchet по факту после P8.2–P8.5; CHANGELOG; receipt с выводом посадки."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "декомпозиция `CoreServiceProvider`; смена lifetime\nбиндингов; Deptrac/PHPat/Pest Arch DSL; observational режим."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P8-design.json` §10; `packages/tenancy/src/TenancyServiceProvider.php`;\n`packages/modules/src/ModulesServiceProvider.php`; `@plan/knowledge/findings-P8-receipts.json`;\n`@plan/decisions/D45.json`; `tests/Support/SourceScanner.php`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`scripts/provider-size-gate.php`; `scripts/provider-size.json`; `tests/Arch/ProviderSizeTest.php`; `CHANGELOG.md`; `@plan/knowledge/findings-P8-receipts.json`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P8/phase.json`; 2) `@plan/knowledge/research-P8-design.json` §0, §10; 3) `@plan/knowledge/research-P8-design-rag.json` §1 (P8-Q5); 4) `@plan/decisions/D45.json`; 5) `@plan/decisions/D17.json`; 6) `tests/Arch/PackageGraphTest.php`; 7) `tests/Support/SourceScanner.php`; 8) `packages/core/src/CoreServiceProvider.php`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Сначала измерение всех `*ServiceProvider.php`\nпод `packages/*/src`, потом запись `ratchet`. Число core не угадывать.\nПосадка `packages/core/src/Support/ProviderSizeProbeProvider.php` с 21\n`singleton`, restore в `finally`. Exit 1 на посадке, 0 на чистом дереве.\nСообщение содержит относительный путь. Ни один файл вне `Files` не\nизменяется — посадка не в Files, потому что временная."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "JSON и правило счёта — §10. Образец посадки —\n`tests/Arch/PackageGraphTest.php`. Анти-самообман: зелёный гейт без\nвызова CLI — дефект; Pest обязан вызвать скрипт."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "`composer test` корневого Arch-набора. Посадка краснеет\nс `ProviderSizeProbeProvider.php`; после снятия зелёный.\n`php scripts/provider-size-gate.php` на чистом дереве exit 0.\nRatchet tenancy и modules — 0. `bash scripts/anti-weakening-gate.sh`\nзелёный. Receipt содержит вывод посадки дословно."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "блокирующий гейт; снимок ratchet; доказанная посадка;\nстрока CHANGELOG."
+    }
+  ]
+}

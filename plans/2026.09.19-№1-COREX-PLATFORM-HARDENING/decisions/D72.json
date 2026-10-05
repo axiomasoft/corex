@@ -1,0 +1,49 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D72",
+  "title": "One error descriptor has envelope and Problem Details projections",
+  "date": "2026-09-20",
+  "status": "accepted",
+  "decision": "- `application/json` keeps the current envelope and adds descriptor fields plus\n  `meta.correlation_id`.\n- `application/problem+json` projects the same descriptor/meta into RFC 9457.\n- Stable code/category/path/retryability/detail keys are identical in both forms;\n  human message/detail text is not a compatibility key.\n- HTTP status is projection-only. `Retry-After` requires named duration policy;\n  retryable boolean alone is insufficient.\n- Error catalogue remains P12 fixture + descriptors; no second Problem Details list.",
+  "rationale": "Replacing the envelope would break current clients; omitting Problem Details would\nlose standard tooling. Two projections over one descriptor preserve both without\ndual semantic ownership.",
+  "applies_to": [
+    "P12",
+    "P13",
+    "P13.9",
+    "P13.10",
+    "P13.12"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/codex-gpt-5.6-sol/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D72\ndate: 2026-09-20\nstatus: accepted\nitem: P13\nitems: [P12, P13, P13.9, P13.10, P13.12]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D72-One-error-descriptor-has-envelope-and-Problem-Details-projections",
+      "title": "D72 — One error descriptor has envelope and Problem Details projections",
+      "text": "**Actor:** plan-designer/codex-gpt-5.6-sol/high\n**Evidence:** RAG:✅ RFC 9457 permits extension members and keeps human detail\nnon-machine-readable. D60–D61 assign descriptor ownership to P12 and wire ownership\nto P13."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "- `application/json` keeps the current envelope and adds descriptor fields plus\n  `meta.correlation_id`.\n- `application/problem+json` projects the same descriptor/meta into RFC 9457.\n- Stable code/category/path/retryability/detail keys are identical in both forms;\n  human message/detail text is not a compatibility key.\n- HTTP status is projection-only. `Retry-After` requires named duration policy;\n  retryable boolean alone is insufficient.\n- Error catalogue remains P12 fixture + descriptors; no second Problem Details list."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Replacing the envelope would break current clients; omitting Problem Details would\nlose standard tooling. Two projections over one descriptor preserve both without\ndual semantic ownership."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P13.9 owns negotiation/serializer/OpenAPI. P13.10 emits one `errors.json` from the\nP12 fixture, and P13.12 proves parity."
+    }
+  ]
+}

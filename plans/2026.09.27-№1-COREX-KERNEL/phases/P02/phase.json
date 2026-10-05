@@ -1,0 +1,126 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:phase:v1",
+  "id": "P02",
+  "title": "Vendor, состав пакетов, namespace = путь",
+  "design": "detailed",
+  "goal": "P02 приводит монорепо к glossary P00.1 без изменения наблюдаемого поведения. Сначала швы в текущей раскладке:\nядро перестаёт знать пакеты (D27 `FieldCastRegistry`, D28 SavedViews-wiring в panels, D32 `ManifestSectionCompiler`,\n`ConfigReportSection`, `ImpersonationGuard`), кросс-пакетные тесты уходят с `Internal` на `Testing`-харнессы (D35),\noperations отдаёт webhooks/tools через SPI и собственный провайдер (D31). Затем один механический перенос\nинструментом по картам P00 (D44): vendor `axiomasoft`, merge modules → ядро, split operations → operations/tools/webhooks,\nattributes → custom-fields, access → `CoreX\\Access`, `CoreX\\Search\\Meilisearch` → `CoreX\\SearchMeilisearch`, зоны ядра →\nзакрытый список модулей, один PSR-4 корень на пакет, удаление import-export, `flex/crm` → `products/flex-crm`.\nПоследним — идентификаторы пакета (config/tags/env/команды, D33/D45), гейт полноты переименований и ownership `--strict`.\n\n> **Контракт фазы.** Потребляет: D01, D02, D04, D12, D14, D15, D25–D35, D39, D40, D44, D45, D46; `@plan/knowledge/research-03-glossary.json`;\n> `artifacts/P00/{package-map,namespace-map,dependency-edges}.tsv`; `artifacts/P00-design/scripts/check-maps.py`;\n> `artifacts/P01-design/scripts/golden-rename-map.py`; сетка P01 (golden, ownership, ratchets, anti-weakening, CI).\n> Производит: SPI ядра/engine и их регистрации, `Testing`-модули, пакеты `packages/{tools,webhooks,custom-fields}`,\n> `products/flex-crm`, 22 манифеста `axiomasoft/*` (+ `flex/crm`), `scripts/{rename-completeness-gate.php,rename-completeness.json,ratchet-successors.json}`,\n> rekeyed `scripts/ownership-map.json` с пустым baseline, обновлённые CI/docs. Границы: feature modules внутри пакетов (P03),\n> `#[Api]/#[Spi]` и DTO (P04), typed config (P05), wire/имена маршрутов и событий (P06), движок tenancy и `tenancy` config (P07),\n> таблицы/миграции scope (P08), публикация (P09).\n\n> **Phase Assurance | v1.**\n> Impact: public-contract\n> Integration Seams: package-topology · autoload · composer-manifests · config-ids · module-ids · kernel-spi · test-boundary\n> Live or Irreversible: no\n> Audit Intent: auto\n> Rationale: меняются имена всех пакетов, namespace, SPI ядра и идентификаторы — SemVer-поверхность каждого потребителя; массовый перенос (≥500 файлов) требует сухого прогона и доказательства «перенесено, а не изменено» golden-сеткой; каждый item — full-ревью другой моделью.\n\n> **Окружение:** как P01 — `scripts/php84` (PHP 8.4.26, расширения полны), PostgreSQL 16 на 127.0.0.1:5432 (`PGSQL_PORT=5432`).\n\n> **Порядок.** P02.1 → P02.2 → P02.3 → P02.4, строго последовательно (каждый следующий потребляет результат и\n> зелёный стек предыдущего; P02.3 отказывается стартовать при незакрытых швах).",
+  "context": "P02 приводит монорепо к glossary P00.1 без изменения наблюдаемого поведения. Сначала швы в текущей раскладке:\nядро перестаёт знать пакеты (D27 `FieldCastRegistry`, D28 SavedViews-wiring в panels, D32 `ManifestSectionCompiler`,\n`ConfigReportSection`, `ImpersonationGuard`), кросс-пакетные тесты уходят с `Internal` на `Testing`-харнессы (D35),\noperations отдаёт webhooks/tools через SPI и собственный провайдер (D31). Затем один механический перенос\nинструментом по картам P00 (D44): vendor `axiomasoft`, merge modules → ядро, split operations → operations/tools/webhooks,\nattributes → custom-fields, access → `CoreX\\Access`, `CoreX\\Search\\Meilisearch` → `CoreX\\SearchMeilisearch`, зоны ядра →\nзакрытый список модулей, один PSR-4 корень на пакет, удаление import-export, `flex/crm` → `products/flex-crm`.\nПоследним — идентификаторы пакета (config/tags/env/команды, D33/D45), гейт полноты переименований и ownership `--strict`.\n\n> **Контракт фазы.** Потребляет: D01, D02, D04, D12, D14, D15, D25–D35, D39, D40, D44, D45, D46; `@plan/knowledge/research-03-glossary.json`;\n> `artifacts/P00/{package-map,namespace-map,dependency-edges}.tsv`; `artifacts/P00-design/scripts/check-maps.py`;\n> `artifacts/P01-design/scripts/golden-rename-map.py`; сетка P01 (golden, ownership, ratchets, anti-weakening, CI).\n> Производит: SPI ядра/engine и их регистрации, `Testing`-модули, пакеты `packages/{tools,webhooks,custom-fields}`,\n> `products/flex-crm`, 22 манифеста `axiomasoft/*` (+ `flex/crm`), `scripts/{rename-completeness-gate.php,rename-completeness.json,ratchet-successors.json}`,\n> rekeyed `scripts/ownership-map.json` с пустым baseline, обновлённые CI/docs. Границы: feature modules внутри пакетов (P03),\n> `#[Api]/#[Spi]` и DTO (P04), typed config (P05), wire/имена маршрутов и событий (P06), движок tenancy и `tenancy` config (P07),\n> таблицы/миграции scope (P08), публикация (P09).\n\n> **Phase Assurance | v1.**\n> Impact: public-contract\n> Integration Seams: package-topology · autoload · composer-manifests · config-ids · module-ids · kernel-spi · test-boundary\n> Live or Irreversible: no\n> Audit Intent: auto\n> Rationale: меняются имена всех пакетов, namespace, SPI ядра и идентификаторы — SemVer-поверхность каждого потребителя; массовый перенос (≥500 файлов) требует сухого прогона и доказательства «перенесено, а не изменено» golden-сеткой; каждый item — full-ревью другой моделью.\n\n> **Окружение:** как P01 — `scripts/php84` (PHP 8.4.26, расширения полны), PostgreSQL 16 на 127.0.0.1:5432 (`PGSQL_PORT=5432`).\n\n> **Порядок.** P02.1 → P02.2 → P02.3 → P02.4, строго последовательно (каждый следующий потребляет результат и\n> зелёный стек предыдущего; P02.3 отказывается стартовать при незакрытых швах).",
+  "depends_on": [
+    "P01"
+  ],
+  "items": [
+    "P02.1",
+    "P02.2",
+    "P02.3",
+    "P02.4"
+  ],
+  "batches": [
+    {
+      "id": "B02-A",
+      "items": [
+        "P02.1",
+        "P02.2"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP02-3",
+      "items": [
+        "P02.3"
+      ],
+      "mode": "recommended"
+    },
+    {
+      "id": "BP02-4",
+      "items": [
+        "P02.4"
+      ],
+      "mode": "recommended"
+    }
+  ],
+  "closed": {
+    "at": "2026-09-29T07:46:08Z",
+    "result": "done",
+    "summary": "<!-- plan-projection\nprojection: phase-closure\nprojection_version: v1\nsource_scope: phase P02 + item states + decisions\nthrough: P02: 🟢 Done\ninputs_sha256: e3fe5bc12bfd4cc26c7bac8d994d24f29dfba2c3a5609a4d8e01b9476865d81f\ngenerated_by: task plan-views closure\n-->\n\n# Закрытие фазы P02\n\n> Не править руками: это генерируемый вид.\n\n## Контракт фазы\n\n**Контракт фазы.** Потребляет: D01, D02, D04, D12, D14, D15, D25–D35, D39, D40, D44, D45, D46; `@plan/knowledge/research-03-glossary.json`;\n`artifacts/P00/{package-map,namespace-map,dependency-edges}.tsv`; `artifacts/P00-design/scripts/check-maps.py`;\n`artifacts/P01-design/scripts/golden-rename-map.py`; сетка P01 (golden, ownership, ratchets, anti-weakening, CI).\nПроизводит: SPI ядра/engine и их регистрации, `Testing`-модули, пакеты `packages/{tools,webhooks,custom-fields}`,\n`products/flex-crm`, 22 манифеста `axiomasoft/*` (+ `flex/crm`), `scripts/{rename-completeness-gate.php,rename-completeness.json,ratchet-successors.json}`,\nrekeyed `scripts/ownership-map.json` с пустым baseline, обновлённые CI/docs. Границы: feature modules внутри пакетов (P03),\n`#[Api]/#[Spi]` и DTO (P04), typed config (P05), wire/имена маршрутов и событий (P06), движок tenancy и `tenancy` config (P07),\nтаблицы/миграции scope (P08), публикация (P09).\n\n## Произведено\n\n- P02.1 — Ядро не знает пакетов: SPI швов и тестовые харнессы: 4 SPI-шва ядра + 8 разделов config-отчёта + 2 компилятора секций; SavedViews-wiring в panels; 3 `Testing`-модуля\n- P02.2 — Operations отдаёт webhooks и tools через SPI: SPI снимка и секция webhooks; `WebhooksServiceProvider`, `corex:webhooks:prune`, `corex-webhooks.php`;\n- P02.3 — Механический перенос по картам P00: перенесённое монорепо (22 корня), scaffold tools/webhooks, манифест и гейт полноты, ratchet-проекция,\n- P02.4 — Идентификаторы пакетов и гейт полноты переименований: идентификаторы по glossary, раздел `corex.modules`, `upstream_config`, strict ownership с пустым baseline,\n\n## Known Deviations\n\n- —\n\n## Решения\n\n- [D44](../../decisions/D44-p02-transfer-mechanics.md)\n- [D45](../../decisions/D45-p02-identifiers-and-gates.md)\n- [D46](../../decisions/D46-p02-design-audit-remediation.md)\n- [D47](../../decisions/D47-hosted-ci-deferred.md)\n- [D48](../../decisions/D48-seam-regression-map-rows.md)\n- [D49](../../decisions/D49-seam-gate-alignment.md)\n- [D50](../../decisions/D50-operations-seam-test-ownership.md)\n- [D51](../../decisions/D51-p02-source-debt-projection.md)\n- [D52](../../decisions/D52-p02-migration-tag-projection.md)\n- [D53](../../decisions/D53-p024-module-identifiers-and-panels-tags.md)\n- [D54](../../decisions/D54-ratchet-history-completeness-exception.md)\n"
+  },
+  "orchestration": {
+    "strategy": "sequential"
+  },
+  "sections": [
+    {
+      "id": "P02-Vendor-namespace",
+      "title": "P02 — Vendor, состав пакетов, namespace = путь",
+      "text": "> **Статус дизайна:** детализирована 2026-09-28 (`task:plan-design … P02`); контракты — `P02.1.md`…`P02.4.md`.\n> A1–A4 исправлены в текущей сессии по запросу владельца (D46); доказательства — `artifacts/P02-design-remediation/`.\n> Досье `@plan/knowledge/research-P02-design.json` (карта кода §1, факты §2, развилки §3, runbooks §4, playbook §5, self-check §6, owner\n> gates §7), внешние факты `@plan/knowledge/research-P02-design-rag.json` (E1, индекс captures `@plan/knowledge/artifacts-P02-design-rag-README.json`), примеры\n> `@plan/knowledge/artifacts-P02-design-examples.json`, факты `@plan/knowledge/artifacts-P02-design-facts-README.json`, скрипты `artifacts/P02-design/scripts/`."
+    },
+    {
+      "id": "Phase-Context",
+      "title": "Phase Context",
+      "text": "P02 приводит монорепо к glossary P00.1 без изменения наблюдаемого поведения. Сначала швы в текущей раскладке:\nядро перестаёт знать пакеты (D27 `FieldCastRegistry`, D28 SavedViews-wiring в panels, D32 `ManifestSectionCompiler`,\n`ConfigReportSection`, `ImpersonationGuard`), кросс-пакетные тесты уходят с `Internal` на `Testing`-харнессы (D35),\noperations отдаёт webhooks/tools через SPI и собственный провайдер (D31). Затем один механический перенос\nинструментом по картам P00 (D44): vendor `axiomasoft`, merge modules → ядро, split operations → operations/tools/webhooks,\nattributes → custom-fields, access → `CoreX\\Access`, `CoreX\\Search\\Meilisearch` → `CoreX\\SearchMeilisearch`, зоны ядра →\nзакрытый список модулей, один PSR-4 корень на пакет, удаление import-export, `flex/crm` → `products/flex-crm`.\nПоследним — идентификаторы пакета (config/tags/env/команды, D33/D45), гейт полноты переименований и ownership `--strict`.\n\n> **Контракт фазы.** Потребляет: D01, D02, D04, D12, D14, D15, D25–D35, D39, D40, D44, D45, D46; `@plan/knowledge/research-03-glossary.json`;\n> `artifacts/P00/{package-map,namespace-map,dependency-edges}.tsv`; `artifacts/P00-design/scripts/check-maps.py`;\n> `artifacts/P01-design/scripts/golden-rename-map.py`; сетка P01 (golden, ownership, ratchets, anti-weakening, CI).\n> Производит: SPI ядра/engine и их регистрации, `Testing`-модули, пакеты `packages/{tools,webhooks,custom-fields}`,\n> `products/flex-crm`, 22 манифеста `axiomasoft/*` (+ `flex/crm`), `scripts/{rename-completeness-gate.php,rename-completeness.json,ratchet-successors.json}`,\n> rekeyed `scripts/ownership-map.json` с пустым baseline, обновлённые CI/docs. Границы: feature modules внутри пакетов (P03),\n> `#[Api]/#[Spi]` и DTO (P04), typed config (P05), wire/имена маршрутов и событий (P06), движок tenancy и `tenancy` config (P07),\n> таблицы/миграции scope (P08), публикация (P09).\n\n> **Phase Assurance | v1.**\n> Impact: public-contract\n> Integration Seams: package-topology · autoload · composer-manifests · config-ids · module-ids · kernel-spi · test-boundary\n> Live or Irreversible: no\n> Audit Intent: auto\n> Rationale: меняются имена всех пакетов, namespace, SPI ядра и идентификаторы — SemVer-поверхность каждого потребителя; массовый перенос (≥500 файлов) требует сухого прогона и доказательства «перенесено, а не изменено» golden-сеткой; каждый item — full-ревью другой моделью.\n\n> **Окружение:** как P01 — `scripts/php84` (PHP 8.4.26, расширения полны), PostgreSQL 16 на 127.0.0.1:5432 (`PGSQL_PORT=5432`).\n\n> **Порядок.** P02.1 → P02.2 → P02.3 → P02.4, строго последовательно (каждый следующий потребляет результат и\n> зелёный стек предыдущего; P02.3 отказывается стартовать при незакрытых швах)."
+    },
+    {
+      "id": "DoR",
+      "title": "DoR",
+      "text": "- [x] P01 закрыта (локально GREEN, фазовый аудит GREEN).\n- [x] Карты P00 валидны на текущем дереве (F1, после ремонта строки D44 п.7); план переноса без конфликтов (F4); сухой прогон без Rector (F5).\n- [x] Внешний факт E1 (Rector) снят и сохранён; остаток — VERIFY-AT-EXEC в сухом прогоне P02.3.\n- [ ] **O-3:** GREEN hosted CI на коммите P01 (`d2e84a1`) — сейчас не стартует из-за billing GitHub Actions (F12). Без него исполнение P02.1 не начинается (контракт P01; досье §7)."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "1. Швы ядра и тестовые харнессы вне operations (P02.1): 47 строк `facts/seams.tsv`.\n2. Швы operations и тестовая граница engine (P02.2): 71 строка `seams.tsv`; конфиг `corex-webhooks`.\n3. Механический перенос по картам с сухим прогоном, scaffold tools/webhooks, манифесты, ratchet-проекция, rekey ownership, пути CI/docs/scripts (P02.3).\n4. Идентификаторы по `identifier-map.tsv`, раздел `corex.modules`, `upstream_config`, гейт полноты, ownership `--strict`, удаление P15-гейта, docs установки (P02.4)."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Feature modules и `Internal` внутри пакетов (P03); `#[Api]/#[Spi]`, DTO, коды ошибок (P04); typed options/конфиг tools (P05);\nимена маршрутов/событий, wire-коды `webhook_*` (P06); config `tenancy`, движок stancl, мост AzGuard (P07); scope миграций и\nтаблицы (P08); split-репозитории, Packagist, теги (P09); push и настройки GitHub (владелец)."
+    },
+    {
+      "id": "Dependencies",
+      "title": "Dependencies",
+      "text": "P01 закрыта **и O-3** (hosted CI GREEN). Внутри: P02.1 → P02.2 → P02.3 → P02.4. P03 стартует после закрытия P02 и\nhosted CI на её коммитах."
+    },
+    {
+      "id": "Planned-Items",
+      "title": "Planned Items (исходы)",
+      "text": "- **P02.1 — Ядро не знает пакетов: SPI швов и тестовые харнессы** (implementation/high, full).\n- **P02.2 — Operations отдаёт webhooks и tools через SPI** (implementation/high, full).\n- **P02.3 — Механический перенос по картам P00** (implementation/xhigh, full).\n- **P02.4 — Идентификаторы пакетов и гейт полноты переименований** (implementation/high, full)."
+    },
+    {
+      "id": "Code-Evidence-Map",
+      "title": "Code/Evidence Map",
+      "text": "`@plan/knowledge/research-P02-design.json` §1 (все затрагиваемые файлы с якорями); `@plan/knowledge/artifacts-P02-design-facts-README.json` F1–F12 и\n`facts/{seams.tsv,extra-moves.tsv,identifier-map.tsv,new-map-rows.tsv}`; `@plan/knowledge/artifacts-P02-design-examples.json` §1–§5;\n`artifacts/P02-design/scripts/{p02-transfer.py,p02-literal-pass.php,p02-identifiers.py,golden-delta.py,rename-completeness-gate.php}`."
+    },
+    {
+      "id": "Pitfalls",
+      "title": "Pitfalls",
+      "text": "- Все PHP-команды — `scripts/php84`; `stage-stancl-providers.py` ключ `repositories.stancl-providers` снимать после install/update (P01).\n- Швы не меняют вывод: `corex:config:validate`, `api/v1` снимок, golden `routes/events/wire` — байт в байт; литерал регрессионного теста и baseline не правятся «под зелёное».\n- Новые файлы швов — в текущей раскладке и с текущим namespace каталога; строка карты — из `new-map-rows.tsv`, `check-maps.py` exit 0 после item.\n- Перенос P02.3 — только инструментом; результат переноса руками не правится (кроме остатка, названного гейтом полноты); дефект → скрипт/карта → новый сухой прогон.\n- Golden в P02.3/P02.4 не перезаписывается; потолки и ownership baseline только сокращаются (группы преемников D44 п.6).\n- `tenancy` config-ключ и `tenancy.php` не переименовываются (D45 п.2); меняются только env внутри файла."
+    },
+    {
+      "id": "Validation-phase-level",
+      "title": "Validation (phase-level)",
+      "text": "Все item Validation зелёные; на итоговом дереве: `python3 scripts/manifest-check.py` → `manifests OK: 22 roots`;\n`scripts/php84 composer test`, `PGSQL_PORT=5432 scripts/php84 composer test:pg`, `scripts/php84 composer test:packages` exit 0;\n`scripts/php84 composer golden` → `Tests: 4 passed` (baseline после P02.2 не менялся); `php scripts/ownership-gate.php --strict` →\n`0 baselined`, exit 0; `php scripts/rename-completeness-gate.php` → `rename-completeness OK`; `scripts/php84 composer analyse` +\n`php scripts/quality-ceiling-guard.php` → `ceilings OK`; `bash scripts/anti-weakening-gate.sh` exit 0; `python3 <task>/scripts/plan-lint.py\nplans/2026.09.27-№1-COREX-KERNEL` без новых ошибок. **Внешняя граница:** владелец пушит коммиты P02 → все jobs `CI` на них\nзелёные (ссылка на run — в Phase Handoff)."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "SPI `FieldCastRegistry`, `ManifestSectionCompiler`, `ConfigReportSection`, `ContractSnapshotSection` и их реализации;\n`WebhooksServiceProvider`, `corex:webhooks:prune`; `Testing`-модули Messaging/Wakeup/Search/Operations; пакеты\n`packages/{core,access,custom-fields,intl,media,notifications,operations,tools,webhooks,panels,recurrence,search,search-intl,search-meilisearch,tasks,tasks-workflow,tenancy,transfer,wakeup,workflow}`\nи `products/flex-crm` с одним PSR-4 корнем; `scripts/{rename-completeness-gate.php,rename-completeness.json,ratchet-successors.json}`;\nownership map/baseline (пустой); CI/docs/scripts с новыми именами; строки `REBASELINE.md` P02.1/P02.2."
+    },
+    {
+      "id": "Items",
+      "title": "Items",
+      "text": "| ID | Title | Status | Updated |\n|:--|:--|:--|:--|\n| P02.1 | Ядро не знает пакетов: SPI швов и тестовые харнессы | ⬜ Not started | 2026-09-28 |\n| P02.2 | Operations отдаёт webhooks и tools через SPI | ⬜ Not started | 2026-09-28 |\n| P02.3 | Механический перенос по картам P00 | ⬜ Not started | 2026-09-28 |\n| P02.4 | Идентификаторы пакетов и гейт полноты переименований | ⬜ Not started | 2026-09-28 |"
+    },
+    {
+      "id": "Phase-Handoff",
+      "title": "Phase Handoff",
+      "text": "P02 закрыта 2026-09-29 по GREEN item-доказательствам P02.1–P02.4 и GREEN фазовому аудиту D55 (`@plan/knowledge/findings-P02-phase-audit.json`,\nпродуктовых замечаний нет). Итог на `74aaf55`: 22 манифеста `axiomasoft/*` + `flex/crm`; `rename-completeness OK: 528 tokens`;\n`ownership OK: 524 identifiers, 0 baselined` (`--strict`); `identifiers check: 0 remaining`; SQLite 832, PG 240 — из\n`artifacts/P02.4-execution/validation-summary.json`. Hosted CI не сертифицирован (D47: отложен до восстановления лимитов\nGitHub Actions, локальное исполнение не блокирует). Дальше — дизайн P03 из `backlog/P03.md` по фактическому коду."
+    },
+    {
+      "id": "Audit-P02-contracts-and-behavior",
+      "title": "Audit P02 — contracts and behavior",
+      "text": "**Вердикт: GREEN**\n\nОдин запуск D55. Контракты P02.1–P02.4 на текущем кандидате соблюдены; поведение после переносов и переименований сохранено в пределах карт. Hosted CI не сертифицируется (D47). Продуктовых замечаний нет. Доказательства: `@plan/knowledge/findings-P02-phase-audit.json`."
+    },
+    {
+      "id": "section",
+      "title": "Что запускать",
+      "text": "Semantic Next: `close: task:plan-close 2026.09.27-№1-COREX-KERNEL P02`\n\n| Параметр | Значение |\n|:--|:--|\n| Batch | n/a |\n| Model class | implementation |\n| Effort | low |\n| Capabilities | — |\n| Context | continue-root |\n| Суть | Формально закрыть P02 по audit-green. Локальное закрытие уже allow; hosted CI остаётся D47. |\n\n```session-continuity-decision/v1\n{\"evidence\": [\"batch:8a70cb68e2473960610ffc474d5e1498f966d86a214ac806a5691f35d6e159f5\", \"loaded-inputs:reusable\", \"cold-start-cost:0\", \"lifecycle:scope-complete\", \"checkpoint:@plan/knowledge/findings-P02-phase-audit.json\"], \"outcome\": \"continue-root\", \"reason\": \"authorized-scope-complete\", \"runnable\": true, \"schema_version\": \"session-continuity-decision/v1\"}\n```\n\n```bash\n$ task:plan-close 2026.09.27-№1-COREX-KERNEL P02\n```"
+    }
+  ]
+}

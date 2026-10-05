@@ -1,0 +1,17 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "backlog-README",
+  "title": "Backlog фаз (D24)",
+  "sections": [
+    {
+      "id": "Backlog-D24",
+      "title": "Backlog фаз (D24)",
+      "text": "Skeleton-носители фаз P08–P09 до их очереди (P04, P05, P06, P07, P10 детализированы в `phases/`; P07 — до закрытия P06 по D94; P10 исполняется до P05, D73). Не phase carriers: Task tooling их не читает.\n`task:plan-design 2026.09.27-№1-COREX-KERNEL <Pn>` переносит `backlog/Pnn.md` в `phases/Pnn/Pnn.md` и детализирует items;\nзатем `finish` → `task:plan-audit … design` → исполнение (D21, D24)."
+    }
+  ],
+  "applies_to": [],
+  "provenance": {
+    "path": "backlog/README.md",
+    "sha256": "0c7d4d47aa1fc6f552b37d6864132f1eed6421d45295bc50ab6a673f16d9995f"
+  }
+}

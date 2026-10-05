@@ -1,0 +1,46 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D79",
+  "title": "Webhook topics — проекция объявленных messages",
+  "date": "2026-09-20",
+  "status": "accepted",
+  "decision": "P5 registry authority, immutable topic profile, subscription pins major/topic version. PII allow-list, explicit sensitive ability, secret class prohibited. Endpoint changes do not redirect stored delivery.",
+  "rationale": "`@plan/knowledge/research-P14-design.json` фиксирует проверенные ограничения дерева, failure modes\nи отвергнутые альтернативы. Решение сохраняет D7/D9/D14, физический tenant scope\nи одну contract authority; не вводит нового consumer-specific слоя.",
+  "applies_to": [
+    "P14",
+    "P14.11"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/codex-gpt-6-astra/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D79\ndate: 2026-09-20\nstatus: accepted\nitem: P14\nitems: [P14, P14.11]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D79-Webhook-topics-messages",
+      "title": "D79 — Webhook topics — проекция объявленных messages",
+      "text": "**Actor:** plan-designer/codex-gpt-6-astra/high\n**Evidence:** RAG:— repository reads и predecessor contracts; внешние patterns,\nгде применимы, подтверждены `@plan/knowledge/research-P14-design-rag.json`. Defaults — локальное решение."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "P5 registry authority, immutable topic profile, subscription pins major/topic version. PII allow-list, explicit sensitive ability, secret class prohibited. Endpoint changes do not redirect stored delivery."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "`@plan/knowledge/research-P14-design.json` фиксирует проверенные ограничения дерева, failure modes\nи отвергнутые альтернативы. Решение сохраняет D7/D9/D14, физический tenant scope\nи одну contract authority; не вводит нового consumer-specific слоя."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "Items P14.11 реализуют точный нормативный срез и negative matrix.\nЭтот design record не является owner grant для G-DDL/G-SECRET или live rollout."
+    }
+  ]
+}

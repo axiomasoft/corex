@@ -1,0 +1,48 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D48",
+  "title": "Multi-account relay требует измеренного триггера",
+  "date": "2026-09-19",
+  "status": "accepted",
+  "decision": "1. D27.1–D27.3 о месте outbox и single-account relay не меняются.\n2. P9 назначает multi-account relay owner'ом `Tenancy/Runtime`, но не строит\n   scheduler, lease/progress state, DDL и concurrency policy.\n3. Отдельная product-работа открывается при любом из триггеров:\n   наблюдаемое голодание; нарушение delivery SLO; ручной fan-out выше\n   утверждённого operator budget.\n4. На старте той работы нужны: metrics baseline, fairness/SLO contract,\n   owner-gate на центральный state/DDL и failure-mode design.",
+  "rationale": "Выбор round-robin, age priority, backoff и global concurrency без объёмов и SLO был бы\nспекулятивным. Помещать это в фазу переносов повысило бы риск\nмолчаливой потери доставки и сломало contract-first границу P9.",
+  "applies_to": [
+    "P9",
+    "P9.1",
+    "P9.2",
+    "P9.8"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-designer/codex-gpt-5.6-sol/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D48\ndate: 2026-09-19\nstatus: accepted\nitem: P9\nitems: [P9, P9.1, P9.2, P9.8]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D48-Multi-account-relay",
+      "title": "D48 — Multi-account relay требует измеренного триггера",
+      "text": "**Actor:** plan-designer/codex-gpt-5.6-sol/high\n\n**Evidence:** `RAG:—` D27 корректно размещает outbox в tenant DB и называет\nриск голодания, но не содержит наблюдаемого SLO, объёма, operator workflow\nили контракта lease/progress. `RAG:—` фаза P9 объявлена как\nобратимая структурная работа без DDL и смены поведения."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "1. D27.1–D27.3 о месте outbox и single-account relay не меняются.\n2. P9 назначает multi-account relay owner'ом `Tenancy/Runtime`, но не строит\n   scheduler, lease/progress state, DDL и concurrency policy.\n3. Отдельная product-работа открывается при любом из триггеров:\n   наблюдаемое голодание; нарушение delivery SLO; ручной fan-out выше\n   утверждённого operator budget.\n4. На старте той работы нужны: metrics baseline, fairness/SLO contract,\n   owner-gate на центральный state/DDL и failure-mode design."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Выбор round-robin, age priority, backoff и global concurrency без объёмов и SLO был бы\nспекулятивным. Помещать это в фазу переносов повысило бы риск\nмолчаливой потери доставки и сломало contract-first границу P9."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "Риск D27 остаётся открытым и должен быть в receipt P9 и roadmap. Это\nрешение уточняет адресацию D27.4, не отменяя его атомарность и\nне выдавая непостроенный control plane за закрытый долг."
+    }
+  ]
+}

@@ -1,0 +1,346 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P1.2",
+  "title": "Таксономия: схема `extra.corex` и её заполнение в 20 пакетах",
+  "status": "done",
+  "summary": "Создать `docs/architecture/taxonomy.md` со схемой блока `extra.corex` (`schema-version`, `module`, `package-type`, `stability`, `public-api`), двумя закрытыми наборами значений и объявлением ортогональности архитектурных осей осям Composer — и заполнить блок во всех 20 живых `composer.json`.",
+  "why": "`extra.corex` сегодня есть в 9 пакетах из 20 и содержит единственный ключ `module` (`RAG:—`, `@plan/knowledge/research-00-baseline-metrics.json` §1, находка N04). Ни `package-type`, ни `stability`, ни `public-api` не объявлены нигде, поэтому P2 нечем классифицировать пакеты, а P3 нечем проверять направление зависимостей и публичную поверхность. `RAG:✅` `extra` — официально открытая точка расширения Composer, но категория установки принадлежит полю `type`, release-стабильность — версии пакета, а собственный блок обязан жить под владеемым неймспейсом и нести целочисленный `schema-version` (`@plan/knowledge/research-P1-design-rag.json` §1, запрос P1-Q1). Отсюда D11: обе оси сохраняются, но документ обязан назвать их ортогональность явно, иначе в одном файле появятся два противоречивых ответа на вопрос «что это за пакет».",
+  "scope": {
+    "include": [
+      "Файл `docs/architecture/taxonomy.md`: схема блока с таблицей ключей, закрытый набор `package-type` (шесть значений), закрытый набор `stability` (четыре значения), таблица ортогональности осей, таблица распределения по 20 живым пакетам, правило чтения метаданных потребителем. Заполнение блока `extra.corex` в `packages/*/composer.json` всех 20 живых пакетов: добавление `schema-version`, `package-type`, `stability`, `public-api`; существующий ключ `module` сохраняется без изменений там, где он есть. Строка в корневом `CHANGELOG.md`."
+    ],
+    "exclude": [
+      "Изменение composer `type` в любом пакете — он Composer-facing и остаётся как есть (D11); изменение `extra.laravel` и любого другого блока `extra`; изменение `require`, `autoload`, `scripts` и версий; добавление `extra.corex` в `packages/import-export` — у тумбстоуна нет `composer.json` (D13); создание гейта, читающего эти метаданные (P3); заполнение `public-api` неймспейсами, которых нет в дереве; изменение любого PHP-файла; создание `table-ownership.md` и `configuration.md` (P2)."
+    ]
+  },
+  "depends_on": [
+    "P1.1"
+  ],
+  "decisions": [
+    "D11",
+    "D3",
+    "D108"
+  ],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P1-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D11.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D3.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-P1-design-rag.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "docs/architecture/constitution.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D108.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P1/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/research-00-baseline-metrics.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/core/composer.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/media/composer.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/crm/composer.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "docs/dev-doctrine.md",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "docs/architecture/taxonomy.md",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    },
+    {
+      "path": "packages/api/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/attributes/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/auth/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/core/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/crm/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/intl/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/media/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/modules/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/notifications/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/panels/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/recurrence/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/search-intl/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/search-meilisearch/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/search/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/tasks-workflow/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/tasks/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/tenancy/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/transfer/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/wakeup/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "packages/workflow/composer.json",
+      "change": "any"
+    },
+    {
+      "path": "@plan/knowledge/findings-P1-receipts.json",
+      "change": "any"
+    },
+    {
+      "path": "extra.corex",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Правка `composer.json` — **только** внутри `extra.corex`. Любое изменение `name`, `type`, `require`, `autoload`, `scripts`, `extra.laravel` — дефект item'а. Порядок ключей внутри `corex`: `schema-version`, `module` (если есть), `package-type`, `stability`, `public-api`. `schema-version` = `1` во всех пакетах. `stability` = `experimental` во всех 20 пакетах: 1.0 не выпущен ни для одного, и `stable` было бы обещанием без гейта, который его проверяет. `package-type` берётся из таблицы `P1-design.md` §3.3 без импровизации: `foundation` — `core`, `modules`; `integration` — `search-intl`, `search-meilisearch`, `tasks-workflow`; `product` — `crm`; `capability` — остальные 14. Перед записью каждого элемента `public-api` исполнитель выполняет `ls packages/<pkg>/src` и **удаляет** из перечня неймспейс, каталог которого физически не существует; создавать каталог запрещено. Форматирование JSON сохраняется в стиле файла (4 пробела, как в существующих `composer.json`), без переформатирования остального документа. `packages/import-export` пропускается: у него нет `composer.json`. Документ `taxonomy.md` не переписывает статьи конституции, а ссылается на их идентификаторы (`API-001` — публичная поверхность, `PKG-009` — тумбстоун)."
+  ],
+  "guidance": "Готовый JSON-пример и обе таблицы закрытых наборов — `@plan/knowledge/research-P1-design.json` §3.2, переносятся в документ как есть. Таблица ортогональности осей — §3.1. Таблица распределения — §3.3 вместе с тремя примечаниями («почему `api` — `capability`, а не отдельный вид `gateway`», «почему `recurrence` — `capability` при composer `type: library`», «почему тумбстоун не получает метаданных»): они отвечают на вопросы, которые иначе будут заданы снова. Правило потребителя («метаданные — данные, а не полномочие»; «отсутствие блока и невалидный блок — разные состояния»; «неизвестные ключи игнорируются») — §3.2, обязательный абзац документа.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "python3 -c \"import json,glob,sys; [json.load(open(p)) for p in glob.glob('packages/*/composer.json')]\"",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "composer validate --no-check-publish --working-dir=packages/<pkg>",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "python3 - <<'PY'",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "composer lint:check",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "git diff --stat -- 'packages/*/src' 'packages/*/database' 'scripts/' 'tests/' '.github/'",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "extra.corex keys in 20 composer.json",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "composer lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "git diff packages src empty",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "`docs/architecture/taxonomy.md` со схемой, двумя закрытыми наборами, таблицей ортогональности и распределением по 20 пакетам; заполненный `extra.corex` во всех 20 живых `composer.json`; запись в корневом `CHANGELOG.md`. Receipt — append к `@plan/knowledge/findings-P1-receipts.json`: вывод `composer validate` по каждому пакету, таблица «пакет → package-type → число неймспейсов в public-api» и отдельная строка о каждом неймспейсе, удалённом из стартового перечня из-за отсутствия каталога в дереве."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "medium"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "required",
+    "status": "complete"
+  },
+  "result": {
+    "started_at": "2026-09-21T08:40:48Z",
+    "finished_at": "2026-09-21T08:45:00Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-exec/cursor-composer-2.5/medium",
+      "effort": "medium"
+    },
+    "notes": "P1.2 GREEN: deliverables + validation",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-21T08:45:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-21T08:45:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-21T08:45:00Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-21T08:45:00Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Создать `docs/architecture/taxonomy.md` со схемой блока `extra.corex` (`schema-version`, `module`, `package-type`, `stability`, `public-api`), двумя закрытыми наборами значений и объявлением ортогональности архитектурных осей осям Composer — и заполнить блок во всех 20 живых `composer.json`."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "`extra.corex` сегодня есть в 9 пакетах из 20 и содержит единственный ключ `module` (`RAG:—`, `@plan/knowledge/research-00-baseline-metrics.json` §1, находка N04). Ни `package-type`, ни `stability`, ни `public-api` не объявлены нигде, поэтому P2 нечем классифицировать пакеты, а P3 нечем проверять направление зависимостей и публичную поверхность. `RAG:✅` `extra` — официально открытая точка расширения Composer, но категория установки принадлежит полю `type`, release-стабильность — версии пакета, а собственный блок обязан жить под владеемым неймспейсом и нести целочисленный `schema-version` (`@plan/knowledge/research-P1-design-rag.json` §1, запрос P1-Q1). Отсюда D11: обе оси сохраняются, но документ обязан назвать их ортогональность явно, иначе в одном файле появятся два противоречивых ответа на вопрос «что это за пакет»."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "Файл `docs/architecture/taxonomy.md`: схема блока с таблицей ключей, закрытый набор `package-type` (шесть значений), закрытый набор `stability` (четыре значения), таблица ортогональности осей, таблица распределения по 20 живым пакетам, правило чтения метаданных потребителем. Заполнение блока `extra.corex` в `packages/*/composer.json` всех 20 живых пакетов: добавление `schema-version`, `package-type`, `stability`, `public-api`; существующий ключ `module` сохраняется без изменений там, где он есть. Строка в корневом `CHANGELOG.md`."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Изменение composer `type` в любом пакете — он Composer-facing и остаётся как есть (D11); изменение `extra.laravel` и любого другого блока `extra`; изменение `require`, `autoload`, `scripts` и версий; добавление `extra.corex` в `packages/import-export` — у тумбстоуна нет `composer.json` (D13); создание гейта, читающего эти метаданные (P3); заполнение `public-api` неймспейсами, которых нет в дереве; изменение любого PHP-файла; создание `table-ownership.md` и `configuration.md` (P2)."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P1-design.json` §3 как нормативная спецификация: §3.1 таблица ортогональности осей, §3.2 готовый текст схемы и обоих закрытых наборов, §3.3 готовая таблица распределения по 20 пакетам с правилом сверки по дереву; `@plan/decisions/D11.json` как основание формы; `@plan/decisions/D3.json` как исходное решение; `@plan/knowledge/research-P1-design-rag.json` §1 и §4 (1) как внешнее подтверждение; `docs/architecture/constitution.md` (создан P1.1) как владелец статей `API-001` и `PKG-009`, на которые документ ссылается.\n\n`@plan/decisions/D108.json` owns the sole bounded Files exception."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "D108 bounded homogeneous metadata exception; exact manifest, no wildcard:\n`docs/architecture/taxonomy.md`; `CHANGELOG.md`;\n`packages/api/composer.json`; `packages/attributes/composer.json`; `packages/auth/composer.json`;\n`packages/core/composer.json`; `packages/crm/composer.json`; `packages/intl/composer.json`;\n`packages/media/composer.json`; `packages/modules/composer.json`; `packages/notifications/composer.json`;\n`packages/panels/composer.json`; `packages/recurrence/composer.json`; `packages/search-intl/composer.json`;\n`packages/search-meilisearch/composer.json`; `packages/search/composer.json`;\n`packages/tasks-workflow/composer.json`; `packages/tasks/composer.json`; `packages/tenancy/composer.json`;\n`packages/transfer/composer.json`; `packages/wakeup/composer.json`; `packages/workflow/composer.json`.\n`@plan/knowledge/findings-P1-receipts.json`.\nThe exception covers only the identical `extra.corex` subtree plus taxonomy/changelog/receipt and does not\nraise the ordinary eight-file budget for any other item."
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P1/phase.json`; 2) `@plan/knowledge/research-P1-design.json` §0, §3, §13; 3) `@plan/decisions/D11.json`; 4) `@plan/decisions/D3.json`; 5) `@plan/knowledge/research-P1-design-rag.json` §1, §4; 6) `docs/architecture/constitution.md` (статьи `API-001`, `PKG-009`); 7) `@plan/knowledge/research-00-baseline-metrics.json` §1; 8) `packages/core/composer.json`; 9) `packages/media/composer.json`; 10) `packages/crm/composer.json`; 11) `docs/dev-doctrine.md` §1, §3; 12) `@plan/decisions/D108.json`."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Правка `composer.json` — **только** внутри `extra.corex`. Любое изменение `name`, `type`, `require`, `autoload`, `scripts`, `extra.laravel` — дефект item'а. Порядок ключей внутри `corex`: `schema-version`, `module` (если есть), `package-type`, `stability`, `public-api`. `schema-version` = `1` во всех пакетах. `stability` = `experimental` во всех 20 пакетах: 1.0 не выпущен ни для одного, и `stable` было бы обещанием без гейта, который его проверяет. `package-type` берётся из таблицы `P1-design.md` §3.3 без импровизации: `foundation` — `core`, `modules`; `integration` — `search-intl`, `search-meilisearch`, `tasks-workflow`; `product` — `crm`; `capability` — остальные 14. Перед записью каждого элемента `public-api` исполнитель выполняет `ls packages/<pkg>/src` и **удаляет** из перечня неймспейс, каталог которого физически не существует; создавать каталог запрещено. Форматирование JSON сохраняется в стиле файла (4 пробела, как в существующих `composer.json`), без переформатирования остального документа. `packages/import-export` пропускается: у него нет `composer.json`. Документ `taxonomy.md` не переписывает статьи конституции, а ссылается на их идентификаторы (`API-001` — публичная поверхность, `PKG-009` — тумбстоун)."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Готовый JSON-пример и обе таблицы закрытых наборов — `@plan/knowledge/research-P1-design.json` §3.2, переносятся в документ как есть. Таблица ортогональности осей — §3.1. Таблица распределения — §3.3 вместе с тремя примечаниями («почему `api` — `capability`, а не отдельный вид `gateway`», «почему `recurrence` — `capability` при composer `type: library`», «почему тумбстоун не получает метаданных»): они отвечают на вопросы, которые иначе будут заданы снова. Правило потребителя («метаданные — данные, а не полномочие»; «отсутствие блока и невалидный блок — разные состояния»; «неизвестные ключи игнорируются») — §3.2, обязательный абзац документа."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "`python3 -c \"import json,glob,sys; [json.load(open(p)) for p in glob.glob('packages/*/composer.json')]\"` — без исключений. `composer validate --no-check-publish --working-dir=packages/<pkg>` для каждого из 20 живых пакетов — зелёный. Счётчик заполненности: `python3 - <<'PY'` со сверкой, что во всех 20 файлах присутствуют ключи `schema-version`, `package-type`, `stability`, `public-api`, что `package-type` входит в закрытый набор из шести значений и `stability` — из четырёх. Сверка `public-api` с деревом: для каждого перечисленного неймспейса существует соответствующий каталог в `packages/<pkg>/src`. A pre/post JSON snapshot removes only top-level `extra.corex` and proves every remaining semantic value byte-for-byte canonical-equal. The expanded actual write set equals the 23 literal Files paths exactly; any extra/missing path is red. `composer lint:check` из корня — зелёный. `git diff --stat -- 'packages/*/src' 'packages/*/database' 'scripts/' 'tests/' '.github/'` пуст."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "`docs/architecture/taxonomy.md` со схемой, двумя закрытыми наборами, таблицей ортогональности и распределением по 20 пакетам; заполненный `extra.corex` во всех 20 живых `composer.json`; запись в корневом `CHANGELOG.md`. Receipt — append к `@plan/knowledge/findings-P1-receipts.json`: вывод `composer validate` по каждому пакету, таблица «пакет → package-type → число неймспейсов в public-api» и отдельная строка о каждом неймспейсе, удалённом из стартового перечня из-за отсутствия каталога в дереве."
+    }
+  ]
+}

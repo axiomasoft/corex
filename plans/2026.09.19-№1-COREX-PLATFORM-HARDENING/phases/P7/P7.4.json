@@ -1,0 +1,268 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P7.4",
+  "title": "Инъекция lifecycle/database/host",
+  "status": "done",
+  "summary": "Перевести шесть не-HTTP потребителей tenancy с `config()` на\n`AccountLifecyclePolicy` или `TenancyOptions`.",
+  "why": "Оставшиеся чтения central_connection, trial/grace/domain и\ntemplate integrity после P7.2/P7.3 всё ещё прячут зависимость. CFG-002.",
+  "scope": {
+    "include": [
+      "шесть файлов §7.2; замыкания провайдера этих типов;\nCHANGELOG."
+    ],
+    "exclude": [
+      "Clock вместо `now()` в lifecycle; workspace/OIDC\n(P7.5); команды (composition); смена дефолтов trial/grace."
+    ]
+  },
+  "depends_on": [],
+  "decisions": [],
+  "skills": [],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P7-design.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Support/TenancyOptions.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Support/AccountLifecyclePolicy.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "@plan/phases/P7/phase.json",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/TenancyServiceProvider.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Account/Internal/Lifecycle/AccountLifecycle.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/tests/Feature/AccountLifecycleTest.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/config/tenancy.php",
+      "why": "Source input; exact context is preserved in item sections.",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/tenancy/src/Account/Internal/Lifecycle/AccountLifecycle.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/tenancy/src/Resolvers/HostTenantResolver.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/tenancy/src/Database/TemplateIntegrityVerifier.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/tenancy/src/Provisioning/Internal/Database/TemplateClonePostgreSQLManager.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/tenancy/src/Account/Internal/Jobs/CreateDatabaseFromTemplate.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/tenancy/src/Laravel/Http/Middleware/RequireActiveMembership.php",
+      "change": "any"
+    },
+    {
+      "path": "packages/tenancy/src/TenancyServiceProvider.php",
+      "change": "any"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Таблица §7.2 дословно. `now()->addDays`\nсохраняется. `membershipGuard` по умолчанию `'web'`, ключ в файле\nконфига может отсутствовать (undeclared-read P2.4) — `fromArray` уже\nдал дефолт. Ни один файл вне `Files` не изменяется."
+  ],
+  "guidance": "Конструкторы — named arguments. `CreateDatabaseFromTemplate`\nсериализуется очередью: в payload не класть Options, резолвить из\nконтейнера в `handle()` (команда/job на composition-границе), либо\nпередавать `string $centralConnection` скаляром. Предпочтителен скаляр\n`centralConnection` в публичных свойствах job'а, уже существующих,\nвместо объекта Options в сериализации.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "composer --working-dir=packages/tenancy test",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "test:pg",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "rg -n 'config\\('",
+      "expect": "Source acceptance condition preserved in Validation section.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "composer --working-dir=packages/tenancy lint:check",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "procedure": "composer --working-dir=packages/tenancy analyse",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "composer --working-dir=packages/tenancy test",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "procedure": "./vendor/bin/pest --group=pg (packages/tenancy)",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "rg -n 'config(' on the six §7.2 files",
+      "expect": "Source evidence status: green",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "шесть потребителей без `config()`; строка CHANGELOG."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed"
+  },
+  "result": {
+    "started_at": "2026-09-23T08:40:52Z",
+    "finished_at": "2026-09-23T08:58:01Z",
+    "executor": {
+      "provider": "legacy",
+      "model": "plan-run/cursor-grok-4.6/high",
+      "effort": "high"
+    },
+    "notes": "P7.4 GREEN: six lifecycle/database/host consumers on AccountLifecyclePolicy/TenancyOptions. pest 476/1513, pg 228/865, phpstan 0, pint ok.\nwrite-site: pre_mutation: allow · pre_final: allow",
+    "deviations": [],
+    "pending": [],
+    "checks": [
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-09-23T08:58:01Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-09-23T08:58:01Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-09-23T08:58:01Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-09-23T08:58:01Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-09-23T08:58:01Z",
+        "summary": "Authentic terminal evidence recorded green in the source journal."
+      }
+    ]
+  },
+  "updated_at": "2026-09-23T08:58:01Z",
+  "sections": [
+    {
+      "id": "Intent",
+      "title": "Intent",
+      "text": "Перевести шесть не-HTTP потребителей tenancy с `config()` на\n`AccountLifecyclePolicy` или `TenancyOptions`."
+    },
+    {
+      "id": "Why",
+      "title": "Why",
+      "text": "Оставшиеся чтения central_connection, trial/grace/domain и\ntemplate integrity после P7.2/P7.3 всё ещё прячут зависимость. CFG-002."
+    },
+    {
+      "id": "Scope-Included",
+      "title": "Scope Included",
+      "text": "шесть файлов §7.2; замыкания провайдера этих типов;\nCHANGELOG."
+    },
+    {
+      "id": "Scope-Excluded",
+      "title": "Scope Excluded",
+      "text": "Clock вместо `now()` в lifecycle; workspace/OIDC\n(P7.5); команды (composition); смена дефолтов trial/grace."
+    },
+    {
+      "id": "Inputs",
+      "title": "Inputs",
+      "text": "`@plan/knowledge/research-P7-design.json` §7.2;\n`packages/tenancy/src/Support/TenancyOptions.php`;\n`packages/tenancy/src/Support/AccountLifecyclePolicy.php`."
+    },
+    {
+      "id": "Files",
+      "title": "Files",
+      "text": "`packages/tenancy/src/Lifecycle/AccountLifecycle.php`; `packages/tenancy/src/Resolvers/HostTenantResolver.php`; `packages/tenancy/src/Database/TemplateIntegrityVerifier.php`; `packages/tenancy/src/Database/TemplateClonePostgreSQLManager.php`; `packages/tenancy/src/Jobs/CreateDatabaseFromTemplate.php`; `packages/tenancy/src/Http/Middleware/RequireActiveMembership.php`; `packages/tenancy/src/TenancyServiceProvider.php`; `CHANGELOG.md`"
+    },
+    {
+      "id": "Required-Reads",
+      "title": "Required Reads",
+      "text": "1) `@plan/phases/P7/phase.json`; 2) `@plan/knowledge/research-P7-design.json` §0, §7.2; 3) `packages/tenancy/src/Support/TenancyOptions.php`; 4) `packages/tenancy/src/Support/AccountLifecyclePolicy.php`; 5) `packages/tenancy/src/TenancyServiceProvider.php`; 6) `packages/tenancy/src/Lifecycle/AccountLifecycle.php`; 7) `packages/tenancy/tests/Feature/AccountLifecycleTest.php`; 8) `packages/tenancy/config/tenancy.php` (trial/grace/platform_domain)."
+    },
+    {
+      "id": "Implementation-Rules",
+      "title": "Implementation Rules",
+      "text": "Таблица §7.2 дословно. `now()->addDays`\nсохраняется. `membershipGuard` по умолчанию `'web'`, ключ в файле\nконфига может отсутствовать (undeclared-read P2.4) — `fromArray` уже\nдал дефолт. Ни один файл вне `Files` не изменяется."
+    },
+    {
+      "id": "Code-Guidance",
+      "title": "Code Guidance",
+      "text": "Конструкторы — named arguments. `CreateDatabaseFromTemplate`\nсериализуется очередью: в payload не класть Options, резолвить из\nконтейнера в `handle()` (команда/job на composition-границе), либо\nпередавать `string $centralConnection` скаляром. Предпочтителен скаляр\n`centralConnection` в публичных свойствах job'а, уже существующих,\nвместо объекта Options в сериализации."
+    },
+    {
+      "id": "Validation",
+      "title": "Validation",
+      "text": "`composer --working-dir=packages/tenancy test` и\n`test:pg`. `rg -n 'config\\('` по шести файлам пуст. lint и analyse\nпакета зелёные."
+    },
+    {
+      "id": "Deliverables",
+      "title": "Deliverables",
+      "text": "шесть потребителей без `config()`; строка CHANGELOG."
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D116",
+  "title": "Шесть публичных рёбер зон остаются поимёнными, матрица не открывается",
+  "date": "2026-09-22",
+  "status": "accepted",
+  "decision": "`ALLOWED['Foundation']` остаётся пустым. Features не получает зону Settings.\nШесть импортов разрешены только как точное совпадение файла и символа:\n\n- `packages/core/src/Support/Data/DataScope.php` → `CoreX\\Tenancy\\TenantContext`\n- `packages/core/src/Events/DomainEvent.php` → `CoreX\\Tenancy\\TenantContext`\n- `packages/core/src/Events/DomainEvent.php` → `CoreX\\Tenancy\\Contracts\\TenantContextResolver`\n- `packages/core/src/Events/FeatureFlagToggled.php` → `CoreX\\Contracts\\SettingsScope`\n- `packages/core/src/Features/DatabaseFeatureFlags.php` → `CoreX\\Contracts\\SettingsScope`\n- `packages/core/src/Features/DatabaseFeatureFlags.php` → `CoreX\\Enums\\SettingScope`\n\nЛюбой другой символ на этих файлах и любой новый файл остаются нарушением R-Z1.\nПосадка Foundation → `Views\\Internal` и неизвестный `Support/Probe.php` остаются\nкрасными.",
+  "rationale": "Снятие этих рёбер меняет публичные сигнатуры сразу в нескольких пакетах. Это\nне локальная правка гейта. Открыть Foundation на весь Tenancy или Features на\nвесь Settings было бы шире измеренного факта.",
+  "applies_to": [
+    "P6",
+    "P6.2"
+  ],
+  "supersedes": [],
+  "actor": {
+    "provider": "legacy",
+    "model": "plan-exec/cursor-grok-4.7/high",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "Preamble",
+      "title": "Preamble",
+      "text": "---\nid: D116\ndate: 2026-09-22\nstatus: accepted\nitem: P6.2\nitems: [P6, P6.2]\nsupersedes: []\nsuperseded_by: null\n---"
+    },
+    {
+      "id": "D116",
+      "title": "D116 — Шесть публичных рёбер зон остаются поимёнными, матрица не открывается",
+      "text": "**Actor:** plan-exec/cursor-grok-4.7/high\n\n**Evidence:** `RAG:—` чистый прогон R-Z1 на живом дереве называет ровно шесть\nимпортов. `DataScope::fromTenantContext` и поле `DomainEvent::$tenant`\nиспользуются пакетами монорепозитория. `FeatureFlags` принимает `SettingsScope`\nв той же сигнатуре, что и `DatabaseFeatureFlags`. D32 запрещает перенос FQCN\nв P6. D109 оставил фабрику `fromTenantContext` после скалярного конструктора."
+    },
+    {
+      "id": "section",
+      "title": "Решение",
+      "text": "`ALLOWED['Foundation']` остаётся пустым. Features не получает зону Settings.\nШесть импортов разрешены только как точное совпадение файла и символа:\n\n- `packages/core/src/Support/Data/DataScope.php` → `CoreX\\Tenancy\\TenantContext`\n- `packages/core/src/Events/DomainEvent.php` → `CoreX\\Tenancy\\TenantContext`\n- `packages/core/src/Events/DomainEvent.php` → `CoreX\\Tenancy\\Contracts\\TenantContextResolver`\n- `packages/core/src/Events/FeatureFlagToggled.php` → `CoreX\\Contracts\\SettingsScope`\n- `packages/core/src/Features/DatabaseFeatureFlags.php` → `CoreX\\Contracts\\SettingsScope`\n- `packages/core/src/Features/DatabaseFeatureFlags.php` → `CoreX\\Enums\\SettingScope`\n\nЛюбой другой символ на этих файлах и любой новый файл остаются нарушением R-Z1.\nПосадка Foundation → `Views\\Internal` и неизвестный `Support/Probe.php` остаются\nкрасными."
+    },
+    {
+      "id": "section-2",
+      "title": "Почему",
+      "text": "Снятие этих рёбер меняет публичные сигнатуры сразу в нескольких пакетах. Это\nне локальная правка гейта. Открыть Foundation на весь Tenancy или Features на\nвесь Settings было бы шире измеренного факта."
+    },
+    {
+      "id": "Consequences",
+      "title": "Consequences",
+      "text": "P6.2 записывает список в `CoreZoneTest` и в `docs/architecture/core-zones.md`.\nПеренос или удаление этих методов — отдельный item под G-API, не молчаливое\nрасширение матрицы."
+    }
+  ]
+}
