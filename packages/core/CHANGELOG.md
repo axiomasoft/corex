@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — PLAN3.P07.3 mandatory synchronous audit
+
+- Added the `SynchronousAuditWriter` SPI and stock committed database writer for mandatory support-access events. It bypasses optional audit disablement and queues, rejects ambient transactions, and requires an event-time snapshot.
+
 ## Unreleased — PLAN3.P07.2 tenancy implementation cleanup
 
 - TenantDatabaseLifecycle documentation refers to the physical database implementation; the kernel contract

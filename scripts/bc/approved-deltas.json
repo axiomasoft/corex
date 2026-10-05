@@ -147,6 +147,14 @@
                 {
                     "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D107-p07-data-persistence-until-p08.md",
                     "sha256": "210b1e4c57dc93f1efe6f2de16ec45ebc86502670d79d3c4a1ebff598748c1da"
+                },
+                {
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D96-p07-impersonation-access-edges.md",
+                    "sha256": "79c6e71c6250162b82945901e51f62029dc8a334701da02a7915ca5039b17525"
+                },
+                {
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D100-p07-grok-design-remediation.md",
+                    "sha256": "c6036d8746643d497efd2fb5194c6cb252d4d1084ce3c5338c35dd8eb8b9dd2c"
                 }
             ],
             "changes": [
@@ -399,6 +407,16 @@
                     "path": null,
                     "modificationType": "removed",
                     "description_sha256": "c46e3077a37ded6b6a950f5078a5e03f040d5e9072f348b00abd0918f63db056"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/ImpersonationPolicy.php",
+                    "modificationType": "removed",
+                    "description_sha256": "e270e3a6bb8ace4c37b03f36ddb39471d322cd39925079a8a4b4110c4f9c9c04"
+                },
+                {
+                    "path": "/packages/tenancy/src/Laravel/Support/ImpersonationPolicy.php",
+                    "modificationType": "changed",
+                    "description_sha256": "fa083b533f4e840c8d18183647ef56398b56ab58728d65e0287181658e2c4896"
                 }
             ]
         }

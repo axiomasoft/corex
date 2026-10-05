@@ -6,6 +6,7 @@ namespace CoreX\Tenancy\Laravel;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
+use CoreX\Config\Contracts\RuntimeConfigCheck;
 use CoreX\Context\Contracts\AccountConnectionResolver;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
@@ -13,6 +14,8 @@ use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Storage\Contracts\TenantStorage;
 use CoreX\Tenancy\Account\Contracts\AccountRead;
+use CoreX\Tenancy\Impersonation\Internal\ImpersonatedModelWriteGuard;
+use CoreX\Tenancy\Internal\DangerousModesCheck;
 use CoreX\Tenancy\Laravel\Support\AccountLifecyclePolicy;
 use CoreX\Tenancy\Laravel\Support\ImpersonationPolicy;
 use CoreX\Tenancy\Laravel\Support\StatusGatePolicy;
@@ -56,6 +59,8 @@ final class RuntimeRegistrar implements PackageRegistrar
             ImpersonationPolicy::class,
             static fn (Application $app): ImpersonationPolicy => $app->make(TenancyOptions::class)->impersonation,
         );
+        $app->scoped(ImpersonatedModelWriteGuard::class);
+        $app->tag([DangerousModesCheck::class], RuntimeConfigCheck::class);
         $app->bind(
             AccountLifecyclePolicy::class,
             static fn (Application $app): AccountLifecyclePolicy => $app->make(TenancyOptions::class)->lifecycle,

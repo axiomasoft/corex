@@ -176,19 +176,19 @@ return [
         // claim is rejected (403) and neither the write-guard middleware
         // nor the Eloquent listeners are registered (AC-28).
         //
-        // `require_approved_by` (D148) — 4-eyes is a DEPLOYMENT policy
-        // (B-11 §5.9 п.1 "опционально … для prod-политики"), not part of
-        // the invariant itself: default `false` so dev/staging keeps
-        // working, a prod profile flips it to reject any grant missing
-        // `approved_by`.
         'impersonation' => [
             'enabled' => (bool) env('COREX_TENANCY_OIDC_IMPERSONATION_ENABLED', false),
-            'require_approved_by' => (bool) env('COREX_TENANCY_OIDC_IMPERSONATION_REQUIRE_APPROVED_BY', false),
         ],
 
         // AC-15 — enforced by Http\Middleware\EnforceSessionLifetime
         // regardless of the consuming app's own `session.lifetime`.
         'max_session_lifetime_minutes' => (int) env('COREX_TENANCY_OIDC_MAX_SESSION_LIFETIME_MINUTES', 720),
+    ],
+
+    // Profile rules are enforced in the atomic grant claim. Production dev
+    // requires an explicit dangerous-mode acknowledgement.
+    'impersonation' => [
+        'profile' => env('COREX_TENANCY_IMPERSONATION_PROFILE', 'standard'),
     ],
 
     /*

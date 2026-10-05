@@ -17,6 +17,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Audit\Contracts\AuditRetention` | spi-implement | 1.0 |
 | `CoreX\Audit\Contracts\Auditable` | spi-implement | 1.0 |
 | `CoreX\Audit\Contracts\CurrentActor` | spi-call | 1.0 |
+| `CoreX\Audit\Contracts\SynchronousAuditWriter` | spi-implement | 1.0 |
 | `CoreX\Audit\Data\AuditEntry` | api | 1.0 |
 | `CoreX\Audit\Enums\ActorType` | api | 1.0 |
 | `CoreX\Audit\Laravel\AuditRegistrar` | spi-call | 1.0 |
@@ -786,6 +787,12 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Tenancy\Identity\Contracts\MembershipProjection` | spi-call | 1.0 |
 | `CoreX\Tenancy\Identity\Events\UserSynced` | spi-call | 1.0 |
 | `CoreX\Tenancy\Identity\Laravel\UserRelations` | spi-call | 1.0 |
+| `CoreX\Tenancy\Impersonation\Contracts\ImpersonationAuditSink` | spi-implement | 1.0 |
+| `CoreX\Tenancy\Impersonation\Contracts\ImpersonationGrantStore` | spi-implement | 1.0 |
+| `CoreX\Tenancy\Impersonation\Data\ClaimedGrant` | api | 1.0 |
+| `CoreX\Tenancy\Impersonation\Data\GrantClaim` | api | 1.0 |
+| `CoreX\Tenancy\Impersonation\Data\ImpersonationAuditEvent` | api | 1.0 |
+| `CoreX\Tenancy\Impersonation\Enums\ImpersonationProfile` | api | 1.0 |
 | `CoreX\Tenancy\Impersonation\Events\ImpersonationEnded` | spi-call | 1.0 |
 | `CoreX\Tenancy\Impersonation\Events\ImpersonationStarted` | spi-call | 1.0 |
 | `CoreX\Tenancy\Laravel\AuthenticationRegistrar` | spi-call | 1.0 |

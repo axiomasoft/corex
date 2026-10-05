@@ -6,10 +6,12 @@ namespace CoreX\Tenancy\Laravel;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
+use CoreX\Audit\Contracts\SynchronousAuditWriter;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Modules\Laravel\RegistersNothingOnBoot;
+use CoreX\Tenancy\Account\Contracts\AccountRead;
 use CoreX\Tenancy\Authentication\Internal\Http\Controllers\LogoutController;
 use CoreX\Tenancy\Authentication\Internal\Http\Controllers\OidcLoginController;
 use CoreX\Tenancy\Authentication\Internal\Oidc\IdTokenVerifier;
@@ -17,14 +19,20 @@ use CoreX\Tenancy\Authentication\Internal\Oidc\JwksKeySet;
 use CoreX\Tenancy\Authentication\Internal\Oidc\OidcClient;
 use CoreX\Tenancy\Authentication\Internal\Oidc\OidcDiscovery;
 use CoreX\Tenancy\Identity\Contracts\IdentitySyncer;
+use CoreX\Tenancy\Impersonation\Contracts\ImpersonationAuditSink;
+use CoreX\Tenancy\Impersonation\Contracts\ImpersonationGrantStore;
+use CoreX\Tenancy\Impersonation\Internal\DatabaseImpersonationGrantStore;
 use CoreX\Tenancy\Impersonation\Internal\DatabaseImpersonationService;
+use CoreX\Tenancy\Impersonation\Internal\DualImpersonationAuditSink;
 use CoreX\Tenancy\Laravel\Support\ImpersonationPolicy;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Http\Client\Factory as HttpFactory;
+use Illuminate\Support\Str;
 use Override;
 use Psr\Clock\ClockInterface;
 
@@ -36,6 +44,23 @@ final class AuthenticationRegistrar implements PackageRegistrar
     #[Override]
     public function register(Application $app): void
     {
+        $app->scoped(
+            ImpersonationGrantStore::class,
+            static fn (Application $app): ImpersonationGrantStore => new DatabaseImpersonationGrantStore(
+                connections: $app->make(ConnectionResolverInterface::class),
+                centralConnection: $app->make(TenancyOptions::class)->centralConnection,
+            ),
+        );
+        $app->scoped(
+            ImpersonationAuditSink::class,
+            static fn (Application $app): ImpersonationAuditSink => new DualImpersonationAuditSink(
+                connections: $app->make(ConnectionResolverInterface::class),
+                writer: $app->make(SynchronousAuditWriter::class),
+                contexts: $app->make(TenantContextResolver::class),
+                id: static fn (): string => (string) Str::uuid7(),
+                centralConnection: $app->make(TenancyOptions::class)->centralConnection,
+            ),
+        );
         $app->singleton(
             OidcDiscovery::class,
             static fn (Application $app): OidcDiscovery => new OidcDiscovery(
@@ -117,9 +142,19 @@ final class AuthenticationRegistrar implements PackageRegistrar
         $app->scoped(
             ImpersonationService::class,
             static fn (Application $app): DatabaseImpersonationService => new DatabaseImpersonationService(
-                impersonationPolicy: $app->make(ImpersonationPolicy::class),
-                options: $app->make(TenancyOptions::class),
+                policy: $app->make(ImpersonationPolicy::class),
+                grants: $app->make(ImpersonationGrantStore::class),
+                audit: $app->make(ImpersonationAuditSink::class),
+                accounts: $app->make(AccountRead::class),
                 contexts: $app->make(TenantContextResolver::class),
+                session: $app->make('request')->hasSession()
+                    ? $app->make('request')->session()
+                    : $app->make('session.store'),
+                auth: $app->make(AuthFactory::class),
+                events: $app->make(Dispatcher::class),
+                clock: $app->make(ClockInterface::class),
+                guard: $app->make(TenancyOptions::class)->oidcGuard,
+                centralConnection: $app->make(TenancyOptions::class)->centralConnection,
             ),
         );
     }

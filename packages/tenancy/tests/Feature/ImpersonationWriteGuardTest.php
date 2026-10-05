@@ -231,7 +231,7 @@ it('ы: L2 allowing() lets an intentional write through, then blocks again after
     $guard = app()->make(ImpersonatedModelWriteGuard::class);
     Event::listen('eloquent.saving: *', [$guard, 'handle']);
 
-    ImpersonatedModelWriteGuard::allowing(function (): void {
+    $guard->allowing(function (): void {
         ImpersonationGuardWriteStub::create(['id' => (string) Str::uuid(), 'name' => 'inside-allowing']);
     });
 
@@ -239,7 +239,7 @@ it('ы: L2 allowing() lets an intentional write through, then blocks again after
 
     // Flag must be reset even when the callback itself throws.
     try {
-        ImpersonatedModelWriteGuard::allowing(function (): void {
+        $guard->allowing(function (): void {
             throw new RuntimeException('boom');
         });
     } catch (RuntimeException) {
@@ -248,6 +248,29 @@ it('ы: L2 allowing() lets an intentional write through, then blocks again after
 
     expect(fn () => ImpersonationGuardWriteStub::create(['id' => (string) Str::uuid(), 'name' => 'after-allowing']))
         ->toThrow(ImpersonationRestrictedException::class);
+});
+
+it('keeps allowing local to its scoped guard and restores an outer allowance after an inner exception', function (): void {
+    $fake = new WriteGuardFakeImpersonationService(wgActiveState());
+    $outer = new ImpersonatedModelWriteGuard($fake);
+    $other = new ImpersonatedModelWriteGuard($fake);
+    $payload = [new ImpersonationGuardWriteStub];
+
+    $outer->allowing(function () use ($outer, $other, $payload): void {
+        expect(fn () => $outer->handle('eloquent.saving', $payload))->not->toThrow(ImpersonationRestrictedException::class);
+        expect(fn () => $other->handle('eloquent.saving', $payload))->toThrow(ImpersonationRestrictedException::class);
+
+        try {
+            $outer->allowing(static function (): void {
+                throw new RuntimeException('inner');
+            });
+        } catch (RuntimeException) {
+            // The outer allowance must still be active here.
+        }
+        expect(fn () => $outer->handle('eloquent.saving', $payload))->not->toThrow(ImpersonationRestrictedException::class);
+    });
+
+    expect(fn () => $outer->handle('eloquent.saving', $payload))->toThrow(ImpersonationRestrictedException::class);
 });
 
 // ── L3 — semantic layer (ь) ─────────────────────────────────────────────

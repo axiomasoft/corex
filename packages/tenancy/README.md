@@ -3,6 +3,20 @@
 Laravel tenancy primitives for CoreX's physical PostgreSQL database-per-account
 profile.
 
+## Support impersonation
+
+Enable the OIDC impersonation lane with `corex-tenancy.oidc.impersonation.enabled`.
+Choose `corex-tenancy.impersonation.profile`: `standard` (default, 60-minute maximum grant),
+`regulated` (30 minutes and approval by a different staff identity), or `dev` (480 minutes).
+Production `dev` requires `corex.acknowledged_dangerous_modes` to contain
+`corex-tenancy.impersonation.profile`. All grants are claimed once atomically and must carry a
+reason. `standard` and `regulated` commit correlated central and tenant audit rows before login;
+`dev` commits central audit only. Any audit failure denies access and leaves the grant consumed.
+The central intent remains if the tenant mirror fails. Hosts may implement
+`ImpersonationGrantStore` and `ImpersonationAuditSink`; a custom sink must preserve committed,
+fail-closed writes. The current scoped `ImpersonatedModelWriteGuard` instance provides
+`allowing()` for a deliberately permitted write.
+
 ## Optional wakeup root hints
 
 `corex-tenancy.wakeup.driver` defaults to `local_sweep`. With `axiomasoft/corex-wakeup` installed, a cloud

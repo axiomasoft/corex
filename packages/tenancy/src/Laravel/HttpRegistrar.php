@@ -48,9 +48,8 @@ final class HttpRegistrar implements PackageRegistrar
     {
         $app->bind(
             ImpersonationGrant::class,
-            static fn (Application $app): ImpersonationGrant => new ImpersonationGrant(
-                options: $app->make(TenancyOptions::class),
-            ),
+            static fn (Application $app): ImpersonationGrant => (new ImpersonationGrant)
+                ->setConnection($app->make(TenancyOptions::class)->centralConnection),
         );
         $app->bind(
             ImpersonationSessionGuard::class,

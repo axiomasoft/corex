@@ -32,7 +32,7 @@ final class ImpersonationRestrictedException extends CodedException
     {
         return new self(
             "Model write blocked under impersonation: {$modelClass}. ".
-            'Wrap the mutation in ImpersonatedModelWriteGuard::allowing() if it is intentionally allowed.',
+            'Use the current scoped ImpersonatedModelWriteGuard instance allowing() method for an intentional mutation.',
         );
     }
 

@@ -1802,7 +1802,7 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-tenancy.oidc.impersonation.require_approved_by": {
+        "corex-tenancy.impersonation.profile": {
             "owner": "axiomasoft/corex-tenancy",
             "secret": "no",
             "mode": "deployment",
@@ -2053,7 +2053,7 @@
         "corex-tenancy.host_identification.cache_store": "TenancyOptions::$hostCacheStore",
         "corex-tenancy.host_identification.cache_ttl": "TenancyOptions::$hostCacheTtl",
         "corex-tenancy.oidc.impersonation.enabled": "TenancyOptions::$impersonation",
-        "corex-tenancy.oidc.impersonation.require_approved_by": "TenancyOptions::$impersonation",
+        "corex-tenancy.impersonation.profile": "TenancyOptions::$impersonation",
         "corex-tenancy.platform_domain": "TenancyOptions::$lifecycle",
         "corex-tenancy.trial_days": "TenancyOptions::$lifecycle"
     }

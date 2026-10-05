@@ -1,13 +1,1 @@
-{
-    "packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php": {
-        "G1": 2,
-        "G2": 19,
-        "G3": 2
-    },
-    "packages/tenancy/src/Impersonation/Internal/ImpersonatedModelWriteGuard.php": {
-        "G4": 1
-    },
-    "packages/tenancy/src/Impersonation/Internal/Models/ImpersonationGrant.php": {
-        "G2": 1
-    }
-}
+{}

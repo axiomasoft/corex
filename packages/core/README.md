@@ -65,6 +65,13 @@ php artisan migrate --database=<tenant>
 ключи ядра под свой тип без форка миграций. Меняйте стратегию **до** первого
 `migrate` — она фиксирует тип колонок в БД.
 
+## Mandatory support audit
+
+Mandatory support-access events use `CoreX\Audit\Contracts\SynchronousAuditWriter`.
+The stock writer commits directly to the configured audit table, requires an event-time
+snapshot and rejects ambient transactions. It bypasses the optional audit logger and queue.
+Custom implementations must provide the same committed, fail-closed behavior.
+
 ## Точность времени
 
 Все `timestamptz`-колонки объявлены с явной микросекундной точностью

@@ -8,6 +8,7 @@ use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Config\Data\SecretRef;
 use CoreX\Config\Laravel\ConfigurationValidator;
+use CoreX\Tenancy\Impersonation\Enums\ImpersonationProfile;
 use CoreX\Tenancy\Runtime\Contracts\TenantBootstrapper;
 use CoreX\Tenancy\Runtime\Internal\Bootstrappers\CachePrefixBootstrapper;
 use CoreX\Tenancy\Runtime\Internal\Bootstrappers\ConnectionBootstrapper;
@@ -164,13 +165,18 @@ final readonly class TenancyOptions
         );
 
         $impersonationConfig = is_array($oidc['impersonation'] ?? null) ? $oidc['impersonation'] : [];
+        $profileConfig = is_array($config['impersonation'] ?? null) ? $config['impersonation'] : [];
+        $configuredProfile = $profileConfig['profile'] ?? 'standard';
+        $profile = is_string($configuredProfile) ? ImpersonationProfile::tryFrom($configuredProfile) : null;
+
+        if ($profile === null) {
+            $violations->add('corex-tenancy.impersonation.profile', 'must be dev, standard, or regulated');
+            $profile = ImpersonationProfile::Standard;
+        }
+
         $impersonation = new ImpersonationPolicy(
             enabled: self::bool($violations, 'oidc.impersonation.enabled', $impersonationConfig['enabled'] ?? false),
-            requireApprovedBy: self::bool(
-                $violations,
-                'oidc.impersonation.require_approved_by',
-                $impersonationConfig['require_approved_by'] ?? false,
-            ),
+            profile: $profile,
         );
 
         $oidcMaxSessionLifetimeMinutes = self::positiveInt(

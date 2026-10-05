@@ -126,6 +126,7 @@
 | corex-tenancy.host_identification.cache_store | axiomasoft/corex-tenancy | null | null | no | product-policy | unobserved | use-site | TenancyOptions::$hostCacheStore |  |  |
 | corex-tenancy.host_identification.cache_ttl | axiomasoft/corex-tenancy | int | 300 | no | product-policy | unobserved | use-site | TenancyOptions::$hostCacheTtl |  |  |
 | corex-tenancy.host_identification.enabled | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$hostIdentificationEnabled |  |  |
+| corex-tenancy.impersonation.profile | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$impersonation |  |  |
 | corex-tenancy.membership_guard.guard | axiomasoft/corex-tenancy | unobserved | unobserved | no | product-policy | unobserved | use-site | TenancyOptions::$membershipGuard |  | undeclared-read |
 | corex-tenancy.oidc.allowed_algs | axiomasoft/corex-tenancy | array | unobserved | no | product-policy | unobserved | use-site | TenancyOptions::$oidcAllowedAlgs |  | undeclared-read |
 | corex-tenancy.oidc.client_id | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$oidcClientId |  |  |
@@ -135,7 +136,6 @@
 | corex-tenancy.oidc.enabled | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$oidcEnabled |  |  |
 | corex-tenancy.oidc.guard | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$oidcGuard |  |  |
 | corex-tenancy.oidc.impersonation.enabled | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$impersonation |  |  |
-| corex-tenancy.oidc.impersonation.require_approved_by | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$impersonation |  |  |
 | corex-tenancy.oidc.issuer | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$oidcIssuer |  |  |
 | corex-tenancy.oidc.jwks.cache_store | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | unobserved | TenancyOptions::$oidcJwksCacheStore |  |  |
 | corex-tenancy.oidc.jwks.cache_ttl | axiomasoft/corex-tenancy | unobserved | unobserved | no | deployment | no | use-site | TenancyOptions::$oidcJwksCacheTtl |  |  |

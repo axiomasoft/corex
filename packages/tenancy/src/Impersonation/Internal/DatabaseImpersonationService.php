@@ -4,22 +4,27 @@ declare(strict_types=1);
 
 namespace CoreX\Tenancy\Impersonation\Internal;
 
-use Carbon\CarbonImmutable;
-use CoreX\Audit\Contracts\CurrentActor;
 use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\ImpersonationState;
 use CoreX\Context\Exceptions\CentralContextException;
 use CoreX\Tenancy\Account\Contracts\AccountRead;
 use CoreX\Tenancy\Authentication\Exceptions\OidcAuthenticationException;
+use CoreX\Tenancy\Impersonation\Contracts\ImpersonationAuditSink;
+use CoreX\Tenancy\Impersonation\Contracts\ImpersonationGrantStore;
+use CoreX\Tenancy\Impersonation\Data\GrantClaim;
+use CoreX\Tenancy\Impersonation\Data\ImpersonationAuditEvent;
 use CoreX\Tenancy\Impersonation\Events\ImpersonationEnded;
 use CoreX\Tenancy\Impersonation\Events\ImpersonationStarted;
 use CoreX\Tenancy\Laravel\Support\ImpersonationPolicy;
-use CoreX\Tenancy\Laravel\Support\TenancyOptions;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+use DateTimeImmutable;
+use Illuminate\Contracts\Auth\Factory as AuthFactory;
+use Illuminate\Contracts\Auth\StatefulGuard;
+use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Contracts\Session\Session;
 use Override;
+use Psr\Clock\ClockInterface;
+use Throwable;
 
 /**
  * Cloud implementation of support impersonation (B-11 §5.9, D139). Rebound
@@ -55,79 +60,74 @@ final class DatabaseImpersonationService implements ImpersonationService
     private ?ImpersonationState $memoState = null;
 
     public function __construct(
-        private readonly ImpersonationPolicy $impersonationPolicy,
-        private readonly TenancyOptions $options,
-        private readonly TenantContextResolver $contexts,
+        private ImpersonationPolicy $policy,
+        private ImpersonationGrantStore $grants,
+        private ImpersonationAuditSink $audit,
+        private AccountRead $accounts,
+        private TenantContextResolver $contexts,
+        private Session $session,
+        private AuthFactory $auth,
+        private Dispatcher $events,
+        private ClockInterface $clock,
+        private string $guard,
+        private string $centralConnection,
     ) {}
 
     #[Override]
     public function start(string $grantId, string $staffIdentityId): void
     {
-        if ($this->state() !== null) {
+        if (! $this->policy->enabled || $this->state() !== null) {
             throw OidcAuthenticationException::impersonationDenied();
         }
 
-        $central = $this->centralConnection();
+        $accountId = $this->contexts->current()->account->id;
+        $claimed = $this->grants->claim(new GrantClaim(
+            grantId: $grantId,
+            staffIdentityId: $staffIdentityId,
+            accountId: $accountId,
+            profile: $this->policy->profile,
+            now: $this->clock->now(),
+        ));
 
-        $account = $this->contexts->current()->account;
-
-        $requireApprovedBy = $this->impersonationPolicy->requireApprovedBy;
-
-        $affected = DB::connection($central)->table('root_impersonation_grants')
-            ->where('id', $grantId)
-            ->where('staff_identity_id', $staffIdentityId)
-            ->where('account_id', $account->id)
-            ->whereNull('used_at')
-            ->whereNull('revoked_at')
-            ->where('expires_at', '>', now())
-            ->where('reason', '<>', '')
-            ->when($requireApprovedBy, static fn ($query) => $query->whereNotNull('approved_by'))
-            ->whereExists(static function ($query) use ($staffIdentityId): void {
-                $query->selectRaw('1')
-                    ->from('root_identities')
-                    ->where('id', $staffIdentityId)
-                    ->where('is_staff', true);
-            })
-            ->update(['used_at' => now(), 'updated_at' => now()]);
-
-        if ($affected !== 1) {
+        if ($claimed === null) {
             throw OidcAuthenticationException::impersonationDenied();
         }
 
-        $row = DB::connection($central)->table('root_impersonation_grants')->where('id', $grantId)->first();
+        $targetUserId = $claimed->targetUserId ?? $this->accounts->ownerIdentityId($accountId, $this->centralConnection);
 
-        $targetUserId = $row->target_user_id ?? app(AccountRead::class)->ownerIdentityId($account->id, $central);
-        $reason = is_string($row->reason) ? $row->reason : '';
-
-        if (! is_string($targetUserId) || $targetUserId === '' || $reason === '') {
+        if (! is_string($targetUserId) || $targetUserId === '') {
             throw OidcAuthenticationException::loginFailed();
         }
 
-        $this->mirror($account->id, 'impersonation.started', $staffIdentityId, $grantId, $targetUserId, $reason, (string) $row->expires_at);
+        $this->record(event: 'impersonation.started', accountId: $accountId, staffIdentityId: $staffIdentityId, grantId: $grantId, targetUserId: $targetUserId, reason: $claimed->reason, expiresAt: $claimed->expiresAt);
 
-        $expiresAt = CarbonImmutable::parse($row->expires_at);
-
-        session()->regenerate();
-        session([
+        $this->session->regenerate();
+        $this->session->put([
             self::SESSION_GRANT_ID => $grantId,
             self::SESSION_STAFF_ID => $staffIdentityId,
             self::SESSION_TARGET_ID => $targetUserId,
-            self::SESSION_EXPIRES_AT => $expiresAt->toIso8601String(),
-            self::SESSION_REASON => $reason,
+            self::SESSION_EXPIRES_AT => $claimed->expiresAt->format(DATE_ATOM),
+            self::SESSION_REASON => $claimed->reason,
         ]);
 
-        $this->memoState = new ImpersonationState($grantId, $staffIdentityId, $targetUserId, $expiresAt, $reason);
+        $this->memoState = new ImpersonationState($grantId, $staffIdentityId, $targetUserId, $claimed->expiresAt, $claimed->reason);
         $this->resolved = true;
 
-        $authenticated = Auth::guard($this->guard())->loginUsingId($targetUserId);
-
-        if ($authenticated === false) {
-            $this->failStart($account->id, $grantId, $staffIdentityId, $targetUserId, $reason);
+        try {
+            $authenticated = $this->statefulGuard()->loginUsingId($targetUserId);
+        } catch (Throwable) {
+            $this->failStart($accountId, $grantId, $staffIdentityId, $targetUserId, $claimed->reason, $claimed->expiresAt);
 
             throw OidcAuthenticationException::loginFailed();
         }
 
-        event(new ImpersonationStarted($grantId, $staffIdentityId, $targetUserId, $reason));
+        if ($authenticated === false) {
+            $this->failStart($accountId, $grantId, $staffIdentityId, $targetUserId, $claimed->reason, $claimed->expiresAt);
+
+            throw OidcAuthenticationException::loginFailed();
+        }
+
+        $this->events->dispatch(new ImpersonationStarted($grantId, $staffIdentityId, $targetUserId, $claimed->reason));
     }
 
     #[Override]
@@ -148,10 +148,10 @@ final class DatabaseImpersonationService implements ImpersonationService
         $this->clearSession();
 
         if ($accountId !== null) {
-            $this->mirror($accountId, 'impersonation.ended', $state->staffIdentityId, $state->grantId, $state->targetUserId, $state->reason);
+            $this->record(event: 'impersonation.ended', accountId: $accountId, staffIdentityId: $state->staffIdentityId, grantId: $state->grantId, targetUserId: $state->targetUserId, reason: (string) $state->reason, expiresAt: $state->expiresAt);
         }
 
-        event(new ImpersonationEnded($state->grantId, $state->staffIdentityId, $state->targetUserId, $state->reason));
+        $this->events->dispatch(new ImpersonationEnded($state->grantId, $state->staffIdentityId, $state->targetUserId, (string) $state->reason));
     }
 
     #[Override]
@@ -169,19 +169,19 @@ final class DatabaseImpersonationService implements ImpersonationService
 
         $this->resolved = true;
 
-        $grantId = session(self::SESSION_GRANT_ID);
-        $staffId = session(self::SESSION_STAFF_ID);
-        $targetId = session(self::SESSION_TARGET_ID);
-        $expiresAt = session(self::SESSION_EXPIRES_AT);
+        $grantId = $this->session->get(self::SESSION_GRANT_ID);
+        $staffId = $this->session->get(self::SESSION_STAFF_ID);
+        $targetId = $this->session->get(self::SESSION_TARGET_ID);
+        $expiresAt = $this->session->get(self::SESSION_EXPIRES_AT);
 
         if (! is_string($grantId) || ! is_string($staffId) || ! is_string($targetId) || ! is_string($expiresAt)) {
             return $this->memoState = null;
         }
 
-        $reason = session(self::SESSION_REASON);
+        $reason = $this->session->get(self::SESSION_REASON);
 
         if (! is_string($reason) || $reason === '') {
-            $reason = $this->claimedReason($grantId);
+            $reason = $this->grants->claimedReason($grantId);
 
             if ($reason === null) {
                 $this->clearSession();
@@ -189,71 +189,57 @@ final class DatabaseImpersonationService implements ImpersonationService
                 return $this->memoState = null;
             }
 
-            session([self::SESSION_REASON => $reason]);
+            $this->session->put(self::SESSION_REASON, $reason);
         }
 
-        return $this->memoState = new ImpersonationState($grantId, $staffId, $targetId, CarbonImmutable::parse($expiresAt), $reason);
+        return $this->memoState = new ImpersonationState($grantId, $staffId, $targetId, new DateTimeImmutable($expiresAt), $reason);
     }
 
-    private function failStart(string $accountId, string $grantId, string $staffIdentityId, string $targetUserId, string $reason): void
+    private function failStart(string $accountId, string $grantId, string $staffIdentityId, string $targetUserId, string $reason, DateTimeImmutable $expiresAt): void
     {
         $this->clearSession();
-        $this->mirror($accountId, 'impersonation.failed', $staffIdentityId, $grantId, $targetUserId, $reason);
+        $this->record(event: 'impersonation.failed', accountId: $accountId, staffIdentityId: $staffIdentityId, grantId: $grantId, targetUserId: $targetUserId, reason: $reason, expiresAt: $expiresAt);
     }
 
     private function clearSession(): void
     {
-        Auth::guard($this->guard())->logout();
-        session()->forget([
+        $this->statefulGuard()->logout();
+        $this->session->forget([
             self::SESSION_GRANT_ID,
             self::SESSION_STAFF_ID,
             self::SESSION_TARGET_ID,
             self::SESSION_EXPIRES_AT,
             self::SESSION_REASON,
         ]);
-        session()->invalidate();
-        session()->regenerateToken();
+        $this->session->invalidate();
+        $this->session->regenerateToken();
         $this->memoState = null;
         $this->resolved = true;
     }
 
-    private function claimedReason(string $grantId): ?string
+    private function record(string $event, string $accountId, string $staffIdentityId, string $grantId, string $targetUserId, string $reason, DateTimeImmutable $expiresAt): void
     {
-        $reason = DB::connection($this->centralConnection())
-            ->table('root_impersonation_grants')
-            ->where('id', $grantId)
-            ->whereNotNull('used_at')
-            ->value('reason');
-
-        return is_string($reason) && $reason !== '' ? $reason : null;
+        $this->audit->record(new ImpersonationAuditEvent(
+            event: $event,
+            accountId: $accountId,
+            grantId: $grantId,
+            staffIdentityId: $staffIdentityId,
+            targetUserId: $targetUserId,
+            reason: $reason,
+            profile: $this->policy->profile,
+            occurredAt: $this->clock->now(),
+            expiresAt: $expiresAt,
+        ));
     }
 
-    private function mirror(string $accountId, string $event, string $staffIdentityId, string $grantId, string $targetUserId, ?string $reason, ?string $expiresAt = null): void
+    private function statefulGuard(): StatefulGuard
     {
-        $payload = ['target_user_id' => $targetUserId, 'reason' => $reason, 'outcome' => $event];
+        $guard = $this->auth->guard($this->guard);
 
-        if ($expiresAt !== null) {
-            $payload['expires_at'] = $expiresAt;
+        if (! $guard instanceof StatefulGuard) {
+            throw OidcAuthenticationException::loginFailed();
         }
 
-        DB::connection($this->centralConnection())->table('root_account_events')->insert([
-            'id' => (string) Str::uuid7(),
-            'account_id' => $accountId,
-            'event' => $event,
-            'actor' => json_encode(['type' => 'support', 'id' => $staffIdentityId, 'grant' => $grantId], JSON_THROW_ON_ERROR),
-            'payload' => json_encode($payload, JSON_THROW_ON_ERROR),
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-    }
-
-    private function guard(): string
-    {
-        return $this->options->oidcGuard;
-    }
-
-    private function centralConnection(): string
-    {
-        return $this->options->centralConnection;
+        return $guard;
     }
 }

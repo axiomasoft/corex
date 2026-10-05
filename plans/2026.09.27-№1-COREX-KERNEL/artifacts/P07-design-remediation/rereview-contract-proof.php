@@ -88,7 +88,7 @@ foreach (['initialize', 'runFor-central', 'runFor-outer', 'logger-fails', 'callb
                         check('outer_callback_reached', true);
                     }
 
-throw new RuntimeException('callback-failed');
+                    throw new RuntimeException('callback-failed');
                 }
             });
         }
@@ -242,4 +242,4 @@ try {
 } catch (TenantContextUnavailable $e) {
     check('null_context_domain_error', $e->getMessage() === 'not-initialized');
 }
-echo json_encode(['example_sha256' => hash('sha256',$examples), 'passed' => count($checks), 'checks' => $checks, 'database_connections' => 0, 'limits' => 'Exact Markdown manager/status/scope bodies; fake read/auth ports, actual Laravel Request/Route/Application/abort. Full provider boot and PostgreSQL deferred to product execution.'],JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)."\n";
+echo json_encode(['example_sha256' => hash('sha256', $examples), 'passed' => count($checks), 'checks' => $checks, 'database_connections' => 0, 'limits' => 'Exact Markdown manager/status/scope bodies; fake read/auth ports, actual Laravel Request/Route/Application/abort. Full provider boot and PostgreSQL deferred to product execution.'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)."\n";

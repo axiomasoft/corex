@@ -51,7 +51,6 @@ function validTenancyConfigArrays(): array
                 ],
                 'impersonation' => [
                     'enabled' => false,
-                    'require_approved_by' => false,
                 ],
                 'max_session_lifetime_minutes' => 720,
             ],

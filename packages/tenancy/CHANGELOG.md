@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — PLAN3.P07.3 impersonation profiles and audit
+
+- Replaced the approval flag with `corex-tenancy.impersonation.profile` (`dev`, `standard`, `regulated`). Grant rules are enforced in one atomic claim; regulated approval requires a distinct staff identity. Added grant and audit ports, committed central plus tenant audit for standard/regulated, fail-closed access, and a production acknowledgement for dev. The Eloquent write guard is scoped with an instance `allowing()` method. This is an unpublished pre-1.0 PHP/configuration contract change.
+
 ## Unreleased — PLAN3.P07.2 (D95/D98; pre-1.0 BC delta)
 
 - Removed Stancl and its prerelease provider dependencies, runtime model projections, identifier binding,
@@ -218,8 +222,8 @@ tag `v0.2.0` per D17 default policy (no per-package split mirror configured).
   has no UI). Login lane (`OidcLoginController`) split `assertMembership` into `assertAccountClaim`
   (both lanes) + `assertMembership` (ordinary lane only) — the `imp` branch skips membership and
   `IdentitySyncer` entirely (support is not an account member, D145); the ordinary lane's own
-  Validation suite is unchanged. `require_approved_by` config (D148, default `false`) — optional
-  4-eyes deployment policy.
+  Validation suite is unchanged. The later profile contract supersedes the former optional
+  four-eyes deployment policy.
 - **`ResolveWorkspace`-middleware: `/w/{slug}` → workspace narrowing (P2.23, B-11 §5.4 п.4,
   D131–D136, AC-18).** Registered as the `tenancy.workspace` alias (D131) — always registered,
   never a member of the `'tenant'` group: a route with `->middleware(['tenant',
