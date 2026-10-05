@@ -128,8 +128,8 @@
   "validation": [
     {
       "id": "V1",
-      "cmd": "test -s plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.6-review/verdict.md",
-      "expect": "Source acceptance condition preserved in Validation section.",
+      "cmd": "test -s plans/2026.09.27-№1-COREX-KERNEL/knowledge/artifacts-P07.6-review-verdict.json",
+      "expect": "exit 0; canonical review verdict preserved after JSON migration",
       "kind": "acceptance"
     },
     {
@@ -140,8 +140,8 @@
     },
     {
       "id": "V3",
-      "cmd": "git grep -n -i stancl -- packages products scripts .github composer.json ':!**/CHANGELOG.md'",
-      "expect": "Source acceptance condition preserved in Validation section.",
+      "cmd": "git grep -n -i stancl -- packages products scripts .github composer.json ':!**/CHANGELOG.md'; stancl_search_exit=$?; test \"$stancl_search_exit\" -eq 1",
+      "expect": "exit 0; tracked-source grep has no matches (grep exit 1)",
       "kind": "acceptance"
     }
   ],
@@ -176,7 +176,7 @@
     "pending": [],
     "checks": []
   },
-  "updated_at": "2026-10-05T17:28:09Z",
+  "updated_at": "2026-10-05T19:14:19Z",
   "sections": [
     {
       "id": "Owner-execution-override-2026-10-05",

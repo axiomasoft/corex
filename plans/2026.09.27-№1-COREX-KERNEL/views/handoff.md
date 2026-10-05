@@ -18,4 +18,4 @@
 
 ## Open questions
 
-0 open. See `open-questions.md`.
+1 open. See `open-questions.md`.

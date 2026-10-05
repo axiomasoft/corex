@@ -64,8 +64,8 @@
     },
     {
       "path": "scripts/distribution/stage-stancl-providers.py",
-      "why": "Source input; exact context is preserved in item sections.",
-      "required": true
+      "why": "Source input; exact context is preserved in item sections. (файл удалён последующими фазами; чтение историческое)",
+      "required": false
     }
   ],
   "task_files": [
@@ -392,7 +392,7 @@
       }
     ]
   },
-  "updated_at": "2026-10-05T17:27:48Z",
+  "updated_at": "2026-10-05T19:10:56Z",
   "sections": [
     {
       "id": "Intent",

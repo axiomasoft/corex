@@ -48,6 +48,19 @@ helper-ах и static (baseline 25 находок на текущей базе; 
 - P06
 - P05
 
+## Validation
+
+```json
+[
+  {
+    "id": "V4",
+    "cmd": "gh run view 37355723226 --repo ax1oma/corex-miror --json conclusion,headSha,jobs --jq '.conclusion == \"success\" and .headSha == \"4f3000d9470cc695eaeab60e1c3810cbe93f51af\" and (.jobs | length) == 37 and all(.jobs[]; .conclusion == \"success\")' | rg -qx true",
+    "expect": "exit 0; final P07 acceptance commit has CI success and all 37 hosted jobs success, including mutation (D73, D97.4)",
+    "kind": "acceptance"
+  }
+]
+```
+
 ## Items
 
 - P07.1
@@ -242,3 +255,30 @@ P07.5 Files дополнительно scripts/module-layout.json (closed kernel
 ## D103 — stable BC admission and review evidence
 
 D103 priority: P07.1 Files/Scope includes scripts/bc/approved-deltas.json; exact D102 AccountStatusGate constructor optional policy → five required arguments is an approved unpublished semantic delta under D64. At product execution, preserve unrelated approvals and bind finite actual Roave rows to actual resolved BC_CHECK_BASE and accepted D102/D103 hashes; never invent description hashes, relax stable gate or change accepted base. Golden/CHANGELOG alone insufficient. P07.6 explicitly reviews enum 15→16 and constructor/admission alongside D98–D103. Actual checker scratch positive/negative proof is bc-admission-proof.py; it is not real Roave/product admission. Proof arity aligned with QueueTenantContext four parameters; outer callback+cleanup restoration branch now executed. No new implementation behavior.
+
+## Post-P08 design cleanup and P07 hosted acceptance
+
+Owner scope: «для фиксов CI я создал еще одно зеркало https://github.com/ax1oma/corex-miror. CI тестируй на нем»; «исправляй все, что всплыло + задача до финального результата». P08 items remain todo; no new review was performed.
+
+The initial workspace was clean at 40691de8fa1cc906feb1ec8d0d3ba70153fed9ec (P08 design already committed). The current plan checker reported 0 errors and 0 warnings, despite nine missing historical reads still marked required. Only the specified reads in P01.1, P02.1, P02.2, P05.1, P06.5 and P07.1 were made optional and annotated; ordering and other reads were preserved. P07.6 Validation carriers were aligned to the canonical JSON verdict and the expected empty stancl grep.
+
+CI repairs: 94ce22cc2ef5687d3f9364c70570874c1bf419a0, fdff76a0ed5b1b43f093d8b29bd97f42f0fb7f90, 28afb27149d232d082f9c1f9058e6c299698320f, 4f3000d9470cc695eaeab60e1c3810cbe93f51af. Removed nonexistent retired tenancy PHPStan and bridge Pg suite paths and the retired dependency-scanner path. BC approval now reads schema-backed accepted JSON decisions, with 19 source references rebound to the verified migrated documents; the accepted base and all 98 unique approved change signatures are unchanged. Four obsolete PHPStan ignore entries were removed after explicit default-connection resolution and correct framework column metadata types. Golden records only the previously added Internal HostAccountResolver::generationKey() from 32e1817c. The failing cache creator fixture uses a bindable closure on Laravel 12. Mutation CI runs on both push and pull_request so D73 can be met without a skipped job. No floor, ratchet, or BC change allowance was loosened.
+
+Local verification: PHP 8.4.26; PostgreSQL 16 on 127.0.0.1:5434, isolated corex_test and test-created schemas/databases. Package harnesses migrate their fixtures.
+
+| Check | Observed result |
+|---|---|
+| Full tenancy | 599 passed, 2228 assertions; 6 existing optional skips |
+| Bridge SQLite suite | 37 passed, 138 assertions |
+| Affected PG lifecycle/migration suite | 38 passed, 186 assertions |
+| BC admission regressions (JSON and Markdown) | 2 passed, 14 assertions; exact-source tamper, open status, wrong base and unknown/missing changes reject |
+| BC selection regressions | 6 passed, 57 assertions; root fixtures 17 passed, 79 assertions |
+| Actual first-run Roave report replay | All six packages admitted; 98 unique signatures match the existing finite approvals |
+| Golden | 4 passed, 1449 assertions; only the intentional existing additive Internal method recorded |
+| Root lint; tests lint; affected core/CRM PHPStan; tenancy dependency scan | All passed |
+| Mandatory mutation registry | 37/37 expected RED; source and index restored |
+| Targeted cache-store failure regression after callback repair | 1 passed, 2 assertions |
+
+Hosted acceptance: GREEN, CI success, all 37/37 jobs success including mutation (V4 exit 0): [CI 37355723226](https://github.com/ax1oma/corex-miror/actions/runs/37355723226) on 4f3000d9470cc695eaeab60e1c3810cbe93f51af. Prior runs 37350346185 and 37353799966 are failures, not acceptance. Superseded intermediate runs 37355040883 and 37355350353 were cancelled to free runners. No workflow rerun was requested. Primary GitHub account billing was not changed. The original P07.6 review/route deviation is preserved; this cleanup does not assert a new independent review GREEN.
+
+Closure is blocked only by the lifecycle metadata operation: repeated finish returned `NOT_STARTED: P07.6 is done_with_deviations; start it first (use reopen to redo a finished item)`. Canonical V1–V4 all passed. D115 is an open owner question for the technical reopen/start/finish required by the original task §3.4. P07.6 remains terminal with its original result; no reopen or decision acceptance was performed without the separate owner answer.

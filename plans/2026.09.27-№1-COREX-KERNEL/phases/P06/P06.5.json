@@ -49,13 +49,13 @@
     },
     {
       "path": "@plan/knowledge/artifacts-P06.-1-2-3-4--execution-completion.json",
-      "why": "Source input; exact context is preserved in item sections.",
-      "required": true
+      "why": "Source input; exact context is preserved in item sections. (файл удалён последующими фазами; чтение историческое)",
+      "required": false
     },
     {
       "path": "@plan/knowledge/phases-P06-P06.-1-2-3-4.json",
-      "why": "Source input; exact context is preserved in item sections.",
-      "required": true
+      "why": "Source input; exact context is preserved in item sections. (файл удалён последующими фазами; чтение историческое)",
+      "required": false
     },
     {
       "path": "docs/architecture/webhooks-threat-model.md",
@@ -166,7 +166,7 @@
       }
     ]
   },
-  "updated_at": "2026-10-05T17:28:04Z",
+  "updated_at": "2026-10-05T19:10:57Z",
   "sections": [
     {
       "id": "Intent",

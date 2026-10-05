@@ -93,8 +93,8 @@
     },
     {
       "path": "packages/tenancy/src/Runtime/Internal/StanclTenancyManager.php",
-      "why": "Source input; exact context is preserved in item sections.",
-      "required": true
+      "why": "Source input; exact context is preserved in item sections. (файл удалён последующими фазами; чтение историческое)",
+      "required": false
     },
     {
       "path": "packages/tenancy/src/Laravel/RuntimeRegistrar.php",
@@ -103,13 +103,13 @@
     },
     {
       "path": "packages/tenancy/src/Laravel/Bootstrappers/WorkspaceContextBootstrapper.php",
-      "why": "Source input; exact context is preserved in item sections.",
-      "required": true
+      "why": "Source input; exact context is preserved in item sections. (файл удалён последующими фазами; чтение историческое)",
+      "required": false
     },
     {
       "path": "packages/tenancy/src/Laravel/Resolvers/HostTenantResolver.php",
-      "why": "Source input; exact context is preserved in item sections.",
-      "required": true
+      "why": "Source input; exact context is preserved in item sections. (файл удалён последующими фазами; чтение историческое)",
+      "required": false
     },
     {
       "path": "packages/tenancy/tests/Pg/ResidentTenantSwitchPgTest.php",
@@ -437,7 +437,7 @@
       }
     ]
   },
-  "updated_at": "2026-10-05T17:28:05Z",
+  "updated_at": "2026-10-05T19:10:57Z",
   "sections": [
     {
       "id": "Intent",

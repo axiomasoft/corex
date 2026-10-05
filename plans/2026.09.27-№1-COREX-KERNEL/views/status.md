@@ -63,7 +63,7 @@ D01–D24, `artifacts/P00-design/facts/import-matrix.txt`. Производит:
 
 | Item | Title | Status | Route | Updated |
 |:--|:--|:--|:--|:--|
-| P01.1 | Окружение PHP 8.4 и платформа манифестов | 🟢 Done | implementation/high | 2026-10-05T17:27:48Z |
+| P01.1 | Окружение PHP 8.4 и платформа манифестов | 🟢 Done | implementation/high | 2026-10-05T19:10:56Z |
 | P01.2 | Golden-снимки с нормализатором переименований | 🟢 Done | implementation/high | 2026-10-05T17:28:20Z |
 | P01.3 | Ratchet-гейты: ownership v2, PHPStan max, dependency-analyser | 🟢 Done | implementation/high | 2026-10-05T17:27:50Z |
 | P01.4 | CI supply chain и подключение страховочной сетки | 🟢 Done | implementation/high | 2026-10-05T17:27:51Z |
@@ -116,8 +116,8 @@ Rector-сеты (P09), stancl/azguard (P07), release/SBOM (P09).
 
 | Item | Title | Status | Route | Updated |
 |:--|:--|:--|:--|:--|
-| P02.1 | Ядро не знает пакетов: SPI швов и тестовые харнессы | 🟢 Done | implementation/high | 2026-10-05T17:27:51Z |
-| P02.2 | Operations отдаёт webhooks и tools через SPI | 🟢 Done | implementation/high | 2026-10-05T17:27:52Z |
+| P02.1 | Ядро не знает пакетов: SPI швов и тестовые харнессы | 🟢 Done | implementation/high | 2026-10-05T19:10:56Z |
+| P02.2 | Operations отдаёт webhooks и tools через SPI | 🟢 Done | implementation/high | 2026-10-05T19:10:56Z |
 | P02.3 | Механический перенос по картам P00 | 🟢 Done | implementation/xhigh | 2026-10-05T17:27:53Z |
 | P02.4 | Идентификаторы пакетов и гейт полноты переименований | 🟢 Done | implementation/high | 2026-10-05T17:27:53Z |
 
@@ -270,7 +270,7 @@ generated_by: task plan-views closure
 
 | Item | Title | Status | Route | Updated |
 |:--|:--|:--|:--|:--|
-| P05.1 | Typed Options, runtime-проверки и удаление static Config | 🟢 Done | implementation/high | 2026-10-05T17:27:58Z |
+| P05.1 | Typed Options, runtime-проверки и удаление static Config | 🟢 Done | implementation/high | 2026-10-05T19:10:57Z |
 | P05.2 | Тонкие providers, registrars и именованные классы | 🟢 Done | implementation/high | 2026-10-05T17:27:59Z |
 | P05.3 | Порты вместо фасадов, хелперов и static state | 🟢 Done | implementation/high | 2026-10-05T17:28:00Z |
 | P05.4 | Резидентный режим, config:cache, reference и доктрина | 🟢 Done | implementation/high | 2026-10-05T17:28:21Z |
@@ -329,7 +329,7 @@ Phase audit не авторизован.
 | P06.2 | Таксономия кодов и исходы tool runtime | 🟢 Done | implementation/high | 2026-10-05T17:28:02Z |
 | P06.3 | Конверт CloudEvents для сообщений и тела вебхуков | 🟢 Done | implementation/high | 2026-10-05T17:28:03Z |
 | P06.4 | Контракт доставки вебхуков, egress арендатора и модель угроз | 🟢 Done | implementation/high | 2026-10-05T17:28:03Z |
-| P06.5 | Review P06 | 🟠 Done with deviations | frontier/high | 2026-10-05T17:28:04Z |
+| P06.5 | Review P06 | 🟠 Done with deviations | frontier/high | 2026-10-05T19:10:57Z |
 
 Closed 2026-10-03T21:33:30Z (🟠 Done with deviations): <!-- plan-projection
 projection: phase-closure
@@ -375,12 +375,12 @@ Restore Actions capacity and obtain a green `CI` run before release, before trea
 
 | Item | Title | Status | Route | Updated |
 |:--|:--|:--|:--|:--|
-| P07.1 | Собственный движок tenancy и граница контекста | 🟢 Done | implementation/xhigh | 2026-10-05T17:28:05Z |
+| P07.1 | Собственный движок tenancy и граница контекста | 🟢 Done | implementation/xhigh | 2026-10-05T19:10:57Z |
 | P07.2 | Tenancy без stancl: данные, provisioning, manifests | 🟢 Done | implementation/high | 2026-10-05T17:28:06Z |
 | P07.3 | Impersonation на портах с профилями и двойным аудитом | 🟢 Done | implementation/high | 2026-10-05T17:28:06Z |
 | P07.4 | Access без AzGuard и мост access-azguard | 🟢 Done | implementation/high | 2026-10-05T17:28:07Z |
 | P07.5 | Контракты пробуждения в ядре и граф без notifications → wakeup | 🟢 Done | implementation/high | 2026-10-05T17:28:08Z |
-| P07.6 | Review P07 | 🟠 Done with deviations | frontier/high | 2026-10-05T17:28:09Z |
+| P07.6 | Review P07 | 🟠 Done with deviations | frontier/high | 2026-10-05T19:14:19Z |
 
 ## P08 — Схема: baseline v1 · ⬜ Not started
 

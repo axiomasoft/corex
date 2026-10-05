@@ -62,8 +62,8 @@
     },
     {
       "path": "packages/modules/src/Compiler/RegistryCompiler.php",
-      "why": "Source input; exact context is preserved in item sections.",
-      "required": true
+      "why": "Source input; exact context is preserved in item sections. (файл удалён последующими фазами; чтение историческое)",
+      "required": false
     },
     {
       "path": "packages/core/src/Config/Internal/Commands/ValidateConfigCommand.php",
@@ -315,7 +315,7 @@
       }
     ]
   },
-  "updated_at": "2026-10-05T17:27:51Z",
+  "updated_at": "2026-10-05T19:10:56Z",
   "sections": [
     {
       "id": "Intent",
