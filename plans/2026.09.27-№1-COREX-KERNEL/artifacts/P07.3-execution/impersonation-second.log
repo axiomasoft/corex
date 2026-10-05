@@ -1,0 +1,47 @@
+> pest '--filter=ImpersonationTest'
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\ImpersonationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit ж: account_id гранта ≠ текущий тенант → 403[39m[90m                      [39m [90m0.86s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit м: target_user_id = NULL → сессия открывается от имени owner_ide[39m[90m…[39m [90m0.68s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit з: is_staff=false у предъявителя → 403[39m[90m                           [39m [90m0.63s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit к/н: target-пользователя не существует → 403, но used_at выставл[39m[90m…[39m [90m0.81s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit backfills a legacy session from the claimed grant reason[39m[90m         [39m [90m0.75s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit э: stop() гасит сессию, пишет impersonation.ended и излучает Imp[39m[90m…[39m [90m0.93s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit й: два start одного гранта → ровно один успех (одноразовость, D1[39m[90m…[39m [90m0.79s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit и: require_approved_by=true и approved_by=NULL → 403; approved_b[39m[90m…[39m [90m0.81s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit г: revoked_at выставлен → 403[39m[90m                                    [39m [90m0.75s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit е: staff_identity_id гранта ≠ sub токена → 403[39m[90m                   [39m [90m0.91s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit б: грант с used_at уже выставленным → 403[39m[90m                        [39m [90m0.87s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ю: TTL истёк → следующий запрос 401, сессия завершена[39m[90m            [39m [90m0.85s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit closes a legacy session whose claimed grant has no reason[39m[90m        [39m [90m0.61s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit isolates impersonation state across requests in one worker conta[39m[90m…[39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit isolates impersonation state across requests in one worker conta[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit л/м/о/п/с/т/у: валидный грант — target≠sub, root_account_events,[39m[90m…[39m [90m0.68s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit а: imp в токене при impersonation.enabled=false → 403 (регресс P[39m[90m…[39m [90m0.69s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit р: заголовок X-CoreX-Impersonation присутствует на следующем зап[39m[90m…[39m [90m0.90s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit я: revoked_at выставлен извне mid-session → следующий запрос 401[39m[90m…[39m [90m0.92s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit д: reason пустой → 403[39m[90m                                           [39m [90m0.81s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a nested start before the second grant is consumed[39m[90m       [39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit в: expires_at в прошлом → 403[39m[90m                                    [39m [90m0.80s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ImpersonationTest[22m [90m>[39m it и: require_approved_by=true…    
+[39;1m  Expected response status code [403] but received 302.
+Failed asserting that 302 is identical to 403.[39;22m
+
+  at [32mtests/Feature/ImpersonationTest.php[39m:[32m513[39m
+    509▕     $state1 = Str::random(40);
+    510▕     $nonce1 = Str::random(40);
+    511▕     $claims1 = baseClaimsIM($staffId, $account->id, $nonce1, ['imp' => $deniedGrant]);
+    512▕     $idTokenResponse['id_token'] = signIdTokenIM($claims1, $key['private'], $key['kid']);
+  ➜ 513▕     callbackIM($state1, $nonce1)->assertStatus(403);
+    514▕ 
+    515▕     // approved_by set → passes.
+    516▕     $approverId = makeIdentityIM();
+    517▕     $approvedGrant = makeGrantIM($staffId, $account->id, ['approved_by' => $approverId]);
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m21 passed[39;22m[90m (57 assertions)[39m
+  [90mDuration:[39m [39m16.55s[39m
+  [90mRandom Order Seed:[39m [39m1791174123[39m
+
+Script pest handling the test event returned with error code 1

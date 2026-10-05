@@ -1,0 +1,524 @@
+> pest '--filter=Impersonation'
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\ImpersonationWriteGuardTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit ш: L1 permits an unsafe method carrying the AllowImpersonatedWri[39m[90m…[39m [90m0.69s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit аа: with oidc disabled, no impersonation middleware in the tenan[39m[90m…[39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ь: L3 ImpersonationGuard::assertAllowed() throws under impersona[39m[90m…[39m [90m0.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit щ: L2 blocks Model::save()/delete() under impersonation; passes[39m[90m… [39m [90m0.68s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ч: L1 denies an unsafe method under impersonation without a rout[39m[90m…[39m [90m0.76s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit L1 passes every method outside impersonation (regression)[39m[90m        [39m [90m0.47s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit ы: L2 allowing() lets an intentional write through, then blocks[39m[90m… [39m [90m0.63s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ъ: L2 exempts AuditLog — the compliance record can write while q[39m[90m…[39m [90m0.39s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit ъ: L2 exempts ImpersonationGrant — the grant row itself is not b[39m[90m…[39m [90m0.53s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\AccountLifecycleTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit purge() under active impersonation throws ImpersonationRestricte[39m[90m…[39m [90m1.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\OidcLoginTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit н: imp в токене при impersonation.enabled=false → 403[39m[90m            [39m [90m0.68s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\ImpersonationTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit и: require_approved_by=true и approved_by=NULL → 403; approved_b[39m[90m…[39m [90m0.41s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit в: expires_at в прошлом → 403[39m[90m                                    [39m [90m0.31s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit э: stop() гасит сессию, пишет impersonation.ended и излучает Imp[39m[90m…[39m [90m0.40s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit а: imp в токене при impersonation.enabled=false → 403 (регресс P[39m[90m…[39m [90m0.50s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit з: is_staff=false у предъявителя → 403[39m[90m                           [39m [90m0.46s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit р: заголовок X-CoreX-Impersonation присутствует на следующем зап[39m[90m…[39m [90m0.43s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit й: два start одного гранта → ровно один успех (одноразовость, D1[39m[90m…[39m [90m0.51s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit isolates impersonation state across requests in one worker conta[39m[90m…[39m [90m0.38s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit isolates impersonation state across requests in one worker conta[39m[90m…[39m [90m0.36s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit closes a legacy session whose claimed grant has no reason[39m[90m        [39m [90m0.42s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit м: target_user_id = NULL → сессия открывается от имени owner_ide[39m[90m…[39m [90m0.36s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit ж: account_id гранта ≠ текущий тенант → 403[39m[90m                      [39m [90m0.37s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit д: reason пустой → 403[39m[90m                                           [39m [90m0.53s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit к/н: target-пользователя не существует → 403, но used_at выставл[39m[90m…[39m [90m0.52s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit г: revoked_at выставлен → 403[39m[90m                                    [39m [90m0.43s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit ю: TTL истёк → следующий запрос 401, сессия завершена[39m[90m            [39m [90m0.32s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit л/м/о/п/с/т/у: валидный грант — target≠sub, root_account_events,[39m[90m…[39m [90m0.31s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit rejects a nested start before the second grant is consumed[39m[90m       [39m [90m0.40s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit е: staff_identity_id гранта ≠ sub токена → 403[39m[90m                   [39m [90m0.34s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit б: грант с used_at уже выставленным → 403[39m[90m                        [39m [90m0.48s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit я: revoked_at выставлен извне mid-session → следующий запрос 401[39m[90m…[39m [90m0.35s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit backfills a legacy session from the claimed grant reason[39m[90m         [39m [90m0.40s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ImpersonationWriteGuardTest[22m [90m>[39m it ы: L2 allow… [41;1m Error [49;22m  
+[39;1m  Non-static method CoreX\Tenancy\Impersonation\Internal\ImpersonatedModelWriteGuard::allowing() cannot be called statically[39;22m
+
+  at [32mtests/Feature/ImpersonationWriteGuardTest.php[39m:[32m234[39m
+    230▕ 
+    231▕     $guard = app()->make(ImpersonatedModelWriteGuard::class);
+    232▕     Event::listen('eloquent.saving: *', [$guard, 'handle']);
+    233▕ 
+  ➜ 234▕     ImpersonatedModelWriteGuard::allowing(function (): void {
+    235▕         ImpersonationGuardWriteStub::create(['id' => (string) Str::uuid(), 'name' => 'inside-allowing']);
+    236▕     });
+    237▕ 
+    238▕     expect(ImpersonationGuardWriteStub::query()->count())->toBe(1);
+
+  [33m1   [39m[39;1mtests/Feature/ImpersonationWriteGuardTest.php[39;22m:[39;1m234[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ImpersonationWriteGuardTest[22m [90m>[39m it ъ: L2 e… [41;1m TypeError [49;22m  
+[39;1m  CoreX\Tenancy\Impersonation\Internal\Models\ImpersonationGrant::getConnectionName(): Return value must be of type string, null returned[39;22m
+
+  at [32msrc/Impersonation/Internal/Models/ImpersonationGrant.php[39m:[32m50[39m
+     46▕ 
+     47▕     #[Override]
+     48▕     public function getConnectionName(): string
+     49▕     {
+  ➜  50▕         return $this->options?->centralConnection ?? parent::getConnectionName();
+     51▕     }
+     52▕ 
+     53▕     /** @return array<string, string> */
+     54▕     protected function casts(): array
+
+  [33m1   [39m[39;1msrc/Impersonation/Internal/Models/ImpersonationGrant.php[39;22m:[39;1m50[39;22m
+      [2m+7 vendor frames [22m
+  [33m9   [39m[39;1mtests/Feature/ImpersonationWriteGuardTest.php[39;22m:[39;1m217[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ImpersonationTest[22m [90m>[39m it и: require… [41;1m RuntimeException [49;22m  
+[39;1m  Session store not set on request.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Http/Request.php[39m:[32m630[39m
+    626▕      */
+    627▕     public function session()
+    628▕     {
+    629▕         if (! $this->hasSession()) {
+  ➜ 630▕             throw new RuntimeException('Session store not set on request.');
+    631▕         }
+    632▕ 
+    633▕         return $this->session->store;
+    634▕     }
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1msrc/Laravel/AuthenticationRegistrar.php[39;22m:[39;1m150[39;22m
+      [2m+24 vendor frames [22m
+  [33m27  [39m[39;1mtests/Feature/ImpersonationTest.php[39;22m:[39;1m245[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ImpersonationTest[22m [90m>[39m it в: expires… [41;1m RuntimeException [49;22m  
+[39;1m  Session store not set on request.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Http/Request.php[39m:[32m630[39m
+    626▕      */
+    627▕     public function session()
+    628▕     {
+    629▕         if (! $this->hasSession()) {
+  ➜ 630▕             throw new RuntimeException('Session store not set on request.');
+    631▕         }
+    632▕ 
+    633▕         return $this->session->store;
+    634▕     }
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1msrc/Laravel/AuthenticationRegistrar.php[39;22m:[39;1m150[39;22m
+      [2m+24 vendor frames [22m
+  [33m27  [39m[39;1mtests/Feature/ImpersonationTest.php[39;22m:[39;1m245[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ImpersonationTest[22m [90m>[39m it э: stop()…  [41;1m RuntimeException [49;22m  
+[39;1m  Session store not set on request.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Http/Request.php[39m:[32m630[39m
+    626▕      */
+    627▕     public function session()
+    628▕     {
+    629▕         if (! $this->hasSession()) {
+  ➜ 630▕             throw new RuntimeException('Session store not set on request.');
+    631▕         }
+    632▕ 
+    633▕         return $this->session->store;
+    634▕     }
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1msrc/Laravel/AuthenticationRegistrar.php[39;22m:[39;1m150[39;22m
+      [2m+25 vendor frames [22m
+  [33m28  [39m[39;1mtests/Feature/ImpersonationTest.php[39;22m:[39;1m245[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ImpersonationTest[22m [90m>[39m it а: imp в т… [41;1m RuntimeException [49;22m  
+[39;1m  Session store not set on request.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Http/Request.php[39m:[32m630[39m
+    626▕      */
+    627▕     public function session()
+    628▕     {
+    629▕         if (! $this->hasSession()) {
+  ➜ 630▕             throw new RuntimeException('Session store not set on request.');
+    631▕         }
+    632▕ 
+    633▕         return $this->session->store;
+    634▕     }
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1msrc/Laravel/AuthenticationRegistrar.php[39;22m:[39;1m150[39;22m
+      [2m+24 vendor frames [22m
+  [33m27  [39m[39;1mtests/Feature/ImpersonationTest.php[39;22m:[39;1m245[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ImpersonationTest[22m [90m>[39m it з: is_staf… [41;1m RuntimeException [49;22m  
+[39;1m  Session store not set on request.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Http/Request.php[39m:[32m630[39m
+    626▕      */
+    627▕     public function session()
+    628▕     {
+    629▕         if (! $this->hasSession()) {
+  ➜ 630▕             throw new RuntimeException('Session store not set on request.');
+    631▕         }
+    632▕ 
+    633▕         return $this->session->store;
+    634▕     }
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1msrc/Laravel/AuthenticationRegistrar.php[39;22m:[39;1m150[39;22m
+      [2m+24 vendor frames [22m
+  [33m27  [39m[39;1mtests/Feature/ImpersonationTest.php[39;22m:[39;1m245[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ImpersonationTest[22m [90m>[39m it р: заголов… [41;1m RuntimeException [49;22m  
+[39;1m  Session store not set on request.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Http/Request.php[39m:[32m630[39m
+    626▕      */
+    627▕     public function session()
+    628▕     {
+    629▕         if (! $this->hasSession()) {
+  ➜ 630▕             throw new RuntimeException('Session store not set on request.');
+    631▕         }
+    632▕ 
+    633▕         return $this->session->store;
+    634▕     }
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1msrc/Laravel/AuthenticationRegistrar.php[39;22m:[39;1m150[39;22m
+      [2m+24 vendor frames [22m
+  [33m27  [39m[39;1mtests/Feature/ImpersonationTest.php[39;22m:[39;1m245[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ImpersonationTest[22m [90m>[39m it й: два sta… [41;1m RuntimeException [49;22m  
+[39;1m  Session store not set on request.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Http/Request.php[39m:[32m630[39m
+    626▕      */
+    627▕     public function session()
+    628▕     {
+    629▕         if (! $this->hasSession()) {
+  ➜ 630▕             throw new RuntimeException('Session store not set on request.');
+    631▕         }
+    632▕ 
+    633▕         return $this->session->store;
+    634▕     }
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1msrc/Laravel/AuthenticationRegistrar.php[39;22m:[39;1m150[39;22m
+      [2m+24 vendor frames [22m
+  [33m27  [39m[39;1mtests/Feature/ImpersonationTest.php[39;22m:[39;1m245[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ImpersonationTest[22m [90m>[39m it isolates i… [41;1m RuntimeException [49;22m  
+[39;1m  Session store not set on request.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Http/Request.php[39m:[32m630[39m
+    626▕      */
+    627▕     public function session()
+    628▕     {
+    629▕         if (! $this->hasSession()) {
+  ➜ 630▕             throw new RuntimeException('Session store not set on request.');
+    631▕         }
+    632▕ 
+    633▕         return $this->session->store;
+    634▕     }
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1msrc/Laravel/AuthenticationRegistrar.php[39;22m:[39;1m150[39;22m
+      [2m+6 vendor frames [22m
+  [33m9   [39m[39;1mtests/Feature/ImpersonationTest.php[39;22m:[39;1m68[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ImpersonationTest[22m [90m>[39m it isolates i… [41;1m RuntimeException [49;22m  
+[39;1m  Session store not set on request.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Http/Request.php[39m:[32m630[39m
+    626▕      */
+    627▕     public function session()
+    628▕     {
+    629▕         if (! $this->hasSession()) {
+  ➜ 630▕             throw new RuntimeException('Session store not set on request.');
+    631▕         }
+    632▕ 
+    633▕         return $this->session->store;
+    634▕     }
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1msrc/Laravel/AuthenticationRegistrar.php[39;22m:[39;1m150[39;22m
+      [2m+6 vendor frames [22m
+  [33m9   [39m[39;1mtests/Feature/ImpersonationTest.php[39;22m:[39;1m68[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ImpersonationTest[22m [90m>[39m it closes a l… [41;1m RuntimeException [49;22m  
+[39;1m  Session store not set on request.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Http/Request.php[39m:[32m630[39m
+    626▕      */
+    627▕     public function session()
+    628▕     {
+    629▕         if (! $this->hasSession()) {
+  ➜ 630▕             throw new RuntimeException('Session store not set on request.');
+    631▕         }
+    632▕ 
+    633▕         return $this->session->store;
+    634▕     }
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1msrc/Laravel/AuthenticationRegistrar.php[39;22m:[39;1m150[39;22m
+      [2m+24 vendor frames [22m
+  [33m27  [39m[39;1mtests/Feature/ImpersonationTest.php[39;22m:[39;1m245[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ImpersonationTest[22m [90m>[39m it м: target_… [41;1m RuntimeException [49;22m  
+[39;1m  Session store not set on request.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Http/Request.php[39m:[32m630[39m
+    626▕      */
+    627▕     public function session()
+    628▕     {
+    629▕         if (! $this->hasSession()) {
+  ➜ 630▕             throw new RuntimeException('Session store not set on request.');
+    631▕         }
+    632▕ 
+    633▕         return $this->session->store;
+    634▕     }
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1msrc/Laravel/AuthenticationRegistrar.php[39;22m:[39;1m150[39;22m
+      [2m+24 vendor frames [22m
+  [33m27  [39m[39;1mtests/Feature/ImpersonationTest.php[39;22m:[39;1m245[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ImpersonationTest[22m [90m>[39m it ж: account… [41;1m RuntimeException [49;22m  
+[39;1m  Session store not set on request.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Http/Request.php[39m:[32m630[39m
+    626▕      */
+    627▕     public function session()
+    628▕     {
+    629▕         if (! $this->hasSession()) {
+  ➜ 630▕             throw new RuntimeException('Session store not set on request.');
+    631▕         }
+    632▕ 
+    633▕         return $this->session->store;
+    634▕     }
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1msrc/Laravel/AuthenticationRegistrar.php[39;22m:[39;1m150[39;22m
+      [2m+24 vendor frames [22m
+  [33m27  [39m[39;1mtests/Feature/ImpersonationTest.php[39;22m:[39;1m245[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ImpersonationTest[22m [90m>[39m it д: reason…  [41;1m RuntimeException [49;22m  
+[39;1m  Session store not set on request.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Http/Request.php[39m:[32m630[39m
+    626▕      */
+    627▕     public function session()
+    628▕     {
+    629▕         if (! $this->hasSession()) {
+  ➜ 630▕             throw new RuntimeException('Session store not set on request.');
+    631▕         }
+    632▕ 
+    633▕         return $this->session->store;
+    634▕     }
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1msrc/Laravel/AuthenticationRegistrar.php[39;22m:[39;1m150[39;22m
+      [2m+24 vendor frames [22m
+  [33m27  [39m[39;1mtests/Feature/ImpersonationTest.php[39;22m:[39;1m245[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ImpersonationTest[22m [90m>[39m it к/н: targe… [41;1m RuntimeException [49;22m  
+[39;1m  Session store not set on request.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Http/Request.php[39m:[32m630[39m
+    626▕      */
+    627▕     public function session()
+    628▕     {
+    629▕         if (! $this->hasSession()) {
+  ➜ 630▕             throw new RuntimeException('Session store not set on request.');
+    631▕         }
+    632▕ 
+    633▕         return $this->session->store;
+    634▕     }
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1msrc/Laravel/AuthenticationRegistrar.php[39;22m:[39;1m150[39;22m
+      [2m+24 vendor frames [22m
+  [33m27  [39m[39;1mtests/Feature/ImpersonationTest.php[39;22m:[39;1m245[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ImpersonationTest[22m [90m>[39m it г: revoked… [41;1m RuntimeException [49;22m  
+[39;1m  Session store not set on request.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Http/Request.php[39m:[32m630[39m
+    626▕      */
+    627▕     public function session()
+    628▕     {
+    629▕         if (! $this->hasSession()) {
+  ➜ 630▕             throw new RuntimeException('Session store not set on request.');
+    631▕         }
+    632▕ 
+    633▕         return $this->session->store;
+    634▕     }
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1msrc/Laravel/AuthenticationRegistrar.php[39;22m:[39;1m150[39;22m
+      [2m+24 vendor frames [22m
+  [33m27  [39m[39;1mtests/Feature/ImpersonationTest.php[39;22m:[39;1m245[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ImpersonationTest[22m [90m>[39m it ю: TTL ист… [41;1m RuntimeException [49;22m  
+[39;1m  Session store not set on request.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Http/Request.php[39m:[32m630[39m
+    626▕      */
+    627▕     public function session()
+    628▕     {
+    629▕         if (! $this->hasSession()) {
+  ➜ 630▕             throw new RuntimeException('Session store not set on request.');
+    631▕         }
+    632▕ 
+    633▕         return $this->session->store;
+    634▕     }
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1msrc/Laravel/AuthenticationRegistrar.php[39;22m:[39;1m150[39;22m
+      [2m+24 vendor frames [22m
+  [33m27  [39m[39;1mtests/Feature/ImpersonationTest.php[39;22m:[39;1m245[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ImpersonationTest[22m [90m>[39m it л/м/о/п/с/… [41;1m RuntimeException [49;22m  
+[39;1m  Session store not set on request.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Http/Request.php[39m:[32m630[39m
+    626▕      */
+    627▕     public function session()
+    628▕     {
+    629▕         if (! $this->hasSession()) {
+  ➜ 630▕             throw new RuntimeException('Session store not set on request.');
+    631▕         }
+    632▕ 
+    633▕         return $this->session->store;
+    634▕     }
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1msrc/Laravel/AuthenticationRegistrar.php[39;22m:[39;1m150[39;22m
+      [2m+25 vendor frames [22m
+  [33m28  [39m[39;1mtests/Feature/ImpersonationTest.php[39;22m:[39;1m245[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ImpersonationTest[22m [90m>[39m it rejects a…  [41;1m RuntimeException [49;22m  
+[39;1m  Session store not set on request.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Http/Request.php[39m:[32m630[39m
+    626▕      */
+    627▕     public function session()
+    628▕     {
+    629▕         if (! $this->hasSession()) {
+  ➜ 630▕             throw new RuntimeException('Session store not set on request.');
+    631▕         }
+    632▕ 
+    633▕         return $this->session->store;
+    634▕     }
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1msrc/Laravel/AuthenticationRegistrar.php[39;22m:[39;1m150[39;22m
+      [2m+24 vendor frames [22m
+  [33m27  [39m[39;1mtests/Feature/ImpersonationTest.php[39;22m:[39;1m245[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ImpersonationTest[22m [90m>[39m it е: staff_i… [41;1m RuntimeException [49;22m  
+[39;1m  Session store not set on request.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Http/Request.php[39m:[32m630[39m
+    626▕      */
+    627▕     public function session()
+    628▕     {
+    629▕         if (! $this->hasSession()) {
+  ➜ 630▕             throw new RuntimeException('Session store not set on request.');
+    631▕         }
+    632▕ 
+    633▕         return $this->session->store;
+    634▕     }
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1msrc/Laravel/AuthenticationRegistrar.php[39;22m:[39;1m150[39;22m
+      [2m+24 vendor frames [22m
+  [33m27  [39m[39;1mtests/Feature/ImpersonationTest.php[39;22m:[39;1m245[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ImpersonationTest[22m [90m>[39m it б: грант с… [41;1m RuntimeException [49;22m  
+[39;1m  Session store not set on request.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Http/Request.php[39m:[32m630[39m
+    626▕      */
+    627▕     public function session()
+    628▕     {
+    629▕         if (! $this->hasSession()) {
+  ➜ 630▕             throw new RuntimeException('Session store not set on request.');
+    631▕         }
+    632▕ 
+    633▕         return $this->session->store;
+    634▕     }
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1msrc/Laravel/AuthenticationRegistrar.php[39;22m:[39;1m150[39;22m
+      [2m+24 vendor frames [22m
+  [33m27  [39m[39;1mtests/Feature/ImpersonationTest.php[39;22m:[39;1m245[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ImpersonationTest[22m [90m>[39m it я: revoked… [41;1m RuntimeException [49;22m  
+[39;1m  Session store not set on request.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Http/Request.php[39m:[32m630[39m
+    626▕      */
+    627▕     public function session()
+    628▕     {
+    629▕         if (! $this->hasSession()) {
+  ➜ 630▕             throw new RuntimeException('Session store not set on request.');
+    631▕         }
+    632▕ 
+    633▕         return $this->session->store;
+    634▕     }
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1msrc/Laravel/AuthenticationRegistrar.php[39;22m:[39;1m150[39;22m
+      [2m+24 vendor frames [22m
+  [33m27  [39m[39;1mtests/Feature/ImpersonationTest.php[39;22m:[39;1m245[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ImpersonationTest[22m [90m>[39m it backfills…  [41;1m RuntimeException [49;22m  
+[39;1m  Session store not set on request.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Http/Request.php[39m:[32m630[39m
+    626▕      */
+    627▕     public function session()
+    628▕     {
+    629▕         if (! $this->hasSession()) {
+  ➜ 630▕             throw new RuntimeException('Session store not set on request.');
+    631▕         }
+    632▕ 
+    633▕         return $this->session->store;
+    634▕     }
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1msrc/Laravel/AuthenticationRegistrar.php[39;22m:[39;1m150[39;22m
+      [2m+24 vendor frames [22m
+  [33m27  [39m[39;1mtests/Feature/ImpersonationTest.php[39;22m:[39;1m245[39;22m
+
+
+  [90mTests:[39m    [31;1m24 failed[39;22m[90m,[39m[39m [39m[32;1m9 passed[39;22m[90m (23 assertions)[39m
+  [90mDuration:[39m [39m16.15s[39m
+  [90mRandom Order Seed:[39m [39m1791174094[39m
+
+Script pest handling the test event returned with error code 2

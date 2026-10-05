@@ -1,0 +1,110 @@
+[
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E18",
+    "command": "- После продуктового commit: `bash scripts/contract-guard.sh` и `bash scripts/contract-guard.sh \"$(cat plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.3-execution/base-commit.txt)\"` → exit 0.",
+    "contract_sha256": "7d44005d1cfdf0c4357b324558fd3bf327e842eb13b9486370c67a1eecf66906",
+    "spec_sha256": "3c7891892a9fe8b1000498dc1d99912bce0c357382c7c9b655d855348bf8fa38",
+    "head": "e7917772a46ea458d6a639a9f77edb129196bf02",
+    "tree": "8624fd8a8de43c65ef6a6a94556d906a899916b00be229248d26adf458047d1a",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-05T04:45:14Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E19",
+    "command": "- `PGSQL_PORT=5434 scripts/php84 composer --working-dir=packages/tenancy test -- --group=pg --filter=ImpersonationProfile` → exit 0: все 27 ячеек матрицы examples §8.",
+    "contract_sha256": "7d44005d1cfdf0c4357b324558fd3bf327e842eb13b9486370c67a1eecf66906",
+    "spec_sha256": "3c7891892a9fe8b1000498dc1d99912bce0c357382c7c9b655d855348bf8fa38",
+    "head": "e7917772a46ea458d6a639a9f77edb129196bf02",
+    "tree": "8624fd8a8de43c65ef6a6a94556d906a899916b00be229248d26adf458047d1a",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-05T04:43:56Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E20",
+    "command": "- `scripts/php84 composer --working-dir=packages/tenancy test -- --filter='Impersonation'` → exit 0: actual stock sink/writer: disabled general audit + async queue имеют committed rows до regenerate/login; central/tenant/commit/ambient transaction failure → отказ start без открытой сессии и consumed grant; central intent при tenant failure сохраняется; provider DI service→sink→writer и AuditLogger→service нецикличен; в `dev` зеркала нет; события started/ended/failed содержат профиль и `expires_at`; `allowing()` экземпляра восстанавливает guard после исключения; опасный режим `dev` в production без acknowledgement → violation, с acknowledgement — нет.",
+    "contract_sha256": "7d44005d1cfdf0c4357b324558fd3bf327e842eb13b9486370c67a1eecf66906",
+    "spec_sha256": "3c7891892a9fe8b1000498dc1d99912bce0c357382c7c9b655d855348bf8fa38",
+    "head": "e7917772a46ea458d6a639a9f77edb129196bf02",
+    "tree": "8624fd8a8de43c65ef6a6a94556d906a899916b00be229248d26adf458047d1a",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-05T04:44:34Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E21",
+    "command": "- `cat scripts/runtime-globals-baseline.json` → `{}`; `scripts/php84 composer runtime-globals-gate` → exit 0; негатив: добавить `now()` в `DatabaseImpersonationService` → exit ≠ 0, вернуть.",
+    "contract_sha256": "7d44005d1cfdf0c4357b324558fd3bf327e842eb13b9486370c67a1eecf66906",
+    "spec_sha256": "3c7891892a9fe8b1000498dc1d99912bce0c357382c7c9b655d855348bf8fa38",
+    "head": "e7917772a46ea458d6a639a9f77edb129196bf02",
+    "tree": "8624fd8a8de43c65ef6a6a94556d906a899916b00be229248d26adf458047d1a",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-05T04:33:04Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E22",
+    "command": "- `git grep -n -E 'require_approved_by|requireApprovedBy' -- packages docs` → пусто.",
+    "contract_sha256": "7d44005d1cfdf0c4357b324558fd3bf327e842eb13b9486370c67a1eecf66906",
+    "spec_sha256": "3c7891892a9fe8b1000498dc1d99912bce0c357382c7c9b655d855348bf8fa38",
+    "head": "e7917772a46ea458d6a639a9f77edb129196bf02",
+    "tree": "8624fd8a8de43c65ef6a6a94556d906a899916b00be229248d26adf458047d1a",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-05T05:16:55Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E23",
+    "command": "- `scripts/php84 composer --working-dir=packages/tenancy test`, `PGSQL_PORT=5434 scripts/php84 composer test:pg`, `scripts/php84 composer test:packages` → exit 0.",
+    "contract_sha256": "7d44005d1cfdf0c4357b324558fd3bf327e842eb13b9486370c67a1eecf66906",
+    "spec_sha256": "3c7891892a9fe8b1000498dc1d99912bce0c357382c7c9b655d855348bf8fa38",
+    "head": "e7917772a46ea458d6a639a9f77edb129196bf02",
+    "tree": "8624fd8a8de43c65ef6a6a94556d906a899916b00be229248d26adf458047d1a",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-05T04:41:08Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E24",
+    "command": "- `scripts/php84 php scripts/php-api.php --write` дважды → идентично; `scripts/php84 composer php-api`, `scripts/php84 composer bc-check` → exit 0; diff Golden — только строки P07.3 из досье §4.",
+    "contract_sha256": "7d44005d1cfdf0c4357b324558fd3bf327e842eb13b9486370c67a1eecf66906",
+    "spec_sha256": "3c7891892a9fe8b1000498dc1d99912bce0c357382c7c9b655d855348bf8fa38",
+    "head": "e7917772a46ea458d6a639a9f77edb129196bf02",
+    "tree": "8624fd8a8de43c65ef6a6a94556d906a899916b00be229248d26adf458047d1a",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-05T04:43:08Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E25",
+    "command": "- `scripts/php84 composer lint:check`, `scripts/php84 composer analyse` → exit 0; `bash scripts/anti-weakening-gate.sh` → exit 0; `php scripts/package-docs-gate.php` → exit 0.",
+    "contract_sha256": "7d44005d1cfdf0c4357b324558fd3bf327e842eb13b9486370c67a1eecf66906",
+    "spec_sha256": "3c7891892a9fe8b1000498dc1d99912bce0c357382c7c9b655d855348bf8fa38",
+    "head": "e7917772a46ea458d6a639a9f77edb129196bf02",
+    "tree": "8624fd8a8de43c65ef6a6a94556d906a899916b00be229248d26adf458047d1a",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-05T04:39:08Z"
+  },
+  {
+    "schema_version": "validation-receipt/v1",
+    "evidence_id": "E26",
+    "command": "- Review `light` (D97): self-check по досье §6; строка `review: self-check GREEN` в Completion Notes.",
+    "contract_sha256": "7d44005d1cfdf0c4357b324558fd3bf327e842eb13b9486370c67a1eecf66906",
+    "spec_sha256": "3c7891892a9fe8b1000498dc1d99912bce0c357382c7c9b655d855348bf8fa38",
+    "head": "e7917772a46ea458d6a639a9f77edb129196bf02",
+    "tree": "8624fd8a8de43c65ef6a6a94556d906a899916b00be229248d26adf458047d1a",
+    "environment_sha256": "609d004d41baff4e2a320a8df64c7920edf000fc257c824b3426077190d8cb16",
+    "exit_code": 0,
+    "executed_at": "2026-10-05T05:14:02Z"
+  }
+]

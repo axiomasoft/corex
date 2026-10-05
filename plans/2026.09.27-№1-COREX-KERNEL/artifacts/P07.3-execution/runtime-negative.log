@@ -1,0 +1,5 @@
+G2 packages/tenancy/src/Impersonation/Internal/DatabaseImpersonationService.php:79 now()
+runtime-globals-gate: G1 0, G2 1, G3 0, G4 0, G5 0 outside baseline
+runtime-globals-gate: baseline files=0 findings=0 (prefix packages/tenancy/src/Impersonation/)
+> php scripts/runtime-globals-gate.php
+Script php scripts/runtime-globals-gate.php handling the runtime-globals-gate event returned with error code 1

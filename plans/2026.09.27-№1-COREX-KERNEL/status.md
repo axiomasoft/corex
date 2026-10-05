@@ -2,8 +2,8 @@
 projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
-through: 2026-10-04
-inputs_sha256: cbfb1f655899222f026ec34a19ef410994f01c8ef0fe6d5eb41038153063a501
+through: 2026-10-05
+inputs_sha256: 7020bf883563b2d5b0018e72abb4acd06e606bf74952b3791c300ed96f02a156
 generated_by: task plan-views status
 -->
 
@@ -17,7 +17,7 @@ generated_by: task plan-views status
 |:--|:--|
 | Version | — |
 | Status | 🟡 In progress |
-| Last Updated | 2026-10-04 |
+| Last Updated | 2026-10-05 |
 
 ## 4. Phase Index & Status Board
 
@@ -30,7 +30,7 @@ generated_by: task plan-views status
 | P04 | Application API, Extension SPI и типизированные ошибки | 4/4 | 🟢 Done |
 | P05 | Typed config, композиция и порты | 4/4 | 🟢 Done |
 | P06 | Operations, tools, webhooks и wire | 4/5 | 🟠 Done with deviations |
-| P07 | Tenancy, access, независимость модулей | 2/6 | 🟡 In progress |
+| P07 | Tenancy, access, независимость модулей | 3/6 | 🟡 In progress |
 | P10 | Зелёный hosted CI на базе P04 | 4/4 | 🟢 Done |
 
 ## Phase P00
@@ -100,7 +100,7 @@ generated_by: task plan-views status
 |:--|:--|:--|:--|
 | P07.1 | Собственный движок tenancy и граница контекста | 🟢 Done | 2026-10-04 |
 | P07.2 | Tenancy без stancl: данные, provisioning, manifests | 🟢 Done | 2026-10-04 |
-| P07.3 | Impersonation на портах с профилями и двойным аудитом | ⬜ Not started | — |
+| P07.3 | Impersonation на портах с профилями и двойным аудитом | 🟢 Done | 2026-10-05 |
 | P07.4 | Access без AzGuard и мост access-azguard | ⬜ Not started | — |
 | P07.5 | Контракты пробуждения в ядре и граф без notifications → wakeup | ⬜ Not started | — |
 | P07.6 | Review P07 | ⬜ Not started | — |
@@ -387,6 +387,10 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-10-04 | executor/codex | plan-run · escalated · All five Grok findings repaired; affected checks GREEN, product ef8a2869. Two completed review rounds exhausted. Pending owner approval for one additional round. Evidence: artifacts/P07.2-execution/review-approval-checkpoint.json. |
 | 2026-10-04 | executor/codex | plan-run · in-progress · D108 owner-authorized closure resume; review requirement withdrawn, no product changes or repeat checks. Existing Validation evidence reused. |
 | 2026-10-04 | executor/codex | plan-run · closed-green · P07.2 native models/provisioning/config and dependency removal GREEN; D107 preserves explicit claim/cleanup SQL until P08. Further review/retest withdrawn by owner D108. Sources: artifacts/P07.2-execution/completion.md. |
+| 2026-10-05 | codex/gpt-6-sol/high | plan-run · in-progress · — |
+| 2026-10-05 | codex/gpt-6-sol/high | plan-run · closed-green · P07.3 impersonation profiles, atomic claim, committed dual audit and zero runtime globals GREEN. Two Grok 4.7 review rounds returned GREEN; final candidate a8f44d91d63232d1c0dd17b0727c2a661d0e543cdf26cbe9e5593ff548e054bc. Evidence: artifacts/P07.3-execution/completion.md. |
+| 2026-10-05 | codex/gpt-6-sol/high | plan-run · no-op · Bookkeeping: current Task Contract and nine validation receipts verify both write sites; evidence artifacts/P07.3/write-site.json.
+write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates
 

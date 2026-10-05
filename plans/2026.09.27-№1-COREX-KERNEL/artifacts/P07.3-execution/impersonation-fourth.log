@@ -1,0 +1,80 @@
+> pest '--filter=Impersonation'
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Pg\ImpersonationProfileTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit enforces all 27 grant profile matrix cells in the atomic claim[39m[90m   [39m [90m0.41s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\ImpersonationWriteGuardTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit L1 passes every method outside impersonation (regression)[39m[90m        [39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit аа: with oidc disabled, no impersonation middleware in the tenan[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ъ: L2 exempts AuditLog — the compliance record can write while q[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps allowing local to its scoped guard and restores an outer a[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ы: L2 allowing() lets an intentional write through, then blocks[39m[90m… [39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ч: L1 denies an unsafe method under impersonation without a rout[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ъ: L2 exempts ImpersonationGrant — the grant row itself is not b[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit щ: L2 blocks Model::save()/delete() under impersonation; passes[39m[90m… [39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ш: L1 permits an unsafe method carrying the AllowImpersonatedWri[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ь: L3 ImpersonationGuard::assertAllowed() throws under impersona[39m[90m…[39m [90m0.34s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\ImpersonationAuditTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit refuses login and consumes the grant when the central audit inse[39m[90m…[39m [90m0.58s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects an ambient tenant transaction after consuming the grant[39m[90m  [39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit uses the stock writer to commit central and tenant audit before[39m[90m… [39m [90m0.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit omits tenant mirror in dev and requires production acknowledgeme[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps committed central intent and a consumed grant when the ten[39m[90m…[39m [90m0.43s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\ImpersonationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit й: два start одного гранта → ровно один успех (одноразовость, D1[39m[90m…[39m [90m0.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit э: stop() гасит сессию, пишет impersonation.ended и излучает Imp[39m[90m…[39m [90m0.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ю: TTL истёк → следующий запрос 401, сессия завершена[39m[90m            [39m [90m0.56s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit к/н: target-пользователя не существует → 403, но used_at выставл[39m[90m…[39m [90m0.53s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit л/м/о/п/с/т/у: валидный грант — target≠sub, root_account_events,[39m[90m…[39m [90m0.58s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit closes a legacy session whose claimed grant has no reason[39m[90m        [39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit б: грант с used_at уже выставленным → 403[39m[90m                        [39m [90m0.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit в: expires_at в прошлом → 403[39m[90m                                    [39m [90m0.56s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a nested start before the second grant is consumed[39m[90m       [39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit isolates impersonation state across requests in one worker conta[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit isolates impersonation state across requests in one worker conta[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit и: regulated profile requires a separate staff approver[39m[90m          [39m [90m0.65s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit м: target_user_id = NULL → сессия открывается от имени owner_ide[39m[90m…[39m [90m0.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit р: заголовок X-CoreX-Impersonation присутствует на следующем зап[39m[90m…[39m [90m0.58s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit г: revoked_at выставлен → 403[39m[90m                                    [39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit е: staff_identity_id гранта ≠ sub токена → 403[39m[90m                   [39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit з: is_staff=false у предъявителя → 403[39m[90m                           [39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit а: imp в токене при impersonation.enabled=false → 403 (регресс P[39m[90m…[39m [90m0.56s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit backfills a legacy session from the claimed grant reason[39m[90m         [39m [90m0.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit я: revoked_at выставлен извне mid-session → следующий запрос 401[39m[90m…[39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit д: reason пустой → 403[39m[90m                                           [39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ж: account_id гранта ≠ текущий тенант → 403[39m[90m                      [39m [90m0.71s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\AccountLifecycleTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit purge() under active impersonation throws ImpersonationRestricte[39m[90m…[39m [90m0.50s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\OidcLoginTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit н: imp в токене при impersonation.enabled=false → 403[39m[90m            [39m [90m0.52s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\ImpersonationAuditTest[22m [90m>[39m it refuses login and consu…   
+[39;1m  Expected: [39;22m[31mSQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "root_account_events" does not exist\n[39m[39;1m
+  [39;22m[31mLINE 1: insert into "root_account_events" ("id", "account_id", "even...\n[39m[39;1m
+  [39;22m[31m                    ^ (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_test, SQL: insert into "root_account_events" ("id", "account_id", "event", "actor", "payload", "created_at", "updated_at") values (01a10a53-e599-706b-9dc3-d3a222f3f7ee, 01a10a53-e4dc-7323-96f1-ef3703a39740, impersonation.started, {"type":"support","id":"42dcf421-96e7-4741-88f5-d7c94a659051","grant":"2647604c-0d58-4bdf-a33f-b66e83cba672"}, {"grant_id":"2647604c-0d58-4bdf-a33f-b66e83cba672","account_id":"01a10a53-e4dc-7323-96f1-ef3703a39740","staff_identity_id":"42dcf421-96e7-4741-88f5-d7c94a659051","target_user_id":"6a53608d-d1c3-4a60-89d1-15629690fae2","reason":"support ticket #1","profile":"standard","outcome":"impersonation.started","expires_at":"2026-10-05T05:30:32+00:00"}, 2026-10-05 04:30:32, 2026-10-05 04:30:32))[39m[39;1m
+
+  To contain: [39;22m[32mThrowable[39m
+
+  at [32mtests/Feature/ImpersonationAuditTest.php[39m:[32m106[39m
+    102▕     $staffId = makeStaffIdentityIM();
+    103▕     $grantId = makeGrantIM($staffId, $account->id);
+    104▕     DB::connection('pgsql')->statement('DROP TABLE root_account_events');
+    105▕ 
+  ➜ 106▕     expect(fn () => app(ImpersonationService::class)->start($grantId, $staffId))->toThrow(Throwable::class);
+    107▕     expect(grantRowIM($grantId)->used_at)->not->toBeNull()
+    108▕         ->and(DB::connection('tenant')->table('sys_audit_log')->count())->toBe(0)
+    109▕         ->and(Auth::guard('web')->check())->toBeFalse();
+    110▕ });
+
+  [33m1   [39m[39;1mtests/Feature/ImpersonationAuditTest.php[39;22m:[39;1m106[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m39 passed[39;22m[90m (169 assertions)[39m
+  [90mDuration:[39m [39m18.55s[39m
+  [90mRandom Order Seed:[39m [39m1791174628[39m
+
+Script pest handling the test event returned with error code 1
