@@ -3,7 +3,7 @@ projection: status-view
 projection_version: v1
 source_scope: plan core + phases + journal
 through: 2026-10-05
-inputs_sha256: eb186b10476d944d3148969337b97affb01e3f30ece51c49f20e52cd5d8e9139
+inputs_sha256: 0074c737e5cccee948921df4d1e0830aa4c1ee51b4e195815c4576ea6d5e5cb7
 generated_by: task plan-views status
 -->
 
@@ -30,7 +30,7 @@ generated_by: task plan-views status
 | P04 | Application API, Extension SPI и типизированные ошибки | 4/4 | 🟢 Done |
 | P05 | Typed config, композиция и порты | 4/4 | 🟢 Done |
 | P06 | Operations, tools, webhooks и wire | 4/5 | 🟠 Done with deviations |
-| P07 | Tenancy, access, независимость модулей | 4/6 | 🟡 In progress |
+| P07 | Tenancy, access, независимость модулей | 5/6 | 🟡 In progress |
 | P10 | Зелёный hosted CI на базе P04 | 4/4 | 🟢 Done |
 
 ## Phase P00
@@ -102,7 +102,7 @@ generated_by: task plan-views status
 | P07.2 | Tenancy без stancl: данные, provisioning, manifests | 🟢 Done | 2026-10-04 |
 | P07.3 | Impersonation на портах с профилями и двойным аудитом | 🟢 Done | 2026-10-05 |
 | P07.4 | Access без AzGuard и мост access-azguard | 🟢 Done | 2026-10-05 |
-| P07.5 | Контракты пробуждения в ядре и граф без notifications → wakeup | ⬜ Not started | — |
+| P07.5 | Контракты пробуждения в ядре и граф без notifications → wakeup | 🟢 Done | 2026-10-05 |
 | P07.6 | Review P07 | ⬜ Not started | — |
 
 ## Phase P10
@@ -395,6 +395,9 @@ write-site: pre_mutation: allow · pre_final: allow |
 | 2026-10-05 | codex/GPT-6 | plan-run · local-repair · P07.4 final gates found bridge config composition, missing dependency analyser config and missing Golden ledger entry; bounded owning repair. Full run mutation GREEN (37). |
 | 2026-10-05 | codex/GPT-6 | plan-run · local-repair · Qualified repair post-validation GREEN: exact test:packages carrier, deps:analyse and anti-weakening on final candidate. |
 | 2026-10-05 | codex/GPT-6 | plan-run · closed-green · P07.4 closed on 6e7abb42 by grok session 01a10b69-39f3-77d0-8472-83fa0bcc70ab. 29 checks and examples §11 GREEN. D109: no new review, CI excluded, no independent GREEN. P07.5 in a fresh session.
+write-site: pre_mutation: allow · pre_final: allow |
+| 2026-10-05 | grok/grok-4.7 | plan-run · in-progress · — |
+| 2026-10-05 | grok/grok-4.7 | plan-run · closed-green · P07.5 closed on local evidence. Scheduling contracts live in CoreX\Scheduling; module-layout gate is green.
 write-site: pre_mutation: allow · pre_final: allow |
 
 ## Owner Gates
