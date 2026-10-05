@@ -7,12 +7,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-// Tenant-DB migration (B-11 §2.3, D14/D16) — role-надстройка над AzGuard
-// (D15): UI-матрица компилируется в az_guard_role_permissions,
-// azguard_role_id — soft-ref БЕЗ FK (тип подтверждён
-// findings/P2.8-azguard-inventory-2026-07-26.md §1). Cross-package FK на
-// эту таблицу — нет, единственная её родительская связь (cloned_from_id)
-// self-ссылочна. См. DB_SCHEMA.md §3.5 aut_roles для дословного источника.
+// Tenant-DB authorization roles; bridge role links live in the bridge package.
 return new class extends Migration
 {
     public function up(): void
@@ -24,7 +19,6 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->boolean('is_system')->default(false);
             $table->uuid('cloned_from_id')->nullable();
-            $table->bigInteger('azguard_role_id')->nullable();
             $table->jsonb('assignable_to')->default('["user"]');
             $table->timestampTz('created_at', precision: 6)->useCurrent();
             $table->timestampTz('updated_at', precision: 6)->useCurrent();

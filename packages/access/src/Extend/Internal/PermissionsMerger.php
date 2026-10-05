@@ -13,12 +13,11 @@ use CoreX\Modules\Events\ModuleEnabled;
 /**
  * Ties `aut_role_matrix` compilation to module lifecycle (AC-27, D112/D113):
  * on ANY enable/disable, {@see RoleMatrixCompiler::recompileAll()} re-runs,
- * so the active-module filter in {@see CoreX\Access\Matrix\Contracts\EntityActivity}
- * (consumed by the compiler and the AzGuard catalog) is re-evaluated against
+ * so active-entity checks are re-evaluated against
  * the module's new state. This class creates NO `aut_role_matrix` rows
  * itself (D113 — the merger only merges the SURFACE, modules write the
  * matrix); the rows a disabled module's entities leave behind stay in the
- * table for re-enable, `recompileAll()` simply stops emitting keys for them.
+ * table for re-enable.
  *
  * `merge()` also validates `CompiledRegistry::$permissions` declarations
  * against {@see EntityRegistry}: a declaration whose `entity` is unknown to

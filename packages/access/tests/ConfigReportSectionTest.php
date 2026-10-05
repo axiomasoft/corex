@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Tests;
 
-use AzGuard\AzGuardServiceProvider;
 use CoreX\Access\CoreAuthServiceProvider;
 use CoreX\Access\Internal\Support\AccessConfigSection;
 use CoreX\Config\Contracts\ConfigReportSection;
@@ -17,7 +16,7 @@ final class ConfigReportSectionTest extends TestCase
 {
     protected function getPackageProviders($app): array
     {
-        return [CoreServiceProvider::class, ModulesServiceProvider::class, AzGuardServiceProvider::class, CoreAuthServiceProvider::class];
+        return [CoreServiceProvider::class, ModulesServiceProvider::class, CoreAuthServiceProvider::class];
     }
 
     public function test_section_registers_in_report_order_and_redacts_its_secrets(): void

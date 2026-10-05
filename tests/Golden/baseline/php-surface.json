@@ -1,5 +1,147 @@
 {
-    "CoreX\\Access\\Access\\Internal\\AutMatrixGrantSource": {
+    "CoreX\\AccessAzguard\\AccessAzguardRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\AccessAzguard\\AccessAzguardServiceProvider": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": "Illuminate\\Support\\ServiceProvider",
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\AccessAzguard\\Internal\\AccessAzguardOptions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "bindPermissionLayer",
+                        "type": "bool",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "rolesTable",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "morphType",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "roleModel",
+                        "type": "?string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "fromArray": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "config",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "bindPermissionLayer": {
+                "name": "bindPermissionLayer",
+                "readonly": true,
+                "static": false,
+                "type": "bool"
+            },
+            "morphType": {
+                "name": "morphType",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "roleModel": {
+                "name": "roleModel",
+                "readonly": true,
+                "static": false,
+                "type": "?string"
+            },
+            "rolesTable": {
+                "name": "rolesTable",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\AccessAzguard\\Internal\\AutMatrixGrantSource": {
         "abstract": false,
         "constants": [],
         "final": true,
@@ -54,6 +196,340 @@
             "priority": {
                 "params": [],
                 "return": "int",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\AccessAzguard\\Internal\\AzGuardRoleModel": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "ArrayAccess",
+            "Illuminate\\Contracts\\Broadcasting\\HasBroadcastChannel",
+            "Illuminate\\Contracts\\Queue\\QueueableEntity",
+            "Illuminate\\Contracts\\Routing\\UrlRoutable",
+            "Illuminate\\Contracts\\Support\\Arrayable",
+            "Illuminate\\Contracts\\Support\\CanBeEscapedWhenCastToString",
+            "Illuminate\\Contracts\\Support\\Jsonable",
+            "JsonSerializable",
+            "Stringable"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "getTable": {
+                "params": [],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": "AzGuard\\Models\\Role",
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\AccessAzguard\\Internal\\Laravel\\AccessAzguardBindingsRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\AccessAzguard\\Internal\\MatrixPermissionCatalogBuilder": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "AzGuard\\Registry\\Contracts\\PermissionCatalogBuilder"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\Access\\Laravel\\AuthOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "activeEntities",
+                        "type": "CoreX\\Access\\Matrix\\Contracts\\EntityActivity",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "build": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "panelId",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            },
+            "supports": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "panelId",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\AccessAzguard\\Internal\\RoleLinkStore": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "upsert": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "roleId",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "azguardRoleId",
+                        "type": "int",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\AccessAzguard\\Internal\\SyncAzGuardRolePermissions": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "options",
+                        "type": "CoreX\\Access\\Laravel\\AuthOptions",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "activeEntities",
+                        "type": "CoreX\\Access\\Matrix\\Contracts\\EntityActivity",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "links",
+                        "type": "CoreX\\AccessAzguard\\Internal\\RoleLinkStore",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "event",
+                        "type": "CoreX\\Access\\Matrix\\Events\\RoleMatrixCompiled",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\AccessAzguard\\Internal\\TenantContextGuard": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "AzGuard\\Contracts\\ContextGuard"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "entities",
+                        "type": "CoreX\\Modules\\Contracts\\EntityRegistry",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "checkInContext": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "user",
+                        "type": "Illuminate\\Contracts\\Auth\\Authenticatable",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "contextType",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "contextId",
+                        "type": "string|int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "permission",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "panelId",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\AccessAzguard\\Internal\\WorkspacePermissionLayer": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "AzGuard\\Contracts\\PermissionLayer"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "tenancyManager",
+                        "type": "CoreX\\Context\\Contracts\\TenancyManager",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "apply": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "global",
+                        "type": "AzGuard\\Registry\\Values\\PermissionSet",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "user",
+                        "type": "Illuminate\\Contracts\\Auth\\Authenticatable",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "panelId",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "AzGuard\\Registry\\Values\\PermissionSet",
+                "static": false
+            },
+            "cacheDiscriminator": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "panelId",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
                 "static": false
             }
         },
@@ -119,6 +595,12 @@
                         "byRef": false,
                         "name": "clock",
                         "type": "Psr\\Clock\\ClockInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "activity",
+                        "type": "CoreX\\Access\\Matrix\\Contracts\\EntityActivity",
                         "variadic": false
                     }
                 ],
@@ -250,6 +732,12 @@
                         "name": "options",
                         "type": "CoreX\\Access\\Laravel\\AuthOptions",
                         "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "activity",
+                        "type": "CoreX\\Access\\Matrix\\Contracts\\EntityActivity",
+                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -309,8 +797,14 @@
                 "params": [
                     {
                         "byRef": false,
-                        "name": "options",
-                        "type": "CoreX\\Access\\Laravel\\AuthOptions",
+                        "name": "connections",
+                        "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "clock",
+                        "type": "Psr\\Clock\\ClockInterface",
                         "variadic": false
                     }
                 ],
@@ -516,69 +1010,6 @@
         "properties": [],
         "readonly": true
     },
-    "CoreX\\Access\\Access\\Internal\\WorkspacePermissionLayer": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "AzGuard\\Contracts\\PermissionLayer"
-        ],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "tenancyManager",
-                        "type": "CoreX\\Context\\Contracts\\TenancyManager",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "apply": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "global",
-                        "type": "AzGuard\\Registry\\Values\\PermissionSet",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "user",
-                        "type": "Illuminate\\Contracts\\Auth\\Authenticatable",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "panelId",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "AzGuard\\Registry\\Values\\PermissionSet",
-                "static": false
-            },
-            "cacheDiscriminator": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "panelId",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "string",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": true
-    },
     "CoreX\\Access\\Access\\Internal\\WorkspaceScopeWiring": {
         "abstract": false,
         "constants": [],
@@ -621,7 +1052,6 @@
         "constants": [],
         "final": true,
         "interfaces": [
-            "AzGuard\\Contracts\\HasPermissions",
             "CoreX\\Access\\Contracts\\Principal",
             "Illuminate\\Contracts\\Auth\\Authenticatable"
         ],
@@ -651,45 +1081,6 @@
                     }
                 ],
                 "return": "",
-                "static": false
-            },
-            "checkPermission": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "permission",
-                        "type": "UnitEnum|string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "panelId",
-                        "type": "BackedEnum|string|null",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "context",
-                        "type": "?AzGuard\\Contracts\\PermissionContext",
-                        "variadic": false
-                    }
-                ],
-                "return": "bool",
-                "static": false
-            },
-            "flushPermissions": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "panelId",
-                        "type": "BackedEnum|string|null",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
                 "static": false
             },
             "fromPrincipal": {
@@ -737,107 +1128,6 @@
             "getRememberTokenName": {
                 "params": [],
                 "return": "string",
-                "static": false
-            },
-            "hasContextGuard": {
-                "params": [],
-                "return": "bool",
-                "static": false
-            },
-            "hasPermission": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "permission",
-                        "type": "UnitEnum|string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "panelId",
-                        "type": "BackedEnum|string|null",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "context",
-                        "type": "?AzGuard\\Contracts\\PermissionContext",
-                        "variadic": false
-                    }
-                ],
-                "return": "bool",
-                "static": false
-            },
-            "hasPermissionIn": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "contextType",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "contextId",
-                        "type": "string|int",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "permission",
-                        "type": "UnitEnum|string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "panelId",
-                        "type": "BackedEnum|string|null",
-                        "variadic": false
-                    }
-                ],
-                "return": "bool",
-                "static": false
-            },
-            "isSuperAdmin": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "panelId",
-                        "type": "BackedEnum|string|null",
-                        "variadic": false
-                    }
-                ],
-                "return": "bool",
-                "static": false
-            },
-            "permissionSet": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "panelId",
-                        "type": "BackedEnum|string|null",
-                        "variadic": false
-                    }
-                ],
-                "return": "AzGuard\\Registry\\Values\\PermissionSet",
-                "static": false
-            },
-            "permissions": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "default": null,
-                        "name": "panelId",
-                        "type": "BackedEnum|string|null",
-                        "variadic": false
-                    }
-                ],
-                "return": "Illuminate\\Support\\Collection",
                 "static": false
             },
             "principalId": {
@@ -1750,12 +2040,6 @@
                     },
                     {
                         "byRef": false,
-                        "name": "bindPermissionLayer",
-                        "type": "bool",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
                         "name": "workspaceScopeClass",
                         "type": "?string",
                         "variadic": false
@@ -1783,12 +2067,6 @@
                         "name": "identityColumns",
                         "type": "array",
                         "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "azguardPins",
-                        "type": "array",
-                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -1809,18 +2087,6 @@
         },
         "parent": null,
         "properties": {
-            "azguardPins": {
-                "name": "azguardPins",
-                "readonly": true,
-                "static": false,
-                "type": "array"
-            },
-            "bindPermissionLayer": {
-                "name": "bindPermissionLayer",
-                "readonly": true,
-                "static": false,
-                "type": "bool"
-            },
             "cacheStore": {
                 "name": "cacheStore",
                 "readonly": true,
@@ -1966,6 +2232,38 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Access\\Matrix\\Events\\RoleMatrixCompiled": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "roleId",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "roleId": {
+                "name": "roleId",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": true
+    },
     "CoreX\\Access\\Matrix\\Internal\\ActiveEntityFilter": {
         "abstract": false,
         "constants": [],
@@ -2037,20 +2335,14 @@
                     },
                     {
                         "byRef": false,
-                        "name": "options",
-                        "type": "CoreX\\Access\\Laravel\\AuthOptions",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "activeEntities",
-                        "type": "CoreX\\Access\\Matrix\\Internal\\ActiveEntityFilter",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
                         "name": "connections",
                         "type": "Illuminate\\Database\\ConnectionResolverInterface",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "events",
+                        "type": "Illuminate\\Contracts\\Events\\Dispatcher",
                         "variadic": false
                     }
                 ],
@@ -2072,63 +2364,6 @@
             "recompileAll": {
                 "params": [],
                 "return": "void",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": true
-    },
-    "CoreX\\Access\\Matrix\\Internal\\MatrixPermissionCatalogBuilder": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "AzGuard\\Registry\\Contracts\\PermissionCatalogBuilder"
-        ],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "options",
-                        "type": "CoreX\\Access\\Laravel\\AuthOptions",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "activeEntities",
-                        "type": "CoreX\\Access\\Matrix\\Internal\\ActiveEntityFilter",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "build": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "panelId",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "array",
-                "static": false
-            },
-            "supports": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "panelId",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "bool",
                 "static": false
             }
         },
@@ -2254,34 +2489,6 @@
         "properties": [],
         "readonly": true
     },
-    "CoreX\\Access\\Matrix\\Laravel\\AzGuardRoleModel": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "ArrayAccess",
-            "Illuminate\\Contracts\\Broadcasting\\HasBroadcastChannel",
-            "Illuminate\\Contracts\\Queue\\QueueableEntity",
-            "Illuminate\\Contracts\\Routing\\UrlRoutable",
-            "Illuminate\\Contracts\\Support\\Arrayable",
-            "Illuminate\\Contracts\\Support\\CanBeEscapedWhenCastToString",
-            "Illuminate\\Contracts\\Support\\Jsonable",
-            "JsonSerializable",
-            "Stringable"
-        ],
-        "internal": false,
-        "kind": "class",
-        "methods": {
-            "getTable": {
-                "params": [],
-                "return": "string",
-                "static": false
-            }
-        },
-        "parent": "AzGuard\\Models\\Role",
-        "properties": [],
-        "readonly": false
-    },
     "CoreX\\Access\\Matrix\\Laravel\\MatrixPortBindings": {
         "abstract": false,
         "constants": [],
@@ -2390,12 +2597,6 @@
                         "name": "assignableTo",
                         "type": "array",
                         "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "azguardRoleId",
-                        "type": "?int",
-                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -2409,12 +2610,6 @@
                 "readonly": true,
                 "static": false,
                 "type": "array"
-            },
-            "azguardRoleId": {
-                "name": "azguardRoleId",
-                "readonly": true,
-                "static": false,
-                "type": "?int"
             },
             "id": {
                 "name": "id",
@@ -2700,24 +2895,6 @@
         "internal": false,
         "kind": "class",
         "methods": {
-            "bindAzGuardRole": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "roleId",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "azguardRoleId",
-                        "type": "int",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
-                "static": true
-            },
             "matrix": {
                 "params": [
                     {
@@ -2772,69 +2949,6 @@
                 ],
                 "return": "mixed",
                 "static": true
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
-    "CoreX\\Access\\Tenancy\\Internal\\TenantContextGuard": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [
-            "AzGuard\\Contracts\\ContextGuard"
-        ],
-        "internal": true,
-        "kind": "class",
-        "methods": {
-            "__construct": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "entities",
-                        "type": "CoreX\\Modules\\Contracts\\EntityRegistry",
-                        "variadic": false
-                    }
-                ],
-                "return": "",
-                "static": false
-            },
-            "checkInContext": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "user",
-                        "type": "Illuminate\\Contracts\\Auth\\Authenticatable",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "contextType",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "contextId",
-                        "type": "string|int",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "permission",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "panelId",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "bool",
-                "static": false
             }
         },
         "parent": null,

@@ -1,36 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			rawMessage: 'Cannot call method on() on mixed.'
-			identifier: method.nonObject
-			count: 1
-			path: src/Access/Internal/AutMatrixGrantSource.php
-
-		-
-			rawMessage: 'Cannot call method where() on mixed.'
-			identifier: method.nonObject
-			count: 1
-			path: src/Access/Internal/AutMatrixGrantSource.php
-
-		-
-			rawMessage: Cannot cast mixed to string.
-			identifier: cast.string
-			count: 1
-			path: src/Access/Internal/AutMatrixGrantSource.php
-
-		-
-			rawMessage: 'Parameter #1 $array of function array_unique expects an array of values castable to string, array<mixed> given.'
-			identifier: argument.type
-			count: 1
-			path: src/Access/Internal/AutMatrixGrantSource.php
-
-		-
-			rawMessage: 'Parameter #1 $keys of static method AzGuard\Registry\Values\PermissionSet::fromRawKeys() expects list<string>, list<mixed> given.'
-			identifier: argument.type
-			count: 1
-			path: src/Access/Internal/AutMatrixGrantSource.php
-
-		-
 			rawMessage: 'Method CoreX\Access\Access\Internal\DefaultAccessChecker::activeRoleIds() should return list<string> but returns array<int, mixed>.'
 			identifier: return.type
 			count: 1
@@ -41,24 +11,6 @@ parameters:
 			identifier: argument.type
 			count: 2
 			path: src/Access/Internal/DefaultAccessChecker.php
-
-		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<Illuminate\Database\Eloquent\Model>::whereRaw().'
-			identifier: staticMethod.dynamicCall
-			count: 1
-			path: src/Access/Internal/DefaultScopeResolver.php
-
-		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<AzGuard\Models\DirectGrant>::active().'
-			identifier: staticMethod.dynamicCall
-			count: 1
-			path: src/Access/Internal/DirectGrantLookup.php
-
-		-
-			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<AzGuard\Models\DirectGrant>::exists().'
-			identifier: staticMethod.dynamicCall
-			count: 1
-			path: src/Access/Internal/DirectGrantLookup.php
 
 		-
 			rawMessage: 'Return type (string|null) of method CoreX\Access\Access\Laravel\PrincipalIdentity::getAuthPassword() should be covariant with return type (string) of method Illuminate\Contracts\Auth\Authenticatable::getAuthPassword()'
@@ -139,12 +91,6 @@ parameters:
 			path: src/Identity/Laravel/PrincipalUserProvider.php
 
 		-
-			rawMessage: 'Method CoreX\Access\Matrix\Internal\MatrixPermissionCatalogBuilder::build() should return list<AzGuard\Registry\Contracts\PermissionDefinition> but returns array<int, AzGuard\Registry\Definitions\SimplePermissionDefinition>.'
-			identifier: return.type
-			count: 1
-			path: src/Matrix/Internal/MatrixPermissionCatalogBuilder.php
-
-		-
 			rawMessage: Anonymous function should return int but returns mixed.
 			identifier: return.type
 			count: 1
@@ -185,9 +131,3 @@ parameters:
 			identifier: staticMethod.dynamicCall
 			count: 1
 			path: src/Roles/Internal/Models/RoleMatrixRow.php
-
-		-
-			rawMessage: 'Parameter $azguardPins of class CoreX\Access\Laravel\AuthOptions constructor expects array<string, mixed>, array<mixed> given.'
-			identifier: argument.type
-			count: 1
-			path: src/Laravel/AuthOptions.php

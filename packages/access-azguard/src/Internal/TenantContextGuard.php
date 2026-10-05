@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Access\Tenancy\Internal;
+namespace CoreX\AccessAzguard\Internal;
 
 use AzGuard\Contracts\ContextGuard;
 use CoreX\Modules\Contracts\EntityRegistry;

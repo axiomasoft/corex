@@ -1,13 +1,12 @@
 {
     "name": "axiomasoft/corex-access",
-    "description": "CoreX auth bridge — tenant-boundary authorization, entity-context checks and scoped Blade directives on top of AzGuard (ADR-009).",
+    "description": "CoreX native authorization, tenant-boundary access checks, role matrices and direct grants.",
     "type": "library",
     "license": "MIT",
     "keywords": [
         "laravel",
         "authorization",
         "multi-tenancy",
-        "azguard",
         "rbac"
     ],
     "authors": [
@@ -19,7 +18,6 @@
     "require": {
         "ext-mbstring": "*",
         "php": "^8.4",
-        "axioma-studio/azguard-core": "^0.3",
         "axiomasoft/corex": "^1.0@dev",
         "illuminate/auth": "^12.0|^13.0",
         "illuminate/contracts": "^12.0|^13.0",
@@ -63,41 +61,6 @@
         }
     },
     "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "axioma-studio/azguard-core",
-                "version": "0.3.0",
-                "source": {
-                    "type": "git",
-                    "url": "https://github.com/axiomasoft/azguard-private.git",
-                    "reference": "253cbf4cce0226545cd96ca8c6bcbefe329b1403"
-                },
-                "require": {
-                    "php": "^8.3",
-                    "illuminate/console": "^11.0|^12.0|^13.0",
-                    "illuminate/contracts": "^11.0|^12.0|^13.0",
-                    "illuminate/database": "^11.0|^12.0|^13.0",
-                    "illuminate/filesystem": "^11.0|^12.0|^13.0",
-                    "illuminate/http": "^11.0|^12.0|^13.0",
-                    "illuminate/queue": "^11.0|^12.0|^13.0",
-                    "illuminate/routing": "^11.0|^12.0|^13.0",
-                    "illuminate/support": "^11.0|^12.0|^13.0"
-                },
-                "autoload": {
-                    "psr-4": {
-                        "AzGuard\\": "packages/core/src/"
-                    }
-                },
-                "extra": {
-                    "laravel": {
-                        "providers": [
-                            "AzGuard\\AzGuardServiceProvider"
-                        ]
-                    }
-                }
-            }
-        },
         {
             "type": "path",
             "url": "../core"

@@ -65,6 +65,7 @@
 | `experimental` | Поверхность может измениться в миноре; изменение — в `CHANGELOG` пакета |
 | `internal` | Пакет не для прямого потребления вне монорепозитория |
 | `deprecated` | Только исправления; названа замена и версия удаления |
+| `unreleased` | Пакет ещё не входит в релизный набор; публикация требует отдельного решения |
 
 ## Текущий состав
 
@@ -74,6 +75,7 @@
 | Путь | Composer name | Composer type | Package type | Stability |
 |:--|:--|:--|:--|:--|
 | `packages/access` | axiomasoft/corex-access | library | capability | stable |
+| `packages/access-azguard` | axiomasoft/corex-access-azguard | library | integration | unreleased |
 | `packages/core` | axiomasoft/corex | library | foundation | stable |
 | `packages/custom-fields` | axiomasoft/corex-custom-fields | corex-module | capability | stable |
 | `packages/intl` | axiomasoft/corex-intl | corex-module | capability | stable |

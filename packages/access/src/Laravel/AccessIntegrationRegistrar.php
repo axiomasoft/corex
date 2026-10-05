@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Access\Laravel;
 
-use AzGuard\Contracts\AzGuardManagerInterface;
-use CoreX\Access\Access\Internal\AutMatrixGrantSource;
 use CoreX\Access\Access\Internal\WorkspaceScopeWiring;
 use CoreX\Access\Extend\Internal\PermissionsMerger;
 use CoreX\Access\Identity\Laravel\PrincipalUserProvider;
-use CoreX\Access\Matrix\Internal\MatrixPermissionCatalogBuilder;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Modules\Contracts\EntityRegistry;
@@ -20,7 +17,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Event;
 use InvalidArgumentException;
 use Override;
@@ -34,12 +30,7 @@ final class AccessIntegrationRegistrar implements PackageRegistrar
     #[Override]
     public function boot(Application $app): void
     {
-        $this->registerBladeDirectives();
         $this->registerIdentityProvider($app);
-
-        $manager = $app->make(AzGuardManagerInterface::class);
-        $manager->registerGrantSource(AutMatrixGrantSource::class);
-        $manager->registerCatalogBuilder(MatrixPermissionCatalogBuilder::class);
 
         WorkspaceScopeWiring::wire(
             $app->make(EntityRegistry::class),
@@ -78,20 +69,5 @@ final class AccessIntegrationRegistrar implements PackageRegistrar
         Auth::provider('corex-principal', static fn (): PrincipalUserProvider => new PrincipalUserProvider(
             options: $app->make(AuthOptions::class),
         ));
-    }
-
-    /**
-     * Registers entity-scoped Blade directives layered on AzGuard's scoped
-     * roles: "scope" checks a role scoped to an entity and "entity" checks a
-     * permission scoped to an entity, e.g. scope(role, $project) or
-     * entity('crm.deal.view', $deal), each closed by its end-directive.
-     */
-    private function registerBladeDirectives(): void
-    {
-        Blade::directive('scope', static fn (string $expression): string => "<?php if (auth()->check() && auth()->user()->hasScopedRole({$expression})): ?>");
-        Blade::directive('endscope', static fn (): string => '<?php endif; ?>');
-
-        Blade::directive('entity', static fn (string $expression): string => "<?php if (auth()->check() && auth()->user()->hasScopedPermission({$expression})): ?>");
-        Blade::directive('endentity', static fn (): string => '<?php endif; ?>');
     }
 }

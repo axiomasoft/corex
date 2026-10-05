@@ -12,10 +12,10 @@
 | key | owner | type | default | secret | mode | reloadable | validation | typed_options_field | deprecated_aliases | notes |
 |:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|:--|
 | auth.* | axiomasoft/corex-access | unobserved | unobserved | no | product-policy | unobserved | use-site | — |  | undeclared-read |
-| corex-access.azguard_pins.column_names.morph_type | axiomasoft/corex-access | string | uuid | no | product-policy | unobserved | use-site | AuthOptions::$azguardPins |  |  |
-| corex-access.azguard_pins.models.role | axiomasoft/corex-access | unobserved | unobserved | no | product-policy | unobserved | use-site | AuthOptions::$azguardPins |  |  |
-| corex-access.azguard_pins.table_names.roles | axiomasoft/corex-access | string | az_guard_roles | no | product-policy | unobserved | use-site | AuthOptions::$azguardPins |  |  |
-| corex-access.bind_permission_layer | axiomasoft/corex-access | unobserved | unobserved | no | deployment | no | use-site | AuthOptions::$bindPermissionLayer |  |  |
+| corex-access-azguard.azguard_pins.column_names.morph_type | axiomasoft/corex-access-azguard | string | uuid | no | product-policy | unobserved | boot | AccessAzguardOptions::$morphType |  |  |
+| corex-access-azguard.azguard_pins.models.role | axiomasoft/corex-access-azguard | unobserved | unobserved | no | product-policy | unobserved | boot | AccessAzguardOptions::$roleModel |  |  |
+| corex-access-azguard.azguard_pins.table_names.roles | axiomasoft/corex-access-azguard | string | az_guard_roles | no | product-policy | unobserved | boot | AccessAzguardOptions::$rolesTable |  |  |
+| corex-access-azguard.bind_permission_layer | axiomasoft/corex-access-azguard | unobserved | unobserved | no | deployment | no | boot | AccessAzguardOptions::$bindPermissionLayer |  |  |
 | corex-access.cache.store | axiomasoft/corex-access | unobserved | unobserved | no | deployment | no | use-site | AuthOptions::$cacheStore |  |  |
 | corex-access.identity.columns.active | axiomasoft/corex-access | string | is_active | no | product-policy | unobserved | unobserved | AuthOptions::$identityColumns |  |  |
 | corex-access.identity.columns.deleted_at | axiomasoft/corex-access | string | deleted_at | no | product-policy | unobserved | unobserved | AuthOptions::$identityColumns |  |  |

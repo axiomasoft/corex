@@ -11,18 +11,11 @@
             "abstract": false,
             "extends": [],
             "implements": [
-                "AzGuard\\Contracts\\HasPermissions",
                 "CoreX\\Access\\Contracts\\Principal",
                 "Illuminate\\Contracts\\Auth\\Authenticatable"
             ],
-            "uses": [
-                "AzGuard\\Concerns\\HasPermissions"
-            ],
-            "doc": {
-                "@corex-model-extension": [
-                    "laravel-model"
-                ]
-            },
+            "uses": [],
+            "doc": [],
             "methods": {
                 "__construct": {
                     "visibility": "public",
@@ -1073,15 +1066,6 @@
                             "flags": 1
                         },
                         {
-                            "name": "bindPermissionLayer",
-                            "type": "bool",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
                             "name": "workspaceScopeClass",
                             "type": "?string",
                             "by_reference": false,
@@ -1125,21 +1109,11 @@
                             "optional": false,
                             "default": null,
                             "flags": 1
-                        },
-                        {
-                            "name": "azguardPins",
-                            "type": "array",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
                         }
                     ],
                     "return": null,
                     "doc": {
                         "@param": [
-                            "array<string, mixed> $azguardPins",
                             "array<string, string> $identityColumns"
                         ]
                     }
@@ -1170,36 +1144,6 @@
                 }
             },
             "properties": {
-                "azguardPins": {
-                    "flags": 1,
-                    "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, mixed> $azguardPins",
-                            "array<string, string> $identityColumns"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "bindPermissionLayer": {
-                    "flags": 1,
-                    "type": "bool",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "array<string, mixed> $azguardPins",
-                            "array<string, string> $identityColumns"
-                        ]
-                    },
-                    "hooks": []
-                },
                 "cacheStore": {
                     "flags": 1,
                     "type": "?string",
@@ -1209,7 +1153,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, mixed> $azguardPins",
                             "array<string, string> $identityColumns"
                         ]
                     },
@@ -1224,7 +1167,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, mixed> $azguardPins",
                             "array<string, string> $identityColumns"
                         ]
                     },
@@ -1239,7 +1181,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, mixed> $azguardPins",
                             "array<string, string> $identityColumns"
                         ]
                     },
@@ -1254,7 +1195,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, mixed> $azguardPins",
                             "array<string, string> $identityColumns"
                         ]
                     },
@@ -1269,7 +1209,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, mixed> $azguardPins",
                             "array<string, string> $identityColumns"
                         ]
                     },
@@ -1284,7 +1223,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, mixed> $azguardPins",
                             "array<string, string> $identityColumns"
                         ]
                     },
@@ -1299,7 +1237,6 @@
                     "default": null,
                     "doc": {
                         "@param": [
-                            "array<string, mixed> $azguardPins",
                             "array<string, string> $identityColumns"
                         ]
                     },
@@ -1471,36 +1408,51 @@
             "enum_backing": null,
             "enum_cases": []
         },
-        "CoreX\\Access\\Matrix\\Laravel\\AzGuardRoleModel": {
+        "CoreX\\Access\\Matrix\\Events\\RoleMatrixCompiled": {
             "kind": "class",
-            "layer": "spi-call",
+            "layer": "api",
             "since": "1.0",
             "final": true,
-            "readonly": false,
+            "readonly": true,
             "abstract": false,
-            "extends": [
-                "AzGuard\\Models\\Role"
-            ],
+            "extends": [],
             "implements": [],
             "uses": [],
-            "doc": {
-                "@corex-model-extension": [
-                    "laravel-model"
-                ]
-            },
+            "doc": [],
             "methods": {
-                "getTable": {
+                "__construct": {
                     "visibility": "public",
                     "static": false,
                     "final": false,
                     "abstract": false,
                     "by_reference": false,
-                    "parameters": [],
-                    "return": "string",
+                    "parameters": [
+                        {
+                            "name": "roleId",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 1
+                        }
+                    ],
+                    "return": null,
                     "doc": []
                 }
             },
-            "properties": [],
+            "properties": {
+                "roleId": {
+                    "flags": 1,
+                    "type": "string",
+                    "readonly": true,
+                    "visibility": "public",
+                    "static": false,
+                    "default": null,
+                    "doc": [],
+                    "hooks": []
+                }
+            },
             "constants": [],
             "enum_backing": null,
             "enum_cases": []
@@ -1675,15 +1627,6 @@
                             "optional": false,
                             "default": null,
                             "flags": 1
-                        },
-                        {
-                            "name": "azguardRoleId",
-                            "type": "?int",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
                         }
                     ],
                     "return": null,
@@ -1698,20 +1641,6 @@
                 "assignableTo": {
                     "flags": 1,
                     "type": "array",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "list<string> $assignableTo"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "azguardRoleId": {
-                    "flags": 1,
-                    "type": "?int",
                     "readonly": true,
                     "visibility": "public",
                     "static": false,
@@ -1768,35 +1697,6 @@
             "uses": [],
             "doc": [],
             "methods": {
-                "bindAzGuardRole": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "roleId",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        },
-                        {
-                            "name": "azguardRoleId",
-                            "type": "int",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "void",
-                    "doc": []
-                },
                 "matrix": {
                     "visibility": "public",
                     "static": true,

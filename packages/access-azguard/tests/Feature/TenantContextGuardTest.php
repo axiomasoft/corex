@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use AzGuard\Contracts\ContextGuard;
-use CoreX\Access\Tests\Stubs\ContextUser;
-use CoreX\Access\Tests\Stubs\Project;
+use CoreX\AccessAzguard\Tests\Stubs\ContextUser;
+use CoreX\AccessAzguard\Tests\Stubs\Project;
 use CoreX\Modules\Data\EntityDefinition;
 use CoreX\Modules\Testing\ArrayEntityRegistry;
 

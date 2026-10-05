@@ -37,7 +37,7 @@ const COREX_SCHEMA_VERSION = 1;
 const VALID_PACKAGE_TYPES = ['foundation', 'capability', 'integration', 'product', 'tooling', 'fixture'];
 
 /** @var list<string> */
-const VALID_STABILITY = ['stable', 'experimental', 'internal', 'deprecated'];
+const VALID_STABILITY = ['stable', 'experimental', 'internal', 'deprecated', 'unreleased'];
 
 /** @var array<string, int> */
 const PACKAGE_TYPE_RANK = [

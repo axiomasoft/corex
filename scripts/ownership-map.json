@@ -9,6 +9,14 @@
             "env_prefix": "COREX_ACCESS_",
             "command_prefix": "corex:access:"
         },
+        "axiomasoft/corex-access-azguard": {
+            "dir": "access-azguard",
+            "root": "CoreX\\AccessAzguard",
+            "config": "corex-access-azguard",
+            "tag_prefix": "corex-access-azguard-",
+            "env_prefix": "COREX_ACCESS_AZGUARD_",
+            "command_prefix": "corex:access-azguard:"
+        },
         "axiomasoft/corex-custom-fields": {
             "dir": "custom-fields",
             "root": "CoreX\\CustomFields",

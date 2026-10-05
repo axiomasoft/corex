@@ -13,18 +13,15 @@ final readonly class AuthOptions
 {
     /**
      * @param  array<string, string>  $identityColumns
-     * @param  array<string, mixed>  $azguardPins
      */
     public function __construct(
         public string $panel,
         public ?string $cacheStore,
-        public bool $bindPermissionLayer,
         public ?string $workspaceScopeClass,
         public bool $identityEnabled,
         public ?string $identityConnection,
         public string $identityTable,
         public array $identityColumns,
-        public array $azguardPins,
     ) {}
 
     /** @param  array<array-key, mixed>  $config */
@@ -36,8 +33,6 @@ final readonly class AuthOptions
 
         $cache = is_array($config['cache'] ?? null) ? $config['cache'] : [];
         $cacheStore = self::nullableString($cache['store'] ?? null);
-
-        $bindPermissionLayer = self::bool($violations, 'bind_permission_layer', $config['bind_permission_layer'] ?? true);
 
         $workspaceScopeClass = self::nullableString($config['workspace_scope_class'] ?? null);
 
@@ -84,20 +79,16 @@ final readonly class AuthOptions
             }
         }
 
-        $azguardPins = is_array($config['azguard_pins'] ?? null) ? $config['azguard_pins'] : [];
-
         $violations->failIfAny();
 
         return new self(
             panel: $panel,
             cacheStore: $cacheStore,
-            bindPermissionLayer: $bindPermissionLayer,
             workspaceScopeClass: $workspaceScopeClass,
             identityEnabled: $identityEnabled,
             identityConnection: $identityConnection,
             identityTable: $identityTable,
             identityColumns: $identityColumns,
-            azguardPins: $azguardPins,
         );
     }
 

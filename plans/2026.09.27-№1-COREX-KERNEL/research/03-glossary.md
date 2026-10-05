@@ -21,12 +21,13 @@
 
 ## Packages
 
-Релизный набор P09 — все строки, кроме `product`. `bridge` — integration-пакет, соединяющий два пакета через их `#[Api]/#[Spi]`.
+Релизный набор P09 — все строки, кроме `product` и неопубликованного `access-azguard`. `bridge` — integration-пакет, соединяющий два пакета через их `#[Api]/#[Spi]`.
 
 | Каталог | Composer | Namespace | Тип | Назначение |
 |:--|:--|:--|:--|:--|
 | `packages/core` | `axiomasoft/corex` | `CoreX\` | kernel | Ядро платформы: система модулей, контекст исполнения, данные, ошибки, конфигурация, время, сообщения, настройки, флаги, отделы, аудит, хранилище и наблюдаемость для любого приложения. |
 | `packages/access` | `axiomasoft/corex-access` | `CoreX\Access\` | package | Авторизация платформы: граница tenant, контекст сущности, scope и матрица ролей без зависимости от AzGuard. |
+| `packages/access-azguard` | `axiomasoft/corex-access-azguard` | `CoreX\\AccessAzguard\\` | bridge | Неопубликованный мост access ↔ AzGuard; релиз после стабильного AzGuard и owner-gate Q2 (D14). |
 | `packages/custom-fields` | `axiomasoft/corex-custom-fields` | `CoreX\CustomFields\` | package | Типизированные пользовательские поля сущностей модулей: схема, значения, запросы и хранение. |
 | `packages/intl` | `axiomasoft/corex-intl` | `CoreX\Intl\` | package | Локали, переводы, валюты и деньги, форматирование и территории/адреса. |
 | `packages/media` | `axiomasoft/corex-media` | `CoreX\Media\` | package | Жизненный цикл приватных медиафайлов tenant: загрузка, конверсии, очистка. |
@@ -54,7 +55,6 @@ Merge: `packages/modules` → `packages/core` (`CoreX\Modules`, D25). Tombstone:
 
 | Composer | Namespace | Тип | Фаза | Назначение / условие |
 |:--|:--|:--|:--|:--|
-| `axiomasoft/corex-access-azguard` | `CoreX\AccessAzguard\` | bridge | P07 | Мост access ↔ AzGuard; публикуется только после стабильного релиза AzGuard (D14, owner-gate Q2). |
 | `axiomasoft/corex-full` | — | metapackage | P09 | Lockstep-набор всех релизных пакетов (D19). |
 
 Не вводится: `corex-testkit` (нет независимого потребителя, pplx-02; фейки SPI — `CoreX\<Pkg>\Testing\`, D30), `corex-timers`

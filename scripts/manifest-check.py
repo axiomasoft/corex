@@ -19,6 +19,9 @@ PHP = '^8.4'
 ILLUMINATE = '^12.0|^13.0'
 # Temporary pinned upstream exceptions for packages without stable releases.
 ALLOWED_PRERELEASE = {}
+# The AzGuard bridge stays outside the release set until its upstream is published.
+UNRELEASED = {'axiomasoft/corex-access-azguard'}
+VALID_STABILITY = {'stable', 'experimental', 'internal', 'deprecated', 'unreleased'}
 STACK = {
     'pestphp/pest': '^5.2',
     'orchestra/testbench': '^10.12|^11.3',
@@ -78,6 +81,11 @@ def main() -> int:
             bad('stability', 'prefer-stable must be true')
         if not is_root and data.get('extra', {}).get('branch-alias', {}).get('dev-main') != ALIAS:
             bad('branch-alias', f'extra.branch-alias.dev-main must be {ALIAS!r}')
+        stability = data.get('extra', {}).get('corex', {}).get('stability')
+        if not is_root and stability not in VALID_STABILITY:
+            bad('stability', f'unknown extra.corex.stability={stability!r}')
+        if stability == 'unreleased' and data.get('name') not in UNRELEASED:
+            bad('stability', f'stability=unreleased is reserved for {sorted(UNRELEASED)}')
 
         for name, constraint in sorted(requires.items()):
             if name in mono and constraint != MONO_CONSTRAINT:

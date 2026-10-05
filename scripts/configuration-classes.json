@@ -2,6 +2,11 @@
     "schema": "configuration-classes/v1",
     "note": "Carried registry columns (owner, secret, mode, reloadable, validation, deprecated_aliases, notes) per key. Generated columns: key set, type, default (config files) and typed_options_field (Options reflection). Edit here, then run scripts/configuration-reference.php --write.",
     "options": {
+        "corex-access-azguard": [
+            {
+                "class": "CoreX\\AccessAzguard\\Internal\\AccessAzguardOptions"
+            }
+        ],
         "corex": [
             {
                 "class": "CoreX\\Modules\\Internal\\Support\\ModulesOptions",
@@ -101,39 +106,39 @@
         ]
     },
     "rows": {
-        "corex-access.azguard_pins.column_names.morph_type": {
-            "owner": "axiomasoft/corex-access",
+        "corex-access-azguard.azguard_pins.column_names.morph_type": {
+            "owner": "axiomasoft/corex-access-azguard",
             "secret": "no",
             "mode": "product-policy",
             "reloadable": "unobserved",
-            "validation": "use-site",
+            "validation": "boot",
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-access.azguard_pins.models.role": {
-            "owner": "axiomasoft/corex-access",
+        "corex-access-azguard.azguard_pins.models.role": {
+            "owner": "axiomasoft/corex-access-azguard",
             "secret": "no",
             "mode": "product-policy",
             "reloadable": "unobserved",
-            "validation": "use-site",
+            "validation": "boot",
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-access.azguard_pins.table_names.roles": {
-            "owner": "axiomasoft/corex-access",
+        "corex-access-azguard.azguard_pins.table_names.roles": {
+            "owner": "axiomasoft/corex-access-azguard",
             "secret": "no",
             "mode": "product-policy",
             "reloadable": "unobserved",
-            "validation": "use-site",
+            "validation": "boot",
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-access.bind_permission_layer": {
-            "owner": "axiomasoft/corex-access",
+        "corex-access-azguard.bind_permission_layer": {
+            "owner": "axiomasoft/corex-access-azguard",
             "secret": "no",
             "mode": "deployment",
             "reloadable": "no",
-            "validation": "use-site",
+            "validation": "boot",
             "deprecated_aliases": "",
             "notes": ""
         },
@@ -2014,6 +2019,10 @@
         }
     },
     "options_field_overrides": {
+        "corex-access-azguard.azguard_pins.column_names.morph_type": "AccessAzguardOptions::$morphType",
+        "corex-access-azguard.azguard_pins.models.role": "AccessAzguardOptions::$roleModel",
+        "corex-access-azguard.azguard_pins.table_names.roles": "AccessAzguardOptions::$rolesTable",
+        "corex-access-azguard.bind_permission_layer": "AccessAzguardOptions::$bindPermissionLayer",
         "corex-custom-fields.definitions": "CustomFieldsOptions::$composition",
         "corex-custom-fields.drivers.ddl": "CustomFieldsOptions::$composition",
         "corex-custom-fields.drivers.eav": "CustomFieldsOptions::$composition",

@@ -257,12 +257,21 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Access\Laravel\ScopeResolver` | spi-implement | 1.0 |
 | `CoreX\Access\Matrix\Contracts\EntityActivity` | spi-call | 1.0 |
 | `CoreX\Access\Matrix\Contracts\ScopeMapVersions` | spi-call | 1.0 |
-| `CoreX\Access\Matrix\Laravel\AzGuardRoleModel` | spi-call | 1.0 |
+| `CoreX\Access\Matrix\Events\RoleMatrixCompiled` | api | 1.0 |
 | `CoreX\Access\Matrix\Laravel\MatrixPortBindings` | spi-call | 1.0 |
 | `CoreX\Access\Roles\Data\RoleMatrixEntry` | api | 1.0 |
 | `CoreX\Access\Roles\Data\RoleView` | api | 1.0 |
 | `CoreX\Access\Roles\Laravel\RoleMatrixData` | spi-call | 1.0 |
 | `CoreX\Access\Roles\Laravel\SystemRoleImmutable` | spi-call | 1.0 |
+
+## axiomasoft/corex-access-azguard
+
+[Member manifest](../../packages/access-azguard/resources/contracts/php-api.json)
+
+| Symbol | Layer | Since |
+|:--|:--|:--|
+| `CoreX\AccessAzguard\AccessAzguardRegistrar` | spi-call | 1.0 |
+| `CoreX\AccessAzguard\AccessAzguardServiceProvider` | spi-call | 1.0 |
 
 ## axiomasoft/corex-custom-fields
 

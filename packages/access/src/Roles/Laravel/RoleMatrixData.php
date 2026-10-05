@@ -19,7 +19,7 @@ final class RoleMatrixData
     {
         $role = Role::query()->findOrFail($roleId);
 
-        return new RoleView($role->id, $role->slug, $role->assignable_to, $role->azguard_role_id);
+        return new RoleView($role->id, $role->slug, $role->assignable_to);
     }
 
     /** @return list<RoleMatrixEntry> */
@@ -36,12 +36,5 @@ final class RoleMatrixData
     public static function roleIds(): array
     {
         return array_values(Role::query()->get(['id'])->map(static fn (Role $role): string => $role->id)->all());
-    }
-
-    public static function bindAzGuardRole(string $roleId, int $azguardRoleId): void
-    {
-        $role = Role::query()->findOrFail($roleId);
-        $role->forceFill(['azguard_role_id' => $azguardRoleId]);
-        Role::withSystemMutationAllowed(fn (): bool => $role->save());
     }
 }

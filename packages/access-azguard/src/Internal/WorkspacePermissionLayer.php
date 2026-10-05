@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Access\Access\Internal;
+namespace CoreX\AccessAzguard\Internal;
 
 use AzGuard\Contracts\PermissionLayer;
 use AzGuard\Registry\Values\PermissionSet;

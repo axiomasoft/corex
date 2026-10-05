@@ -1,0 +1,256 @@
+<?php
+
+declare(strict_types=1);
+
+use AzGuard\Models\RolePermission;
+use CoreX\Access\Access\Laravel\PrincipalIdentity;
+use CoreX\Access\Contracts\RoleMatrixCompiler;
+use CoreX\Access\Enums\PrincipalType;
+use CoreX\Access\Matrix\Contracts\EntityActivity;
+use CoreX\Access\Matrix\Contracts\ScopeMapVersions;
+use CoreX\Access\Matrix\Events\RoleMatrixCompiled;
+use CoreX\Access\Matrix\Internal\DatabaseRoleMatrixCompiler;
+use CoreX\AccessAzguard\Internal\AutMatrixGrantSource;
+use CoreX\AccessAzguard\Internal\AzGuardRoleModel;
+use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Data\AccountRef;
+use CoreX\Context\Data\TenantContext;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
+
+beforeEach(function (): void {
+    Schema::create('aut_roles', static function (Blueprint $table): void {
+        $table->uuid('id')->primary();
+        $table->string('slug');
+        $table->string('name');
+        $table->text('assignable_to');
+        $table->boolean('is_system')->default(false);
+        $table->softDeletes();
+        $table->timestamps();
+    });
+    Schema::create('aut_role_matrix', static function (Blueprint $table): void {
+        $table->uuid('id')->primary();
+        $table->uuid('role_id');
+        $table->string('entity_key');
+        $table->string('action');
+        $table->string('scope');
+        $table->timestamps();
+    });
+    (require dirname(__DIR__, 2).'/database/migrations/tenant/2026_10_04_000001_create_aut_azguard_role_links_table.php')->up();
+    Schema::create('aut_role_assignments', static function (Blueprint $table): void {
+        $table->uuid('id')->primary();
+        $table->uuid('role_id');
+        $table->string('principal_type');
+        $table->uuid('principal_id');
+        $table->uuid('workspace_id')->nullable();
+        $table->timestamp('expires_at')->nullable();
+    });
+
+    $this->tenantContext = new class implements TenantContextResolver
+    {
+        public string $accountId = 'bridge-tenant';
+
+        public function current(): TenantContext
+        {
+            return new TenantContext(new AccountRef($this->accountId, 'test', 'active', [], []));
+        }
+    };
+    app()->instance(TenantContextResolver::class, $this->tenantContext);
+    config()->set('cache.default', 'array');
+
+    app()->instance(EntityActivity::class, new class implements EntityActivity
+    {
+        public function isActive(string $entityKey): bool
+        {
+            return $entityKey === 'crm.deal';
+        }
+    });
+});
+
+function bridgeRole(): string
+{
+    $roleId = (string) Str::uuid();
+    DB::table('aut_roles')->insert(['id' => $roleId, 'slug' => 'sales', 'name' => 'Sales', 'assignable_to' => '["user"]']);
+    foreach ([['crm.deal', 'read', 'account'], ['crm.deal', 'delete', 'none'], ['inactive.deal', 'read', 'account']] as [$entity, $action, $scope]) {
+        DB::table('aut_role_matrix')->insert([
+            'id' => (string) Str::uuid(), 'role_id' => $roleId,
+            'entity_key' => $entity, 'action' => $action, 'scope' => $scope,
+        ]);
+    }
+
+    return $roleId;
+}
+
+it('compiles through the registered bridge on the same tenant transaction and clean role schema', function (): void {
+    $roleId = bridgeRole();
+    $connection = DB::connection();
+    $versions = app(ScopeMapVersions::class);
+    $initial = $versions->current($roleId);
+    $writes = [];
+    $seen = [];
+
+    DB::listen(function (QueryExecuted $query) use (&$writes): void {
+        if (preg_match('/^(insert|update|delete).*\b(aut_azguard_role_links|az_guard_roles|az_guard_role_permissions)\b/i', $query->sql) === 1) {
+            $writes[] = [$query->connection, $query->connection->transactionLevel()];
+        }
+    });
+    Event::listen(RoleMatrixCompiled::class, function (RoleMatrixCompiled $event) use (&$seen, $versions): void {
+        $azguardRoleId = DB::table('aut_azguard_role_links')->where('role_id', $event->roleId)->value('azguard_role_id');
+        $seen[] = [
+            $event->roleId,
+            DB::transactionLevel(),
+            RolePermission::query()->where('role_id', $azguardRoleId)->pluck('permission_key')->all(),
+            $versions->current($event->roleId),
+        ];
+    });
+
+    $compiler = app(RoleMatrixCompiler::class);
+    expect($compiler)->toBeInstanceOf(DatabaseRoleMatrixCompiler::class);
+    $compiler->compile($roleId);
+
+    $azguardRole = AzGuardRoleModel::query()->where('name', 'sales')->firstOrFail();
+    expect(Schema::hasColumn('aut_roles', 'azguard_role_id'))->toBeFalse()
+        ->and(DB::table('aut_azguard_role_links')->where('role_id', $roleId)->value('azguard_role_id'))->toBe($azguardRole->id)
+        ->and(RolePermission::query()->where('role_id', $azguardRole->id)->pluck('permission_key')->all())->toBe(['app.crm.deal.read'])
+        ->and($seen)->toBe([[$roleId, 1, ['app.crm.deal.read'], $initial]])
+        ->and($versions->current($roleId))->toBe($initial + 1)
+        ->and($writes)->not->toBeEmpty();
+    foreach ($writes as [$writeConnection, $level]) {
+        expect($writeConnection)->toBe($connection)
+            ->and($level)->toBeGreaterThanOrEqual(2);
+    }
+
+    DB::table('aut_role_matrix')->where('role_id', $roleId)->delete();
+    $compiler->compile($roleId);
+    expect(RolePermission::query()->where('role_id', $azguardRole->id)->count())->toBe(0)
+        ->and(DB::table('aut_azguard_role_links')->where('role_id', $roleId)->value('azguard_role_id'))->toBe($azguardRole->id)
+        ->and($versions->current($roleId))->toBe($initial + 2);
+});
+
+it('propagates a missing role during compilation without invalidating scope', function (): void {
+    $roleId = (string) Str::uuid();
+    $versions = app(ScopeMapVersions::class);
+    $initial = $versions->current($roleId);
+    expect(fn () => app(RoleMatrixCompiler::class)->compile($roleId))->toThrow(ModelNotFoundException::class);
+    expect($versions->current($roleId))->toBe($initial)
+        ->and(DB::table('aut_azguard_role_links')->count())->toBe(0)
+        ->and(AzGuardRoleModel::query()->count())->toBe(0);
+});
+
+it('rolls back native and bridge writes when the registered bridge listener fails', function (bool $existingMirror): void {
+    $roleId = bridgeRole();
+    $compiler = app(RoleMatrixCompiler::class);
+    $versions = app(ScopeMapVersions::class);
+
+    if ($existingMirror) {
+        $compiler->compile($roleId);
+    }
+    $initial = $versions->current($roleId);
+    $links = DB::table('aut_azguard_role_links')->get()->all();
+    $roles = DB::table('az_guard_roles')->get()->all();
+    $permissions = DB::table('az_guard_role_permissions')->get()->all();
+    $matrix = DB::table('aut_role_matrix')->get()->all();
+    $seen = [];
+
+    app()->instance(EntityActivity::class, new class($roleId, $seen) implements EntityActivity
+    {
+        public function __construct(private string $roleId, private array &$seen) {}
+
+        public function isActive(string $entityKey): bool
+        {
+            $this->seen[] = [DB::transactionLevel(), DB::table('aut_azguard_role_links')->where('role_id', $this->roleId)->exists()];
+            DB::table('aut_roles')->where('id', $this->roleId)->update(['name' => 'Uncommitted']);
+            DB::table('aut_role_matrix')->where('role_id', $this->roleId)->update(['scope' => 'own']);
+
+            throw new RuntimeException('bridge listener failure');
+        }
+    });
+
+    expect(fn () => $compiler->compile($roleId))->toThrow(RuntimeException::class, 'bridge listener failure');
+    expect($seen)->toBe([[2, true]])
+        ->and(DB::transactionLevel())->toBe(0)
+        ->and(DB::table('aut_roles')->where('id', $roleId)->value('name'))->toBe('Sales')
+        ->and(DB::table('aut_role_matrix')->get()->all())->toEqual($matrix)
+        ->and(DB::table('aut_azguard_role_links')->get()->all())->toEqual($links)
+        ->and(DB::table('az_guard_roles')->get()->all())->toEqual($roles)
+        ->and(DB::table('az_guard_role_permissions')->get()->all())->toEqual($permissions)
+        ->and($versions->current($roleId))->toBe($initial);
+})->with(['new mirror' => false, 'existing mirror' => true]);
+
+it('defers scope invalidation to outer commit and drops it after rollback', function (): void {
+    $roleId = bridgeRole();
+    $compiler = app(RoleMatrixCompiler::class);
+    $versions = app(ScopeMapVersions::class);
+    $initial = $versions->current($roleId);
+
+    DB::beginTransaction();
+    DB::table('aut_roles')->where('id', $roleId)->update(['name' => 'Uncommitted']);
+    $compiler->compile($roleId);
+    expect(DB::table('aut_azguard_role_links')->where('role_id', $roleId)->exists())->toBeTrue()
+        ->and(RolePermission::query()->pluck('permission_key')->all())->toBe(['app.crm.deal.read'])
+        ->and($versions->current($roleId))->toBe($initial);
+    DB::rollBack();
+    expect(DB::table('aut_azguard_role_links')->where('role_id', $roleId)->exists())->toBeFalse()
+        ->and(AzGuardRoleModel::query()->where('name', 'sales')->exists())->toBeFalse()
+        ->and(RolePermission::query()->count())->toBe(0)
+        ->and(DB::table('aut_roles')->where('id', $roleId)->value('name'))->toBe('Sales')
+        ->and($versions->current($roleId))->toBe($initial);
+
+    DB::beginTransaction();
+    $compiler->compile($roleId);
+    expect($versions->current($roleId))->toBe($initial);
+    $this->tenantContext->accountId = 'other-tenant';
+    DB::commit();
+    expect($versions->current($roleId))->toBe(0);
+    $this->tenantContext->accountId = 'bridge-tenant';
+    expect($versions->current($roleId))->toBe($initial + 1)
+        ->and(RolePermission::query()->pluck('permission_key')->all())->toBe(['app.crm.deal.read']);
+});
+
+it('reads compiled permissions through assignments and role links for each principal type', function (PrincipalType $type): void {
+    $roleId = bridgeRole();
+    $principal = new PrincipalIdentity($type, (string) Str::uuid());
+    DB::table('aut_role_assignments')->insert([
+        'id' => (string) Str::uuid(), 'role_id' => $roleId,
+        'principal_type' => $type->value, 'principal_id' => $principal->principalId(),
+    ]);
+    $compiler = app(RoleMatrixCompiler::class);
+    $source = app(AutMatrixGrantSource::class);
+    expect($source->permissionsFor($principal, 'app')->keys())->toBe([]);
+
+    $compiler->compile($roleId);
+    expect($source->permissionsFor($principal, 'app')->keys())->toBe(['app.crm.deal.read'])
+        ->and($source->permissionsFor($principal, 'admin')->keys())->toBe([]);
+
+    DB::table('aut_role_matrix')->where('role_id', $roleId)->where('action', 'read')->where('entity_key', 'crm.deal')->update(['scope' => 'none']);
+    $compiler->compile($roleId);
+    expect($source->permissionsFor($principal, 'app')->keys())->toBe([]);
+})->with(PrincipalType::cases());
+
+it('excludes ineligible assignments and roles from the compiled grant chain', function (string $exclusion): void {
+    $roleId = bridgeRole();
+    $principal = new PrincipalIdentity(PrincipalType::User, (string) Str::uuid());
+    $assignmentId = (string) Str::uuid();
+    DB::table('aut_role_assignments')->insert([
+        'id' => $assignmentId, 'role_id' => $roleId,
+        'principal_type' => 'user', 'principal_id' => $principal->principalId(),
+    ]);
+    app(RoleMatrixCompiler::class)->compile($roleId);
+    $source = app(AutMatrixGrantSource::class);
+    expect($source->permissionsFor($principal, 'app')->keys())->toBe(['app.crm.deal.read']);
+
+    match ($exclusion) {
+        'expired' => DB::table('aut_role_assignments')->where('id', $assignmentId)->update(['expires_at' => '2000-01-01 00:00:00']),
+        'foreign workspace' => DB::table('aut_role_assignments')->where('id', $assignmentId)->update(['workspace_id' => (string) Str::uuid()]),
+        'different principal' => DB::table('aut_role_assignments')->where('id', $assignmentId)->update(['principal_id' => (string) Str::uuid()]),
+        'deleted role' => DB::table('aut_roles')->where('id', $roleId)->update(['deleted_at' => '2000-01-01 00:00:00']),
+        'missing link' => DB::table('aut_azguard_role_links')->where('role_id', $roleId)->delete(),
+    };
+
+    expect($source->permissionsFor($principal, 'app')->keys())->toBe([]);
+})->with(['expired', 'foreign workspace', 'different principal', 'deleted role', 'missing link']);

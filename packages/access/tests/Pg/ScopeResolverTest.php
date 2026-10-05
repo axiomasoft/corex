@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use AzGuard\Contracts\AzGuardManagerInterface;
-use AzGuard\Panels\Panel;
 use CoreX\Access\Access\Internal\ScopePredicate;
 use CoreX\Access\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Contracts\AccessChecker;
@@ -38,12 +36,9 @@ uses()->group('pg');
 
 beforeEach(function (): void {
     $this->resetPgSchema();
-    $this->migrateAzGuard();
     $this->migrateAutSchema();
     $this->migrateFixtures();
     $this->migrateCoreDepartments();
-
-    app(AzGuardManagerInterface::class)->registerPanel(Panel::make()->id('app'));
 
     app(ArrayEntityRegistry::class)->register(new EntityDefinition(
         handle: 'crm.deal',
@@ -57,10 +52,7 @@ beforeEach(function (): void {
         titleAttribute: null,
     ));
 
-    // P2.21: the real ModuleRegistry (no compiled file in Testbench) would
-    // report every module inactive and hit tables never migrated here
-    // (mod_modules) — this fixture's module is active by fiat so the
-    // pre-P2.21 compiled-key expectations below stay valid.
+    // Keep the fixture module active without cross-package module migrations.
     app()->instance(ModuleRegistry::class, new FakeModuleRegistry(['corex/access-tests']));
 
     $this->compileRole = function (string $roleId): void {
@@ -521,7 +513,6 @@ it('denies dept/dept_tree on the builder when the principal has no department', 
 // Fail-closed when users/sys_departments do not exist at all (boxed profile, AC-28) — independent of driver.
 it('denies dept/dept_tree on the builder when users/sys_departments tables do not exist', function (Scope $scope): void {
     $this->resetPgSchema();
-    $this->migrateAzGuard();
     $this->migrateAutSchema();
 
     Schema::create('deals', function (Blueprint $table): void {

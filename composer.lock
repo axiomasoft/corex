@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "28babfa62f31e4b7fedecf5c62bb7341",
+    "content-hash": "fe350a6a08be46aff7b13d33ce1b0cdc",
     "packages": [
         {
             "name": "axiomasoft/corex",
@@ -8029,17 +8029,17 @@
             "dist": {
                 "type": "path",
                 "url": "packages/access",
-                "reference": "82db6a4fc3b65a9c2ecab756bf7087928c211cda"
+                "reference": "88cd71b71db1224162b975657ce9ef45f407b088"
             },
             "require": {
-                "axioma-studio/azguard-core": "^0.3",
                 "axiomasoft/corex": "^1.0@dev",
                 "ext-mbstring": "*",
                 "illuminate/auth": "^12.0|^13.0",
                 "illuminate/contracts": "^12.0|^13.0",
                 "illuminate/database": "^12.0|^13.0",
                 "illuminate/support": "^12.0|^13.0",
-                "php": "^8.4"
+                "php": "^8.4",
+                "psr/clock": "^1.0"
             },
             "require-dev": {
                 "larastan/larastan": "^3.12",
@@ -8106,14 +8106,80 @@
                     "email": "dv.vostrikov@gmail.com"
                 }
             ],
-            "description": "CoreX auth bridge — tenant-boundary authorization, entity-context checks and scoped Blade directives on top of AzGuard (ADR-009).",
+            "description": "CoreX native authorization, tenant-boundary access checks, role matrices and direct grants.",
             "keywords": [
                 "authorization",
-                "azguard",
                 "laravel",
                 "multi-tenancy",
                 "rbac"
             ],
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "axiomasoft/corex-access-azguard",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "packages/access-azguard",
+                "reference": "53cea3ded3ff5c1c433e9323f5e5e062e2e01320"
+            },
+            "require": {
+                "axioma-studio/azguard-core": "^0.3",
+                "axiomasoft/corex": "^1.0@dev",
+                "axiomasoft/corex-access": "^1.0@dev",
+                "illuminate/contracts": "^12.0|^13.0",
+                "illuminate/database": "^12.0|^13.0",
+                "illuminate/support": "^12.0|^13.0",
+                "php": "^8.4",
+                "psr/clock": "^1.0"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.12",
+                "laravel/pint": "^1.32",
+                "mockery/mockery": "^1.6",
+                "orchestra/testbench": "^10.12|^11.3",
+                "orchestra/testbench-core": "^10.12|^11.3",
+                "pestphp/pest": "^5.2",
+                "symfony/process": "^7.2|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "corex": {
+                    "schema-version": 1,
+                    "package-type": "integration",
+                    "stability": "unreleased"
+                },
+                "laravel": {
+                    "providers": [
+                        "CoreX\\AccessAzguard\\AccessAzguardServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-main": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "CoreX\\AccessAzguard\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "CoreX\\AccessAzguard\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": "../../vendor/bin/pest --test-directory=packages/access-azguard/tests --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --exclude-group=pg",
+                "test:pg": "../../vendor/bin/pest --test-directory=packages/access-azguard/tests --configuration=phpunit.xml --bootstrap=../../vendor/autoload.php --group=pg",
+                "analyse": "cd ../.. && vendor/bin/phpstan analyse -c packages/access-azguard/phpstan.neon --memory-limit=2G --no-progress",
+                "lint:check": "../../vendor/bin/pint --test"
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Optional AzGuard integration for the CoreX Access permission matrix.",
             "transport-options": {
                 "relative": true
             }
@@ -16851,6 +16917,7 @@
     "stability-flags": {
         "axiomasoft/corex": 20,
         "axiomasoft/corex-access": 20,
+        "axiomasoft/corex-access-azguard": 20,
         "axiomasoft/corex-custom-fields": 20,
         "axiomasoft/corex-intl": 20,
         "axiomasoft/corex-media": 20,

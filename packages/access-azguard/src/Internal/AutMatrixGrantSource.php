@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Access\Access\Internal;
+namespace CoreX\AccessAzguard\Internal;
 
 use AzGuard\Configuration\Config as AzGuardConfig;
 use AzGuard\Registry\Contracts\GrantSource;
@@ -13,8 +13,11 @@ use CoreX\Context\Contracts\TenancyManager;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Query\JoinClause;
+use InvalidArgumentException;
 use Override;
 use Psr\Clock\ClockInterface;
+use UnexpectedValueException;
 
 /**
  * GrantSource reading `aut_role_assignments` (D101) — the built-in
@@ -40,9 +43,19 @@ final readonly class AutMatrixGrantSource implements GrantSource
     #[Override]
     public function permissionsFor(Authenticatable $user, string $panelId): PermissionSet
     {
-        [$principalType, $principalId] = $user instanceof Principal
-            ? [$user->principalType(), $user->principalId()]
-            : [PrincipalType::User, (string) $user->getAuthIdentifier()];
+        if ($user instanceof Principal) {
+            $principalType = $user->principalType();
+            $principalId = $user->principalId();
+        } else {
+            $identifier = $user->getAuthIdentifier();
+
+            if (! is_string($identifier) && ! is_int($identifier)) {
+                throw new InvalidArgumentException('AzGuard principal identifier must be a string or integer.');
+            }
+
+            $principalType = PrincipalType::User;
+            $principalId = (string) $identifier;
+        }
 
         $workspaceId = $this->tenancyManager->context()?->workspace?->id;
 
@@ -51,14 +64,21 @@ final readonly class AutMatrixGrantSource implements GrantSource
         }
 
         $keys = $this->assignmentsQuery($principalType, $principalId, $workspaceId)
-            ->join('aut_roles', 'aut_roles.id', '=', 'aut_role_assignments.role_id')
-            ->join(AzGuardConfig::rolePermissionsTable().' as azgrp', static function ($join) use ($panelId): void {
-                $join->on('azgrp.role_id', '=', 'aut_roles.azguard_role_id')
+            ->join('aut_azguard_role_links as links', 'links.role_id', '=', 'aut_role_assignments.role_id')
+            ->join('aut_roles', 'aut_roles.id', '=', 'links.role_id')
+            ->join(AzGuardConfig::rolePermissionsTable().' as azgrp', static function (JoinClause $join) use ($panelId): void {
+                $join->on('azgrp.role_id', '=', 'links.azguard_role_id')
                     ->where('azgrp.panel_id', '=', $panelId);
             })
             ->whereNull('aut_roles.deleted_at')
             ->pluck('azgrp.permission_key')
             ->all();
+
+        foreach ($keys as $key) {
+            if (! is_string($key)) {
+                throw new UnexpectedValueException('AzGuard permission key must be a string.');
+            }
+        }
 
         return PermissionSet::fromRawKeys(array_values(array_unique($keys)));
     }

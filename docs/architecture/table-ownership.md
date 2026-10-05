@@ -9,13 +9,13 @@
 `tenant_scope=test` обозначает только disposable-таблицы reference consumer'ов:
 их создают тестовые fixture, а пакеты не публикуют для них миграции.
 
-AzGuard управляет схемой своих таблиц как зависимость `axiomasoft/corex-access`; в этой
-установке `axiomasoft/corex-access` владеет их конфигурацией и прикладными записями.
+AzGuard управляет схемой своих таблиц как зависимость `axiomasoft/corex-access-azguard`; в этой
+установке неопубликованный мост владеет их конфигурацией и прикладными записями.
 Канонические ORM-модели для DATA-003 привязаны к следующим таблицам:
 
 | ORM model | table | source |
 |:--|:--|:--|
-| `CoreX\Access\Matrix\Laravel\AzGuardRoleModel` | `az_guard_roles` | `corex-access.azguard_pins.table_names.roles` |
+| `CoreX\AccessAzguard\Internal\AzGuardRoleModel` | `az_guard_roles` | `corex-access-azguard.azguard_pins.table_names.roles` |
 | `AzGuard\Models\RolePermission` | `az_guard_role_permissions` | AzGuard `table_names.role_permissions` default |
 
 ## Разделённый префикс `sys_`
@@ -55,10 +55,12 @@ AzGuard управляет схемой своих таблиц как зави�
 | sys_attribute_schema_operations | axiomasoft/corex-custom-fields | tenant | axiomasoft/corex-custom-fields |  | unobserved | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
 | sys_attribute_write_tokens | axiomasoft/corex-custom-fields | tenant | axiomasoft/corex-custom-fields |  | unobserved | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
 | aut_role_assignments | axiomasoft/corex-access | tenant | axiomasoft/corex-access |  | unobserved | exception |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private | D102 cross-package FK exception (DATA-004) |
+| aut_direct_grants | axiomasoft/corex-access | tenant | axiomasoft/corex-access | axiomasoft/corex-access | unobserved | forbidden | index(['principal_type', 'principal_id', 'permission_key']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private | Native direct grants; P07.4 |
+| aut_azguard_role_links | axiomasoft/corex-access-azguard | tenant | axiomasoft/corex-access-azguard | axiomasoft/corex-access-azguard | unobserved | forbidden | primary(['role_id']); unique(['azguard_role_id']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private | Native role to AzGuard role mapping; P07.4 |
 | aut_role_matrix | axiomasoft/corex-access | tenant | axiomasoft/corex-access |  | unobserved | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
 | aut_roles | axiomasoft/corex-access | tenant | axiomasoft/corex-access |  | unobserved | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
-| az_guard_roles | axiomasoft/corex-access | tenant | axiomasoft/corex-access |  | unobserved | forbidden |  | unobserved | unobserved | vendor-managed | private | AzGuard migration; `axiomasoft/corex-access` pins the role model/table |
-| az_guard_role_permissions | axiomasoft/corex-access | tenant | axiomasoft/corex-access |  | unobserved | forbidden |  | unobserved | unobserved | vendor-managed | private | AzGuard migration; `axiomasoft/corex-access` compiler writes this table |
+| az_guard_roles | axiomasoft/corex-access-azguard | tenant | axiomasoft/corex-access-azguard |  | unobserved | forbidden |  | unobserved | unobserved | vendor-managed | private | AzGuard migration; bridge pins the role model/table |
+| az_guard_role_permissions | axiomasoft/corex-access-azguard | tenant | axiomasoft/corex-access-azguard |  | unobserved | forbidden |  | unobserved | unobserved | vendor-managed | private | AzGuard migration; bridge listener writes this table |
 | sys_audit_log | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |
 | sys_department_user | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | primary(['department_id', 'user_id']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |
 | sys_departments | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |

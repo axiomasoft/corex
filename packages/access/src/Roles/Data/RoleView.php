@@ -10,5 +10,5 @@ use CoreX\Attributes\Api;
 final readonly class RoleView
 {
     /** @param list<string> $assignableTo */
-    public function __construct(public string $id, public string $slug, public array $assignableTo, public ?int $azguardRoleId) {}
+    public function __construct(public string $id, public string $slug, public array $assignableTo) {}
 }

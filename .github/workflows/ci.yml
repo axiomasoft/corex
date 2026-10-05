@@ -649,6 +649,12 @@ jobs:
       - name: Composer audit (access)
         run: composer audit --locked --working-dir=packages/access
 
+      - name: Install access AzGuard bridge dependencies
+        run: composer --working-dir=packages/access-azguard update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit (access AzGuard bridge)
+        run: composer audit --locked --working-dir=packages/access-azguard
+
       - name: Install remaining standalone package harnesses
         run: |
           for package in media tasks tasks-workflow panels operations tenancy webhooks tools recurrence; do
@@ -962,6 +968,12 @@ jobs:
 
       - name: Composer audit (access)
         run: composer audit --locked --working-dir=packages/access
+
+      - name: Install access AzGuard bridge dependencies
+        run: composer --working-dir=packages/access-azguard update --prefer-dist --no-interaction --no-progress
+
+      - name: Composer audit (access AzGuard bridge)
+        run: composer audit --locked --working-dir=packages/access-azguard
 
       - name: PHPStan
         run: composer analyse

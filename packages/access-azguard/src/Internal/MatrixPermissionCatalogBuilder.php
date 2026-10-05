@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoreX\Access\Matrix\Internal;
+namespace CoreX\AccessAzguard\Internal;
 
 use AzGuard\Registry\Contracts\PermissionCatalogBuilder;
 use AzGuard\Registry\Contracts\PermissionDefinition;
@@ -10,6 +10,7 @@ use AzGuard\Registry\Definitions\SimplePermissionDefinition;
 use AzGuard\Registry\Resolver\EffectivePermissionResolver;
 use CoreX\Access\Enums\Scope;
 use CoreX\Access\Laravel\AuthOptions;
+use CoreX\Access\Matrix\Contracts\EntityActivity;
 use CoreX\Access\Roles\Data\RoleMatrixEntry;
 use CoreX\Access\Roles\Laravel\RoleMatrixData;
 use Override;
@@ -26,14 +27,11 @@ final readonly class MatrixPermissionCatalogBuilder implements PermissionCatalog
 {
     /**
      * `$activeEntities` defaults to null (resolved from the container
-     * lazily, MatrixValidator precedent) so the pre-existing zero-argument
-     * `new MatrixPermissionCatalogBuilder` call site (P2.8) keeps working
-     * unchanged; DI containers still inject the real ActiveEntityFilter via
-     * the constructor's type-hint.
+     * Catalog filtering follows the public access entity activity port.
      */
     public function __construct(
         private AuthOptions $options,
-        private ActiveEntityFilter $activeEntities,
+        private EntityActivity $activeEntities,
     ) {}
 
     #[Override]
@@ -50,13 +48,13 @@ final readonly class MatrixPermissionCatalogBuilder implements PermissionCatalog
             return [];
         }
 
-        return collect(RoleMatrixData::matrix())
+        return array_values(collect(RoleMatrixData::matrix())
             ->filter(static fn (RoleMatrixEntry $row): bool => $row->scope !== Scope::None)
             ->filter(fn (RoleMatrixEntry $row): bool => $this->activeEntities->isActive($row->entityKey))
             ->map(static fn (RoleMatrixEntry $row): string => "{$panelId}.{$row->entityKey}.{$row->action}")
             ->unique()
             ->map(static fn (string $key): PermissionDefinition => new SimplePermissionDefinition($key, $panelId))
             ->values()
-            ->all();
+            ->all());
     }
 }

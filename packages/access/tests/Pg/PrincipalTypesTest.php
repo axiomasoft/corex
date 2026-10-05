@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use AzGuard\Contracts\AzGuardManagerInterface;
-use AzGuard\Panels\Panel;
 use CoreX\Access\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Contracts\AccessChecker;
 use CoreX\Access\Enums\PrincipalType;
@@ -23,10 +21,7 @@ uses()->group('pg');
 
 beforeEach(function (): void {
     $this->resetPgSchema();
-    $this->migrateAzGuard();
     $this->migrateAutSchema();
-
-    app(AzGuardManagerInterface::class)->registerPanel(Panel::make()->id('app'));
 
     app(ArrayEntityRegistry::class)->register(new EntityDefinition(
         handle: 'crm.deal',
@@ -40,10 +35,7 @@ beforeEach(function (): void {
         titleAttribute: null,
     ));
 
-    // P2.21: the real ModuleRegistry (no compiled file in Testbench) would
-    // report every module inactive and hit tables never migrated here
-    // (mod_modules) — this fixture's module is active by fiat so the
-    // pre-P2.21 compiled-key expectations below stay valid.
+    // Keep the fixture module active without cross-package module migrations.
     app()->instance(ModuleRegistry::class, new FakeModuleRegistry(['corex/access-tests']));
 
     $this->compileRole = function (string $roleId): void {

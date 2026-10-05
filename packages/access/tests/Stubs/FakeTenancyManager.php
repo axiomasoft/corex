@@ -11,7 +11,7 @@ use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
 
 /**
- * Test double letting AccessChecker/GrantSource/PermissionLayer tests move
+ * Test double letting access tests move
  * the active workspace context on demand. `axiomasoft/corex`'s own boxed default
  * (NullTenancyManager) makes setWorkspace() a deliberate no-op — it cannot
  * stand in here, axiomasoft/corex-access does not depend on axiomasoft/corex-tenancy (AC-28) so
