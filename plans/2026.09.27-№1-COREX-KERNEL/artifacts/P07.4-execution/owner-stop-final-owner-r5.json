@@ -1,0 +1,16 @@
+{
+  "reason": "Owner explicitly stopped Codex and requested a Grok executor handoff without new reviews",
+  "product_commit": "6e7abb425640678e9a00347f7874ebfcc5cf6b29",
+  "validation_attempt": "final-owner-r5",
+  "receipt": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/receipt.json",
+  "green_checks": 25,
+  "interrupted_check": "dependencies",
+  "interrupted_exit_code": -15,
+  "not_executed": [
+    "anti-weakening",
+    "docs",
+    "mutation"
+  ],
+  "product_terminal_written": false,
+  "background_processes_stopped": true
+}

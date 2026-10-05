@@ -1,0 +1,169 @@
+{
+  "actor": "codex/GPT-6",
+  "attempt": 1,
+  "batch_receipt": {
+    "batch_id": "B07-A",
+    "completed_prefix": [
+      "P07.4"
+    ],
+    "handoff_digest": "57bed4bb565269fd9c872ce964234ddb9a44fcbdeb3cf344a333f7c593b4d36a",
+    "invocation_digest": "b3ef78ed6d8146e6135f180aea013ee218b4dfc51496f36018edf4003b582b45",
+    "membership": [
+      "P07.4",
+      "P07.5"
+    ],
+    "routing_digest": "a9cd518ddade9e64fdd62b416850a7d830d347da38dc98a64aa5d211d70fd21d",
+    "schema_version": "batch-receipt/v1",
+    "spec_digest": "30073ac7e5d85044780fca814c828d7a3a22cc7a5a13bb7b3ad968e22965f8f9",
+    "stop_disposition": "continue"
+  },
+  "command": "plan-run",
+  "cost_usd": null,
+  "decision": {
+    "action": "close-green",
+    "recovered": true,
+    "scope_class": "item",
+    "signal_class": "acceptance",
+    "terminal": true,
+    "terminal_evidence": {
+      "repair_exhausted": null,
+      "schema_version": "terminal-evidence/v1",
+      "spec_sha256": "7708656ad5052b4bcabc5f2d08ac58f56d0a90118145a071cfff7b882de5a346",
+      "validation": [
+        {
+          "carrier": "После продуктового commit: `bash scripts/contract-guard.sh` и `bash scripts/contract-guard.sh \"$(cat plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/base-commit.txt)\"` → exit 0.",
+          "evidence_ids": [
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/composite-validation-6e7abb42-r6.json",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/receipt.json",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/candidate-anchor.log",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/contract-head.log",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/contract-base.log"
+          ],
+          "status": "green"
+        },
+        {
+          "carrier": "`git grep -n -i -E 'azguard|az_guard' -- packages/access ':!packages/access/CHANGELOG.md'` → пусто.",
+          "evidence_ids": [
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/composite-validation-6e7abb42-r6.json",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/receipt.json",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/access-azguard-scan.log"
+          ],
+          "status": "green"
+        },
+        {
+          "carrier": "`scripts/php84 composer --working-dir=packages/access test` и `PGSQL_PORT=5434 scripts/php84 composer --working-dir=packages/access test:pg` → exit 0, включая `NativePermissionTest` (examples §9: stale matrix/direct grant на unknown/inactive entity отказывает во всех четырёх paths) без установленного AzGuard в closure access.",
+          "evidence_ids": [
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/composite-validation-6e7abb42-r6.json",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/receipt.json",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/access-closure.log",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/access-tests.log",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/pg-preflight.log",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/access-pg.log"
+          ],
+          "status": "green"
+        },
+        {
+          "carrier": "`scripts/php84 composer --working-dir=packages/access-azguard test` → exit 0 (`AzGuardBridgeTest`: после `RoleMatrixCompiled` `az_guard_role_permissions` совпадает с матрицей; связь в `aut_azguard_role_links`, чистая схема без aut_roles.azguard_role_id, rollback listener, отсутствие foreign Internal).",
+          "evidence_ids": [
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/composite-validation-6e7abb42-r6.json",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/receipt.json",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/bridge-tests.log"
+          ],
+          "status": "green"
+        },
+        {
+          "carrier": "`scripts/php84 composer package-graph-gate`, `scripts/php84 composer manifests:check`, `scripts/php84 composer ownership-gate`, `scripts/php84 composer table-ownership-gate`, `scripts/php84 composer naming-gate` → exit 0; негативы examples §11: mystery отклоняют оба gate, foreign unreleased отклоняет manifest-check; bridge unreleased проходит graph; вернуть.",
+          "evidence_ids": [
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/composite-validation-6e7abb42-r6.json",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/receipt.json",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/graph.log",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/manifests.log",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/ownership.log",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/tables.log",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/naming.log",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/negative-final-6e7abb42-r6/negative-summary.json",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/negative-final-6e7abb42-r6/01-bridge-unreleased-graph.log",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/negative-final-6e7abb42-r6/02-baseline-manifests.log",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/negative-final-6e7abb42-r6/03-mystery-graph.log",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/negative-final-6e7abb42-r6/04-mystery-manifests.log",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/negative-final-6e7abb42-r6/05-foreign-unreleased-manifests.log"
+          ],
+          "status": "green"
+        },
+        {
+          "carrier": "`scripts/php84 composer test:packages`, `PGSQL_PORT=5434 scripts/php84 composer test:pg` → exit 0.",
+          "evidence_ids": [
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/composite-validation-6e7abb42-r6.json",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/receipt.json",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/package-tests.log",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/root-pg.log"
+          ],
+          "status": "green"
+        },
+        {
+          "carrier": "`scripts/php84 php scripts/php-api.php --write` дважды → идентично; `scripts/php84 composer php-api`, `scripts/php84 composer bc-check` → exit 0; diff Golden — только строки P07.4 из досье §4.",
+          "evidence_ids": [
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/composite-validation-6e7abb42-r6.json",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/receipt.json",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/api-write-1.log",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/api-write-2.log",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/api.log",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/bc.log",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/golden-delta.log",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/golden.log",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/golden-semantic-delta.json",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/608be1592adb3a84ac9ade50e7ce5432f80d447f33296b95296beb158f5f5b47/final-acca84ea-r2/receipt.json",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/608be1592adb3a84ac9ade50e7ce5432f80d447f33296b95296beb158f5f5b47/final-acca84ea-r2/bc.log"
+          ],
+          "status": "green"
+        },
+        {
+          "carrier": "`scripts/php84 composer lint:check`, `scripts/php84 composer analyse`, `scripts/php84 composer deps:analyse` → exit 0; `bash scripts/anti-weakening-gate.sh` → exit 0; `php scripts/package-docs-gate.php` → exit 0.",
+          "evidence_ids": [
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/composite-validation-6e7abb42-r6.json",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/receipt.json",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-6e7abb42-owner-residual-r6/receipt.json",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/lint.log",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-owner-r5/analyse.log",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-6e7abb42-owner-residual-r6/dependencies.log",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-6e7abb42-owner-residual-r6/anti-weakening.log",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-6e7abb42-owner-residual-r6/docs.log"
+          ],
+          "status": "green"
+        },
+        {
+          "carrier": "Review `light` (D97): self-check по досье §6; строка `review: self-check GREEN` в Completion Notes.",
+          "evidence_ids": [
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/composite-validation-6e7abb42-r6.json",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/completion.md",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/self-check-6e7abb42.md",
+            "plans/2026.09.27-№1-COREX-KERNEL/decisions/D109-p074-ci-exclusion-and-review-cancellation.md",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/owner-close-direction.md",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4/owner-review/request-withdrawn-D109.json"
+          ],
+          "status": "green"
+        },
+        {
+          "carrier": "docs/dev-doctrine.md D98: bash scripts/mutation-check.sh --all before closure for packages/*/src changes",
+          "evidence_ids": [
+            "docs/dev-doctrine.md",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/composite-validation-6e7abb42-r6.json",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-6e7abb42-owner-residual-r6/receipt.json",
+            "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/canonical-validation/090437a5fb06edfbe8c9206b6c4ee41c6b3fc35787eb70cf63a5fd0cdadc25bd/final-6e7abb42-owner-residual-r6/mutation.log"
+          ],
+          "status": "green"
+        }
+      ]
+    }
+  },
+  "duration_ms": null,
+  "friction": [],
+  "item_id": "P07.4",
+  "note": "P07.4 closed on 6e7abb42 by grok session 01a10b69-39f3-77d0-8472-83fa0bcc70ab. 29 checks and examples §11 GREEN. D109: no new review, CI excluded, no independent GREEN. P07.5 in a fresh session.\nwrite-site: pre_mutation: allow · pre_final: allow",
+  "num_turns": null,
+  "plan_id": "2026.09.27-№1-COREX-KERNEL",
+  "result": "closed-green",
+  "run_id": "92f3d263816d7cdeb6114ca05f94d53fc3fad635d4bd27928f282c721b1cc7f5",
+  "session_id": "01a10a9e-9c38-7e40-be6d-1c15c8c4c018",
+  "ts": "2026-10-05T09:49:35Z"
+}

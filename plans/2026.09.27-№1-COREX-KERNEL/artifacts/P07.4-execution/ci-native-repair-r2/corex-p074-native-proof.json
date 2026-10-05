@@ -1,0 +1,94 @@
+{
+  "base_head": "9e56afe69ef2525f7ec3a68ca3b252e6b9bf1078",
+  "candidate_hashes_before": {
+    ".github/workflows/ci.yml": "6f3b2b3332cd91d371dc8505a3b041f06ece38544d72d4556b50a2d940e44959",
+    "scripts/ci-native-access.py": "967f1dd38bfba4c94bf24ea6affb20e8e17e8c295de787d2c07e931a058f37c0"
+  },
+  "candidate_hashes_after": {
+    ".github/workflows/ci.yml": "6f3b2b3332cd91d371dc8505a3b041f06ece38544d72d4556b50a2d940e44959",
+    "scripts/ci-native-access.py": "967f1dd38bfba4c94bf24ea6affb20e8e17e8c295de787d2c07e931a058f37c0"
+  },
+  "cwd": "/tmp/corex-p074-native-l8jlykl8",
+  "native_hashes_before": {
+    "composer.json": "3720c963ab02eef69bc10dbbc07371172b0881336010dc2b73d4d4a982a45b97",
+    "phpunit.xml": "cd2cee94b88a90bff24efc179d14ae13ff8e4668c1cbc7de528826fb5958ffd1",
+    ".ci-native-phpstan.neon": "d357f6f92515e6fbe2432bfe1aa9ce35cf4160c25a5076a28dad812a62312a5a",
+    ".ci-native-tests-lint.neon": "f6055e13393a2bf5fef210bcc7c43913d133da3f7b3b4ba6c9fd92ca579b08b5"
+  },
+  "native_hashes_after": {
+    "composer.json": "3720c963ab02eef69bc10dbbc07371172b0881336010dc2b73d4d4a982a45b97",
+    "phpunit.xml": "cd2cee94b88a90bff24efc179d14ae13ff8e4668c1cbc7de528826fb5958ffd1",
+    ".ci-native-phpstan.neon": "d357f6f92515e6fbe2432bfe1aa9ce35cf4160c25a5076a28dad812a62312a5a",
+    ".ci-native-tests-lint.neon": "f6055e13393a2bf5fef210bcc7c43913d133da3f7b3b4ba6c9fd92ca579b08b5"
+  },
+  "idempotent": true,
+  "credential_profile": "COMPOSER_AUTH={} and isolated COMPOSER_HOME",
+  "native_upstream_class_exists": false,
+  "native_bridge_options_loadable": true,
+  "commands": {
+    "composer": {
+      "command": [
+        "php8.4",
+        "/home/vostrikov/.config/herd-lite/bin/composer",
+        "update",
+        "--dry-run",
+        "--no-install",
+        "--prefer-dist",
+        "--no-interaction",
+        "--no-progress"
+      ],
+      "exit_code": 0,
+      "log": "/tmp/corex-p074-native-composer.log"
+    },
+    "phpstan": {
+      "command": [
+        "php8.4",
+        "vendor/phpstan/phpstan/phpstan",
+        "analyse",
+        "-c",
+        ".ci-native-phpstan.neon",
+        "--memory-limit=2G",
+        "--no-progress"
+      ],
+      "exit_code": 0,
+      "log": "/tmp/corex-p074-native-phpstan.log"
+    },
+    "arch-discovery": {
+      "command": [
+        "php8.4",
+        "vendor/pestphp/pest/bin/pest",
+        "--testsuite=Arch",
+        "--list-tests"
+      ],
+      "exit_code": 0,
+      "log": "/tmp/corex-p074-native-arch-discovery.log"
+    },
+    "api-contract": {
+      "command": [
+        "php8.4",
+        "scripts/check-api-contract.php"
+      ],
+      "exit_code": 0,
+      "log": "/tmp/corex-p074-native-api-contract.log"
+    },
+    "configuration-reference": {
+      "command": [
+        "php8.4",
+        "scripts/configuration-reference.php",
+        "--check"
+      ],
+      "exit_code": 0,
+      "log": "/tmp/corex-p074-native-configuration-reference.log"
+    }
+  },
+  "actionlint": {
+    "version": "1.7.12",
+    "exit_code": 0,
+    "log": "/tmp/corex-p074-actionlint.log"
+  },
+  "full_graph_scope": "Unchanged architecture suite and strict source API run in secret-gated bridge job. Discovery proves only PackageGraphTest relocated from native suite. Golden/coverage/BC remain full jobs with upstream auth.",
+  "upstream_resolution_probe_logs": [
+    "/tmp/corex-p074-native-package-graph.log",
+    "/tmp/corex-p074-native-source-api.log"
+  ]
+}

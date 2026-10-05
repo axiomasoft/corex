@@ -1,0 +1,113 @@
+{
+  "schema_version": "repair-decision/v1",
+  "plan_id": "2026.09.27-№1-COREX-KERNEL",
+  "item_id": "P07.4",
+  "origin": "validation",
+  "original_carrier": {
+    "command": "scripts/php84 composer test:packages",
+    "digest": "adc16f4fc6b84d30624da87a39a362ce7d82ec2fea72a1779f2f6860d745a533",
+    "result": "red"
+  },
+  "baseline": {
+    "reproduced": false,
+    "carrier": null
+  },
+  "candidate": {
+    "delta_proved": true,
+    "evidence_ids": [
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/validation-90f21c877997-r1/package-tests.log"
+    ]
+  },
+  "affected_paths": [
+    {
+      "path": "packages/access-azguard/src/AccessAzguardRegistrar.php",
+      "owner_item": "P07.4",
+      "declared_file": true
+    },
+    {
+      "path": "packages/access-azguard/src/AccessAzguardServiceProvider.php",
+      "owner_item": "P07.4",
+      "declared_file": true
+    },
+    {
+      "path": "packages/access-azguard/src/Internal/AccessAzguardOptions.php",
+      "owner_item": "P07.4",
+      "declared_file": true
+    },
+    {
+      "path": "packages/access-azguard/src/Internal/Laravel/AccessAzguardBindingsRegistrar.php",
+      "owner_item": "P07.4",
+      "declared_file": true
+    },
+    {
+      "path": "packages/access-azguard/tests/Feature/BridgeConfigurationTest.php",
+      "owner_item": "P07.4",
+      "declared_file": true
+    },
+    {
+      "path": "packages/access-azguard/composer-dependency-analyser.php",
+      "owner_item": "P07.4",
+      "declared_file": true
+    },
+    {
+      "path": "scripts/configuration-classes.json",
+      "owner_item": "P07.4",
+      "declared_file": false
+    },
+    {
+      "path": "docs/architecture/configuration.md",
+      "owner_item": "P07.4",
+      "declared_file": false
+    },
+    {
+      "path": "tests/Golden/GoldenTestCase.php",
+      "owner_item": "P07.4",
+      "declared_file": false
+    },
+    {
+      "path": "tests/Golden/REBASELINE.md",
+      "owner_item": "P07.4",
+      "declared_file": false
+    }
+  ],
+  "bounded_diff": {
+    "files_changed": 10,
+    "max_files": 12,
+    "reversible": true
+  },
+  "material_surface": {
+    "public": false,
+    "frozen": false,
+    "security": false,
+    "schema": false,
+    "dependency": false,
+    "authority": false,
+    "irreversible": false,
+    "product": true,
+    "test_topology": true
+  },
+  "pre_validation": [
+    {
+      "command": "scripts/php84 composer test:packages",
+      "digest": "adc16f4fc6b84d30624da87a39a362ce7d82ec2fea72a1779f2f6860d745a533",
+      "result": "red"
+    },
+    {
+      "command": "scripts/php84 composer deps:analyse",
+      "digest": "b52fd909861ba91a5f79d91e7a531aa20a470c6cc49878c91bfbf69a298518b3",
+      "result": "red"
+    },
+    {
+      "command": "bash scripts/anti-weakening-gate.sh",
+      "digest": "2f20af7225ec222a3d79b84dfed1b13f400fc98318532022eae00190b4337c24",
+      "result": "red"
+    }
+  ],
+  "post_validation": [],
+  "evidence_ids": [
+    "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/validation-90f21c877997-r1/package-tests.log",
+    "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/validation-90f21c877997-r1/dependencies.log",
+    "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P07.4-execution/validation-90f21c877997-r1/anti-weakening.log"
+  ],
+  "design": null
+}

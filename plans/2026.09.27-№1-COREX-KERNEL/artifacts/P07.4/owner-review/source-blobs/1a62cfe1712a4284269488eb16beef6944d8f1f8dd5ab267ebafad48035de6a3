@@ -1,0 +1,33 @@
+{
+  "added": [
+    "CoreX\\AccessAzguard\\AccessAzguardRegistrar",
+    "CoreX\\AccessAzguard\\AccessAzguardServiceProvider",
+    "CoreX\\AccessAzguard\\Internal\\AccessAzguardOptions",
+    "CoreX\\AccessAzguard\\Internal\\AutMatrixGrantSource",
+    "CoreX\\AccessAzguard\\Internal\\AzGuardRoleModel",
+    "CoreX\\AccessAzguard\\Internal\\Laravel\\AccessAzguardBindingsRegistrar",
+    "CoreX\\AccessAzguard\\Internal\\MatrixPermissionCatalogBuilder",
+    "CoreX\\AccessAzguard\\Internal\\RoleLinkStore",
+    "CoreX\\AccessAzguard\\Internal\\SyncAzGuardRolePermissions",
+    "CoreX\\AccessAzguard\\Internal\\TenantContextGuard",
+    "CoreX\\AccessAzguard\\Internal\\WorkspacePermissionLayer",
+    "CoreX\\Access\\Matrix\\Events\\RoleMatrixCompiled"
+  ],
+  "removed": [
+    "CoreX\\Access\\Access\\Internal\\AutMatrixGrantSource",
+    "CoreX\\Access\\Access\\Internal\\WorkspacePermissionLayer",
+    "CoreX\\Access\\Matrix\\Internal\\MatrixPermissionCatalogBuilder",
+    "CoreX\\Access\\Matrix\\Laravel\\AzGuardRoleModel",
+    "CoreX\\Access\\Tenancy\\Internal\\TenantContextGuard"
+  ],
+  "changed": [
+    "CoreX\\Access\\Access\\Internal\\DefaultAccessChecker",
+    "CoreX\\Access\\Access\\Internal\\DefaultScopeResolver",
+    "CoreX\\Access\\Access\\Internal\\DirectGrantLookup",
+    "CoreX\\Access\\Access\\Laravel\\PrincipalIdentity",
+    "CoreX\\Access\\Laravel\\AuthOptions",
+    "CoreX\\Access\\Matrix\\Internal\\DatabaseRoleMatrixCompiler",
+    "CoreX\\Access\\Roles\\Data\\RoleView",
+    "CoreX\\Access\\Roles\\Laravel\\RoleMatrixData"
+  ]
+}

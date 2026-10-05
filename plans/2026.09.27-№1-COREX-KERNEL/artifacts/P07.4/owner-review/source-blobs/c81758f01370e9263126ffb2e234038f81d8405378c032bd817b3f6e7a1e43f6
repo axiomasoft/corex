@@ -1,0 +1,7 @@
+candidate=90f21c877997ccd69055ccb5cdda1b7e5ebe9d01
+command=scripts/php84 composer test:pg
+started=2026-10-05T06:52:28.125428+00:00
+> vendor/bin/pest --group=pg
+{"tool":"pest","result":"passed","tests":242,"passed":242,"assertions":1156,"duration_ms":40537}
+
+exit=0

@@ -1,0 +1,92 @@
+{"compare": "item_base...HEAD", "item_base": "9fe70584928a409b9a6377655ceaa71e4e575cc2", "product_commit": "6e7abb425640678e9a00347f7874ebfcc5cf6b29"}
+commit 6e7abb425640678e9a00347f7874ebfcc5cf6b29
+Author:     t <t@t>
+AuthorDate: Mon Oct 5 12:25:54 2026 +0300
+Commit:     t <t@t>
+CommitDate: Mon Oct 5 12:25:54 2026 +0300
+
+    fix(access-azguard): use coalesce guard accepted by static analysis
+ .github/workflows/ci.yml                           |   12 +
+ composer.json                                      |    3 +-
+ composer.lock                                      |   79 +-
+ docs/architecture/configuration.md                 |    8 +-
+ docs/architecture/table-ownership.md               |   12 +-
+ docs/architecture/taxonomy.md                      |    2 +
+ docs/reference/public-api.md                       |   11 +-
+ packages/access-azguard/CHANGELOG.md               |    7 +
+ packages/access-azguard/PACKAGE.md                 |   13 +
+ packages/access-azguard/README.md                  |   13 +
+ .../composer-dependency-analyser.php               |   19 +
+ packages/access-azguard/composer.json              |  108 +++
+ .../access-azguard/config/corex-access-azguard.php |   14 +
+ ..._000001_create_aut_azguard_role_links_table.php |   23 +
+ packages/access-azguard/phpstan.neon               |   12 +
+ packages/access-azguard/phpunit.xml                |   17 +
+ .../resources/contracts/php-api.json               |  106 ++
+ .../access-azguard/src/AccessAzguardRegistrar.php  |   44 +
+ .../src/AccessAzguardServiceProvider.php           |   37 +
+ .../src/Internal/AccessAzguardOptions.php          |   78 ++
+ .../src}/Internal/AutMatrixGrantSource.php         |   34 +-
+ .../src/Internal}/AzGuardRoleModel.php             |    7 +-
+ .../Laravel/AccessAzguardBindingsRegistrar.php     |   37 +
+ .../Internal/MatrixPermissionCatalogBuilder.php    |   14 +-
+ .../access-azguard/src/Internal/RoleLinkStore.php  |   21 +
+ .../src/Internal/SyncAzGuardRolePermissions.php    |   64 ++
+ .../src}/Internal/TenantContextGuard.php           |    2 +-
+ .../src}/Internal/WorkspacePermissionLayer.php     |    2 +-
+ .../tests/Feature/AzGuardBridgeTest.php            |  332 +++++++
+ .../tests/Feature/BladeDirectivesTest.php          |    0
+ .../tests/Feature/BridgeConfigurationTest.php      |  117 +++
+ .../tests/Feature/TenantContextGuardTest.php       |    4 +-
+ packages/access-azguard/tests/Pest.php             |   11 +
+ .../tests/Stubs/ContextUser.php                    |    2 +-
+ packages/access-azguard/tests/Stubs/Project.php    |   18 +
+ packages/access-azguard/tests/TestCase.php         |   52 +
+ .../2026_06_14_000000_create_projects_table.php    |   27 +
+ packages/access/CHANGELOG.md                       |    6 +
+ packages/access/PACKAGE.md                         |   12 +-
+ packages/access/README.md                          |  147 +--
+ packages/access/composer.json                      |   39 +-
+ packages/access/config/corex-access.php            |   47 +-
+ .../2026_07_26_200001_create_aut_roles_table.php   |    8 +-
+ ...10_04_000001_create_aut_direct_grants_table.php |   29 +
+ packages/access/phpstan-baseline.neon              |   60 --
+ packages/access/resources/contracts/php-api.json   |  164 +---
+ .../src/Access/Internal/DefaultAccessChecker.php   |   33 +-
+ .../src/Access/Internal/DefaultScopeResolver.php   |   18 +-
+ .../src/Access/Internal/DirectGrantLookup.php      |   29 +-
+ .../src/Access/Laravel/PrincipalIdentity.php       |   18 +-
+ packages/access/src/Contracts/AccessChecker.php    |    6 +-
+ .../access/src/Contracts/RoleMatrixCompiler.php    |    6 +-
+ .../src/Extend/Internal/PermissionsMerger.php      |    5 +-
+ .../access/src/Laravel/AccessBindingsRegistrar.php |   43 -
+ .../src/Laravel/AccessIntegrationRegistrar.php     |   24 -
+ packages/access/src/Laravel/AuthOptions.php        |    9 -
+ .../src/Matrix/Events/RoleMatrixCompiled.php       |   13 +
+ .../Matrix/Internal/DatabaseRoleMatrixCompiler.php |   67 +-
+ .../access/src/Matrix/Internal/ScopeMapVersion.php |    5 +-
+ packages/access/src/Roles/Data/RoleView.php        |    2 +-
+ packages/access/src/Roles/Internal/Models/Role.php |    4 +-
+ .../access/src/Roles/Laravel/RoleMatrixData.php    |    9 +-
+ packages/access/tests/ConfigReportSectionTest.php  |    3 +-
+ packages/access/tests/Pg/AccessCheckerTest.php     |   81 +-
+ packages/access/tests/Pg/AutSchemaTest.php         |   15 +-
+ packages/access/tests/Pg/NativePermissionTest.php  |  101 ++
+ packages/access/tests/Pg/PermissionsMergerTest.php |  130 +--
+ packages/access/tests/Pg/PrincipalTypesTest.php    |   10 +-
+ .../access/tests/Pg/RoleMatrixCompilerTest.php     |  312 ++----
+ packages/access/tests/Pg/ScopeResolverTest.php     |   11 +-
+ packages/access/tests/Pg/SystemRolesTest.php       |    1 -
+ packages/access/tests/PgTestCase.php               |   12 +-
+ packages/access/tests/Stubs/FakeTenancyManager.php |    2 +-
+ packages/access/tests/Support/CoreAuthTestCase.php |    4 +-
+ scripts/bc/approved-deltas.json                    |  114 +++
+ scripts/configuration-classes.json                 |   33 +-
+ scripts/manifest-check.py                          |    8 +
+ scripts/ownership-map.json                         |    8 +
+ scripts/package-graph-gate.php                     |    2 +-
+ tests/Golden/GoldenTestCase.php                    |    2 +
+ tests/Golden/REBASELINE.md                         |    1 +
+ tests/Golden/baseline/php-surface.json             | 1010 +++++++++++---------
+ 82 files changed, 2504 insertions(+), 1521 deletions(-)
+product_worktree_status=''

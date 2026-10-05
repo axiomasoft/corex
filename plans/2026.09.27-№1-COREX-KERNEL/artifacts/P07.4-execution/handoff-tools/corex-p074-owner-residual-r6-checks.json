@@ -1,0 +1,79 @@
+[
+  {
+    "id": "dependencies",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "python3",
+      "-c",
+      "import subprocess,json,os\nnative=\"if (!extension_loaded('redis') || !extension_loaded('igbinary')) { throw new RuntimeException('Native Redis runtime missing'); } echo json_encode(['php'=>PHP_VERSION,'redis'=>phpversion('redis'),'igbinary'=>phpversion('igbinary'),'ini_scan_dir'=>getenv('PHP_INI_SCAN_DIR'),'redis_sha256'=>hash_file('sha256','/tmp/corex-p074-php-runtime/usr/lib/php/20240924/redis.so'),'igbinary_sha256'=>hash_file('sha256','/tmp/corex-p074-php-runtime/usr/lib/php/20240924/igbinary.so'),'origin'=>'apt package from configured ondrej/php PPA; extracted locally; no system configuration changed'], JSON_PRETTY_PRINT).PHP_EOL;\"\nsubprocess.run(['scripts/php84','php','-r',native],check=True)\nraise SystemExit(subprocess.run(['scripts/php84','composer','deps:analyse']).returncode)\n"
+    ],
+    "depends_on": [],
+    "env": {
+      "PHP_INI_SCAN_DIR": "/etc/php/8.4/cli/conf.d:/tmp/corex-p074-php-runtime/ini"
+    }
+  },
+  {
+    "id": "anti-weakening",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "bash",
+      "scripts/anti-weakening-gate.sh"
+    ],
+    "depends_on": [
+      "dependencies"
+    ]
+  },
+  {
+    "id": "docs",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "scripts/php84",
+      "php",
+      "scripts/package-docs-gate.php"
+    ],
+    "depends_on": [
+      "anti-weakening"
+    ]
+  },
+  {
+    "id": "mutation",
+    "argv": [
+      "env",
+      "XDEBUG_MODE=off",
+      "PGSQL_HOST=127.0.0.1",
+      "PGSQL_PORT=5434",
+      "PGSQL_DATABASE=corex_test",
+      "PGSQL_USERNAME=corex",
+      "PGSQL_PASSWORD=corex",
+      "BC_CHECK_JOBS=1",
+      "scripts/php84",
+      "bash",
+      "scripts/mutation-check.sh",
+      "--all"
+    ],
+    "depends_on": [
+      "docs"
+    ]
+  }
+]

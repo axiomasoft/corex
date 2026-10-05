@@ -1,0 +1,10 @@
+candidate=6e7abb425640678e9a00347f7874ebfcc5cf6b29
+command=scripts/php84 composer package-graph-gate
+mutation=mystery
+started=2026-10-05T09:45:44.104771+00:00
+> bash scripts/ci-deferred-guard.sh php scripts/package-graph-gate.php
+package-graph-gate: invalid extra.corex.stability in packages/access/composer.json
+Script bash scripts/ci-deferred-guard.sh php scripts/package-graph-gate.php handling the package-graph-gate event returned with error code 2
+
+exit=2
+verified=true

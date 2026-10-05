@@ -1,0 +1,13 @@
+NAME               IMAGE                COMMAND                  SERVICE   CREATED        STATUS                 PORTS
+corex_pgsql_test   postgres:16-alpine   "docker-entrypoint.s…"   pgsql     2 months ago   Up 3 hours (healthy)   127.0.0.1:5434->5432/tcp
+/var/run/postgresql:5432 - accepting connections
+{
+    "mode": "host",
+    "host_port": "5434",
+    "connection": {
+        "database": "corex_test",
+        "address": "172.21.0.2\/32",
+        "server_port": 5432
+    },
+    "migrations": "Package and root PG TestCase fixtures apply migrations in isolated test database"
+}
