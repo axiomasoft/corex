@@ -20,6 +20,7 @@ use CoreX\Tenancy\Laravel\Support\AccountLifecyclePolicy;
 use CoreX\Tenancy\Laravel\Support\ImpersonationPolicy;
 use CoreX\Tenancy\Laravel\Support\StatusGatePolicy;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
+use CoreX\Tenancy\Provisioning\Contracts\TemplateDatabaseCloner;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateClonePostgreSQLManager;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Runtime\Internal\Bootstrappers\CachePrefixBootstrapper;
@@ -150,6 +151,8 @@ final class RuntimeRegistrar implements PackageRegistrar
                 ephemeralRoot: $app->make(TenancyOptions::class)->storageEphemeralRoot,
             ),
         );
+
+        $app->bind(TemplateDatabaseCloner::class, TemplateClonePostgreSQLManager::class);
 
         $app->bind(
             TemplateClonePostgreSQLManager::class,

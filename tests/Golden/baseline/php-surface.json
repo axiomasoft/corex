@@ -66805,7 +66805,7 @@
                     {
                         "byRef": false,
                         "name": "manager",
-                        "type": "CoreX\\Tenancy\\Provisioning\\Internal\\Database\\TemplateClonePostgreSQLManager",
+                        "type": "CoreX\\Tenancy\\Provisioning\\Contracts\\TemplateDatabaseCloner",
                         "variadic": false
                     }
                 ],
@@ -78642,6 +78642,43 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Tenancy\\Provisioning\\Contracts\\TemplateDatabaseCloner": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "createForAccount": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "account",
+                        "type": "CoreX\\Context\\Data\\AccountRef",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            },
+            "databaseExists": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "bool",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Tenancy\\Provisioning\\Contracts\\TemplateIntegrityChecks": {
         "abstract": false,
         "constants": [],
@@ -79226,7 +79263,9 @@
         "abstract": false,
         "constants": [],
         "final": true,
-        "interfaces": [],
+        "interfaces": [
+            "CoreX\\Tenancy\\Provisioning\\Contracts\\TemplateDatabaseCloner"
+        ],
         "internal": true,
         "kind": "class",
         "methods": {

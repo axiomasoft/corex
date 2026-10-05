@@ -3,6 +3,7 @@
   "layer": "php-surface",
   "added": [
     "CoreX\\Notifications\\Internal\\DigestSchedulerCheck",
+    "CoreX\\Tenancy\\Provisioning\\Contracts\\TemplateDatabaseCloner",
     "CoreX\\Scheduling\\Contracts\\DueWakeupHandler",
     "CoreX\\Scheduling\\Contracts\\DueWakeupSource",
     "CoreX\\Scheduling\\Contracts\\WakeupScheduler",
@@ -39,7 +40,9 @@
   "changed_behavior": [
     "CoreX\\Scheduling\\Contracts\\DueWakeupSource constant TAG",
     "CoreX\\Scheduling\\Data\\WakeupHandlerDefinition constant TAG",
-    "CoreX\\Notifications\\Digest\\Internal\\SqlDigestBuilder nullable WakeupScheduler; enabled null throws InvalidConfiguration before writes"
+    "CoreX\\Notifications\\Digest\\Internal\\SqlDigestBuilder nullable WakeupScheduler; enabled null throws InvalidConfiguration before writes",
+    "CoreX\\Tenancy\\Account\\Internal\\Jobs\\CreateDatabaseFromTemplate handle manager type is TemplateDatabaseCloner",
+    "CoreX\\Tenancy\\Provisioning\\Internal\\Database\\TemplateClonePostgreSQLManager implements TemplateDatabaseCloner"
   ],
   "preserved": ["routes", "events", "wire"]
 }

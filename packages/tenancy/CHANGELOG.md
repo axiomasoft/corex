@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — PLAN3.P07.5 module layout
+
+- Added `CoreX\Tenancy\Provisioning\Contracts\TemplateDatabaseCloner`. Account provisioning calls that port; `TemplateClonePostgreSQLManager` stays inside Provisioning and implements it.
+
 ## Unreleased — PLAN3.P07.3 impersonation profiles and audit
 
 - Replaced the approval flag with `corex-tenancy.impersonation.profile` (`dev`, `standard`, `regulated`). Grant rules are enforced in one atomic claim; regulated approval requires a distinct staff identity. Added grant and audit ports, committed central plus tenant audit for standard/regulated, fail-closed access, and a production acknowledgement for dev. The Eloquent write guard is scoped with an instance `allowing()` method. This is an unpublished pre-1.0 PHP/configuration contract change.

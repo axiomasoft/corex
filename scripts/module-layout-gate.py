@@ -8,7 +8,7 @@ Scope: every PHP file under `packages/*/src/` (the product keeps its own layout,
       a package `src/` has no layer bucket directory (`Support`, `Models`, `Commands`, ...).
   R2  a public category (`Contracts|Data|Enums|Events|Exceptions`) sits only directly under a module.
   R3  a file lives in a public category or in a bridge (`Internal|Laravel|Testing|PHPStan`) of its module; a module may
-      also hold its service provider directly, and only a package root holds `<Pkg>Module.php`.
+      also hold its service provider directly, and only a package root holds `<Pkg>Module.php` or its package `*Registrar.php`.
   R4  `Internal` only directly under a module (never nested).
   R5  no reference into the `Internal` of another module of the same package, except from a composition root
       (permitted provider/root entry, `Laravel` directly under the module; PLAN3.D58).
@@ -156,10 +156,11 @@ def evaluate(files: list[dict], config: dict) -> list[dict]:
         if f['namespace'] != expected:
             add('R0', f, f"{f['namespace']} != {expected}")
         kernel = f['package'] == KERNEL
-        # A service provider may sit directly in the package root or in its own module; `<Pkg>Module.php` only in the root.
+        # A service provider may sit directly in the package root or in its own module; `<Pkg>Module.php` and the
+        # package composition registrar (`*Registrar.php`) only in the root.
         root_entry = (name.endswith('ServiceProvider.php') and not f['inner'] and f['module'] is not None) or \
             (not dirs and (name == 'CoreServiceProvider.php' if kernel else
-                          name.endswith(('ServiceProvider.php', 'Module.php'))))
+                          name.endswith(('ServiceProvider.php', 'Module.php', 'Registrar.php'))))
         if kernel and not root_entry and f['module'] is None:
             add('R1', f, 'kernel root holds only CoreServiceProvider and kernel modules')
             continue

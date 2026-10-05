@@ -1,6 +1,6 @@
 {
     "schema": "package-graph-report/1",
-    "generated_at": "2026-10-05T10:39:03+00:00",
+    "generated_at": "2026-10-05T11:34:27+00:00",
     "legacy_namespace_splits": [],
     "reservations": [
         {
@@ -19,7 +19,7 @@
     "violations": [],
     "summary": {
         "packages_scanned": 22,
-        "classes_indexed": 1420,
+        "classes_indexed": 1421,
         "violation_count": 0,
         "legacy_split_count": 0,
         "reservation_count": 1

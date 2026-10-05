@@ -7,6 +7,7 @@ namespace CoreX\Tenancy\Provisioning\Internal\Database;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Tenancy\Account\Laravel\AccountTemplateSnapshot;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
+use CoreX\Tenancy\Provisioning\Contracts\TemplateDatabaseCloner;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
 use RuntimeException;
@@ -33,7 +34,7 @@ use Throwable;
  *
  * @internal spec: D24, premortem A3/B3, R-11 §2.3 п.2, F-DDL1
  */
-final class TemplateClonePostgreSQLManager
+final class TemplateClonePostgreSQLManager implements TemplateDatabaseCloner
 {
     private const int QUARANTINE_RETRIES = 5;
 

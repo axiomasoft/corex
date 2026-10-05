@@ -8,8 +8,8 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\ProvisionParams;
 use CoreX\Tenancy\Account\Laravel\AccountTemplateSnapshot;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
+use CoreX\Tenancy\Provisioning\Contracts\TemplateDatabaseCloner;
 use CoreX\Tenancy\Provisioning\Contracts\TemplateIntegrityChecks as TemplateIntegrityVerifier;
-use CoreX\Tenancy\Provisioning\Internal\Database\TemplateClonePostgreSQLManager;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -32,7 +32,7 @@ final class CreateDatabaseFromTemplate implements ShouldQueue
     public function handle(
         TemplateIntegrityVerifier $templateIntegrityVerifier,
         TenancyOptions $options,
-        TemplateClonePostgreSQLManager $manager,
+        TemplateDatabaseCloner $manager,
     ): bool {
         $snapshot = AccountTemplateSnapshot::capture($this->account, $options->centralConnection);
 

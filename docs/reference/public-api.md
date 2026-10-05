@@ -879,6 +879,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Tenancy\Membership\Exceptions\RevokeUncertain` | api | 1.0 |
 | `CoreX\Tenancy\Membership\Laravel\MembershipSnapshotFactory` | spi-call | 1.0 |
 | `CoreX\Tenancy\Membership\Laravel\RevokeMembershipReceiptFactory` | spi-call | 1.0 |
+| `CoreX\Tenancy\Provisioning\Contracts\TemplateDatabaseCloner` | spi-call | 1.0 |
 | `CoreX\Tenancy\Provisioning\Contracts\TemplateIntegrityChecks` | spi-call | 1.0 |
 | `CoreX\Tenancy\Provisioning\Data\ClaimRequest` | api | 1.0 |
 | `CoreX\Tenancy\Provisioning\Data\ClaimResult` | api | 1.0 |

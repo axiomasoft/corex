@@ -9187,6 +9187,64 @@
             "enum_backing": null,
             "enum_cases": []
         },
+        "CoreX\\Tenancy\\Provisioning\\Contracts\\TemplateDatabaseCloner": {
+            "kind": "interface",
+            "layer": "spi-call",
+            "since": "1.0",
+            "final": false,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": {
+                "createForAccount": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": true,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "account",
+                            "type": "CoreX\\Context\\Data\\AccountRef",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "bool",
+                    "doc": []
+                },
+                "databaseExists": {
+                    "visibility": "public",
+                    "static": false,
+                    "final": false,
+                    "abstract": true,
+                    "by_reference": false,
+                    "parameters": [
+                        {
+                            "name": "name",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 0
+                        }
+                    ],
+                    "return": "bool",
+                    "doc": []
+                }
+            },
+            "properties": [],
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": []
+        },
         "CoreX\\Tenancy\\Provisioning\\Contracts\\TemplateIntegrityChecks": {
             "kind": "interface",
             "layer": "spi-call",
