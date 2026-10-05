@@ -34,6 +34,6 @@ final readonly class WorkspacePermissionLayer implements PermissionLayer
     #[Override]
     public function cacheDiscriminator(string $panelId): string
     {
-        return $this->tenancyManager->context()?->workspace->id ?? '';
+        return $this->tenancyManager->context()?->workspace?->id ?? '';
     }
 }

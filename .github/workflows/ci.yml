@@ -8,6 +8,87 @@ on:
 permissions: {}
 
 jobs:
+  # Fork PRs have no upstream secret; native Access jobs remain independent.
+  azguard-availability:
+    runs-on: ubuntu-latest
+    name: Optional AzGuard credentials
+    outputs:
+      available: ${{ steps.credentials.outputs.available }}
+    steps:
+      - name: Check upstream read credentials
+        id: credentials
+        env:
+          AZGUARD_READ_TOKEN: ${{ secrets.AZGUARD_READ_TOKEN }}
+        run: |
+          if [[ -n "$AZGUARD_READ_TOKEN" ]]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Optional AzGuard jobs require AZGUARD_READ_TOKEN; native Access validation continues."
+          fi
+
+  access-azguard-tests:
+    permissions:
+      contents: read
+    needs: azguard-availability
+    if: needs.azguard-availability.outputs.available == 'true'
+    runs-on: ubuntu-latest
+    name: Optional Access AzGuard bridge and full quality
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_DB: corex_test
+          POSTGRES_USER: corex
+          POSTGRES_PASSWORD: corex
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U corex -d corex_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      COMPOSER_AUTH: '{"github-oauth":{"github.com":"${{ secrets.AZGUARD_READ_TOKEN }}"}}'
+      PGSQL_HOST: 127.0.0.1
+      PGSQL_PORT: 5432
+      PGSQL_DATABASE: corex_test
+      PGSQL_USERNAME: corex
+      PGSQL_PASSWORD: corex
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
+          coverage: none
+      - name: Install full root and Access harness dependencies
+        run: |
+          composer update --prefer-dist --no-interaction --no-progress
+          composer audit --locked
+          for package in access access-azguard; do
+            composer --working-dir="packages/$package" update --prefer-dist --no-interaction --no-progress
+            composer audit --locked --working-dir="packages/$package"
+          done
+      - name: Bridge SQLite tests
+        run: composer --working-dir=packages/access-azguard test
+      - name: Bridge PostgreSQL tests
+        run: composer --working-dir=packages/access-azguard test:pg
+      - name: Full architecture and package graph regression suite
+        run: composer test:arch
+      - name: Full source API contracts (including upstream types)
+        run: composer php-api
+      - name: Full PHPStan (including bridge and Golden application)
+        run: composer analyse
+      - name: Full modules lint
+        run: composer analyse:tests-lint
+      - name: Bridge standalone dependency analysis
+        run: bash scripts/dependency-analyser.sh packages/access-azguard
+      - name: Bridge standalone dependency audit
+        run: composer audit --locked --working-dir=packages/access-azguard
+
   anti-weakening-gate:
     permissions:
       contents: read
@@ -51,6 +132,9 @@ jobs:
       - name: Laravel 12 test stack
         if: matrix.laravel == '12.*'
         run: composer require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
+
+      - name: Prepare native CI dependencies (without optional AzGuard)
+        run: python3 scripts/ci-native-access.py
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress --with "illuminate/contracts:$LARAVEL_VERSION"
@@ -114,6 +198,9 @@ jobs:
         if: matrix.laravel == '12.*'
         run: composer require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
 
+      - name: Prepare native CI dependencies (without optional AzGuard)
+        run: python3 scripts/ci-native-access.py
+
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress --with "illuminate/contracts:$LARAVEL_VERSION"
 
@@ -169,6 +256,9 @@ jobs:
         if: matrix.laravel == '12.*'
         run: composer --working-dir=packages/operations require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
 
+      - name: Prepare native CI dependencies (without optional AzGuard)
+        run: python3 scripts/ci-native-access.py
+
       - name: Install root tooling and shared test dependencies
         run: composer update --prefer-dist --no-interaction --no-progress --with "illuminate/contracts:$LARAVEL_VERSION"
 
@@ -217,6 +307,9 @@ jobs:
       - name: Laravel 12 test stack
         if: matrix.laravel == '12.*'
         run: composer --working-dir=packages/tools require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
+
+      - name: Prepare native CI dependencies (without optional AzGuard)
+        run: python3 scripts/ci-native-access.py
 
       - name: Install root tooling and shared test dependencies
         run: composer update --prefer-dist --no-interaction --no-progress --with "illuminate/contracts:$LARAVEL_VERSION"
@@ -267,6 +360,9 @@ jobs:
         if: matrix.laravel == '12.*'
         run: composer --working-dir=packages/webhooks require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
 
+      - name: Prepare native CI dependencies (without optional AzGuard)
+        run: python3 scripts/ci-native-access.py
+
       - name: Install root tooling and shared test dependencies
         run: composer update --prefer-dist --no-interaction --no-progress --with "illuminate/contracts:$LARAVEL_VERSION"
 
@@ -297,6 +393,9 @@ jobs:
           php-version: '8.4'
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
+      - name: Prepare native CI dependencies (without optional AzGuard)
+        run: python3 scripts/ci-native-access.py
+
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
 
@@ -339,6 +438,9 @@ jobs:
           php-version: '8.4'
           extensions: mbstring, pdo, pdo_pgsql, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
+      - name: Prepare native CI dependencies (without optional AzGuard)
+        run: python3 scripts/ci-native-access.py
+
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
 
@@ -380,6 +482,9 @@ jobs:
           php-version: '8.4'
           extensions: mbstring, pdo, pdo_pgsql, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd, xdebug
           coverage: xdebug
+      - name: Prepare native CI dependencies (without optional AzGuard)
+        run: python3 scripts/ci-native-access.py
+
       - name: Install root tooling and shared test dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
 
@@ -418,6 +523,9 @@ jobs:
           php-version: '8.4'
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd, gd, xdebug
           coverage: xdebug
+      - name: Prepare native CI dependencies (without optional AzGuard)
+        run: python3 scripts/ci-native-access.py
+
       - name: Install root tooling and shared test dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
 
@@ -462,6 +570,9 @@ jobs:
           php-version: '8.4'
           extensions: mbstring, pdo, pdo_pgsql, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
+      - name: Prepare native CI dependencies (without optional AzGuard)
+        run: python3 scripts/ci-native-access.py
+
       - name: Install root tooling and shared test dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
 
@@ -532,6 +643,9 @@ jobs:
         if: matrix.laravel == '12.*'
         run: composer --working-dir=packages/tenancy require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
 
+      - name: Prepare native CI dependencies (without optional AzGuard)
+        run: python3 scripts/ci-native-access.py
+
       - name: Install root tooling and shared test dependencies
         run: composer update --prefer-dist --no-interaction --no-progress --with "illuminate/contracts:$LARAVEL_VERSION"
 
@@ -600,6 +714,9 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd, xdebug
           coverage: xdebug
 
+      - name: Prepare native CI dependencies (without optional AzGuard)
+        run: python3 scripts/ci-native-access.py
+
       - name: Install root tooling and shared test dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
 
@@ -637,6 +754,9 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd, xdebug
           coverage: xdebug
 
+      - name: Prepare native CI dependencies (without optional AzGuard)
+        run: python3 scripts/ci-native-access.py
+
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
 
@@ -648,12 +768,6 @@ jobs:
 
       - name: Composer audit (access)
         run: composer audit --locked --working-dir=packages/access
-
-      - name: Install access AzGuard bridge dependencies
-        run: composer --working-dir=packages/access-azguard update --prefer-dist --no-interaction --no-progress
-
-      - name: Composer audit (access AzGuard bridge)
-        run: composer audit --locked --working-dir=packages/access-azguard
 
       - name: Install remaining standalone package harnesses
         run: |
@@ -700,6 +814,9 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd, xdebug
           coverage: xdebug
 
+      - name: Prepare native CI dependencies (without optional AzGuard)
+        run: python3 scripts/ci-native-access.py
+
       - name: Install root tooling and shared test dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
 
@@ -737,7 +854,7 @@ jobs:
     permissions:
       contents: read
     runs-on: ubuntu-latest
-    name: Auth package (AzGuard)
+    name: Native Access package
     services:
       postgres:
         image: postgres:18
@@ -762,6 +879,9 @@ jobs:
           php-version: '8.4'
           extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
           coverage: none
+
+      - name: Prepare native CI dependencies (without optional AzGuard)
+        run: python3 scripts/ci-native-access.py
 
       - name: Install root tooling and shared test dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
@@ -806,6 +926,9 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
 
+      - name: Prepare native CI dependencies (without optional AzGuard)
+        run: python3 scripts/ci-native-access.py
+
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
 
@@ -814,9 +937,6 @@ jobs:
 
       - name: Architecture & layer rules (CoreX ↛ Flex, core isolation)
         run: composer test:arch
-
-      - name: Source API surface report (classification debt is reported)
-        run: composer php-api
 
       - name: Typed package error registry and literal gate
         run: composer error-registry
@@ -851,6 +971,10 @@ jobs:
         run: bash scripts/contract-guard.sh "$BASE_SHA"
 
   backward-compatibility:
+    needs: azguard-availability
+    if: needs.azguard-availability.outputs.available == 'true'
+    env:
+      COMPOSER_AUTH: '{"github-oauth":{"github.com":"${{ secrets.AZGUARD_READ_TOKEN }}"}}'
     permissions:
       contents: read
     runs-on: ubuntu-latest
@@ -877,6 +1001,10 @@ jobs:
         run: bash scripts/bc-check.sh
 
   coverage:
+    needs: azguard-availability
+    if: needs.azguard-availability.outputs.available == 'true'
+    env:
+      COMPOSER_AUTH: '{"github-oauth":{"github.com":"${{ secrets.AZGUARD_READ_TOKEN }}"}}'
     permissions:
       contents: read
     runs-on: ubuntu-latest
@@ -957,6 +1085,9 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
 
+      - name: Prepare native CI dependencies (without optional AzGuard)
+        run: python3 scripts/ci-native-access.py
+
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
 
@@ -969,20 +1100,21 @@ jobs:
       - name: Composer audit (access)
         run: composer audit --locked --working-dir=packages/access
 
-      - name: Install access AzGuard bridge dependencies
-        run: composer --working-dir=packages/access-azguard update --prefer-dist --no-interaction --no-progress
-
-      - name: Composer audit (access AzGuard bridge)
-        run: composer audit --locked --working-dir=packages/access-azguard
-
       - name: PHPStan
-        run: composer analyse
+        run: |
+          status=0
+          for config in packages/*/phpstan.neon products/*/phpstan.neon .ci-native-phpstan.neon; do
+            [[ "$config" == packages/access-azguard/phpstan.neon ]] && continue
+            vendor/bin/phpstan analyse -c "$config" --memory-limit=2G --no-progress || status=1
+          done
+          php scripts/quality-ceiling-guard.php || status=1
+          exit "$status"
 
       # Второй, самостоятельный прогон (P1.28/D48): 9 правил corex/modules-lint
       # на tests/ через phpstan-tests-lint.neon (без larastan — иначе Pest-идиома
       # даёт 60 несвязанных property.notFound). Строго ПОСЛЕ основного analyse.
       - name: PHPStan (modules-lint on tests/)
-        run: composer analyse:tests-lint
+        run: vendor/bin/phpstan analyse -c .ci-native-tests-lint.neon --memory-limit=1G
 
       - name: Pint
         run: composer lint:check
@@ -1022,6 +1154,9 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
           coverage: none
 
+      - name: Prepare native CI dependencies (without optional AzGuard)
+        run: python3 scripts/ci-native-access.py
+
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
 
@@ -1060,6 +1195,10 @@ jobs:
           done
 
   golden:
+    needs: azguard-availability
+    if: needs.azguard-availability.outputs.available == 'true'
+    env:
+      COMPOSER_AUTH: '{"github-oauth":{"github.com":"${{ secrets.AZGUARD_READ_TOKEN }}"}}'
     name: Golden surface and wire contracts
     runs-on: ubuntu-latest
     permissions:
@@ -1094,6 +1233,9 @@ jobs:
           php-version: '8.4'
           extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
           coverage: none
+      - name: Prepare native CI dependencies (without optional AzGuard)
+        run: python3 scripts/ci-native-access.py
+
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
       - name: Composer audit
@@ -1117,15 +1259,23 @@ jobs:
           php-version: '8.4'
           extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
           coverage: none
+      - name: Prepare native CI dependencies (without optional AzGuard)
+        run: python3 scripts/ci-native-access.py
+
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress
       - name: Composer audit
         run: composer audit --locked
       - name: Analyse every standalone package
-        run: bash scripts/dependency-analyser.sh --all
+        run: |
+          for manifest in packages/*/composer.json products/*/composer.json; do
+            [[ "$manifest" == packages/access-azguard/composer.json ]] && continue
+            bash scripts/dependency-analyser.sh "$(dirname "$manifest")"
+          done
       - name: Audit every standalone package lockfile
         run: |
           for manifest in packages/*/composer.json products/*/composer.json; do
+            [[ "$manifest" == packages/access-azguard/composer.json ]] && continue
             composer audit --locked --working-dir="$(dirname "$manifest")"
           done
 

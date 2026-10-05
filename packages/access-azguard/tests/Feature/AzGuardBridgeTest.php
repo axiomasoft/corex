@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use AzGuard\Contracts\PermissionLayer;
+use AzGuard\Contracts\PermissionResolverInterface;
 use AzGuard\Models\RolePermission;
 use CoreX\Access\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Contracts\RoleMatrixCompiler;
@@ -13,8 +15,12 @@ use CoreX\Access\Matrix\Internal\DatabaseRoleMatrixCompiler;
 use CoreX\AccessAzguard\Internal\AutMatrixGrantSource;
 use CoreX\AccessAzguard\Internal\AzGuardRoleModel;
 use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
+use CoreX\Context\Data\WorkspaceRef;
+use CoreX\Context\Internal\NullTenancyManager;
+use CoreX\Context\Internal\SingleAccountResolver;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Database\Schema\Blueprint;
@@ -231,6 +237,76 @@ it('reads compiled permissions through assignments and role links for each princ
     $compiler->compile($roleId);
     expect($source->permissionsFor($principal, 'app')->keys())->toBe([]);
 })->with(PrincipalType::cases());
+
+it('resolves compiled AzGuard permissions without a workspace', function (string $contextType): void {
+    if ($contextType === 'boxed') {
+        app()->instance(TenancyManager::class, new NullTenancyManager(new SingleAccountResolver));
+    } elseif ($contextType === 'root') {
+        $manager = Mockery::mock(TenancyManager::class);
+        $manager->shouldReceive('context')->andReturnNull();
+        app()->instance(TenancyManager::class, $manager);
+    }
+
+    $roleId = bridgeRole();
+    $principal = new PrincipalIdentity(PrincipalType::User, (string) Str::uuid());
+    DB::table('aut_role_assignments')->insert([
+        'id' => (string) Str::uuid(), 'role_id' => $roleId,
+        'principal_type' => 'user', 'principal_id' => $principal->principalId(),
+    ]);
+    app(RoleMatrixCompiler::class)->compile($roleId);
+
+    set_error_handler(static function (int $severity, string $message): never {
+        throw new ErrorException($message, 0, $severity);
+    }, E_WARNING | E_NOTICE);
+
+    try {
+        expect(app(PermissionLayer::class)->cacheDiscriminator('app'))->toBe('')
+            ->and(app(PermissionResolverInterface::class)->forUser($principal, 'app')->keys())->toBe(['app.crm.deal.read'])
+            ->and(app(PermissionResolverInterface::class)->forUser($principal, 'admin')->keys())->toBe([]);
+    } finally {
+        restore_error_handler();
+    }
+})->with(['boxed', 'account', 'root']);
+
+it('keeps AzGuard permission cache entries separate while switching and clearing workspaces', function (): void {
+    $workspaceA = new WorkspaceRef((string) Str::uuid(), 'a', 'team', '/a', null);
+    $workspaceB = new WorkspaceRef((string) Str::uuid(), 'b', 'team', '/b', null);
+    $accountContext = $this->tenantContext->current();
+    $context = $accountContext->forWorkspace($workspaceA);
+    $manager = Mockery::mock(TenancyManager::class);
+    $manager->shouldReceive('context')->andReturnUsing(static function () use (&$context): TenantContext {
+        return $context;
+    });
+    $manager->shouldReceive('setWorkspace')->andReturnUsing(static function (?WorkspaceRef $workspace) use (&$context, $accountContext): void {
+        $context = $workspace === null ? $accountContext : $accountContext->forWorkspace($workspace);
+    });
+    app()->instance(TenancyManager::class, $manager);
+
+    $roleId = bridgeRole();
+    $principal = new PrincipalIdentity(PrincipalType::User, (string) Str::uuid());
+    DB::table('aut_role_assignments')->insert([
+        'id' => (string) Str::uuid(), 'role_id' => $roleId,
+        'principal_type' => 'user', 'principal_id' => $principal->principalId(),
+        'workspace_id' => $workspaceA->id,
+    ]);
+    app(RoleMatrixCompiler::class)->compile($roleId);
+    $resolver = app(PermissionResolverInterface::class);
+    $layer = app(PermissionLayer::class);
+
+    expect($layer->cacheDiscriminator('app'))->toBe($workspaceA->id)
+        ->and($resolver->forUser($principal, 'app')->keys())->toBe(['app.crm.deal.read']);
+
+    $manager->setWorkspace($workspaceB);
+    expect($layer->cacheDiscriminator('app'))->toBe($workspaceB->id)
+        ->and($resolver->forUser($principal, 'app')->keys())->toBe([]);
+
+    $manager->setWorkspace(null);
+    expect($layer->cacheDiscriminator('app'))->toBe('')
+        ->and($resolver->forUser($principal, 'app')->keys())->toBe([]);
+
+    $manager->setWorkspace($workspaceA);
+    expect($resolver->forUser($principal, 'app')->keys())->toBe(['app.crm.deal.read']);
+});
 
 it('excludes ineligible assignments and roles from the compiled grant chain', function (string $exclusion): void {
     $roleId = bridgeRole();
