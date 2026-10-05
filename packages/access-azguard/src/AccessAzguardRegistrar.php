@@ -13,9 +13,9 @@ use CoreX\AccessAzguard\Internal\SyncAzGuardRolePermissions;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Modules\Contracts\PackageRegistrar;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Event;
+use Illuminate\View\Compilers\BladeCompiler;
 use Override;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
@@ -34,11 +34,12 @@ final class AccessAzguardRegistrar implements PackageRegistrar
         $manager->registerGrantSource(AutMatrixGrantSource::class);
         $manager->registerCatalogBuilder(MatrixPermissionCatalogBuilder::class);
 
-        Event::listen(RoleMatrixCompiled::class, SyncAzGuardRolePermissions::class);
+        $app->make(Dispatcher::class)->listen(RoleMatrixCompiled::class, SyncAzGuardRolePermissions::class);
 
-        Blade::directive('scope', static fn (string $expression): string => "<?php if (auth()->check() && auth()->user()->hasScopedRole({$expression})): ?>");
-        Blade::directive('endscope', static fn (): string => '<?php endif; ?>');
-        Blade::directive('entity', static fn (string $expression): string => "<?php if (auth()->check() && auth()->user()->hasScopedPermission({$expression})): ?>");
-        Blade::directive('endentity', static fn (): string => '<?php endif; ?>');
+        $blade = $app->make(BladeCompiler::class);
+        $blade->directive('scope', static fn (string $expression): string => "<?php if (auth()->check() && auth()->user()->hasScopedRole({$expression})): ?>");
+        $blade->directive('endscope', static fn (): string => '<?php endif; ?>');
+        $blade->directive('entity', static fn (string $expression): string => "<?php if (auth()->check() && auth()->user()->hasScopedPermission({$expression})): ?>");
+        $blade->directive('endentity', static fn (): string => '<?php endif; ?>');
     }
 }
