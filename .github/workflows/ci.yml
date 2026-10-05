@@ -990,7 +990,6 @@ jobs:
   mutation-check:
     permissions:
       contents: read
-    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     name: Mutation registry (scripts/mutation-check.sh --all)
     services:
