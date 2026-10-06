@@ -1,0 +1,11 @@
+{
+  "scripts/schema-gate.php": "fc86d5c4ba9df888ec8f8721234a79ba91a0f1c9dd878e0e3c655a39bf309918",
+  "tests/Unit/SchemaGateTest.php": "84a57b57ed0ee148a8acbaf3d10ede53ef99ee667270d1e1551257fdaff5f2da",
+  "tests/Golden/Support/SchemaCatalogue.php": "f58b9222ced0df7faa789d5c66e8baf2f5e5104b1037baf6d7654cec6f88bb9c",
+  "tests/Golden/SchemaGoldenTest.php": "ca64f660917dabcb4cf39e0f63b04152ae3c473e79c827b7f639fc12ed59950a",
+  "tests/Golden/schema/tenant.pgsql.json": "0835c27d357d41dd526a40e0102523cc6e283d974f5566c2d140474edb49a438",
+  "tests/Golden/schema/central.pgsql.json": "3d690c26e18f532b155a92723812aa1a2f15f367ff138e25319fbadb21532101",
+  "tests/Golden/schema/dedicated.pgsql.json": "bf902112332aa4d6137459dc2ed400fdef6b38ffcea4ccb4a989da47373865fb",
+  "plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.3-repair/repair.diff": "a2abff2f97ec477ffc9ddc1269b2480c4bb311b2ef60b4c954d0ccc1fcd5731a",
+  "plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.3-repair/validation-results.json": "75ffcd44a8efb09f9df2df07e0d35d026ff104423c97be9bf67206cf17ce38c2"
+}

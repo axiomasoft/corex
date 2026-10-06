@@ -42,7 +42,8 @@
                         "key"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -105,7 +106,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_api_budget_reservations_retention_ix",
@@ -115,7 +117,8 @@
                         "expires_at"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],

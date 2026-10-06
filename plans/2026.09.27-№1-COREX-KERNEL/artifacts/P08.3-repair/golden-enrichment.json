@@ -1,0 +1,30 @@
+[
+  {
+    "path": "tests/Golden/schema/central.pgsql.json",
+    "added_boolean_fields": 42,
+    "nulls_not_distinct_true": [
+      "root_feature_flags.root_feature_flags_uq"
+    ],
+    "all_other_fields_identical": true
+  },
+  {
+    "path": "tests/Golden/schema/dedicated.pgsql.json",
+    "added_boolean_fields": 3,
+    "nulls_not_distinct_true": [],
+    "all_other_fields_identical": true
+  },
+  {
+    "path": "tests/Golden/schema/tenant.pgsql.json",
+    "added_boolean_fields": 226,
+    "nulls_not_distinct_true": [
+      "aut_role_assignments.aut_role_assignments_uq",
+      "aut_role_matrix.aut_role_matrix_uq",
+      "crm_lost_reasons.crm_lost_reasons_code_uq",
+      "crm_pipelines.crm_pipelines_code_uq",
+      "crm_pipelines.crm_pipelines_default_uq",
+      "crm_sources.crm_sources_workspace_id_code_uq",
+      "sys_settings.sys_settings_uq"
+    ],
+    "all_other_fields_identical": true
+  }
+]

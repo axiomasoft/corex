@@ -1,0 +1,4 @@
+$ env PGSQL_PORT=5434 PGSQL_DATABASE=corex_test APP_ENV=testing scripts/php84 vendor/bin/pest tests/Golden/SchemaGoldenTest.php --filter=fresh_postgres --compact
+{"tool":"pest","result":"passed","tests":3,"passed":3,"assertions":3702,"duration_ms":1748}
+
+exit=0

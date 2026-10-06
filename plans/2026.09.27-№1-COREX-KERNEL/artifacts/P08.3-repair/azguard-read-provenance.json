@@ -1,0 +1,21 @@
+{
+  "at": "2026-10-06T17:23:45.493903+00:00",
+  "authentication": "none",
+  "operation": "read-only GET, no private source uploaded",
+  "receipts": [
+    {
+      "url": "https://api.github.com/repos/axiomasoft/azguard-private",
+      "http_status": 200,
+      "full_name": "axiomasoft/azguard-private",
+      "private": false,
+      "visibility": "public",
+      "html_url": "https://github.com/axiomasoft/azguard-private"
+    },
+    {
+      "url": "https://api.github.com/repos/axiomasoft/azguard-private/commits/253cbf4cce0226545cd96ca8c6bcbefe329b1403",
+      "http_status": 200,
+      "sha": "253cbf4cce0226545cd96ca8c6bcbefe329b1403",
+      "html_url": "https://github.com/axiomasoft/azguard-private/commit/253cbf4cce0226545cd96ca8c6bcbefe329b1403"
+    }
+  ]
+}

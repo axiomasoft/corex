@@ -150,6 +150,18 @@ final class SchemaGate
     private function structure(string $file, string $package, string $scope, array $up, array $variables): void
     {
         $calls = self::calls($up['body']);
+        $rawMethods = ['statement', 'unprepared', 'select', 'selectOne', 'scalar', 'cursor', 'affectingStatement', 'insert', 'update', 'delete', 'exec', 'query', 'prepare', 'selectFromWriteConnection', 'selectResultSets'];
+        $rawCalls = array_values(array_filter($calls, static function (array $call) use ($rawMethods): bool {
+            if (! $call['method']) {
+                return false;
+            }
+            $argument = $call['args'][0] ?? '';
+            $literal = self::rawSql($argument, []);
+
+            return in_array($call['name'], $rawMethods, true)
+                || ($literal !== null && preg_match('/^(?:CREATE|ALTER|DO|CALL|EXECUTE)\s+/i', ltrim($literal)) === 1);
+        }));
+        $rawVariables = self::rawVariables($up['body']);
         $tables = [];
         foreach ($calls as $call) {
             if (! $call['method'] || ($call['name'] !== 'create' && $call['name'] !== 'table')
@@ -173,6 +185,16 @@ final class SchemaGate
         foreach ($calls as $call) {
             $line = $up['line'] + $call['line'] - 1;
             $name = $call['name'];
+
+            if (array_any($rawCalls, static fn (array $raw): bool => $raw['offset'] === $call['offset'])) {
+                $sql = self::rawSql(self::argument($call, 0, 'query') ?? self::argument($call, 0, 'sql') ?? '', $rawVariables);
+
+                if ($sql === null) {
+                    $this->hit('S6', $file, $line, 'cannot verify computed raw SQL; use explicit column DDL');
+                } else {
+                    $this->rawIntegers($file, $line, $sql);
+                }
+            }
             $table = '';
             foreach ($tables as $candidate) {
                 if ($call['offset'] > $candidate['start'] && $call['offset'] < $candidate['end']) {
@@ -230,7 +252,11 @@ final class SchemaGate
             }
         }
         // SQL is inspected only inside strings, never comments or PHP identifiers.
+        $offset = -6;
         foreach (token_get_all('<?php '.$up['body']) as $token) {
+            $start = $offset;
+            $offset += strlen(is_array($token) ? $token[1] : $token);
+
             if (! is_array($token) || ! in_array($token[0], [T_CONSTANT_ENCAPSED_STRING, T_ENCAPSED_AND_WHITESPACE], true)) {
                 continue;
             }
@@ -239,6 +265,12 @@ final class SchemaGate
 
             if (preg_match('/\bCREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?["`]?([a-z0-9_]+)/i', $sql, $match) === 1) {
                 $this->ownership($file, $line, $match[1], $package, $scope);
+            }
+
+            // Declarations and literals passed to other SQL APIs are checked too.
+            // Known raw calls were checked as a whole, including interpolation.
+            if (! array_any($rawCalls, static fn (array $call): bool => $start > $call['offset'] && $start < $call['end'])) {
+                $this->rawIntegers($file, $line, $token[0] === T_CONSTANT_ENCAPSED_STRING ? (self::rawSql($token[1], []) ?? $sql) : $sql);
             }
 
             // RENAME references the old object; S4 applies to its new literal name.
@@ -255,6 +287,325 @@ final class SchemaGate
                 $this->object($file, $line, $object, $target[1] ?? '', $scope);
             }
         }
+    }
+
+    /**
+     * Only unambiguous identifiers and proven index-only variable templates may
+     * feed raw calls. Column SQL variables/computed tails stay unsupported;
+     * their declaration strings are still checked independently. This avoids
+     * resolving an earlier statement with a later reassignment's SQL or table.
+     *
+     * @return array<string, string>
+     */
+    private static function rawVariables(string $body): array
+    {
+        $literal = '\'(?:[^\'\\\\]|\\\\.)*\'|"(?:[^"\\\\]|\\\\.)*"';
+        preg_match_all('/\$(\w+)\s*=\s*('.$literal.')\s*;/', $body, $assignments, PREG_SET_ORDER);
+        $values = [];
+        foreach ($assignments as $assignment) {
+            $value = self::rawSql($assignment[2], []);
+
+            if ($value !== null) {
+                $values[$assignment[1]][] = $value;
+            }
+        }
+        $result = [];
+        foreach ($values as $name => $candidates) {
+            $unique = array_values(array_unique($candidates));
+            $count = preg_match_all('/\$'.preg_quote($name, '/').'\s*=(?!=)/', $body);
+
+            if ($count !== count($candidates)) {
+                continue;
+            }
+            $indexOnly = array_all($unique, static fn (string $sql): bool => preg_match('/^CREATE\s+(?:UNIQUE\s+)?INDEX\b/i', $sql) === 1 && ! str_contains($sql, ';'));
+            $identifier = count($unique) === 1 && preg_match('/^[a-z0-9_]+$/', $unique[0]) === 1;
+            preg_match_all('/\$'.preg_quote($name, '/').'\s*\.=\s*([^;]+);/s', $body, $appends);
+
+            if ($identifier && $appends[1] === []) {
+                $result['$'.$name] = $unique[0];
+
+                continue;
+            }
+
+            if (! $indexOnly) {
+                continue;
+            }
+            foreach ($appends[1] as $append) {
+                $tails = [self::rawSql($append, [])];
+
+                if (preg_match('/\?\s*('.$literal.')\s*:\s*('.$literal.')\s*$/s', $append, $branches) === 1) {
+                    $tails = [self::rawSql($branches[1], []), self::rawSql($branches[2], [])];
+                }
+
+                if (array_any($tails, static fn (?string $tail): bool => $tail === null || str_contains($tail, ';') || preg_match('/\b(?:CREATE|ALTER)\b/i', $tail) === 1)) {
+                    $indexOnly = false;
+                }
+            }
+
+            if ($indexOnly) {
+                $result['$'.$name] = implode(';', $unique);
+            }
+        }
+
+        return $result;
+    }
+
+    /** @param array<string, string> $variables */
+    private static function rawSql(string $argument, array $variables): ?string
+    {
+        $tokens = array_values(array_filter(array_slice(token_get_all('<?php '.$argument), 1),
+            static fn (array|string $token): bool => ! is_array($token) || ! in_array($token[0], [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT], true)));
+
+        // Existing constraint/trigger templates do not define column types; the
+        // grammar still rejects unresolved placeholders in column definitions.
+        if (is_array($tokens[0] ?? null) && $tokens[0][0] === T_STRING && strtolower($tokens[0][1]) === 'sprintf'
+            && ($tokens[1] ?? null) === '(' && is_array($tokens[2] ?? null) && $tokens[2][0] === T_CONSTANT_ENCAPSED_STRING) {
+            $tokens = [$tokens[2]];
+        }
+        $sql = '';
+        foreach ($tokens as $token) {
+            if (is_array($token)) {
+                if ($token[0] === T_CONSTANT_ENCAPSED_STRING) {
+                    $value = substr($token[1], 1, -1);
+                    $sql .= $token[1][0] === '"' ? stripcslashes($value) : str_replace(["\\'", '\\\\'], ["'", '\\'], $value);
+                } elseif ($token[0] === T_ENCAPSED_AND_WHITESPACE) {
+                    $sql .= stripcslashes($token[1]);
+                } elseif ($token[0] === T_VARIABLE) {
+                    $sql .= $variables[$token[1]] ?? '?';
+                } elseif (! in_array($token[0], [T_CURLY_OPEN, T_START_HEREDOC, T_END_HEREDOC], true)) {
+                    return null;
+                }
+            } elseif (! in_array($token, ['"', '}', '.'], true)) {
+                return null;
+            }
+        }
+
+        return str_starts_with(ltrim($sql), '?') ? null : $sql;
+    }
+
+    /**
+     * Bounded column DDL grammar: CREATE TABLE (...), ALTER TABLE ADD [COLUMN]
+     * and ALTER [COLUMN] ... [SET DATA] TYPE. Unknown types/forms fail closed:
+     * a domain, LIKE or AS SELECT could otherwise conceal an integer column.
+     */
+    private function rawIntegers(string $file, int $line, string $sql): void
+    {
+        if (preg_match('/\b(?:CREATE|ALTER|DO|CALL|EXECUTE)\b/i', $sql) !== 1) {
+            return;
+        }
+        // PHP double-quoted SQL literals escape identifier quotes.
+        $sql = str_replace('\\"', '"', $sql);
+        preg_match_all('/\'(?:[^\']|\'\')*\'|"(?:[^"]|"")*"|`(?:[^`]|``)*`|--[^\n]*|\/\*.*?\*\/|[a-z_][a-z0-9_$]*|[0-9]+|[^\s]/is', $sql, $matches);
+        $tokens = array_values(array_filter($matches[0], static fn (string $token): bool => ! str_starts_with($token, '--') && ! str_starts_with($token, '/*')));
+
+        try {
+            foreach (self::sqlParts($tokens, ';') as $statement) {
+                // A bare keyword can also be an ordinary Blueprint column name.
+                if (count($statement) === 1) {
+                    continue;
+                }
+                $head = strtoupper(implode(' ', array_slice($statement, 0, 4)));
+
+                if (in_array(strtoupper($statement[0]), ['DO', 'CALL', 'EXECUTE'], true)) {
+                    throw new RuntimeException('unsupported procedural or dynamic SQL wrapper');
+                }
+
+                if (strtoupper($statement[0]) === 'ALTER' && strtoupper($statement[1] ?? '') !== 'TABLE') {
+                    throw new RuntimeException('unsupported or computed ALTER target');
+                }
+
+                if (! str_starts_with($head, 'CREATE ') && ! ($head === 'ALTER TABLE' || str_starts_with($head, 'ALTER TABLE '))) {
+                    if (preg_match('/\b(?:CREATE\s+(?:(?:TEMP(?:ORARY)?|UNLOGGED)\s+)?TABLE|ALTER\s+TABLE)\b/i', implode(' ', $statement)) === 1) {
+                        throw new RuntimeException('column DDL inside unsupported SQL wrapper');
+                    }
+
+                    continue;
+                }
+                $create = strtoupper($statement[0]) === 'CREATE';
+                $i = $create ? 1 : 2;
+
+                if ($create) {
+                    if (in_array(strtoupper($statement[$i] ?? ''), ['TEMP', 'TEMPORARY', 'UNLOGGED'], true)) {
+                        $i++;
+                    }
+
+                    if (strtoupper($statement[$i] ?? '') !== 'TABLE') {
+                        $kind = strtoupper($statement[$i] ?? '');
+
+                        if (! in_array($kind, ['INDEX', 'EXTENSION', 'TRIGGER'], true)
+                            && ! ($kind === 'UNIQUE' && strtoupper($statement[$i + 1] ?? '') === 'INDEX')) {
+                            throw new RuntimeException('unsupported CREATE form: '.$kind);
+                        }
+
+                        if (preg_match('/\b(?:CREATE\s+TABLE|ALTER\s+TABLE)\b/i', implode(' ', array_slice($statement, $i))) === 1) {
+                            throw new RuntimeException('nested column DDL inside unsupported CREATE form');
+                        }
+
+                        continue;
+                    }
+                    $i++;
+
+                    if (strtoupper($statement[$i] ?? '') === 'IF') {
+                        if (strtoupper(implode(' ', array_slice($statement, $i, 3))) !== 'IF NOT EXISTS') {
+                            throw new RuntimeException('unsupported CREATE TABLE guard');
+                        }
+                        $i += 3;
+                    }
+                } elseif (strtoupper($statement[$i] ?? '') === 'ONLY') {
+                    $i++;
+                }
+                $table = $statement[$i++] ?? '';
+
+                if (($statement[$i] ?? '') === '.') {
+                    if (self::sqlIdentifier($table) !== 'public') {
+                        throw new RuntimeException('unsupported schema-qualified table');
+                    }
+                    $i++;
+                    $table = $statement[$i++] ?? '';
+                }
+
+                if ($create) {
+                    if (($statement[$i++] ?? '') !== '(') {
+                        throw new RuntimeException('CREATE TABLE requires explicit column definitions');
+                    }
+                    $body = array_slice($statement, $i);
+
+                    if (array_pop($body) !== ')') {
+                        throw new RuntimeException('unsupported CREATE TABLE suffix or incomplete definition');
+                    }
+                    foreach (self::sqlParts($body, ',') as $definition) {
+                        if (in_array(strtoupper($definition[0] ?? ''), ['CONSTRAINT', 'PRIMARY', 'UNIQUE', 'FOREIGN', 'CHECK', 'EXCLUDE'], true)) {
+                            continue;
+                        }
+                        $this->rawColumn($file, $line, $table, $definition);
+                    }
+
+                    continue;
+                }
+
+                if ($i >= count($statement)) {
+                    throw new RuntimeException('ALTER TABLE requires explicit actions');
+                }
+                foreach (self::sqlParts(array_slice($statement, $i), ',') as $action) {
+                    $verb = strtoupper(array_shift($action) ?? '');
+
+                    if ($verb === 'ADD') {
+                        if (in_array(strtoupper($action[0] ?? ''), ['CONSTRAINT', 'PRIMARY', 'UNIQUE', 'FOREIGN', 'CHECK', 'EXCLUDE'], true)) {
+                            continue;
+                        }
+
+                        if (strtoupper($action[0] ?? '') === 'COLUMN') {
+                            array_shift($action);
+                        }
+
+                        if (strtoupper($action[0] ?? '') === 'IF') {
+                            if (strtoupper(implode(' ', array_slice($action, 0, 3))) !== 'IF NOT EXISTS') {
+                                throw new RuntimeException('unsupported ADD COLUMN guard');
+                            }
+                            $action = array_slice($action, 3);
+                        }
+                        $this->rawColumn($file, $line, $table, $action);
+                    } elseif ($verb === 'ALTER') {
+                        if (strtoupper($action[0] ?? '') === 'COLUMN') {
+                            array_shift($action);
+                        }
+                        $column = array_shift($action) ?? '';
+
+                        if (strtoupper(implode(' ', array_slice($action, 0, 3))) === 'SET DATA TYPE') {
+                            $action = array_slice($action, 2);
+                        }
+
+                        if (strtoupper($action[0] ?? '') === 'TYPE') {
+                            $this->rawColumn($file, $line, $table, [$column, ...array_slice($action, 1)]);
+                        } elseif (! in_array(strtoupper(implode(' ', array_slice($action, 0, 2))), ['SET DEFAULT', 'DROP DEFAULT', 'SET NOT', 'DROP NOT'], true)) {
+                            throw new RuntimeException('unsupported ALTER COLUMN action');
+                        }
+                    } elseif (! in_array($verb, ['DROP', 'RENAME', 'VALIDATE'], true)) {
+                        throw new RuntimeException('unsupported ALTER TABLE action: '.$verb);
+                    }
+                }
+            }
+        } catch (RuntimeException $error) {
+            $this->hit('S6', $file, $line, 'cannot verify raw column DDL: '.$error->getMessage());
+        }
+    }
+
+    /** @param list<string> $definition */
+    private function rawColumn(string $file, int $line, string $table, array $definition): void
+    {
+        $table = self::sqlIdentifier($table);
+        $column = self::sqlIdentifier($definition[0] ?? '');
+        $type = strtolower($definition[1] ?? '');
+
+        // Qualified/domain/quoted types need resolution and are deliberately unsupported.
+        if (($definition[2] ?? '') === '.' || ! in_array($type, [
+            'smallint', 'int2', 'integer', 'int', 'int4', 'tinyint', 'mediumint', 'serial', 'serial2', 'serial4', 'smallserial',
+            'bigint', 'int8', 'bigserial', 'serial8', 'uuid', 'text', 'varchar', 'character', 'char', 'boolean', 'bool',
+            'numeric', 'decimal', 'real', 'double', 'float', 'date', 'time', 'timestamp', 'timestamptz', 'timetz', 'interval',
+            'json', 'jsonb', 'bytea', 'ltree',
+        ], true)) {
+            throw new RuntimeException('unsupported column type: '.$table.'.'.$column.' '.($type === '' ? '?' : $type));
+        }
+
+        if (in_array($type, ['smallint', 'int2', 'integer', 'int', 'int4', 'tinyint', 'mediumint', 'serial', 'serial2', 'serial4', 'smallserial'], true)
+            && ! isset($this->allowlist[$table.'.'.$column])) {
+            $this->hit('S6', $file, $line, '32-bit integer outside allowlist: '.$table.'.'.$column);
+        }
+    }
+
+    private static function sqlIdentifier(string $token): string
+    {
+        if (preg_match('/^[a-z_][a-z0-9_]*$/i', $token) === 1) {
+            return strtolower($token);
+        }
+
+        if (preg_match('/^(["`])([a-z_][a-z0-9_]*)\1$/i', $token, $match) === 1) {
+            return $match[2];
+        }
+
+        throw new RuntimeException('unsupported or missing identifier: '.$token);
+    }
+
+    /** @param list<string> $tokens
+     * @return list<list<string>> */
+    private static function sqlParts(array $tokens, string $delimiter): array
+    {
+        $parts = [];
+        $part = [];
+        $depth = 0;
+        foreach ($tokens as $token) {
+            if ($token === '(' || $token === '[') {
+                $depth++;
+            } elseif ($token === ')' || $token === ']') {
+                $depth--;
+            }
+
+            if ($depth < 0) {
+                throw new RuntimeException('unbalanced column definition');
+            }
+
+            if ($token === $delimiter && $depth === 0) {
+                if ($part === []) {
+                    throw new RuntimeException('empty column definition');
+                }
+                $parts[] = $part;
+                $part = [];
+            } else {
+                $part[] = $token;
+            }
+        }
+
+        if ($depth !== 0) {
+            throw new RuntimeException('incomplete column definition');
+        }
+
+        if ($part !== []) {
+            $parts[] = $part;
+        } elseif ($delimiter === ',' && $tokens !== []) {
+            throw new RuntimeException('empty trailing column definition');
+        }
+
+        return $parts;
     }
 
     private function purity(string $file, string $source, string $body, int $line): void

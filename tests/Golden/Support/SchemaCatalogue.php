@@ -12,7 +12,7 @@ use RuntimeException;
  *
  * @phpstan-type Row array<string, string|int|bool|null>
  * @phpstan-type Column array{type: string, nullable: bool, default: ?string}
- * @phpstan-type Index array{name: string, kind: string, columns: list<string>, predicate: ?string, method: string}
+ * @phpstan-type Index array{name: string, kind: string, columns: list<string>, predicate: ?string, method: string, nulls_not_distinct?: bool}
  * @phpstan-type ForeignKey array{name: string, columns: list<string>, references: string, on_delete: string, on_update: string, deferrable: bool, initially_deferred: bool}
  * @phpstan-type Check array{name: string, expression: string}
  * @phpstan-type Table array{columns: array<string, Column>, indexes: list<Index>, foreign_keys: list<ForeignKey>, checks: list<Check>, triggers: array<string, string>}
@@ -63,13 +63,13 @@ final class SchemaCatalogue
             SELECT x.relname AS name, am.amname AS method, CASE WHEN i.indisprimary THEN 'pk' WHEN i.indisunique THEN 'uq' ELSE 'ix' END AS kind,
                    (SELECT json_agg(pg_get_indexdef(i.indexrelid, k, false) ORDER BY k)
                     FROM generate_series(1, i.indnatts) AS k)::text AS columns,
-                   pg_get_expr(i.indpred, i.indrelid, false) AS predicate
+                   pg_get_expr(i.indpred, i.indrelid, false) AS predicate, i.indnullsnotdistinct AS nulls_not_distinct
             FROM pg_index i JOIN pg_class c ON c.oid = i.indrelid
             JOIN pg_namespace n ON n.oid = c.relnamespace JOIN pg_class x ON x.oid = i.indexrelid
             JOIN pg_am am ON am.oid = x.relam
             WHERE n.nspname = 'public' AND c.relname = ? ORDER BY x.relname COLLATE "C"
             SQL, [$table]) as $row) {
-            $indexes[] = ['name' => (string) $row['name'], 'kind' => (string) $row['kind'], 'columns' => self::stringList((string) $row['columns']), 'predicate' => $row['predicate'] === null ? null : (string) $row['predicate'], 'method' => (string) $row['method']];
+            $indexes[] = ['name' => (string) $row['name'], 'kind' => (string) $row['kind'], 'columns' => self::stringList((string) $row['columns']), 'predicate' => $row['predicate'] === null ? null : (string) $row['predicate'], 'method' => (string) $row['method'], 'nulls_not_distinct' => (bool) $row['nulls_not_distinct']];
         }
         $foreign = [];
         $checks = [];

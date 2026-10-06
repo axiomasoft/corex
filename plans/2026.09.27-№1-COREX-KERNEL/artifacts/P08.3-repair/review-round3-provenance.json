@@ -1,0 +1,12 @@
+{
+  "requested_model": "grok/grok-4.7",
+  "cli_selector": "grok-4.7",
+  "session_id": "cb021b86-7448-482c-9733-9e4229351b2d",
+  "permission_mode": "plan",
+  "reasoning_effort": "high",
+  "tools": {
+    "read_file": 11
+  },
+  "all_repository_file_hashes_before_after": "identical",
+  "hosted": "not attested, owner-wait"
+}

@@ -1,0 +1,8 @@
+{
+  "session_id": "cb021b86-7448-482c-9733-9e4229351b2d",
+  "exit": 1,
+  "error": "max turns reached",
+  "delivered_verdict": false,
+  "acceptance": false,
+  "scope": "incomplete attempt within second/final fix/recheck round; current resumed source also includes two explicit unknown ALTER suffix guards, with new92case receipt"
+}

@@ -152,3 +152,141 @@ it('validates the target of a constraint rename rather than its old reference', 
     'wrong table' => ['other_table_pk', ['S4']],
     'too long' => ['sys_gate_probe_'.str_repeat('x', 64).'_pk', ['S4']],
 ]);
+
+/** @param array<string, string> $allowlist
+ * @return list<array{code: string, file: string, line: int, message: string}> */
+function schemaGateRawProbe(string $sql, array $allowlist = []): array
+{
+    return schemaGateProbe('<?php return new class { public function up(): void { DB::statement('.var_export($sql, true).'); } };', allowlist: $allowlist);
+}
+
+it('rejects raw narrow integer column DDL including aliases and multiple actions', function (string $sql): void {
+    $hits = schemaGateRawProbe($sql);
+    expect(array_unique(array_column($hits, 'code')))->toBe(['S6'])
+        ->and(implode(' ', array_column($hits, 'message')))->toContain('sys_gate_probe.attempts');
+})->with([
+    'CREATE TABLE sys_gate_probe (id uuid, attempts integer)',
+    'CREATE TABLE sys_gate_probe (attempts int4)',
+    'CREATE TABLE sys_gate_probe (attempts smallint)',
+    'CREATE TABLE sys_gate_probe (attempts serial)',
+    'CREATE TABLE sys_gate_probe (attempts int2)',
+    'ALTER TABLE sys_gate_probe ADD attempts integer',
+    'ALTER TABLE sys_gate_probe ADD COLUMN IF NOT EXISTS attempts int',
+    'ALTER TABLE sys_gate_probe ALTER COLUMN attempts TYPE integer USING attempts::integer',
+    'ALTER TABLE ONLY sys_gate_probe ALTER attempts SET DATA TYPE smallint',
+    'ALTER TABLE public."sys_gate_probe" ADD COLUMN "attempts" int4',
+    'ALTER TABLE sys_gate_probe ADD COLUMN safe bigint, ADD COLUMN attempts integer',
+    'ALTER TABLE sys_gate_probe ADD CONSTRAINT sys_gate_probe_ck CHECK (true), ADD attempts integer',
+    'ALTER /* comment */ TABLE sys_gate_probe ADD attempts integer',
+    'CREATE TABLE sys_gate_probe (safe numeric(10, 2) DEFAULT 1, attempts integer); ALTER TABLE sys_gate_probe ADD x bigint',
+]);
+
+it('accepts raw bigint DDL and ignores integer words in expressions comments and strings', function (string $sql): void {
+    expect(schemaGateRawProbe($sql))->toBe([]);
+})->with([
+    'CREATE TABLE sys_gate_probe (id uuid, attempts bigint, note text DEFAULT \'integer; int4, serial\')',
+    'ALTER TABLE sys_gate_probe ADD COLUMN attempts int8',
+    'ALTER TABLE sys_gate_probe ADD attempts bigserial',
+    'ALTER TABLE sys_gate_probe ALTER attempts TYPE bigint USING attempts::integer',
+    'ALTER TABLE sys_gate_probe ADD attempts bigint /* integer */, ADD cost numeric(10, 2)',
+]);
+
+it('applies raw integer exceptions to the exact table and column only', function (): void {
+    foreach (['CREATE TABLE sys_gate_probe (attempts integer)', 'ALTER TABLE sys_gate_probe ADD COLUMN attempts integer', 'ALTER TABLE public."sys_gate_probe" ALTER COLUMN "attempts" TYPE int4'] as $sql) {
+        expect(schemaGateRawProbe($sql, ['sys_gate_probe.attempts' => 'bounded fixture']))->toBe([]);
+        foreach (['other_table.attempts', 'sys_gate_probe.other', '*.attempts', 'sys_gate_probe.*'] as $key) {
+            expect(array_column(schemaGateRawProbe($sql, [$key => 'wrong identity']), 'code'))->toBe(['S6']);
+        }
+    }
+    expect(array_column(schemaGateRawProbe('ALTER TABLE sys_gate_probe ADD COLUMN "Attempts" integer', ['sys_gate_probe.attempts' => 'case sensitive']), 'code'))->toBe(['S6']);
+});
+
+it('fails explicitly for unsupported raw column definitions', function (string $sql): void {
+    $hits = schemaGateRawProbe($sql);
+    expect(array_unique(array_column($hits, 'code')))->toBe(['S6'])
+        ->and(implode(' ', array_column($hits, 'message')))->toContain('cannot verify raw column DDL');
+})->with([
+    'CREATE TABLE sys_gate_probe (attempts custom_integer_domain)',
+    'CREATE TABLE sys_gate_probe (LIKE existing INCLUDING ALL)',
+    'CREATE TABLE sys_gate_probe AS SELECT 1 AS attempts',
+    'CREATE TABLE sys_gate_probe (attempts pg_catalog.int4)',
+    'ALTER TABLE sys_gate_probe MODIFY COLUMN attempts integer',
+    'ALTER TABLE sys_gate_probe ADD COLUMN attempts',
+    'ALTER TABLE sys_gate_probe ADD COLUMN attempts %s',
+    'ALTER TABLE other_schema.sys_gate_probe ADD attempts integer',
+    'ALTER TABLE sys_gate_probe ADD COLUMN attempts bigint,',
+]);
+
+it('inspects heredoc and invoked helper raw column DDL and rejects dynamic types', function (): void {
+    $source = <<<'PHP'
+        <?php return new class {
+            public function up(): void { $this->columns(); }
+            private function columns(): void {
+                DB::unprepared(<<<'SQL'
+                ALTER TABLE sys_gate_probe ADD COLUMN attempts integer
+                SQL);
+            }
+        };
+        PHP;
+    expect(array_column(schemaGateProbe($source), 'code'))->toBe(['S6']);
+    foreach ([
+        'DB::statement("ALTER TABLE sys_gate_probe ADD attempts {$type}");',
+        'DB::statement(\'CREATE\' . \' TABLE sys_gate_probe (attempts integer)\');',
+        'DB::statement($sql);',
+        'DB::statement(sprintf(\'ALTER TABLE sys_gate_probe ADD attempts %s\', $type));',
+    ] as $statement) {
+        expect(array_column(schemaGateProbe('<?php return new class { public function up(): void { '.$statement.' } };'), 'code'))->toContain('S6');
+    }
+});
+
+it('checks raw column DDL through all SQL execution APIs and unknown literal wrappers', function (string $method): void {
+    $source = '<?php return new class { public function up(): void { DB::'.$method.'("ALTER TABLE sys_gate_probe ADD attempts integer"); } };';
+    expect(array_column(schemaGateProbe($source), 'code'))->toContain('S6');
+})->with(['select', 'selectOne', 'affectingStatement', 'scalar', 'cursor', 'exec', 'query', 'customSqlExecutor']);
+
+it('does not resolve earlier SQL or table identifiers using a later reassignment', function (): void {
+    foreach ([
+        '$sql = "ALTER TABLE sys_gate_probe ADD attempts integer"; DB::statement($sql); $sql = "ALTER TABLE sys_gate_probe ADD attempts bigint"; DB::statement($sql);',
+        '$sql = "ALTER TABLE sys_gate_probe ADD safe bigint"; $sql .= ", ADD attempts integer"; DB::statement($sql);',
+        '$table = "sys_gate_probe"; DB::statement("ALTER TABLE {$table} ADD attempts integer"); $table = "other_table";',
+    ] as $body) {
+        expect(array_column(schemaGateProbe('<?php return new class { public function up(): void { '.$body.' } };', allowlist: ['other_table.attempts' => 'wrong table']), 'code'))->toContain('S6');
+    }
+    $source = '<?php return new class { public function up(): void { $table = "sys_gate_probe"; DB::statement("ALTER TABLE {$table} ADD attempts integer"); } };';
+    expect(schemaGateProbe($source, allowlist: ['sys_gate_probe.attempts' => 'exact fixture']))->toBe([]);
+});
+
+it('fails explicitly for procedural and unsupported wrappers that conceal column DDL', function (string $sql): void {
+    $hits = schemaGateRawProbe($sql);
+    expect(array_unique(array_column($hits, 'code')))->toBe(['S6'])
+        ->and(implode(' ', array_column($hits, 'message')))->toContain('cannot verify raw column DDL');
+})->with([
+    "DO 'BEGIN CREATE TABLE sys_gate_probe (id uuid, attempts integer NOT NULL); END'",
+    'DO $$ BEGIN ALTER TABLE sys_gate_probe ADD attempts integer; END $$',
+    'DO $$ BEGIN EXECUTE ddl; END $$',
+    'CALL install_columns()',
+    'EXECUTE prepared_ddl',
+    "SELECT execute_ddl('ALTER TABLE sys_gate_probe ADD attempts integer')",
+    "CREATE FUNCTION add_columns() RETURNS void AS 'BEGIN ALTER TABLE sys_gate_probe ADD attempts integer; END' LANGUAGE plpgsql",
+]);
+
+it('checks concatenated column DDL through PDO Laravel and other literal SQL methods', function (string $method): void {
+    $executor = $method === 'prepare' ? 'Schema::getConnection()->getPdo()' : 'Schema::getConnection()';
+    $source = '<?php return new class { public function up(): void { '.$executor.'->'.$method.'(\'ALTER \' . \'TABLE sys_gate_probe ADD attempts integer\'); } };';
+    expect(array_column(schemaGateProbe($source), 'code'))->toContain('S6');
+    expect(schemaGateProbe(str_replace('attempts integer', 'attempts bigint', $source)))->toBe([]);
+    expect(schemaGateProbe($source, allowlist: ['sys_gate_probe.attempts' => 'bounded fixture']))->toBe([]);
+    expect(array_column(schemaGateProbe($source, allowlist: ['other_table.attempts' => 'wrong identity']), 'code'))->toContain('S6');
+})->with(['prepare', 'selectFromWriteConnection', 'selectResultSets', 'customSqlExecutor']);
+
+it('keeps ordinary Blueprint names out of raw procedural SQL parsing', function (): void {
+    $source = '<?php return new class { public function up(): void { Schema::create("sys_gate_probe", function ($table) { $table->uuid("call"); $table->string("execute"); $table->bigInteger("alter"); }); } };';
+    expect(schemaGateProbe($source))->toBe([]);
+});
+
+it('fails explicitly when a computed ALTER suffix can conceal column actions', function (string $prefix): void {
+    $source = '<?php return new class { public function up(): void { $ddl = $this->columnClause(); DB::statement('.var_export($prefix, true).' . $ddl); } private function columnClause(): string { return "sys_gate_probe ADD attempts integer"; } };';
+    $hits = schemaGateProbe($source);
+    expect(array_column($hits, 'code'))->toContain('S6')
+        ->and(implode(' ', array_column($hits, 'message')))->toContain('cannot verify raw column DDL');
+})->with(['ALTER TABLE ', 'ALTER ']);

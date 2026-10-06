@@ -1,0 +1,8 @@
+$ scripts/php84 php plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.10-review/reproduce-enforcement.php
+{"probe":"raw-sql-S6","column_type":"bigint","allowlist":[],"hits":[]}
+{"probe":"raw-sql-S6","column_type":"integer","allowlist":[],"hits":[{"code":"S6","file":"packages\/core\/database\/migrations\/tenant\/2026_10_01_010010_create_sys_gate_probe.php","line":4,"message":"32-bit integer outside allowlist: sys_gate_probe.attempts"}]}
+{"probe":"golden-null-uniqueness","catalogues_equal":false,"before_ddl":"CREATE UNIQUE INDEX p0810_review_probe_uq ON public.p0810_review_probe USING btree (workspace_id, code) NULLS NOT DISTINCT","after_ddl":"CREATE UNIQUE INDEX p0810_review_probe_uq ON public.p0810_review_probe USING btree (workspace_id, code)","catalogue_index":[{"name":"p0810_review_probe_uq","kind":"uq","columns":["workspace_id","code"],"predicate":null,"method":"btree","nulls_not_distinct":true}]}
+{"probe":"changed-behavior","duplicate_global_keys_accepted":2}
+{"probe":"rollback","remaining_table":null}
+
+exit=0

@@ -48,7 +48,8 @@
                         "created_at"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "root_account_events_pk",
@@ -57,7 +58,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -142,7 +144,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -207,7 +210,8 @@
                         "product"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -287,7 +291,8 @@
                         "status"
                     ],
                     "predicate": "((status)::text <> 'ok'::text)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "root_account_schema_state_pk",
@@ -296,7 +301,8 @@
                         "account_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -462,7 +468,8 @@
                         "cluster_id"
                     ],
                     "predicate": "(deleted_at IS NULL)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "root_accounts_db_uq",
@@ -471,7 +478,8 @@
                         "db_name"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "root_accounts_pk",
@@ -480,7 +488,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "root_accounts_purge_ix",
@@ -489,7 +498,8 @@
                         "purge_after"
                     ],
                     "predicate": "(purge_after IS NOT NULL)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "root_accounts_signup_key_uq",
@@ -498,7 +508,8 @@
                         "signup_key"
                     ],
                     "predicate": "((signup_key IS NOT NULL) AND (deleted_at IS NULL))",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "root_accounts_slug_uq",
@@ -507,7 +518,8 @@
                         "slug"
                     ],
                     "predicate": "((slug IS NOT NULL) AND (deleted_at IS NULL))",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "root_accounts_status_ix",
@@ -516,7 +528,8 @@
                         "status"
                     ],
                     "predicate": "(deleted_at IS NULL)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -669,7 +682,8 @@
                         "name"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "root_clusters_pk",
@@ -678,7 +692,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -766,7 +781,8 @@
                         "lower((host)::text)"
                     ],
                     "predicate": "(deleted_at IS NULL)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "root_domains_pk",
@@ -775,7 +791,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "root_domains_primary_uq",
@@ -784,7 +801,8 @@
                         "account_id"
                     ],
                     "predicate": "(is_primary AND (deleted_at IS NULL))",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -853,7 +871,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "root_feature_flags_uq",
@@ -863,7 +882,8 @@
                         "flag"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": true
                 }
             ],
             "foreign_keys": [
@@ -963,7 +983,8 @@
                         "lower((email)::text)"
                     ],
                     "predicate": "(deleted_at IS NULL)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "root_identities_pk",
@@ -972,7 +993,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -1030,7 +1052,8 @@
                         "account_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "root_identity_accounts_identity_id_account_id_uq",
@@ -1040,7 +1063,8 @@
                         "account_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "root_identity_accounts_pk",
@@ -1049,7 +1073,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "root_identity_accounts_sync_ix",
@@ -1058,7 +1083,8 @@
                         "sync_status"
                     ],
                     "predicate": "((sync_status)::text <> 'synced'::text)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -1153,7 +1179,8 @@
                         "identity_id"
                     ],
                     "predicate": "(revoked_at IS NULL)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "root_idp_sessions_pk",
@@ -1162,7 +1189,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "root_idp_sessions_token_hash_uq",
@@ -1171,7 +1199,8 @@
                         "token_hash"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -1257,7 +1286,8 @@
                         "created_at"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "root_impersonation_grants_pk",
@@ -1266,7 +1296,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -1368,7 +1399,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -1445,7 +1477,8 @@
                         "client_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "root_oauth_clients_pk",
@@ -1454,7 +1487,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -1512,7 +1546,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "root_oauth_refresh_tokens_token_hash_uq",
@@ -1521,7 +1556,8 @@
                         "token_hash"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -1606,7 +1642,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "root_templates_version_uq",
@@ -1615,7 +1652,8 @@
                         "version"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -1674,7 +1712,8 @@
                         "period"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -1739,7 +1778,8 @@
                         "account_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "root_wakeup_hints_scan_ix",
@@ -1749,7 +1789,8 @@
                         "leased_until"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -1797,7 +1838,8 @@
                         "name"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],

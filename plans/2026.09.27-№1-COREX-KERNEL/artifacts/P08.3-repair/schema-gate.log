@@ -1,0 +1,5 @@
+$ scripts/php84 composer schema-gate
+> bash scripts/ci-deferred-guard.sh php scripts/schema-gate.php
+schema-gate: OK (21 sets)
+
+exit=0

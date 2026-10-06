@@ -1,0 +1,19 @@
+Host-mode tests: phpunit.xml PGSQL_HOST=127.0.0.1 PORT=5434 DATABASE=corex_test USER=corex. APP_ENV=testing; serial only. SchemaEnvironment freshSchema checks actual database then reconstructs test schema; Golden migrates and asserts pending/unknown empty. No app Artisan or dev migration needed.
+$ scripts/php84 --check
+php84 OK: 8.4.26, extensions complete
+
+exit=0
+$ docker compose ps
+NAME               IMAGE                COMMAND                  SERVICE   CREATED        STATUS                  PORTS
+corex_pgsql_test   postgres:16-alpine   "docker-entrypoint.s…"   pgsql     2 months ago   Up 35 hours (healthy)   127.0.0.1:5434->5432/tcp
+
+exit=0
+$ pg_isready -h 127.0.0.1 -p 5434 -U corex -d corex_test
+127.0.0.1:5434 - accepting connections
+
+exit=0
+$ psql -h 127.0.0.1 -p 5434 -U corex -d corex_test -X -Atqc SELECT current_database(),current_user,version(); SELECT 1 FROM pg_database WHERE datname='corex_test';
+corex_test|corex|PostgreSQL 16.14 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit
+1
+
+exit=0

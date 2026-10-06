@@ -1,0 +1,39 @@
+I'll recheck only the named F1 and F2 corrections from the supplied sources and evidence, without rerunning anything or reopening the wider audit.Both scoped corrections are closed. Hosted P08 acceptance stays owner-wait.
+
+| Item | Verdict | Evidence |
+|---|---|---|
+| F1 raw integer S6 | CLOSED | The quoted-`DO` bypass is gone. `DO` / `CALL` / `EXECUTE` now raise S6, and any other statement that still contains `CREATE TABLE` or `ALTER TABLE` raises S6. Common executors, the literal fallback, reassignment, appends, and computed column SQL fail closed. No allowlist change. |
+| F2 PG `NULLS NOT DISTINCT` | CLOSED | Catalogue reads `i.indnullsnotdistinct` and stores a boolean on every PostgreSQL index. The regression flips only that flag for the same name and columns. Golden delta is 271 new booleans, 8 `true`. |
+
+No demonstrated repair defect remains on these paths. Local exits are not a hosted CI receipt.
+
+### F1
+
+The old hole was a non-`CREATE` / `ALTER TABLE` head falling through, so a `DO` body never reached `rawColumn`. `scripts/schema-gate.php:396–405` now throws `unsupported procedural or dynamic SQL wrapper` for a `DO`, `CALL`, or `EXECUTE` head, and throws `column DDL inside unsupported SQL wrapper` when any other head still contains `CREATE TABLE` or `ALTER TABLE`.
+
+Static trace of the old reproducer, `DB::statement("DO 'BEGIN CREATE TABLE sys_gate_probe (id uuid, attempts integer NOT NULL); END'")`, is one statement whose first token is `DO`, so it hits S6 with `cannot verify raw column DDL`. The same is true for `DO $$ … ALTER TABLE … integer; END $$`: the semicolon stays inside the `DO` statement, and that statement still starts with `DO`.
+
+The repaired paths match the new tests in `tests/Unit/SchemaGateTest.php:242–271`:
+
+- Raw methods at `scripts/schema-gate.php:153–187` cover `statement`, `unprepared`, `select`, `selectOne`, `scalar`, `cursor`, `affectingStatement`, `insert`, `update`, `delete`, `exec`, and `query`.
+- A literal passed to an unknown method such as `customSqlExecutor` is still scanned at `scripts/schema-gate.php:261–264`.
+- `rawVariables` (`scripts/schema-gate.php:291–341`) keeps only a single identifier or a proven index-only template. A later SQL or table assignment is not applied to an earlier use. Column SQL and appends that contain `;`, `CREATE`, or `ALTER` are left unresolved.
+- An unresolved variable becomes `?` (`scripts/schema-gate.php:364–374`). A statement that is only `?` is `cannot verify computed raw SQL`. A `?` table or type later fails the identifier or type check.
+
+`repair.diff` has seven paths and does not touch `scripts/schema-gate-allowlist.json`. `SchemaGate.log` is 85 passed, 159 assertions, exit 0, started 17:44:22Z. `schema-gate.log` is `schema-gate: OK (21 sets)`, exit 0, started 17:44:24Z. `root-analysis.log` is PHPStan 0 errors. `lint.log` is Pint pass on the four PHP files.
+
+`reproduction-after.log` (17:25:41Z) still shows direct `integer` → S6 `sys_gate_probe.attempts` and `bigint` → no hits. It does not itself replay the `DO` string. The `DO` closure is the current parser plus `SchemaGateTest.php:259–271` and the later SchemaGate log.
+
+### F2
+
+`tests/Golden/Support/SchemaCatalogue.php:66` selects `i.indnullsnotdistinct`, and line 72 stores `nulls_not_distinct` as a boolean on every PostgreSQL index, including unique indexes that back unique constraints. SQLite index rows at line 143 have no such field. No `*.sqlite.json` catalogue contains `nulls_not_distinct`.
+
+`tests/Golden/SchemaGoldenTest.php:52–78` builds the same name and columns with `NULLS NOT DISTINCT`, then without it, for both a unique index and a unique constraint. It expects `true`, then `false`, a different encoding, and equal catalogues after that one flag is set to `false`.
+
+`golden-enrichment.json` records 42 + 3 + 226 = 271 added booleans and `all_other_fields_identical: true` for central, dedicated, and tenant. Current `*.pgsql.json` files contain 8 `true` values, the same eight names as that file. Dedicated has none.
+
+`PG-regression.log`: 2 passed, 14 assertions, exit 0. `PG-golden-enrich.log` and `PG-golden.log`: `fresh_postgres`, 3 passed, 3702 assertions, exit 0. `SQLite-golden.log`: 3 passed, 1996 assertions, exit 0. Those PG logs are from 17:25–17:26Z, before the 17:44Z F1 rerun. The F2 source above is the current catalogue and regression. This session did not rerun PostgreSQL or recompute `tested-source-hashes.json`.
+
+### Lifecycle
+
+These artifacts do not contain a hosted CI run id, a final SHA, or success for all 37 required jobs. D73 closure is not met. Status remains owner-wait.

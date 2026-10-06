@@ -22,7 +22,8 @@
                         "azguard_role_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "aut_azguard_role_links_pk",
@@ -31,7 +32,8 @@
                         "role_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -91,7 +93,8 @@
                         "permission_key"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "aut_direct_grants_pk",
@@ -100,7 +103,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -163,7 +167,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "aut_role_assignments_principal_ix",
@@ -173,7 +178,8 @@
                         "principal_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "aut_role_assignments_uq",
@@ -185,7 +191,8 @@
                         "workspace_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": true
                 }
             ],
             "foreign_keys": [
@@ -287,7 +294,8 @@
                         "entity_key"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "aut_role_matrix_pk",
@@ -296,7 +304,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "aut_role_matrix_uq",
@@ -309,7 +318,8 @@
                         "context_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": true
                 }
             ],
             "foreign_keys": [
@@ -402,7 +412,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "aut_roles_slug_uq",
@@ -411,7 +422,8 @@
                         "slug"
                     ],
                     "predicate": "(deleted_at IS NULL)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -486,7 +498,8 @@
                         "capture_attempt"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "corex_export_manifests_pk",
@@ -495,7 +508,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -566,7 +580,8 @@
                         "part_no"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "corex_export_parts_pk",
@@ -575,7 +590,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -645,7 +661,8 @@
                         "operation_key"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "corex_rate_batches_pk",
@@ -654,7 +671,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -720,7 +738,8 @@
                         "source"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -810,7 +829,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "corex_rate_snapshots_publication_uq",
@@ -824,7 +844,8 @@
                         "valid_on"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -881,7 +902,8 @@
                         "alias"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -928,7 +950,8 @@
                         "dataset_key"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -993,7 +1016,8 @@
                         "snapshot_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -1086,7 +1110,8 @@
                         "source_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "corex_reference_records_scan_ix",
@@ -1097,7 +1122,8 @@
                         "normalized_name"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -1197,7 +1223,8 @@
                         "revision"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "corex_search_dirty_lane_key_submitted_at_sequence_ix",
@@ -1208,7 +1235,8 @@
                         "sequence"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "corex_search_dirty_pkey",
@@ -1217,7 +1245,8 @@
                         "sequence"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -1285,7 +1314,8 @@
                         "lane_key"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -1369,7 +1399,8 @@
                         "to_generation"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "corex_search_rebuilds_pk",
@@ -1378,7 +1409,8 @@
                         "rebuild_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -1441,7 +1473,8 @@
                         "operation_key"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "corex_task_occurrences_pk",
@@ -1450,7 +1483,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "corex_task_occurrences_series_key_immutable_revisio_54d57fbe_uq",
@@ -1461,7 +1495,8 @@
                         "occurrence_key"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -1536,7 +1571,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "corex_task_operations_request_key_uq",
@@ -1545,7 +1581,8 @@
                         "request_key"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -1621,7 +1658,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "corex_task_series_series_key_immutable_revision_uq",
@@ -1631,7 +1669,8 @@
                         "immutable_revision"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -1697,7 +1736,8 @@
                         "series_key"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -1816,7 +1856,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "corex_transfer_jobs_state_updated_at_ix",
@@ -1826,7 +1867,8 @@
                         "updated_at"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -1899,7 +1941,8 @@
                         "operation_key"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "corex_transfer_outbox_pk",
@@ -1908,7 +1951,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -2005,7 +2049,8 @@
                         "external_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "corex_transfer_refs_pk",
@@ -2014,7 +2059,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -2100,7 +2146,8 @@
                         "ordinal"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "corex_transfer_rows_pk",
@@ -2109,7 +2156,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -2240,7 +2288,8 @@
                         "status"
                     ],
                     "predicate": "(deleted_at IS NULL)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_activities_pk",
@@ -2249,7 +2298,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_activities_planned_ix",
@@ -2259,7 +2309,8 @@
                         "starts_at"
                     ],
                     "predicate": "(((status)::text = 'planned'::text) AND (deleted_at IS NULL))",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -2338,7 +2389,8 @@
                         "entity_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_activity_targets_pk",
@@ -2349,7 +2401,8 @@
                         "entity_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -2474,7 +2527,8 @@
                         "emails"
                     ],
                     "predicate": null,
-                    "method": "gin"
+                    "method": "gin",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_companies_inn_ix",
@@ -2483,7 +2537,8 @@
                         "inn"
                     ],
                     "predicate": "((inn IS NOT NULL) AND (deleted_at IS NULL))",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_companies_owner_ix",
@@ -2492,7 +2547,8 @@
                         "owner_id"
                     ],
                     "predicate": "(deleted_at IS NULL)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_companies_phones_ix",
@@ -2501,7 +2557,8 @@
                         "phones"
                     ],
                     "predicate": null,
-                    "method": "gin"
+                    "method": "gin",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_companies_pk",
@@ -2510,7 +2567,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_companies_search_ix",
@@ -2519,7 +2577,8 @@
                         "search"
                     ],
                     "predicate": null,
-                    "method": "gin"
+                    "method": "gin",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_companies_ws_ix",
@@ -2528,7 +2587,8 @@
                         "workspace_id"
                     ],
                     "predicate": "(deleted_at IS NULL)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -2615,7 +2675,8 @@
                         "company_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_contact_company_contact_id_company_id_uq",
@@ -2625,7 +2686,8 @@
                         "company_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_contact_company_pk",
@@ -2634,7 +2696,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_contact_company_primary_uq",
@@ -2643,7 +2706,8 @@
                         "contact_id"
                     ],
                     "predicate": "is_primary",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -2769,7 +2833,8 @@
                         "emails"
                     ],
                     "predicate": null,
-                    "method": "gin"
+                    "method": "gin",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_contacts_owner_ix",
@@ -2778,7 +2843,8 @@
                         "owner_id"
                     ],
                     "predicate": "(deleted_at IS NULL)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_contacts_phones_ix",
@@ -2787,7 +2853,8 @@
                         "phones"
                     ],
                     "predicate": null,
-                    "method": "gin"
+                    "method": "gin",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_contacts_pk",
@@ -2796,7 +2863,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_contacts_search_ix",
@@ -2805,7 +2873,8 @@
                         "search"
                     ],
                     "predicate": null,
-                    "method": "gin"
+                    "method": "gin",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_contacts_ws_ix",
@@ -2814,7 +2883,8 @@
                         "workspace_id"
                     ],
                     "predicate": "(deleted_at IS NULL)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -2901,7 +2971,8 @@
                         "contact_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_deal_contacts_deal_id_contact_id_uq",
@@ -2911,7 +2982,8 @@
                         "contact_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_deal_contacts_pk",
@@ -2920,7 +2992,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_deal_contacts_primary_uq",
@@ -2929,7 +3002,8 @@
                         "deal_id"
                     ],
                     "predicate": "is_primary",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -3100,7 +3174,8 @@
                         "close_date"
                     ],
                     "predicate": "(((status)::text = 'open'::text) AND (deleted_at IS NULL))",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_deals_company_ix",
@@ -3109,7 +3184,8 @@
                         "company_id"
                     ],
                     "predicate": "(deleted_at IS NULL)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_deals_forecast_ix",
@@ -3122,7 +3198,8 @@
                         "forecast_category"
                     ],
                     "predicate": "(((status)::text = 'open'::text) AND (close_date IS NOT NULL) AND (deleted_at IS NULL))",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_deals_kanban_ix",
@@ -3133,7 +3210,8 @@
                         "\"position\""
                     ],
                     "predicate": "(deleted_at IS NULL)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_deals_owner_ix",
@@ -3143,7 +3221,8 @@
                         "status"
                     ],
                     "predicate": "(deleted_at IS NULL)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_deals_pk",
@@ -3152,7 +3231,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_deals_search_ix",
@@ -3161,7 +3241,8 @@
                         "search"
                     ],
                     "predicate": null,
-                    "method": "gin"
+                    "method": "gin",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_deals_ws_ix",
@@ -3170,7 +3251,8 @@
                         "workspace_id"
                     ],
                     "predicate": "(deleted_at IS NULL)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -3415,7 +3497,8 @@
                         "\"position\""
                     ],
                     "predicate": "(deleted_at IS NULL)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_leads_owner_ix",
@@ -3425,7 +3508,8 @@
                         "status"
                     ],
                     "predicate": "(deleted_at IS NULL)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_leads_pk",
@@ -3434,7 +3518,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_leads_search_ix",
@@ -3443,7 +3528,8 @@
                         "search"
                     ],
                     "predicate": null,
-                    "method": "gin"
+                    "method": "gin",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -3616,7 +3702,8 @@
                         "code"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": true
                 },
                 {
                     "name": "crm_lost_reasons_pk",
@@ -3625,7 +3712,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -3717,7 +3805,8 @@
                         "workspace_id"
                     ],
                     "predicate": "(deleted_at IS NULL)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": true
                 },
                 {
                     "name": "crm_pipelines_default_uq",
@@ -3727,7 +3816,8 @@
                         "workspace_id"
                     ],
                     "predicate": "(is_default AND (deleted_at IS NULL))",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": true
                 },
                 {
                     "name": "crm_pipelines_pk",
@@ -3736,7 +3826,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -3806,7 +3897,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_sources_workspace_id_code_uq",
@@ -3816,7 +3908,8 @@
                         "code"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": true
                 }
             ],
             "foreign_keys": [
@@ -3912,7 +4005,8 @@
                         "code"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_stages_pipeline_ix",
@@ -3922,7 +4016,8 @@
                         "\"position\""
                     ],
                     "predicate": "(deleted_at IS NULL)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "crm_stages_pk",
@@ -3931,7 +4026,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -4038,7 +4134,8 @@
                         "source_version"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "med_conversions_pk",
@@ -4047,7 +4144,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -4157,7 +4255,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "med_files_request_key_uq",
@@ -4166,7 +4265,8 @@
                         "request_key"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -4259,7 +4359,8 @@
                         "operation_key"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "med_operations_pk",
@@ -4268,7 +4369,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "med_operations_state_next_attempt_at_ix",
@@ -4278,7 +4380,8 @@
                         "next_attempt_at"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -4346,7 +4449,8 @@
                         "slot"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "med_relations_pk",
@@ -4355,7 +4459,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -4441,7 +4546,8 @@
                         "created_at"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "mod_lifecycle_log_pk",
@@ -4450,7 +4556,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -4546,7 +4653,8 @@
                         "name"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "mod_modules_pk",
@@ -4555,7 +4663,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "mod_modules_state_ix",
@@ -4564,7 +4673,8 @@
                         "state"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -4631,7 +4741,8 @@
                         "seq"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "mod_records_pk",
@@ -4642,7 +4753,8 @@
                         "reference"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -4760,7 +4872,8 @@
                         "delivery_key"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "ntf_deliveries_pk",
@@ -4769,7 +4882,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "ntf_deliveries_scan_ix",
@@ -4779,7 +4893,8 @@
                         "next_attempt"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -4841,7 +4956,8 @@
                         "channel"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "ntf_digest_items_pk",
@@ -4850,7 +4966,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -4941,7 +5058,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "ntf_digest_runs_recipient_kind_recipient_id_period__27ecc408_uq",
@@ -4954,7 +5072,8 @@
                         "batch_seq"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -5047,7 +5166,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "ntf_notifications_recipient_kind_recipient_id_request_key_uq",
@@ -5058,7 +5178,8 @@
                         "request_key"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "ntf_notifications_scan_ix",
@@ -5070,7 +5191,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -5104,7 +5226,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -5152,7 +5275,8 @@
                         "last_activity"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sessions_pk",
@@ -5161,7 +5285,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sessions_user_id_ix",
@@ -5170,7 +5295,8 @@
                         "user_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -5320,7 +5446,8 @@
                         "lease_until"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_api_bulk_operations_pk",
@@ -5329,7 +5456,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_api_bulk_operations_submission_uq",
@@ -5340,7 +5468,8 @@
                         "submission_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -5432,7 +5561,8 @@
                         "expires_at"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_api_idempotency_scope_key_uq",
@@ -5442,7 +5572,8 @@
                         "key_hash"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -5511,7 +5642,8 @@
                         "started_at"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_api_webhook_attempts_number_uq",
@@ -5521,7 +5653,8 @@
                         "attempt"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_api_webhook_attempts_pk",
@@ -5530,7 +5663,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -5660,7 +5794,8 @@
                         "lease_until"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_api_webhook_deliveries_event_uq",
@@ -5670,7 +5805,8 @@
                         "event_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_api_webhook_deliveries_pk",
@@ -5679,7 +5815,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -5763,7 +5900,8 @@
                         "major"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_api_webhook_subscriptions_pk",
@@ -5772,7 +5910,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -5885,7 +6024,8 @@
                         "to_revision"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_attribute_backfills_pk",
@@ -5894,7 +6034,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -5989,7 +6130,8 @@
                         "revision"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_attribute_definitions_pk",
@@ -5999,7 +6141,8 @@
                         "revision"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -6038,7 +6181,8 @@
                         "record_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -6072,7 +6216,8 @@
                         "record_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -6112,7 +6257,8 @@
                         "field"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -6166,7 +6312,8 @@
                         "current_revision"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_attribute_key_reservations_pk",
@@ -6176,7 +6323,8 @@
                         "key"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -6264,7 +6412,8 @@
                         "operation_key"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_attribute_schema_operations_pk",
@@ -6273,7 +6422,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -6316,7 +6466,8 @@
                         "operation_key"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -6396,7 +6547,8 @@
                         "occurred_at"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_audit_log_entity_ix",
@@ -6407,7 +6559,8 @@
                         "occurred_at"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_audit_log_occurred_brin_ix",
@@ -6416,7 +6569,8 @@
                         "occurred_at"
                     ],
                     "predicate": null,
-                    "method": "brin"
+                    "method": "brin",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_audit_log_pk",
@@ -6425,7 +6579,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_audit_log_seq_ix",
@@ -6434,7 +6589,8 @@
                         "seq"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_audit_log_workspace_ix",
@@ -6444,7 +6600,8 @@
                         "occurred_at"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -6498,7 +6655,8 @@
                         "user_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_department_user_primary_uq",
@@ -6507,7 +6665,8 @@
                         "user_id"
                     ],
                     "predicate": "is_primary",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -6603,7 +6762,8 @@
                         "path"
                     ],
                     "predicate": null,
-                    "method": "gist"
+                    "method": "gist",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_departments_path_uq",
@@ -6612,7 +6772,8 @@
                         "path"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_departments_pk",
@@ -6621,7 +6782,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_departments_workspace_ix",
@@ -6630,7 +6792,8 @@
                         "workspace_id"
                     ],
                     "predicate": "(deleted_at IS NULL)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -6717,7 +6880,8 @@
                         "key"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_feature_flags_pk",
@@ -6726,7 +6890,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -6786,7 +6951,8 @@
                         "scope_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_feature_overrides_pk",
@@ -6795,7 +6961,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -6851,7 +7018,8 @@
                         "message_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_inbox_messages_processed_ix",
@@ -6860,7 +7028,8 @@
                         "processed_at"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -7000,7 +7169,8 @@
                         "id"
                     ],
                     "predicate": "((status)::text = 'pending'::text)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_outbox_messages_dead_ix",
@@ -7010,7 +7180,8 @@
                         "id"
                     ],
                     "predicate": "((status)::text = 'dead'::text)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_outbox_messages_pk",
@@ -7019,7 +7190,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_outbox_messages_published_ix",
@@ -7029,7 +7201,8 @@
                         "id"
                     ],
                     "predicate": "((status)::text = 'published'::text)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_outbox_messages_reclaim_ix",
@@ -7039,7 +7212,8 @@
                         "id"
                     ],
                     "predicate": "((status)::text = 'publishing'::text)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -7078,7 +7252,8 @@
                         "subscriber"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -7117,7 +7292,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_pubsub_messages_pk",
@@ -7126,7 +7302,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -7155,7 +7332,8 @@
                         "scope_key"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -7259,7 +7437,8 @@
                         "default_scope_key"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_saved_views_pk",
@@ -7268,7 +7447,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -7344,7 +7524,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_settings_scope_ix",
@@ -7354,7 +7535,8 @@
                         "scope_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_settings_uq",
@@ -7366,7 +7548,8 @@
                         "scope_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": true
                 }
             ],
             "foreign_keys": [],
@@ -7488,7 +7671,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_wakeup_requests_scan_ix",
@@ -7499,7 +7683,8 @@
                         "fire_at"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_wakeup_requests_workspace_scope_key_kind_request_key_uq",
@@ -7510,7 +7695,8 @@
                         "request_key"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_wakeup_requests_workspace_scope_key_request_key_uq",
@@ -7520,7 +7706,8 @@
                         "request_key"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -7628,7 +7815,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_workflow_intents_request_key_uq",
@@ -7637,7 +7825,8 @@
                         "request_key"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "sys_workflow_intents_state_updated_at_ix",
@@ -7647,7 +7836,8 @@
                         "updated_at"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -7701,7 +7891,8 @@
                         "event_id"
                     ],
                     "predicate": "((status)::text = 'pending'::text)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "tnt_membership_inbox_pk",
@@ -7710,7 +7901,8 @@
                         "event_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -7794,7 +7986,8 @@
                         "identity_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [],
@@ -7902,7 +8095,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "tsk_projects_ws_ix",
@@ -7912,7 +8106,8 @@
                         "status"
                     ],
                     "predicate": "(deleted_at IS NULL)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -8003,7 +8198,8 @@
                         "project_id"
                     ],
                     "predicate": "((status)::text = 'active'::text)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "tsk_sprints_pk",
@@ -8012,7 +8208,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -8096,7 +8293,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "tsk_stages_project_id_code_uq",
@@ -8106,7 +8304,8 @@
                         "code"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -8162,7 +8361,8 @@
                         "entity_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "tsk_task_targets_pk",
@@ -8173,7 +8373,8 @@
                         "entity_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -8219,7 +8420,8 @@
                         "user_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -8391,7 +8593,8 @@
                         "status"
                     ],
                     "predicate": "(deleted_at IS NULL)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "tsk_tasks_due_ix",
@@ -8400,7 +8603,8 @@
                         "due_at"
                     ],
                     "predicate": "(((status)::text = ANY ((ARRAY['open'::character varying, 'in_progress'::character varying, 'waiting'::character varying, 'review'::character varying])::text[])) AND (deleted_at IS NULL))",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "tsk_tasks_kanban_ix",
@@ -8411,7 +8615,8 @@
                         "\"position\""
                     ],
                     "predicate": "(deleted_at IS NULL)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "tsk_tasks_pk",
@@ -8420,7 +8625,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "tsk_tasks_review_ix",
@@ -8430,7 +8636,8 @@
                         "assignee_id"
                     ],
                     "predicate": "(((status)::text = 'review'::text) AND (deleted_at IS NULL))",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "tsk_tasks_search_ix",
@@ -8439,7 +8646,8 @@
                         "search"
                     ],
                     "predicate": null,
-                    "method": "gin"
+                    "method": "gin",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "tsk_tasks_sprint_ix",
@@ -8448,7 +8656,8 @@
                         "sprint_id"
                     ],
                     "predicate": "(sprint_id IS NOT NULL)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -8606,7 +8815,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "tsk_time_logs_task_ix",
@@ -8615,7 +8825,8 @@
                         "task_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "tsk_time_logs_user_ix",
@@ -8625,7 +8836,8 @@
                         "spent_on"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -8700,7 +8912,8 @@
                         "user_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -8816,7 +9029,8 @@
                         "lower((email)::text)"
                     ],
                     "predicate": "(deleted_at IS NULL)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "users_pk",
@@ -8825,7 +9039,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -8910,7 +9125,8 @@
                         "lower((email)::text)"
                     ],
                     "predicate": "((status)::text = 'pending'::text)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "wsp_invitations_pk",
@@ -8919,7 +9135,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "wsp_invitations_token_hash_uq",
@@ -8928,7 +9145,8 @@
                         "token_hash"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -9014,7 +9232,8 @@
                         "user_id"
                     ],
                     "predicate": "is_default",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "wsp_workspace_members_pk",
@@ -9023,7 +9242,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "wsp_workspace_members_user_ix",
@@ -9032,7 +9252,8 @@
                         "user_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "wsp_workspace_members_workspace_id_user_id_uq",
@@ -9042,7 +9263,8 @@
                         "user_id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
@@ -9143,7 +9365,8 @@
                         "(true)"
                     ],
                     "predicate": "(is_default AND (deleted_at IS NULL))",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "wsp_workspaces_path_gist_ix",
@@ -9152,7 +9375,8 @@
                         "path"
                     ],
                     "predicate": null,
-                    "method": "gist"
+                    "method": "gist",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "wsp_workspaces_pk",
@@ -9161,7 +9385,8 @@
                         "id"
                     ],
                     "predicate": null,
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 },
                 {
                     "name": "wsp_workspaces_slug_uq",
@@ -9170,7 +9395,8 @@
                         "slug"
                     ],
                     "predicate": "(deleted_at IS NULL)",
-                    "method": "btree"
+                    "method": "btree",
+                    "nulls_not_distinct": false
                 }
             ],
             "foreign_keys": [
