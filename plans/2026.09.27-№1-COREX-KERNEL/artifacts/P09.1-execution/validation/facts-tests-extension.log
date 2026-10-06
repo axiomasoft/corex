@@ -1,0 +1,7 @@
+/home/vostrikov/projects/packages/corex/scripts/quality/tests/test_facts_guard.py:35: SyntaxWarning: invalid escape sequence '\d'
+  self.put(str(guard.FACTS_SCRIPT), '''import hashlib,json,subprocess,re
+...................
+----------------------------------------------------------------------
+Ran 19 tests in 3.052s
+
+OK

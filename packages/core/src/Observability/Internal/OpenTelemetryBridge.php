@@ -7,6 +7,7 @@ namespace CoreX\Observability\Internal;
 use Closure;
 use CoreX\Observability\Contracts\TracePropagation;
 use CoreX\Observability\Data\OperationContext;
+use Error;
 use OpenTelemetry\API\Trace\Propagation\TraceContextPropagator;
 use OpenTelemetry\API\Trace\Span;
 use OpenTelemetry\API\Trace\SpanKind;
@@ -42,6 +43,10 @@ final class OpenTelemetryBridge implements TracePropagation
         try {
             $carrier = [];
             TraceContextPropagator::getInstance()->inject($carrier);
+
+            if (! is_array($carrier)) {
+                return $metadata;
+            }
             foreach (['traceparent', 'tracestate'] as $key) {
                 $value = $carrier[$key] ?? null;
 
@@ -146,7 +151,13 @@ final class OpenTelemetryBridge implements TracePropagation
             return null;
         }
 
-        return $target->{$method}(...$arguments);
+        $callback = [$target, $method];
+
+        if (! is_callable($callback)) {
+            throw new Error("Method {$method} is not accessible.");
+        }
+
+        return $callback(...$arguments);
     }
 
     /**

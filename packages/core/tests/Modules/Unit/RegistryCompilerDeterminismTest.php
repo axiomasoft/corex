@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Database\Laravel\BaseModel;
+use CoreX\Features\Data\FeatureFlagDefinition;
 use CoreX\Modules\Data\CompiledRegistry;
 use CoreX\Modules\Data\Entity;
 use CoreX\Modules\Data\FieldDefinition;
@@ -194,4 +196,34 @@ it('does not let a hydrated mutation change authority bytes or fingerprint', fun
 
     expect($again->fingerprint)->toBe($fingerprint)
         ->and($again->menu[0]->handle)->toBe('home');
+});
+
+it('round trips feature flag payloads without restricting valid JSON to maps', function (): void {
+    foreach ([false, 42, 'scalar', ['one', 'two'], ['nested' => ['one', 'two']]] as $value) {
+        $flag = new FeatureFlagDefinition(
+            key: 'payload', payload: JsonDocuments::capture($value),
+        );
+        $compiled = new CompiledRegistry([], [], [], [], [], [], [], [], featureFlags: [$flag]);
+        $array = $compiled->toArray();
+        $copy = CompiledRegistry::fromArray($array);
+        expect($copy->toArray())->toBe($array)
+            ->and(JsonDocuments::decode($copy->featureFlags[0]->payload))->toBe($value);
+    }
+});
+
+it('rejects malformed serialized slices before hydration', function (): void {
+    foreach ([['entityFields', [['extender' => [], 'declaringModule' => 42, 'sleeping' => false]]],
+        ['settings', [['namespace' => 'example', 'definition' => 'not a map']]],
+        ['featureFlags', [['key' => 'example', 'default' => 'not a bool', 'module' => null, 'payload' => null]]],
+        ['permissions', ['not a map']]] as [$key, $invalid]) {
+        $payload = CompiledRegistry::empty()->toArray();
+        $payload[$key] = $invalid;
+        expect(fn () => CompiledRegistry::fromArray($payload))->toThrow(CompilationException::class);
+    }
+});
+
+it('round trips interface event class strings in compiled listeners', function (): void {
+    $listeners = ['example/events' => [Stringable::class => [stdClass::class]]];
+    $compiled = new CompiledRegistry([], [], [], [], [], [], [], [], listeners: $listeners);
+    expect(CompiledRegistry::fromArray($compiled->toArray())->listeners)->toBe($listeners);
 });

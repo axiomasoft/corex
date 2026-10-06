@@ -10,6 +10,7 @@ use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Data\ImpersonationState;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Http\Request;
+use Stringable;
 
 /**
  * Actor/request snapshot for an audit entry built outside a queue worker
@@ -50,7 +51,10 @@ final class CurrentActor
 
         $user = $this->auth->guard()->user();
 
-        return $user !== null ? (string) $user->getAuthIdentifier() : null;
+        $identifier = $user?->getAuthIdentifier();
+        assert(is_scalar($identifier) || $identifier === null || $identifier instanceof Stringable);
+
+        return $user !== null ? (string) $identifier : null;
     }
 
     /** @return array<string, mixed> */

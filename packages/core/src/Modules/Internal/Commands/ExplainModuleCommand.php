@@ -23,12 +23,12 @@ final class ExplainModuleCommand extends Command
 
     public function handle(RegistryIntrospection $introspection): int
     {
-        $module = (string) $this->argument('module');
+        $module = $this->argument('module');
         $context = $this->resolveContext();
         $explanation = $introspection->why(module: $module, context: $context);
 
-        if ((bool) $this->option('json')) {
-            $this->line((string) json_encode([
+        if ($this->option('json')) {
+            $this->line(json_encode([
                 'schemaVersion' => $explanation->schemaVersion,
                 'module' => $explanation->module,
                 'status' => $explanation->status,

@@ -302,7 +302,7 @@ final class RegistryCompiler implements ModuleCompilation
      * Falls back to introspecting the model's `$casts` when the extender
      * doesn't declare fields explicitly.
      *
-     * @param  class-string<Model>  $model
+     * @param  class-string  $model
      * @return list<FieldDefinition>
      *
      * @internal spec: B-10 §4.2
@@ -310,6 +310,7 @@ final class RegistryCompiler implements ModuleCompilation
     private function introspectCasts(string $model): array
     {
         $instance = new $model;
+        assert($instance instanceof Model);
 
         $fields = [];
 
@@ -742,7 +743,9 @@ final class RegistryCompiler implements ModuleCompilation
             $rightPriority = is_numeric($right->payload['priority'] ?? null) ? (int) $right->payload['priority'] : null;
 
             if ($leftPriority !== null || $rightPriority !== null) {
-                return ($rightPriority ?? 0) <=> ($leftPriority ?? 0) ?: $left->id <=> $right->id;
+                $priority = ($rightPriority ?? 0) <=> ($leftPriority ?? 0);
+
+                return $priority !== 0 ? $priority : $left->id <=> $right->id;
             }
 
             return $left->id <=> $right->id;
@@ -946,7 +949,7 @@ final class RegistryCompiler implements ModuleCompilation
             $leftId = $left->panel.':'.$left->handle;
             $rightId = $right->panel.':'.$right->handle;
 
-            return (array_search($leftId, $order, true) ?: 0) <=> (array_search($rightId, $order, true) ?: 0);
+            return (array_search($leftId, $order, true) === false ? 0 : array_search($leftId, $order, true)) <=> (array_search($rightId, $order, true) === false ? 0 : array_search($rightId, $order, true));
         });
 
         return $menu;

@@ -20,11 +20,20 @@ $baselinePath = $root.'/scripts/ownership-gate-baseline.json';
 try {
     $map = json_decode((string) file_get_contents($root.'/scripts/ownership-map.json'), true, flags: JSON_THROW_ON_ERROR);
 
+    assert(is_array($map));
+    assert(is_array($map['packages']) && is_array($map['kernel']));
+    foreach (['packages', 'root_symbols', 'dev_roots', 'modules'] as $field) {
+        assert(is_array($map['kernel'][$field]));
+        foreach ($map['kernel'][$field] as $name) {
+            assert(is_string($name));
+        }
+    }
+
     if ($map['schema'] !== 'corex-ownership-map/1') {
         throw new RuntimeException('invalid ownership map schema');
     }
     $plannedSources = [];
-    $plannedDeclarations = is_array($map) ? ($map['planned_identifier_sources'] ?? []) : [];
+    $plannedDeclarations = $map['planned_identifier_sources'] ?? [];
 
     if (! is_array($plannedDeclarations)) {
         throw new RuntimeException('invalid planned identifier declarations');
@@ -47,8 +56,8 @@ try {
         $plannedSources[$entry['package']][$entry['kind']][$entry['id']] = $sourceFiles;
     }
     $catalog = [];
-    foreach (file($root.'/docs/architecture/table-ownership.md') as $line) {
-        if (preg_match('/^\| ([^|]+) \| ([a-z][a-z0-9-]*\/[a-z][a-z0-9-]*) \|/', $line, $m)) {
+    foreach ((($lines = file($root.'/docs/architecture/table-ownership.md')) === false ? throw new RuntimeException('Unreadable table catalog') : $lines) as $line) {
+        if (preg_match('/^\| ([^|]+) \| ([a-z][a-z0-9-]*\/[a-z][a-z0-9-]*) \|/', $line, $m) === 1) {
             $catalog[trim($m[1])] = $m[2];
         }
     }
@@ -56,20 +65,25 @@ try {
     $sourceInventory = [];
     $inventory = [];
     $violations = [];
-    foreach (glob($root.'/packages/*/composer.json') ?: [] as $manifest) {
+    foreach ((($entries = glob($root.'/packages/*/composer.json')) === false ? [] : $entries) as $manifest) {
         $composer = json_decode((string) file_get_contents($manifest), true, flags: JSON_THROW_ON_ERROR);
+        assert(is_array($composer) && is_string($composer['name']));
         $package = $composer['name'];
         $rule = $map['packages'][$package] ?? null;
 
-        if ($rule === null || $rule['dir'] !== basename(dirname($manifest))) {
+        if (! is_array($rule) || $rule['dir'] !== basename(dirname($manifest))) {
             throw new RuntimeException('missing ownership map for '.$package);
+        }
+        assert(is_string($rule['root']));
+        foreach (['config', 'tag_prefix', 'env_prefix', 'command_prefix'] as $field) {
+            assert($rule[$field] === null || is_string($rule[$field]));
         }
         $identifiers = [];
         $sourceNamespaces = [];
         $identifierSources = [];
         foreach (['autoload', 'autoload-dev'] as $section) {
-            foreach (array_keys($composer[$section]['psr-4'] ?? []) as $ns) {
-                $identifiers['namespace'][rtrim($ns, '\\')] = true;
+            foreach (array_keys(is_array($composer[$section] ?? null) && is_array($composer[$section]['psr-4'] ?? null) ? $composer[$section]['psr-4'] : []) as $ns) {
+                $identifiers['namespace'][rtrim((string) $ns, '\\')] = true;
             }
         }
         foreach (['src', 'config', 'database/migrations'] as $area) {
@@ -154,7 +168,7 @@ try {
                 // A pre-transfer identifier expires when its exact source declarations disappear.
                 $declaredSources = $identifierSources[$kind][$id] ?? [];
                 $sourceInventory[$kind][$id][$package] = $declaredSources;
-                $packageKey = is_string($package) ? $package : '';
+                $packageKey = $package;
                 $allowedSources = $plannedSources[$packageKey][$kind][$id] ?? [];
                 $planned = ! in_array('--strict', $argv, true) && $declaredSources !== []
                     && array_diff($declaredSources, $allowedSources) === [];
@@ -188,7 +202,7 @@ try {
                     continue;
                 }
 
-                $upstreamConfig = is_array($rule) ? ($rule['upstream_config'] ?? []) : [];
+                $upstreamConfig = $rule['upstream_config'] ?? [];
 
                 if (! is_array($upstreamConfig)) {
                     throw new RuntimeException('invalid upstream config for '.$packageKey);
@@ -199,6 +213,7 @@ try {
                 }
                 $field = ['config' => 'config', 'tag' => 'tag_prefix', 'env' => 'env_prefix', 'command' => 'command_prefix'][$kind];
                 $expected = $rule[$field];
+                assert($expected === null || is_string($expected));
 
                 if (! $planned && ($expected === null || ($kind === 'config' ? $id !== $expected : ! str_starts_with($id, $expected)))) {
                     $violations[] = "O2 {$kind} {$package} {$id} expected".($kind === 'config' ? '' : '-prefix').' '.($expected ?? 'none');
@@ -212,9 +227,17 @@ try {
     }
     foreach ($owners as $kind => $ids) {
         foreach ($ids as $id => $packages) {
+            $sharedTags = $map['projected_shared_tags'] ?? [];
+            assert(is_array($sharedTags));
             $shared = $kind === 'tag' && ! in_array('--strict', $argv, true)
-                ? ($map['projected_shared_tags'][$id] ?? []) : [];
-            $sourcesMatch = $shared !== [] && array_diff(array_keys($packages), $shared) === [];
+                ? ($sharedTags[$id] ?? []) : [];
+            assert(is_array($shared));
+            $sharedNames = [];
+            foreach ($shared as $name) {
+                assert(is_string($name));
+                $sharedNames[] = $name;
+            }
+            $sourcesMatch = $sharedNames !== [] && array_diff(array_keys($packages), $sharedNames) === [];
             foreach (array_keys($packages) as $owner) {
                 $expectedSources = $owner === 'axiomasoft/corex'
                     ? ['packages/core/src/CoreServiceProvider.php']
@@ -242,8 +265,12 @@ try {
     }
     $baseline = is_file($baselinePath) ? json_decode((string) file_get_contents($baselinePath), true, flags: JSON_THROW_ON_ERROR) : ['schema' => 'corex-ownership-baseline/1', 'violations' => []];
 
-    if ($baseline['schema'] !== 'corex-ownership-baseline/1' || ! is_array($baseline['violations'])) {
+    if (! is_array($baseline) || $baseline['schema'] !== 'corex-ownership-baseline/1' || ! is_array($baseline['violations'])) {
         throw new RuntimeException('invalid ownership baseline');
+    }
+
+    foreach ($baseline['violations'] as $line) {
+        assert(is_string($line));
     }
 
     if (in_array('--write-baseline', $argv, true)) {
@@ -255,8 +282,8 @@ try {
     }
     $new = in_array('--strict', $argv, true) ? $violations : array_values(array_diff($violations, $baseline['violations']));
     $stale = array_values(array_diff($baseline['violations'], $violations));
-    foreach (['new' => $new, 'stale' => $stale] as $kind => $lines) {
-        foreach ($lines as $line) {
+    foreach (['new' => $new, 'stale' => $stale] as $kind => $diagnostics) {
+        foreach ($diagnostics as $line) {
             fwrite(STDERR, "ownership FAIL: {$kind}: {$line}\n");
         }
     }

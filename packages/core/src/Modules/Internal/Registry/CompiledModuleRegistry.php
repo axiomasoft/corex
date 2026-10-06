@@ -180,7 +180,7 @@ final class CompiledModuleRegistry implements ModuleRegistry
      * runtime with no entities and no morph map, exactly the class of defect
      * A10 was, only quieter.
      *
-     * @return array<string, mixed>
+     * @return array<array-key, mixed>
      */
     private function readCache(): array
     {

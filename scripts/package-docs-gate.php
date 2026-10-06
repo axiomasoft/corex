@@ -10,6 +10,7 @@ use CoreX\Attributes\Tooling\SurfaceScanner;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RuntimeException;
+use SplFileInfo;
 use ZipArchive;
 
 /**
@@ -67,10 +68,10 @@ if ($wantJson) {
     fwrite(STDERR, formatReport($report));
 }
 
-exit($report['ok'] ? EXIT_OK : EXIT_VIOLATION);
+exit($report['ok'] === true ? EXIT_OK : EXIT_VIOLATION);
 
 /**
- * @return array<string, mixed>
+ * @return array{schema_version: string, ok: bool, cohort_count: int, packages: list<array<string,mixed>>, violations: list<array<string,string>>}
  */
 function runDocsGate(string $repoRoot, bool $pristine): array
 {
@@ -98,7 +99,7 @@ function runDocsGate(string $repoRoot, bool $pristine): array
 }
 
 /**
- * @return list<array{name: string, path: string, dir: string, composer: array<string, mixed>}>
+ * @return list<array{name: string, path: string, dir: string, composer: array<array-key, mixed>}>
  */
 function loadCohort(string $repoRoot): array
 {
@@ -115,8 +116,9 @@ function loadCohort(string $repoRoot): array
 
     $out = [];
     foreach ($decoded['packages'] as $row) {
-        $name = (string) ($row['name'] ?? '');
-        $path = (string) ($row['path'] ?? '');
+        assert(is_array($row) && is_string($row['name']) && is_string($row['path']));
+        $name = $row['name'];
+        $path = $row['path'];
 
         if ($name === '' || $path === '') {
             throw new RuntimeException('cohort row missing name/path');
@@ -144,8 +146,8 @@ function loadCohort(string $repoRoot): array
 }
 
 /**
- * @param  array{name: string, path: string, dir: string, composer: array<string, mixed>}  $package
- * @return array<string, mixed>
+ * @param  array{name: string, path: string, dir: string, composer: array<array-key, mixed>}  $package
+ * @return array{violations: list<array<string,string>>, ...}
  */
 function inspectPackage(string $repoRoot, array $package, bool $pristine): array
 {
@@ -198,11 +200,11 @@ function inspectPackage(string $repoRoot, array $package, bool $pristine): array
 }
 
 /**
- * @param  array{name: string, path: string, dir: string, composer: array<string, mixed>}  $package
+ * @param  array{name: string, path: string, dir: string, composer: array<array-key, mixed>}  $package
  * @param  array<string, string>  $topics
  * @param  list<array<string, mixed>>  $examples
- * @param  list<array<string, mixed>>  $violations
- * @return array<string, mixed>
+ * @param  list<array<string, string>>  $violations
+ * @return array{violations: list<array<string,string>>, ...}
  */
 function packageResult(array $package, string $readmePath, array $topics, array $examples, array $violations): array
 {
@@ -211,7 +213,7 @@ function packageResult(array $package, string $readmePath, array $topics, array 
         'path' => $package['path'],
         'readme' => $readmePath,
         'producer_phase' => PRODUCER_PHASE[$package['name']] ?? 'P1',
-        'package_type' => (string) ($package['composer']['extra']['corex']['package-type'] ?? ''),
+        'package_type' => packageType($package['composer']),
         'topics' => $topics,
         'examples' => $examples,
         'violations' => $violations,
@@ -219,8 +221,8 @@ function packageResult(array $package, string $readmePath, array $topics, array 
 }
 
 /**
- * @param  array{name: string, path: string, dir: string, composer: array<string, mixed>}  $package
- * @return array<string, mixed>
+ * @param  array{name: string, path: string, dir: string, composer: array<array-key, mixed>}  $package
+ * @return array<string,string>
  */
 function violation(array $package, string $path, string $heading, string $matchedHeading, string $symbol, string $detail, string $codeBlock = ''): array
 {
@@ -240,7 +242,7 @@ function violation(array $package, string $path, string $heading, string $matche
 function extractHeadings(string $markdown): array
 {
     $headings = [];
-    foreach (preg_split("/\R/", $markdown) ?: [] as $line) {
+    foreach ((($lines = preg_split("/\R/", $markdown)) === false ? [] : $lines) as $line) {
         if (preg_match('/^#{1,6}\s+(.+)$/', trim($line), $match) !== 1) {
             continue;
         }
@@ -271,7 +273,7 @@ function extractCodeBlocks(string $markdown): array
 
 /**
  * @param  list<string>  $headings
- * @param  array{name: string, path: string, dir: string, composer: array<string, mixed>}  $package
+ * @param  array{name: string, path: string, dir: string, composer: array<array-key, mixed>}  $package
  * @return array{status: string, heading: string, detail: string}
  */
 function topicStatus(string $topic, string $markdown, array $headings, array $package, string $repoRoot): array
@@ -327,13 +329,13 @@ function bodyCoversTopic(string $topic, string $markdown): bool
 }
 
 /**
- * @param  array{name: string, path: string, dir: string, composer: array<string, mixed>}  $package
+ * @param  array{name: string, path: string, dir: string, composer: array<array-key, mixed>}  $package
  */
 function notApplicable(string $topic, array $package, string $repoRoot, string $markdown): ?string
 {
-    $packageType = (string) ($package['composer']['extra']['corex']['package-type'] ?? '');
+    $packageType = packageType($package['composer']);
     $configDir = $repoRoot.'/'.$package['path'].'/config';
-    $configFiles = is_dir($configDir) ? (glob($configDir.'/*.php') ?: []) : [];
+    $configFiles = is_dir($configDir) ? ((($entries = glob($configDir.'/*.php')) === false ? [] : $entries)) : [];
 
     if ($topic === 'configuration' && $configFiles === []) {
         return 'package-type='.$packageType.'; no config/*.php';
@@ -343,9 +345,9 @@ function notApplicable(string $topic, array $package, string $repoRoot, string $
 }
 
 /**
- * @param  array{name: string, path: string, dir: string, composer: array<string, mixed>}  $package
+ * @param  array{name: string, path: string, dir: string, composer: array<array-key, mixed>}  $package
  * @param  array{language: string, code: string}  $block
- * @return array<string, mixed>
+ * @return array{violations: list<array<string,string>>, ...}
  */
 function inspectPhpBlock(string $repoRoot, array $package, string $readmePath, int $index, array $block, bool $pristine): array
 {
@@ -455,7 +457,7 @@ function wrapPhpExample(string $code): string
     if (! str_starts_with($trimmed, '<?php')) {
         if (preg_match("/^'[^']+'\\s*=>/", $trimmed) === 1 || str_starts_with($trimmed, '[')) {
             $trimmed = "<?php\n\$example = [\n".$trimmed."\n];\n";
-        } elseif (str_contains($trimmed, '$this->') && ! preg_match('/\bclass\b/', $trimmed)) {
+        } elseif (str_contains($trimmed, '$this->') && preg_match('/\bclass\b/', $trimmed) !== 1) {
             $trimmed = "<?php\nfinal class DocumentationExample {\n    public function example(): mixed {\n".$trimmed."\n        return null;\n    }\n}\n";
         } else {
             $trimmed = "<?php\n".$trimmed."\n";
@@ -539,7 +541,7 @@ function coveredByAnyPublicApi(string $fqcn, array $maps): bool
 }
 
 /**
- * @param  array{name: string, path: string, dir: string, composer: array<string, mixed>}  $package
+ * @param  array{name: string, path: string, dir: string, composer: array<array-key, mixed>}  $package
  * @param  list<string>  $symbols
  * @return array{archive: string, missing: list<string>}
  */
@@ -548,7 +550,10 @@ function compileAgainstArchive(string $repoRoot, array $package, array $symbols)
     $cohortPath = $repoRoot.'/scripts/package-docs-cohort.json';
     $cohort = json_decode((string) file_get_contents($cohortPath), true);
     $archiveSha = null;
-    foreach ($cohort['packages'] ?? [] as $row) {
+    assert(is_array($cohort) && is_array($cohort['packages']));
+    foreach ($cohort['packages'] as $row) {
+        assert(is_array($row));
+
         if (($row['name'] ?? '') === $package['name']) {
             $archiveSha = $row['archive_sha256'] ?? null;
 
@@ -570,7 +575,7 @@ function compileAgainstArchive(string $repoRoot, array $package, array $symbols)
         }
     }
 
-    $zips = glob($output.'/artifacts/*.zip') ?: [];
+    $zips = (($entries = glob($output.'/artifacts/*.zip')) === false ? [] : $entries);
     $zipPath = null;
     foreach ($zips as $zip) {
         if ($archiveSha !== null && hash_file('sha256', $zip) === $archiveSha) {
@@ -615,6 +620,8 @@ function classFileExists(string $extractRoot, string $fqcn): bool
 {
     $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($extractRoot));
     foreach ($it as $file) {
+        assert($file instanceof SplFileInfo);
+
         if (! $file->isFile() || $file->getFilename() !== 'composer.json') {
             continue;
         }
@@ -624,7 +631,11 @@ function classFileExists(string $extractRoot, string $fqcn): bool
             continue;
         }
         $base = dirname($file->getPathname());
-        foreach ($composer['autoload']['psr-4'] ?? [] as $ns => $dir) {
+        $autoload = $composer['autoload'] ?? [];
+        assert(is_array($autoload));
+        $psr4 = $autoload['psr-4'] ?? [];
+        assert(is_array($psr4));
+        foreach ($psr4 as $ns => $dir) {
             $ns = (string) $ns;
 
             if (! str_starts_with($fqcn.'\\', $ns) && $fqcn !== rtrim($ns, '\\')) {
@@ -633,7 +644,8 @@ function classFileExists(string $extractRoot, string $fqcn): bool
             $relative = substr($fqcn, strlen(rtrim($ns, '\\')));
             $relative = ltrim(str_replace('\\', '/', $relative), '/').'.php';
             foreach ((array) $dir as $directory) {
-                $candidate = rtrim($base.'/'.trim((string) $directory, '/'), '/').'/'.$relative;
+                assert(is_string($directory));
+                $candidate = rtrim($base.'/'.trim($directory, '/'), '/').'/'.$relative;
 
                 if (is_file($candidate)) {
                     return true;
@@ -646,7 +658,7 @@ function classFileExists(string $extractRoot, string $fqcn): bool
 }
 
 /**
- * @param  array<string, mixed>  $report
+ * @param  array{schema_version: string, ok: bool, cohort_count: int, packages: list<array<string,mixed>>, violations: list<array<string,string>>}  $report
  */
 function formatReport(array $report): string
 {
@@ -667,4 +679,15 @@ function formatReport(array $report): string
     }
 
     return implode("\n", $lines)."\n";
+}
+
+/** @param array<array-key, mixed> $composer */
+function packageType(array $composer): string
+{
+    $extra = $composer['extra'] ?? [];
+    $corex = is_array($extra) ? ($extra['corex'] ?? []) : [];
+    $type = is_array($corex) ? ($corex['package-type'] ?? '') : '';
+    assert(is_string($type));
+
+    return $type;
 }

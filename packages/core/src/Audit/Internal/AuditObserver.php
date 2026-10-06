@@ -10,6 +10,7 @@ use CoreX\Audit\Data\AuditEntry;
 use CoreX\Config\Data\CoreOptions;
 use CoreX\Data\Laravel\JsonDocuments;
 use Illuminate\Database\Eloquent\Model;
+use Stringable;
 
 /**
  * Single write path for both audit sources (capability-based auditing +
@@ -108,7 +109,7 @@ final class AuditObserver
             $attributes = $model->getAttributes();
 
             foreach ($attributes as $attribute => $value) {
-                if (isset($always[$attribute]) || isset($except[$attribute]) || ! $model->isFillable((string) $attribute)) {
+                if (isset($always[$attribute]) || isset($except[$attribute]) || ! $model->isFillable($attribute)) {
                     continue;
                 }
 
@@ -116,7 +117,7 @@ final class AuditObserver
             }
         } else {
             foreach ($model->getChanges() as $attribute => $value) {
-                if (isset($always[$attribute]) || isset($except[$attribute]) || ! $model->isFillable((string) $attribute)) {
+                if (isset($always[$attribute]) || isset($except[$attribute]) || ! $model->isFillable($attribute)) {
                     continue;
                 }
 
@@ -131,12 +132,15 @@ final class AuditObserver
             }
         }
 
+        $key = $model->getKey();
+        assert(is_scalar($key) || $key === null || $key instanceof Stringable);
+
         $this->logger->record(new AuditEntry(
             action: $action,
             actorType: $this->actor->type(),
             actorId: $this->actor->id(),
             entityType: $model->getMorphClass(),
-            entityId: (string) $model->getKey(),
+            entityId: (string) $key,
             changes: JsonDocuments::nullable($changes === [] ? null : json_decode(json_encode($changes, JSON_THROW_ON_ERROR), true, 512, JSON_THROW_ON_ERROR)),
             context: JsonDocuments::capture($this->actor->context()),
         ));

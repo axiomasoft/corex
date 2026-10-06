@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — foundation typing (P09.1, D126)
+
+- Refine the serialized PHPDoc contracts of CompiledModule, CompiledRegistry, EntityField, EntityDefinition, FieldDefinition and ModuleManifest; validate raw compiled payloads at deserialization. Native public signatures and schema remain unchanged. Feature flag JSON payloads retain scalar, list and map round-trips.
+
 ## Unreleased — tenant baseline v1
 
 - Tenant schema baseline v1: one file per table, explicit constraint/index names, bigint counters, and folded actor checks; the temporary `tenant-modules` set is removed.

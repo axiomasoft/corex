@@ -1,0 +1,28 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:check-evidence:v1",
+  "evidence_id": "PLAN3.P09.1.V17",
+  "check_id": "V17",
+  "subject": "PLAN3.P09.1",
+  "procedure": {
+    "cmd": "scripts/php84 vendor/bin/pest tests/Arch/MigrationToolingGuardTest.php",
+    "cwd": "/home/vostrikov/projects/packages/corex"
+  },
+  "candidate": {
+    "head": "f0faead86201935c71cd0c2d8731e2e41bcc26e5"
+  },
+  "exit": 0,
+  "started_at": "2026-10-06T20:27:49.107133+00:00",
+  "finished_at": "2026-10-06T20:27:52.233848+00:00",
+  "producer": {
+    "kind": "executor",
+    "actor": {
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh"
+    }
+  },
+  "log": {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.1-execution/validation/V17.log",
+    "sha256": "f5fb2571531d11ef7a6540071367828e4f33071c01940e39d5fb2fa8c6e29398"
+  }
+}

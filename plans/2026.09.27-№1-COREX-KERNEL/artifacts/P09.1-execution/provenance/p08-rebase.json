@@ -1,0 +1,62 @@
+{
+  "state": "CLOSED_P08_PROVENANCE_READY: candidate for future P09 pre admission; owner grant and sealed pre receipt still absent",
+  "historical_snapshot_sha256": "eb7951221aad7b978b4dc652134b0e7a2aeca6930288a2fc24612f95b17b9867",
+  "exact_deltas": [
+    {
+      "key": "anchors..github/workflows/ci.yml",
+      "previous": "fb059595c35b592c6f69b8d2066fa1d04696260eab7df9fa3ab35b14f33fcb6b",
+      "current": "144e98402ed13d458fcfea4f65be0f3f2fad6d6277d8cfe9861da2081daeb666",
+      "owning_item": "P08.3",
+      "candidate_source_sha": "1f824f74fa0044819f991346e484dad82872827a",
+      "hosted_ci_run_id": 37508077385,
+      "state": "closed-P08-provenance-ready-for-future-pre",
+      "reason": "Closed P08.3 schema/PG catalog repair, verified hosted P08 final source and unchanged-product plan-only lineage"
+    },
+    {
+      "key": "anchors.scripts/schema-gate.php",
+      "previous": "20730757b9acd5fbb3050ed439ad1df61cf5a08843a2f8c3b160365ddb38a782",
+      "current": "c5ac639f6103e73646d8bc136e67e9c6ade7527578cf35df7c706c7407364045",
+      "owning_item": "P08.3",
+      "candidate_source_sha": "1f824f74fa0044819f991346e484dad82872827a",
+      "hosted_ci_run_id": 37508077385,
+      "state": "closed-P08-provenance-ready-for-future-pre",
+      "reason": "Closed P08.3 schema/PG catalog repair, verified hosted P08 final source and unchanged-product plan-only lineage"
+    },
+    {
+      "key": "source_commit",
+      "previous": "3b46c9a10b1c7a574336a0b49530ea70ce03c05a",
+      "current": "f0faead86201935c71cd0c2d8731e2e41bcc26e5",
+      "owning_item": "P08.3",
+      "candidate_source_sha": "1f824f74fa0044819f991346e484dad82872827a",
+      "hosted_ci_run_id": 37508077385,
+      "state": "closed-P08-provenance-ready-for-future-pre",
+      "reason": "Closed P08.3 schema/PG catalog repair, verified hosted P08 final source and unchanged-product plan-only lineage"
+    }
+  ],
+  "unexpected_deltas": [],
+  "original_snapshot_unchanged": true,
+  "not_a_sealed_P09_pre_receipt": true,
+  "future_owner": "P09.1 facts-guard bootstrap/pre/verify-pre/post under frozen write-set",
+  "closed_P08": {
+    "at": "2026-10-06T19:12:32Z",
+    "result": "done_with_deviations",
+    "summary": "10 item(s): 8 done, 2 done_with_deviations"
+  },
+  "hosted_receipt": {
+    "repository": "ax1oma/corex-mirror",
+    "run_id": 37508077385,
+    "head_sha": "1f824f74fa0044819f991346e484dad82872827a",
+    "status": "completed",
+    "conclusion": "success",
+    "mandatory_jobs_success": 37,
+    "deferred_flag_absent": true,
+    "path": "artifacts/P08-closure-readiness/hosted-receipt-ax1oma.json",
+    "run_path": "artifacts/P09.1-execution/V0-live-run.json",
+    "jobs_path": "artifacts/P09.1-execution/V0-live-jobs.json"
+  },
+  "lineage": {
+    "tested_sha": "1f824f74fa0044819f991346e484dad82872827a",
+    "pre_source_sha": "f0faead86201935c71cd0c2d8731e2e41bcc26e5",
+    "plan_only": true
+  }
+}

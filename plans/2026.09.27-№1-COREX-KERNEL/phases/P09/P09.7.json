@@ -2,7 +2,7 @@
   "$schema": "urn:swissknifeman:task:plan:item:v1",
   "id": "P09.7",
   "title": "Финальный local proof: source-bound rc и qualification",
-  "status": "todo",
+  "status": "skipped",
   "summary": "Точный новый кандидат проходит current DoD/stack/install/consumer gates; read-only qualification workflow и local sealed packet готовы для approval.",
   "why": "Свежесть доказательств и приватная dependency closure — обязательны; публикация требует external authority и не выполняется здесь.",
   "scope": {
@@ -26,7 +26,8 @@
     "D73",
     "D103",
     "D113",
-    "D121"
+    "D121",
+    "D125"
   ],
   "reads": [
     {
@@ -325,6 +326,14 @@
       "@plan/artifacts/P09-design-rag/README.md"
     ]
   },
-  "result": null,
-  "updated_at": "2026-10-06T16:43:21Z"
+  "result": {
+    "finished_at": "2026-10-06T19:25:24Z",
+    "registered_by": {
+      "provider": "codex",
+      "model": "gpt-6"
+    },
+    "notes": "Freeze/source-bound RC и финальная release qualification не нужны: стабильная версия потребует многих дальнейших прогонов. Пропущено по прямому указанию владельца 2026-10-06; реализация и проверки этого item не выполнялись.",
+    "decision": "D125"
+  },
+  "updated_at": "2026-10-06T19:25:24Z"
 }

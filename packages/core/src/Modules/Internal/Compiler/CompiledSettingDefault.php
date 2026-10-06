@@ -35,9 +35,14 @@ final readonly class CompiledSettingDefault
      */
     public function toArray(): array
     {
+        $properties = [];
+        foreach (get_object_vars($this->definition) as $property => $value) {
+            $properties[(string) $property] = $value;
+        }
+
         return [
             'namespace' => $this->namespace,
-            'definition' => get_object_vars($this->definition),
+            'definition' => $properties,
         ];
     }
 

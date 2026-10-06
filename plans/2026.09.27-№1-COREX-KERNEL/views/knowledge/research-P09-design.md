@@ -7,6 +7,10 @@ Source: [JSON](../../knowledge/research-P09-design.json). This view is for peopl
 
 - P09
 
+## Действующая граница P09 по решению D125
+
+D125 (owner, 2026-10-06): P09 ограничена улучшениями кода и репозитория до выпуска. RC 1.0 не будет. P09.6/7/16/17 пропущены; P09.15 содержит только source lifecycle checks; P09.8 — code-quality review и обычный финальный CI D73. Не создавать sealed candidate, SBOM/first-release receipts, release DoD/scorecard, supported-release registry, operator packet или release qualification workflow/matrix; не менять версии, каналы, stability и release baseline. Исторические release/dod-map/qualification/candidate части досье и примеров не являются заданиями оставшихся items. Типизация, MSI95/90/75, API/SPI/BC/Golden и фактические проверки не ослаблены. Текущие item contracts и D125 имеют приоритет при противоречии старому runbook. Технические проверки migrations, facts, mutation parsers и behavioral regression tests сохраняются. D123 о каналах релиза не блокирует code-items; решение о каналах не принято. P08 readiness/design review остаются предусловиями; изменение плана не является разрешением на их обход.
+
 ## 1. База, полномочия, факты
 
 Source `3b46c9a10b1c7a574336a0b49530ea70ce03c05a`; факты RAG:—, измерены read-only `python3 plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09-design/scripts/facts.py`. Raw `artifacts/P09-design/facts.json`. Это counts baseline, не свежий PHPStan error run: baseline_total=1975, root=441; ceilings sum=2710 — исторический потолок, не текущая метрика. Ни одного acceptance suite при дизайне не запускалось.

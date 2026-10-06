@@ -90,8 +90,8 @@ function parseCatalog(string $path): array
 {
     $catalog = [];
 
-    foreach (file($path) as $line) {
-        if (! preg_match('/^\| ([^|]+) \| ([a-z][a-z0-9-]*\/[a-z][a-z0-9-]*) \|/', $line, $match)) {
+    foreach ((($lines = file($path)) === false ? throw new RuntimeException('Unreadable table catalog') : $lines) as $line) {
+        if (preg_match('/^\| ([^|]+) \| ([a-z][a-z0-9-]*\/[a-z][a-z0-9-]*) \|/', $line, $match) !== 1) {
             continue;
         }
 
@@ -114,10 +114,10 @@ function loadPackageComposerNames(string $repoRoot): array
 {
     $map = [];
 
-    foreach (glob($repoRoot.'/packages/*/composer.json') ?: [] as $composerFile) {
+    foreach ((($entries = glob($repoRoot.'/packages/*/composer.json')) === false ? [] : $entries) as $composerFile) {
         $data = json_decode((string) file_get_contents($composerFile), true);
 
-        if (! is_array($data) || ! isset($data['name'])) {
+        if (! is_array($data) || ! is_string($data['name'] ?? null)) {
             continue;
         }
 
@@ -141,12 +141,12 @@ function loadConfigTableDefaults(string $repoRoot): array
 
     $src = (string) file_get_contents($configPath);
 
-    if (preg_match_all(
+    if ((($qualityMatchCount = preg_match_all(
         '/public\s+static\s+function\s+(\w+Table)\(\)[^{]*\{[^}]*config\([^,]+,\s*\'([^\']+)\'\)[^}]*\}/',
         $src,
         $matches,
         PREG_SET_ORDER,
-    )) {
+    )) !== false && $qualityMatchCount > 0)) {
         foreach ($matches as $match) {
             $defaults[$match[1]] = $match[2];
         }
@@ -164,7 +164,7 @@ function extractSchemaCreates(string $repoRoot, array $packageDirs, array $confi
 {
     $creates = [];
 
-    foreach (glob($repoRoot.'/packages/*/database/migrations', GLOB_ONLYDIR) ?: [] as $migDir) {
+    foreach ((($entries = glob($repoRoot.'/packages/*/database/migrations', GLOB_ONLYDIR)) === false ? [] : $entries) as $migDir) {
         $pkgDir = dirname(dirname($migDir));
         $ownerPkg = $packageDirs[$pkgDir] ?? basename($pkgDir);
 
@@ -173,6 +173,8 @@ function extractSchemaCreates(string $repoRoot, array $packageDirs, array $confi
         $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($migDir));
 
         foreach ($iterator as $file) {
+            assert($file instanceof SplFileInfo);
+
             if (! $file->isFile() || ! str_ends_with($file->getPathname(), '.php')) {
                 continue;
             }
@@ -191,11 +193,11 @@ function extractSchemaCreates(string $repoRoot, array $packageDirs, array $confi
             $src = (string) file_get_contents($filePath);
             $consts = [];
 
-            if (preg_match_all(
+            if ((($qualityMatchCount = preg_match_all(
                 '/(?:private|protected|public)?\s*const\s+(?:string\s+)?(\w+)\s*=\s*\'([^\']+)\'/',
                 $src,
                 $constMatches,
-            )) {
+            )) !== false && $qualityMatchCount > 0)) {
                 foreach ($constMatches[1] as $i => $name) {
                     $consts[$name] = $constMatches[2][$i];
                 }
@@ -203,7 +205,7 @@ function extractSchemaCreates(string $repoRoot, array $packageDirs, array $confi
 
             $varMap = [];
 
-            if (preg_match_all('/\$(\w+)\s*=\s*Config::(\w+)\(\)/', $src, $varMatches)) {
+            if ((($qualityMatchCount = preg_match_all('/\$(\w+)\s*=\s*Config::(\w+)\(\)/', $src, $varMatches)) !== false && $qualityMatchCount > 0)) {
                 foreach ($varMatches[1] as $i => $varName) {
                     $method = $varMatches[2][$i];
 
@@ -213,12 +215,12 @@ function extractSchemaCreates(string $repoRoot, array $packageDirs, array $confi
                 }
             }
 
-            if (! preg_match_all(
+            if ((($qualityMatchCount = preg_match_all(
                 '/Schema::create\(\s*(?:\'([^\']+)\'|"([^"]+)"|self::(\w+)|\$(\w+)|Config::(\w+)\(\))\s*,/',
                 $src,
                 $matches,
                 PREG_SET_ORDER,
-            )) {
+            )) === false || $qualityMatchCount === 0)) {
                 continue;
             }
 
@@ -281,13 +283,15 @@ function collectCrossPackageForeignKeys(string $repoRoot, array $packageDirs, ar
 {
     $hits = [];
 
-    foreach (glob($repoRoot.'/packages/*/database/migrations', GLOB_ONLYDIR) ?: [] as $migDir) {
+    foreach ((($entries = glob($repoRoot.'/packages/*/database/migrations', GLOB_ONLYDIR)) === false ? [] : $entries) as $migDir) {
         $pkgDir = dirname(dirname($migDir));
         $migOwner = $packageDirs[$pkgDir] ?? basename($pkgDir);
 
         $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($migDir));
 
         foreach ($iterator as $file) {
+            assert($file instanceof SplFileInfo);
+
             if (! $file->isFile() || ! str_ends_with($file->getPathname(), '.php')) {
                 continue;
             }
@@ -337,11 +341,11 @@ function extractReferencedTables(string $src): array
 {
     $tables = [];
 
-    if (preg_match_all('/->constrained\(\s*[\'"]([a-z0-9_]+)[\'"]\s*\)/', $src, $matches)) {
+    if ((($qualityMatchCount = preg_match_all('/->constrained\(\s*[\'"]([a-z0-9_]+)[\'"]\s*\)/', $src, $matches)) !== false && $qualityMatchCount > 0)) {
         $tables = [...$tables, ...$matches[1]];
     }
 
-    if (preg_match_all('/->on\(\s*[\'"]([a-z0-9_]+)[\'"]\s*\)/', $src, $matches)) {
+    if ((($qualityMatchCount = preg_match_all('/->on\(\s*[\'"]([a-z0-9_]+)[\'"]\s*\)/', $src, $matches)) !== false && $qualityMatchCount > 0)) {
         $tables = [...$tables, ...$matches[1]];
     }
 

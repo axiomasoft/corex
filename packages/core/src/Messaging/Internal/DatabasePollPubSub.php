@@ -107,9 +107,10 @@ final class DatabasePollPubSub implements PubSub
                 ->get();
 
             foreach ($rows as $row) {
+                assert((is_int($row->id) || is_numeric($row->id)) && is_string($row->payload));
                 $cursor = (int) $row->id;
                 /** @var array<string, mixed> $payload */
-                $payload = json_decode((string) $row->payload, true, flags: JSON_THROW_ON_ERROR);
+                $payload = json_decode($row->payload, true, flags: JSON_THROW_ON_ERROR);
                 $handler($payload);
 
                 $this->persistCursor($connection, $cursorsTable, $channel, $subscriber, $cursor);
@@ -137,12 +138,14 @@ final class DatabasePollPubSub implements PubSub
             ->first();
 
         if ($existing !== null) {
+            assert(is_int($existing->position) || is_numeric($existing->position));
+
             return (int) $existing->position;
         }
 
-        $start = $replayBacklog
-            ? 0
-            : (int) ($connection->table($messagesTable)->where('channel', $channel)->max('id') ?? 0);
+        $maximum = $replayBacklog ? 0 : ($connection->table($messagesTable)->where('channel', $channel)->max('id') ?? 0);
+        assert(is_int($maximum) || is_numeric($maximum));
+        $start = (int) $maximum;
 
         $this->persistCursor($connection, $cursorsTable, $channel, $subscriber, $start);
 

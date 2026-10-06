@@ -8,6 +8,7 @@ use CoreX\Context\Data\TenantContext;
 use CoreX\Modules\Contracts\ModuleStateReader;
 use CoreX\Modules\Enums\ModuleState;
 use Illuminate\Database\ConnectionResolverInterface;
+use stdClass;
 
 /**
  * DB-backed {@see ModuleStateReader}: reads the enabled set straight from
@@ -32,9 +33,11 @@ final class DatabaseModuleStateReader implements ModuleStateReader
         return $this->connections->connection($this->connection)->table('mod_modules')
             ->where('state', ModuleState::Enabled->value)
             ->get(['name', 'state', 'edition'])
-            ->mapWithKeys(static fn (object $row): array => [
-                $row->name => ['state' => $row->state, 'edition' => $row->edition],
-            ])
+            ->mapWithKeys(static function (stdClass $row): array {
+                assert(is_string($row->name) && is_string($row->state) && is_string($row->edition));
+
+                return [$row->name => ['state' => $row->state, 'edition' => $row->edition]];
+            })
             ->all();
     }
 }

@@ -154,8 +154,10 @@ final class CoreOptionsParser
     }
 
     /**
-     * @param  class-string  $contract
-     * @return class-string
+     * @template T of object
+     *
+     * @param  class-string<T>  $contract
+     * @return class-string<T>
      */
     private static function classString(ConfigurationValidator $violations, string $path, mixed $value, string $contract): string
     {

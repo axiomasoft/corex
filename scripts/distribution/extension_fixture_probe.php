@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use CoreX\Attributes\Api;
 use CoreX\Attributes\Spi;
+use CoreX\Modules\Data\InstalledPackageVersion;
+use CoreX\Modules\Data\ModuleManifest;
 use CoreX\Modules\Testing\ExtensionContract;
 use CoreX\Search\Internal\SearchManager;
 use Illuminate\Config\Repository;
@@ -29,6 +31,8 @@ if ($clean !== []) {
 
 $manifest = $class::manifest();
 $version = $class::installedVersion();
+assert($manifest instanceof ModuleManifest);
+assert($version instanceof InstalledPackageVersion);
 $report = ExtensionContract::verify(
     manifests: [$manifest],
     installedPackages: [$version->name => $version],
@@ -45,7 +49,7 @@ if (method_exists($class, 'driver')) {
         'corex-search' => ['driver' => 'thirdparty'],
     ]));
     $manager = new SearchManager($container);
-    $manager->extend('thirdparty', static fn (mixed ...$ignored) => $driver);
+    $manager->extend('thirdparty', fn (mixed ...$ignored) => $driver);
     $class::bind($manager->driver('thirdparty'));
 }
 
@@ -76,7 +80,7 @@ function parseArguments(array $argv): array
     $values = [];
 
     for ($index = 0; $index < count($argv); $index += 2) {
-        $key = $argv[$index] ?? '';
+        $key = $argv[$index];
         $values[ltrim($key, '-')] = $argv[$index + 1] ?? '';
     }
 
@@ -86,22 +90,30 @@ function parseArguments(array $argv): array
         }
     }
 
-    return $values;
+    return ['vendor' => $values['vendor'], 'fixture' => $values['fixture'], 'class' => $values['class'], 'package' => $values['package'], 'forbidden' => $values['forbidden'], 'workspace' => $values['workspace']];
 }
 
 /** @return array<string, true> */
 function allowedSymbols(string $vendor): array
 {
     $installed = json_decode((string) file_get_contents($vendor.'/composer/installed.json'), true, flags: JSON_THROW_ON_ERROR);
+    assert(is_array($installed));
     $packages = $installed['packages'] ?? $installed;
+    assert(is_array($packages));
     $allowed = [];
     $queue = [];
 
     foreach ($packages as $package) {
-        if (! isset($package['extra']['corex'])) {
+        assert(is_array($package));
+        $extra = $package['extra'] ?? [];
+        assert(is_array($extra));
+
+        if (! isset($extra['corex'])) {
             continue;
         }
-        $root = $vendor.'/composer/'.($package['install-path'] ?? '');
+        $install = $package['install-path'] ?? '';
+        assert(is_string($install));
+        $root = $vendor.'/composer/'.$install;
         foreach (phpFiles($root) as $file) {
             foreach (declaredSymbols($file) as $symbol) {
                 if (! (class_exists($symbol) || interface_exists($symbol) || trait_exists($symbol) || enum_exists($symbol))) {
@@ -159,6 +171,12 @@ function enqueue(array &$queue, array $allowed, string $symbol): void
     }
 }
 
+/**
+ * @template T of object
+ *
+ * @param  ReflectionClass<T>|ReflectionEnum<UnitEnum>  $reflection
+ * @return list<string>
+ */
 function reflectionTypes(ReflectionClass $reflection): array
 {
     $types = [];
@@ -243,7 +261,8 @@ function resolveSymbol(string $token, string $namespace, array $uses): string
         return $uses[$token];
     }
 
-    $head = strstr($token, '\\', true) ?: $token;
+    $prefix = strstr($token, '\\', true);
+    $head = $prefix === false || $prefix === '' || $prefix === '0' ? $token : $prefix;
 
     if (isset($uses[$head])) {
         return $uses[$head].substr($token, strlen($head));
@@ -269,7 +288,9 @@ function importedSymbols(string $file): array
 
     foreach ($matches as $match) {
         $symbol = $match[1];
-        $alias = ($match[2] ?? '') !== '' ? $match[2] : substr(strrchr('\\'.$symbol, '\\') ?: $symbol, 1);
+        $leaf = strrchr('\\'.$symbol, '\\');
+        assert(is_string($leaf));
+        $alias = ($match[2] ?? '') !== '' ? $match[2] : substr($leaf, 1);
         $alias = ltrim($alias, '\\');
         $uses[$alias] = $symbol;
     }
@@ -316,6 +337,8 @@ function phpFiles(string $root): array
     $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root, FilesystemIterator::SKIP_DOTS));
 
     foreach ($iterator as $file) {
+        assert($file instanceof SplFileInfo);
+
         if ($file->isFile() && $file->getExtension() === 'php') {
             $files[] = $file->getPathname();
         }

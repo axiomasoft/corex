@@ -26,6 +26,7 @@ final class Workflow implements Extender
     /** @var list<string> */
     public array $eventNames = [];
 
+    /** @param 'stepType'|'trigger' $kind */
     private function __construct(string $kind)
     {
         $this->kind = $kind;

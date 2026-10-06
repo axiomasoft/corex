@@ -1,0 +1,28 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:check-evidence:v1",
+  "evidence_id": "PLAN3.P09.1.V2",
+  "check_id": "V2",
+  "subject": "PLAN3.P09.1",
+  "procedure": {
+    "cmd": "python3 scripts/quality/facts-guard.py verify-pre --snapshot 'plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09-design/facts.json' --receipt build/quality/P09.1/facts-pre.json --p08-rebase build/quality/P09.1/p08-rebase.json",
+    "cwd": "/home/vostrikov/projects/packages/corex"
+  },
+  "candidate": {
+    "head": "f0faead86201935c71cd0c2d8731e2e41bcc26e5"
+  },
+  "exit": 0,
+  "started_at": "2026-10-06T20:34:18.069982+00:00",
+  "finished_at": "2026-10-06T20:34:18.124025+00:00",
+  "producer": {
+    "kind": "executor",
+    "actor": {
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh"
+    }
+  },
+  "log": {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.1-execution/validation/V2.log",
+    "sha256": "f0008175aa008dc5c3cd54317d742d53a9637d2bb7538cc6b8b8e7ccd080ed41"
+  }
+}

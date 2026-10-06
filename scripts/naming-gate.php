@@ -74,13 +74,13 @@ foreach ($packages as $dirName => $meta) {
         $relativeFile = substr($file, strlen($repoRoot) + 1);
         $contents = (string) file_get_contents($file);
 
-        if (! preg_match('/^\s*namespace\s+([^;]+);/m', $contents, $namespaceMatch)) {
+        if (preg_match('/^\s*namespace\s+([^;]+);/m', $contents, $namespaceMatch) !== 1) {
             continue;
         }
 
         $namespace = trim($namespaceMatch[1]).'\\';
 
-        if (! preg_match_all('/\b(?:class|interface|trait|enum)\s+([A-Za-z_][A-Za-z0-9_]*)\b/', $contents, $typeMatches)) {
+        if ((($qualityMatchCount = preg_match_all('/\b(?:class|interface|trait|enum)\s+([A-Za-z_][A-Za-z0-9_]*)\b/', $contents, $typeMatches)) === false || $qualityMatchCount === 0)) {
             continue;
         }
 
@@ -176,13 +176,13 @@ function emitGrandfatherSnapshot(string $repoRoot, string $path): void
         foreach (walkPhpFiles($srcDir) as $file) {
             $contents = (string) file_get_contents($file);
 
-            if (! preg_match('/^\s*namespace\s+([^;]+);/m', $contents, $namespaceMatch)) {
+            if (preg_match('/^\s*namespace\s+([^;]+);/m', $contents, $namespaceMatch) !== 1) {
                 continue;
             }
 
             $namespace = trim($namespaceMatch[1]).'\\';
 
-            if (! preg_match_all('/\b(?:class|interface|trait|enum)\s+([A-Za-z_][A-Za-z0-9_]*)\b/', $contents, $typeMatches)) {
+            if ((($qualityMatchCount = preg_match_all('/\b(?:class|interface|trait|enum)\s+([A-Za-z_][A-Za-z0-9_]*)\b/', $contents, $typeMatches)) === false || $qualityMatchCount === 0)) {
                 continue;
             }
 
@@ -233,7 +233,7 @@ function namespaceCoveredByPublicApi(string $symbol, array $publicApiPrefixes): 
 function lineOfTypeDeclaration(string $contents, string $shortName): int
 {
     if (preg_match('/\b(?:class|interface|trait|enum)\s+'.$shortName.'\b/', $contents, $match, PREG_OFFSET_CAPTURE) === 1) {
-        $offset = (int) $match[0][1];
+        $offset = $match[0][1];
 
         return substr_count(substr($contents, 0, $offset), "\n") + 1;
     }
@@ -274,7 +274,7 @@ function discoverPackages(string $repoRoot): array
     $packages = [];
     $surface = (new SurfaceScanner)->scan($repoRoot);
 
-    foreach (glob($repoRoot.'/packages/*/composer.json') ?: [] as $composerPath) {
+    foreach ((($entries = glob($repoRoot.'/packages/*/composer.json')) === false ? [] : $entries) as $composerPath) {
         $dirName = basename(dirname($composerPath));
         $composer = json_decode((string) file_get_contents($composerPath), true);
 
@@ -282,7 +282,8 @@ function discoverPackages(string $repoRoot): array
             continue;
         }
 
-        $corex = $composer['extra']['corex'] ?? null;
+        $extra = $composer['extra'] ?? null;
+        $corex = is_array($extra) ? ($extra['corex'] ?? null) : null;
 
         if (! is_array($corex)) {
             fwrite(STDERR, "naming-gate: missing extra.corex in packages/{$dirName}/composer.json\n");
@@ -304,7 +305,7 @@ function discoverPackages(string $repoRoot): array
         $normalizedPublicApi = array_keys($surface->manifests[$name]['symbols'] ?? []);
 
         $packages[$dirName] = [
-            'name' => (string) $composer['name'],
+            'name' => $name,
             'dir' => $dirName,
             'public_api' => $normalizedPublicApi,
         ];

@@ -40,9 +40,11 @@ use Illuminate\Database\Events\MigrationEnded;
 use Illuminate\Database\Events\MigrationStarted;
 use Illuminate\Database\Migrations\Migrator;
 use Illuminate\Events\Dispatcher;
+use Illuminate\Events\QueuedClosure;
 use Illuminate\Support\Str;
 use LogicException;
 use Psr\Clock\ClockInterface;
+use stdClass;
 use Throwable;
 
 /**
@@ -201,7 +203,6 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
         $this->connections->setDefaultConnection($this->connection ?? $previous);
 
         try {
-            /** @var FeatureFlags $flags */
             $flags = $this->container->make(FeatureFlags::class);
 
             foreach ($this->manifestFor($module)->featureFlags as $definition) {
@@ -392,9 +393,20 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
         $this->db()->statement('select pg_advisory_xact_lock(hashtext(?))', [$module]);
     }
 
+    /** @return (stdClass&object{state: string, version: string, schema_version: string|null, edition: string})|null */
     private function currentRow(string $module): ?object
     {
-        return $this->db()->table(self::MODULES_TABLE)->where('name', $module)->first();
+        $row = $this->db()->table(self::MODULES_TABLE)->where('name', $module)->first();
+
+        if ($row !== null) {
+            assert(is_string($row->state));
+            assert(is_string($row->version));
+            assert(is_string($row->schema_version) || $row->schema_version === null);
+            assert(is_string($row->edition));
+        }
+
+        /** @var (stdClass&object{state: string, version: string, schema_version: string|null, edition: string})|null $row Columns checked against the owned mod_modules schema above. */
+        return $row;
     }
 
     private function ensureDependencyEnabled(string $module, string $target, bool $cascade): void
@@ -458,10 +470,11 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
         $droppedTables = [];
 
         foreach ($claims as $claim) {
+            assert(is_string($claim->reference));
             match ($claim->record_type) {
-                'table' => $this->dropOwnedTable((string) $claim->reference, $droppedTables),
-                'column' => $this->dropOwnedColumn((string) $claim->reference),
-                'index' => $this->dropOwnedIndex((string) $claim->reference),
+                'table' => $this->dropOwnedTable($claim->reference, $droppedTables),
+                'column' => $this->dropOwnedColumn($claim->reference),
+                'index' => $this->dropOwnedIndex($claim->reference),
                 // role/permission/menu/setting/seed/blueprint/feature_flag/other
                 // are logical claims with no core-owned schema sink in P1 (roles
                 // are aut_* in P2, menus land later): their teardown is the
@@ -496,7 +509,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
     {
         [$table, $column] = array_pad(explode('.', $reference, 2), 2, null);
 
-        if ($column === null) {
+        if ($table === null || $column === null) {
             return;
         }
 
@@ -523,7 +536,8 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
             ->get(['record_type', 'reference']);
 
         foreach ($claims as $claim) {
-            $reference = (string) $claim->reference;
+            assert(is_string($claim->reference));
+            $reference = $claim->reference;
 
             $exists = match ($claim->record_type) {
                 'table' => isset($objects['tables'][$reference]),
@@ -554,7 +568,7 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
 
         $names = array_map(
             static fn (string $file): string => basename($file, '.php'),
-            glob(rtrim($path, '/').'/*.php') ?: [],
+            (($files = glob(rtrim($path, '/').'/*.php')) === false ? [] : $files),
         );
 
         if ($names !== []) {
@@ -674,14 +688,27 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
         } finally {
             foreach ([MigrationStarted::class => $started, MigrationEnded::class => $ended] as $event => $owned) {
                 $listeners = $events->getRawListeners()[$event] ?? [];
+                assert(is_array($listeners));
                 $events->forget($event);
                 foreach ($listeners as $listener) {
+                    assert(is_callable($listener) || is_string($listener) || is_array($listener) || $listener instanceof QueuedClosure);
+
                     if ($listener !== $owned) {
-                        $events->listen($event, $listener);
+                        if (is_string($listener)) {
+                            $this->restoreStringListener($events, $event, $listener);
+                        } else {
+                            $events->listen($event, $listener);
+                        }
                     }
                 }
             }
         }
+    }
+
+    private function restoreStringListener(EventDispatcher $events, string $event, string $listener): void
+    {
+        // The interface accepts Laravel's Class@method form; the concrete PHPDoc only lists class-string.
+        $events->listen($event, $listener);
     }
 
     /**
@@ -742,19 +769,22 @@ final class DatabaseModuleLifecycle implements ModuleLifecycle
         $tables = [];
 
         foreach ($connection->select("select c.relname as name, c.oid::bigint as oid from pg_class c join pg_namespace n on n.oid = c.relnamespace where c.relkind = 'r' and n.nspname = current_schema()") as $row) {
-            $tables[(string) $row->name] = (int) $row->oid;
+            assert($row instanceof stdClass && is_string($row->name) && (is_int($row->oid) || is_numeric($row->oid)));
+            $tables[$row->name] = (int) $row->oid;
         }
 
         $columns = [];
 
         foreach ($connection->select('select table_name, column_name from information_schema.columns where table_schema = current_schema()') as $row) {
+            assert($row instanceof stdClass && is_string($row->table_name) && is_string($row->column_name));
             $columns[$row->table_name.'.'.$row->column_name] = true;
         }
 
         $indexes = [];
 
         foreach ($connection->select("select i.relname as name, t.relname as tbl from pg_class i join pg_index ix on ix.indexrelid = i.oid join pg_class t on t.oid = ix.indrelid join pg_namespace n on n.oid = i.relnamespace where i.relkind = 'i' and n.nspname = current_schema()") as $row) {
-            $indexes[(string) $row->name] = (string) $row->tbl;
+            assert($row instanceof stdClass && is_string($row->name) && is_string($row->tbl));
+            $indexes[$row->name] = $row->tbl;
         }
 
         return ['tables' => $tables, 'columns' => $columns, 'indexes' => $indexes];

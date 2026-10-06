@@ -2,7 +2,7 @@
   "$schema": "urn:swissknifeman:task:plan:item:v1",
   "id": "P09.17",
   "title": "External hosted receipt: exact branch CI + four qualification cells",
-  "status": "todo",
+  "status": "skipped",
   "summary": "Consume owner-operated push/dispatch evidence after reviewable local packet; hosted proof remains distinct from local.",
   "why": "No hosted CI without exact committed workflow/source/operator input. Routine preparation must precede owner external action.",
   "scope": {
@@ -28,7 +28,8 @@
     "D121",
     "D122",
     "D123",
-    "D124"
+    "D124",
+    "D125"
   ],
   "reads": [
     {
@@ -109,6 +110,14 @@
     "notes": "RAG:— current source facts",
     "captures": []
   },
-  "result": null,
-  "updated_at": "2026-10-06T16:43:21Z"
+  "result": {
+    "finished_at": "2026-10-06T19:25:24Z",
+    "registered_by": {
+      "provider": "codex",
+      "model": "gpt-6"
+    },
+    "notes": "Hosted release qualification matrix и external release receipt не нужны; обычный финальный CI остаётся в P09.8. Пропущено по прямому указанию владельца 2026-10-06; реализация и проверки этого item не выполнялись.",
+    "decision": "D125"
+  },
+  "updated_at": "2026-10-06T19:25:24Z"
 }

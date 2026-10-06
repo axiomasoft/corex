@@ -16,6 +16,7 @@ use DateTimeInterface;
 use Illuminate\Database\Connection;
 use Override;
 use Psr\Clock\ClockInterface;
+use stdClass;
 use Throwable;
 
 final readonly class SqlOutboxRelay implements OutboxRelay
@@ -37,7 +38,6 @@ final readonly class SqlOutboxRelay implements OutboxRelay
         $leaseUntil = $now->add(new DateInterval("PT{$this->leaseSeconds}S"));
         $table = $this->table;
 
-        /** @var list<object> $rows */
         $rows = $this->connection->transaction(function () use ($table, $leaseOwner, $batchSize, $now, $leaseUntil): array {
             $this->connection->table($table)
                 ->where('status', 'publishing')
@@ -79,6 +79,7 @@ final readonly class SqlOutboxRelay implements OutboxRelay
             $claimed = $query->get()->all();
 
             foreach ($claimed as $row) {
+                assert(is_int($row->attempts) || is_numeric($row->attempts));
                 $this->connection->table($table)->where('id', $row->id)->update([
                     'status' => 'publishing',
                     'lease_owner' => $leaseOwner,
@@ -94,6 +95,8 @@ final readonly class SqlOutboxRelay implements OutboxRelay
         $leased = [];
 
         foreach ($rows as $row) {
+            assert(is_int($row->attempts) || is_numeric($row->attempts));
+            assert(is_string($row->id));
             $attempt = (int) $row->attempts + 1;
 
             try {
@@ -106,7 +109,7 @@ final readonly class SqlOutboxRelay implements OutboxRelay
             } catch (Throwable $error) {
                 $this->releaseWithBackoff(
                     message: $this->syntheticLeasedMessage(
-                        messageId: (string) $row->id,
+                        messageId: $row->id,
                         leaseOwner: $leaseOwner,
                         attempt: $attempt,
                         leaseUntil: $leaseUntil,
@@ -193,25 +196,37 @@ final readonly class SqlOutboxRelay implements OutboxRelay
         );
     }
 
-    private function envelope(object $row): MessageEnvelope
+    private function envelope(stdClass $row): MessageEnvelope
     {
+        assert(is_string($row->id));
+        assert(is_string($row->source));
+        assert(is_string($row->name));
+        assert(is_string($row->scope));
+        assert(is_string($row->metadata));
+        assert(is_string($row->payload));
+        assert(is_string($row->pii_class));
+        assert(is_int($row->contract_version) || is_numeric($row->contract_version));
+        assert(is_int($row->envelope_version) || is_numeric($row->envelope_version));
+        assert($row->subject === null || is_string($row->subject));
+        assert($row->correlation_id === null || is_string($row->correlation_id));
+        assert($row->causation_id === null || is_string($row->causation_id));
         /** @var array<string, scalar|null> $scope */
-        $scope = json_decode((string) $row->scope, true, flags: JSON_THROW_ON_ERROR);
+        $scope = json_decode($row->scope, true, flags: JSON_THROW_ON_ERROR);
         /** @var array<string, scalar|null> $metadata */
-        $metadata = json_decode((string) $row->metadata, true, flags: JSON_THROW_ON_ERROR);
+        $metadata = json_decode($row->metadata, true, flags: JSON_THROW_ON_ERROR);
 
         return new MessageEnvelope(
-            messageId: (string) $row->id,
-            source: (string) $row->source,
-            name: (string) $row->name,
+            messageId: $row->id,
+            source: $row->source,
+            name: $row->name,
             contractVersion: (int) $row->contract_version,
             occurredAt: $this->date($row->occurred_at),
             scope: $scope,
-            payload: MessagePayload::fromJson((string) $row->payload),
-            piiClass: PiiClass::from((string) $row->pii_class),
-            subject: $row->subject === null ? null : (string) $row->subject,
-            correlationId: $row->correlation_id === null ? null : (string) $row->correlation_id,
-            causationId: $row->causation_id === null ? null : (string) $row->causation_id,
+            payload: MessagePayload::fromJson($row->payload),
+            piiClass: PiiClass::from($row->pii_class),
+            subject: $row->subject === null ? null : $row->subject,
+            correlationId: $row->correlation_id === null ? null : $row->correlation_id,
+            causationId: $row->causation_id === null ? null : $row->causation_id,
             metadata: $metadata,
             envelopeVersion: (int) $row->envelope_version,
         );
@@ -219,6 +234,8 @@ final readonly class SqlOutboxRelay implements OutboxRelay
 
     private function date(mixed $value): DateTimeImmutable
     {
+        assert(is_scalar($value) || $value === null || $value instanceof DateTimeInterface);
+
         return $value instanceof DateTimeInterface
             ? DateTimeImmutable::createFromInterface($value)
             : new DateTimeImmutable((string) $value);

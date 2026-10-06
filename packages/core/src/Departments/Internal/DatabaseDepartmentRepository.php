@@ -50,15 +50,12 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
             return [];
         }
 
-        /** @var list<Models\Department> $rows */
-        $rows = Models\Department::on($this->connection)
-            ->where('workspace_id', $root->workspace_id)
-            ->whereRaw('path <@ ?::ltree', [$root->path])
-            ->orderBy('path')
-            ->get()
-            ->all();
+        $query = Models\Department::on($this->connection)
+            ->where('workspace_id', $root->workspace_id);
+        $query->getQuery()->whereRaw('path <@ ?::ltree', [$root->path])->orderBy('path');
+        $rows = $query->get()->all();
 
-        return array_map($this->toDto(...), $rows);
+        return array_values(array_map($this->toDto(...), $rows));
     }
 
     #[Override]
@@ -133,7 +130,7 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
             }
 
             $oldPath = $moving->path;
-            $ownLabel = str_contains($oldPath, '.') ? substr($oldPath, strrpos($oldPath, '.') + 1) : $oldPath;
+            $ownLabel = str_contains($oldPath, '.') ? substr($oldPath, (int) strrpos($oldPath, '.') + 1) : $oldPath;
             $newPath = $newParentPath !== '' ? $newParentPath.'.'.$ownLabel : $ownLabel;
 
             // ONE UPDATE over the whole subtree (`path <@`) — no recursive

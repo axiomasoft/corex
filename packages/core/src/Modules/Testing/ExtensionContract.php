@@ -72,6 +72,7 @@ final readonly class ExtensionContract
 
         $identities = [];
         foreach ($first->extensions as $extension) {
+            assert(is_string($extension['point']) && is_string($extension['id']));
             $key = $extension['point']."\0".$extension['id'];
 
             if (isset($identities[$key])) {

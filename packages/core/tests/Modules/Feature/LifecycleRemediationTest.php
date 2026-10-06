@@ -32,6 +32,16 @@ use Psr\Clock\ClockInterface;
 
 uses()->group('pg');
 
+final class LifecycleStringMigrationListener
+{
+    public static int $calls = 0;
+
+    public function onStarted(MigrationStarted $event): void
+    {
+        self::$calls++;
+    }
+}
+
 beforeEach(function (): void {
     config(['database.default' => 'pgsql', 'corex.modules.connection' => 'pgsql']);
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
@@ -104,6 +114,9 @@ it('serializes different module transitions on the dependency graph lock', funct
 
 it('preserves application migration listeners on success and failure', function (): void {
     $started = $ended = 0;
+    LifecycleStringMigrationListener::$calls = 0;
+    $listener = LifecycleStringMigrationListener::class.'@onStarted';
+    app('events')->listen(MigrationStarted::class, $listener);
     app('events')->listen(MigrationStarted::class, function () use (&$started): void {
         $started++;
     });
@@ -118,6 +131,8 @@ it('preserves application migration listeners on success and failure', function 
     app('events')->dispatch(new MigrationStarted($migration, 'up'));
     app('events')->dispatch(new MigrationEnded($migration, 'up'));
     expect([$started, $ended])->toBe([$before[0] + 1, $before[1] + 1]);
+    expect(LifecycleStringMigrationListener::$calls)->toBe($started)
+        ->and(app('events')->getRawListeners()[MigrationStarted::class])->toContain($listener);
 });
 
 it('makes flags visible to ModuleEnabled and rolls back a failed definition', function (): void {

@@ -33,7 +33,8 @@ final class RedisPubSub implements PubSub
     #[Override]
     public function publish(string $channel, array $payload): void
     {
-        $this->redis->connection($this->connection)->publish($channel, json_encode($payload, JSON_THROW_ON_ERROR));
+        $connection = $this->redis->connection($this->connection);
+        $connection->command('publish', [$channel, json_encode($payload, JSON_THROW_ON_ERROR)]);
     }
 
     #[Override]

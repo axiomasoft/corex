@@ -10,6 +10,7 @@ use CoreX\Config\Exceptions\InvalidConfiguration;
 use CoreX\CustomFields\Internal\Laravel\AttributeComposition;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use SplFileInfo;
 use Symfony\Component\Process\Process;
 
 // The whole-monorepo AST/ownership graph exceeds PHP's 128 MiB CLI default.
@@ -146,6 +147,8 @@ function phpFiles(string $directory): array
 
     $files = [];
     foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory)) as $file) {
+        assert($file instanceof SplFileInfo);
+
         if ($file->isFile() && $file->getExtension() === 'php') {
             $files[] = $file->getPathname();
         }

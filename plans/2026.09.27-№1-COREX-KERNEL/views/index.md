@@ -26,7 +26,7 @@ PLAN3 · layout v4 · 🟡 Active. JSON files are the source of truth; the Markd
 - [P06](phases/P06/phase.md) — Operations, tools, webhooks и wire · 🟠 Done with deviations
 - [P07](phases/P07/phase.md) — Tenancy, access, независимость модулей · 🟠 Done with deviations
 - [P08](phases/P08/phase.md) — Схема: baseline v1 · 🟠 Done with deviations
-- [P09](phases/P09/phase.md) — Планка качества и release-квалификация `1.0.0-rc.1` · ⬜ Not started
+- [P09](phases/P09/phase.md) — Планка качества: типизация, tooling и тесты до выпуска · 🟡 In progress
 - [P10](phases/P10/phase.md) — Зелёный hosted CI на базе P04 · 🟢 Done
 
 ## Change the plan

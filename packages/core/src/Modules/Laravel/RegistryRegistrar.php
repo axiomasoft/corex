@@ -129,6 +129,6 @@ final class RegistryRegistrar implements PackageRegistrar
             return 0;
         }
 
-        return (int) DB::connection($connection)->table('mod_lifecycle_log')->count();
+        return DB::connection($connection)->table('mod_lifecycle_log')->count();
     }
 }

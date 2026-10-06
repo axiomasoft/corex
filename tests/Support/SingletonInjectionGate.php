@@ -10,6 +10,7 @@ use ReflectionNamedType;
 use ReflectionType;
 use ReflectionUnionType;
 use RuntimeException;
+use Stringable;
 
 /**
  * P4.12 — scan package ServiceProviders and Registrars for singleton ::class literals and flag
@@ -161,7 +162,7 @@ final class SingletonInjectionGate
     }
 
     /**
-     * @return array<string, array{owner_phase: string, note?: string}>
+     * @return array<string, array{owner_phase: string, note: string|null}>
      */
     public static function loadAllowlist(string $path): array
     {
@@ -177,15 +178,17 @@ final class SingletonInjectionGate
 
         $map = [];
 
-        foreach ($decoded['entries'] ?? [] as $entry) {
+        $entries = $decoded['entries'] ?? [];
+        assert(is_array($entries));
+        foreach ($entries as $entry) {
             if (! is_array($entry)) {
                 continue;
             }
 
-            $package = (string) ($entry['package'] ?? '');
-            $class = (string) ($entry['class'] ?? '');
-            $parameter = (string) ($entry['parameter'] ?? '');
-            $owner = (string) ($entry['owner_phase'] ?? '');
+            $package = self::scalarString($entry['package'] ?? null) ?? '';
+            $class = self::scalarString($entry['class'] ?? null) ?? '';
+            $parameter = self::scalarString($entry['parameter'] ?? null) ?? '';
+            $owner = self::scalarString($entry['owner_phase'] ?? null) ?? '';
 
             if ($package === '' || $class === '' || $parameter === '' || $owner === '') {
                 throw new RuntimeException('allowlist entry missing package/class/parameter/owner_phase');
@@ -193,11 +196,24 @@ final class SingletonInjectionGate
 
             $map[self::allowlistKey($package, $class, $parameter)] = [
                 'owner_phase' => $owner,
-                'note' => isset($entry['note']) ? (string) $entry['note'] : null,
+                'note' => self::scalarString($entry['note'] ?? null),
             ];
         }
 
         return $map;
+    }
+
+    private static function scalarString(mixed $value): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        if (! is_scalar($value) && ! $value instanceof Stringable) {
+            throw new RuntimeException('allowlist field must be scalar');
+        }
+
+        return (string) $value;
     }
 
     public static function allowlistPath(): string
@@ -217,7 +233,7 @@ final class SingletonInjectionGate
     {
         $matches = [];
 
-        foreach (glob(SourceScanner::repoRoot().'/packages/*/src', GLOB_ONLYDIR) ?: [] as $srcDir) {
+        foreach ((($entries = glob(SourceScanner::repoRoot().'/packages/*/src', GLOB_ONLYDIR)) === false ? [] : $entries) as $srcDir) {
             $matches = [
                 ...$matches,
                 ...SourceScanner::filesMatching($srcDir, '/\bclass\s+\w+(?:ServiceProvider|Registrar)\b/'),
@@ -259,7 +275,7 @@ final class SingletonInjectionGate
     {
         $map = [];
 
-        if (preg_match_all('/^use\s+([^;]+);/m', $content, $matches)) {
+        if ((($qualityMatchCount = preg_match_all('/^use\s+([^;]+);/m', $content, $matches)) !== false && $qualityMatchCount > 0)) {
             foreach ($matches[1] as $useClause) {
                 $useClause = trim($useClause);
 
@@ -292,6 +308,7 @@ final class SingletonInjectionGate
         return trim($m[1]);
     }
 
+    /** @param array<string, string> $useMap */
     private static function resolveClassName(string $token, ?string $namespace, array $useMap): ?string
     {
         $token = trim($token);

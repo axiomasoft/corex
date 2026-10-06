@@ -1,0 +1,15 @@
+{
+  "id": "V16",
+  "command": [
+    "scripts/php84",
+    "php",
+    "scripts/quality-ceiling-guard.php",
+    "--tighten"
+  ],
+  "cwd": "/home/vostrikov/projects/packages/corex",
+  "started_at": "2026-10-06T20:34:18.231012+00:00",
+  "finished_at": "2026-10-06T20:34:18.253237+00:00",
+  "exit": 0,
+  "product_inventory_sha256": "3d7563f59e6664939b09440db5e628442a8cb6817f9110f5f25fa7b92d786272",
+  "log_sha256": "0f803042208f4fe0ba2d743c2374d163f1800ec943fd15275cbce36a6dfa31a2"
+}

@@ -34,7 +34,6 @@ final class ModuleDiscovery implements \CoreX\Modules\Contracts\ModuleDiscovery
         return array_map($this->manifestFor(...), $classes);
     }
 
-    /** @param  class-string  $class */
     private function manifestFor(string $class): ModuleManifest
     {
         if (! is_subclass_of($class, ModuleDefinition::class)) {
@@ -47,7 +46,7 @@ final class ModuleDiscovery implements \CoreX\Modules\Contracts\ModuleDiscovery
         return $module->manifest();
     }
 
-    /** @return list<class-string> */
+    /** @return list<string> */
     private function scanInstalledJson(): array
     {
         $path = $this->installedJsonPath;
@@ -72,7 +71,9 @@ final class ModuleDiscovery implements \CoreX\Modules\Contracts\ModuleDiscovery
                 continue;
             }
 
-            $class = $package['extra']['corex']['module'] ?? null;
+            $extra = $package['extra'] ?? null;
+            $corex = is_array($extra) ? ($extra['corex'] ?? null) : null;
+            $class = is_array($corex) ? ($corex['module'] ?? null) : null;
 
             if (is_string($class)) {
                 $classes[] = $class;

@@ -1,0 +1,2738 @@
+{
+  "item": "PLAN3.P09.1",
+  "intent": "type precision only; foundation debt -> zero; all ceilings only decrease; preserve API/schema/manifest/path inventory; Pint/Rector protect migrations",
+  "paths": [
+    {
+      "path": "packages/access-azguard/phpstan.neon",
+      "before_sha256": "927bdd3ddee241307f5b27bb11c7c83493e1b30fc56369bd97b5fa7179d2a200",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/access-azguard/src/AccessAzguardRegistrar.php",
+      "before_sha256": "30f3d67a2743b29cccaa2af633d423be918b77127e495240daf23bac0463df0a",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/access-azguard/src/AccessAzguardServiceProvider.php",
+      "before_sha256": "741e112bf96ef0d4bb49da2a70ab381169d71ebe79ceeff542cf2acbbc43edcb",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/access-azguard/src/Internal/AccessAzguardOptions.php",
+      "before_sha256": "a62f04bf5a1e879043dfa56052fcd3aa273d28b173f2071a165cfb0bbf726b46",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/access-azguard/src/Internal/AccessAzguardSchemaSets.php",
+      "before_sha256": "87239556f6e5ce9472ca71c35948b0a37b3899d80e29426417ca0cfbf9380875",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/access-azguard/src/Internal/AutMatrixGrantSource.php",
+      "before_sha256": "d2ce87059df4d0ea1a4d0dcebcfbf5a03d7dd282ffd49b0050d04bb8a7bfda3a",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/access-azguard/src/Internal/AzGuardRoleModel.php",
+      "before_sha256": "de9c45ef88ddb895e2080dc238e96da6d57c94f182c351555e032258e79354ed",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/access-azguard/src/Internal/Laravel/AccessAzguardBindingsRegistrar.php",
+      "before_sha256": "7b411047b6057d09a98c93964adec024d79265e4987e701ce3814b490ce4c910",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/access-azguard/src/Internal/MatrixPermissionCatalogBuilder.php",
+      "before_sha256": "9516e7a507d1f6098b4b86738e2457ebb7631fc3bce49a366fa24677c5a63a31",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/access-azguard/src/Internal/RoleLinkStore.php",
+      "before_sha256": "b340ba9610475ad1d861896c58546e1c2ecc024e1588266e01158017bb05741a",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/access-azguard/src/Internal/SyncAzGuardRolePermissions.php",
+      "before_sha256": "be8231a20a178cd65d0bda92bc732ad184b628027b25bc78efd3f6108530322a",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/access-azguard/src/Internal/TenantContextGuard.php",
+      "before_sha256": "90f062eeda318dfa7f32b2f27b76ff4d54038afdf2a1a941fa7f472fbc064dc7",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/access-azguard/src/Internal/WorkspacePermissionLayer.php",
+      "before_sha256": "228ea9bcc9c2d16c5976ad1da631c3558adb777b9a4f0c3a8f1b5c8e7bba8084",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/access-azguard/tests/Feature/AzGuardBridgeTest.php",
+      "before_sha256": "9a3736a309433ef0d4963c9222f647609df120c5b7513768498a8886f337e4ac",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/access-azguard/tests/Feature/BladeDirectivesTest.php",
+      "before_sha256": "4684b8d07b54cf7453e7da342c85634eb6aeb7970fc51366df20a35960fd9203",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/access-azguard/tests/Feature/BridgeConfigurationTest.php",
+      "before_sha256": "3aa040be70cf7ca17fadd294a8239a1172f91fd45a44b5279cb5e15f5c54e0f4",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/access-azguard/tests/Feature/TenantContextGuardTest.php",
+      "before_sha256": "2e6d1dc55c7199ed6d067a6a9ee43d64d6101bf63e3d2d9bb3e08735bda2f411",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/access-azguard/tests/Pest.php",
+      "before_sha256": "301d7bffba02177cd12317029ed236caa48bff0ed7b9afa42d2ff80a803c4fa6",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/access-azguard/tests/Stubs/ContextUser.php",
+      "before_sha256": "1ddc6607957ea10a08f12d289d27436c24c430755754db42ee8e672b83d05d3b",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/access-azguard/tests/Stubs/Project.php",
+      "before_sha256": "ce5a35eea3be50a0cf76893cb1d52637dc5f8ab501ad8470ba17c2e7ae453571",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/access-azguard/tests/TestCase.php",
+      "before_sha256": "d52dea6411f28fe9dfdd1f726255775026902bea0842bb1d131cd50d15ae4782",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/access-azguard/tests/database/migrations/2026_06_14_000000_create_projects_table.php",
+      "before_sha256": "47aaee0d2c96657d4f1be7c8d6a6d3f422ca54e9667ff47cac7333a7b7d13817",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/access/phpstan.neon",
+      "before_sha256": "4e34fab13983754bd9f85a3c4ad55afe79085bfa98343a9732cf838575a8a066",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/phpstan-baseline.neon",
+      "before_sha256": "2290ed5b32b007b8b7d56bf5c4c70025680eadb1a475c268842de5b245eedae5",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/phpstan.neon",
+      "before_sha256": "773ce85bf701cde3f18c661abfb72ae6d0debfc99e4d414cc152b13594216d44",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Attributes/Api.php",
+      "before_sha256": "90ee75fc5e64540f9a1c3e85e199e3ca3fa95e42d228fd5a6e265aa71fa63913",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Attributes/Spi.php",
+      "before_sha256": "42a56b372fe626f68be001ea35f06f0ef494e661d8e8b217504677a3febfa146",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Attributes/SpiKind.php",
+      "before_sha256": "5a7c6d20e453a77d1d21ba4d3771d909c4ab577000c905e50a4e1b0358e02c9b",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Attributes/Tooling/SourceType.php",
+      "before_sha256": "b9bc8edd4bac54d6c2ca1781eb8f9d0f346d560a2979d6e9a783543a58328ab6",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Attributes/Tooling/SurfaceDiagnostic.php",
+      "before_sha256": "6f7d27cbd147797482ef3aab1d21988b65ffa78a8e90e2d7d17960163d55c130",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Attributes/Tooling/SurfaceReport.php",
+      "before_sha256": "41e9780c410c97e5dceb565b5bda95305afc4218b347d2a7726c9cadd54a5375",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Attributes/Tooling/SurfaceScanner.php",
+      "before_sha256": "945cf5dfbb82d440a1a49e13066da129ecbcf72492d3c94be7de9e5a26e6ec8c",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Audit/Contracts/AuditLogger.php",
+      "before_sha256": "cfdbd463df625779bcc51786b0465a2d8610234abfdf756c6d7d5d9abc5fa2cf",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Audit/Contracts/AuditRetention.php",
+      "before_sha256": "cf03e5c84ad9ad8bbe25c8f4b1dceea9003f6e7fefcb77ab20189588f1e04109",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Audit/Contracts/Auditable.php",
+      "before_sha256": "a8f66506a93e4eb1a5707d6f3dbcccdb6729c347cb757d9a54d71ee80812da37",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Audit/Contracts/CurrentActor.php",
+      "before_sha256": "ea29da3d1ec3bed92e45e8201d909a46d94a629a98d869ed4b1dc58986778547",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Audit/Contracts/SynchronousAuditWriter.php",
+      "before_sha256": "e0bb1312f597978347a587ca3daa417f14ee54377c1ea5d21b56831fa4aade14",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Audit/Data/AuditEntry.php",
+      "before_sha256": "d0f403b4790a96240d0543451dfd7662d33a35bc64d600957140ffb07c05b842",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Audit/Enums/ActorType.php",
+      "before_sha256": "6923853882dd9618856cd5e3d830e48259da404a21e4fab19003a239a388f29a",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Audit/Internal/AuditLog.php",
+      "before_sha256": "8e71fb090eb29c55cdfbf66b917cd83f7d88c263ac661802c6b4dbab6909c14b",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Audit/Internal/AuditObserver.php",
+      "before_sha256": "2e054cd5df5ef34f43a19581d917d9b6a1b725353900678392c2e757af5fae7a",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Audit/Internal/CurrentActor.php",
+      "before_sha256": "3179c460c174a09c6e88fd1f85a889c1b7fb6faa41111da03760e14d79a5bf4f",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Audit/Internal/CurrentActorResolver.php",
+      "before_sha256": "5ac72b2c64981385ff012de67cfd0a2c127b9f70d0f920df21e08e483d5862af",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Audit/Internal/DatabaseSynchronousAuditWriter.php",
+      "before_sha256": "cf04cfe2c131b3dcbf840967a29bf680e32e0bc30631915098d2e2888953e449",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Audit/Internal/NullAuditRetention.php",
+      "before_sha256": "51c1807719b3cfad70a94f6f8bd4d8ef702e53f553666253d7bf0bb59459b098",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Audit/Internal/PruneAuditLog.php",
+      "before_sha256": "4012afe6e3de266e107da3dcbedf08929e9174b5c975cff8aebbf03437eaf2cc",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Audit/Internal/QueuedAuditLogger.php",
+      "before_sha256": "d113b450e966a1c35576d3239be2a13edebc90f284eeb6dd86a540b5f940acf7",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Audit/Internal/RecordAuditEntry.php",
+      "before_sha256": "4806ddb8c338936961f90148961957f503258b522a2d248486165d54e0f11dda",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Audit/Laravel/AuditRegistrar.php",
+      "before_sha256": "d40cf8dbc0ff1fa7a4f922dd1647571acd21e18cbccde7dcaaeb14f25d26f4d3",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Audit/Laravel/AuditRegistration.php",
+      "before_sha256": "14e7b5b6e2b24bafa3237c7c1306721ded3716fa4e5096c6b58c7ff044ae5ca5",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Audit/Laravel/AuditWriteExemption.php",
+      "before_sha256": "4a29300f05e71dd9777e65947378679b5b0e2b47aeaf102826ca7006e71b19df",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Audit/Laravel/HasAuditLog.php",
+      "before_sha256": "aad65c70728af9b9b192c1f47d9c1e1be4e4288fbcb4568656cf3901f9ec5a57",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Config/Contracts/ConfigReportSection.php",
+      "before_sha256": "a6242119c8eba5944b1a8440cf5c12ab9788866e4b1f5ff8de8bf8b80f2b3362",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Config/Contracts/RuntimeConfigCheck.php",
+      "before_sha256": "6d66c8622ce04a5ed55493a7125435e96b0ff88f494130f9c6b62c6623b0662a",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Config/Data/CoreOptions.php",
+      "before_sha256": "87ff0af1af69081f8328a7e08880b52a50467df9565c9156ca5a98cc2c3b7ab4",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Config/Data/SecretRef.php",
+      "before_sha256": "c2a7b0f24416ecbde59ea0439f9acefcfd0601217c0d8a5e7a79391e131b8955",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Config/Exceptions/InvalidConfiguration.php",
+      "before_sha256": "27e3c75aae2f75d34d845f2a1a91c5d6d2bb6536487219760f9f7b40e7f8af9a",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Config/Internal/ApplicationLocator.php",
+      "before_sha256": "5d1c940927b487ba5e9fe56f4ee6f747f0d1d6775c088ccc92cbf16ab45d3df4",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Config/Internal/Commands/ValidateConfigCommand.php",
+      "before_sha256": "0c3147da373f3edd4274ffdffa6b8f119bf17f272e8c8658c05287ce0c978936",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Config/Internal/KernelConfigSection.php",
+      "before_sha256": "f69f58f19836c7df3a58649f89144eede78267c0ae1a51b2e31d09de538f1f9a",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Config/Laravel/ConfigRegistrar.php",
+      "before_sha256": "45bd9c7263e1b3ca1c536fed5f527557638e00cc6411b7391506770f77c49f5a",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Config/Laravel/ConfigurationValidator.php",
+      "before_sha256": "ab29366d37da33564a110ca0701bb7fbadf4c78bb062c091ae1dd32f40b3b75d",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Config/Laravel/ConfiguredImplementation.php",
+      "before_sha256": "c26ea69f36d6f3eeee0afcb6e4a0fda946a153eee7d48b5e2e7da39f106ca490",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Config/Laravel/CoreOptionsParser.php",
+      "before_sha256": "b265a5c045ffb253baa0d782c41fc8d7720ced1a72ac03606042b071ced14559",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Config/Laravel/RuntimeConfigGate.php",
+      "before_sha256": "35accc9a8c3d8f4e255190fb8de5c8b2268c788c9eabdea6229e82293d206317",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Context/Contracts/AccountConnectionResolver.php",
+      "before_sha256": "6d82ab77c708f3e69b8883ebf1cb26b5f3c0e772e239f23f1d916716ee13859f",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Context/Contracts/IdentityPasswordRehasher.php",
+      "before_sha256": "38c4e08a919a81b1f9b8a9a032fc7b40cd1dc5ced0575f50d254fa1b4db1bedd",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Context/Contracts/ImpersonationGuard.php",
+      "before_sha256": "2f7cbefdff0386fe61c9d1eb3c27b5324389c989f36250d400358438ae4947a7",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Context/Contracts/ImpersonationService.php",
+      "before_sha256": "f58c9d4638c2fc79d483b17e2cbac6434438c34ca3b932f8147ddec12eb20c85",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Context/Contracts/TenancyManager.php",
+      "before_sha256": "2c8c0547ac684b11193fb4a49d0ee77e5bc0eaf17d849ee67ac4fcda26bf2511",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Context/Contracts/TenantContextResolver.php",
+      "before_sha256": "bd6f9ee87cac670375af6143d372c72395bd5a70942312d66ec7dce573b01319",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Context/Contracts/TenantContextRestorer.php",
+      "before_sha256": "b3443ddf09dab199db180fa24f1cd6313e0f3d121d78850aaf75eab2783c457d",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Context/Contracts/TenantDatabaseLifecycle.php",
+      "before_sha256": "bfde29937814dd15edea343931b822961f0b7f5adbfa26e1a684c9bc0f29591e",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Context/Contracts/TenantDatabaseProvisioner.php",
+      "before_sha256": "3e3b1010c894469086964fb33838d30bb3c8cc963e6be45f8b8b7d31ba166ce1",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Context/Data/AccountRef.php",
+      "before_sha256": "ea44f49f5cbdd86a6b17de9ee65fed883435c7ca64554d396e3f85b450924cd2",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Context/Data/DatabaseConnectionConfig.php",
+      "before_sha256": "f4b2505682a6ee5d5a8e461b0210107603a304a8c67362d15d9424bc05c52a70",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Context/Data/ImpersonationState.php",
+      "before_sha256": "1c2a570e1fef72d37d0d98d283217fb89f3fc206dd76249a4bd4ca128e1764ac",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Context/Data/ProvisionParams.php",
+      "before_sha256": "d7b1f0d5bcd106ff31099f81929086c7aa7bfa125c1999f718cf5387e061317f",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Context/Data/TenantContext.php",
+      "before_sha256": "e638c9ac61764be7be8bb91377354b61dd0276c3566010a24e8ac6363e847048",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Context/Data/WorkspaceRef.php",
+      "before_sha256": "f624753fd845d7fc2451eb752f00b7f5c959125a662f049bd669649adf7025dc",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Context/Enums/ImpersonationRestrictedAction.php",
+      "before_sha256": "10b4eea91287d878f2942197a990ed42ea270106cac9a32904b5b428526354f8",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Context/Exceptions/CentralContextException.php",
+      "before_sha256": "3b35ba77419b8327e98e5b7fecb15b23885dd489abff9d8ab702ab0dcbbcccfe",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Context/Exceptions/ImpersonationRestrictedException.php",
+      "before_sha256": "884573c01a48263609cd70b968dc15cc172aab767d9d51bf0282e44f46900a7f",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Context/Exceptions/ScopeContextMismatch.php",
+      "before_sha256": "27c5fecfba37cb16a9604eac3f4b8943f327608b136ee39e6c93469a41a15e22",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Context/Internal/GuardedTenantContextRestorer.php",
+      "before_sha256": "3118f363b9fc592abb89c1bb2bfbf06c2163b2d8b824a8ca31cd4a6d77d0900d",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Context/Internal/ImpersonationGuard.php",
+      "before_sha256": "0c08d2003cffc0cb0c77f79936b031a0d251864ed94f8effb9d6001ed724b141",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Context/Internal/NullImpersonationService.php",
+      "before_sha256": "733ec6c7ac4780e2cf2c32bc1be4591fe6bb10cf1155f14925f8c3b6705b1465",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Context/Internal/NullTenancyManager.php",
+      "before_sha256": "a24b2d1cb57d6e14b921ad1f48fd933a75654efc3dec5d8ae1d74034f3cdc8fc",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Context/Internal/SingleAccountResolver.php",
+      "before_sha256": "90c9be85c490e86795b51be8a274ffde0aae29454d86cd34e5daf8fa83b196a8",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Context/Laravel/ContextRegistrar.php",
+      "before_sha256": "6f3b19e32d21fd5cef1e5763666598e93b01ba254fab1ea7bcf155039f98c495",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/CoreServiceProvider.php",
+      "before_sha256": "5b73acc9b56117b591b1f7c9e2793dfb3aad959226f01f15d619445733b4e731",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Data/Contracts/DataScopeAuthorizer.php",
+      "before_sha256": "b1666352133c994192b0a7035fb45dce176ff87cf284783e1a71a5de39b18628",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Data/Contracts/DataScopeCodec.php",
+      "before_sha256": "b38aa78885fb90bda86a2d3866386fad56a4068e3c89c391b33dd0f3ad1176e7",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Data/Data/DataScope.php",
+      "before_sha256": "7f0e4566ed8edf3bf8513223bc5f6e094e6cbd0d3d90a3d9a9b3e4e2ae0dbba6",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Data/Data/DataScopeAccessDecision.php",
+      "before_sha256": "d04a7e0e88e39784afcbafe97d284f30c15ec315bdd8548aa926542d5c4f0b51",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Data/Data/JsonDocument.php",
+      "before_sha256": "7534bef03f654f78ec775533622b216c6aa01deedb6e2d8644c7fade9ced9833",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Data/Data/RecordRef.php",
+      "before_sha256": "e598f7006a42f98b3637608c7dde6a36a082240f0fe8783694c663d2aa431379",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Data/Data/WriteToken.php",
+      "before_sha256": "162ec3065f2e881458174f1ef2ddba13be5da97f825ffc9fb6bcbfeb4278142e",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Data/Exceptions/InvalidScopePayload.php",
+      "before_sha256": "04532dd95255d82a7560d24f9cabc14a29f2a26d618cabbbb59574ff4f315888",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Data/Internal/AllowAllDataScopeAuthorizer.php",
+      "before_sha256": "a46a2eadd840445c96f33e459bb74121a678f777a35111e7a65d73275e41605a",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Data/Internal/ArrayDataScopeCodec.php",
+      "before_sha256": "e561ab41a242fb261757872cec5be0f3c0b1cca5a2bd2388c33f7921cafa13d0",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Data/Internal/CallableDataScopeAuthorizer.php",
+      "before_sha256": "d675bf0078cb12835560210d1ee2019faf982a1896102400e263ac90ae54fdc1",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Data/Internal/DenyDataScopeAuthorizer.php",
+      "before_sha256": "c81e67c7a4f39af45c9cfa0072e547207f7f7b8288cfae4a7a6f5823eabefd0c",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Data/Laravel/DataRegistrar.php",
+      "before_sha256": "05dcbc873d10b95b53c7857e827772bdff32328bf1fb9d23b0a4c58469efebf9",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Data/Laravel/JsonDocuments.php",
+      "before_sha256": "833d7252f31b3e46c71a3a9ea3c468ac100eed6f77fa8f3a0d1aeb5806b08d1e",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Data/Laravel/SystemDataScopeAuthorization.php",
+      "before_sha256": "95da7c10fdea6dc917e9079b8e64b84ce6b500e8319cf7088268d0c2d5c42861",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Database/Contracts/SchemaMigrator.php",
+      "before_sha256": "e0156a6e43f2a8e6658d9abdf49688ae40f1ffe584d141a6c50722b215e6e5fd",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Database/Contracts/SchemaSetProvider.php",
+      "before_sha256": "20cc3680ab2f9f6b97c0221a195640355ee294d037abfd895f569b025bc877ea",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Database/Contracts/SchemaSets.php",
+      "before_sha256": "696d5ca0790aa2cd1fe87f65fa812bb902b20a1b9e92f425cceb630710dbe292",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Database/Data/SchemaSet.php",
+      "before_sha256": "30b93e6015ca2891e41032cfaa9b34a4bb9b01cab6b8b1d45a80af3656870b4b",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Database/Data/SchemaSetStatus.php",
+      "before_sha256": "2e8f0c43a7111f69a5e3f9af2eb4d288d75d4dac457456182cfde801d5755e61",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Database/Enums/SchemaLifecycle.php",
+      "before_sha256": "6a560e91c1ba9c8c0ae8f80b71e271f3ffae51dc43acbb68e6147467878f7cfd",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Database/Enums/SchemaScope.php",
+      "before_sha256": "816ce8ebc6e712b382909cdaa7fa86fe9ef530bdb16c00354ab1a9d6aa6905c8",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Database/Exceptions/SchemaSetException.php",
+      "before_sha256": "bb84e184e5e0b2f1a292ec505587df173aa260f7da0514ab5344e2585974f674",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Database/Internal/Commands/SchemaMigrateCommand.php",
+      "before_sha256": "589de69f17187d1d0b8db4509799fccae55709b90fa316b67d2da90ca8759989",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Database/Internal/Commands/SchemaStatusCommand.php",
+      "before_sha256": "8db87c7fcb7d5bc7801f046f9d1e8fbabc5e20f4ceb889c2e1f2c2ceae2c3c5c",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Database/Internal/CoreSchemaSets.php",
+      "before_sha256": "18568dd80cfbd8d33bbc79d5475be84afed4859932156d59bbecfd59bed048f5",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Database/Internal/LaravelSchemaMigrator.php",
+      "before_sha256": "d04965302b22da7926bd50562fa10f1291fb5f8df5ab06facba7c79571d343b9",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Database/Internal/TaggedSchemaSets.php",
+      "before_sha256": "7bf80849db896b3ac9804bd043f8db75db568b8141dceda246819e946446f8ce",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Database/Laravel/BaseModel.php",
+      "before_sha256": "e1604085df704caf5ca49231598e797583e76cd5cdf0b35719fae44c700b88c7",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Database/Laravel/DatabaseRegistrar.php",
+      "before_sha256": "8ee5ecbdb8ff654081443b1ebcf47168a69872347fd523f70f85ae7636c83ad9",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Database/Testing/MigratesSchemaSets.php",
+      "before_sha256": "69285e34b930baefa21a2fd87fb89d12d9badfb3cd58d2c6b4b0c1b62d35bb57",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Departments/Contracts/DepartmentRepository.php",
+      "before_sha256": "88234b3365685c08de106da5d1e357ebf990e05fd5348282c6baee635e6ca2ef",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Departments/Data/Department.php",
+      "before_sha256": "63bac99973ebff4b453f5149096f0010d67547d1968f02ab8203a31c23fa9fdc",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Departments/Events/DepartmentMoved.php",
+      "before_sha256": "09badf3028fd66e1a1015e019ec61b2403f7c1084e63cc225367e4cb8c074aa8",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Departments/Exceptions/CrossWorkspaceMoveException.php",
+      "before_sha256": "175d2821fe88054835ca55c26851c5861f6bd132dd6ca2561ce7d812c1c969ea",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Departments/Exceptions/DepartmentCycleException.php",
+      "before_sha256": "243f3d1e0e91fad5e7f46b8ef6c27adc960844fba0d10c25859b233906e11c0e",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Departments/Internal/DatabaseDepartmentRepository.php",
+      "before_sha256": "bd7a8f18a3af556f5dd301e0083cf5fc8f87250fa26304f93aa6f231abbcc040",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Departments/Internal/Models/Department.php",
+      "before_sha256": "5e2938f4f59cf7535a12a87d8f668d891b5cb4bc6b599698ab7637662e8453c1",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Departments/Laravel/DepartmentQueries.php",
+      "before_sha256": "fb5e34acb7371e5cacfc9cca4647c400ea797294483fb3f911385085a88bffb1",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Departments/Laravel/DepartmentsRegistrar.php",
+      "before_sha256": "b0c5218fcaceb459a7f67abd04499f19c1cb99a2826c64c4fb8cf23e80e36a0f",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Errors/Contracts/DescribesError.php",
+      "before_sha256": "9ede7d34f2464656c61df949104d072a1c7fbe0d2513a7220556aae58c225256",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Errors/Contracts/ErrorCode.php",
+      "before_sha256": "a552fd4495b4dd5cb1bf89c6e215713aa3973649028f82c163ca1e6af20990c7",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Errors/Contracts/ProblemDefinitionProvider.php",
+      "before_sha256": "db444b75e6ae9d864bcd0a446337b6b5219cca1b0aeba7b8a3b589e06e4c072f",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Errors/Contracts/ProblemRegistry.php",
+      "before_sha256": "2e66ecc0dc96348e35054d9b40b389e5e89c7f00d7f26525879284906129b470",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Errors/Data/ErrorDescriptor.php",
+      "before_sha256": "6b7ad7d4c2f234a180bfb08f65b8753a8f2633e610c39bcb8cbd57f573334e7f",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Errors/Data/ProblemDefinition.php",
+      "before_sha256": "4708c89eb94d675ff35096ffa07ef5f7186ef234b1ccd7284a5e033af82acdb7",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Errors/Enums/CoreErrorCode.php",
+      "before_sha256": "78f3b897a9d50954c304d7b706e393e3525b0bd3e9ef9673f62854ed5c8de1b0",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Errors/Enums/ErrorCategory.php",
+      "before_sha256": "90c9efa776d7162bc4ae6594fdda82ccaf371577ddb2b74e4a94f2a5fd706f0c",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Errors/Enums/UnavailabilityReason.php",
+      "before_sha256": "f2582d0295287e9b6bcb0e2a1b8b4f78d375f0253fea5a9a93b74addcb404cd6",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Errors/Exceptions/CodedException.php",
+      "before_sha256": "4ca1effd3eaa0f57c1f8af868629cc6f75d378f88a2d031ec89d0892f832fa31",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Errors/Exceptions/ProblemRegistryException.php",
+      "before_sha256": "a8324c8e12214b22c083307a0211a55a167df2923fef779f931d9ab294f7ba35",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Errors/Internal/CompiledProblemRegistry.php",
+      "before_sha256": "321ce82a32e422a54caf271bac3c73b96237402841030aa5dc43566b8bd0d5f8",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Errors/Internal/PackageProblemDefinitions.php",
+      "before_sha256": "dc50807172a07cccecf20ef50d1ad99edeccd2e4df61410129cc62c5e28d32c7",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Errors/Internal/ProblemContribution.php",
+      "before_sha256": "925e0d9eec94beb1f8f41cac6439348e0e082ed006af8e561da27dadea28ac73",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Errors/Laravel/ErrorsRegistrar.php",
+      "before_sha256": "cba94b7d9234fa3372977f7f4374dbe76b1b1e7bb98d44df996637349ab7cc11",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Errors/Laravel/ProblemDefinitions.php",
+      "before_sha256": "fee9834a908b4fb4541e1ee307a8fa667051704551449f1acc1ffc5a471d4050",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Errors/Laravel/ProblemRegistryFactory.php",
+      "before_sha256": "eec2c35175ad6210386ac79988eff59e12111664a932648877304f5d092fdfff",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Errors/Tooling/ErrorSourceScanner.php",
+      "before_sha256": "53cfd9238dd2c3340917b757d50e1d0bdc39bc7b09d42474b03bdff5385a2b32",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Features/Contracts/FeatureFlags.php",
+      "before_sha256": "7692070930a798837cb385c6e4bb888679ea44bc75b90b7877b6d67b4190b8e2",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Features/Data/FeatureFlagDefinition.php",
+      "before_sha256": "951107f4e14419c3f74bba79dfa87c4fda2bf3b3c45c7cd742fbae27ddd0f7cf",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Features/Events/FeatureFlagToggled.php",
+      "before_sha256": "f0a423f7b0bc3e7f85b20a5945f686370ea88a488d7f447b7160f80ba212b62b",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Features/Internal/DatabaseFeatureFlags.php",
+      "before_sha256": "994ad5ed2895a4f4838db93690ea185f12837252ae1e5aaf760c56532ea7d51e",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Features/Internal/Models/FeatureFlag.php",
+      "before_sha256": "3de2602cba56a6e497057e5183fdbb7a8f3d1f45c4b32f2a1f7f012ae311c757",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Features/Internal/Models/FeatureOverride.php",
+      "before_sha256": "cce68d320a3325675df8f3b18546961d16379bcdb0052c8af4fcb2c0d6f56c68",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Features/Laravel/FeaturesRegistrar.php",
+      "before_sha256": "6b0707bc423eedc8513f57cc2fcc9dbef337e329c8b4e4ffddad8c727c6bd78c",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Contracts/Cancellable.php",
+      "before_sha256": "9ffbe31ebaa7d0092bb3ed1f8f03c511e2b769daab014798af6a8cedcc13d0b9",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Contracts/CloudEventCodec.php",
+      "before_sha256": "b64113ca6eec16fc48ec1c305d07be88cd68d7b18eaeadb0c4fb8fa28254e8c5",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Contracts/DurableMessagePublisher.php",
+      "before_sha256": "1e22f0e995dca0d2f2a2eb19b4a85c7225096c427381f82438a7d9719cf11155",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Contracts/DurablePayload.php",
+      "before_sha256": "0c7f69df3fe97531c6c8f9f2351fa210f4fc5704859136c80628f29201b9fbd4",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Contracts/Inbox.php",
+      "before_sha256": "af189bc54eb740c52a12c41dd46970faaa61a690a0a4c36dd19f1fbeb5fa8579",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Contracts/MessageContractRegistry.php",
+      "before_sha256": "943219945487a5322d9a47434b25378aa2eac8f521836094d6a2ce02a94e02e0",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Contracts/MessagePublisher.php",
+      "before_sha256": "b35afc64ad6bcac73e86874a89f12c7aac9cc1cc588a01868f3e1978aed3b67e",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Contracts/Outbox.php",
+      "before_sha256": "636a7e52f4d7e578c85af80297ac73a87dbc1baa556fe66739b0dce0e0f80d1f",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Contracts/OutboxRelay.php",
+      "before_sha256": "5b075e4e37d35f57b5695f27a8538ed8bb35b28353acae309516960cd4f37278",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Contracts/PubSub.php",
+      "before_sha256": "0dff059847b75c162f743d991e864f08dc9128affa0a12b1fe44664553ed9efd",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Contracts/TraceContextBridge.php",
+      "before_sha256": "2d26ff3b618632aa6fbd5b6ab22fee0e6921ed99ccbee26652739e77780fe492",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Contracts/WorkerRuntime.php",
+      "before_sha256": "85ad37feb5620602a0d2ff87554159597cbd55ff39d94cf64a9587af56c001c5",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Data/DeliveryHealth.php",
+      "before_sha256": "45a74b3e6f358df5d4ff8246397240d593d287ce1777bc3a4ed2a75cfdc2d4f0",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Data/LeasedMessage.php",
+      "before_sha256": "9eeeaeab56e55cb2a99eeb2cfaec489fd8f3cd4f81ddd355f861c7713920b4f4",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Data/MessageContract.php",
+      "before_sha256": "dc395c054fddc70469b3b3c90ce56f936be403ab02120f6a83c5dc14d5fb265f",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Data/MessageEnvelope.php",
+      "before_sha256": "8b77a2ded9ef1fd42bba136c9aa47419fd80f7e0eebefd2994c41e2341495de9",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Data/MessagePayload.php",
+      "before_sha256": "1d9a76c605ca1cb3ef68194b01aef71fd3f1f234559443616346e16291795854",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Enums/MessageClass.php",
+      "before_sha256": "49fbb1a8e300eb93be1a516d1684da911cc5e094f2c70bd15eb426afea830ba7",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Enums/PiiClass.php",
+      "before_sha256": "7d06a8b037bf8d0192078891609824e94394146fe3c0dbee74da54034ceab800",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Enums/PubSubDriver.php",
+      "before_sha256": "a3b12d5976c81f5c296eb6a5b11bf791bf3c119829fb7025597b695e140ee63e",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Events/DomainEvent.php",
+      "before_sha256": "c5df27ac3d8d6adb9391d1eb1be9730c422d14d08a286d72f93b999619137b50",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Exceptions/InboxRefused.php",
+      "before_sha256": "4c675f58a66bf3533dca73ec607769b2a98dd7741f8a87a93678ba8e163760ba",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Exceptions/InvalidMessage.php",
+      "before_sha256": "b587804864961bee0207c2669eb60a88e2ff2c63fad8b3104cb9f050569655cb",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Exceptions/OutboxLeaseLost.php",
+      "before_sha256": "633d118d024ac0e3520ba11684f64a9859f08a7bbcdb1a28f6fb1657dee50986",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Exceptions/OutboxRefused.php",
+      "before_sha256": "e3af221c2b1f878fa547b1e37c00456bc07c53220774fe238cdf2a9c661093fb",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Exceptions/UnknownMessageContract.php",
+      "before_sha256": "04820dcf61c038b198810f95e0cf9c80586e87a1ccad388dbe31194556b01c54",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/ArrayMessageContractRegistry.php",
+      "before_sha256": "5930e610d20e806b2d6180dc362c7964310ad177292b8314dfc3147110b0009f",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/Commands/PruneOutboxMessages.php",
+      "before_sha256": "2908e89c4721311e0d1f727701bb9ec751a94d4c95a5395775be1f49ea625882",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/Commands/RelayOutbox.php",
+      "before_sha256": "3dfa8c57195a313abd7cf18b3d01f81b2b3fbb1ba4270dc0291b87d4cfe7885d",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/Commands/ShowDeliveryHealth.php",
+      "before_sha256": "b3416b960975f2796044f5a06da35783617a915efdc93d3d984f6421fce2cc77",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/DatabasePollPubSub.php",
+      "before_sha256": "6e68ef208e2144d49ef28edbb41c75c7383d2a2b433ba15c991c4cf6b98e25ae",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/DefaultWorkerRuntime.php",
+      "before_sha256": "cada8f64ccfa8b3288f62f363226b1bd4c873b16a1fb2b48dcf1a52c262fab41",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/DomainEventDefaults.php",
+      "before_sha256": "12b421f82b0eaa2afc8c9692b3fe7db46f8842ee24d7639d996b4fba9a1fbbe3",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/JsonCloudEventCodec.php",
+      "before_sha256": "0d5f3201a4d72b271bf15a8c948922bfa068bdb1c1cbdaa1b0551f2c87467a4b",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/NullPubSub.php",
+      "before_sha256": "da17e5d689f90cad4c028d376073fb61e680fecadff4eda66b4b459925a66718",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/NullTraceContextBridge.php",
+      "before_sha256": "a2d037e2f9454a60dc820a8ce5e1ffe1c1f0ae2461af98e7d418df108d000111",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/OpenTelemetryTraceContextBridge.php",
+      "before_sha256": "3e950cc52cced62e6d133534cbd51fa6974f0015ae3ea79a046db9c4737108df",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/PrunePubSubMessages.php",
+      "before_sha256": "07788d740b41bb598b0a50c96a5d6f284bb512e63cdf46f2c4e785d6a7ed8ceb",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/RedisPubSub.php",
+      "before_sha256": "65799759e20f647419e7e39a0d4cb52715bf4fe7da6cf8563736e24c43a4dd03",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/SqlDeliveryHealth.php",
+      "before_sha256": "717b277d6d6fc04805aee290d5e4b612b87a478e627d403792d1b08772d2466b",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/SqlInbox.php",
+      "before_sha256": "cf2bbfb9c727e625533aa26f8045899e43f2ffc2c0339b40adeca6b4ff2f705e",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/SqlOutbox.php",
+      "before_sha256": "daee73b66c184991c3c0af2e561ae4dd4933fae7d2347e5824bb75d43380744c",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/SqlOutboxRelay.php",
+      "before_sha256": "5946e3fcd527da3f7d8266f3bd82b6d07eb7069893275db0d298148e178d883a",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/SubscribeGuard.php",
+      "before_sha256": "6d45f929833f9f623338535da552c14d189d5041cf3a8a09f3b4784bcd01e3c7",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Internal/UriReference.php",
+      "before_sha256": "2d16c331884643763135371f93d4b994e21626394b4569c833ea5822215fcdd3",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Laravel/InboxRetention.php",
+      "before_sha256": "a577a64697424501dee404b06df92822dc450d1fe8ff5ba6becbc0006d922493",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Laravel/MessagingRegistrar.php",
+      "before_sha256": "d211feb36c5ebab06d5d4b4cc055c0ef40dc72a9a11f2dcfcecde2945485645f",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Laravel/PubSubAdapters.php",
+      "before_sha256": "f8bc4d4299c8a456e0fc7cf07700bbab44df918fc7a6947e14fdec0189e83631",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/PHPStan/DurablePayloadTypeChecker.php",
+      "before_sha256": "ed32953ebfd3e6223798a279d5ff96e68f7742df3d2ec0bbfb69fd71b687a62f",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/PHPStan/Rules/DurablePayloadPromotedPropertyRule.php",
+      "before_sha256": "fd49a02ed9d1a835a8f02f22bb199db2c330f7bc45fdee7aa914cf9bfddd3600",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/PHPStan/Rules/DurablePayloadRule.php",
+      "before_sha256": "9163576be485c36fc99aa63254b0b142387429537f394ae420cab426b405d875",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Messaging/Testing/MessagingFixtures.php",
+      "before_sha256": "8605bde9f19a98988ea57bdd85bb71c4607d4148add473fd0b283859c2725a8a",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Contracts/DisableHook.php",
+      "before_sha256": "1e18a34793076b7e59520bd3d573b0dd7d71459c70df79853258cebe90abfefa",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Contracts/EnableHook.php",
+      "before_sha256": "2b08cc8ccf8d85aae3dbfc8c7373e2ba0bc1b010d97731bd1fa844f9fc591f6b",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Contracts/EntityRegistry.php",
+      "before_sha256": "4f74c978b4353fceafed2f2a23ff6183e60f5a4cc34eadc8f410ddb6bd4df884",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Contracts/Extender.php",
+      "before_sha256": "ef29de90ada296305947a39f8a69c1894b3536c3756123d218596feabbf90a11",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Contracts/FieldCastRegistry.php",
+      "before_sha256": "3db6747393d5f1f365e8e4b23a1ef4b573d9edd44ee15dea6001706fdaa43cb1",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Contracts/ManifestSectionCompiler.php",
+      "before_sha256": "732801540d0c44749cf68edf4d5f0a3242329c49cda513b259d5f17927c53727",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Contracts/ModuleActivationGate.php",
+      "before_sha256": "a74013a87f8ac53591cdbeef5b61636f1ec4603c7fa68a59840465e0adaaf9e7",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Contracts/ModuleCompilation.php",
+      "before_sha256": "8c22ccb2b6074ba403e2ea055182ed3ff1aecb564ce0bdbf8935fb489e020813",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Contracts/ModuleDefinition.php",
+      "before_sha256": "3dca58276cdf8c2ca509c59fb528f9a7a4c1802bd4d0c7c9d885959105902932",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Contracts/ModuleDiscovery.php",
+      "before_sha256": "5fcd81fbc9136052ba1a4daecea17ac4749e45e7447a62b481b94630af3ff888",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Contracts/ModuleLifecycle.php",
+      "before_sha256": "2ac6d022337c818865602f1099801b5726c6590fa5510bc4732abba303281164",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Contracts/ModuleRegistrar.php",
+      "before_sha256": "272996912b4c03c70aa98f101af8ca1ee5debe062910bfd38d9c9f6eae21b1dc",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Contracts/ModuleRegistry.php",
+      "before_sha256": "5007d49f85a53ee699a0a59ad27221def567e1e7d0ecc6821a5f8d0ecdecc98a",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Contracts/ModuleRegistryCache.php",
+      "before_sha256": "8956367b19797fb62ca1f0906c677b34ec9692f9592ed111a432674d14b85fc3",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Contracts/ModuleStateReader.php",
+      "before_sha256": "df23e228999dd1468b6d2857cc6c80295662d310bce8e738381fb342ccbb8499",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Contracts/PackageRegistrar.php",
+      "before_sha256": "760cc9ee24ddac52446aa844b0f4f8a7cf1950812e05dc4633341244fb2f4f2b",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Contracts/PurgeHook.php",
+      "before_sha256": "73b32b93c434d10135f6b44b22b361f7c11a0d0beec662edb9889fa8365f5e14",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Contracts/RecordsRegistrar.php",
+      "before_sha256": "417a4fbaba38e07766714f74dcf155b19ee0ddf10f398fe936fba14904560e49",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Contracts/RegistryIntrospection.php",
+      "before_sha256": "f1fa4a8a35843bbeb1ba448e601d8e1a1bb6cbc0237babc033287553ed529fa6",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Data/Api.php",
+      "before_sha256": "528a3f31aab6345250bdbd451348613f468744dc9bd76c3af35d2ab834055110",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Data/CompiledEntityField.php",
+      "before_sha256": "29ae122a4b38d63fd21fcf8f8540dfcebfb0c65fa9c37869f26d3336681d0dfc",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Data/CompiledModule.php",
+      "before_sha256": "8c8c2566292f047dbff7b39da45b6249f68ab998683fde5865b12d136c760368",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Data/CompiledRegistry.php",
+      "before_sha256": "a2eef2902b09bce3a9f6e543d5e32dd75ff882c833c0f568441c149ce92c91ac",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Data/Entity.php",
+      "before_sha256": "4c67cc83ae993db8c91b2aa6ed13f4bb94f4ef3fb15a1865ed21df79b656d440",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Data/EntityDefinition.php",
+      "before_sha256": "6375b47706c7a54a7bcfc83e439486571fd2e740f155d0e6dd61a6980bd0e081",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Data/EntityField.php",
+      "before_sha256": "140ecbcf3a2e5a111f83f8b00c79abbd2e42e5ab9a332054d815ccf5c1cdfd46",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Data/ExtensionReplacement.php",
+      "before_sha256": "aee6d5968b9d34ababce8a9a0044675f9d394442caf208a96ee9a131567ea424",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Data/ExtensionStamp.php",
+      "before_sha256": "45672f389c8f899d81950b7784fbb885e96c3abf9f70d51272f96417211c3fe6",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Data/FieldDefinition.php",
+      "before_sha256": "b859f9f81f2dacf0c060709823a016b9b09855e0a7b54483f0e5aec326dab220",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Data/InstalledPackageVersion.php",
+      "before_sha256": "6736abfa6ddc9fd3729f14e8478e412116ba13bcec0952b4fd73b3deb274b528",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Data/ModuleExplanation.php",
+      "before_sha256": "9fbf752c6b201bc3e15d49cfa87d30ad75a7985bf82dc068db9dbd2858777bda",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Data/ModuleManifest.php",
+      "before_sha256": "acc16583f8e6dfe15decf8e0ea853f5de98511a9fadd4dac80bffc654afcdd1b",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Data/ModuleRuntimeContext.php",
+      "before_sha256": "70ee39bca11f8fc9f3cbcad89960c42ec1586491119e2e9fade6b0f2682f08b9",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Data/ModuleStatus.php",
+      "before_sha256": "b95a9ac084505709c14a7830d59adab8fbcf78fe72e38c730ebe8616ab660854",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Data/NormalizedExtension.php",
+      "before_sha256": "8b1c8766e7836868d65ccb619fa9e60c2d48b8bff645a42b06a969e395d5220c",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Data/Permissions.php",
+      "before_sha256": "d455740faf6dcc54f3ce7352c1be7d2487397a527396edd3ae906e3c5fd8067d",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Data/RegistryMap.php",
+      "before_sha256": "ef03a517f3b3b39e006a2909e61d3c1538e1a9a8e824665b270a22e498447fb8",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Enums/Capability.php",
+      "before_sha256": "e2b8684fc3da630f58108aa936520484c061847d0ad06f055f83522e78a5944c",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Enums/DisableReason.php",
+      "before_sha256": "61c097b5fd70de9a59bbddd4f50c51e6ece97ae23eda3edd7a8f1030842e5c41",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Enums/ModuleState.php",
+      "before_sha256": "2aa582a4056e45942e7e6b0c0a16860baaaa47c51b525ced4f406d71067e2c09",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Events/ModuleArchived.php",
+      "before_sha256": "8c24d1ecf2fe88eeedeee8f8eb348abfefcd3599fb1bdf644e88f9d2d2e9a56c",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Events/ModuleDisabled.php",
+      "before_sha256": "e6f89c752b429a2071024341ca48738909a11822ce29866ca1257830f2224f7f",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Events/ModuleEnabled.php",
+      "before_sha256": "7379388338eb40de43c221cc98f20f35b97df1e0e70d1999456d6810a746b59b",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Events/ModulePurged.php",
+      "before_sha256": "eeddab4647af1792b9c07ccb06fb18117adc6f6f8e46e7c062d2a649e38f5ba8",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Events/ModuleUpgraded.php",
+      "before_sha256": "8a2c5c3918bf0b3342cf88ca7030684505fbf7d352041aa628efae7ff17abdb1",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Exceptions/CompilationException.php",
+      "before_sha256": "7e1ed14a2acf75faeb58f27dbc3326e0fe69e14e0501816ba705d4314b98803d",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Exceptions/EntityNotFound.php",
+      "before_sha256": "2bdefef32be79775df3a2c781b937c9a9deab4fbb5e036f01fbbcd0901313b03",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Exceptions/HasEnabledDependentsException.php",
+      "before_sha256": "4a47ff0bb67735990e3944b86ce9fcdd07042dc94dcd735b4f814d9f67ad98ad",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Exceptions/InvalidManifestException.php",
+      "before_sha256": "ae4546414a2bee5e7597fa14d6e0e62f809731c157f3aff375e2ae25c77dec13",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Exceptions/InvalidRegistryPoint.php",
+      "before_sha256": "32146d1cdfabff9c4d4f98a571a664497e9fb9253721df4fab3a55d33b1db3c5",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Exceptions/InvalidStateTransitionException.php",
+      "before_sha256": "dc6c589e23f6e2e19033a86d7edb70c818391cf9e8971033778062b49e3f0c27",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Exceptions/MissingDependencyException.php",
+      "before_sha256": "0037f580297b703cac22c857f01309b39b7b3ec207f8705e1d562ead2a650484",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Exceptions/ModuleEnableFailedException.php",
+      "before_sha256": "aa8f8f6ff493a095dfeecdc1c65526cf5d87a335b0e48d58274c89d91e53f564",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Exceptions/ModuleNotFound.php",
+      "before_sha256": "072c6c1acd63a7db12962bdd02b826bda347ac5a6275e9b800b30d02b263250a",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Exceptions/ModuleUpgradeFailedException.php",
+      "before_sha256": "a2f63bdadbd98f9c83d523e5f7c9950c3adec3387256f594bd01aaf0f59b2cff",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Exceptions/RegistryFrozen.php",
+      "before_sha256": "aa21e0f8c1e925fd5189eaad8832d8a78a97b2d629994728373d51b1d31f6f3b",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Exceptions/RegistryInputUnavailable.php",
+      "before_sha256": "cb15630d8ff11a905af75f8b269e1b026dfa72c272c40a7a2e363c8975073b03",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Exceptions/StaleRegistryRevision.php",
+      "before_sha256": "ae1b040371b1925b4b381bf214b948a253d7ffbb28129fe38967c748f1181160",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Audit/AuditCapabilityWiring.php",
+      "before_sha256": "20df13261b366339bbd92686882bfbabd6bc76ed82a86aed1613471f664ac0bc",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Commands/CompileModulesCommand.php",
+      "before_sha256": "ce89a6d7c72bb8a64ffc7c426296b78f13d5e5ad3ce98f5ec52bf563c801895e",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Commands/ExplainModuleCommand.php",
+      "before_sha256": "a549ac3eb38193da854df3a0059311910b1c5f36ee256aaca803cb8be0837cb3",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Commands/RepairModuleCommand.php",
+      "before_sha256": "ab386fffcd841f8c86b8e346f90a99516cf262b5a3ce4c73bd9918c9c889ede7",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Compiler/CompilationValidator.php",
+      "before_sha256": "751a71db355fdfb1b4bc6b33d7e735e5a4932895aae8b840263209aad465816e",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Compiler/CompiledSettingDefault.php",
+      "before_sha256": "c09391aeb81c84fa2e0feb193bb0de3353aecdb7666227a2c84ebd18cd948914",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Compiler/FieldCastMap.php",
+      "before_sha256": "2aad6c5a642ca9396fc6a39f525074750d80b71fc24cadcd2b77d47cd35fe235",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Compiler/InstalledPackages.php",
+      "before_sha256": "2d81f5d96541c5fcd8de933ecc6d14d2518ddbd0c13aad86beadb33e3940ffb2",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Compiler/PipelineStages.php",
+      "before_sha256": "a00694c28870a73573fc77a27f49034880907c2274ce56d50617b03d5b543e8a",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Compiler/RegistryCompiler.php",
+      "before_sha256": "382c714b71b879b58cc62863a4f2a0bf9ca4055cb741ced593e249236dc9679d",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Definition/ModuleDependency.php",
+      "before_sha256": "2ea378ba7d2a4a9db280bac8c3ae0219126dbe53ec249ff4ba22972499af9430",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Discovery/ModuleDiscovery.php",
+      "before_sha256": "6478b1eab6393bb3ef0071c11a9cd41a165238ccb10a7bea2b25efb66d61d2bc",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Events/ManifestListeners.php",
+      "before_sha256": "4b4b81e543694ce83ab4565e050865a69789a55d23a9aeabb840f57be3008baa",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Extend/Filament.php",
+      "before_sha256": "c4cf2e489f5b56bcb8f79c71cfbb00e0ddb3672f54b12efa8be049ebcab6b187",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Extend/Menu.php",
+      "before_sha256": "d68defa1eb40527413c9f4480ae0a692e59a24e75644b367eb8cd52a47568bd1",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Extend/Routes.php",
+      "before_sha256": "fee3a52de6d5d53088dc8648b25b64b452b49ff5c51c09014e6213d6d3aa23e1",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Extend/Workflow.php",
+      "before_sha256": "71133c8984889be860dec5a0eb4a4c9deffb41b360e20a5b56901d70cde2f980",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Gate/AllowAllActivationGate.php",
+      "before_sha256": "a761cd121d45729fce77d47c64751595d3dbe580e41a99d62a7f25cc73286e18",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Gate/ModuleActivationDecision.php",
+      "before_sha256": "c2dbf2bd47459a2f9e788476168656b82f6fbe4021c8fb010e7f47ddf2e8ea46",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/InMemoryEntityRegistry.php",
+      "before_sha256": "32136d62369db7e1bb7f9995ce90f2fd732f443e4a5749b7a8143a20631cf9c9",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Lifecycle/DatabaseModuleLifecycle.php",
+      "before_sha256": "b92b119055e145602606da4a11919328525a556f65f00ae3e236d7ed738e55d0",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Lifecycle/DatabaseModuleStateReader.php",
+      "before_sha256": "a5c84a925e5d88da2e5792a7caae9a24b04ab5d9daaef2897a16a72773fcd31d",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Lifecycle/DatabaseRecordsRegistrar.php",
+      "before_sha256": "a0ee26965a1415f38047cfbf52ad7f805ec3b00886072ebd66595fec5288095f",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/ReadRegistryIntrospection.php",
+      "before_sha256": "1e48e95ff92544b5d499f90e575fc636f8335f4f2dd5c802f4e31d4df514f880",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Registry/ArrayModuleStateReader.php",
+      "before_sha256": "06a2f4686d4abdb38cdfd5f38dedf506fe4a26ab91ffe58a9ac8611a6ba8e3c6",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Registry/CompiledModuleRegistry.php",
+      "before_sha256": "087fe71c226e78e5b603377491fac06044c6711d4002a4c31016e25ba3b05279",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Registry/RepositoryModuleRegistryCache.php",
+      "before_sha256": "1159014b84bd5bc14dea50ca03c61db53a40a52f30756aaee9a025ef4533c963",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/ServiceProviderModuleRegistrar.php",
+      "before_sha256": "b8a883181eb7523e25edfcfc8d8059d196dfd47eb79d8a37c2a6b7edd80d16e4",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Settings/CompiledSettingDefaultsProvider.php",
+      "before_sha256": "40be20e659dfccf765dac6607245710b6fcfa5e8166fea7bfff1d32823c31000",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Settings/DefaultSettingDefinition.php",
+      "before_sha256": "de3657724ed0392d9214577ba7d7d9ecbda813a622ace4ba4caceb7f672b08ab",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Support/ModulesConfigSection.php",
+      "before_sha256": "378bd95dea2cdf58017b5fec3856a05de2f78338234a26935f1e2abe501f3c2d",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Internal/Support/ModulesOptions.php",
+      "before_sha256": "25bdc626fd67d89838ca41ac06dc70abcac9485c92a9b36554b0827ca3fb6123",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Laravel/CoreModulesRegistrar.php",
+      "before_sha256": "18f1ba2afb2340f2ea6be77f485f088efdecf7e25c5eec7f2254a0159d140082",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Laravel/LifecycleRegistrar.php",
+      "before_sha256": "fd6e3c4222ccea9904833ed93467cc7ef25e99bdeaeed59bc8a930386adcc9b1",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Laravel/ModulesBootRegistrar.php",
+      "before_sha256": "957b575ed3ea7cc7544dce5f6253cf8360dccde8bb3f55fafee41cf35cb4433c",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Laravel/RegistersNothingOnBoot.php",
+      "before_sha256": "d7e16c37e4c2f47f7e1a523b43e808dcfbb74e5531fe66f0ec1580be7212745d",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Laravel/RegistryRegistrar.php",
+      "before_sha256": "913ff1f40fd12e85cb139f7e8376134585db54f1a8d96ff56f54adc7bd5442f1",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Laravel/SettingsRegistrar.php",
+      "before_sha256": "7e37e34faffc7c9a1332de360b12a9d6e9e3efc9da7421f08275082a6f0ae935",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/ModulesServiceProvider.php",
+      "before_sha256": "8b8c77ca33a44341e2d68aa952886592e04d3f28fec8cef76c76227865d782dd",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/PHPStan/Rules/AbstractDatabaseCallRule.php",
+      "before_sha256": "d7a0d7848e9b43e75b6a357467dd4a04264e43d24d5f24aff7377587859578ba",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/PHPStan/Rules/NoDirectSystemTableWriteRule.php",
+      "before_sha256": "927cbb99abe1c0c3d7c09dc4ebdf66d77353b3e551b6cd6359f969c86d432002",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/PHPStan/Rules/NoEvalRule.php",
+      "before_sha256": "b337515a268e2e926cddbae0df7d99347cb2b3269ed4a4c7d6b9f1b672477b69",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/PHPStan/Rules/NoForeignPrefixSqlRule.php",
+      "before_sha256": "9da084914d72c9ae1ecc6e79a3284e61d874fb136869913ffcbf05295af14a34",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/PHPStan/Rules/NoFsOutsideModuleRule.php",
+      "before_sha256": "017b351322612a74d9f6b29c43d6740c02c36e777278bbed16fc00063298cfec",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/PHPStan/Rules/NoListenNotifyRule.php",
+      "before_sha256": "e01224451bb8b2a1855c06a6c13ddb1b72463a8b9f6655a8fd7aedebd284c01e",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/PHPStan/Rules/NoSessionAdvisoryLockRule.php",
+      "before_sha256": "ab50bf1878b2477f9aca795509d57f0b1fc24f4adef385668a2a300879409d97",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/PHPStan/Rules/NoSetWithoutLocalRule.php",
+      "before_sha256": "d3d4dd5ce4e4987964677f61d0ec6ca27020c903a3df0acecee9341feda32c22",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/PHPStan/Rules/NoSqlPrepareRule.php",
+      "before_sha256": "4faff730c55d0a028c90deb8d4d9b2523473941014b592d00e46dad937c78edb",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/PHPStan/Rules/NoTempTableRule.php",
+      "before_sha256": "d455369252fe66f4b36b203c464308e0a38d3af61b774290f407706d2bd4396b",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/PHPStan/Rules/Support/DatabaseCall.php",
+      "before_sha256": "9a4a0982e3f9b4a19c77d8df8c8ea2cf48a570bdea74cb74288eec72fbceae0a",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Testing/ArrayEntityRegistry.php",
+      "before_sha256": "18d0ad4f30c4fbf990d123c1968b5f9664f1ef124cfcc13c13c68ba513e31a6c",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Modules/Testing/ExtensionContract.php",
+      "before_sha256": "4c8c715c77376f646c6daad5c88ba889b975e280381d257b99a09a5b267a3321",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Observability/Contracts/OperationObserver.php",
+      "before_sha256": "a5a16e976e63eaa86d30a650e0e90c6d6670ac20d40647539e2fa346d01ec33d",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Observability/Contracts/TracePropagation.php",
+      "before_sha256": "0ba703f8d9241f842f8b75000ff1efb95d0e4abec83bd7013d73792991f2d56d",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Observability/Data/OperationCompleted.php",
+      "before_sha256": "2484b60a4ede7055a7528b5039f776ce2d838ff3dacd44530cc15c03725fc0ae",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Observability/Data/OperationContext.php",
+      "before_sha256": "f1f16527f857017db1705351492016d35723839f32d62503cc9e2540cc2180bf",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Observability/Data/OperationFailed.php",
+      "before_sha256": "43d83429453fde4596935831b2f4a962a574f8794d5d95fb54bcbf71bde9f7cc",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Observability/Data/OperationStarted.php",
+      "before_sha256": "0076779d941f48044baa5c3ef7f9d549a0db4dab2bbf135301c619a48bcbc6c6",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Observability/Enums/OperationOutcome.php",
+      "before_sha256": "99be2b506f3c0d548d83d86bfe571c8d93692f6b96d020fbf39ddeb96ec41004",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Observability/Internal/MetricAttributes.php",
+      "before_sha256": "260673d8ed034db467c61756af83b7335277f3fd27a1afd015696c6560c0d34e",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Observability/Internal/NullOperationObserver.php",
+      "before_sha256": "05ac5c80528b7f324f76fc3da83796269c0eb996895a19241fff88007c74af5b",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Observability/Internal/OpenTelemetryBridge.php",
+      "before_sha256": "ad47b622282813b56316f714ec80e4466335c1c6c589e5e77a05072ce4117847",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Observability/Internal/PsrLogOperationObserver.php",
+      "before_sha256": "d17a2381625c57410c2dc940b2ecb2037a84ab8bb835fcf1286ce8a509bcc90f",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Observability/Laravel/ObservabilityRegistrar.php",
+      "before_sha256": "23ce6196de18bf57745d0b17c9d016149a73608ca6ed4b87b8c2836fd9ce56db",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Scheduling/Contracts/DueWakeupHandler.php",
+      "before_sha256": "44669571f7e3852a8c937732007c071384902e2fac285a002d39e2bb6f389d06",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Scheduling/Contracts/DueWakeupSource.php",
+      "before_sha256": "80a0b793fe4f899756a8680b2c1a7a95b27cb42ffa7ff324dea67b6db4a048ca",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Scheduling/Contracts/WakeupScheduler.php",
+      "before_sha256": "8c61f160f73a5d3ebd5bb456648728449dda83055b7b15a7fd69031f7c0b0e22",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Scheduling/Data/CancelResult.php",
+      "before_sha256": "e3f29dd25cdd9be87ade4176ad2fc1d1776d5802176bd596c10aca1d64f088dd",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Scheduling/Data/ScheduleResult.php",
+      "before_sha256": "22d9345c815a7492e78f8fb3b132f3426d488c7a92a315d96c582bdd0f582b54",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Scheduling/Data/SweepResult.php",
+      "before_sha256": "8f642e61681d40b4742818edb3f41c177f181b12175b3a836a2b269a3f0246b8",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Scheduling/Data/WakeupDelivery.php",
+      "before_sha256": "469e222070bc46a7a5e3b2c46097e23ffda90f516e2eec18b2875ae6b00cd4c4",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Scheduling/Data/WakeupHandlerDefinition.php",
+      "before_sha256": "3d578ab1cab9fd93303f196c87deaba478eedbcb9ab588c7b2c9bd99195bc393",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Scheduling/Data/WakeupRequest.php",
+      "before_sha256": "14a83b43746497f71dbbf2f09b7f19c3b6ca94c207fd6ebfce81fda4114074aa",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Scheduling/Data/WakeupWindow.php",
+      "before_sha256": "205eb858be2c237f634e955969173ecfc435235ab8e54d53f65a69baaa4ce505",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Settings/Contracts/SettingDefaultsProvider.php",
+      "before_sha256": "b10988501c70cbd54fc55818533b49702613f3bfa7110cf147152ab7c11b73d5",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Settings/Contracts/SettingsRepository.php",
+      "before_sha256": "ec50a145cfd862bb851787a6f35caff87d06d96cca45243d3d1f03704cdb4603",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Settings/Data/SettingsScope.php",
+      "before_sha256": "08abbffc6075fe1b4c8fcf9a5ad33112db2a5b9c36648e8f1a8b160036297ce5",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Settings/Enums/SettingScope.php",
+      "before_sha256": "ab7f4f061021cedeb24b24a25c08ac10cbfc87d0a615340cb341d509d7aefeac",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Settings/Events/SettingChanged.php",
+      "before_sha256": "556e450ace83b1999a3d04d0091bbfaa97a405074b7a17bddeff60d9cc966e9a",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Settings/Exceptions/SettingValueTooLargeException.php",
+      "before_sha256": "9d0b3a7100f5712ac65f23b0ab577ea6e7b8db8ccff65f755da6ed48de0e1333",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Settings/Exceptions/UnsupportedScopeException.php",
+      "before_sha256": "0e7757867bcb1833ccc4b086eeb457892ff1a65017ea398708a7a2726fbae706",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Settings/Internal/DatabaseSettingsRepository.php",
+      "before_sha256": "f0b92b51426613220cf5a1c6a3e6ecc128ad610bc6fae70c5d766fcd77a4c21a",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Settings/Internal/Models/Setting.php",
+      "before_sha256": "90298c144d991564aee7d9b44553610c1d360df1fb19b013d9eda402f641e7e7",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Settings/Internal/NullSettingDefaultsProvider.php",
+      "before_sha256": "f7edc7a8f2172ad3a2bc1c699f27b70d83b833b7e293e95587b601e73c8b66cd",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Settings/Laravel/SettingsRegistrar.php",
+      "before_sha256": "6c1592f2a014296c97430ef1df698507a1a33c226ef87834e4cc4da1d5dbf2be",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Storage/Contracts/TenantStorage.php",
+      "before_sha256": "dfafe3dca04858025d744978a3891b1b5c5411fa698d9af37e1511dc7aacb0d1",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Storage/Data/ExportArchiveRef.php",
+      "before_sha256": "3c2cfbba3c48e75fcf66b1e863f86dabd02a68fbd7ef7a7d7eb237554a973475",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Storage/Data/StorageCapabilities.php",
+      "before_sha256": "c4c3c3937053be0883a9a6893586b109b75bac1437c615a1adb705e0267545ce",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Storage/Exceptions/StorageCapabilityUnavailable.php",
+      "before_sha256": "551203187faf52de0dffcd41a0faef8032dfc8f651b9db9da567d87e9aa564ac",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Storage/Exceptions/StorageOperationFailed.php",
+      "before_sha256": "e022470003a4426e699e9085a412cf8d6c228a6f42ee5f285c487d1a8b223408",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Storage/Internal/LocalTenantStorage.php",
+      "before_sha256": "ffcf5afe2f3e0dfe405ff497311845a5da6cc78ad7edd7ef88ea03957493d267",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Storage/Internal/ScopedFilesystem.php",
+      "before_sha256": "3e0b2e88e887f07ab427cd3f93e16e4b7bf4608f005ad10ba5f90ca82a0b7781",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Storage/Laravel/ScopedFilesystemFactory.php",
+      "before_sha256": "8c06db7cf93fc6646c5c72f1afadc163e4c54c37a234f0ec34e34bb352dcf19a",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Storage/Laravel/StorageRegistrar.php",
+      "before_sha256": "cd5c7c5d022b0fd1e2ae13c0bc280c445cb6f2fdba25dbc3c7fb779890554070",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Time/Laravel/LaravelClock.php",
+      "before_sha256": "6f99110da53e5144cfb5145fa2b88ccc94d91fc2e1d70f007316074f51241c79",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Time/Laravel/SystemClock.php",
+      "before_sha256": "081635df12f5420a94da17278305d70edae7ecbde211565200ee110b6b6dceea",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Time/Laravel/TimeRegistrar.php",
+      "before_sha256": "e3681e7f6d9bc93caaa847efb7f6ea4301b1ebc3668aa19ddfa474899e052fe6",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/src/Time/Testing/FrozenClock.php",
+      "before_sha256": "c86f8b981074ab31f4ea354dadf299416577dddef3463f3daf72d729c1db360c",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Attributes/AttributesTest.php",
+      "before_sha256": "92e87c7548ffa0d5a0da0cd0472e41a5d3cf46b9c410bcdbaf30b33634afd707",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Attributes/SurfaceScannerTest.php",
+      "before_sha256": "da1fe78d2d915baa2b95e62661dae5abfce5cd93285a7df8bda1bd6f0cc3694d",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Feature/AuditImpersonationTest.php",
+      "before_sha256": "39583ff509d54726beea12d3cb2830f76320ccffbf33d24bae607ad123ad30a1",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Feature/BaseModelIdentityTest.php",
+      "before_sha256": "bcb26dce1dad5fb15b02172454a09aeeed880aed5ab0627f1cb214ca361d6899",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Feature/DeliveryRemediationTest.php",
+      "before_sha256": "14962370c891fd184f00975f51cfa665864ddee9ae3c36d421e2c01f4dfd3a4d",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Feature/InboxClaimTest.php",
+      "before_sha256": "5ec9f798f088d8c4a4802ceb839652722b9f948c5126c1d732cb1a6b20621a3b",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Feature/MessagePublisherTest.php",
+      "before_sha256": "06ef0564740e2b3c97f9da7cf986d9921e9bb8a73496ed0c002dac2ceb27bf47",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Feature/OutboxAppendTest.php",
+      "before_sha256": "8a9e02cccc47cbb40364f62d88ab2b4aab4055fde2d0f63895e5084a0d5fbee7",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Feature/ProblemRegistryTest.php",
+      "before_sha256": "45aa57e062a82516c3e952a3e45c52805fe90e6a8d39e4e379efe0843cac73a8",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Feature/PruneOutboxTest.php",
+      "before_sha256": "324bdfd88d1844394d2148e5767dab78da730fa4b22756e9fb5840d963a08c07",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Feature/PublishIsolationTest.php",
+      "before_sha256": "c7c7ce77a72ef6cea8800de7b963355cb81dd2f384b07dc8c40c5491819255c6",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Feature/SynchronousAuditWriterTest.php",
+      "before_sha256": "5419dc66722e74fdb21fa09b89d37afde5200fdb3f8b2a085a077857af4225a1",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Feature/ValidateConfigCommandTest.php",
+      "before_sha256": "9354ce68b28acb8c1d5784a9b5d7b23bf274b382ab322d985ec21d0d231d3f58",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Feature/WorkUnitIsolationTest.php",
+      "before_sha256": "5940a2866ac85853ae31cce121481ebe28786e85b6791b187932933bbe222343",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Fixtures/PublishFailureFixture.php",
+      "before_sha256": "ce5a8c815d37e89d3b51859813bdc7a65bec6484b1ff5eb9bd315f7a1d157f02",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Fixtures/RecordingPublisher.php",
+      "before_sha256": "88ce10a1ba06d4db47af9eb7ce9e26d2f52f4d1504db70897326a698e3e76a03",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Modules/Feature/CompositionBindingsTest.php",
+      "before_sha256": "21b4a1de3dc1e0607a4c510aab8805ee091188e956a3c09dc5b67c30f97b96e9",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Modules/Feature/LifecycleRemediationTest.php",
+      "before_sha256": "f396ec504b9e430b981824f349f4f941edd5c8b0914b3f3ad427e1877bb570e2",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Modules/Feature/RegistryIntrospectionTest.php",
+      "before_sha256": "03f6b33daab3de1c023794e0f398fafb0b9225ae4519f814f4e885fd9d229ea6",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Modules/Unit/ExtensionContractTest.php",
+      "before_sha256": "71e38096c438e065ca89143d45391b492648a43f78674504f7f5805f3a7c04cd",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Modules/Unit/ExtensionMetadataTest.php",
+      "before_sha256": "a3182f5de813fbbfb41cbfe9d4e639bf5931c5438688a22f01b4dce9e6d6524d",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Modules/Unit/ExtensionRemediationTest.php",
+      "before_sha256": "539e9ee0858d882453796e2f6fc8c4f52ab724fa6249e0fa1dd19a89dfb99926",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Modules/Unit/FieldCastMapTest.php",
+      "before_sha256": "0b4ea89878e3b8f02e2bb12c53aa36546c99707b88f7f8adf5bb2036ce6dd598",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Modules/Unit/ModulesOptionsTest.php",
+      "before_sha256": "e9f9e648e4466c859e53fd1ff394641f7157a3fc48adf92833425240b8f44763",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Modules/Unit/RegistryCompilerDeterminismTest.php",
+      "before_sha256": "185bbcc6ae5e15cb4664726a74684ef0d558f14530f3242a893db34685663b0f",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Modules/Unit/RegistryFreezeTest.php",
+      "before_sha256": "79d9c4fdbd1ca68de38a88e1279fb9faef188ea4fa249e7b630ed4285ac23371",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Pest.php",
+      "before_sha256": "e92687e958f754a4ad9aa6829c346f547127ce2643fc4628f2b04242d7b6c079",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Pg/DeliveryGuaranteesTest.php",
+      "before_sha256": "5491cf059eca2810c70d0d2aa9cc6b21b62cd88bddd958a6690925503328fc8b",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Pg/DeliveryHealthTest.php",
+      "before_sha256": "ae1bc101df5103790fe27ff7299490a23088cdd4d348cc6d2c69a17be72a82f1",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Pg/InboxConcurrencyTest.php",
+      "before_sha256": "f5e01a280bd64fe8253be730f05ba765924afa8865ed8170504d5c2e3c2ed3eb",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Pg/MessagingSchemaTest.php",
+      "before_sha256": "4a9befb78b3d1dac124a221a8e75241d5587d42aa2c26fbf9f360a2ef0ea4607",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Pg/OutboxAppendPgTest.php",
+      "before_sha256": "db7e64a6de7d9eb464b1a8a2ceb80832c6ec09e3bb1c43ff5f94de4c63917139",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Pg/OutboxRelayCommandTest.php",
+      "before_sha256": "822e64105eba3c0e279e7fb4f80a5e7ed9bb789f90accaeb80a1a0c0773837b8",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Pg/OutboxRelayTest.php",
+      "before_sha256": "3a60873498c398c8330af5f2d163d308ce5a5bbf7ddb6d3b13f79bfa8b19457f",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Storage/LocalTenantStorageTest.php",
+      "before_sha256": "d53cd02efcea8e8ac0066301050cecf059d2b899fd6ea2f088450a051d190df2",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Support/ConfigReportTestSection.php",
+      "before_sha256": "26655e4ea9a5c612707546775f912dfb0b08d3b57f12a46af5360388b85bd32c",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Support/CoreXTestCase.php",
+      "before_sha256": "f75201cb19f04f4a9c0edf8590b2daec23c6056407595c9e118de814b2b057d9",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Support/DescriptorFixtureCode.php",
+      "before_sha256": "921a1009e4ecbca8fc507daa32c704c6462f7776d61468133d0dcc1bcb645ca3",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Support/IsolatesDatabasePath.php",
+      "before_sha256": "6358332f50e58bad0f4361f9e4ebd1243b74b969cfc92416439dbfaf6e0bf569",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Support/Modules/ConfigReportSectionTest.php",
+      "before_sha256": "2f20b12b146fdb5a88ced2b7172f4a140b1951c20084820378ec75f2d6a5457b",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Support/Stubs/Lifecycle/StubBaseModule.php",
+      "before_sha256": "7be47daa15653cd36808fdf8ddb8fd4386f886d4f08f09053a80a9c85e3d9faa",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Support/Stubs/Lifecycle/StubDependentModule.php",
+      "before_sha256": "b637d295804c6af1054d8a4d5a482c50a7f2456a006d376103dce92554c9e7a5",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Support/Stubs/Lifecycle/StubDisableHook.php",
+      "before_sha256": "bddbe5ad15122f7ba09bdb07964231fb1de11761ef5cbb50e2f40032be1217bc",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Support/Stubs/Lifecycle/StubEnableHook.php",
+      "before_sha256": "8863117058a2c13126fcf79818538b6ffc081c406b91455dc7a9238e624824f5",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Support/Stubs/Lifecycle/StubFailingModule.php",
+      "before_sha256": "e4ba383ee7ea1c8d9d8be320fed80c8bb64d8c3d8320067bed74faf03f9147ca",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Support/Stubs/Lifecycle/StubFeatureFlagModule.php",
+      "before_sha256": "bb314db93cb012e20cff2d7e756fd4dd311429aa343484c41f8b6e2621851df0",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Support/Stubs/Lifecycle/StubFkModule.php",
+      "before_sha256": "4256630d9b060226a592d4124e873bffefd31df6e05aa98973da1f7a10248883",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Support/Stubs/Lifecycle/StubPurgeHook.php",
+      "before_sha256": "f590bc1e7b2bbdcb47ad08b635d5e3411acdea9dcb268d8b521c485a555374f4",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Support/Stubs/Widget.php",
+      "before_sha256": "93ea8a5a63f45e3886ccaa3872d990480c6ad054c973fea8841441766163bcee",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Unit/ClockTest.php",
+      "before_sha256": "3a1702a2d59c0e65114acea8e479178d30288633f062a8216460e4e147ec6622",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Unit/CloudEventCodecTest.php",
+      "before_sha256": "903b07b2f63c54351a70e0b36046cc55382403c2973be56e2393e47b4b2ff61b",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Unit/CoreOptionsTest.php",
+      "before_sha256": "f680ca9be86c5664789e94ddf353741bae757ad99eeacccfa4670f198f1377dc",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Unit/DataScopeCodecTest.php",
+      "before_sha256": "d61b1f59ee20e81913c713bfc9715b4150b2d9a0a12baec1c1dd576fd7107775",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Unit/ErrorDescriptorTest.php",
+      "before_sha256": "1e2933042b23fd2637981064f62ec916c8fabc4c664a7a9fe4e8e68d64f6dfc0",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Unit/MessageContractRegistryTest.php",
+      "before_sha256": "fc62c0a26140285edb0d6fc2c1b24a1f6bffd0a3953b03c4961ecd7ec0e1abc6",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Unit/MessagingEnvelopeTest.php",
+      "before_sha256": "72252a44ed31fa08b062815494370580cee2c4d917812187bce8122ad9e3b3a0",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Unit/OpenTelemetryBridgeTest.php",
+      "before_sha256": "c7a4865cbc535d1c6f823d7c6ad053e60941cf44c2143d2d3622254da4404945",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Unit/OperationObserverTest.php",
+      "before_sha256": "b359ed7c28cb6cd69aac1f3ea409ed0c20f26063999c466b02e0c8b3e7c8e333",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Unit/PackageRegistrarTest.php",
+      "before_sha256": "76aa8f7810c0c1210b119c6931b4ee73e280526771eb0d7d87138e83e6a04072",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Unit/SupportDataTest.php",
+      "before_sha256": "f68f835e7c31540559a124e8b33eaec2ae5bea0006c1069d2b6e8ba15b74e964",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/tests/Unit/TenantContextRestorerTest.php",
+      "before_sha256": "7a9dcf1cce9773c1600c8436edd802b3d49d24f33dc947028e21db793ddf8ed8",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/custom-fields/phpstan.neon",
+      "before_sha256": "b6026adab3f41c2cab51b830db9d4990222b2690812a939bdea1a5f6d9d62f16",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/intl/phpstan.neon",
+      "before_sha256": "00994bc0edda559ca3e6690cdad8e2e59310be0059764ce1a72c3104e9fefa46",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/media/phpstan.neon",
+      "before_sha256": "b7da9c6fc43b2c4a46f3564dec5c4d1ee06920929fd8b9276de591d11d5e0962",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/notifications/phpstan.neon",
+      "before_sha256": "b204cb0a99240bcd8236edeab1c3a66fe9c03fe1814a9740f89bddaa23baee45",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/operations/phpstan.neon",
+      "before_sha256": "1b822a43894b4069c1a6d6e634b9363827836c628b82f4d761a82c54d1cdd108",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/panels/phpstan.neon",
+      "before_sha256": "f9332497f5ff80032f0faf0ecf90e3ac48deeb5998279e4cb0bec8002404ffd8",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/recurrence/phpstan.neon",
+      "before_sha256": "ddbecc08eb37053f3d099f2bd180df1ba74800240ff39e255d0c8fa6791588fa",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/search-intl/phpstan.neon",
+      "before_sha256": "5351e9ccd9e48f91edc1a01de52fa69dc20b72e5c301ffb4fcb18fdee8783f67",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/search-meilisearch/phpstan.neon",
+      "before_sha256": "8c09894e8005fd658811057c78af33f14d967836f65323d03266b623364044cd",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/search/phpstan.neon",
+      "before_sha256": "569893f8b5ef55856742fedc6611b15d4758d1c45ecc5bf52c6aabbfce337f53",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/tasks-workflow/phpstan.neon",
+      "before_sha256": "204bfa24a219aed9ceaba5a193164cfe1de8033c9ae1ca3ac9255420255af51a",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/tasks/phpstan.neon",
+      "before_sha256": "9219f553c352988baa19cb9add211b83ae62a9560063826d99238e3918a1a803",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/tenancy/phpstan.neon",
+      "before_sha256": "54f4dfdf2004b7a0dbe4105f90ad2636612ae82a8d6390ff545770a44e60b86e",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/tools/phpstan.neon",
+      "before_sha256": "2a3ba4555f0ea94107071201ff41d1cef90042c5b4a520089b968358e914a826",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/transfer/phpstan.neon",
+      "before_sha256": "605ada44700599bf78f4d671668929ddde254ec203da1c55af63846ce6e017c6",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/wakeup/phpstan.neon",
+      "before_sha256": "133a53c160844ecb15b612e6c5aefb32d4de6a6bad35580abb456396b2a67629",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/webhooks/phpstan.neon",
+      "before_sha256": "e689887971fe1acbd875f93c03eeba2bba8877bc4c0930eacf2e266c9f8fead9",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/workflow/phpstan.neon",
+      "before_sha256": "915b58fd29974fbd865237dbade53d362498f20d800cd81a821f0578b06af074",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "phpstan-baseline.neon",
+      "before_sha256": "67478eb9bb6e6ba6616dabe2dd2a433516e01c8bc50ad8f32fff32b7987f81c5",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "phpstan-extensions.neon",
+      "before_sha256": "9894d193a253316e7837f819b7fc3eb7cb290182a243d148a8409b4dc08af013",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "phpstan-tests-lint.neon",
+      "before_sha256": "0f0db100734ea19a8bb816fa47d6e3d718fc9f16814a54085fd5fe87d87a98b3",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "phpstan.neon",
+      "before_sha256": "632ac3eb90196e2bd14d005923f787e4d55bcf564b6541331d5674a95656ef32",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "pint.json",
+      "before_sha256": "b1257f6a87a67ad2d77f92ad190c09e6e7c654bc5feb4c02d6db48681573a94d",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "rector.php",
+      "before_sha256": "824cc7ca3d7e666f360cb7bec1cac3d757aa1b5571bc06cc74fdc937ba662262",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/attributes-architecture-gate.php",
+      "before_sha256": "d0415515757631e786e6ebbe6ec4ffe0e2fb3102e89d6c71a4a8bd9e51518045",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/bc/interface-addition.php",
+      "before_sha256": "feae41515bed37a9fbd92190d02061c9b8729f0ff076514bfe950237081ed6ff",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/bc/property-default.php",
+      "before_sha256": "5a274ca86031749a74b41e1dc3220429baae3179fb5d7a6e4724df79cd8863b3",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/bc/roave.php",
+      "before_sha256": "11ea4f371c07f28d462c89b283d9f5dad80837530762dbb716057a71c2adafcf",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/bc/source-membership.php",
+      "before_sha256": "eea4744ae90725a9d30993e90c14114a390a54ebb5d9152aee5b9d2368e54402",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/bc/test-property-default.php",
+      "before_sha256": "ea6466463c93e9bc6ac25f54e44afca692c3829f5009f5dc362fb1291d5b1a37",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/check-api-contract.php",
+      "before_sha256": "9cf4cad052251cc2f4aa6c10e69c24d5a231a0fb6c6d8287ec87dfb78212cabd",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/ci-composer-update.php",
+      "before_sha256": "74fb553f31749178d56ff250be960d9fa656801d45b1198f822ba7421d850dda",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/config-composition-gate.php",
+      "before_sha256": "8b8bce06f601e9f096601be3a41ab5b5015f5ce1cef57c9c7adbcf3bdfdfa683",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/configuration-reference.php",
+      "before_sha256": "615ef337e3a336e3e2e6f724bfea44d09ab2a2b8f15c40c88dc3859aa2b4bc29",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/distribution/extension_fixture_probe.php",
+      "before_sha256": "771e202288a7459f9504ccd1bedc72fc00fe5813b20f333fe4f1fba02d804f40",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/error-registry.php",
+      "before_sha256": "423ca96dedc2c7f86d8f030518cfbaa041af5b2770800b87eda4c47d88bca936",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/extension-contract-gate.php",
+      "before_sha256": "f086747f8e0ee78477582a7a04804aec23671bfe163eb17cf08e312ed9876a31",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutation-check.sh",
+      "before_sha256": "0ff42bdd598636055b1a807db1ff1b37abd4fa585568724cd432cc5be9ebef85",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/API-default-deny.patch",
+      "before_sha256": "de5285640a92550bc1cc25cf140206abc28ca4589bc13ae7b41bab66eef93cee",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/API-module-activation.patch",
+      "before_sha256": "0e26848be09fb5d8aa70b3ba7437d7b98808bb1b8aea7d004f88858cc32a1873",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/API-physical-context.patch",
+      "before_sha256": "2098bc4165d270019b05a9c7dd6b600d2c26b301554510f8818278aee21d0206",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/API-undeclared-input.patch",
+      "before_sha256": "cb61fcfc502007979c6902a34fa1d3619e98a7efd0a36dc72a13ddcb86594825",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P05-scoped-to-singleton.patch",
+      "before_sha256": "ede29ab7de81673a6ffff848c948d9ee0a39a0c68fda7d34bc58a86a880f2ec5",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P06-egress-skip-on-delivery.patch",
+      "before_sha256": "b45b4762d8d319f7656e8b5ff68fbc3e773a358bd5929ef825c5a7d404ff9fea",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.14-foreign-prefix-fp.patch",
+      "before_sha256": "b4a680034ce77ebbedb03f51dfa1b80162c1e45fb3e2fc6816eb197a60dd1eaa",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.14-pg-lane-split.patch",
+      "before_sha256": "a3b56e07abcc25af685de8da339e80470e3daad2308e8efb66e9a706433cad23",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.15-drop-entities.patch",
+      "before_sha256": "4d20e80e98d0a316b3129efa84fb526d4c07331a5182fde0c962efb0555f1a63",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.15-rename-check.patch",
+      "before_sha256": "f3cb0a3dcd6f0c28a8904ac111bcd03fc187cfffb59b818da7280ff9f0515fcb",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.15-silent-empty.patch",
+      "before_sha256": "baaaadc3799770f209ecbcc54d46253b36f67e94de822a247cbb352326ea940e",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.16-no-epoch-bump.patch",
+      "before_sha256": "96a1e9562a6b29afc0ed160d5e2058144fa3af17a536ef8f4f3a5d3fdf03dcf4",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.16-statereader-bare-binding.patch",
+      "before_sha256": "f7911ee19ba71e46a601da850af129febd5a34129e8bb9ca3caaf0f957dc62f6",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.16-tags-back.patch",
+      "before_sha256": "3ccb6719d57d28d30c16d9d0ad00af0ab0e2e253f6a29ee6de87a6c3520a461a",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.17-stage-order-swap.patch",
+      "before_sha256": "710a600909b4c944ac542da6eef0c78e4c70ae9b8c630962153a2ea929f18a9b",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.17-tableprefix-skip.patch",
+      "before_sha256": "2eb3047491b2a74d3cefc7d3f883ab051e688e1fa971eb06568bf2b9a914ef26",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.18-enable-swallow.patch",
+      "before_sha256": "df0b0377b6dd6b835645f12c97ac2201d0e7b41fa1d78acd975a96eeee475782",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.18-purge-order.patch",
+      "before_sha256": "fda6c0c7e64dbb2a86f420d6248bc1b6a7555e72b292c7556959435e93964b44",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.19-drop-precision.patch",
+      "before_sha256": "ecee213b95a6417af04c6c4f1253128733663b526cf52b2a748461cf1399f6f9",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.21-always-excluded-removed.patch",
+      "before_sha256": "d9bdabb27b95f1271f3d3e41368715faa048b13b9f661bc5d4df085ce06f9f62",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.21-getattributes-create.patch",
+      "before_sha256": "97ffa58b498fd203f9c72d73c269bc154263289e4bcb988a00b5d0b8f82cf006",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.21-killswitch-writeseam.patch",
+      "before_sha256": "7aa5cb22cf5df6935c855ed1b517983f1500d7ea2236a74673db21689255e76d",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.21-killswitch.patch",
+      "before_sha256": "1682757f3205cd12a2439819d2ea7f8ed29be393f9b37c2f7459deac742518e6",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.22-drop-unique-index.patch",
+      "before_sha256": "af6f170faba6f3d72c31c65e74630d5d488c612793f30d3c8f5c5b9be47d9556",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.22-drop-workspace-branch.patch",
+      "before_sha256": "5ec1623cddfd0289fbcf94e6c9a8467619d2be07a6aa7f12d95e2b91f0f62429",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.23-event-in-transaction.patch",
+      "before_sha256": "9baa768afab50af01aea7af0769d9b059ffb03eb045a5d6e10cdc6597761308c",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.23-move-workspace-filter.patch",
+      "before_sha256": "c8ca0bac17bc95ec8d40b35ad169d256bf810c890e1b610c1151d72d3e60ae9b",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.23-stale-read.patch",
+      "before_sha256": "302b5feaaf464138bd1fb1fa2f8ae0f7fd5287a0e474a6c8acdbb83e8734573f",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.24-bare-runninginconsole-guard.patch",
+      "before_sha256": "d27bb97ed612bc7beec0123cdddb45c519d7f0dea113ffc4a4fd906682c8b930",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.24-cursor-start-zero.patch",
+      "before_sha256": "7058edd2266aa80d9cd34a189e4be784363d0fabad6d5eb3f2ca7d86ec6c9c43",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.25-domainevent-drop.patch",
+      "before_sha256": "af5ab8a90582a60bca998c70b966b722b23afd436b16315410903279253ea016",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.25-null-provider-binding.patch",
+      "before_sha256": "8168d736a229e751670096dbda6571291764939189902b5b2655ab5072e2db47",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.29-move-parent-workspace.patch",
+      "before_sha256": "af752732703b01cc3e164367aae50c8f5bc3e41c734fcebef0e734fe8be1d172",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P1.29-upgrade-swallow.patch",
+      "before_sha256": "fdcba9d005a119cffa5538583c564ad28006da910ad044c2cf70fc1e04b6fe4b",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/mutations/P10-pg-outside-group.patch",
+      "before_sha256": "aba67181469e7467cc7df496f823804dab4e82200d55fb24ef775c53b14c6be3",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/naming-gate.php",
+      "before_sha256": "8da6d1b81ce0b77bcc9e44244349028cf2677d5e3f825d913224631406063b28",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/ownership-gate.php",
+      "before_sha256": "c7a174123cd42dabc8913b9a8a097e0bc84ed5bc6920ddefa9e307cc95a56a45",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/package-docs-gate.php",
+      "before_sha256": "ef60b5c4f03b75695c772ff4aa36ebeed4066d30b9ea734027ee0b172111b0a2",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/package-graph-gate.php",
+      "before_sha256": "a230a0a6bd7cd0621bdbe89d1196b13293e4ed255a6f26bd747030cafe95bc01",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/php-api.php",
+      "before_sha256": "a1dbb09727d3ecee5b0800a628b07add0913b80d25a603ecbf2b8ad6c6a18042",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/phpstan-tenancy-commands.php",
+      "before_sha256": "02572db9b0556b2a7ae26861544c686e4ad41d8944d6d5c58d736a8f78b5116b",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/provider-size-gate.php",
+      "before_sha256": "fae1e320ba7daad988396c99deb557cf75d8241f15735c52ef9c8af42cdb5f6c",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/quality-ceiling-guard.php",
+      "before_sha256": "ef9edcec27ca561cdef8b3b21a34d7d0d948bea545cbdc38ce24e82e8f5bf5d4",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/quality-ceilings.json",
+      "before_sha256": "db6049647841312336843d89b76093ddb31411e711c99109611248a25a30396b",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/quality/facts-guard.py",
+      "before_sha256": "caa06746a4793b497fb14f28210b92afcf49b5a93c06406f03af6abc71f9b6e6",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/quality/release-quality.php",
+      "before_sha256": null,
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/quality/tests/test_facts_guard.py",
+      "before_sha256": "78e2926cd7f4f1856d65d9920d3cf7c81091ee9019beb498ab3614ecaa9c0af7",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/rename-completeness-gate.php",
+      "before_sha256": "9f5b0a84cf925f76674e183f15f9b6357bf30c776401b97560c4989d9c410074",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/runtime-globals-gate.php",
+      "before_sha256": "d3b0872d286109b2269588e30dc0f1e4e76f5907c429c9285b3ff2a817677df3",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/schema-gate.php",
+      "before_sha256": "c5ac639f6103e73646d8bc136e67e9c6ade7527578cf35df7c706c7407364045",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/table-ownership-gate.php",
+      "before_sha256": "517d35dfb2e876ca22e34a933bbc6836bfcf2ae1830525f2898ac10e3aa0a905",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "scripts/table-write-ownership-gate.php",
+      "before_sha256": "7c4f7c69e0fd4129a28461ef35695a5816115f6827a5b15f4de0f2e3de23726f",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Arch/MigrationToolingGuardTest.php",
+      "before_sha256": null,
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Arch/QualityReleaseGateTest.php",
+      "before_sha256": null,
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Golden/GoldenTest.php",
+      "before_sha256": "f1ccf0e2d96ff19d59bff33471ce65948c46be533e6004c9dd3a0e0a1a38e412",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Golden/GoldenTestCase.php",
+      "before_sha256": "71b2ae02cfefd610f57dd9c13cdf7c99b6739df8c6363d38a0e1ed19bf9895dc",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Golden/REBASELINE.md",
+      "before_sha256": "3cad91844fc2517a25043e7709abee25b059d25709c2e08cfe53e62cb75d8ff5",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Golden/SchemaGoldenTest.php",
+      "before_sha256": "ca64f660917dabcb4cf39e0f63b04152ae3c473e79c827b7f639fc12ed59950a",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Golden/SchemaSqliteGoldenTest.php",
+      "before_sha256": "e87eadc270c7093f30095898604444a24451854e8874273d1bbf9028c55f6529",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Golden/Support/GoldenSnapshot.php",
+      "before_sha256": "add56000a6685ff7430599be0bec2121fb10272e7fbb3356ac03be9f1f6a74ca",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Golden/Support/Normalizer.php",
+      "before_sha256": "ded45b5b56ad1f3320a19842d958b194fa51288e45019b318c25bc77edf6529a",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Golden/Support/RenameMap.php",
+      "before_sha256": "2545c4e2ee3bd1f86e4c107e3546ad7b12017fe407f7ed9137aa56187b459292",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Golden/Support/SchemaCatalogue.php",
+      "before_sha256": "f58b9222ced0df7faa789d5c66e8baf2f5e5104b1037baf6d7654cec6f88bb9c",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Golden/Support/SchemaEnvironment.php",
+      "before_sha256": "975b6eb1ee6d43ce623fa1cfc95d7c5711d5d4a1c79fee647c76c5a71cbe973c",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Golden/Support/SchemaSelectionProvider.php",
+      "before_sha256": "240ae364e5903c6e0f6662a4e404b774c64a8333506962db58613ad8300a26a3",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Golden/Support/SnapshotSchemaTest.php",
+      "before_sha256": "9c8f1c42122c9c82208cac13fd5d4f90c77aa20d7a0ed328c88f378c4bb35914",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Golden/baseline/events.json",
+      "before_sha256": "1945f1eed007443cf905bb3beb9f27b7afa8e994dbec5a6bc57ea89062f52283",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Golden/baseline/php-surface.json",
+      "before_sha256": "c6648a8b46710375152aab520b48784f0e72660fd9c5f1581ba6d870f95a214d",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Golden/baseline/routes.json",
+      "before_sha256": "0ea5e83c25f8cfb6c97d1fd2a7f458a5bf1e1d794cd8de50a533c10adba73be4",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Golden/baseline/wire.json",
+      "before_sha256": "b94c9c1a286a99ee594c44f827cee69503388eba6e147e67ca9bdefef89623a3",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Golden/package-projection.json",
+      "before_sha256": "108022fa5a3323e64cb20a99c2466ef95b8ffd5bc0fb09c867f6a322f384720a",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Golden/promoted-fixtures.json",
+      "before_sha256": "56a4a1dbc087fab2d8fec75938d2bddcde0cda3bbcc4f5ce2304cb7861c0fc8c",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Golden/rename-map.json",
+      "before_sha256": "54abf108453d8a1b669090ed276eb908045693e908d13d21db252817a80d054c",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Golden/schema/central.pgsql.json",
+      "before_sha256": "3d690c26e18f532b155a92723812aa1a2f15f367ff138e25319fbadb21532101",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Golden/schema/dedicated.pgsql.json",
+      "before_sha256": "bf902112332aa4d6137459dc2ed400fdef6b38ffcea4ccb4a989da47373865fb",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Golden/schema/tenant.pgsql.json",
+      "before_sha256": "0835c27d357d41dd526a40e0102523cc6e283d974f5566c2d140474edb49a438",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Golden/schema/tenant.sqlite.json",
+      "before_sha256": "db6005a74f420e45611540647e97aba1533c381810b09b414eb2b86835c43c28",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Support/OptionsSingletonGate.php",
+      "before_sha256": "8a70f0e76255089acbd7ac1830c870cabb5dd9c2c24f0d6ccb81093465de4203",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Support/SingletonInjectionGate.php",
+      "before_sha256": "f9ce1d294dcda78378eb4d37e586f572dd5637de05df6eab90bfde2c28bc0f12",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "tests/Support/SourceScanner.php",
+      "before_sha256": "4d9a810067ae7994621eb8074274af312b89904f8d959362ddad6419a18c079a",
+      "allowed_change": "P09.1 declared typing/gate/tooling change; preserve runtime/public/schema behavior"
+    },
+    {
+      "path": "packages/core/CHANGELOG.md",
+      "before_sha256": "b534e462863f6afef1a7beb54cd54837f596efefb7b31126e3ceadb37711c041",
+      "allowed_change": "Finite D126 documentation/API inventory precision; no runtime signature/schema/release change"
+    },
+    {
+      "path": "packages/core/resources/contracts/php-api.json",
+      "before_sha256": "59874ccb5f2ce1b00473f8b0db046ab41c322c2944f0829b6dd3c94c340708d8",
+      "allowed_change": "Finite D126 documentation/API inventory precision; no runtime signature/schema/release change"
+    },
+    {
+      "path": "docs/reference/public-api.md",
+      "before_sha256": "44731762b4cded544366d8f7e98f5283af1d79594fcf7699c36915fac04e053b",
+      "allowed_change": "Finite D126 documentation/API inventory precision; no runtime signature/schema/release change"
+    }
+  ],
+  "freeze_note": "Corrected directory-only glob expansion before ANY measured edit; initial pre retained as facts-pre-incomplete.json. Only exact declared item files expanded; no unrelated drift accepted.",
+  "extension_decision": "PLAN3.D126"
+}

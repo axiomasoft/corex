@@ -1,0 +1,37 @@
+[
+  {
+    "type": "session_meta",
+    "id": "01a112b8-87f9-7333-aafe-9fd459898f5d",
+    "source": {
+      "subagent": {
+        "thread_spawn": {
+          "parent_thread_id": "01a112b5-e159-7b63-a3e8-e862378cc7b8",
+          "depth": 1,
+          "agent_path": "/root/d125_independent_review",
+          "agent_nickname": "Curie",
+          "agent_role": null
+        }
+      }
+    },
+    "agent_path": "/root/d125_independent_review",
+    "timestamp": "2026-10-06T19:37:25.757Z"
+  },
+  {
+    "type": "turn_context",
+    "model": "gpt-6-sol",
+    "effort": "high",
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "sandbox_policy": {
+      "type": "danger-full-access"
+    }
+  },
+  {
+    "type": "turn_context",
+    "model": "gpt-6-sol",
+    "effort": "high",
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "sandbox_policy": {
+      "type": "danger-full-access"
+    }
+  }
+]

@@ -18,6 +18,7 @@ use ReflectionMethod;
 use ReflectionParameter;
 use ReflectionProperty;
 use RuntimeException;
+use SplFileInfo;
 use UnitEnum;
 
 final class GoldenSnapshot
@@ -29,9 +30,11 @@ final class GoldenSnapshot
         // Read declarations, then let Composer load their actual names exactly once.
         $classes = [];
         $files = [];
-        foreach (array_merge(glob($repoRoot.'/packages/*/src') ?: [], glob($repoRoot.'/products/*/src') ?: []) as $base) {
+        foreach (array_merge((($entries = glob($repoRoot.'/packages/*/src')) === false ? [] : $entries), (($entries = glob($repoRoot.'/products/*/src')) === false ? [] : $entries)) as $base) {
             $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($base, FilesystemIterator::SKIP_DOTS));
             foreach ($iterator as $file) {
+                assert($file instanceof SplFileInfo);
+
                 if ($file->getExtension() === 'php') {
                     $files[] = $file->getPathname();
                 }
@@ -115,6 +118,10 @@ final class GoldenSnapshot
     }
 
     /** @return array<string, mixed> */
+    /**
+     * @param  list<class-string>  $classes
+     * @return array<string, mixed>
+     */
     public static function phpSurface(array $classes): array
     {
         $out = [];
@@ -176,7 +183,7 @@ final class GoldenSnapshot
                 'abstract' => $r->isAbstract() && ! $r->isInterface(),
                 'readonly' => $r->isReadOnly(),
                 'internal' => str_contains($class, '\\Internal\\'),
-                'parent' => $r->getParentClass() ? $r->getParentClass()->getName() : null,
+                'parent' => $r->getParentClass() !== false ? $r->getParentClass()->getName() : null,
                 'interfaces' => self::sorted($r->getInterfaceNames()),
                 'constants' => $constants,
                 'properties' => $properties,
@@ -209,10 +216,14 @@ final class GoldenSnapshot
     public static function routes(): array
     {
         $rows = [];
-        foreach (Route::getRoutes() as $route) {
+        foreach (Route::getRoutes()->getRoutes() as $route) {
             $action = $route->getActionName();
+            $methods = $route->methods();
+            foreach ($methods as $method) {
+                assert(is_string($method));
+            }
             $rows[] = [
-                'methods' => array_values(array_diff($route->methods(), ['HEAD'])),
+                'methods' => array_values(array_diff($methods, ['HEAD'])),
                 'uri' => $route->uri(),
                 'name' => $route->getName(),
                 'action' => $action === 'Closure' ? 'Closure' : $action,
@@ -223,7 +234,10 @@ final class GoldenSnapshot
         return $rows;
     }
 
-    /** @param list<class-string> $classes @return array<string, mixed> */
+    /**
+     * @param  list<class-string>  $classes
+     * @return array<string, mixed>
+     */
     public static function events(array $classes): array
     {
         $names = [];
@@ -270,7 +284,7 @@ final class GoldenSnapshot
 
             return $out;
         } finally {
-            foreach (glob($tmp.'/*') ?: [] as $path) {
+            foreach ((($entries = glob($tmp.'/*')) === false ? [] : $entries) as $path) {
                 if (is_file($path)) {
                     unlink($path);
                 }
@@ -282,11 +296,14 @@ final class GoldenSnapshot
         }
     }
 
-    /** @param list<string> $values @return list<string> */
+    /**
+     * @param  list<string>  $values
+     * @return list<string>
+     */
     private static function sorted(array $values): array
     {
         sort($values);
 
-        return array_values($values);
+        return $values;
     }
 }

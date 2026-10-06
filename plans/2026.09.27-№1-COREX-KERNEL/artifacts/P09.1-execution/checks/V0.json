@@ -1,0 +1,28 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:check-evidence:v1",
+  "evidence_id": "PLAN3.P09.1.V0",
+  "check_id": "V0",
+  "subject": "PLAN3.P09.1",
+  "procedure": {
+    "procedure": "Verify P08 final CI run id/commit/all required jobs completed success and explicit independent corrected-design verdict from different model; run test ! -e scripts/.plan-close-deferred. No status-only approval."
+  },
+  "candidate": {
+    "head": "f0faead86201935c71cd0c2d8731e2e41bcc26e5"
+  },
+  "verdict": "pass",
+  "observation": "Verified live P08 CI run37508077385 at1f824f74fa0044819f991346e484dad82872827a:37/37 required jobs completed success; different-model corrected-design review gpt-6-sol/high session01a112b8-87f9-7333-aafe-9fd459898f5d has GREEN plus immutable reviewed input hashes. No deferred flag. P09.1 status/result/updated_at excluded only as runtime start bookkeeping.",
+  "started_at": "2026-10-06T19:51:19Z",
+  "finished_at": "2026-10-06T19:54:52.431568+00:00",
+  "producer": {
+    "kind": "executor",
+    "actor": {
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh"
+    }
+  },
+  "log": {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.1-execution/V0-verification.json",
+    "sha256": "4dd59114210e73a115bac99aea8d6eed4344c1d2aefa7192208eff54a92c3496"
+  }
+}

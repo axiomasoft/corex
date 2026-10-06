@@ -1,10 +1,9 @@
 diff --git a/tests/Feature/PubSubDatabasePollTest.php b/tests/Feature/PubSubDatabasePollTest.php
-index 0c5f899..f37a976 100644
 --- a/tests/Feature/PubSubDatabasePollTest.php
 +++ b/tests/Feature/PubSubDatabasePollTest.php
-@@ -10,7 +10,6 @@ use CoreX\Config\Data\CoreOptions;
- use Illuminate\Database\Connection;
+@@ -8,7 +8,6 @@
  use Illuminate\Support\Facades\DB;
+ use Psr\Clock\ClockInterface;
  
 -uses()->group('pg');
  

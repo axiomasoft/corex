@@ -1,0 +1,39 @@
+{
+  "verified_at": "2026-10-06T19:43:28.845054+00:00",
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan.py",
+        "check",
+        "PLAN3"
+      ],
+      "exit": 0,
+      "stdout": "0 error(s), 0 warning(s)\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan.py",
+        "render",
+        "PLAN3",
+        "--check"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "/home/vostrikov/projects/packages/swissknifeman/packages/task/scripts/plan.py",
+        "next",
+        "PLAN3"
+      ],
+      "exit": 0,
+      "stdout": "run-items: task:plan-run 2026.09.27-№1-COREX-KERNEL P09.1  (implementation/xhigh)\n",
+      "stderr": ""
+    }
+  ]
+}

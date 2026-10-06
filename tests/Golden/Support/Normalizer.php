@@ -6,6 +6,7 @@ namespace CoreX\Tests\Golden\Support;
 
 final class Normalizer
 {
+    /** @param list<array-key> $path */
     public static function normalize(mixed $value, array $path = []): mixed
     {
         if (! is_array($value)) {
@@ -15,6 +16,7 @@ final class Normalizer
         // Internal status and interface ordering derive from projected class names.
         if (count($path) === 1 && isset($value['kind'], $value['methods'], $value['interfaces'])) {
             $value['internal'] = str_contains((string) $path[0], '\\Internal\\');
+            assert(is_array($value['interfaces']));
             sort($value['interfaces']);
         }
 

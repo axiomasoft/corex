@@ -62,11 +62,11 @@ final readonly class CompiledModule
         );
     }
 
-    /**
-     * @param  array{composerName: string, title: ?string, tablePrefix: ?string, requires: list<array{kind: string, package: string, constraint: string}>, editions: array<string, list<string>>, components: list<class-string>, onEnableHook?: class-string|null, onDisableHook?: class-string|null, onPurgeHook?: class-string|null}  $data
-     */
+    /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
+        self::assertPayload($data);
+
         return new self(
             composerName: $data['composerName'],
             title: $data['title'],
@@ -78,6 +78,37 @@ final readonly class CompiledModule
             onDisableHook: $data['onDisableHook'] ?? null,
             onPurgeHook: $data['onPurgeHook'] ?? null,
         );
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     *
+     * @phpstan-assert array{composerName: string, title: ?string, tablePrefix: ?string, requires: list<array{kind: string, package: string, constraint: string}>, editions: array<string, list<string>>, components: list<class-string>, onEnableHook?: class-string|null, onDisableHook?: class-string|null, onPurgeHook?: class-string|null} $data
+     */
+    private static function assertPayload(array $data): void
+    {
+        assert(is_string($data['composerName']));
+        assert($data['title'] === null || is_string($data['title']));
+        assert($data['tablePrefix'] === null || is_string($data['tablePrefix']));
+        assert(is_array($data['requires']) && array_is_list($data['requires']));
+        foreach ($data['requires'] as $row) {
+            assert(is_array($row) && is_string($row['kind']) && is_string($row['package']) && is_string($row['constraint']));
+        }
+        assert(is_array($data['editions']));
+        foreach ($data['editions'] as $edition => $capabilities) {
+            assert(is_string($edition) && is_array($capabilities) && array_is_list($capabilities));
+            foreach ($capabilities as $capability) {
+                assert(is_string($capability));
+            }
+        }
+        assert(is_array($data['components']) && array_is_list($data['components']));
+        foreach ($data['components'] as $component) {
+            assert(is_string($component) && (class_exists($component) || interface_exists($component)));
+        }
+        foreach (['onEnableHook', 'onDisableHook', 'onPurgeHook'] as $key) {
+            $hook = $data[$key] ?? null;
+            assert($hook === null || (is_string($hook) && (class_exists($hook) || interface_exists($hook))));
+        }
     }
 
     /**

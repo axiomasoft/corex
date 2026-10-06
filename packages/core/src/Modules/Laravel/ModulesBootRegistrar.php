@@ -16,7 +16,9 @@ use CoreX\Modules\Internal\Commands\RepairModuleCommand;
 use CoreX\Modules\Internal\InMemoryEntityRegistry;
 use CoreX\Modules\Internal\Registry\CompiledModuleRegistry;
 use Illuminate\Console\Application as Console;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Queue\Events\JobProcessing;
 use Override;
@@ -37,7 +39,7 @@ final class ModulesBootRegistrar implements PackageRegistrar
         // Epoch memo reset: a long-running queue worker drops its
         // per-process compiled-file memo before each job, so a redeploy's
         // recompiled registry is picked up instead of served stale for hours.
-        $app['events']->listen(JobProcessing::class, static fn () => self::flushRegistry($app));
+        $app->make(Dispatcher::class)->listen(JobProcessing::class, static fn () => self::flushRegistry($app));
 
         // Built after every module provider has booted and registered its
         // entities (ADR-003: EntityRegistry is the single morph-map source).
@@ -59,12 +61,16 @@ final class ModulesBootRegistrar implements PackageRegistrar
         // ModuleRegistry to an implementation without flush(), so the
         // instanceof stays a real guard (and larastan does not narrow the
         // container binding to the concrete, flagging it always-true).
-        /** @var ModuleRegistry $registry */
-        $registry = $app->make(ModuleRegistry::class);
+        $registry = self::moduleRegistry($app);
 
         if ($registry instanceof CompiledModuleRegistry) {
             $registry->flush();
         }
+    }
+
+    private static function moduleRegistry(Application $app): ModuleRegistry
+    {
+        return $app->make(ModuleRegistry::class);
     }
 
     private function projectEntities(Application $app): void
@@ -96,6 +102,7 @@ final class ModulesBootRegistrar implements PackageRegistrar
         // Relation::morphMap loses the handle. The active-module filter in
         // all(?ctx) is a DIFFERENT call — not this one.
         foreach ($registry->all() as $definition) {
+            assert(is_a($definition->model, Model::class, true));
             $map[$definition->handle] = $definition->model;
         }
 
@@ -114,6 +121,6 @@ final class ModulesBootRegistrar implements PackageRegistrar
     private function isCompilingModules(Application $app): bool
     {
         return $app->runningInConsole()
-            && ($_SERVER['argv'][1] ?? null) === 'corex:modules:compile';
+            && (is_array($_SERVER['argv'] ?? null) ? ($_SERVER['argv'][1] ?? null) : null) === 'corex:modules:compile';
     }
 }

@@ -31,7 +31,8 @@ final readonly class SqlDeliveryHealth
             ->get();
 
         foreach ($grouped as $row) {
-            $counts[(string) $row->status] = (int) $row->total;
+            assert(is_string($row->status) && (is_int($row->total) || is_numeric($row->total)));
+            $counts[$row->status] = (int) $row->total;
         }
 
         $byContract = [];
@@ -46,6 +47,7 @@ final readonly class SqlDeliveryHealth
             ->get();
 
         foreach ($pending as $row) {
+            assert(is_string($row->name) && (is_int($row->contract_version) || is_numeric($row->contract_version)));
             $age = $now->getTimestamp() - $this->date($row->oldest)->getTimestamp();
             $byContract["{$row->name}.v{$row->contract_version}"] = $age;
             $oldest = $oldest === null ? $age : max($oldest, $age);
@@ -56,6 +58,8 @@ final readonly class SqlDeliveryHealth
         $attempts = $this->connection->table($table)
             ->whereIn('status', ['pending', 'publishing'])
             ->max('attempts');
+
+        assert($attempts === null || is_int($attempts) || is_numeric($attempts));
 
         return new DeliveryHealth(
             oldestPendingSeconds: $oldest,
@@ -69,6 +73,8 @@ final readonly class SqlDeliveryHealth
 
     private function date(mixed $value): DateTimeImmutable
     {
+        assert(is_scalar($value) || $value === null || $value instanceof DateTimeInterface);
+
         return $value instanceof DateTimeInterface
             ? DateTimeImmutable::createFromInterface($value)
             : new DateTimeImmutable((string) $value);

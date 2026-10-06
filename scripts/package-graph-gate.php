@@ -13,6 +13,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RuntimeException;
 use SplFileInfo;
+use Stringable;
 use Throwable;
 
 /**
@@ -315,29 +316,29 @@ foreach ($activeReservations as $reservation) {
         $reservation['host'],
         $reservation['owner'],
         $reservation['reason'],
-        json_encode($reservation['class_counts'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        json_encode($reservation['class_counts'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR),
     ));
 }
 
 foreach ($config['undeclared_dependency_exceptions'] as $exception) {
     fwrite(STDERR, sprintf(
         "UNDECLARED DEPENDENCY EXCEPTION: %s -> %s in %s — ADR %s; expires when: %s\n",
-        (string) ($exception['from'] ?? ''),
-        (string) ($exception['to'] ?? ''),
-        (string) ($exception['import_file'] ?? ''),
-        (string) ($exception['adr'] ?? ''),
-        (string) ($exception['expires_when'] ?? ''),
+        scalarString($exception['from'] ?? ''),
+        scalarString($exception['to'] ?? ''),
+        scalarString($exception['import_file'] ?? ''),
+        scalarString($exception['adr'] ?? ''),
+        scalarString($exception['expires_when'] ?? ''),
     ));
 }
 
 foreach ($config['public_api_exceptions'] as $exception) {
     fwrite(STDERR, sprintf(
         "PUBLIC API EXCEPTION: %s -> %s in %s — ADR %s; expires when: %s\n",
-        (string) ($exception['from'] ?? ''),
-        (string) ($exception['to'] ?? ''),
-        (string) ($exception['import_file'] ?? ''),
-        (string) ($exception['adr'] ?? ''),
-        (string) ($exception['expires_when'] ?? ''),
+        scalarString($exception['from'] ?? ''),
+        scalarString($exception['to'] ?? ''),
+        scalarString($exception['import_file'] ?? ''),
+        scalarString($exception['adr'] ?? ''),
+        scalarString($exception['expires_when'] ?? ''),
     ));
 }
 
@@ -409,7 +410,7 @@ function discoverPackages(string $repoRoot): array
 {
     $packages = [];
 
-    foreach (array_merge(glob($repoRoot.'/packages/*/composer.json') ?: [], glob($repoRoot.'/products/*/composer.json') ?: []) as $composerPath) {
+    foreach (array_merge((($entries = glob($repoRoot.'/packages/*/composer.json')) === false ? [] : $entries), (($entries = glob($repoRoot.'/products/*/composer.json')) === false ? [] : $entries)) as $composerPath) {
         $dirName = basename(dirname($composerPath));
         $composer = json_decode((string) file_get_contents($composerPath), true);
 
@@ -446,7 +447,7 @@ function discoverPackages(string $repoRoot): array
 
         $packages[$dirName] = [
             'path' => substr(dirname($composerPath), strlen($repoRoot) + 1),
-            'name' => (string) $composer['name'],
+            'name' => $composer['name'],
             'dir' => $dirName,
             'require' => $requires,
             'psr4' => $psr4,
@@ -484,7 +485,7 @@ function walkPhpFiles(string $dir): array
 }
 
 /**
- * @return list<array{import: string, line: int, via: 'use'|'fqcn'|'extends'}>
+ * @return list<array{import: string, line: int, via: string}>
  */
 function extractReferences(string $file): array
 {
@@ -787,6 +788,7 @@ function readName(array $tokens, int $keywordIndex): string
     return rtrim(readQualifiedName($tokens, $i), '\\');
 }
 
+/** @param array<string,string> $useTable */
 function resolveName(string $name, string $namespace, array $useTable): string
 {
     if (str_starts_with($name, '\\')) {
@@ -810,7 +812,7 @@ function resolveName(string $name, string $namespace, array $useTable): string
 
 /**
  * @param  list<array{import: string, line: int, via: string}>  $refs
- * @return list<array{import: string, line: int, via: 'use'|'fqcn'|'extends'}>
+ * @return list<array{import: string, line: int, via: string}>
  */
 function uniqueRefs(array $refs): array
 {
@@ -1005,7 +1007,8 @@ function parseExtraCorex(array $composer, string $composerPath): array
     $relativePath = str_contains($composerPath, '/packages/')
         ? 'packages/'.basename(dirname($composerPath)).'/composer.json'
         : $composerPath;
-    $corex = $composer['extra']['corex'] ?? null;
+    $extra = $composer['extra'] ?? null;
+    $corex = is_array($extra) ? ($extra['corex'] ?? null) : null;
 
     if (! is_array($corex)) {
         fwrite(STDERR, "package-graph-gate: missing or invalid extra.corex in {$relativePath}\n");
@@ -1176,15 +1179,15 @@ function violatesUndeclaredDependency(
 function validateAllowlistEntries(array $allowlist, string $repoRoot): void
 {
     foreach ($allowlist as $entry) {
-        $guardFile = (string) ($entry['guard_file'] ?? '');
-        $importFile = (string) ($entry['import_file'] ?? '');
+        $guardFile = scalarString($entry['guard_file'] ?? '');
+        $importFile = scalarString($entry['import_file'] ?? '');
         $patterns = $entry['guard_contains'] ?? [];
 
         if ($guardFile === '' || $importFile === '' || ! is_file($repoRoot.'/'.$guardFile)) {
             fwrite(STDERR, sprintf(
                 "package-graph-gate: invalid allowlist entry for %s -> %s (%s)\n",
-                (string) ($entry['from'] ?? ''),
-                (string) ($entry['to'] ?? ''),
+                scalarString($entry['from'] ?? ''),
+                scalarString($entry['to'] ?? ''),
                 $importFile,
             ));
             exit(EXIT_CONFIG);
@@ -1193,8 +1196,8 @@ function validateAllowlistEntries(array $allowlist, string $repoRoot): void
         if (! is_array($patterns) || $patterns === []) {
             fwrite(STDERR, sprintf(
                 "package-graph-gate: missing guard_contains for %s -> %s (%s)\n",
-                (string) ($entry['from'] ?? ''),
-                (string) ($entry['to'] ?? ''),
+                scalarString($entry['from'] ?? ''),
+                scalarString($entry['to'] ?? ''),
                 $importFile,
             ));
             exit(EXIT_CONFIG);
@@ -1207,7 +1210,7 @@ function validateAllowlistEntries(array $allowlist, string $repoRoot): void
  */
 function allowlistGuardIsValid(array $entry, string $repoRoot): bool
 {
-    $guardFile = (string) ($entry['guard_file'] ?? '');
+    $guardFile = scalarString($entry['guard_file'] ?? '');
     $guardPath = $repoRoot.'/'.$guardFile;
 
     if ($guardFile === '' || ! is_file($guardPath)) {
@@ -1234,7 +1237,7 @@ function allowlistGuardIsValid(array $entry, string $repoRoot): bool
  * @param  array<string, string>  $classIndex
  * @param  array<string, array{name: string, dir: string, path: string, require: list<string>, psr4: array<string, string>, package_type: string, stability: string}>  $packages
  * @param  list<array<string, string>>  $reservations
- * @return list<array<string, mixed>>
+ * @return list<array{kind: 'active', prefix: string, host: string, owner: string, reason: string, class_counts: array<string,int>}|array{kind: 'violation', prefix: string, file: string, line: int, owner: string, message: string}>
  */
 function evaluateReservations(array $classIndex, array $packages, array $reservations): array
 {
@@ -1323,8 +1326,8 @@ function evaluateReservations(array $classIndex, array $packages, array $reserva
  *     legacy_namespace_splits: list<array<string, mixed>>,
  *     forbidden_edges: list<array<string, string>>
  * }  $config
- * @param  list<array<string, mixed>>  $activeReservations
- * @return list<array<string, mixed>>
+ * @param  list<array{kind: 'active', prefix: string, host: string, owner: string, reason: string, class_counts: array<string,int>}>  $activeReservations
+ * @return list<array{kind: 'legacy', prefix: string, packages: list<string>, adr: string, expires_when: string, reason: string, class_counts: array<string,int>}|array{kind: 'violation', prefix: string, packages: list<string>, file: string, line: int, message: string}>
  */
 function detectNamespaceOwnershipConflicts(array $classIndex, array $packages, array $config, array $activeReservations): array
 {
@@ -1332,8 +1335,13 @@ function detectNamespaceOwnershipConflicts(array $classIndex, array $packages, a
     $seenLegacy = [];
 
     foreach ($config['legacy_namespace_splits'] as $entry) {
-        $prefix = (string) ($entry['prefix'] ?? '');
-        $expectedPackages = array_values($entry['packages'] ?? []);
+        $prefix = scalarString($entry['prefix'] ?? '');
+        $expected = $entry['packages'] ?? [];
+        assert(is_array($expected));
+        $expectedPackages = array_values($expected);
+        foreach ($expectedPackages as $name) {
+            assert(is_string($name));
+        }
         sort($expectedPackages);
         $actualPackages = packagesWithClassesUnderPrefix($prefix, $classIndex);
         sort($actualPackages);
@@ -1353,9 +1361,9 @@ function detectNamespaceOwnershipConflicts(array $classIndex, array $packages, a
             'kind' => 'legacy',
             'prefix' => $prefix,
             'packages' => $actualPackages,
-            'adr' => (string) ($entry['adr'] ?? ''),
-            'expires_when' => (string) ($entry['expires_when'] ?? ''),
-            'reason' => (string) ($entry['reason'] ?? ''),
+            'adr' => scalarString($entry['adr'] ?? ''),
+            'expires_when' => scalarString($entry['expires_when'] ?? ''),
+            'reason' => scalarString($entry['reason'] ?? ''),
             'class_counts' => classCountsUnderPrefix($prefix, $classIndex, $actualPackages),
         ];
     }
@@ -1494,8 +1502,10 @@ function classCountsUnderPrefix(string $prefix, array $classIndex, array $packag
 function isPrefixCoveredByLegacy(string $prefix, array $legacySplits, array $owners): bool
 {
     foreach ($legacySplits as $entry) {
-        $legacyPrefix = (string) ($entry['prefix'] ?? '');
-        $legacyPackages = array_values($entry['packages'] ?? []);
+        $legacyPrefix = scalarString($entry['prefix'] ?? '');
+        $expected = $entry['packages'] ?? [];
+        assert(is_array($expected));
+        $legacyPackages = array_values($expected);
         sort($legacyPackages);
         $sortedOwners = $owners;
         sort($sortedOwners);
@@ -1513,12 +1523,12 @@ function isPrefixCoveredByLegacy(string $prefix, array $legacySplits, array $own
 }
 
 /**
- * @param  list<array<string, mixed>>  $activeReservations
+ * @param  list<array{kind: 'active', prefix: string, host: string, owner: string, reason: string, class_counts: array<string,int>}>  $activeReservations
  */
 function isPrefixCoveredByActiveReservation(string $prefix, array $activeReservations): bool
 {
     foreach ($activeReservations as $reservation) {
-        $reservedPrefix = (string) ($reservation['prefix'] ?? '');
+        $reservedPrefix = $reservation['prefix'];
 
         if ($prefix === $reservedPrefix || str_starts_with($prefix, $reservedPrefix) || str_starts_with($reservedPrefix, $prefix)) {
             return true;
@@ -1536,6 +1546,7 @@ function violation(string $rule, string $file, int $line, string $import, string
     return compact('rule', 'file', 'line', 'import', 'owner', 'message');
 }
 
+/** @param array{rule: string, file: string, line: int, import: string, owner: string, message: string} $violation */
 function formatViolationLine(array $violation): string
 {
     return sprintf(
@@ -1549,6 +1560,7 @@ function formatViolationLine(array $violation): string
     );
 }
 
+/** @param array<string, mixed> $report */
 function writeReport(string $path, array $report): void
 {
     $dir = dirname($path);
@@ -1633,4 +1645,13 @@ function stringConfigRecords(mixed $value): array
     }
 
     return $records;
+}
+
+function scalarString(mixed $value): string
+{
+    if (! is_scalar($value) && $value !== null && ! $value instanceof Stringable) {
+        throw new RuntimeException('Expected scalar config value');
+    }
+
+    return (string) $value;
 }

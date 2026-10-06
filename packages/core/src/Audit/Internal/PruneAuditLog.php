@@ -44,6 +44,8 @@ final class PruneAuditLog extends Command
             ->where('occurred_at', '<', $cutoff)
             ->delete();
 
+        assert(is_int($deleted));
+
         $this->info(sprintf(
             'Audit retention: pruned %d row(s) older than %s.',
             $deleted,

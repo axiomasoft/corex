@@ -8,6 +8,7 @@ use CoreX\Modules\Contracts\Extender;
 use CoreX\Modules\Data\ModuleManifest;
 use CoreX\Modules\Data\NormalizedExtension;
 use CoreX\Modules\Exceptions\CompilationException;
+use LogicException;
 
 /**
  * Compile-time checks — every failure here is a deploy failure, never a
@@ -33,9 +34,10 @@ final class CompilationValidator
 
         /** @var array<string, true> $visited */
         $visited = [];
-        $visit = function (string $module, array $path) use (&$visit, &$visited, $graph): void {
+        /** @param list<string> $path */
+        $visit = /** @param list<string> $path */ function (string $module, array $path) use (&$visit, &$visited, $graph): void {
             if (in_array($module, $path, true)) {
-                throw new CompilationException('Cyclic module dependency: '.implode(' -> ', [...$path, $module]));
+                throw new CompilationException('Cyclic module dependency: '.implode(' -> ', [...array_map(static fn (mixed $name): string => is_string($name) ? $name : throw new LogicException('Invalid module cycle path'), $path), $module]));
             }
 
             if (isset($visited[$module])) {
@@ -310,9 +312,10 @@ final class CompilationValidator
     {
         /** @var array<string, true> $visited */
         $visited = [];
-        $visit = function (string $node, array $path) use (&$visit, &$visited, $graph, $nodes, $menu): void {
+        /** @param list<string> $path */
+        $visit = /** @param list<string> $path */ function (string $node, array $path) use (&$visit, &$visited, $graph, $nodes, $menu): void {
             if (in_array($node, $path, true)) {
-                $cycle = implode(' -> ', [...$path, $node]);
+                $cycle = implode(' -> ', [...array_map(static fn (mixed $name): string => is_string($name) ? $name : throw new LogicException('Invalid extension cycle path'), $path), $node]);
 
                 if ($menu) {
                     throw CompilationException::menuCycle($cycle);

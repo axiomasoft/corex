@@ -45,6 +45,7 @@ final class Entity implements Extender
     /** @var list<FieldDefinition>|null null = introspect model */
     public ?array $fieldDefinitions = null;
 
+    /** @param class-string $model */
     private function __construct(string $model)
     {
         $this->model = $model;

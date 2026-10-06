@@ -1,16 +1,17 @@
 {
   "$schema": "urn:swissknifeman:task:plan:item:v1",
   "id": "P09.15",
-  "title": "DoD rewrite: JSON owners, 27 fresh assertions and missing producers",
+  "title": "Проверки request/queue/Octane lifecycle по текущему коду",
   "status": "todo",
-  "summary": "DoD rewrite: JSON owners, 27 fresh assertions and missing producers",
-  "why": "Bounded owner of verified P09 review defect; explicit acceptance and dependencies prevent hidden work.",
+  "summary": "Проверить изоляцию resident/request/queue lifecycle и добавить реальный Octane Worker harness с воспроизводимыми source receipts без release DoD.",
+  "why": "Tenant context/reset и очистка после ошибок требуют поведенческой регрессионной защиты независимо от выпуска версии.",
   "scope": {
     "include": [
-      "DoD rewrite: JSON owners, 27 fresh assertions and missing producers"
+      "Source lifecycle tests: resident/request/scoped reset, queue two-tenant/failure cleanup; actual Octane Worker harness на поддерживаемой матрице; тесты достоверности source receipts."
     ],
     "exclude": [
-      "Remote writes/publication unless exact separate external gate supplied; no unrelated P08/product behavior change."
+      "Release DoD/27-row collector, first-release scorecard, supported-release registry, candidate fingerprints, exporter/SBOM/qualification/publication и версия 1.0.0-rc.1.",
+      "Изменение API/schema/версий/каналов без отдельного решения."
     ]
   },
   "depends_on": [
@@ -25,16 +26,17 @@
     "D73",
     "D103",
     "D113",
-    "D121"
+    "D121",
+    "D125"
   ],
   "reads": [
     {
-      "ref": "knowledge/research-P09-design#basis",
-      "why": "Canonical verified runbook",
+      "ref": "knowledge/research-P09-design#repository-only",
+      "why": "Действующий scope владельца и граница отменённых release работ",
       "required": true
     },
     {
-      "ref": "knowledge/research-P09-design#dod-map",
+      "ref": "knowledge/research-P09-design#basis",
       "why": "Canonical verified runbook",
       "required": true
     },
@@ -47,44 +49,17 @@
       "ref": "knowledge/research-P09-design#grok-repair",
       "why": "Verified G1–G6 corrections and executable runtime boundary",
       "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#dod-map",
+      "why": "Только source lifecycle subsection DOD-08/G6 по D125; release DoD/collector исключены",
+      "required": true
     }
   ],
   "task_files": [
     {
-      "path": "scripts/dod-1.0.py",
-      "change": "modify"
-    },
-    {
-      "path": "scripts/dod-1.0.json",
-      "change": "modify"
-    },
-    {
-      "path": "scripts/distribution/tests/**",
-      "change": "modify"
-    },
-    {
-      "path": "scripts/quality/dod-evidence.py",
-      "change": "create"
-    },
-    {
-      "path": "scripts/quality/tests/test_dod_evidence.py",
-      "change": "create"
-    },
-    {
-      "path": "scripts/supported-releases.json",
-      "change": "create"
-    },
-    {
       "path": "packages/core/tests/Feature/ReleaseContextLifecycleTest.php",
       "change": "create"
-    },
-    {
-      "path": "scripts/tests/test_dod_1_0.py",
-      "change": "modify"
-    },
-    {
-      "path": "docs/architecture/dod-1.0.md",
-      "change": "modify"
     },
     {
       "path": "scripts/quality/octane-proof.py",
@@ -104,44 +79,21 @@
     }
   ],
   "rules": [
-    "Соблюдать D118/D121/D120, D17/D18/D19/D73/D103/D113; никаких внешних записей.",
+    "Соблюдать D125, D118/D120 и технические правила D121, D17/D73/D103/D113. Release-положения прежнего дизайна исключены D125; внешние записи не разрешены.",
     "Сохранять чужие изменения; source facts пересверяются. PHP84 wrapper обязателен; перед PG — skill db-test-preflight и только *_test.",
     "Поведение/API/SPI/schema не менять молча ради зелёного tooling; precise decision+CHANGELOG+API/Golden для public delta.",
     "Каждый новый gate негатив-проверен на temp fixtures; coverage/MSI/quality scopes и пороги не снижать. Если packages/*/src меняется, surviving fixed mutations --all до завершения.",
     "Self-check + scoped checks; repair owning item. Независимое full-review фазы отдельное P09.8 по действующим требованиям плана.",
-    "Current design session does not execute this item. Admission waits independent different-model design review; owner D122/D123/D124 stay unresolved for dependent release steps.",
-    "DOD-08 requires actual Octane Worker execution, request and queue scenarios, independently named mandatory evidence. Modeled forgetScopedInstances proof is diagnostic only; no downgrade decision or fabricated execution."
+    "Изменение scope не запускает исполнение. При запуске проверить актуальное завершение P08 и independent corrected-design review. Release owner questions/grants не являются допуском для code-items.",
+    "D125: выполнять только repository scope; требования к rc/candidate/SBOM/27-row release DoD и публикации пропущены, не переносить их в этот item.",
+    "Actual Octane Worker execution обязательна: request/queue isolation, handler lifecycle и cleanup failure; modeled reset proof не заменяет реальные source checks."
   ],
-  "guidance": "Execute only after admission, from required section. Produce real fresh raw outputs; new commands below are owned deliverables, not present-at-design assumptions. Regenerate docs/architecture/dod-1.0.md using python3 scripts/dod-1.0.py render before render --check; this existing default target was verified in runner. Preserve every assertion and negative fixture from scripts/tests/test_dod_1_0.py.",
+  "guidance": "D125: исполнить только lifecycle часть старой dod-map (DOD-08/G6). Сохранить request и queue scenarios; добавить ReleaseContextLifecycleTest.php и реальный Octane Worker harness из существующего примера, scripts/quality/octane-proof.py и его tests. Здесь Release в пути — прежнее имя тестовой фикстуры, не выпуск версии. V3/V6/V7 являются source checks и не требуют rc/candidate/SBOM. Не создавать scripts/dod-1.0.py/json, dod-evidence.py, supported-releases.json или first-release scorecard. Перед PG проверить *_test; реальные Octane handlers на всех 4 поддерживаемых cells, модельный forgetScopedInstances не заменяет исполнение.",
   "validation": [
-    {
-      "id": "V1",
-      "cmd": "python3 -m unittest discover -s scripts/quality/tests -p test_dod_evidence.py",
-      "expect": "exit0 all27 mapped, owner JSON/unknown-id/missing hash/legacy/stale/first-release negative controls",
-      "kind": "acceptance"
-    },
-    {
-      "id": "V2",
-      "cmd": "python3 scripts/dod-1.0.py render --check",
-      "expect": "exit0 projection equals rewritten canonical manifest",
-      "kind": "acceptance"
-    },
     {
       "id": "V3",
       "cmd": "scripts/php84 vendor/bin/pest tests/Feature/ResidentLifecycleTest.php packages/core/tests/Unit/TenantContextRestorerTest.php packages/core/tests/Feature/ReleaseContextLifecycleTest.php",
       "expect": "exit0 request/scoped reset/queue two-tenant/failure cleanup assertions; negative singleton/reset controls demonstrated",
-      "kind": "acceptance"
-    },
-    {
-      "id": "V4",
-      "procedure": "DoD collector schema/input smoke on temp current rc fixture, using explicit --candidate --evidence-dir.",
-      "expect": "Missing release evidence and legacy/mismatched receipt return exit1 exact assertion+PLAN3 item, complete valid fixture passes; no real qualification claimed",
-      "kind": "acceptance"
-    },
-    {
-      "id": "V5",
-      "cmd": "python3 -m unittest discover -s scripts/tests -p test_dod_1_0.py",
-      "expect": "exit0 existing regression suite adapted to all27 JSON owners/strict receipts; legacy-negative coverage preserved",
       "kind": "acceptance"
     },
     {
@@ -157,15 +109,33 @@
       "kind": "acceptance"
     },
     {
-      "id": "V8",
-      "procedure": "DoD producer negative fixture: omit any one Transfer exact JUnit case or replace DOD-08 octane executed with missing/false/model-only/skipped handler; run collector/checker fixture.",
-      "expect": "Missing mandatory actual behavior stays RED; no aggregate-suite or modeled pass",
+      "id": "V9",
+      "cmd": "scripts/php84 composer lint:check",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "cmd": "scripts/php84 composer analyse",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V11",
+      "cmd": "scripts/php84 composer test",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V12",
+      "cmd": "PGSQL_PORT=5434 scripts/php84 composer test:pg",
+      "expect": "exit 0 after isolated *_test preflight",
       "kind": "acceptance"
     }
   ],
   "deliverables": [
-    "DoD 27-row mapping/JSON owner resolution; strict required candidate fingerprints; fresh scorecard/lifecycle/structure/first-release producers and regression tests; no legacy receipt fallback",
-    "Actual Octane Worker handler harness + receipt/provenance; unexecuted Octane keeps DOD-08 RED; unchanged Octane/request/queue assertion"
+    "Request/queue regression tests and actual Octane Worker boot/handle/request termination harness; fresh source/lock/hash receipts for all supported cells, independently checked failure/cleanup/tenant separation.",
+    "Receipt checker negative controls: missing/unexecuted/wrong handler/model-only/skipped handler/lock/hash/cleanup failure are RED; no release readiness claim."
   ],
   "route": {
     "class": "implementation",
@@ -184,5 +154,5 @@
     "captures": []
   },
   "result": null,
-  "updated_at": "2026-10-06T16:43:21Z"
+  "updated_at": "2026-10-06T19:25:11Z"
 }

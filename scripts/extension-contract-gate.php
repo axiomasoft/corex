@@ -3,6 +3,8 @@
 
 declare(strict_types=1);
 
+use CoreX\Modules\Data\InstalledPackageVersion;
+use CoreX\Modules\Data\ModuleManifest;
 use CoreX\Modules\Testing\ExtensionContract;
 
 $root = dirname(__DIR__);
@@ -61,8 +63,10 @@ $classification = [
 
 $violations = [];
 $found = [];
-foreach (glob($root.'/packages/*/src', GLOB_ONLYDIR) ?: [] as $directory) {
+foreach ((($entries = glob($root.'/packages/*/src', GLOB_ONLYDIR)) === false ? [] : $entries) as $directory) {
     foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory)) as $file) {
+        assert($file instanceof SplFileInfo);
+
         if (! $file->isFile() || $file->getExtension() !== 'php') {
             continue;
         }
@@ -92,16 +96,33 @@ foreach ($classification as $candidate => $kind) {
 require $root.'/vendor/autoload.php';
 require $root.'/tests/fixtures/extension-contract/fixture-adapter.php';
 $fingerprints = [];
-foreach (glob($root.'/tests/fixtures/extension-contract/*.json') ?: [] as $path) {
+foreach ((($entries = glob($root.'/tests/fixtures/extension-contract/*.json')) === false ? [] : $entries) as $path) {
     $fixtureData = json_decode((string) file_get_contents($path), true, flags: JSON_THROW_ON_ERROR);
-    [$manifests, $versions] = extensionContractFixture($path);
+    assert(is_array($fixtureData));
+    $loader = (new ReflectionFunction('extensionContractFixture'))->getClosure();
+    $tuple = $loader($path);
+    assert(is_array($tuple) && is_array($tuple[0]) && is_array($tuple[1]));
+    $manifests = [];
+    foreach ($tuple[0] as $manifest) {
+        assert($manifest instanceof ModuleManifest);
+        $manifests[] = $manifest;
+    }
+    $versions = [];
+    foreach ($tuple[1] as $key => $version) {
+        assert(is_string($key) && $version instanceof InstalledPackageVersion);
+        $versions[$key] = $version;
+    }
     $report = ExtensionContract::verify(manifests: $manifests, installedPackages: $versions);
     $expected = $fixtureData['expect'] ?? null;
 
     if ($expected === 'pass' && $report->passed()) {
         $fingerprints[basename($path)] = $report->fingerprint;
     } elseif ($expected === 'fail' && ! $report->passed()) {
-        foreach ($fixtureData['contains'] ?? [] as $needle) {
+        $contains = $fixtureData['contains'] ?? [];
+        assert(is_array($contains));
+        foreach ($contains as $needle) {
+            assert(is_string($needle));
+
             if (! str_contains($report->summary(), $needle)) {
                 $violations[] = basename($path).": missing diagnostic {$needle}";
             }

@@ -1,0 +1,19 @@
+{
+  "id": "V20",
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "scripts/quality/tests",
+    "-p",
+    "test_facts_guard.py"
+  ],
+  "cwd": "/home/vostrikov/projects/packages/corex",
+  "started_at": "2026-10-06T20:29:01.483431+00:00",
+  "finished_at": "2026-10-06T20:29:05.010568+00:00",
+  "exit": 0,
+  "product_inventory_sha256": "22d6517859e2bf6a99391c37a0a46e4d627ce1b319c5a3b0bdf5e28d1d3fb49a",
+  "log_sha256": "8a7d2dc5e97df15704ddc2560df8773cbcf752ddf7a3c34b59d8267b5f1d3226"
+}

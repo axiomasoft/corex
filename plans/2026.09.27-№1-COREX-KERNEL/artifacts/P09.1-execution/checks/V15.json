@@ -1,0 +1,28 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:check-evidence:v1",
+  "evidence_id": "PLAN3.P09.1.V15",
+  "check_id": "V15",
+  "subject": "PLAN3.P09.1",
+  "procedure": {
+    "cmd": "bash scripts/mutation-check.sh --all",
+    "cwd": "/home/vostrikov/projects/packages/corex"
+  },
+  "candidate": {
+    "head": "f0faead86201935c71cd0c2d8731e2e41bcc26e5"
+  },
+  "exit": 0,
+  "started_at": "2026-10-06T20:37:57.195345+00:00",
+  "finished_at": "2026-10-06T20:38:08.873926+00:00",
+  "producer": {
+    "kind": "executor",
+    "actor": {
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh"
+    }
+  },
+  "log": {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.1-execution/validation/V15.log.gz",
+    "sha256": "bdec55e9d504dc1ea61767b621a32efcb3547db2b8ce0a678c5505bf5ad21983"
+  }
+}

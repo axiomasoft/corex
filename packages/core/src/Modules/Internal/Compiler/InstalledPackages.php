@@ -96,7 +96,7 @@ final class InstalledPackages
         return $packages;
     }
 
-    /** @param array<string, mixed> $package */
+    /** @param array<array-key, mixed> $package */
     private static function reference(array $package): ?string
     {
         $source = self::nestedReference(package: $package, key: 'source');
@@ -108,7 +108,7 @@ final class InstalledPackages
         return self::nestedReference(package: $package, key: 'dist');
     }
 
-    /** @param array<string, mixed> $package */
+    /** @param array<array-key, mixed> $package */
     private static function nestedReference(array $package, string $key): ?string
     {
         $node = $package[$key] ?? null;

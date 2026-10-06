@@ -128,8 +128,7 @@ operations, независимые модули, детерминированн�
 - **Окружение исполнения** (F00 A12.7): PHP 8.4 + Composer 2 + PostgreSQL (docker-compose `pgsql`) обязательны; на хосте
   автора — PHP 8.3 без Docker. Каждая фаза объявляет `$PHP84` (команда-обёртка) из P01.1; без PHP 8.4 — стоп и эскалация,
   не выполнение на 8.3.
-- Внешние действия (Packagist, split repos, теги, push в чужие репозитории, создание репозиториев) запрещены: публикация —
-  owner-gate P09.
+- Внешние релизные действия (Packagist, split repos, теги, создание репозиториев) исключены из P09 по D125. P09 выполняет только улучшения кода/репозитория; RC 1.0 не создаётся. Будущая публикация потребует отдельного scope и owner authorization.
 - **Hosted CI — граница приёмки фазы** (D73, заменяет D47): фаза закрывается только при зелёном workflow `CI` на своём
   финальном commit; падающий тест или гейт не обходится — исправление либо карантин отдельным D# с фазой-владельцем;
   гейты герметичны; пороги не понижаются.
@@ -163,7 +162,7 @@ operations, независимые модули, детерминированн�
 | P06 | Operations, tools, webhooks и wire | detailed | 5/5 | 🟠 Done with deviations |
 | P07 | Tenancy, access, независимость модулей | detailed | 6/6 | 🟠 Done with deviations |
 | P08 | Схема: baseline v1 | detailed | 10/10 | 🟠 Done with deviations |
-| P09 | Планка качества и release-квалификация `1.0.0-rc.1` | detailed | 0/17 | ⬜ Not started |
+| P09 | Планка качества: типизация, tooling и тесты до выпуска | detailed | 5/17 | 🟡 In progress |
 | P10 | Зелёный hosted CI на базе P04 | detailed | 4/4 | 🟢 Done |
 
 ## Decisions
@@ -294,3 +293,5 @@ operations, независимые модули, детерминированн�
 | D122 | owner-question: amend/supersede D19 split mechanism | accepted | 2026-10-06 |
 | D123 | owner-question: Access channel and corex-full composition | open | 2026-10-06 |
 | D124 | owner-question: hosted delivery of pinned AzGuard input | accepted | 2026-10-06 |
+| D125 | P09: только улучшения репозитория; RC и релизная квалификация пропущены | accepted | 2026-10-06 |
+| D126 | P09.1: finite PHPDoc precision with runtime API/schema preservation | accepted | 2026-10-06 |

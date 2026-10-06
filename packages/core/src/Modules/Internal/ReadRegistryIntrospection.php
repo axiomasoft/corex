@@ -415,7 +415,7 @@ final class ReadRegistryIntrospection implements RegistryIntrospection
 
     private function assertModuleName(string $module): void
     {
-        if (! preg_match('/^[a-z0-9][a-z0-9._-]*\/[a-z0-9][a-z0-9._-]*$/', $module)) {
+        if (preg_match('/^[a-z0-9][a-z0-9._-]*\/[a-z0-9][a-z0-9._-]*$/', $module) !== 1) {
             throw new ModuleNotFound($module);
         }
     }

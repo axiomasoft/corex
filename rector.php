@@ -10,6 +10,10 @@ return RectorConfig::configure()
         __DIR__.'/packages/core/src',
         __DIR__.'/tests',
     ])
+    ->withSkip([
+        __DIR__.'/packages/*/database/migrations/*',
+        __DIR__.'/products/*/database/migrations/*',
+    ])
     ->withSets([
         LevelSetList::UP_TO_PHP_83,
     ])

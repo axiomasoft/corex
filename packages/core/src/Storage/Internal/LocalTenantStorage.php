@@ -14,6 +14,7 @@ use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Filesystem\FilesystemManager;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use SplFileInfo;
 
 final class LocalTenantStorage implements TenantStorage
 {
@@ -45,6 +46,8 @@ final class LocalTenantStorage implements TenantStorage
         $size = 0;
         $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(directory: $path, flags: RecursiveDirectoryIterator::SKIP_DOTS));
         foreach ($iterator as $file) {
+            assert($file instanceof SplFileInfo);
+
             if ($file->isLink()) {
                 throw new StorageOperationFailed('Storage root contains a symbolic link.');
             }

@@ -19,17 +19,17 @@ require $root.'/vendor/autoload.php';
 
 $catalog = [];
 $externalModelTables = [];
-foreach (file($root.'/docs/architecture/table-ownership.md') as $line) {
-    if (preg_match('/^\| `([^`]+\\\\[^`]+)` \| `([a-z][a-z0-9_]*)` \|/', $line, $mapping)) {
+foreach ((($lines = file($root.'/docs/architecture/table-ownership.md')) === false ? throw new RuntimeException('Unreadable table catalog') : $lines) as $line) {
+    if (preg_match('/^\| `([^`]+\\\\[^`]+)` \| `([a-z][a-z0-9_]*)` \|/', $line, $mapping) === 1) {
         $externalModelTables[$mapping[1]] = $mapping[2];
 
         continue;
     }
 
-    if (! preg_match('/^\| ([^|]+) \| ([a-z][a-z0-9-]*\/[a-z][a-z0-9-]*) \| ([^|]*) \| ([^|]*) \|/', $line, $m)) {
+    if (preg_match('/^\| ([^|]+) \| ([a-z][a-z0-9-]*\/[a-z][a-z0-9-]*) \| ([^|]*) \| ([^|]*) \|/', $line, $m) !== 1) {
         continue;
     }
-    $catalog[trim($m[1])] = ['owner' => trim($m[2]), 'writers' => array_filter(array_map('trim', explode(',', $m[4])))];
+    $catalog[trim($m[1])] = ['owner' => trim($m[2]), 'writers' => array_filter(array_map('trim', explode(',', $m[4])), static fn (string $writer): bool => $writer !== '' && $writer !== '0')];
 }
 
 if ($catalog === []) {
@@ -54,9 +54,9 @@ $files = [];
 if ($fixture !== null) {
     $files[$root.'/tests/fixtures/table-write-ownership/'.$fixture.'.php'] = 'axiomasoft/corex-tenancy';
 } else {
-    foreach (glob($root.'/packages/*/composer.json') ?: [] as $composerFile) {
+    foreach ((($entries = glob($root.'/packages/*/composer.json')) === false ? [] : $entries) as $composerFile) {
         $data = json_decode((string) file_get_contents($composerFile), true);
-        $owner = $data['name'] ?? null;
+        $owner = is_array($data) ? ($data['name'] ?? null) : null;
 
         if (! is_string($owner)) {
             continue;
@@ -67,6 +67,8 @@ if ($fixture !== null) {
             continue;
         }
         foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source)) as $file) {
+            assert($file instanceof SplFileInfo);
+
             if ($file->isFile() && $file->getExtension() === 'php') {
                 $files[$file->getPathname()] = $owner;
             }
@@ -129,7 +131,7 @@ foreach ($files as $file => $owner) {
 
         if (! isset($modelTables[$name])) {
             $modelTables[$name] = $class->getMethod('getTable') === null
-                ? Str::snake(Str::pluralStudly($class->name->toString()))
+                ? Str::snake(Str::pluralStudly($class->name?->toString() ?? ''))
                 : '';
         }
     }
@@ -235,6 +237,7 @@ $checked = 0;
 foreach ($trees as $file => $tree) {
     $owner = $files[$file];
     foreach ($finder->find($tree, static fn (Node $n): bool => $n instanceof Expr\MethodCall || $n instanceof Expr\StaticCall) as $call) {
+        assert($call instanceof Expr\MethodCall || $call instanceof Expr\StaticCall);
         $method = $call->name instanceof Node\Identifier ? $call->name->toString() : null;
 
         if ($method === null || ! in_array($method, ['insert', 'insertGetId', 'insertOrIgnore', 'upsert', 'update', 'updateOrInsert', 'delete', 'truncate', 'increment', 'decrement', 'create', 'firstOrCreate', 'updateOrCreate', 'save', 'forceDelete', 'statement', 'affectingStatement'], true)) {
@@ -244,7 +247,7 @@ foreach ($trees as $file => $tree) {
 
         if (in_array($method, ['statement', 'affectingStatement'], true)
             || ($call instanceof Expr\StaticCall && in_array($method, ['insert', 'update', 'delete'], true) && $call->class instanceof Node\Name && in_array($call->class->getLast(), ['DB', 'Database'], true))) {
-            $table = sqlWriteTable($call->args[0]->value ?? null, $method, $call, $finder, $tableDefaults[$owner] ?? []);
+            $table = sqlWriteTable($call->getArgs()[0]->value ?? null, $method, $call, $finder, $tableDefaults[$owner] ?? []);
         } elseif ($call instanceof Expr\MethodCall) {
             $table = tableFromReceiver($call->var, $call, $finder, $modelTables, $tableDefaults[$owner] ?? []);
         } elseif ($call->class instanceof Node\Name) {
@@ -301,7 +304,7 @@ function tableFromReceiver(Expr $receiver, Node $site, NodeFinder $finder, array
         $method = $receiver->name instanceof Node\Identifier ? $receiver->name->toString() : '';
 
         if ($method === 'table') {
-            $arg = $receiver->args[0]->value ?? null;
+            $arg = $receiver->getArgs()[0]->value ?? null;
 
             return tableExpression($arg, $site, $finder, $tableDefaults, $depth + 1);
         }
@@ -327,7 +330,7 @@ function tableFromReceiver(Expr $receiver, Node $site, NodeFinder $finder, array
 
     if ($receiver instanceof Expr\StaticCall && $receiver->class instanceof Node\Name) {
         if ($receiver->name instanceof Node\Identifier && $receiver->name->toString() === 'table') {
-            return tableExpression($receiver->args[0]->value ?? null, $site, $finder, $tableDefaults, $depth + 1);
+            return tableExpression($receiver->getArgs()[0]->value ?? null, $site, $finder, $tableDefaults, $depth + 1);
         }
 
         return $modelTables[$receiver->class->toString()] ?? null;
@@ -341,14 +344,19 @@ function tableFromReceiver(Expr $receiver, Node $site, NodeFinder $finder, array
         $scope = enclosingFunction($site);
 
         if ($scope !== null) {
-            $assignments = $finder->find($scope->stmts ?? [], static fn (Node $n): bool => $n instanceof Expr\Assign && $n->var instanceof Expr\Variable && $n->var->name === $receiver->name && $n->getStartLine() < $site->getStartLine());
+            $assignments = $finder->find($scope->getStmts() ?? [], static fn (Node $n): bool => $n instanceof Expr\Assign && $n->var instanceof Expr\Variable && $n->var->name === $receiver->name && $n->getStartLine() < $site->getStartLine());
 
             if ($assignments !== []) {
                 $assignment = end($assignments);
+                assert($assignment instanceof Expr\Assign);
 
                 return tableFromReceiver($assignment->expr, $site, $finder, $modelTables, $tableDefaults, $depth + 1);
             }
-            foreach ($scope->params as $param) {
+            foreach ($scope->getParams() as $param) {
+                if (! $param->var instanceof Expr\Variable) {
+                    continue;
+                }
+
                 if ($param->var->name === $receiver->name && $param->type instanceof Node\Name) {
                     return $modelTables[$param->type->toString()] ?? null;
                 }
@@ -388,10 +396,13 @@ function tableExpression(?Expr $expr, Node $site, NodeFinder $finder, array $tab
         $scope = enclosingFunction($site);
 
         if ($scope !== null) {
-            $assignments = $finder->find($scope->stmts ?? [], static fn (Node $n): bool => $n instanceof Expr\Assign && $n->var instanceof Expr\Variable && $n->var->name === $expr->name && $n->getStartLine() < $site->getStartLine());
+            $assignments = $finder->find($scope->getStmts() ?? [], static fn (Node $n): bool => $n instanceof Expr\Assign && $n->var instanceof Expr\Variable && $n->var->name === $expr->name && $n->getStartLine() < $site->getStartLine());
 
             if ($assignments !== []) {
-                return tableExpression(end($assignments)->expr, $site, $finder, $tableDefaults, $depth + 1);
+                $assignment = end($assignments);
+                assert($assignment instanceof Expr\Assign);
+
+                return tableExpression($assignment->expr, $site, $finder, $tableDefaults, $depth + 1);
             }
 
             if ($scope instanceof Expr\Closure) {
@@ -401,7 +412,12 @@ function tableExpression(?Expr $expr, Node $site, NodeFinder $finder, array $tab
                     }
                 }
             }
-            foreach ($scope->params as $index => $param) {
+            foreach ($scope->getParams() as $index => $param) {
+                if (! $param->var instanceof Expr\Variable) {
+                    continue;
+                }
+                assert(is_int($index));
+
                 if ($param->var->name !== $expr->name || ! $scope instanceof Node\Stmt\ClassMethod) {
                     continue;
                 }
@@ -416,7 +432,7 @@ function tableExpression(?Expr $expr, Node $site, NodeFinder $finder, array $tab
                         || ! $invocation->name instanceof Node\Identifier || $invocation->name->toString() !== $scope->name->toString()) {
                         continue;
                     }
-                    $value = tableExpression($invocation->args[$index]->value ?? null, $invocation, $finder, $tableDefaults, $depth + 1);
+                    $value = tableExpression($invocation->getArgs()[$index]->value ?? null, $invocation, $finder, $tableDefaults, $depth + 1);
                     $values[] = $value;
                 }
 
@@ -457,8 +473,12 @@ function tableExpression(?Expr $expr, Node $site, NodeFinder $finder, array $tab
             $scope = enclosingFunction($site);
 
             if ($scope instanceof Node\Stmt\ClassMethod || $scope instanceof Node\Stmt\Function_ || $scope instanceof Expr\Closure) {
-                foreach ($scope->params as $param) {
-                    if ($param->var instanceof Expr\Variable && $param->var->name === $expr->var->name) {
+                foreach ($scope->getParams() as $param) {
+                    if (! $param->var instanceof Expr\Variable) {
+                        continue;
+                    }
+
+                    if ($param->var->name === $expr->var->name) {
                         $sourceType = typeName($param->type);
 
                         break;
@@ -516,7 +536,7 @@ function promotedPropertyType(?Node\Stmt\Class_ $class, string $property): ?stri
 
     if ($constructor !== null) {
         foreach ($constructor->params as $param) {
-            if ($param->var->name === $property && $param->flags !== 0) {
+            if (($param->var instanceof Expr\Variable && $param->var->name === $property) && $param->flags !== 0) {
                 return typeName($param->type);
             }
         }
@@ -583,9 +603,9 @@ function sqlWriteTable(?Expr $sql, string $method, Node $site, NodeFinder $finde
     $tables = [];
 
     foreach ($prefixes as $prefix) {
-        if (preg_match('/^\s*(?:INSERT(?:\s+OR\s+\w+)?\s+INTO|UPDATE|DELETE\s+FROM)\s+"?([a-z][a-z0-9_]*)"?/i', $prefix, $m)) {
+        if (preg_match('/^\s*(?:INSERT(?:\s+OR\s+\w+)?\s+INTO|UPDATE|DELETE\s+FROM)\s+"?([a-z][a-z0-9_]*)"?/i', $prefix, $m) === 1) {
             $tables[] = $m[1];
-        } elseif (preg_match('/^\s*(?:INSERT|UPDATE|DELETE)\b/i', $prefix) || $method !== 'statement') {
+        } elseif (preg_match('/^\s*(?:INSERT|UPDATE|DELETE)\b/i', $prefix) === 1 || $method !== 'statement') {
             $tables[] = '';
         }
     }

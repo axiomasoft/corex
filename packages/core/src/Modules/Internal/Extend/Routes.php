@@ -24,6 +24,7 @@ final class Routes implements Extender
 
     public ?string $routePrefix = null;
 
+    /** @param 'api'|'web' $kind */
     private function __construct(string $kind, string $file)
     {
         $this->kind = $kind;

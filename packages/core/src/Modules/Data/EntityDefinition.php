@@ -39,7 +39,7 @@ final readonly class EntityDefinition
      * nested {@see FieldDefinition}s recurse — no object survives into the
      * persisted payload (`__set_state`/serialize are banned for the hot path).
      *
-     * @return array{handle: string, model: class-string, table: string, module: string, labelSingular: string, labelPlural: string, capabilities: list<string>, fields: list<array{handle: string, type: string, required: bool, searchable: bool, meta: array<string, mixed>|null}>, titleAttribute: string|null}
+     * @return array{handle: string, model: class-string, table: string, module: string, labelSingular: string, labelPlural: string, capabilities: list<string>, fields: list<array{handle: string, type: 'string'|'int'|'decimal'|'bool'|'date'|'datetime'|'json'|'money'|'relation'|'enum', required: bool, searchable: bool, meta: array<string, mixed>|null}>, titleAttribute: string|null}
      */
     public function toArray(): array
     {

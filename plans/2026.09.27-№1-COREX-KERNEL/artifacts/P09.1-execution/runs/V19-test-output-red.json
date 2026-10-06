@@ -1,0 +1,20 @@
+{
+  "id": "V19",
+  "command": [
+    "python3",
+    "scripts/quality/facts-guard.py",
+    "post",
+    "--before",
+    "build/quality/P09.1/facts-pre.json",
+    "--write-set",
+    "build/quality/P09.1/write-set.json",
+    "--output",
+    "build/quality/P09.1/facts-post.json"
+  ],
+  "cwd": "/home/vostrikov/projects/packages/corex",
+  "started_at": "2026-10-06T20:38:51.369249+00:00",
+  "finished_at": "2026-10-06T20:38:51.527001+00:00",
+  "exit": 1,
+  "product_inventory_sha256": "9a3d4f925f8186e847b59d711d89d2dc6a53d6f247efa0c98864e8c97f770a3b",
+  "log_sha256": "38868cf1debc29a494c2d8816fac509aaa6907020962f88c1e576bf8fde8b1f1"
+}

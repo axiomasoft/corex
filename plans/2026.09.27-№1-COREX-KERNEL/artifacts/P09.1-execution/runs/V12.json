@@ -1,0 +1,14 @@
+{
+  "id": "V12",
+  "command": [
+    "scripts/php84",
+    "composer",
+    "php-api"
+  ],
+  "cwd": "/home/vostrikov/projects/packages/corex",
+  "started_at": "2026-10-06T20:29:01.420471+00:00",
+  "finished_at": "2026-10-06T20:29:07.615984+00:00",
+  "exit": 0,
+  "product_inventory_sha256": "22d6517859e2bf6a99391c37a0a46e4d627ce1b319c5a3b0bdf5e28d1d3fb49a",
+  "log_sha256": "aad4fd1c28df61e2ca87d2d05ca8e836d45882f64e42fc75ce1eccf4e4121b08"
+}

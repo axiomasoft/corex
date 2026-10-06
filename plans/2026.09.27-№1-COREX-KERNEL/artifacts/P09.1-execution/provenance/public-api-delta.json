@@ -1,0 +1,105 @@
+{
+  "schema": "P09.1-api-delta/1",
+  "symbol_inventory_unchanged": true,
+  "native_signatures_unchanged": true,
+  "changed_symbols": [
+    "CoreX\\Modules\\Data\\CompiledModule",
+    "CoreX\\Modules\\Data\\CompiledRegistry",
+    "CoreX\\Modules\\Data\\EntityDefinition",
+    "CoreX\\Modules\\Data\\EntityField",
+    "CoreX\\Modules\\Data\\FieldDefinition",
+    "CoreX\\Modules\\Data\\ModuleManifest"
+  ],
+  "changes": [
+    {
+      "path": ".symbols.CoreX\\Modules\\Data\\CompiledRegistry.doc",
+      "before": [],
+      "after": {
+        "@phpstan-type": [
+          "RegistryPayload array{entities?: array<string, array{handle: string, model: class-string, table: string, module: string, labelSingular: string, labelPlural: string, capabilities: list<string>, fields: list<array{handle: string, type: ('string' | 'int' | 'decimal' | 'bool' | 'date' | 'datetime' | 'json' | 'money' | 'relation' | 'enum'), required?: bool, searchable?: bool, meta?: (array<string, mixed> | null)}>, titleAttribute: (string | null)}>, entityFields?: list<array{extender: array<string, mixed>, declaringModule: string, sleeping: bool}>, permissions?: list<array<string, mixed>>, api?: list<array<string, mixed>>, filament?: list<array<string, mixed>>, menu?: list<array<string, mixed>>, routes?: list<array<string, mixed>>, workflow?: list<array<string, mixed>>, settings?: list<array{namespace: string, definition: array<string, mixed>}>, featureFlags?: list<array{key: string, default: bool, module: (string | null), payload: mixed}>, schema?: string, fingerprint?: string, compiler?: array<string, mixed>, modules?: list<array<string, mixed>>, extensions?: list<array<string, mixed>>, replacements?: list<array<string, mixed>>, listeners?: array<string, array<class-string, list<class-string>>>}"
+        ]
+      }
+    },
+    {
+      "path": ".symbols.CoreX\\Modules\\Data\\CompiledRegistry.methods.fromArray.doc.@param",
+      "before": [
+        "array{entities?: array<string, array<string, mixed>>, entityFields?: list<array<string, mixed>>, permissions?: list<array<string, mixed>>, api?: list<array<string, mixed>>, filament?: list<array<string, mixed>>, menu?: list<array<string, mixed>>, routes?: list<array<string, mixed>>, workflow?: list<array<string, mixed>>, settings?: list<array<string, mixed>>, featureFlags?: list<array<string, mixed>>, schema?: string, fingerprint?: string, compiler?: array<string, mixed>, modules?: list<array<string, mixed>>, extensions?: list<array<string, mixed>>, replacements?: list<array<string, mixed>>, listeners?: array<string, array<class-string, list<class-string>>>} $data"
+      ],
+      "after": [
+        "array<array-key, mixed> $data"
+      ]
+    },
+    {
+      "path": ".symbols.CoreX\\Modules\\Data\\CompiledRegistry.methods.toArray.doc.@return",
+      "before": [
+        "array<string, mixed>"
+      ],
+      "after": [
+        "array{entities?: array<string, array{handle: string, model: class-string, table: string, module: string, labelSingular: string, labelPlural: string, capabilities: list<string>, fields: list<array{handle: string, type: ('string' | 'int' | 'decimal' | 'bool' | 'date' | 'datetime' | 'json' | 'money' | 'relation' | 'enum'), required?: bool, searchable?: bool, meta?: (array<string, mixed> | null)}>, titleAttribute: (string | null)}>, entityFields?: list<array{extender: array<string, mixed>, declaringModule: string, sleeping: bool}>, permissions?: list<array<string, mixed>>, api?: list<array<string, mixed>>, filament?: list<array<string, mixed>>, menu?: list<array<string, mixed>>, routes?: list<array<string, mixed>>, workflow?: list<array<string, mixed>>, settings?: list<array{namespace: string, definition: array<string, mixed>}>, featureFlags?: list<array{key: string, default: bool, module: (string | null), payload: mixed}>, schema?: string, fingerprint?: string, compiler?: array<string, mixed>, modules?: list<array<string, mixed>>, extensions?: list<array<string, mixed>>, replacements?: list<array<string, mixed>>, listeners?: array<string, array<class-string, list<class-string>>>}"
+      ]
+    },
+    {
+      "path": ".symbols.CoreX\\Modules\\Data\\EntityDefinition.methods.toArray.doc.@return",
+      "before": [
+        "array{handle: string, model: class-string, table: string, module: string, labelSingular: string, labelPlural: string, capabilities: list<string>, fields: list<array{handle: string, type: string, required: bool, searchable: bool, meta: (array<string, mixed> | null)}>, titleAttribute: (string | null)}"
+      ],
+      "after": [
+        "array{handle: string, model: class-string, table: string, module: string, labelSingular: string, labelPlural: string, capabilities: list<string>, fields: list<array{handle: string, type: ('string' | 'int' | 'decimal' | 'bool' | 'date' | 'datetime' | 'json' | 'money' | 'relation' | 'enum'), required: bool, searchable: bool, meta: (array<string, mixed> | null)}>, titleAttribute: (string | null)}"
+      ]
+    },
+    {
+      "path": ".symbols.CoreX\\Modules\\Data\\FieldDefinition.methods.toArray.doc.@return",
+      "before": [
+        "array{handle: string, type: string, required: bool, searchable: bool, meta: (array<string, mixed> | null)}"
+      ],
+      "after": [
+        "array{handle: string, type: ('string' | 'int' | 'decimal' | 'bool' | 'date' | 'datetime' | 'json' | 'money' | 'relation' | 'enum'), required: bool, searchable: bool, meta: (array<string, mixed> | null)}"
+      ]
+    },
+    {
+      "path": ".symbols.CoreX\\Modules\\Data\\EntityField.properties.relationType.doc.@var",
+      "before": [
+        "('hasMany' | 'belongsTo' | 'belongsToMany' | null)"
+      ],
+      "after": [
+        "(string | null)"
+      ]
+    },
+    {
+      "path": ".symbols.CoreX\\Modules\\Data\\ModuleManifest.properties.onPurgeHook.doc",
+      "before": [],
+      "after": {
+        "@var": [
+          "(class-string | null)"
+        ]
+      }
+    },
+    {
+      "path": ".symbols.CoreX\\Modules\\Data\\ModuleManifest.properties.onEnableHook.doc",
+      "before": [],
+      "after": {
+        "@var": [
+          "(class-string | null)"
+        ]
+      }
+    },
+    {
+      "path": ".symbols.CoreX\\Modules\\Data\\ModuleManifest.properties.onDisableHook.doc",
+      "before": [],
+      "after": {
+        "@var": [
+          "(class-string | null)"
+        ]
+      }
+    },
+    {
+      "path": ".symbols.CoreX\\Modules\\Data\\CompiledModule.methods.fromArray.doc.@param",
+      "before": [
+        "array{composerName: string, title: ?string, tablePrefix: ?string, requires: list<array{kind: string, package: string, constraint: string}>, editions: array<string, list<string>>, components: list<class-string>, onEnableHook?: (class-string | null), onDisableHook?: (class-string | null), onPurgeHook?: (class-string | null)} $data"
+      ],
+      "after": [
+        "array<string, mixed> $data"
+      ]
+    }
+  ]
+}

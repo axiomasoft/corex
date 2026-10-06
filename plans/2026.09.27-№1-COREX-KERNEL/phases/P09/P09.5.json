@@ -26,9 +26,15 @@
     "D73",
     "D103",
     "D113",
-    "D121"
+    "D121",
+    "D125"
   ],
   "reads": [
+    {
+      "ref": "knowledge/research-P09-design#repository-only",
+      "why": "Действующий scope владельца и граница отменённых release работ",
+      "required": true
+    },
     {
       "ref": "knowledge/research-P09-design#basis",
       "why": "База/cohort",
@@ -52,11 +58,6 @@
     {
       "ref": "knowledge/research-P09-design-rag#sources",
       "why": "Version-bound tooling",
-      "required": true
-    },
-    {
-      "ref": "knowledge/research-P09-design#dod-map",
-      "why": "Current assertion ownership and fresh receipt requirements",
       "required": true
     },
     {
@@ -100,14 +101,15 @@
     }
   ],
   "rules": [
-    "Соблюдать D118/D121/D120, D17/D18/D19/D73/D103/D113; никаких внешних записей.",
+    "Соблюдать D125, D118/D120 и технические правила D121, D17/D73/D103/D113. Release-положения прежнего дизайна исключены D125; внешние записи не разрешены.",
     "Сохранять чужие изменения; source facts пересверяются. PHP84 wrapper обязателен; перед PG — skill db-test-preflight и только *_test.",
     "Поведение/API/SPI/schema не менять молча ради зелёного tooling; precise decision+CHANGELOG+API/Golden для public delta.",
     "Каждый новый gate негатив-проверен на temp fixtures; coverage/MSI/quality scopes и пороги не снижать. Если packages/*/src меняется, surviving fixed mutations --all до завершения.",
     "Self-check + scoped checks; repair owning item. Независимое full-review фазы отдельное P09.8 по действующим требованиям плана.",
-    "Current design session does not execute this item. Admission waits independent different-model design review; owner D122/D123/D124 stay unresolved for dependent release steps."
+    "Изменение scope не запускает исполнение. При запуске проверить актуальное завершение P08 и independent corrected-design review. Release owner questions/grants не являются допуском для code-items.",
+    "D125: выполнять только repository scope; требования к rc/candidate/SBOM/27-row release DoD и публикации пропущены, не переносить их в этот item."
   ],
-  "guidance": "Выполнить соответствующую секцию досье в context pack. Сначала реальная диагностика из версии/файла, затем узкая правка и affected check. Raw вывод сохранить в artifacts/P09.5-execution; результирующие claims только по фактически запущенным командам. Будущие scripts из Validation создаются этим item или предыдущим, не предположены существующими при дизайне.",
+  "guidance": "Сначала применить scope D125 и knowledge/research-P09-design#repository-only. Выполнить соответствующую секцию досье в context pack. Сначала реальная диагностика из версии/файла, затем узкая правка и affected check. Raw вывод сохранить в artifacts/P09.5-execution; результирующие claims только по фактически запущенным командам. Будущие scripts из Validation создаются этим item или предыдущим, не предположены существующими при дизайне.",
   "validation": [
     {
       "id": "V1",
@@ -186,5 +188,5 @@
     ]
   },
   "result": null,
-  "updated_at": "2026-10-06T16:43:21Z"
+  "updated_at": "2026-10-06T19:25:11Z"
 }

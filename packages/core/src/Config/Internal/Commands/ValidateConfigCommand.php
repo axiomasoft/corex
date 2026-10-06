@@ -195,7 +195,7 @@ final class ValidateConfigCommand extends Command
         return null;
     }
 
-    /** @return array<string, mixed> */
+    /** @return array<array-key, mixed> */
     private function configArray(string $key): array
     {
         $value = config($key, []);

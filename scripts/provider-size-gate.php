@@ -58,7 +58,7 @@ function measureProviders(string $repoRoot): array
 {
     $measured = [];
 
-    foreach (glob($repoRoot.'/packages/*/src', GLOB_ONLYDIR) ?: [] as $srcRoot) {
+    foreach ((($entries = glob($repoRoot.'/packages/*/src', GLOB_ONLYDIR)) === false ? [] : $entries) as $srcRoot) {
         foreach (walkPhpFiles($srcRoot) as $file) {
             $counts = countBindingCalls($file);
 
@@ -291,7 +291,7 @@ function scanStyle(string $file): array
 }
 
 /**
- * @param  list<mixed>  $tokens
+ * @param  list<array{int, string, int}|string>  $tokens
  */
 function anonymousClassFollows(array $tokens, int $newIndex): bool
 {
@@ -311,7 +311,7 @@ function anonymousClassFollows(array $tokens, int $newIndex): bool
 /**
  * A method or function declaration has a name after `function`; a closure goes straight to `(`.
  *
- * @param  list<mixed>  $tokens
+ * @param  list<array{int, string, int}|string>  $tokens
  */
 function isNamedFunction(array $tokens, int $functionIndex): bool
 {
@@ -325,7 +325,7 @@ function isNamedFunction(array $tokens, int $functionIndex): bool
 }
 
 /**
- * @param  list<mixed>  $tokens
+ * @param  list<array{int, string, int}|string>  $tokens
  */
 function closureBodyIsSingleReturn(array $tokens, int $functionIndex): bool
 {
@@ -402,7 +402,7 @@ function closureBodyIsSingleReturn(array $tokens, int $functionIndex): bool
 }
 
 /**
- * @param  list<mixed>  $tokens
+ * @param  list<array{int, string, int}|string>  $tokens
  */
 function skipParenthesised(array $tokens, int $openIndex): ?int
 {
@@ -496,9 +496,7 @@ function countBindingCalls(string $file): ?array
         return null;
     }
 
-    $counts['total'] = array_sum($counts);
-
-    return $counts;
+    return ['singleton' => $counts['singleton'], 'scoped' => $counts['scoped'], 'bind' => $counts['bind'], 'bindIf' => $counts['bindIf'], 'total' => array_sum($counts)];
 }
 
 function relativeFromRepo(string $file): string
@@ -509,7 +507,7 @@ function relativeFromRepo(string $file): string
 }
 
 /**
- * @param  list<mixed>  $tokens
+ * @param  list<array{int, string, int}|string>  $tokens
  */
 function isClassConstant(array $tokens, int $classIndex): bool
 {
@@ -519,7 +517,7 @@ function isClassConstant(array $tokens, int $classIndex): bool
 }
 
 /**
- * @param  list<mixed>  $tokens
+ * @param  list<array{int, string, int}|string>  $tokens
  * @param  array<string, string>  $uses
  */
 function extendedParent(array $tokens, int $classIndex, array $uses): ?string
@@ -547,7 +545,7 @@ function extendedParent(array $tokens, int $classIndex, array $uses): ?string
 }
 
 /**
- * @param  list<mixed>  $tokens
+ * @param  list<array{int, string, int}|string>  $tokens
  * @return array<string, string>
  */
 function useImports(array $tokens): array
@@ -624,7 +622,7 @@ function useImports(array $tokens): array
 }
 
 /**
- * @param  list<mixed>  $tokens
+ * @param  list<array{int, string, int}|string>  $tokens
  */
 function aliasAfter(array $tokens, int $afterName): ?string
 {
@@ -643,6 +641,7 @@ function aliasAfter(array $tokens, int $afterName): ?string
     return $tokens[$alias][1];
 }
 
+/** @param array<string, string> $uses */
 function resolveType(string $name, array $uses): string
 {
     $name = ltrim($name, '\\');
@@ -658,11 +657,11 @@ function leafName(string $fqcn): string
 {
     $parts = explode('\\', ltrim($fqcn, '\\'));
 
-    return (string) array_pop($parts);
+    return array_pop($parts);
 }
 
 /**
- * @param  list<mixed>  $tokens
+ * @param  list<array{int, string, int}|string>  $tokens
  */
 function readQualifiedName(array $tokens, int $start): ?string
 {
@@ -719,7 +718,7 @@ function readQualifiedName(array $tokens, int $start): ?string
 }
 
 /**
- * @param  list<mixed>  $tokens
+ * @param  list<array{int, string, int}|string>  $tokens
  */
 function indexAfterName(array $tokens, int $start): int
 {
@@ -760,7 +759,7 @@ function indexAfterName(array $tokens, int $start): int
 }
 
 /**
- * @param  list<mixed>  $tokens
+ * @param  list<array{int, string, int}|string>  $tokens
  */
 function bindingMethodAt(array $tokens, int $operatorIndex): ?string
 {
@@ -786,7 +785,7 @@ function bindingMethodAt(array $tokens, int $operatorIndex): ?string
 }
 
 /**
- * @param  list<mixed>  $tokens
+ * @param  list<array{int, string, int}|string>  $tokens
  */
 function nextSignificant(array $tokens, int $index): ?int
 {
@@ -806,7 +805,7 @@ function nextSignificant(array $tokens, int $index): ?int
 }
 
 /**
- * @param  list<mixed>  $tokens
+ * @param  list<array{int, string, int}|string>  $tokens
  */
 function previousSignificant(array $tokens, int $index): ?int
 {

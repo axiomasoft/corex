@@ -1,0 +1,16 @@
+{
+  "id": "V9",
+  "command": [
+    "env",
+    "PGSQL_PORT=5434",
+    "scripts/php84",
+    "composer",
+    "test:pg"
+  ],
+  "cwd": "/home/vostrikov/projects/packages/corex",
+  "started_at": "2026-10-06T20:36:51.469908+00:00",
+  "finished_at": "2026-10-06T20:37:48.951337+00:00",
+  "exit": 0,
+  "product_inventory_sha256": "9a3d4f925f8186e847b59d711d89d2dc6a53d6f247efa0c98864e8c97f770a3b",
+  "log_sha256": "3a49e4079d630f65b64ee09ede0dea72afa460766cff7ef864e035593407c889"
+}

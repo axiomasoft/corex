@@ -1,0 +1,14 @@
+{
+  "id": "doctrine-analyse",
+  "command": [
+    "scripts/php84",
+    "composer",
+    "analyse"
+  ],
+  "cwd": "/home/vostrikov/projects/packages/corex",
+  "started_at": "2026-10-06T20:34:25.065805+00:00",
+  "finished_at": "2026-10-06T20:35:36.186089+00:00",
+  "exit": 0,
+  "product_inventory_sha256": "94735396c1ef5144c60ddec705ab73df5a04a504abb2fcc469b3418b1630a67a",
+  "log_sha256": "19de74e64e97264121467c1be9db466fd3f31136ec36ddbc2cccd3817508f6df"
+}

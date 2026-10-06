@@ -31,7 +31,7 @@ final class EntityField implements Extender
     /** @var array<string, mixed> */
     public array $meta = [];
 
-    /** @var 'hasMany'|'belongsTo'|'belongsToMany'|null */
+    /** @var string|null Relation kinds are checked by CompilationValidator. */
     public ?string $relationType = null;
 
     /** @var class-string|null */

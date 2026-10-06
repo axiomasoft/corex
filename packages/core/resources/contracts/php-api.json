@@ -13982,7 +13982,7 @@
                     "return": "self(CoreX\\Modules\\Data\\CompiledModule)",
                     "doc": {
                         "@param": [
-                            "array{composerName: string, title: ?string, tablePrefix: ?string, requires: list<array{kind: string, package: string, constraint: string}>, editions: array<string, list<string>>, components: list<class-string>, onEnableHook?: (class-string | null), onDisableHook?: (class-string | null), onPurgeHook?: (class-string | null)} $data"
+                            "array<string, mixed> $data"
                         ]
                     }
                 },
@@ -14208,7 +14208,11 @@
             "extends": [],
             "implements": [],
             "uses": [],
-            "doc": [],
+            "doc": {
+                "@phpstan-type": [
+                    "RegistryPayload array{entities?: array<string, array{handle: string, model: class-string, table: string, module: string, labelSingular: string, labelPlural: string, capabilities: list<string>, fields: list<array{handle: string, type: ('string' | 'int' | 'decimal' | 'bool' | 'date' | 'datetime' | 'json' | 'money' | 'relation' | 'enum'), required?: bool, searchable?: bool, meta?: (array<string, mixed> | null)}>, titleAttribute: (string | null)}>, entityFields?: list<array{extender: array<string, mixed>, declaringModule: string, sleeping: bool}>, permissions?: list<array<string, mixed>>, api?: list<array<string, mixed>>, filament?: list<array<string, mixed>>, menu?: list<array<string, mixed>>, routes?: list<array<string, mixed>>, workflow?: list<array<string, mixed>>, settings?: list<array{namespace: string, definition: array<string, mixed>}>, featureFlags?: list<array{key: string, default: bool, module: (string | null), payload: mixed}>, schema?: string, fingerprint?: string, compiler?: array<string, mixed>, modules?: list<array<string, mixed>>, extensions?: list<array<string, mixed>>, replacements?: list<array<string, mixed>>, listeners?: array<string, array<class-string, list<class-string>>>}"
+                ]
+            },
             "methods": {
                 "__construct": {
                     "visibility": "public",
@@ -14478,7 +14482,7 @@
                     "return": "self(CoreX\\Modules\\Data\\CompiledRegistry)",
                     "doc": {
                         "@param": [
-                            "array{entities?: array<string, array<string, mixed>>, entityFields?: list<array<string, mixed>>, permissions?: list<array<string, mixed>>, api?: list<array<string, mixed>>, filament?: list<array<string, mixed>>, menu?: list<array<string, mixed>>, routes?: list<array<string, mixed>>, workflow?: list<array<string, mixed>>, settings?: list<array<string, mixed>>, featureFlags?: list<array<string, mixed>>, schema?: string, fingerprint?: string, compiler?: array<string, mixed>, modules?: list<array<string, mixed>>, extensions?: list<array<string, mixed>>, replacements?: list<array<string, mixed>>, listeners?: array<string, array<class-string, list<class-string>>>} $data"
+                            "array<array-key, mixed> $data"
                         ]
                     }
                 },
@@ -14546,7 +14550,7 @@
                     "return": "array",
                     "doc": {
                         "@return": [
-                            "array<string, mixed>"
+                            "array{entities?: array<string, array{handle: string, model: class-string, table: string, module: string, labelSingular: string, labelPlural: string, capabilities: list<string>, fields: list<array{handle: string, type: ('string' | 'int' | 'decimal' | 'bool' | 'date' | 'datetime' | 'json' | 'money' | 'relation' | 'enum'), required?: bool, searchable?: bool, meta?: (array<string, mixed> | null)}>, titleAttribute: (string | null)}>, entityFields?: list<array{extender: array<string, mixed>, declaringModule: string, sleeping: bool}>, permissions?: list<array<string, mixed>>, api?: list<array<string, mixed>>, filament?: list<array<string, mixed>>, menu?: list<array<string, mixed>>, routes?: list<array<string, mixed>>, workflow?: list<array<string, mixed>>, settings?: list<array{namespace: string, definition: array<string, mixed>}>, featureFlags?: list<array{key: string, default: bool, module: (string | null), payload: mixed}>, schema?: string, fingerprint?: string, compiler?: array<string, mixed>, modules?: list<array<string, mixed>>, extensions?: list<array<string, mixed>>, replacements?: list<array<string, mixed>>, listeners?: array<string, array<class-string, list<class-string>>>}"
                         ]
                     }
                 }
@@ -15520,7 +15524,7 @@
                     "return": "array",
                     "doc": {
                         "@return": [
-                            "array{handle: string, model: class-string, table: string, module: string, labelSingular: string, labelPlural: string, capabilities: list<string>, fields: list<array{handle: string, type: string, required: bool, searchable: bool, meta: (array<string, mixed> | null)}>, titleAttribute: (string | null)}"
+                            "array{handle: string, model: class-string, table: string, module: string, labelSingular: string, labelPlural: string, capabilities: list<string>, fields: list<array{handle: string, type: ('string' | 'int' | 'decimal' | 'bool' | 'date' | 'datetime' | 'json' | 'money' | 'relation' | 'enum'), required: bool, searchable: bool, meta: (array<string, mixed> | null)}>, titleAttribute: (string | null)}"
                         ]
                     }
                 }
@@ -15904,7 +15908,7 @@
                     "default": "null",
                     "doc": {
                         "@var": [
-                            "('hasMany' | 'belongsTo' | 'belongsToMany' | null)"
+                            "(string | null)"
                         ]
                     },
                     "hooks": []
@@ -16261,7 +16265,7 @@
                     "return": "array",
                     "doc": {
                         "@return": [
-                            "array{handle: string, type: string, required: bool, searchable: bool, meta: (array<string, mixed> | null)}"
+                            "array{handle: string, type: ('string' | 'int' | 'decimal' | 'bool' | 'date' | 'datetime' | 'json' | 'money' | 'relation' | 'enum'), required: bool, searchable: bool, meta: (array<string, mixed> | null)}"
                         ]
                     }
                 }
@@ -17115,7 +17119,11 @@
                     "visibility": "public",
                     "static": false,
                     "default": "null",
-                    "doc": [],
+                    "doc": {
+                        "@var": [
+                            "(class-string | null)"
+                        ]
+                    },
                     "hooks": []
                 },
                 "onEnableHook": {
@@ -17125,7 +17133,11 @@
                     "visibility": "public",
                     "static": false,
                     "default": "null",
-                    "doc": [],
+                    "doc": {
+                        "@var": [
+                            "(class-string | null)"
+                        ]
+                    },
                     "hooks": []
                 },
                 "onPurgeHook": {
@@ -17135,7 +17147,11 @@
                     "visibility": "public",
                     "static": false,
                     "default": "null",
-                    "doc": [],
+                    "doc": {
+                        "@var": [
+                            "(class-string | null)"
+                        ]
+                    },
                     "hooks": []
                 },
                 "replacements": {

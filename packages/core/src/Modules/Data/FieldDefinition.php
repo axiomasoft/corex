@@ -31,7 +31,7 @@ final readonly class FieldDefinition
      * only, no `__set_state`: the compiled file must be var_export'able and
      * re-readable without reconstructing objects from serialized state.
      *
-     * @return array{handle: string, type: string, required: bool, searchable: bool, meta: array<string, mixed>|null}
+     * @return array{handle: string, type: 'string'|'int'|'decimal'|'bool'|'date'|'datetime'|'json'|'money'|'relation'|'enum', required: bool, searchable: bool, meta: array<string, mixed>|null}
      */
     public function toArray(): array
     {

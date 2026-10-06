@@ -72,10 +72,13 @@ final class ModuleManifest
      */
     public array $replacements = [];
 
+    /** @var class-string|null */
     public ?string $onEnableHook = null;
 
+    /** @var class-string|null */
     public ?string $onDisableHook = null;
 
+    /** @var class-string|null */
     public ?string $onPurgeHook = null;
 
     private function __construct(string $composerName)

@@ -1,0 +1,28 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:check-evidence:v1",
+  "evidence_id": "PLAN3.P09.1.V1",
+  "check_id": "V1",
+  "subject": "PLAN3.P09.1",
+  "procedure": {
+    "cmd": "scripts/php84 --check",
+    "cwd": "/home/vostrikov/projects/packages/corex"
+  },
+  "candidate": {
+    "head": "f0faead86201935c71cd0c2d8731e2e41bcc26e5"
+  },
+  "exit": 0,
+  "started_at": "2026-10-06T20:27:47.624440+00:00",
+  "finished_at": "2026-10-06T20:27:47.977727+00:00",
+  "producer": {
+    "kind": "executor",
+    "actor": {
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh"
+    }
+  },
+  "log": {
+    "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.1-execution/validation/V1.log",
+    "sha256": "e3583739861a19bd2a5efeabad17e8a94aa3406f916bbad529d1eb3b8b33a11b"
+  }
+}

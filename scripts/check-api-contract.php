@@ -3,6 +3,10 @@
 
 declare(strict_types=1);
 
+namespace CoreX\Tooling\ApiContract;
+
+use RuntimeException;
+
 /**
  * Intra-major API compatibility gate (P13.11, D73).
  *
@@ -130,7 +134,7 @@ function parseArguments(array $argv, string $repoRoot): array
 }
 
 /**
- * @return array{files: array<string, mixed>, directory: string}
+ * @return array{files: array<string, array<array-key, mixed>|null>, directory: string}
  */
 function loadSnapshot(string $directory): array
 {
@@ -139,7 +143,7 @@ function loadSnapshot(string $directory): array
     }
 
     $entries = array_values(array_filter(
-        scandir($directory) ?: [],
+        (($entries = scandir($directory)) === false ? [] : $entries),
         static fn (string $name): bool => $name !== '.' && $name !== '..',
     ));
     sort($entries);
@@ -172,7 +176,15 @@ function loadSnapshot(string $directory): array
         throw new RuntimeException('unknown-schema manifest.json /schema');
     }
 
-    return ['files' => $files, 'directory' => $directory];
+    $validatedFiles = [];
+    foreach ($files as $name => $value) {
+        if ($value !== null && ! is_array($value)) {
+            throw new RuntimeException('unknown-schema '.$name.' /');
+        }
+        $validatedFiles[$name] = $value;
+    }
+
+    return ['files' => $validatedFiles, 'directory' => $directory];
 }
 
 function assertKnownDocument(mixed $document, string $subject, string $pointer): void
@@ -255,7 +267,12 @@ function assertSchema(array $schema, string $subject, string $pointer): void
 {
     assertKnownKeys($schema, SCHEMA_KEYS, $subject, $pointer);
 
-    foreach (($schema['properties'] ?? []) as $name => $property) {
+    $properties = $schema['properties'] ?? [];
+
+    if (! is_array($properties)) {
+        throw new RuntimeException('unknown-schema '.$subject.' '.$pointer.'/properties');
+    }
+    foreach ($properties as $name => $property) {
         if (! is_string($name) || ! is_array($property)) {
             throw new RuntimeException('unknown-schema '.$subject.' '.$pointer.'/properties');
         }
@@ -273,8 +290,8 @@ function assertSchema(array $schema, string $subject, string $pointer): void
 }
 
 /**
- * @param  array{files: array<string, mixed>}  $baseline
- * @param  array{files: array<string, mixed>}  $candidate
+ * @param  array{files: array<string, array<array-key, mixed>|null>, directory?: string}  $baseline
+ * @param  array{files: array<string, array<array-key, mixed>|null>, directory?: string}  $candidate
  * @return list<string>
  */
 function compareSnapshots(array $baseline, array $candidate): array
@@ -287,6 +304,8 @@ function compareSnapshots(array $baseline, array $candidate): array
         $violations[] = 'unknown-schema manifest.json /major';
     }
 
+    assert(is_array($baseline['files']['operations.json']) && is_array($candidate['files']['operations.json']));
+    assert(is_array($baseline['files']['errors.json']) && is_array($candidate['files']['errors.json']));
     $baseOperations = indexOperations($baseline['files']['operations.json']);
     $nextOperations = indexOperations($candidate['files']['operations.json']);
 
@@ -319,7 +338,7 @@ function compareSnapshots(array $baseline, array $candidate): array
     $nextErrors = indexErrors($candidate['files']['errors.json']);
 
     foreach ($baseErrors as $key => $error) {
-        $pointer = '/errors/'.escapePointer((string) $error['owner']).'/'.escapePointer((string) $error['code']);
+        $pointer = '/errors/'.escapePointer($error['owner']).'/'.escapePointer($error['code']);
 
         if (! isset($nextErrors[$key])) {
             $violations[] = 'error-contract-drift '.$error['code'].' '.$pointer;
@@ -349,29 +368,36 @@ function compareSnapshots(array $baseline, array $candidate): array
 }
 
 /**
- * @param  list<array<string, mixed>>  $operations
- * @return array<string, array<string, mixed>>
+ * @param  array<array-key, mixed>  $operations
+ * @return array<string, array{id: string, method: string, path: string, request_schema: array<array-key,mixed>, response_schema: array<array-key,mixed>, ...}>
  */
 function indexOperations(array $operations): array
 {
     $indexed = [];
 
     foreach ($operations as $operation) {
-        $indexed[(string) $operation['id']] = $operation;
+        assert(is_array($operation) && is_string($operation['id']) && is_string($operation['method']) && is_string($operation['path']));
+        assert(is_array($operation['request_schema']) && is_array($operation['response_schema']));
+        $indexed[$operation['id']] = $operation;
     }
 
     return $indexed;
 }
 
 /**
- * @param  list<array<string, mixed>>  $errors
- * @return array<string, array<string, mixed>>
+ * @param  array<array-key, mixed>  $errors
+ * @return array<string, array{owner: string, code: string, detail_keys: array<scalar|null>, category: string, path: string|null, retryable: bool, ...}>
  */
 function indexErrors(array $errors): array
 {
     $indexed = [];
 
     foreach ($errors as $error) {
+        assert(is_array($error) && is_string($error['owner']) && is_string($error['code']) && is_array($error['detail_keys']));
+        assert(is_string($error['category']) && ($error['path'] === null || is_string($error['path'])) && is_bool($error['retryable']));
+        foreach ($error['detail_keys'] as $key) {
+            assert(is_scalar($key) || $key === null);
+        }
         $indexed[$error['owner']."\0".$error['code']] = $error;
     }
 
@@ -379,15 +405,15 @@ function indexErrors(array $errors): array
 }
 
 /**
- * @param  array<string, mixed>  $baseline
- * @param  array<string, mixed>  $candidate
+ * @param  array<array-key, mixed>  $baseline
+ * @param  array<array-key, mixed>  $candidate
  * @return list<string>
  */
 function compareSchema(string $subject, array $baseline, array $candidate, string $pointer, bool $input): array
 {
     $violations = [];
 
-    if (array_key_exists('type', $baseline) && ($baseline['type'] ?? null) !== ($candidate['type'] ?? null)) {
+    if (array_key_exists('type', $baseline) && $baseline['type'] !== ($candidate['type'] ?? null)) {
         $violations[] = 'type-change '.$subject.' '.$pointer.'/type';
     }
 
@@ -399,7 +425,8 @@ function compareSchema(string $subject, array $baseline, array $candidate, strin
     }
 
     if (isset($baseline['enum'])) {
-        $removed = array_diff($baseline['enum'], $candidate['enum'] ?? []);
+        assert(is_array($baseline['enum']) && is_array($candidate['enum'] ?? []));
+        $removed = array_diff(scalarValues($baseline['enum']), scalarValues($candidate['enum'] ?? []));
 
         if ($removed !== []) {
             $violations[] = 'enum-removal '.$subject.' '.$pointer.'/enum';
@@ -409,14 +436,20 @@ function compareSchema(string $subject, array $baseline, array $candidate, strin
     $baseRequired = $baseline['required'] ?? [];
     $nextRequired = $candidate['required'] ?? [];
 
-    if ($input && array_diff($nextRequired, $baseRequired) !== []) {
+    assert(is_array($baseRequired) && is_array($nextRequired));
+
+    if ($input && array_diff(scalarValues($nextRequired), scalarValues($baseRequired)) !== []) {
         $violations[] = 'required-input-addition '.$subject.' '.$pointer.'/required';
     }
 
-    foreach (($baseline['properties'] ?? []) as $name => $property) {
+    $properties = $baseline['properties'] ?? [];
+    $candidateProperties = $candidate['properties'] ?? [];
+    assert(is_array($properties) && is_array($candidateProperties));
+    foreach ($properties as $name => $property) {
+        assert(is_array($property));
         $child = $pointer.'/properties/'.escapePointer((string) $name);
 
-        if (! isset($candidate['properties'][$name])) {
+        if (! isset($candidateProperties[$name])) {
             if (! $input) {
                 $violations[] = 'response-field-removal '.$subject.' '.$child;
             }
@@ -426,7 +459,7 @@ function compareSchema(string $subject, array $baseline, array $candidate, strin
 
         $violations = array_merge(
             $violations,
-            compareSchema($subject, $property, $candidate['properties'][$name], $child, $input),
+            compareSchema($subject, $property, (is_array($candidateProperties[$name]) ? $candidateProperties[$name] : throw new RuntimeException('Invalid property schema')), $child, $input),
         );
     }
 
@@ -509,7 +542,7 @@ function assertCost(mixed $cost, string $subject, string $pointer): void
     }
 }
 
-/** @param  array<string, mixed>  $document */
+/** @param  array<array-key, mixed>  $document */
 function assertWebhook(array $document): void
 {
     assertKnownKeys($document, WEBHOOK_KEYS, 'webhooks.json', '');
@@ -570,6 +603,8 @@ function compareWebhooks(mixed $baseline, mixed $candidate): array
     }
 
     $violations = [];
+    assert(is_array($baseline['topics'] ?? []) && is_array($candidate['topics'] ?? []));
+    assert(is_array($baseline['rotation'] ?? []) && is_array($candidate['rotation'] ?? []));
     $baseTopics = indexTopics($baseline['topics'] ?? []);
     $nextTopics = indexTopics($candidate['topics'] ?? []);
 
@@ -601,8 +636,10 @@ function compareWebhooks(mixed $baseline, mixed $candidate): array
         ))));
     }
 
+    $baseRotation = $baseline['rotation'] ?? [];
+    $nextRotation = $candidate['rotation'] ?? [];
     foreach (ROTATION_KEYS as $key) {
-        if (($baseline['rotation'][$key] ?? null) === ($candidate['rotation'][$key] ?? null)) {
+        if (($baseRotation[$key] ?? null) === ($nextRotation[$key] ?? null)) {
             continue;
         }
 
@@ -620,16 +657,35 @@ function compareWebhooks(mixed $baseline, mixed $candidate): array
 }
 
 /**
- * @param  list<array<string, mixed>>  $topics
- * @return array<string, array<string, mixed>>
+ * @param  array<array-key, mixed>  $topics
+ * @return array<string, array{name: string, version: int|string, pii_class: string, payload: array<array-key,mixed>, ...}>
  */
 function indexTopics(array $topics): array
 {
     $indexed = [];
 
     foreach ($topics as $topic) {
+        assert(is_array($topic) && is_string($topic['name']) && (is_int($topic['version']) || is_string($topic['version'])));
+        assert(is_string($topic['pii_class']) && is_array($topic['payload']));
         $indexed[$topic['name'].'.v'.$topic['version']] = $topic;
     }
 
     return $indexed;
+}
+
+/** @return list<scalar|null> */
+function scalarValues(mixed $values): array
+{
+    if (! is_array($values)) {
+        throw new RuntimeException('unknown-schema scalar list');
+    }
+    $result = [];
+    foreach ($values as $value) {
+        if (! is_scalar($value) && $value !== null) {
+            throw new RuntimeException('unknown-schema scalar list item');
+        }
+        $result[] = $value;
+    }
+
+    return $result;
 }

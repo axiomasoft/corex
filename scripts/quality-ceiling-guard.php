@@ -10,6 +10,19 @@ declare(strict_types=1);
 $root = dirname(__DIR__);
 $ceilingsPath = $root.'/scripts/quality-ceilings.json';
 $ceilings = json_decode((string) file_get_contents($ceilingsPath), true, flags: JSON_THROW_ON_ERROR);
+assert(is_array($ceilings));
+$validated = [];
+foreach (['phpstan', 'dependencies'] as $kind) {
+    assert(is_array($ceilings[$kind]));
+    $validated[$kind] = [];
+    foreach ($ceilings[$kind] as $key => $value) {
+        assert(is_string($key) && is_int($value));
+        $validated[$kind][$key] = $value;
+    }
+}
+$schema = $ceilings['schema'];
+assert(is_string($schema));
+$ceilings = ['schema' => $schema, ...$validated];
 
 $measure = static function (string $file, string $pattern): int {
     if (! is_file($file)) {
@@ -17,12 +30,14 @@ $measure = static function (string $file, string $pattern): int {
     }
     preg_match_all($pattern, (string) file_get_contents($file), $m);
 
-    return array_sum(array_map('intval', $m[1] ?? [])) ?: count($m[0] ?? []);
+    $sum = array_sum(array_map('intval', $m[1] ?? []));
+
+    return $sum !== 0 ? $sum : count($m[0] ?? []);
 };
 
 $actual = ['phpstan' => [], 'dependencies' => []];
 $actual['phpstan']['root'] = $measure($root.'/phpstan-baseline.neon', '/^\s+count: (\d+)$/m');
-foreach (array_merge(glob($root.'/packages/*/composer.json') ?: [], glob($root.'/products/*/composer.json') ?: []) as $manifest) {
+foreach (array_merge((($entries = glob($root.'/packages/*/composer.json')) === false ? [] : $entries), (($entries = glob($root.'/products/*/composer.json')) === false ? [] : $entries)) as $manifest) {
     $dir = basename(dirname($manifest));
     $actual['phpstan'][$dir] = $measure(dirname($manifest).'/phpstan-baseline.neon', '/^\s+count: (\d+)$/m');
     $actual['dependencies'][$dir] = substr_count((string) @file_get_contents(dirname($manifest).'/composer-dependency-analyser.php'), '// ratchet:');

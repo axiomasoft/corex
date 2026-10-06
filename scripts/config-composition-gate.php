@@ -18,12 +18,12 @@ $repoRoot = dirname(__DIR__);
 $configPath = $repoRoot.'/scripts/composition-boundary.json';
 
 $config = loadBoundaryConfig($configPath);
-$blocking = (bool) ($config['blocking'] ?? false);
+$blocking = $config['blocking'];
 $allowGlobs = $config['allow_globs'];
 $allowPaths = $config['allow_paths'];
 $findings = [];
 
-foreach (glob($repoRoot.'/packages/*/src', GLOB_ONLYDIR) ?: [] as $srcRoot) {
+foreach ((($entries = glob($repoRoot.'/packages/*/src', GLOB_ONLYDIR)) === false ? [] : $entries) as $srcRoot) {
     foreach (walkPhpFiles($srcRoot) as $file) {
         $relativeFile = substr($file, strlen($repoRoot) + 1);
 
@@ -118,7 +118,7 @@ function loadBoundaryConfig(string $path): array
 
     return [
         'blocking' => (bool) ($decoded['blocking'] ?? false),
-        'allow_globs' => $allowGlobs,
+        'allow_globs' => array_values($allowGlobs),
         'allow_paths' => $allowPaths,
     ];
 }

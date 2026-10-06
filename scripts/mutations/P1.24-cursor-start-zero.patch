@@ -1,8 +1,7 @@
 diff --git a/packages/core/src/Messaging/Internal/DatabasePollPubSub.php b/packages/core/src/Messaging/Internal/DatabasePollPubSub.php
-index d1278d8..b4e7a65 100644
 --- a/packages/core/src/Messaging/Internal/DatabasePollPubSub.php
 +++ b/packages/core/src/Messaging/Internal/DatabasePollPubSub.php
-@@ -115,22 +115,7 @@ final class DatabasePollPubSub implements PubSub
+@@ -132,24 +132,7 @@
          string $subscriber,
          bool $replayBacklog,
      ): int {
@@ -12,12 +11,14 @@ index d1278d8..b4e7a65 100644
 -            ->first();
 -
 -        if ($existing !== null) {
+-            assert(is_int($existing->position) || is_numeric($existing->position));
+-
 -            return (int) $existing->position;
 -        }
 -
--        $start = $replayBacklog
--            ? 0
--            : (int) ($connection->table($messagesTable)->where('channel', $channel)->max('id') ?? 0);
+-        $maximum = $replayBacklog ? 0 : ($connection->table($messagesTable)->where('channel', $channel)->max('id') ?? 0);
+-        assert(is_int($maximum) || is_numeric($maximum));
+-        $start = (int) $maximum;
 -
 -        $this->persistCursor($connection, $cursorsTable, $channel, $subscriber, $start);
 -
