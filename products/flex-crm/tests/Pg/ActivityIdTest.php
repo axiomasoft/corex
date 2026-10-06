@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Data\CoreOptions;
 use CoreX\Database\Contracts\SchemaSets;
-use CoreX\Database\Enums\IdStrategy;
 use Flex\Crm\Activity\Actions\LogActivity;
 use Flex\Crm\Activity\Enums\ActivityType;
 use Flex\Crm\Company\Models\Company;
@@ -19,36 +17,34 @@ use Illuminate\Support\Str;
 
 uses()->group('pg');
 
-it('stores and resolves activity subjects on PostgreSQL for the configured ID strategy', function (string $strategy): void {
-    config(['database.default' => 'pgsql', 'corex.ids.strategy' => $strategy]);
-    app()->forgetInstance(CoreOptions::class);
+it('stores and resolves UUIDv7 activity subjects on PostgreSQL', function (): void {
+    config(['database.default' => 'pgsql']);
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     AccountFixture::migrate();
     $this->migrateSchemaSets(['flex/crm:tenant'], DB::getDefaultConnection());
     $ctx = TestContext::seed('pgsql')->current();
-    $subject = Company::query()->create(['name' => 'Subject', 'workspace_id' => $strategy === 'int' ? (int) $ctx->tenant->workspace->id : $ctx->tenant->workspace->id]);
-    $activity = app(LogActivity::class)->handle($subject, ActivityType::Call, 'Compatible ID');
-    expect((string) $activity->fresh()->targets()->sole()->entity->getKey())->toBe((string) $subject->getKey());
-})->with(['uuid7', 'uuid', 'ulid', 'int']);
+    $subject = Company::query()->create(['name' => 'Subject', 'workspace_id' => $ctx->tenant->workspace->id]);
+    $activity = app(LogActivity::class)->handle($subject, ActivityType::Call, 'UUIDv7 ID');
+    expect((string) $activity->fresh()->targets()->sole()->entity->getKey())->toBe((string) $subject->getKey())
+        ->and($subject->getKey()[14])->toBe('7')
+        ->and($activity->getKey()[14])->toBe('7');
+});
 
-it('converts with canonical deal associations under enum configured IDs', function (string $strategy): void {
-    config(['database.default' => 'pgsql', 'corex.ids.strategy' => $strategy]);
-    app()->forgetInstance(CoreOptions::class);
+it('converts with canonical UUIDv7 deal associations', function (): void {
+    config(['database.default' => 'pgsql']);
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     AccountFixture::migrate();
     $this->migrateSchemaSets(['flex/crm:tenant'], DB::getDefaultConnection());
     TestContext::seed('pgsql');
-    config(['corex.ids.strategy' => IdStrategy::from($strategy)]);
-    app()->forgetInstance(CoreOptions::class);
     $pipeline = Pipeline::create(['entity_type' => 'crm.deal', 'code' => 'sales', 'name' => ['en' => 'Sales']]);
     Stage::create(['pipeline_id' => $pipeline->id, 'code' => 'open', 'name' => ['en' => 'Open']]);
     $lead = app(CreateLead::class)->handle(title: 'Inquiry', contactName: 'Jane');
     $contact = app(ConvertLead::class)->handle($lead, $pipeline);
     expect((string) $contact->deals()->sole()->getKey())->toBe((string) $lead->fresh()->converted_deal_id)
         ->and(DB::table('crm_deal_contacts')->count())->toBe(1);
-})->with(['ulid', 'int']);
+});
 
 it('widens a legacy activity morph column before a UUID insert', function (): void {
     config(['database.default' => 'pgsql']);

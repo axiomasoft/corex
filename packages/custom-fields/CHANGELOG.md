@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — deterministic schema (P08.2)
+
+- Remove the tables configuration and internal Options table map; storage tables use package-owned literals while AttributeTables remains available for explicit composition.
+
 ## Unreleased — thin providers and registrars (P05.2)
 
 - Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.

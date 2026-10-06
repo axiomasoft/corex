@@ -1,0 +1,14 @@
+{
+  "name": "/corex_p082_redis_test",
+  "container_id": "b121922dbdd9e1ad68fce3da5f177c61c4e610c18ac891e389278498a5e8df69",
+  "image": "redis:7-alpine",
+  "image_id": "sha256:487efc0616382465781b8fdc3d6d1db449e6fd80ae23bf48432a2da6b6929908",
+  "server_version": "7.4.9",
+  "host": "127.0.0.1",
+  "port": 6384,
+  "database": 15,
+  "initial_dbsize": 0,
+  "key_prefix": "corex:p3.6:random-8-byte-hex / corex:p3.6:families:random-8-byte-hex",
+  "cleanup": "test-owned prefixes only; no global flush",
+  "status": "running"
+}

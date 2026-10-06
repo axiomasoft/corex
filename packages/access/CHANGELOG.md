@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — deterministic schema (P08.2)
+
+- Generate model identifiers with Laravel HasUuids (UUIDv7); schema keys use literal UUID columns.
+
 ## Unreleased — native authorization (P07.4)
 
 - Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.

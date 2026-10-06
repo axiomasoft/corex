@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Data\CoreOptions;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
@@ -50,7 +49,7 @@ function residentSwitchMarkers(ConnectionInterface $connection): array
 {
     $markers = [];
 
-    foreach ($connection->table(app(CoreOptions::class)->outboxMessagesTable)->orderBy('id')->pluck('payload') as $payload) {
+    foreach ($connection->table('sys_outbox_messages')->orderBy('id')->pluck('payload') as $payload) {
         $markers[] = json_decode((string) $payload, true, flags: JSON_THROW_ON_ERROR)['marker'];
     }
 

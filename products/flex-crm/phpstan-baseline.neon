@@ -367,12 +367,6 @@ parameters:
 			path: src/Deal/Actions/CreateDeal.php
 
 		-
-			rawMessage: 'Parameter #1 $attributes of method Illuminate\Database\Eloquent\Builder<Flex\Crm\Deal\Models\Deal>::create() expects array<model property of Flex\Crm\Deal\Models\Deal, mixed>, array<string, Brick\Money\Money|Flex\Crm\Deal\Enums\DealStatus|Illuminate\Support\Carbon|int|string|null> given.'
-			identifier: argument.type
-			count: 1
-			path: src/Deal/Actions/CreateDeal.php
-
-		-
 			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<Flex\Crm\Deal\Models\Deal>::lockForUpdate().'
 			identifier: staticMethod.dynamicCall
 			count: 1

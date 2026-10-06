@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Data\CoreOptions;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,7 +11,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create(app(CoreOptions::class)->pubsubMessagesTable, function (Blueprint $table): void {
+        Schema::create('sys_pubsub_messages', function (Blueprint $table): void {
             $table->id();
             $table->string('channel', 190);
             $table->jsonb('payload');
@@ -24,6 +23,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists(app(CoreOptions::class)->pubsubMessagesTable);
+        Schema::dropIfExists('sys_pubsub_messages');
     }
 };

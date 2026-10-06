@@ -62,7 +62,7 @@ final class DatabasePollPubSub implements PubSub
                 bindings: ['corex-pubsub:'.$channel],
             );
 
-            $connection->table($this->options->pubsubMessagesTable)->insert([
+            $connection->table('sys_pubsub_messages')->insert([
                 'channel' => $channel,
                 'payload' => json_encode($payload, JSON_THROW_ON_ERROR),
                 'created_at' => $this->clock->now(),
@@ -93,8 +93,8 @@ final class DatabasePollPubSub implements PubSub
         SubscribeGuard::assert($this->runtime, $this->options->pubsubOctaneWorkerOptIn, self::class);
 
         $connection = $this->connections->connection($this->connection);
-        $messagesTable = $this->options->pubsubMessagesTable;
-        $cursorsTable = $this->options->pubsubCursorsTable;
+        $messagesTable = 'sys_pubsub_messages';
+        $cursorsTable = 'sys_pubsub_cursors';
 
         $cursor = $this->loadOrBootstrapCursor($connection, $cursorsTable, $messagesTable, $channel, $subscriber, $replayBacklog);
         $polls = 0;

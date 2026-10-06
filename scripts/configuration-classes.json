@@ -304,51 +304,6 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex-custom-fields.tables.documents": {
-            "owner": "axiomasoft/corex-custom-fields",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "unobserved",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex-custom-fields.tables.eav_records": {
-            "owner": "axiomasoft/corex-custom-fields",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "unobserved",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex-custom-fields.tables.eav_values": {
-            "owner": "axiomasoft/corex-custom-fields",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "unobserved",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex-custom-fields.tables.schema_operations": {
-            "owner": "axiomasoft/corex-custom-fields",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "unobserved",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex-custom-fields.tables.write_tokens": {
-            "owner": "axiomasoft/corex-custom-fields",
-            "secret": "yes",
-            "mode": "secret",
-            "reloadable": "unobserved",
-            "validation": "unobserved",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
         "corex-intl.formatting.icu_enabled": {
             "owner": "axiomasoft/corex-intl",
             "secret": "no",
@@ -1303,15 +1258,6 @@
             "deprecated_aliases": "",
             "notes": ""
         },
-        "corex.ids.strategy": {
-            "owner": "axiomasoft/corex",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
         "corex.messaging.backoff_cap_seconds": {
             "owner": "axiomasoft/corex",
             "secret": "no",
@@ -1484,114 +1430,6 @@
             "notes": ""
         },
         "corex.storage.ephemeral_root": {
-            "owner": "axiomasoft/corex",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex.tables.audit_logs": {
-            "owner": "axiomasoft/corex",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex.tables.department_user": {
-            "owner": "axiomasoft/corex",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex.tables.departments": {
-            "owner": "axiomasoft/corex",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex.tables.feature_flags": {
-            "owner": "axiomasoft/corex",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex.tables.feature_overrides": {
-            "owner": "axiomasoft/corex",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex.tables.inbox_messages": {
-            "owner": "axiomasoft/corex",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "unobserved",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex.tables.outbox_messages": {
-            "owner": "axiomasoft/corex",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "unobserved",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex.tables.pubsub_cursors": {
-            "owner": "axiomasoft/corex",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex.tables.pubsub_messages": {
-            "owner": "axiomasoft/corex",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex.tables.saved_view_scopes": {
-            "owner": "axiomasoft/corex",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex.tables.saved_views": {
-            "owner": "axiomasoft/corex",
-            "secret": "no",
-            "mode": "product-policy",
-            "reloadable": "unobserved",
-            "validation": "use-site",
-            "deprecated_aliases": "",
-            "notes": ""
-        },
-        "corex.tables.settings": {
             "owner": "axiomasoft/corex",
             "secret": "no",
             "mode": "product-policy",
@@ -2042,19 +1880,6 @@
         "corex.bindings.feature_flags": "CoreOptions::$featureFlags",
         "corex.bindings.setting_defaults": "CoreOptions::$settingDefaultsProvider",
         "corex.bindings.settings": "CoreOptions::$settingsRepository",
-        "corex.ids.strategy": "CoreOptions::$idStrategy",
-        "corex.tables.audit_logs": "CoreOptions::$auditLogsTable",
-        "corex.tables.department_user": "CoreOptions::$departmentUserTable",
-        "corex.tables.departments": "CoreOptions::$departmentsTable",
-        "corex.tables.feature_flags": "CoreOptions::$featureFlagsTable",
-        "corex.tables.feature_overrides": "CoreOptions::$featureOverridesTable",
-        "corex.tables.inbox_messages": "CoreOptions::$inboxMessagesTable",
-        "corex.tables.outbox_messages": "CoreOptions::$outboxMessagesTable",
-        "corex.tables.pubsub_cursors": "CoreOptions::$pubsubCursorsTable",
-        "corex.tables.pubsub_messages": "CoreOptions::$pubsubMessagesTable",
-        "corex.tables.saved_view_scopes": "CoreOptions::$savedViewScopesTable",
-        "corex.tables.saved_views": "CoreOptions::$savedViewsTable",
-        "corex.tables.settings": "CoreOptions::$settingsTable",
         "corex.tenant_context.impersonation": "CoreOptions::$impersonationService",
         "corex.tenant_context.manager": "CoreOptions::$tenancyManager",
         "corex-tenancy.grace_days": "TenancyOptions::$lifecycle",

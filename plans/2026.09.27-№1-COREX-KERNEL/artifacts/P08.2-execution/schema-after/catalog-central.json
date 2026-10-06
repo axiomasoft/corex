@@ -1,0 +1,2687 @@
+{
+    "scope": "central",
+    "sets": [
+        "axiomasoft/corex-tenancy:root"
+    ],
+    "migration_files": [
+        "2026_07_18_170001_create_root_clusters_table.php",
+        "2026_07_18_170002_create_root_templates_table.php",
+        "2026_07_18_170003_create_root_identities_table.php",
+        "2026_07_18_170004_create_root_accounts_table.php",
+        "2026_07_18_170005_create_root_identity_accounts_table.php",
+        "2026_07_18_170006_create_root_account_products_table.php",
+        "2026_07_18_170007_create_root_domains_table.php",
+        "2026_07_18_170008_create_root_oauth_clients_table.php",
+        "2026_07_18_170009_create_root_idp_sessions_table.php",
+        "2026_07_18_170010_create_root_oauth_refresh_tokens_table.php",
+        "2026_07_18_170011_create_root_impersonation_grants_table.php",
+        "2026_07_18_170012_create_root_feature_flags_table.php",
+        "2026_07_18_170013_create_root_usage_snapshots_table.php",
+        "2026_07_18_170014_create_root_migration_batches_table.php",
+        "2026_07_18_170015_create_root_account_schema_state_table.php",
+        "2026_07_18_170016_create_root_account_events_table.php",
+        "2026_07_18_170017_create_root_account_exports_table.php",
+        "2026_09_12_200001_add_schema_hash_to_root_templates_table.php",
+        "2026_09_13_000001_add_signup_key_index.php",
+        "2026_09_14_160001_add_domain_trust_generation_to_root_domains_table.php",
+        "2026_09_15_000003_create_root_wakeup_hints_table.php",
+        "2026_09_15_000004_create_root_wakeup_reconciliation_state_table.php"
+    ],
+    "migrated": [
+        "2026_07_18_170001_create_root_clusters_table",
+        "2026_07_18_170002_create_root_templates_table",
+        "2026_07_18_170003_create_root_identities_table",
+        "2026_07_18_170004_create_root_accounts_table",
+        "2026_07_18_170005_create_root_identity_accounts_table",
+        "2026_07_18_170006_create_root_account_products_table",
+        "2026_07_18_170007_create_root_domains_table",
+        "2026_07_18_170008_create_root_oauth_clients_table",
+        "2026_07_18_170009_create_root_idp_sessions_table",
+        "2026_07_18_170010_create_root_oauth_refresh_tokens_table",
+        "2026_07_18_170011_create_root_impersonation_grants_table",
+        "2026_07_18_170012_create_root_feature_flags_table",
+        "2026_07_18_170013_create_root_usage_snapshots_table",
+        "2026_07_18_170014_create_root_migration_batches_table",
+        "2026_07_18_170015_create_root_account_schema_state_table",
+        "2026_07_18_170016_create_root_account_events_table",
+        "2026_07_18_170017_create_root_account_exports_table",
+        "2026_09_12_200001_add_schema_hash_to_root_templates_table",
+        "2026_09_13_000001_add_signup_key_index",
+        "2026_09_14_160001_add_domain_trust_generation_to_root_domains_table",
+        "2026_09_15_000003_create_root_wakeup_hints_table",
+        "2026_09_15_000004_create_root_wakeup_reconciliation_state_table"
+    ],
+    "columns": [
+        {
+            "table_name": "migrations",
+            "ordinal": 1,
+            "column_name": "id",
+            "column_type": "integer",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "nextval('migrations_id_seq'::regclass)"
+        },
+        {
+            "table_name": "migrations",
+            "ordinal": 2,
+            "column_name": "migration",
+            "column_type": "character varying(255)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "migrations",
+            "ordinal": 3,
+            "column_name": "batch",
+            "column_type": "integer",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_account_events",
+            "ordinal": 1,
+            "column_name": "id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_account_events",
+            "ordinal": 2,
+            "column_name": "account_id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_account_events",
+            "ordinal": 3,
+            "column_name": "event",
+            "column_type": "character varying(64)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_account_events",
+            "ordinal": 4,
+            "column_name": "actor",
+            "column_type": "jsonb",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "'{}'::jsonb"
+        },
+        {
+            "table_name": "root_account_events",
+            "ordinal": 5,
+            "column_name": "payload",
+            "column_type": "jsonb",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "'{}'::jsonb"
+        },
+        {
+            "table_name": "root_account_events",
+            "ordinal": 6,
+            "column_name": "created_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_account_events",
+            "ordinal": 7,
+            "column_name": "updated_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_account_exports",
+            "ordinal": 1,
+            "column_name": "id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_account_exports",
+            "ordinal": 2,
+            "column_name": "account_id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_account_exports",
+            "ordinal": 3,
+            "column_name": "kind",
+            "column_type": "character varying(16)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_account_exports",
+            "ordinal": 4,
+            "column_name": "status",
+            "column_type": "character varying(16)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "'pending'::character varying"
+        },
+        {
+            "table_name": "root_account_exports",
+            "ordinal": 5,
+            "column_name": "formats",
+            "column_type": "jsonb",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "'[\"pg_dump\", \"csv\"]'::jsonb"
+        },
+        {
+            "table_name": "root_account_exports",
+            "ordinal": 6,
+            "column_name": "storage_path",
+            "column_type": "character varying(512)",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_account_exports",
+            "ordinal": 7,
+            "column_name": "url_expires_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_account_exports",
+            "ordinal": 8,
+            "column_name": "size_bytes",
+            "column_type": "bigint",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_account_exports",
+            "ordinal": 9,
+            "column_name": "purge_after",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_account_exports",
+            "ordinal": 10,
+            "column_name": "created_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_account_exports",
+            "ordinal": 11,
+            "column_name": "updated_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_account_products",
+            "ordinal": 1,
+            "column_name": "account_id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_account_products",
+            "ordinal": 2,
+            "column_name": "product",
+            "column_type": "character varying(32)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_account_products",
+            "ordinal": 3,
+            "column_name": "activated_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_account_products",
+            "ordinal": 4,
+            "column_name": "created_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_account_products",
+            "ordinal": 5,
+            "column_name": "updated_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_account_schema_state",
+            "ordinal": 1,
+            "column_name": "account_id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_account_schema_state",
+            "ordinal": 2,
+            "column_name": "current_version",
+            "column_type": "integer",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_account_schema_state",
+            "ordinal": 3,
+            "column_name": "target_version",
+            "column_type": "integer",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_account_schema_state",
+            "ordinal": 4,
+            "column_name": "status",
+            "column_type": "character varying(16)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "'ok'::character varying"
+        },
+        {
+            "table_name": "root_account_schema_state",
+            "ordinal": 5,
+            "column_name": "batch_id",
+            "column_type": "uuid",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_account_schema_state",
+            "ordinal": 6,
+            "column_name": "last_migrated_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_account_schema_state",
+            "ordinal": 7,
+            "column_name": "last_error",
+            "column_type": "text",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_account_schema_state",
+            "ordinal": 8,
+            "column_name": "created_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_account_schema_state",
+            "ordinal": 9,
+            "column_name": "updated_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_accounts",
+            "ordinal": 1,
+            "column_name": "id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_accounts",
+            "ordinal": 2,
+            "column_name": "slug",
+            "column_type": "character varying(63)",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_accounts",
+            "ordinal": 3,
+            "column_name": "name",
+            "column_type": "character varying(255)",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_accounts",
+            "ordinal": 4,
+            "column_name": "cluster_id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_accounts",
+            "ordinal": 5,
+            "column_name": "db_name",
+            "column_type": "character varying(63)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_accounts",
+            "ordinal": 6,
+            "column_name": "status",
+            "column_type": "character varying(16)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "'pending'::character varying"
+        },
+        {
+            "table_name": "root_accounts",
+            "ordinal": 7,
+            "column_name": "owner_identity_id",
+            "column_type": "uuid",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_accounts",
+            "ordinal": 8,
+            "column_name": "vertical_code",
+            "column_type": "character varying(64)",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_accounts",
+            "ordinal": 9,
+            "column_name": "template_version",
+            "column_type": "integer",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_accounts",
+            "ordinal": 10,
+            "column_name": "embedding_model",
+            "column_type": "character varying(64)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_accounts",
+            "ordinal": 11,
+            "column_name": "embedding_dim",
+            "column_type": "smallint",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_accounts",
+            "ordinal": 12,
+            "column_name": "locale",
+            "column_type": "character varying(8)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "'ru'::character varying"
+        },
+        {
+            "table_name": "root_accounts",
+            "ordinal": 13,
+            "column_name": "trial_ends_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_accounts",
+            "ordinal": 14,
+            "column_name": "suspended_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_accounts",
+            "ordinal": 15,
+            "column_name": "grace_until",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_accounts",
+            "ordinal": 16,
+            "column_name": "purge_after",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_accounts",
+            "ordinal": 17,
+            "column_name": "data",
+            "column_type": "jsonb",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "'{}'::jsonb"
+        },
+        {
+            "table_name": "root_accounts",
+            "ordinal": 18,
+            "column_name": "created_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_accounts",
+            "ordinal": 19,
+            "column_name": "updated_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_accounts",
+            "ordinal": 20,
+            "column_name": "deleted_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_clusters",
+            "ordinal": 1,
+            "column_name": "id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_clusters",
+            "ordinal": 2,
+            "column_name": "name",
+            "column_type": "character varying(64)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_clusters",
+            "ordinal": 3,
+            "column_name": "region",
+            "column_type": "character varying(32)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "'ru-central'::character varying"
+        },
+        {
+            "table_name": "root_clusters",
+            "ordinal": 4,
+            "column_name": "status",
+            "column_type": "character varying(16)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "'active'::character varying"
+        },
+        {
+            "table_name": "root_clusters",
+            "ordinal": 5,
+            "column_name": "pg_host_writer",
+            "column_type": "character varying(255)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_clusters",
+            "ordinal": 6,
+            "column_name": "pg_host_reader",
+            "column_type": "character varying(255)",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_clusters",
+            "ordinal": 7,
+            "column_name": "pg_port",
+            "column_type": "integer",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "5432"
+        },
+        {
+            "table_name": "root_clusters",
+            "ordinal": 8,
+            "column_name": "pgbouncer_host",
+            "column_type": "character varying(255)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_clusters",
+            "ordinal": 9,
+            "column_name": "pgbouncer_port",
+            "column_type": "integer",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "6432"
+        },
+        {
+            "table_name": "root_clusters",
+            "ordinal": 10,
+            "column_name": "app_db_user",
+            "column_type": "character varying(64)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_clusters",
+            "ordinal": 11,
+            "column_name": "tei_endpoint",
+            "column_type": "character varying(255)",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_clusters",
+            "ordinal": 12,
+            "column_name": "backup_repo",
+            "column_type": "character varying(255)",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_clusters",
+            "ordinal": 13,
+            "column_name": "db_count",
+            "column_type": "integer",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "0"
+        },
+        {
+            "table_name": "root_clusters",
+            "ordinal": 14,
+            "column_name": "db_soft_limit",
+            "column_type": "integer",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "700"
+        },
+        {
+            "table_name": "root_clusters",
+            "ordinal": 15,
+            "column_name": "pending_pool_size",
+            "column_type": "integer",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "20"
+        },
+        {
+            "table_name": "root_clusters",
+            "ordinal": 16,
+            "column_name": "template_version",
+            "column_type": "integer",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "0"
+        },
+        {
+            "table_name": "root_clusters",
+            "ordinal": 17,
+            "column_name": "meta",
+            "column_type": "jsonb",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "'{}'::jsonb"
+        },
+        {
+            "table_name": "root_clusters",
+            "ordinal": 18,
+            "column_name": "created_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_clusters",
+            "ordinal": 19,
+            "column_name": "updated_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_domains",
+            "ordinal": 1,
+            "column_name": "id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_domains",
+            "ordinal": 2,
+            "column_name": "account_id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_domains",
+            "ordinal": 3,
+            "column_name": "host",
+            "column_type": "character varying(255)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_domains",
+            "ordinal": 4,
+            "column_name": "type",
+            "column_type": "character varying(16)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_domains",
+            "ordinal": 5,
+            "column_name": "is_primary",
+            "column_type": "boolean",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "false"
+        },
+        {
+            "table_name": "root_domains",
+            "ordinal": 6,
+            "column_name": "verification_token",
+            "column_type": "character varying(64)",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_domains",
+            "ordinal": 7,
+            "column_name": "verified_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_domains",
+            "ordinal": 8,
+            "column_name": "tls_status",
+            "column_type": "character varying(16)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "'none'::character varying"
+        },
+        {
+            "table_name": "root_domains",
+            "ordinal": 9,
+            "column_name": "ca_used",
+            "column_type": "character varying(32)",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_domains",
+            "ordinal": 10,
+            "column_name": "created_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_domains",
+            "ordinal": 11,
+            "column_name": "updated_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_domains",
+            "ordinal": 12,
+            "column_name": "deleted_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_domains",
+            "ordinal": 13,
+            "column_name": "verification_generation",
+            "column_type": "bigint",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "'0'::bigint"
+        },
+        {
+            "table_name": "root_feature_flags",
+            "ordinal": 1,
+            "column_name": "id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_feature_flags",
+            "ordinal": 2,
+            "column_name": "account_id",
+            "column_type": "uuid",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_feature_flags",
+            "ordinal": 3,
+            "column_name": "flag",
+            "column_type": "character varying(64)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_feature_flags",
+            "ordinal": 4,
+            "column_name": "value",
+            "column_type": "jsonb",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_feature_flags",
+            "ordinal": 5,
+            "column_name": "created_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_feature_flags",
+            "ordinal": 6,
+            "column_name": "updated_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_identities",
+            "ordinal": 1,
+            "column_name": "id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_identities",
+            "ordinal": 2,
+            "column_name": "email",
+            "column_type": "character varying(255)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_identities",
+            "ordinal": 3,
+            "column_name": "phone",
+            "column_type": "character varying(32)",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_identities",
+            "ordinal": 4,
+            "column_name": "name",
+            "column_type": "character varying(255)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "''::character varying"
+        },
+        {
+            "table_name": "root_identities",
+            "ordinal": 5,
+            "column_name": "password_hash",
+            "column_type": "character varying(255)",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_identities",
+            "ordinal": 6,
+            "column_name": "email_verified_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_identities",
+            "ordinal": 7,
+            "column_name": "mfa_totp_secret",
+            "column_type": "text",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_identities",
+            "ordinal": 8,
+            "column_name": "mfa_enabled_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_identities",
+            "ordinal": 9,
+            "column_name": "locale",
+            "column_type": "character varying(8)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "'ru'::character varying"
+        },
+        {
+            "table_name": "root_identities",
+            "ordinal": 10,
+            "column_name": "is_staff",
+            "column_type": "boolean",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "false"
+        },
+        {
+            "table_name": "root_identities",
+            "ordinal": 11,
+            "column_name": "last_login_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_identities",
+            "ordinal": 12,
+            "column_name": "created_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_identities",
+            "ordinal": 13,
+            "column_name": "updated_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_identities",
+            "ordinal": 14,
+            "column_name": "deleted_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_identity_accounts",
+            "ordinal": 1,
+            "column_name": "id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_identity_accounts",
+            "ordinal": 2,
+            "column_name": "identity_id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_identity_accounts",
+            "ordinal": 3,
+            "column_name": "account_id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_identity_accounts",
+            "ordinal": 4,
+            "column_name": "status",
+            "column_type": "character varying(16)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "'active'::character varying"
+        },
+        {
+            "table_name": "root_identity_accounts",
+            "ordinal": 5,
+            "column_name": "sync_status",
+            "column_type": "character varying(16)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "'pending'::character varying"
+        },
+        {
+            "table_name": "root_identity_accounts",
+            "ordinal": 6,
+            "column_name": "synced_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_identity_accounts",
+            "ordinal": 7,
+            "column_name": "created_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_identity_accounts",
+            "ordinal": 8,
+            "column_name": "updated_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_idp_sessions",
+            "ordinal": 1,
+            "column_name": "id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_idp_sessions",
+            "ordinal": 2,
+            "column_name": "identity_id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_idp_sessions",
+            "ordinal": 3,
+            "column_name": "token_hash",
+            "column_type": "character varying(64)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_idp_sessions",
+            "ordinal": 4,
+            "column_name": "ip",
+            "column_type": "inet",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_idp_sessions",
+            "ordinal": 5,
+            "column_name": "user_agent",
+            "column_type": "character varying(512)",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_idp_sessions",
+            "ordinal": 6,
+            "column_name": "expires_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_idp_sessions",
+            "ordinal": 7,
+            "column_name": "revoked_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_idp_sessions",
+            "ordinal": 8,
+            "column_name": "created_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_idp_sessions",
+            "ordinal": 9,
+            "column_name": "updated_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_impersonation_grants",
+            "ordinal": 1,
+            "column_name": "id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_impersonation_grants",
+            "ordinal": 2,
+            "column_name": "staff_identity_id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_impersonation_grants",
+            "ordinal": 3,
+            "column_name": "account_id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_impersonation_grants",
+            "ordinal": 4,
+            "column_name": "target_user_id",
+            "column_type": "uuid",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_impersonation_grants",
+            "ordinal": 5,
+            "column_name": "reason",
+            "column_type": "text",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_impersonation_grants",
+            "ordinal": 6,
+            "column_name": "approved_by",
+            "column_type": "uuid",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_impersonation_grants",
+            "ordinal": 7,
+            "column_name": "expires_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "(now() + '01:00:00'::interval)"
+        },
+        {
+            "table_name": "root_impersonation_grants",
+            "ordinal": 8,
+            "column_name": "used_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_impersonation_grants",
+            "ordinal": 9,
+            "column_name": "revoked_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_impersonation_grants",
+            "ordinal": 10,
+            "column_name": "created_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_impersonation_grants",
+            "ordinal": 11,
+            "column_name": "updated_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_migration_batches",
+            "ordinal": 1,
+            "column_name": "id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_migration_batches",
+            "ordinal": 2,
+            "column_name": "from_version",
+            "column_type": "integer",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_migration_batches",
+            "ordinal": 3,
+            "column_name": "to_version",
+            "column_type": "integer",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_migration_batches",
+            "ordinal": 4,
+            "column_name": "wave",
+            "column_type": "character varying(16)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_migration_batches",
+            "ordinal": 5,
+            "column_name": "status",
+            "column_type": "character varying(16)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "'created'::character varying"
+        },
+        {
+            "table_name": "root_migration_batches",
+            "ordinal": 6,
+            "column_name": "stats",
+            "column_type": "jsonb",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "'{}'::jsonb"
+        },
+        {
+            "table_name": "root_migration_batches",
+            "ordinal": 7,
+            "column_name": "started_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_migration_batches",
+            "ordinal": 8,
+            "column_name": "finished_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_migration_batches",
+            "ordinal": 9,
+            "column_name": "created_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_migration_batches",
+            "ordinal": 10,
+            "column_name": "updated_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_oauth_clients",
+            "ordinal": 1,
+            "column_name": "id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_oauth_clients",
+            "ordinal": 2,
+            "column_name": "client_id",
+            "column_type": "character varying(64)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_oauth_clients",
+            "ordinal": 3,
+            "column_name": "secret_hash",
+            "column_type": "character varying(255)",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_oauth_clients",
+            "ordinal": 4,
+            "column_name": "name",
+            "column_type": "character varying(128)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_oauth_clients",
+            "ordinal": 5,
+            "column_name": "product",
+            "column_type": "character varying(32)",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_oauth_clients",
+            "ordinal": 6,
+            "column_name": "redirect_patterns",
+            "column_type": "jsonb",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_oauth_clients",
+            "ordinal": 7,
+            "column_name": "is_first_party",
+            "column_type": "boolean",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "true"
+        },
+        {
+            "table_name": "root_oauth_clients",
+            "ordinal": 8,
+            "column_name": "created_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_oauth_clients",
+            "ordinal": 9,
+            "column_name": "updated_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_oauth_clients",
+            "ordinal": 10,
+            "column_name": "deleted_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_oauth_refresh_tokens",
+            "ordinal": 1,
+            "column_name": "id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_oauth_refresh_tokens",
+            "ordinal": 2,
+            "column_name": "session_id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_oauth_refresh_tokens",
+            "ordinal": 3,
+            "column_name": "client_id",
+            "column_type": "character varying(64)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_oauth_refresh_tokens",
+            "ordinal": 4,
+            "column_name": "token_hash",
+            "column_type": "character varying(64)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_oauth_refresh_tokens",
+            "ordinal": 5,
+            "column_name": "expires_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_oauth_refresh_tokens",
+            "ordinal": 6,
+            "column_name": "revoked_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_oauth_refresh_tokens",
+            "ordinal": 7,
+            "column_name": "created_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_oauth_refresh_tokens",
+            "ordinal": 8,
+            "column_name": "updated_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_templates",
+            "ordinal": 1,
+            "column_name": "id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_templates",
+            "ordinal": 2,
+            "column_name": "version",
+            "column_type": "integer",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_templates",
+            "ordinal": 3,
+            "column_name": "db_name",
+            "column_type": "character varying(63)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_templates",
+            "ordinal": 4,
+            "column_name": "status",
+            "column_type": "character varying(16)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "'building'::character varying"
+        },
+        {
+            "table_name": "root_templates",
+            "ordinal": 5,
+            "column_name": "embedding_model",
+            "column_type": "character varying(64)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_templates",
+            "ordinal": 6,
+            "column_name": "embedding_dim",
+            "column_type": "smallint",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_templates",
+            "ordinal": 7,
+            "column_name": "git_ref",
+            "column_type": "character varying(64)",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_templates",
+            "ordinal": 8,
+            "column_name": "built_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_templates",
+            "ordinal": 9,
+            "column_name": "created_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_templates",
+            "ordinal": 10,
+            "column_name": "updated_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_templates",
+            "ordinal": 11,
+            "column_name": "schema_hash",
+            "column_type": "character varying(64)",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_usage_snapshots",
+            "ordinal": 1,
+            "column_name": "account_id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_usage_snapshots",
+            "ordinal": 2,
+            "column_name": "metric",
+            "column_type": "character varying(64)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_usage_snapshots",
+            "ordinal": 3,
+            "column_name": "period",
+            "column_type": "date",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_usage_snapshots",
+            "ordinal": 4,
+            "column_name": "value",
+            "column_type": "numeric(18,3)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_usage_snapshots",
+            "ordinal": 5,
+            "column_name": "created_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_usage_snapshots",
+            "ordinal": 6,
+            "column_name": "updated_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_wakeup_hints",
+            "ordinal": 1,
+            "column_name": "account_id",
+            "column_type": "uuid",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_wakeup_hints",
+            "ordinal": 2,
+            "column_name": "next_fire_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_wakeup_hints",
+            "ordinal": 3,
+            "column_name": "hint_revision",
+            "column_type": "bigint",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_wakeup_hints",
+            "ordinal": 4,
+            "column_name": "leased_until",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_wakeup_hints",
+            "ordinal": 5,
+            "column_name": "claim_epoch",
+            "column_type": "bigint",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_wakeup_hints",
+            "ordinal": 6,
+            "column_name": "created_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_wakeup_hints",
+            "ordinal": 7,
+            "column_name": "updated_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_wakeup_reconciliation_state",
+            "ordinal": 1,
+            "column_name": "name",
+            "column_type": "character varying(64)",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_wakeup_reconciliation_state",
+            "ordinal": 2,
+            "column_name": "cursor_account_id",
+            "column_type": "uuid",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_wakeup_reconciliation_state",
+            "ordinal": 3,
+            "column_name": "attempts",
+            "column_type": "integer",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "0"
+        },
+        {
+            "table_name": "root_wakeup_reconciliation_state",
+            "ordinal": 4,
+            "column_name": "retry_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": false,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": null
+        },
+        {
+            "table_name": "root_wakeup_reconciliation_state",
+            "ordinal": 5,
+            "column_name": "created_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        },
+        {
+            "table_name": "root_wakeup_reconciliation_state",
+            "ordinal": 6,
+            "column_name": "updated_at",
+            "column_type": "timestamp(6) with time zone",
+            "not_null": true,
+            "identity_kind": "",
+            "generated_kind": "",
+            "default_expression": "CURRENT_TIMESTAMP"
+        }
+    ],
+    "constraints": [
+        {
+            "table_name": "migrations",
+            "constraint_name": "migrations_pkey",
+            "constraint_type": "p",
+            "definition": "PRIMARY KEY (id)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_account_events",
+            "constraint_name": "root_account_events_account_id_foreign",
+            "constraint_type": "f",
+            "definition": "FOREIGN KEY (account_id) REFERENCES root_accounts(id) ON DELETE CASCADE",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_account_events",
+            "constraint_name": "root_account_events_pkey",
+            "constraint_type": "p",
+            "definition": "PRIMARY KEY (id)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_account_exports",
+            "constraint_name": "root_account_exports_account_id_foreign",
+            "constraint_type": "f",
+            "definition": "FOREIGN KEY (account_id) REFERENCES root_accounts(id) ON DELETE CASCADE",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_account_exports",
+            "constraint_name": "root_account_exports_kind_ck",
+            "constraint_type": "c",
+            "definition": "CHECK (kind::text = ANY (ARRAY['offboarding'::character varying, 'pre_purge'::character varying, 'manual'::character varying]::text[]))",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_account_exports",
+            "constraint_name": "root_account_exports_pkey",
+            "constraint_type": "p",
+            "definition": "PRIMARY KEY (id)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_account_exports",
+            "constraint_name": "root_account_exports_status_ck",
+            "constraint_type": "c",
+            "definition": "CHECK (status::text = ANY (ARRAY['pending'::character varying, 'running'::character varying, 'ready'::character varying, 'failed'::character varying, 'purged'::character varying]::text[]))",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_account_products",
+            "constraint_name": "root_account_products_account_id_foreign",
+            "constraint_type": "f",
+            "definition": "FOREIGN KEY (account_id) REFERENCES root_accounts(id) ON DELETE CASCADE",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_account_products",
+            "constraint_name": "root_account_products_pkey",
+            "constraint_type": "p",
+            "definition": "PRIMARY KEY (account_id, product)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_account_products",
+            "constraint_name": "root_account_products_product_ck",
+            "constraint_type": "c",
+            "definition": "CHECK (product::text ~ '^[a-z0-9]([a-z0-9_-]*[a-z0-9])?$'::text)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_account_schema_state",
+            "constraint_name": "root_account_schema_state_account_id_foreign",
+            "constraint_type": "f",
+            "definition": "FOREIGN KEY (account_id) REFERENCES root_accounts(id) ON DELETE CASCADE",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_account_schema_state",
+            "constraint_name": "root_account_schema_state_batch_id_foreign",
+            "constraint_type": "f",
+            "definition": "FOREIGN KEY (batch_id) REFERENCES root_migration_batches(id) ON DELETE SET NULL",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_account_schema_state",
+            "constraint_name": "root_account_schema_state_pkey",
+            "constraint_type": "p",
+            "definition": "PRIMARY KEY (account_id)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_account_schema_state",
+            "constraint_name": "root_account_schema_state_status_ck",
+            "constraint_type": "c",
+            "definition": "CHECK (status::text = ANY (ARRAY['ok'::character varying, 'migrating'::character varying, 'failed'::character varying, 'blocked'::character varying]::text[]))",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_accounts",
+            "constraint_name": "root_accounts_cluster_id_foreign",
+            "constraint_type": "f",
+            "definition": "FOREIGN KEY (cluster_id) REFERENCES root_clusters(id) ON DELETE RESTRICT",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_accounts",
+            "constraint_name": "root_accounts_owner_identity_id_foreign",
+            "constraint_type": "f",
+            "definition": "FOREIGN KEY (owner_identity_id) REFERENCES root_identities(id) ON DELETE RESTRICT",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_accounts",
+            "constraint_name": "root_accounts_owner_or_pending_ck",
+            "constraint_type": "c",
+            "definition": "CHECK ((status::text = ANY (ARRAY['pending'::character varying, 'provisioning'::character varying]::text[])) OR owner_identity_id IS NOT NULL)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_accounts",
+            "constraint_name": "root_accounts_pkey",
+            "constraint_type": "p",
+            "definition": "PRIMARY KEY (id)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_accounts",
+            "constraint_name": "root_accounts_slug_or_pending_ck",
+            "constraint_type": "c",
+            "definition": "CHECK ((status::text = ANY (ARRAY['pending'::character varying, 'provisioning'::character varying]::text[])) OR slug IS NOT NULL)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_accounts",
+            "constraint_name": "root_accounts_status_ck",
+            "constraint_type": "c",
+            "definition": "CHECK (status::text = ANY (ARRAY['pending'::character varying, 'provisioning'::character varying, 'trial'::character varying, 'active'::character varying, 'suspended'::character varying, 'grace'::character varying, 'exporting'::character varying, 'deleted'::character varying]::text[]))",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_clusters",
+            "constraint_name": "root_clusters_name_unique",
+            "constraint_type": "u",
+            "definition": "UNIQUE (name)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_clusters",
+            "constraint_name": "root_clusters_pkey",
+            "constraint_type": "p",
+            "definition": "PRIMARY KEY (id)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_clusters",
+            "constraint_name": "root_clusters_status_ck",
+            "constraint_type": "c",
+            "definition": "CHECK (status::text = ANY (ARRAY['provisioning'::character varying, 'active'::character varying, 'draining'::character varying, 'readonly'::character varying, 'retired'::character varying]::text[]))",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_domains",
+            "constraint_name": "root_domains_account_id_foreign",
+            "constraint_type": "f",
+            "definition": "FOREIGN KEY (account_id) REFERENCES root_accounts(id) ON DELETE CASCADE",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_domains",
+            "constraint_name": "root_domains_pkey",
+            "constraint_type": "p",
+            "definition": "PRIMARY KEY (id)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_domains",
+            "constraint_name": "root_domains_tls_status_ck",
+            "constraint_type": "c",
+            "definition": "CHECK (tls_status::text = ANY (ARRAY['none'::character varying, 'pending'::character varying, 'issued'::character varying, 'failed'::character varying]::text[]))",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_domains",
+            "constraint_name": "root_domains_type_ck",
+            "constraint_type": "c",
+            "definition": "CHECK (type::text = ANY (ARRAY['platform'::character varying, 'custom'::character varying]::text[]))",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_feature_flags",
+            "constraint_name": "root_feature_flags_account_id_foreign",
+            "constraint_type": "f",
+            "definition": "FOREIGN KEY (account_id) REFERENCES root_accounts(id) ON DELETE CASCADE",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_feature_flags",
+            "constraint_name": "root_feature_flags_pkey",
+            "constraint_type": "p",
+            "definition": "PRIMARY KEY (id)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_feature_flags",
+            "constraint_name": "root_feature_flags_uq",
+            "constraint_type": "u",
+            "definition": "UNIQUE NULLS NOT DISTINCT (account_id, flag)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_identities",
+            "constraint_name": "root_identities_pkey",
+            "constraint_type": "p",
+            "definition": "PRIMARY KEY (id)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_identity_accounts",
+            "constraint_name": "root_identity_accounts_account_id_foreign",
+            "constraint_type": "f",
+            "definition": "FOREIGN KEY (account_id) REFERENCES root_accounts(id) ON DELETE CASCADE",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_identity_accounts",
+            "constraint_name": "root_identity_accounts_identity_id_account_id_unique",
+            "constraint_type": "u",
+            "definition": "UNIQUE (identity_id, account_id)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_identity_accounts",
+            "constraint_name": "root_identity_accounts_identity_id_foreign",
+            "constraint_type": "f",
+            "definition": "FOREIGN KEY (identity_id) REFERENCES root_identities(id) ON DELETE CASCADE",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_identity_accounts",
+            "constraint_name": "root_identity_accounts_pkey",
+            "constraint_type": "p",
+            "definition": "PRIMARY KEY (id)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_identity_accounts",
+            "constraint_name": "root_identity_accounts_status_ck",
+            "constraint_type": "c",
+            "definition": "CHECK (status::text = ANY (ARRAY['invited'::character varying, 'active'::character varying, 'blocked'::character varying]::text[]))",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_identity_accounts",
+            "constraint_name": "root_identity_accounts_sync_status_ck",
+            "constraint_type": "c",
+            "definition": "CHECK (sync_status::text = ANY (ARRAY['pending'::character varying, 'synced'::character varying, 'failed'::character varying]::text[]))",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_idp_sessions",
+            "constraint_name": "root_idp_sessions_identity_id_foreign",
+            "constraint_type": "f",
+            "definition": "FOREIGN KEY (identity_id) REFERENCES root_identities(id) ON DELETE CASCADE",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_idp_sessions",
+            "constraint_name": "root_idp_sessions_pkey",
+            "constraint_type": "p",
+            "definition": "PRIMARY KEY (id)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_idp_sessions",
+            "constraint_name": "root_idp_sessions_token_hash_unique",
+            "constraint_type": "u",
+            "definition": "UNIQUE (token_hash)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_impersonation_grants",
+            "constraint_name": "root_impersonation_grants_account_id_foreign",
+            "constraint_type": "f",
+            "definition": "FOREIGN KEY (account_id) REFERENCES root_accounts(id) ON DELETE CASCADE",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_impersonation_grants",
+            "constraint_name": "root_impersonation_grants_approved_by_foreign",
+            "constraint_type": "f",
+            "definition": "FOREIGN KEY (approved_by) REFERENCES root_identities(id) ON DELETE SET NULL",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_impersonation_grants",
+            "constraint_name": "root_impersonation_grants_pkey",
+            "constraint_type": "p",
+            "definition": "PRIMARY KEY (id)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_impersonation_grants",
+            "constraint_name": "root_impersonation_grants_staff_identity_id_foreign",
+            "constraint_type": "f",
+            "definition": "FOREIGN KEY (staff_identity_id) REFERENCES root_identities(id) ON DELETE CASCADE",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_migration_batches",
+            "constraint_name": "root_migration_batches_pkey",
+            "constraint_type": "p",
+            "definition": "PRIMARY KEY (id)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_migration_batches",
+            "constraint_name": "root_migration_batches_status_ck",
+            "constraint_type": "c",
+            "definition": "CHECK (status::text = ANY (ARRAY['created'::character varying, 'running'::character varying, 'paused'::character varying, 'done'::character varying, 'failed'::character varying]::text[]))",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_migration_batches",
+            "constraint_name": "root_migration_batches_wave_ck",
+            "constraint_type": "c",
+            "definition": "CHECK (wave::text = ANY (ARRAY['internal'::character varying, 'canary'::character varying, 'p10'::character varying, 'p50'::character varying, 'all'::character varying]::text[]))",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_oauth_clients",
+            "constraint_name": "root_oauth_clients_client_id_unique",
+            "constraint_type": "u",
+            "definition": "UNIQUE (client_id)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_oauth_clients",
+            "constraint_name": "root_oauth_clients_pkey",
+            "constraint_type": "p",
+            "definition": "PRIMARY KEY (id)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_oauth_refresh_tokens",
+            "constraint_name": "root_oauth_refresh_tokens_pkey",
+            "constraint_type": "p",
+            "definition": "PRIMARY KEY (id)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_oauth_refresh_tokens",
+            "constraint_name": "root_oauth_refresh_tokens_session_id_foreign",
+            "constraint_type": "f",
+            "definition": "FOREIGN KEY (session_id) REFERENCES root_idp_sessions(id) ON DELETE CASCADE",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_oauth_refresh_tokens",
+            "constraint_name": "root_oauth_refresh_tokens_token_hash_unique",
+            "constraint_type": "u",
+            "definition": "UNIQUE (token_hash)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_templates",
+            "constraint_name": "root_templates_pkey",
+            "constraint_type": "p",
+            "definition": "PRIMARY KEY (id)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_templates",
+            "constraint_name": "root_templates_schema_hash_ck",
+            "constraint_type": "c",
+            "definition": "CHECK (schema_hash IS NULL OR (schema_hash::text COLLATE \"C\") ~ '^[0-9a-f]{64}$'::text)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_templates",
+            "constraint_name": "root_templates_status_ck",
+            "constraint_type": "c",
+            "definition": "CHECK (status::text = ANY (ARRAY['building'::character varying, 'ready'::character varying, 'retired'::character varying]::text[]))",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_templates",
+            "constraint_name": "root_templates_version_unique",
+            "constraint_type": "u",
+            "definition": "UNIQUE (version)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_usage_snapshots",
+            "constraint_name": "root_usage_snapshots_account_id_foreign",
+            "constraint_type": "f",
+            "definition": "FOREIGN KEY (account_id) REFERENCES root_accounts(id) ON DELETE CASCADE",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_usage_snapshots",
+            "constraint_name": "root_usage_snapshots_pkey",
+            "constraint_type": "p",
+            "definition": "PRIMARY KEY (account_id, metric, period)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_wakeup_hints",
+            "constraint_name": "root_wakeup_hints_pkey",
+            "constraint_type": "p",
+            "definition": "PRIMARY KEY (account_id)",
+            "deferrable": false,
+            "initially_deferred": false
+        },
+        {
+            "table_name": "root_wakeup_reconciliation_state",
+            "constraint_name": "root_wakeup_reconciliation_state_pkey",
+            "constraint_type": "p",
+            "definition": "PRIMARY KEY (name)",
+            "deferrable": false,
+            "initially_deferred": false
+        }
+    ],
+    "indexes": [
+        {
+            "table_name": "migrations",
+            "index_name": "migrations_pkey",
+            "definition": "CREATE UNIQUE INDEX migrations_pkey ON public.migrations USING btree (id)"
+        },
+        {
+            "table_name": "root_account_events",
+            "index_name": "root_account_events_ix",
+            "definition": "CREATE INDEX root_account_events_ix ON public.root_account_events USING btree (account_id, created_at)"
+        },
+        {
+            "table_name": "root_account_events",
+            "index_name": "root_account_events_pkey",
+            "definition": "CREATE UNIQUE INDEX root_account_events_pkey ON public.root_account_events USING btree (id)"
+        },
+        {
+            "table_name": "root_account_exports",
+            "index_name": "root_account_exports_pkey",
+            "definition": "CREATE UNIQUE INDEX root_account_exports_pkey ON public.root_account_exports USING btree (id)"
+        },
+        {
+            "table_name": "root_account_products",
+            "index_name": "root_account_products_pkey",
+            "definition": "CREATE UNIQUE INDEX root_account_products_pkey ON public.root_account_products USING btree (account_id, product)"
+        },
+        {
+            "table_name": "root_account_schema_state",
+            "index_name": "root_account_schema_state_pkey",
+            "definition": "CREATE UNIQUE INDEX root_account_schema_state_pkey ON public.root_account_schema_state USING btree (account_id)"
+        },
+        {
+            "table_name": "root_account_schema_state",
+            "index_name": "root_schema_state_bad_ix",
+            "definition": "CREATE INDEX root_schema_state_bad_ix ON public.root_account_schema_state USING btree (status) WHERE ((status)::text <> 'ok'::text)"
+        },
+        {
+            "table_name": "root_accounts",
+            "index_name": "root_accounts_cluster_ix",
+            "definition": "CREATE INDEX root_accounts_cluster_ix ON public.root_accounts USING btree (cluster_id) WHERE (deleted_at IS NULL)"
+        },
+        {
+            "table_name": "root_accounts",
+            "index_name": "root_accounts_db_uq",
+            "definition": "CREATE UNIQUE INDEX root_accounts_db_uq ON public.root_accounts USING btree (db_name)"
+        },
+        {
+            "table_name": "root_accounts",
+            "index_name": "root_accounts_pkey",
+            "definition": "CREATE UNIQUE INDEX root_accounts_pkey ON public.root_accounts USING btree (id)"
+        },
+        {
+            "table_name": "root_accounts",
+            "index_name": "root_accounts_purge_ix",
+            "definition": "CREATE INDEX root_accounts_purge_ix ON public.root_accounts USING btree (purge_after) WHERE (purge_after IS NOT NULL)"
+        },
+        {
+            "table_name": "root_accounts",
+            "index_name": "root_accounts_signup_key_uq",
+            "definition": "CREATE UNIQUE INDEX root_accounts_signup_key_uq ON public.root_accounts USING btree (((data ->> 'signup_key'::text))) WHERE (((data ->> 'signup_key'::text) IS NOT NULL) AND (deleted_at IS NULL))"
+        },
+        {
+            "table_name": "root_accounts",
+            "index_name": "root_accounts_slug_uq",
+            "definition": "CREATE UNIQUE INDEX root_accounts_slug_uq ON public.root_accounts USING btree (slug) WHERE ((slug IS NOT NULL) AND (deleted_at IS NULL))"
+        },
+        {
+            "table_name": "root_accounts",
+            "index_name": "root_accounts_status_ix",
+            "definition": "CREATE INDEX root_accounts_status_ix ON public.root_accounts USING btree (status) WHERE (deleted_at IS NULL)"
+        },
+        {
+            "table_name": "root_clusters",
+            "index_name": "root_clusters_name_unique",
+            "definition": "CREATE UNIQUE INDEX root_clusters_name_unique ON public.root_clusters USING btree (name)"
+        },
+        {
+            "table_name": "root_clusters",
+            "index_name": "root_clusters_pkey",
+            "definition": "CREATE UNIQUE INDEX root_clusters_pkey ON public.root_clusters USING btree (id)"
+        },
+        {
+            "table_name": "root_domains",
+            "index_name": "root_domains_host_uq",
+            "definition": "CREATE UNIQUE INDEX root_domains_host_uq ON public.root_domains USING btree (lower((host)::text)) WHERE (deleted_at IS NULL)"
+        },
+        {
+            "table_name": "root_domains",
+            "index_name": "root_domains_pkey",
+            "definition": "CREATE UNIQUE INDEX root_domains_pkey ON public.root_domains USING btree (id)"
+        },
+        {
+            "table_name": "root_domains",
+            "index_name": "root_domains_primary_uq",
+            "definition": "CREATE UNIQUE INDEX root_domains_primary_uq ON public.root_domains USING btree (account_id) WHERE (is_primary AND (deleted_at IS NULL))"
+        },
+        {
+            "table_name": "root_feature_flags",
+            "index_name": "root_feature_flags_pkey",
+            "definition": "CREATE UNIQUE INDEX root_feature_flags_pkey ON public.root_feature_flags USING btree (id)"
+        },
+        {
+            "table_name": "root_feature_flags",
+            "index_name": "root_feature_flags_uq",
+            "definition": "CREATE UNIQUE INDEX root_feature_flags_uq ON public.root_feature_flags USING btree (account_id, flag) NULLS NOT DISTINCT"
+        },
+        {
+            "table_name": "root_identities",
+            "index_name": "root_identities_email_uq",
+            "definition": "CREATE UNIQUE INDEX root_identities_email_uq ON public.root_identities USING btree (lower((email)::text)) WHERE (deleted_at IS NULL)"
+        },
+        {
+            "table_name": "root_identities",
+            "index_name": "root_identities_pkey",
+            "definition": "CREATE UNIQUE INDEX root_identities_pkey ON public.root_identities USING btree (id)"
+        },
+        {
+            "table_name": "root_identity_accounts",
+            "index_name": "root_identity_accounts_acc_ix",
+            "definition": "CREATE INDEX root_identity_accounts_acc_ix ON public.root_identity_accounts USING btree (account_id)"
+        },
+        {
+            "table_name": "root_identity_accounts",
+            "index_name": "root_identity_accounts_identity_id_account_id_unique",
+            "definition": "CREATE UNIQUE INDEX root_identity_accounts_identity_id_account_id_unique ON public.root_identity_accounts USING btree (identity_id, account_id)"
+        },
+        {
+            "table_name": "root_identity_accounts",
+            "index_name": "root_identity_accounts_pkey",
+            "definition": "CREATE UNIQUE INDEX root_identity_accounts_pkey ON public.root_identity_accounts USING btree (id)"
+        },
+        {
+            "table_name": "root_identity_accounts",
+            "index_name": "root_identity_accounts_sync_ix",
+            "definition": "CREATE INDEX root_identity_accounts_sync_ix ON public.root_identity_accounts USING btree (sync_status) WHERE ((sync_status)::text <> 'synced'::text)"
+        },
+        {
+            "table_name": "root_idp_sessions",
+            "index_name": "root_idp_sessions_identity_ix",
+            "definition": "CREATE INDEX root_idp_sessions_identity_ix ON public.root_idp_sessions USING btree (identity_id) WHERE (revoked_at IS NULL)"
+        },
+        {
+            "table_name": "root_idp_sessions",
+            "index_name": "root_idp_sessions_pkey",
+            "definition": "CREATE UNIQUE INDEX root_idp_sessions_pkey ON public.root_idp_sessions USING btree (id)"
+        },
+        {
+            "table_name": "root_idp_sessions",
+            "index_name": "root_idp_sessions_token_hash_unique",
+            "definition": "CREATE UNIQUE INDEX root_idp_sessions_token_hash_unique ON public.root_idp_sessions USING btree (token_hash)"
+        },
+        {
+            "table_name": "root_impersonation_grants",
+            "index_name": "root_impersonation_acc_ix",
+            "definition": "CREATE INDEX root_impersonation_acc_ix ON public.root_impersonation_grants USING btree (account_id, created_at)"
+        },
+        {
+            "table_name": "root_impersonation_grants",
+            "index_name": "root_impersonation_grants_pkey",
+            "definition": "CREATE UNIQUE INDEX root_impersonation_grants_pkey ON public.root_impersonation_grants USING btree (id)"
+        },
+        {
+            "table_name": "root_migration_batches",
+            "index_name": "root_migration_batches_pkey",
+            "definition": "CREATE UNIQUE INDEX root_migration_batches_pkey ON public.root_migration_batches USING btree (id)"
+        },
+        {
+            "table_name": "root_oauth_clients",
+            "index_name": "root_oauth_clients_client_id_unique",
+            "definition": "CREATE UNIQUE INDEX root_oauth_clients_client_id_unique ON public.root_oauth_clients USING btree (client_id)"
+        },
+        {
+            "table_name": "root_oauth_clients",
+            "index_name": "root_oauth_clients_pkey",
+            "definition": "CREATE UNIQUE INDEX root_oauth_clients_pkey ON public.root_oauth_clients USING btree (id)"
+        },
+        {
+            "table_name": "root_oauth_refresh_tokens",
+            "index_name": "root_oauth_refresh_tokens_pkey",
+            "definition": "CREATE UNIQUE INDEX root_oauth_refresh_tokens_pkey ON public.root_oauth_refresh_tokens USING btree (id)"
+        },
+        {
+            "table_name": "root_oauth_refresh_tokens",
+            "index_name": "root_oauth_refresh_tokens_token_hash_unique",
+            "definition": "CREATE UNIQUE INDEX root_oauth_refresh_tokens_token_hash_unique ON public.root_oauth_refresh_tokens USING btree (token_hash)"
+        },
+        {
+            "table_name": "root_templates",
+            "index_name": "root_templates_pkey",
+            "definition": "CREATE UNIQUE INDEX root_templates_pkey ON public.root_templates USING btree (id)"
+        },
+        {
+            "table_name": "root_templates",
+            "index_name": "root_templates_version_unique",
+            "definition": "CREATE UNIQUE INDEX root_templates_version_unique ON public.root_templates USING btree (version)"
+        },
+        {
+            "table_name": "root_usage_snapshots",
+            "index_name": "root_usage_snapshots_pkey",
+            "definition": "CREATE UNIQUE INDEX root_usage_snapshots_pkey ON public.root_usage_snapshots USING btree (account_id, metric, period)"
+        },
+        {
+            "table_name": "root_wakeup_hints",
+            "index_name": "root_wakeup_hints_pkey",
+            "definition": "CREATE UNIQUE INDEX root_wakeup_hints_pkey ON public.root_wakeup_hints USING btree (account_id)"
+        },
+        {
+            "table_name": "root_wakeup_hints",
+            "index_name": "root_wakeup_hints_scan_idx",
+            "definition": "CREATE INDEX root_wakeup_hints_scan_idx ON public.root_wakeup_hints USING btree (next_fire_at, leased_until)"
+        },
+        {
+            "table_name": "root_wakeup_reconciliation_state",
+            "index_name": "root_wakeup_reconciliation_state_pkey",
+            "definition": "CREATE UNIQUE INDEX root_wakeup_reconciliation_state_pkey ON public.root_wakeup_reconciliation_state USING btree (name)"
+        }
+    ],
+    "source": "/home/vostrikov/projects/packages/corex",
+    "core_options_source": "/home/vostrikov/projects/packages/corex/packages/core/src/Config/Data/CoreOptions.php"
+}

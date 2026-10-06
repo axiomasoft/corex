@@ -37,10 +37,6 @@ final readonly class DatabaseSynchronousAuditWriter implements SynchronousAuditW
             ]);
             $row->setConnection($connectionName);
 
-            foreach ($row->uniqueIds() as $column) {
-                $row->setAttribute($column, $row->newUniqueId());
-            }
-
             if (! $row->saveQuietly()) {
                 throw new RuntimeException('Synchronous audit insert failed');
             }

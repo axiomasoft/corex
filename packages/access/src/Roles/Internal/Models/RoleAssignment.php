@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Access\Roles\Internal\Models;
 
 use CoreX\Access\Enums\PrincipalType;
-use CoreX\Database\Laravel\HasConfiguredId;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
@@ -29,7 +29,7 @@ use Illuminate\Support\Carbon;
  */
 final class RoleAssignment extends Model
 {
-    use HasConfiguredId;
+    use HasUuids;
 
     protected $table = 'aut_role_assignments';
 

@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace CoreX\Departments\Internal\Models;
 
-use CoreX\Database\Laravel\HasConfiguredId;
-use CoreX\Database\Laravel\ResolvesCoreOptions;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Override;
 
 /**
  * Department hierarchy row (`sys_departments`). `path` is ltree —
@@ -32,9 +30,10 @@ use Override;
  */
 final class Department extends Model
 {
-    use HasConfiguredId;
-    use ResolvesCoreOptions;
+    use HasUuids;
     use SoftDeletes;
+
+    protected $table = 'sys_departments';
 
     protected $guarded = [];
 
@@ -46,11 +45,5 @@ final class Department extends Model
         // PG returns integers as strings over PDO; the DTO's `int $sortOrder`
         // is strict-typed, so cast here rather than at every read site.
         return ['sort_order' => 'integer'];
-    }
-
-    #[Override]
-    public function getTable(): string
-    {
-        return $this->coreOptions()->departmentsTable;
     }
 }

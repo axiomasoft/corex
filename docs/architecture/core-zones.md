@@ -81,18 +81,17 @@ Money             → Foundation, TenancyContracts
 | `FeatureFlag.php`, `FeatureOverride.php` | Features |
 | `Setting.php` | Settings |
 
-**`Concerns/` (2):**
+**`Concerns/` (1):**
 
 | Файл | Зона |
 |:--|:--|
 | `HasAuditLog.php` | Audit |
-| `HasConfiguredId.php` | Foundation; LITMUS_ELOQUENT |
 
-**`Enums/` (9):**
+**`Enums/` (8):**
 
 | Файлы | Зона |
 |:--|:--|
-| `ActorType.php`, `ErrorCategory.php`, `IdStrategy.php`, `UnavailabilityReason.php` | Foundation |
+| `ActorType.php`, `ErrorCategory.php`, `UnavailabilityReason.php` | Foundation |
 | `ImpersonationRestrictedAction.php` | TenancyContracts |
 | `MessageClass.php`, `PiiClass.php`, `PubSubDriver.php` | Messaging |
 | `SettingScope.php` | Settings |
@@ -182,8 +181,6 @@ packages/core/src/Features/Internal/DatabaseFeatureFlags.php
 
 ```text
 packages/core/src/Database/Laravel/BaseModel.php
-packages/core/src/Database/Laravel/HasConfiguredId.php
-packages/core/src/Database/Laravel/IdColumns.php
 ```
 
 Список не расширяется без решения в Decision Log.

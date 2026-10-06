@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Database\Laravel\IdColumns;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,9 +11,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tsk_project_participants', function (Blueprint $table): void {
-            IdColumns::primary($table);
-            IdColumns::foreign($table, 'project_id')->constrained('tsk_projects')->cascadeOnDelete();
-            IdColumns::reference($table, 'user_id');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('project_id')->constrained('tsk_projects')->cascadeOnDelete();
+            $table->uuid('user_id');
             $table->string('role', 50)->default('participant');
             $table->timestamps();
             $table->softDeletes();

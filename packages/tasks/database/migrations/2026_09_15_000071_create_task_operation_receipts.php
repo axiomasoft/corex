@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Database\Laravel\IdColumns;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -13,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('corex_task_operations', function (Blueprint $table): void {
-            IdColumns::primary($table);
+            $table->uuid('id')->primary();
             $table->string('request_key', 128)->unique();
             $table->char('payload_hash', 64);
             $table->string('kind', 32);

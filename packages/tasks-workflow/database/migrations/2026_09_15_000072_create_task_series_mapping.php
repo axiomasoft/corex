@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Database\Laravel\IdColumns;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -13,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('corex_task_series', function (Blueprint $table): void {
-            IdColumns::primary($table);
+            $table->uuid('id')->primary();
             $table->string('series_key', 128);
             $table->string('immutable_revision', 128);
             $table->char('definition_hash', 64);
@@ -36,7 +35,7 @@ return new class extends Migration
         });
 
         Schema::create('corex_task_occurrences', function (Blueprint $table): void {
-            IdColumns::primary($table);
+            $table->uuid('id')->primary();
             $table->string('series_key', 128);
             $table->string('immutable_revision', 128);
             $table->char('occurrence_key', 64);

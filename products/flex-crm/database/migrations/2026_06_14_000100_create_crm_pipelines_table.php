@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Database\Laravel\IdColumns;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,7 +11,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('crm_pipelines', function (Blueprint $table): void {
-            IdColumns::primary($table);
+            $table->uuid('id')->primary();
             $table->string('name');
             $table->boolean('is_default')->default(false);
             $table->unsignedInteger('position')->default(0);

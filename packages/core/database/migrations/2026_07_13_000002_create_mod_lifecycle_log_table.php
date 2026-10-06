@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Database\Laravel\IdColumns;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -14,14 +13,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('mod_lifecycle_log', function (Blueprint $table): void {
-            IdColumns::primary($table);
+            $table->uuid('id')->primary();
             $table->string('module_name', 190);
             $table->string('operation', 16);
             $table->string('from_state', 16);
             $table->string('to_state', 16);
             $table->string('status', 16)->default('success');
             $table->string('actor_type', 16);
-            IdColumns::reference($table, 'actor_id')->nullable();
+            $table->uuid('actor_id')->nullable();
             $table->jsonb('details')->default('{}');
             $table->timestampTz('created_at', precision: 6)->useCurrent();
             $table->timestampTz('updated_at', precision: 6)->useCurrent();

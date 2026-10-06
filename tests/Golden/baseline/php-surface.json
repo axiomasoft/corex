@@ -2734,24 +2734,49 @@
         "internal": true,
         "kind": "class",
         "methods": {
-            "bootHasConfiguredId": {
-                "params": [],
-                "return": "void",
-                "static": true
-            },
             "getIncrementing": {
                 "params": [],
-                "return": "bool",
+                "return": "",
                 "static": false
             },
             "getKeyType": {
                 "params": [],
-                "return": "string",
+                "return": "",
+                "static": false
+            },
+            "initializeHasUniqueStringIds": {
+                "params": [],
+                "return": "",
                 "static": false
             },
             "newUniqueId": {
                 "params": [],
-                "return": "string",
+                "return": "",
+                "static": false
+            },
+            "resolveRouteBindingQuery": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "query",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "field",
+                        "type": "",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
                 "static": false
             },
             "role": {
@@ -2761,7 +2786,7 @@
             },
             "uniqueIds": {
                 "params": [],
-                "return": "array",
+                "return": "",
                 "static": false
             }
         },
@@ -2787,24 +2812,49 @@
         "internal": true,
         "kind": "class",
         "methods": {
-            "bootHasConfiguredId": {
-                "params": [],
-                "return": "void",
-                "static": true
-            },
             "getIncrementing": {
                 "params": [],
-                "return": "bool",
+                "return": "",
                 "static": false
             },
             "getKeyType": {
                 "params": [],
-                "return": "string",
+                "return": "",
+                "static": false
+            },
+            "initializeHasUniqueStringIds": {
+                "params": [],
+                "return": "",
                 "static": false
             },
             "newUniqueId": {
                 "params": [],
-                "return": "string",
+                "return": "",
+                "static": false
+            },
+            "resolveRouteBindingQuery": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "query",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "field",
+                        "type": "",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
                 "static": false
             },
             "role": {
@@ -2814,7 +2864,7 @@
             },
             "uniqueIds": {
                 "params": [],
-                "return": "array",
+                "return": "",
                 "static": false
             },
             "withSystemMutationAllowed": {
@@ -3898,34 +3948,54 @@
         "internal": true,
         "kind": "class",
         "methods": {
-            "bootHasConfiguredId": {
-                "params": [],
-                "return": "void",
-                "static": true
-            },
             "getIncrementing": {
                 "params": [],
-                "return": "bool",
+                "return": "",
                 "static": false
             },
             "getKeyType": {
                 "params": [],
-                "return": "string",
+                "return": "",
                 "static": false
             },
-            "getTable": {
+            "initializeHasUniqueStringIds": {
                 "params": [],
-                "return": "string",
+                "return": "",
                 "static": false
             },
             "newUniqueId": {
                 "params": [],
-                "return": "string",
+                "return": "",
+                "static": false
+            },
+            "resolveRouteBindingQuery": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "query",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "field",
+                        "type": "",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
                 "static": false
             },
             "uniqueIds": {
                 "params": [],
-                "return": "array",
+                "return": "",
                 "static": false
             }
         },
@@ -5000,84 +5070,6 @@
                 "params": [
                     {
                         "byRef": false,
-                        "name": "idStrategy",
-                        "type": "CoreX\\Database\\Enums\\IdStrategy",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "settingsTable",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "auditLogsTable",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "featureFlagsTable",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "featureOverridesTable",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "departmentsTable",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "departmentUserTable",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "pubsubMessagesTable",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "pubsubCursorsTable",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "savedViewsTable",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "savedViewScopesTable",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "outboxMessagesTable",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "inboxMessagesTable",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
                         "name": "tenantContextResolver",
                         "type": "string",
                         "variadic": false
@@ -5276,12 +5268,6 @@
                 "static": false,
                 "type": "string"
             },
-            "auditLogsTable": {
-                "name": "auditLogsTable",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
             "auditRetention": {
                 "name": "auditRetention",
                 "readonly": true,
@@ -5300,50 +5286,14 @@
                 "static": false,
                 "type": "string"
             },
-            "departmentUserTable": {
-                "name": "departmentUserTable",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "departmentsTable": {
-                "name": "departmentsTable",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
             "featureFlags": {
                 "name": "featureFlags",
                 "readonly": true,
                 "static": false,
                 "type": "string"
             },
-            "featureFlagsTable": {
-                "name": "featureFlagsTable",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "featureOverridesTable": {
-                "name": "featureOverridesTable",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "idStrategy": {
-                "name": "idStrategy",
-                "readonly": true,
-                "static": false,
-                "type": "CoreX\\Database\\Enums\\IdStrategy"
-            },
             "impersonationService": {
                 "name": "impersonationService",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "inboxMessagesTable": {
-                "name": "inboxMessagesTable",
                 "readonly": true,
                 "static": false,
                 "type": "string"
@@ -5390,29 +5340,11 @@
                 "static": false,
                 "type": "string"
             },
-            "outboxMessagesTable": {
-                "name": "outboxMessagesTable",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "pubsubCursorsTable": {
-                "name": "pubsubCursorsTable",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
             "pubsubDriver": {
                 "name": "pubsubDriver",
                 "readonly": true,
                 "static": false,
                 "type": "CoreX\\Messaging\\Enums\\PubSubDriver"
-            },
-            "pubsubMessagesTable": {
-                "name": "pubsubMessagesTable",
-                "readonly": true,
-                "static": false,
-                "type": "string"
             },
             "pubsubOctaneWorkerOptIn": {
                 "name": "pubsubOctaneWorkerOptIn",
@@ -5428,18 +5360,6 @@
             },
             "pubsubRetention": {
                 "name": "pubsubRetention",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "savedViewScopesTable": {
-                "name": "savedViewScopesTable",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "savedViewsTable": {
-                "name": "savedViewsTable",
                 "readonly": true,
                 "static": false,
                 "type": "string"
@@ -5470,12 +5390,6 @@
             },
             "settingsRepository": {
                 "name": "settingsRepository",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "settingsTable": {
-                "name": "settingsTable",
                 "readonly": true,
                 "static": false,
                 "type": "string"
@@ -9125,12 +9039,6 @@
                         "name": "composition",
                         "type": "CoreX\\CustomFields\\Internal\\Laravel\\AttributeComposition",
                         "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "tables",
-                        "type": "array",
-                        "variadic": false
                     }
                 ],
                 "return": "",
@@ -9156,12 +9064,6 @@
                 "readonly": true,
                 "static": false,
                 "type": "CoreX\\CustomFields\\Internal\\Laravel\\AttributeComposition"
-            },
-            "tables": {
-                "name": "tables",
-                "readonly": true,
-                "static": false,
-                "type": "array"
             }
         },
         "readonly": true
@@ -13515,97 +13417,6 @@
         },
         "readonly": true
     },
-    "CoreX\\Database\\Enums\\IdStrategy": {
-        "abstract": false,
-        "constants": {
-            "Int": {
-                "type": "CoreX\\Database\\Enums\\IdStrategy",
-                "value": {
-                    "enum": "CoreX\\Database\\Enums\\IdStrategy",
-                    "case": "Int",
-                    "value": "int"
-                }
-            },
-            "Ulid": {
-                "type": "CoreX\\Database\\Enums\\IdStrategy",
-                "value": {
-                    "enum": "CoreX\\Database\\Enums\\IdStrategy",
-                    "case": "Ulid",
-                    "value": "ulid"
-                }
-            },
-            "Uuid": {
-                "type": "CoreX\\Database\\Enums\\IdStrategy",
-                "value": {
-                    "enum": "CoreX\\Database\\Enums\\IdStrategy",
-                    "case": "Uuid",
-                    "value": "uuid"
-                }
-            },
-            "Uuid7": {
-                "type": "CoreX\\Database\\Enums\\IdStrategy",
-                "value": {
-                    "enum": "CoreX\\Database\\Enums\\IdStrategy",
-                    "case": "Uuid7",
-                    "value": "uuid7"
-                }
-            }
-        },
-        "final": true,
-        "interfaces": [
-            "BackedEnum",
-            "UnitEnum"
-        ],
-        "internal": false,
-        "kind": "enum",
-        "methods": {
-            "cases": {
-                "params": [],
-                "return": "array",
-                "static": true
-            },
-            "from": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "value",
-                        "type": "string|int",
-                        "variadic": false
-                    }
-                ],
-                "return": "static",
-                "static": true
-            },
-            "tryFrom": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "value",
-                        "type": "string|int",
-                        "variadic": false
-                    }
-                ],
-                "return": "?static",
-                "static": true
-            }
-        },
-        "parent": null,
-        "properties": {
-            "name": {
-                "name": "name",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            },
-            "value": {
-                "name": "value",
-                "readonly": true,
-                "static": false,
-                "type": "string"
-            }
-        },
-        "readonly": false
-    },
     "CoreX\\Database\\Enums\\SchemaLifecycle": {
         "abstract": false,
         "constants": {
@@ -14168,11 +13979,6 @@
                 "return": "void",
                 "static": true
             },
-            "bootHasConfiguredId": {
-                "params": [],
-                "return": "void",
-                "static": true
-            },
             "bootSoftDeletes": {
                 "params": [],
                 "return": "",
@@ -14231,15 +14037,20 @@
             },
             "getIncrementing": {
                 "params": [],
-                "return": "bool",
+                "return": "",
                 "static": false
             },
             "getKeyType": {
                 "params": [],
-                "return": "string",
+                "return": "",
                 "static": false
             },
             "getQualifiedDeletedAtColumn": {
+                "params": [],
+                "return": "",
+                "static": false
+            },
+            "initializeHasUniqueStringIds": {
                 "params": [],
                 "return": "",
                 "static": false
@@ -14256,7 +14067,32 @@
             },
             "newUniqueId": {
                 "params": [],
-                "return": "string",
+                "return": "",
+                "static": false
+            },
+            "resolveRouteBindingQuery": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "query",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "field",
+                        "type": "",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
                 "static": false
             },
             "restore": {
@@ -14312,7 +14148,7 @@
             },
             "uniqueIds": {
                 "params": [],
-                "return": "array",
+                "return": "",
                 "static": false
             }
         },
@@ -14355,124 +14191,6 @@
                 "static": false
             }
         },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
-    "CoreX\\Database\\Laravel\\HasConfiguredId": {
-        "abstract": false,
-        "constants": [],
-        "final": false,
-        "interfaces": [],
-        "internal": false,
-        "kind": "trait",
-        "methods": {
-            "bootHasConfiguredId": {
-                "params": [],
-                "return": "void",
-                "static": true
-            },
-            "getIncrementing": {
-                "params": [],
-                "return": "bool",
-                "static": false
-            },
-            "getKeyType": {
-                "params": [],
-                "return": "string",
-                "static": false
-            },
-            "newUniqueId": {
-                "params": [],
-                "return": "string",
-                "static": false
-            },
-            "uniqueIds": {
-                "params": [],
-                "return": "array",
-                "static": false
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
-    "CoreX\\Database\\Laravel\\IdColumns": {
-        "abstract": false,
-        "constants": [],
-        "final": true,
-        "interfaces": [],
-        "internal": false,
-        "kind": "class",
-        "methods": {
-            "foreign": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "table",
-                        "type": "Illuminate\\Database\\Schema\\Blueprint",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "name",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "Illuminate\\Database\\Schema\\ForeignIdColumnDefinition",
-                "static": true
-            },
-            "primary": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "table",
-                        "type": "Illuminate\\Database\\Schema\\Blueprint",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": "id",
-                        "name": "name",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "void",
-                "static": true
-            },
-            "reference": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "table",
-                        "type": "Illuminate\\Database\\Schema\\Blueprint",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "name",
-                        "type": "string",
-                        "variadic": false
-                    }
-                ],
-                "return": "Illuminate\\Database\\Schema\\ColumnDefinition",
-                "static": true
-            }
-        },
-        "parent": null,
-        "properties": [],
-        "readonly": false
-    },
-    "CoreX\\Database\\Laravel\\ResolvesCoreOptions": {
-        "abstract": false,
-        "constants": [],
-        "final": false,
-        "interfaces": [],
-        "internal": false,
-        "kind": "trait",
-        "methods": [],
         "parent": null,
         "properties": [],
         "readonly": false
@@ -14822,12 +14540,6 @@
                     },
                     {
                         "byRef": false,
-                        "name": "options",
-                        "type": "CoreX\\Config\\Data\\CoreOptions",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
                         "name": "events",
                         "type": "Illuminate\\Contracts\\Events\\Dispatcher",
                         "variadic": false
@@ -14920,11 +14632,6 @@
         "internal": true,
         "kind": "class",
         "methods": {
-            "bootHasConfiguredId": {
-                "params": [],
-                "return": "void",
-                "static": true
-            },
             "bootSoftDeletes": {
                 "params": [],
                 "return": "",
@@ -14983,12 +14690,12 @@
             },
             "getIncrementing": {
                 "params": [],
-                "return": "bool",
+                "return": "",
                 "static": false
             },
             "getKeyType": {
                 "params": [],
-                "return": "string",
+                "return": "",
                 "static": false
             },
             "getQualifiedDeletedAtColumn": {
@@ -14996,9 +14703,9 @@
                 "return": "",
                 "static": false
             },
-            "getTable": {
+            "initializeHasUniqueStringIds": {
                 "params": [],
-                "return": "string",
+                "return": "",
                 "static": false
             },
             "initializeSoftDeletes": {
@@ -15013,7 +14720,32 @@
             },
             "newUniqueId": {
                 "params": [],
-                "return": "string",
+                "return": "",
+                "static": false
+            },
+            "resolveRouteBindingQuery": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "query",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "field",
+                        "type": "",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
                 "static": false
             },
             "restore": {
@@ -15069,7 +14801,7 @@
             },
             "uniqueIds": {
                 "params": [],
-                "return": "array",
+                "return": "",
                 "static": false
             }
         },
@@ -16853,34 +16585,54 @@
         "internal": true,
         "kind": "class",
         "methods": {
-            "bootHasConfiguredId": {
-                "params": [],
-                "return": "void",
-                "static": true
-            },
             "getIncrementing": {
                 "params": [],
-                "return": "bool",
+                "return": "",
                 "static": false
             },
             "getKeyType": {
                 "params": [],
-                "return": "string",
+                "return": "",
                 "static": false
             },
-            "getTable": {
+            "initializeHasUniqueStringIds": {
                 "params": [],
-                "return": "string",
+                "return": "",
                 "static": false
             },
             "newUniqueId": {
                 "params": [],
-                "return": "string",
+                "return": "",
+                "static": false
+            },
+            "resolveRouteBindingQuery": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "query",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "field",
+                        "type": "",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
                 "static": false
             },
             "uniqueIds": {
                 "params": [],
-                "return": "array",
+                "return": "",
                 "static": false
             }
         },
@@ -16906,34 +16658,54 @@
         "internal": true,
         "kind": "class",
         "methods": {
-            "bootHasConfiguredId": {
-                "params": [],
-                "return": "void",
-                "static": true
-            },
             "getIncrementing": {
                 "params": [],
-                "return": "bool",
+                "return": "",
                 "static": false
             },
             "getKeyType": {
                 "params": [],
-                "return": "string",
+                "return": "",
                 "static": false
             },
-            "getTable": {
+            "initializeHasUniqueStringIds": {
                 "params": [],
-                "return": "string",
+                "return": "",
                 "static": false
             },
             "newUniqueId": {
                 "params": [],
-                "return": "string",
+                "return": "",
+                "static": false
+            },
+            "resolveRouteBindingQuery": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "query",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "field",
+                        "type": "",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
                 "static": false
             },
             "uniqueIds": {
                 "params": [],
-                "return": "array",
+                "return": "",
                 "static": false
             }
         },
@@ -45321,35 +45093,6 @@
                 "return": "string",
                 "static": false
             },
-            "fromConfigured": {
-                "params": [
-                    {
-                        "byRef": false,
-                        "name": "type",
-                        "type": "string",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "name": "value",
-                        "type": "string|int",
-                        "variadic": false
-                    },
-                    {
-                        "byRef": false,
-                        "default": {
-                            "enum": "CoreX\\Database\\Enums\\IdStrategy",
-                            "case": "Uuid7",
-                            "value": "uuid7"
-                        },
-                        "name": "configuredStrategy",
-                        "type": "CoreX\\Database\\Enums\\IdStrategy",
-                        "variadic": false
-                    }
-                ],
-                "return": "self",
-                "static": true
-            },
             "fromValue": {
                 "params": [
                     {
@@ -45366,8 +45109,8 @@
                     },
                     {
                         "byRef": false,
-                        "name": "strategy",
-                        "type": "CoreX\\Database\\Enums\\IdStrategy",
+                        "name": "format",
+                        "type": "CoreX\\Operations\\Definition\\Enums\\ResourceIdFormat",
                         "variadic": false
                     }
                 ],
@@ -45384,8 +45127,8 @@
                     },
                     {
                         "byRef": false,
-                        "name": "expectedStrategy",
-                        "type": "CoreX\\Database\\Enums\\IdStrategy",
+                        "name": "expectedFormat",
+                        "type": "CoreX\\Operations\\Definition\\Enums\\ResourceIdFormat",
                         "variadic": false
                     },
                     {
@@ -45407,11 +45150,11 @@
         },
         "parent": null,
         "properties": {
-            "strategy": {
-                "name": "strategy",
+            "format": {
+                "name": "format",
                 "readonly": true,
                 "static": false,
-                "type": "CoreX\\Database\\Enums\\IdStrategy"
+                "type": "CoreX\\Operations\\Definition\\Enums\\ResourceIdFormat"
             },
             "type": {
                 "name": "type",
@@ -45520,6 +45263,62 @@
             },
             "value": {
                 "name": "value",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\Operations\\Definition\\Enums\\ResourceIdFormat": {
+        "abstract": false,
+        "constants": {
+            "Integer": {
+                "type": "CoreX\\Operations\\Definition\\Enums\\ResourceIdFormat",
+                "value": {
+                    "enum": "CoreX\\Operations\\Definition\\Enums\\ResourceIdFormat",
+                    "case": "Integer"
+                }
+            },
+            "Ulid": {
+                "type": "CoreX\\Operations\\Definition\\Enums\\ResourceIdFormat",
+                "value": {
+                    "enum": "CoreX\\Operations\\Definition\\Enums\\ResourceIdFormat",
+                    "case": "Ulid"
+                }
+            },
+            "Uuid": {
+                "type": "CoreX\\Operations\\Definition\\Enums\\ResourceIdFormat",
+                "value": {
+                    "enum": "CoreX\\Operations\\Definition\\Enums\\ResourceIdFormat",
+                    "case": "Uuid"
+                }
+            },
+            "Uuid7": {
+                "type": "CoreX\\Operations\\Definition\\Enums\\ResourceIdFormat",
+                "value": {
+                    "enum": "CoreX\\Operations\\Definition\\Enums\\ResourceIdFormat",
+                    "case": "Uuid7"
+                }
+            }
+        },
+        "final": true,
+        "interfaces": [
+            "UnitEnum"
+        ],
+        "internal": false,
+        "kind": "enum",
+        "methods": {
+            "cases": {
+                "params": [],
+                "return": "array",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "name": {
+                "name": "name",
                 "readonly": true,
                 "static": false,
                 "type": "string"
@@ -59913,34 +59712,54 @@
         "internal": true,
         "kind": "class",
         "methods": {
-            "bootHasConfiguredId": {
-                "params": [],
-                "return": "void",
-                "static": true
-            },
             "getIncrementing": {
                 "params": [],
-                "return": "bool",
+                "return": "",
                 "static": false
             },
             "getKeyType": {
                 "params": [],
-                "return": "string",
+                "return": "",
                 "static": false
             },
-            "getTable": {
+            "initializeHasUniqueStringIds": {
                 "params": [],
-                "return": "string",
+                "return": "",
                 "static": false
             },
             "newUniqueId": {
                 "params": [],
-                "return": "string",
+                "return": "",
+                "static": false
+            },
+            "resolveRouteBindingQuery": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "query",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "field",
+                        "type": "",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
                 "static": false
             },
             "uniqueIds": {
                 "params": [],
-                "return": "array",
+                "return": "",
                 "static": false
             }
         },
@@ -64666,29 +64485,54 @@
         "internal": true,
         "kind": "class",
         "methods": {
-            "bootHasConfiguredId": {
-                "params": [],
-                "return": "void",
-                "static": true
-            },
             "getIncrementing": {
                 "params": [],
-                "return": "bool",
+                "return": "",
                 "static": false
             },
             "getKeyType": {
                 "params": [],
-                "return": "string",
+                "return": "",
+                "static": false
+            },
+            "initializeHasUniqueStringIds": {
+                "params": [],
+                "return": "",
                 "static": false
             },
             "newUniqueId": {
                 "params": [],
-                "return": "string",
+                "return": "",
                 "static": false
             },
             "project": {
                 "params": [],
                 "return": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
+                "static": false
+            },
+            "resolveRouteBindingQuery": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "query",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "field",
+                        "type": "",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
                 "static": false
             },
             "tasks": {
@@ -64698,7 +64542,7 @@
             },
             "uniqueIds": {
                 "params": [],
-                "return": "array",
+                "return": "",
                 "static": false
             }
         },
@@ -66507,29 +66351,54 @@
         "internal": true,
         "kind": "class",
         "methods": {
-            "bootHasConfiguredId": {
-                "params": [],
-                "return": "void",
-                "static": true
-            },
             "getIncrementing": {
                 "params": [],
-                "return": "bool",
+                "return": "",
                 "static": false
             },
             "getKeyType": {
                 "params": [],
-                "return": "string",
+                "return": "",
+                "static": false
+            },
+            "initializeHasUniqueStringIds": {
+                "params": [],
+                "return": "",
                 "static": false
             },
             "newUniqueId": {
                 "params": [],
-                "return": "string",
+                "return": "",
                 "static": false
             },
             "project": {
                 "params": [],
                 "return": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
+                "static": false
+            },
+            "resolveRouteBindingQuery": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "query",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "field",
+                        "type": "",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
                 "static": false
             },
             "tasks": {
@@ -66539,7 +66408,7 @@
             },
             "uniqueIds": {
                 "params": [],
-                "return": "array",
+                "return": "",
                 "static": false
             }
         },
@@ -67252,24 +67121,49 @@
         "internal": true,
         "kind": "class",
         "methods": {
-            "bootHasConfiguredId": {
-                "params": [],
-                "return": "void",
-                "static": true
-            },
             "getIncrementing": {
                 "params": [],
-                "return": "bool",
+                "return": "",
                 "static": false
             },
             "getKeyType": {
                 "params": [],
-                "return": "string",
+                "return": "",
+                "static": false
+            },
+            "initializeHasUniqueStringIds": {
+                "params": [],
+                "return": "",
                 "static": false
             },
             "newUniqueId": {
                 "params": [],
-                "return": "string",
+                "return": "",
+                "static": false
+            },
+            "resolveRouteBindingQuery": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "query",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "field",
+                        "type": "",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
                 "static": false
             },
             "task": {
@@ -67279,7 +67173,7 @@
             },
             "uniqueIds": {
                 "params": [],
-                "return": "array",
+                "return": "",
                 "static": false
             }
         },
@@ -82242,19 +82136,19 @@
                 "return": "?CoreX\\Tenancy\\Workspace\\Internal\\Models\\WorkspaceMember",
                 "static": false
             },
-            "bootHasConfiguredId": {
-                "params": [],
-                "return": "void",
-                "static": true
-            },
             "getIncrementing": {
                 "params": [],
-                "return": "bool",
+                "return": "",
                 "static": false
             },
             "getKeyType": {
                 "params": [],
-                "return": "string",
+                "return": "",
+                "static": false
+            },
+            "initializeHasUniqueStringIds": {
+                "params": [],
+                "return": "",
                 "static": false
             },
             "invitedBy": {
@@ -82264,12 +82158,37 @@
             },
             "newUniqueId": {
                 "params": [],
-                "return": "string",
+                "return": "",
+                "static": false
+            },
+            "resolveRouteBindingQuery": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "query",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "field",
+                        "type": "",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
                 "static": false
             },
             "uniqueIds": {
                 "params": [],
-                "return": "array",
+                "return": "",
                 "static": false
             },
             "workspace": {
@@ -82343,29 +82262,54 @@
         "internal": true,
         "kind": "class",
         "methods": {
-            "bootHasConfiguredId": {
-                "params": [],
-                "return": "void",
-                "static": true
-            },
             "getIncrementing": {
                 "params": [],
-                "return": "bool",
+                "return": "",
                 "static": false
             },
             "getKeyType": {
                 "params": [],
-                "return": "string",
+                "return": "",
+                "static": false
+            },
+            "initializeHasUniqueStringIds": {
+                "params": [],
+                "return": "",
                 "static": false
             },
             "newUniqueId": {
                 "params": [],
-                "return": "string",
+                "return": "",
+                "static": false
+            },
+            "resolveRouteBindingQuery": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "query",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "field",
+                        "type": "",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
                 "static": false
             },
             "uniqueIds": {
                 "params": [],
-                "return": "array",
+                "return": "",
                 "static": false
             },
             "user": {
@@ -92646,7 +92590,7 @@
                         "variadic": false
                     }
                 ],
-                "return": "string|int",
+                "return": "string",
                 "static": true
             },
             "fromPath": {
@@ -92658,7 +92602,7 @@
                         "variadic": false
                     }
                 ],
-                "return": "string|int",
+                "return": "string",
                 "static": true
             }
         },
@@ -94026,11 +93970,6 @@
         "internal": false,
         "kind": "class",
         "methods": {
-            "bootHasConfiguredId": {
-                "params": [],
-                "return": "void",
-                "static": true
-            },
             "company": {
                 "params": [],
                 "return": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
@@ -94043,22 +93982,52 @@
             },
             "getIncrementing": {
                 "params": [],
-                "return": "bool",
+                "return": "",
                 "static": false
             },
             "getKeyType": {
                 "params": [],
-                "return": "string",
+                "return": "",
+                "static": false
+            },
+            "initializeHasUniqueStringIds": {
+                "params": [],
+                "return": "",
                 "static": false
             },
             "newUniqueId": {
                 "params": [],
-                "return": "string",
+                "return": "",
+                "static": false
+            },
+            "resolveRouteBindingQuery": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "query",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "field",
+                        "type": "",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
                 "static": false
             },
             "uniqueIds": {
                 "params": [],
-                "return": "array",
+                "return": "",
                 "static": false
             }
         },
@@ -94212,7 +94181,7 @@
                         "variadic": false
                     }
                 ],
-                "return": "string|int|null",
+                "return": "?string",
                 "static": false
             }
         },
@@ -94504,29 +94473,54 @@
         "internal": false,
         "kind": "class",
         "methods": {
-            "bootHasConfiguredId": {
-                "params": [],
-                "return": "void",
-                "static": true
-            },
             "getIncrementing": {
                 "params": [],
-                "return": "bool",
+                "return": "",
                 "static": false
             },
             "getKeyType": {
                 "params": [],
-                "return": "string",
+                "return": "",
+                "static": false
+            },
+            "initializeHasUniqueStringIds": {
+                "params": [],
+                "return": "",
                 "static": false
             },
             "newUniqueId": {
                 "params": [],
-                "return": "string",
+                "return": "",
+                "static": false
+            },
+            "resolveRouteBindingQuery": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "query",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "field",
+                        "type": "",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
                 "static": false
             },
             "uniqueIds": {
                 "params": [],
-                "return": "array",
+                "return": "",
                 "static": false
             }
         },

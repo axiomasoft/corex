@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Sprint\Internal\Models;
 
-use CoreX\Database\Laravel\HasConfiguredId;
 use CoreX\Tasks\Project\Laravel\ProjectRelations;
 use CoreX\Tasks\Sprint\Enums\SprintStatus;
 use CoreX\Tasks\Task\Laravel\TaskRelations;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 final class Sprint extends Model
 {
-    use HasConfiguredId;
+    use HasUuids;
 
     protected $table = 'tsk_sprints';
 

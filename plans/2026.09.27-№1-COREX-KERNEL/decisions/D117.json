@@ -1,0 +1,24 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D117",
+  "title": "P08.2: снять obsolete schema bridge и использовать native quiet UUID generation",
+  "date": "2026-10-06",
+  "status": "accepted",
+  "question": "Как закрыть реальные PHPStan последствия удаления конфигурируемой схемы без сохранения неиспользуемого SPI/подавлений?",
+  "context": "P08.2 V7 обнаружил 18 unmatched suppression blocks от удалённого HasConfiguredId, смешанный ключ ручного ID-loop, unused ResolvesCoreOptions и два недостижимых int return types. Владелец делегировал архитектурный выбор агенту, без костылей.",
+  "decision": "1. Удаляется CoreX\\Database\\Laravel\\ResolvesCoreOptions: это публичный SPI-bridge исключительно для конфигурируемых имён таблиц Eloquent, и после D112 у него нет потребителей/смысла. Без нового adopter, suppression, aliases/deprecated. P08.2 Scope, Golden/API/BC delta включает точное удаление этого четвёртого DB bridge; stable admission по D103 привязана к D117, actual Roave row only.\n2. DatabaseSynchronousAuditWriter удаляет ручной uniqueIds/newUniqueId loop. Native HasUuids initializes usesUniqueIds; Model::performInsert вызывает setUniqueIds до model events, в том числе saveQuietly. Existing committed-row test явно проверяет UUIDv7; аудит остаётся mandatory/quiet/transaction-protected.\n3. Из core PHPStan baseline удаляются ровно 18 stale blocks empty/getAttribute/setAttribute для AuditLog, BaseModel, Department, FeatureFlag, FeatureOverride, Setting. Новых suppression/повышения quality ceilings нет. CRM returns, больше не возвращающие int после D112, объявляются string/nullable string без изменения остальных boundary checks.",
+  "rationale": "Это текущие последствия D112, а не будущая схема: удалить orphan bridge и дублированную генерацию, сохранить native invariants и снизить analysis debt. Явное делегирование владельца разрешает bounded архитектурное решение.",
+  "consequences": [
+    "Дополнение §7: −CoreX\\Database\\Laravel\\ResolvesCoreOptions; finite BC admission D117, остальные допуски/база неизменны.",
+    "Affected audit/CRM tests + core/Flex analysis проходят перед оставшимся обязательным набором."
+  ],
+  "applies_to": [
+    "P08.2"
+  ],
+  "actor": {
+    "provider": "codex",
+    "model": "gpt-6",
+    "effort": "high"
+  },
+  "answered_by": "agent"
+}

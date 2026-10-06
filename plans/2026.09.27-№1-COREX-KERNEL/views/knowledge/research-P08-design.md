@@ -366,6 +366,9 @@ wsp_invitations, sessions, membership-таблицы) плюс:
   publish-теги `corex-*-migrations*` удаляются (golden `tests/Golden/baseline/*` и `scripts/ownership-map.json` tags).
 - P08.2: − `IdStrategy`, `HasConfiguredId`, `IdColumns`; `CoreOptions` − `idStrategy` и 12 `*Table`; custom-fields Options − tables;
   config-ключи `corex.ids.*`, `corex.tables.*`, `corex-custom-fields.tables.*`.
+- P08.2 / native HasUuids: BaseModel больше не экспортирует bootHasConfiguredId; native методы getKeyType/getIncrementing/newUniqueId/uniqueIds не имеют прежних declared return types. Это точная consequential BC delta замены трейта D112; runtime UUIDv7/string/nonincrementing проверяется отдельно. Удаление 13 leading promoted параметров CoreOptions даёт 13 positional comparisons Roave; retained named fields сохраняют типы/defaults.
+- P08.2 / D116: + `CoreX\Operations\Definition\Enums\ResourceIdFormat`; `ResourceId::$strategy` → `$format`, `fromValue`/`parse` параметры типа `ResourceIdFormat`, `fromConfigured` удаляется. Wire UUID/UUIDv7/ULID/integer остаётся прежним; enum operations описывает transport format, не DB strategy. Exact stable BC admission привязана к D112/D116 по D103.
+- P08.2 / D117: − `CoreX\Database\Laravel\ResolvesCoreOptions`, obsolete table-config SPI bridge with zero consumers after D112; exact finite stable BC removal admission. Quiet synchronous audit uses native Eloquent insert UUID generation; no API alias/suppression is retained.
 - P08.4–P08.8: публичных PHP-символов нет; меняются Golden-схема и `table-ownership.md`.
 D01: алиасов и deprecated нет; `bc-check` сверяет с базой фазы по правилам D103 (stable BC admission), delta перечисляется в Completion Notes.
 

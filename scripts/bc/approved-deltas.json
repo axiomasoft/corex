@@ -11,6 +11,18 @@
                 {
                     "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D92.json",
                     "sha256": "a83bfd36573e259a72837e38a068dca1bdac976aa767372886000dd64a92d866"
+                },
+                {
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D103.json",
+                    "sha256": "3f10f0bb58eb6679f58bf5c9dcb8b678c8df46730fcf8d6567164aefef0f5792"
+                },
+                {
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D112.json",
+                    "sha256": "467ee8023742d7217f058ddaffa49deacead9402e3a5380b55c0c54c68c35244"
+                },
+                {
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D116.json",
+                    "sha256": "59c59d03fc705ca22285c94b4465fa61aa0b5ca62eebd87bbee91878f14abbe7"
                 }
             ],
             "changes": [
@@ -43,6 +55,26 @@
                     "path": "/packages/operations/src/Laravel/Support/ApiOptions.php",
                     "modificationType": "changed",
                     "description_sha256": "ec4319067d760bb5c6daba7f407871e13f19c5a4500e81cf84053c06e3aaa145"
+                },
+                {
+                    "path": "/packages/operations/src/Definition/Data/ResourceId.php",
+                    "modificationType": "removed",
+                    "description_sha256": "abaa8f0a97f39bc661aab33d9404abcaaf381537571bbb112065f45c208e1bb3"
+                },
+                {
+                    "path": "/packages/operations/src/Definition/Data/ResourceId.php",
+                    "modificationType": "removed",
+                    "description_sha256": "66981dfb5a276aa4b114286318f2847cdba596aa2240cfeddbd04ab70d3c5b78"
+                },
+                {
+                    "path": "/packages/operations/src/Definition/Data/ResourceId.php",
+                    "modificationType": "changed",
+                    "description_sha256": "2d7c0f4a59fed68250009a5d5ae77d7722030e4bad572ccf511a6f65808218bf"
+                },
+                {
+                    "path": "/packages/operations/src/Definition/Data/ResourceId.php",
+                    "modificationType": "changed",
+                    "description_sha256": "c14eab898544e8d44d8ac2cb6a04f0ae5b85f56a01aa6f858d3da9a2b20f0d18"
                 }
             ]
         },
@@ -629,6 +661,14 @@
                 {
                     "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D111.json",
                     "sha256": "e25883f1188a74ce53b8fab198d311cb8244faeed7c4ef55cdd1b8a836e28dcd"
+                },
+                {
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D103.json",
+                    "sha256": "3f10f0bb58eb6679f58bf5c9dcb8b678c8df46730fcf8d6567164aefef0f5792"
+                },
+                {
+                    "path": "plans/2026.09.27-№1-COREX-KERNEL/decisions/D112.json",
+                    "sha256": "467ee8023742d7217f058ddaffa49deacead9402e3a5380b55c0c54c68c35244"
                 }
             ],
             "changes": [
@@ -666,6 +706,196 @@
                     "path": "/packages/core/src/Modules/ModulesServiceProvider.php",
                     "modificationType": "removed",
                     "description_sha256": "065f7c7c67d93186829c48b48b1bbc489a3b99602361e0c6e370b93ab775f684"
+                },
+                {
+                    "path": "/packages/core/src/Config/Data/CoreOptions.php",
+                    "modificationType": "removed",
+                    "description_sha256": "d2ab7f7e6c05f22d687487ab6554321bfe8554c7e34b684c2bc54fe128ee5779"
+                },
+                {
+                    "path": "/packages/core/src/Config/Data/CoreOptions.php",
+                    "modificationType": "removed",
+                    "description_sha256": "437762641ddd37817f67df782ab6d8f00726fa7f4034253b11281a25fff75800"
+                },
+                {
+                    "path": "/packages/core/src/Config/Data/CoreOptions.php",
+                    "modificationType": "removed",
+                    "description_sha256": "b72cd7bbf2b55f3696ba6bb91800641e5ac8c28fc428063e3949e51f9c4a70c8"
+                },
+                {
+                    "path": "/packages/core/src/Config/Data/CoreOptions.php",
+                    "modificationType": "removed",
+                    "description_sha256": "446c8396a75e6099a4fa4f83f8387a8288ccbf2ac0eb55f921bc6a3b817ae77e"
+                },
+                {
+                    "path": "/packages/core/src/Config/Data/CoreOptions.php",
+                    "modificationType": "removed",
+                    "description_sha256": "d01c1e6cde626331d83ce5bf4fe18a526499b987cc5e6203b587742ec83f35da"
+                },
+                {
+                    "path": "/packages/core/src/Config/Data/CoreOptions.php",
+                    "modificationType": "removed",
+                    "description_sha256": "8e558c66867070b922c159a439d61a89ea09250469c9a2d47aa01d37b23e01a5"
+                },
+                {
+                    "path": "/packages/core/src/Config/Data/CoreOptions.php",
+                    "modificationType": "removed",
+                    "description_sha256": "2b1ffb5433b2cab54bc62cd9605f9aca9ac60cc1eb040f66dd0ed3968baef0be"
+                },
+                {
+                    "path": "/packages/core/src/Config/Data/CoreOptions.php",
+                    "modificationType": "removed",
+                    "description_sha256": "69ebe049bb0885683ef094a3446419273c7832c6946d3b7d764cc23fce18a8d2"
+                },
+                {
+                    "path": "/packages/core/src/Config/Data/CoreOptions.php",
+                    "modificationType": "removed",
+                    "description_sha256": "759f6e5b542121f7ec61399315e58fb6160c4f8c44214d7422d3180afaa7755e"
+                },
+                {
+                    "path": "/packages/core/src/Config/Data/CoreOptions.php",
+                    "modificationType": "removed",
+                    "description_sha256": "b6a50b667a2d7d478eaaaa160ebd05736a02770c9132557834acb6cabb313b68"
+                },
+                {
+                    "path": "/packages/core/src/Config/Data/CoreOptions.php",
+                    "modificationType": "removed",
+                    "description_sha256": "1ff0c69102187c3ca1e2fddf2cf10ce2c1b0759d5b7c661c9dd7aface011b84f"
+                },
+                {
+                    "path": "/packages/core/src/Config/Data/CoreOptions.php",
+                    "modificationType": "removed",
+                    "description_sha256": "ea6953973db24742b8de8847de7b15fb88aec5ce13dcf88da62c77ad109f4208"
+                },
+                {
+                    "path": "/packages/core/src/Config/Data/CoreOptions.php",
+                    "modificationType": "removed",
+                    "description_sha256": "afdf9528da9c5975591d3218120351097e8e3f0f9a2e60219f19f729749d6f83"
+                },
+                {
+                    "path": "/packages/core/src/Config/Data/CoreOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "b837f9defb441de7004d0a81665683aff5cee13b5aa84aeca929a893490f6859"
+                },
+                {
+                    "path": "/packages/core/src/Config/Data/CoreOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "a9d047e1d407e979e780c555b93898992a4c23ab32cd159fb9350b3016e30d68"
+                },
+                {
+                    "path": "/packages/core/src/Config/Data/CoreOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "36475bfee1b277fa600e7ac7bd7c7a341790730c644c86fb3f40303c3782787d"
+                },
+                {
+                    "path": "/packages/core/src/Config/Data/CoreOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "b553e6b1020d738bc05fadd388d88e9a9d2daa4b566964c70f66be5e729c3075"
+                },
+                {
+                    "path": "/packages/core/src/Config/Data/CoreOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "28eb38ca1bffcf2752290f544a5f33baa52c523ebf6032d74294f27e9b290cda"
+                },
+                {
+                    "path": "/packages/core/src/Config/Data/CoreOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "fdead853d323241b9ddf659ba5f0f447a78dabe73d88d989ae9a98bb732fd926"
+                },
+                {
+                    "path": "/packages/core/src/Config/Data/CoreOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "5a8a59dc5bc3f418eb7e9e1eedcff9d5a9e68b448fcf1d5aa40acd7ffb6f19c2"
+                },
+                {
+                    "path": "/packages/core/src/Config/Data/CoreOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "a47d4ca8ded0239dbafaf41f9dff2971066f42315382c2f789cfac17cb8be35d"
+                },
+                {
+                    "path": "/packages/core/src/Config/Data/CoreOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "dc39a2157c5b0b64d2528bf1ac57a569a65fc70fda4e1f1f4ed03d6688162ca2"
+                },
+                {
+                    "path": "/packages/core/src/Config/Data/CoreOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "1dc6a8815220741e5723e62ff61a828ebfe2fa46b9ea5cc653c581a031105d5b"
+                },
+                {
+                    "path": "/packages/core/src/Config/Data/CoreOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "595c55aa47a7ed6c6213b2c102105d89f6ecdd6d15bdc078d3b6e09310dba1dc"
+                },
+                {
+                    "path": "/packages/core/src/Config/Data/CoreOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "123da5514b05f5770a503b6b9105afbf78d324e86a711a3b52aae8ea677910cf"
+                },
+                {
+                    "path": "/packages/core/src/Config/Data/CoreOptions.php",
+                    "modificationType": "changed",
+                    "description_sha256": "0d80ee3f05decee8b96c11e1597099aa6ee9104822516c0d7fc5299b296e2b1e"
+                },
+                {
+                    "path": null,
+                    "modificationType": "removed",
+                    "description_sha256": "12b4930d010a6b2170d264a4b9413059af04b931ec08ba10f8bbd4a93ed3080a"
+                },
+                {
+                    "path": "/packages/core/src/Database/Laravel/BaseModel.php",
+                    "modificationType": "removed",
+                    "description_sha256": "2e0ed25b8202ecaa452e6a79ce62d358190720cd1a7894d5f956bebc9c6159e9"
+                },
+                {
+                    "path": "/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasUniqueStringIds.php",
+                    "modificationType": "changed",
+                    "description_sha256": "c9e8ffa792cd2ebd48a35c063ec10dc13008d0491203ae8bf0c4a07269567d5c"
+                },
+                {
+                    "path": "/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasUniqueStringIds.php",
+                    "modificationType": "changed",
+                    "description_sha256": "0e1d98ef52ac322eac17085c78bdadc322e11dd46ac1893efa43ed5ce879b4c5"
+                },
+                {
+                    "path": "/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasUniqueStringIds.php",
+                    "modificationType": "changed",
+                    "description_sha256": "67ef64c197a4173a9a6eabf1bccce0ae8ab0a2b4e53b08925c171ac53fa92944"
+                },
+                {
+                    "path": "/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasUniqueStringIds.php",
+                    "modificationType": "changed",
+                    "description_sha256": "8aa50ee32b0f765e9631185e085d5b023a3603b1e08d18dbe5dcae96ae1e8427"
+                },
+                {
+                    "path": "/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasUuids.php",
+                    "modificationType": "changed",
+                    "description_sha256": "dac23def43c60a93142b4b7baea7b4f5e89651bbe659e1a02c3fdedc286f4295"
+                },
+                {
+                    "path": "/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasUuids.php",
+                    "modificationType": "changed",
+                    "description_sha256": "0222cbc2b95f14f62d52d2abb20955153b24cabc441f12cc2a7020c440f1b8d0"
+                },
+                {
+                    "path": "/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasUniqueStringIds.php",
+                    "modificationType": "changed",
+                    "description_sha256": "700459e1d53411905b6526298c827ea9f2e0928dff09c3d6a5dbe7c4c338bca7"
+                },
+                {
+                    "path": "/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasUniqueStringIds.php",
+                    "modificationType": "changed",
+                    "description_sha256": "9a6e86ffbf81baf98340d8ba6f89ab3e651d56bec56811921124ab237624a2c5"
+                },
+                {
+                    "path": null,
+                    "modificationType": "removed",
+                    "description_sha256": "a7a7d418073f20acc14869d3457ac94d08e2429fe124455614ef4c804b8fbb82"
+                },
+                {
+                    "path": null,
+                    "modificationType": "removed",
+                    "description_sha256": "69b896104df82134a8d4d81ce297bff1d8de017c00c82c164191e7e25a568b33"
                 }
             ]
         }

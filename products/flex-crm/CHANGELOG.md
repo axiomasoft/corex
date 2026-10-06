@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — deterministic UUID schema (P08.2)
+
+- Models use Laravel HasUuids (UUIDv7); migrations use literal table names and UUID columns without configuration or model lookups.
+
 Все заметные изменения `flex/crm` документируются здесь. Формат — [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Пакет pre-1.0 — breaking-изменения публичных контрактов легальны в MINOR до 1.0 (D17).
 

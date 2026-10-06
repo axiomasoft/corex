@@ -2,11 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Database\Laravel\IdColumns;
-use Flex\Crm\Company\Models\Company;
-use Flex\Crm\Contact\Models\Contact;
-use Flex\Crm\Contact\Models\ContactCompany;
-use Flex\Crm\Context\Models\Source;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +13,7 @@ return new class extends Migration
     {
         // The historical schema has no provenance. Do not invent actors, lose
         // custom fields or truncate tax IDs in an automatic upgrade.
-        foreach ([(new Company)->getTable(), (new Contact)->getTable()] as $table) {
+        foreach (['crm_companies', 'crm_contacts'] as $table) {
             if (DB::table($table)->exists()) {
                 throw new RuntimeException('CRM_PARITY_UPGRADE_REQUIRES_EXPORT: populated legacy company/contact tables need an explicit provenance-preserving conversion. See products/flex-crm/UPGRADE.md. No CRM tables were changed.');
             }
@@ -33,7 +28,7 @@ return new class extends Migration
             }
         }
         foreach (['users', 'wsp_workspaces'] as $table) {
-            if (Schema::getColumnType($table, 'id') !== Schema::getColumnType((new Company)->getTable(), 'id')) {
+            if (Schema::getColumnType($table, 'id') !== Schema::getColumnType('crm_companies', 'id')) {
                 throw new RuntimeException("CRM prerequisite [{$table}.id] has an incompatible configured ID profile.");
             }
         }
@@ -41,11 +36,11 @@ return new class extends Migration
         if (DB::getDriverName() === 'pgsql' && (int) DB::selectOne('SHOW server_version_num')->server_version_num < 150000) {
             throw new RuntimeException('CRM requires PostgreSQL 15+ for NULLS NOT DISTINCT.');
         }
-        Schema::drop((new Contact)->getTable());
-        Schema::drop((new Company)->getTable());
-        Schema::create((new Source)->getTable(), function (Blueprint $table): void {
-            IdColumns::primary($table);
-            IdColumns::foreign($table, 'workspace_id')->nullable()->constrained('wsp_workspaces')->cascadeOnDelete();
+        Schema::drop('crm_contacts');
+        Schema::drop('crm_companies');
+        Schema::create('crm_sources', function (Blueprint $table): void {
+            $table->uuid('id')->primary();
+            $table->foreignUuid('workspace_id')->nullable()->constrained('wsp_workspaces')->cascadeOnDelete();
             $table->string('code', 64);
             $table->jsonb('name');
             $table->boolean('is_active')->default(true);
@@ -55,9 +50,9 @@ return new class extends Migration
         DB::statement(DB::getDriverName() === 'pgsql'
             ? 'ALTER TABLE crm_sources ADD CONSTRAINT crm_sources_workspace_id_code_unique UNIQUE NULLS NOT DISTINCT (workspace_id, code)'
             : "CREATE UNIQUE INDEX crm_sources_workspace_id_code_unique ON crm_sources (COALESCE(workspace_id, ''), code)");
-        Schema::create((new Company)->getTable(), function (Blueprint $table): void {
-            IdColumns::primary($table);
-            IdColumns::foreign($table, 'workspace_id')->nullable()->constrained('wsp_workspaces')->cascadeOnDelete();
+        Schema::create('crm_companies', function (Blueprint $table): void {
+            $table->uuid('id')->primary();
+            $table->foreignUuid('workspace_id')->nullable()->constrained('wsp_workspaces')->cascadeOnDelete();
             $table->string('name', 255);
             $table->string('legal_name', 255)->nullable();
             $table->string('domain', 190)->nullable();
@@ -70,9 +65,9 @@ return new class extends Migration
             $table->jsonb('bank_details')->nullable();
             $this->recordColumns($table);
         });
-        Schema::create((new Contact)->getTable(), function (Blueprint $table): void {
-            IdColumns::primary($table);
-            IdColumns::foreign($table, 'workspace_id')->nullable()->constrained('wsp_workspaces')->cascadeOnDelete();
+        Schema::create('crm_contacts', function (Blueprint $table): void {
+            $table->uuid('id')->primary();
+            $table->foreignUuid('workspace_id')->nullable()->constrained('wsp_workspaces')->cascadeOnDelete();
             $table->string('name_last', 120)->nullable();
             $table->string('name_first', 120)->nullable();
             $table->string('name_middle', 120)->nullable();
@@ -83,10 +78,10 @@ return new class extends Migration
             $table->date('birthday')->nullable();
             $this->recordColumns($table);
         });
-        Schema::create((new ContactCompany)->getTable(), function (Blueprint $table): void {
-            IdColumns::primary($table);
-            IdColumns::foreign($table, 'contact_id')->constrained((new Contact)->getTable())->cascadeOnDelete();
-            IdColumns::foreign($table, 'company_id')->constrained((new Company)->getTable())->cascadeOnDelete();
+        Schema::create('crm_contact_company', function (Blueprint $table): void {
+            $table->uuid('id')->primary();
+            $table->foreignUuid('contact_id')->constrained('crm_contacts')->cascadeOnDelete();
+            $table->foreignUuid('company_id')->constrained('crm_companies')->cascadeOnDelete();
             $table->string('label', 64)->nullable();
             $table->boolean('is_primary')->default(false);
             $this->timestamps($table);
@@ -115,8 +110,8 @@ return new class extends Migration
 
     private function recordColumns(Blueprint $table): void
     {
-        IdColumns::foreign($table, 'source_id')->nullable()->constrained((new Source)->getTable())->nullOnDelete();
-        IdColumns::foreign($table, 'owner_id')->nullable()->constrained('users')->nullOnDelete();
+        $table->foreignUuid('source_id')->nullable()->constrained('crm_sources')->nullOnDelete();
+        $table->foreignUuid('owner_id')->nullable()->constrained('users')->nullOnDelete();
         $table->jsonb('created_by');
         $table->text('search')->nullable();
         $this->timestamps($table);

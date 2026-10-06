@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Data\CoreOptions;
 use CoreX\Messaging\Contracts\Outbox;
 use Illuminate\Support\Facades\DB;
 
@@ -28,5 +27,5 @@ it('rolls back an outbox row with the business transaction', function (): void {
         expect($exception->getMessage())->toBe('force-rollback');
     }
 
-    expect(DB::connection('pgsql')->table(app(CoreOptions::class)->outboxMessagesTable)->count())->toBe(0);
+    expect(DB::connection('pgsql')->table('sys_outbox_messages')->count())->toBe(0);
 })->group('pg');

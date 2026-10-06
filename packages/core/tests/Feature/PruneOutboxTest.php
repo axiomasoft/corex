@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Data\CoreOptions;
 use CoreX\Time\Testing\FrozenClock;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Artisan;
@@ -12,7 +11,7 @@ use Psr\Clock\ClockInterface;
 
 function pruneOutboxInstallSchema(): void
 {
-    Schema::create(app(CoreOptions::class)->outboxMessagesTable, function (Blueprint $table): void {
+    Schema::create('sys_outbox_messages', function (Blueprint $table): void {
         $table->string('id')->primary();
         $table->string('name');
         $table->unsignedSmallInteger('contract_version');
@@ -39,7 +38,7 @@ function pruneOutboxInstallSchema(): void
         $table->dateTimeTz('updated_at');
     });
 
-    Schema::create(app(CoreOptions::class)->inboxMessagesTable, function (Blueprint $table): void {
+    Schema::create('sys_inbox_messages', function (Blueprint $table): void {
         $table->string('consumer');
         $table->string('message_id');
         $table->string('name');
@@ -52,7 +51,7 @@ function pruneOutboxInsertRow(array $overrides = []): void
 {
     $now = app(ClockInterface::class)->now();
 
-    DB::table(app(CoreOptions::class)->outboxMessagesTable)->insert([
+    DB::table('sys_outbox_messages')->insert([
         'id' => $overrides['id'] ?? 'msg-prune-1',
         'name' => 'membership.expired',
         'contract_version' => 1,
@@ -100,7 +99,7 @@ it('prunes published rows older than the published window and keeps newer ones',
 
     Artisan::call('corex:messaging:prune', ['--published-older-than' => '14 days']);
 
-    expect(DB::table(app(CoreOptions::class)->outboxMessagesTable)->pluck('id')->all())
+    expect(DB::table('sys_outbox_messages')->pluck('id')->all())
         ->toBe(['pub-new']);
 });
 
@@ -122,7 +121,7 @@ it('prunes dead rows by the dead window not the published window', function (): 
         '--dead-older-than' => '90 days',
     ]);
 
-    expect(DB::table(app(CoreOptions::class)->outboxMessagesTable)->pluck('id')->all())
+    expect(DB::table('sys_outbox_messages')->pluck('id')->all())
         ->toBe(['dead-recent']);
 });
 
@@ -144,7 +143,7 @@ it('never prunes pending or publishing rows', function (): void {
         '--dead-older-than' => '0 seconds',
     ]);
 
-    expect(DB::table(app(CoreOptions::class)->outboxMessagesTable)->count())->toBe(2);
+    expect(DB::table('sys_outbox_messages')->count())->toBe(2);
 });
 
 it('does not touch sys_inbox_messages', function (): void {
@@ -155,7 +154,7 @@ it('does not touch sys_inbox_messages', function (): void {
         'published_at' => $now->sub(new DateInterval('P30D')),
     ]);
 
-    DB::table(app(CoreOptions::class)->inboxMessagesTable)->insert([
+    DB::table('sys_inbox_messages')->insert([
         'consumer' => 'worker-a',
         'message_id' => 'inbox-1',
         'name' => 'membership.expired',
@@ -164,7 +163,7 @@ it('does not touch sys_inbox_messages', function (): void {
 
     Artisan::call('corex:messaging:prune', ['--published-older-than' => '1 day']);
 
-    expect(DB::table(app(CoreOptions::class)->inboxMessagesTable)->count())->toBe(1);
+    expect(DB::table('sys_inbox_messages')->count())->toBe(1);
 });
 
 it('uses FrozenClock for retention thresholds', function (): void {
@@ -184,6 +183,6 @@ it('uses FrozenClock for retention thresholds', function (): void {
 
     Artisan::call('corex:messaging:prune', ['--published-older-than' => '14 days']);
 
-    expect(DB::table(app(CoreOptions::class)->outboxMessagesTable)->pluck('id')->all())
+    expect(DB::table('sys_outbox_messages')->pluck('id')->all())
         ->toBe(['on-boundary']);
 });

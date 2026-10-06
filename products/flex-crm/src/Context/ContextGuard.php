@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Flex\Crm\Context;
 
-use CoreX\Config\Data\CoreOptions;
 use CoreX\Context\Contracts\AccountConnectionResolver;
 use CoreX\Context\Contracts\TenantContextResolver;
-use CoreX\Database\Enums\IdStrategy;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use Flex\Crm\Context\Contracts\CrmExecutionContext;
 use Flex\Crm\Context\Data\ExecutionContext;
@@ -96,7 +94,7 @@ final readonly class ContextGuard
         }
     }
 
-    public function workspace(ExecutionContext $ctx, bool $accountLevel): string|int|null
+    public function workspace(ExecutionContext $ctx, bool $accountLevel): ?string
     {
         if ($accountLevel) {
             if (! $ctx->allowAccountLevel) {
@@ -106,21 +104,16 @@ final readonly class ContextGuard
             return null;
         }
         $workspace = $ctx->tenant->workspace ?? throw new AuthorizationException('CRM workspace write requires a workspace.');
-        $id = $workspace->id;
 
-        return app(CoreOptions::class)->idStrategy === IdStrategy::Int ? (int) $id : $id;
+        return $workspace->id;
     }
 
     public function id(string|int $id): void
     {
-        $valid = match (app(CoreOptions::class)->idStrategy) {
-            IdStrategy::Int => is_int($id) && $id > 0,
-            IdStrategy::Ulid => is_string($id) && Str::isUlid($id),
-            default => is_string($id) && Str::isUuid($id),
-        };
+        $valid = is_string($id) && Str::isUuid($id);
 
         if (! $valid) {
-            throw new AuthorizationException('CRM reference has an invalid configured ID type.');
+            throw new AuthorizationException('CRM reference has an invalid UUID.');
         }
     }
 }

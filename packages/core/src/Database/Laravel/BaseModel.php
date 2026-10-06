@@ -7,12 +7,13 @@ namespace CoreX\Database\Laravel;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Audit\Laravel\HasAuditLog;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * @corex-model-extension Eloquent base; configured primary key, deleted_at and Auditable opt-in. Subclasses retain Eloquent relations.
- * Base for ecosystem domain models: ULID key (ADR-003), soft deletes, and an
+ * @corex-model-extension Eloquent base; UUIDv7 primary key, deleted_at and Auditable opt-in. Subclasses retain Eloquent relations.
+ * Base for ecosystem domain models: UUIDv7 key, soft deletes, and an
  * audit trail that only records when the model also implements Auditable.
  *
  * Tenant isolation is physical (DB-per-account, B-11): a model loaded here
@@ -24,6 +25,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 abstract class BaseModel extends Model
 {
     use HasAuditLog;
-    use HasConfiguredId;
+    use HasUuids;
     use SoftDeletes;
 }

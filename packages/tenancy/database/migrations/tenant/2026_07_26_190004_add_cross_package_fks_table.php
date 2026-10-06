@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Data\CoreOptions;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
@@ -20,8 +19,8 @@ return new class extends Migration
 {
     public function up(): void
     {
-        $departments = app(CoreOptions::class)->departmentsTable;
-        $departmentUser = app(CoreOptions::class)->departmentUserTable;
+        $departments = 'sys_departments';
+        $departmentUser = 'sys_department_user';
 
         DB::statement("ALTER TABLE users ADD CONSTRAINT users_department_fk FOREIGN KEY (department_id) REFERENCES {$departments} (id) ON DELETE SET NULL");
         DB::statement("ALTER TABLE {$departments} ADD CONSTRAINT sys_dept_workspace_fk FOREIGN KEY (workspace_id) REFERENCES wsp_workspaces (id) ON DELETE RESTRICT");
@@ -31,8 +30,8 @@ return new class extends Migration
 
     public function down(): void
     {
-        $departments = app(CoreOptions::class)->departmentsTable;
-        $departmentUser = app(CoreOptions::class)->departmentUserTable;
+        $departments = 'sys_departments';
+        $departmentUser = 'sys_department_user';
 
         DB::statement("ALTER TABLE {$departmentUser} DROP CONSTRAINT sys_du_user_fk");
         DB::statement("ALTER TABLE {$departments} DROP CONSTRAINT sys_dept_head_user_fk");

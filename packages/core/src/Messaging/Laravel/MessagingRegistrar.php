@@ -57,7 +57,7 @@ final class MessagingRegistrar implements PackageRegistrar
                 contracts: $app->make(MessageContractRegistry::class),
                 clock: $app->make(ClockInterface::class),
                 traces: $app->make(TraceContextBridge::class),
-                table: $app->make(CoreOptions::class)->outboxMessagesTable,
+                table: 'sys_outbox_messages',
             ),
         );
         $app->scoped(
@@ -68,7 +68,7 @@ final class MessagingRegistrar implements PackageRegistrar
                 leaseSeconds: $app->make(CoreOptions::class)->messagingLeaseSeconds,
                 maxAttempts: $app->make(CoreOptions::class)->messagingMaxAttempts,
                 backoffCapSeconds: $app->make(CoreOptions::class)->messagingBackoffCapSeconds,
-                table: $app->make(CoreOptions::class)->outboxMessagesTable,
+                table: 'sys_outbox_messages',
             ),
         );
         $app->scoped(
@@ -76,7 +76,7 @@ final class MessagingRegistrar implements PackageRegistrar
             static fn (Application $app): SqlInbox => new SqlInbox(
                 connection: $app->make(ConnectionInterface::class),
                 clock: $app->make(ClockInterface::class),
-                table: $app->make(CoreOptions::class)->inboxMessagesTable,
+                table: 'sys_inbox_messages',
             ),
         );
         $app->scoped(
@@ -84,7 +84,7 @@ final class MessagingRegistrar implements PackageRegistrar
             static fn (Application $app): SqlDeliveryHealth => new SqlDeliveryHealth(
                 connection: $app->make(ConnectionInterface::class),
                 clock: $app->make(ClockInterface::class),
-                table: $app->make(CoreOptions::class)->outboxMessagesTable,
+                table: 'sys_outbox_messages',
             ),
         );
         $app->singleton(PubSub::class, static fn (Application $app): PubSub => $app->make(match ($app->make(CoreOptions::class)->pubsubDriver) {

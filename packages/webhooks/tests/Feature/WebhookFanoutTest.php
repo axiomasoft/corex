@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Tests\Feature;
 
-use CoreX\Config\Data\CoreOptions;
 use CoreX\Config\Data\SecretRef;
 use CoreX\Context\Data\AccountRef;
 use CoreX\CoreServiceProvider;
@@ -71,7 +70,7 @@ final class WebhookFanoutTest extends TestCase
             $publisher->publish($this->envelope('11111111-1111-4111-8111-111111111111'));
             self::fail('Projection failure was committed.');
         } catch (RuntimeException) {
-            self::assertSame(0, DB::connection('api_tenant')->table(app(CoreOptions::class)->inboxMessagesTable)->count());
+            self::assertSame(0, DB::connection('api_tenant')->table('sys_inbox_messages')->count());
             self::assertSame(0, DB::connection('api_tenant')->table('sys_api_webhook_deliveries')->count());
         }
     }
@@ -177,7 +176,7 @@ final class WebhookFanoutTest extends TestCase
                 $fanout->accept($this->envelope('44444444-4444-4444-8444-444444444444'));
                 self::fail('PostgreSQL projection failure was committed.');
             } catch (RuntimeException) {
-                self::assertSame(0, $connection->table(app(CoreOptions::class)->inboxMessagesTable)->count());
+                self::assertSame(0, $connection->table('sys_inbox_messages')->count());
                 self::assertSame(0, $connection->table('sys_api_webhook_deliveries')->count());
             }
         } finally {
@@ -246,7 +245,7 @@ final class WebhookFanoutTest extends TestCase
 
     private function inbox(string $connection = 'api_tenant'): void
     {
-        DB::connection($connection)->getSchemaBuilder()->create(app(CoreOptions::class)->inboxMessagesTable, function (Blueprint $table): void {
+        DB::connection($connection)->getSchemaBuilder()->create('sys_inbox_messages', function (Blueprint $table): void {
             $table->string('consumer', 120);
             $table->uuid('message_id');
             $table->string('name', 160);

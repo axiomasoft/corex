@@ -189,12 +189,12 @@ final class SqlSavedViewRepository implements SavedViewRepository
 
     private function viewsTable(): string
     {
-        return $this->resolvedOptions()->savedViewsTable;
+        return 'sys_saved_views';
     }
 
     private function scopesTable(): string
     {
-        return $this->resolvedOptions()->savedViewScopesTable;
+        return 'sys_saved_view_scopes';
     }
 
     private function resolvedOptions(): CoreOptions

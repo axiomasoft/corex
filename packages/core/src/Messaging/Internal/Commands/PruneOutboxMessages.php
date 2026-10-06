@@ -43,7 +43,7 @@ final class PruneOutboxMessages extends Command
         $published = $publishedOption ?? $options->messagingOutboxRetention;
         $dead = $deadOption ?? $options->messagingDeadRetention;
         $now = $clock->now();
-        $table = $options->outboxMessagesTable;
+        $table = 'sys_outbox_messages';
 
         $prunedPublished = $connections->connection($connection)->table($table)
             ->where('status', 'published')

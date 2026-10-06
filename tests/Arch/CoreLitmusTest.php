@@ -6,7 +6,7 @@ use CoreX\Tests\Support\SourceScanner;
 
 // P6.3 — Foundation litmus (A29, D34). The file list is an explicit constant
 // of the live Foundation map, not "every file except another zone".
-// Condition 3 is fail-closed outside LITMUS_ELOQUENT. A fourth allowlist
+// Condition 3 is fail-closed outside LITMUS_ELOQUENT. A new allowlist
 // path needs a decision record. Condition 1 below the grep bar is a warning.
 // An unobservable reference is unresolved, not a failure. Condition 5 above
 // 200 lines outside Contracts, Enums, or Data is unresolved (P2 §7.1).
@@ -23,14 +23,12 @@ const LITMUS_FOUNDATION = [
     'packages/core/src/Messaging/PHPStan/Rules/DurablePayloadPromotedPropertyRule.php',
     'packages/core/src/Data/Data/JsonDocument.php',
     'packages/core/src/Data/Laravel/JsonDocuments.php',
-    'packages/core/src/Database/Laravel/HasConfiguredId.php',
     'packages/core/src/Data/Contracts/DataScopeAuthorizer.php',
     'packages/core/src/Data/Contracts/DataScopeCodec.php',
     'packages/core/src/Messaging/Contracts/DurablePayload.php',
     'packages/core/src/Modules/Contracts/ModuleRegistrar.php',
     'packages/core/src/Data/Data/DataScopeAccessDecision.php',
     'packages/core/src/Audit/Enums/ActorType.php',
-    'packages/core/src/Database/Enums/IdStrategy.php',
     'packages/core/src/Messaging/Contracts/Cancellable.php',
     'packages/core/src/Messaging/Events/DomainEvent.php',
     'packages/core/src/Data/Exceptions/InvalidScopePayload.php',
@@ -44,7 +42,6 @@ const LITMUS_FOUNDATION = [
     'packages/core/src/Data/Laravel/DataRegistrar.php',
     'packages/core/src/Data/Data/RecordRef.php',
     'packages/core/src/Data/Data/WriteToken.php',
-    'packages/core/src/Database/Laravel/IdColumns.php',
     'packages/core/src/Time/Testing/FrozenClock.php',
     'packages/core/src/Time/Laravel/LaravelClock.php',
     'packages/core/src/Time/Laravel/TimeRegistrar.php',
@@ -52,14 +49,12 @@ const LITMUS_FOUNDATION = [
 ];
 
 /**
- * Closed Eloquent/HTTP/Application exceptions. Exactly these three paths.
+ * Closed Eloquent/HTTP/Application exception. Only BaseModel remains after D112.
  *
  * @var list<string>
  */
 const LITMUS_ELOQUENT = [
     'packages/core/src/Database/Laravel/BaseModel.php',
-    'packages/core/src/Database/Laravel/HasConfiguredId.php',
-    'packages/core/src/Database/Laravel/IdColumns.php',
 ];
 
 /** @var list<string> */
@@ -84,11 +79,9 @@ test('foundation membership is an explicit constant of the live zone map', funct
         ->and(LITMUS_FOUNDATION)->not->toBe([]);
 });
 
-test('LITMUS_ELOQUENT is exactly the three identity paths', function (): void {
-    expect(LITMUS_ELOQUENT)->toHaveCount(3)
-        ->and(LITMUS_ELOQUENT[0])->toEndWith('Database/Laravel/BaseModel.php')
-        ->and(LITMUS_ELOQUENT[1])->toEndWith('Database/Laravel/HasConfiguredId.php')
-        ->and(LITMUS_ELOQUENT[2])->toEndWith('Database/Laravel/IdColumns.php');
+test('LITMUS_ELOQUENT contains only the BaseModel identity path', function (): void {
+    expect(LITMUS_ELOQUENT)->toHaveCount(1)
+        ->and(LITMUS_ELOQUENT[0])->toEndWith('Database/Laravel/BaseModel.php');
 });
 
 test('foundation litmus hard conditions are green on the clean tree', function (): void {
@@ -341,15 +334,12 @@ function litmusLiveFoundationFiles(): array
 {
     $prefixes = ['Messaging/PHPStan/', 'Data/', 'Time/'];
     $named = [
-        'Database/Laravel/HasConfiguredId.php',
-        'Database/Laravel/IdColumns.php',
         'Data/Contracts/DataScopeAuthorizer.php',
         'Data/Contracts/DataScopeCodec.php',
         'Messaging/Contracts/DurablePayload.php',
         'Modules/Contracts/ModuleRegistrar.php',
         'Data/DataScopeAccessDecision.php',
         'Audit/Enums/ActorType.php',
-        'Database/Enums/IdStrategy.php',
         'Messaging/Contracts/Cancellable.php',
         'Messaging/Events/DomainEvent.php',
         'Data/Exceptions/InvalidScopePayload.php',

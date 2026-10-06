@@ -162,7 +162,7 @@ operations, независимые модули, детерминированн�
 | P05 | Typed config, композиция и порты | detailed | 4/4 | 🟢 Done |
 | P06 | Operations, tools, webhooks и wire | detailed | 5/5 | 🟠 Done with deviations |
 | P07 | Tenancy, access, независимость модулей | detailed | 6/6 | 🟠 Done with deviations |
-| P08 | Схема: baseline v1 | detailed | 1/10 | 🟡 In progress |
+| P08 | Схема: baseline v1 | detailed | 2/10 | 🟡 In progress |
 | P09 | Планка качества и release-квалификация `1.0.0-rc.1` | skeleton | 0/0 | ⬜ Skeleton |
 | P10 | Зелёный hosted CI на базе P04 | detailed | 4/4 | 🟢 Done |
 
@@ -285,3 +285,5 @@ operations, независимые модули, детерминированн�
 | D113 | P08: форма baseline v1 — раскладка, имена, типы, драйверы | accepted | 2026-10-05 |
 | D114 | P08: явные колонки signup/cleanup вместо root_accounts.data (закрытие D107) | accepted | 2026-10-05 |
 | D115 | Техническое закрытие P07 после зелёного hosted CI | accepted | 2026-10-05 |
+| D116 | P08.2: формат ResourceId принадлежит operations, не схеме БД | accepted | 2026-10-06 |
+| D117 | P08.2: снять obsolete schema bridge и использовать native quiet UUID generation | accepted | 2026-10-06 |

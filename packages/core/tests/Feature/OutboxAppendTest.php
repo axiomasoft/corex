@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Data\CoreOptions;
 use CoreX\Messaging\Contracts\MessageContractRegistry;
 use CoreX\Messaging\Contracts\Outbox;
 use CoreX\Messaging\Contracts\TraceContextBridge;
@@ -34,7 +33,7 @@ function outboxAppendDeclaredContract(): MessageContract
 
 function outboxAppendInstallSchema(): void
 {
-    Schema::create(app(CoreOptions::class)->outboxMessagesTable, function (Blueprint $table): void {
+    Schema::create('sys_outbox_messages', function (Blueprint $table): void {
         $table->string('id')->primary();
         $table->string('name');
         $table->unsignedSmallInteger('contract_version');
@@ -112,7 +111,7 @@ it('persists a pending row with encoded payload and clock-backed timestamps', fu
         $outbox->append($envelope);
     });
 
-    $row = DB::table(app(CoreOptions::class)->outboxMessagesTable)->where('id', $envelope->messageId)->first();
+    $row = DB::table('sys_outbox_messages')->where('id', $envelope->messageId)->first();
 
     expect($row)->not->toBeNull()
         ->and($row->status)->toBe('pending')
@@ -151,7 +150,7 @@ it('injects trace carrier into persisted metadata without changing identity', fu
         $outbox->append($envelope);
     });
 
-    $row = DB::table(app(CoreOptions::class)->outboxMessagesTable)->where('id', 'msg-trace-1')->first();
+    $row = DB::table('sys_outbox_messages')->where('id', 'msg-trace-1')->first();
     $metadata = json_decode((string) $row->metadata, true, flags: JSON_THROW_ON_ERROR);
 
     expect($row->correlation_id)->toBe('corr-keep')
@@ -174,7 +173,7 @@ it('uses one clock instant for available_at created_at and updated_at', function
         $outbox->append(messagingSampleEnvelope(['messageId' => 'msg-clock-1']));
     });
 
-    $row = DB::table(app(CoreOptions::class)->outboxMessagesTable)->where('id', 'msg-clock-1')->first();
+    $row = DB::table('sys_outbox_messages')->where('id', 'msg-clock-1')->first();
 
     expect($row->available_at)->toBe($row->created_at)
         ->and($row->created_at)->toBe($row->updated_at);

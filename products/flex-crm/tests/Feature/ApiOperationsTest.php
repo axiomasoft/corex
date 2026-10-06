@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Data\CoreOptions;
 use CoreX\Context\Data\TenantContext;
-use CoreX\Database\Enums\IdStrategy;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Internal\Compiler\RegistryCompiler;
 use CoreX\Operations\Authorization\Contracts\OperationAuthorizer;
@@ -115,11 +113,10 @@ it('declares and dispatches company, contact and association operations through 
         ->and($undeclared->getData(true)['code'])->toBe('operations.undeclared_fields');
 });
 
-it('normalizes CRM identifiers for the configured ID strategy', function (): void {
-    config(['corex.ids.strategy' => IdStrategy::Int]);
-    app()->forgetInstance(CoreOptions::class);
+it('preserves string CRM identifiers and rejects non-string input', function (): void {
+    $id = '01932f5a-0000-7000-8000-000000000001';
 
-    expect(CrmIdentifier::fromPath('7'))->toBe(7)
-        ->and(CrmIdentifier::fromInput(8))->toBe(8)
-        ->and(fn (): int|string => CrmIdentifier::fromPath('0'))->toThrow(ValidationException::class);
+    expect(CrmIdentifier::fromPath($id))->toBe($id)
+        ->and(CrmIdentifier::fromInput($id))->toBe($id)
+        ->and(fn (): int|string => CrmIdentifier::fromInput(8))->toThrow(ValidationException::class);
 });

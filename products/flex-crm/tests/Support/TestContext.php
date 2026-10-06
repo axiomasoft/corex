@@ -38,12 +38,11 @@ final class TestContext implements AccountConnectionResolver, CrmExecutionContex
     public static function seed(string $connectionName): self
     {
         $db = DB::connection($connectionName);
-        $strategy = config('corex.ids.strategy');
-        $user = $strategy === 'int' ? 1 : ($strategy === 'ulid' ? (string) Str::ulid() : (string) Str::uuid7());
-        $workspace = $strategy === 'int' ? 1 : ($strategy === 'ulid' ? (string) Str::ulid() : (string) Str::uuid7());
+        $user = (string) Str::uuid7();
+        $workspace = (string) Str::uuid7();
         $db->table('users')->insert(['id' => $user, 'name' => 'Trusted user']);
         $db->table('wsp_workspaces')->insert(['id' => $workspace, 'slug' => 'main']);
-        $db->table('wsp_workspace_members')->insert(['id' => $strategy === 'int' ? 1 : ($strategy === 'ulid' ? (string) Str::ulid() : (string) Str::uuid7()), 'workspace_id' => $workspace, 'user_id' => $user, 'status' => 'active']);
+        $db->table('wsp_workspace_members')->insert(['id' => (string) Str::uuid7(), 'workspace_id' => $workspace, 'user_id' => $user, 'status' => 'active']);
         $self = new self;
         $self->context = new ExecutionContext(
             tenant: new TenantContext(new AccountRef(id: (string) Str::uuid7(), slug: 'account-a', status: 'active', features: [], limits: []), new WorkspaceRef(id: (string) $workspace, slug: 'main', type: 'main', path: '', parentId: null)),

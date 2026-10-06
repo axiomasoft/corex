@@ -994,123 +994,6 @@
                     "by_reference": false,
                     "parameters": [
                         {
-                            "name": "idStrategy",
-                            "type": "CoreX\\Database\\Enums\\IdStrategy",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "settingsTable",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "auditLogsTable",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "featureFlagsTable",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "featureOverridesTable",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "departmentsTable",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "departmentUserTable",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "pubsubMessagesTable",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "pubsubCursorsTable",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "savedViewsTable",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "savedViewScopesTable",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "outboxMessagesTable",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
-                            "name": "inboxMessagesTable",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 1
-                        },
-                        {
                             "name": "tenantContextResolver",
                             "type": "string",
                             "by_reference": false,
@@ -1463,30 +1346,6 @@
                     },
                     "hooks": []
                 },
-                "auditLogsTable": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "class-string<\\CoreX\\Audit\\Contracts\\AuditLogger> $auditLogger",
-                            "class-string<\\CoreX\\Audit\\Contracts\\AuditRetention> $auditRetention",
-                            "class-string<\\CoreX\\Context\\Contracts\\ImpersonationService> $impersonationService",
-                            "class-string<\\CoreX\\Context\\Contracts\\TenancyManager> $tenancyManager",
-                            "class-string<\\CoreX\\Context\\Contracts\\TenantContextResolver> $tenantContextResolver",
-                            "class-string<\\CoreX\\Data\\Contracts\\DataScopeAuthorizer> $dataScopeAuthorizer",
-                            "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
-                            "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
-                            "list<string> $acknowledgedDangerousModes"
-                        ]
-                    },
-                    "hooks": []
-                },
                 "auditRetention": {
                     "flags": 1,
                     "type": "string",
@@ -1559,54 +1418,6 @@
                     },
                     "hooks": []
                 },
-                "departmentUserTable": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "class-string<\\CoreX\\Audit\\Contracts\\AuditLogger> $auditLogger",
-                            "class-string<\\CoreX\\Audit\\Contracts\\AuditRetention> $auditRetention",
-                            "class-string<\\CoreX\\Context\\Contracts\\ImpersonationService> $impersonationService",
-                            "class-string<\\CoreX\\Context\\Contracts\\TenancyManager> $tenancyManager",
-                            "class-string<\\CoreX\\Context\\Contracts\\TenantContextResolver> $tenantContextResolver",
-                            "class-string<\\CoreX\\Data\\Contracts\\DataScopeAuthorizer> $dataScopeAuthorizer",
-                            "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
-                            "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
-                            "list<string> $acknowledgedDangerousModes"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "departmentsTable": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "class-string<\\CoreX\\Audit\\Contracts\\AuditLogger> $auditLogger",
-                            "class-string<\\CoreX\\Audit\\Contracts\\AuditRetention> $auditRetention",
-                            "class-string<\\CoreX\\Context\\Contracts\\ImpersonationService> $impersonationService",
-                            "class-string<\\CoreX\\Context\\Contracts\\TenancyManager> $tenancyManager",
-                            "class-string<\\CoreX\\Context\\Contracts\\TenantContextResolver> $tenantContextResolver",
-                            "class-string<\\CoreX\\Data\\Contracts\\DataScopeAuthorizer> $dataScopeAuthorizer",
-                            "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
-                            "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
-                            "list<string> $acknowledgedDangerousModes"
-                        ]
-                    },
-                    "hooks": []
-                },
                 "featureFlags": {
                     "flags": 1,
                     "type": "string",
@@ -1631,103 +1442,7 @@
                     },
                     "hooks": []
                 },
-                "featureFlagsTable": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "class-string<\\CoreX\\Audit\\Contracts\\AuditLogger> $auditLogger",
-                            "class-string<\\CoreX\\Audit\\Contracts\\AuditRetention> $auditRetention",
-                            "class-string<\\CoreX\\Context\\Contracts\\ImpersonationService> $impersonationService",
-                            "class-string<\\CoreX\\Context\\Contracts\\TenancyManager> $tenancyManager",
-                            "class-string<\\CoreX\\Context\\Contracts\\TenantContextResolver> $tenantContextResolver",
-                            "class-string<\\CoreX\\Data\\Contracts\\DataScopeAuthorizer> $dataScopeAuthorizer",
-                            "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
-                            "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
-                            "list<string> $acknowledgedDangerousModes"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "featureOverridesTable": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "class-string<\\CoreX\\Audit\\Contracts\\AuditLogger> $auditLogger",
-                            "class-string<\\CoreX\\Audit\\Contracts\\AuditRetention> $auditRetention",
-                            "class-string<\\CoreX\\Context\\Contracts\\ImpersonationService> $impersonationService",
-                            "class-string<\\CoreX\\Context\\Contracts\\TenancyManager> $tenancyManager",
-                            "class-string<\\CoreX\\Context\\Contracts\\TenantContextResolver> $tenantContextResolver",
-                            "class-string<\\CoreX\\Data\\Contracts\\DataScopeAuthorizer> $dataScopeAuthorizer",
-                            "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
-                            "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
-                            "list<string> $acknowledgedDangerousModes"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "idStrategy": {
-                    "flags": 1,
-                    "type": "CoreX\\Database\\Enums\\IdStrategy",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "class-string<\\CoreX\\Audit\\Contracts\\AuditLogger> $auditLogger",
-                            "class-string<\\CoreX\\Audit\\Contracts\\AuditRetention> $auditRetention",
-                            "class-string<\\CoreX\\Context\\Contracts\\ImpersonationService> $impersonationService",
-                            "class-string<\\CoreX\\Context\\Contracts\\TenancyManager> $tenancyManager",
-                            "class-string<\\CoreX\\Context\\Contracts\\TenantContextResolver> $tenantContextResolver",
-                            "class-string<\\CoreX\\Data\\Contracts\\DataScopeAuthorizer> $dataScopeAuthorizer",
-                            "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
-                            "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
-                            "list<string> $acknowledgedDangerousModes"
-                        ]
-                    },
-                    "hooks": []
-                },
                 "impersonationService": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "class-string<\\CoreX\\Audit\\Contracts\\AuditLogger> $auditLogger",
-                            "class-string<\\CoreX\\Audit\\Contracts\\AuditRetention> $auditRetention",
-                            "class-string<\\CoreX\\Context\\Contracts\\ImpersonationService> $impersonationService",
-                            "class-string<\\CoreX\\Context\\Contracts\\TenancyManager> $tenancyManager",
-                            "class-string<\\CoreX\\Context\\Contracts\\TenantContextResolver> $tenantContextResolver",
-                            "class-string<\\CoreX\\Data\\Contracts\\DataScopeAuthorizer> $dataScopeAuthorizer",
-                            "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
-                            "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
-                            "list<string> $acknowledgedDangerousModes"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "inboxMessagesTable": {
                     "flags": 1,
                     "type": "string",
                     "readonly": true,
@@ -1919,81 +1634,9 @@
                     },
                     "hooks": []
                 },
-                "outboxMessagesTable": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "class-string<\\CoreX\\Audit\\Contracts\\AuditLogger> $auditLogger",
-                            "class-string<\\CoreX\\Audit\\Contracts\\AuditRetention> $auditRetention",
-                            "class-string<\\CoreX\\Context\\Contracts\\ImpersonationService> $impersonationService",
-                            "class-string<\\CoreX\\Context\\Contracts\\TenancyManager> $tenancyManager",
-                            "class-string<\\CoreX\\Context\\Contracts\\TenantContextResolver> $tenantContextResolver",
-                            "class-string<\\CoreX\\Data\\Contracts\\DataScopeAuthorizer> $dataScopeAuthorizer",
-                            "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
-                            "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
-                            "list<string> $acknowledgedDangerousModes"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "pubsubCursorsTable": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "class-string<\\CoreX\\Audit\\Contracts\\AuditLogger> $auditLogger",
-                            "class-string<\\CoreX\\Audit\\Contracts\\AuditRetention> $auditRetention",
-                            "class-string<\\CoreX\\Context\\Contracts\\ImpersonationService> $impersonationService",
-                            "class-string<\\CoreX\\Context\\Contracts\\TenancyManager> $tenancyManager",
-                            "class-string<\\CoreX\\Context\\Contracts\\TenantContextResolver> $tenantContextResolver",
-                            "class-string<\\CoreX\\Data\\Contracts\\DataScopeAuthorizer> $dataScopeAuthorizer",
-                            "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
-                            "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
-                            "list<string> $acknowledgedDangerousModes"
-                        ]
-                    },
-                    "hooks": []
-                },
                 "pubsubDriver": {
                     "flags": 1,
                     "type": "CoreX\\Messaging\\Enums\\PubSubDriver",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "class-string<\\CoreX\\Audit\\Contracts\\AuditLogger> $auditLogger",
-                            "class-string<\\CoreX\\Audit\\Contracts\\AuditRetention> $auditRetention",
-                            "class-string<\\CoreX\\Context\\Contracts\\ImpersonationService> $impersonationService",
-                            "class-string<\\CoreX\\Context\\Contracts\\TenancyManager> $tenancyManager",
-                            "class-string<\\CoreX\\Context\\Contracts\\TenantContextResolver> $tenantContextResolver",
-                            "class-string<\\CoreX\\Data\\Contracts\\DataScopeAuthorizer> $dataScopeAuthorizer",
-                            "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
-                            "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
-                            "list<string> $acknowledgedDangerousModes"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "pubsubMessagesTable": {
-                    "flags": 1,
-                    "type": "string",
                     "readonly": true,
                     "visibility": "public",
                     "static": false,
@@ -2064,54 +1707,6 @@
                     "hooks": []
                 },
                 "pubsubRetention": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "class-string<\\CoreX\\Audit\\Contracts\\AuditLogger> $auditLogger",
-                            "class-string<\\CoreX\\Audit\\Contracts\\AuditRetention> $auditRetention",
-                            "class-string<\\CoreX\\Context\\Contracts\\ImpersonationService> $impersonationService",
-                            "class-string<\\CoreX\\Context\\Contracts\\TenancyManager> $tenancyManager",
-                            "class-string<\\CoreX\\Context\\Contracts\\TenantContextResolver> $tenantContextResolver",
-                            "class-string<\\CoreX\\Data\\Contracts\\DataScopeAuthorizer> $dataScopeAuthorizer",
-                            "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
-                            "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
-                            "list<string> $acknowledgedDangerousModes"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "savedViewScopesTable": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "class-string<\\CoreX\\Audit\\Contracts\\AuditLogger> $auditLogger",
-                            "class-string<\\CoreX\\Audit\\Contracts\\AuditRetention> $auditRetention",
-                            "class-string<\\CoreX\\Context\\Contracts\\ImpersonationService> $impersonationService",
-                            "class-string<\\CoreX\\Context\\Contracts\\TenancyManager> $tenancyManager",
-                            "class-string<\\CoreX\\Context\\Contracts\\TenantContextResolver> $tenantContextResolver",
-                            "class-string<\\CoreX\\Data\\Contracts\\DataScopeAuthorizer> $dataScopeAuthorizer",
-                            "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
-                            "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
-                            "list<string> $acknowledgedDangerousModes"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "savedViewsTable": {
                     "flags": 1,
                     "type": "string",
                     "readonly": true,
@@ -2232,30 +1827,6 @@
                     "hooks": []
                 },
                 "settingsRepository": {
-                    "flags": 1,
-                    "type": "string",
-                    "readonly": true,
-                    "visibility": "public",
-                    "static": false,
-                    "default": null,
-                    "doc": {
-                        "@param": [
-                            "class-string<\\CoreX\\Audit\\Contracts\\AuditLogger> $auditLogger",
-                            "class-string<\\CoreX\\Audit\\Contracts\\AuditRetention> $auditRetention",
-                            "class-string<\\CoreX\\Context\\Contracts\\ImpersonationService> $impersonationService",
-                            "class-string<\\CoreX\\Context\\Contracts\\TenancyManager> $tenancyManager",
-                            "class-string<\\CoreX\\Context\\Contracts\\TenantContextResolver> $tenantContextResolver",
-                            "class-string<\\CoreX\\Data\\Contracts\\DataScopeAuthorizer> $dataScopeAuthorizer",
-                            "class-string<\\CoreX\\Departments\\Contracts\\DepartmentRepository> $departmentRepository",
-                            "class-string<\\CoreX\\Features\\Contracts\\FeatureFlags> $featureFlags",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingDefaultsProvider> $settingDefaultsProvider",
-                            "class-string<\\CoreX\\Settings\\Contracts\\SettingsRepository> $settingsRepository",
-                            "list<string> $acknowledgedDangerousModes"
-                        ]
-                    },
-                    "hooks": []
-                },
-                "settingsTable": {
                     "flags": 1,
                     "type": "string",
                     "readonly": true,
@@ -6458,28 +6029,6 @@
             "enum_backing": null,
             "enum_cases": []
         },
-        "CoreX\\Database\\Enums\\IdStrategy": {
-            "kind": "enum",
-            "layer": "api",
-            "since": "1.0",
-            "final": false,
-            "readonly": false,
-            "abstract": false,
-            "extends": [],
-            "implements": [],
-            "uses": [],
-            "doc": [],
-            "methods": [],
-            "properties": [],
-            "constants": [],
-            "enum_backing": "string",
-            "enum_cases": {
-                "Int": "'int'",
-                "Ulid": "'ulid'",
-                "Uuid": "'uuid'",
-                "Uuid7": "'uuid7'"
-            }
-        },
         "CoreX\\Database\\Enums\\SchemaLifecycle": {
             "kind": "enum",
             "layer": "spi-call",
@@ -6691,7 +6240,7 @@
             "implements": [],
             "uses": [
                 "CoreX\\Audit\\Laravel\\HasAuditLog",
-                "CoreX\\Database\\Laravel\\HasConfiguredId",
+                "Illuminate\\Database\\Eloquent\\Concerns\\HasUuids",
                 "Illuminate\\Database\\Eloquent\\SoftDeletes"
             ],
             "doc": {
@@ -6737,60 +6286,6 @@
                     "parameters": [],
                     "return": "void",
                     "doc": []
-                },
-                "bootHasConfiguredId": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "void",
-                    "doc": []
-                },
-                "getIncrementing": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "bool",
-                    "doc": []
-                },
-                "getKeyType": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "string",
-                    "doc": []
-                },
-                "newUniqueId": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "string",
-                    "doc": []
-                },
-                "uniqueIds": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "array",
-                    "doc": {
-                        "@return": [
-                            "list<string>"
-                        ]
-                    }
                 }
             },
             "properties": [],
@@ -6853,200 +6348,6 @@
                     "doc": []
                 }
             },
-            "properties": [],
-            "constants": [],
-            "enum_backing": null,
-            "enum_cases": []
-        },
-        "CoreX\\Database\\Laravel\\HasConfiguredId": {
-            "kind": "trait",
-            "layer": "spi-call",
-            "since": "1.0",
-            "final": false,
-            "readonly": false,
-            "abstract": false,
-            "extends": [],
-            "implements": [],
-            "uses": [],
-            "doc": [],
-            "methods": {
-                "bootHasConfiguredId": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "void",
-                    "doc": []
-                },
-                "getIncrementing": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "bool",
-                    "doc": []
-                },
-                "getKeyType": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "string",
-                    "doc": []
-                },
-                "newUniqueId": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "string",
-                    "doc": []
-                },
-                "uniqueIds": {
-                    "visibility": "public",
-                    "static": false,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [],
-                    "return": "array",
-                    "doc": {
-                        "@return": [
-                            "list<string>"
-                        ]
-                    }
-                }
-            },
-            "properties": [],
-            "constants": [],
-            "enum_backing": null,
-            "enum_cases": []
-        },
-        "CoreX\\Database\\Laravel\\IdColumns": {
-            "kind": "class",
-            "layer": "spi-call",
-            "since": "1.0",
-            "final": true,
-            "readonly": false,
-            "abstract": false,
-            "extends": [],
-            "implements": [],
-            "uses": [],
-            "doc": [],
-            "methods": {
-                "foreign": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "table",
-                            "type": "Illuminate\\Database\\Schema\\Blueprint",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        },
-                        {
-                            "name": "name",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "Illuminate\\Database\\Schema\\ForeignIdColumnDefinition",
-                    "doc": []
-                },
-                "primary": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "table",
-                            "type": "Illuminate\\Database\\Schema\\Blueprint",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        },
-                        {
-                            "name": "name",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": true,
-                            "default": "'id'",
-                            "flags": 0
-                        }
-                    ],
-                    "return": "void",
-                    "doc": []
-                },
-                "reference": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "table",
-                            "type": "Illuminate\\Database\\Schema\\Blueprint",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        },
-                        {
-                            "name": "name",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        }
-                    ],
-                    "return": "Illuminate\\Database\\Schema\\ColumnDefinition",
-                    "doc": []
-                }
-            },
-            "properties": [],
-            "constants": [],
-            "enum_backing": null,
-            "enum_cases": []
-        },
-        "CoreX\\Database\\Laravel\\ResolvesCoreOptions": {
-            "kind": "trait",
-            "layer": "spi-call",
-            "since": "1.0",
-            "final": false,
-            "readonly": false,
-            "abstract": false,
-            "extends": [],
-            "implements": [],
-            "uses": [],
-            "doc": [],
-            "methods": [],
             "properties": [],
             "constants": [],
             "enum_backing": null,

@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Data\CoreOptions;
-use CoreX\Database\Laravel\IdColumns;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -14,14 +12,14 @@ return new class extends Migration
 {
     public function up(): void
     {
-        $table = app(CoreOptions::class)->settingsTable;
+        $table = 'sys_settings';
 
         Schema::create($table, function (Blueprint $table): void {
-            IdColumns::primary($table);
+            $table->uuid('id')->primary();
             $table->string('namespace', 64);
             $table->string('key', 190);
             $table->string('scope_type', 16)->default('account');
-            IdColumns::reference($table, 'scope_id')->nullable();
+            $table->uuid('scope_id')->nullable();
             $table->jsonb('value');
             $table->boolean('is_sensitive')->default(false);
             $table->timestampTz('created_at', precision: 6)->useCurrent();
@@ -39,6 +37,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists(app(CoreOptions::class)->settingsTable);
+        Schema::dropIfExists('sys_settings');
     }
 };

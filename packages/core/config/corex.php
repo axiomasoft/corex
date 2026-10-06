@@ -8,7 +8,6 @@ use CoreX\Context\Internal\NullImpersonationService;
 use CoreX\Context\Internal\NullTenancyManager;
 use CoreX\Context\Internal\SingleAccountResolver;
 use CoreX\Data\Internal\DenyDataScopeAuthorizer;
-use CoreX\Database\Enums\IdStrategy;
 use CoreX\Departments\Internal\DatabaseDepartmentRepository;
 use CoreX\Features\Internal\DatabaseFeatureFlags;
 use CoreX\Messaging\Enums\PubSubDriver;
@@ -16,38 +15,6 @@ use CoreX\Settings\Internal\DatabaseSettingsRepository;
 use CoreX\Settings\Internal\NullSettingDefaultsProvider;
 
 return [
-
-    /*
-    |--------------------------------------------------------------------------
-    | Identifier strategy
-    |--------------------------------------------------------------------------
-    | Primary-key strategy for BaseModel. UUIDv7 is the default (ADR-003
-    | revision); Ulid/Uuid/Int seams remain for boxed/legacy installs.
-    */
-    'ids' => [
-        'strategy' => IdStrategy::Uuid7,
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Table names
-    |--------------------------------------------------------------------------
-    | Override if the defaults collide with existing tables in a host app.
-    */
-    'tables' => [
-        'settings' => 'sys_settings',
-        'audit_logs' => 'sys_audit_log',
-        'feature_flags' => 'sys_feature_flags',
-        'feature_overrides' => 'sys_feature_overrides',
-        'departments' => 'sys_departments',
-        'department_user' => 'sys_department_user',
-        'pubsub_messages' => 'sys_pubsub_messages',
-        'pubsub_cursors' => 'sys_pubsub_cursors',
-        'saved_views' => 'sys_saved_views',
-        'saved_view_scopes' => 'sys_saved_view_scopes',
-        'outbox_messages' => 'sys_outbox_messages',
-        'inbox_messages' => 'sys_inbox_messages',
-    ],
 
     /*
     |--------------------------------------------------------------------------

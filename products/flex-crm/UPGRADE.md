@@ -4,11 +4,11 @@ This is a pre-1.0 breaking MINOR candidate after monorepo v0.2.0. No release tag
 Back up the account database before a separately authorized installation/upgrade.
 
 Fresh or empty legacy installations: initialize the existing `users`, `wsp_workspaces`
-and `wsp_workspace_members` owning schema with matching configured IDs, compile the
+and `wsp_workspace_members` owning schema with UUID keys, compile the
 installed modules, then enable `flex/crm` in that account connection. The additive
 `2026_09_14_000002_company_contact_parity` migration replaces only empty historical
 company/contact tables and creates sources and the typed association. Earlier migration
-files remain unchanged. PostgreSQL 15+ is required; FlexCRM uses `corex.ids.strategy=uuid7`.
+files remain unchanged. PostgreSQL 15+ is required; FlexCRM models generate UUIDv7 identifiers.
 
 Populated legacy installations are explicitly unsupported by automatic in-place upgrade.
 The migration throws `CRM_PARITY_UPGRADE_REQUIRES_EXPORT` before changing CRM tables.

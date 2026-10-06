@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Data\CoreOptions;
-use CoreX\Database\Laravel\IdColumns;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -14,11 +12,11 @@ return new class extends Migration
 {
     public function up(): void
     {
-        $table = app(CoreOptions::class)->departmentUserTable;
+        $table = 'sys_department_user';
 
         Schema::create($table, function (Blueprint $table): void {
-            IdColumns::foreign($table, 'department_id')->constrained(app(CoreOptions::class)->departmentsTable)->cascadeOnDelete();
-            IdColumns::reference($table, 'user_id');
+            $table->foreignUuid('department_id')->constrained('sys_departments')->cascadeOnDelete();
+            $table->uuid('user_id');
             $table->string('role', 16)->default('member');
             $table->boolean('is_primary')->default(false);
             $table->timestampTz('created_at', precision: 6)->useCurrent();
@@ -33,6 +31,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists(app(CoreOptions::class)->departmentUserTable);
+        Schema::dropIfExists('sys_department_user');
     }
 };

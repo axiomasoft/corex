@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Data\CoreOptions;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -89,54 +88,11 @@ it('creates partial indexes on sys_outbox_messages hot paths', function (): void
     }
 })->group('pg');
 
-it('uses configured messaging table names for tables and indexes', function (): void {
-    $originalOutboxTable = config('corex.tables.outbox_messages');
-    $originalInboxTable = config('corex.tables.inbox_messages');
-    $outboxTable = 'custom_outbox_messages';
-    $inboxTable = 'custom_inbox_messages';
-
-    try {
-        config([
-            'corex.tables.outbox_messages' => $outboxTable,
-            'corex.tables.inbox_messages' => $inboxTable,
-        ]);
-        app()->forgetInstance(CoreOptions::class);
-
-        DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
-        DB::statement('CREATE SCHEMA public');
-        $this->migrateSchemaSets(['axiomasoft/corex:tenant'], 'pgsql');
-
-        expect(Schema::hasTable($outboxTable))->toBeTrue()
-            ->and(Schema::hasTable($inboxTable))->toBeTrue()
-            ->and(Schema::hasTable('sys_outbox_messages'))->toBeFalse()
-            ->and(Schema::hasTable('sys_inbox_messages'))->toBeFalse();
-
-        $outboxIndexes = DB::table('pg_indexes')
-            ->where('tablename', $outboxTable)
-            ->whereIn('indexname', [
-                'sys_outbox_messages_claim_idx',
-                'sys_outbox_messages_reclaim_idx',
-                'sys_outbox_messages_published_idx',
-                'sys_outbox_messages_dead_idx',
-            ])
-            ->pluck('indexdef', 'indexname');
-
-        expect($outboxIndexes)->toHaveCount(4);
-        foreach ($outboxIndexes as $indexDefinition) {
-            expect($indexDefinition)->toContain('WHERE');
-        }
-
-        expect(DB::table('pg_indexes')
-            ->where('tablename', $inboxTable)
-            ->where('indexname', 'sys_inbox_messages_processed_idx')
-            ->exists())->toBeTrue();
-    } finally {
-        config([
-            'corex.tables.outbox_messages' => $originalOutboxTable,
-            'corex.tables.inbox_messages' => $originalInboxTable,
-        ]);
-        app()->forgetInstance(CoreOptions::class);
-    }
+it('indexes the shipped inbox table for retention', function (): void {
+    expect(DB::table('pg_indexes')
+        ->where('tablename', 'sys_inbox_messages')
+        ->where('indexname', 'sys_inbox_messages_processed_idx')
+        ->exists())->toBeTrue();
 })->group('pg');
 
 it('rejects duplicate inbox consumer and message_id pairs', function (): void {

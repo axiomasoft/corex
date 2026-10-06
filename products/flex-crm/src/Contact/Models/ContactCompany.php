@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Flex\Crm\Contact\Models;
 
-use CoreX\Database\Laravel\HasConfiguredId;
 use Flex\Crm\Company\Models\Company;
 use Flex\Crm\Context\ContextGuard;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Override;
@@ -22,7 +22,7 @@ use Override;
  */
 final class ContactCompany extends Pivot
 {
-    use HasConfiguredId;
+    use HasUuids;
 
     protected $table = 'crm_contact_company';
 

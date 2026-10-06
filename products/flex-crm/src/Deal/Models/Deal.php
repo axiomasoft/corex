@@ -22,6 +22,7 @@ use Illuminate\Support\Carbon;
  * @property string $stage_id
  * @property string $title
  * @property Money|null $amount
+ * @property string $currency
  * @property DealStatus $status
  * @property string|null $owner_id
  * @property string $position

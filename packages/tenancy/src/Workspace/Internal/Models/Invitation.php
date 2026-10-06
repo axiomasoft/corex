@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Workspace\Internal\Models;
 
 use Carbon\CarbonImmutable;
-use CoreX\Database\Laravel\HasConfiguredId;
 use CoreX\Tenancy\Identity\Laravel\UserRelations;
 use CoreX\Tenancy\Workspace\Exceptions\InvitationNotAcceptableException;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -31,7 +31,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 final class Invitation extends Model
 {
-    use HasConfiguredId;
+    use HasUuids;
 
     protected $table = 'wsp_invitations';
 

@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Data\CoreOptions;
 use CoreX\Messaging\Contracts\DurableMessagePublisher;
 use CoreX\Messaging\Contracts\MessagePublisher;
 use CoreX\Messaging\Data\MessageEnvelope;
@@ -36,7 +35,7 @@ it('publishes two pending messages in one pass', function (): void {
     Artisan::call('corex:messaging:relay', ['--once' => true]);
 
     expect(Artisan::output())->toContain('published 2')
-        ->and(DB::connection('pgsql')->table(app(CoreOptions::class)->outboxMessagesTable)->where('status', 'published')->count())->toBe(2);
+        ->and(DB::connection('pgsql')->table('sys_outbox_messages')->where('status', 'published')->count())->toBe(2);
 })->group('pg');
 
 it('defers the second message when the publisher throws', function (): void {
@@ -64,13 +63,13 @@ it('defers the second message when the publisher throws', function (): void {
         ->assertSuccessful();
 
     $now = app(ClockInterface::class)->now();
-    $second = DB::connection('pgsql')->table(app(CoreOptions::class)->outboxMessagesTable)
+    $second = DB::connection('pgsql')->table('sys_outbox_messages')
         ->where('id', '01932f5a-0000-7000-8000-000000000032')
         ->first();
 
     $availableAt = new DateTimeImmutable((string) $second->available_at);
 
-    expect(DB::connection('pgsql')->table(app(CoreOptions::class)->outboxMessagesTable)->where('status', 'published')->count())->toBe(1)
+    expect(DB::connection('pgsql')->table('sys_outbox_messages')->where('status', 'published')->count())->toBe(1)
         ->and($second->status)->toBe('pending')
         ->and($availableAt->getTimestamp())->toBe($now->modify('+2 seconds')->getTimestamp());
 })->group('pg');
@@ -100,7 +99,7 @@ it('warns on OutboxLeaseLost without deferring', function (): void {
         ->expectsOutputToContain('superseded')
         ->assertSuccessful();
 
-    $second = DB::connection('pgsql')->table(app(CoreOptions::class)->outboxMessagesTable)
+    $second = DB::connection('pgsql')->table('sys_outbox_messages')
         ->where('id', '01932f5a-0000-7000-8000-000000000042')
         ->first();
 

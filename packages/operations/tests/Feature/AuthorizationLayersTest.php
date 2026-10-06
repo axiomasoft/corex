@@ -11,7 +11,6 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Database\Contracts\SchemaMigrator;
 use CoreX\Database\Contracts\SchemaSets;
-use CoreX\Database\Enums\IdStrategy;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Data\Api;
 use CoreX\Modules\Data\ModuleManifest;
@@ -25,6 +24,7 @@ use CoreX\Operations\Authorization\Internal\DenyClientScopeAuthorizer;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
 use CoreX\Operations\Definition\Data\Operation;
 use CoreX\Operations\Definition\Data\ResourceId;
+use CoreX\Operations\Definition\Enums\ResourceIdFormat;
 use CoreX\Operations\Definition\Laravel\OperationFactory;
 use CoreX\Operations\Errors\Enums\OperationsErrorCode;
 use CoreX\Operations\Errors\Exceptions\ApiError;
@@ -138,39 +138,40 @@ final class AuthorizationLayersTest extends TestCase
         AuthorizationHandler::$calls = 0;
     }
 
-    public function test_resource_ids_round_trip_all_supported_strategies_and_reject_mismatch(): void
+    public function test_resource_ids_round_trip_all_supported_formats_and_reject_mismatch(): void
     {
         $vectors = [
-            [IdStrategy::Uuid7, '01890f3e-7b2a-7cc0-98c4-dc0c0c07398f', self::LocalResource],
-            [IdStrategy::Uuid, '550e8400-e29b-41d4-a716-446655440000', 'note:uuid:550e8400-e29b-41d4-a716-446655440000'],
-            [IdStrategy::Ulid, '01ARZ3NDEKTSV4RRFFQ69G5FAV', 'note:ulid:01ARZ3NDEKTSV4RRFFQ69G5FAV'],
-            [IdStrategy::Int, 42, 'note:integer:42'],
+            [ResourceIdFormat::Uuid7, '01890f3e-7b2a-7cc0-98c4-dc0c0c07398f', self::LocalResource],
+            [ResourceIdFormat::Uuid, '550e8400-e29b-41d4-a716-446655440000', 'note:uuid:550e8400-e29b-41d4-a716-446655440000'],
+            [ResourceIdFormat::Ulid, '01ARZ3NDEKTSV4RRFFQ69G5FAV', 'note:ulid:01ARZ3NDEKTSV4RRFFQ69G5FAV'],
+            [ResourceIdFormat::Integer, 42, 'note:integer:42'],
         ];
 
-        foreach ($vectors as [$strategy, $value, $encoded]) {
-            $resourceId = ResourceId::fromValue('note', $value, $strategy);
+        foreach ($vectors as [$format, $value, $encoded]) {
+            $resourceId = ResourceId::fromValue('note', $value, $format);
 
+            self::assertSame($format, $resourceId->format);
             self::assertSame($encoded, $resourceId->toString());
-            self::assertSame($encoded, ResourceId::parse($encoded, $strategy, 'note')->toString());
+            self::assertSame($encoded, ResourceId::parse($encoded, $format, 'note')->toString());
         }
 
-        self::assertSame(self::LocalResource, ResourceId::fromConfigured(
+        self::assertSame(self::LocalResource, ResourceId::fromValue(
             'note',
             '01890f3e-7b2a-7cc0-98c4-dc0c0c07398f',
-            IdStrategy::Uuid7,
+            ResourceIdFormat::Uuid7,
         )->toString());
         self::assertSame(self::LocalResource, ResourceId::parse(
             self::LocalResource,
-            IdStrategy::Uuid,
+            ResourceIdFormat::Uuid,
         )->toString());
 
         foreach ([
-            fn () => ResourceId::parse(self::LocalResource, IdStrategy::Ulid),
-            fn () => ResourceId::parse('note:uuid:550e8400-e29b-41d4-a716-446655440000', IdStrategy::Uuid7),
-            fn () => ResourceId::parse(self::LocalResource, IdStrategy::Uuid7, 'contact'),
-            fn () => ResourceId::fromValue('note', '01arz3ndektsv4rrffq69g5fav', IdStrategy::Ulid),
-            fn () => ResourceId::fromValue('note', '042', IdStrategy::Int),
-            fn () => ResourceId::fromValue('Note', 42, IdStrategy::Int),
+            fn () => ResourceId::parse(self::LocalResource, ResourceIdFormat::Ulid),
+            fn () => ResourceId::parse('note:uuid:550e8400-e29b-41d4-a716-446655440000', ResourceIdFormat::Uuid7),
+            fn () => ResourceId::parse(self::LocalResource, ResourceIdFormat::Uuid7, 'contact'),
+            fn () => ResourceId::fromValue('note', '01arz3ndektsv4rrffq69g5fav', ResourceIdFormat::Ulid),
+            fn () => ResourceId::fromValue('note', '042', ResourceIdFormat::Integer),
+            fn () => ResourceId::fromValue('Note', 42, ResourceIdFormat::Integer),
         ] as $invalid) {
             try {
                 $invalid();
@@ -386,7 +387,7 @@ final class AuthorizationHandler implements OperationHandler
     public function handle(RequestContext $context, array $input, array $parameters): array
     {
         self::$calls++;
-        $resource = ResourceId::parse((string) $input['resource_id'], IdStrategy::Uuid7, 'note');
+        $resource = ResourceId::parse((string) $input['resource_id'], ResourceIdFormat::Uuid7, 'note');
 
         if ($resource->toString() === AuthorizationLayersTest::ForeignTenantResource
             || $input['owner'] !== $context->principal()->id()) {

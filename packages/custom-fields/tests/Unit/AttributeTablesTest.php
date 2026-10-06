@@ -7,7 +7,6 @@ namespace CoreX\CustomFields\Tests\Unit;
 use CoreX\CustomFields\AttributesServiceProvider;
 use CoreX\CustomFields\Data\AttributeTables;
 use CoreX\CustomFields\Exceptions\InvalidAttributeTables;
-use CoreX\CustomFields\Internal\CustomFieldsOptions;
 use Orchestra\Testbench\TestCase;
 use Override;
 
@@ -55,12 +54,14 @@ final class AttributeTablesTest extends TestCase
         ))->toThrow(InvalidAttributeTables::class);
     }
 
-    public function test_it_rejects_invalid_table_names_loaded_from_provider_configuration(): void
+    public function test_provider_resolves_the_shipped_table_names(): void
     {
-        $this->app['config']->set('corex-custom-fields.tables.documents', 'Bad-Name');
-        $this->app->forgetInstance(CustomFieldsOptions::class);
+        $tables = $this->app->make(AttributeTables::class);
 
-        expect(fn (): AttributeTables => $this->app->make(AttributeTables::class))
-            ->toThrow(InvalidAttributeTables::class);
+        expect($tables->documents)->toBe('sys_attribute_documents')
+            ->and($tables->writeTokens)->toBe('sys_attribute_write_tokens')
+            ->and($tables->eavValues)->toBe('sys_attribute_eav_values')
+            ->and($tables->eavRecords)->toBe('sys_attribute_eav_records')
+            ->and($tables->schemaOperations)->toBe('sys_attribute_schema_operations');
     }
 }

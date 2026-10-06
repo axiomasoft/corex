@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Data\CoreOptions;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,13 +12,13 @@ use Illuminate\Support\Facades\Schema;
 // instead of resetting to 0 (replays all history) or max(id) on every
 // subscribe() (silently drops the restart-window backlog — plan.md D44,
 // pre-mortem P1R C7). Driver-local delivery-cursor state, not a domain
-// entity — same NOT-in-DB_SCHEMA.md / NOT-IdColumns rationale as
+// entity — same NOT-in-DB_SCHEMA.md / transport-key rationale as
 // sys_pubsub_messages.id (OQ-6, audit F12; P1.19 Scope Excluded).
 return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create(app(CoreOptions::class)->pubsubCursorsTable, function (Blueprint $table): void {
+        Schema::create('sys_pubsub_cursors', function (Blueprint $table): void {
             $table->string('channel', 190);
             $table->string('subscriber', 190);
             $table->unsignedBigInteger('position');
@@ -31,6 +30,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists(app(CoreOptions::class)->pubsubCursorsTable);
+        Schema::dropIfExists('sys_pubsub_cursors');
     }
 };

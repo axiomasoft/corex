@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Settings\Internal\Models;
 
-use CoreX\Database\Laravel\HasConfiguredId;
-use CoreX\Database\Laravel\ResolvesCoreOptions;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
-use Override;
 
 /**
  * @property string $namespace
@@ -19,8 +17,9 @@ use Override;
  */
 final class Setting extends Model
 {
-    use HasConfiguredId;
-    use ResolvesCoreOptions;
+    use HasUuids;
+
+    protected $table = 'sys_settings';
 
     protected $guarded = [];
 
@@ -28,10 +27,4 @@ final class Setting extends Model
     protected $casts = [
         'is_sensitive' => 'bool',
     ];
-
-    #[Override]
-    public function getTable(): string
-    {
-        return $this->coreOptions()->settingsTable;
-    }
 }

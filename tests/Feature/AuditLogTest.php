@@ -17,7 +17,6 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
-use CoreX\Database\Laravel\HasConfiguredId;
 use CoreX\Modules\Data\EntityDefinition;
 use CoreX\Modules\Enums\Capability;
 use CoreX\Modules\Internal\Audit\AuditCapabilityWiring;
@@ -25,6 +24,7 @@ use CoreX\Modules\Testing\ArrayEntityRegistry;
 use CoreX\Tests\Stubs\StubAuditableThing;
 use CoreX\Tests\Stubs\Widget;
 use Illuminate\Database\Connection;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Carbon;
@@ -44,7 +44,7 @@ const AUDIT_TEST_CONNECTION = 'pgsql';
 final class AuditSensitiveStub extends Model implements Auditable
 {
     use HasAuditLog;
-    use HasConfiguredId;
+    use HasUuids;
 
     protected $table = 'audit_sensitive_stubs';
 
@@ -71,7 +71,7 @@ final class AuditSensitiveStub extends Model implements Auditable
 final class AuditUnguardedStub extends Model implements Auditable
 {
     use HasAuditLog;
-    use HasConfiguredId;
+    use HasUuids;
 
     protected $table = 'audit_unguarded_stubs';
 

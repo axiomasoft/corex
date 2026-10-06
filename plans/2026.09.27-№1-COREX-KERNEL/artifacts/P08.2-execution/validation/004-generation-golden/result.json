@@ -1,0 +1,34 @@
+{
+  "id": "generation-golden",
+  "command": [
+    "env",
+    "GOLDEN_UPDATE=1",
+    "scripts/php84",
+    "composer",
+    "golden",
+    "--",
+    "--filter=php-surface"
+  ],
+  "started_at": "2026-10-06T07:17:02.973564+00:00",
+  "elapsed_seconds": 4.076,
+  "exit": 0,
+  "expected_exit": 0,
+  "exit_matches_expectation": true,
+  "product_current": false,
+  "product_sha256": "6bb57b7276d877012f7ffc69b96bf7f459a28c7c31ac58d4e6eac7af10761eaa",
+  "after_product_sha256": "76c5a8b6b9f5476c52afaf90057f0c66cf836c73de4911cc415577824721d012",
+  "environment_before": {
+    "composer.lock": "5219c96445ea830f692ad2a2cb62e88b1fd891868aeb98edd5c2394a56359881",
+    "vendor/composer/installed.json": "9c4a8d018567cf2201d6ca473b929caf90688b4f2bfd5c6d04d9fb7f34bc08ca",
+    "vendor/orchestra/testbench-core/laravel/config/corex.php": "587c590efaa7992d332f96ec9c07e48ccf1cce25b95df32d98df1a1337b90b1c",
+    "vendor/orchestra/testbench-core/laravel/bootstrap/cache/config.php": "ABSENT"
+  },
+  "environment_after": {
+    "composer.lock": "5219c96445ea830f692ad2a2cb62e88b1fd891868aeb98edd5c2394a56359881",
+    "vendor/composer/installed.json": "9c4a8d018567cf2201d6ca473b929caf90688b4f2bfd5c6d04d9fb7f34bc08ca",
+    "vendor/orchestra/testbench-core/laravel/config/corex.php": "587c590efaa7992d332f96ec9c07e48ccf1cce25b95df32d98df1a1337b90b1c",
+    "vendor/orchestra/testbench-core/laravel/bootstrap/cache/config.php": "ABSENT"
+  },
+  "candidate_head": "f6d9e41e13e39dbf7b44ce89788591ed8e742e41",
+  "log": "/tmp/corex-p082-validation/004-generation-golden/output.log"
+}

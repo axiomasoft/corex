@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Tests\Feature;
 
-use CoreX\Config\Data\CoreOptions;
 use CoreX\Config\Data\SecretRef;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
@@ -128,7 +127,7 @@ final class WebhookLoadContourIntegrationTest extends TestCase
             $migration = require app(SchemaSets::class)->get('axiomasoft/corex-webhooks:tenant')->path.'/create_sys_api_webhook_tables.php';
             app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
             $connection = DB::connection('api_p1420_tenant');
-            $connection->getSchemaBuilder()->create(app(CoreOptions::class)->inboxMessagesTable, function (Blueprint $table): void {
+            $connection->getSchemaBuilder()->create('sys_inbox_messages', function (Blueprint $table): void {
                 $table->string('consumer', 120);
                 $table->uuid('message_id');
                 $table->string('name', 160);

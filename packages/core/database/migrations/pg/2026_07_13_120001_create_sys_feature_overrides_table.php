@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Data\CoreOptions;
-use CoreX\Database\Laravel\IdColumns;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -14,13 +12,13 @@ return new class extends Migration
 {
     public function up(): void
     {
-        $table = app(CoreOptions::class)->featureOverridesTable;
+        $table = 'sys_feature_overrides';
 
         Schema::create($table, function (Blueprint $table): void {
-            IdColumns::primary($table);
-            IdColumns::foreign($table, 'flag_id')->constrained(app(CoreOptions::class)->featureFlagsTable)->cascadeOnDelete();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('flag_id')->constrained('sys_feature_flags')->cascadeOnDelete();
             $table->string('scope_type', 16);
-            IdColumns::reference($table, 'scope_id');
+            $table->uuid('scope_id');
             $table->boolean('is_enabled');
             $table->jsonb('payload')->nullable();
             $table->timestampTz('created_at', precision: 6)->useCurrent();
@@ -33,6 +31,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists(app(CoreOptions::class)->featureOverridesTable);
+        Schema::dropIfExists('sys_feature_overrides');
     }
 };

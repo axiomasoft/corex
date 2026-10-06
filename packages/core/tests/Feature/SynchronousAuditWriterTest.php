@@ -9,6 +9,7 @@ use CoreX\Data\Data\JsonDocument;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 beforeEach(function (): void {
     Schema::connection('testbench')->create('sys_audit_log', function (Blueprint $table): void {
@@ -38,6 +39,9 @@ it('commits a mandatory audit row with the event snapshot despite optional audit
 
     expect(DB::connection('testbench')->table('sys_audit_log')->count())->toBe(1)
         ->and(DB::connection('testbench')->transactionLevel())->toBe(0);
+    $id = DB::connection('testbench')->table('sys_audit_log')->value('id');
+    expect(is_string($id) && Str::isUuid($id))->toBeTrue()
+        ->and($id[14])->toBe('7');
 });
 
 it('rejects an ambient transaction before writing the audit row', function (): void {

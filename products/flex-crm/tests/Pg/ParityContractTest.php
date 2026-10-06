@@ -32,7 +32,7 @@ use Illuminate\Validation\ValidationException;
 uses()->group('pg');
 
 beforeEach(function (): void {
-    config(['database.default' => 'pgsql', 'corex.ids.strategy' => 'uuid7']);
+    config(['database.default' => 'pgsql']);
     app()->forgetInstance(CoreOptions::class);
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');

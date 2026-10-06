@@ -1,0 +1,2 @@
+> bash scripts/ci-deferred-guard.sh vendor/bin/pest --testsuite=Arch
+{"tool":"pest","result":"passed","tests":137,"passed":137,"assertions":467,"duration_ms":165834}

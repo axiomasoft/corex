@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Webhooks\Tests\Feature;
 
-use CoreX\Config\Data\CoreOptions;
 use CoreX\Config\Data\SecretRef;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Data\Contracts\DataScopeCodec;
@@ -53,7 +52,7 @@ trait WebhookDeliveryFixture
         $this->connection = DB::connection('api_tenant');
         $migration = require app(SchemaSets::class)->get('axiomasoft/corex-webhooks:tenant')->path.'/create_sys_api_webhook_tables.php';
         app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
-        $this->connection->getSchemaBuilder()->create(app(CoreOptions::class)->inboxMessagesTable, function (Blueprint $table): void {
+        $this->connection->getSchemaBuilder()->create('sys_inbox_messages', function (Blueprint $table): void {
             $table->string('consumer', 120);
             $table->string('message_id', 64);
             $table->string('name', 160);

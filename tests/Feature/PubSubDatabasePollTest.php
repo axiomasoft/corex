@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Data\CoreOptions;
 use CoreX\Messaging\Contracts\WorkerRuntime;
 use CoreX\Messaging\Internal\DatabasePollPubSub;
 use Illuminate\Database\Connection;
@@ -73,7 +72,7 @@ it('persists rows in the configured table with a bigint cursor', function (): vo
     $pubsub = pollingPubSub();
     $pubsub->publish('module.enabled', ['module' => 'crm']);
 
-    $row = pubsubPg()->table(app(CoreOptions::class)->pubsubMessagesTable)->first();
+    $row = pubsubPg()->table('sys_pubsub_messages')->first();
 
     expect($row->channel)->toBe('module.enabled')
         ->and(json_decode((string) $row->payload, true))->toBe(['module' => 'crm'])
@@ -122,7 +121,7 @@ it('(г) D44: a rolling restart of the SAME subscriber resumes from its persiste
 });
 
 it('(д) corex:messaging:prune-pubsub truncates rows older than the threshold, leaving fresh rows intact', function (): void {
-    pubsubPg()->table(app(CoreOptions::class)->pubsubMessagesTable)->insert([
+    pubsubPg()->table('sys_pubsub_messages')->insert([
         ['channel' => 'module.enabled', 'payload' => '{"module":"stale"}', 'created_at' => now()->subDays(60)],
         ['channel' => 'module.enabled', 'payload' => '{"module":"fresh"}', 'created_at' => now()],
     ]);
@@ -132,7 +131,7 @@ it('(д) corex:messaging:prune-pubsub truncates rows older than the threshold, l
         '--database' => PUBSUB_DB_POLL_TEST_CONNECTION,
     ])->assertSuccessful();
 
-    $remaining = pubsubPg()->table(app(CoreOptions::class)->pubsubMessagesTable)->pluck('payload');
+    $remaining = pubsubPg()->table('sys_pubsub_messages')->pluck('payload');
 
     expect($remaining)->toHaveCount(1)
         ->and(json_decode((string) $remaining->first(), true))->toBe(['module' => 'fresh']);

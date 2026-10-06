@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Data\CoreOptions;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,7 +10,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create(app(CoreOptions::class)->inboxMessagesTable, function (Blueprint $table): void {
+        Schema::create('sys_inbox_messages', function (Blueprint $table): void {
             $table->string('consumer', 120);
             $table->uuid('message_id');
             $table->string('name', 160);

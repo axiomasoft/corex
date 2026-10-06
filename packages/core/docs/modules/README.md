@@ -26,9 +26,8 @@ php artisan corex:schema:migrate --scope=tenant --database=<tenant>
 
 ## Идентификаторы и время
 
-Ключевые колонки (`mod_modules.id`, `mod_lifecycle_log.id`/`actor_id`) следуют
-`config('corex.ids.strategy')` через `CoreX\Database\Laravel\IdColumns` (шов
-axiomasoft/corex). Все `timestamptz` — с явной микросекундной точностью
+Ключевые колонки (`mod_modules.id`, `mod_lifecycle_log.id`/`actor_id`) используют UUID.
+Модели генерируют UUIDv7 через Laravel `HasUuids`. Все `timestamptz` — с явной микросекундной точностью
 (`precision: 6`). Порядок purge в `mod_records` детерминирован монотонным
 `seq bigserial` (не часами) — FK-безопасный обратный порядок удаления.
 

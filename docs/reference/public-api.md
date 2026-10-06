@@ -71,15 +71,11 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Database\Contracts\SchemaSets` | spi-call | 1.0 |
 | `CoreX\Database\Data\SchemaSet` | spi-call | 1.0 |
 | `CoreX\Database\Data\SchemaSetStatus` | spi-call | 1.0 |
-| `CoreX\Database\Enums\IdStrategy` | api | 1.0 |
 | `CoreX\Database\Enums\SchemaLifecycle` | spi-call | 1.0 |
 | `CoreX\Database\Enums\SchemaScope` | spi-call | 1.0 |
 | `CoreX\Database\Exceptions\SchemaSetException` | spi-call | 1.0 |
 | `CoreX\Database\Laravel\BaseModel` | spi-implement | 1.0 |
 | `CoreX\Database\Laravel\DatabaseRegistrar` | spi-call | 1.0 |
-| `CoreX\Database\Laravel\HasConfiguredId` | spi-call | 1.0 |
-| `CoreX\Database\Laravel\IdColumns` | spi-call | 1.0 |
-| `CoreX\Database\Laravel\ResolvesCoreOptions` | spi-call | 1.0 |
 | `CoreX\Database\Testing\MigratesSchemaSets` | spi-call | 1.0 |
 | `CoreX\Departments\Contracts\DepartmentRepository` | api | 1.0 |
 | `CoreX\Departments\Data\Department` | api | 1.0 |
@@ -507,6 +503,7 @@ Attributes own membership. Members belong to this package; direct extends/implem
 | `CoreX\Operations\Definition\Data\Operation` | spi-call | 1.0 |
 | `CoreX\Operations\Definition\Data\ResourceId` | api | 1.0 |
 | `CoreX\Operations\Definition\Enums\OperationMode` | api | 1.0 |
+| `CoreX\Operations\Definition\Enums\ResourceIdFormat` | api | 1.0 |
 | `CoreX\Operations\Definition\Laravel\OperationFactory` | spi-call | 1.0 |
 | `CoreX\Operations\Definition\Laravel\OperationFingerprint` | spi-call | 1.0 |
 | `CoreX\Operations\Definition\Laravel\OperationPortBindings` | spi-call | 1.0 |

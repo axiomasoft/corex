@@ -41,14 +41,6 @@ php artisan corex:schema:status --scope=tenant --database=<tenant>
 После фиксации baseline изменение схемы поставляется новым файлом с повышением версии набора.
 Повторный `corex:schema:migrate` применяет только отсутствующие в журнале Laravel `migrations` файлы.
 
-## Стратегия идентификаторов
-
-Тип ключевых колонок (`id`, ссылки, FK) следует `config('corex.ids.strategy')`:
-`uuid7` (дефолт, ADR-003), `uuid`, `ulid`, `int`. Миграции пишут колонки через
-`CoreX\Database\Laravel\IdColumns`, модели — через трейт
-`CoreX\Database\Laravel\HasConfiguredId`, так что boxed/legacy-установка выравнивает
-ключи ядра под свой тип без форка миграций. Меняйте стратегию **до** первого
-`migrate` — она фиксирует тип колонок в БД.
 
 ## Mandatory support audit
 

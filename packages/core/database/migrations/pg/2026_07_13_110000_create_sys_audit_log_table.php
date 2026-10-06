@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Data\CoreOptions;
-use CoreX\Database\Laravel\IdColumns;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -14,16 +12,16 @@ return new class extends Migration
 {
     public function up(): void
     {
-        $table = app(CoreOptions::class)->auditLogsTable;
+        $table = 'sys_audit_log';
 
         Schema::create($table, function (Blueprint $table): void {
-            IdColumns::primary($table);
+            $table->uuid('id')->primary();
             $table->timestampTz('occurred_at', precision: 6)->useCurrent();
             $table->string('actor_type', 16);
-            IdColumns::reference($table, 'actor_id')->nullable();
-            IdColumns::reference($table, 'workspace_id')->nullable();
+            $table->uuid('actor_id')->nullable();
+            $table->uuid('workspace_id')->nullable();
             $table->string('entity_type', 64)->nullable();
-            IdColumns::reference($table, 'entity_id')->nullable();
+            $table->uuid('entity_id')->nullable();
             $table->string('action', 64);
             $table->jsonb('changes')->nullable();
             $table->jsonb('context')->default('{}');
@@ -45,6 +43,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists(app(CoreOptions::class)->auditLogsTable);
+        Schema::dropIfExists('sys_audit_log');
     }
 };

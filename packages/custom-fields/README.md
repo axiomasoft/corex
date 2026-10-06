@@ -15,10 +15,6 @@ Without `axiomasoft/corex`, `FieldCatalogue`, `AttributeStore`, and `SchemaOpera
 `UnavailableAttributes`. Dynamic attribute fields are unavailable in that configuration; this is an
 observable fail-closed state, not a silent degradation.
 
-Table names are configured once through `corex-custom-fields.tables` and normalized into an immutable
-`AttributeTables` object at provider registration. Defaults match the shipped `sys_attribute_*`
-migrations byte-for-byte; migrations themselves are not overridden by configuration.
-
 Schema requests persist an idempotent operation only. They do not execute SQL in the request path.
 A trusted asynchronous worker invokes `SchemaOperationWorker` with a fresh `DataScope`; it claims
 the operation transactionally, executes PostgreSQL concurrent index DDL outside that transaction,
@@ -29,6 +25,17 @@ queue or console boundary; it must never be called from HTTP handling.
 ## Installation
 
 Install with `composer require axiomasoft/corex-custom-fields` through the configured CoreX channel. Provide a trusted PostgreSQL tenant connection and apply the package-owned `sys_attribute_*` migrations before enabling writes. Bind the module/entity registries when dynamic attribute definitions are required; without them the package reports its unavailable state.
+
+## Configuration
+
+`corex-custom-fields.storage_driver` defaults to `jsonb`; select `eav` when needed. Use
+`corex-custom-fields.storage_by_entity` to map individual entities to either driver. The application
+controls these settings and the `drivers` enablement map. `sources` selects definition sources
+(`static` by default), while `definitions` maps entities to lists of field definitions.
+
+Package-owned `sys_attribute_*` table names are literal in the migrations and composed into an
+immutable `AttributeTables` object at provider registration. Host configuration does not rename
+these tables; explicit storage composition can still use the validated `AttributeTables` DTO.
 
 ## Extension contracts
 

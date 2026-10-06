@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Data\CoreOptions;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,7 +10,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        $tableName = app(CoreOptions::class)->outboxMessagesTable;
+        $tableName = 'sys_outbox_messages';
 
         Schema::create($tableName, function (Blueprint $table): void {
             $table->uuid('id')->primary();

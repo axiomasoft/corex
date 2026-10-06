@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — resource identifier formats (P08.2)
+
+- ResourceId uses operations-owned ResourceIdFormat instead of the removed kernel schema strategy. Rename its strategy property/parameters to format and remove fromConfigured; callers supply the expected format explicitly. UUIDv7, UUID, ULID and integer wire domains remain supported.
+
 ## Unreleased — strict input envelopes and RFC 9457 errors
 
 - Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.

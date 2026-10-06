@@ -11,7 +11,6 @@ use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
-use CoreX\Database\Enums\IdStrategy;
 use CoreX\Departments\Contracts\DepartmentRepository;
 use CoreX\Features\Contracts\FeatureFlags;
 use CoreX\Messaging\Enums\PubSubDriver;
@@ -35,19 +34,6 @@ final readonly class CoreOptions
      * @param  list<string>  $acknowledgedDangerousModes  exact config paths of dangerous modes accepted in production
      */
     public function __construct(
-        public IdStrategy $idStrategy,
-        public string $settingsTable,
-        public string $auditLogsTable,
-        public string $featureFlagsTable,
-        public string $featureOverridesTable,
-        public string $departmentsTable,
-        public string $departmentUserTable,
-        public string $pubsubMessagesTable,
-        public string $pubsubCursorsTable,
-        public string $savedViewsTable,
-        public string $savedViewScopesTable,
-        public string $outboxMessagesTable,
-        public string $inboxMessagesTable,
         public string $tenantContextResolver,
         public string $tenancyManager,
         public string $impersonationService,

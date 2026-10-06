@@ -5,9 +5,9 @@ index 551ef59..4291612 100644
 @@ -35,7 +35,7 @@ return new class extends Migration
  
          Schema::create($table, function (Blueprint $table): void {
-             IdColumns::primary($table);
+             $table->uuid('id')->primary();
 -            $table->timestampTz('occurred_at', precision: 6)->useCurrent();
 +            $table->timestampTz('occurred_at')->useCurrent();
              $table->string('actor_type', 16);
-             IdColumns::reference($table, 'actor_id')->nullable();
-             IdColumns::reference($table, 'workspace_id')->nullable();
+             $table->uuid('actor_id')->nullable();
+             $table->uuid('workspace_id')->nullable();

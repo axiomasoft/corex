@@ -7,8 +7,7 @@
 - lifecycle manifest: `CoreX\Tasks\TasksModule`, package type `corex-module`;
 - восемь tenant-таблиц с префиксом `tsk_`: projects, stages, sprints, tasks,
   targets, watchers, time logs и timers;
-- UUIDv7 генерируются через `HasConfiguredId` при стандартной конфигурации
-  CoreX;
+- UUIDv7 генерируются через Laravel `HasUuids`;
 - публичные write-границы: `CreateTaskCommand`, `MoveTaskToStageCommand`,
   `UpdateTaskCommand`, `CompleteTaskCommand`, а также планирование
   `TaskPlanningCommand` (`createProject`, `createSprint`, `recordTime`);

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — deterministic schema (P08.2)
+
+- Saved-view queries and migrations use fixed sys_saved_views and sys_saved_view_scopes tables.
+
 ## Unreleased — thin providers and registrars (P05.2)
 
 - Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.

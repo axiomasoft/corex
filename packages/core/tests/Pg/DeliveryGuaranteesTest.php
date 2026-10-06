@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Data\CoreOptions;
 use CoreX\Messaging\Contracts\DurableMessagePublisher;
 use CoreX\Messaging\Contracts\Inbox;
 use CoreX\Messaging\Contracts\MessagePublisher;
@@ -115,12 +114,12 @@ it('proves at-least-once when the relay dies after durable publish but before ma
         // Relay process died before markPublished; no releaseWithBackoff — crash, not defer.
     }
 
-    expect(DB::table(app(CoreOptions::class)->outboxMessagesTable)->where('id', $messageId)->value('status'))->toBe('publishing')
+    expect(DB::table('sys_outbox_messages')->where('id', $messageId)->value('status'))->toBe('publishing')
         ->and($publisher->recordedMessageIds)->toBe([$messageId]);
 
     outboxRelayClock(new DateTimeImmutable('2026-06-15T13:05:00+00:00'));
 
-    $rowBeforeReclaim = DB::table(app(CoreOptions::class)->outboxMessagesTable)->where('id', $messageId)->first();
+    $rowBeforeReclaim = DB::table('sys_outbox_messages')->where('id', $messageId)->first();
     expect($rowBeforeReclaim->status)->toBe('publishing');
 
     $reclaimRelay = outboxRelayService(leaseSeconds: 60);
@@ -165,7 +164,7 @@ it('partitions concurrent relay leases without overlap or blocking', function ()
         ->and(array_intersect($idsA, $idsB))->toBe([]);
 
     $heldId = outboxRelayInsertRow(['id' => '01932f5a-0000-7000-8000-000000000120']);
-    $table = app(CoreOptions::class)->outboxMessagesTable;
+    $table = 'sys_outbox_messages';
 
     DB::connection('dg_relay_a')->beginTransaction();
     DB::connection('dg_relay_a')->table($table)->where('id', $heldId)->lockForUpdate()->first();
@@ -199,7 +198,7 @@ it('rolls back outbox rows with the business transaction and commits both on suc
     }
 
     expect(DB::table('dg_business_effects')->count())->toBe(0)
-        ->and(DB::table(app(CoreOptions::class)->outboxMessagesTable)->count())->toBe(0);
+        ->and(DB::table('sys_outbox_messages')->count())->toBe(0);
 
     DB::connection('pgsql')->transaction(function () use ($outbox, $messageId): void {
         DB::connection('pgsql')->table('dg_business_effects')->insert([
@@ -212,7 +211,7 @@ it('rolls back outbox rows with the business transaction and commits both on suc
     });
 
     expect(DB::table('dg_business_effects')->count())->toBe(1)
-        ->and(DB::table(app(CoreOptions::class)->outboxMessagesTable)->count())->toBe(1);
+        ->and(DB::table('sys_outbox_messages')->count())->toBe(1);
 })->group('pg');
 
 it('hands off durably to a restarted consumer and rejects lossy publishers before markPublished', function (): void {
@@ -233,7 +232,7 @@ it('hands off durably to a restarted consumer and rejects lossy publishers befor
     $messageId = outboxRelayInsertRow(['id' => '01932f5a-0000-7000-8000-000000000104']);
     Artisan::call('corex:messaging:relay', ['--once' => true]);
 
-    expect(DB::table(app(CoreOptions::class)->outboxMessagesTable)->where('id', $messageId)->value('status'))->toBe('published')
+    expect(DB::table('sys_outbox_messages')->where('id', $messageId)->value('status'))->toBe('published')
         ->and(DB::table('dg_durable_store')->count())->toBe(1);
 
     $stored = DB::table('dg_durable_store')->where('message_id', $messageId)->first();
@@ -255,7 +254,7 @@ it('hands off durably to a restarted consumer and rejects lossy publishers befor
     expect(fn () => Artisan::call('corex:messaging:relay', ['--once' => true]))
         ->toThrow(BindingResolutionException::class);
 
-    expect(DB::table(app(CoreOptions::class)->outboxMessagesTable)->where('id', '01932f5a-0000-7000-8000-000000000105')->value('status'))
+    expect(DB::table('sys_outbox_messages')->where('id', '01932f5a-0000-7000-8000-000000000105')->value('status'))
         ->toBe('pending');
 })->group('pg');
 
@@ -274,7 +273,7 @@ it('terminates expired publishing rows at maxAttempts without another publish an
     $relay = outboxRelayService(maxAttempts: 8);
     expect($relay->lease(leaseOwner: OUTBOX_RELAY_OWNER, batchSize: 1))->toBe([]);
 
-    $exhaustedRow = DB::table(app(CoreOptions::class)->outboxMessagesTable)->where('id', $exhaustedId)->first();
+    $exhaustedRow = DB::table('sys_outbox_messages')->where('id', $exhaustedId)->first();
     expect($exhaustedRow->status)->toBe('dead')
         ->and($exhaustedRow->failure_class)->toBe('lease-expiry-attempts-exhausted')
         ->and($publisher->recordedMessageIds)->toBe([]);
@@ -286,7 +285,7 @@ it('terminates expired publishing rows at maxAttempts without another publish an
     $corruptRelay = outboxRelayService(maxAttempts: 1);
     expect($corruptRelay->lease(leaseOwner: OUTBOX_RELAY_OWNER, batchSize: 1))->toBe([]);
 
-    $corruptRow = DB::table(app(CoreOptions::class)->outboxMessagesTable)->where('id', $corruptId)->first();
+    $corruptRow = DB::table('sys_outbox_messages')->where('id', $corruptId)->first();
     expect($corruptRow->status)->toBe('dead')
         ->and($corruptRow->failure_class)->toBe('attempts-exhausted')
         ->and($publisher->recordedMessageIds)->toBe([]);

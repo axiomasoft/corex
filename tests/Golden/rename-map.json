@@ -1418,11 +1418,6 @@
             "to": "CoreX\\Audit\\Laravel\\HasAuditLog"
         },
         {
-            "from": "CoreX\\Concerns\\HasConfiguredId",
-            "kind": "class",
-            "to": "CoreX\\Database\\Laravel\\HasConfiguredId"
-        },
-        {
             "from": "CoreX\\Contracts\\ConfigReportSection",
             "kind": "class",
             "to": "CoreX\\Config\\Contracts\\ConfigReportSection"
@@ -1536,11 +1531,6 @@
             "from": "CoreX\\Enums\\ErrorCategory",
             "kind": "class",
             "to": "CoreX\\Errors\\Enums\\ErrorCategory"
-        },
-        {
-            "from": "CoreX\\Enums\\IdStrategy",
-            "kind": "class",
-            "to": "CoreX\\Database\\Enums\\IdStrategy"
         },
         {
             "from": "CoreX\\Enums\\ImpersonationRestrictedAction",
@@ -2456,11 +2446,6 @@
             "from": "CoreX\\Support\\RegistersNothingOnBoot",
             "kind": "class",
             "to": "CoreX\\Modules\\Laravel\\RegistersNothingOnBoot"
-        },
-        {
-            "from": "CoreX\\Support\\Schema\\IdColumns",
-            "kind": "class",
-            "to": "CoreX\\Database\\Laravel\\IdColumns"
         },
         {
             "from": "CoreX\\Support\\SecretRef",
@@ -3601,16 +3586,6 @@
             "kind": "class",
             "from": "CoreX\\Database\\BaseModel",
             "to": "CoreX\\Database\\Laravel\\BaseModel"
-        },
-        {
-            "kind": "class",
-            "from": "CoreX\\Database\\HasConfiguredId",
-            "to": "CoreX\\Database\\Laravel\\HasConfiguredId"
-        },
-        {
-            "kind": "class",
-            "from": "CoreX\\Database\\Schema\\IdColumns",
-            "to": "CoreX\\Database\\Laravel\\IdColumns"
         },
         {
             "kind": "class",

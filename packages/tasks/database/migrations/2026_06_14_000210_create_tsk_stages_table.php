@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Database\Laravel\IdColumns;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,8 +11,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tsk_stages', function (Blueprint $table): void {
-            IdColumns::primary($table);
-            IdColumns::foreign($table, 'process_id')->constrained('tsk_processes')->cascadeOnDelete();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('process_id')->constrained('tsk_processes')->cascadeOnDelete();
             $table->string('name', 100);
             $table->char('color', 7)->default('#6B7280');
             $table->unsignedInteger('position')->default(0);

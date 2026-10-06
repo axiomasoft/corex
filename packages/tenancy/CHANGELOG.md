@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — deterministic schema (P08.2)
+
+- Generate model identifiers with Laravel HasUuids (UUIDv7); package migrations use UUID columns and literal table names.
+
 ## Unreleased — PLAN3.P07.6 host-cache correction
 
 - Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.

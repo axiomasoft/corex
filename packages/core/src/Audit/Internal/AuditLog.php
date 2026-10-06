@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Audit\Internal;
 
 use CoreX\Audit\Enums\ActorType;
-use CoreX\Database\Laravel\HasConfiguredId;
-use CoreX\Database\Laravel\ResolvesCoreOptions;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
-use Override;
 
 /**
  * Append-only audit entry (sys_audit_log). No updated_at:
@@ -32,10 +30,11 @@ use Override;
  */
 final class AuditLog extends Model
 {
-    use HasConfiguredId;
-    use ResolvesCoreOptions;
+    use HasUuids;
 
     public const UPDATED_AT = null;
+
+    protected $table = 'sys_audit_log';
 
     protected $guarded = [];
 
@@ -48,11 +47,5 @@ final class AuditLog extends Model
             'changes' => 'array',
             'context' => 'array',
         ];
-    }
-
-    #[Override]
-    public function getTable(): string
-    {
-        return $this->coreOptions()->auditLogsTable;
     }
 }

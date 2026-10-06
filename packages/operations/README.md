@@ -138,6 +138,14 @@ Direct dispatcher calls outside the HTTP kernel must bind their request as Larav
 if their handlers use this provider.
 
 Bindings are transient by default and provider defaults preserve bindings installed beforehand.
+`ResourceId` validates explicit transport identifiers using the operations-owned
+`ResourceIdFormat`: UUIDv7, UUID, ULID or a positive integer. Use
+`ResourceId::fromValue(type: 'note', value: $id, format: ResourceIdFormat::Uuid7)`
+or `ResourceId::parse(encoded: $encoded, expectedFormat: ResourceIdFormat::Uuid7, expectedType: 'note')`.
+The canonical wire forms are `<type>:uuid:<value>`, `<type>:ulid:<value>` and
+`<type>:integer:<value>`. UUIDv7 validates the version inside the UUID form;
+transport formats are independent of the kernel database schema.
+
 Application adapters should be transient or request-scoped; never cache a principal/context in a singleton.
 The default physical profile rejects missing/boxed/mismatched manager state with `context_required` 403,
 and a non-active account with `account_unavailable` 403. A boxed deployment may explicitly set

@@ -6,7 +6,7 @@ namespace CoreX\Access\Roles\Internal\Models;
 
 use CoreX\Access\Enums\Scope;
 use CoreX\Access\Roles\Laravel\SystemRoleImmutable;
-use CoreX\Database\Laravel\HasConfiguredId;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
@@ -31,7 +31,7 @@ use Override;
  */
 final class RoleMatrixRow extends Model
 {
-    use HasConfiguredId;
+    use HasUuids;
     use SystemRoleImmutable;
 
     protected $table = 'aut_role_matrix';

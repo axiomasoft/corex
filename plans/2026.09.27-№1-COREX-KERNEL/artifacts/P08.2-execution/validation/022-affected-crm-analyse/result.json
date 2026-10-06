@@ -1,0 +1,33 @@
+{
+  "id": "affected-crm-analyse",
+  "command": [
+    "scripts/php84",
+    "vendor/bin/phpstan",
+    "analyse",
+    "-c",
+    "products/flex-crm/phpstan.neon",
+    "--memory-limit=1G"
+  ],
+  "started_at": "2026-10-06T07:37:19.815469+00:00",
+  "elapsed_seconds": 2.646,
+  "exit": 1,
+  "expected_exit": 0,
+  "exit_matches_expectation": false,
+  "product_current": true,
+  "product_sha256": "31b96305420839ff7b6cb4d8ccd03dfe4a979b0f66d4b6d24b0a4ac05e2a398a",
+  "after_product_sha256": "31b96305420839ff7b6cb4d8ccd03dfe4a979b0f66d4b6d24b0a4ac05e2a398a",
+  "environment_before": {
+    "composer.lock": "5219c96445ea830f692ad2a2cb62e88b1fd891868aeb98edd5c2394a56359881",
+    "vendor/composer/installed.json": "9c4a8d018567cf2201d6ca473b929caf90688b4f2bfd5c6d04d9fb7f34bc08ca",
+    "vendor/orchestra/testbench-core/laravel/config/corex.php": "587c590efaa7992d332f96ec9c07e48ccf1cce25b95df32d98df1a1337b90b1c",
+    "vendor/orchestra/testbench-core/laravel/bootstrap/cache/config.php": "ABSENT"
+  },
+  "environment_after": {
+    "composer.lock": "5219c96445ea830f692ad2a2cb62e88b1fd891868aeb98edd5c2394a56359881",
+    "vendor/composer/installed.json": "9c4a8d018567cf2201d6ca473b929caf90688b4f2bfd5c6d04d9fb7f34bc08ca",
+    "vendor/orchestra/testbench-core/laravel/config/corex.php": "587c590efaa7992d332f96ec9c07e48ccf1cce25b95df32d98df1a1337b90b1c",
+    "vendor/orchestra/testbench-core/laravel/bootstrap/cache/config.php": "ABSENT"
+  },
+  "candidate_head": "d1f50e9f24e7f1124884afa5eeb09839ac66e43e",
+  "log": "/tmp/corex-p082-validation/022-affected-crm-analyse/output.log"
+}

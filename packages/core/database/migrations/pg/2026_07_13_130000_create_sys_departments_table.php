@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Data\CoreOptions;
-use CoreX\Database\Laravel\IdColumns;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -18,14 +16,14 @@ return new class extends Migration
         // suffices, no superuser required (RAG:✅ 2026-07-12 findings §4).
         DB::statement('CREATE EXTENSION IF NOT EXISTS ltree');
 
-        $table = app(CoreOptions::class)->departmentsTable;
+        $table = 'sys_departments';
 
         Schema::create($table, function (Blueprint $table): void {
-            IdColumns::primary($table);
-            IdColumns::reference($table, 'workspace_id');
-            IdColumns::reference($table, 'parent_id')->nullable();
+            $table->uuid('id')->primary();
+            $table->uuid('workspace_id');
+            $table->uuid('parent_id')->nullable();
             $table->string('name', 255);
-            IdColumns::reference($table, 'head_user_id')->nullable();
+            $table->uuid('head_user_id')->nullable();
             $table->integer('sort_order')->default(0);
             $table->timestampTz('deleted_at', precision: 6)->nullable();
             $table->timestampTz('created_at', precision: 6)->useCurrent();
@@ -45,6 +43,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists(app(CoreOptions::class)->departmentsTable);
+        Schema::dropIfExists('sys_departments');
     }
 };

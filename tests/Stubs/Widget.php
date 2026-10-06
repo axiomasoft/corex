@@ -10,7 +10,7 @@ use CoreX\Database\Laravel\BaseModel;
 use CoreX\Intl\Money\Laravel\MoneyCast;
 
 /**
- * Test double exercising the kernel: ULID + soft deletes + audit (BaseModel)
+ * Test double exercising the kernel: UUIDv7 + soft deletes + audit (BaseModel)
  * and a money cast.
  *
  * @property string $id

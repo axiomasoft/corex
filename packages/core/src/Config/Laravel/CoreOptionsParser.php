@@ -20,7 +20,6 @@ use CoreX\Context\Internal\NullTenancyManager;
 use CoreX\Context\Internal\SingleAccountResolver;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Internal\DenyDataScopeAuthorizer;
-use CoreX\Database\Enums\IdStrategy;
 use CoreX\Departments\Contracts\DepartmentRepository;
 use CoreX\Departments\Internal\DatabaseDepartmentRepository;
 use CoreX\Features\Contracts\FeatureFlags;
@@ -47,7 +46,6 @@ final class CoreOptionsParser
     public static function fromArray(array $config): CoreOptions
     {
         $violations = new ConfigurationValidator;
-        $tables = is_array($config['tables'] ?? null) ? $config['tables'] : [];
         $tenant = is_array($config['tenant_context'] ?? null) ? $config['tenant_context'] : [];
         $bindings = is_array($config['bindings'] ?? null) ? $config['bindings'] : [];
         $storage = is_array($config['storage'] ?? null) ? $config['storage'] : [];
@@ -56,21 +54,6 @@ final class CoreOptionsParser
         $settings = is_array($config['settings'] ?? null) ? $config['settings'] : [];
         $pubsub = is_array($config['pubsub'] ?? null) ? $config['pubsub'] : [];
         $messaging = is_array($config['messaging'] ?? null) ? $config['messaging'] : [];
-        $ids = is_array($config['ids'] ?? null) ? $config['ids'] : [];
-
-        $idStrategy = self::enum($violations, 'ids.strategy', $ids['strategy'] ?? IdStrategy::Uuid7, IdStrategy::class);
-        $settingsTable = self::table($violations, 'tables.settings', $tables['settings'] ?? 'sys_settings');
-        $auditLogsTable = self::table($violations, 'tables.audit_logs', $tables['audit_logs'] ?? 'sys_audit_log');
-        $featureFlagsTable = self::table($violations, 'tables.feature_flags', $tables['feature_flags'] ?? 'sys_feature_flags');
-        $featureOverridesTable = self::table($violations, 'tables.feature_overrides', $tables['feature_overrides'] ?? 'sys_feature_overrides');
-        $departmentsTable = self::table($violations, 'tables.departments', $tables['departments'] ?? 'sys_departments');
-        $departmentUserTable = self::table($violations, 'tables.department_user', $tables['department_user'] ?? 'sys_department_user');
-        $pubsubMessagesTable = self::table($violations, 'tables.pubsub_messages', $tables['pubsub_messages'] ?? 'sys_pubsub_messages');
-        $pubsubCursorsTable = self::table($violations, 'tables.pubsub_cursors', $tables['pubsub_cursors'] ?? 'sys_pubsub_cursors');
-        $savedViewsTable = self::table($violations, 'tables.saved_views', $tables['saved_views'] ?? 'sys_saved_views');
-        $savedViewScopesTable = self::table($violations, 'tables.saved_view_scopes', $tables['saved_view_scopes'] ?? 'sys_saved_view_scopes');
-        $outboxMessagesTable = self::table($violations, 'tables.outbox_messages', $tables['outbox_messages'] ?? 'sys_outbox_messages');
-        $inboxMessagesTable = self::table($violations, 'tables.inbox_messages', $tables['inbox_messages'] ?? 'sys_inbox_messages');
 
         $tenantContextResolver = self::classString($violations, 'tenant_context.resolver', $tenant['resolver'] ?? SingleAccountResolver::class, TenantContextResolver::class);
         $tenancyManager = self::classString($violations, 'tenant_context.manager', $tenant['manager'] ?? NullTenancyManager::class, TenancyManager::class);
@@ -113,19 +96,6 @@ final class CoreOptionsParser
         $violations->failIfAny();
 
         return new CoreOptions(
-            idStrategy: $idStrategy,
-            settingsTable: $settingsTable,
-            auditLogsTable: $auditLogsTable,
-            featureFlagsTable: $featureFlagsTable,
-            featureOverridesTable: $featureOverridesTable,
-            departmentsTable: $departmentsTable,
-            departmentUserTable: $departmentUserTable,
-            pubsubMessagesTable: $pubsubMessagesTable,
-            pubsubCursorsTable: $pubsubCursorsTable,
-            savedViewsTable: $savedViewsTable,
-            savedViewScopesTable: $savedViewScopesTable,
-            outboxMessagesTable: $outboxMessagesTable,
-            inboxMessagesTable: $inboxMessagesTable,
             tenantContextResolver: $tenantContextResolver,
             tenancyManager: $tenancyManager,
             impersonationService: $impersonationService,
@@ -181,17 +151,6 @@ final class CoreOptionsParser
         $violations->add($path, 'must be a '.$enumClass.' value');
 
         return $enumClass::cases()[0];
-    }
-
-    private static function table(ConfigurationValidator $violations, string $path, mixed $value): string
-    {
-        if (is_string($value) && $value !== '') {
-            return $value;
-        }
-
-        $violations->add($path, 'must be a non-empty string');
-
-        return 'invalid';
     }
 
     /**

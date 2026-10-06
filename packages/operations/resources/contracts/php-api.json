@@ -4210,44 +4210,6 @@
                     "return": "string",
                     "doc": []
                 },
-                "fromConfigured": {
-                    "visibility": "public",
-                    "static": true,
-                    "final": false,
-                    "abstract": false,
-                    "by_reference": false,
-                    "parameters": [
-                        {
-                            "name": "type",
-                            "type": "string",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        },
-                        {
-                            "name": "value",
-                            "type": "(int|string)",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": false,
-                            "default": null,
-                            "flags": 0
-                        },
-                        {
-                            "name": "configuredStrategy",
-                            "type": "CoreX\\Database\\Enums\\IdStrategy",
-                            "by_reference": false,
-                            "variadic": false,
-                            "optional": true,
-                            "default": "\\CoreX\\Database\\Enums\\IdStrategy::Uuid7",
-                            "flags": 0
-                        }
-                    ],
-                    "return": "self(CoreX\\Operations\\Definition\\Data\\ResourceId)",
-                    "doc": []
-                },
                 "fromValue": {
                     "visibility": "public",
                     "static": true,
@@ -4274,8 +4236,8 @@
                             "flags": 0
                         },
                         {
-                            "name": "strategy",
-                            "type": "CoreX\\Database\\Enums\\IdStrategy",
+                            "name": "format",
+                            "type": "CoreX\\Operations\\Definition\\Enums\\ResourceIdFormat",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -4303,8 +4265,8 @@
                             "flags": 0
                         },
                         {
-                            "name": "expectedStrategy",
-                            "type": "CoreX\\Database\\Enums\\IdStrategy",
+                            "name": "expectedFormat",
+                            "type": "CoreX\\Operations\\Definition\\Enums\\ResourceIdFormat",
                             "by_reference": false,
                             "variadic": false,
                             "optional": false,
@@ -4336,9 +4298,9 @@
                 }
             },
             "properties": {
-                "strategy": {
+                "format": {
                     "flags": 1,
-                    "type": "CoreX\\Database\\Enums\\IdStrategy",
+                    "type": "CoreX\\Operations\\Definition\\Enums\\ResourceIdFormat",
                     "readonly": true,
                     "visibility": "public",
                     "static": false,
@@ -4392,6 +4354,28 @@
                 "BulkQuery": "'bulk_query'",
                 "Command": "'command'",
                 "Query": "'query'"
+            }
+        },
+        "CoreX\\Operations\\Definition\\Enums\\ResourceIdFormat": {
+            "kind": "enum",
+            "layer": "api",
+            "since": "1.0",
+            "final": false,
+            "readonly": false,
+            "abstract": false,
+            "extends": [],
+            "implements": [],
+            "uses": [],
+            "doc": [],
+            "methods": [],
+            "properties": [],
+            "constants": [],
+            "enum_backing": null,
+            "enum_cases": {
+                "Integer": null,
+                "Ulid": null,
+                "Uuid": null,
+                "Uuid7": null
             }
         },
         "CoreX\\Operations\\Definition\\Laravel\\OperationFactory": {

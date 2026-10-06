@@ -94,8 +94,8 @@ it('lets a narrower scope override a broader one without leaking across ids', fu
 
 it('encrypts a sensitive value at rest and masks it in SettingChanged', function (): void {
     // Faking ONLY SettingChanged (not a blanket Event::fake()): a bare fake
-    // also intercepts Eloquent's internal model events, which would starve
-    // HasConfiguredId's creating() hook and leave `id` unset.
+    // also intercepts Eloquent's internal model events, which the persistence
+    // path and audit integration still need.
     Event::fake([SettingChanged::class]);
     $repository = settingsRepositoryFor(sensitive: ['crm.api_key']);
 

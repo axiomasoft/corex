@@ -105,7 +105,7 @@ it('boots from a cached configuration repository instead of the config files', f
         $cached[$name] = array_replace_recursive($config, $cached[$name] ?? []);
     }
 
-    $cached['corex']['tables']['settings'] = 'sys_settings_from_cache';
+    $cached['corex']['settings']['cache_prefix'] = 'corex_settings_from_cache';
     $cached['app']['providers'] = [...(new DefaultProviders)->toArray(), CoreServiceProvider::class];
 
     $base = sys_get_temp_dir().'/corex-config-cache-'.bin2hex(random_bytes(6));
@@ -126,7 +126,7 @@ it('boots from a cached configuration repository instead of the config files', f
 
         expect($app->configurationIsCached())->toBeTrue()
             ->and($app->make(CoreOptions::class))->toBeInstanceOf(CoreOptions::class)
-            ->and($app->make(CoreOptions::class)->settingsTable)->toBe($cached['corex']['tables']['settings']);
+            ->and($app->make(CoreOptions::class)->settingsCachePrefix)->toBe($cached['corex']['settings']['cache_prefix']);
     } finally {
         (new Filesystem)->deleteDirectory($base);
     }

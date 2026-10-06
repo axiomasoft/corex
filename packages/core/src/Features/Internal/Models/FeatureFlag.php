@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Features\Internal\Models;
 
-use CoreX\Database\Laravel\HasConfiguredId;
-use CoreX\Database\Laravel\ResolvesCoreOptions;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
-use Override;
 
 /**
  * Per-account feature-flag default (sys_feature_flags).
@@ -22,8 +20,9 @@ use Override;
  */
 final class FeatureFlag extends Model
 {
-    use HasConfiguredId;
-    use ResolvesCoreOptions;
+    use HasUuids;
+
+    protected $table = 'sys_feature_flags';
 
     protected $guarded = [];
 
@@ -34,11 +33,5 @@ final class FeatureFlag extends Model
             'is_enabled' => 'bool',
             'payload' => 'array',
         ];
-    }
-
-    #[Override]
-    public function getTable(): string
-    {
-        return $this->coreOptions()->featureFlagsTable;
     }
 }

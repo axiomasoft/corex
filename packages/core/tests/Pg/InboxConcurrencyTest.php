@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Data\CoreOptions;
 use Illuminate\Support\Facades\DB;
 
 beforeEach(function (): void {
@@ -14,7 +13,7 @@ beforeEach(function (): void {
 
 it('inserts exactly one inbox row when two connections race on the same key', function (): void {
 
-    $table = app(CoreOptions::class)->inboxMessagesTable;
+    $table = 'sys_inbox_messages';
     $consumer = 'inbox.concurrency.v1';
     $messageId = '55555555-5555-7555-8555-555555555555';
     $name = 'membership.expired';

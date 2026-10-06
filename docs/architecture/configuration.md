@@ -34,11 +34,6 @@
 | corex-custom-fields.sources | axiomasoft/corex-custom-fields | array | unobserved | no | product-policy | unobserved | unobserved | CustomFieldsOptions::$composition |  |  |
 | corex-custom-fields.storage_by_entity | axiomasoft/corex-custom-fields | array | [] | no | product-policy | unobserved | unobserved | CustomFieldsOptions::$composition |  |  |
 | corex-custom-fields.storage_driver | axiomasoft/corex-custom-fields | string | jsonb | no | product-policy | unobserved | unobserved | CustomFieldsOptions::$composition |  |  |
-| corex-custom-fields.tables.documents | axiomasoft/corex-custom-fields | string | sys_attribute_documents | no | product-policy | unobserved | unobserved | CustomFieldsOptions::$tables |  |  |
-| corex-custom-fields.tables.eav_records | axiomasoft/corex-custom-fields | string | sys_attribute_eav_records | no | product-policy | unobserved | unobserved | CustomFieldsOptions::$tables |  |  |
-| corex-custom-fields.tables.eav_values | axiomasoft/corex-custom-fields | string | sys_attribute_eav_values | no | product-policy | unobserved | unobserved | CustomFieldsOptions::$tables |  |  |
-| corex-custom-fields.tables.schema_operations | axiomasoft/corex-custom-fields | string | sys_attribute_schema_operations | no | product-policy | unobserved | unobserved | CustomFieldsOptions::$tables |  |  |
-| corex-custom-fields.tables.write_tokens | axiomasoft/corex-custom-fields | string | *** | yes | secret | unobserved | unobserved | CustomFieldsOptions::$tables |  |  |
 | corex-intl.formatting.icu_enabled | axiomasoft/corex-intl | unobserved | unobserved | no | product-policy | unobserved | unobserved | IntlOptions::$formattingIcuEnabled |  |  |
 | corex-intl.locale.allow_parent | axiomasoft/corex-intl | bool | true | no | product-policy | unobserved | unobserved | IntlOptions::$localeAllowParent |  |  |
 | corex-intl.locale.app_tag | axiomasoft/corex-intl | string | en | no | product-policy | unobserved | unobserved | IntlOptions::$localeAppTag |  |  |
@@ -184,7 +179,6 @@
 | corex.bindings.feature_flags | axiomasoft/corex | unobserved | unobserved | no | product-policy | unobserved | use-site | CoreOptions::$featureFlags |  |  |
 | corex.bindings.setting_defaults | axiomasoft/corex | unobserved | unobserved | no | product-policy | unobserved | use-site | CoreOptions::$settingDefaultsProvider |  |  |
 | corex.bindings.settings | axiomasoft/corex | unobserved | unobserved | no | product-policy | unobserved | use-site | CoreOptions::$settingsRepository |  |  |
-| corex.ids.strategy | axiomasoft/corex | const | IdStrategy::Uuid7 | no | product-policy | unobserved | use-site | CoreOptions::$idStrategy |  |  |
 | corex.messaging.backoff_cap_seconds | axiomasoft/corex | int | 300 | no | product-policy | unobserved | unobserved | CoreOptions::$messagingBackoffCapSeconds |  |  |
 | corex.messaging.batch_size | axiomasoft/corex | int | 100 | no | product-policy | unobserved | unobserved | CoreOptions::$messagingBatchSize |  |  |
 | corex.messaging.dead_retention | axiomasoft/corex | string | 90 days | no | product-policy | unobserved | unobserved | CoreOptions::$messagingDeadRetention |  |  |
@@ -205,18 +199,6 @@
 | corex.settings.cache_ttl | axiomasoft/corex | int | 3600 | no | product-policy | unobserved | use-site | CoreOptions::$settingsCacheTtl |  |  |
 | corex.storage.durable_root | axiomasoft/corex | unobserved | unobserved | no | product-policy | unobserved | use-site | CoreOptions::$storageDurableRoot |  |  |
 | corex.storage.ephemeral_root | axiomasoft/corex | unobserved | unobserved | no | product-policy | unobserved | use-site | CoreOptions::$storageEphemeralRoot |  |  |
-| corex.tables.audit_logs | axiomasoft/corex | string | sys_audit_log | no | product-policy | unobserved | use-site | CoreOptions::$auditLogsTable |  |  |
-| corex.tables.department_user | axiomasoft/corex | string | sys_department_user | no | product-policy | unobserved | use-site | CoreOptions::$departmentUserTable |  |  |
-| corex.tables.departments | axiomasoft/corex | string | sys_departments | no | product-policy | unobserved | use-site | CoreOptions::$departmentsTable |  |  |
-| corex.tables.feature_flags | axiomasoft/corex | string | sys_feature_flags | no | product-policy | unobserved | use-site | CoreOptions::$featureFlagsTable |  |  |
-| corex.tables.feature_overrides | axiomasoft/corex | string | sys_feature_overrides | no | product-policy | unobserved | use-site | CoreOptions::$featureOverridesTable |  |  |
-| corex.tables.inbox_messages | axiomasoft/corex | string | sys_inbox_messages | no | product-policy | unobserved | unobserved | CoreOptions::$inboxMessagesTable |  |  |
-| corex.tables.outbox_messages | axiomasoft/corex | string | sys_outbox_messages | no | product-policy | unobserved | unobserved | CoreOptions::$outboxMessagesTable |  |  |
-| corex.tables.pubsub_cursors | axiomasoft/corex | string | sys_pubsub_cursors | no | product-policy | unobserved | use-site | CoreOptions::$pubsubCursorsTable |  |  |
-| corex.tables.pubsub_messages | axiomasoft/corex | string | sys_pubsub_messages | no | product-policy | unobserved | use-site | CoreOptions::$pubsubMessagesTable |  |  |
-| corex.tables.saved_view_scopes | axiomasoft/corex | string | sys_saved_view_scopes | no | product-policy | unobserved | use-site | CoreOptions::$savedViewScopesTable |  |  |
-| corex.tables.saved_views | axiomasoft/corex | string | sys_saved_views | no | product-policy | unobserved | use-site | CoreOptions::$savedViewsTable |  |  |
-| corex.tables.settings | axiomasoft/corex | string | sys_settings | no | product-policy | unobserved | use-site | CoreOptions::$settingsTable |  |  |
 | corex.tenant_context.impersonation | axiomasoft/corex | unobserved | unobserved | no | product-policy | unobserved | use-site | CoreOptions::$impersonationService |  |  |
 | corex.tenant_context.manager | axiomasoft/corex | unobserved | unobserved | no | product-policy | unobserved | use-site | CoreOptions::$tenancyManager |  |  |
 | corex.tenant_context.resolver | axiomasoft/corex | unobserved | unobserved | no | product-policy | unobserved | use-site | CoreOptions::$tenantContextResolver |  |  |

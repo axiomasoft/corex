@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Data\CoreOptions;
 use CoreX\Messaging\Data\LeasedMessage;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Data\MessagePayload;
@@ -66,7 +65,7 @@ function outboxRelayInsertRow(array $overrides = []): string
     $now = app(ClockInterface::class)->now();
     $id = $envelope->messageId;
 
-    DB::table(app(CoreOptions::class)->outboxMessagesTable)->insert([
+    DB::table('sys_outbox_messages')->insert([
         'id' => $id,
         'name' => $envelope->name,
         'contract_version' => $envelope->contractVersion,
@@ -115,7 +114,7 @@ it('leases a pending row into publishing with owner, lease window, and attempt c
         ->and($leased[0]->leaseUntil->getTimestamp())->toBe($now->modify('+120 seconds')->getTimestamp())
         ->and($leased[0]->envelope->messageId)->toBe($id);
 
-    $row = DB::table(app(CoreOptions::class)->outboxMessagesTable)->where('id', $id)->first();
+    $row = DB::table('sys_outbox_messages')->where('id', $id)->first();
 
     expect($row->status)->toBe('publishing')
         ->and($row->lease_owner)->toBe(OUTBOX_RELAY_OWNER)
@@ -129,7 +128,7 @@ it('does not lease rows with a future available_at', function (): void {
     $leased = outboxRelayService()->lease(leaseOwner: OUTBOX_RELAY_OWNER, batchSize: 10);
 
     expect($leased)->toBe([])
-        ->and(DB::table(app(CoreOptions::class)->outboxMessagesTable)->value('status'))->toBe('pending');
+        ->and(DB::table('sys_outbox_messages')->value('status'))->toBe('pending');
 })->group('pg');
 
 it('reclaims expired publishing rows, marks exhausted leases dead, and fences corrupt envelopes', function (): void {
@@ -157,7 +156,7 @@ it('reclaims expired publishing rows, marks exhausted leases dead, and fences co
 
     $relay->markPublished($leased[0]);
 
-    $deadRow = DB::table(app(CoreOptions::class)->outboxMessagesTable)->where('id', $deadId)->first();
+    $deadRow = DB::table('sys_outbox_messages')->where('id', $deadId)->first();
     expect($deadRow->status)->toBe('dead')
         ->and($deadRow->failure_class)->toBe('lease-expiry-attempts-exhausted');
 })->group('pg');
@@ -171,7 +170,7 @@ it('fences corrupt envelope reconstruction through the same backoff budget', fun
 
     expect($relay->lease(leaseOwner: OUTBOX_RELAY_OWNER, batchSize: 1))->toBe([]);
 
-    $row = DB::table(app(CoreOptions::class)->outboxMessagesTable)->where('id', $corruptId)->first();
+    $row = DB::table('sys_outbox_messages')->where('id', $corruptId)->first();
     expect($row->status)->toBe('dead')
         ->and($row->attempts)->toBe(1)
         ->and($row->failure_class)->toBe('attempts-exhausted');
@@ -192,12 +191,12 @@ it('refuses markPublished when the lease owner no longer matches', function (): 
     expect(fn (): mixed => $relay->markPublished($wrongOwner))
         ->toThrow(OutboxLeaseLost::class, 'may already have reached its destination');
 
-    expect(DB::table(app(CoreOptions::class)->outboxMessagesTable)->where('id', $id)->value('status'))->toBe('publishing');
+    expect(DB::table('sys_outbox_messages')->where('id', $id)->value('status'))->toBe('publishing');
 })->group('pg');
 
 function outboxRelayLeasedMessageFromRow(string $id, int $attempt): LeasedMessage
 {
-    $row = DB::table(app(CoreOptions::class)->outboxMessagesTable)->where('id', $id)->first();
+    $row = DB::table('sys_outbox_messages')->where('id', $id)->first();
     $envelope = new MessageEnvelope(
         messageId: (string) $row->id,
         source: (string) $row->source,
@@ -226,7 +225,7 @@ function outboxRelaySeedPublishing(string $id, int $attempt): void
 {
     $now = app(ClockInterface::class)->now();
     outboxRelayInsertRow(['id' => $id, 'attempts' => $attempt]);
-    $updated = DB::table(app(CoreOptions::class)->outboxMessagesTable)->where('id', $id)->update([
+    $updated = DB::table('sys_outbox_messages')->where('id', $id)->update([
         'status' => 'publishing',
         'lease_owner' => OUTBOX_RELAY_OWNER,
         'lease_until' => $now->modify('+120 seconds'),
@@ -258,7 +257,7 @@ it('applies deterministic exponential backoff on the first four publish failures
             new RuntimeException('publish-failed'),
         );
 
-        $availableAt = new DateTimeImmutable((string) DB::table(app(CoreOptions::class)->outboxMessagesTable)->where('id', $messageId)->value('available_at'));
+        $availableAt = new DateTimeImmutable((string) DB::table('sys_outbox_messages')->where('id', $messageId)->value('available_at'));
         expect($availableAt->getTimestamp())->toBe($baseline->modify("+{$delay} seconds")->getTimestamp());
     }
 })->group('pg');
@@ -278,7 +277,7 @@ it('marks a row dead after the eighth failed attempt', function (): void {
 
     $relay->releaseWithBackoff($leased[0], new RuntimeException('publish-failed'));
 
-    $row = DB::table(app(CoreOptions::class)->outboxMessagesTable)->where('id', $id)->first();
+    $row = DB::table('sys_outbox_messages')->where('id', $id)->first();
     expect($row->status)->toBe('dead')
         ->and($row->dead_at)->not->toBeNull()
         ->and($row->failure_class)->toBe('attempts-exhausted');
@@ -291,13 +290,13 @@ it('truncates last_error to two thousand characters', function (): void {
 
     $relay->releaseWithBackoff($leased, new RuntimeException(str_repeat('x', 2_500)));
 
-    $error = (string) DB::table(app(CoreOptions::class)->outboxMessagesTable)->value('last_error');
+    $error = (string) DB::table('sys_outbox_messages')->value('last_error');
     expect(mb_strlen($error))->toBe(2_000);
 })->group('pg');
 
 it('skips locked pending rows with SKIP LOCKED and blocks without it', function (): void {
     $id = outboxRelayInsertRow(['id' => '01932f5a-0000-7000-8000-000000000007']);
-    $table = app(CoreOptions::class)->outboxMessagesTable;
+    $table = 'sys_outbox_messages';
     $connection = config('database.connections.pgsql');
     $dsn = "pgsql:host={$connection['host']};port={$connection['port']};dbname={$connection['database']}";
     $second = new PDO($dsn, $connection['username'], $connection['password'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);

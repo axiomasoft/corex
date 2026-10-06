@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — deterministic schema (P08.2)
+
+- Remove configurable identifier strategies and the twelve table-name options. Models generate UUIDv7 with Laravel HasUuids; migrations and queries use package-owned table literals. Remove IdStrategy, IdColumns, HasConfiguredId and the unused ResolvesCoreOptions schema bridge without aliases. Native Eloquent insert assigns IDs during quiet synchronous audit writes.
+
 ## Unreleased — scheduling contracts (P07.5)
 
 - Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.

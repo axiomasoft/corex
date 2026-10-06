@@ -45,7 +45,7 @@ final class PrunePubSubMessages extends Command
         /** @var string|null $connection */
         $connection = $this->option('database');
 
-        $deleted = $connections->connection($connection)->table($options->pubsubMessagesTable)
+        $deleted = $connections->connection($connection)->table('sys_pubsub_messages')
             ->where('created_at', '<', $cutoff)
             ->delete();
 

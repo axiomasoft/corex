@@ -1,0 +1,30 @@
+{
+  "id": "V1-final",
+  "command": [
+    "bash",
+    "-lc",
+    "git grep -n -E 'IdStrategy|HasConfiguredId|IdColumns|idStrategy|ids\\.strategy|corex\\.tables|(settings|auditLogs|featureFlags|featureOverrides|departments|departmentUser|pubsubMessages|pubsubCursors|savedViews|savedViewScopes|outboxMessages|inboxMessages)Table' -- packages products tests docs/architecture ':!**/CHANGELOG.md'"
+  ],
+  "started_at": "2026-10-06T07:50:52.028887+00:00",
+  "elapsed_seconds": 0.175,
+  "exit": 1,
+  "expected_exit": 1,
+  "exit_matches_expectation": true,
+  "product_current": true,
+  "product_sha256": "bcac7ed08332ad03dd375276fbb591c9204b780b40f5ad6c2bf0bb897295651f",
+  "after_product_sha256": "bcac7ed08332ad03dd375276fbb591c9204b780b40f5ad6c2bf0bb897295651f",
+  "environment_before": {
+    "composer.lock": "5219c96445ea830f692ad2a2cb62e88b1fd891868aeb98edd5c2394a56359881",
+    "vendor/composer/installed.json": "9c4a8d018567cf2201d6ca473b929caf90688b4f2bfd5c6d04d9fb7f34bc08ca",
+    "vendor/orchestra/testbench-core/laravel/config/corex.php": "587c590efaa7992d332f96ec9c07e48ccf1cce25b95df32d98df1a1337b90b1c",
+    "vendor/orchestra/testbench-core/laravel/bootstrap/cache/config.php": "ABSENT"
+  },
+  "environment_after": {
+    "composer.lock": "5219c96445ea830f692ad2a2cb62e88b1fd891868aeb98edd5c2394a56359881",
+    "vendor/composer/installed.json": "9c4a8d018567cf2201d6ca473b929caf90688b4f2bfd5c6d04d9fb7f34bc08ca",
+    "vendor/orchestra/testbench-core/laravel/config/corex.php": "587c590efaa7992d332f96ec9c07e48ccf1cce25b95df32d98df1a1337b90b1c",
+    "vendor/orchestra/testbench-core/laravel/bootstrap/cache/config.php": "ABSENT"
+  },
+  "candidate_head": "ed44411849c446f123dc6e81543c5626538a3a21",
+  "log": "/tmp/corex-p082-validation/029-V1-final/output.log"
+}

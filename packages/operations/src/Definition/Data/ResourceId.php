@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Operations\Definition\Data;
 
 use CoreX\Attributes\Api;
-use CoreX\Database\Enums\IdStrategy;
+use CoreX\Operations\Definition\Enums\ResourceIdFormat;
 use InvalidArgumentException;
 use Stringable;
 
@@ -14,48 +14,40 @@ final readonly class ResourceId implements Stringable
 {
     private function __construct(
         public string $type,
-        public IdStrategy $strategy,
+        public ResourceIdFormat $format,
         public int|string $value,
     ) {}
 
-    public static function fromValue(string $type, int|string $value, IdStrategy $strategy): self
+    public static function fromValue(string $type, int|string $value, ResourceIdFormat $format): self
     {
         self::assertType($type);
 
-        return new self($type, $strategy, self::canonicalValue($value, $strategy));
-    }
-
-    public static function fromConfigured(
-        string $type,
-        int|string $value,
-        IdStrategy $configuredStrategy = IdStrategy::Uuid7,
-    ): self {
-        return self::fromValue($type, $value, $configuredStrategy);
+        return new self($type, $format, self::canonicalValue($value, $format));
     }
 
     public static function parse(
         string $encoded,
-        IdStrategy $expectedStrategy,
+        ResourceIdFormat $expectedFormat,
         ?string $expectedType = null,
     ): self {
         $parts = explode(':', $encoded, 3);
 
         if (count($parts) !== 3) {
-            throw new InvalidArgumentException('Resource id must use the <type>:<strategy>:<value> form.');
+            throw new InvalidArgumentException('Resource id must use the <type>:<format>:<value> form.');
         }
 
-        [$type, $wireStrategy, $value] = $parts;
+        [$type, $wireFormat, $value] = $parts;
         self::assertType($type);
 
         if ($expectedType !== null && ! hash_equals($expectedType, $type)) {
             throw new InvalidArgumentException('Resource id type does not match the expected type.');
         }
 
-        if (! hash_equals(self::wireStrategy($expectedStrategy), $wireStrategy)) {
-            throw new InvalidArgumentException('Resource id strategy does not match the expected strategy.');
+        if (! hash_equals(self::wireFormat($expectedFormat), $wireFormat)) {
+            throw new InvalidArgumentException('Resource id format does not match the expected format.');
         }
 
-        $resourceId = self::fromValue($type, $value, $expectedStrategy);
+        $resourceId = self::fromValue($type, $value, $expectedFormat);
 
         if (! hash_equals($resourceId->toString(), $encoded)) {
             throw new InvalidArgumentException('Resource id is not canonically encoded.');
@@ -66,7 +58,7 @@ final readonly class ResourceId implements Stringable
 
     public function toString(): string
     {
-        return "{$this->type}:".self::wireStrategy($this->strategy).":{$this->value}";
+        return "{$this->type}:".self::wireFormat($this->format).":{$this->value}";
     }
 
     public function __toString(): string
@@ -81,13 +73,13 @@ final readonly class ResourceId implements Stringable
         }
     }
 
-    private static function canonicalValue(int|string $value, IdStrategy $strategy): int|string
+    private static function canonicalValue(int|string $value, ResourceIdFormat $format): int|string
     {
-        return match ($strategy) {
-            IdStrategy::Int => self::canonicalInteger($value),
-            IdStrategy::Ulid => self::canonicalUlid($value),
-            IdStrategy::Uuid => self::canonicalUuid($value),
-            IdStrategy::Uuid7 => self::canonicalUuid($value, 7),
+        return match ($format) {
+            ResourceIdFormat::Integer => self::canonicalInteger($value),
+            ResourceIdFormat::Ulid => self::canonicalUlid($value),
+            ResourceIdFormat::Uuid => self::canonicalUuid($value),
+            ResourceIdFormat::Uuid7 => self::canonicalUuid($value, 7),
         };
     }
 
@@ -125,12 +117,12 @@ final readonly class ResourceId implements Stringable
         return $value;
     }
 
-    private static function wireStrategy(IdStrategy $strategy): string
+    private static function wireFormat(ResourceIdFormat $format): string
     {
-        return match ($strategy) {
-            IdStrategy::Uuid, IdStrategy::Uuid7 => 'uuid',
-            IdStrategy::Ulid => 'ulid',
-            IdStrategy::Int => 'integer',
+        return match ($format) {
+            ResourceIdFormat::Uuid, ResourceIdFormat::Uuid7 => 'uuid',
+            ResourceIdFormat::Ulid => 'ulid',
+            ResourceIdFormat::Integer => 'integer',
         };
     }
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CoreX\Departments\Internal;
 
-use CoreX\Config\Data\CoreOptions;
 use CoreX\Departments\Contracts\DepartmentRepository;
 use CoreX\Departments\Data\Department;
 use CoreX\Departments\Events\DepartmentMoved;
@@ -30,7 +29,6 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
 {
     public function __construct(
         private readonly ConnectionResolverInterface $connections,
-        private readonly CoreOptions $options,
         private readonly Dispatcher $events,
         private readonly ?string $connection = null,
     ) {}
@@ -66,7 +64,7 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
     #[Override]
     public function primaryOf(string $userId): ?Department
     {
-        $departmentId = $this->db()->table($this->options->departmentUserTable)
+        $departmentId = $this->db()->table('sys_department_user')
             ->where('user_id', $userId)
             ->where('is_primary', true)
             ->value('department_id');
@@ -83,7 +81,7 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
             //     query still returns it for a row mid-deletion, so we always
             //     serialize on the right workspace. Absent row → explicit throw,
             //     never a silent no-op (A5 If-then).
-            $lockWorkspaceId = $this->db()->table($this->options->departmentsTable)
+            $lockWorkspaceId = $this->db()->table('sys_departments')
                 ->where('id', $departmentId)
                 ->value('workspace_id');
 
@@ -149,7 +147,7 @@ final class DatabaseDepartmentRepository implements DepartmentRepository
             // on workspace_id — a same-shaped path in ANOTHER workspace under
             // `path <@` must never be rewritten by this workspace's move().
             $this->db()->statement(
-                'update '.$this->options->departmentsTable.' set
+                'update sys_departments set
                     path = (?::ltree || subpath(path, nlevel(?::ltree) - 1)),
                     parent_id = case when id = ? then ? else parent_id end,
                     updated_at = now()

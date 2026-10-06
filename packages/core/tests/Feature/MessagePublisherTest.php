@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Config\Data\CoreOptions;
 use CoreX\Messaging\Contracts\DurableMessagePublisher;
 use CoreX\Messaging\Contracts\MessagePublisher;
 use CoreX\Messaging\Data\MessageEnvelope;
@@ -15,7 +14,7 @@ use Psr\Clock\ClockInterface;
 
 function messagePublisherInstallSchema(): void
 {
-    Schema::create(app(CoreOptions::class)->outboxMessagesTable, function (Blueprint $table): void {
+    Schema::create('sys_outbox_messages', function (Blueprint $table): void {
         $table->string('id')->primary();
         $table->string('name');
         $table->unsignedSmallInteger('contract_version');
@@ -68,7 +67,7 @@ it('admits a durable publisher binding and marks a leased row published', functi
 
     $envelope = messagingSampleEnvelope(['messageId' => '01932f5a-0000-7000-8000-000000000010']);
     $now = app(ClockInterface::class)->now();
-    DB::table(app(CoreOptions::class)->outboxMessagesTable)->insert([
+    DB::table('sys_outbox_messages')->insert([
         'id' => $envelope->messageId,
         'name' => $envelope->name,
         'contract_version' => $envelope->contractVersion,
@@ -92,7 +91,7 @@ it('admits a durable publisher binding and marks a leased row published', functi
     $this->artisan('corex:messaging:relay', ['--once' => true])->assertSuccessful();
 
     expect($publisher->publishedIds)->toBe([$envelope->messageId])
-        ->and(DB::table(app(CoreOptions::class)->outboxMessagesTable)->value('status'))->toBe('published');
+        ->and(DB::table('sys_outbox_messages')->value('status'))->toBe('published');
 });
 
 it('refuses relay when no durable publisher is bound', function (): void {
@@ -107,7 +106,7 @@ it('refuses a null-transport publisher before markPublished', function (): void 
     });
 
     $now = app(ClockInterface::class)->now();
-    DB::table(app(CoreOptions::class)->outboxMessagesTable)->insert([
+    DB::table('sys_outbox_messages')->insert([
         'id' => '01932f5a-0000-7000-8000-000000000011',
         'name' => 'membership.expired',
         'contract_version' => 1,
@@ -131,7 +130,7 @@ it('refuses a null-transport publisher before markPublished', function (): void 
     expect(fn () => $this->artisan('corex:messaging:relay', ['--once' => true]))
         ->toThrow(BindingResolutionException::class);
 
-    expect(DB::table(app(CoreOptions::class)->outboxMessagesTable)->value('status'))->toBe('pending');
+    expect(DB::table('sys_outbox_messages')->value('status'))->toBe('pending');
 });
 
 it('refuses a redis-publish publisher before markPublished', function (): void {
@@ -141,7 +140,7 @@ it('refuses a redis-publish publisher before markPublished', function (): void {
     });
 
     $now = app(ClockInterface::class)->now();
-    DB::table(app(CoreOptions::class)->outboxMessagesTable)->insert([
+    DB::table('sys_outbox_messages')->insert([
         'id' => '01932f5a-0000-7000-8000-000000000012',
         'name' => 'membership.expired',
         'contract_version' => 1,
@@ -165,5 +164,5 @@ it('refuses a redis-publish publisher before markPublished', function (): void {
     expect(fn () => $this->artisan('corex:messaging:relay', ['--once' => true]))
         ->toThrow(BindingResolutionException::class);
 
-    expect(DB::table(app(CoreOptions::class)->outboxMessagesTable)->value('status'))->toBe('pending');
+    expect(DB::table('sys_outbox_messages')->value('status'))->toBe('pending');
 });
