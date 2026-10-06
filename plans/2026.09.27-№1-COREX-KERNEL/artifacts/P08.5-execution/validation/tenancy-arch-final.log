@@ -1,0 +1,16 @@
+> pest 'tests/Arch'
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Arch\NoCrossDbFkTest[39m
+  [32;1m✓[39;22m[90m [39m[90mroot-directory migrations create only root_ tables and tenant-directory migrations create none[39m
+  [32;1m✓[39;22m[90m [39m[90mthe FK-target detector reads both Laravel forms and flags dynamic targets[39m
+  [32;1m✓[39;22m[90m [39m[90mtenant-layer migrations declare no foreign key to a root_ table[39m[90m     [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe central and tenant runners use disjoint registered schema scopes[39m
+  [32;1m✓[39;22m[90m [39m[90mevery axiomasoft/corex-tenancy migration is classified root or tenant by its directory[39m
+  [32;1m✓[39;22m[90m [39m[90mliteral model table resolution retains root detection and rejects unknown expressions[39m
+  [32;1m✓[39;22m[90m [39m[90mthe migration inventory is not empty in either layer[39m
+  [32;1m✓[39;22m[90m [39m[90mroot-layer migrations declare foreign keys only to root_ tables[39m
+
+  [90mTests:[39m    [32;1m8 passed[39;22m[90m (23 assertions)[39m
+  [90mDuration:[39m [39m0.06s[39m
+  [90mRandom Order Seed:[39m [39m1791285670[39m
+

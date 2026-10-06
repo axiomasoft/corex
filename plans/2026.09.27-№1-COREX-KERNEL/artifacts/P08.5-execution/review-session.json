@@ -1,0 +1,22 @@
+{
+  "reviewer": "grok/grok-4.7/high",
+  "native_session": "4f2a0019-e96e-4eb8-b591-2820bdf0ea8b",
+  "context_argument": false,
+  "base": "696486c2a98eea1fcb6e6783a40a43eada7f0d5f",
+  "product_diff_sha256": "13fd1e0c0095851cbf5459e33a75e9587962613358738d51d82d73f53306552b",
+  "status": "GREEN",
+  "actual_model_usage": [
+    "grok-4.7-build"
+  ],
+  "stop_reason": "end_turn",
+  "completed_rounds": 1,
+  "owning_corrections": 0,
+  "usage": {
+    "input_tokens": 142662,
+    "cache_read_input_tokens": 833920,
+    "cache_creation_input_tokens": 0,
+    "output_tokens": 39420,
+    "reasoning_tokens": 36793,
+    "total_tokens": 1016002
+  }
+}

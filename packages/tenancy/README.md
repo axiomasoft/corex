@@ -27,10 +27,11 @@ provide authority to select an account connection.
 ## Package engine and configuration
 
 CoreX owns the account/domain models, physical tenancy engine and synchronous golden-template
-provisioning. Account identifiers use UUIDv7; account fields are explicit typed columns. The legacy
-`root_accounts.data` column is no longer used for model attributes. Existing signup claim and pool
-cleanup SQL still use it for idempotency and crash recovery until P08 (D107); retain the column and
-these writes until that migration is complete. Saved/deleted model events fence the central host cache
+provisioning. Account identifiers use UUIDv7; account fields are explicit typed columns.
+Signup idempotency is stored in explicit `signup_*` columns, written atomically by the claim SQL.
+A named all-or-nothing CHECK and partial unique index protect the binding. Cleanup commits
+`pool_cleanup` before dropping a stale database and resumes interrupted cleanup from that marker.
+These fields are excluded from model mass assignment. Saved/deleted model events fence the central host cache
 after commit. Positive entries carry a shared generation so late lookups cannot restore revoked mappings;
 account deletion cascades also invalidate them. Changes to any account/domain invalidate all warmed host
 mappings, which are rebuilt on demand. Resolutions inside transactions bypass the shared cache.
@@ -51,9 +52,7 @@ following:
 `corex-tenancy.template_integrity.trusted_keys` and
 `corex-tenancy.template_integrity.manifests` are deliberately empty defaults.
 Existing ready rows with a NULL hash are not compatible fallback templates.
-Consumer write-path adoption is intentionally separate. Operational rollback
-preserves the integrity metadata; the additive migration has no destructive
-automatic down action.
+Template integrity metadata is part of the fresh baseline schema.
 
 ## Compatibility evidence
 
@@ -81,6 +80,8 @@ See the monorepo [error contract](../../docs/reference/errors.md) for contributi
 validated replay and safe mapping.
 
 ## Schema installation
+
+Schema: `root` (Central) and `tenant` (Tenant), baseline v1, PostgreSQL.
 
 Register the package provider, then run `php artisan corex:schema:migrate --scope=tenant --database=<tenant>`. Module sets are installed by `ModuleLifecycle::enable()`; template preparation includes them with `--modules`. Inspect the journal with `corex:schema:status`.
 

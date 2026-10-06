@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Contracts\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Provisioning\Data\ClaimRequest;
 use CoreX\Tenancy\Provisioning\Data\QualifiedTemplate;
@@ -10,6 +11,7 @@ use CoreX\Tenancy\Provisioning\Exceptions\ClaimUnavailable;
 use CoreX\Tenancy\Provisioning\Internal\ClaimAccountSignup;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -74,7 +76,7 @@ function signupFixture(): array
     return [$clusterId, $templateId];
 }
 
-function pendingSignupAccount(string $clusterId, array $data = []): string
+function pendingSignupAccount(string $clusterId, array $signup = []): string
 {
     $accountId = (string) Str::uuid();
 
@@ -88,9 +90,7 @@ function pendingSignupAccount(string $clusterId, array $data = []): string
         'embedding_dim' => 1024,
     ];
 
-    if ($data !== []) {
-        $attributes['data'] = json_encode($data, JSON_THROW_ON_ERROR);
-    }
+    $attributes = array_merge($attributes, $signup);
 
     DB::table('root_accounts')->insert($attributes);
 
@@ -152,7 +152,7 @@ function signupClaim(string $connection, TemplateIntegrityVerifier $verifier): C
 
 it('returns one reservation when two independent connections claim the same key', function (): void {
     [$clusterId, $templateId] = signupFixture();
-    $accountId = pendingSignupAccount($clusterId, ['unrelated' => 'kept']);
+    $accountId = pendingSignupAccount($clusterId);
     $request = signupRequest('checkout:0001', $clusterId, $templateId);
     $verifier = qualifiedSignupTemplate($clusterId, $templateId);
 
@@ -165,9 +165,8 @@ it('returns one reservation when two independent connections claim the same key'
         ->and($second->replayed)->toBeTrue()
         ->and(DB::table('root_accounts')->where('status', 'provisioning')->count())->toBe(1);
 
-    $data = json_decode((string) DB::table('root_accounts')->where('id', $accountId)->value('data'), true, flags: JSON_THROW_ON_ERROR);
-    expect($data)->toMatchArray([
-        'unrelated' => 'kept',
+    $row = DB::table('root_accounts')->where('id', $accountId)->first();
+    expect((array) $row)->toMatchArray([
         'signup_key' => 'checkout:0001',
         'signup_request_digest' => $request->requestDigest,
         'signup_cluster_id' => $clusterId,
@@ -189,7 +188,7 @@ it('reserves different accounts for different keys', function (): void {
         ->and($second->replayed)->toBeFalse();
 });
 
-it('rejects a replay with incompatible immutable input without reserving another account', function (): void {
+it('rejects a replay with incompatible immutable input without reserving another account', function (string $changed): void {
     [$clusterId, $templateId] = signupFixture();
     $accountId = pendingSignupAccount($clusterId);
     $verifier = qualifiedSignupTemplate($clusterId, $templateId);
@@ -197,11 +196,61 @@ it('rejects a replay with incompatible immutable input without reserving another
 
     $claim->claim(signupRequest('checkout:0001', $clusterId, $templateId));
 
-    expect(fn () => $claim->claim(signupRequest('checkout:0001', $clusterId, $templateId, str_repeat('b', 64))))
+    expect(fn () => $claim->claim(signupRequest(
+        'checkout:0001',
+        $changed === 'cluster' ? (string) Str::uuid() : $clusterId,
+        $changed === 'template' ? (string) Str::uuid() : $templateId,
+        $changed === 'digest' ? str_repeat('b', 64) : hash('sha256', "{$clusterId}:{$templateId}"),
+    )))
         ->toThrow(ClaimConflict::class);
 
     expect(DB::table('root_accounts')->where('id', $accountId)->value('status'))->toBe('provisioning')
         ->and(DB::table('root_accounts')->where('status', 'pending')->count())->toBe(0);
+})->with(['digest', 'cluster', 'template']);
+
+it('rejects partial signup writes through the named all-or-nothing check', function (): void {
+    [$clusterId] = signupFixture();
+    $accountId = pendingSignupAccount($clusterId);
+
+    try {
+        DB::table('root_accounts')->where('id', $accountId)->update(['signup_key' => 'partial']);
+
+        throw new RuntimeException('The signup check accepted a partial binding.');
+    } catch (QueryException $exception) {
+        expect($exception->getPrevious()->getCode())->toBe('23514')
+            ->and($exception->getMessage())->toContain('root_accounts_signup_ck');
+    }
+    expect(DB::table('root_accounts')->where('id', $accountId)->value('signup_key'))->toBeNull();
+});
+
+it('rejects a second live signup binding but permits the schema slot after soft deletion', function (): void {
+    [$clusterId, $templateId] = signupFixture();
+    $signup = [
+        'signup_key' => 'duplicate',
+        'signup_request_digest' => str_repeat('a', 64),
+        'signup_cluster_id' => $clusterId,
+        'signup_template_id' => $templateId,
+    ];
+    $first = pendingSignupAccount($clusterId, $signup);
+
+    try {
+        pendingSignupAccount($clusterId, $signup);
+
+        throw new RuntimeException('The signup index accepted a duplicate live binding.');
+    } catch (QueryException $exception) {
+        expect($exception->getPrevious()->getCode())->toBe('23505')
+            ->and($exception->getMessage())->toContain('root_accounts_signup_key_uq');
+    }
+    DB::table('root_accounts')->where('id', $first)->update(['deleted_at' => now()]);
+    expect(pendingSignupAccount($clusterId, $signup))->not->toBe($first);
+});
+
+it('keeps signup and cleanup columns outside account mass assignment', function (): void {
+    $account = new Account;
+
+    foreach (['signup_key', 'signup_request_digest', 'signup_cluster_id', 'signup_template_id', 'pool_cleanup'] as $field) {
+        expect($account->isFillable($field))->toBeFalse();
+    }
 });
 
 it('fails closed when template integrity is missing before the first write', function (): void {
@@ -213,7 +262,7 @@ it('fails closed when template integrity is missing before the first write', fun
         ->toThrow(ClaimUnavailable::class);
 
     expect(DB::table('root_accounts')->where('id', $accountId)->value('status'))->toBe('pending')
-        ->and(DB::table('root_accounts')->where('id', $accountId)->value('data'))->toBe('{}');
+        ->and(DB::table('root_accounts')->where('id', $accountId)->value('signup_key'))->toBeNull();
 });
 
 it('rejects empty keys and soft-deleted key bindings', function (): void {

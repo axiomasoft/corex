@@ -1,0 +1,67 @@
+root_account_events: rename indexes root_account_events_ix -> root_account_events_account_created_ix
+root_account_events: rename indexes root_account_events_pkey -> root_account_events_pk
+root_account_events: rename foreign_keys root_account_events_account_id_foreign -> root_account_events_account_id_fk
+root_account_exports: rename indexes root_account_exports_pkey -> root_account_exports_pk
+root_account_exports: rename foreign_keys root_account_exports_account_id_foreign -> root_account_exports_account_id_fk
+root_account_products: rename indexes root_account_products_pkey -> root_account_products_pk
+root_account_products: rename foreign_keys root_account_products_account_id_foreign -> root_account_products_account_id_fk
+root_account_schema_state: ~type current_version 'integer' -> 'bigint'
+root_account_schema_state: ~type target_version 'integer' -> 'bigint'
+root_account_schema_state: rename indexes root_schema_state_bad_ix -> root_account_schema_state_bad_ix
+root_account_schema_state: rename indexes root_account_schema_state_pkey -> root_account_schema_state_pk
+root_account_schema_state: rename foreign_keys root_account_schema_state_account_id_foreign -> root_account_schema_state_account_id_fk
+root_account_schema_state: rename foreign_keys root_account_schema_state_batch_id_foreign -> root_account_schema_state_batch_id_fk
+root_accounts: -col data
+root_accounts: +col pool_cleanup boolean
+root_accounts: +col signup_cluster_id uuid
+root_accounts: +col signup_key text
+root_accounts: +col signup_request_digest text
+root_accounts: +col signup_template_id uuid
+root_accounts: ~type template_version 'integer' -> 'bigint'
+root_accounts: rename indexes root_accounts_pkey -> root_accounts_pk
+root_accounts: -indexes root_accounts_signup_key_uq ('uq', ("((data ->> 'signup_key'::text))",), "(((data ->> 'signup_key'::text) IS NOT NULL) AND (deleted_at IS NULL))")
+root_accounts: +indexes root_accounts_signup_key_uq ('uq', ('signup_key',), '((signup_key IS NOT NULL) AND (deleted_at IS NULL))')
+root_accounts: rename foreign_keys root_accounts_cluster_id_foreign -> root_accounts_cluster_id_fk
+root_accounts: rename foreign_keys root_accounts_owner_identity_id_foreign -> root_accounts_owner_identity_id_fk
+root_accounts: +checks root_accounts_signup_ck ('(((signup_key IS NULL) AND (signup_request_digest IS NULL) AND (signup_cluster_id IS NULL) AND (signup_template_id IS NULL)) OR ((signup_key IS NOT NULL) AND (signup_request_digest IS NOT NULL) AND (signup_cluster_id IS NOT NULL) AND (signup_template_id IS NOT NULL)))',)
+root_clusters: ~type db_count 'integer' -> 'bigint'
+root_clusters: ~default db_count '0' -> "'0'::bigint"
+root_clusters: ~type template_version 'integer' -> 'bigint'
+root_clusters: ~default template_version '0' -> "'0'::bigint"
+root_clusters: rename indexes root_clusters_pkey -> root_clusters_pk
+root_clusters: rename indexes root_clusters_name_unique -> root_clusters_name_uq
+root_domains: rename indexes root_domains_pkey -> root_domains_pk
+root_domains: rename foreign_keys root_domains_account_id_foreign -> root_domains_account_id_fk
+root_feature_flags: rename indexes root_feature_flags_pkey -> root_feature_flags_pk
+root_feature_flags: rename foreign_keys root_feature_flags_account_id_foreign -> root_feature_flags_account_id_fk
+root_identities: rename indexes root_identities_pkey -> root_identities_pk
+root_identity_accounts: rename indexes root_identity_accounts_pkey -> root_identity_accounts_pk
+root_identity_accounts: rename indexes root_identity_accounts_identity_id_account_id_unique -> root_identity_accounts_identity_id_account_id_uq
+root_identity_accounts: rename foreign_keys root_identity_accounts_account_id_foreign -> root_identity_accounts_account_id_fk
+root_identity_accounts: rename foreign_keys root_identity_accounts_identity_id_foreign -> root_identity_accounts_identity_id_fk
+root_idp_sessions: rename indexes root_idp_sessions_pkey -> root_idp_sessions_pk
+root_idp_sessions: rename indexes root_idp_sessions_token_hash_unique -> root_idp_sessions_token_hash_uq
+root_idp_sessions: rename foreign_keys root_idp_sessions_identity_id_foreign -> root_idp_sessions_identity_id_fk
+root_impersonation_grants: rename indexes root_impersonation_acc_ix -> root_impersonation_grants_account_created_ix
+root_impersonation_grants: rename indexes root_impersonation_grants_pkey -> root_impersonation_grants_pk
+root_impersonation_grants: rename foreign_keys root_impersonation_grants_account_id_foreign -> root_impersonation_grants_account_id_fk
+root_impersonation_grants: rename foreign_keys root_impersonation_grants_approved_by_foreign -> root_impersonation_grants_approved_by_fk
+root_impersonation_grants: rename foreign_keys root_impersonation_grants_staff_identity_id_foreign -> root_impersonation_grants_staff_identity_id_fk
+root_migration_batches: ~type from_version 'integer' -> 'bigint'
+root_migration_batches: ~type to_version 'integer' -> 'bigint'
+root_migration_batches: rename indexes root_migration_batches_pkey -> root_migration_batches_pk
+root_oauth_clients: rename indexes root_oauth_clients_pkey -> root_oauth_clients_pk
+root_oauth_clients: rename indexes root_oauth_clients_client_id_unique -> root_oauth_clients_client_id_uq
+root_oauth_refresh_tokens: rename indexes root_oauth_refresh_tokens_pkey -> root_oauth_refresh_tokens_pk
+root_oauth_refresh_tokens: rename indexes root_oauth_refresh_tokens_token_hash_unique -> root_oauth_refresh_tokens_token_hash_uq
+root_oauth_refresh_tokens: rename foreign_keys root_oauth_refresh_tokens_session_id_foreign -> root_oauth_refresh_tokens_session_id_fk
+root_templates: ~type version 'integer' -> 'bigint'
+root_templates: rename indexes root_templates_pkey -> root_templates_pk
+root_templates: rename indexes root_templates_version_unique -> root_templates_version_uq
+root_usage_snapshots: rename indexes root_usage_snapshots_pkey -> root_usage_snapshots_pk
+root_usage_snapshots: rename foreign_keys root_usage_snapshots_account_id_foreign -> root_usage_snapshots_account_id_fk
+root_wakeup_hints: rename indexes root_wakeup_hints_scan_idx -> root_wakeup_hints_scan_ix
+root_wakeup_hints: rename indexes root_wakeup_hints_pkey -> root_wakeup_hints_pk
+root_wakeup_reconciliation_state: ~type attempts 'integer' -> 'bigint'
+root_wakeup_reconciliation_state: ~default attempts '0' -> "'0'::bigint"
+root_wakeup_reconciliation_state: rename indexes root_wakeup_reconciliation_state_pkey -> root_wakeup_reconciliation_state_pk

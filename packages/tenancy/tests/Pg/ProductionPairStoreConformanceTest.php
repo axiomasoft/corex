@@ -26,15 +26,23 @@ beforeEach(function (): void {
     DB::purge('pgsql');
     $this->migrateSchemaSets(['axiomasoft/corex:tenant', 'axiomasoft/corex-tenancy:tenant'], 'pgsql');
 
-    /** @var Migration $migration */
-    $migration = require app(SchemaSets::class)->get('axiomasoft/corex-tenancy:tenant')->path.'/2026_09_15_000700_create_membership_adapter_tables.php';
-    $this->migration = $migration;
+    // Rollback guards belong to each table; schema construction still uses the registry.
+    $this->membershipMigrations = [];
+    $set = app(SchemaSets::class)->get('axiomasoft/corex-tenancy:tenant');
+    foreach (glob($set->path.'/*_create_tnt_membership_*.php') as $file) {
+        /** @var Migration $migration */
+        $migration = require $file;
+        $this->membershipMigrations[] = $migration;
+    }
+    expect($this->membershipMigrations)->toHaveCount(2);
 });
 
 afterEach(function (): void {
     DB::table('tnt_membership_inbox')->delete();
     DB::table('tnt_membership_pairs')->delete();
-    $this->migration->down();
+    foreach (array_reverse($this->membershipMigrations) as $migration) {
+        $migration->down();
+    }
 });
 
 it('keeps the physical pair mapping denied until a canonical snapshot is applied', function (): void {
@@ -90,5 +98,5 @@ it('refuses a populated migration rollback', function (): void {
         'denied' => true,
     ]);
 
-    expect(fn (): mixed => $this->migration->down())->toThrow(RuntimeException::class);
+    expect(fn (): mixed => $this->membershipMigrations[0]->down())->toThrow(RuntimeException::class);
 })->group('pg');

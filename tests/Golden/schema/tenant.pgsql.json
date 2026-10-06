@@ -5124,7 +5124,7 @@
                     "default": null
                 },
                 "last_activity": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
                     "default": null
                 },
@@ -5146,7 +5146,7 @@
             },
             "indexes": [
                 {
-                    "name": "sessions_last_activity_index",
+                    "name": "sessions_last_activity_ix",
                     "kind": "ix",
                     "columns": [
                         "last_activity"
@@ -5155,7 +5155,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sessions_pkey",
+                    "name": "sessions_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -5164,7 +5164,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sessions_user_id_index",
+                    "name": "sessions_user_id_ix",
                     "kind": "ix",
                     "columns": [
                         "user_id"
@@ -6523,7 +6523,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "sys_du_user_fk",
+                    "name": "sys_department_user_user_fk",
                     "columns": [
                         "user_id"
                     ],
@@ -6635,6 +6635,17 @@
             ],
             "foreign_keys": [
                 {
+                    "name": "sys_departments_head_user_fk",
+                    "columns": [
+                        "head_user_id"
+                    ],
+                    "references": "users(id)",
+                    "on_delete": "SET NULL",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                },
+                {
                     "name": "sys_departments_parent_fk",
                     "columns": [
                         "parent_id"
@@ -6646,18 +6657,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "sys_dept_head_user_fk",
-                    "columns": [
-                        "head_user_id"
-                    ],
-                    "references": "users(id)",
-                    "on_delete": "SET NULL",
-                    "on_update": "NO ACTION",
-                    "deferrable": false,
-                    "initially_deferred": false
-                },
-                {
-                    "name": "sys_dept_workspace_fk",
+                    "name": "sys_departments_workspace_fk",
                     "columns": [
                         "workspace_id"
                     ],
@@ -7694,7 +7694,7 @@
             },
             "indexes": [
                 {
-                    "name": "tnt_membership_inbox_pending_idx",
+                    "name": "tnt_membership_inbox_pending_ix",
                     "kind": "ix",
                     "columns": [
                         "lease_until",
@@ -7704,7 +7704,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "tnt_membership_inbox_pkey",
+                    "name": "tnt_membership_inbox_pk",
                     "kind": "pk",
                     "columns": [
                         "event_id"
@@ -7716,7 +7716,7 @@
             "foreign_keys": [],
             "checks": [
                 {
-                    "name": "tnt_membership_inbox_status",
+                    "name": "tnt_membership_inbox_status_ck",
                     "expression": "((status)::text = ANY ((ARRAY['pending'::character varying, 'acknowledged'::character varying])::text[]))"
                 }
             ],
@@ -7787,7 +7787,7 @@
             },
             "indexes": [
                 {
-                    "name": "tnt_membership_pairs_pkey",
+                    "name": "tnt_membership_pairs_pk",
                     "kind": "pk",
                     "columns": [
                         "account_id",
@@ -7800,27 +7800,27 @@
             "foreign_keys": [],
             "checks": [
                 {
-                    "name": "tnt_membership_pairs_application_fence_range",
+                    "name": "tnt_membership_pairs_application_fence_range_ck",
                     "expression": "((application_fence IS NULL) OR ((application_fence >= (0)::numeric) AND (application_fence <= '18446744073709551615'::numeric)))"
                 },
                 {
-                    "name": "tnt_membership_pairs_local_epoch_range",
+                    "name": "tnt_membership_pairs_local_epoch_range_ck",
                     "expression": "((local_epoch >= (0)::numeric) AND (local_epoch <= '18446744073709551615'::numeric))"
                 },
                 {
-                    "name": "tnt_membership_pairs_operation_fence_range",
+                    "name": "tnt_membership_pairs_operation_fence_range_ck",
                     "expression": "((operation_fence >= (0)::numeric) AND (operation_fence <= '18446744073709551615'::numeric))"
                 },
                 {
-                    "name": "tnt_membership_pairs_revision_range",
+                    "name": "tnt_membership_pairs_revision_range_ck",
                     "expression": "((revision >= (0)::numeric) AND (revision <= '18446744073709551615'::numeric))"
                 },
                 {
-                    "name": "tnt_membership_pairs_revoke_generation_range",
+                    "name": "tnt_membership_pairs_revoke_generation_range_ck",
                     "expression": "((revoke_generation >= (0)::numeric) AND (revoke_generation <= '18446744073709551615'::numeric))"
                 },
                 {
-                    "name": "tnt_membership_pairs_snapshot_digest_format",
+                    "name": "tnt_membership_pairs_snapshot_digest_format_ck",
                     "expression": "((snapshot_digest IS NULL) OR (snapshot_digest ~ '^[a-f0-9]{64}$'::text))"
                 }
             ],
@@ -8819,7 +8819,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "users_pkey",
+                    "name": "users_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -8913,7 +8913,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "wsp_invitations_pkey",
+                    "name": "wsp_invitations_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -8922,7 +8922,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "wsp_invitations_token_hash_unique",
+                    "name": "wsp_invitations_token_hash_uq",
                     "kind": "uq",
                     "columns": [
                         "token_hash"
@@ -8933,7 +8933,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "wsp_invitations_invited_by_foreign",
+                    "name": "wsp_invitations_invited_by_fk",
                     "columns": [
                         "invited_by"
                     ],
@@ -8944,7 +8944,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "wsp_invitations_workspace_id_foreign",
+                    "name": "wsp_invitations_workspace_id_fk",
                     "columns": [
                         "workspace_id"
                     ],
@@ -9008,7 +9008,7 @@
             },
             "indexes": [
                 {
-                    "name": "wsp_members_default_uq",
+                    "name": "wsp_workspace_members_default_uq",
                     "kind": "uq",
                     "columns": [
                         "user_id"
@@ -9017,16 +9017,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "wsp_members_user_ix",
-                    "kind": "ix",
-                    "columns": [
-                        "user_id"
-                    ],
-                    "predicate": null,
-                    "method": "btree"
-                },
-                {
-                    "name": "wsp_workspace_members_pkey",
+                    "name": "wsp_workspace_members_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -9035,7 +9026,16 @@
                     "method": "btree"
                 },
                 {
-                    "name": "wsp_workspace_members_workspace_id_user_id_unique",
+                    "name": "wsp_workspace_members_user_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "user_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "wsp_workspace_members_workspace_id_user_id_uq",
                     "kind": "uq",
                     "columns": [
                         "workspace_id",
@@ -9047,7 +9047,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "wsp_workspace_members_user_id_foreign",
+                    "name": "wsp_workspace_members_user_id_fk",
                     "columns": [
                         "user_id"
                     ],
@@ -9058,7 +9058,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "wsp_workspace_members_workspace_id_foreign",
+                    "name": "wsp_workspace_members_workspace_id_fk",
                     "columns": [
                         "workspace_id"
                     ],
@@ -9071,7 +9071,7 @@
             ],
             "checks": [
                 {
-                    "name": "wsp_members_status_ck",
+                    "name": "wsp_workspace_members_status_ck",
                     "expression": "((status)::text = ANY ((ARRAY['active'::character varying, 'suspended'::character varying])::text[]))"
                 }
             ],
@@ -9146,7 +9146,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "wsp_workspaces_path_gist",
+                    "name": "wsp_workspaces_path_gist_ix",
                     "kind": "ix",
                     "columns": [
                         "path"
@@ -9155,7 +9155,7 @@
                     "method": "gist"
                 },
                 {
-                    "name": "wsp_workspaces_pkey",
+                    "name": "wsp_workspaces_pk",
                     "kind": "pk",
                     "columns": [
                         "id"

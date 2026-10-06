@@ -1,0 +1,132 @@
+{
+  "status": "GREEN",
+  "policy": "Owner-authorized affected packages and checks, once per relevant change; failed inputs repaired by focused deltas",
+  "checks": [
+    {
+      "id": "V1",
+      "acceptance_exit": 0,
+      "log": "validation/schema-gate.log",
+      "evidence": "21 sets; 15 pending, tenancy removed"
+    },
+    {
+      "id": "V2",
+      "acceptance_exit": 0,
+      "log": null,
+      "evidence": "tenancy intersection of pending = []"
+    },
+    {
+      "id": "V3",
+      "acceptance_exit": 0,
+      "log": "validation/golden-pg-final.log",
+      "evidence": "Central/Tenant PG Golden: 2 tests, 3642 assertions; intentional baseline axiomasoft/corex-tenancy update"
+    },
+    {
+      "id": "V4",
+      "acceptance_exit": 0,
+      "log": "validation/root-affected-sqlite.log",
+      "evidence": "SchemaSqliteGoldenTest included and passed; tenant.sqlite.json unchanged"
+    },
+    {
+      "id": "V5",
+      "acceptance_exit": 0,
+      "log": null,
+      "evidence": "git grep returns 1 with no data JSON storage references in tenancy/src"
+    },
+    {
+      "id": "V6",
+      "acceptance_exit": 0,
+      "log": "validation/tenancy-pg.log",
+      "evidence": "Complete PG lane: 521 pass, 1 old data assertion repaired in tenancy-pg-delta.log (21 pass/108 assertions), 6 opt-in Redis/object-storage skips. Final union 522 passed/6 skipped; no full replay."
+    },
+    {
+      "id": "V7",
+      "acceptance_exit": 0,
+      "log": "validation/tenancy-unit-arch.log",
+      "evidence": "85 tests/122 assertions; changed Arch rerun tenancy-arch-final.log: 8 tests/23 assertions"
+    },
+    {
+      "id": "V8",
+      "acceptance_exit": 0,
+      "log": null,
+      "evidence": "28 files, all 2026_10_01_02 names: 19 root, 7 tenant table files + 2 cyclic FK files"
+    },
+    {
+      "id": "V9",
+      "acceptance_exit": 0,
+      "log": "validation/lint.log",
+      "evidence": "Pint tenancy plus harness-lint.log"
+    },
+    {
+      "id": "V10",
+      "acceptance_exit": 0,
+      "log": "validation/phpstan-final.log",
+      "evidence": "PHPStan tenancy GREEN; harness-phpstan.log GREEN"
+    },
+    {
+      "id": "V11",
+      "acceptance_exit": 0,
+      "log": "validation/dependencies.log",
+      "evidence": "330 files; no Composer issues"
+    },
+    {
+      "id": "V12",
+      "acceptance_exit": 0,
+      "log": "validation/root-affected-sqlite.log",
+      "evidence": "78 tests; initial ownership failure repaired with ownership-arch-final.log (10 pass/27 assertions); unaffected 77 passed include schema registry, gate, layer and Golden"
+    },
+    {
+      "id": "V13",
+      "acceptance_exit": 0,
+      "log": "validation/golden-pg-final.log",
+      "evidence": "Reuse V6 + V3 for affected PG integration"
+    },
+    {
+      "id": "V14",
+      "acceptance_exit": 0,
+      "log": "validation/tenancy-pg-delta.log",
+      "evidence": "Reuse V6/V7 for affected package lanes"
+    },
+    {
+      "id": "V15",
+      "acceptance_exit": 0,
+      "log": "validation/tenancy-arch-final.log",
+      "evidence": "Reuse tenancy Arch + root architecture in V12; root ownership final rerun serial"
+    },
+    {
+      "id": "V16",
+      "acceptance_exit": 0,
+      "log": "validation/root-affected-sqlite.log",
+      "evidence": "GoldenTest four public surface layers GREEN, no surface delta"
+    },
+    {
+      "id": "V17",
+      "acceptance_exit": 0,
+      "log": "validation/anti-weakening.log",
+      "evidence": "GREEN against f6d9e41e; run at staged product boundary"
+    },
+    {
+      "id": "V18",
+      "acceptance_exit": 0,
+      "log": "validation/package-docs.log",
+      "evidence": "20-package metadata scan GREEN; no fleet behavioral suite"
+    },
+    {
+      "id": "V19",
+      "acceptance_exit": 0,
+      "log": "validation/ownership.log",
+      "evidence": "94 shipped tables, 122 catalogue rows"
+    },
+    {
+      "id": "V20",
+      "acceptance_exit": 0,
+      "log": null,
+      "evidence": "Both before/after snapshots and schema-diff-classification.txt; verify-snapshots.py proves full catalogue equality after D113/D114, including methods/actions/checks/triggers"
+    },
+    {
+      "id": "V21",
+      "acceptance_exit": 0,
+      "log": null,
+      "evidence": "Completion self-check: GREEN; D111–D114 mapped to source and tests"
+    }
+  ]
+}

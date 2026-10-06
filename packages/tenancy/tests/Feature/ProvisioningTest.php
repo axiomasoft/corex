@@ -153,7 +153,10 @@ it('creates an Account with a UUIDv7 key and typed custom columns', function ():
 
     $raw = DB::table('root_accounts')->where('id', $account->id)->first();
     expect($raw->status)->toBe('pending')
-        ->and($raw->data)->toBe('{}');
+        ->and($raw->signup_key)->toBeNull()
+        ->and($raw->pool_cleanup)->toBeFalse()
+        ->and(property_exists($raw, 'meta_note'))->toBeFalse()
+        ->and(property_exists($raw, 'data'))->toBeFalse();
 });
 
 it('provisions a database by cloning the golden template via STRATEGY WAL_LOG, without Migrate/Seed', function (): void {

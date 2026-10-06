@@ -41,7 +41,7 @@
             },
             "indexes": [
                 {
-                    "name": "root_account_events_ix",
+                    "name": "root_account_events_account_created_ix",
                     "kind": "ix",
                     "columns": [
                         "account_id",
@@ -51,7 +51,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "root_account_events_pkey",
+                    "name": "root_account_events_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -62,7 +62,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "root_account_events_account_id_foreign",
+                    "name": "root_account_events_account_id_fk",
                     "columns": [
                         "account_id"
                     ],
@@ -136,7 +136,7 @@
             },
             "indexes": [
                 {
-                    "name": "root_account_exports_pkey",
+                    "name": "root_account_exports_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -147,7 +147,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "root_account_exports_account_id_foreign",
+                    "name": "root_account_exports_account_id_fk",
                     "columns": [
                         "account_id"
                     ],
@@ -200,7 +200,7 @@
             },
             "indexes": [
                 {
-                    "name": "root_account_products_pkey",
+                    "name": "root_account_products_pk",
                     "kind": "pk",
                     "columns": [
                         "account_id",
@@ -212,7 +212,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "root_account_products_account_id_foreign",
+                    "name": "root_account_products_account_id_fk",
                     "columns": [
                         "account_id"
                     ],
@@ -249,7 +249,7 @@
                     "default": "CURRENT_TIMESTAMP"
                 },
                 "current_version": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
                     "default": null
                 },
@@ -269,7 +269,7 @@
                     "default": "'ok'::character varying"
                 },
                 "target_version": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
                     "default": null
                 },
@@ -281,27 +281,27 @@
             },
             "indexes": [
                 {
-                    "name": "root_account_schema_state_pkey",
-                    "kind": "pk",
-                    "columns": [
-                        "account_id"
-                    ],
-                    "predicate": null,
-                    "method": "btree"
-                },
-                {
-                    "name": "root_schema_state_bad_ix",
+                    "name": "root_account_schema_state_bad_ix",
                     "kind": "ix",
                     "columns": [
                         "status"
                     ],
                     "predicate": "((status)::text <> 'ok'::text)",
                     "method": "btree"
+                },
+                {
+                    "name": "root_account_schema_state_pk",
+                    "kind": "pk",
+                    "columns": [
+                        "account_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
                 }
             ],
             "foreign_keys": [
                 {
-                    "name": "root_account_schema_state_account_id_foreign",
+                    "name": "root_account_schema_state_account_id_fk",
                     "columns": [
                         "account_id"
                     ],
@@ -312,7 +312,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "root_account_schema_state_batch_id_foreign",
+                    "name": "root_account_schema_state_batch_id_fk",
                     "columns": [
                         "batch_id"
                     ],
@@ -342,11 +342,6 @@
                     "type": "timestamp(6) with time zone",
                     "nullable": false,
                     "default": "CURRENT_TIMESTAMP"
-                },
-                "data": {
-                    "type": "jsonb",
-                    "nullable": false,
-                    "default": "'{}'::jsonb"
                 },
                 "db_name": {
                     "type": "character varying(63)",
@@ -393,8 +388,33 @@
                     "nullable": true,
                     "default": null
                 },
+                "pool_cleanup": {
+                    "type": "boolean",
+                    "nullable": false,
+                    "default": "false"
+                },
                 "purge_after": {
                     "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "signup_cluster_id": {
+                    "type": "uuid",
+                    "nullable": true,
+                    "default": null
+                },
+                "signup_key": {
+                    "type": "text",
+                    "nullable": true,
+                    "default": null
+                },
+                "signup_request_digest": {
+                    "type": "text",
+                    "nullable": true,
+                    "default": null
+                },
+                "signup_template_id": {
+                    "type": "uuid",
                     "nullable": true,
                     "default": null
                 },
@@ -414,7 +434,7 @@
                     "default": null
                 },
                 "template_version": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
                     "default": null
                 },
@@ -454,7 +474,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "root_accounts_pkey",
+                    "name": "root_accounts_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -475,9 +495,9 @@
                     "name": "root_accounts_signup_key_uq",
                     "kind": "uq",
                     "columns": [
-                        "((data ->> 'signup_key'::text))"
+                        "signup_key"
                     ],
-                    "predicate": "(((data ->> 'signup_key'::text) IS NOT NULL) AND (deleted_at IS NULL))",
+                    "predicate": "((signup_key IS NOT NULL) AND (deleted_at IS NULL))",
                     "method": "btree"
                 },
                 {
@@ -501,7 +521,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "root_accounts_cluster_id_foreign",
+                    "name": "root_accounts_cluster_id_fk",
                     "columns": [
                         "cluster_id"
                     ],
@@ -512,7 +532,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "root_accounts_owner_identity_id_foreign",
+                    "name": "root_accounts_owner_identity_id_fk",
                     "columns": [
                         "owner_identity_id"
                     ],
@@ -527,6 +547,10 @@
                 {
                     "name": "root_accounts_owner_or_pending_ck",
                     "expression": "(((status)::text = ANY ((ARRAY['pending'::character varying, 'provisioning'::character varying])::text[])) OR (owner_identity_id IS NOT NULL))"
+                },
+                {
+                    "name": "root_accounts_signup_ck",
+                    "expression": "(((signup_key IS NULL) AND (signup_request_digest IS NULL) AND (signup_cluster_id IS NULL) AND (signup_template_id IS NULL)) OR ((signup_key IS NOT NULL) AND (signup_request_digest IS NOT NULL) AND (signup_cluster_id IS NOT NULL) AND (signup_template_id IS NOT NULL)))"
                 },
                 {
                     "name": "root_accounts_slug_or_pending_ck",
@@ -557,9 +581,9 @@
                     "default": "CURRENT_TIMESTAMP"
                 },
                 "db_count": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
-                    "default": "0"
+                    "default": "'0'::bigint"
                 },
                 "db_soft_limit": {
                     "type": "integer",
@@ -627,9 +651,9 @@
                     "default": null
                 },
                 "template_version": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
-                    "default": "0"
+                    "default": "'0'::bigint"
                 },
                 "updated_at": {
                     "type": "timestamp(6) with time zone",
@@ -639,7 +663,7 @@
             },
             "indexes": [
                 {
-                    "name": "root_clusters_name_unique",
+                    "name": "root_clusters_name_uq",
                     "kind": "uq",
                     "columns": [
                         "name"
@@ -648,7 +672,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "root_clusters_pkey",
+                    "name": "root_clusters_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -745,7 +769,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "root_domains_pkey",
+                    "name": "root_domains_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -765,7 +789,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "root_domains_account_id_foreign",
+                    "name": "root_domains_account_id_fk",
                     "columns": [
                         "account_id"
                     ],
@@ -823,7 +847,7 @@
             },
             "indexes": [
                 {
-                    "name": "root_feature_flags_pkey",
+                    "name": "root_feature_flags_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -844,7 +868,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "root_feature_flags_account_id_foreign",
+                    "name": "root_feature_flags_account_id_fk",
                     "columns": [
                         "account_id"
                     ],
@@ -942,7 +966,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "root_identities_pkey",
+                    "name": "root_identities_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -1009,7 +1033,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "root_identity_accounts_identity_id_account_id_unique",
+                    "name": "root_identity_accounts_identity_id_account_id_uq",
                     "kind": "uq",
                     "columns": [
                         "identity_id",
@@ -1019,7 +1043,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "root_identity_accounts_pkey",
+                    "name": "root_identity_accounts_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -1039,7 +1063,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "root_identity_accounts_account_id_foreign",
+                    "name": "root_identity_accounts_account_id_fk",
                     "columns": [
                         "account_id"
                     ],
@@ -1050,7 +1074,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "root_identity_accounts_identity_id_foreign",
+                    "name": "root_identity_accounts_identity_id_fk",
                     "columns": [
                         "identity_id"
                     ],
@@ -1132,7 +1156,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "root_idp_sessions_pkey",
+                    "name": "root_idp_sessions_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -1141,7 +1165,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "root_idp_sessions_token_hash_unique",
+                    "name": "root_idp_sessions_token_hash_uq",
                     "kind": "uq",
                     "columns": [
                         "token_hash"
@@ -1152,7 +1176,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "root_idp_sessions_identity_id_foreign",
+                    "name": "root_idp_sessions_identity_id_fk",
                     "columns": [
                         "identity_id"
                     ],
@@ -1226,7 +1250,7 @@
             },
             "indexes": [
                 {
-                    "name": "root_impersonation_acc_ix",
+                    "name": "root_impersonation_grants_account_created_ix",
                     "kind": "ix",
                     "columns": [
                         "account_id",
@@ -1236,7 +1260,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "root_impersonation_grants_pkey",
+                    "name": "root_impersonation_grants_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -1247,7 +1271,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "root_impersonation_grants_account_id_foreign",
+                    "name": "root_impersonation_grants_account_id_fk",
                     "columns": [
                         "account_id"
                     ],
@@ -1258,7 +1282,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "root_impersonation_grants_approved_by_foreign",
+                    "name": "root_impersonation_grants_approved_by_fk",
                     "columns": [
                         "approved_by"
                     ],
@@ -1269,7 +1293,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "root_impersonation_grants_staff_identity_id_foreign",
+                    "name": "root_impersonation_grants_staff_identity_id_fk",
                     "columns": [
                         "staff_identity_id"
                     ],
@@ -1296,7 +1320,7 @@
                     "default": null
                 },
                 "from_version": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
                     "default": null
                 },
@@ -1321,7 +1345,7 @@
                     "default": "'created'::character varying"
                 },
                 "to_version": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
                     "default": null
                 },
@@ -1338,7 +1362,7 @@
             },
             "indexes": [
                 {
-                    "name": "root_migration_batches_pkey",
+                    "name": "root_migration_batches_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -1415,7 +1439,7 @@
             },
             "indexes": [
                 {
-                    "name": "root_oauth_clients_client_id_unique",
+                    "name": "root_oauth_clients_client_id_uq",
                     "kind": "uq",
                     "columns": [
                         "client_id"
@@ -1424,7 +1448,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "root_oauth_clients_pkey",
+                    "name": "root_oauth_clients_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -1482,7 +1506,7 @@
             },
             "indexes": [
                 {
-                    "name": "root_oauth_refresh_tokens_pkey",
+                    "name": "root_oauth_refresh_tokens_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -1491,7 +1515,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "root_oauth_refresh_tokens_token_hash_unique",
+                    "name": "root_oauth_refresh_tokens_token_hash_uq",
                     "kind": "uq",
                     "columns": [
                         "token_hash"
@@ -1502,7 +1526,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "root_oauth_refresh_tokens_session_id_foreign",
+                    "name": "root_oauth_refresh_tokens_session_id_fk",
                     "columns": [
                         "session_id"
                     ],
@@ -1569,14 +1593,14 @@
                     "default": "CURRENT_TIMESTAMP"
                 },
                 "version": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
                     "default": null
                 }
             },
             "indexes": [
                 {
-                    "name": "root_templates_pkey",
+                    "name": "root_templates_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -1585,7 +1609,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "root_templates_version_unique",
+                    "name": "root_templates_version_uq",
                     "kind": "uq",
                     "columns": [
                         "version"
@@ -1642,7 +1666,7 @@
             },
             "indexes": [
                 {
-                    "name": "root_usage_snapshots_pkey",
+                    "name": "root_usage_snapshots_pk",
                     "kind": "pk",
                     "columns": [
                         "account_id",
@@ -1655,7 +1679,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "root_usage_snapshots_account_id_foreign",
+                    "name": "root_usage_snapshots_account_id_fk",
                     "columns": [
                         "account_id"
                     ],
@@ -1709,7 +1733,7 @@
             },
             "indexes": [
                 {
-                    "name": "root_wakeup_hints_pkey",
+                    "name": "root_wakeup_hints_pk",
                     "kind": "pk",
                     "columns": [
                         "account_id"
@@ -1718,7 +1742,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "root_wakeup_hints_scan_idx",
+                    "name": "root_wakeup_hints_scan_ix",
                     "kind": "ix",
                     "columns": [
                         "next_fire_at",
@@ -1735,9 +1759,9 @@
         "root_wakeup_reconciliation_state": {
             "columns": {
                 "attempts": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
-                    "default": "0"
+                    "default": "'0'::bigint"
                 },
                 "created_at": {
                     "type": "timestamp(6) with time zone",
@@ -1767,7 +1791,7 @@
             },
             "indexes": [
                 {
-                    "name": "root_wakeup_reconciliation_state_pkey",
+                    "name": "root_wakeup_reconciliation_state_pk",
                     "kind": "pk",
                     "columns": [
                         "name"

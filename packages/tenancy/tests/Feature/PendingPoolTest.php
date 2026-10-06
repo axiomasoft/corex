@@ -10,6 +10,7 @@ use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -243,6 +244,52 @@ it('pending-clear removes stale болванки by template_version (DROP+DELET
 
     $cluster = DB::table('root_clusters')->where('id', $clusterId)->first();
     expect($cluster->db_count)->toBe($countBefore - 2);
+});
+
+it('commits a cleanup marker before a failed DROP and recovers without double decrement', function (): void {
+    $cluster = makePendingClusterRow();
+    makePendingTemplateRow();
+    $id = pendingPool()->createPending(1, $cluster)[0];
+    $row = DB::table('root_accounts')->where('id', $id)->first();
+    // A live session makes PostgreSQL reject DROP DATABASE without FORCE.
+    $blocker = pendingConnectTo($row->db_name);
+    $blocker->select('SELECT 1');
+
+    try {
+        expect(fn () => pendingPool()->clearPending(templateVersion: 1))->toThrow(QueryException::class);
+        $marked = DB::table('root_accounts')->where('id', $id)->first();
+        expect($marked->status)->toBe('provisioning')
+            ->and($marked->pool_cleanup)->toBeTrue()
+            ->and(DB::table('root_clusters')->where('id', $cluster)->value('db_count'))->toBe(1);
+    } finally {
+        $blocker->disconnect();
+    }
+
+    expect(pendingPool()->clearPending(templateVersion: 1))->toBe(1)
+        ->and(pendingPool()->clearPending(templateVersion: 1))->toBe(0)
+        ->and(DB::table('root_accounts')->where('id', $id)->exists())->toBeFalse()
+        ->and(DB::table('root_clusters')->where('id', $cluster)->value('db_count'))->toBe(0)
+        ->and(DB::table('pg_database')->where('datname', $row->db_name)->exists())->toBeFalse();
+});
+
+it('keeps a signup-claimed row and its database out of pending cleanup', function (): void {
+    $cluster = makePendingClusterRow();
+    makePendingTemplateRow();
+    $id = pendingPool()->createPending(1, $cluster)[0];
+    $template = DB::table('root_templates')->first();
+    DB::table('root_accounts')->where('id', $id)->update([
+        'status' => 'provisioning',
+        'signup_key' => 'claimed',
+        'signup_request_digest' => str_repeat('a', 64),
+        'signup_cluster_id' => $cluster,
+        'signup_template_id' => $template->id,
+    ]);
+
+    expect(pendingPool()->clearPending(templateVersion: 1))->toBe(0);
+    $row = DB::table('root_accounts')->where('id', $id)->first();
+    expect($row->pool_cleanup)->toBeFalse()
+        ->and(DB::table('root_clusters')->where('id', $cluster)->value('db_count'))->toBe(1)
+        ->and(DB::table('pg_database')->where('datname', $row->db_name)->exists())->toBeTrue();
 });
 
 it('clearPending() requires at least one filter to avoid nuking the whole pool', function (): void {

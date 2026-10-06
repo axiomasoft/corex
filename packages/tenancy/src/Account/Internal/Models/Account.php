@@ -15,7 +15,7 @@ use Override;
 /**
  * `root_accounts` is a physical DB-per-account tenant on the central connection.
  * Only explicit typed columns are writable through this model.
- * Signup claim and pool cleanup SQL retain the data column until P08 (D107).
+ * Signup claim and cleanup fields are written only by their SQL protocols.
  *
  * @property string $id
  * @property ?string $slug

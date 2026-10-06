@@ -343,30 +343,6 @@ parameters:
 			path: src/Membership/Internal/Transport/StrictTransport.php
 
 		-
-			rawMessage: Access to an undefined property object::$data.
-			identifier: property.notFound
-			count: 1
-			path: src/Provisioning/Internal/ClaimAccountSignup.php
-
-		-
-			rawMessage: Access to an undefined property object::$deleted_at.
-			identifier: property.notFound
-			count: 1
-			path: src/Provisioning/Internal/ClaimAccountSignup.php
-
-		-
-			rawMessage: Access to an undefined property object::$id.
-			identifier: property.notFound
-			count: 1
-			path: src/Provisioning/Internal/ClaimAccountSignup.php
-
-		-
-			rawMessage: Access to an undefined property object::$status.
-			identifier: property.notFound
-			count: 1
-			path: src/Provisioning/Internal/ClaimAccountSignup.php
-
-		-
 			rawMessage: Cannot access offset 1 on array|false.
 			identifier: offsetAccess.nonOffsetAccessible
 			count: 1
@@ -381,18 +357,6 @@ parameters:
 		-
 			rawMessage: 'Method CoreX\Tenancy\Provisioning\Internal\ClaimAccountSignup::sqlState() should return string|null but returns int<min, -1>|int<1, max>|string|null.'
 			identifier: return.type
-			count: 1
-			path: src/Provisioning/Internal/ClaimAccountSignup.php
-
-		-
-			rawMessage: 'Parameter #1 $binding of method CoreX\Tenancy\Provisioning\Internal\ClaimAccountSignup::replayResult() expects object, stdClass|null given.'
-			identifier: argument.type
-			count: 1
-			path: src/Provisioning/Internal/ClaimAccountSignup.php
-
-		-
-			rawMessage: 'Parameter #1 $json of function json_decode expects string, mixed given.'
-			identifier: argument.type
 			count: 1
 			path: src/Provisioning/Internal/ClaimAccountSignup.php
 

@@ -14,6 +14,7 @@ use CoreX\Tenancy\Provisioning\Exceptions\ClaimUnavailable;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\QueryException;
+use stdClass;
 
 /** @internal */
 final class ClaimAccountSignup implements ProvisioningClaim
@@ -62,8 +63,8 @@ final class ClaimAccountSignup implements ProvisioningClaim
         );
 
         $bindings = $connection->table('root_accounts')
-            ->select(['id', 'status', 'deleted_at', 'data'])
-            ->whereRaw("data->>'signup_key' = ?", [$request->requestKey])
+            ->select(['id', 'status', 'deleted_at', 'signup_key', 'signup_request_digest', 'signup_cluster_id', 'signup_template_id'])
+            ->where('signup_key', $request->requestKey)
             ->orderBy('id')
             ->lock('FOR UPDATE')
             ->get();
@@ -72,8 +73,10 @@ final class ClaimAccountSignup implements ProvisioningClaim
             throw new ClaimConflict('The signup key has ambiguous account bindings.');
         }
 
-        if ($bindings->count() === 1) {
-            return $this->replayResult($bindings->first(), $request);
+        $binding = $bindings->first();
+
+        if ($binding !== null) {
+            return $this->replayResult($binding, $request);
         }
 
         $qualifiedTemplate = $this->templateIntegrity->qualify($request);
@@ -81,15 +84,12 @@ final class ClaimAccountSignup implements ProvisioningClaim
         $this->lockAndVerifyTemplate($connection, $qualifiedTemplate);
 
         $candidate = $connection->table('root_accounts')
-            ->select(['id', 'cluster_id', 'template_version', 'embedding_model', 'embedding_dim', 'data'])
+            ->select(['id', 'cluster_id', 'template_version', 'embedding_model', 'embedding_dim'])
             ->where('cluster_id', $request->clusterId)
             ->where('template_version', $qualifiedTemplate->templateVersion)
             ->where('status', 'pending')
             ->whereNull('deleted_at')
-            ->whereJsonDoesntContainKey('data->signup_key')
-            ->whereJsonDoesntContainKey('data->signup_request_digest')
-            ->whereJsonDoesntContainKey('data->signup_cluster_id')
-            ->whereJsonDoesntContainKey('data->signup_template_id')
+            ->whereNull('signup_key')
             ->orderBy('id')
             ->lock('FOR UPDATE SKIP LOCKED')
             ->first();
@@ -98,24 +98,14 @@ final class ClaimAccountSignup implements ProvisioningClaim
             throw new ClaimUnavailable('No qualified pending account is available.');
         }
 
-        $payload = json_encode([
-            'signup_key' => $request->requestKey,
-            'signup_request_digest' => $request->requestDigest,
-            'signup_cluster_id' => $request->clusterId,
-            'signup_template_id' => $request->templateId,
-        ], JSON_THROW_ON_ERROR);
-
         $updated = $connection->update(
             query: "UPDATE root_accounts
-                SET status = ?, data = data || ?::jsonb, updated_at = CURRENT_TIMESTAMP
+                SET status = ?, signup_key = ?, signup_request_digest = ?, signup_cluster_id = ?, signup_template_id = ?, updated_at = CURRENT_TIMESTAMP
                 WHERE id = ?
                   AND status = 'pending'
                   AND deleted_at IS NULL
-                  AND NOT jsonb_exists(data, 'signup_key')
-                  AND NOT jsonb_exists(data, 'signup_request_digest')
-                  AND NOT jsonb_exists(data, 'signup_cluster_id')
-                  AND NOT jsonb_exists(data, 'signup_template_id')",
-            bindings: ['provisioning', $payload, $candidate->id],
+                  AND signup_key IS NULL",
+            bindings: ['provisioning', $request->requestKey, $request->requestDigest, $request->clusterId, $request->templateId, $candidate->id],
         );
 
         if ($updated !== 1) {
@@ -125,17 +115,14 @@ final class ClaimAccountSignup implements ProvisioningClaim
         return new ClaimResult(accountId: $candidate->id, replayed: false);
     }
 
-    private function replayResult(object $binding, ClaimRequest $request): ClaimResult
+    private function replayResult(stdClass $binding, ClaimRequest $request): ClaimResult
     {
-        $data = json_decode($binding->data, true, flags: JSON_THROW_ON_ERROR);
-
-        if (! is_array($data)
-            || $binding->deleted_at !== null
+        if ($binding->deleted_at !== null
             || $binding->status === 'deleted'
-            || ($data['signup_key'] ?? null) !== $request->requestKey
-            || ($data['signup_request_digest'] ?? null) !== $request->requestDigest
-            || ($data['signup_cluster_id'] ?? null) !== $request->clusterId
-            || ($data['signup_template_id'] ?? null) !== $request->templateId) {
+            || $binding->signup_key !== $request->requestKey
+            || $binding->signup_request_digest !== $request->requestDigest
+            || $binding->signup_cluster_id !== $request->clusterId
+            || $binding->signup_template_id !== $request->templateId) {
             throw new ClaimConflict('The signup key is already bound to a different request.');
         }
 

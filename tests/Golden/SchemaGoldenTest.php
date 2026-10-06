@@ -27,9 +27,10 @@ final class SchemaGoldenTest extends GoldenTestCase
         $migrator = $this->schemaMigrator();
         $override = $scope === SchemaScope::Dedicated ? null : $name;
 
-        // Pending historical packages reference the core baseline before their own squash.
+        // Pending historical packages reference the core/tenancy baselines before their own squash.
         if ($scope === SchemaScope::Tenant) {
             $migrator->migrateSets(['axiomasoft/corex:tenant'], $name);
+            $migrator->migrateSets(['axiomasoft/corex-tenancy:tenant'], $name);
         }
         self::assertNotEmpty($migrator->migrate($scope, $override, includeModules: true));
         self::assertSame([], $migrator->migrate($scope, $override, includeModules: true));

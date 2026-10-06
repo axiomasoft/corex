@@ -141,7 +141,7 @@ $v = new class($p['op']) implements TemplateIntegrityVerifier {
 };
 if ($p['op'] === 'raw') {
     $c->beginTransaction();
-    $c->table('root_accounts')->where('id', $p['account'])->update(['status' => 'provisioning', 'data' => json_encode(['signup_key' => $p['key'], 'signup_request_digest' => $p['digest'], 'signup_cluster_id' => $p['cluster'], 'signup_template_id' => $p['template']], JSON_THROW_ON_ERROR)]);
+    $c->table('root_accounts')->where('id', $p['account'])->update(['status' => 'provisioning', 'signup_key' => $p['key'], 'signup_request_digest' => $p['digest'], 'signup_cluster_id' => $p['cluster'], 'signup_template_id' => $p['template']]);
     echo "ready\n"; fflush(STDOUT); fgets(STDIN); $c->commit();
     echo json_encode(['account' => $p['account'], 'raw' => true], JSON_THROW_ON_ERROR)."\n";
 } else {
@@ -205,7 +205,7 @@ it('overlaps independent claims while an unrelated key progresses before release
     $b = $second->result();
     expect($a['account'])->toBe($b['account'])->not->toBe($other['account']);
     expect($a['replayed'])->toBeFalse()->and($b['replayed'])->toBeTrue();
-    expect(DB::table('root_accounts')->whereRaw("data->>'signup_key' = ?", ['shared'])->count())->toBe(1);
+    expect(DB::table('root_accounts')->where('signup_key', 'shared')->count())->toBe(1);
 });
 
 it('reconciles a named unique-index race against a writer with no advisory cooperation', function (): void {
@@ -219,10 +219,10 @@ it('reconciles a named unique-index race against a writer with no advisory coope
     $result = $claim->result();
     expect($result)->toBe(['account' => $id, 'replayed' => true]);
     expect(DB::table('root_accounts')->where('status', 'pending')->count())->toBe(2);
-    $duplicate = DB::table('root_accounts')->where('id', $id)->value('data');
+    $duplicate = (array) DB::table('root_accounts')->where('id', $id)->first(['signup_key', 'signup_request_digest', 'signup_cluster_id', 'signup_template_id']);
 
     try {
-        DB::table('root_accounts')->where('id', $this->p32Candidates[1])->update(['data' => $duplicate]);
+        DB::table('root_accounts')->where('id', $this->p32Candidates[1])->update($duplicate);
 
         throw new RuntimeException('Named unique constraint did not reject a duplicate.');
     } catch (QueryException $exception) {
@@ -238,7 +238,7 @@ it('rolls back a killed precommit worker and replays a committed response lost b
     expect(DB::table('root_accounts')->where('status', 'pending')->count())->toBe(3);
     $after = p32SpawnClaim(key: 'crash-after', operation: 'postcommit');
     expect($after->line())->toBe('committed');
-    $id = DB::table('root_accounts')->whereRaw("data->>'signup_key' = ?", ['crash-after'])->value('id');
+    $id = DB::table('root_accounts')->where('signup_key', 'crash-after')->value('id');
     $after->stop();
     $replay = p32SpawnClaim('crash-after')->result();
     expect($replay)->toBe(['account' => $id, 'replayed' => true]);

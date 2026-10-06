@@ -1,0 +1,184 @@
+{
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "scripts/php84 composer schema-gate",
+      "expect": "exit 0; пакеты item отсутствуют в `scripts/schema-gate-pending.json`",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "python3 -c \"import json;p=json.load(open('scripts/schema-gate-pending.json'));print(sorted(set(p)&set([\"axiomasoft/corex-tenancy\"])))\"",
+      "expect": "печатает `[]`",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "PGSQL_PORT=5434 scripts/php84 vendor/bin/pest tests/Golden/SchemaGoldenTest.php --filter='#0-1'",
+      "expect": "exit 0 (golden обновлён в этом item с классом «baseline <pkg>»)",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "scripts/php84 vendor/bin/pest tests/Golden/SchemaSqliteGoldenTest.php",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "git grep -n -E \"data->|'data'|jsonb_set|jsonb_exists|whereJsonDoesntContainKey\" -- packages/tenancy/src",
+      "expect": "нет вывода (exit 1)",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "cmd": "PGSQL_PORT=5434 scripts/php84 composer --working-dir=packages/tenancy test -- --group=pg",
+      "expect": "One complete tenancy PG lane; each failure or changed input is repaired and covered by a GREEN focused delta run. No duplicate full lane.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "cmd": "scripts/php84 composer --working-dir=packages/tenancy test -- --exclude-group=pg",
+      "expect": "exit 0 (Unit/Arch); PG Feature/Pg covered once in V6",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "cmd": "test -z \"$(ls packages/tenancy/database/migrations/root | grep -v '^2026_10_01_02')\" && test -z \"$(ls packages/tenancy/database/migrations/tenant | grep -v '^2026_10_01_02')\"",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "cmd": "scripts/php84 composer --working-dir=packages/tenancy lint:check",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "cmd": "scripts/php84 composer --working-dir=packages/tenancy analyse",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V11",
+      "cmd": "scripts/php84 vendor/bin/composer-dependency-analyser --composer-json=packages/tenancy/composer.json --config=packages/tenancy/composer-dependency-analyser.php",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V12",
+      "cmd": "scripts/php84 vendor/bin/pest tests/Feature/SchemaSetsTest.php tests/Unit/SchemaGateTest.php tests/Arch/AchievedInvariantTest.php tests/Arch/LayerTest.php tests/Golden/SchemaSqliteGoldenTest.php",
+      "expect": "exit 0 (root SQLite lane)",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V13",
+      "expect": "exit 0 (root PG lane, preflight done)",
+      "kind": "acceptance",
+      "procedure": "Reuse V6 tenancy PG lane and V3 Central/Tenant schema Golden as affected integration proof; no duplicate full root PG run."
+    },
+    {
+      "id": "V14",
+      "expect": "exit 0",
+      "kind": "acceptance",
+      "procedure": "Reuse V6/V7 tenancy package lanes; no unchanged package fleet run."
+    },
+    {
+      "id": "V15",
+      "expect": "exit 0",
+      "kind": "acceptance",
+      "procedure": "Reuse tenancy Arch in V7 and schema/layer/ownership Arch in V12."
+    },
+    {
+      "id": "V16",
+      "cmd": "scripts/php84 vendor/bin/pest tests/Golden/GoldenTest.php",
+      "expect": "exit 0; schema Golden covered by V3/V4, public surface unchanged.",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V17",
+      "cmd": "bash scripts/anti-weakening-gate.sh",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V18",
+      "cmd": "scripts/php84 php scripts/package-docs-gate.php",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V19",
+      "cmd": "scripts/php84 composer table-ownership-gate",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V20",
+      "procedure": "Для каждого пакета (axiomasoft/corex-tenancy): снимки до/после и `python3 plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08-design/scripts/schema-diff.py <pkg>-before.json <pkg>-after.json` сохранены в `plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.5-execution/`; каждая строка diff относится к классу rename/int→bigint/morph/D114 (досье §6.4 шаг 3).",
+      "expect": "нет строк вне разрешённых классов",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V21",
+      "procedure": "Self-check (D110 п.2): каждая строка D111–D114, относящаяся к item → файл:строка и тест; строка `self-check: GREEN` в Completion Notes `@plan/knowledge/artifacts-P08.<n>-execution-completion.json`.",
+      "expect": "self-check: GREEN",
+      "kind": "acceptance"
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/tenancy/database/migrations/**",
+      "change": "any"
+    },
+    {
+      "path": "packages/tenancy/src/Provisioning/Internal/ClaimAccountSignup.php",
+      "change": "modify"
+    },
+    {
+      "path": "packages/tenancy/src/Account/Internal/PendingPool.php",
+      "change": "modify"
+    },
+    {
+      "path": "packages/tenancy/src/Account/Internal/Models/Account.php",
+      "change": "modify"
+    },
+    {
+      "path": "packages/tenancy/src/**/*SchemaSets.php",
+      "change": "modify"
+    },
+    {
+      "path": "packages/tenancy/tests/**",
+      "change": "modify"
+    },
+    {
+      "path": "packages/tenancy/{README,CHANGELOG}.md",
+      "change": "any"
+    },
+    {
+      "path": "scripts/schema-gate-pending.json",
+      "change": "any"
+    },
+    {
+      "path": "tests/Golden/schema/*.json",
+      "change": "modify"
+    },
+    {
+      "path": "docs/architecture/table-ownership.md",
+      "change": "modify"
+    },
+    {
+      "path": "@plan/artifacts/P08.5-execution/**",
+      "change": "create"
+    },
+    {
+      "path": "packages/tenancy/phpstan-baseline.neon",
+      "change": "modify"
+    },
+    {
+      "path": "tests/Golden/SchemaGoldenTest.php",
+      "change": "modify"
+    }
+  ]
+}

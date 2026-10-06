@@ -23,8 +23,12 @@ use CoreX\Tenancy\Internal\TenancySchemaSets;
 $packageRoot = \dirname(__DIR__, 2);
 $repoRoot = \dirname($packageRoot, 2);
 
-$rootLayerDir = $packageRoot.'/database/migrations/root';
-$tenantLayerDir = $packageRoot.'/database/migrations/tenant';
+$registeredSets = [];
+foreach ((new TenancySchemaSets)->sets() as $set) {
+    $registeredSets[$set->name] = $set;
+}
+$rootLayerDir = $registeredSets['root']->path;
+$tenantLayerDir = $registeredSets['tenant']->path;
 
 /** Единственная директория миграций центральной (root) БД во всём репозитории. */
 $isRootLayer = static fn (string $file): bool => str_contains(
@@ -323,6 +327,7 @@ test('the central and tenant runners use disjoint registered schema scopes', fun
     $byName = [];
     foreach ($sets->sets() as $set) {
         $byName[$set->name] = $set->scope->value;
+        expect($set->version)->toBe(1)->and($set->drivers)->toBe(['pgsql']);
     }
     expect($byName)->toBe(['root' => 'central', 'tenant' => 'tenant'])
         ->and(preg_match('/\$this->loadMigrationsFrom\s*\(/', $provider))->toBe(0);

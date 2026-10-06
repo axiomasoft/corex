@@ -139,7 +139,7 @@ final class PendingPool
         $query = $this->db()
             ->table('root_accounts')
             ->where(fn ($query) => $query->where('status', 'pending')
-                ->orWhere(fn ($query) => $query->where('status', 'provisioning')->where('data->pool_cleanup', true)));
+                ->orWhere(fn ($query) => $query->where('status', 'provisioning')->where('pool_cleanup', true)));
 
         if ($templateVersion !== null) {
             $query->where('template_version', $templateVersion);
@@ -158,8 +158,8 @@ final class PendingPool
             $claimed = $this->db()->table('root_accounts')
                 ->where('id', $row->id)
                 ->where(fn ($query) => $query->where('status', 'pending')
-                    ->orWhere(fn ($query) => $query->where('status', 'provisioning')->where('data->pool_cleanup', true)))
-                ->update(['status' => 'provisioning', 'data' => $this->db()->raw("jsonb_set(CASE WHEN jsonb_typeof(data) = 'object' THEN data ELSE '{}'::jsonb END, '{pool_cleanup}', 'true')")]);
+                    ->orWhere(fn ($query) => $query->where('status', 'provisioning')->where('pool_cleanup', true)))
+                ->update(['status' => 'provisioning', 'pool_cleanup' => true]);
 
             if ($claimed !== 1) {
                 continue;
@@ -172,7 +172,7 @@ final class PendingPool
                     ->table('root_accounts')
                     ->where('id', $row->id)
                     ->where('status', 'provisioning')
-                    ->where('data->pool_cleanup', true)
+                    ->where('pool_cleanup', true)
                     ->delete();
 
                 if ($deleted === 0) {

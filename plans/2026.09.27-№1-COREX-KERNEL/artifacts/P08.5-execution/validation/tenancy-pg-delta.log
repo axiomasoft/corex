@@ -1,0 +1,33 @@
+> pest 'tests/Feature/ProvisioningTest.php' 'tests/Feature/SignupIdempotencyTest.php' 'tests/Pg/ClaimLifecycleConcurrencyTest.php'
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\SignupIdempotencyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects a replay with incompatible immutable input without reser[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a replay with incompatible immutable input without reser[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a replay with incompatible immutable input without reser[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects partial signup writes through the named all-or-nothing c[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit returns one reservation when two independent connections claim t[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fails closed when template integrity is missing before the first[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps signup and cleanup columns outside account mass assignment[39m[90m [39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit reserves different accounts for different keys[39m[90m                   [39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a second live signup binding but permits the schema slot[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects empty keys and soft-deleted key bindings[39m[90m                 [39m [90m0.33s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\ProvisioningTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit creates an Account with a UUIDv7 key and typed custom columns[39m[90m    [39m [90m0.67s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses to clone a template that is not ready (template-parity g[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fixes embedding_model/dim and other provisioning params onto the[39m[90m…[39m [90m0.57s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit provisions a database by cloning the golden template via STRATEG[39m[90m…[39m [90m0.70s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit re-provisioning an already-created database is idempotent (repla[39m[90m…[39m [90m0.69s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects an untrusted template before changing provisioning param[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves the tenant connection from root_clusters+db_name and fo[39m[90m…[39m [90m0.46s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Pg\ClaimLifecycleConcurrencyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit reconciles a named unique-index race against a writer with no ad[39m[90m…[39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit overlaps independent claims while an unrelated key progresses be[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rolls back a killed precommit worker and replays a committed res[39m[90m…[39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies every changed immutable fingerprint and soft-deleted repl[39m[90m…[39m [90m0.44s[39m  
+
+  [90mTests:[39m    [32;1m21 passed[39;22m[90m (108 assertions)[39m
+  [90mDuration:[39m [39m8.77s[39m
+  [90mRandom Order Seed:[39m [39m1791285640[39m
+

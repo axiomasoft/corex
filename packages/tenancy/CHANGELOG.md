@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — baseline v1 and signup/cleanup columns (P08.5)
+
+- Squash the PostgreSQL `root` and `tenant` schema sets to baseline v1, one table per file, with explicit object names and bigint counters. Both sets retain version 1 and their PG driver.
+- Replace `root_accounts.data` with nullable `signup_key`, `signup_request_digest`, `signup_cluster_id`, `signup_template_id` and a `pool_cleanup` boolean. Named CHECK/partial unique constraints enforce complete and unique live signup bindings. The fields stay outside model mass assignment.
+- Preserve claim locks, immutable replay comparisons, cleanup marker-before-DROP ordering and retry recovery. This unpublished baseline replaces historical migration names; no installed-schema upgrade path is provided.
+
 ## Unreleased — deterministic schema (P08.2)
 
 - Generate model identifiers with Laravel HasUuids (UUIDv7); package migrations use UUID columns and literal table names.

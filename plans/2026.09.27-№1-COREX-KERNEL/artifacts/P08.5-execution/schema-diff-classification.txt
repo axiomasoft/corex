@@ -1,0 +1,2 @@
+root: GREEN — exact shape after object renames, approved int→bigint/default casts and D114; index methods, FK actions, CHECKs, triggers preserved
+tenant: GREEN — exact shape after object renames, approved int→bigint/default casts and D114; index methods, FK actions, CHECKs, triggers preserved
