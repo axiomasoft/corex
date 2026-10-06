@@ -1,0 +1,12 @@
+{
+  "native_session_id": "c8e2c5d0-e75a-4ba8-ba1d-8cec44cea37b",
+  "provider": "grok",
+  "model": "grok-4.7",
+  "reasoning_effort": "high",
+  "tools": [
+    "read_file",
+    "list_dir",
+    "grep"
+  ],
+  "cwd": "/home/vostrikov/projects/packages/corex/plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.3-execution/review-snapshot"
+}

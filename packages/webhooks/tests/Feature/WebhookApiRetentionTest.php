@@ -85,7 +85,7 @@ final class WebhookApiRetentionTest extends TestCase
         $this->selectSchema('api_budget', 'sqlite', ':memory:', 'api_tenant', 'sqlite', ':memory:');
         $this->budget = DB::connection('api_budget');
         $this->tenant = DB::connection('api_tenant');
-        $this->migrate('tenant', 'create_sys_api_webhook_tables.php');
+        $this->migrate('tenant');
         $this->inbox($this->tenant);
         $this->clock = new FrozenClock(new DateTimeImmutable('2026-09-26T12:00:00.000000+00:00'));
         $contexts = new ContextFixture;
@@ -193,7 +193,7 @@ final class WebhookApiRetentionTest extends TestCase
 
         try {
             $this->selectSchema('api_p1417_budget', 'pgsql', $database, 'api_p1417_tenant', 'pgsql', $database);
-            $this->migrate('tenant', 'create_sys_api_webhook_tables.php');
+            $this->migrate('tenant');
             $tenant = DB::connection('api_p1417_tenant');
             $budget = DB::connection('api_p1417_budget');
             $this->inbox($tenant);
@@ -392,13 +392,12 @@ final class WebhookApiRetentionTest extends TestCase
         });
     }
 
-    private function migrate(string $directory, string $file): void
+    private function migrate(string $directory): void
     {
         $this->app->forgetInstance(ApiSchemaRegistrar::class);
         $this->app->forgetInstance(SchemaSets::class);
         $this->app->forgetInstance(SchemaMigrator::class);
-        $migration = require app(SchemaSets::class)->get("axiomasoft/corex-webhooks:{$directory}")->path."/{$file}";
-        $migration->up();
+        app(SchemaMigrator::class)->migrateSets(["axiomasoft/corex-webhooks:{$directory}"], app(ApiSchemaRegistrar::class)->tenant()->getName());
     }
 
     private function configure(string $name, string $driver, string $database): void

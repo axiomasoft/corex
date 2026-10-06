@@ -1,5 +1,10 @@
 ## Unreleased — delivery budget and tenant egress
 
+## Unreleased — schema set connection ownership
+
+- Shipped migrations obtain their `up()` connection from the schema migrator's current connection. Test retention fixtures use `SchemaMigrator` instead of calling migration `up()` directly. DDL is unchanged.
+
+
 - Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
 
 - Breaking pre-1.0 (PLAN3.P06.4): `WebhookHttpResult::$errorCode` now accepts `?WebhookFailureReason`, with 20 typed delivery causes; transport errors use the declared reason set and SQL persists enum values.

@@ -1,0 +1,17 @@
+{
+    "crm_leads.score": "Bounded value or configuration limit; preserve current type (schema policy §4.3).",
+    "crm_stages.probability": "Bounded value or configuration limit; preserve current type (schema policy §4.3).",
+    "med_conversions.height": "Bounded value or configuration limit; preserve current type (schema policy §4.3).",
+    "med_conversions.width": "Bounded value or configuration limit; preserve current type (schema policy §4.3).",
+    "root_accounts.embedding_dim": "Bounded value or configuration limit; preserve current type (schema policy §4.3).",
+    "root_clusters.db_soft_limit": "Bounded value or configuration limit; preserve current type (schema policy §4.3).",
+    "root_clusters.pending_pool_size": "Bounded value or configuration limit; preserve current type (schema policy §4.3).",
+    "root_clusters.pg_port": "Bounded value or configuration limit; preserve current type (schema policy §4.3).",
+    "root_clusters.pgbouncer_port": "Bounded value or configuration limit; preserve current type (schema policy §4.3).",
+    "root_templates.embedding_dim": "Bounded value or configuration limit; preserve current type (schema policy §4.3).",
+    "sys_api_webhook_attempts.http_status": "Bounded value or configuration limit; preserve current type (schema policy §4.3).",
+    "sys_api_webhook_deliveries.topic_version": "Bounded value or configuration limit; preserve current type (schema policy §4.3).",
+    "sys_api_webhook_subscriptions.topic_version": "Bounded value or configuration limit; preserve current type (schema policy §4.3).",
+    "sys_outbox_messages.contract_version": "Bounded wire version; preserve unsignedSmallInteger (schema policy §4.3).",
+    "sys_outbox_messages.envelope_version": "Bounded wire version; preserve unsignedSmallInteger (schema policy §4.3)."
+}

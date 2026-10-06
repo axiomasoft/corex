@@ -1,0 +1,12 @@
+{
+  "review-snapshot": {
+    "archive": "review-snapshot.tar.gz",
+    "sha256": "2d7f528d7e2e5f93cec67cb458fb63cbe8fd1e0bc88f80efbd04d17b5b34f4a5",
+    "verbatim_bytes_verified": true
+  },
+  "review-round2": {
+    "archive": "review-round2.tar.gz",
+    "sha256": "3bef9c0080684f1bb345b0f2260ac6ea594a7fdd6ad1a5f8170a5f59a34d51cd",
+    "verbatim_bytes_verified": true
+  }
+}

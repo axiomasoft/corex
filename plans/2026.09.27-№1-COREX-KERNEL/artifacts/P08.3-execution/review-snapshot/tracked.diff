@@ -1,0 +1,294 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index cdae6704..21fe1558 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -829,6 +829,14 @@ jobs:
+           composer module-layout-gate
+           python3 -m unittest discover -s scripts/tests -p 'test_module_layout_gate.py'
+
++      - name: Migration table ownership
++        run: composer table-ownership-gate
++
++      - name: Shipped schema S1–S9 and registry manifest
++        run: |
++          composer schema-gate
++          php scripts/schema-gate.php --check
++
+       - name: DATA-003 table write ownership
+         run: |
+           composer table-write-ownership-gate
+diff --git a/composer.json b/composer.json
+index 15a7c572..13293f7f 100644
+--- a/composer.json
++++ b/composer.json
+@@ -200,10 +200,11 @@
+         "refactor": "vendor/bin/rector process",
+         "refactor:check": "vendor/bin/rector process --dry-run",
+         "manifests:check": "python3 scripts/manifest-check.py",
+-        "golden": "vendor/bin/pest --testsuite=Golden",
++        "golden": "vendor/bin/pest --testsuite=Golden --exclude-group=pg",
+         "ownership-gate": "php scripts/ownership-gate.php --strict",
+         "quality:ceilings": "php scripts/quality-ceiling-guard.php",
+         "deps:analyse": "bash scripts/dependency-analyser.sh --all",
+-        "php-api": "php scripts/php-api.php --strict --check"
++        "php-api": "php scripts/php-api.php --strict --check",
++        "schema-gate": "bash scripts/ci-deferred-guard.sh php scripts/schema-gate.php"
+     }
+ }
+diff --git a/docs/architecture/table-ownership.md b/docs/architecture/table-ownership.md
+index 9f83dddf..ebfde498 100644
+--- a/docs/architecture/table-ownership.md
++++ b/docs/architecture/table-ownership.md
+@@ -150,6 +150,7 @@ AzGuard управляет схемой своих таблиц как зави
+ | sys_workflow_intents | axiomasoft/corex-workflow | tenant | axiomasoft/corex-workflow |  | unobserved | forbidden | index(['state', 'updated_at']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
+ | crm_activities | flex/crm | tenant | flex/crm |  | unobserved | forbidden | index(['subject_type', 'subject_id']); index(['type']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
+ | crm_activity_targets | flex/crm | tenant | flex/crm |  | unobserved | forbidden | index(['entity_type', 'entity_id'], 'crm_at_entity_ix'); primary(['activity_id', 'entity_type', 'entity_id']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
++| crm_sources | flex/crm | tenant | flex/crm | flex/crm | non-pii | forbidden | primary(['id']); crm_sources_workspace_id_code_unique (workspace_id, code), NULL workspace identity normalized | tenant-backup | host policy | expand-migrate-contract (policy-default) | private | Shipped company/contact parity source catalogue; S9 inventory reconciliation. |
+ | crm_companies | flex/crm | tenant | flex/crm |  | pii-indirect | forbidden | index(['name']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
+ | crm_contact_company | flex/crm | tenant | flex/crm |  | pii-indirect | forbidden | unique(['contact_id', 'company_id']); unique(['contact_id']) WHERE is_primary | unobserved | unobserved | expand-migrate-contract (policy-default) | private | products/flex-crm/database/migrations/2026_09_14_000002_company_contact_parity.php |
+ | crm_contacts | flex/crm | tenant | flex/crm |  | pii-direct | forbidden | index(['email']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
+diff --git a/packages/operations/CHANGELOG.md b/packages/operations/CHANGELOG.md
+index 7cad3ffa..e70124b6 100644
+--- a/packages/operations/CHANGELOG.md
++++ b/packages/operations/CHANGELOG.md
+@@ -1,5 +1,10 @@
+ # Changelog
+
++## Unreleased — schema set connection ownership
++
++- Shipped migrations obtain their `up()` connection from the schema migrator's current connection. Test retention fixtures use `SchemaMigrator` instead of calling migration `up()` directly. DDL is unchanged.
++
++
+ ## Unreleased — resource identifier formats (P08.2)
+
+ - ResourceId uses operations-owned ResourceIdFormat instead of the removed kernel schema strategy. Rename its strategy property/parameters to format and remove fromConfigured; callers supply the expected format explicitly. UUIDv7, UUID, ULID and integer wire domains remain supported.
+diff --git a/packages/operations/database/migrations/budget/create_sys_api_budget_tables.php b/packages/operations/database/migrations/budget/create_sys_api_budget_tables.php
+index 936935c7..9f0e5e59 100644
+--- a/packages/operations/database/migrations/budget/create_sys_api_budget_tables.php
++++ b/packages/operations/database/migrations/budget/create_sys_api_budget_tables.php
+@@ -6,12 +6,13 @@ use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+ use Illuminate\Database\Connection;
+ use Illuminate\Database\Migrations\Migration;
+ use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
+
+ return new class extends Migration
+ {
+     public function up(): void
+     {
+-        $connection = app(ApiSchemaRegistrar::class)->budget();
++        $connection = Schema::getConnection();
+         $schema = $connection->getSchemaBuilder();
+
+         $schema->create('sys_api_budget_buckets', function (Blueprint $table): void {
+diff --git a/packages/operations/database/migrations/tenant/create_sys_api_bulk_operations_table.php b/packages/operations/database/migrations/tenant/create_sys_api_bulk_operations_table.php
+index 8ce19cdf..3fdb9024 100644
+--- a/packages/operations/database/migrations/tenant/create_sys_api_bulk_operations_table.php
++++ b/packages/operations/database/migrations/tenant/create_sys_api_bulk_operations_table.php
+@@ -6,12 +6,13 @@ use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+ use Illuminate\Database\Connection;
+ use Illuminate\Database\Migrations\Migration;
+ use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
+
+ return new class extends Migration
+ {
+     public function up(): void
+     {
+-        $connection = app(ApiSchemaRegistrar::class)->tenant();
++        $connection = Schema::getConnection();
+         $schema = $connection->getSchemaBuilder();
+
+         $schema->create('sys_api_bulk_operations', function (Blueprint $table): void {
+diff --git a/packages/operations/tests/Feature/ApiRetentionTest.php b/packages/operations/tests/Feature/ApiRetentionTest.php
+index 033f93f9..fa78568c 100644
+--- a/packages/operations/tests/Feature/ApiRetentionTest.php
++++ b/packages/operations/tests/Feature/ApiRetentionTest.php
+@@ -60,8 +60,8 @@ final class ApiRetentionTest extends TestCase
+         $this->selectSchema('api_budget', 'sqlite', ':memory:', 'api_tenant', 'sqlite', ':memory:');
+         $this->budget = DB::connection('api_budget');
+         $this->tenant = DB::connection('api_tenant');
+-        $this->migrate('budget', 'create_sys_api_budget_tables.php');
+-        $this->migrate('tenant', 'create_sys_api_bulk_operations_table.php');
++        $this->migrate('budget');
++        $this->migrate('tenant');
+         $this->clock = new FrozenClock(new DateTimeImmutable('2026-09-26T12:00:00.000000+00:00'));
+         $contexts = new ContextFixture;
+         $contexts->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
+@@ -236,8 +236,8 @@ final class ApiRetentionTest extends TestCase
+
+         try {
+             $this->selectSchema('api_p1417_budget', 'pgsql', $database, 'api_p1417_tenant', 'pgsql', $database);
+-            $this->migrate('budget', 'create_sys_api_budget_tables.php');
+-            $this->migrate('tenant', 'create_sys_api_bulk_operations_table.php');
++            $this->migrate('budget');
++            $this->migrate('tenant');
+             $tenant = DB::connection('api_p1417_tenant');
+             $budget = DB::connection('api_p1417_budget');
+             $contexts = new ContextFixture;
+@@ -369,13 +369,12 @@ final class ApiRetentionTest extends TestCase
+             ->all();
+     }
+
+-    private function migrate(string $directory, string $file): void
++    private function migrate(string $directory): void
+     {
+         $this->app->forgetInstance(ApiSchemaRegistrar::class);
+         $this->app->forgetInstance(SchemaSets::class);
+         $this->app->forgetInstance(SchemaMigrator::class);
+-        $migration = require app(SchemaSets::class)->get("axiomasoft/corex-operations:{$directory}")->path."/{$file}";
+-        $migration->up();
++        app(SchemaMigrator::class)->migrateSets(["axiomasoft/corex-operations:{$directory}"], $directory === 'budget' ? null : app(ApiSchemaRegistrar::class)->tenant()->getName());
+     }
+
+     private function configure(string $name, string $driver, string $database): void
+diff --git a/packages/webhooks/CHANGELOG.md b/packages/webhooks/CHANGELOG.md
+index ef67f71a..5fb521c4 100644
+--- a/packages/webhooks/CHANGELOG.md
++++ b/packages/webhooks/CHANGELOG.md
+@@ -1,5 +1,10 @@
+ ## Unreleased — delivery budget and tenant egress
+
++## Unreleased — schema set connection ownership
++
++- Shipped migrations obtain their `up()` connection from the schema migrator's current connection. Test retention fixtures use `SchemaMigrator` instead of calling migration `up()` directly. DDL is unchanged.
++
++
+ - Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
+
+ - Breaking pre-1.0 (PLAN3.P06.4): `WebhookHttpResult::$errorCode` now accepts `?WebhookFailureReason`, with 20 typed delivery causes; transport errors use the declared reason set and SQL persists enum values.
+diff --git a/packages/webhooks/database/migrations/tenant/create_sys_api_webhook_tables.php b/packages/webhooks/database/migrations/tenant/create_sys_api_webhook_tables.php
+index 4c5782ea..f2950a1d 100644
+--- a/packages/webhooks/database/migrations/tenant/create_sys_api_webhook_tables.php
++++ b/packages/webhooks/database/migrations/tenant/create_sys_api_webhook_tables.php
+@@ -6,12 +6,13 @@ use CoreX\Operations\Laravel\ApiSchemaRegistrar;
+ use Illuminate\Database\Connection;
+ use Illuminate\Database\Migrations\Migration;
+ use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
+
+ return new class extends Migration
+ {
+     public function up(): void
+     {
+-        $connection = app(ApiSchemaRegistrar::class)->tenant();
++        $connection = Schema::getConnection();
+         $schema = $connection->getSchemaBuilder();
+
+         $schema->create('sys_api_webhook_subscriptions', function (Blueprint $table): void {
+diff --git a/packages/webhooks/tests/Feature/WebhookApiRetentionTest.php b/packages/webhooks/tests/Feature/WebhookApiRetentionTest.php
+index e2ede3f2..2df0b732 100644
+--- a/packages/webhooks/tests/Feature/WebhookApiRetentionTest.php
++++ b/packages/webhooks/tests/Feature/WebhookApiRetentionTest.php
+@@ -85,7 +85,7 @@ final class WebhookApiRetentionTest extends TestCase
+         $this->selectSchema('api_budget', 'sqlite', ':memory:', 'api_tenant', 'sqlite', ':memory:');
+         $this->budget = DB::connection('api_budget');
+         $this->tenant = DB::connection('api_tenant');
+-        $this->migrate('tenant', 'create_sys_api_webhook_tables.php');
++        $this->migrate('tenant');
+         $this->inbox($this->tenant);
+         $this->clock = new FrozenClock(new DateTimeImmutable('2026-09-26T12:00:00.000000+00:00'));
+         $contexts = new ContextFixture;
+@@ -193,7 +193,7 @@ final class WebhookApiRetentionTest extends TestCase
+
+         try {
+             $this->selectSchema('api_p1417_budget', 'pgsql', $database, 'api_p1417_tenant', 'pgsql', $database);
+-            $this->migrate('tenant', 'create_sys_api_webhook_tables.php');
++            $this->migrate('tenant');
+             $tenant = DB::connection('api_p1417_tenant');
+             $budget = DB::connection('api_p1417_budget');
+             $this->inbox($tenant);
+@@ -392,13 +392,12 @@ final class WebhookApiRetentionTest extends TestCase
+         });
+     }
+
+-    private function migrate(string $directory, string $file): void
++    private function migrate(string $directory): void
+     {
+         $this->app->forgetInstance(ApiSchemaRegistrar::class);
+         $this->app->forgetInstance(SchemaSets::class);
+         $this->app->forgetInstance(SchemaMigrator::class);
+-        $migration = require app(SchemaSets::class)->get("axiomasoft/corex-webhooks:{$directory}")->path."/{$file}";
+-        $migration->up();
++        app(SchemaMigrator::class)->migrateSets(["axiomasoft/corex-webhooks:{$directory}"], app(ApiSchemaRegistrar::class)->tenant()->getName());
+     }
+
+     private function configure(string $name, string $driver, string $database): void
+diff --git a/scripts/anti-weakening-gate.sh b/scripts/anti-weakening-gate.sh
+index ef2ea4f5..7391489c 100755
+--- a/scripts/anti-weakening-gate.sh
++++ b/scripts/anti-weakening-gate.sh
+@@ -74,7 +74,8 @@ check_added_pattern 'continue-on-error' 'continue-on-error' '.github/workflows/*
+ python3 - "$BASE_REF" <<'PYRATCHET' || log_fail "quality ceilings or ownership baseline grew"
+ import json, pathlib, subprocess, sys, re
+ base = sys.argv[1]
+-paths = {'scripts/quality-ceilings.json': 'ceilings', 'scripts/ownership-gate-baseline.json': 'ownership'}
++paths = {'scripts/quality-ceilings.json': 'ceilings', 'scripts/ownership-gate-baseline.json': 'ownership',
++         'scripts/schema-gate-pending.json': 'inventory', 'scripts/schema-gate-allowlist.json': 'inventory'}
+ def read(ref, path):
+     if ref is None:
+         p = pathlib.Path(path)
+@@ -88,9 +89,11 @@ def read(ref, path):
+     return json.loads(result.stdout)
+ def check(old, new, kind):
+     if new is None:
+-        return old is None
++        return kind == 'inventory' or old is None
+     if old is None:
+         return True
++    if kind == 'inventory':
++        return not (set(new) - set(old))
+     succ_path = pathlib.Path('scripts/ratchet-successors.json')
+     succ = json.loads(succ_path.read_text()) if succ_path.exists() else {'groups': [], 'packages': {}}
+     if kind == 'ownership':
+diff --git a/scripts/table-ownership-gate.php b/scripts/table-ownership-gate.php
+index 85741da2..276d46ed 100644
+--- a/scripts/table-ownership-gate.php
++++ b/scripts/table-ownership-gate.php
+@@ -35,12 +35,25 @@ $configDefaults = loadConfigTableDefaults($repoRoot);
+
+ $creates = extractSchemaCreates($repoRoot, $packageDirs, $configDefaults);
+ $violations = [];
++require_once __DIR__.'/schema-gate.php';
++/** @var array{packages: array<string, string>, sets: list<array{id: string, package: string, name: string, scope: string, path: string, version: int, drivers: list<string>, lifecycle: string, requires: list<string>, connection: ?string}>} $manifest */
++$manifest = json_decode((string) file_get_contents(__DIR__.'/schema-sets.json'), true, flags: JSON_THROW_ON_ERROR);
++$coveredPaths = array_column($manifest['sets'], 'path');
++foreach ((new SchemaGate($repoRoot, $manifest, [], []))->run() as $hit) {
++    if ($hit['code'] === 'S9') {
++        $violations[] = ['S9', $hit['file'].':'.$hit['line'], $hit['message']];
++    }
++}
+
+ foreach ($creates as $create) {
+     $table = $create['table'];
+     $owner = $create['owning_package'];
+     $file = $create['migration'];
+
++    if (in_array(dirname($file), $coveredPaths, true)) {
++        continue; // S9 owns the registered paths, including package and scope checks.
++    }
++
+     if (! isset($catalog[$table])) {
+         $violations[] = ['T1', $file, "table '{$table}' missing from catalog"];
+
+diff --git a/tests/Arch/AchievedInvariantTest.php b/tests/Arch/AchievedInvariantTest.php
+index 62c31304..6bda3be9 100644
+--- a/tests/Arch/AchievedInvariantTest.php
++++ b/tests/Arch/AchievedInvariantTest.php
+@@ -158,7 +158,7 @@ test('table ownership gate reports no violations on clean tree', function (): vo
+         ->and($joined)->toContain('table-ownership-gate: OK');
+ });
+
+-test('table ownership gate reports T1 for uncatalogued create', function (): void {
++test('table ownership gate delegates registered uncatalogued creates to S9', function (): void {
+     $repoRoot = SourceScanner::repoRoot();
+     $probePath = $repoRoot.'/packages/core/database/migrations/pg/2099_01_01_000000_table_ownership_t1_probe.php';
+     $probeContents = <<<'PHP'
+@@ -199,7 +199,7 @@ PHP;
+     $joined = implode("\n", $output);
+
+     expect($exitCode)->toBe(1, "gate exit {$exitCode}:\n".implode("\n", $output))
+-        ->and($joined)->toContain('T1')
++        ->and($joined)->toContain('S9')
+         ->and($joined)->toContain('2099_01_01_000000_table_ownership_t1_probe.php');
+ });

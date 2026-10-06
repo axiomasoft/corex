@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — schema set connection ownership
+
+- Shipped migrations obtain their `up()` connection from the schema migrator's current connection. Test retention fixtures use `SchemaMigrator` instead of calling migration `up()` directly. DDL is unchanged.
+
+
 ## Unreleased — resource identifier formats (P08.2)
 
 - ResourceId uses operations-owned ResourceIdFormat instead of the removed kernel schema strategy. Rename its strategy property/parameters to format and remove fromConfigured; callers supply the expected format explicitly. UUIDv7, UUID, ULID and integer wire domains remain supported.

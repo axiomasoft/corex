@@ -1,0 +1,2 @@
+> bash scripts/ci-deferred-guard.sh php scripts/table-ownership-gate.php
+table-ownership-gate: OK (94 tables, catalog 122 rows)

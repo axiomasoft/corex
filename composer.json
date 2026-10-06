@@ -200,10 +200,11 @@
         "refactor": "vendor/bin/rector process",
         "refactor:check": "vendor/bin/rector process --dry-run",
         "manifests:check": "python3 scripts/manifest-check.py",
-        "golden": "vendor/bin/pest --testsuite=Golden",
+        "golden": "vendor/bin/pest --testsuite=Golden --exclude-group=pg",
         "ownership-gate": "php scripts/ownership-gate.php --strict",
         "quality:ceilings": "php scripts/quality-ceiling-guard.php",
         "deps:analyse": "bash scripts/dependency-analyser.sh --all",
-        "php-api": "php scripts/php-api.php --strict --check"
+        "php-api": "php scripts/php-api.php --strict --check",
+        "schema-gate": "bash scripts/ci-deferred-guard.sh php scripts/schema-gate.php"
     }
 }

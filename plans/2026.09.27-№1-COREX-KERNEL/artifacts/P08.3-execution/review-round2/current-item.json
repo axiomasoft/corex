@@ -1,0 +1,312 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P08.3",
+  "title": "Гейт схемы S1–S9 и Golden-схема PG/SQLite",
+  "status": "in_progress",
+  "summary": "`composer schema-gate` статически проверяет раскладку, имена, типы и чистоту shipped-миграций (S1–S9) с временным pending-списком непереведённых пакетов; Golden-тесты строят fresh-схему каждого scope на PG и SQLite через `SchemaMigrator` и сравнивают канонический каталог с golden-файлами.",
+  "why": "D113/D20 требуют машинной проверки формы baseline до сквоша, чтобы P08.4–P08.8 исполнялись против гейта; Golden-схема — будущий enforcement DATA-005 (выпущенная схема неизменна с rc). Каждый новый гейт обязан иметь негативный контроль (правило плана).",
+  "scope": {
+    "include": [
+      "`scripts/schema-gate.php` (S1–S9, `--write-sets`/`--check` для `scripts/schema-sets.json`), `scripts/schema-gate-allowlist.json` (строки «оставить тип» досье §4.3), `scripts/schema-gate-pending.json` (все пакеты со схемой), composer script `schema-gate`, шаг CI в `.github/workflows/ci.yml` рядом с `table-ownership-gate`.",
+      "Тест гейта с фикстурами нарушений `tests/fixtures/schema-gate/S1…S9` (каждый код краснеет) — `tests/Unit/SchemaGateTest.php`.",
+      "`tests/Golden/Support/SchemaCatalogue.php` (PG и SQLite), `tests/Golden/SchemaGoldenTest.php` (group pg) + `tests/Golden/SchemaSqliteGoldenTest.php`, golden `tests/Golden/schema/{tenant,central,dedicated}.pgsql.json`, `tenant.sqlite.json`; `GOLDEN_UPDATE=1` режим; обёртка снимка `tests/Golden/Support/SnapshotSchemaTest.php` (examples §10).",
+      "`scripts/table-ownership-gate.php`: T1/T2 для путей, покрытых S9, переходят в schema-gate (T4 остаётся); негатив S9 доказывает отсутствие ослабления.",
+      "Owner 2026-10-06: minimal connection-source repair in operations tenant/budget and webhooks tenant up(): Schema::getConnection(), unchanged DDL; necessary related repairs allowed when principled, no workarounds.",
+      "Bounded review repair: S9/structural rules inspect invoked helpers and all Blueprint callback forms; SQLite Golden keeps actual autoindex identity and validates names <=63, with four exact pre-existing long names in scripts/schema-golden-name-pending.json tied to still-pending package owners and shrinking anti-weakening ratchet. No shipped DDL rename."
+    ],
+    "exclude": [
+      "Изменение DDL и сквош миграций (P08.4–P08.8); исключение владельца 2026-10-06 — минимальное устранение S7 через соединение SchemaMigrator. Правки table-ownership.md только необходимые для S9."
+    ]
+  },
+  "depends_on": [
+    "P08.2"
+  ],
+  "related": [],
+  "decisions": [
+    "D113",
+    "D111",
+    "D73"
+  ],
+  "reads": [
+    {
+      "path": "@plan/knowledge/research-P08-design.json",
+      "section": "§4, §5, §6.3",
+      "why": "Спецификация гейта и Golden; правила формы, которые он проверяет.",
+      "required": true
+    },
+    {
+      "path": "@plan/knowledge/artifacts-P08-design-examples.json",
+      "section": "§6, §9, §10",
+      "why": "Каркас регулярных выражений гейта; форма снимка и diff.",
+      "required": true
+    },
+    {
+      "path": "@plan/decisions/D113.json",
+      "why": "Норма формы.",
+      "required": true
+    },
+    {
+      "path": "scripts/table-ownership-gate.php",
+      "why": "Существующие T1/T2/T4 и разбор каталога владения.",
+      "required": true
+    },
+    {
+      "path": "packages/tenancy/src/Provisioning/Internal/Database/SchemaCatalogueSerializer.php",
+      "why": "Образец PG-каталога без OID/ACL.",
+      "required": true
+    },
+    {
+      "path": "@plan/artifacts/P08-design/scripts/schema-diff.py",
+      "why": "Ожидаемая форма JSON снимка (docstring).",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "scripts/schema-gate.php",
+      "change": "create"
+    },
+    {
+      "path": "scripts/{schema-sets,schema-gate-allowlist,schema-gate-pending}.json",
+      "change": "create"
+    },
+    {
+      "path": "composer.json",
+      "change": "modify"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "change": "modify"
+    },
+    {
+      "path": "tests/Unit/SchemaGateTest.php",
+      "change": "create"
+    },
+    {
+      "path": "tests/fixtures/schema-gate/**",
+      "change": "create"
+    },
+    {
+      "path": "tests/Golden/{SchemaGoldenTest,SchemaSqliteGoldenTest}.php",
+      "change": "create"
+    },
+    {
+      "path": "tests/Golden/Support/{SchemaCatalogue,SnapshotSchemaTest}.php",
+      "change": "create"
+    },
+    {
+      "path": "tests/Golden/schema/*.json",
+      "change": "create"
+    },
+    {
+      "path": "scripts/table-ownership-gate.php",
+      "change": "modify"
+    },
+    {
+      "path": "phpunit.xml",
+      "change": "modify",
+      "note": "только если Golden suite требует регистрации новых файлов"
+    },
+    {
+      "path": "tests/Golden/Support/{SchemaEnvironment,SchemaSelectionProvider}.php",
+      "change": "create",
+      "note": "Necessary related scope explicitly authorized by owner 2026-10-06."
+    },
+    {
+      "path": "scripts/anti-weakening-gate.sh",
+      "change": "modify",
+      "note": "Necessary related scope explicitly authorized by owner 2026-10-06."
+    },
+    {
+      "path": "tests/Arch/AchievedInvariantTest.php",
+      "change": "modify",
+      "note": "Necessary related scope explicitly authorized by owner 2026-10-06."
+    },
+    {
+      "path": "packages/operations/database/migrations/{tenant/create_sys_api_bulk_operations_table,budget/create_sys_api_budget_tables}.php",
+      "change": "modify",
+      "note": "Necessary related scope explicitly authorized by owner 2026-10-06."
+    },
+    {
+      "path": "packages/webhooks/database/migrations/tenant/create_sys_api_webhook_tables.php",
+      "change": "modify",
+      "note": "Necessary related scope explicitly authorized by owner 2026-10-06."
+    },
+    {
+      "path": "packages/operations/tests/Feature/ApiRetentionTest.php",
+      "change": "modify",
+      "note": "Necessary related scope explicitly authorized by owner 2026-10-06."
+    },
+    {
+      "path": "packages/webhooks/tests/Feature/WebhookApiRetentionTest.php",
+      "change": "modify",
+      "note": "Necessary related scope explicitly authorized by owner 2026-10-06."
+    },
+    {
+      "path": "packages/{operations,webhooks}/CHANGELOG.md",
+      "change": "modify",
+      "note": "Necessary related scope explicitly authorized by owner 2026-10-06."
+    },
+    {
+      "path": "docs/architecture/table-ownership.md",
+      "change": "modify",
+      "note": "Necessary related scope explicitly authorized by owner 2026-10-06."
+    },
+    {
+      "path": "scripts/schema-golden-name-pending.json",
+      "change": "create",
+      "note": "Initial four existing SQLite long object names; bound to pending package baseline and ratcheted, no DDL changes."
+    }
+  ],
+  "rules": [
+    "Pending-список и allowlist только сокращаются после этого item (anti-weakening); новые строки — стоп и эскалация.",
+    "Гейт герметичен (D73 п.5): статическая часть не обращается к БД; Golden PG — group `pg`, SQLite-лейн не трогает PG.",
+    "Golden фиксирует текущие (ещё не baseline) наборы — стартовая точка; обновление — только `GOLDEN_UPDATE=1` с классом изменения в Completion Notes.",
+    "scripts/schema-golden-name-pending.json is a finite SQLite-only pre-baseline exception inventory. Every exception must occur in the actual catalogue and its owning package must remain pending; stale/new entries fail. Only shrink it during the owning baseline items; remove when empty."
+  ],
+  "guidance": "Досье §5 (таблица S1–S9), §6.3 шаги 1–5; examples §9 (регулярные выражения, коды PP в `schema-sets.json`), §10 (снимок). Вывод гейта `S<n> <file>:<line> <message>`, сортировка; exit 0/1/2 как у `table-ownership-gate.php`.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "scripts/php84 composer schema-gate",
+      "expect": "exit 0 на дереве с pending-списком",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "scripts/php84 vendor/bin/pest tests/Unit/SchemaGateTest.php",
+      "expect": "exit 0; каждая фикстура S1–S9 даёт ровно свой код",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "scripts/php84 php scripts/schema-gate.php --check",
+      "expect": "exit 0 (schema-sets.json соответствует реестру)",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "PGSQL_PORT=5434 scripts/php84 vendor/bin/pest tests/Golden/SchemaGoldenTest.php",
+      "expect": "exit 0; повторный migrate — «Nothing to migrate», нет enum-типов, имена ≤ 63",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "scripts/php84 vendor/bin/pest tests/Golden/SchemaSqliteGoldenTest.php",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "cmd": "scripts/php84 composer table-ownership-gate",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "cmd": "rg -n 'composer schema-gate' .github/workflows/ci.yml",
+      "expect": "exactly one CI composer schema-gate invocation, adjacent to table-ownership-gate; --check in same step",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "cmd": "scripts/php84 vendor/bin/pint --test <all changed PHP files>",
+      "expect": "exit 0; exact file list in artifacts/P08.3-execution/validation-summary.json",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "cmd": "scripts/php84 vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=1G",
+      "expect": "exit 0 (root tooling and Golden scope; no package analysis)",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "procedure": "Owner narrowing 2026-10-06: no unrelated package/architecture/dependency rerun; scope is schema gate, Golden catalogue, ownership gate and changed tooling.",
+      "expect": "scope-specific checks GREEN; no unchanged package run",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V11",
+      "procedure": "Re-use current V2 + V5 affected SQLite checks; no duplicate root suite, per owner instruction 2026-10-06.",
+      "expect": "V2 and V5 exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V12",
+      "procedure": "Re-use V4 PG scope checks plus supplied SNAPSHOT_SETS=axiomasoft/corex-operations:budget export; snapshot-export-witness.json proves equality with dedicated.pgsql.json.",
+      "expect": "V4 and snapshot export exit 0; same catalogue",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V13",
+      "procedure": "Affected migration tests only: BulkApiTest, ApiRetentionTest, OperationBudgetTest, WebhookSubscriptionTest, WebhookApiRetentionTest; exact command/log under related in validation-summary.json.",
+      "expect": "exit 0; unchanged package suites omitted by owner",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V14",
+      "cmd": "scripts/php84 vendor/bin/pest tests/Arch/AchievedInvariantTest.php '--filter=table ownership' --compact",
+      "expect": "exit 0; S9 ownership transfer and retained T4 negatives",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V15",
+      "cmd": "scripts/php84 composer golden",
+      "expect": "exit 0; hermetic non-PG Golden lane, PG independently V4",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V16",
+      "cmd": "bash scripts/anti-weakening-gate.sh",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V17",
+      "cmd": "php scripts/package-docs-gate.php",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V18",
+      "procedure": "Негатив S9/T-перенос: временно удалить строку одной таблицы core из `docs/architecture/table-ownership.md` → `scripts/php84 composer schema-gate` exit 1 с `S9`; вернуть. Негатив Golden: временно добавить индекс в фикстурный набор → `SchemaSqliteGoldenTest` красный; вернуть. Логи `artifacts/P08.3-execution/negative.txt`.",
+      "expect": "оба негатива краснеют, после отката зелено",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V19",
+      "procedure": "Self-check (D110 п.2): каждая строка D111–D114, относящаяся к item → файл:строка и тест; строка `self-check: GREEN` в Completion Notes `@plan/knowledge/artifacts-P08.<n>-execution-completion.json`.",
+      "expect": "self-check: GREEN",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Гейт схемы с тестом и негативами; Golden-схема PG/SQLite со стартовыми golden; шаг CI; Completion Notes `@plan/knowledge/artifacts-P08.3-execution-completion.json`."
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed",
+    "notes": "Внешние факты собраны при дизайне: @plan/knowledge/research-P08-design-rag.json."
+  },
+  "result": {
+    "started_at": "2026-10-06T09:04:22Z",
+    "executor": {
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "session": "01a11073-6c4a-7053-8c02-3400ead1f58e"
+    }
+  },
+  "updated_at": "2026-10-06T09:55:24Z"
+}

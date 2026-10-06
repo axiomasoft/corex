@@ -1,0 +1,27 @@
+<?php
+
+declare(strict_types=1);
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        // config(), ->enum(), CREATE TYPE sample AS ENUM are comments, not calls.
+        Schema::create('sys_gate_probe', function (Blueprint $table): void {
+            $table->enum('id', ['one', 'two']);
+            $table->primary(['id'], 'sys_gate_probe_pk');
+        });
+    }
+
+    public function down(): void
+    {
+        if (! app()->environment('testing')) {
+            throw new RuntimeException('Rollback guard');
+        }
+        Schema::dropIfExists('sys_gate_probe');
+    }
+};

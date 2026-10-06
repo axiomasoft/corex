@@ -1,0 +1,297 @@
+--- round1/scripts/anti-weakening-gate.sh
++++ round2/scripts/anti-weakening-gate.sh
+@@ -75,7 +75,8 @@
+ import json, pathlib, subprocess, sys, re
+ base = sys.argv[1]
+ paths = {'scripts/quality-ceilings.json': 'ceilings', 'scripts/ownership-gate-baseline.json': 'ownership',
+-         'scripts/schema-gate-pending.json': 'inventory', 'scripts/schema-gate-allowlist.json': 'inventory'}
++         'scripts/schema-gate-pending.json': 'inventory', 'scripts/schema-gate-allowlist.json': 'inventory',
++         'scripts/schema-golden-name-pending.json': 'inventory'}
+ def read(ref, path):
+     if ref is None:
+         p = pathlib.Path(path)
+--- round1/scripts/schema-gate.php
++++ round2/scripts/schema-gate.php
+@@ -142,13 +142,23 @@
+         foreach ($assignments as $assignment) {
+             $variables[$assignment[1] !== '' ? '$'.$assignment[1] : 'self::'.$assignment[2]] = $assignment[4];
+         }
++        foreach ($bodies as $body) {
++            $this->structure($file, $package, $scope, $baseline, $body, $variables);
++        }
++    }
++
++    /** @param array{body: string, line: int} $up
++     * @param array<string, string> $variables */
++    private function structure(string $file, string $package, string $scope, bool $baseline, array $up, array $variables): void
++    {
+         $calls = self::calls($up['body']);
+         $tables = [];
+         foreach ($calls as $call) {
+-            if (($call['name'] !== 'create' && $call['name'] !== 'table') || ! isset($call['args'][1]) || preg_match('/^(?:static\s+)?function\b/', $call['args'][1]) !== 1) {
+-                continue;
+-            }
+-            $argument = $call['args'][0];
++            if (! $call['method'] || ($call['name'] !== 'create' && $call['name'] !== 'table')
++                || ($call['name'] === 'table' && ! isset($call['args'][1]))) {
++                continue;
++            }
++            $argument = self::argument($call, 0, 'table') ?? '';
+             $table = self::literal($argument) ?? ($variables[$argument] ?? null);
+
+             if ($table === null) {
+@@ -180,8 +190,10 @@
+                 $this->hit('S3', $file, $line, 'implicitly named constraint/index: '.$name);
+             }
+
+-            if (in_array($name, ['index', 'unique', 'primary', 'foreign', 'fullText', 'spatialIndex'], true)) {
++            if (in_array($name, ['index', 'unique', 'primary', 'foreign', 'foreignId', 'foreignUuid', 'foreignUlid', 'fullText', 'spatialIndex'], true)) {
+                 // Blueprint APIs take columns then name; a chained column takes only name.
++                $references = false;
++                $foreignColumn = in_array($name, ['foreignId', 'foreignUuid', 'foreignUlid'], true);
+                 $before = substr($up['body'], 0, $call['offset']);
+                 $chained = preg_match('/\)\s*->\s*$/', $before) === 1;
+                 $object = $call['args'][$chained ? 0 : 1] ?? null;
+@@ -191,14 +203,21 @@
+                     }
+                 }
+
+-                if ($name === 'foreign' && $object === null) {
++                if (($name === 'foreign' || $foreignColumn) && $object === null) {
+                     $semicolon = strpos($up['body'], ';', $call['end']);
+                     $chain = substr($up['body'], $call['end'], ($semicolon === false ? strlen($up['body']) : $semicolon) - $call['end']);
++                    $references = false;
+                     foreach (self::calls($chain) as $fluent) {
++                        $references = $references || $fluent['name'] === 'references';
++
+                         if ($fluent['name'] === 'name') {
+                             $object = $fluent['args'][0] ?? null;
+                         }
+                     }
++                }
++
++                if ($foreignColumn && ! $references) {
++                    continue; // A foreignId column alone creates no foreign key.
+                 }
+
+                 if ($object === null || trim($object) === '' || trim($object) === 'null') {
+@@ -209,7 +228,7 @@
+             }
+
+             if (preg_match('/^(?:unsigned)?(?:Integer|SmallInteger|TinyInteger|MediumInteger)$|^(?:integer|smallInteger|tinyInteger|mediumInteger|increments|smallIncrements|tinyIncrements|mediumIncrements)$/', $name) === 1) {
+-                $column = self::literal($call['args'][0] ?? '');
++                $column = self::literal(self::argument($call, 0, 'column') ?? '');
+
+                 if ($column === null || ! isset($this->allowlist[$table.'.'.$column])) {
+                     $this->hit('S6', $file, $line, '32-bit integer outside allowlist: '.$table.'.'.($column ?? '?'));
+@@ -318,6 +337,18 @@
+     private function hit(string $code, string $file, int $line, string $message): void
+     {
+         $this->hits[] = compact('code', 'file', 'line', 'message');
++    }
++
++    /** @param SchemaCall $call */
++    private static function argument(array $call, int $position, string $parameter): ?string
++    {
++        foreach ($call['args'] as $argument) {
++            if (preg_match('/^'.preg_quote($parameter, '/').'\s*:\s*(.+)$/s', $argument, $match) === 1) {
++                return $match[1];
++            }
++        }
++
++        return $call['args'][$position] ?? null;
+     }
+
+     private static function literal(string $value): ?string
+--- round1/tests/Golden/SchemaGoldenTest.php
++++ round2/tests/Golden/SchemaGoldenTest.php
+@@ -34,14 +34,7 @@
+         }
+         $catalogue = SchemaCatalogue::of($connection);
+         self::assertSame([], $catalogue['enum_types']);
+-        foreach ($catalogue['tables'] as $table => $definition) {
+-            self::assertLessThanOrEqual(63, strlen($table));
+-            foreach (['indexes', 'foreign_keys', 'checks'] as $kind) {
+-                foreach ($definition[$kind] as $object) {
+-                    self::assertLessThanOrEqual(63, strlen($object['name']));
+-                }
+-            }
+-        }
++        $this->assertSchemaNames($catalogue);
+         $command = $this->artisan('corex:schema:migrate', ['--scope' => $scope->value, '--modules' => true, ...($override === null ? [] : ['--database' => $override])]);
+         self::assertInstanceOf(PendingCommand::class, $command);
+         $command->expectsOutput('Nothing to migrate.')->assertSuccessful();
+--- round1/tests/Golden/SchemaSqliteGoldenTest.php
++++ round2/tests/Golden/SchemaSqliteGoldenTest.php
+@@ -9,7 +9,9 @@
+ use CoreX\Tests\Golden\Support\SchemaCatalogue;
+ use CoreX\Tests\Golden\Support\SchemaEnvironment;
+ use Flex\Crm\Tests\Support\AccountFixture;
++use Illuminate\Database\Schema\Blueprint;
+ use Illuminate\Support\Facades\DB;
++use Throwable;
+
+ final class SchemaSqliteGoldenTest extends GoldenTestCase
+ {
+@@ -37,6 +39,43 @@
+                 self::assertSame([], $status->unknown);
+             }
+         }
+-        $this->assertSchemaGolden(SchemaCatalogue::of($connection), __DIR__.'/schema/tenant.sqlite.json');
++        $catalogue = SchemaCatalogue::of($connection);
++        $this->assertSchemaNames($catalogue);
++        $this->assertSchemaGolden($catalogue, __DIR__.'/schema/tenant.sqlite.json');
++    }
++
++    public function test_catalogue_keeps_stored_autoindex_identity(): void
++    {
++        $this->schemaRegistry();
++        $connection = DB::connection('schema_golden');
++        $this->freshSchema($connection);
++        $connection->getSchemaBuilder()->create('schema_name_probe', function (Blueprint $table): void {
++            $table->uuid('first');
++            $table->uuid('second');
++            $table->primary(['first', 'second'], 'schema_name_probe_pk');
++        });
++        $catalogue = SchemaCatalogue::of($connection);
++        self::assertSame('sqlite_autoindex_schema_name_probe_1', $catalogue['tables']['schema_name_probe']['indexes'][0]['name']);
++    }
++
++    public function test_new_long_sqlite_names_fail_without_an_existing_pending_exception(): void
++    {
++        $this->schemaRegistry();
++        $connection = DB::connection('schema_golden');
++        $this->freshSchema($connection);
++        $connection->getSchemaBuilder()->create('schema_name_probe', function (Blueprint $table): void {
++            $table->uuid('id');
++            $table->index(['id'], 'schema_name_probe_'.str_repeat('x', 64).'_ix');
++        });
++        $catalogue = SchemaCatalogue::of($connection);
++        $failure = null;
++
++        try {
++            $this->assertSchemaNames($catalogue);
++        } catch (Throwable $exception) {
++            $failure = $exception;
++        }
++        self::assertNotNull($failure, 'An unlisted long SQLite name must fail.');
++        self::assertStringContainsString('Schema name: schema_name_probe.', $failure->getMessage());
+     }
+ }
+--- round1/tests/Golden/Support/SchemaCatalogue.php
++++ round2/tests/Golden/Support/SchemaCatalogue.php
+@@ -137,7 +137,7 @@
+             if (str_starts_with($name, 'sqlite_autoindex_')) {
+                 // SQLite discards explicit constraint names in PRAGMA; recover them from DDL.
+                 preg_match('/constraint\s+["`]?([a-z0-9_]+)["`]?\s+'.($kind === 'pk' ? 'primary\s+key' : 'unique').'\s*\(\s*'.preg_quote('"'.implode('", "', $parts).'"', '/').'\s*\)/i', $sql, $match);
+-                $name = $match[1] ?? $table.'_'.$kind.'_'.implode('_', $parts);
++                $name = $match[1] ?? $name; // Keep SQLite's actual autoindex identity when the DDL has no name.
+             }
+             preg_match('/\bWHERE\s+(.+)$/is', $definition, $predicate);
+             $indexes[] = ['name' => $name, 'kind' => $kind, 'columns' => $parts, 'predicate' => $predicate[1] ?? null, 'method' => 'btree'];
+--- round1/tests/Golden/Support/SchemaEnvironment.php
++++ round2/tests/Golden/Support/SchemaEnvironment.php
+@@ -92,6 +92,38 @@
+     }
+
+     /** @param Catalogue $catalogue */
++    public function assertSchemaNames(array $catalogue): void
++    {
++        /** @var array<string, array{package: string, reason: string}> $exceptions */
++        $exceptions = $catalogue['driver'] === 'sqlite' && is_file(dirname(__DIR__, 3).'/scripts/schema-golden-name-pending.json') ? json_decode((string) file_get_contents(dirname(__DIR__, 3).'/scripts/schema-golden-name-pending.json'), true, flags: JSON_THROW_ON_ERROR) : [];
++        /** @var list<string> $pending */
++        $pending = is_file(dirname(__DIR__, 3).'/scripts/schema-gate-pending.json') ? json_decode((string) file_get_contents(dirname(__DIR__, 3).'/scripts/schema-gate-pending.json'), true, flags: JSON_THROW_ON_ERROR) : [];
++        $observed = [];
++        foreach ($catalogue['tables'] as $table => $definition) {
++            self::assertLessThanOrEqual(63, strlen($table));
++            foreach (array_keys($definition['columns']) as $column) {
++                self::assertLessThanOrEqual(63, strlen($column));
++            }
++            foreach (['indexes', 'foreign_keys', 'checks'] as $kind) {
++                foreach ($definition[$kind] as $object) {
++                    $key = $table.'.'.$object['name'];
++
++                    if (strlen($object['name']) > 63 && isset($exceptions[$key])) {
++                        self::assertContains($exceptions[$key]['package'], $pending, 'Expired SQLite name exception: '.$key);
++                        $observed[] = $key;
++                    } else {
++                        self::assertLessThanOrEqual(63, strlen($object['name']), 'Schema name: '.$key);
++                    }
++                }
++            }
++        }
++        sort($observed);
++        $expected = array_keys($exceptions);
++        sort($expected);
++        self::assertSame($expected, $observed, 'Remove stale SQLite name exceptions as packages leave the pending baseline.');
++    }
++
++    /** @param Catalogue $catalogue */
+     public function assertSchemaGolden(array $catalogue, string $path): void
+     {
+         if (getenv('GOLDEN_UPDATE') === '1') {
+--- round1/tests/Unit/SchemaGateTest.php
++++ round2/tests/Unit/SchemaGateTest.php
+@@ -98,3 +98,41 @@
+     $source = str_replace('$'."table->uuid('id');", '$'."table->uuid('id');\n            $"."table->foreign(['id'])->references('id')->on('sys_gate_probe')->name('sys_gate_probe_self_fk');", $source);
+     expect(schemaGateProbe($source))->toBe([]);
+ });
++
++it('checks ownership for helpers and every callback syntax', function (string $syntax): void {
++    $source = (string) file_get_contents(__DIR__.'/../fixtures/schema-gate/valid.php.fixture');
++
++    if ($syntax === 'helper') {
++        $source = str_replace('    public function up(): void', '    public function up(): void { $'."this->createTables(); }\n\n    private function createTables(): void", $source);
++    } elseif ($syntax === 'arrow') {
++        $source = preg_replace('/function \(Blueprint \$table\): void \{.*?\}/s', 'fn (Blueprint $table) => $table->uuid(\'id\')', $source, 1);
++    } else {
++        $source = preg_replace('/function \(Blueprint \$table\): void \{.*?\}/s', '$callback', $source, 1);
++    }
++    expect(array_values(array_unique(array_column(schemaGateProbe($source, catalogue: 'other_table', pending: ['axiomasoft/corex']), 'code'))))->toBe(['S9']);
++})->with(['helper', 'arrow', 'variable']);
++
++it('applies baseline rules inside invoked helpers', function (string $code): void {
++    $source = (string) file_get_contents(__DIR__.'/../fixtures/schema-gate/'.$code.'/migration.php.fixture');
++    $source = str_replace('    public function up(): void', '    public function up(): void { $'."this->createTables(); }\n\n    private function createTables(): void", $source);
++    expect(array_values(array_unique(array_column(schemaGateProbe($source), 'code'))))->toBe([$code]);
++})->with(['S3', 'S4', 'S6']);
++
++it('rejects unnamed fluent foreign keys and admits explicit names', function (): void {
++    $source = (string) file_get_contents(__DIR__.'/../fixtures/schema-gate/valid.php.fixture');
++    $source = str_replace('$'."table->uuid('id');", '$'."table->foreignUuid('id')->references('id')->on('sys_gate_probe');", $source);
++    expect(array_values(array_unique(array_column(schemaGateProbe($source), 'code'))))->toBe(['S3']);
++    $named = str_replace("->on('sys_gate_probe');", "->on('sys_gate_probe')->name('sys_gate_probe_self_fk');", $source);
++    expect(schemaGateProbe($named))->toBe([]);
++});
++
++it('rejects a nonbaseline date independently of filename shape', function (): void {
++    $source = (string) file_get_contents(__DIR__.'/../fixtures/schema-gate/valid.php.fixture');
++    expect(array_values(array_unique(array_column(schemaGateProbe($source, filename: '2026_10_02_010010_create_sys_gate_probe.php'), 'code'))))->toBe(['S8']);
++});
++
++it('rejects duplicate object names in one scope', function (): void {
++    $source = (string) file_get_contents(__DIR__.'/../fixtures/schema-gate/valid.php.fixture');
++    $source = str_replace('$'."table->primary(['id'], 'sys_gate_probe_pk');", '$'."table->primary(['id'], 'sys_gate_probe_pk');\n            $"."table->index(['id'], 'sys_gate_probe_pk');", $source);
++    expect(array_values(array_unique(array_column(schemaGateProbe($source), 'code'))))->toBe(['S4']);
++});
+--- round1/scripts/schema-golden-name-pending.json
++++ round2/scripts/schema-golden-name-pending.json
+@@ -0,0 +1,18 @@
++{
++    "corex_task_occurrences.corex_task_occurrences_series_key_immutable_revision_occurrence_key_unique": {
++        "package": "axiomasoft/corex-tasks-workflow",
++        "reason": "Existing SQLite Laravel unique name before package baseline; normalize in P08.7."
++    },
++    "med_conversions.med_conversions_file_id_profile_key_profile_digest_source_version_unique": {
++        "package": "axiomasoft/corex-media",
++        "reason": "Existing SQLite Laravel unique name before package baseline; normalize in P08.6."
++    },
++    "ntf_digest_runs.ntf_digest_runs_recipient_kind_recipient_id_period_period_start_batch_seq_unique": {
++        "package": "axiomasoft/corex-notifications",
++        "reason": "Existing SQLite Laravel unique name before package baseline; normalize in P08.6."
++    },
++    "ntf_notifications.ntf_notifications_recipient_kind_recipient_id_request_key_unique": {
++        "package": "axiomasoft/corex-notifications",
++        "reason": "Existing SQLite Laravel unique name before package baseline; normalize in P08.6."
++    }
++}

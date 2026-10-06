@@ -1,0 +1,17 @@
+{
+  "current_model_id": "grok-4.7",
+  "reasoning_effort": "high",
+  "created_at": "2026-10-06T09:29:18.449354490Z",
+  "updated_at": "2026-10-06T09:42:44.567078776Z",
+  "sandbox_profile": "off",
+  "request_id": "d6b82d63-1c41-4015-a121-b646781417c4",
+  "session_kind": "headless",
+  "session_id": "c8e2c5d0-e75a-4ba8-ba1d-8cec44cea37b",
+  "observed_tools": {
+    "list_dir": 3,
+    "read_file": 63,
+    "grep": 25
+  },
+  "source": "native grok trace export via grok trace --local",
+  "state": "review-running; no verdict yet"
+}

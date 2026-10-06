@@ -35,11 +35,24 @@ $configDefaults = loadConfigTableDefaults($repoRoot);
 
 $creates = extractSchemaCreates($repoRoot, $packageDirs, $configDefaults);
 $violations = [];
+require_once __DIR__.'/schema-gate.php';
+/** @var array{packages: array<string, string>, sets: list<array{id: string, package: string, name: string, scope: string, path: string, version: int, drivers: list<string>, lifecycle: string, requires: list<string>, connection: ?string}>} $manifest */
+$manifest = json_decode((string) file_get_contents(__DIR__.'/schema-sets.json'), true, flags: JSON_THROW_ON_ERROR);
+$coveredPaths = array_column($manifest['sets'], 'path');
+foreach ((new SchemaGate($repoRoot, $manifest, [], []))->run() as $hit) {
+    if ($hit['code'] === 'S9') {
+        $violations[] = ['S9', $hit['file'].':'.$hit['line'], $hit['message']];
+    }
+}
 
 foreach ($creates as $create) {
     $table = $create['table'];
     $owner = $create['owning_package'];
     $file = $create['migration'];
+
+    if (in_array(dirname($file), $coveredPaths, true)) {
+        continue; // S9 owns the registered paths, including package and scope checks.
+    }
 
     if (! isset($catalog[$table])) {
         $violations[] = ['T1', $file, "table '{$table}' missing from catalog"];

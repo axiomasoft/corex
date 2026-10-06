@@ -1,0 +1,20 @@
+[
+    "axiomasoft/corex",
+    "axiomasoft/corex-tenancy",
+    "axiomasoft/corex-access",
+    "axiomasoft/corex-access-azguard",
+    "axiomasoft/corex-operations",
+    "axiomasoft/corex-webhooks",
+    "axiomasoft/corex-panels",
+    "axiomasoft/corex-custom-fields",
+    "axiomasoft/corex-intl",
+    "axiomasoft/corex-media",
+    "axiomasoft/corex-notifications",
+    "axiomasoft/corex-search",
+    "axiomasoft/corex-transfer",
+    "axiomasoft/corex-wakeup",
+    "axiomasoft/corex-workflow",
+    "axiomasoft/corex-tasks",
+    "axiomasoft/corex-tasks-workflow",
+    "flex/crm"
+]

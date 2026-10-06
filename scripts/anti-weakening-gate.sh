@@ -74,7 +74,9 @@ check_added_pattern 'continue-on-error' 'continue-on-error' '.github/workflows/*
 python3 - "$BASE_REF" <<'PYRATCHET' || log_fail "quality ceilings or ownership baseline grew"
 import json, pathlib, subprocess, sys, re
 base = sys.argv[1]
-paths = {'scripts/quality-ceilings.json': 'ceilings', 'scripts/ownership-gate-baseline.json': 'ownership'}
+paths = {'scripts/quality-ceilings.json': 'ceilings', 'scripts/ownership-gate-baseline.json': 'ownership',
+         'scripts/schema-gate-pending.json': 'inventory', 'scripts/schema-gate-allowlist.json': 'inventory',
+         'scripts/schema-golden-name-pending.json': 'inventory'}
 def read(ref, path):
     if ref is None:
         p = pathlib.Path(path)
@@ -88,9 +90,11 @@ def read(ref, path):
     return json.loads(result.stdout)
 def check(old, new, kind):
     if new is None:
-        return old is None
+        return kind == 'inventory' or old is None
     if old is None:
         return True
+    if kind == 'inventory':
+        return not (set(new) - set(old))
     succ_path = pathlib.Path('scripts/ratchet-successors.json')
     succ = json.loads(succ_path.read_text()) if succ_path.exists() else {'groups': [], 'packages': {}}
     if kind == 'ownership':

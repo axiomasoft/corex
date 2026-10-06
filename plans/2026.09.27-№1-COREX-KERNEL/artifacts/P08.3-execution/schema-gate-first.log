@@ -1,0 +1,26 @@
+S1 packages/operations/database/migrations/budget/create_sys_api_budget_tables.php:1 file must belong to exactly one registered set directory
+S1 packages/operations/database/migrations/tenant/create_sys_api_bulk_operations_table.php:1 file must belong to exactly one registered set directory
+S1 packages/operations/database/migrations/tenant/create_sys_api_idempotency_table.php:1 file must belong to exactly one registered set directory
+S7 products/flex-crm/database/migrations/2026_09_14_000002_company_contact_parity.php:17 table name must be statically resolvable
+S7 products/flex-crm/database/migrations/2026_09_15_000001_full_storage_parity.php:17 table name must be statically resolvable
+S7 products/flex-crm/database/migrations/2026_09_15_000001_full_storage_parity.php:40 table name must be statically resolvable
+S9 packages/tenancy/database/migrations/root/2026_07_18_170001_create_root_clusters_table.php:18 table root_clusters must belong to axiomasoft/corex-tenancy with scope central
+S9 packages/tenancy/database/migrations/root/2026_07_18_170002_create_root_templates_table.php:15 table root_templates must belong to axiomasoft/corex-tenancy with scope central
+S9 packages/tenancy/database/migrations/root/2026_07_18_170003_create_root_identities_table.php:15 table root_identities must belong to axiomasoft/corex-tenancy with scope central
+S9 packages/tenancy/database/migrations/root/2026_07_18_170004_create_root_accounts_table.php:16 table root_accounts must belong to axiomasoft/corex-tenancy with scope central
+S9 packages/tenancy/database/migrations/root/2026_07_18_170005_create_root_identity_accounts_table.php:15 table root_identity_accounts must belong to axiomasoft/corex-tenancy with scope central
+S9 packages/tenancy/database/migrations/root/2026_07_18_170006_create_root_account_products_table.php:18 table root_account_products must belong to axiomasoft/corex-tenancy with scope central
+S9 packages/tenancy/database/migrations/root/2026_07_18_170007_create_root_domains_table.php:15 table root_domains must belong to axiomasoft/corex-tenancy with scope central
+S9 packages/tenancy/database/migrations/root/2026_07_18_170008_create_root_oauth_clients_table.php:15 table root_oauth_clients must belong to axiomasoft/corex-tenancy with scope central
+S9 packages/tenancy/database/migrations/root/2026_07_18_170009_create_root_idp_sessions_table.php:16 table root_idp_sessions must belong to axiomasoft/corex-tenancy with scope central
+S9 packages/tenancy/database/migrations/root/2026_07_18_170010_create_root_oauth_refresh_tokens_table.php:14 table root_oauth_refresh_tokens must belong to axiomasoft/corex-tenancy with scope central
+S9 packages/tenancy/database/migrations/root/2026_07_18_170011_create_root_impersonation_grants_table.php:19 table root_impersonation_grants must belong to axiomasoft/corex-tenancy with scope central
+S9 packages/tenancy/database/migrations/root/2026_07_18_170012_create_root_feature_flags_table.php:15 table root_feature_flags must belong to axiomasoft/corex-tenancy with scope central
+S9 packages/tenancy/database/migrations/root/2026_07_18_170013_create_root_usage_snapshots_table.php:14 table root_usage_snapshots must belong to axiomasoft/corex-tenancy with scope central
+S9 packages/tenancy/database/migrations/root/2026_07_18_170014_create_root_migration_batches_table.php:15 table root_migration_batches must belong to axiomasoft/corex-tenancy with scope central
+S9 packages/tenancy/database/migrations/root/2026_07_18_170015_create_root_account_schema_state_table.php:16 table root_account_schema_state must belong to axiomasoft/corex-tenancy with scope central
+S9 packages/tenancy/database/migrations/root/2026_07_18_170016_create_root_account_events_table.php:17 table root_account_events must belong to axiomasoft/corex-tenancy with scope central
+S9 packages/tenancy/database/migrations/root/2026_07_18_170017_create_root_account_exports_table.php:15 table root_account_exports must belong to axiomasoft/corex-tenancy with scope central
+S9 packages/tenancy/database/migrations/root/2026_09_15_000003_create_root_wakeup_hints_table.php:13 table root_wakeup_hints must belong to axiomasoft/corex-tenancy with scope central
+S9 packages/tenancy/database/migrations/root/2026_09_15_000004_create_root_wakeup_reconciliation_state_table.php:13 table root_wakeup_reconciliation_state must belong to axiomasoft/corex-tenancy with scope central
+S9 products/flex-crm/database/migrations/2026_09_14_000002_company_contact_parity.php:41 table crm_sources must belong to flex/crm with scope tenant

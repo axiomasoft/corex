@@ -158,7 +158,7 @@ test('table ownership gate reports no violations on clean tree', function (): vo
         ->and($joined)->toContain('table-ownership-gate: OK');
 });
 
-test('table ownership gate reports T1 for uncatalogued create', function (): void {
+test('table ownership gate delegates registered uncatalogued creates to S9', function (): void {
     $repoRoot = SourceScanner::repoRoot();
     $probePath = $repoRoot.'/packages/core/database/migrations/pg/2099_01_01_000000_table_ownership_t1_probe.php';
     $probeContents = <<<'PHP'
@@ -199,7 +199,7 @@ PHP;
     $joined = implode("\n", $output);
 
     expect($exitCode)->toBe(1, "gate exit {$exitCode}:\n".implode("\n", $output))
-        ->and($joined)->toContain('T1')
+        ->and($joined)->toContain('S9')
         ->and($joined)->toContain('2099_01_01_000000_table_ownership_t1_probe.php');
 });
 

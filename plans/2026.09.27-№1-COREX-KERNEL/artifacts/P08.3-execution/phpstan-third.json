@@ -1,0 +1,17 @@
+Instructions for interpreting errors
+---------
+
+Each error has an associated identifier, like `argument.type`
+or `return.missing`.
+
+Each error identifier has documentation at URL https://phpstan.org/error-identifiers/<identifier>
+This page contains code example, explanation why is this an error
+and instruction how to fix it.
+Before fixing the error, fetch the documentation page for its identifier.
+
+The error usually indicates a real bug or incorrect type in the code. Fix the underlying cause, do not just make the error go away.
+Do not add `@phpstan-ignore` comments, `@phpstan-ignore-next-line` comments, or baseline entries to suppress the error.
+Do not use assert() or inline @var PHPDoc tag to override PHPStan's inferred type.
+Do not add type casts just to silence errors.
+Do not widen parameter or return types just to make the error go away.
+{"totals":{"errors":0,"file_errors":6},"files":{"/home/vostrikov/projects/packages/corex/tests/Golden/SchemaGoldenTest.php":{"errors":1,"messages":[{"message":"Method CoreX\\Database\\Contracts\\SchemaSetProvider@anonymous/tests/Golden/Support/SchemaEnvironment.php:85::__construct() has parameter $selection with no value type specified in iterable type array.","line":88,"ignorable":true,"tip":"See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type","identifier":"missingType.iterableValue"}]},"/home/vostrikov/projects/packages/corex/tests/Golden/SchemaSqliteGoldenTest.php":{"errors":1,"messages":[{"message":"Method CoreX\\Database\\Contracts\\SchemaSetProvider@anonymous/tests/Golden/Support/SchemaEnvironment.php:85::__construct() has parameter $selection with no value type specified in iterable type array.","line":88,"ignorable":true,"tip":"See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type","identifier":"missingType.iterableValue"}]},"/home/vostrikov/projects/packages/corex/tests/Golden/Support/SchemaCatalogue.php":{"errors":1,"messages":[{"message":"Method CoreX\\Tests\\Golden\\Support\\SchemaCatalogue::rows() should return list<array<string, bool|int|string|null>> but returns list<array<bool|int|string|null>>.","line":206,"ignorable":true,"identifier":"return.type"}]},"/home/vostrikov/projects/packages/corex/tests/Golden/Support/SnapshotSchemaTest.php":{"errors":3,"messages":[{"message":"Instantiated class CoreX\\Tests\\Golden\\RuntimeException not found.","line":30,"ignorable":true,"tip":"Learn more at https://phpstan.org/user-guide/discovering-symbols","identifier":"class.notFound"},{"message":"Throwing object of an unknown class CoreX\\Tests\\Golden\\RuntimeException.","line":30,"ignorable":true,"tip":"Learn more at https://phpstan.org/user-guide/discovering-symbols","identifier":"class.notFound"},{"message":"Method CoreX\\Database\\Contracts\\SchemaSetProvider@anonymous/tests/Golden/Support/SchemaEnvironment.php:85::__construct() has parameter $selection with no value type specified in iterable type array.","line":88,"ignorable":true,"tip":"See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type","identifier":"missingType.iterableValue"}]}},"errors":[]}

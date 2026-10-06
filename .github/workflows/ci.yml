@@ -829,6 +829,14 @@ jobs:
           composer module-layout-gate
           python3 -m unittest discover -s scripts/tests -p 'test_module_layout_gate.py'
 
+      - name: Migration table ownership
+        run: composer table-ownership-gate
+
+      - name: Shipped schema S1–S9 and registry manifest
+        run: |
+          composer schema-gate
+          php scripts/schema-gate.php --check
+
       - name: DATA-003 table write ownership
         run: |
           composer table-write-ownership-gate

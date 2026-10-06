@@ -32,12 +32,12 @@ Execution sheet: run the batches in order. Route is the maximum class/effort of 
 | 25 | P07 | BP07-6 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P07.6` | frontier/high | done |
 | 26 | P08 | BP08-1 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P08.1` | implementation/xhigh | done |
 | 27 | P08 | BP08-2 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P08.2` | implementation/high | done |
-| 28 | P08 | BP08-3 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P08.3` | implementation/high | ready |
-| 29 | P08 | BP08-4 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P08.4` | implementation/high | waiting: BP08-3 |
-| 30 | P08 | BP08-5 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P08.5` | implementation/xhigh | waiting: BP08-3 |
-| 31 | P08 | B08-A | `task:plan-run 2026.09.27-№1-COREX-KERNEL P08.6 P08.7 P08.8` | implementation/high | waiting: BP08-3 |
-| 32 | P08 | BP08-9 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P08.9` | implementation/high | waiting: BP08-3 |
-| 33 | P08 | BP08-10 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P08.10` | frontier/high | waiting: BP08-3 |
+| 28 | P08 | BP08-3 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P08.3` | implementation/high | done |
+| 29 | P08 | BP08-4 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P08.4` | implementation/high | ready |
+| 30 | P08 | BP08-5 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P08.5` | implementation/xhigh | waiting: BP08-4 |
+| 31 | P08 | B08-A | `task:plan-run 2026.09.27-№1-COREX-KERNEL P08.6 P08.7 P08.8` | implementation/high | waiting: BP08-4 |
+| 32 | P08 | BP08-9 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P08.9` | implementation/high | waiting: BP08-4 |
+| 33 | P08 | BP08-10 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P08.10` | frontier/high | waiting: BP08-4 |
 | 34 | P10 | BP10-1 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P10.1` | implementation/high | done |
 | 35 | P10 | BP10-2 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P10.2` | implementation/high | done |
 | 36 | P10 | BP10-3 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P10.3` | implementation/high | done |

@@ -1,0 +1,10 @@
+{
+  "verdict": "GREEN",
+  "findings": [],
+  "recommendations": [
+    "S4 still does not bind sprintf constraint names passed into addCheck() in the operations budget, operations bulk, and webhooks migrations. The SQL scan reads only literal CONSTRAINT/INDEX tokens, so those names stay for the owning baseline items.",
+    "S4 still accepts an object name that starts with the enclosed table name plus an underscore.",
+    "The remaining round-1 baseline notes stay non-gating: crm_leads.score allowlist residue, the budget SQLite lane outside the tenant golden, mixed SNAPSHOT_SETS, the hermetic schema connection override, the AccountFixture/COALESCE driver split, and pending 32-bit counters."
+  ],
+  "coverage": "Bounded round-2 recheck of the one owning correction. F1: schema-gate.php runs S9 and baseline S3/S4/S6 over every helper body already collected for purity, and Schema::create ownership no longer depends on an inline Blueprint callback. SchemaGateTest covers helper, arrow, and variable callbacks for S9 and helper bodies for S3/S4/S6. Purity still runs on those bodies, pending still suppresses only S2/S3/S4/S6/S8, and table-ownership-gate.php still leaves registered paths to S9 while retaining T4. F2: unnamed SQLite autoindexes keep the stored sqlite_autoindex_* identity, including sqlite_autoindex_corex_reference_aliases_1. assertSchemaNames enforces 63 bytes on both drivers for tables, columns, indexes, foreign keys, and checks. The only names over 63 are the four stored unique indexes in schema-golden-name-pending.json, owned by axiomasoft/corex-tasks-workflow, axiomasoft/corex-media, and axiomasoft/corex-notifications, all still pending. Unlisted long names and stale inventory keys fail, and anti-weakening-gate.sh ratchets that inventory down. The correction diff renames no shipped DDL. The fluent foreign-key check and the fixed-date and duplicate-name tests do not change these invariants. V1, V2 (35), V4 (4), V5 (3), V6, V8, V9, V16, and negative.txt are green after the S9 and golden-drift negatives restored byte-identically."
+}

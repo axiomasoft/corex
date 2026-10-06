@@ -1,0 +1,1785 @@
+{
+    "driver": "pgsql",
+    "tables": {
+        "root_account_events": {
+            "columns": {
+                "account_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "actor": {
+                    "type": "jsonb",
+                    "nullable": false,
+                    "default": "'{}'::jsonb"
+                },
+                "created_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "event": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "payload": {
+                    "type": "jsonb",
+                    "nullable": false,
+                    "default": "'{}'::jsonb"
+                },
+                "updated_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                }
+            },
+            "indexes": [
+                {
+                    "name": "root_account_events_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "account_id",
+                        "created_at"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "root_account_events_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [
+                {
+                    "name": "root_account_events_account_id_foreign",
+                    "columns": [
+                        "account_id"
+                    ],
+                    "references": "root_accounts(id)",
+                    "on_delete": "CASCADE",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                }
+            ],
+            "checks": [],
+            "triggers": []
+        },
+        "root_account_exports": {
+            "columns": {
+                "account_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "created_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "formats": {
+                    "type": "jsonb",
+                    "nullable": false,
+                    "default": "'[\"pg_dump\", \"csv\"]'::jsonb"
+                },
+                "id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "kind": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": null
+                },
+                "purge_after": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "size_bytes": {
+                    "type": "bigint",
+                    "nullable": true,
+                    "default": null
+                },
+                "status": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": "'pending'::character varying"
+                },
+                "storage_path": {
+                    "type": "character varying(512)",
+                    "nullable": true,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "url_expires_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "root_account_exports_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [
+                {
+                    "name": "root_account_exports_account_id_foreign",
+                    "columns": [
+                        "account_id"
+                    ],
+                    "references": "root_accounts(id)",
+                    "on_delete": "CASCADE",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                }
+            ],
+            "checks": [
+                {
+                    "name": "root_account_exports_kind_ck",
+                    "expression": "((kind)::text = ANY ((ARRAY['offboarding'::character varying, 'pre_purge'::character varying, 'manual'::character varying])::text[]))"
+                },
+                {
+                    "name": "root_account_exports_status_ck",
+                    "expression": "((status)::text = ANY ((ARRAY['pending'::character varying, 'running'::character varying, 'ready'::character varying, 'failed'::character varying, 'purged'::character varying])::text[]))"
+                }
+            ],
+            "triggers": []
+        },
+        "root_account_products": {
+            "columns": {
+                "account_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "activated_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "created_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "product": {
+                    "type": "character varying(32)",
+                    "nullable": false,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                }
+            },
+            "indexes": [
+                {
+                    "name": "root_account_products_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "account_id",
+                        "product"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [
+                {
+                    "name": "root_account_products_account_id_foreign",
+                    "columns": [
+                        "account_id"
+                    ],
+                    "references": "root_accounts(id)",
+                    "on_delete": "CASCADE",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                }
+            ],
+            "checks": [
+                {
+                    "name": "root_account_products_product_ck",
+                    "expression": "((product)::text ~ '^[a-z0-9]([a-z0-9_-]*[a-z0-9])?$'::text)"
+                }
+            ],
+            "triggers": []
+        },
+        "root_account_schema_state": {
+            "columns": {
+                "account_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "batch_id": {
+                    "type": "uuid",
+                    "nullable": true,
+                    "default": null
+                },
+                "created_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "current_version": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": null
+                },
+                "last_error": {
+                    "type": "text",
+                    "nullable": true,
+                    "default": null
+                },
+                "last_migrated_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "status": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": "'ok'::character varying"
+                },
+                "target_version": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                }
+            },
+            "indexes": [
+                {
+                    "name": "root_account_schema_state_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "account_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "root_schema_state_bad_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "status"
+                    ],
+                    "predicate": "((status)::text <> 'ok'::text)",
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [
+                {
+                    "name": "root_account_schema_state_account_id_foreign",
+                    "columns": [
+                        "account_id"
+                    ],
+                    "references": "root_accounts(id)",
+                    "on_delete": "CASCADE",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                },
+                {
+                    "name": "root_account_schema_state_batch_id_foreign",
+                    "columns": [
+                        "batch_id"
+                    ],
+                    "references": "root_migration_batches(id)",
+                    "on_delete": "SET NULL",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                }
+            ],
+            "checks": [
+                {
+                    "name": "root_account_schema_state_status_ck",
+                    "expression": "((status)::text = ANY ((ARRAY['ok'::character varying, 'migrating'::character varying, 'failed'::character varying, 'blocked'::character varying])::text[]))"
+                }
+            ],
+            "triggers": []
+        },
+        "root_accounts": {
+            "columns": {
+                "cluster_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "created_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "data": {
+                    "type": "jsonb",
+                    "nullable": false,
+                    "default": "'{}'::jsonb"
+                },
+                "db_name": {
+                    "type": "character varying(63)",
+                    "nullable": false,
+                    "default": null
+                },
+                "deleted_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "embedding_dim": {
+                    "type": "smallint",
+                    "nullable": false,
+                    "default": null
+                },
+                "embedding_model": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "grace_until": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "locale": {
+                    "type": "character varying(8)",
+                    "nullable": false,
+                    "default": "'ru'::character varying"
+                },
+                "name": {
+                    "type": "character varying(255)",
+                    "nullable": true,
+                    "default": null
+                },
+                "owner_identity_id": {
+                    "type": "uuid",
+                    "nullable": true,
+                    "default": null
+                },
+                "purge_after": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "slug": {
+                    "type": "character varying(63)",
+                    "nullable": true,
+                    "default": null
+                },
+                "status": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": "'pending'::character varying"
+                },
+                "suspended_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "template_version": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": null
+                },
+                "trial_ends_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "vertical_code": {
+                    "type": "character varying(64)",
+                    "nullable": true,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "root_accounts_cluster_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "cluster_id"
+                    ],
+                    "predicate": "(deleted_at IS NULL)",
+                    "method": "btree"
+                },
+                {
+                    "name": "root_accounts_db_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "db_name"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "root_accounts_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "root_accounts_purge_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "purge_after"
+                    ],
+                    "predicate": "(purge_after IS NOT NULL)",
+                    "method": "btree"
+                },
+                {
+                    "name": "root_accounts_signup_key_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "((data ->> 'signup_key'::text))"
+                    ],
+                    "predicate": "(((data ->> 'signup_key'::text) IS NOT NULL) AND (deleted_at IS NULL))",
+                    "method": "btree"
+                },
+                {
+                    "name": "root_accounts_slug_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "slug"
+                    ],
+                    "predicate": "((slug IS NOT NULL) AND (deleted_at IS NULL))",
+                    "method": "btree"
+                },
+                {
+                    "name": "root_accounts_status_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "status"
+                    ],
+                    "predicate": "(deleted_at IS NULL)",
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [
+                {
+                    "name": "root_accounts_cluster_id_foreign",
+                    "columns": [
+                        "cluster_id"
+                    ],
+                    "references": "root_clusters(id)",
+                    "on_delete": "RESTRICT",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                },
+                {
+                    "name": "root_accounts_owner_identity_id_foreign",
+                    "columns": [
+                        "owner_identity_id"
+                    ],
+                    "references": "root_identities(id)",
+                    "on_delete": "RESTRICT",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                }
+            ],
+            "checks": [
+                {
+                    "name": "root_accounts_owner_or_pending_ck",
+                    "expression": "(((status)::text = ANY ((ARRAY['pending'::character varying, 'provisioning'::character varying])::text[])) OR (owner_identity_id IS NOT NULL))"
+                },
+                {
+                    "name": "root_accounts_slug_or_pending_ck",
+                    "expression": "(((status)::text = ANY ((ARRAY['pending'::character varying, 'provisioning'::character varying])::text[])) OR (slug IS NOT NULL))"
+                },
+                {
+                    "name": "root_accounts_status_ck",
+                    "expression": "((status)::text = ANY ((ARRAY['pending'::character varying, 'provisioning'::character varying, 'trial'::character varying, 'active'::character varying, 'suspended'::character varying, 'grace'::character varying, 'exporting'::character varying, 'deleted'::character varying])::text[]))"
+                }
+            ],
+            "triggers": []
+        },
+        "root_clusters": {
+            "columns": {
+                "app_db_user": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "backup_repo": {
+                    "type": "character varying(255)",
+                    "nullable": true,
+                    "default": null
+                },
+                "created_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "db_count": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": "0"
+                },
+                "db_soft_limit": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": "700"
+                },
+                "id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "meta": {
+                    "type": "jsonb",
+                    "nullable": false,
+                    "default": "'{}'::jsonb"
+                },
+                "name": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "pending_pool_size": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": "20"
+                },
+                "pg_host_reader": {
+                    "type": "character varying(255)",
+                    "nullable": true,
+                    "default": null
+                },
+                "pg_host_writer": {
+                    "type": "character varying(255)",
+                    "nullable": false,
+                    "default": null
+                },
+                "pg_port": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": "5432"
+                },
+                "pgbouncer_host": {
+                    "type": "character varying(255)",
+                    "nullable": false,
+                    "default": null
+                },
+                "pgbouncer_port": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": "6432"
+                },
+                "region": {
+                    "type": "character varying(32)",
+                    "nullable": false,
+                    "default": "'ru-central'::character varying"
+                },
+                "status": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": "'active'::character varying"
+                },
+                "tei_endpoint": {
+                    "type": "character varying(255)",
+                    "nullable": true,
+                    "default": null
+                },
+                "template_version": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": "0"
+                },
+                "updated_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                }
+            },
+            "indexes": [
+                {
+                    "name": "root_clusters_name_unique",
+                    "kind": "uq",
+                    "columns": [
+                        "name"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "root_clusters_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [
+                {
+                    "name": "root_clusters_status_ck",
+                    "expression": "((status)::text = ANY ((ARRAY['provisioning'::character varying, 'active'::character varying, 'draining'::character varying, 'readonly'::character varying, 'retired'::character varying])::text[]))"
+                }
+            ],
+            "triggers": []
+        },
+        "root_domains": {
+            "columns": {
+                "account_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "ca_used": {
+                    "type": "character varying(32)",
+                    "nullable": true,
+                    "default": null
+                },
+                "created_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "deleted_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "host": {
+                    "type": "character varying(255)",
+                    "nullable": false,
+                    "default": null
+                },
+                "id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "is_primary": {
+                    "type": "boolean",
+                    "nullable": false,
+                    "default": "false"
+                },
+                "tls_status": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": "'none'::character varying"
+                },
+                "type": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "verification_generation": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "'0'::bigint"
+                },
+                "verification_token": {
+                    "type": "character varying(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "verified_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "root_domains_host_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "lower((host)::text)"
+                    ],
+                    "predicate": "(deleted_at IS NULL)",
+                    "method": "btree"
+                },
+                {
+                    "name": "root_domains_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "root_domains_primary_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "account_id"
+                    ],
+                    "predicate": "(is_primary AND (deleted_at IS NULL))",
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [
+                {
+                    "name": "root_domains_account_id_foreign",
+                    "columns": [
+                        "account_id"
+                    ],
+                    "references": "root_accounts(id)",
+                    "on_delete": "CASCADE",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                }
+            ],
+            "checks": [
+                {
+                    "name": "root_domains_tls_status_ck",
+                    "expression": "((tls_status)::text = ANY ((ARRAY['none'::character varying, 'pending'::character varying, 'issued'::character varying, 'failed'::character varying])::text[]))"
+                },
+                {
+                    "name": "root_domains_type_ck",
+                    "expression": "((type)::text = ANY ((ARRAY['platform'::character varying, 'custom'::character varying])::text[]))"
+                }
+            ],
+            "triggers": []
+        },
+        "root_feature_flags": {
+            "columns": {
+                "account_id": {
+                    "type": "uuid",
+                    "nullable": true,
+                    "default": null
+                },
+                "created_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "flag": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "value": {
+                    "type": "jsonb",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "root_feature_flags_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "root_feature_flags_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "account_id",
+                        "flag"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [
+                {
+                    "name": "root_feature_flags_account_id_foreign",
+                    "columns": [
+                        "account_id"
+                    ],
+                    "references": "root_accounts(id)",
+                    "on_delete": "CASCADE",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                }
+            ],
+            "checks": [],
+            "triggers": []
+        },
+        "root_identities": {
+            "columns": {
+                "created_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "deleted_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "email": {
+                    "type": "character varying(255)",
+                    "nullable": false,
+                    "default": null
+                },
+                "email_verified_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "is_staff": {
+                    "type": "boolean",
+                    "nullable": false,
+                    "default": "false"
+                },
+                "last_login_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "locale": {
+                    "type": "character varying(8)",
+                    "nullable": false,
+                    "default": "'ru'::character varying"
+                },
+                "mfa_enabled_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "mfa_totp_secret": {
+                    "type": "text",
+                    "nullable": true,
+                    "default": null
+                },
+                "name": {
+                    "type": "character varying(255)",
+                    "nullable": false,
+                    "default": "''::character varying"
+                },
+                "password_hash": {
+                    "type": "character varying(255)",
+                    "nullable": true,
+                    "default": null
+                },
+                "phone": {
+                    "type": "character varying(32)",
+                    "nullable": true,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                }
+            },
+            "indexes": [
+                {
+                    "name": "root_identities_email_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "lower((email)::text)"
+                    ],
+                    "predicate": "(deleted_at IS NULL)",
+                    "method": "btree"
+                },
+                {
+                    "name": "root_identities_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [],
+            "triggers": []
+        },
+        "root_identity_accounts": {
+            "columns": {
+                "account_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "created_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "identity_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "status": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": "'active'::character varying"
+                },
+                "sync_status": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": "'pending'::character varying"
+                },
+                "synced_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                }
+            },
+            "indexes": [
+                {
+                    "name": "root_identity_accounts_acc_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "account_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "root_identity_accounts_identity_id_account_id_unique",
+                    "kind": "uq",
+                    "columns": [
+                        "identity_id",
+                        "account_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "root_identity_accounts_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "root_identity_accounts_sync_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "sync_status"
+                    ],
+                    "predicate": "((sync_status)::text <> 'synced'::text)",
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [
+                {
+                    "name": "root_identity_accounts_account_id_foreign",
+                    "columns": [
+                        "account_id"
+                    ],
+                    "references": "root_accounts(id)",
+                    "on_delete": "CASCADE",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                },
+                {
+                    "name": "root_identity_accounts_identity_id_foreign",
+                    "columns": [
+                        "identity_id"
+                    ],
+                    "references": "root_identities(id)",
+                    "on_delete": "CASCADE",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                }
+            ],
+            "checks": [
+                {
+                    "name": "root_identity_accounts_status_ck",
+                    "expression": "((status)::text = ANY ((ARRAY['invited'::character varying, 'active'::character varying, 'blocked'::character varying])::text[]))"
+                },
+                {
+                    "name": "root_identity_accounts_sync_status_ck",
+                    "expression": "((sync_status)::text = ANY ((ARRAY['pending'::character varying, 'synced'::character varying, 'failed'::character varying])::text[]))"
+                }
+            ],
+            "triggers": []
+        },
+        "root_idp_sessions": {
+            "columns": {
+                "created_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "expires_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": null
+                },
+                "id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "identity_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "ip": {
+                    "type": "inet",
+                    "nullable": true,
+                    "default": null
+                },
+                "revoked_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "token_hash": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "user_agent": {
+                    "type": "character varying(512)",
+                    "nullable": true,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "root_idp_sessions_identity_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "identity_id"
+                    ],
+                    "predicate": "(revoked_at IS NULL)",
+                    "method": "btree"
+                },
+                {
+                    "name": "root_idp_sessions_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "root_idp_sessions_token_hash_unique",
+                    "kind": "uq",
+                    "columns": [
+                        "token_hash"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [
+                {
+                    "name": "root_idp_sessions_identity_id_foreign",
+                    "columns": [
+                        "identity_id"
+                    ],
+                    "references": "root_identities(id)",
+                    "on_delete": "CASCADE",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                }
+            ],
+            "checks": [],
+            "triggers": []
+        },
+        "root_impersonation_grants": {
+            "columns": {
+                "account_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "approved_by": {
+                    "type": "uuid",
+                    "nullable": true,
+                    "default": null
+                },
+                "created_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "expires_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "(now() + '01:00:00'::interval)"
+                },
+                "id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "reason": {
+                    "type": "text",
+                    "nullable": false,
+                    "default": null
+                },
+                "revoked_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "staff_identity_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "target_user_id": {
+                    "type": "uuid",
+                    "nullable": true,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "used_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "root_impersonation_acc_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "account_id",
+                        "created_at"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "root_impersonation_grants_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [
+                {
+                    "name": "root_impersonation_grants_account_id_foreign",
+                    "columns": [
+                        "account_id"
+                    ],
+                    "references": "root_accounts(id)",
+                    "on_delete": "CASCADE",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                },
+                {
+                    "name": "root_impersonation_grants_approved_by_foreign",
+                    "columns": [
+                        "approved_by"
+                    ],
+                    "references": "root_identities(id)",
+                    "on_delete": "SET NULL",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                },
+                {
+                    "name": "root_impersonation_grants_staff_identity_id_foreign",
+                    "columns": [
+                        "staff_identity_id"
+                    ],
+                    "references": "root_identities(id)",
+                    "on_delete": "CASCADE",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                }
+            ],
+            "checks": [],
+            "triggers": []
+        },
+        "root_migration_batches": {
+            "columns": {
+                "created_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "finished_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "from_version": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": null
+                },
+                "id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "started_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "stats": {
+                    "type": "jsonb",
+                    "nullable": false,
+                    "default": "'{}'::jsonb"
+                },
+                "status": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": "'created'::character varying"
+                },
+                "to_version": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "wave": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "root_migration_batches_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [
+                {
+                    "name": "root_migration_batches_status_ck",
+                    "expression": "((status)::text = ANY ((ARRAY['created'::character varying, 'running'::character varying, 'paused'::character varying, 'done'::character varying, 'failed'::character varying])::text[]))"
+                },
+                {
+                    "name": "root_migration_batches_wave_ck",
+                    "expression": "((wave)::text = ANY ((ARRAY['internal'::character varying, 'canary'::character varying, 'p10'::character varying, 'p50'::character varying, 'all'::character varying])::text[]))"
+                }
+            ],
+            "triggers": []
+        },
+        "root_oauth_clients": {
+            "columns": {
+                "client_id": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "created_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "deleted_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "is_first_party": {
+                    "type": "boolean",
+                    "nullable": false,
+                    "default": "true"
+                },
+                "name": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "product": {
+                    "type": "character varying(32)",
+                    "nullable": true,
+                    "default": null
+                },
+                "redirect_patterns": {
+                    "type": "jsonb",
+                    "nullable": false,
+                    "default": null
+                },
+                "secret_hash": {
+                    "type": "character varying(255)",
+                    "nullable": true,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                }
+            },
+            "indexes": [
+                {
+                    "name": "root_oauth_clients_client_id_unique",
+                    "kind": "uq",
+                    "columns": [
+                        "client_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "root_oauth_clients_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [],
+            "triggers": []
+        },
+        "root_oauth_refresh_tokens": {
+            "columns": {
+                "client_id": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "created_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "expires_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": null
+                },
+                "id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "revoked_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "session_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "token_hash": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                }
+            },
+            "indexes": [
+                {
+                    "name": "root_oauth_refresh_tokens_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "root_oauth_refresh_tokens_token_hash_unique",
+                    "kind": "uq",
+                    "columns": [
+                        "token_hash"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [
+                {
+                    "name": "root_oauth_refresh_tokens_session_id_foreign",
+                    "columns": [
+                        "session_id"
+                    ],
+                    "references": "root_idp_sessions(id)",
+                    "on_delete": "CASCADE",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                }
+            ],
+            "checks": [],
+            "triggers": []
+        },
+        "root_templates": {
+            "columns": {
+                "built_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "created_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "db_name": {
+                    "type": "character varying(63)",
+                    "nullable": false,
+                    "default": null
+                },
+                "embedding_dim": {
+                    "type": "smallint",
+                    "nullable": false,
+                    "default": null
+                },
+                "embedding_model": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "git_ref": {
+                    "type": "character varying(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "schema_hash": {
+                    "type": "character varying(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "status": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": "'building'::character varying"
+                },
+                "updated_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "version": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "root_templates_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "root_templates_version_unique",
+                    "kind": "uq",
+                    "columns": [
+                        "version"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [
+                {
+                    "name": "root_templates_schema_hash_ck",
+                    "expression": "((schema_hash IS NULL) OR (((schema_hash)::text COLLATE \"C\") ~ '^[0-9a-f]{64}$'::text))"
+                },
+                {
+                    "name": "root_templates_status_ck",
+                    "expression": "((status)::text = ANY ((ARRAY['building'::character varying, 'ready'::character varying, 'retired'::character varying])::text[]))"
+                }
+            ],
+            "triggers": []
+        },
+        "root_usage_snapshots": {
+            "columns": {
+                "account_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "created_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "metric": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "period": {
+                    "type": "date",
+                    "nullable": false,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "value": {
+                    "type": "numeric(18,3)",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "root_usage_snapshots_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "account_id",
+                        "metric",
+                        "period"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [
+                {
+                    "name": "root_usage_snapshots_account_id_foreign",
+                    "columns": [
+                        "account_id"
+                    ],
+                    "references": "root_accounts(id)",
+                    "on_delete": "CASCADE",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                }
+            ],
+            "checks": [],
+            "triggers": []
+        },
+        "root_wakeup_hints": {
+            "columns": {
+                "account_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "claim_epoch": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "created_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "hint_revision": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "leased_until": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "next_fire_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                }
+            },
+            "indexes": [
+                {
+                    "name": "root_wakeup_hints_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "account_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "root_wakeup_hints_scan_idx",
+                    "kind": "ix",
+                    "columns": [
+                        "next_fire_at",
+                        "leased_until"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [],
+            "triggers": []
+        },
+        "root_wakeup_reconciliation_state": {
+            "columns": {
+                "attempts": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": "0"
+                },
+                "created_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                "cursor_account_id": {
+                    "type": "uuid",
+                    "nullable": true,
+                    "default": null
+                },
+                "name": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "retry_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": "CURRENT_TIMESTAMP"
+                }
+            },
+            "indexes": [
+                {
+                    "name": "root_wakeup_reconciliation_state_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "name"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [],
+            "triggers": []
+        }
+    },
+    "enum_types": []
+}

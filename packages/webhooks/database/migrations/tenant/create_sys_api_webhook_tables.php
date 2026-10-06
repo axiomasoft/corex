@@ -6,12 +6,13 @@ use CoreX\Operations\Laravel\ApiSchemaRegistrar;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
     public function up(): void
     {
-        $connection = app(ApiSchemaRegistrar::class)->tenant();
+        $connection = Schema::getConnection();
         $schema = $connection->getSchemaBuilder();
 
         $schema->create('sys_api_webhook_subscriptions', function (Blueprint $table): void {
