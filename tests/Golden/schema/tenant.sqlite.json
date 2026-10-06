@@ -88,7 +88,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_export_manifests_capture_attempt_unique",
+                    "name": "corex_export_manifests_capture_attempt_uq",
                     "kind": "uq",
                     "columns": [
                         "capture_attempt"
@@ -167,7 +167,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_export_parts_manifest_id_part_no_unique",
+                    "name": "corex_export_parts_manifest_id_part_no_uq",
                     "kind": "uq",
                     "columns": [
                         "manifest_id",
@@ -940,7 +940,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_task_occurrences_operation_key_unique",
+                    "name": "corex_task_occurrences_operation_key_uq",
                     "kind": "uq",
                     "columns": [
                         "operation_key"
@@ -949,7 +949,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "corex_task_occurrences_series_key_immutable_revision_occurrence_key_unique",
+                    "name": "corex_task_occurrences_series_key_immutable_revisio_54d57fbe_uq",
                     "kind": "uq",
                     "columns": [
                         "series_key",
@@ -972,9 +972,9 @@
             "foreign_keys": [],
             "checks": [],
             "triggers": {
-                "corex_task_occurrences_occurrence_key_chk": "CREATE TRIGGER corex_task_occurrences_occurrence_key_chk BEFORE INSERT ON corex_task_occurrences BEGIN SELECT CASE WHEN length(NEW.occurrence_key) = 64 AND NEW.occurrence_key NOT GLOB '*[^a-f0-9]*' THEN 0 ELSE RAISE(ABORT, 'invalid occurrence_key') END; END",
+                "corex_task_occurrences_occurrence_key_ck": "CREATE TRIGGER corex_task_occurrences_occurrence_key_ck BEFORE INSERT ON corex_task_occurrences BEGIN SELECT CASE WHEN length(NEW.occurrence_key) = 64 AND NEW.occurrence_key NOT GLOB '*[^a-f0-9]*' THEN 0 ELSE RAISE(ABORT, 'invalid occurrence_key') END; END",
                 "corex_task_occurrences_revision_fk": "CREATE TRIGGER corex_task_occurrences_revision_fk BEFORE INSERT ON corex_task_occurrences BEGIN SELECT CASE WHEN EXISTS (SELECT 1 FROM corex_task_series WHERE series_key = NEW.series_key AND immutable_revision = NEW.immutable_revision) THEN 0 ELSE RAISE(ABORT, 'invalid occurrence revision') END; END",
-                "corex_task_occurrences_state_chk": "CREATE TRIGGER corex_task_occurrences_state_chk BEFORE INSERT ON corex_task_occurrences BEGIN SELECT CASE WHEN NEW.state IN ('pending','committed','cancelled','retired','unknown') THEN 0 ELSE RAISE(ABORT, 'invalid state') END; END"
+                "corex_task_occurrences_state_ck": "CREATE TRIGGER corex_task_occurrences_state_ck BEFORE INSERT ON corex_task_occurrences BEGIN SELECT CASE WHEN NEW.state IN ('pending','committed','cancelled','retired','unknown') THEN 0 ELSE RAISE(ABORT, 'invalid state') END; END"
             }
         },
         "corex_task_operations": {
@@ -1017,7 +1017,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_task_operations_request_key_unique",
+                    "name": "corex_task_operations_request_key_uq",
                     "kind": "uq",
                     "columns": [
                         "request_key"
@@ -1038,9 +1038,9 @@
             "foreign_keys": [],
             "checks": [],
             "triggers": {
-                "corex_task_operations_kind_chk": "CREATE TRIGGER corex_task_operations_kind_chk BEFORE INSERT ON corex_task_operations BEGIN SELECT CASE WHEN NEW.kind IN ('createProject','createSprint','recordTime','materialize','completionCapture') THEN 0 ELSE RAISE(ABORT, 'invalid kind') END; END",
-                "corex_task_operations_payload_hash_chk": "CREATE TRIGGER corex_task_operations_payload_hash_chk BEFORE INSERT ON corex_task_operations BEGIN SELECT CASE WHEN length(NEW.payload_hash) = 64 AND NEW.payload_hash NOT GLOB '*[^a-f0-9]*' THEN 0 ELSE RAISE(ABORT, 'invalid payload_hash') END; END",
-                "corex_task_operations_restore_epoch_chk": "CREATE TRIGGER corex_task_operations_restore_epoch_chk BEFORE INSERT ON corex_task_operations BEGIN SELECT CASE WHEN length(NEW.restore_epoch) = 64 AND NEW.restore_epoch NOT GLOB '*[^a-f0-9]*' THEN 0 ELSE RAISE(ABORT, 'invalid restore_epoch') END; END"
+                "corex_task_operations_kind_ck": "CREATE TRIGGER corex_task_operations_kind_ck BEFORE INSERT ON corex_task_operations BEGIN SELECT CASE WHEN NEW.kind IN ('createProject','createSprint','recordTime','materialize','completionCapture') THEN 0 ELSE RAISE(ABORT, 'invalid kind') END; END",
+                "corex_task_operations_payload_hash_ck": "CREATE TRIGGER corex_task_operations_payload_hash_ck BEFORE INSERT ON corex_task_operations BEGIN SELECT CASE WHEN length(NEW.payload_hash) = 64 AND NEW.payload_hash NOT GLOB '*[^a-f0-9]*' THEN 0 ELSE RAISE(ABORT, 'invalid payload_hash') END; END",
+                "corex_task_operations_restore_epoch_ck": "CREATE TRIGGER corex_task_operations_restore_epoch_ck BEFORE INSERT ON corex_task_operations BEGIN SELECT CASE WHEN length(NEW.restore_epoch) = 64 AND NEW.restore_epoch NOT GLOB '*[^a-f0-9]*' THEN 0 ELSE RAISE(ABORT, 'invalid restore_epoch') END; END"
             }
         },
         "corex_task_series": {
@@ -1093,7 +1093,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_task_series_series_key_immutable_revision_unique",
+                    "name": "corex_task_series_series_key_immutable_revision_uq",
                     "kind": "uq",
                     "columns": [
                         "series_key",
@@ -1115,9 +1115,9 @@
             "foreign_keys": [],
             "checks": [],
             "triggers": {
-                "corex_task_series_context_hash_chk": "CREATE TRIGGER corex_task_series_context_hash_chk BEFORE INSERT ON corex_task_series BEGIN SELECT CASE WHEN length(NEW.context_hash) = 64 AND NEW.context_hash NOT GLOB '*[^a-f0-9]*' THEN 0 ELSE RAISE(ABORT, 'invalid context_hash') END; END",
-                "corex_task_series_definition_hash_chk": "CREATE TRIGGER corex_task_series_definition_hash_chk BEFORE INSERT ON corex_task_series BEGIN SELECT CASE WHEN length(NEW.definition_hash) = 64 AND NEW.definition_hash NOT GLOB '*[^a-f0-9]*' THEN 0 ELSE RAISE(ABORT, 'invalid definition_hash') END; END",
-                "corex_task_series_restore_epoch_chk": "CREATE TRIGGER corex_task_series_restore_epoch_chk BEFORE INSERT ON corex_task_series BEGIN SELECT CASE WHEN length(NEW.restore_epoch) = 64 AND NEW.restore_epoch NOT GLOB '*[^a-f0-9]*' THEN 0 ELSE RAISE(ABORT, 'invalid restore_epoch') END; END"
+                "corex_task_series_context_hash_ck": "CREATE TRIGGER corex_task_series_context_hash_ck BEFORE INSERT ON corex_task_series BEGIN SELECT CASE WHEN length(NEW.context_hash) = 64 AND NEW.context_hash NOT GLOB '*[^a-f0-9]*' THEN 0 ELSE RAISE(ABORT, 'invalid context_hash') END; END",
+                "corex_task_series_definition_hash_ck": "CREATE TRIGGER corex_task_series_definition_hash_ck BEFORE INSERT ON corex_task_series BEGIN SELECT CASE WHEN length(NEW.definition_hash) = 64 AND NEW.definition_hash NOT GLOB '*[^a-f0-9]*' THEN 0 ELSE RAISE(ABORT, 'invalid definition_hash') END; END",
+                "corex_task_series_restore_epoch_ck": "CREATE TRIGGER corex_task_series_restore_epoch_ck BEFORE INSERT ON corex_task_series BEGIN SELECT CASE WHEN length(NEW.restore_epoch) = 64 AND NEW.restore_epoch NOT GLOB '*[^a-f0-9]*' THEN 0 ELSE RAISE(ABORT, 'invalid restore_epoch') END; END"
             }
         },
         "corex_task_series_state": {
@@ -1172,9 +1172,9 @@
             "foreign_keys": [],
             "checks": [],
             "triggers": {
-                "corex_task_series_state_generation_chk": "CREATE TRIGGER corex_task_series_state_generation_chk BEFORE INSERT ON corex_task_series_state BEGIN SELECT CASE WHEN length(NEW.generation) <= 20 AND NEW.generation NOT GLOB '*[^0-9]*' AND NEW.generation <= '18446744073709551615' THEN 0 ELSE RAISE(ABORT, 'invalid generation') END; END",
-                "corex_task_series_state_restore_epoch_chk": "CREATE TRIGGER corex_task_series_state_restore_epoch_chk BEFORE INSERT ON corex_task_series_state BEGIN SELECT CASE WHEN length(NEW.restore_epoch) = 64 AND NEW.restore_epoch NOT GLOB '*[^a-f0-9]*' THEN 0 ELSE RAISE(ABORT, 'invalid restore_epoch') END; END",
-                "corex_task_series_state_retired_chk": "CREATE TRIGGER corex_task_series_state_retired_chk BEFORE INSERT ON corex_task_series_state BEGIN SELECT CASE WHEN NEW.retired IN (0, 1) THEN 0 ELSE RAISE(ABORT, 'invalid retired') END; END",
+                "corex_task_series_state_generation_ck": "CREATE TRIGGER corex_task_series_state_generation_ck BEFORE INSERT ON corex_task_series_state BEGIN SELECT CASE WHEN length(NEW.generation) <= 20 AND NEW.generation NOT GLOB '*[^0-9]*' AND NEW.generation <= '18446744073709551615' THEN 0 ELSE RAISE(ABORT, 'invalid generation') END; END",
+                "corex_task_series_state_restore_epoch_ck": "CREATE TRIGGER corex_task_series_state_restore_epoch_ck BEFORE INSERT ON corex_task_series_state BEGIN SELECT CASE WHEN length(NEW.restore_epoch) = 64 AND NEW.restore_epoch NOT GLOB '*[^a-f0-9]*' THEN 0 ELSE RAISE(ABORT, 'invalid restore_epoch') END; END",
+                "corex_task_series_state_retired_ck": "CREATE TRIGGER corex_task_series_state_retired_ck BEFORE INSERT ON corex_task_series_state BEGIN SELECT CASE WHEN NEW.retired IN (0, 1) THEN 0 ELSE RAISE(ABORT, 'invalid retired') END; END",
                 "corex_task_series_state_revision_fk": "CREATE TRIGGER corex_task_series_state_revision_fk BEFORE INSERT ON corex_task_series_state BEGIN SELECT CASE WHEN EXISTS (SELECT 1 FROM corex_task_series WHERE series_key = NEW.series_key AND immutable_revision = NEW.active_revision) THEN 0 ELSE RAISE(ABORT, 'invalid active revision') END; END"
             }
         },
@@ -1258,7 +1258,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_transfer_jobs_state_updated_at_index",
+                    "name": "corex_transfer_jobs_state_updated_at_ix",
                     "kind": "ix",
                     "columns": [
                         "state",
@@ -1341,7 +1341,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_transfer_outbox_operation_key_unique",
+                    "name": "corex_transfer_outbox_operation_key_uq",
                     "kind": "uq",
                     "columns": [
                         "operation_key"
@@ -1445,7 +1445,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_transfer_refs_entity_external_system_external_id_unique",
+                    "name": "corex_transfer_refs_entity_external_system_external_id_uq",
                     "kind": "uq",
                     "columns": [
                         "entity",
@@ -1541,7 +1541,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_transfer_rows_job_id_ordinal_unique",
+                    "name": "corex_transfer_rows_job_id_ordinal_uq",
                     "kind": "uq",
                     "columns": [
                         "job_id",
@@ -1762,7 +1762,7 @@
             },
             "indexes": [
                 {
-                    "name": "crm_at_entity_ix",
+                    "name": "crm_activity_targets_entity_ix",
                     "kind": "ix",
                     "columns": [
                         "entity_type",
@@ -2013,7 +2013,7 @@
             },
             "indexes": [
                 {
-                    "name": "crm_cc_company_ix",
+                    "name": "crm_contact_company_company_ix",
                     "kind": "ix",
                     "columns": [
                         "company_id"
@@ -2022,22 +2022,22 @@
                     "method": "btree"
                 },
                 {
-                    "name": "crm_cc_primary_uq",
-                    "kind": "uq",
-                    "columns": [
-                        "contact_id"
-                    ],
-                    "predicate": "is_primary",
-                    "method": "btree"
-                },
-                {
-                    "name": "crm_contact_company_contact_id_company_id_unique",
+                    "name": "crm_contact_company_contact_id_company_id_uq",
                     "kind": "uq",
                     "columns": [
                         "contact_id",
                         "company_id"
                     ],
                     "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "crm_contact_company_primary_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "contact_id"
+                    ],
+                    "predicate": "is_primary",
                     "method": "btree"
                 },
                 {
@@ -2272,7 +2272,7 @@
             },
             "indexes": [
                 {
-                    "name": "crm_dc_contact_ix",
+                    "name": "crm_deal_contacts_contact_ix",
                     "kind": "ix",
                     "columns": [
                         "contact_id"
@@ -2281,22 +2281,22 @@
                     "method": "btree"
                 },
                 {
-                    "name": "crm_dc_primary_uq",
-                    "kind": "uq",
-                    "columns": [
-                        "deal_id"
-                    ],
-                    "predicate": "is_primary",
-                    "method": "btree"
-                },
-                {
-                    "name": "crm_deal_contacts_deal_id_contact_id_unique",
+                    "name": "crm_deal_contacts_deal_id_contact_id_uq",
                     "kind": "uq",
                     "columns": [
                         "deal_id",
                         "contact_id"
                     ],
                     "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "crm_deal_contacts_primary_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "deal_id"
+                    ],
+                    "predicate": "is_primary",
                     "method": "btree"
                 },
                 {
@@ -2942,7 +2942,7 @@
             },
             "indexes": [
                 {
-                    "name": "crm_lr_code_uq",
+                    "name": "crm_lost_reasons_code_uq",
                     "kind": "uq",
                     "columns": [
                         "COALESCE(workspace_id, '')",
@@ -3128,7 +3128,7 @@
             },
             "indexes": [
                 {
-                    "name": "crm_sources_workspace_id_code_unique",
+                    "name": "crm_sources_workspace_id_code_uq",
                     "kind": "uq",
                     "columns": [
                         "COALESCE(workspace_id, '')",
@@ -3233,7 +3233,7 @@
             },
             "indexes": [
                 {
-                    "name": "crm_stages_pipeline_id_code_unique",
+                    "name": "crm_stages_pipeline_id_code_uq",
                     "kind": "uq",
                     "columns": [
                         "pipeline_id",
@@ -5412,7 +5412,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "tsk_stages_project_id_code_unique",
+                    "name": "tsk_stages_project_id_code_uq",
                     "kind": "uq",
                     "columns": [
                         "project_id",
@@ -5474,7 +5474,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "tsk_tt_entity_ix",
+                    "name": "tsk_task_targets_entity_ix",
                     "kind": "ix",
                     "columns": [
                         "entity_type",
@@ -5842,7 +5842,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "tsk_tl_task_ix",
+                    "name": "tsk_time_logs_task_ix",
                     "kind": "ix",
                     "columns": [
                         "task_id"
@@ -5851,7 +5851,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "tsk_tl_user_ix",
+                    "name": "tsk_time_logs_user_ix",
                     "kind": "ix",
                     "columns": [
                         "user_id",

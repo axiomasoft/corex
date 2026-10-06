@@ -1,0 +1,11 @@
+{
+  "decision": "D113",
+  "scope": "P08.8",
+  "tests": [
+    "packages/tasks/tests/Pg/TasksPgSchemaTest.php: refuses to rewrite non-empty legacy Tasks schema",
+    "products/flex-crm/tests/Pg/UpgradeSafetyTest.php: upgrade-only file",
+    "products/flex-crm/tests/Pg/FullStorageParityTest.php: refuses populated legacy sales tables",
+    "products/flex-crm/tests/Pg/ActivityIdTest.php: widens legacy morph column"
+  ],
+  "preserved": "Fresh schema/catalogue and application behavior tests retained; approved fixture adopts D113 bigint and morph columns."
+}

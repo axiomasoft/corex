@@ -1,0 +1,276 @@
+{
+    "driver": "pgsql",
+    "tables": {
+        "corex_task_occurrences": {
+            "columns": {
+                "effective_at": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "immutable_revision": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "occurrence_key": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "operation_key": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "original_identity": {
+                    "type": "json",
+                    "nullable": false,
+                    "default": null
+                },
+                "series_key": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "state": {
+                    "type": "character varying(24)",
+                    "nullable": false,
+                    "default": null
+                },
+                "task_ref": {
+                    "type": "json",
+                    "nullable": true,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "corex_task_occurrences_operation_key_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "operation_key"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "corex_task_occurrences_pk",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "corex_task_occurrences_series_key_immutable_revisio_54d57fbe_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "series_key",
+                        "immutable_revision",
+                        "occurrence_key"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [
+                {
+                    "name": "corex_task_occurrences_revision_fk",
+                    "columns": [
+                        "series_key",
+                        "immutable_revision"
+                    ],
+                    "references": "corex_task_series(series_key,immutable_revision)",
+                    "on_delete": "RESTRICT",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                }
+            ],
+            "checks": [
+                {
+                    "name": "corex_task_occurrences_occurrence_key_ck",
+                    "expression": "(occurrence_key ~ '^[a-f0-9]{64}$'::text)"
+                },
+                {
+                    "name": "corex_task_occurrences_state_ck",
+                    "expression": "((state)::text = ANY ((ARRAY['pending'::character varying, 'committed'::character varying, 'cancelled'::character varying, 'retired'::character varying, 'unknown'::character varying])::text[]))"
+                }
+            ],
+            "triggers": []
+        },
+        "corex_task_series": {
+            "columns": {
+                "actor": {
+                    "type": "json",
+                    "nullable": false,
+                    "default": null
+                },
+                "context_hash": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "definition": {
+                    "type": "json",
+                    "nullable": false,
+                    "default": null
+                },
+                "definition_hash": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "immutable_revision": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "restore_epoch": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "series_key": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "template": {
+                    "type": "json",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "corex_task_series_pk",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "corex_task_series_series_key_immutable_revision_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "series_key",
+                        "immutable_revision"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [
+                {
+                    "name": "corex_task_series_context_hash_ck",
+                    "expression": "(context_hash ~ '^[a-f0-9]{64}$'::text)"
+                },
+                {
+                    "name": "corex_task_series_definition_hash_ck",
+                    "expression": "(definition_hash ~ '^[a-f0-9]{64}$'::text)"
+                },
+                {
+                    "name": "corex_task_series_restore_epoch_ck",
+                    "expression": "(restore_epoch ~ '^[a-f0-9]{64}$'::text)"
+                }
+            ],
+            "triggers": []
+        },
+        "corex_task_series_state": {
+            "columns": {
+                "active_revision": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "complete_through": {
+                    "type": "character varying(128)",
+                    "nullable": true,
+                    "default": null
+                },
+                "cursor": {
+                    "type": "json",
+                    "nullable": true,
+                    "default": null
+                },
+                "generation": {
+                    "type": "numeric(20,0)",
+                    "nullable": false,
+                    "default": "'0'::numeric"
+                },
+                "restore_epoch": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "retired": {
+                    "type": "boolean",
+                    "nullable": false,
+                    "default": "false"
+                },
+                "series_key": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "corex_task_series_state_pk",
+                    "kind": "pk",
+                    "columns": [
+                        "series_key"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [
+                {
+                    "name": "corex_task_series_state_revision_fk",
+                    "columns": [
+                        "series_key",
+                        "active_revision"
+                    ],
+                    "references": "corex_task_series(series_key,immutable_revision)",
+                    "on_delete": "RESTRICT",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                }
+            ],
+            "checks": [
+                {
+                    "name": "corex_task_series_state_generation_ck",
+                    "expression": "((generation >= (0)::numeric) AND (generation <= '18446744073709551615'::numeric))"
+                },
+                {
+                    "name": "corex_task_series_state_restore_epoch_ck",
+                    "expression": "(restore_epoch ~ '^[a-f0-9]{64}$'::text)"
+                },
+                {
+                    "name": "corex_task_series_state_retired_ck",
+                    "expression": "(retired = ANY (ARRAY[true, false]))"
+                }
+            ],
+            "triggers": []
+        }
+    },
+    "enum_types": []
+}

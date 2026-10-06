@@ -4,7 +4,7 @@ CREATE TABLE crm_sources (
   code         varchar(64) NOT NULL,
   name         jsonb NOT NULL,
   is_active    boolean NOT NULL DEFAULT true,
-  position     int NOT NULL DEFAULT 0,
+  position bigint NOT NULL DEFAULT 0,
   created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now(),
   UNIQUE NULLS NOT DISTINCT (workspace_id, code)
 );
@@ -16,7 +16,7 @@ CREATE TABLE crm_lost_reasons (
   name         jsonb NOT NULL,
   entity_type  varchar(16) NOT NULL DEFAULT 'both' CHECK (entity_type IN ('lead','deal','both')),
   is_active    boolean NOT NULL DEFAULT true,
-  position     int NOT NULL DEFAULT 0,
+  position bigint NOT NULL DEFAULT 0,
   created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now(),
   UNIQUE NULLS NOT DISTINCT (workspace_id, code)
 );
@@ -28,7 +28,7 @@ CREATE TABLE crm_pipelines (
   code         varchar(64) NOT NULL,
   name         jsonb NOT NULL,
   is_default   boolean NOT NULL DEFAULT false,
-  position     int NOT NULL DEFAULT 0,
+  position bigint NOT NULL DEFAULT 0,
   settings     jsonb NOT NULL DEFAULT '{}',
   created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now(),
   deleted_at   timestamptz
@@ -42,7 +42,7 @@ CREATE TABLE crm_stages (
   color           varchar(16),
   semantic        varchar(8) NOT NULL DEFAULT 'open' CHECK (semantic IN ('open','won','lost')),
   probability     smallint NOT NULL DEFAULT 0 CHECK (probability BETWEEN 0 AND 100),
-  position        int NOT NULL DEFAULT 0,
+  position bigint NOT NULL DEFAULT 0,
   required_fields jsonb NOT NULL DEFAULT '[]',
   settings        jsonb NOT NULL DEFAULT '{}',
   created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now(),
@@ -181,7 +181,7 @@ CREATE TABLE crm_activities (
   body          text,
   direction     varchar(3) CHECK (direction IN ('in','out')),
   phone         varchar(64),
-  duration_sec  int,
+  duration_sec bigint,
   location      varchar(255),
   email_meta    jsonb,
   recording_file_id uuid,
@@ -198,7 +198,7 @@ CREATE TABLE crm_activities (
 CREATE TABLE crm_activity_targets (
   activity_id uuid NOT NULL REFERENCES crm_activities(id) ON DELETE CASCADE,
   entity_type varchar(64) NOT NULL,
-  entity_id   uuid NOT NULL,
+  entity_id   varchar(64) NOT NULL,
   created_at  timestamptz NOT NULL DEFAULT now(),
   PRIMARY KEY (activity_id, entity_type, entity_id)
 );

@@ -1,0 +1,2 @@
+> bash scripts/ci-deferred-guard.sh php scripts/schema-gate.php
+schema-gate: OK (21 sets, 2 pending packages)

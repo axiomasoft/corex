@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — baseline v1
+
+- Схема: набор(ы) `tenant`, baseline v1. Baseline заменяет невыпущенную upgrade-цепочку; новая установка использует финальную схему.
+
 ## Unreleased — deterministic schema (P08.2)
 
 - Generate model identifiers with Laravel HasUuids (UUIDv7); schema keys use literal UUID columns.

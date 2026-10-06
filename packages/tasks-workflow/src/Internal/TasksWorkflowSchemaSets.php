@@ -17,7 +17,7 @@ final readonly class TasksWorkflowSchemaSets implements SchemaSetProvider
         $root = dirname(__DIR__, 2).'/database/migrations';
 
         return [
-            new SchemaSet(package: 'axiomasoft/corex-tasks-workflow', name: 'tenant', scope: SchemaScope::Tenant, path: $root, version: 1, drivers: ['pgsql', 'sqlite'], lifecycle: SchemaLifecycle::Module),
+            new SchemaSet(package: 'axiomasoft/corex-tasks-workflow', name: 'tenant', scope: SchemaScope::Tenant, path: $root.'/tenant', version: 1, drivers: ['pgsql', 'sqlite'], lifecycle: SchemaLifecycle::Module),
         ];
     }
 }

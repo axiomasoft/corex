@@ -480,7 +480,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_export_manifests_capture_attempt_unique",
+                    "name": "corex_export_manifests_capture_attempt_uq",
                     "kind": "uq",
                     "columns": [
                         "capture_attempt"
@@ -489,7 +489,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "corex_export_manifests_pkey",
+                    "name": "corex_export_manifests_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -500,7 +500,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "corex_export_manifests_job_id_foreign",
+                    "name": "corex_export_manifests_job_id_fk",
                     "columns": [
                         "job_id"
                     ],
@@ -559,7 +559,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_export_parts_manifest_id_part_no_unique",
+                    "name": "corex_export_parts_manifest_id_part_no_uq",
                     "kind": "uq",
                     "columns": [
                         "manifest_id",
@@ -569,7 +569,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "corex_export_parts_pkey",
+                    "name": "corex_export_parts_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -580,7 +580,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "corex_export_parts_manifest_id_foreign",
+                    "name": "corex_export_parts_manifest_id_fk",
                     "columns": [
                         "manifest_id"
                     ],
@@ -1435,7 +1435,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_task_occurrences_operation_key_unique",
+                    "name": "corex_task_occurrences_operation_key_uq",
                     "kind": "uq",
                     "columns": [
                         "operation_key"
@@ -1444,7 +1444,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "corex_task_occurrences_pkey",
+                    "name": "corex_task_occurrences_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -1453,7 +1453,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "corex_task_occurrences_series_key_immutable_revision_occurrence",
+                    "name": "corex_task_occurrences_series_key_immutable_revisio_54d57fbe_uq",
                     "kind": "uq",
                     "columns": [
                         "series_key",
@@ -1480,11 +1480,11 @@
             ],
             "checks": [
                 {
-                    "name": "corex_task_occurrences_occurrence_key_chk",
+                    "name": "corex_task_occurrences_occurrence_key_ck",
                     "expression": "(occurrence_key ~ '^[a-f0-9]{64}$'::text)"
                 },
                 {
-                    "name": "corex_task_occurrences_state_chk",
+                    "name": "corex_task_occurrences_state_ck",
                     "expression": "((state)::text = ANY ((ARRAY['pending'::character varying, 'committed'::character varying, 'cancelled'::character varying, 'retired'::character varying, 'unknown'::character varying])::text[]))"
                 }
             ],
@@ -1530,7 +1530,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_task_operations_pkey",
+                    "name": "corex_task_operations_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -1539,7 +1539,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "corex_task_operations_request_key_unique",
+                    "name": "corex_task_operations_request_key_uq",
                     "kind": "uq",
                     "columns": [
                         "request_key"
@@ -1551,15 +1551,15 @@
             "foreign_keys": [],
             "checks": [
                 {
-                    "name": "corex_task_operations_kind_chk",
+                    "name": "corex_task_operations_kind_ck",
                     "expression": "((kind)::text = ANY ((ARRAY['createProject'::character varying, 'createSprint'::character varying, 'recordTime'::character varying, 'materialize'::character varying, 'completionCapture'::character varying])::text[]))"
                 },
                 {
-                    "name": "corex_task_operations_payload_hash_chk",
+                    "name": "corex_task_operations_payload_hash_ck",
                     "expression": "(payload_hash ~ '^[a-f0-9]{64}$'::text)"
                 },
                 {
-                    "name": "corex_task_operations_restore_epoch_chk",
+                    "name": "corex_task_operations_restore_epoch_ck",
                     "expression": "(restore_epoch ~ '^[a-f0-9]{64}$'::text)"
                 }
             ],
@@ -1615,7 +1615,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_task_series_pkey",
+                    "name": "corex_task_series_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -1624,7 +1624,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "corex_task_series_series_key_immutable_revision_unique",
+                    "name": "corex_task_series_series_key_immutable_revision_uq",
                     "kind": "uq",
                     "columns": [
                         "series_key",
@@ -1637,15 +1637,15 @@
             "foreign_keys": [],
             "checks": [
                 {
-                    "name": "corex_task_series_context_hash_chk",
+                    "name": "corex_task_series_context_hash_ck",
                     "expression": "(context_hash ~ '^[a-f0-9]{64}$'::text)"
                 },
                 {
-                    "name": "corex_task_series_definition_hash_chk",
+                    "name": "corex_task_series_definition_hash_ck",
                     "expression": "(definition_hash ~ '^[a-f0-9]{64}$'::text)"
                 },
                 {
-                    "name": "corex_task_series_restore_epoch_chk",
+                    "name": "corex_task_series_restore_epoch_ck",
                     "expression": "(restore_epoch ~ '^[a-f0-9]{64}$'::text)"
                 }
             ],
@@ -1691,7 +1691,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_task_series_state_pkey",
+                    "name": "corex_task_series_state_pk",
                     "kind": "pk",
                     "columns": [
                         "series_key"
@@ -1716,15 +1716,15 @@
             ],
             "checks": [
                 {
-                    "name": "corex_task_series_state_generation_chk",
+                    "name": "corex_task_series_state_generation_ck",
                     "expression": "((generation >= (0)::numeric) AND (generation <= '18446744073709551615'::numeric))"
                 },
                 {
-                    "name": "corex_task_series_state_restore_epoch_chk",
+                    "name": "corex_task_series_state_restore_epoch_ck",
                     "expression": "(restore_epoch ~ '^[a-f0-9]{64}$'::text)"
                 },
                 {
-                    "name": "corex_task_series_state_retired_chk",
+                    "name": "corex_task_series_state_retired_ck",
                     "expression": "(retired = ANY (ARRAY[true, false]))"
                 }
             ],
@@ -1810,7 +1810,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_transfer_jobs_pkey",
+                    "name": "corex_transfer_jobs_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -1819,7 +1819,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "corex_transfer_jobs_state_updated_at_index",
+                    "name": "corex_transfer_jobs_state_updated_at_ix",
                     "kind": "ix",
                     "columns": [
                         "state",
@@ -1893,7 +1893,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_transfer_outbox_operation_key_unique",
+                    "name": "corex_transfer_outbox_operation_key_uq",
                     "kind": "uq",
                     "columns": [
                         "operation_key"
@@ -1902,7 +1902,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "corex_transfer_outbox_pkey",
+                    "name": "corex_transfer_outbox_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -1913,7 +1913,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "corex_transfer_outbox_job_id_foreign",
+                    "name": "corex_transfer_outbox_job_id_fk",
                     "columns": [
                         "job_id"
                     ],
@@ -1997,7 +1997,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_transfer_refs_entity_external_system_external_id_unique",
+                    "name": "corex_transfer_refs_entity_external_system_external_id_uq",
                     "kind": "uq",
                     "columns": [
                         "entity",
@@ -2008,7 +2008,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "corex_transfer_refs_pkey",
+                    "name": "corex_transfer_refs_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -2019,7 +2019,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "corex_transfer_refs_job_id_foreign",
+                    "name": "corex_transfer_refs_job_id_fk",
                     "columns": [
                         "job_id"
                     ],
@@ -2093,7 +2093,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_transfer_rows_job_id_ordinal_unique",
+                    "name": "corex_transfer_rows_job_id_ordinal_uq",
                     "kind": "uq",
                     "columns": [
                         "job_id",
@@ -2103,7 +2103,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "corex_transfer_rows_pkey",
+                    "name": "corex_transfer_rows_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -2114,7 +2114,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "corex_transfer_rows_job_id_foreign",
+                    "name": "corex_transfer_rows_job_id_fk",
                     "columns": [
                         "job_id"
                     ],
@@ -2156,7 +2156,7 @@
                     "default": null
                 },
                 "duration_sec": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": true,
                     "default": null
                 },
@@ -2243,7 +2243,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "crm_activities_pkey",
+                    "name": "crm_activities_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -2264,7 +2264,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "crm_activities_owner_id_foreign",
+                    "name": "crm_activities_owner_id_fk",
                     "columns": [
                         "owner_id"
                     ],
@@ -2275,7 +2275,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "crm_activities_workspace_id_foreign",
+                    "name": "crm_activities_workspace_id_fk",
                     "columns": [
                         "workspace_id"
                     ],
@@ -2319,7 +2319,7 @@
                     "default": "CURRENT_TIMESTAMP"
                 },
                 "entity_id": {
-                    "type": "uuid",
+                    "type": "character varying(64)",
                     "nullable": false,
                     "default": null
                 },
@@ -2331,10 +2331,9 @@
             },
             "indexes": [
                 {
-                    "name": "crm_activity_targets_pkey",
-                    "kind": "pk",
+                    "name": "crm_activity_targets_entity_ix",
+                    "kind": "ix",
                     "columns": [
-                        "activity_id",
                         "entity_type",
                         "entity_id"
                     ],
@@ -2342,9 +2341,10 @@
                     "method": "btree"
                 },
                 {
-                    "name": "crm_at_entity_ix",
-                    "kind": "ix",
+                    "name": "crm_activity_targets_pk",
+                    "kind": "pk",
                     "columns": [
+                        "activity_id",
                         "entity_type",
                         "entity_id"
                     ],
@@ -2354,7 +2354,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "crm_activity_targets_activity_id_foreign",
+                    "name": "crm_activity_targets_activity_id_fk",
                     "columns": [
                         "activity_id"
                     ],
@@ -2504,7 +2504,7 @@
                     "method": "gin"
                 },
                 {
-                    "name": "crm_companies_pkey",
+                    "name": "crm_companies_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -2533,7 +2533,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "crm_companies_owner_id_foreign",
+                    "name": "crm_companies_owner_id_fk",
                     "columns": [
                         "owner_id"
                     ],
@@ -2544,7 +2544,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "crm_companies_source_id_foreign",
+                    "name": "crm_companies_source_id_fk",
                     "columns": [
                         "source_id"
                     ],
@@ -2555,7 +2555,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "crm_companies_workspace_id_foreign",
+                    "name": "crm_companies_workspace_id_fk",
                     "columns": [
                         "workspace_id"
                     ],
@@ -2609,7 +2609,7 @@
             },
             "indexes": [
                 {
-                    "name": "crm_cc_company_ix",
+                    "name": "crm_contact_company_company_ix",
                     "kind": "ix",
                     "columns": [
                         "company_id"
@@ -2618,16 +2618,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "crm_cc_primary_uq",
-                    "kind": "uq",
-                    "columns": [
-                        "contact_id"
-                    ],
-                    "predicate": "is_primary",
-                    "method": "btree"
-                },
-                {
-                    "name": "crm_contact_company_contact_id_company_id_unique",
+                    "name": "crm_contact_company_contact_id_company_id_uq",
                     "kind": "uq",
                     "columns": [
                         "contact_id",
@@ -2637,18 +2628,27 @@
                     "method": "btree"
                 },
                 {
-                    "name": "crm_contact_company_pkey",
+                    "name": "crm_contact_company_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
                     ],
                     "predicate": null,
                     "method": "btree"
+                },
+                {
+                    "name": "crm_contact_company_primary_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "contact_id"
+                    ],
+                    "predicate": "is_primary",
+                    "method": "btree"
                 }
             ],
             "foreign_keys": [
                 {
-                    "name": "crm_contact_company_company_id_foreign",
+                    "name": "crm_contact_company_company_id_fk",
                     "columns": [
                         "company_id"
                     ],
@@ -2659,7 +2659,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "crm_contact_company_contact_id_foreign",
+                    "name": "crm_contact_company_contact_id_fk",
                     "columns": [
                         "contact_id"
                     ],
@@ -2790,7 +2790,7 @@
                     "method": "gin"
                 },
                 {
-                    "name": "crm_contacts_pkey",
+                    "name": "crm_contacts_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -2819,7 +2819,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "crm_contacts_owner_id_foreign",
+                    "name": "crm_contacts_owner_id_fk",
                     "columns": [
                         "owner_id"
                     ],
@@ -2830,7 +2830,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "crm_contacts_source_id_foreign",
+                    "name": "crm_contacts_source_id_fk",
                     "columns": [
                         "source_id"
                     ],
@@ -2841,7 +2841,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "crm_contacts_workspace_id_foreign",
+                    "name": "crm_contacts_workspace_id_fk",
                     "columns": [
                         "workspace_id"
                     ],
@@ -2895,7 +2895,7 @@
             },
             "indexes": [
                 {
-                    "name": "crm_dc_contact_ix",
+                    "name": "crm_deal_contacts_contact_ix",
                     "kind": "ix",
                     "columns": [
                         "contact_id"
@@ -2904,16 +2904,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "crm_dc_primary_uq",
-                    "kind": "uq",
-                    "columns": [
-                        "deal_id"
-                    ],
-                    "predicate": "is_primary",
-                    "method": "btree"
-                },
-                {
-                    "name": "crm_deal_contacts_deal_id_contact_id_unique",
+                    "name": "crm_deal_contacts_deal_id_contact_id_uq",
                     "kind": "uq",
                     "columns": [
                         "deal_id",
@@ -2923,18 +2914,27 @@
                     "method": "btree"
                 },
                 {
-                    "name": "crm_deal_contacts_pkey",
+                    "name": "crm_deal_contacts_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
                     ],
                     "predicate": null,
                     "method": "btree"
+                },
+                {
+                    "name": "crm_deal_contacts_primary_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "deal_id"
+                    ],
+                    "predicate": "is_primary",
+                    "method": "btree"
                 }
             ],
             "foreign_keys": [
                 {
-                    "name": "crm_deal_contacts_contact_id_foreign",
+                    "name": "crm_deal_contacts_contact_id_fk",
                     "columns": [
                         "contact_id"
                     ],
@@ -2945,7 +2945,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "crm_deal_contacts_deal_id_foreign",
+                    "name": "crm_deal_contacts_deal_id_fk",
                     "columns": [
                         "deal_id"
                     ],
@@ -3146,7 +3146,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "crm_deals_pkey",
+                    "name": "crm_deals_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -3175,7 +3175,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "crm_deals_company_id_foreign",
+                    "name": "crm_deals_company_id_fk",
                     "columns": [
                         "company_id"
                     ],
@@ -3186,7 +3186,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "crm_deals_lost_reason_id_foreign",
+                    "name": "crm_deals_lost_reason_id_fk",
                     "columns": [
                         "lost_reason_id"
                     ],
@@ -3197,7 +3197,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "crm_deals_owner_id_foreign",
+                    "name": "crm_deals_owner_id_fk",
                     "columns": [
                         "owner_id"
                     ],
@@ -3208,7 +3208,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "crm_deals_pipeline_id_foreign",
+                    "name": "crm_deals_pipeline_id_fk",
                     "columns": [
                         "pipeline_id"
                     ],
@@ -3219,7 +3219,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "crm_deals_source_id_foreign",
+                    "name": "crm_deals_source_id_fk",
                     "columns": [
                         "source_id"
                     ],
@@ -3230,7 +3230,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "crm_deals_stage_id_foreign",
+                    "name": "crm_deals_stage_id_fk",
                     "columns": [
                         "stage_id"
                     ],
@@ -3241,7 +3241,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "crm_deals_workspace_id_foreign",
+                    "name": "crm_deals_workspace_id_fk",
                     "columns": [
                         "workspace_id"
                     ],
@@ -3428,7 +3428,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "crm_leads_pkey",
+                    "name": "crm_leads_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -3448,7 +3448,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "crm_leads_converted_company_id_foreign",
+                    "name": "crm_leads_converted_company_id_fk",
                     "columns": [
                         "converted_company_id"
                     ],
@@ -3459,7 +3459,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "crm_leads_converted_contact_id_foreign",
+                    "name": "crm_leads_converted_contact_id_fk",
                     "columns": [
                         "converted_contact_id"
                     ],
@@ -3470,7 +3470,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "crm_leads_converted_deal_id_foreign",
+                    "name": "crm_leads_converted_deal_id_fk",
                     "columns": [
                         "converted_deal_id"
                     ],
@@ -3481,7 +3481,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "crm_leads_lost_reason_id_foreign",
+                    "name": "crm_leads_lost_reason_id_fk",
                     "columns": [
                         "lost_reason_id"
                     ],
@@ -3492,7 +3492,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "crm_leads_owner_id_foreign",
+                    "name": "crm_leads_owner_id_fk",
                     "columns": [
                         "owner_id"
                     ],
@@ -3503,7 +3503,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "crm_leads_pipeline_id_foreign",
+                    "name": "crm_leads_pipeline_id_fk",
                     "columns": [
                         "pipeline_id"
                     ],
@@ -3514,7 +3514,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "crm_leads_source_id_foreign",
+                    "name": "crm_leads_source_id_fk",
                     "columns": [
                         "source_id"
                     ],
@@ -3525,7 +3525,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "crm_leads_stage_id_foreign",
+                    "name": "crm_leads_stage_id_fk",
                     "columns": [
                         "stage_id"
                     ],
@@ -3536,7 +3536,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "crm_leads_workspace_id_foreign",
+                    "name": "crm_leads_workspace_id_fk",
                     "columns": [
                         "workspace_id"
                     ],
@@ -3592,7 +3592,7 @@
                     "default": null
                 },
                 "position": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
                     "default": "0"
                 },
@@ -3609,16 +3609,7 @@
             },
             "indexes": [
                 {
-                    "name": "crm_lost_reasons_pkey",
-                    "kind": "pk",
-                    "columns": [
-                        "id"
-                    ],
-                    "predicate": null,
-                    "method": "btree"
-                },
-                {
-                    "name": "crm_lr_code_uq",
+                    "name": "crm_lost_reasons_code_uq",
                     "kind": "uq",
                     "columns": [
                         "workspace_id",
@@ -3626,11 +3617,20 @@
                     ],
                     "predicate": null,
                     "method": "btree"
+                },
+                {
+                    "name": "crm_lost_reasons_pk",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
                 }
             ],
             "foreign_keys": [
                 {
-                    "name": "crm_lost_reasons_workspace_id_foreign",
+                    "name": "crm_lost_reasons_workspace_id_fk",
                     "columns": [
                         "workspace_id"
                     ],
@@ -3643,7 +3643,7 @@
             ],
             "checks": [
                 {
-                    "name": "crm_lr_entity_ck",
+                    "name": "crm_lost_reasons_entity_ck",
                     "expression": "((entity_type)::text = ANY ((ARRAY['lead'::character varying, 'deal'::character varying, 'both'::character varying])::text[]))"
                 }
             ],
@@ -3687,7 +3687,7 @@
                     "default": null
                 },
                 "position": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
                     "default": "0"
                 },
@@ -3730,7 +3730,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "crm_pipelines_pkey",
+                    "name": "crm_pipelines_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -3741,7 +3741,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "crm_pipelines_workspace_id_foreign",
+                    "name": "crm_pipelines_workspace_id_fk",
                     "columns": [
                         "workspace_id"
                     ],
@@ -3783,7 +3783,7 @@
                     "default": null
                 },
                 "position": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
                     "default": "0"
                 },
@@ -3800,7 +3800,7 @@
             },
             "indexes": [
                 {
-                    "name": "crm_sources_pkey",
+                    "name": "crm_sources_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -3809,7 +3809,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "crm_sources_workspace_id_code_unique",
+                    "name": "crm_sources_workspace_id_code_uq",
                     "kind": "uq",
                     "columns": [
                         "workspace_id",
@@ -3821,7 +3821,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "crm_sources_workspace_id_foreign",
+                    "name": "crm_sources_workspace_id_fk",
                     "columns": [
                         "workspace_id"
                     ],
@@ -3873,7 +3873,7 @@
                     "default": null
                 },
                 "position": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
                     "default": "0"
                 },
@@ -3905,7 +3905,7 @@
             },
             "indexes": [
                 {
-                    "name": "crm_stages_pipeline_id_code_unique",
+                    "name": "crm_stages_pipeline_id_code_uq",
                     "kind": "uq",
                     "columns": [
                         "pipeline_id",
@@ -3925,7 +3925,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "crm_stages_pkey",
+                    "name": "crm_stages_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -3936,7 +3936,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "crm_stages_pipeline_id_foreign",
+                    "name": "crm_stages_pipeline_id_fk",
                     "columns": [
                         "pipeline_id"
                     ],
@@ -7896,7 +7896,7 @@
             },
             "indexes": [
                 {
-                    "name": "tsk_projects_pkey",
+                    "name": "tsk_projects_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -7917,7 +7917,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "tsk_projects_owner_id_foreign",
+                    "name": "tsk_projects_owner_id_fk",
                     "columns": [
                         "owner_id"
                     ],
@@ -7928,7 +7928,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "tsk_projects_workspace_id_foreign",
+                    "name": "tsk_projects_workspace_id_fk",
                     "columns": [
                         "workspace_id"
                     ],
@@ -7941,7 +7941,7 @@
             ],
             "checks": [
                 {
-                    "name": "tsk_projects_status_chk",
+                    "name": "tsk_projects_status_ck",
                     "expression": "((status)::text = ANY ((ARRAY['active'::character varying, 'archived'::character varying])::text[]))"
                 }
             ],
@@ -8006,7 +8006,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "tsk_sprints_pkey",
+                    "name": "tsk_sprints_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -8017,7 +8017,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "tsk_sprints_project_id_foreign",
+                    "name": "tsk_sprints_project_id_fk",
                     "columns": [
                         "project_id"
                     ],
@@ -8030,11 +8030,11 @@
             ],
             "checks": [
                 {
-                    "name": "tsk_sprints_dates_chk",
+                    "name": "tsk_sprints_dates_ck",
                     "expression": "(ends_on >= starts_on)"
                 },
                 {
-                    "name": "tsk_sprints_status_chk",
+                    "name": "tsk_sprints_status_ck",
                     "expression": "((status)::text = ANY ((ARRAY['planned'::character varying, 'active'::character varying, 'completed'::character varying])::text[]))"
                 }
             ],
@@ -8073,9 +8073,9 @@
                     "default": null
                 },
                 "position": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
-                    "default": "0"
+                    "default": "'0'::bigint"
                 },
                 "project_id": {
                     "type": "uuid",
@@ -8090,7 +8090,7 @@
             },
             "indexes": [
                 {
-                    "name": "tsk_stages_pkey",
+                    "name": "tsk_stages_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -8099,7 +8099,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "tsk_stages_project_id_code_unique",
+                    "name": "tsk_stages_project_id_code_uq",
                     "kind": "uq",
                     "columns": [
                         "project_id",
@@ -8111,7 +8111,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "tsk_stages_project_id_foreign",
+                    "name": "tsk_stages_project_id_fk",
                     "columns": [
                         "project_id"
                     ],
@@ -8124,7 +8124,7 @@
             ],
             "checks": [
                 {
-                    "name": "tsk_stages_auto_status_chk",
+                    "name": "tsk_stages_auto_status_ck",
                     "expression": "((auto_status)::text = ANY ((ARRAY['in_progress'::character varying, 'done'::character varying])::text[]))"
                 }
             ],
@@ -8138,7 +8138,7 @@
                     "default": "CURRENT_TIMESTAMP"
                 },
                 "entity_id": {
-                    "type": "uuid",
+                    "type": "character varying(64)",
                     "nullable": false,
                     "default": null
                 },
@@ -8155,10 +8155,9 @@
             },
             "indexes": [
                 {
-                    "name": "tsk_task_targets_pkey",
-                    "kind": "pk",
+                    "name": "tsk_task_targets_entity_ix",
+                    "kind": "ix",
                     "columns": [
-                        "task_id",
                         "entity_type",
                         "entity_id"
                     ],
@@ -8166,9 +8165,10 @@
                     "method": "btree"
                 },
                 {
-                    "name": "tsk_tt_entity_ix",
-                    "kind": "ix",
+                    "name": "tsk_task_targets_pk",
+                    "kind": "pk",
                     "columns": [
+                        "task_id",
                         "entity_type",
                         "entity_id"
                     ],
@@ -8178,7 +8178,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "tsk_task_targets_task_id_foreign",
+                    "name": "tsk_task_targets_task_id_fk",
                     "columns": [
                         "task_id"
                     ],
@@ -8212,7 +8212,7 @@
             },
             "indexes": [
                 {
-                    "name": "tsk_task_watchers_pkey",
+                    "name": "tsk_task_watchers_pk",
                     "kind": "pk",
                     "columns": [
                         "task_id",
@@ -8224,7 +8224,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "tsk_task_watchers_task_id_foreign",
+                    "name": "tsk_task_watchers_task_id_fk",
                     "columns": [
                         "task_id"
                     ],
@@ -8235,7 +8235,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "tsk_task_watchers_user_id_foreign",
+                    "name": "tsk_task_watchers_user_id_fk",
                     "columns": [
                         "user_id"
                     ],
@@ -8292,7 +8292,7 @@
                     "default": null
                 },
                 "estimate_minutes": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": true,
                     "default": null
                 },
@@ -8342,9 +8342,9 @@
                     "default": null
                 },
                 "spent_minutes": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
-                    "default": "0"
+                    "default": "'0'::bigint"
                 },
                 "sprint_id": {
                     "type": "uuid",
@@ -8414,7 +8414,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "tsk_tasks_pkey",
+                    "name": "tsk_tasks_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -8453,7 +8453,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "tsk_tasks_assignee_id_foreign",
+                    "name": "tsk_tasks_assignee_id_fk",
                     "columns": [
                         "assignee_id"
                     ],
@@ -8464,7 +8464,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "tsk_tasks_author_id_foreign",
+                    "name": "tsk_tasks_author_id_fk",
                     "columns": [
                         "author_id"
                     ],
@@ -8475,7 +8475,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "tsk_tasks_parent_id_foreign",
+                    "name": "tsk_tasks_parent_id_fk",
                     "columns": [
                         "parent_id"
                     ],
@@ -8486,7 +8486,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "tsk_tasks_project_id_foreign",
+                    "name": "tsk_tasks_project_id_fk",
                     "columns": [
                         "project_id"
                     ],
@@ -8497,7 +8497,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "tsk_tasks_sprint_id_foreign",
+                    "name": "tsk_tasks_sprint_id_fk",
                     "columns": [
                         "sprint_id"
                     ],
@@ -8508,7 +8508,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "tsk_tasks_stage_id_foreign",
+                    "name": "tsk_tasks_stage_id_fk",
                     "columns": [
                         "stage_id"
                     ],
@@ -8519,7 +8519,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "tsk_tasks_workspace_id_foreign",
+                    "name": "tsk_tasks_workspace_id_fk",
                     "columns": [
                         "workspace_id"
                     ],
@@ -8532,19 +8532,19 @@
             ],
             "checks": [
                 {
-                    "name": "tsk_tasks_completed_chk",
+                    "name": "tsk_tasks_completed_ck",
                     "expression": "(((status)::text <> 'done'::text) OR (completed_at IS NOT NULL))"
                 },
                 {
-                    "name": "tsk_tasks_priority_chk",
+                    "name": "tsk_tasks_priority_ck",
                     "expression": "((priority)::text = ANY ((ARRAY['low'::character varying, 'normal'::character varying, 'high'::character varying, 'urgent'::character varying])::text[]))"
                 },
                 {
-                    "name": "tsk_tasks_recurrence_chk",
+                    "name": "tsk_tasks_recurrence_ck",
                     "expression": "((recurrence_rule_id IS NULL) = (recurrence_occurs_at IS NULL))"
                 },
                 {
-                    "name": "tsk_tasks_status_chk",
+                    "name": "tsk_tasks_status_ck",
                     "expression": "((status)::text = ANY ((ARRAY['open'::character varying, 'in_progress'::character varying, 'waiting'::character varying, 'review'::character varying, 'done'::character varying, 'cancelled'::character varying])::text[]))"
                 }
             ],
@@ -8568,7 +8568,7 @@
                     "default": null
                 },
                 "minutes": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
                     "default": null
                 },
@@ -8600,7 +8600,7 @@
             },
             "indexes": [
                 {
-                    "name": "tsk_time_logs_pkey",
+                    "name": "tsk_time_logs_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -8609,7 +8609,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "tsk_tl_task_ix",
+                    "name": "tsk_time_logs_task_ix",
                     "kind": "ix",
                     "columns": [
                         "task_id"
@@ -8618,7 +8618,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "tsk_tl_user_ix",
+                    "name": "tsk_time_logs_user_ix",
                     "kind": "ix",
                     "columns": [
                         "user_id",
@@ -8630,7 +8630,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "tsk_time_logs_task_id_foreign",
+                    "name": "tsk_time_logs_task_id_fk",
                     "columns": [
                         "task_id"
                     ],
@@ -8641,7 +8641,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "tsk_time_logs_user_id_foreign",
+                    "name": "tsk_time_logs_user_id_fk",
                     "columns": [
                         "user_id"
                     ],
@@ -8654,11 +8654,11 @@
             ],
             "checks": [
                 {
-                    "name": "tsk_time_logs_minutes_chk",
+                    "name": "tsk_time_logs_minutes_ck",
                     "expression": "(minutes > 0)"
                 },
                 {
-                    "name": "tsk_time_logs_source_chk",
+                    "name": "tsk_time_logs_source_ck",
                     "expression": "((source)::text = ANY ((ARRAY['manual'::character varying, 'timer'::character varying])::text[]))"
                 }
             ],
@@ -8694,7 +8694,7 @@
             },
             "indexes": [
                 {
-                    "name": "tsk_timers_pkey",
+                    "name": "tsk_timers_pk",
                     "kind": "pk",
                     "columns": [
                         "user_id"
@@ -8705,7 +8705,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "tsk_timers_task_id_foreign",
+                    "name": "tsk_timers_task_id_fk",
                     "columns": [
                         "task_id"
                     ],
@@ -8716,7 +8716,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "tsk_timers_user_id_foreign",
+                    "name": "tsk_timers_user_id_fk",
                     "columns": [
                         "user_id"
                     ],

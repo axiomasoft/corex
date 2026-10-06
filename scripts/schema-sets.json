@@ -189,7 +189,7 @@
             "package": "axiomasoft/corex-tasks-workflow",
             "name": "tenant",
             "scope": "tenant",
-            "path": "packages/tasks-workflow/database/migrations",
+            "path": "packages/tasks-workflow/database/migrations/tenant",
             "version": 1,
             "drivers": [
                 "pgsql",
@@ -204,7 +204,7 @@
             "package": "axiomasoft/corex-tasks",
             "name": "tenant",
             "scope": "tenant",
-            "path": "packages/tasks/database/migrations",
+            "path": "packages/tasks/database/migrations/tenant",
             "version": 1,
             "drivers": [
                 "pgsql",
@@ -247,7 +247,7 @@
             "package": "axiomasoft/corex-transfer",
             "name": "tenant",
             "scope": "tenant",
-            "path": "packages/transfer/database/migrations",
+            "path": "packages/transfer/database/migrations/tenant",
             "version": 1,
             "drivers": [
                 "pgsql",
@@ -321,7 +321,7 @@
             "package": "flex/crm",
             "name": "tenant",
             "scope": "tenant",
-            "path": "products/flex-crm/database/migrations",
+            "path": "products/flex-crm/database/migrations/tenant",
             "version": 1,
             "drivers": [
                 "pgsql",

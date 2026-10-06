@@ -1,0 +1,8 @@
+> pest --group=pg '--filter=FullStorageParityTest'
+
+   PASS  Tests\Pg\FullStorageParityTest
+  ✓ it matches every actual enabled column constraint and index against… 0.58s
+
+  Tests:    1 passed (13 assertions)
+  Duration: 0.66s
+  Random Order Seed: 1791290003

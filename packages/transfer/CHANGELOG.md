@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — baseline v1
+
+- Схема: набор(ы) `tenant`, baseline v1. Baseline заменяет невыпущенную upgrade-цепочку; новая установка использует финальную схему.
+
 ## Unreleased — typed Options and runtime configuration checks (P05.1)
 
 - Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.

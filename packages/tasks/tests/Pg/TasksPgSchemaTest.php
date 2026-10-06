@@ -2,10 +2,8 @@
 
 declare(strict_types=1);
 
-use CoreX\Database\Contracts\SchemaSets;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
 
 beforeEach(function (): void {
     $this->resetPgSchema();
@@ -50,16 +48,16 @@ it('matches the approved PostgreSQL table, column, constraint and index contract
         ->value('udt_name');
     $constraints = DB::table('pg_constraint')
         ->whereIn('conname', [
-            'tsk_projects_status_chk',
-            'tsk_stages_auto_status_chk',
-            'tsk_sprints_status_chk',
-            'tsk_sprints_dates_chk',
-            'tsk_tasks_status_chk',
-            'tsk_tasks_priority_chk',
-            'tsk_tasks_completed_chk',
-            'tsk_tasks_recurrence_chk',
-            'tsk_time_logs_minutes_chk',
-            'tsk_time_logs_source_chk',
+            'tsk_projects_status_ck',
+            'tsk_stages_auto_status_ck',
+            'tsk_sprints_status_ck',
+            'tsk_sprints_dates_ck',
+            'tsk_tasks_status_ck',
+            'tsk_tasks_priority_ck',
+            'tsk_tasks_completed_ck',
+            'tsk_tasks_recurrence_ck',
+            'tsk_time_logs_minutes_ck',
+            'tsk_time_logs_source_ck',
         ])
         ->count();
     $indexes = DB::table('pg_indexes')
@@ -73,9 +71,9 @@ it('matches the approved PostgreSQL table, column, constraint and index contract
             'tsk_tasks_sprint_ix',
             'tsk_tasks_search_ix',
             'tsk_tasks_review_ix',
-            'tsk_tt_entity_ix',
-            'tsk_tl_task_ix',
-            'tsk_tl_user_ix',
+            'tsk_task_targets_entity_ix',
+            'tsk_time_logs_task_ix',
+            'tsk_time_logs_user_ix',
         ])
         ->count();
 
@@ -83,37 +81,4 @@ it('matches the approved PostgreSQL table, column, constraint and index contract
         ->and($searchType)->toBe('tsvector')
         ->and($constraints)->toBe(10)
         ->and($indexes)->toBe(11);
-})->group('pg');
-
-it('refuses to rewrite a non-empty legacy Tasks schema', function (): void {
-    $this->resetPgSchema();
-    expect($this->migrateFixtures())->toBe(0);
-
-    $legacyFiles = [
-        '2026_06_14_000200_create_tsk_processes_table.php',
-        '2026_06_14_000210_create_tsk_stages_table.php',
-        '2026_06_14_000220_create_tsk_projects_table.php',
-        '2026_06_14_000230_create_tsk_tasks_table.php',
-        '2026_06_14_000240_create_tsk_task_participants_table.php',
-        '2026_06_14_000250_create_tsk_project_participants_table.php',
-    ];
-
-    foreach ($legacyFiles as $file) {
-        expect($this->migrateFile(app(SchemaSets::class)->get('axiomasoft/corex-tasks:tenant')->path.'/'.$file))->toBe(0);
-    }
-
-    DB::table('tsk_processes')->insert([
-        'id' => (string) Str::uuid7(),
-        'name' => 'Legacy',
-        'code' => 'legacy',
-        'created_at' => now(),
-        'updated_at' => now(),
-    ]);
-
-    expect(fn () => $this->migrateFile(
-        app(SchemaSets::class)->get('axiomasoft/corex-tasks:tenant')->path.'/2026_09_11_000260_align_tasks_with_approved_schema.php',
-    ))->toThrow(RuntimeException::class);
-
-    expect(Schema::hasTable('tsk_processes'))->toBeTrue()
-        ->and(Schema::hasTable('tsk_sprints'))->toBeFalse();
 })->group('pg');

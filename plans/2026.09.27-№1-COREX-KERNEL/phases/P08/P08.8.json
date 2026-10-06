@@ -2,7 +2,7 @@
   "$schema": "urn:swissknifeman:task:plan:item:v1",
   "id": "P08.8",
   "title": "Baseline v1: tasks, tasks-workflow, transfer, flex/crm",
-  "status": "in_progress",
+  "status": "done",
   "summary": "Миграции пакетов axiomasoft/corex-tasks, axiomasoft/corex-tasks-workflow, axiomasoft/corex-transfer, flex/crm сквошены в baseline v1 по правилам D113: каталоги наборов, один файл на таблицу, явные имена ≤63, bigint-счётчики, без config, финальная форма цепочки; наборы объявлены с `version: 1`, тесты строят схему через `MigratesSchemaSets`.",
   "why": "D113: самые длинные upgrade-цепочки (tasks align, crm parity) и полиморфные колонки ulid (аудит 2026-09-14: char(26) несовместим с uuid-ключами); fresh≡upgraded не требуется.",
   "scope": {
@@ -289,12 +289,116 @@
   },
   "result": {
     "started_at": "2026-10-06T12:07:31Z",
+    "finished_at": "2026-10-06T12:50:00Z",
     "executor": {
       "provider": "codex",
       "model": "gpt-6.1-sol",
       "effort": "high",
       "session": "01a1111a-803c-7a20-98db-9575cc3ea564"
-    }
+    },
+    "notes": "self-check: GREEN; review: grok/grok-4.7 GREEN. Final chain baseline, fresh SQLite/PG behavior and raw NND/constraint witnesses preserved; scoped checks/Golden green; upgrade-only tests retired per D113.",
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-10-06T12:50:00Z"
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-10-06T12:50:00Z"
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-10-06T12:50:00Z"
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-10-06T12:50:00Z"
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-10-06T12:50:00Z"
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-10-06T12:50:00Z"
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-10-06T12:50:00Z"
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-10-06T12:50:00Z"
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-10-06T12:50:00Z"
+      },
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-10-06T12:50:00Z"
+      },
+      {
+        "id": "V11",
+        "exit": 0,
+        "at": "2026-10-06T12:50:00Z"
+      },
+      {
+        "id": "V12",
+        "exit": 0,
+        "at": "2026-10-06T12:50:00Z"
+      },
+      {
+        "id": "V13",
+        "exit": 0,
+        "at": "2026-10-06T12:50:00Z"
+      },
+      {
+        "id": "V14",
+        "exit": 0,
+        "at": "2026-10-06T12:50:00Z"
+      },
+      {
+        "id": "V15",
+        "exit": 0,
+        "at": "2026-10-06T12:50:00Z"
+      },
+      {
+        "id": "V16",
+        "exit": 0,
+        "at": "2026-10-06T12:50:00Z"
+      },
+      {
+        "id": "V17",
+        "exit": 0,
+        "at": "2026-10-06T12:50:00Z"
+      },
+      {
+        "id": "V18",
+        "exit": 0,
+        "at": "2026-10-06T12:50:00Z"
+      },
+      {
+        "id": "V19",
+        "exit": 0,
+        "at": "2026-10-06T12:50:00Z"
+      },
+      {
+        "id": "V20",
+        "exit": 0,
+        "at": "2026-10-06T12:50:00Z"
+      }
+    ]
   },
-  "updated_at": "2026-10-06T12:40:20Z"
+  "updated_at": "2026-10-06T12:50:00Z"
 }

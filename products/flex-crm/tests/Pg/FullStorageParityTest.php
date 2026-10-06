@@ -2,12 +2,9 @@
 
 declare(strict_types=1);
 
-use CoreX\Database\Contracts\SchemaSets;
 use Flex\Crm\Tests\Support\AccountFixture;
 use Flex\Crm\Tests\Support\StorageCatalogue;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
 
 uses()->group('pg');
 
@@ -33,26 +30,3 @@ it('matches every actual enabled column constraint and index against approved DD
         DB::statement('DROP SCHEMA crm_reference_test CASCADE');
     });
 });
-
-it('refuses populated legacy sales tables before changing any storage', function (string $table): void {
-    foreach (glob(app(SchemaSets::class)->get('flex/crm:tenant')->path.'/*.php') as $path) {
-        if (str_contains($path, '2026_09_15')) {
-            continue;
-        }
-        (require $path)->up();
-    }
-    $id = (string) Str::uuid7();
-    $values = match ($table) {
-        'crm_leads' => ['id' => $id, 'name' => 'Legacy', 'source' => 'website', 'custom_fields' => '{"provenance":"keep"}'],
-        'crm_pipelines' => ['id' => $id, 'name' => 'Legacy'],
-        'crm_activities' => ['id' => $id, 'type' => 'note', 'summary' => 'Original', 'subject_type' => 'crm.lead', 'subject_id' => $id, 'metadata' => '{"keep":true}'],
-    };
-    DB::table($table)->insert($values);
-    $rowBefore = (array) DB::table($table)->where('id', $id)->first();
-    $before = StorageCatalogue::read(DB::connection(), 'public');
-    $migration = require app(SchemaSets::class)->get('flex/crm:tenant')->path.'/2026_09_15_000001_full_storage_parity.php';
-    expect(fn () => $migration->up())->toThrow(RuntimeException::class, 'CRM_PARITY_UPGRADE_REQUIRES_EXPORT');
-    expect(StorageCatalogue::read(DB::connection(), 'public'))->toBe($before)
-        ->and((array) DB::table($table)->where('id', $id)->first())->toBe($rowBefore)
-        ->and(Schema::hasTable('crm_lost_reasons'))->toBeFalse();
-})->with(['crm_leads', 'crm_pipelines', 'crm_activities']);

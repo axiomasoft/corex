@@ -77,9 +77,9 @@ it('matches approved PostgreSQL fields lengths defaults indexes and foreign keys
     }
     expect($indexes['crm_companies_inn_ix']->indexdef)->not->toContain('UNIQUE')
         ->and($indexes['crm_companies_inn_ix']->indexdef)->toContain('inn IS NOT NULL')
-        ->and($indexes['crm_cc_primary_uq']->indexdef)->toContain('UNIQUE', '(contact_id)', 'WHERE is_primary')
-        ->and($indexes['crm_cc_company_ix']->indexdef)->toContain('(company_id)')
-        ->and($indexes['crm_sources_workspace_id_code_unique']->indexdef)->toContain('NULLS NOT DISTINCT');
+        ->and($indexes['crm_contact_company_primary_uq']->indexdef)->toContain('UNIQUE', '(contact_id)', 'WHERE is_primary')
+        ->and($indexes['crm_contact_company_company_ix']->indexdef)->toContain('(company_id)')
+        ->and($indexes['crm_sources_workspace_id_code_uq']->indexdef)->toContain('NULLS NOT DISTINCT');
     $fks = collect(DB::select("SELECT conrelid::regclass::text AS tbl,pg_get_constraintdef(oid) AS def FROM pg_constraint WHERE contype='f'"));
     foreach (['crm_companies', 'crm_contacts'] as $table) {
         $defs = $fks->where('tbl', $table)->pluck('def')->implode(' ');

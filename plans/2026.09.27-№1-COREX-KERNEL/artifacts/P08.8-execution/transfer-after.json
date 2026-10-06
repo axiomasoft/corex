@@ -1,0 +1,568 @@
+{
+    "driver": "pgsql",
+    "tables": {
+        "corex_export_manifests": {
+            "columns": {
+                "capture_attempt": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "job_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "parts_hash": {
+                    "type": "character(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "restore_epoch": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "roster": {
+                    "type": "jsonb",
+                    "nullable": false,
+                    "default": null
+                },
+                "schema_hash": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "snapshot_mode": {
+                    "type": "character varying(24)",
+                    "nullable": false,
+                    "default": null
+                },
+                "state": {
+                    "type": "character varying(24)",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "corex_export_manifests_capture_attempt_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "capture_attempt"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "corex_export_manifests_pk",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [
+                {
+                    "name": "corex_export_manifests_job_id_fk",
+                    "columns": [
+                        "job_id"
+                    ],
+                    "references": "corex_transfer_jobs(id)",
+                    "on_delete": "RESTRICT",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                }
+            ],
+            "checks": [],
+            "triggers": []
+        },
+        "corex_export_parts": {
+            "columns": {
+                "byte_length": {
+                    "type": "numeric(20,0)",
+                    "nullable": false,
+                    "default": null
+                },
+                "hash": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "immutable_ref": {
+                    "type": "character varying(1024)",
+                    "nullable": false,
+                    "default": null
+                },
+                "manifest_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "part_no": {
+                    "type": "numeric(20,0)",
+                    "nullable": false,
+                    "default": null
+                },
+                "row_counts": {
+                    "type": "jsonb",
+                    "nullable": false,
+                    "default": null
+                },
+                "state": {
+                    "type": "character varying(24)",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "corex_export_parts_manifest_id_part_no_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "manifest_id",
+                        "part_no"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "corex_export_parts_pk",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [
+                {
+                    "name": "corex_export_parts_manifest_id_fk",
+                    "columns": [
+                        "manifest_id"
+                    ],
+                    "references": "corex_export_manifests(id)",
+                    "on_delete": "RESTRICT",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                }
+            ],
+            "checks": [],
+            "triggers": []
+        },
+        "corex_transfer_jobs": {
+            "columns": {
+                "checkpoint_seq": {
+                    "type": "numeric(20,0)",
+                    "nullable": false,
+                    "default": "'0'::numeric"
+                },
+                "claim_epoch": {
+                    "type": "numeric(20,0)",
+                    "nullable": false,
+                    "default": "'0'::numeric"
+                },
+                "created_at": {
+                    "type": "timestamp(0) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "cursor": {
+                    "type": "jsonb",
+                    "nullable": false,
+                    "default": null
+                },
+                "id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "mapping_hash": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "mapping_snapshot": {
+                    "type": "jsonb",
+                    "nullable": false,
+                    "default": null
+                },
+                "mode": {
+                    "type": "character varying(24)",
+                    "nullable": false,
+                    "default": null
+                },
+                "restore_epoch": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "schema_hash": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "source_hash": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "source_manifest": {
+                    "type": "jsonb",
+                    "nullable": false,
+                    "default": null
+                },
+                "state": {
+                    "type": "character varying(24)",
+                    "nullable": false,
+                    "default": null
+                },
+                "stats": {
+                    "type": "jsonb",
+                    "nullable": false,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(0) with time zone",
+                    "nullable": true,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "corex_transfer_jobs_pk",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "corex_transfer_jobs_state_updated_at_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "state",
+                        "updated_at"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [],
+            "triggers": []
+        },
+        "corex_transfer_outbox": {
+            "columns": {
+                "claim_epoch": {
+                    "type": "numeric(20,0)",
+                    "nullable": false,
+                    "default": "'0'::numeric"
+                },
+                "created_at": {
+                    "type": "timestamp(0) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "dedup_deadline": {
+                    "type": "timestamp(0) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "job_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "operation_key": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "payload_hash": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "provider_task": {
+                    "type": "character varying(255)",
+                    "nullable": true,
+                    "default": null
+                },
+                "request": {
+                    "type": "jsonb",
+                    "nullable": false,
+                    "default": null
+                },
+                "state": {
+                    "type": "character varying(24)",
+                    "nullable": false,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(0) with time zone",
+                    "nullable": true,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "corex_transfer_outbox_operation_key_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "operation_key"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "corex_transfer_outbox_pk",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [
+                {
+                    "name": "corex_transfer_outbox_job_id_fk",
+                    "columns": [
+                        "job_id"
+                    ],
+                    "references": "corex_transfer_jobs(id)",
+                    "on_delete": "RESTRICT",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                }
+            ],
+            "checks": [],
+            "triggers": []
+        },
+        "corex_transfer_refs": {
+            "columns": {
+                "created_at": {
+                    "type": "timestamp(0) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "entity": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "external_id": {
+                    "type": "character varying(255)",
+                    "nullable": false,
+                    "default": null
+                },
+                "external_system": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "job_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "payload_hash": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "result": {
+                    "type": "jsonb",
+                    "nullable": true,
+                    "default": null
+                },
+                "source_revision": {
+                    "type": "character varying(255)",
+                    "nullable": false,
+                    "default": null
+                },
+                "source_updated_at": {
+                    "type": "timestamp(0) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "state": {
+                    "type": "character varying(24)",
+                    "nullable": false,
+                    "default": null
+                },
+                "target_id": {
+                    "type": "character varying(255)",
+                    "nullable": true,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(0) with time zone",
+                    "nullable": true,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "corex_transfer_refs_entity_external_system_external_id_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "entity",
+                        "external_system",
+                        "external_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "corex_transfer_refs_pk",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [
+                {
+                    "name": "corex_transfer_refs_job_id_fk",
+                    "columns": [
+                        "job_id"
+                    ],
+                    "references": "corex_transfer_jobs(id)",
+                    "on_delete": "RESTRICT",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                }
+            ],
+            "checks": [],
+            "triggers": []
+        },
+        "corex_transfer_rows": {
+            "columns": {
+                "epoch": {
+                    "type": "numeric(20,0)",
+                    "nullable": false,
+                    "default": null
+                },
+                "error": {
+                    "type": "jsonb",
+                    "nullable": true,
+                    "default": null
+                },
+                "external_identity_hash": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "job_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "operation_key": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "ordinal": {
+                    "type": "numeric(20,0)",
+                    "nullable": false,
+                    "default": null
+                },
+                "payload_hash": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "provider_task": {
+                    "type": "character varying(255)",
+                    "nullable": true,
+                    "default": null
+                },
+                "request": {
+                    "type": "jsonb",
+                    "nullable": true,
+                    "default": null
+                },
+                "result": {
+                    "type": "character varying(24)",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "corex_transfer_rows_job_id_ordinal_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "job_id",
+                        "ordinal"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "corex_transfer_rows_pk",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [
+                {
+                    "name": "corex_transfer_rows_job_id_fk",
+                    "columns": [
+                        "job_id"
+                    ],
+                    "references": "corex_transfer_jobs(id)",
+                    "on_delete": "RESTRICT",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                }
+            ],
+            "checks": [],
+            "triggers": []
+        }
+    },
+    "enum_types": []
+}

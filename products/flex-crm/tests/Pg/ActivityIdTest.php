@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use CoreX\Database\Contracts\SchemaSets;
 use Flex\Crm\Activity\Actions\LogActivity;
 use Flex\Crm\Activity\Enums\ActivityType;
 use Flex\Crm\Company\Models\Company;
@@ -13,7 +12,6 @@ use Flex\Crm\Lead\Actions\CreateLead;
 use Flex\Crm\Tests\Support\AccountFixture;
 use Flex\Crm\Tests\Support\TestContext;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 uses()->group('pg');
 
@@ -44,17 +42,4 @@ it('converts with canonical UUIDv7 deal associations', function (): void {
     $contact = app(ConvertLead::class)->handle($lead, $pipeline);
     expect((string) $contact->deals()->sole()->getKey())->toBe((string) $lead->fresh()->converted_deal_id)
         ->and(DB::table('crm_deal_contacts')->count())->toBe(1);
-});
-
-it('widens a legacy activity morph column before a UUID insert', function (): void {
-    config(['database.default' => 'pgsql']);
-    DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
-    DB::statement('CREATE SCHEMA public');
-    (require app(SchemaSets::class)->get('flex/crm:tenant')->path.'/2026_06_14_000160_create_crm_activities_table.php')->up();
-    DB::statement('ALTER TABLE crm_activities ALTER COLUMN subject_id TYPE varchar(26) USING subject_id::text');
-    $migration = require app(SchemaSets::class)->get('flex/crm:tenant')->path.'/2026_09_14_000001_widen_activity_subject_id.php';
-    $migration->up();
-    $id = (string) Str::uuid7();
-    DB::table('crm_activities')->insert(['id' => $id, 'subject_id' => $id, 'subject_type' => 'crm.company', 'type' => 'note', 'summary' => 'Legacy UUID']);
-    expect(DB::table('crm_activities')->value('subject_id'))->toBe($id);
 });

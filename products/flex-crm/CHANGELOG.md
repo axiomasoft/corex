@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — baseline v1
+
+- Схема: набор(ы) `tenant`, baseline v1. Baseline заменяет невыпущенную upgrade-цепочку; новая установка использует финальную схему.
+
 ## Unreleased — deterministic UUID schema (P08.2)
 
 - Models use Laravel HasUuids (UUIDv7); migrations use literal table names and UUID columns without configuration or model lookups.

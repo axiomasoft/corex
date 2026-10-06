@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/tmp/corex-common-objects.py", line 50, in <module>
+    j=up.index('        });');up=up[:j]+'\n'.join('            '+st for st in blue)+'\n'+up[j:]
+      ^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: substring not found
+Traceback (most recent call last):
+  File "/tmp/corex-catalog-baseline.py", line 82, in <module>
+    subprocess.run(['python3','/tmp/corex-common-objects.py',pkg],check=True)
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['python3', '/tmp/corex-common-objects.py', 'crm']' returned non-zero exit status 1.

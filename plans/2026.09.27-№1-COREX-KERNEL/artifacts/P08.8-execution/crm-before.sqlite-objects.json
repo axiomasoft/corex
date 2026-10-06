@@ -1,0 +1,286 @@
+{
+    "objects": [
+        {
+            "table_name": "crm_activities",
+            "name": "crm_activities",
+            "kind": "table",
+            "definition": "CREATE TABLE \"crm_activities\" (\"id\" varchar not null, \"workspace_id\" varchar, \"kind\" varchar not null, \"status\" varchar not null default 'planned', \"subject\" varchar, \"body\" text, \"direction\" varchar, \"phone\" varchar, \"duration_sec\" integer, \"location\" varchar, \"email_meta\" text, \"recording_file_id\" varchar, \"transcript\" text, \"starts_at\" datetime, \"ends_at\" datetime, \"owner_id\" varchar, \"created_by\" text not null, \"created_at\" datetime not null default CURRENT_TIMESTAMP, \"updated_at\" datetime not null default CURRENT_TIMESTAMP, \"deleted_at\" datetime, foreign key(\"workspace_id\") references \"wsp_workspaces\"(\"id\") on delete cascade, foreign key(\"owner_id\") references \"users\"(\"id\") on delete set null, primary key (\"id\"))"
+        },
+        {
+            "table_name": "crm_activities",
+            "name": "crm_activities_kind_ix",
+            "kind": "index",
+            "definition": "CREATE INDEX crm_activities_kind_ix ON crm_activities (kind, status) WHERE deleted_at IS NULL"
+        },
+        {
+            "table_name": "crm_activities",
+            "name": "crm_activities_planned_ix",
+            "kind": "index",
+            "definition": "CREATE INDEX crm_activities_planned_ix ON crm_activities (owner_id, starts_at) WHERE status = 'planned' AND deleted_at IS NULL"
+        },
+        {
+            "table_name": "crm_activity_targets",
+            "name": "crm_activity_targets",
+            "kind": "table",
+            "definition": "CREATE TABLE \"crm_activity_targets\" (\"activity_id\" varchar not null, \"entity_type\" varchar not null, \"entity_id\" varchar not null, \"created_at\" datetime not null default CURRENT_TIMESTAMP, foreign key(\"activity_id\") references \"crm_activities\"(\"id\") on delete cascade, primary key (\"activity_id\", \"entity_type\", \"entity_id\"))"
+        },
+        {
+            "table_name": "crm_activity_targets",
+            "name": "crm_at_entity_ix",
+            "kind": "index",
+            "definition": "CREATE INDEX \"crm_at_entity_ix\" on \"crm_activity_targets\" (\"entity_type\", \"entity_id\")"
+        },
+        {
+            "table_name": "crm_companies",
+            "name": "crm_companies",
+            "kind": "table",
+            "definition": "CREATE TABLE \"crm_companies\" (\"id\" varchar not null, \"workspace_id\" varchar, \"name\" varchar not null, \"legal_name\" varchar, \"domain\" varchar, \"inn\" varchar, \"kpp\" varchar, \"ogrn\" varchar, \"phones\" text not null default '[]', \"emails\" text not null default '[]', \"address\" text, \"bank_details\" text, \"source_id\" varchar, \"owner_id\" varchar, \"created_by\" text not null, \"search\" text, \"created_at\" datetime not null default CURRENT_TIMESTAMP, \"updated_at\" datetime not null default CURRENT_TIMESTAMP, \"deleted_at\" datetime, foreign key(\"workspace_id\") references \"wsp_workspaces\"(\"id\") on delete cascade, foreign key(\"source_id\") references \"crm_sources\"(\"id\") on delete set null, foreign key(\"owner_id\") references \"users\"(\"id\") on delete set null, primary key (\"id\"))"
+        },
+        {
+            "table_name": "crm_companies",
+            "name": "crm_companies_inn_ix",
+            "kind": "index",
+            "definition": "CREATE INDEX crm_companies_inn_ix ON crm_companies (inn) WHERE inn IS NOT NULL AND deleted_at IS NULL"
+        },
+        {
+            "table_name": "crm_companies",
+            "name": "crm_companies_owner_ix",
+            "kind": "index",
+            "definition": "CREATE INDEX crm_companies_owner_ix ON crm_companies (owner_id) WHERE deleted_at IS NULL"
+        },
+        {
+            "table_name": "crm_companies",
+            "name": "crm_companies_ws_ix",
+            "kind": "index",
+            "definition": "CREATE INDEX crm_companies_ws_ix ON crm_companies (workspace_id) WHERE deleted_at IS NULL"
+        },
+        {
+            "table_name": "crm_contact_company",
+            "name": "crm_cc_company_ix",
+            "kind": "index",
+            "definition": "CREATE INDEX \"crm_cc_company_ix\" on \"crm_contact_company\" (\"company_id\")"
+        },
+        {
+            "table_name": "crm_contact_company",
+            "name": "crm_cc_primary_uq",
+            "kind": "index",
+            "definition": "CREATE UNIQUE INDEX crm_cc_primary_uq ON crm_contact_company (contact_id) WHERE is_primary"
+        },
+        {
+            "table_name": "crm_contact_company",
+            "name": "crm_contact_company",
+            "kind": "table",
+            "definition": "CREATE TABLE \"crm_contact_company\" (\"id\" varchar not null, \"contact_id\" varchar not null, \"company_id\" varchar not null, \"label\" varchar, \"is_primary\" tinyint(1) not null default '0', \"created_at\" datetime not null default CURRENT_TIMESTAMP, \"updated_at\" datetime not null default CURRENT_TIMESTAMP, foreign key(\"contact_id\") references \"crm_contacts\"(\"id\") on delete cascade, foreign key(\"company_id\") references \"crm_companies\"(\"id\") on delete cascade, primary key (\"id\"))"
+        },
+        {
+            "table_name": "crm_contact_company",
+            "name": "crm_contact_company_contact_id_company_id_unique",
+            "kind": "index",
+            "definition": "CREATE UNIQUE INDEX \"crm_contact_company_contact_id_company_id_unique\" on \"crm_contact_company\" (\"contact_id\", \"company_id\")"
+        },
+        {
+            "table_name": "crm_contacts",
+            "name": "crm_contacts",
+            "kind": "table",
+            "definition": "CREATE TABLE \"crm_contacts\" (\"id\" varchar not null, \"workspace_id\" varchar, \"name_last\" varchar, \"name_first\" varchar, \"name_middle\" varchar, \"display_name\" varchar not null, \"job_title\" varchar, \"phones\" text not null default '[]', \"emails\" text not null default '[]', \"birthday\" date, \"source_id\" varchar, \"owner_id\" varchar, \"created_by\" text not null, \"search\" text, \"created_at\" datetime not null default CURRENT_TIMESTAMP, \"updated_at\" datetime not null default CURRENT_TIMESTAMP, \"deleted_at\" datetime, foreign key(\"workspace_id\") references \"wsp_workspaces\"(\"id\") on delete cascade, foreign key(\"source_id\") references \"crm_sources\"(\"id\") on delete set null, foreign key(\"owner_id\") references \"users\"(\"id\") on delete set null, primary key (\"id\"))"
+        },
+        {
+            "table_name": "crm_contacts",
+            "name": "crm_contacts_owner_ix",
+            "kind": "index",
+            "definition": "CREATE INDEX crm_contacts_owner_ix ON crm_contacts (owner_id) WHERE deleted_at IS NULL"
+        },
+        {
+            "table_name": "crm_contacts",
+            "name": "crm_contacts_ws_ix",
+            "kind": "index",
+            "definition": "CREATE INDEX crm_contacts_ws_ix ON crm_contacts (workspace_id) WHERE deleted_at IS NULL"
+        },
+        {
+            "table_name": "crm_deal_contacts",
+            "name": "crm_dc_contact_ix",
+            "kind": "index",
+            "definition": "CREATE INDEX \"crm_dc_contact_ix\" on \"crm_deal_contacts\" (\"contact_id\")"
+        },
+        {
+            "table_name": "crm_deal_contacts",
+            "name": "crm_dc_primary_uq",
+            "kind": "index",
+            "definition": "CREATE UNIQUE INDEX crm_dc_primary_uq ON crm_deal_contacts (deal_id) WHERE is_primary"
+        },
+        {
+            "table_name": "crm_deal_contacts",
+            "name": "crm_deal_contacts",
+            "kind": "table",
+            "definition": "CREATE TABLE \"crm_deal_contacts\" (\"id\" varchar not null, \"deal_id\" varchar not null, \"contact_id\" varchar not null, \"label\" varchar, \"is_primary\" tinyint(1) not null default '0', \"created_at\" datetime not null default CURRENT_TIMESTAMP, \"updated_at\" datetime not null default CURRENT_TIMESTAMP, foreign key(\"deal_id\") references \"crm_deals\"(\"id\") on delete cascade, foreign key(\"contact_id\") references \"crm_contacts\"(\"id\") on delete cascade, primary key (\"id\"))"
+        },
+        {
+            "table_name": "crm_deal_contacts",
+            "name": "crm_deal_contacts_deal_id_contact_id_unique",
+            "kind": "index",
+            "definition": "CREATE UNIQUE INDEX \"crm_deal_contacts_deal_id_contact_id_unique\" on \"crm_deal_contacts\" (\"deal_id\", \"contact_id\")"
+        },
+        {
+            "table_name": "crm_deals",
+            "name": "crm_deals",
+            "kind": "table",
+            "definition": "CREATE TABLE \"crm_deals\" (\"id\" varchar not null, \"workspace_id\" varchar, \"title\" varchar not null, \"status\" varchar not null default 'open', \"pipeline_id\" varchar not null, \"stage_id\" varchar not null, \"amount\" integer, \"currency\" varchar not null default 'RUB', \"close_date\" date, \"won_at\" datetime, \"lost_at\" datetime, \"lost_reason_id\" varchar, \"company_id\" varchar, \"source_id\" varchar, \"utm\" text, \"owner_id\" varchar, \"created_by\" text not null, \"primary_quote_doc_id\" varchar, \"forecast_category\" varchar, \"forecast_category_is_manual\" tinyint(1) not null default '0', \"stage_entered_at\" datetime not null default CURRENT_TIMESTAMP, \"position\" numeric not null default '0', \"search\" text, \"created_at\" datetime not null default CURRENT_TIMESTAMP, \"updated_at\" datetime not null default CURRENT_TIMESTAMP, \"deleted_at\" datetime, foreign key(\"workspace_id\") references \"wsp_workspaces\"(\"id\") on delete cascade, foreign key(\"pipeline_id\") references \"crm_pipelines\"(\"id\") on delete restrict, foreign key(\"stage_id\") references \"crm_stages\"(\"id\") on delete restrict, foreign key(\"lost_reason_id\") references \"crm_lost_reasons\"(\"id\") on delete set null, foreign key(\"company_id\") references \"crm_companies\"(\"id\") on delete set null, foreign key(\"source_id\") references \"crm_sources\"(\"id\") on delete set null, foreign key(\"owner_id\") references \"users\"(\"id\") on delete set null, primary key (\"id\"))"
+        },
+        {
+            "table_name": "crm_deals",
+            "name": "crm_deals_close_ix",
+            "kind": "index",
+            "definition": "CREATE INDEX crm_deals_close_ix ON crm_deals (close_date) WHERE status = 'open' AND deleted_at IS NULL"
+        },
+        {
+            "table_name": "crm_deals",
+            "name": "crm_deals_company_ix",
+            "kind": "index",
+            "definition": "CREATE INDEX crm_deals_company_ix ON crm_deals (company_id) WHERE deleted_at IS NULL"
+        },
+        {
+            "table_name": "crm_deals",
+            "name": "crm_deals_forecast_ix",
+            "kind": "index",
+            "definition": "CREATE INDEX crm_deals_forecast_ix ON crm_deals (workspace_id, owner_id, pipeline_id, close_date, forecast_category) WHERE status = 'open' AND close_date IS NOT NULL AND deleted_at IS NULL"
+        },
+        {
+            "table_name": "crm_deals",
+            "name": "crm_deals_kanban_ix",
+            "kind": "index",
+            "definition": "CREATE INDEX crm_deals_kanban_ix ON crm_deals (pipeline_id, stage_id, position) WHERE deleted_at IS NULL"
+        },
+        {
+            "table_name": "crm_deals",
+            "name": "crm_deals_owner_ix",
+            "kind": "index",
+            "definition": "CREATE INDEX crm_deals_owner_ix ON crm_deals (owner_id, status) WHERE deleted_at IS NULL"
+        },
+        {
+            "table_name": "crm_deals",
+            "name": "crm_deals_ws_ix",
+            "kind": "index",
+            "definition": "CREATE INDEX crm_deals_ws_ix ON crm_deals (workspace_id) WHERE deleted_at IS NULL"
+        },
+        {
+            "table_name": "crm_leads",
+            "name": "crm_leads",
+            "kind": "table",
+            "definition": "CREATE TABLE \"crm_leads\" (\"id\" varchar not null, \"workspace_id\" varchar, \"title\" varchar not null, \"status\" varchar not null default ('open'), \"pipeline_id\" varchar, \"stage_id\" varchar, \"contact_name\" varchar, \"phone\" varchar, \"email\" varchar, \"company_name\" varchar, \"amount\" integer, \"currency\" varchar not null default ('RUB'), \"source_id\" varchar, \"utm\" text, \"lost_reason_id\" varchar, \"owner_id\" varchar, \"created_by\" text not null, \"converted_at\" datetime, \"converted_deal_id\" varchar, \"converted_contact_id\" varchar, \"converted_company_id\" varchar, \"position\" numeric not null default ('0'), \"search\" text, \"created_at\" datetime not null default (CURRENT_TIMESTAMP), \"updated_at\" datetime not null default (CURRENT_TIMESTAMP), \"deleted_at\" datetime, foreign key(\"converted_company_id\") references crm_companies(\"id\") on delete set null on update no action, foreign key(\"converted_contact_id\") references crm_contacts(\"id\") on delete set null on update no action, foreign key(\"owner_id\") references users(\"id\") on delete set null on update no action, foreign key(\"lost_reason_id\") references crm_lost_reasons(\"id\") on delete set null on update no action, foreign key(\"source_id\") references crm_sources(\"id\") on delete set null on update no action, foreign key(\"stage_id\") references crm_stages(\"id\") on delete restrict on update no action, foreign key(\"pipeline_id\") references crm_pipelines(\"id\") on delete restrict on update no action, foreign key(\"workspace_id\") references wsp_workspaces(\"id\") on delete cascade on update no action, foreign key(\"converted_deal_id\") references \"crm_deals\"(\"id\") on delete set null, primary key (\"id\"))"
+        },
+        {
+            "table_name": "crm_leads",
+            "name": "crm_leads_kanban_ix",
+            "kind": "index",
+            "definition": "CREATE INDEX crm_leads_kanban_ix ON crm_leads (pipeline_id, stage_id, position) WHERE deleted_at IS NULL"
+        },
+        {
+            "table_name": "crm_leads",
+            "name": "crm_leads_owner_ix",
+            "kind": "index",
+            "definition": "CREATE INDEX crm_leads_owner_ix ON crm_leads (owner_id, status) WHERE deleted_at IS NULL"
+        },
+        {
+            "table_name": "crm_lost_reasons",
+            "name": "crm_lost_reasons",
+            "kind": "table",
+            "definition": "CREATE TABLE \"crm_lost_reasons\" (\"id\" varchar not null, \"workspace_id\" varchar, \"code\" varchar not null, \"name\" text not null, \"entity_type\" varchar not null default 'both', \"is_active\" tinyint(1) not null default '1', \"position\" integer not null default '0', \"created_at\" datetime not null default CURRENT_TIMESTAMP, \"updated_at\" datetime not null default CURRENT_TIMESTAMP, foreign key(\"workspace_id\") references \"wsp_workspaces\"(\"id\") on delete cascade, primary key (\"id\"))"
+        },
+        {
+            "table_name": "crm_lost_reasons",
+            "name": "crm_lr_code_uq",
+            "kind": "index",
+            "definition": "CREATE UNIQUE INDEX crm_lr_code_uq ON crm_lost_reasons (COALESCE(workspace_id, ''), code)"
+        },
+        {
+            "table_name": "crm_pipelines",
+            "name": "crm_pipelines",
+            "kind": "table",
+            "definition": "CREATE TABLE \"crm_pipelines\" (\"id\" varchar not null, \"workspace_id\" varchar, \"entity_type\" varchar not null, \"code\" varchar not null, \"name\" text not null, \"is_default\" tinyint(1) not null default '0', \"position\" integer not null default '0', \"settings\" text not null default '{}', \"created_at\" datetime not null default CURRENT_TIMESTAMP, \"updated_at\" datetime not null default CURRENT_TIMESTAMP, \"deleted_at\" datetime, foreign key(\"workspace_id\") references \"wsp_workspaces\"(\"id\") on delete cascade, primary key (\"id\"))"
+        },
+        {
+            "table_name": "crm_pipelines",
+            "name": "crm_pipelines_code_uq",
+            "kind": "index",
+            "definition": "CREATE UNIQUE INDEX crm_pipelines_code_uq ON crm_pipelines (entity_type, code, COALESCE(workspace_id, '')) WHERE deleted_at IS NULL"
+        },
+        {
+            "table_name": "crm_pipelines",
+            "name": "crm_pipelines_default_uq",
+            "kind": "index",
+            "definition": "CREATE UNIQUE INDEX crm_pipelines_default_uq ON crm_pipelines (entity_type, COALESCE(workspace_id, '')) WHERE is_default AND deleted_at IS NULL"
+        },
+        {
+            "table_name": "crm_sources",
+            "name": "crm_sources",
+            "kind": "table",
+            "definition": "CREATE TABLE \"crm_sources\" (\"id\" varchar not null, \"workspace_id\" varchar, \"code\" varchar not null, \"name\" text not null, \"is_active\" tinyint(1) not null default '1', \"position\" integer not null default '0', \"created_at\" datetime not null default CURRENT_TIMESTAMP, \"updated_at\" datetime not null default CURRENT_TIMESTAMP, foreign key(\"workspace_id\") references \"wsp_workspaces\"(\"id\") on delete cascade, primary key (\"id\"))"
+        },
+        {
+            "table_name": "crm_sources",
+            "name": "crm_sources_workspace_id_code_unique",
+            "kind": "index",
+            "definition": "CREATE UNIQUE INDEX crm_sources_workspace_id_code_unique ON crm_sources (COALESCE(workspace_id, ''), code)"
+        },
+        {
+            "table_name": "crm_stages",
+            "name": "crm_stages",
+            "kind": "table",
+            "definition": "CREATE TABLE \"crm_stages\" (\"id\" varchar not null, \"pipeline_id\" varchar not null, \"code\" varchar not null, \"name\" text not null, \"color\" varchar, \"position\" integer not null default '0', \"semantic\" varchar not null default 'open', \"probability\" integer not null default '0', \"required_fields\" text not null default '[]', \"settings\" text not null default '{}', \"created_at\" datetime not null default CURRENT_TIMESTAMP, \"updated_at\" datetime not null default CURRENT_TIMESTAMP, \"deleted_at\" datetime, foreign key(\"pipeline_id\") references \"crm_pipelines\"(\"id\") on delete cascade, primary key (\"id\"))"
+        },
+        {
+            "table_name": "crm_stages",
+            "name": "crm_stages_pipeline_id_code_unique",
+            "kind": "index",
+            "definition": "CREATE UNIQUE INDEX \"crm_stages_pipeline_id_code_unique\" on \"crm_stages\" (\"pipeline_id\", \"code\")"
+        },
+        {
+            "table_name": "crm_stages",
+            "name": "crm_stages_pipeline_ix",
+            "kind": "index",
+            "definition": "CREATE INDEX crm_stages_pipeline_ix ON crm_stages (pipeline_id, position) WHERE deleted_at IS NULL"
+        },
+        {
+            "table_name": "migrations",
+            "name": "migrations",
+            "kind": "table",
+            "definition": "CREATE TABLE \"migrations\" (\"id\" integer primary key autoincrement not null, \"migration\" varchar not null, \"batch\" integer not null)"
+        },
+        {
+            "table_name": "sqlite_sequence",
+            "name": "sqlite_sequence",
+            "kind": "table",
+            "definition": "CREATE TABLE sqlite_sequence(name,seq)"
+        },
+        {
+            "table_name": "users",
+            "name": "users",
+            "kind": "table",
+            "definition": "CREATE TABLE \"users\" (\"id\" varchar not null, \"name\" varchar not null, \"is_active\" tinyint(1) not null default '1', \"deleted_at\" datetime, primary key (\"id\"))"
+        },
+        {
+            "table_name": "wsp_workspace_members",
+            "name": "wsp_workspace_members",
+            "kind": "table",
+            "definition": "CREATE TABLE \"wsp_workspace_members\" (\"id\" varchar not null, \"workspace_id\" varchar not null, \"user_id\" varchar not null, \"status\" varchar not null default 'active', foreign key(\"workspace_id\") references \"wsp_workspaces\"(\"id\") on delete cascade, foreign key(\"user_id\") references \"users\"(\"id\") on delete cascade, primary key (\"id\"))"
+        },
+        {
+            "table_name": "wsp_workspace_members",
+            "name": "wsp_workspace_members_workspace_id_user_id_unique",
+            "kind": "index",
+            "definition": "CREATE UNIQUE INDEX \"wsp_workspace_members_workspace_id_user_id_unique\" on \"wsp_workspace_members\" (\"workspace_id\", \"user_id\")"
+        },
+        {
+            "table_name": "wsp_workspaces",
+            "name": "wsp_workspaces",
+            "kind": "table",
+            "definition": "CREATE TABLE \"wsp_workspaces\" (\"id\" varchar not null, \"slug\" varchar not null, \"deleted_at\" datetime, primary key (\"id\"))"
+        },
+        {
+            "table_name": "wsp_workspaces",
+            "name": "wsp_workspaces_slug_unique",
+            "kind": "index",
+            "definition": "CREATE UNIQUE INDEX \"wsp_workspaces_slug_unique\" on \"wsp_workspaces\" (\"slug\")"
+        }
+    ]
+}

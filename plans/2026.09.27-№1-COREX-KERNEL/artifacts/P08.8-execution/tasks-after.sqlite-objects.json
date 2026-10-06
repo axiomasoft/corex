@@ -1,0 +1,148 @@
+{
+    "objects": [
+        {
+            "table_name": "corex_task_operations",
+            "name": "corex_task_operations",
+            "kind": "table",
+            "definition": "CREATE TABLE \"corex_task_operations\" (\"id\" varchar not null, \"request_key\" varchar not null, \"payload_hash\" varchar not null, \"kind\" varchar not null, \"result_ref\" text not null, \"restore_epoch\" varchar not null, \"created_at\" datetime not null default CURRENT_TIMESTAMP, primary key (\"id\"))"
+        },
+        {
+            "table_name": "corex_task_operations",
+            "name": "corex_task_operations_kind_ck",
+            "kind": "trigger",
+            "definition": "CREATE TRIGGER corex_task_operations_kind_ck BEFORE INSERT ON corex_task_operations BEGIN SELECT CASE WHEN NEW.kind IN ('createProject','createSprint','recordTime','materialize','completionCapture') THEN 0 ELSE RAISE(ABORT, 'invalid kind') END; END"
+        },
+        {
+            "table_name": "corex_task_operations",
+            "name": "corex_task_operations_payload_hash_ck",
+            "kind": "trigger",
+            "definition": "CREATE TRIGGER corex_task_operations_payload_hash_ck BEFORE INSERT ON corex_task_operations BEGIN SELECT CASE WHEN length(NEW.payload_hash) = 64 AND NEW.payload_hash NOT GLOB '*[^a-f0-9]*' THEN 0 ELSE RAISE(ABORT, 'invalid payload_hash') END; END"
+        },
+        {
+            "table_name": "corex_task_operations",
+            "name": "corex_task_operations_request_key_uq",
+            "kind": "index",
+            "definition": "CREATE UNIQUE INDEX \"corex_task_operations_request_key_uq\" on \"corex_task_operations\" (\"request_key\")"
+        },
+        {
+            "table_name": "corex_task_operations",
+            "name": "corex_task_operations_restore_epoch_ck",
+            "kind": "trigger",
+            "definition": "CREATE TRIGGER corex_task_operations_restore_epoch_ck BEFORE INSERT ON corex_task_operations BEGIN SELECT CASE WHEN length(NEW.restore_epoch) = 64 AND NEW.restore_epoch NOT GLOB '*[^a-f0-9]*' THEN 0 ELSE RAISE(ABORT, 'invalid restore_epoch') END; END"
+        },
+        {
+            "table_name": "migrations",
+            "name": "migrations",
+            "kind": "table",
+            "definition": "CREATE TABLE \"migrations\" (\"id\" integer primary key autoincrement not null, \"migration\" varchar not null, \"batch\" integer not null)"
+        },
+        {
+            "table_name": "sqlite_sequence",
+            "name": "sqlite_sequence",
+            "kind": "table",
+            "definition": "CREATE TABLE sqlite_sequence(name,seq)"
+        },
+        {
+            "table_name": "tsk_projects",
+            "name": "tsk_projects",
+            "kind": "table",
+            "definition": "CREATE TABLE \"tsk_projects\" (\"id\" varchar not null, \"workspace_id\" varchar, \"name\" varchar not null, \"description\" text, \"status\" varchar not null default 'active', \"owner_id\" varchar, \"starts_on\" date, \"due_on\" date, \"settings\" text not null default '{}', \"created_by\" text not null, \"created_at\" datetime not null default CURRENT_TIMESTAMP, \"updated_at\" datetime not null default CURRENT_TIMESTAMP, \"deleted_at\" datetime, foreign key(\"owner_id\") references \"users\"(\"id\") on delete set null on update no action, foreign key(\"workspace_id\") references \"wsp_workspaces\"(\"id\") on delete cascade on update no action, primary key (\"id\"))"
+        },
+        {
+            "table_name": "tsk_sprints",
+            "name": "tsk_sprints",
+            "kind": "table",
+            "definition": "CREATE TABLE \"tsk_sprints\" (\"id\" varchar not null, \"project_id\" varchar not null, \"name\" varchar not null, \"goal\" text, \"status\" varchar not null default 'planned', \"starts_on\" date not null, \"ends_on\" date not null, \"created_at\" datetime not null default CURRENT_TIMESTAMP, \"updated_at\" datetime not null default CURRENT_TIMESTAMP, foreign key(\"project_id\") references \"tsk_projects\"(\"id\") on delete cascade on update no action, primary key (\"id\"))"
+        },
+        {
+            "table_name": "tsk_stages",
+            "name": "tsk_stages",
+            "kind": "table",
+            "definition": "CREATE TABLE \"tsk_stages\" (\"id\" varchar not null, \"project_id\" varchar not null, \"code\" varchar not null, \"name\" text not null, \"color\" varchar, \"position\" integer not null default '0', \"auto_status\" varchar, \"created_at\" datetime not null default CURRENT_TIMESTAMP, \"updated_at\" datetime not null default CURRENT_TIMESTAMP, foreign key(\"project_id\") references \"tsk_projects\"(\"id\") on delete cascade on update no action, primary key (\"id\"))"
+        },
+        {
+            "table_name": "tsk_stages",
+            "name": "tsk_stages_project_id_code_uq",
+            "kind": "index",
+            "definition": "CREATE UNIQUE INDEX \"tsk_stages_project_id_code_uq\" on \"tsk_stages\" (\"project_id\", \"code\")"
+        },
+        {
+            "table_name": "tsk_task_targets",
+            "name": "tsk_task_targets",
+            "kind": "table",
+            "definition": "CREATE TABLE \"tsk_task_targets\" (\"task_id\" varchar not null, \"entity_type\" varchar not null, \"entity_id\" varchar not null, \"created_at\" datetime not null default CURRENT_TIMESTAMP, foreign key(\"task_id\") references \"tsk_tasks\"(\"id\") on delete cascade on update no action, primary key (\"task_id\", \"entity_type\", \"entity_id\"))"
+        },
+        {
+            "table_name": "tsk_task_targets",
+            "name": "tsk_task_targets_entity_ix",
+            "kind": "index",
+            "definition": "CREATE INDEX \"tsk_task_targets_entity_ix\" on \"tsk_task_targets\" (\"entity_type\", \"entity_id\")"
+        },
+        {
+            "table_name": "tsk_task_watchers",
+            "name": "tsk_task_watchers",
+            "kind": "table",
+            "definition": "CREATE TABLE \"tsk_task_watchers\" (\"task_id\" varchar not null, \"user_id\" varchar not null, \"created_at\" datetime not null default CURRENT_TIMESTAMP, foreign key(\"task_id\") references \"tsk_tasks\"(\"id\") on delete cascade on update no action, foreign key(\"user_id\") references \"users\"(\"id\") on delete cascade on update no action, primary key (\"task_id\", \"user_id\"))"
+        },
+        {
+            "table_name": "tsk_tasks",
+            "name": "tsk_tasks",
+            "kind": "table",
+            "definition": "CREATE TABLE \"tsk_tasks\" (\"id\" varchar not null, \"workspace_id\" varchar, \"project_id\" varchar, \"sprint_id\" varchar, \"stage_id\" varchar, \"parent_id\" varchar, \"title\" varchar not null, \"description\" text, \"status\" varchar not null default 'open', \"priority\" varchar not null default 'normal', \"author_id\" varchar, \"assignee_id\" varchar, \"created_by\" text not null, \"starts_at\" datetime, \"due_at\" datetime, \"completed_at\" datetime, \"requires_acceptance\" tinyint(1) not null default '0', \"recurrence_rule_id\" varchar, \"recurrence_occurs_at\" datetime, \"estimate_minutes\" integer, \"spent_minutes\" integer not null default '0', \"position\" numeric not null default '0', \"search\" text, \"created_at\" datetime not null default CURRENT_TIMESTAMP, \"updated_at\" datetime not null default CURRENT_TIMESTAMP, \"deleted_at\" datetime, foreign key(\"assignee_id\") references \"users\"(\"id\") on delete set null on update no action, foreign key(\"author_id\") references \"users\"(\"id\") on delete set null on update no action, foreign key(\"parent_id\") references \"tsk_tasks\"(\"id\") on delete cascade on update no action, foreign key(\"project_id\") references \"tsk_projects\"(\"id\") on delete set null on update no action, foreign key(\"sprint_id\") references \"tsk_sprints\"(\"id\") on delete set null on update no action, foreign key(\"stage_id\") references \"tsk_stages\"(\"id\") on delete set null on update no action, foreign key(\"workspace_id\") references \"wsp_workspaces\"(\"id\") on delete cascade on update no action, primary key (\"id\"))"
+        },
+        {
+            "table_name": "tsk_time_logs",
+            "name": "tsk_time_logs",
+            "kind": "table",
+            "definition": "CREATE TABLE \"tsk_time_logs\" (\"id\" varchar not null, \"task_id\" varchar not null, \"user_id\" varchar not null, \"minutes\" integer not null, \"spent_on\" date not null, \"comment\" text, \"source\" varchar not null default 'manual', \"created_at\" datetime not null default CURRENT_TIMESTAMP, \"updated_at\" datetime not null default CURRENT_TIMESTAMP, foreign key(\"task_id\") references \"tsk_tasks\"(\"id\") on delete cascade on update no action, foreign key(\"user_id\") references \"users\"(\"id\") on delete restrict on update no action, primary key (\"id\"))"
+        },
+        {
+            "table_name": "tsk_time_logs",
+            "name": "tsk_time_logs_task_ix",
+            "kind": "index",
+            "definition": "CREATE INDEX \"tsk_time_logs_task_ix\" on \"tsk_time_logs\" (\"task_id\")"
+        },
+        {
+            "table_name": "tsk_time_logs",
+            "name": "tsk_time_logs_user_ix",
+            "kind": "index",
+            "definition": "CREATE INDEX \"tsk_time_logs_user_ix\" on \"tsk_time_logs\" (\"user_id\", \"spent_on\")"
+        },
+        {
+            "table_name": "tsk_timers",
+            "name": "tsk_timers",
+            "kind": "table",
+            "definition": "CREATE TABLE \"tsk_timers\" (\"user_id\" varchar not null, \"task_id\" varchar not null, \"started_at\" datetime not null default CURRENT_TIMESTAMP, \"created_at\" datetime not null default CURRENT_TIMESTAMP, \"updated_at\" datetime not null default CURRENT_TIMESTAMP, foreign key(\"task_id\") references \"tsk_tasks\"(\"id\") on delete cascade on update no action, foreign key(\"user_id\") references \"users\"(\"id\") on delete cascade on update no action, primary key (\"user_id\"))"
+        },
+        {
+            "table_name": "users",
+            "name": "users",
+            "kind": "table",
+            "definition": "CREATE TABLE \"users\" (\"id\" varchar not null, \"name\" varchar not null, \"is_active\" tinyint(1) not null default '1', \"deleted_at\" datetime, primary key (\"id\"))"
+        },
+        {
+            "table_name": "wsp_workspace_members",
+            "name": "wsp_workspace_members",
+            "kind": "table",
+            "definition": "CREATE TABLE \"wsp_workspace_members\" (\"id\" varchar not null, \"workspace_id\" varchar not null, \"user_id\" varchar not null, \"status\" varchar not null default 'active', foreign key(\"workspace_id\") references \"wsp_workspaces\"(\"id\") on delete cascade, foreign key(\"user_id\") references \"users\"(\"id\") on delete cascade, primary key (\"id\"))"
+        },
+        {
+            "table_name": "wsp_workspace_members",
+            "name": "wsp_workspace_members_workspace_id_user_id_unique",
+            "kind": "index",
+            "definition": "CREATE UNIQUE INDEX \"wsp_workspace_members_workspace_id_user_id_unique\" on \"wsp_workspace_members\" (\"workspace_id\", \"user_id\")"
+        },
+        {
+            "table_name": "wsp_workspaces",
+            "name": "wsp_workspaces",
+            "kind": "table",
+            "definition": "CREATE TABLE \"wsp_workspaces\" (\"id\" varchar not null, \"slug\" varchar not null, \"deleted_at\" datetime, primary key (\"id\"))"
+        },
+        {
+            "table_name": "wsp_workspaces",
+            "name": "wsp_workspaces_slug_unique",
+            "kind": "index",
+            "definition": "CREATE UNIQUE INDEX \"wsp_workspaces_slug_unique\" on \"wsp_workspaces\" (\"slug\")"
+        }
+    ]
+}

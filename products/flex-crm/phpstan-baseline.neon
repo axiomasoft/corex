@@ -1,30 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			rawMessage: Cannot access property $server_version_num on mixed.
-			identifier: property.nonObject
-			count: 1
-			path: database/migrations/2026_09_14_000002_company_contact_parity.php
-
-		-
-			rawMessage: Cannot cast mixed to int.
-			identifier: cast.int
-			count: 1
-			path: database/migrations/2026_09_14_000002_company_contact_parity.php
-
-		-
-			rawMessage: Cannot access property $server_version_num on mixed.
-			identifier: property.nonObject
-			count: 1
-			path: database/migrations/2026_09_15_000001_full_storage_parity.php
-
-		-
-			rawMessage: Cannot cast mixed to int.
-			identifier: cast.int
-			count: 1
-			path: database/migrations/2026_09_15_000001_full_storage_parity.php
-
-		-
 			rawMessage: 'Dynamic call to static method Illuminate\Database\Eloquent\Builder<Flex\Crm\Company\Models\Company>::sharedLock().'
 			identifier: staticMethod.dynamicCall
 			count: 1

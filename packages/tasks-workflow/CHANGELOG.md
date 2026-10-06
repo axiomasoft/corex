@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — baseline v1
+
+- Схема: набор(ы) `tenant`, baseline v1. Baseline заменяет невыпущенную upgrade-цепочку; новая установка использует финальную схему.
+
 ## Unreleased — wakeup suggest removed (P07.5)
 
 - Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
