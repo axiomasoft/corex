@@ -160,7 +160,7 @@ test('table ownership gate reports no violations on clean tree', function (): vo
 
 test('table ownership gate delegates registered uncatalogued creates to S9', function (): void {
     $repoRoot = SourceScanner::repoRoot();
-    $probePath = $repoRoot.'/packages/core/database/migrations/pg/2099_01_01_000000_table_ownership_t1_probe.php';
+    $probePath = $repoRoot.'/packages/core/database/migrations/tenant/2099_01_01_000000_table_ownership_t1_probe.php';
     $probeContents = <<<'PHP'
 <?php
 
@@ -205,7 +205,7 @@ PHP;
 
 test('table ownership gate reports T4 for core cross-package foreign key probe', function (): void {
     $repoRoot = SourceScanner::repoRoot();
-    $probePath = $repoRoot.'/packages/core/database/migrations/pg/2099_01_01_000001_table_ownership_t4_probe.php';
+    $probePath = $repoRoot.'/packages/core/database/migrations/tenant/2099_01_01_000001_table_ownership_t4_probe.php';
     $probeContents = <<<'PHP'
 <?php
 

@@ -1,0 +1,5 @@
+sys_saved_view_scopes: rename indexes sys_saved_view_scopes_pkey -> sys_saved_view_scopes_pk
+sys_saved_views: ~type position 'integer' -> 'bigint'
+sys_saved_views: rename indexes sys_saved_views_pkey -> sys_saved_views_pk
+sys_saved_views: rename indexes sys_saved_views_entity_code_default_scope_key_unique -> sys_saved_views_default_scope_uq
+sys_saved_views: rename foreign_keys sys_saved_views_entity_code_scope_key_foreign -> sys_saved_views_scope_fk

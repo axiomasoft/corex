@@ -71,10 +71,10 @@ it('defines a composite primary key on sys_inbox_messages', function (): void {
 
 it('creates partial indexes on sys_outbox_messages hot paths', function (): void {
     $indexNames = [
-        'sys_outbox_messages_claim_idx',
-        'sys_outbox_messages_reclaim_idx',
-        'sys_outbox_messages_published_idx',
-        'sys_outbox_messages_dead_idx',
+        'sys_outbox_messages_claim_ix',
+        'sys_outbox_messages_reclaim_ix',
+        'sys_outbox_messages_published_ix',
+        'sys_outbox_messages_dead_ix',
     ];
 
     foreach ($indexNames as $indexName) {
@@ -91,7 +91,7 @@ it('creates partial indexes on sys_outbox_messages hot paths', function (): void
 it('indexes the shipped inbox table for retention', function (): void {
     expect(DB::table('pg_indexes')
         ->where('tablename', 'sys_inbox_messages')
-        ->where('indexname', 'sys_inbox_messages_processed_idx')
+        ->where('indexname', 'sys_inbox_messages_processed_ix')
         ->exists())->toBeTrue();
 })->group('pg');
 

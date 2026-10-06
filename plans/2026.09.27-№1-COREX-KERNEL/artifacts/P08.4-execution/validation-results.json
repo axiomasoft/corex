@@ -1,0 +1,134 @@
+{
+  "V1": {
+    "command": "scripts/php84 composer schema-gate",
+    "exit_code": 0,
+    "seconds": 0.62,
+    "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.4-execution/V1.log"
+  },
+  "V2": {
+    "command": "python3 -c 'import json; p=json.load(open(\"scripts/schema-gate-pending.json\")); print(sorted(set(p)&{\"axiomasoft/corex\", \"axiomasoft/corex-panels\"}))'",
+    "exit_code": 0,
+    "seconds": 0.02,
+    "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.4-execution/V2.log"
+  },
+  "V5": {
+    "command": "test ! -e packages/core/database/migrations/pg && test ! -e packages/panels/database/migrations/pg",
+    "exit_code": 0,
+    "seconds": 0.0,
+    "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.4-execution/V5.log"
+  },
+  "V6": {
+    "command": "git grep -n -E 'core/database/migrations/pg|panels/database/migrations/pg|core/database/migrations/2026_07|corex:tenant-modules' -- tests packages products; code=$?; test \"$code\" -eq 1",
+    "exit_code": 0,
+    "seconds": 0.01,
+    "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.4-execution/V6.log"
+  },
+  "V7": {
+    "command": "scripts/php84 vendor/bin/pint --test packages/core/database/migrations/tenant/2026_10_01_010010_create_mod_modules.php packages/core/database/migrations/tenant/2026_10_01_010020_create_mod_records.php packages/core/database/migrations/tenant/2026_10_01_010030_create_mod_lifecycle_log.php packages/core/database/migrations/tenant/2026_10_01_010040_create_sys_settings.php packages/core/database/migrations/tenant/2026_10_01_010050_create_sys_audit_log.php packages/core/database/migrations/tenant/2026_10_01_010060_create_sys_feature_flags.php packages/core/database/migrations/tenant/2026_10_01_010070_create_sys_feature_overrides.php packages/core/database/migrations/tenant/2026_10_01_010080_create_sys_departments.php packages/core/database/migrations/tenant/2026_10_01_010090_create_sys_department_user.php packages/core/database/migrations/tenant/2026_10_01_010100_create_sys_pubsub_messages.php packages/core/database/migrations/tenant/2026_10_01_010110_create_sys_pubsub_cursors.php packages/core/database/migrations/tenant/2026_10_01_010120_create_sys_outbox_messages.php packages/core/database/migrations/tenant/2026_10_01_010130_create_sys_inbox_messages.php packages/core/src/Database/Internal/CoreSchemaSets.php packages/core/tests/Modules/Feature/LifecycleRemediationTest.php packages/core/tests/Pg/MessagingSchemaTest.php packages/panels/database/migrations/tenant/2026_10_01_070010_create_sys_saved_view_scopes.php packages/panels/database/migrations/tenant/2026_10_01_070020_create_sys_saved_views.php packages/panels/src/Internal/PanelsSchemaSets.php packages/panels/tests/SavedViews/SqlSavedViewRepositoryTest.php products/flex-crm/tests/Pg/ModuleLifecycleTest.php tests/Arch/AchievedInvariantTest.php tests/Feature/AuditLogTest.php tests/Feature/DepartmentTest.php tests/Feature/ImpersonatedActorTest.php tests/Feature/ModuleLifecycleTest.php tests/Feature/SchemaSetsPgTest.php tests/Feature/SchemaSetsTest.php tests/Golden/SchemaGoldenTest.php scripts/schema-gate.php tests/Unit/SchemaGateTest.php",
+    "exit_code": 0,
+    "seconds": 5.4,
+    "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.4-execution/V7.log"
+  },
+  "V8": {
+    "command": "scripts/php84 vendor/bin/phpstan analyse -c packages/core/phpstan.neon --memory-limit=2G --no-progress && scripts/php84 vendor/bin/phpstan analyse -c packages/panels/phpstan.neon --memory-limit=2G --no-progress",
+    "exit_code": 0,
+    "seconds": 6.65,
+    "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.4-execution/V8.log",
+    "additional_evidence": {
+      "command": "scripts/php84 vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=2G --no-progress",
+      "exit_code": 0,
+      "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.4-execution/root-analyse.log"
+    }
+  },
+  "V9": {
+    "command": "scripts/php84 vendor/bin/composer-dependency-analyser --composer-json=packages/core/composer.json --config=packages/core/composer-dependency-analyser.php && scripts/php84 vendor/bin/composer-dependency-analyser --composer-json=packages/panels/composer.json --config=packages/panels/composer-dependency-analyser.php",
+    "exit_code": 0,
+    "seconds": 0.26,
+    "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.4-execution/V9.log"
+  },
+  "V15": {
+    "command": "bash scripts/anti-weakening-gate.sh",
+    "exit_code": 0,
+    "seconds": 5.23,
+    "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.4-execution/V15.log"
+  },
+  "V16": {
+    "command": "php scripts/package-docs-gate.php",
+    "exit_code": 0,
+    "seconds": 1.56,
+    "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.4-execution/V16.log"
+  },
+  "V17": {
+    "command": "scripts/php84 composer table-ownership-gate",
+    "exit_code": 0,
+    "seconds": 0.61,
+    "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.4-execution/V17.log"
+  },
+  "V3": {
+    "command": "PGSQL_PORT=5434 scripts/php84 vendor/bin/pest tests/Golden/SchemaGoldenTest.php --filter 'test_fresh_postgres_schemas#0'",
+    "exit_code": 0,
+    "seconds": 2.2,
+    "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.4-execution/V3.log"
+  },
+  "V4": {
+    "command": "scripts/php84 vendor/bin/pest tests/Golden/SchemaSqliteGoldenTest.php",
+    "exit_code": 0,
+    "seconds": 0.34,
+    "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.4-execution/V4.log"
+  },
+  "V10": {
+    "command": "scripts/php84 vendor/bin/pest tests/Feature/SchemaSetsTest.php tests/Unit/SchemaGateTest.php tests/Arch/AchievedInvariantTest.php --exclude-group=pg",
+    "exit_code": 0,
+    "seconds": 1.69,
+    "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.4-execution/V10.log"
+  },
+  "V11": {
+    "kind": "procedure",
+    "result": "GREEN",
+    "evidence": [
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.4-execution/core-pg-final.log",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.4-execution/panels-pg.log",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.4-execution/consumer-pg.log"
+    ]
+  },
+  "V12": {
+    "kind": "procedure",
+    "result": "GREEN",
+    "evidence": [
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.4-execution/core-sqlite.log",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.4-execution/panels-sqlite.log"
+    ]
+  },
+  "V13": {
+    "kind": "procedure",
+    "result": "GREEN",
+    "evidence": [
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.4-execution/V10.log"
+    ]
+  },
+  "V14": {
+    "kind": "procedure",
+    "result": "GREEN",
+    "evidence": [
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.4-execution/V3.log",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.4-execution/V4.log"
+    ],
+    "unchanged_unrelated_golden": true
+  },
+  "V18": {
+    "kind": "procedure",
+    "result": "GREEN",
+    "evidence": [
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.4-execution/core-diff.txt",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.4-execution/panels-diff.txt",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.4-execution/schema-diff-classification.txt"
+    ]
+  },
+  "V19": {
+    "kind": "procedure",
+    "result": "GREEN",
+    "evidence": [
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.4-execution/../../knowledge/artifacts-P08.4-execution-completion.json"
+    ]
+  }
+}

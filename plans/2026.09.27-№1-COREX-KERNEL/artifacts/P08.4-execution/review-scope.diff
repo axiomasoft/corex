@@ -1,0 +1,1880 @@
+diff --git a/docs/architecture/table-ownership.md b/docs/architecture/table-ownership.md
+index ebfde498..2a3d24a9 100644
+--- a/docs/architecture/table-ownership.md
++++ b/docs/architecture/table-ownership.md
+@@ -61,18 +61,18 @@ AzGuard управляет схемой своих таблиц как зави
+ | aut_roles | axiomasoft/corex-access | tenant | axiomasoft/corex-access |  | unobserved | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
+ | az_guard_roles | axiomasoft/corex-access-azguard | tenant | axiomasoft/corex-access-azguard |  | unobserved | forbidden |  | unobserved | unobserved | vendor-managed | private | AzGuard migration; bridge pins the role model/table |
+ | az_guard_role_permissions | axiomasoft/corex-access-azguard | tenant | axiomasoft/corex-access-azguard |  | unobserved | forbidden |  | unobserved | unobserved | vendor-managed | private | AzGuard migration; bridge listener writes this table |
+-| sys_audit_log | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |
+-| sys_department_user | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | primary(['department_id', 'user_id']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |
+-| sys_departments | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |
+-| sys_feature_flags | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |
+-| sys_feature_overrides | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |
+-| sys_inbox_messages | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | primary(['consumer', 'message_id']); index(['processed_at'], 'sys_inbox_messages_processed_idx') | unobserved | unobserved | expand-migrate-contract (policy-default) | outbox | вне `DB_SCHEMA.md` FROZEN v1.0; tenant-schema DDL (D27, G-DDL P5.4) |
+-| sys_outbox_messages | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | partial indexes claim/reclaim/published/dead (P5.4) | unobserved | unobserved | expand-migrate-contract (policy-default) | outbox | вне `DB_SCHEMA.md` FROZEN v1.0; tenant-schema DDL (D27, G-DDL P5.4) |
+-| sys_pubsub_cursors | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | primary(['channel', 'subscriber']) | unobserved | unobserved | expand-migrate-contract (policy-default) | outbox | table-name-via-config-default |
+-| sys_pubsub_messages | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | index(['channel', 'id']) | unobserved | unobserved | expand-migrate-contract (policy-default) | outbox | table-name-via-config-default |
+-| sys_saved_view_scopes | axiomasoft/corex-panels | tenant | axiomasoft/corex-panels |  | unobserved | forbidden | primary(['entity_code', 'scope_key']) | unobserved | unobserved | expand-migrate-contract (policy-default) | projection | table-name-via-config-default |
+-| sys_saved_views | axiomasoft/corex-panels | tenant | axiomasoft/corex-panels |  | unobserved | forbidden | unique(['entity_code', 'default_scope_key']) | unobserved | unobserved | expand-migrate-contract (policy-default) | projection | table-name-via-config-default |
+-| sys_settings | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |
++| sys_audit_log | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_audit_log_actor_ix`; `sys_audit_log_entity_ix`; `sys_audit_log_occurred_brin_ix`; `sys_audit_log_pk`; `sys_audit_log_seq_ix`; `sys_audit_log_workspace_ix` | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |
++| sys_department_user | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_department_user_pk`; `sys_department_user_primary_uq` | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |
++| sys_departments | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_departments_path_gist_ix`; `sys_departments_path_uq`; `sys_departments_pk`; `sys_departments_workspace_ix` | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |
++| sys_feature_flags | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_feature_flags_key_uq`; `sys_feature_flags_pk` | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |
++| sys_feature_overrides | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_feature_overrides_flag_scope_uq`; `sys_feature_overrides_pk` | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |
++| sys_inbox_messages | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_inbox_messages_pk`; `sys_inbox_messages_processed_ix` | unobserved | unobserved | expand-migrate-contract (policy-default) | outbox | вне `DB_SCHEMA.md` FROZEN v1.0; tenant-schema DDL (D27, G-DDL P5.4) |
++| sys_outbox_messages | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_outbox_messages_claim_ix`; `sys_outbox_messages_dead_ix`; `sys_outbox_messages_pk`; `sys_outbox_messages_published_ix`; `sys_outbox_messages_reclaim_ix` | unobserved | unobserved | expand-migrate-contract (policy-default) | outbox | вне `DB_SCHEMA.md` FROZEN v1.0; tenant-schema DDL (D27, G-DDL P5.4) |
++| sys_pubsub_cursors | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_pubsub_cursors_pk` | unobserved | unobserved | expand-migrate-contract (policy-default) | outbox | table-name-via-config-default |
++| sys_pubsub_messages | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_pubsub_messages_channel_id_ix`; `sys_pubsub_messages_pk` | unobserved | unobserved | expand-migrate-contract (policy-default) | outbox | table-name-via-config-default |
++| sys_saved_view_scopes | axiomasoft/corex-panels | tenant | axiomasoft/corex-panels |  | unobserved | forbidden | `sys_saved_view_scopes_pk` | unobserved | unobserved | expand-migrate-contract (policy-default) | projection | table-name-via-config-default |
++| sys_saved_views | axiomasoft/corex-panels | tenant | axiomasoft/corex-panels |  | unobserved | forbidden | `sys_saved_views_default_scope_uq`; `sys_saved_views_pk` | unobserved | unobserved | expand-migrate-contract (policy-default) | projection | table-name-via-config-default |
++| sys_settings | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `sys_settings_pk`; `sys_settings_scope_ix`; `sys_settings_uq` | unobserved | unobserved | expand-migrate-contract (policy-default) | private | table-name-via-config-default |
+ | corex_rate_batches | axiomasoft/corex-intl | tenant | axiomasoft/corex-intl |  | unobserved | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
+ | corex_rate_current | axiomasoft/corex-intl | tenant | axiomasoft/corex-intl |  | unobserved | forbidden | primary(['base', 'quote', 'source']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
+ | corex_rate_snapshots | axiomasoft/corex-intl | tenant | axiomasoft/corex-intl |  | unobserved | forbidden | unique(['source', 'publication_id', 'publication_revision', 'base', 'quote', 'valid_on'], 'corex_rate_snapshots_publication_unique') | unobserved | unobserved | expand-migrate-contract (policy-default) | projection |  |
+@@ -84,9 +84,9 @@ AzGuard управляет схемой своих таблиц как зави
+ | med_files | axiomasoft/corex-media | tenant | axiomasoft/corex-media |  | unobserved | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
+ | med_operations | axiomasoft/corex-media | tenant | axiomasoft/corex-media |  | unobserved | forbidden | index(['state', 'next_attempt_at']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
+ | med_relations | axiomasoft/corex-media | tenant | axiomasoft/corex-media |  | unobserved | forbidden | unique(['file_id', 'entity_handle', 'entity_id', 'slot']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
+-| mod_lifecycle_log | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden |  | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
+-| mod_modules | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | index('state', 'mod_modules_state_ix'); unique('name', 'mod_modules_name_uq') | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
+-| mod_records | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | primary(['module_name', 'record_type', 'reference']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
++| mod_lifecycle_log | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `mod_lifecycle_log_module_ix`; `mod_lifecycle_log_pk` | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
++| mod_modules | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `mod_modules_name_uq`; `mod_modules_pk`; `mod_modules_state_ix` | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
++| mod_records | axiomasoft/corex | tenant | axiomasoft/corex |  | unobserved | forbidden | `mod_records_module_seq_ix`; `mod_records_pk` | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
+ | ntf_deliveries | axiomasoft/corex-notifications | tenant | axiomasoft/corex-notifications |  | unobserved | forbidden | index(['state', 'next_attempt'], 'ntf_deliveries_scan_idx') | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
+ | ntf_digest_items | axiomasoft/corex-notifications | tenant | axiomasoft/corex-notifications |  | unobserved | forbidden | unique(['notification_id', 'channel']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
+ | ntf_digest_runs | axiomasoft/corex-notifications | tenant | axiomasoft/corex-notifications |  | unobserved | forbidden | unique(['recipient_kind', 'recipient_id', 'period', 'period_start', 'batch_seq']) | unobserved | unobserved | expand-migrate-contract (policy-default) | private |  |
+diff --git a/packages/core/CHANGELOG.md b/packages/core/CHANGELOG.md
+index 2f23afb2..431e0536 100644
+--- a/packages/core/CHANGELOG.md
++++ b/packages/core/CHANGELOG.md
+@@ -1,5 +1,9 @@
+ # Changelog
+ 
++## Unreleased — tenant baseline v1
++
++- Tenant schema baseline v1: one file per table, explicit constraint/index names, bigint counters, and folded actor checks; the temporary `tenant-modules` set is removed.
++
+ ## Unreleased — deterministic schema (P08.2)
+ 
+ - Remove configurable identifier strategies and the twelve table-name options. Models generate UUIDv7 with Laravel HasUuids; migrations and queries use package-owned table literals. Remove IdStrategy, IdColumns, HasConfiguredId and the unused ResolvesCoreOptions schema bridge without aliases. Native Eloquent insert assigns IDs during quiet synchronous audit writes.
+@@ -93,6 +97,8 @@
+ 
+ ## [Unreleased]
+ 
++- Tenant schema baseline v1: one file per table, explicit constraint/index names, bigint counters, and folded actor checks; the temporary `tenant-modules` set is removed.
++
+ - CloudEvents 1.0 structured JSON codec with internal/external profiles; MessageContract dataSchema, MessageEnvelope source URI-reference validation and withPayload; MessagePublisher wire now uses application/cloudevents+json (PLAN3.D90/D92, P06.3).
+ 
+ - PHP API manifests now record direct inheritance, interfaces and traits separately and include only members declared by this package; external dependency members are omitted without changing the `php-api/1` schema. Source scanners move to the Attributes/Errors Tooling bridges and the durable payload checker moves to Messaging/PHPStan; runtime references to development bridges are forbidden.
+diff --git a/packages/core/README.md b/packages/core/README.md
+index 0c004351..036a7800 100644
+--- a/packages/core/README.md
++++ b/packages/core/README.md
+@@ -122,3 +122,7 @@ Package error identities use backed enums and a boot compiled kernel registry.
+ Error constructors require `ErrorCode`; descriptors keep scoped string wire codes.
+ See the monorepo [error contract](../../docs/reference/errors.md) for contributions,
+ validated replay and safe mapping.
++
++## Схема
++
++Набор `tenant`, baseline v1 (PostgreSQL). Он содержит таблицы `sys_*` и `mod_*`; исполнение — `corex:schema:migrate --scope=tenant`. Миграции не публикуются.
+diff --git a/packages/core/database/migrations/2026_07_27_100001_widen_mod_lifecycle_actor_check.php b/packages/core/database/migrations/2026_07_27_100001_widen_mod_lifecycle_actor_check.php
+deleted file mode 100644
+index 2841f339..00000000
+--- a/packages/core/database/migrations/2026_07_27_100001_widen_mod_lifecycle_actor_check.php
++++ /dev/null
+@@ -1,27 +0,0 @@
+-<?php
+-
+-declare(strict_types=1);
+-
+-use Illuminate\Database\Migrations\Migration;
+-use Illuminate\Support\Facades\DB;
+-
+-// P2.11 (D138) — mod_lifecycle_log.actor_ck holds a DIFFERENT vocabulary
+-// than sys_audit_log (no agent/api_key here) and DatabaseModuleLifecycle
+-// writes CurrentActor::type()->value into it; without this widening, the
+-// first lifecycle operation performed under impersonation would fail with a
+-// CHECK-violation. Additive — the closed P1.3 migration is never edited.
+-// down() restores the ORIGINAL four-value list.
+-return new class extends Migration
+-{
+-    public function up(): void
+-    {
+-        DB::statement('ALTER TABLE mod_lifecycle_log DROP CONSTRAINT mod_ll_actor_ck');
+-        DB::statement("ALTER TABLE mod_lifecycle_log ADD CONSTRAINT mod_ll_actor_ck CHECK (actor_type IN ('user','system','platform','cli','support'))");
+-    }
+-
+-    public function down(): void
+-    {
+-        DB::statement('ALTER TABLE mod_lifecycle_log DROP CONSTRAINT mod_ll_actor_ck');
+-        DB::statement("ALTER TABLE mod_lifecycle_log ADD CONSTRAINT mod_ll_actor_ck CHECK (actor_type IN ('user','system','platform','cli'))");
+-    }
+-};
+diff --git a/packages/core/database/migrations/pg/2026_07_27_100000_widen_sys_audit_actor_check.php b/packages/core/database/migrations/pg/2026_07_27_100000_widen_sys_audit_actor_check.php
+deleted file mode 100644
+index 6345ff51..00000000
+--- a/packages/core/database/migrations/pg/2026_07_27_100000_widen_sys_audit_actor_check.php
++++ /dev/null
+@@ -1,29 +0,0 @@
+-<?php
+-
+-declare(strict_types=1);
+-
+-use Illuminate\Database\Migrations\Migration;
+-use Illuminate\Support\Facades\DB;
+-
+-// P2.11 (D137/OQ-7 часть 1) — additive widening of the CHECK the closed
+-// P1.8 migration created: `support` (B-11 §5.9 impersonation ACTOR) joins
+-// the vocabulary. down() restores the ORIGINAL four-value list — the closed
+-// migration file itself is never edited (D137).
+-return new class extends Migration
+-{
+-    public function up(): void
+-    {
+-        $table = 'sys_audit_log';
+-
+-        DB::statement("ALTER TABLE {$table} DROP CONSTRAINT sys_audit_actor_ck");
+-        DB::statement("ALTER TABLE {$table} ADD CONSTRAINT sys_audit_actor_ck CHECK (actor_type IN ('user','agent','api_key','system','support'))");
+-    }
+-
+-    public function down(): void
+-    {
+-        $table = 'sys_audit_log';
+-
+-        DB::statement("ALTER TABLE {$table} DROP CONSTRAINT sys_audit_actor_ck");
+-        DB::statement("ALTER TABLE {$table} ADD CONSTRAINT sys_audit_actor_ck CHECK (actor_type IN ('user','agent','api_key','system'))");
+-    }
+-};
+diff --git a/packages/core/database/migrations/2026_07_13_000000_create_mod_modules_table.php b/packages/core/database/migrations/tenant/2026_10_01_010010_create_mod_modules.php
+similarity index 89%
+rename from packages/core/database/migrations/2026_07_13_000000_create_mod_modules_table.php
+rename to packages/core/database/migrations/tenant/2026_10_01_010010_create_mod_modules.php
+index acbc0bee..63a73a78 100644
+--- a/packages/core/database/migrations/2026_07_13_000000_create_mod_modules_table.php
++++ b/packages/core/database/migrations/tenant/2026_10_01_010010_create_mod_modules.php
+@@ -7,13 +7,13 @@ use Illuminate\Database\Schema\Blueprint;
+ use Illuminate\Support\Facades\DB;
+ use Illuminate\Support\Facades\Schema;
+ 
+-// Executed from the package schema set on its declared connection.
+ return new class extends Migration
+ {
+     public function up(): void
+     {
+         Schema::create('mod_modules', function (Blueprint $table): void {
+-            $table->uuid('id')->primary();
++            $table->uuid('id');
++            $table->primary(['id'], 'mod_modules_pk');
+             $table->string('name', 190);
+             $table->string('state', 16);
+             $table->string('version', 32);
+@@ -31,6 +31,8 @@ return new class extends Migration
+             $table->index('state', 'mod_modules_state_ix');
+         });
+ 
++        Schema::getConnection()->statement('ALTER TABLE mod_modules RENAME CONSTRAINT mod_modules_pkey TO mod_modules_pk');
++
+         DB::statement("ALTER TABLE mod_modules ADD CONSTRAINT mod_modules_state_ck CHECK (state IN ('enabled','disabled','archived','purged'))");
+         DB::statement("ALTER TABLE mod_modules ADD CONSTRAINT mod_modules_edition_ck CHECK (edition IN ('standard','pro'))");
+         DB::statement("ALTER TABLE mod_modules ADD CONSTRAINT mod_modules_reason_ck CHECK (disable_reason IN ('manual','billing','dependency') OR disable_reason IS NULL)");
+diff --git a/packages/core/database/migrations/2026_07_13_000001_create_mod_records_table.php b/packages/core/database/migrations/tenant/2026_10_01_010020_create_mod_records.php
+similarity index 55%
+rename from packages/core/database/migrations/2026_07_13_000001_create_mod_records_table.php
+rename to packages/core/database/migrations/tenant/2026_10_01_010020_create_mod_records.php
+index e180a94f..878fa26f 100644
+--- a/packages/core/database/migrations/2026_07_13_000001_create_mod_records_table.php
++++ b/packages/core/database/migrations/tenant/2026_10_01_010020_create_mod_records.php
+@@ -7,8 +7,7 @@ use Illuminate\Database\Schema\Blueprint;
+ use Illuminate\Support\Facades\DB;
+ use Illuminate\Support\Facades\Schema;
+ 
+-// Ownership registry the FSM purges by (B-10 §5.4) — no FK to mod_modules,
+-// module_name is a logical key (DB_SCHEMA.md §3.3 mod_records).
++// Logical module ownership keys deliberately have no foreign key to mod_modules.
+ return new class extends Migration
+ {
+     public function up(): void
+@@ -21,20 +20,12 @@ return new class extends Migration
+             $table->timestampTz('created_at', precision: 6)->useCurrent();
+             $table->timestampTz('updated_at', precision: 6)->useCurrent();
+ 
+-            $table->primary(['module_name', 'record_type', 'reference']);
++            $table->primary(['module_name', 'record_type', 'reference'], 'mod_records_pk');
+         });
+ 
+-        // Monotonic surrogate ordering key (D31, Blocker A3). created_at is
+-        // timestamptz(0) (second precision — RAG §2), so every claim of one
+-        // enable() collapses onto the same wall-clock second and the drop
+-        // order would be decided by an alphabetic `reference` tiebreak, not by
+-        // creation order → a module with a FK between its own tables (parent
+-        // created before child) drops the parent first and fails 2BP01. `seq`
+-        // is a clock-free bigserial assigned in insert order (= claim order =
+-        // creation order via the auto-claim wrapper), so purge orders strictly
+-        // by `seq DESC` (reverse creation) and is FK-safe. ADD COLUMN keeps the
+-        // migration additive — the composite PK stays untouched, existing
+-        // claims keep their rows (Implementation Rules D31; no table recreate).
++        Schema::getConnection()->statement('ALTER TABLE mod_records RENAME CONSTRAINT mod_records_pkey TO mod_records_pk');
++
++        // Insertion order determines reverse, foreign-key-safe purge order.
+         DB::statement('ALTER TABLE mod_records ADD COLUMN seq bigserial');
+ 
+         DB::statement('CREATE INDEX mod_records_module_seq_ix ON mod_records (module_name, seq DESC)');
+diff --git a/packages/core/database/migrations/2026_07_13_000002_create_mod_lifecycle_log_table.php b/packages/core/database/migrations/tenant/2026_10_01_010030_create_mod_lifecycle_log.php
+similarity index 61%
+rename from packages/core/database/migrations/2026_07_13_000002_create_mod_lifecycle_log_table.php
+rename to packages/core/database/migrations/tenant/2026_10_01_010030_create_mod_lifecycle_log.php
+index f559c449..03e0c145 100644
+--- a/packages/core/database/migrations/2026_07_13_000002_create_mod_lifecycle_log_table.php
++++ b/packages/core/database/migrations/tenant/2026_10_01_010030_create_mod_lifecycle_log.php
+@@ -7,13 +7,13 @@ use Illuminate\Database\Schema\Blueprint;
+ use Illuminate\Support\Facades\DB;
+ use Illuminate\Support\Facades\Schema;
+ 
+-// Executed from the package schema set on its declared connection.
+ return new class extends Migration
+ {
+     public function up(): void
+     {
+         Schema::create('mod_lifecycle_log', function (Blueprint $table): void {
+-            $table->uuid('id')->primary();
++            $table->uuid('id');
++            $table->primary(['id'], 'mod_lifecycle_log_pk');
+             $table->string('module_name', 190);
+             $table->string('operation', 16);
+             $table->string('from_state', 16);
+@@ -26,14 +26,12 @@ return new class extends Migration
+             $table->timestampTz('updated_at', precision: 6)->useCurrent();
+         });
+ 
+-        // Beyond the DRAFT DB_SCHEMA catalog (A91, documented deviation): a
+-        // lookup index over the append-only log by module + recency. Kept, not
+-        // dropped — the catalog is silent on it, not in conflict; recorded in
+-        // the P1.19 column-by-column report.
+-        DB::statement('CREATE INDEX mod_ll_module_ix ON mod_lifecycle_log (module_name, created_at DESC)');
+-        DB::statement("ALTER TABLE mod_lifecycle_log ADD CONSTRAINT mod_ll_op_ck CHECK (operation IN ('enable','disable','upgrade','archive','purge'))");
+-        DB::statement("ALTER TABLE mod_lifecycle_log ADD CONSTRAINT mod_ll_status_ck CHECK (status IN ('success','failed','started'))");
+-        DB::statement("ALTER TABLE mod_lifecycle_log ADD CONSTRAINT mod_ll_actor_ck CHECK (actor_type IN ('user','system','platform','cli'))");
++        Schema::getConnection()->statement('ALTER TABLE mod_lifecycle_log RENAME CONSTRAINT mod_lifecycle_log_pkey TO mod_lifecycle_log_pk');
++
++        DB::statement('CREATE INDEX mod_lifecycle_log_module_ix ON mod_lifecycle_log (module_name, created_at DESC)');
++        DB::statement("ALTER TABLE mod_lifecycle_log ADD CONSTRAINT mod_lifecycle_log_operation_ck CHECK (operation IN ('enable','disable','upgrade','archive','purge'))");
++        DB::statement("ALTER TABLE mod_lifecycle_log ADD CONSTRAINT mod_lifecycle_log_status_ck CHECK (status IN ('success','failed','started'))");
++        DB::statement("ALTER TABLE mod_lifecycle_log ADD CONSTRAINT mod_lifecycle_log_actor_ck CHECK (actor_type IN ('user','system','platform','cli','support'))");
+     }
+ 
+     public function down(): void
+diff --git a/packages/core/database/migrations/pg/2026_07_13_100000_create_sys_settings_table.php b/packages/core/database/migrations/tenant/2026_10_01_010040_create_sys_settings.php
+similarity index 81%
+rename from packages/core/database/migrations/pg/2026_07_13_100000_create_sys_settings_table.php
+rename to packages/core/database/migrations/tenant/2026_10_01_010040_create_sys_settings.php
+index d4289cb1..6a70b967 100644
+--- a/packages/core/database/migrations/pg/2026_07_13_100000_create_sys_settings_table.php
++++ b/packages/core/database/migrations/tenant/2026_10_01_010040_create_sys_settings.php
+@@ -7,7 +7,6 @@ use Illuminate\Database\Schema\Blueprint;
+ use Illuminate\Support\Facades\DB;
+ use Illuminate\Support\Facades\Schema;
+ 
+-// Executed from the package schema set on its declared connection.
+ return new class extends Migration
+ {
+     public function up(): void
+@@ -15,7 +14,8 @@ return new class extends Migration
+         $table = 'sys_settings';
+ 
+         Schema::create($table, function (Blueprint $table): void {
+-            $table->uuid('id')->primary();
++            $table->uuid('id');
++            $table->primary(['id'], 'sys_settings_pk');
+             $table->string('namespace', 64);
+             $table->string('key', 190);
+             $table->string('scope_type', 16)->default('account');
+@@ -26,12 +26,11 @@ return new class extends Migration
+             $table->timestampTz('updated_at', precision: 6)->useCurrent();
+         });
+ 
++        Schema::getConnection()->statement('ALTER TABLE sys_settings RENAME CONSTRAINT sys_settings_pkey TO sys_settings_pk');
++
+         DB::statement("ALTER TABLE {$table} ADD CONSTRAINT sys_settings_scope_ck CHECK (scope_type IN ('account','workspace','user'))");
+         DB::statement("ALTER TABLE {$table} ADD CONSTRAINT sys_settings_scope_id_ck CHECK ((scope_type = 'account' AND scope_id IS NULL) OR (scope_type <> 'account' AND scope_id IS NOT NULL))");
+         DB::statement("ALTER TABLE {$table} ADD CONSTRAINT sys_settings_uq UNIQUE NULLS NOT DISTINCT (namespace, key, scope_type, scope_id)");
+-        // Beyond the DRAFT DB_SCHEMA catalog (A91, documented deviation): a
+-        // scope lookup index for the cascade resolver. Kept, not dropped — the
+-        // catalog is silent on it, not in conflict; recorded in P1.19 report.
+         DB::statement("CREATE INDEX sys_settings_scope_ix ON {$table} (scope_type, scope_id)");
+     }
+ 
+diff --git a/packages/core/database/migrations/pg/2026_07_13_110000_create_sys_audit_log_table.php b/packages/core/database/migrations/tenant/2026_10_01_010050_create_sys_audit_log.php
+similarity index 56%
+rename from packages/core/database/migrations/pg/2026_07_13_110000_create_sys_audit_log_table.php
+rename to packages/core/database/migrations/tenant/2026_10_01_010050_create_sys_audit_log.php
+index cf1e1e54..86d188c6 100644
+--- a/packages/core/database/migrations/pg/2026_07_13_110000_create_sys_audit_log_table.php
++++ b/packages/core/database/migrations/tenant/2026_10_01_010050_create_sys_audit_log.php
+@@ -7,7 +7,6 @@ use Illuminate\Database\Schema\Blueprint;
+ use Illuminate\Support\Facades\DB;
+ use Illuminate\Support\Facades\Schema;
+ 
+-// Executed from the package schema set on its declared connection.
+ return new class extends Migration
+ {
+     public function up(): void
+@@ -15,7 +14,8 @@ return new class extends Migration
+         $table = 'sys_audit_log';
+ 
+         Schema::create($table, function (Blueprint $table): void {
+-            $table->uuid('id')->primary();
++            $table->uuid('id');
++            $table->primary(['id'], 'sys_audit_log_pk');
+             $table->timestampTz('occurred_at', precision: 6)->useCurrent();
+             $table->string('actor_type', 16);
+             $table->uuid('actor_id')->nullable();
+@@ -28,17 +28,17 @@ return new class extends Migration
+             $table->timestampTz('created_at', precision: 6)->useCurrent();
+         });
+ 
+-        // Monotonic audit cursor (D42): clock-free bigserial assigned in insert
+-        // order. Keyset pagination `WHERE seq > :cursor ORDER BY seq` is the ONLY
+-        // stable ordering of this journal — hence the btree index on seq.
++        Schema::getConnection()->statement('ALTER TABLE sys_audit_log RENAME CONSTRAINT sys_audit_log_pkey TO sys_audit_log_pk');
++
++        // A sequence keeps keyset pagination independent of wall-clock ordering.
+         DB::statement("ALTER TABLE {$table} ADD COLUMN seq bigserial");
+ 
+-        DB::statement("ALTER TABLE {$table} ADD CONSTRAINT sys_audit_actor_ck CHECK (actor_type IN ('user','agent','api_key','system'))");
+-        DB::statement("CREATE INDEX sys_audit_seq_ix ON {$table} (seq)");
+-        DB::statement("CREATE INDEX sys_audit_entity_ix ON {$table} (entity_type, entity_id, occurred_at DESC)");
+-        DB::statement("CREATE INDEX sys_audit_actor_ix ON {$table} (actor_type, actor_id, occurred_at DESC)");
+-        DB::statement("CREATE INDEX sys_audit_wsp_ix ON {$table} (workspace_id, occurred_at DESC)");
+-        DB::statement("CREATE INDEX sys_audit_brin_ix ON {$table} USING BRIN (occurred_at)");
++        DB::statement("ALTER TABLE {$table} ADD CONSTRAINT sys_audit_log_actor_ck CHECK (actor_type IN ('user','agent','api_key','system','support'))");
++        DB::statement("CREATE INDEX sys_audit_log_seq_ix ON {$table} (seq)");
++        DB::statement("CREATE INDEX sys_audit_log_entity_ix ON {$table} (entity_type, entity_id, occurred_at DESC)");
++        DB::statement("CREATE INDEX sys_audit_log_actor_ix ON {$table} (actor_type, actor_id, occurred_at DESC)");
++        DB::statement("CREATE INDEX sys_audit_log_workspace_ix ON {$table} (workspace_id, occurred_at DESC)");
++        DB::statement("CREATE INDEX sys_audit_log_occurred_brin_ix ON {$table} USING BRIN (occurred_at)");
+     }
+ 
+     public function down(): void
+diff --git a/packages/core/database/migrations/pg/2026_07_13_120000_create_sys_feature_flags_table.php b/packages/core/database/migrations/tenant/2026_10_01_010060_create_sys_feature_flags.php
+similarity index 68%
+rename from packages/core/database/migrations/pg/2026_07_13_120000_create_sys_feature_flags_table.php
+rename to packages/core/database/migrations/tenant/2026_10_01_010060_create_sys_feature_flags.php
+index 8e43aff2..42d7072d 100644
+--- a/packages/core/database/migrations/pg/2026_07_13_120000_create_sys_feature_flags_table.php
++++ b/packages/core/database/migrations/tenant/2026_10_01_010060_create_sys_feature_flags.php
+@@ -6,20 +6,23 @@ use Illuminate\Database\Migrations\Migration;
+ use Illuminate\Database\Schema\Blueprint;
+ use Illuminate\Support\Facades\Schema;
+ 
+-// Executed from the package schema set on its declared connection.
+ return new class extends Migration
+ {
+     public function up(): void
+     {
+         Schema::create('sys_feature_flags', function (Blueprint $table): void {
+-            $table->uuid('id')->primary();
+-            $table->string('key', 128)->unique();
++            $table->uuid('id');
++            $table->primary(['id'], 'sys_feature_flags_pk');
++            $table->string('key', 128);
++            $table->unique(['key'], 'sys_feature_flags_key_uq');
+             $table->string('module', 190)->nullable();
+             $table->boolean('is_enabled')->default(false);
+             $table->jsonb('payload')->nullable();
+             $table->timestampTz('created_at', precision: 6)->useCurrent();
+             $table->timestampTz('updated_at', precision: 6)->useCurrent();
+         });
++
++        Schema::getConnection()->statement('ALTER TABLE sys_feature_flags RENAME CONSTRAINT sys_feature_flags_pkey TO sys_feature_flags_pk');
+     }
+ 
+     public function down(): void
+diff --git a/packages/core/database/migrations/pg/2026_07_13_120001_create_sys_feature_overrides_table.php b/packages/core/database/migrations/tenant/2026_10_01_010070_create_sys_feature_overrides.php
+similarity index 62%
+rename from packages/core/database/migrations/pg/2026_07_13_120001_create_sys_feature_overrides_table.php
+rename to packages/core/database/migrations/tenant/2026_10_01_010070_create_sys_feature_overrides.php
+index f9342425..8bce6716 100644
+--- a/packages/core/database/migrations/pg/2026_07_13_120001_create_sys_feature_overrides_table.php
++++ b/packages/core/database/migrations/tenant/2026_10_01_010070_create_sys_feature_overrides.php
+@@ -7,7 +7,6 @@ use Illuminate\Database\Schema\Blueprint;
+ use Illuminate\Support\Facades\DB;
+ use Illuminate\Support\Facades\Schema;
+ 
+-// Executed from the package schema set on its declared connection.
+ return new class extends Migration
+ {
+     public function up(): void
+@@ -15,8 +14,10 @@ return new class extends Migration
+         $table = 'sys_feature_overrides';
+ 
+         Schema::create($table, function (Blueprint $table): void {
+-            $table->uuid('id')->primary();
+-            $table->foreignUuid('flag_id')->constrained('sys_feature_flags')->cascadeOnDelete();
++            $table->uuid('id');
++            $table->primary(['id'], 'sys_feature_overrides_pk');
++            $table->uuid('flag_id');
++            $table->foreign(['flag_id'], 'sys_feature_overrides_flag_fk')->references('id')->on('sys_feature_flags')->cascadeOnDelete();
+             $table->string('scope_type', 16);
+             $table->uuid('scope_id');
+             $table->boolean('is_enabled');
+@@ -25,8 +26,10 @@ return new class extends Migration
+             $table->timestampTz('updated_at', precision: 6)->useCurrent();
+         });
+ 
+-        DB::statement("ALTER TABLE {$table} ADD CONSTRAINT sys_fo_scope_ck CHECK (scope_type IN ('workspace','user','department'))");
+-        DB::statement("ALTER TABLE {$table} ADD CONSTRAINT sys_fo_uq UNIQUE (flag_id, scope_type, scope_id)");
++        Schema::getConnection()->statement('ALTER TABLE sys_feature_overrides RENAME CONSTRAINT sys_feature_overrides_pkey TO sys_feature_overrides_pk');
++
++        DB::statement("ALTER TABLE {$table} ADD CONSTRAINT sys_feature_overrides_scope_ck CHECK (scope_type IN ('workspace','user','department'))");
++        DB::statement("ALTER TABLE {$table} ADD CONSTRAINT sys_feature_overrides_flag_scope_uq UNIQUE (flag_id, scope_type, scope_id)");
+     }
+ 
+     public function down(): void
+diff --git a/packages/core/database/migrations/pg/2026_07_13_130000_create_sys_departments_table.php b/packages/core/database/migrations/tenant/2026_10_01_010080_create_sys_departments.php
+similarity index 56%
+rename from packages/core/database/migrations/pg/2026_07_13_130000_create_sys_departments_table.php
+rename to packages/core/database/migrations/tenant/2026_10_01_010080_create_sys_departments.php
+index e433f5b8..ca22bd89 100644
+--- a/packages/core/database/migrations/pg/2026_07_13_130000_create_sys_departments_table.php
++++ b/packages/core/database/migrations/tenant/2026_10_01_010080_create_sys_departments.php
+@@ -7,38 +7,35 @@ use Illuminate\Database\Schema\Blueprint;
+ use Illuminate\Support\Facades\DB;
+ use Illuminate\Support\Facades\Schema;
+ 
+-// Executed from the package schema set on its declared connection.
+ return new class extends Migration
+ {
+     public function up(): void
+     {
+-        // Trusted extension since PG13 — role with CREATE on the database
+-        // suffices, no superuser required (RAG:✅ 2026-07-12 findings §4).
+         DB::statement('CREATE EXTENSION IF NOT EXISTS ltree');
+ 
+         $table = 'sys_departments';
+ 
+         Schema::create($table, function (Blueprint $table): void {
+-            $table->uuid('id')->primary();
++            $table->uuid('id');
++            $table->primary(['id'], 'sys_departments_pk');
+             $table->uuid('workspace_id');
+             $table->uuid('parent_id')->nullable();
+             $table->string('name', 255);
+             $table->uuid('head_user_id')->nullable();
+-            $table->integer('sort_order')->default(0);
++            $table->bigInteger('sort_order')->default(0);
+             $table->timestampTz('deleted_at', precision: 6)->nullable();
+             $table->timestampTz('created_at', precision: 6)->useCurrent();
+             $table->timestampTz('updated_at', precision: 6)->useCurrent();
+         });
+ 
+-        // Self-referencing FK added AFTER the blueprint's own `primary`
+-        // command has run (Schema::create() defers the fluent ->primary()
+-        // to after any inline ->constrained(), which would try to add this
+-        // FK before sys_departments.id has a PK to reference).
+-        DB::statement("ALTER TABLE {$table} ADD CONSTRAINT sys_dept_parent_fk FOREIGN KEY (parent_id) REFERENCES {$table} (id) ON DELETE RESTRICT");
++        Schema::getConnection()->statement('ALTER TABLE sys_departments RENAME CONSTRAINT sys_departments_pkey TO sys_departments_pk');
++
++        // Add the self-reference after the primary key exists.
++        DB::statement("ALTER TABLE {$table} ADD CONSTRAINT sys_departments_parent_fk FOREIGN KEY (parent_id) REFERENCES {$table} (id) ON DELETE RESTRICT");
+         DB::statement("ALTER TABLE {$table} ADD COLUMN path ltree NOT NULL");
+-        DB::statement("ALTER TABLE {$table} ADD CONSTRAINT sys_dept_path_uq UNIQUE (path)");
+-        DB::statement("CREATE INDEX sys_dept_path_gist ON {$table} USING GIST (path)");
+-        DB::statement("CREATE INDEX sys_dept_wsp_ix ON {$table} (workspace_id) WHERE deleted_at IS NULL");
++        DB::statement("ALTER TABLE {$table} ADD CONSTRAINT sys_departments_path_uq UNIQUE (path)");
++        DB::statement("CREATE INDEX sys_departments_path_gist_ix ON {$table} USING GIST (path)");
++        DB::statement("CREATE INDEX sys_departments_workspace_ix ON {$table} (workspace_id) WHERE deleted_at IS NULL");
+     }
+ 
+     public function down(): void
+diff --git a/packages/core/database/migrations/pg/2026_07_13_130001_create_sys_department_user_table.php b/packages/core/database/migrations/tenant/2026_10_01_010090_create_sys_department_user.php
+similarity index 58%
+rename from packages/core/database/migrations/pg/2026_07_13_130001_create_sys_department_user_table.php
+rename to packages/core/database/migrations/tenant/2026_10_01_010090_create_sys_department_user.php
+index 89d42ebd..7e555f00 100644
+--- a/packages/core/database/migrations/pg/2026_07_13_130001_create_sys_department_user_table.php
++++ b/packages/core/database/migrations/tenant/2026_10_01_010090_create_sys_department_user.php
+@@ -7,7 +7,6 @@ use Illuminate\Database\Schema\Blueprint;
+ use Illuminate\Support\Facades\DB;
+ use Illuminate\Support\Facades\Schema;
+ 
+-// Executed from the package schema set on its declared connection.
+ return new class extends Migration
+ {
+     public function up(): void
+@@ -15,18 +14,21 @@ return new class extends Migration
+         $table = 'sys_department_user';
+ 
+         Schema::create($table, function (Blueprint $table): void {
+-            $table->foreignUuid('department_id')->constrained('sys_departments')->cascadeOnDelete();
++            $table->uuid('department_id');
++            $table->foreign(['department_id'], 'sys_department_user_department_fk')->references('id')->on('sys_departments')->cascadeOnDelete();
+             $table->uuid('user_id');
+             $table->string('role', 16)->default('member');
+             $table->boolean('is_primary')->default(false);
+             $table->timestampTz('created_at', precision: 6)->useCurrent();
+             $table->timestampTz('updated_at', precision: 6)->useCurrent();
+ 
+-            $table->primary(['department_id', 'user_id']);
++            $table->primary(['department_id', 'user_id'], 'sys_department_user_pk');
+         });
+ 
+-        DB::statement("ALTER TABLE {$table} ADD CONSTRAINT sys_du_role_ck CHECK (role IN ('member','head','deputy'))");
+-        DB::statement("CREATE UNIQUE INDEX sys_du_primary_uq ON {$table} (user_id) WHERE is_primary");
++        Schema::getConnection()->statement('ALTER TABLE sys_department_user RENAME CONSTRAINT sys_department_user_pkey TO sys_department_user_pk');
++
++        DB::statement("ALTER TABLE {$table} ADD CONSTRAINT sys_department_user_role_ck CHECK (role IN ('member','head','deputy'))");
++        DB::statement("CREATE UNIQUE INDEX sys_department_user_primary_uq ON {$table} (user_id) WHERE is_primary");
+     }
+ 
+     public function down(): void
+diff --git a/packages/core/database/migrations/pg/2026_07_13_140000_create_sys_pubsub_messages_table.php b/packages/core/database/migrations/tenant/2026_10_01_010100_create_sys_pubsub_messages.php
+similarity index 62%
+rename from packages/core/database/migrations/pg/2026_07_13_140000_create_sys_pubsub_messages_table.php
+rename to packages/core/database/migrations/tenant/2026_10_01_010100_create_sys_pubsub_messages.php
+index 35e4fd23..44e926cc 100644
+--- a/packages/core/database/migrations/pg/2026_07_13_140000_create_sys_pubsub_messages_table.php
++++ b/packages/core/database/migrations/tenant/2026_10_01_010100_create_sys_pubsub_messages.php
+@@ -6,19 +6,21 @@ use Illuminate\Database\Migrations\Migration;
+ use Illuminate\Database\Schema\Blueprint;
+ use Illuminate\Support\Facades\Schema;
+ 
+-// Executed from the package schema set on its declared connection.
+ return new class extends Migration
+ {
+     public function up(): void
+     {
+         Schema::create('sys_pubsub_messages', function (Blueprint $table): void {
+-            $table->id();
++            $table->bigInteger('id', autoIncrement: true);
++            $table->primary(['id'], 'sys_pubsub_messages_pk');
+             $table->string('channel', 190);
+             $table->jsonb('payload');
+             $table->timestampTz('created_at', precision: 6)->useCurrent();
+ 
+-            $table->index(['channel', 'id']);
++            $table->index(['channel', 'id'], 'sys_pubsub_messages_channel_id_ix');
+         });
++
++        Schema::getConnection()->statement('ALTER TABLE sys_pubsub_messages RENAME CONSTRAINT sys_pubsub_messages_pkey TO sys_pubsub_messages_pk');
+     }
+ 
+     public function down(): void
+diff --git a/packages/core/database/migrations/pg/2026_07_15_090000_create_sys_pubsub_cursors_table.php b/packages/core/database/migrations/tenant/2026_10_01_010110_create_sys_pubsub_cursors.php
+similarity index 50%
+rename from packages/core/database/migrations/pg/2026_07_15_090000_create_sys_pubsub_cursors_table.php
+rename to packages/core/database/migrations/tenant/2026_10_01_010110_create_sys_pubsub_cursors.php
+index 74ec4966..0744b9a6 100644
+--- a/packages/core/database/migrations/pg/2026_07_15_090000_create_sys_pubsub_cursors_table.php
++++ b/packages/core/database/migrations/tenant/2026_10_01_010110_create_sys_pubsub_cursors.php
+@@ -6,14 +6,7 @@ use Illuminate\Database\Migrations\Migration;
+ use Illuminate\Database\Schema\Blueprint;
+ use Illuminate\Support\Facades\Schema;
+ 
+-// PG-only (D12), same publish/connection scoping as sys_pubsub_messages
+-// (D33/D43). Backs DatabasePollPubSub's DURABLE cursor (D44/P1.24): the poll
+-// position for a (channel, subscriber) pair survives a subscriber restart
+-// instead of resetting to 0 (replays all history) or max(id) on every
+-// subscribe() (silently drops the restart-window backlog — plan.md D44,
+-// pre-mortem P1R C7). Driver-local delivery-cursor state, not a domain
+-// entity — same NOT-in-DB_SCHEMA.md / transport-key rationale as
+-// sys_pubsub_messages.id (OQ-6, audit F12; P1.19 Scope Excluded).
++// Durable subscriber positions use the transport's monotonic message cursor.
+ return new class extends Migration
+ {
+     public function up(): void
+@@ -24,8 +17,10 @@ return new class extends Migration
+             $table->unsignedBigInteger('position');
+             $table->timestampTz('updated_at', precision: 6)->useCurrent();
+ 
+-            $table->primary(['channel', 'subscriber']);
++            $table->primary(['channel', 'subscriber'], 'sys_pubsub_cursors_pk');
+         });
++
++        Schema::getConnection()->statement('ALTER TABLE sys_pubsub_cursors RENAME CONSTRAINT sys_pubsub_cursors_pkey TO sys_pubsub_cursors_pk');
+     }
+ 
+     public function down(): void
+diff --git a/packages/core/database/migrations/pg/2026_09_20_100000_create_sys_outbox_messages_table.php b/packages/core/database/migrations/tenant/2026_10_01_010120_create_sys_outbox_messages.php
+similarity index 76%
+rename from packages/core/database/migrations/pg/2026_09_20_100000_create_sys_outbox_messages_table.php
+rename to packages/core/database/migrations/tenant/2026_10_01_010120_create_sys_outbox_messages.php
+index 417c6d87..c43be52c 100644
+--- a/packages/core/database/migrations/pg/2026_09_20_100000_create_sys_outbox_messages_table.php
++++ b/packages/core/database/migrations/tenant/2026_10_01_010120_create_sys_outbox_messages.php
+@@ -13,7 +13,8 @@ return new class extends Migration
+         $tableName = 'sys_outbox_messages';
+ 
+         Schema::create($tableName, function (Blueprint $table): void {
+-            $table->uuid('id')->primary();
++            $table->uuid('id');
++            $table->primary(['id'], 'sys_outbox_messages_pk');
+             $table->string('name', 160);
+             $table->unsignedSmallInteger('contract_version');
+             $table->unsignedSmallInteger('envelope_version');
+@@ -30,7 +31,7 @@ return new class extends Migration
+             $table->string('status', 16);
+             $table->uuid('lease_owner')->nullable();
+             $table->timestampTz('lease_until', precision: 6)->nullable();
+-            $table->unsignedInteger('attempts');
++            $table->unsignedBigInteger('attempts');
+             $table->string('failure_class', 32)->nullable();
+             $table->text('last_error')->nullable();
+             $table->timestampTz('published_at', precision: 6)->nullable();
+@@ -39,26 +40,33 @@ return new class extends Migration
+             $table->timestampTz('updated_at', precision: 6)->useCurrent();
+         });
+ 
++        Schema::getConnection()->statement('ALTER TABLE sys_outbox_messages RENAME CONSTRAINT sys_outbox_messages_pkey TO sys_outbox_messages_pk');
++
+         $wrappedTable = Schema::getConnection()->getQueryGrammar()->wrapTable($tableName);
+ 
+         Schema::getConnection()->statement(
+-            "CREATE INDEX sys_outbox_messages_claim_idx ON {$wrappedTable} "
++            "CREATE INDEX sys_outbox_messages_claim_ix ON {$wrappedTable} "
+             ."(available_at, occurred_at, id) WHERE status = 'pending'",
+         );
+ 
+         Schema::getConnection()->statement(
+-            "CREATE INDEX sys_outbox_messages_reclaim_idx ON {$wrappedTable} "
++            "CREATE INDEX sys_outbox_messages_reclaim_ix ON {$wrappedTable} "
+             ."(lease_until, id) WHERE status = 'publishing'",
+         );
+ 
+         Schema::getConnection()->statement(
+-            "CREATE INDEX sys_outbox_messages_published_idx ON {$wrappedTable} "
++            "CREATE INDEX sys_outbox_messages_published_ix ON {$wrappedTable} "
+             ."(published_at, id) WHERE status = 'published'",
+         );
+ 
+         Schema::getConnection()->statement(
+-            "CREATE INDEX sys_outbox_messages_dead_idx ON {$wrappedTable} "
++            "CREATE INDEX sys_outbox_messages_dead_ix ON {$wrappedTable} "
+             ."(dead_at, id) WHERE status = 'dead'",
+         );
+     }
++
++    public function down(): void
++    {
++        Schema::dropIfExists('sys_outbox_messages');
++    }
+ };
+diff --git a/packages/core/database/migrations/pg/2026_09_20_100001_create_sys_inbox_messages_table.php b/packages/core/database/migrations/tenant/2026_10_01_010130_create_sys_inbox_messages.php
+similarity index 63%
+rename from packages/core/database/migrations/pg/2026_09_20_100001_create_sys_inbox_messages_table.php
+rename to packages/core/database/migrations/tenant/2026_10_01_010130_create_sys_inbox_messages.php
+index 1cb494b0..ab398953 100644
+--- a/packages/core/database/migrations/pg/2026_09_20_100001_create_sys_inbox_messages_table.php
++++ b/packages/core/database/migrations/tenant/2026_10_01_010130_create_sys_inbox_messages.php
+@@ -15,8 +15,15 @@ return new class extends Migration
+             $table->uuid('message_id');
+             $table->string('name', 160);
+             $table->timestampTz('processed_at', precision: 6);
+-            $table->primary(['consumer', 'message_id']);
+-            $table->index(['processed_at'], 'sys_inbox_messages_processed_idx');
++            $table->primary(['consumer', 'message_id'], 'sys_inbox_messages_pk');
++            $table->index(['processed_at'], 'sys_inbox_messages_processed_ix');
+         });
++
++        Schema::getConnection()->statement('ALTER TABLE sys_inbox_messages RENAME CONSTRAINT sys_inbox_messages_pkey TO sys_inbox_messages_pk');
++    }
++
++    public function down(): void
++    {
++        Schema::dropIfExists('sys_inbox_messages');
+     }
+ };
+diff --git a/packages/core/src/Database/Internal/CoreSchemaSets.php b/packages/core/src/Database/Internal/CoreSchemaSets.php
+index 5902d65d..f81c5d32 100644
+--- a/packages/core/src/Database/Internal/CoreSchemaSets.php
++++ b/packages/core/src/Database/Internal/CoreSchemaSets.php
+@@ -16,8 +16,7 @@ final readonly class CoreSchemaSets implements SchemaSetProvider
+         $root = dirname(__DIR__, 3).'/database/migrations';
+ 
+         return [
+-            new SchemaSet(package: 'axiomasoft/corex', name: 'tenant', scope: SchemaScope::Tenant, path: $root.'/pg', version: 1),
+-            new SchemaSet(package: 'axiomasoft/corex', name: 'tenant-modules', scope: SchemaScope::Tenant, path: $root, version: 1),
++            new SchemaSet(package: 'axiomasoft/corex', name: 'tenant', scope: SchemaScope::Tenant, path: $root.'/tenant', version: 1),
+         ];
+     }
+ }
+diff --git a/packages/core/tests/Modules/Feature/LifecycleRemediationTest.php b/packages/core/tests/Modules/Feature/LifecycleRemediationTest.php
+index 6998f39f..0ecfe1c9 100644
+--- a/packages/core/tests/Modules/Feature/LifecycleRemediationTest.php
++++ b/packages/core/tests/Modules/Feature/LifecycleRemediationTest.php
+@@ -3,7 +3,6 @@
+ declare(strict_types=1);
+ 
+ use CoreX\Context\Contracts\TenantContextResolver;
+-use CoreX\Database\Contracts\SchemaSets;
+ use CoreX\Features\Contracts\FeatureFlags;
+ use CoreX\Features\Internal\DatabaseFeatureFlags;
+ use CoreX\Modules\Contracts\ModuleActivationGate;
+@@ -38,9 +37,7 @@ beforeEach(function (): void {
+     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
+     DB::statement('CREATE SCHEMA public');
+     $this->app->register(ModulesServiceProvider::class);
+-    foreach ([app(SchemaSets::class)->get('axiomasoft/corex:tenant-modules')->path, app(SchemaSets::class)->get('axiomasoft/corex:tenant')->path] as $path) {
+-        $this->artisan('migrate', ['--path' => realpath($path), '--realpath' => true, '--force' => true])->assertSuccessful();
+-    }
++    $this->migrateSchemaSets(['axiomasoft/corex:tenant'], 'pgsql');
+     $discovery = new ModuleDiscovery(fallbackModules: [StubBaseModule::class, StubFailingModule::class, StubFeatureFlagModule::class]);
+     $registry = Mockery::mock(ModuleRegistry::class);
+     foreach ($discovery->discover() as $manifest) {
+diff --git a/packages/core/tests/Pg/MessagingSchemaTest.php b/packages/core/tests/Pg/MessagingSchemaTest.php
+index 29f8f55b..7b6a60c6 100644
+--- a/packages/core/tests/Pg/MessagingSchemaTest.php
++++ b/packages/core/tests/Pg/MessagingSchemaTest.php
+@@ -71,10 +71,10 @@ it('defines a composite primary key on sys_inbox_messages', function (): void {
+ 
+ it('creates partial indexes on sys_outbox_messages hot paths', function (): void {
+     $indexNames = [
+-        'sys_outbox_messages_claim_idx',
+-        'sys_outbox_messages_reclaim_idx',
+-        'sys_outbox_messages_published_idx',
+-        'sys_outbox_messages_dead_idx',
++        'sys_outbox_messages_claim_ix',
++        'sys_outbox_messages_reclaim_ix',
++        'sys_outbox_messages_published_ix',
++        'sys_outbox_messages_dead_ix',
+     ];
+ 
+     foreach ($indexNames as $indexName) {
+@@ -91,7 +91,7 @@ it('creates partial indexes on sys_outbox_messages hot paths', function (): void
+ it('indexes the shipped inbox table for retention', function (): void {
+     expect(DB::table('pg_indexes')
+         ->where('tablename', 'sys_inbox_messages')
+-        ->where('indexname', 'sys_inbox_messages_processed_idx')
++        ->where('indexname', 'sys_inbox_messages_processed_ix')
+         ->exists())->toBeTrue();
+ })->group('pg');
+ 
+diff --git a/packages/panels/CHANGELOG.md b/packages/panels/CHANGELOG.md
+index 30b4cb67..27f0904d 100644
+--- a/packages/panels/CHANGELOG.md
++++ b/packages/panels/CHANGELOG.md
+@@ -1,5 +1,9 @@
+ # Changelog
+ 
++## Unreleased — tenant baseline v1
++
++- Split saved-view scope and view tables into baseline files with explicit object names and bigint positions. The module schema set supports PostgreSQL and SQLite; repository tests use the shipped schema.
++
+ ## Unreleased — deterministic schema (P08.2)
+ 
+ - Saved-view queries and migrations use fixed sys_saved_views and sys_saved_view_scopes tables.
+diff --git a/packages/panels/README.md b/packages/panels/README.md
+index 1f6732b7..5c4516b3 100644
+--- a/packages/panels/README.md
++++ b/packages/panels/README.md
+@@ -62,3 +62,7 @@ The `corex-panels.provider_tag` default is `corex.panels.providers`. Tag provide
+ ## Failure semantics
+ 
+ Catalogue resolution fails closed when current policy/context is unavailable. Treat a missing or inaccessible descriptor as unavailable to the caller; do not infer permission from a provider tag or reuse a descriptor as a cached access grant.
++
++## Схема
++
++Набор `tenant`, baseline v1 (PostgreSQL и SQLite), lifecycle `Module`. Таблицы `sys_saved_view_scopes` и `sys_saved_views` создаёт lifecycle модуля; явное исполнение — `corex:schema:migrate --scope=tenant --modules`. Миграции не публикуются.
+diff --git a/packages/panels/database/migrations/pg/2026_09_15_150001_create_sys_saved_view_scopes_table.php b/packages/panels/database/migrations/pg/2026_09_15_150001_create_sys_saved_view_scopes_table.php
+deleted file mode 100644
+index 27fdb304..00000000
+--- a/packages/panels/database/migrations/pg/2026_09_15_150001_create_sys_saved_view_scopes_table.php
++++ /dev/null
+@@ -1,10 +0,0 @@
+-<?php
+-
+-declare(strict_types=1);
+-
+-use Illuminate\Database\Migrations\Migration;
+-
+-return new class extends Migration
+-{
+-    public function up(): void {}
+-};
+diff --git a/packages/panels/database/migrations/tenant/2026_10_01_070010_create_sys_saved_view_scopes.php b/packages/panels/database/migrations/tenant/2026_10_01_070010_create_sys_saved_view_scopes.php
+new file mode 100644
+index 00000000..67ed9ec7
+--- /dev/null
++++ b/packages/panels/database/migrations/tenant/2026_10_01_070010_create_sys_saved_view_scopes.php
+@@ -0,0 +1,29 @@
++<?php
++
++declare(strict_types=1);
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    public function up(): void
++    {
++        Schema::create('sys_saved_view_scopes', function (Blueprint $table): void {
++            $table->string('entity_code', 128);
++            $table->string('scope_key', 1024);
++            $table->primary(['entity_code', 'scope_key'], 'sys_saved_view_scopes_pk');
++        });
++
++        // PostgreSQL's Blueprint grammar ignores the requested primary-key name.
++        if (Schema::getConnection()->getDriverName() === 'pgsql') {
++            Schema::getConnection()->statement('ALTER TABLE sys_saved_view_scopes RENAME CONSTRAINT sys_saved_view_scopes_pkey TO sys_saved_view_scopes_pk');
++        }
++    }
++
++    public function down(): void
++    {
++        Schema::dropIfExists('sys_saved_view_scopes');
++    }
++};
+diff --git a/packages/panels/database/migrations/pg/2026_09_15_150000_create_sys_saved_views_table.php b/packages/panels/database/migrations/tenant/2026_10_01_070020_create_sys_saved_views.php
+similarity index 56%
+rename from packages/panels/database/migrations/pg/2026_09_15_150000_create_sys_saved_views_table.php
+rename to packages/panels/database/migrations/tenant/2026_10_01_070020_create_sys_saved_views.php
+index f4a5d67e..5837ce7e 100644
+--- a/packages/panels/database/migrations/pg/2026_09_15_150000_create_sys_saved_views_table.php
++++ b/packages/panels/database/migrations/tenant/2026_10_01_070020_create_sys_saved_views.php
+@@ -10,13 +10,9 @@ return new class extends Migration
+ {
+     public function up(): void
+     {
+-        Schema::create('sys_saved_view_scopes', function (Blueprint $table): void {
+-            $table->string('entity_code', 128);
+-            $table->string('scope_key', 1024);
+-            $table->primary(['entity_code', 'scope_key']);
+-        });
+         Schema::create('sys_saved_views', function (Blueprint $table): void {
+-            $table->uuid('id')->primary();
++            $table->uuid('id');
++            $table->primary(['id'], 'sys_saved_views_pk');
+             $table->string('entity_code', 128);
+             $table->string('workspace_id', 255)->nullable();
+             $table->string('owner_kind', 64)->nullable();
+@@ -29,11 +25,21 @@ return new class extends Migration
+             $table->unsignedBigInteger('revision');
+             $table->boolean('is_default');
+             $table->string('default_scope_key', 1024)->nullable();
+-            $table->integer('position');
++            $table->bigInteger('position');
+             $table->string('created_by', 128);
+             $table->timestampsTz(precision: 6);
+-            $table->unique(['entity_code', 'default_scope_key']);
+-            $table->foreign(['entity_code', 'scope_key'])->references(['entity_code', 'scope_key'])->on('sys_saved_view_scopes');
++            $table->unique(['entity_code', 'default_scope_key'], 'sys_saved_views_default_scope_uq');
++            $table->foreign(['entity_code', 'scope_key'], 'sys_saved_views_scope_fk')->references(['entity_code', 'scope_key'])->on('sys_saved_view_scopes');
+         });
++
++        // PostgreSQL's Blueprint grammar ignores the requested primary-key name.
++        if (Schema::getConnection()->getDriverName() === 'pgsql') {
++            Schema::getConnection()->statement('ALTER TABLE sys_saved_views RENAME CONSTRAINT sys_saved_views_pkey TO sys_saved_views_pk');
++        }
++    }
++
++    public function down(): void
++    {
++        Schema::dropIfExists('sys_saved_views');
+     }
+ };
+diff --git a/packages/panels/src/Internal/PanelsSchemaSets.php b/packages/panels/src/Internal/PanelsSchemaSets.php
+index 5d93453f..202019c7 100644
+--- a/packages/panels/src/Internal/PanelsSchemaSets.php
++++ b/packages/panels/src/Internal/PanelsSchemaSets.php
+@@ -17,7 +17,7 @@ final readonly class PanelsSchemaSets implements SchemaSetProvider
+         $root = dirname(__DIR__, 2).'/database/migrations';
+ 
+         return [
+-            new SchemaSet(package: 'axiomasoft/corex-panels', name: 'tenant', scope: SchemaScope::Tenant, path: $root.'/pg', version: 1, lifecycle: SchemaLifecycle::Module),
++            new SchemaSet(package: 'axiomasoft/corex-panels', name: 'tenant', scope: SchemaScope::Tenant, path: $root.'/tenant', version: 1, drivers: ['pgsql', 'sqlite'], lifecycle: SchemaLifecycle::Module),
+         ];
+     }
+ }
+diff --git a/packages/panels/tests/SavedViews/SqlSavedViewRepositoryTest.php b/packages/panels/tests/SavedViews/SqlSavedViewRepositoryTest.php
+index 54a63378..60a24e64 100644
+--- a/packages/panels/tests/SavedViews/SqlSavedViewRepositoryTest.php
++++ b/packages/panels/tests/SavedViews/SqlSavedViewRepositoryTest.php
+@@ -21,33 +21,9 @@ use CoreX\Time\Laravel\SystemClock;
+ use Illuminate\Database\DatabaseManager;
+ use Illuminate\Database\Schema\Blueprint;
+ use Illuminate\Foundation\Application;
+-use Illuminate\Support\Facades\Schema;
+ 
+ beforeEach(function (): void {
+-    Schema::create('sys_saved_view_scopes', function (Blueprint $table): void {
+-        $table->string('entity_code');
+-        $table->string('scope_key');
+-        $table->primary(['entity_code', 'scope_key']);
+-    });
+-    Schema::create('sys_saved_views', function (Blueprint $table): void {
+-        $table->string('id')->primary();
+-        $table->string('entity_code');
+-        $table->string('workspace_id')->nullable();
+-        $table->string('owner_kind')->nullable();
+-        $table->string('owner_id')->nullable();
+-        $table->string('scope_key');
+-        $table->string('kind');
+-        $table->json('name');
+-        $table->json('config');
+-        $table->string('schema_version');
+-        $table->unsignedBigInteger('revision');
+-        $table->boolean('is_default');
+-        $table->string('default_scope_key')->nullable();
+-        $table->integer('position');
+-        $table->string('created_by');
+-        $table->timestamps();
+-        $table->unique(['entity_code', 'default_scope_key']);
+-    });
++    $this->migrateSchemaSets(['axiomasoft/corex-panels:tenant']);
+ });
+ 
+ it('persists only a validated AST and compiles it without SQL or identifiers', function (): void {
+diff --git a/products/flex-crm/tests/Pg/ModuleLifecycleTest.php b/products/flex-crm/tests/Pg/ModuleLifecycleTest.php
+index eb32ba81..1eca7e60 100644
+--- a/products/flex-crm/tests/Pg/ModuleLifecycleTest.php
++++ b/products/flex-crm/tests/Pg/ModuleLifecycleTest.php
+@@ -22,7 +22,7 @@ it('discovers CRM composer metadata and manages its schema through the standard
+     DB::statement('CREATE SCHEMA public');
+     AccountFixture::migrate();
+     expect(Schema::hasTable('crm_companies'))->toBeFalse();
+-    $this->migrateSchemaSets(['axiomasoft/corex:tenant-modules'], DB::getDefaultConnection());
++    $this->migrateSchemaSets(['axiomasoft/corex:tenant'], DB::getDefaultConnection());
+ 
+     $consumer = database_path('consumer');
+     mkdir($consumer.'/vendor/composer', 0700, true);
+diff --git a/scripts/schema-gate-pending.json b/scripts/schema-gate-pending.json
+index b040c4f6..c03d51d4 100644
+--- a/scripts/schema-gate-pending.json
++++ b/scripts/schema-gate-pending.json
+@@ -1,11 +1,9 @@
+ [
+-    "axiomasoft/corex",
+     "axiomasoft/corex-tenancy",
+     "axiomasoft/corex-access",
+     "axiomasoft/corex-access-azguard",
+     "axiomasoft/corex-operations",
+     "axiomasoft/corex-webhooks",
+-    "axiomasoft/corex-panels",
+     "axiomasoft/corex-custom-fields",
+     "axiomasoft/corex-intl",
+     "axiomasoft/corex-media",
+diff --git a/scripts/schema-gate.php b/scripts/schema-gate.php
+index eb4f7599..5fdb2605 100644
+--- a/scripts/schema-gate.php
++++ b/scripts/schema-gate.php
+@@ -248,6 +248,14 @@ final class SchemaGate
+             }
+ 
+             if ($baseline) {
++                // RENAME references the old object; S4 applies to its new literal name.
++                if (preg_match('/\bRENAME\s+CONSTRAINT\s+["`]?([a-z0-9_]+)["`]?\s+TO\s+(["`]?[a-z0-9_]+["`]?)/i', $sql, $rename) === 1) {
++                    preg_match('/\bALTER\s+TABLE\s+["`]?([a-z0-9_]+)/i', $sql, $target);
++                    $this->object($file, $line, trim($rename[2], '"`'), $target[1] ?? '', $scope, register: false);
++                    $sql = str_replace($rename[0], '', $sql);
++                } elseif (preg_match('/\bRENAME\s+CONSTRAINT\b/i', $sql) === 1) {
++                    $this->hit('S4', $file, $line, 'literal constraint rename target required');
++                }
+                 preg_match_all('/\b(?:CONSTRAINT|(?:UNIQUE\s+)?INDEX)\s+["`]?([a-z0-9_]+)["`]?/i', $sql, $names);
+                 foreach ($names[1] as $object) {
+                     preg_match('/\b(?:ALTER\s+TABLE|ON|CREATE\s+TABLE)\s+["`]?([a-z0-9_]+)/i', $sql, $target);
+@@ -318,7 +326,7 @@ final class SchemaGate
+         }
+     }
+ 
+-    private function object(string $file, int $line, ?string $name, string $table, string $scope): void
++    private function object(string $file, int $line, ?string $name, string $table, string $scope, bool $register = true): void
+     {
+         if ($name === null || strlen($name) > 63 || preg_match('/^[a-z0-9_]+_(pk|uq|ix|fk|ck)$/', $name) !== 1
+             || ($table !== '' && ! str_starts_with($name, $table.'_'))) {
+@@ -326,6 +334,10 @@ final class SchemaGate
+ 
+             return;
+         }
++
++        if (! $register) {
++            return;
++        }
+         $key = $scope.'/'.$name;
+ 
+         if (isset($this->objects[$key])) {
+diff --git a/scripts/schema-sets.json b/scripts/schema-sets.json
+index 548f9f6d..73aa37d5 100644
+--- a/scripts/schema-sets.json
++++ b/scripts/schema-sets.json
+@@ -159,10 +159,11 @@
+             "package": "axiomasoft/corex-panels",
+             "name": "tenant",
+             "scope": "tenant",
+-            "path": "packages/panels/database/migrations/pg",
++            "path": "packages/panels/database/migrations/tenant",
+             "version": 1,
+             "drivers": [
+-                "pgsql"
++                "pgsql",
++                "sqlite"
+             ],
+             "lifecycle": "module",
+             "requires": [],
+@@ -306,21 +307,7 @@
+             "package": "axiomasoft/corex",
+             "name": "tenant",
+             "scope": "tenant",
+-            "path": "packages/core/database/migrations/pg",
+-            "version": 1,
+-            "drivers": [
+-                "pgsql"
+-            ],
+-            "lifecycle": "platform",
+-            "requires": [],
+-            "connection": null
+-        },
+-        {
+-            "id": "axiomasoft/corex:tenant-modules",
+-            "package": "axiomasoft/corex",
+-            "name": "tenant-modules",
+-            "scope": "tenant",
+-            "path": "packages/core/database/migrations",
++            "path": "packages/core/database/migrations/tenant",
+             "version": 1,
+             "drivers": [
+                 "pgsql"
+diff --git a/tests/Arch/AchievedInvariantTest.php b/tests/Arch/AchievedInvariantTest.php
+index 6bda3be9..f3b8bca3 100644
+--- a/tests/Arch/AchievedInvariantTest.php
++++ b/tests/Arch/AchievedInvariantTest.php
+@@ -160,7 +160,7 @@ test('table ownership gate reports no violations on clean tree', function (): vo
+ 
+ test('table ownership gate delegates registered uncatalogued creates to S9', function (): void {
+     $repoRoot = SourceScanner::repoRoot();
+-    $probePath = $repoRoot.'/packages/core/database/migrations/pg/2099_01_01_000000_table_ownership_t1_probe.php';
++    $probePath = $repoRoot.'/packages/core/database/migrations/tenant/2099_01_01_000000_table_ownership_t1_probe.php';
+     $probeContents = <<<'PHP'
+ <?php
+ 
+@@ -205,7 +205,7 @@ PHP;
+ 
+ test('table ownership gate reports T4 for core cross-package foreign key probe', function (): void {
+     $repoRoot = SourceScanner::repoRoot();
+-    $probePath = $repoRoot.'/packages/core/database/migrations/pg/2099_01_01_000001_table_ownership_t4_probe.php';
++    $probePath = $repoRoot.'/packages/core/database/migrations/tenant/2099_01_01_000001_table_ownership_t4_probe.php';
+     $probeContents = <<<'PHP'
+ <?php
+ 
+diff --git a/tests/Feature/AuditLogTest.php b/tests/Feature/AuditLogTest.php
+index 795f21dc..78b6bc1c 100644
+--- a/tests/Feature/AuditLogTest.php
++++ b/tests/Feature/AuditLogTest.php
+@@ -562,7 +562,7 @@ it('corex:audit:prune with the default NullAuditRetention deletes nothing', func
+ 
+ it('creates the BRIN index on occurred_at', function (): void {
+     $index = auditPg()->selectOne(
+-        "select indexdef from pg_indexes where tablename = 'sys_audit_log' and indexname = 'sys_audit_brin_ix'",
++        "select indexdef from pg_indexes where tablename = 'sys_audit_log' and indexname = 'sys_audit_log_occurred_brin_ix'",
+     );
+ 
+     expect($index)->not->toBeNull()
+diff --git a/tests/Feature/DepartmentTest.php b/tests/Feature/DepartmentTest.php
+index b459b131..19bc10b7 100644
+--- a/tests/Feature/DepartmentTest.php
++++ b/tests/Feature/DepartmentTest.php
+@@ -371,7 +371,7 @@ it('creates a GIST index and a unique constraint on sys_departments.path', funct
+ 
+     $byName = collect($indexes)->keyBy('indexname');
+ 
+-    expect($byName->has('sys_dept_path_gist'))->toBeTrue()
+-        ->and($byName->get('sys_dept_path_gist')->indexdef)->toContain('USING gist')
+-        ->and($byName->has('sys_dept_path_uq'))->toBeTrue();
++    expect($byName->has('sys_departments_path_gist_ix'))->toBeTrue()
++        ->and($byName->get('sys_departments_path_gist_ix')->indexdef)->toContain('USING gist')
++        ->and($byName->has('sys_departments_path_uq'))->toBeTrue();
+ });
+diff --git a/tests/Feature/ImpersonatedActorTest.php b/tests/Feature/ImpersonatedActorTest.php
+index 231a115d..153f149e 100644
+--- a/tests/Feature/ImpersonatedActorTest.php
++++ b/tests/Feature/ImpersonatedActorTest.php
+@@ -102,7 +102,7 @@ it('CurrentActor falls back to the pre-impersonation behavior once state() is nu
+         ->and(CurrentActor::id())->toBe('user-abc');
+ });
+ 
+-it('sys_audit_actor_ck accepts support after the widening migration (D137)', function (): void {
++it('sys_audit_log_actor_ck accepts support in the baseline', function (): void {
+     DB::connection('pgsql')->statement('DROP SCHEMA IF EXISTS public CASCADE');
+     DB::connection('pgsql')->statement('CREATE SCHEMA public');
+     DB::purge('pgsql');
+@@ -141,12 +141,12 @@ it('sys_audit_actor_ck accepts support after the widening migration (D137)', fun
+         ->and($row->actor_id)->toBe($staffId);
+ })->group('pg');
+ 
+-it('mod_ll_actor_ck accepts support after the widening migration — CurrentActor under impersonation writes without CHECK-violation (х, D138)', function (): void {
++it('mod_lifecycle_log_actor_ck accepts support under impersonation', function (): void {
+     DB::connection('pgsql')->statement('DROP SCHEMA IF EXISTS public CASCADE');
+     DB::connection('pgsql')->statement('CREATE SCHEMA public');
+     DB::purge('pgsql');
+ 
+-    test()->migrateSchemaSets(['axiomasoft/corex:tenant-modules'], 'pgsql');
++    test()->migrateSchemaSets(['axiomasoft/corex:tenant'], 'pgsql');
+ 
+     // Outside impersonation — regression (ц): the original vocabulary still writes.
+     DB::connection('pgsql')->table('mod_lifecycle_log')->insert([
+diff --git a/tests/Feature/ModuleLifecycleTest.php b/tests/Feature/ModuleLifecycleTest.php
+index 2f00ef7a..edfede3b 100644
+--- a/tests/Feature/ModuleLifecycleTest.php
++++ b/tests/Feature/ModuleLifecycleTest.php
+@@ -145,7 +145,7 @@ beforeEach(function (): void {
+         StubFkModule::class,
+     ]));
+ 
+-    $this->migrateSchemaSets(['axiomasoft/corex:tenant-modules'], LIFECYCLE_TEST_CONNECTION);
++    $this->migrateSchemaSets(['axiomasoft/corex:tenant'], LIFECYCLE_TEST_CONNECTION);
+ 
+     $this->registryPath = sys_get_temp_dir().'/corex_modules_lifecycle_test_'.bin2hex(random_bytes(4)).'.php';
+     CompiledModuleRegistry::writeAtomic($this->registryPath, [
+diff --git a/tests/Feature/SchemaSetsPgTest.php b/tests/Feature/SchemaSetsPgTest.php
+index d37ca90e..57307a99 100644
+--- a/tests/Feature/SchemaSetsPgTest.php
++++ b/tests/Feature/SchemaSetsPgTest.php
+@@ -37,8 +37,8 @@ beforeEach(function (): void {
+     DB::purge('pgsql');
+ });
+ 
+-it('migrates core tenant schema directly from both registered platform sets', function (): void {
+-    $this->migrateSchemaSets(['axiomasoft/corex:tenant', 'axiomasoft/corex:tenant-modules'], 'pgsql');
++it('migrates the complete core tenant baseline from its single platform set', function (): void {
++    $this->migrateSchemaSets(['axiomasoft/corex:tenant'], 'pgsql');
+     expect(Schema::connection('pgsql')->hasTable('sys_settings'))->toBeTrue()
+         ->and(Schema::connection('pgsql')->hasTable('sys_audit_log'))->toBeTrue()
+         ->and(Schema::connection('pgsql')->hasTable('sys_feature_flags'))->toBeTrue()
+@@ -99,16 +99,16 @@ it('reads the PostgreSQL journal and reports pending files on the selected conne
+     foreach (app(SchemaMigrator::class)->status(SchemaScope::Tenant, 'pgsql') as $status) {
+         expect($status->pending)->toBe([])->and($status->unknown)->toBe([]);
+     }
+-    DB::connection('pgsql')->table('migrations')->where('migration', '2026_07_13_100000_create_sys_settings_table')->delete();
++    DB::connection('pgsql')->table('migrations')->where('migration', '2026_10_01_010040_create_sys_settings')->delete();
+     $this->artisan('corex:schema:status', ['--database' => 'pgsql'])->assertExitCode(1);
+ });
+ 
+ it('ignores central legacy journal entries when tenant sets share one database', function (): void {
+-    $registry = new TaggedSchemaSets([new FixtureSchemaSets([(new CoreSchemaSets)->sets()[1], (new TenancySchemaSets)->sets()[0]])]);
++    $registry = new TaggedSchemaSets([new FixtureSchemaSets([(new CoreSchemaSets)->sets()[0], (new TenancySchemaSets)->sets()[0]])]);
+     app()->instance(SchemaSets::class, $registry);
+     app()->forgetInstance(SchemaMigrator::class);
+     $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
+-    $this->migrateSchemaSets(['axiomasoft/corex:tenant-modules'], 'pgsql');
++    $this->migrateSchemaSets(['axiomasoft/corex:tenant'], 'pgsql');
+     $status = app(SchemaMigrator::class)->status(SchemaScope::Tenant, 'pgsql')[0];
+     expect($status->unknown)->toBe([])->and($status->pending)->toBe([]);
+     $this->artisan('corex:schema:status', ['--database' => 'pgsql'])->assertSuccessful();
+@@ -123,11 +123,11 @@ it('enables a module using only its registered schema set path', function (): vo
+     app()->register(ModulesServiceProvider::class);
+     $coreSets = new CoreSchemaSets;
+     app()->instance(SchemaSets::class, new TaggedSchemaSets([new FixtureSchemaSets([
+-        $coreSets->sets()[1],
++        $coreSets->sets()[0],
+         new SchemaSet('fixture/module', 'tenant', SchemaScope::Tenant, realpath(__DIR__.'/../Fixtures/Schema/module'), 1, ['pgsql', 'sqlite'], SchemaLifecycle::Module),
+     ])]));
+     app()->forgetInstance(SchemaMigrator::class);
+-    $this->migrateSchemaSets(['axiomasoft/corex:tenant-modules'], 'pgsql');
++    $this->migrateSchemaSets(['axiomasoft/corex:tenant'], 'pgsql');
+     app()->instance(ModuleDiscovery::class, new ModuleDiscovery(fallbackModules: [FixtureModule::class]));
+     $registry = Mockery::mock(ModuleRegistry::class);
+     $registry->shouldReceive('get')->with('fixture/module')->andReturn(new CompiledModule('fixture/module', 'Schema fixture', 'scm', [], [], []));
+diff --git a/tests/Feature/SchemaSetsTest.php b/tests/Feature/SchemaSetsTest.php
+index ae30fe78..09fa59aa 100644
+--- a/tests/Feature/SchemaSetsTest.php
++++ b/tests/Feature/SchemaSetsTest.php
+@@ -204,7 +204,7 @@ it('compiles the actual declarations of every schema-owning package', function (
+         new TasksWorkflowSchemaSets,
+         new CrmSchemaSets,
+     ]);
+-    expect($sets->all())->toHaveCount(22)
++    expect($sets->all())->toHaveCount(21)
+         ->and($sets->get('axiomasoft/corex-access:tenant-cloud')->requires)->toBe(['axiomasoft/corex-tenancy']);
+ });
+ 
+diff --git a/tests/Golden/SchemaGoldenTest.php b/tests/Golden/SchemaGoldenTest.php
+index 02e6a808..e7af86db 100644
+--- a/tests/Golden/SchemaGoldenTest.php
++++ b/tests/Golden/SchemaGoldenTest.php
+@@ -26,6 +26,11 @@ final class SchemaGoldenTest extends GoldenTestCase
+         $this->freshSchema($connection);
+         $migrator = $this->schemaMigrator();
+         $override = $scope === SchemaScope::Dedicated ? null : $name;
++
++        // Pending historical packages reference the core baseline before their own squash.
++        if ($scope === SchemaScope::Tenant) {
++            $migrator->migrateSets(['axiomasoft/corex:tenant'], $name);
++        }
+         self::assertNotEmpty($migrator->migrate($scope, $override, includeModules: true));
+         self::assertSame([], $migrator->migrate($scope, $override, includeModules: true));
+         foreach ($migrator->status($scope, $override) as $status) {
+diff --git a/tests/Golden/schema/tenant.pgsql.json b/tests/Golden/schema/tenant.pgsql.json
+index 3334559d..530582ef 100644
+--- a/tests/Golden/schema/tenant.pgsql.json
++++ b/tests/Golden/schema/tenant.pgsql.json
+@@ -4434,20 +4434,20 @@
+             },
+             "indexes": [
+                 {
+-                    "name": "mod_lifecycle_log_pkey",
+-                    "kind": "pk",
++                    "name": "mod_lifecycle_log_module_ix",
++                    "kind": "ix",
+                     "columns": [
+-                        "id"
++                        "module_name",
++                        "created_at"
+                     ],
+                     "predicate": null,
+                     "method": "btree"
+                 },
+                 {
+-                    "name": "mod_ll_module_ix",
+-                    "kind": "ix",
++                    "name": "mod_lifecycle_log_pk",
++                    "kind": "pk",
+                     "columns": [
+-                        "module_name",
+-                        "created_at"
++                        "id"
+                     ],
+                     "predicate": null,
+                     "method": "btree"
+@@ -4456,15 +4456,15 @@
+             "foreign_keys": [],
+             "checks": [
+                 {
+-                    "name": "mod_ll_actor_ck",
++                    "name": "mod_lifecycle_log_actor_ck",
+                     "expression": "((actor_type)::text = ANY ((ARRAY['user'::character varying, 'system'::character varying, 'platform'::character varying, 'cli'::character varying, 'support'::character varying])::text[]))"
+                 },
+                 {
+-                    "name": "mod_ll_op_ck",
++                    "name": "mod_lifecycle_log_operation_ck",
+                     "expression": "((operation)::text = ANY ((ARRAY['enable'::character varying, 'disable'::character varying, 'upgrade'::character varying, 'archive'::character varying, 'purge'::character varying])::text[]))"
+                 },
+                 {
+-                    "name": "mod_ll_status_ck",
++                    "name": "mod_lifecycle_log_status_ck",
+                     "expression": "((status)::text = ANY ((ARRAY['success'::character varying, 'failed'::character varying, 'started'::character varying])::text[]))"
+                 }
+             ],
+@@ -4549,7 +4549,7 @@
+                     "method": "btree"
+                 },
+                 {
+-                    "name": "mod_modules_pkey",
++                    "name": "mod_modules_pk",
+                     "kind": "pk",
+                     "columns": [
+                         "id"
+@@ -4634,7 +4634,7 @@
+                     "method": "btree"
+                 },
+                 {
+-                    "name": "mod_records_pkey",
++                    "name": "mod_records_pk",
+                     "kind": "pk",
+                     "columns": [
+                         "module_name",
+@@ -6388,7 +6388,7 @@
+             },
+             "indexes": [
+                 {
+-                    "name": "sys_audit_actor_ix",
++                    "name": "sys_audit_log_actor_ix",
+                     "kind": "ix",
+                     "columns": [
+                         "actor_type",
+@@ -6399,27 +6399,27 @@
+                     "method": "btree"
+                 },
+                 {
+-                    "name": "sys_audit_brin_ix",
++                    "name": "sys_audit_log_entity_ix",
+                     "kind": "ix",
+                     "columns": [
++                        "entity_type",
++                        "entity_id",
+                         "occurred_at"
+                     ],
+                     "predicate": null,
+-                    "method": "brin"
++                    "method": "btree"
+                 },
+                 {
+-                    "name": "sys_audit_entity_ix",
++                    "name": "sys_audit_log_occurred_brin_ix",
+                     "kind": "ix",
+                     "columns": [
+-                        "entity_type",
+-                        "entity_id",
+                         "occurred_at"
+                     ],
+                     "predicate": null,
+-                    "method": "btree"
++                    "method": "brin"
+                 },
+                 {
+-                    "name": "sys_audit_log_pkey",
++                    "name": "sys_audit_log_pk",
+                     "kind": "pk",
+                     "columns": [
+                         "id"
+@@ -6428,7 +6428,7 @@
+                     "method": "btree"
+                 },
+                 {
+-                    "name": "sys_audit_seq_ix",
++                    "name": "sys_audit_log_seq_ix",
+                     "kind": "ix",
+                     "columns": [
+                         "seq"
+@@ -6437,7 +6437,7 @@
+                     "method": "btree"
+                 },
+                 {
+-                    "name": "sys_audit_wsp_ix",
++                    "name": "sys_audit_log_workspace_ix",
+                     "kind": "ix",
+                     "columns": [
+                         "workspace_id",
+@@ -6450,7 +6450,7 @@
+             "foreign_keys": [],
+             "checks": [
+                 {
+-                    "name": "sys_audit_actor_ck",
++                    "name": "sys_audit_log_actor_ck",
+                     "expression": "((actor_type)::text = ANY ((ARRAY['user'::character varying, 'agent'::character varying, 'api_key'::character varying, 'system'::character varying, 'support'::character varying])::text[]))"
+                 }
+             ],
+@@ -6491,7 +6491,7 @@
+             },
+             "indexes": [
+                 {
+-                    "name": "sys_department_user_pkey",
++                    "name": "sys_department_user_pk",
+                     "kind": "pk",
+                     "columns": [
+                         "department_id",
+@@ -6501,7 +6501,7 @@
+                     "method": "btree"
+                 },
+                 {
+-                    "name": "sys_du_primary_uq",
++                    "name": "sys_department_user_primary_uq",
+                     "kind": "uq",
+                     "columns": [
+                         "user_id"
+@@ -6512,7 +6512,7 @@
+             ],
+             "foreign_keys": [
+                 {
+-                    "name": "sys_department_user_department_id_foreign",
++                    "name": "sys_department_user_department_fk",
+                     "columns": [
+                         "department_id"
+                     ],
+@@ -6536,7 +6536,7 @@
+             ],
+             "checks": [
+                 {
+-                    "name": "sys_du_role_ck",
++                    "name": "sys_department_user_role_ck",
+                     "expression": "((role)::text = ANY ((ARRAY['member'::character varying, 'head'::character varying, 'deputy'::character varying])::text[]))"
+                 }
+             ],
+@@ -6580,9 +6580,9 @@
+                     "default": null
+                 },
+                 "sort_order": {
+-                    "type": "integer",
++                    "type": "bigint",
+                     "nullable": false,
+-                    "default": "0"
++                    "default": "'0'::bigint"
+                 },
+                 "updated_at": {
+                     "type": "timestamp(6) with time zone",
+@@ -6597,34 +6597,34 @@
+             },
+             "indexes": [
+                 {
+-                    "name": "sys_departments_pkey",
+-                    "kind": "pk",
++                    "name": "sys_departments_path_gist_ix",
++                    "kind": "ix",
+                     "columns": [
+-                        "id"
++                        "path"
+                     ],
+                     "predicate": null,
+-                    "method": "btree"
++                    "method": "gist"
+                 },
+                 {
+-                    "name": "sys_dept_path_gist",
+-                    "kind": "ix",
++                    "name": "sys_departments_path_uq",
++                    "kind": "uq",
+                     "columns": [
+                         "path"
+                     ],
+                     "predicate": null,
+-                    "method": "gist"
++                    "method": "btree"
+                 },
+                 {
+-                    "name": "sys_dept_path_uq",
+-                    "kind": "uq",
++                    "name": "sys_departments_pk",
++                    "kind": "pk",
+                     "columns": [
+-                        "path"
++                        "id"
+                     ],
+                     "predicate": null,
+                     "method": "btree"
+                 },
+                 {
+-                    "name": "sys_dept_wsp_ix",
++                    "name": "sys_departments_workspace_ix",
+                     "kind": "ix",
+                     "columns": [
+                         "workspace_id"
+@@ -6635,23 +6635,23 @@
+             ],
+             "foreign_keys": [
+                 {
+-                    "name": "sys_dept_head_user_fk",
++                    "name": "sys_departments_parent_fk",
+                     "columns": [
+-                        "head_user_id"
++                        "parent_id"
+                     ],
+-                    "references": "users(id)",
+-                    "on_delete": "SET NULL",
++                    "references": "sys_departments(id)",
++                    "on_delete": "RESTRICT",
+                     "on_update": "NO ACTION",
+                     "deferrable": false,
+                     "initially_deferred": false
+                 },
+                 {
+-                    "name": "sys_dept_parent_fk",
++                    "name": "sys_dept_head_user_fk",
+                     "columns": [
+-                        "parent_id"
++                        "head_user_id"
+                     ],
+-                    "references": "sys_departments(id)",
+-                    "on_delete": "RESTRICT",
++                    "references": "users(id)",
++                    "on_delete": "SET NULL",
+                     "on_update": "NO ACTION",
+                     "deferrable": false,
+                     "initially_deferred": false
+@@ -6711,7 +6711,7 @@
+             },
+             "indexes": [
+                 {
+-                    "name": "sys_feature_flags_key_unique",
++                    "name": "sys_feature_flags_key_uq",
+                     "kind": "uq",
+                     "columns": [
+                         "key"
+@@ -6720,7 +6720,7 @@
+                     "method": "btree"
+                 },
+                 {
+-                    "name": "sys_feature_flags_pkey",
++                    "name": "sys_feature_flags_pk",
+                     "kind": "pk",
+                     "columns": [
+                         "id"
+@@ -6778,21 +6778,21 @@
+             },
+             "indexes": [
+                 {
+-                    "name": "sys_feature_overrides_pkey",
+-                    "kind": "pk",
++                    "name": "sys_feature_overrides_flag_scope_uq",
++                    "kind": "uq",
+                     "columns": [
+-                        "id"
++                        "flag_id",
++                        "scope_type",
++                        "scope_id"
+                     ],
+                     "predicate": null,
+                     "method": "btree"
+                 },
+                 {
+-                    "name": "sys_fo_uq",
+-                    "kind": "uq",
++                    "name": "sys_feature_overrides_pk",
++                    "kind": "pk",
+                     "columns": [
+-                        "flag_id",
+-                        "scope_type",
+-                        "scope_id"
++                        "id"
+                     ],
+                     "predicate": null,
+                     "method": "btree"
+@@ -6800,7 +6800,7 @@
+             ],
+             "foreign_keys": [
+                 {
+-                    "name": "sys_feature_overrides_flag_id_foreign",
++                    "name": "sys_feature_overrides_flag_fk",
+                     "columns": [
+                         "flag_id"
+                     ],
+@@ -6813,7 +6813,7 @@
+             ],
+             "checks": [
+                 {
+-                    "name": "sys_fo_scope_ck",
++                    "name": "sys_feature_overrides_scope_ck",
+                     "expression": "((scope_type)::text = ANY ((ARRAY['workspace'::character varying, 'user'::character varying, 'department'::character varying])::text[]))"
+                 }
+             ],
+@@ -6844,7 +6844,7 @@
+             },
+             "indexes": [
+                 {
+-                    "name": "sys_inbox_messages_pkey",
++                    "name": "sys_inbox_messages_pk",
+                     "kind": "pk",
+                     "columns": [
+                         "consumer",
+@@ -6854,7 +6854,7 @@
+                     "method": "btree"
+                 },
+                 {
+-                    "name": "sys_inbox_messages_processed_idx",
++                    "name": "sys_inbox_messages_processed_ix",
+                     "kind": "ix",
+                     "columns": [
+                         "processed_at"
+@@ -6870,7 +6870,7 @@
+         "sys_outbox_messages": {
+             "columns": {
+                 "attempts": {
+-                    "type": "integer",
++                    "type": "bigint",
+                     "nullable": false,
+                     "default": null
+                 },
+@@ -6992,7 +6992,7 @@
+             },
+             "indexes": [
+                 {
+-                    "name": "sys_outbox_messages_claim_idx",
++                    "name": "sys_outbox_messages_claim_ix",
+                     "kind": "ix",
+                     "columns": [
+                         "available_at",
+@@ -7003,7 +7003,7 @@
+                     "method": "btree"
+                 },
+                 {
+-                    "name": "sys_outbox_messages_dead_idx",
++                    "name": "sys_outbox_messages_dead_ix",
+                     "kind": "ix",
+                     "columns": [
+                         "dead_at",
+@@ -7013,7 +7013,7 @@
+                     "method": "btree"
+                 },
+                 {
+-                    "name": "sys_outbox_messages_pkey",
++                    "name": "sys_outbox_messages_pk",
+                     "kind": "pk",
+                     "columns": [
+                         "id"
+@@ -7022,7 +7022,7 @@
+                     "method": "btree"
+                 },
+                 {
+-                    "name": "sys_outbox_messages_published_idx",
++                    "name": "sys_outbox_messages_published_ix",
+                     "kind": "ix",
+                     "columns": [
+                         "published_at",
+@@ -7032,7 +7032,7 @@
+                     "method": "btree"
+                 },
+                 {
+-                    "name": "sys_outbox_messages_reclaim_idx",
++                    "name": "sys_outbox_messages_reclaim_ix",
+                     "kind": "ix",
+                     "columns": [
+                         "lease_until",
+@@ -7071,7 +7071,7 @@
+             },
+             "indexes": [
+                 {
+-                    "name": "sys_pubsub_cursors_pkey",
++                    "name": "sys_pubsub_cursors_pk",
+                     "kind": "pk",
+                     "columns": [
+                         "channel",
+@@ -7110,7 +7110,7 @@
+             },
+             "indexes": [
+                 {
+-                    "name": "sys_pubsub_messages_channel_id_index",
++                    "name": "sys_pubsub_messages_channel_id_ix",
+                     "kind": "ix",
+                     "columns": [
+                         "channel",
+@@ -7120,7 +7120,7 @@
+                     "method": "btree"
+                 },
+                 {
+-                    "name": "sys_pubsub_messages_pkey",
++                    "name": "sys_pubsub_messages_pk",
+                     "kind": "pk",
+                     "columns": [
+                         "id"
+@@ -7148,7 +7148,7 @@
+             },
+             "indexes": [
+                 {
+-                    "name": "sys_saved_view_scopes_pkey",
++                    "name": "sys_saved_view_scopes_pk",
+                     "kind": "pk",
+                     "columns": [
+                         "entity_code",
+@@ -7220,7 +7220,7 @@
+                     "default": null
+                 },
+                 "position": {
+-                    "type": "integer",
++                    "type": "bigint",
+                     "nullable": false,
+                     "default": null
+                 },
+@@ -7252,7 +7252,7 @@
+             },
+             "indexes": [
+                 {
+-                    "name": "sys_saved_views_entity_code_default_scope_key_unique",
++                    "name": "sys_saved_views_default_scope_uq",
+                     "kind": "uq",
+                     "columns": [
+                         "entity_code",
+@@ -7262,7 +7262,7 @@
+                     "method": "btree"
+                 },
+                 {
+-                    "name": "sys_saved_views_pkey",
++                    "name": "sys_saved_views_pk",
+                     "kind": "pk",
+                     "columns": [
+                         "id"
+@@ -7273,7 +7273,7 @@
+             ],
+             "foreign_keys": [
+                 {
+-                    "name": "sys_saved_views_entity_code_scope_key_foreign",
++                    "name": "sys_saved_views_scope_fk",
+                     "columns": [
+                         "entity_code",
+                         "scope_key"
+@@ -7338,7 +7338,7 @@
+             },
+             "indexes": [
+                 {
+-                    "name": "sys_settings_pkey",
++                    "name": "sys_settings_pk",
+                     "kind": "pk",
+                     "columns": [
+                         "id"
+diff --git a/tests/Golden/schema/tenant.sqlite.json b/tests/Golden/schema/tenant.sqlite.json
+index a1d27297..7b113c06 100644
+--- a/tests/Golden/schema/tenant.sqlite.json
++++ b/tests/Golden/schema/tenant.sqlite.json
+@@ -4745,6 +4745,161 @@
+                 "webhook_subscriptions_status_update": "CREATE TRIGGER \"webhook_subscriptions_status_update\" BEFORE UPDATE ON \"sys_api_webhook_subscriptions\" WHEN NOT (NEW.status IN ('active', 'disabled')) BEGIN SELECT RAISE(ABORT, 'webhook_subscriptions_status'); END"
+             }
+         },
++        "sys_saved_view_scopes": {
++            "columns": {
++                "entity_code": {
++                    "type": "varchar",
++                    "nullable": false,
++                    "default": null
++                },
++                "scope_key": {
++                    "type": "varchar",
++                    "nullable": false,
++                    "default": null
++                }
++            },
++            "indexes": [
++                {
++                    "name": "sqlite_autoindex_sys_saved_view_scopes_1",
++                    "kind": "pk",
++                    "columns": [
++                        "entity_code",
++                        "scope_key"
++                    ],
++                    "predicate": null,
++                    "method": "btree"
++                }
++            ],
++            "foreign_keys": [],
++            "checks": [],
++            "triggers": []
++        },
++        "sys_saved_views": {
++            "columns": {
++                "config": {
++                    "type": "text",
++                    "nullable": false,
++                    "default": null
++                },
++                "created_at": {
++                    "type": "datetime",
++                    "nullable": true,
++                    "default": null
++                },
++                "created_by": {
++                    "type": "varchar",
++                    "nullable": false,
++                    "default": null
++                },
++                "default_scope_key": {
++                    "type": "varchar",
++                    "nullable": true,
++                    "default": null
++                },
++                "entity_code": {
++                    "type": "varchar",
++                    "nullable": false,
++                    "default": null
++                },
++                "id": {
++                    "type": "varchar",
++                    "nullable": false,
++                    "default": null
++                },
++                "is_default": {
++                    "type": "tinyint(1)",
++                    "nullable": false,
++                    "default": null
++                },
++                "kind": {
++                    "type": "varchar",
++                    "nullable": false,
++                    "default": null
++                },
++                "name": {
++                    "type": "text",
++                    "nullable": false,
++                    "default": null
++                },
++                "owner_id": {
++                    "type": "varchar",
++                    "nullable": true,
++                    "default": null
++                },
++                "owner_kind": {
++                    "type": "varchar",
++                    "nullable": true,
++                    "default": null
++                },
++                "position": {
++                    "type": "integer",
++                    "nullable": false,
++                    "default": null
++                },
++                "revision": {
++                    "type": "integer",
++                    "nullable": false,
++                    "default": null
++                },
++                "schema_version": {
++                    "type": "varchar",
++                    "nullable": false,
++                    "default": null
++                },
++                "scope_key": {
++                    "type": "varchar",
++                    "nullable": false,
++                    "default": null
++                },
++                "updated_at": {
++                    "type": "datetime",
++                    "nullable": true,
++                    "default": null
++                },
++                "workspace_id": {
++                    "type": "varchar",
++                    "nullable": true,
++                    "default": null
++                }
++            },
++            "indexes": [
++                {
++                    "name": "sqlite_autoindex_sys_saved_views_1",
++                    "kind": "pk",
++                    "columns": [
++                        "id"
++                    ],
++                    "predicate": null,
++                    "method": "btree"
++                },
++                {
++                    "name": "sys_saved_views_default_scope_uq",
++                    "kind": "uq",
++                    "columns": [
++                        "entity_code",
++                        "default_scope_key"
++                    ],
++                    "predicate": null,
++                    "method": "btree"
++                }
++            ],
++            "foreign_keys": [
++                {
++                    "name": "sys_saved_views_entity_code_scope_key_fk",
++                    "columns": [
++                        "entity_code",
++                        "scope_key"
++                    ],
++                    "references": "sys_saved_view_scopes(entity_code,scope_key)",
++                    "on_delete": "NO ACTION",
++                    "on_update": "NO ACTION",
++                    "deferrable": false,
++                    "initially_deferred": false
++                }
++            ],
++            "checks": [],
++            "triggers": []
++        },
+         "sys_wakeup_requests": {
+             "columns": {
+                 "attempt": {
+diff --git a/tests/Unit/SchemaGateTest.php b/tests/Unit/SchemaGateTest.php
+index 5dc904d7..6df0a14a 100644
+--- a/tests/Unit/SchemaGateTest.php
++++ b/tests/Unit/SchemaGateTest.php
+@@ -136,3 +136,15 @@ it('rejects duplicate object names in one scope', function (): void {
+     $source = str_replace('$'."table->primary(['id'], 'sys_gate_probe_pk');", '$'."table->primary(['id'], 'sys_gate_probe_pk');\n            $"."table->index(['id'], 'sys_gate_probe_pk');", $source);
+     expect(array_values(array_unique(array_column(schemaGateProbe($source), 'code'))))->toBe(['S4']);
+ });
++
++it('validates the target of a constraint rename rather than its old reference', function (string $target, array $codes): void {
++    $source = (string) file_get_contents(__DIR__.'/../fixtures/schema-gate/valid.php.fixture');
++    $rename = "        \\Illuminate\\Support\\Facades\\DB::statement('ALTER TABLE sys_gate_probe RENAME CONSTRAINT sys_gate_probe_pkey TO ".$target."');\n";
++    $source = str_replace('        });', '        });'."\n".$rename, $source);
++    expect(array_values(array_unique(array_column(schemaGateProbe($source), 'code'))))->toBe($codes);
++})->with([
++    'valid' => ['sys_gate_probe_pk', []],
++    'wrong suffix' => ['sys_gate_probe_bad', ['S4']],
++    'wrong table' => ['other_table_pk', ['S4']],
++    'too long' => ['sys_gate_probe_'.str_repeat('x', 64).'_pk', ['S4']],
++]);

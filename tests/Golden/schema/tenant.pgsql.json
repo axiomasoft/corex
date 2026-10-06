@@ -4434,20 +4434,20 @@
             },
             "indexes": [
                 {
-                    "name": "mod_lifecycle_log_pkey",
-                    "kind": "pk",
+                    "name": "mod_lifecycle_log_module_ix",
+                    "kind": "ix",
                     "columns": [
-                        "id"
+                        "module_name",
+                        "created_at"
                     ],
                     "predicate": null,
                     "method": "btree"
                 },
                 {
-                    "name": "mod_ll_module_ix",
-                    "kind": "ix",
+                    "name": "mod_lifecycle_log_pk",
+                    "kind": "pk",
                     "columns": [
-                        "module_name",
-                        "created_at"
+                        "id"
                     ],
                     "predicate": null,
                     "method": "btree"
@@ -4456,15 +4456,15 @@
             "foreign_keys": [],
             "checks": [
                 {
-                    "name": "mod_ll_actor_ck",
+                    "name": "mod_lifecycle_log_actor_ck",
                     "expression": "((actor_type)::text = ANY ((ARRAY['user'::character varying, 'system'::character varying, 'platform'::character varying, 'cli'::character varying, 'support'::character varying])::text[]))"
                 },
                 {
-                    "name": "mod_ll_op_ck",
+                    "name": "mod_lifecycle_log_operation_ck",
                     "expression": "((operation)::text = ANY ((ARRAY['enable'::character varying, 'disable'::character varying, 'upgrade'::character varying, 'archive'::character varying, 'purge'::character varying])::text[]))"
                 },
                 {
-                    "name": "mod_ll_status_ck",
+                    "name": "mod_lifecycle_log_status_ck",
                     "expression": "((status)::text = ANY ((ARRAY['success'::character varying, 'failed'::character varying, 'started'::character varying])::text[]))"
                 }
             ],
@@ -4549,7 +4549,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "mod_modules_pkey",
+                    "name": "mod_modules_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -4634,7 +4634,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "mod_records_pkey",
+                    "name": "mod_records_pk",
                     "kind": "pk",
                     "columns": [
                         "module_name",
@@ -6388,7 +6388,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_audit_actor_ix",
+                    "name": "sys_audit_log_actor_ix",
                     "kind": "ix",
                     "columns": [
                         "actor_type",
@@ -6399,16 +6399,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_audit_brin_ix",
-                    "kind": "ix",
-                    "columns": [
-                        "occurred_at"
-                    ],
-                    "predicate": null,
-                    "method": "brin"
-                },
-                {
-                    "name": "sys_audit_entity_ix",
+                    "name": "sys_audit_log_entity_ix",
                     "kind": "ix",
                     "columns": [
                         "entity_type",
@@ -6419,7 +6410,16 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_audit_log_pkey",
+                    "name": "sys_audit_log_occurred_brin_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "occurred_at"
+                    ],
+                    "predicate": null,
+                    "method": "brin"
+                },
+                {
+                    "name": "sys_audit_log_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -6428,7 +6428,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_audit_seq_ix",
+                    "name": "sys_audit_log_seq_ix",
                     "kind": "ix",
                     "columns": [
                         "seq"
@@ -6437,7 +6437,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_audit_wsp_ix",
+                    "name": "sys_audit_log_workspace_ix",
                     "kind": "ix",
                     "columns": [
                         "workspace_id",
@@ -6450,7 +6450,7 @@
             "foreign_keys": [],
             "checks": [
                 {
-                    "name": "sys_audit_actor_ck",
+                    "name": "sys_audit_log_actor_ck",
                     "expression": "((actor_type)::text = ANY ((ARRAY['user'::character varying, 'agent'::character varying, 'api_key'::character varying, 'system'::character varying, 'support'::character varying])::text[]))"
                 }
             ],
@@ -6491,7 +6491,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_department_user_pkey",
+                    "name": "sys_department_user_pk",
                     "kind": "pk",
                     "columns": [
                         "department_id",
@@ -6501,7 +6501,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_du_primary_uq",
+                    "name": "sys_department_user_primary_uq",
                     "kind": "uq",
                     "columns": [
                         "user_id"
@@ -6512,7 +6512,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "sys_department_user_department_id_foreign",
+                    "name": "sys_department_user_department_fk",
                     "columns": [
                         "department_id"
                     ],
@@ -6536,7 +6536,7 @@
             ],
             "checks": [
                 {
-                    "name": "sys_du_role_ck",
+                    "name": "sys_department_user_role_ck",
                     "expression": "((role)::text = ANY ((ARRAY['member'::character varying, 'head'::character varying, 'deputy'::character varying])::text[]))"
                 }
             ],
@@ -6580,9 +6580,9 @@
                     "default": null
                 },
                 "sort_order": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
-                    "default": "0"
+                    "default": "'0'::bigint"
                 },
                 "updated_at": {
                     "type": "timestamp(6) with time zone",
@@ -6597,16 +6597,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_departments_pkey",
-                    "kind": "pk",
-                    "columns": [
-                        "id"
-                    ],
-                    "predicate": null,
-                    "method": "btree"
-                },
-                {
-                    "name": "sys_dept_path_gist",
+                    "name": "sys_departments_path_gist_ix",
                     "kind": "ix",
                     "columns": [
                         "path"
@@ -6615,7 +6606,7 @@
                     "method": "gist"
                 },
                 {
-                    "name": "sys_dept_path_uq",
+                    "name": "sys_departments_path_uq",
                     "kind": "uq",
                     "columns": [
                         "path"
@@ -6624,7 +6615,16 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_dept_wsp_ix",
+                    "name": "sys_departments_pk",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "sys_departments_workspace_ix",
                     "kind": "ix",
                     "columns": [
                         "workspace_id"
@@ -6635,23 +6635,23 @@
             ],
             "foreign_keys": [
                 {
+                    "name": "sys_departments_parent_fk",
+                    "columns": [
+                        "parent_id"
+                    ],
+                    "references": "sys_departments(id)",
+                    "on_delete": "RESTRICT",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                },
+                {
                     "name": "sys_dept_head_user_fk",
                     "columns": [
                         "head_user_id"
                     ],
                     "references": "users(id)",
                     "on_delete": "SET NULL",
-                    "on_update": "NO ACTION",
-                    "deferrable": false,
-                    "initially_deferred": false
-                },
-                {
-                    "name": "sys_dept_parent_fk",
-                    "columns": [
-                        "parent_id"
-                    ],
-                    "references": "sys_departments(id)",
-                    "on_delete": "RESTRICT",
                     "on_update": "NO ACTION",
                     "deferrable": false,
                     "initially_deferred": false
@@ -6711,7 +6711,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_feature_flags_key_unique",
+                    "name": "sys_feature_flags_key_uq",
                     "kind": "uq",
                     "columns": [
                         "key"
@@ -6720,7 +6720,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_feature_flags_pkey",
+                    "name": "sys_feature_flags_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -6778,16 +6778,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_feature_overrides_pkey",
-                    "kind": "pk",
-                    "columns": [
-                        "id"
-                    ],
-                    "predicate": null,
-                    "method": "btree"
-                },
-                {
-                    "name": "sys_fo_uq",
+                    "name": "sys_feature_overrides_flag_scope_uq",
                     "kind": "uq",
                     "columns": [
                         "flag_id",
@@ -6796,11 +6787,20 @@
                     ],
                     "predicate": null,
                     "method": "btree"
+                },
+                {
+                    "name": "sys_feature_overrides_pk",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
                 }
             ],
             "foreign_keys": [
                 {
-                    "name": "sys_feature_overrides_flag_id_foreign",
+                    "name": "sys_feature_overrides_flag_fk",
                     "columns": [
                         "flag_id"
                     ],
@@ -6813,7 +6813,7 @@
             ],
             "checks": [
                 {
-                    "name": "sys_fo_scope_ck",
+                    "name": "sys_feature_overrides_scope_ck",
                     "expression": "((scope_type)::text = ANY ((ARRAY['workspace'::character varying, 'user'::character varying, 'department'::character varying])::text[]))"
                 }
             ],
@@ -6844,7 +6844,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_inbox_messages_pkey",
+                    "name": "sys_inbox_messages_pk",
                     "kind": "pk",
                     "columns": [
                         "consumer",
@@ -6854,7 +6854,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_inbox_messages_processed_idx",
+                    "name": "sys_inbox_messages_processed_ix",
                     "kind": "ix",
                     "columns": [
                         "processed_at"
@@ -6870,7 +6870,7 @@
         "sys_outbox_messages": {
             "columns": {
                 "attempts": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
                     "default": null
                 },
@@ -6992,7 +6992,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_outbox_messages_claim_idx",
+                    "name": "sys_outbox_messages_claim_ix",
                     "kind": "ix",
                     "columns": [
                         "available_at",
@@ -7003,7 +7003,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_outbox_messages_dead_idx",
+                    "name": "sys_outbox_messages_dead_ix",
                     "kind": "ix",
                     "columns": [
                         "dead_at",
@@ -7013,7 +7013,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_outbox_messages_pkey",
+                    "name": "sys_outbox_messages_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -7022,7 +7022,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_outbox_messages_published_idx",
+                    "name": "sys_outbox_messages_published_ix",
                     "kind": "ix",
                     "columns": [
                         "published_at",
@@ -7032,7 +7032,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_outbox_messages_reclaim_idx",
+                    "name": "sys_outbox_messages_reclaim_ix",
                     "kind": "ix",
                     "columns": [
                         "lease_until",
@@ -7071,7 +7071,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_pubsub_cursors_pkey",
+                    "name": "sys_pubsub_cursors_pk",
                     "kind": "pk",
                     "columns": [
                         "channel",
@@ -7110,7 +7110,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_pubsub_messages_channel_id_index",
+                    "name": "sys_pubsub_messages_channel_id_ix",
                     "kind": "ix",
                     "columns": [
                         "channel",
@@ -7120,7 +7120,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_pubsub_messages_pkey",
+                    "name": "sys_pubsub_messages_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -7148,7 +7148,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_saved_view_scopes_pkey",
+                    "name": "sys_saved_view_scopes_pk",
                     "kind": "pk",
                     "columns": [
                         "entity_code",
@@ -7220,7 +7220,7 @@
                     "default": null
                 },
                 "position": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
                     "default": null
                 },
@@ -7252,7 +7252,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_saved_views_entity_code_default_scope_key_unique",
+                    "name": "sys_saved_views_default_scope_uq",
                     "kind": "uq",
                     "columns": [
                         "entity_code",
@@ -7262,7 +7262,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_saved_views_pkey",
+                    "name": "sys_saved_views_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -7273,7 +7273,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "sys_saved_views_entity_code_scope_key_foreign",
+                    "name": "sys_saved_views_scope_fk",
                     "columns": [
                         "entity_code",
                         "scope_key"
@@ -7338,7 +7338,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_settings_pkey",
+                    "name": "sys_settings_pk",
                     "kind": "pk",
                     "columns": [
                         "id"

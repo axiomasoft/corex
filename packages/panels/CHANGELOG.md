@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — tenant baseline v1
+
+- Split saved-view scope and view tables into baseline files with explicit object names and bigint positions. The module schema set supports PostgreSQL and SQLite; repository tests use the shipped schema.
+
 ## Unreleased — deterministic schema (P08.2)
 
 - Saved-view queries and migrations use fixed sys_saved_views and sys_saved_view_scopes tables.

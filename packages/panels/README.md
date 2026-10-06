@@ -62,3 +62,7 @@ The `corex-panels.provider_tag` default is `corex.panels.providers`. Tag provide
 ## Failure semantics
 
 Catalogue resolution fails closed when current policy/context is unavailable. Treat a missing or inaccessible descriptor as unavailable to the caller; do not infer permission from a provider tag or reuse a descriptor as a cached access grant.
+
+## Схема
+
+Набор `tenant`, baseline v1 (PostgreSQL и SQLite), lifecycle `Module`. Таблицы `sys_saved_view_scopes` и `sys_saved_views` создаёт lifecycle модуля; явное исполнение — `corex:schema:migrate --scope=tenant --modules`. Миграции не публикуются.

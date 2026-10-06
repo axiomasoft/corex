@@ -136,3 +136,15 @@ it('rejects duplicate object names in one scope', function (): void {
     $source = str_replace('$'."table->primary(['id'], 'sys_gate_probe_pk');", '$'."table->primary(['id'], 'sys_gate_probe_pk');\n            $"."table->index(['id'], 'sys_gate_probe_pk');", $source);
     expect(array_values(array_unique(array_column(schemaGateProbe($source), 'code'))))->toBe(['S4']);
 });
+
+it('validates the target of a constraint rename rather than its old reference', function (string $target, array $codes): void {
+    $source = (string) file_get_contents(__DIR__.'/../fixtures/schema-gate/valid.php.fixture');
+    $rename = "        \\Illuminate\\Support\\Facades\\DB::statement('ALTER TABLE sys_gate_probe RENAME CONSTRAINT sys_gate_probe_pkey TO ".$target."');\n";
+    $source = str_replace('        });', '        });'."\n".$rename, $source);
+    expect(array_values(array_unique(array_column(schemaGateProbe($source), 'code'))))->toBe($codes);
+})->with([
+    'valid' => ['sys_gate_probe_pk', []],
+    'wrong suffix' => ['sys_gate_probe_bad', ['S4']],
+    'wrong table' => ['other_table_pk', ['S4']],
+    'too long' => ['sys_gate_probe_'.str_repeat('x', 64).'_pk', ['S4']],
+]);

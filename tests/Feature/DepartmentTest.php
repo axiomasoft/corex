@@ -371,7 +371,7 @@ it('creates a GIST index and a unique constraint on sys_departments.path', funct
 
     $byName = collect($indexes)->keyBy('indexname');
 
-    expect($byName->has('sys_dept_path_gist'))->toBeTrue()
-        ->and($byName->get('sys_dept_path_gist')->indexdef)->toContain('USING gist')
-        ->and($byName->has('sys_dept_path_uq'))->toBeTrue();
+    expect($byName->has('sys_departments_path_gist_ix'))->toBeTrue()
+        ->and($byName->get('sys_departments_path_gist_ix')->indexdef)->toContain('USING gist')
+        ->and($byName->has('sys_departments_path_uq'))->toBeTrue();
 });

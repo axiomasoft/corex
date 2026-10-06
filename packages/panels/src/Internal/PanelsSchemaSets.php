@@ -17,7 +17,7 @@ final readonly class PanelsSchemaSets implements SchemaSetProvider
         $root = dirname(__DIR__, 2).'/database/migrations';
 
         return [
-            new SchemaSet(package: 'axiomasoft/corex-panels', name: 'tenant', scope: SchemaScope::Tenant, path: $root.'/pg', version: 1, lifecycle: SchemaLifecycle::Module),
+            new SchemaSet(package: 'axiomasoft/corex-panels', name: 'tenant', scope: SchemaScope::Tenant, path: $root.'/tenant', version: 1, drivers: ['pgsql', 'sqlite'], lifecycle: SchemaLifecycle::Module),
         ];
     }
 }

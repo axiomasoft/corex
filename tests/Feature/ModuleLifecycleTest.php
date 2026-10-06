@@ -145,7 +145,7 @@ beforeEach(function (): void {
         StubFkModule::class,
     ]));
 
-    $this->migrateSchemaSets(['axiomasoft/corex:tenant-modules'], LIFECYCLE_TEST_CONNECTION);
+    $this->migrateSchemaSets(['axiomasoft/corex:tenant'], LIFECYCLE_TEST_CONNECTION);
 
     $this->registryPath = sys_get_temp_dir().'/corex_modules_lifecycle_test_'.bin2hex(random_bytes(4)).'.php';
     CompiledModuleRegistry::writeAtomic($this->registryPath, [

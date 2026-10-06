@@ -562,7 +562,7 @@ it('corex:audit:prune with the default NullAuditRetention deletes nothing', func
 
 it('creates the BRIN index on occurred_at', function (): void {
     $index = auditPg()->selectOne(
-        "select indexdef from pg_indexes where tablename = 'sys_audit_log' and indexname = 'sys_audit_brin_ix'",
+        "select indexdef from pg_indexes where tablename = 'sys_audit_log' and indexname = 'sys_audit_log_occurred_brin_ix'",
     );
 
     expect($index)->not->toBeNull()

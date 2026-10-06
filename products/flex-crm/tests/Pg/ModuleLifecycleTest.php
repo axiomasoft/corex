@@ -22,7 +22,7 @@ it('discovers CRM composer metadata and manages its schema through the standard 
     DB::statement('CREATE SCHEMA public');
     AccountFixture::migrate();
     expect(Schema::hasTable('crm_companies'))->toBeFalse();
-    $this->migrateSchemaSets(['axiomasoft/corex:tenant-modules'], DB::getDefaultConnection());
+    $this->migrateSchemaSets(['axiomasoft/corex:tenant'], DB::getDefaultConnection());
 
     $consumer = database_path('consumer');
     mkdir($consumer.'/vendor/composer', 0700, true);

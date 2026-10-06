@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — tenant baseline v1
+
+- Tenant schema baseline v1: one file per table, explicit constraint/index names, bigint counters, and folded actor checks; the temporary `tenant-modules` set is removed.
+
 ## Unreleased — deterministic schema (P08.2)
 
 - Remove configurable identifier strategies and the twelve table-name options. Models generate UUIDv7 with Laravel HasUuids; migrations and queries use package-owned table literals. Remove IdStrategy, IdColumns, HasConfiguredId and the unused ResolvesCoreOptions schema bridge without aliases. Native Eloquent insert assigns IDs during quiet synchronous audit writes.
@@ -92,6 +96,8 @@
 Пакет pre-1.0 — breaking-изменения публичных контрактов легальны в MINOR до 1.0 (D17).
 
 ## [Unreleased]
+
+- Tenant schema baseline v1: one file per table, explicit constraint/index names, bigint counters, and folded actor checks; the temporary `tenant-modules` set is removed.
 
 - CloudEvents 1.0 structured JSON codec with internal/external profiles; MessageContract dataSchema, MessageEnvelope source URI-reference validation and withPayload; MessagePublisher wire now uses application/cloudevents+json (PLAN3.D90/D92, P06.3).
 

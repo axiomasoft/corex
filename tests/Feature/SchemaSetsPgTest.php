@@ -37,8 +37,8 @@ beforeEach(function (): void {
     DB::purge('pgsql');
 });
 
-it('migrates core tenant schema directly from both registered platform sets', function (): void {
-    $this->migrateSchemaSets(['axiomasoft/corex:tenant', 'axiomasoft/corex:tenant-modules'], 'pgsql');
+it('migrates the complete core tenant baseline from its single platform set', function (): void {
+    $this->migrateSchemaSets(['axiomasoft/corex:tenant'], 'pgsql');
     expect(Schema::connection('pgsql')->hasTable('sys_settings'))->toBeTrue()
         ->and(Schema::connection('pgsql')->hasTable('sys_audit_log'))->toBeTrue()
         ->and(Schema::connection('pgsql')->hasTable('sys_feature_flags'))->toBeTrue()
@@ -99,16 +99,16 @@ it('reads the PostgreSQL journal and reports pending files on the selected conne
     foreach (app(SchemaMigrator::class)->status(SchemaScope::Tenant, 'pgsql') as $status) {
         expect($status->pending)->toBe([])->and($status->unknown)->toBe([]);
     }
-    DB::connection('pgsql')->table('migrations')->where('migration', '2026_07_13_100000_create_sys_settings_table')->delete();
+    DB::connection('pgsql')->table('migrations')->where('migration', '2026_10_01_010040_create_sys_settings')->delete();
     $this->artisan('corex:schema:status', ['--database' => 'pgsql'])->assertExitCode(1);
 });
 
 it('ignores central legacy journal entries when tenant sets share one database', function (): void {
-    $registry = new TaggedSchemaSets([new FixtureSchemaSets([(new CoreSchemaSets)->sets()[1], (new TenancySchemaSets)->sets()[0]])]);
+    $registry = new TaggedSchemaSets([new FixtureSchemaSets([(new CoreSchemaSets)->sets()[0], (new TenancySchemaSets)->sets()[0]])]);
     app()->instance(SchemaSets::class, $registry);
     app()->forgetInstance(SchemaMigrator::class);
     $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
-    $this->migrateSchemaSets(['axiomasoft/corex:tenant-modules'], 'pgsql');
+    $this->migrateSchemaSets(['axiomasoft/corex:tenant'], 'pgsql');
     $status = app(SchemaMigrator::class)->status(SchemaScope::Tenant, 'pgsql')[0];
     expect($status->unknown)->toBe([])->and($status->pending)->toBe([]);
     $this->artisan('corex:schema:status', ['--database' => 'pgsql'])->assertSuccessful();
@@ -123,11 +123,11 @@ it('enables a module using only its registered schema set path', function (): vo
     app()->register(ModulesServiceProvider::class);
     $coreSets = new CoreSchemaSets;
     app()->instance(SchemaSets::class, new TaggedSchemaSets([new FixtureSchemaSets([
-        $coreSets->sets()[1],
+        $coreSets->sets()[0],
         new SchemaSet('fixture/module', 'tenant', SchemaScope::Tenant, realpath(__DIR__.'/../Fixtures/Schema/module'), 1, ['pgsql', 'sqlite'], SchemaLifecycle::Module),
     ])]));
     app()->forgetInstance(SchemaMigrator::class);
-    $this->migrateSchemaSets(['axiomasoft/corex:tenant-modules'], 'pgsql');
+    $this->migrateSchemaSets(['axiomasoft/corex:tenant'], 'pgsql');
     app()->instance(ModuleDiscovery::class, new ModuleDiscovery(fallbackModules: [FixtureModule::class]));
     $registry = Mockery::mock(ModuleRegistry::class);
     $registry->shouldReceive('get')->with('fixture/module')->andReturn(new CompiledModule('fixture/module', 'Schema fixture', 'scm', [], [], []));

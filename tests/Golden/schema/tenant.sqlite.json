@@ -4745,6 +4745,161 @@
                 "webhook_subscriptions_status_update": "CREATE TRIGGER \"webhook_subscriptions_status_update\" BEFORE UPDATE ON \"sys_api_webhook_subscriptions\" WHEN NOT (NEW.status IN ('active', 'disabled')) BEGIN SELECT RAISE(ABORT, 'webhook_subscriptions_status'); END"
             }
         },
+        "sys_saved_view_scopes": {
+            "columns": {
+                "entity_code": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "scope_key": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "sqlite_autoindex_sys_saved_view_scopes_1",
+                    "kind": "pk",
+                    "columns": [
+                        "entity_code",
+                        "scope_key"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [],
+            "triggers": []
+        },
+        "sys_saved_views": {
+            "columns": {
+                "config": {
+                    "type": "text",
+                    "nullable": false,
+                    "default": null
+                },
+                "created_at": {
+                    "type": "datetime",
+                    "nullable": true,
+                    "default": null
+                },
+                "created_by": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "default_scope_key": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
+                "entity_code": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "is_default": {
+                    "type": "tinyint(1)",
+                    "nullable": false,
+                    "default": null
+                },
+                "kind": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "name": {
+                    "type": "text",
+                    "nullable": false,
+                    "default": null
+                },
+                "owner_id": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
+                "owner_kind": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
+                "position": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": null
+                },
+                "revision": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": null
+                },
+                "schema_version": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "scope_key": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "datetime",
+                    "nullable": true,
+                    "default": null
+                },
+                "workspace_id": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "sqlite_autoindex_sys_saved_views_1",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "sys_saved_views_default_scope_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "entity_code",
+                        "default_scope_key"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [
+                {
+                    "name": "sys_saved_views_entity_code_scope_key_fk",
+                    "columns": [
+                        "entity_code",
+                        "scope_key"
+                    ],
+                    "references": "sys_saved_view_scopes(entity_code,scope_key)",
+                    "on_delete": "NO ACTION",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                }
+            ],
+            "checks": [],
+            "triggers": []
+        },
         "sys_wakeup_requests": {
             "columns": {
                 "attempt": {

@@ -248,6 +248,14 @@ final class SchemaGate
             }
 
             if ($baseline) {
+                // RENAME references the old object; S4 applies to its new literal name.
+                if (preg_match('/\bRENAME\s+CONSTRAINT\s+["`]?([a-z0-9_]+)["`]?\s+TO\s+(["`]?[a-z0-9_]+["`]?)/i', $sql, $rename) === 1) {
+                    preg_match('/\bALTER\s+TABLE\s+["`]?([a-z0-9_]+)/i', $sql, $target);
+                    $this->object($file, $line, trim($rename[2], '"`'), $target[1] ?? '', $scope, register: false);
+                    $sql = str_replace($rename[0], '', $sql);
+                } elseif (preg_match('/\bRENAME\s+CONSTRAINT\b/i', $sql) === 1) {
+                    $this->hit('S4', $file, $line, 'literal constraint rename target required');
+                }
                 preg_match_all('/\b(?:CONSTRAINT|(?:UNIQUE\s+)?INDEX)\s+["`]?([a-z0-9_]+)["`]?/i', $sql, $names);
                 foreach ($names[1] as $object) {
                     preg_match('/\b(?:ALTER\s+TABLE|ON|CREATE\s+TABLE)\s+["`]?([a-z0-9_]+)/i', $sql, $target);
@@ -318,12 +326,16 @@ final class SchemaGate
         }
     }
 
-    private function object(string $file, int $line, ?string $name, string $table, string $scope): void
+    private function object(string $file, int $line, ?string $name, string $table, string $scope, bool $register = true): void
     {
         if ($name === null || strlen($name) > 63 || preg_match('/^[a-z0-9_]+_(pk|uq|ix|fk|ck)$/', $name) !== 1
             || ($table !== '' && ! str_starts_with($name, $table.'_'))) {
             $this->hit('S4', $file, $line, 'invalid literal object name: '.($name ?? '<dynamic>'));
 
+            return;
+        }
+
+        if (! $register) {
             return;
         }
         $key = $scope.'/'.$name;

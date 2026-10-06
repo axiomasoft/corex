@@ -21,33 +21,9 @@ use CoreX\Time\Laravel\SystemClock;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Schema;
 
 beforeEach(function (): void {
-    Schema::create('sys_saved_view_scopes', function (Blueprint $table): void {
-        $table->string('entity_code');
-        $table->string('scope_key');
-        $table->primary(['entity_code', 'scope_key']);
-    });
-    Schema::create('sys_saved_views', function (Blueprint $table): void {
-        $table->string('id')->primary();
-        $table->string('entity_code');
-        $table->string('workspace_id')->nullable();
-        $table->string('owner_kind')->nullable();
-        $table->string('owner_id')->nullable();
-        $table->string('scope_key');
-        $table->string('kind');
-        $table->json('name');
-        $table->json('config');
-        $table->string('schema_version');
-        $table->unsignedBigInteger('revision');
-        $table->boolean('is_default');
-        $table->string('default_scope_key')->nullable();
-        $table->integer('position');
-        $table->string('created_by');
-        $table->timestamps();
-        $table->unique(['entity_code', 'default_scope_key']);
-    });
+    $this->migrateSchemaSets(['axiomasoft/corex-panels:tenant']);
 });
 
 it('persists only a validated AST and compiles it without SQL or identifiers', function (): void {

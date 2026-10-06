@@ -1,0 +1,161 @@
+{
+    "driver": "pgsql",
+    "tables": {
+        "sys_saved_view_scopes": {
+            "columns": {
+                "entity_code": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "scope_key": {
+                    "type": "character varying(1024)",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "sys_saved_view_scopes_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "entity_code",
+                        "scope_key"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [],
+            "triggers": []
+        },
+        "sys_saved_views": {
+            "columns": {
+                "config": {
+                    "type": "jsonb",
+                    "nullable": false,
+                    "default": null
+                },
+                "created_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "created_by": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "default_scope_key": {
+                    "type": "character varying(1024)",
+                    "nullable": true,
+                    "default": null
+                },
+                "entity_code": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "is_default": {
+                    "type": "boolean",
+                    "nullable": false,
+                    "default": null
+                },
+                "kind": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "name": {
+                    "type": "jsonb",
+                    "nullable": false,
+                    "default": null
+                },
+                "owner_id": {
+                    "type": "character varying(255)",
+                    "nullable": true,
+                    "default": null
+                },
+                "owner_kind": {
+                    "type": "character varying(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "position": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": null
+                },
+                "revision": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "schema_version": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "scope_key": {
+                    "type": "character varying(1024)",
+                    "nullable": false,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "workspace_id": {
+                    "type": "character varying(255)",
+                    "nullable": true,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "sys_saved_views_entity_code_default_scope_key_unique",
+                    "kind": "uq",
+                    "columns": [
+                        "entity_code",
+                        "default_scope_key"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "sys_saved_views_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [
+                {
+                    "name": "sys_saved_views_entity_code_scope_key_foreign",
+                    "columns": [
+                        "entity_code",
+                        "scope_key"
+                    ],
+                    "references": "sys_saved_view_scopes(entity_code,scope_key)",
+                    "on_delete": "NO ACTION",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                }
+            ],
+            "checks": [],
+            "triggers": []
+        }
+    },
+    "enum_types": []
+}

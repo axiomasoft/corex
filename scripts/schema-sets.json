@@ -159,10 +159,11 @@
             "package": "axiomasoft/corex-panels",
             "name": "tenant",
             "scope": "tenant",
-            "path": "packages/panels/database/migrations/pg",
+            "path": "packages/panels/database/migrations/tenant",
             "version": 1,
             "drivers": [
-                "pgsql"
+                "pgsql",
+                "sqlite"
             ],
             "lifecycle": "module",
             "requires": [],
@@ -306,21 +307,7 @@
             "package": "axiomasoft/corex",
             "name": "tenant",
             "scope": "tenant",
-            "path": "packages/core/database/migrations/pg",
-            "version": 1,
-            "drivers": [
-                "pgsql"
-            ],
-            "lifecycle": "platform",
-            "requires": [],
-            "connection": null
-        },
-        {
-            "id": "axiomasoft/corex:tenant-modules",
-            "package": "axiomasoft/corex",
-            "name": "tenant-modules",
-            "scope": "tenant",
-            "path": "packages/core/database/migrations",
+            "path": "packages/core/database/migrations/tenant",
             "version": 1,
             "drivers": [
                 "pgsql"

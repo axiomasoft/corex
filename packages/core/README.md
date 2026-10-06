@@ -122,3 +122,7 @@ Package error identities use backed enums and a boot compiled kernel registry.
 Error constructors require `ErrorCode`; descriptors keep scoped string wire codes.
 See the monorepo [error contract](../../docs/reference/errors.md) for contributions,
 validated replay and safe mapping.
+
+## Схема
+
+Набор `tenant`, baseline v1 (PostgreSQL). Он содержит таблицы `sys_*` и `mod_*`; исполнение — `corex:schema:migrate --scope=tenant`. Миграции не публикуются.

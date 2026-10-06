@@ -204,7 +204,7 @@ it('compiles the actual declarations of every schema-owning package', function (
         new TasksWorkflowSchemaSets,
         new CrmSchemaSets,
     ]);
-    expect($sets->all())->toHaveCount(22)
+    expect($sets->all())->toHaveCount(21)
         ->and($sets->get('axiomasoft/corex-access:tenant-cloud')->requires)->toBe(['axiomasoft/corex-tenancy']);
 });
 

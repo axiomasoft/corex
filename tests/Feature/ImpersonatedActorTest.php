@@ -102,7 +102,7 @@ it('CurrentActor falls back to the pre-impersonation behavior once state() is nu
         ->and(CurrentActor::id())->toBe('user-abc');
 });
 
-it('sys_audit_actor_ck accepts support after the widening migration (D137)', function (): void {
+it('sys_audit_log_actor_ck accepts support in the baseline', function (): void {
     DB::connection('pgsql')->statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::connection('pgsql')->statement('CREATE SCHEMA public');
     DB::purge('pgsql');
@@ -141,12 +141,12 @@ it('sys_audit_actor_ck accepts support after the widening migration (D137)', fun
         ->and($row->actor_id)->toBe($staffId);
 })->group('pg');
 
-it('mod_ll_actor_ck accepts support after the widening migration — CurrentActor under impersonation writes without CHECK-violation (х, D138)', function (): void {
+it('mod_lifecycle_log_actor_ck accepts support under impersonation', function (): void {
     DB::connection('pgsql')->statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::connection('pgsql')->statement('CREATE SCHEMA public');
     DB::purge('pgsql');
 
-    test()->migrateSchemaSets(['axiomasoft/corex:tenant-modules'], 'pgsql');
+    test()->migrateSchemaSets(['axiomasoft/corex:tenant'], 'pgsql');
 
     // Outside impersonation — regression (ц): the original vocabulary still writes.
     DB::connection('pgsql')->table('mod_lifecycle_log')->insert([

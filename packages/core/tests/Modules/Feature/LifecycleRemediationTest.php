@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use CoreX\Context\Contracts\TenantContextResolver;
-use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Features\Contracts\FeatureFlags;
 use CoreX\Features\Internal\DatabaseFeatureFlags;
 use CoreX\Modules\Contracts\ModuleActivationGate;
@@ -38,9 +37,7 @@ beforeEach(function (): void {
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     $this->app->register(ModulesServiceProvider::class);
-    foreach ([app(SchemaSets::class)->get('axiomasoft/corex:tenant-modules')->path, app(SchemaSets::class)->get('axiomasoft/corex:tenant')->path] as $path) {
-        $this->artisan('migrate', ['--path' => realpath($path), '--realpath' => true, '--force' => true])->assertSuccessful();
-    }
+    $this->migrateSchemaSets(['axiomasoft/corex:tenant'], 'pgsql');
     $discovery = new ModuleDiscovery(fallbackModules: [StubBaseModule::class, StubFailingModule::class, StubFeatureFlagModule::class]);
     $registry = Mockery::mock(ModuleRegistry::class);
     foreach ($discovery->discover() as $manifest) {
