@@ -163,20 +163,44 @@
     "status": "not_needed"
   },
   "result": {
-    "started_at": "2026-10-05T15:13:30Z",
-    "finished_at": "2026-10-05T15:13:30Z",
+    "started_at": "2026-10-05T19:56:21Z",
+    "finished_at": "2026-10-05T19:56:21Z",
     "executor": {
-      "provider": "legacy",
-      "model": "codex/GPT-6 (runtime selector/effort unavailable)"
+      "provider": "openai",
+      "model": "codex"
     },
-    "notes": "F1/F2 исправлены; продукт `32e1817c74abcd59d5a29b51c384c7cb93f89aaa`. Tenancy 599 passed, root 1143 + PG 242, Arch 135, mutation 37/37; lint/analyse/module-layout/php-api GREEN. Результат и логи: `@plan/knowledge/artifacts-P07.6-review-verdict.json`, `artifacts/P07.6-review/autofix/validation-summary.json`.",
+    "notes": "F1/F2 исправлены; продукт `32e1817c74abcd59d5a29b51c384c7cb93f89aaa`. Tenancy 599 passed, root 1143 + PG 242, Arch 135, mutation 37/37; lint/analyse/module-layout/php-api GREEN. Результат и логи: `@plan/knowledge/artifacts-P07.6-review-verdict.json`, `artifacts/P07.6-review/autofix/validation-summary.json`.\n\nТехническая повторная фиксация по D115/A после ответа владельца «бля, ну исправь, все, чтобы не было хвостов!». Исходный done_with_deviations и отклонение сохранены, новое ревью не проводилось. Hosted CI теперь аттестован: https://github.com/ax1oma/corex-miror/actions/runs/37355723226 — success, 37/37 jobs success, commit 4f3000d9470cc695eaeab60e1c3810cbe93f51af; последующие изменения только plans/. V1–V4 exit 0. Прежняя запись об отсутствии hosted аттестации описывает исходное завершение, а не текущую приёмку.",
     "deviations": [
       "Новый Task JSON runtime не читает legacy Markdown/journal; учёт выполнен вручную по указанию владельца. Новое ревью прямо исключено владельцем. Независимость/route исходного ревью и hosted CI не аттестованы; phase acceptance остаётся отдельной границей."
     ],
-    "pending": [],
-    "checks": []
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-10-05T19:56:21Z"
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-10-05T19:56:21Z"
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-10-05T19:56:21Z"
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-10-05T19:56:21Z"
+      }
+    ],
+    "commits": [
+      "32e1817c74abcd59d5a29b51c384c7cb93f89aaa",
+      "4f3000d9470cc695eaeab60e1c3810cbe93f51af"
+    ]
   },
-  "updated_at": "2026-10-05T19:14:19Z",
+  "updated_at": "2026-10-05T19:56:21Z",
   "sections": [
     {
       "id": "Owner-execution-override-2026-10-05",

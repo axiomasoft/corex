@@ -24,7 +24,7 @@ PLAN3 · layout v4 · 🟡 Active. JSON files are the source of truth; the Markd
 - [P04](phases/P04/phase.md) — Application API, Extension SPI и типизированные ошибки · 🟢 Done
 - [P05](phases/P05/phase.md) — Typed config, композиция и порты · 🟢 Done
 - [P06](phases/P06/phase.md) — Operations, tools, webhooks и wire · 🟠 Done with deviations
-- [P07](phases/P07/phase.md) — Tenancy, access, независимость модулей · 🟡 In progress
+- [P07](phases/P07/phase.md) — Tenancy, access, независимость модулей · 🟠 Done with deviations
 - [P08](phases/P08/phase.md) — Схема: baseline v1 · ⬜ Not started
 - [P09](phases/P09/phase.md) — Планка качества и release-квалификация `1.0.0-rc.1` · ⬜ Skeleton
 - [P10](phases/P10/phase.md) — Зелёный hosted CI на базе P04 · 🟢 Done

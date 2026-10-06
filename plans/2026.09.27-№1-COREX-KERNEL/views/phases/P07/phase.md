@@ -113,6 +113,16 @@ helper-ах и static (baseline 25 находок на текущей базе; 
 ]
 ```
 
+## Closed
+
+```json
+{
+  "at": "2026-10-05T19:56:21Z",
+  "result": "done_with_deviations",
+  "summary": "6 item(s): 5 done, 1 done_with_deviations"
+}
+```
+
 ## Orchestration
 
 ```json
@@ -281,4 +291,4 @@ Local verification: PHP 8.4.26; PostgreSQL 16 on 127.0.0.1:5434, isolated corex_
 
 Hosted acceptance: GREEN, CI success, all 37/37 jobs success including mutation (V4 exit 0): [CI 37355723226](https://github.com/ax1oma/corex-miror/actions/runs/37355723226) on 4f3000d9470cc695eaeab60e1c3810cbe93f51af. Prior runs 37350346185 and 37353799966 are failures, not acceptance. Superseded intermediate runs 37355040883 and 37355350353 were cancelled to free runners. No workflow rerun was requested. Primary GitHub account billing was not changed. The original P07.6 review/route deviation is preserved; this cleanup does not assert a new independent review GREEN.
 
-Closure is blocked only by the lifecycle metadata operation: repeated finish returned `NOT_STARTED: P07.6 is done_with_deviations; start it first (use reopen to redo a finished item)`. Canonical V1–V4 all passed. D115 is an open owner question for the technical reopen/start/finish required by the original task §3.4. P07.6 remains terminal with its original result; no reopen or decision acceptance was performed without the separate owner answer.
+Closure completed: owner answered «бля, ну исправь, все, чтобы не было хвостов!» to the explicit technical-reopen request. D115/A was accepted by owner. plan.py reopen → start (--no-scout) → finish preserved done_with_deviations, original notes as a prefix and the original deviation verbatim; V1–V4 were rerun and recorded exit 0. Lifecycle recorded P07.closed and phase_closed. Original result provenance before the administrative cycle: {"started_at": "2026-10-05T15:13:30Z", "finished_at": "2026-10-05T15:13:30Z", "executor": {"provider": "legacy", "model": "codex/GPT-6 (runtime selector/effort unavailable)"}, "notes": "F1/F2 исправлены; продукт `32e1817c74abcd59d5a29b51c384c7cb93f89aaa`. Tenancy 599 passed, root 1143 + PG 242, Arch 135, mutation 37/37; lint/analyse/module-layout/php-api GREEN. Результат и логи: `@plan/knowledge/artifacts-P07.6-review-verdict.json`, `artifacts/P07.6-review/autofix/validation-summary.json`.", "deviations": ["Новый Task JSON runtime не читает legacy Markdown/journal; учёт выполнен вручную по указанию владельца. Новое ревью прямо исключено владельцем. Независимость/route исходного ревью и hosted CI не аттестованы; phase acceptance остаётся отдельной границей."], "pending": [], "checks": []}. No new review was performed and no P08 item was started. D73 remains active, with hosted CI satisfied on 4f3000d9470cc695eaeab60e1c3810cbe93f51af and later changes limited to plans/. A follow-up set of closed.summary was rejected with FIELD_OWNED; lifecycle-owned closure was left intact, with acceptance evidence in this section and P07.6 result.notes.

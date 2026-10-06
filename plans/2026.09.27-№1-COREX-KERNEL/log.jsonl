@@ -248,3 +248,8 @@
 {"v":1,"ts":"2026-10-05T17:22:49Z","type":"decision","actor":{"provider":"anthropic","model":"claude-opus-5-5","effort":"high"},"summary":"D113 accepted","data":{"id":"D113","by":"agent"}}
 {"v":1,"ts":"2026-10-05T17:22:50Z","type":"decision","actor":{"provider":"anthropic","model":"claude-opus-5-5","effort":"high"},"summary":"D114 accepted","data":{"id":"D114","by":"agent"}}
 {"v":1,"ts":"2026-10-05T17:28:46Z","type":"design_done","phase":"P08","actor":{"provider":"anthropic","model":"claude-opus-5-5","effort":"high"},"summary":"P08 design done"}
+{"v":1,"ts":"2026-10-05T19:56:21Z","type":"decision","actor":{"provider":"openai","model":"codex"},"summary":"D115 accepted","data":{"id":"D115","by":"owner","option":"A"}}
+{"v":1,"ts":"2026-10-05T19:56:21Z","type":"note","item":"P07.6","phase":"P07","actor":{"provider":"openai","model":"codex"},"summary":"reopen P07.6: D115/A: бля, ну исправь, все, чтобы не было хвостов! Технический цикл для записи P07.closed; исходный результат сохранён, новое ревью не выполняется.","data":{"reopened_from":"done_with_deviations"}}
+{"v":1,"ts":"2026-10-05T19:56:21Z","type":"start","item":"P07.6","phase":"P07","actor":{"provider":"openai","model":"codex"},"summary":"start P07.6 (batch BP07-6)","data":{"requested":["P07.6"],"route":"ROUTE_MODEL_UNKNOWN"}}
+{"v":1,"ts":"2026-10-05T19:56:21Z","type":"finish","item":"P07.6","phase":"P07","actor":{"provider":"openai","model":"codex"},"summary":"P07.6 done_with_deviations","data":{"status":"done_with_deviations","checks":{"V1":0,"V2":0,"V3":0,"V4":0}}}
+{"v":1,"ts":"2026-10-05T19:56:21Z","type":"phase_closed","phase":"P07","actor":{"provider":"openai","model":"codex"},"summary":"P07 closed: done_with_deviations","data":{"result":"done_with_deviations"}}

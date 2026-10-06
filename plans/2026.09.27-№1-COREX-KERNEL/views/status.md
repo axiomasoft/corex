@@ -371,7 +371,7 @@ Restore Actions capacity and obtain a green `CI` run before release, before trea
 - `@plan/decisions/D105.json`
 
 
-## P07 — Tenancy, access, независимость модулей · 🟡 In progress
+## P07 — Tenancy, access, независимость модулей · 🟠 Done with deviations
 
 | Item | Title | Status | Route | Updated |
 |:--|:--|:--|:--|:--|
@@ -380,7 +380,9 @@ Restore Actions capacity and obtain a green `CI` run before release, before trea
 | P07.3 | Impersonation на портах с профилями и двойным аудитом | 🟢 Done | implementation/high | 2026-10-05T17:28:06Z |
 | P07.4 | Access без AzGuard и мост access-azguard | 🟢 Done | implementation/high | 2026-10-05T17:28:07Z |
 | P07.5 | Контракты пробуждения в ядре и граф без notifications → wakeup | 🟢 Done | implementation/high | 2026-10-05T17:28:08Z |
-| P07.6 | Review P07 | 🟠 Done with deviations | frontier/high | 2026-10-05T19:14:19Z |
+| P07.6 | Review P07 | 🟠 Done with deviations | frontier/high | 2026-10-05T19:56:21Z |
+
+Closed 2026-10-05T19:56:21Z (🟠 Done with deviations): 6 item(s): 5 done, 1 done_with_deviations
 
 ## P08 — Схема: baseline v1 · ⬜ Not started
 
