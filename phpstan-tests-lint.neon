@@ -25,6 +25,9 @@ includes:
 parameters:
     tmpDir: build/phpstan-tests-lint
 
+    scanFiles:
+        - scripts/schema-gate.php
+
     paths:
         - tests
         - packages/operations/tests
@@ -93,12 +96,6 @@ parameters:
             identifier: corexModules.directSystemTableWrite
             path: tests/Feature/ImpersonatedActorTest.php
             count: 4
-        -
-            # Две append-only строки в заданном порядке — предмет теста монотонность
-            # курсора `seq` (D42), независимая от `id`/`occurred_at`.
-            identifier: corexModules.directSystemTableWrite
-            path: tests/Feature/MigrationPublishTest.php
-            count: 1
         -
             # (1) детерминизация `created_at` для патча-саботажа purge-порядка
             # (без неё мутант выживает); (2) посев `mod_modules` для регрессии

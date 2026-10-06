@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+use CoreX\Audit\Data\AuditEntry;
+use CoreX\Audit\Enums\ActorType;
+use CoreX\Audit\Internal\QueuedAuditLogger;
+use CoreX\Config\Data\CoreOptions;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
@@ -24,7 +28,6 @@ use CoreX\Tests\Fixtures\Schema\FixtureModule;
 use CoreX\Tests\Fixtures\Schema\FixtureSchemaSets;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
 
 uses()->group('pg');
 
@@ -83,10 +86,11 @@ it('preserves explicit microsecond precision on every sys and module timestamp (
 
 it('preserves the monotonic audit sequence cursor (D42)', function (): void {
     $this->migrateSchemaSets(['axiomasoft/corex:tenant'], 'pgsql');
+    config(['corex.audit.enabled' => true]);
+    app()->forgetInstance(CoreOptions::class);
+    $logger = app()->make(QueuedAuditLogger::class, ['connection' => 'pgsql']);
     foreach (['first', 'second'] as $action) {
-        DB::connection('pgsql')->table('sys_audit_log')->insert([
-            'id' => (string) Str::uuid7(), 'actor_type' => 'system', 'action' => $action,
-        ]);
+        $logger->record(new AuditEntry(action: $action, actorType: ActorType::System));
     }
     $seqs = DB::connection('pgsql')->table('sys_audit_log')->orderBy('seq')->pluck('seq');
     expect($seqs)->toHaveCount(2)

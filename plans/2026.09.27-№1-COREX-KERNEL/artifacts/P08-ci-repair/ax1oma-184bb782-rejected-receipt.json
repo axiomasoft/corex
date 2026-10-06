@@ -1,0 +1,4877 @@
+{
+  "accepted": false,
+  "run": {
+    "id": 37506417560,
+    "name": "CI",
+    "node_id": "WFR_kwLOU-gNGs8AAAAIu46DmA",
+    "head_branch": "main",
+    "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+    "path": ".github/workflows/ci.yml",
+    "display_title": "fix(ci): repair P08 schema fixtures and lock analysis tooling",
+    "run_number": 1,
+    "event": "push",
+    "status": "completed",
+    "conclusion": "failure",
+    "workflow_id": 376676173,
+    "check_suite_id": 101597599558,
+    "check_suite_node_id": "CS_kwDOU-gNGs8AAAAXp7BXRg",
+    "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+    "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560",
+    "pull_requests": [],
+    "created_at": "2026-10-06T17:48:41Z",
+    "updated_at": "2026-10-06T17:58:18Z",
+    "actor": {
+      "login": "academici",
+      "id": 3863273,
+      "node_id": "MDQ6VXNlcjM4NjMyNzM=",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3863273?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/academici",
+      "html_url": "https://github.com/academici",
+      "followers_url": "https://api.github.com/users/academici/followers",
+      "following_url": "https://api.github.com/users/academici/following{/other_user}",
+      "gists_url": "https://api.github.com/users/academici/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/academici/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/academici/subscriptions",
+      "organizations_url": "https://api.github.com/users/academici/orgs",
+      "repos_url": "https://api.github.com/users/academici/repos",
+      "events_url": "https://api.github.com/users/academici/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/academici/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "run_attempt": 1,
+    "referenced_workflows": [],
+    "run_started_at": "2026-10-06T17:48:41Z",
+    "triggering_actor": {
+      "login": "academici",
+      "id": 3863273,
+      "node_id": "MDQ6VXNlcjM4NjMyNzM=",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3863273?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/academici",
+      "html_url": "https://github.com/academici",
+      "followers_url": "https://api.github.com/users/academici/followers",
+      "following_url": "https://api.github.com/users/academici/following{/other_user}",
+      "gists_url": "https://api.github.com/users/academici/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/academici/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/academici/subscriptions",
+      "organizations_url": "https://api.github.com/users/academici/orgs",
+      "repos_url": "https://api.github.com/users/academici/repos",
+      "events_url": "https://api.github.com/users/academici/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/academici/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "jobs_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560/jobs",
+    "logs_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560/logs",
+    "check_suite_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-suites/101597599558",
+    "artifacts_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560/artifacts",
+    "cancel_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560/cancel",
+    "rerun_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560/rerun",
+    "previous_attempt_url": null,
+    "workflow_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/workflows/376676173",
+    "head_commit": {
+      "id": "184bb782791034abedcaec2207b010eb940f60b6",
+      "tree_id": "f77c3136c10d1e2f0eeedae60cfa458ebcf24a4c",
+      "message": "fix(ci): repair P08 schema fixtures and lock analysis tooling",
+      "timestamp": "2026-10-06T18:43:00Z",
+      "author": {
+        "name": "t",
+        "email": "t@t"
+      },
+      "committer": {
+        "name": "t",
+        "email": "t@t"
+      }
+    },
+    "repository": {
+      "id": 1407716634,
+      "node_id": "R_kgDOU-gNGg",
+      "name": "corex-mirror",
+      "full_name": "ax1oma/corex-mirror",
+      "private": true,
+      "owner": {
+        "login": "ax1oma",
+        "id": 291977717,
+        "node_id": "O_kgDOEWc59Q",
+        "avatar_url": "https://avatars.githubusercontent.com/u/291977717?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/ax1oma",
+        "html_url": "https://github.com/ax1oma",
+        "followers_url": "https://api.github.com/users/ax1oma/followers",
+        "following_url": "https://api.github.com/users/ax1oma/following{/other_user}",
+        "gists_url": "https://api.github.com/users/ax1oma/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/ax1oma/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/ax1oma/subscriptions",
+        "organizations_url": "https://api.github.com/users/ax1oma/orgs",
+        "repos_url": "https://api.github.com/users/ax1oma/repos",
+        "events_url": "https://api.github.com/users/ax1oma/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/ax1oma/received_events",
+        "type": "Organization",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "html_url": "https://github.com/ax1oma/corex-mirror",
+      "description": null,
+      "fork": false,
+      "url": "https://api.github.com/repos/ax1oma/corex-mirror",
+      "forks_url": "https://api.github.com/repos/ax1oma/corex-mirror/forks",
+      "keys_url": "https://api.github.com/repos/ax1oma/corex-mirror/keys{/key_id}",
+      "collaborators_url": "https://api.github.com/repos/ax1oma/corex-mirror/collaborators{/collaborator}",
+      "teams_url": "https://api.github.com/repos/ax1oma/corex-mirror/teams",
+      "hooks_url": "https://api.github.com/repos/ax1oma/corex-mirror/hooks",
+      "issue_events_url": "https://api.github.com/repos/ax1oma/corex-mirror/issues/events{/number}",
+      "events_url": "https://api.github.com/repos/ax1oma/corex-mirror/events",
+      "assignees_url": "https://api.github.com/repos/ax1oma/corex-mirror/assignees{/user}",
+      "branches_url": "https://api.github.com/repos/ax1oma/corex-mirror/branches{/branch}",
+      "tags_url": "https://api.github.com/repos/ax1oma/corex-mirror/tags",
+      "blobs_url": "https://api.github.com/repos/ax1oma/corex-mirror/git/blobs{/sha}",
+      "git_tags_url": "https://api.github.com/repos/ax1oma/corex-mirror/git/tags{/sha}",
+      "git_refs_url": "https://api.github.com/repos/ax1oma/corex-mirror/git/refs{/sha}",
+      "trees_url": "https://api.github.com/repos/ax1oma/corex-mirror/git/trees{/sha}",
+      "statuses_url": "https://api.github.com/repos/ax1oma/corex-mirror/statuses/{sha}",
+      "languages_url": "https://api.github.com/repos/ax1oma/corex-mirror/languages",
+      "stargazers_url": "https://api.github.com/repos/ax1oma/corex-mirror/stargazers",
+      "contributors_url": "https://api.github.com/repos/ax1oma/corex-mirror/contributors",
+      "subscribers_url": "https://api.github.com/repos/ax1oma/corex-mirror/subscribers",
+      "subscription_url": "https://api.github.com/repos/ax1oma/corex-mirror/subscription",
+      "commits_url": "https://api.github.com/repos/ax1oma/corex-mirror/commits{/sha}",
+      "git_commits_url": "https://api.github.com/repos/ax1oma/corex-mirror/git/commits{/sha}",
+      "comments_url": "https://api.github.com/repos/ax1oma/corex-mirror/comments{/number}",
+      "issue_comment_url": "https://api.github.com/repos/ax1oma/corex-mirror/issues/comments{/number}",
+      "contents_url": "https://api.github.com/repos/ax1oma/corex-mirror/contents/{+path}",
+      "compare_url": "https://api.github.com/repos/ax1oma/corex-mirror/compare/{base}...{head}",
+      "merges_url": "https://api.github.com/repos/ax1oma/corex-mirror/merges",
+      "archive_url": "https://api.github.com/repos/ax1oma/corex-mirror/{archive_format}{/ref}",
+      "downloads_url": "https://api.github.com/repos/ax1oma/corex-mirror/downloads",
+      "issues_url": "https://api.github.com/repos/ax1oma/corex-mirror/issues{/number}",
+      "pulls_url": "https://api.github.com/repos/ax1oma/corex-mirror/pulls{/number}",
+      "milestones_url": "https://api.github.com/repos/ax1oma/corex-mirror/milestones{/number}",
+      "notifications_url": "https://api.github.com/repos/ax1oma/corex-mirror/notifications{?since,all,participating}",
+      "labels_url": "https://api.github.com/repos/ax1oma/corex-mirror/labels{/name}",
+      "releases_url": "https://api.github.com/repos/ax1oma/corex-mirror/releases{/id}",
+      "deployments_url": "https://api.github.com/repos/ax1oma/corex-mirror/deployments"
+    },
+    "head_repository": {
+      "id": 1407716634,
+      "node_id": "R_kgDOU-gNGg",
+      "name": "corex-mirror",
+      "full_name": "ax1oma/corex-mirror",
+      "private": true,
+      "owner": {
+        "login": "ax1oma",
+        "id": 291977717,
+        "node_id": "O_kgDOEWc59Q",
+        "avatar_url": "https://avatars.githubusercontent.com/u/291977717?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/ax1oma",
+        "html_url": "https://github.com/ax1oma",
+        "followers_url": "https://api.github.com/users/ax1oma/followers",
+        "following_url": "https://api.github.com/users/ax1oma/following{/other_user}",
+        "gists_url": "https://api.github.com/users/ax1oma/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/ax1oma/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/ax1oma/subscriptions",
+        "organizations_url": "https://api.github.com/users/ax1oma/orgs",
+        "repos_url": "https://api.github.com/users/ax1oma/repos",
+        "events_url": "https://api.github.com/users/ax1oma/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/ax1oma/received_events",
+        "type": "Organization",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "html_url": "https://github.com/ax1oma/corex-mirror",
+      "description": null,
+      "fork": false,
+      "url": "https://api.github.com/repos/ax1oma/corex-mirror",
+      "forks_url": "https://api.github.com/repos/ax1oma/corex-mirror/forks",
+      "keys_url": "https://api.github.com/repos/ax1oma/corex-mirror/keys{/key_id}",
+      "collaborators_url": "https://api.github.com/repos/ax1oma/corex-mirror/collaborators{/collaborator}",
+      "teams_url": "https://api.github.com/repos/ax1oma/corex-mirror/teams",
+      "hooks_url": "https://api.github.com/repos/ax1oma/corex-mirror/hooks",
+      "issue_events_url": "https://api.github.com/repos/ax1oma/corex-mirror/issues/events{/number}",
+      "events_url": "https://api.github.com/repos/ax1oma/corex-mirror/events",
+      "assignees_url": "https://api.github.com/repos/ax1oma/corex-mirror/assignees{/user}",
+      "branches_url": "https://api.github.com/repos/ax1oma/corex-mirror/branches{/branch}",
+      "tags_url": "https://api.github.com/repos/ax1oma/corex-mirror/tags",
+      "blobs_url": "https://api.github.com/repos/ax1oma/corex-mirror/git/blobs{/sha}",
+      "git_tags_url": "https://api.github.com/repos/ax1oma/corex-mirror/git/tags{/sha}",
+      "git_refs_url": "https://api.github.com/repos/ax1oma/corex-mirror/git/refs{/sha}",
+      "trees_url": "https://api.github.com/repos/ax1oma/corex-mirror/git/trees{/sha}",
+      "statuses_url": "https://api.github.com/repos/ax1oma/corex-mirror/statuses/{sha}",
+      "languages_url": "https://api.github.com/repos/ax1oma/corex-mirror/languages",
+      "stargazers_url": "https://api.github.com/repos/ax1oma/corex-mirror/stargazers",
+      "contributors_url": "https://api.github.com/repos/ax1oma/corex-mirror/contributors",
+      "subscribers_url": "https://api.github.com/repos/ax1oma/corex-mirror/subscribers",
+      "subscription_url": "https://api.github.com/repos/ax1oma/corex-mirror/subscription",
+      "commits_url": "https://api.github.com/repos/ax1oma/corex-mirror/commits{/sha}",
+      "git_commits_url": "https://api.github.com/repos/ax1oma/corex-mirror/git/commits{/sha}",
+      "comments_url": "https://api.github.com/repos/ax1oma/corex-mirror/comments{/number}",
+      "issue_comment_url": "https://api.github.com/repos/ax1oma/corex-mirror/issues/comments{/number}",
+      "contents_url": "https://api.github.com/repos/ax1oma/corex-mirror/contents/{+path}",
+      "compare_url": "https://api.github.com/repos/ax1oma/corex-mirror/compare/{base}...{head}",
+      "merges_url": "https://api.github.com/repos/ax1oma/corex-mirror/merges",
+      "archive_url": "https://api.github.com/repos/ax1oma/corex-mirror/{archive_format}{/ref}",
+      "downloads_url": "https://api.github.com/repos/ax1oma/corex-mirror/downloads",
+      "issues_url": "https://api.github.com/repos/ax1oma/corex-mirror/issues{/number}",
+      "pulls_url": "https://api.github.com/repos/ax1oma/corex-mirror/pulls{/number}",
+      "milestones_url": "https://api.github.com/repos/ax1oma/corex-mirror/milestones{/number}",
+      "notifications_url": "https://api.github.com/repos/ax1oma/corex-mirror/notifications{?since,all,participating}",
+      "labels_url": "https://api.github.com/repos/ax1oma/corex-mirror/labels{/name}",
+      "releases_url": "https://api.github.com/repos/ax1oma/corex-mirror/releases{/id}",
+      "deployments_url": "https://api.github.com/repos/ax1oma/corex-mirror/deployments"
+    }
+  },
+  "jobs": {
+    "total_count": 37,
+    "jobs": [
+      {
+        "id": 112416115111,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXJpw",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115111",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115111",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:48:48Z",
+        "completed_at": "2026-10-06T17:49:47Z",
+        "name": "Webhooks package · Laravel 13.*",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:48:49Z",
+            "completed_at": "2026-10-06T17:48:50Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:48:50Z",
+            "completed_at": "2026-10-06T17:48:58Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:48:58Z",
+            "completed_at": "2026-10-06T17:49:03Z"
+          },
+          {
+            "name": "Constrain Laravel version",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:49:03Z",
+            "completed_at": "2026-10-06T17:49:04Z"
+          },
+          {
+            "name": "Constrain root Laravel version",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:49:04Z",
+            "completed_at": "2026-10-06T17:49:04Z"
+          },
+          {
+            "name": "Root Laravel 12 test stack",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 6,
+            "started_at": "2026-10-06T17:49:04Z",
+            "completed_at": "2026-10-06T17:49:04Z"
+          },
+          {
+            "name": "Laravel 12 test stack",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 7,
+            "started_at": "2026-10-06T17:49:04Z",
+            "completed_at": "2026-10-06T17:49:04Z"
+          },
+          {
+            "name": "Install root tooling and shared test dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-06T17:49:04Z",
+            "completed_at": "2026-10-06T17:49:20Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-06T17:49:20Z",
+            "completed_at": "2026-10-06T17:49:20Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-06T17:49:20Z",
+            "completed_at": "2026-10-06T17:49:31Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-06T17:49:31Z",
+            "completed_at": "2026-10-06T17:49:31Z"
+          },
+          {
+            "name": "Webhooks tests and coverage",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-10-06T17:49:31Z",
+            "completed_at": "2026-10-06T17:49:39Z"
+          },
+          {
+            "name": "Webhooks static analysis",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-10-06T17:49:39Z",
+            "completed_at": "2026-10-06T17:49:45Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 26,
+            "started_at": "2026-10-06T17:49:45Z",
+            "completed_at": "2026-10-06T17:49:45Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 27,
+            "started_at": "2026-10-06T17:49:45Z",
+            "completed_at": "2026-10-06T17:49:45Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115111",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000551,
+        "runner_name": "GitHub Actions 1000000551",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115391,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXKvw",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115391",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115391",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:48:48Z",
+        "completed_at": "2026-10-06T17:50:27Z",
+        "name": "PG lane (postgres:16) · Laravel 13.*",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:48:49Z",
+            "completed_at": "2026-10-06T17:48:50Z"
+          },
+          {
+            "name": "Initialize containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:48:50Z",
+            "completed_at": "2026-10-06T17:49:07Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:49:07Z",
+            "completed_at": "2026-10-06T17:49:13Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:49:13Z",
+            "completed_at": "2026-10-06T17:49:21Z"
+          },
+          {
+            "name": "Constrain Laravel version",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:49:21Z",
+            "completed_at": "2026-10-06T17:49:21Z"
+          },
+          {
+            "name": "Laravel 12 test stack",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 6,
+            "started_at": "2026-10-06T17:49:21Z",
+            "completed_at": "2026-10-06T17:49:21Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:49:21Z",
+            "completed_at": "2026-10-06T17:49:34Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-06T17:49:34Z",
+            "completed_at": "2026-10-06T17:49:35Z"
+          },
+          {
+            "name": "Prepare PostgreSQL test databases",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-06T17:49:35Z",
+            "completed_at": "2026-10-06T17:49:35Z"
+          },
+          {
+            "name": "PG tests",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-06T17:49:35Z",
+            "completed_at": "2026-10-06T17:50:24Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 19,
+            "started_at": "2026-10-06T17:50:24Z",
+            "completed_at": "2026-10-06T17:50:25Z"
+          },
+          {
+            "name": "Stop containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 20,
+            "started_at": "2026-10-06T17:50:25Z",
+            "completed_at": "2026-10-06T17:50:25Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 21,
+            "started_at": "2026-10-06T17:50:25Z",
+            "completed_at": "2026-10-06T17:50:25Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115391",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000547,
+        "runner_name": "GitHub Actions 1000000547",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115400,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXKyA",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115400",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115400",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:48:48Z",
+        "completed_at": "2026-10-06T17:50:08Z",
+        "name": "Tasks package",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:48:49Z",
+            "completed_at": "2026-10-06T17:48:50Z"
+          },
+          {
+            "name": "Initialize containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:48:50Z",
+            "completed_at": "2026-10-06T17:49:07Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:49:07Z",
+            "completed_at": "2026-10-06T17:49:15Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:49:15Z",
+            "completed_at": "2026-10-06T17:49:21Z"
+          },
+          {
+            "name": "Install root tooling and shared test dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:49:21Z",
+            "completed_at": "2026-10-06T17:49:37Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:49:37Z",
+            "completed_at": "2026-10-06T17:49:38Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:49:38Z",
+            "completed_at": "2026-10-06T17:49:48Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-06T17:49:48Z",
+            "completed_at": "2026-10-06T17:49:49Z"
+          },
+          {
+            "name": "Tasks tests",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-06T17:49:49Z",
+            "completed_at": "2026-10-06T17:49:54Z"
+          },
+          {
+            "name": "Tasks tests (PG18)",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-06T17:49:54Z",
+            "completed_at": "2026-10-06T17:49:55Z"
+          },
+          {
+            "name": "Tasks coverage (P1.27 compensating gate)",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-06T17:49:55Z",
+            "completed_at": "2026-10-06T17:50:05Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 21,
+            "started_at": "2026-10-06T17:50:05Z",
+            "completed_at": "2026-10-06T17:50:05Z"
+          },
+          {
+            "name": "Stop containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 22,
+            "started_at": "2026-10-06T17:50:05Z",
+            "completed_at": "2026-10-06T17:50:06Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 23,
+            "started_at": "2026-10-06T17:50:06Z",
+            "completed_at": "2026-10-06T17:50:06Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115400",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000540,
+        "runner_name": "GitHub Actions 1000000540",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115420,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXK3A",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115420",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115420",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:49:49Z",
+        "completed_at": "2026-10-06T17:50:39Z",
+        "name": "Notifications and wakeup packages",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:49:50Z",
+            "completed_at": "2026-10-06T17:49:51Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:49:51Z",
+            "completed_at": "2026-10-06T17:49:58Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:49:58Z",
+            "completed_at": "2026-10-06T17:50:04Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:50:04Z",
+            "completed_at": "2026-10-06T17:50:26Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:50:26Z",
+            "completed_at": "2026-10-06T17:50:27Z"
+          },
+          {
+            "name": "Wakeup tests",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:50:27Z",
+            "completed_at": "2026-10-06T17:50:28Z"
+          },
+          {
+            "name": "Notification tests",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:50:28Z",
+            "completed_at": "2026-10-06T17:50:29Z"
+          },
+          {
+            "name": "Notification and wakeup static analysis",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-06T17:50:29Z",
+            "completed_at": "2026-10-06T17:50:37Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 16,
+            "started_at": "2026-10-06T17:50:37Z",
+            "completed_at": "2026-10-06T17:50:37Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 17,
+            "started_at": "2026-10-06T17:50:37Z",
+            "completed_at": "2026-10-06T17:50:37Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115420",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000558,
+        "runner_name": "GitHub Actions 1000000558",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115423,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXK3w",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115423",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115423",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:48:48Z",
+        "completed_at": "2026-10-06T17:53:24Z",
+        "name": "Tenancy package (PG18) · Laravel 13.*",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:48:49Z",
+            "completed_at": "2026-10-06T17:48:50Z"
+          },
+          {
+            "name": "Initialize containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:48:50Z",
+            "completed_at": "2026-10-06T17:49:09Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:49:09Z",
+            "completed_at": "2026-10-06T17:49:21Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:49:21Z",
+            "completed_at": "2026-10-06T17:49:31Z"
+          },
+          {
+            "name": "Constrain Laravel version",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:49:31Z",
+            "completed_at": "2026-10-06T17:49:31Z"
+          },
+          {
+            "name": "Constrain root Laravel version",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:49:31Z",
+            "completed_at": "2026-10-06T17:49:31Z"
+          },
+          {
+            "name": "Root Laravel 12 test stack",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 7,
+            "started_at": "2026-10-06T17:49:31Z",
+            "completed_at": "2026-10-06T17:49:31Z"
+          },
+          {
+            "name": "Laravel 12 test stack",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 8,
+            "started_at": "2026-10-06T17:49:31Z",
+            "completed_at": "2026-10-06T17:49:31Z"
+          },
+          {
+            "name": "Install root tooling and shared test dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-06T17:49:31Z",
+            "completed_at": "2026-10-06T17:49:49Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-06T17:49:49Z",
+            "completed_at": "2026-10-06T17:49:50Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-06T17:49:50Z",
+            "completed_at": "2026-10-06T17:50:02Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-10-06T17:50:02Z",
+            "completed_at": "2026-10-06T17:50:03Z"
+          },
+          {
+            "name": "Install PostgreSQL 18 client",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-10-06T17:50:03Z",
+            "completed_at": "2026-10-06T17:50:20Z"
+          },
+          {
+            "name": "Tenancy tests",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14,
+            "started_at": "2026-10-06T17:50:20Z",
+            "completed_at": "2026-10-06T17:53:12Z"
+          },
+          {
+            "name": "PHPStan (tenancy/src)",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15,
+            "started_at": "2026-10-06T17:53:12Z",
+            "completed_at": "2026-10-06T17:53:20Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 29,
+            "started_at": "2026-10-06T17:53:20Z",
+            "completed_at": "2026-10-06T17:53:20Z"
+          },
+          {
+            "name": "Stop containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 30,
+            "started_at": "2026-10-06T17:53:20Z",
+            "completed_at": "2026-10-06T17:53:21Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 31,
+            "started_at": "2026-10-06T17:53:21Z",
+            "completed_at": "2026-10-06T17:53:21Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115423",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000554,
+        "runner_name": "GitHub Actions 1000000554",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115427,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXK4w",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115427",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115427",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:48:48Z",
+        "completed_at": "2026-10-06T17:49:48Z",
+        "name": "Operations package · Laravel 12.*",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:48:49Z",
+            "completed_at": "2026-10-06T17:48:50Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:48:50Z",
+            "completed_at": "2026-10-06T17:48:58Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:48:58Z",
+            "completed_at": "2026-10-06T17:49:03Z"
+          },
+          {
+            "name": "Constrain Laravel version",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:49:03Z",
+            "completed_at": "2026-10-06T17:49:03Z"
+          },
+          {
+            "name": "Constrain root Laravel version",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:49:03Z",
+            "completed_at": "2026-10-06T17:49:04Z"
+          },
+          {
+            "name": "Root Laravel 12 test stack",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:49:04Z",
+            "completed_at": "2026-10-06T17:49:04Z"
+          },
+          {
+            "name": "Laravel 12 test stack",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:49:04Z",
+            "completed_at": "2026-10-06T17:49:04Z"
+          },
+          {
+            "name": "Install root tooling and shared test dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-06T17:49:04Z",
+            "completed_at": "2026-10-06T17:49:19Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-06T17:49:19Z",
+            "completed_at": "2026-10-06T17:49:20Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-06T17:49:20Z",
+            "completed_at": "2026-10-06T17:49:28Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-06T17:49:28Z",
+            "completed_at": "2026-10-06T17:49:28Z"
+          },
+          {
+            "name": "Operations tests and coverage",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-10-06T17:49:28Z",
+            "completed_at": "2026-10-06T17:49:38Z"
+          },
+          {
+            "name": "Operations static analysis",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-10-06T17:49:38Z",
+            "completed_at": "2026-10-06T17:49:47Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 26,
+            "started_at": "2026-10-06T17:49:47Z",
+            "completed_at": "2026-10-06T17:49:47Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 27,
+            "started_at": "2026-10-06T17:49:47Z",
+            "completed_at": "2026-10-06T17:49:47Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115427",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000541,
+        "runner_name": "GitHub Actions 1000000541",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115431,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXK5w",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115431",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115431",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:48:48Z",
+        "completed_at": "2026-10-06T17:49:09Z",
+        "name": "Anti-weakening gate",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:48:50Z",
+            "completed_at": "2026-10-06T17:48:51Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:48:51Z",
+            "completed_at": "2026-10-06T17:49:01Z"
+          },
+          {
+            "name": "Guard against gate-weakening diffs",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:49:01Z",
+            "completed_at": "2026-10-06T17:49:07Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:49:07Z",
+            "completed_at": "2026-10-06T17:49:07Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:49:07Z",
+            "completed_at": "2026-10-06T17:49:07Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115431",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000555,
+        "runner_name": "GitHub Actions 1000000555",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115439,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXK7w",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115439",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115439",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:48:48Z",
+        "completed_at": "2026-10-06T17:50:18Z",
+        "name": "Tools package · Laravel 12.*",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:48:49Z",
+            "completed_at": "2026-10-06T17:48:50Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:48:50Z",
+            "completed_at": "2026-10-06T17:48:57Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:48:57Z",
+            "completed_at": "2026-10-06T17:49:03Z"
+          },
+          {
+            "name": "Constrain Laravel version",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:49:03Z",
+            "completed_at": "2026-10-06T17:49:03Z"
+          },
+          {
+            "name": "Constrain root Laravel version",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:49:03Z",
+            "completed_at": "2026-10-06T17:49:03Z"
+          },
+          {
+            "name": "Root Laravel 12 test stack",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:49:03Z",
+            "completed_at": "2026-10-06T17:49:03Z"
+          },
+          {
+            "name": "Laravel 12 test stack",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:49:03Z",
+            "completed_at": "2026-10-06T17:49:03Z"
+          },
+          {
+            "name": "Install root tooling and shared test dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-06T17:49:03Z",
+            "completed_at": "2026-10-06T17:49:45Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-06T17:49:45Z",
+            "completed_at": "2026-10-06T17:49:46Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-06T17:49:46Z",
+            "completed_at": "2026-10-06T17:49:54Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-06T17:49:54Z",
+            "completed_at": "2026-10-06T17:49:54Z"
+          },
+          {
+            "name": "Tools tests and coverage",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-10-06T17:49:54Z",
+            "completed_at": "2026-10-06T17:50:12Z"
+          },
+          {
+            "name": "Tools static analysis",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-10-06T17:50:12Z",
+            "completed_at": "2026-10-06T17:50:17Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 26,
+            "started_at": "2026-10-06T17:50:17Z",
+            "completed_at": "2026-10-06T17:50:17Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 27,
+            "started_at": "2026-10-06T17:50:17Z",
+            "completed_at": "2026-10-06T17:50:17Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115439",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000536,
+        "runner_name": "GitHub Actions 1000000536",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115440,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXK8A",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115440",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115440",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:48:48Z",
+        "completed_at": "2026-10-06T17:49:58Z",
+        "name": "Operations package · Laravel 13.*",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:48:49Z",
+            "completed_at": "2026-10-06T17:48:50Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:48:50Z",
+            "completed_at": "2026-10-06T17:48:59Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:48:59Z",
+            "completed_at": "2026-10-06T17:49:06Z"
+          },
+          {
+            "name": "Constrain Laravel version",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:49:06Z",
+            "completed_at": "2026-10-06T17:49:06Z"
+          },
+          {
+            "name": "Constrain root Laravel version",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:49:06Z",
+            "completed_at": "2026-10-06T17:49:06Z"
+          },
+          {
+            "name": "Root Laravel 12 test stack",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 6,
+            "started_at": "2026-10-06T17:49:06Z",
+            "completed_at": "2026-10-06T17:49:06Z"
+          },
+          {
+            "name": "Laravel 12 test stack",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 7,
+            "started_at": "2026-10-06T17:49:06Z",
+            "completed_at": "2026-10-06T17:49:06Z"
+          },
+          {
+            "name": "Install root tooling and shared test dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-06T17:49:06Z",
+            "completed_at": "2026-10-06T17:49:23Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-06T17:49:23Z",
+            "completed_at": "2026-10-06T17:49:24Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-06T17:49:24Z",
+            "completed_at": "2026-10-06T17:49:33Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-06T17:49:33Z",
+            "completed_at": "2026-10-06T17:49:34Z"
+          },
+          {
+            "name": "Operations tests and coverage",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-10-06T17:49:34Z",
+            "completed_at": "2026-10-06T17:49:47Z"
+          },
+          {
+            "name": "Operations static analysis",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-10-06T17:49:47Z",
+            "completed_at": "2026-10-06T17:49:56Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 26,
+            "started_at": "2026-10-06T17:49:56Z",
+            "completed_at": "2026-10-06T17:49:56Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 27,
+            "started_at": "2026-10-06T17:49:56Z",
+            "completed_at": "2026-10-06T17:49:56Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115440",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000542,
+        "runner_name": "GitHub Actions 1000000542",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115441,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXK8Q",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115441",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115441",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:48:48Z",
+        "completed_at": "2026-10-06T17:50:41Z",
+        "name": "PHP 8.4 · Laravel 13.*",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:48:48Z",
+            "completed_at": "2026-10-06T17:48:50Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:48:50Z",
+            "completed_at": "2026-10-06T17:48:57Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:48:57Z",
+            "completed_at": "2026-10-06T17:49:05Z"
+          },
+          {
+            "name": "Constrain Laravel version",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:49:05Z",
+            "completed_at": "2026-10-06T17:49:05Z"
+          },
+          {
+            "name": "Laravel 12 test stack",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 5,
+            "started_at": "2026-10-06T17:49:05Z",
+            "completed_at": "2026-10-06T17:49:05Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:49:05Z",
+            "completed_at": "2026-10-06T17:49:19Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:49:19Z",
+            "completed_at": "2026-10-06T17:49:19Z"
+          },
+          {
+            "name": "Tests",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-06T17:49:19Z",
+            "completed_at": "2026-10-06T17:50:37Z"
+          },
+          {
+            "name": "Runtime globals gate",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-06T17:50:37Z",
+            "completed_at": "2026-10-06T17:50:37Z"
+          },
+          {
+            "name": "Config cache check",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-06T17:50:37Z",
+            "completed_at": "2026-10-06T17:50:38Z"
+          },
+          {
+            "name": "Configuration reference",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-06T17:50:38Z",
+            "completed_at": "2026-10-06T17:50:38Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 22,
+            "started_at": "2026-10-06T17:50:38Z",
+            "completed_at": "2026-10-06T17:50:38Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 23,
+            "started_at": "2026-10-06T17:50:38Z",
+            "completed_at": "2026-10-06T17:50:38Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115441",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000538,
+        "runner_name": "GitHub Actions 1000000538",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115447,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXK9w",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115447",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115447",
+        "status": "completed",
+        "conclusion": "failure",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:50:45Z",
+        "completed_at": "2026-10-06T17:55:48Z",
+        "name": "Static analysis & code style",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:50:46Z",
+            "completed_at": "2026-10-06T17:50:46Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:50:46Z",
+            "completed_at": "2026-10-06T17:50:53Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:50:53Z",
+            "completed_at": "2026-10-06T17:50:58Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:50:58Z",
+            "completed_at": "2026-10-06T17:51:16Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:51:16Z",
+            "completed_at": "2026-10-06T17:51:17Z"
+          },
+          {
+            "name": "Install access dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:51:17Z",
+            "completed_at": "2026-10-06T17:51:29Z"
+          },
+          {
+            "name": "Composer audit (access)",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:51:29Z",
+            "completed_at": "2026-10-06T17:51:30Z"
+          },
+          {
+            "name": "Install access AzGuard bridge dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-06T17:51:30Z",
+            "completed_at": "2026-10-06T17:51:41Z"
+          },
+          {
+            "name": "Composer audit (access AzGuard bridge)",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-06T17:51:41Z",
+            "completed_at": "2026-10-06T17:51:42Z"
+          },
+          {
+            "name": "PHPStan",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-06T17:51:42Z",
+            "completed_at": "2026-10-06T17:55:44Z"
+          },
+          {
+            "name": "PHPStan (modules-lint on tests/)",
+            "status": "completed",
+            "conclusion": "failure",
+            "number": 11,
+            "started_at": "2026-10-06T17:55:44Z",
+            "completed_at": "2026-10-06T17:55:46Z"
+          },
+          {
+            "name": "Pint",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 12,
+            "started_at": "2026-10-06T17:55:46Z",
+            "completed_at": "2026-10-06T17:55:46Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 24,
+            "started_at": "2026-10-06T17:55:46Z",
+            "completed_at": "2026-10-06T17:55:46Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 25,
+            "started_at": "2026-10-06T17:55:46Z",
+            "completed_at": "2026-10-06T17:55:46Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115447",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000573,
+        "runner_name": "GitHub Actions 1000000573",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115455,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXK_w",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115455",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115455",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:48:48Z",
+        "completed_at": "2026-10-06T17:49:01Z",
+        "name": "Contract-snapshot guard",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:48:49Z",
+            "completed_at": "2026-10-06T17:48:50Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:48:50Z",
+            "completed_at": "2026-10-06T17:48:58Z"
+          },
+          {
+            "name": "Guard PHP surface snapshots against a CHANGELOG entry",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:48:58Z",
+            "completed_at": "2026-10-06T17:48:58Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:48:58Z",
+            "completed_at": "2026-10-06T17:48:59Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:48:59Z",
+            "completed_at": "2026-10-06T17:48:59Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115455",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000549,
+        "runner_name": "GitHub Actions 1000000549",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115496,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXLKA",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115496",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115496",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:48:48Z",
+        "completed_at": "2026-10-06T17:50:46Z",
+        "name": "Layer & core-isolation gate",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:48:49Z",
+            "completed_at": "2026-10-06T17:48:52Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:48:52Z",
+            "completed_at": "2026-10-06T17:49:00Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:49:00Z",
+            "completed_at": "2026-10-06T17:49:09Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:49:09Z",
+            "completed_at": "2026-10-06T17:49:25Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:49:25Z",
+            "completed_at": "2026-10-06T17:49:26Z"
+          },
+          {
+            "name": "Architecture & layer rules (CoreX ↛ Flex, core isolation)",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:49:26Z",
+            "completed_at": "2026-10-06T17:50:34Z"
+          },
+          {
+            "name": "Source API surface report (classification debt is reported)",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:50:34Z",
+            "completed_at": "2026-10-06T17:50:37Z"
+          },
+          {
+            "name": "Typed package error registry and literal gate",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-06T17:50:37Z",
+            "completed_at": "2026-10-06T17:50:39Z"
+          },
+          {
+            "name": "API contract compatibility",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-06T17:50:39Z",
+            "completed_at": "2026-10-06T17:50:39Z"
+          },
+          {
+            "name": "Feature-module layout (PLAN3.D57)",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-06T17:50:39Z",
+            "completed_at": "2026-10-06T17:50:40Z"
+          },
+          {
+            "name": "Migration table ownership",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-06T17:50:40Z",
+            "completed_at": "2026-10-06T17:50:40Z"
+          },
+          {
+            "name": "Shipped schema S1–S9 and registry manifest",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-10-06T17:50:40Z",
+            "completed_at": "2026-10-06T17:50:41Z"
+          },
+          {
+            "name": "DATA-003 table write ownership",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-10-06T17:50:41Z",
+            "completed_at": "2026-10-06T17:50:44Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 26,
+            "started_at": "2026-10-06T17:50:44Z",
+            "completed_at": "2026-10-06T17:50:44Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 27,
+            "started_at": "2026-10-06T17:50:44Z",
+            "completed_at": "2026-10-06T17:50:44Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115496",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000546,
+        "runner_name": "GitHub Actions 1000000546",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115519,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXLPw",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115519",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115519",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:48:48Z",
+        "completed_at": "2026-10-06T17:52:16Z",
+        "name": "Tenancy package (PG18) · Laravel 12.*",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:48:48Z",
+            "completed_at": "2026-10-06T17:48:50Z"
+          },
+          {
+            "name": "Initialize containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:48:50Z",
+            "completed_at": "2026-10-06T17:49:15Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:49:15Z",
+            "completed_at": "2026-10-06T17:49:21Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:49:21Z",
+            "completed_at": "2026-10-06T17:49:27Z"
+          },
+          {
+            "name": "Constrain Laravel version",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:49:27Z",
+            "completed_at": "2026-10-06T17:49:27Z"
+          },
+          {
+            "name": "Constrain root Laravel version",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:49:27Z",
+            "completed_at": "2026-10-06T17:49:27Z"
+          },
+          {
+            "name": "Root Laravel 12 test stack",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:49:27Z",
+            "completed_at": "2026-10-06T17:49:27Z"
+          },
+          {
+            "name": "Laravel 12 test stack",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-06T17:49:27Z",
+            "completed_at": "2026-10-06T17:49:27Z"
+          },
+          {
+            "name": "Install root tooling and shared test dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-06T17:49:27Z",
+            "completed_at": "2026-10-06T17:49:41Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-06T17:49:41Z",
+            "completed_at": "2026-10-06T17:49:41Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-06T17:49:41Z",
+            "completed_at": "2026-10-06T17:49:52Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-10-06T17:49:52Z",
+            "completed_at": "2026-10-06T17:49:53Z"
+          },
+          {
+            "name": "Install PostgreSQL 18 client",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-10-06T17:49:53Z",
+            "completed_at": "2026-10-06T17:50:08Z"
+          },
+          {
+            "name": "Tenancy tests",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14,
+            "started_at": "2026-10-06T17:50:08Z",
+            "completed_at": "2026-10-06T17:52:13Z"
+          },
+          {
+            "name": "PHPStan (tenancy/src)",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 15,
+            "started_at": "2026-10-06T17:52:13Z",
+            "completed_at": "2026-10-06T17:52:13Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 29,
+            "started_at": "2026-10-06T17:52:13Z",
+            "completed_at": "2026-10-06T17:52:13Z"
+          },
+          {
+            "name": "Stop containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 30,
+            "started_at": "2026-10-06T17:52:13Z",
+            "completed_at": "2026-10-06T17:52:14Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 31,
+            "started_at": "2026-10-06T17:52:14Z",
+            "completed_at": "2026-10-06T17:52:14Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115519",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000553,
+        "runner_name": "GitHub Actions 1000000553",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115530,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXLSg",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115530",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115530",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:48:48Z",
+        "completed_at": "2026-10-06T17:49:58Z",
+        "name": "Tools package · Laravel 13.*",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:48:49Z",
+            "completed_at": "2026-10-06T17:48:50Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:48:50Z",
+            "completed_at": "2026-10-06T17:48:57Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:48:57Z",
+            "completed_at": "2026-10-06T17:49:02Z"
+          },
+          {
+            "name": "Constrain Laravel version",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:49:02Z",
+            "completed_at": "2026-10-06T17:49:03Z"
+          },
+          {
+            "name": "Constrain root Laravel version",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:49:03Z",
+            "completed_at": "2026-10-06T17:49:03Z"
+          },
+          {
+            "name": "Root Laravel 12 test stack",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 6,
+            "started_at": "2026-10-06T17:49:03Z",
+            "completed_at": "2026-10-06T17:49:03Z"
+          },
+          {
+            "name": "Laravel 12 test stack",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 7,
+            "started_at": "2026-10-06T17:49:03Z",
+            "completed_at": "2026-10-06T17:49:03Z"
+          },
+          {
+            "name": "Install root tooling and shared test dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-06T17:49:03Z",
+            "completed_at": "2026-10-06T17:49:20Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-06T17:49:20Z",
+            "completed_at": "2026-10-06T17:49:21Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-06T17:49:21Z",
+            "completed_at": "2026-10-06T17:49:31Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-06T17:49:31Z",
+            "completed_at": "2026-10-06T17:49:31Z"
+          },
+          {
+            "name": "Tools tests and coverage",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-10-06T17:49:31Z",
+            "completed_at": "2026-10-06T17:49:51Z"
+          },
+          {
+            "name": "Tools static analysis",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-10-06T17:49:51Z",
+            "completed_at": "2026-10-06T17:49:55Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 26,
+            "started_at": "2026-10-06T17:49:55Z",
+            "completed_at": "2026-10-06T17:49:56Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 27,
+            "started_at": "2026-10-06T17:49:56Z",
+            "completed_at": "2026-10-06T17:49:56Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115530",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000550,
+        "runner_name": "GitHub Actions 1000000550",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115533,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXLTQ",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115533",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115533",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:48:48Z",
+        "completed_at": "2026-10-06T17:52:35Z",
+        "name": "Backward compatibility (Roave · PHP 8.4)",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:48:49Z",
+            "completed_at": "2026-10-06T17:48:49Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:48:49Z",
+            "completed_at": "2026-10-06T17:48:58Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:48:58Z",
+            "completed_at": "2026-10-06T17:49:06Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:49:06Z",
+            "completed_at": "2026-10-06T17:49:21Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:49:21Z",
+            "completed_at": "2026-10-06T17:49:22Z"
+          },
+          {
+            "name": "Backward compatibility (bc-check)",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:49:22Z",
+            "completed_at": "2026-10-06T17:52:33Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-10-06T17:52:33Z",
+            "completed_at": "2026-10-06T17:52:33Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-10-06T17:52:33Z",
+            "completed_at": "2026-10-06T17:52:33Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115533",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000548,
+        "runner_name": "GitHub Actions 1000000548",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115536,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXLUA",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115536",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115536",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:49:13Z",
+        "completed_at": "2026-10-06T17:58:17Z",
+        "name": "Coverage (floor from scripts/coverage-min-floor.txt)",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:49:14Z",
+            "completed_at": "2026-10-06T17:49:15Z"
+          },
+          {
+            "name": "Initialize containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:49:15Z",
+            "completed_at": "2026-10-06T17:49:47Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:49:47Z",
+            "completed_at": "2026-10-06T17:49:55Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:49:55Z",
+            "completed_at": "2026-10-06T17:50:01Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:50:01Z",
+            "completed_at": "2026-10-06T17:50:21Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:50:21Z",
+            "completed_at": "2026-10-06T17:50:22Z"
+          },
+          {
+            "name": "Prepare PostgreSQL test databases",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:50:22Z",
+            "completed_at": "2026-10-06T17:50:22Z"
+          },
+          {
+            "name": "Effective coverage floor",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-06T17:50:22Z",
+            "completed_at": "2026-10-06T17:50:22Z"
+          },
+          {
+            "name": "Coverage",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-06T17:50:22Z",
+            "completed_at": "2026-10-06T17:58:13Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 17,
+            "started_at": "2026-10-06T17:58:13Z",
+            "completed_at": "2026-10-06T17:58:13Z"
+          },
+          {
+            "name": "Stop containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 18,
+            "started_at": "2026-10-06T17:58:13Z",
+            "completed_at": "2026-10-06T17:58:15Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 19,
+            "started_at": "2026-10-06T17:58:15Z",
+            "completed_at": "2026-10-06T17:58:15Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115536",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000557,
+        "runner_name": "GitHub Actions 1000000557",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115546,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXLWg",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115546",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115546",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:48:48Z",
+        "completed_at": "2026-10-06T17:50:43Z",
+        "name": "PHP 8.5 · Laravel 12.*",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:48:49Z",
+            "completed_at": "2026-10-06T17:48:50Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:48:50Z",
+            "completed_at": "2026-10-06T17:48:57Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:48:57Z",
+            "completed_at": "2026-10-06T17:49:06Z"
+          },
+          {
+            "name": "Constrain Laravel version",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:49:06Z",
+            "completed_at": "2026-10-06T17:49:06Z"
+          },
+          {
+            "name": "Laravel 12 test stack",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:49:06Z",
+            "completed_at": "2026-10-06T17:49:06Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:49:06Z",
+            "completed_at": "2026-10-06T17:49:20Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:49:20Z",
+            "completed_at": "2026-10-06T17:49:21Z"
+          },
+          {
+            "name": "Tests",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-06T17:49:21Z",
+            "completed_at": "2026-10-06T17:50:40Z"
+          },
+          {
+            "name": "Runtime globals gate",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-06T17:50:40Z",
+            "completed_at": "2026-10-06T17:50:40Z"
+          },
+          {
+            "name": "Config cache check",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-06T17:50:40Z",
+            "completed_at": "2026-10-06T17:50:40Z"
+          },
+          {
+            "name": "Configuration reference",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-06T17:50:40Z",
+            "completed_at": "2026-10-06T17:50:41Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 22,
+            "started_at": "2026-10-06T17:50:41Z",
+            "completed_at": "2026-10-06T17:50:41Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 23,
+            "started_at": "2026-10-06T17:50:41Z",
+            "completed_at": "2026-10-06T17:50:41Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115546",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000539,
+        "runner_name": "GitHub Actions 1000000539",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115567,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXLbw",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115567",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115567",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:48:48Z",
+        "completed_at": "2026-10-06T17:49:48Z",
+        "name": "Webhooks package · Laravel 12.*",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:48:49Z",
+            "completed_at": "2026-10-06T17:48:50Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:48:50Z",
+            "completed_at": "2026-10-06T17:48:58Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:48:58Z",
+            "completed_at": "2026-10-06T17:49:06Z"
+          },
+          {
+            "name": "Constrain Laravel version",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:49:06Z",
+            "completed_at": "2026-10-06T17:49:06Z"
+          },
+          {
+            "name": "Constrain root Laravel version",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:49:06Z",
+            "completed_at": "2026-10-06T17:49:06Z"
+          },
+          {
+            "name": "Root Laravel 12 test stack",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:49:06Z",
+            "completed_at": "2026-10-06T17:49:06Z"
+          },
+          {
+            "name": "Laravel 12 test stack",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:49:06Z",
+            "completed_at": "2026-10-06T17:49:06Z"
+          },
+          {
+            "name": "Install root tooling and shared test dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-06T17:49:06Z",
+            "completed_at": "2026-10-06T17:49:22Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-06T17:49:22Z",
+            "completed_at": "2026-10-06T17:49:22Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-06T17:49:22Z",
+            "completed_at": "2026-10-06T17:49:32Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-06T17:49:32Z",
+            "completed_at": "2026-10-06T17:49:32Z"
+          },
+          {
+            "name": "Webhooks tests and coverage",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-10-06T17:49:32Z",
+            "completed_at": "2026-10-06T17:49:38Z"
+          },
+          {
+            "name": "Webhooks static analysis",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-10-06T17:49:38Z",
+            "completed_at": "2026-10-06T17:49:45Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 26,
+            "started_at": "2026-10-06T17:49:45Z",
+            "completed_at": "2026-10-06T17:49:45Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 27,
+            "started_at": "2026-10-06T17:49:45Z",
+            "completed_at": "2026-10-06T17:49:45Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115567",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000552,
+        "runner_name": "GitHub Actions 1000000552",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115584,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXLgA",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115584",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115584",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:48:48Z",
+        "completed_at": "2026-10-06T17:49:56Z",
+        "name": "Panels package",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:48:49Z",
+            "completed_at": "2026-10-06T17:48:50Z"
+          },
+          {
+            "name": "Initialize containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:48:50Z",
+            "completed_at": "2026-10-06T17:49:04Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:49:04Z",
+            "completed_at": "2026-10-06T17:49:11Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:49:11Z",
+            "completed_at": "2026-10-06T17:49:18Z"
+          },
+          {
+            "name": "Install root tooling and shared test dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:49:18Z",
+            "completed_at": "2026-10-06T17:49:34Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:49:34Z",
+            "completed_at": "2026-10-06T17:49:35Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:49:35Z",
+            "completed_at": "2026-10-06T17:49:45Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-06T17:49:45Z",
+            "completed_at": "2026-10-06T17:49:46Z"
+          },
+          {
+            "name": "Panels SQLite tests",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-06T17:49:46Z",
+            "completed_at": "2026-10-06T17:49:47Z"
+          },
+          {
+            "name": "Panels tests and coverage",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-06T17:49:47Z",
+            "completed_at": "2026-10-06T17:49:49Z"
+          },
+          {
+            "name": "Panels static analysis",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-06T17:49:49Z",
+            "completed_at": "2026-10-06T17:49:54Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 21,
+            "started_at": "2026-10-06T17:49:54Z",
+            "completed_at": "2026-10-06T17:49:54Z"
+          },
+          {
+            "name": "Stop containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 22,
+            "started_at": "2026-10-06T17:49:54Z",
+            "completed_at": "2026-10-06T17:49:54Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 23,
+            "started_at": "2026-10-06T17:49:54Z",
+            "completed_at": "2026-10-06T17:49:54Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115584",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000543,
+        "runner_name": "GitHub Actions 1000000543",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115621,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXLpQ",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115621",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115621",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:48:48Z",
+        "completed_at": "2026-10-06T17:50:51Z",
+        "name": "PHP 8.5 · Laravel 13.*",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:48:49Z",
+            "completed_at": "2026-10-06T17:48:50Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:48:50Z",
+            "completed_at": "2026-10-06T17:48:57Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:48:57Z",
+            "completed_at": "2026-10-06T17:49:04Z"
+          },
+          {
+            "name": "Constrain Laravel version",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:49:04Z",
+            "completed_at": "2026-10-06T17:49:04Z"
+          },
+          {
+            "name": "Laravel 12 test stack",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 5,
+            "started_at": "2026-10-06T17:49:04Z",
+            "completed_at": "2026-10-06T17:49:04Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:49:04Z",
+            "completed_at": "2026-10-06T17:49:22Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:49:22Z",
+            "completed_at": "2026-10-06T17:49:22Z"
+          },
+          {
+            "name": "Tests",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-06T17:49:22Z",
+            "completed_at": "2026-10-06T17:50:47Z"
+          },
+          {
+            "name": "Runtime globals gate",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-06T17:50:47Z",
+            "completed_at": "2026-10-06T17:50:48Z"
+          },
+          {
+            "name": "Config cache check",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-06T17:50:48Z",
+            "completed_at": "2026-10-06T17:50:48Z"
+          },
+          {
+            "name": "Configuration reference",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-06T17:50:48Z",
+            "completed_at": "2026-10-06T17:50:48Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 22,
+            "started_at": "2026-10-06T17:50:48Z",
+            "completed_at": "2026-10-06T17:50:49Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 23,
+            "started_at": "2026-10-06T17:50:49Z",
+            "completed_at": "2026-10-06T17:50:49Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115621",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000537,
+        "runner_name": "GitHub Actions 1000000537",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115652,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXLxA",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115652",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115652",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:48:48Z",
+        "completed_at": "2026-10-06T17:50:27Z",
+        "name": "PG lane (postgres:16) · Laravel 12.*",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:48:49Z",
+            "completed_at": "2026-10-06T17:48:50Z"
+          },
+          {
+            "name": "Initialize containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:48:50Z",
+            "completed_at": "2026-10-06T17:49:06Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:49:06Z",
+            "completed_at": "2026-10-06T17:49:13Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:49:13Z",
+            "completed_at": "2026-10-06T17:49:21Z"
+          },
+          {
+            "name": "Constrain Laravel version",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:49:21Z",
+            "completed_at": "2026-10-06T17:49:21Z"
+          },
+          {
+            "name": "Laravel 12 test stack",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:49:21Z",
+            "completed_at": "2026-10-06T17:49:21Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:49:21Z",
+            "completed_at": "2026-10-06T17:49:36Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-06T17:49:36Z",
+            "completed_at": "2026-10-06T17:49:36Z"
+          },
+          {
+            "name": "Prepare PostgreSQL test databases",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-06T17:49:36Z",
+            "completed_at": "2026-10-06T17:49:37Z"
+          },
+          {
+            "name": "PG tests",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-06T17:49:37Z",
+            "completed_at": "2026-10-06T17:50:24Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 19,
+            "started_at": "2026-10-06T17:50:24Z",
+            "completed_at": "2026-10-06T17:50:25Z"
+          },
+          {
+            "name": "Stop containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 20,
+            "started_at": "2026-10-06T17:50:25Z",
+            "completed_at": "2026-10-06T17:50:25Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 21,
+            "started_at": "2026-10-06T17:50:25Z",
+            "completed_at": "2026-10-06T17:50:25Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115652",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000545,
+        "runner_name": "GitHub Actions 1000000545",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115720,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXMCA",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115720",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115720",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:49:50Z",
+        "completed_at": "2026-10-06T17:50:50Z",
+        "name": "Media package (PG18)",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:49:51Z",
+            "completed_at": "2026-10-06T17:49:52Z"
+          },
+          {
+            "name": "Initialize containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:49:52Z",
+            "completed_at": "2026-10-06T17:50:09Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:50:09Z",
+            "completed_at": "2026-10-06T17:50:15Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:50:15Z",
+            "completed_at": "2026-10-06T17:50:21Z"
+          },
+          {
+            "name": "Install root tooling and shared test dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:50:21Z",
+            "completed_at": "2026-10-06T17:50:35Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:50:35Z",
+            "completed_at": "2026-10-06T17:50:35Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:50:35Z",
+            "completed_at": "2026-10-06T17:50:45Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-06T17:50:45Z",
+            "completed_at": "2026-10-06T17:50:45Z"
+          },
+          {
+            "name": "Media PostgreSQL concurrency test",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-06T17:50:45Z",
+            "completed_at": "2026-10-06T17:50:46Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 17,
+            "started_at": "2026-10-06T17:50:46Z",
+            "completed_at": "2026-10-06T17:50:46Z"
+          },
+          {
+            "name": "Stop containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 18,
+            "started_at": "2026-10-06T17:50:46Z",
+            "completed_at": "2026-10-06T17:50:49Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 19,
+            "started_at": "2026-10-06T17:50:49Z",
+            "completed_at": "2026-10-06T17:50:49Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115720",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000559,
+        "runner_name": "GitHub Actions 1000000559",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115759,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXMLw",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115759",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115759",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:49:59Z",
+        "completed_at": "2026-10-06T17:50:28Z",
+        "name": "Workflow supply chain security",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:49:59Z",
+            "completed_at": "2026-10-06T17:50:05Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:50:05Z",
+            "completed_at": "2026-10-06T17:50:14Z"
+          },
+          {
+            "name": "Run zizmorcore/zizmor-action@cc914d7f3750a2d13d75c7f184a1060aa0e9d482",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:50:14Z",
+            "completed_at": "2026-10-06T17:50:26Z"
+          },
+          {
+            "name": "Post Run zizmorcore/zizmor-action@cc914d7f3750a2d13d75c7f184a1060aa0e9d482",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:50:26Z",
+            "completed_at": "2026-10-06T17:50:26Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:50:26Z",
+            "completed_at": "2026-10-06T17:50:26Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:50:26Z",
+            "completed_at": "2026-10-06T17:50:26Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115759",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000561,
+        "runner_name": "GitHub Actions 1000000561",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115785,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXMSQ",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115785",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115785",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:49:03Z",
+        "completed_at": "2026-10-06T17:50:11Z",
+        "name": "Mutation registry (scripts/mutation-check.sh --all)",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:49:04Z",
+            "completed_at": "2026-10-06T17:49:05Z"
+          },
+          {
+            "name": "Initialize containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:49:05Z",
+            "completed_at": "2026-10-06T17:49:21Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:49:21Z",
+            "completed_at": "2026-10-06T17:49:28Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:49:28Z",
+            "completed_at": "2026-10-06T17:49:35Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:49:35Z",
+            "completed_at": "2026-10-06T17:49:48Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:49:48Z",
+            "completed_at": "2026-10-06T17:49:49Z"
+          },
+          {
+            "name": "Mutation registry — every case must red under sabotage",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:49:49Z",
+            "completed_at": "2026-10-06T17:50:08Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-10-06T17:50:08Z",
+            "completed_at": "2026-10-06T17:50:08Z"
+          },
+          {
+            "name": "Stop containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14,
+            "started_at": "2026-10-06T17:50:08Z",
+            "completed_at": "2026-10-06T17:50:09Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15,
+            "started_at": "2026-10-06T17:50:09Z",
+            "completed_at": "2026-10-06T17:50:09Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115785",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000556,
+        "runner_name": "GitHub Actions 1000000556",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115788,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXMTA",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115788",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115788",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:48:48Z",
+        "completed_at": "2026-10-06T17:50:44Z",
+        "name": "Crm package",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:48:49Z",
+            "completed_at": "2026-10-06T17:48:50Z"
+          },
+          {
+            "name": "Initialize containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:48:50Z",
+            "completed_at": "2026-10-06T17:49:15Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:49:15Z",
+            "completed_at": "2026-10-06T17:49:23Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:49:23Z",
+            "completed_at": "2026-10-06T17:49:32Z"
+          },
+          {
+            "name": "Install root tooling and shared test dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:49:32Z",
+            "completed_at": "2026-10-06T17:49:50Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:49:50Z",
+            "completed_at": "2026-10-06T17:49:51Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:49:51Z",
+            "completed_at": "2026-10-06T17:50:03Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-06T17:50:03Z",
+            "completed_at": "2026-10-06T17:50:04Z"
+          },
+          {
+            "name": "Crm tests",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-06T17:50:04Z",
+            "completed_at": "2026-10-06T17:50:08Z"
+          },
+          {
+            "name": "Crm PostgreSQL regressions",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-06T17:50:08Z",
+            "completed_at": "2026-10-06T17:50:23Z"
+          },
+          {
+            "name": "Crm coverage (P1.27 compensating gate)",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-06T17:50:23Z",
+            "completed_at": "2026-10-06T17:50:41Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 21,
+            "started_at": "2026-10-06T17:50:41Z",
+            "completed_at": "2026-10-06T17:50:41Z"
+          },
+          {
+            "name": "Stop containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 22,
+            "started_at": "2026-10-06T17:50:41Z",
+            "completed_at": "2026-10-06T17:50:42Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 23,
+            "started_at": "2026-10-06T17:50:42Z",
+            "completed_at": "2026-10-06T17:50:42Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115788",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000544,
+        "runner_name": "GitHub Actions 1000000544",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115829,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXMdQ",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115829",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115829",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:50:39Z",
+        "completed_at": "2026-10-06T17:51:00Z",
+        "name": "Manifest policy and strict Composer validation",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:50:40Z",
+            "completed_at": "2026-10-06T17:50:41Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:50:41Z",
+            "completed_at": "2026-10-06T17:50:48Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:50:48Z",
+            "completed_at": "2026-10-06T17:50:54Z"
+          },
+          {
+            "name": "Manifest policy",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:50:54Z",
+            "completed_at": "2026-10-06T17:50:54Z"
+          },
+          {
+            "name": "Strict validation of every installing root",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:50:54Z",
+            "completed_at": "2026-10-06T17:50:58Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-06T17:50:58Z",
+            "completed_at": "2026-10-06T17:50:58Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-06T17:50:58Z",
+            "completed_at": "2026-10-06T17:50:58Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115829",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000570,
+        "runner_name": "GitHub Actions 1000000570",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115850,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXMig",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115850",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115850",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:50:20Z",
+        "completed_at": "2026-10-06T17:52:03Z",
+        "name": "PG lane (postgres:18) · Laravel 13.*",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:50:21Z",
+            "completed_at": "2026-10-06T17:50:23Z"
+          },
+          {
+            "name": "Initialize containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:50:23Z",
+            "completed_at": "2026-10-06T17:50:46Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:50:46Z",
+            "completed_at": "2026-10-06T17:50:56Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:50:56Z",
+            "completed_at": "2026-10-06T17:51:08Z"
+          },
+          {
+            "name": "Constrain Laravel version",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:51:08Z",
+            "completed_at": "2026-10-06T17:51:08Z"
+          },
+          {
+            "name": "Laravel 12 test stack",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 6,
+            "started_at": "2026-10-06T17:51:08Z",
+            "completed_at": "2026-10-06T17:51:08Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:51:08Z",
+            "completed_at": "2026-10-06T17:51:23Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-06T17:51:23Z",
+            "completed_at": "2026-10-06T17:51:23Z"
+          },
+          {
+            "name": "Prepare PostgreSQL test databases",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-06T17:51:23Z",
+            "completed_at": "2026-10-06T17:51:24Z"
+          },
+          {
+            "name": "PG tests",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-06T17:51:24Z",
+            "completed_at": "2026-10-06T17:52:00Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 19,
+            "started_at": "2026-10-06T17:52:00Z",
+            "completed_at": "2026-10-06T17:52:00Z"
+          },
+          {
+            "name": "Stop containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 20,
+            "started_at": "2026-10-06T17:52:00Z",
+            "completed_at": "2026-10-06T17:52:01Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 21,
+            "started_at": "2026-10-06T17:52:01Z",
+            "completed_at": "2026-10-06T17:52:01Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115850",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000566,
+        "runner_name": "GitHub Actions 1000000566",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115851,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXMiw",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115851",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115851",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:50:14Z",
+        "completed_at": "2026-10-06T17:51:56Z",
+        "name": "PG lane (postgres:18) · Laravel 12.*",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:50:15Z",
+            "completed_at": "2026-10-06T17:50:16Z"
+          },
+          {
+            "name": "Initialize containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:50:16Z",
+            "completed_at": "2026-10-06T17:50:34Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:50:34Z",
+            "completed_at": "2026-10-06T17:50:43Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:50:43Z",
+            "completed_at": "2026-10-06T17:50:48Z"
+          },
+          {
+            "name": "Constrain Laravel version",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:50:48Z",
+            "completed_at": "2026-10-06T17:50:48Z"
+          },
+          {
+            "name": "Laravel 12 test stack",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:50:48Z",
+            "completed_at": "2026-10-06T17:50:49Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:50:49Z",
+            "completed_at": "2026-10-06T17:51:04Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-06T17:51:04Z",
+            "completed_at": "2026-10-06T17:51:05Z"
+          },
+          {
+            "name": "Prepare PostgreSQL test databases",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-06T17:51:05Z",
+            "completed_at": "2026-10-06T17:51:05Z"
+          },
+          {
+            "name": "PG tests",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-06T17:51:05Z",
+            "completed_at": "2026-10-06T17:51:52Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 19,
+            "started_at": "2026-10-06T17:51:53Z",
+            "completed_at": "2026-10-06T17:51:53Z"
+          },
+          {
+            "name": "Stop containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 20,
+            "started_at": "2026-10-06T17:51:53Z",
+            "completed_at": "2026-10-06T17:51:53Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 21,
+            "started_at": "2026-10-06T17:51:53Z",
+            "completed_at": "2026-10-06T17:51:53Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115851",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000565,
+        "runner_name": "GitHub Actions 1000000565",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115853,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXMjQ",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115853",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115853",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:50:30Z",
+        "completed_at": "2026-10-06T17:51:12Z",
+        "name": "Golden surface and wire contracts",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:50:31Z",
+            "completed_at": "2026-10-06T17:50:32Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:50:32Z",
+            "completed_at": "2026-10-06T17:50:41Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:50:41Z",
+            "completed_at": "2026-10-06T17:50:46Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:50:46Z",
+            "completed_at": "2026-10-06T17:51:02Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:51:02Z",
+            "completed_at": "2026-10-06T17:51:03Z"
+          },
+          {
+            "name": "Golden snapshots",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:51:03Z",
+            "completed_at": "2026-10-06T17:51:09Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-10-06T17:51:09Z",
+            "completed_at": "2026-10-06T17:51:09Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-10-06T17:51:09Z",
+            "completed_at": "2026-10-06T17:51:09Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115853",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000568,
+        "runner_name": "GitHub Actions 1000000568",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115896,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXMuA",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115896",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115896",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:50:00Z",
+        "completed_at": "2026-10-06T17:50:53Z",
+        "name": "Notifications package (PG18)",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:50:01Z",
+            "completed_at": "2026-10-06T17:50:02Z"
+          },
+          {
+            "name": "Initialize containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:50:02Z",
+            "completed_at": "2026-10-06T17:50:19Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:50:19Z",
+            "completed_at": "2026-10-06T17:50:26Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:50:26Z",
+            "completed_at": "2026-10-06T17:50:32Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:50:32Z",
+            "completed_at": "2026-10-06T17:50:46Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:50:46Z",
+            "completed_at": "2026-10-06T17:50:46Z"
+          },
+          {
+            "name": "PostgreSQL delivery admission test",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:50:46Z",
+            "completed_at": "2026-10-06T17:50:47Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-10-06T17:50:47Z",
+            "completed_at": "2026-10-06T17:50:48Z"
+          },
+          {
+            "name": "Stop containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14,
+            "started_at": "2026-10-06T17:50:48Z",
+            "completed_at": "2026-10-06T17:50:51Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15,
+            "started_at": "2026-10-06T17:50:51Z",
+            "completed_at": "2026-10-06T17:50:51Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115896",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000562,
+        "runner_name": "GitHub Actions 1000000562",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115951,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXM7w",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115951",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115951",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:50:30Z",
+        "completed_at": "2026-10-06T17:51:24Z",
+        "name": "Media package",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:50:32Z",
+            "completed_at": "2026-10-06T17:50:33Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:50:33Z",
+            "completed_at": "2026-10-06T17:50:42Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:50:42Z",
+            "completed_at": "2026-10-06T17:50:47Z"
+          },
+          {
+            "name": "Install root tooling and shared test dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:50:47Z",
+            "completed_at": "2026-10-06T17:51:03Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:51:03Z",
+            "completed_at": "2026-10-06T17:51:04Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:51:04Z",
+            "completed_at": "2026-10-06T17:51:13Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:51:13Z",
+            "completed_at": "2026-10-06T17:51:14Z"
+          },
+          {
+            "name": "Media tests and coverage",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-06T17:51:14Z",
+            "completed_at": "2026-10-06T17:51:16Z"
+          },
+          {
+            "name": "Media static analysis",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-06T17:51:16Z",
+            "completed_at": "2026-10-06T17:51:21Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 18,
+            "started_at": "2026-10-06T17:51:21Z",
+            "completed_at": "2026-10-06T17:51:21Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 19,
+            "started_at": "2026-10-06T17:51:21Z",
+            "completed_at": "2026-10-06T17:51:21Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115951",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000569,
+        "runner_name": "GitHub Actions 1000000569",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115953,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXM8Q",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115953",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115953",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:50:00Z",
+        "completed_at": "2026-10-06T17:50:38Z",
+        "name": "Package identifier ownership",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:50:01Z",
+            "completed_at": "2026-10-06T17:50:02Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:50:02Z",
+            "completed_at": "2026-10-06T17:50:11Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:50:11Z",
+            "completed_at": "2026-10-06T17:50:17Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:50:17Z",
+            "completed_at": "2026-10-06T17:50:33Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:50:33Z",
+            "completed_at": "2026-10-06T17:50:34Z"
+          },
+          {
+            "name": "Strict ownership",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:50:34Z",
+            "completed_at": "2026-10-06T17:50:34Z"
+          },
+          {
+            "name": "Rename completeness",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:50:34Z",
+            "completed_at": "2026-10-06T17:50:35Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14,
+            "started_at": "2026-10-06T17:50:35Z",
+            "completed_at": "2026-10-06T17:50:35Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15,
+            "started_at": "2026-10-06T17:50:35Z",
+            "completed_at": "2026-10-06T17:50:35Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115953",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000563,
+        "runner_name": "GitHub Actions 1000000563",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115969,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXNAQ",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115969",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115969",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:50:10Z",
+        "completed_at": "2026-10-06T17:53:41Z",
+        "name": "Standalone dependencies and lockfile audits",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:50:11Z",
+            "completed_at": "2026-10-06T17:50:12Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:50:12Z",
+            "completed_at": "2026-10-06T17:50:23Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:50:23Z",
+            "completed_at": "2026-10-06T17:50:31Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:50:31Z",
+            "completed_at": "2026-10-06T17:50:50Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:50:50Z",
+            "completed_at": "2026-10-06T17:50:51Z"
+          },
+          {
+            "name": "Analyse every standalone package",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:50:51Z",
+            "completed_at": "2026-10-06T17:53:28Z"
+          },
+          {
+            "name": "Audit every standalone package lockfile",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:53:28Z",
+            "completed_at": "2026-10-06T17:53:37Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14,
+            "started_at": "2026-10-06T17:53:37Z",
+            "completed_at": "2026-10-06T17:53:38Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15,
+            "started_at": "2026-10-06T17:53:38Z",
+            "completed_at": "2026-10-06T17:53:38Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115969",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000564,
+        "runner_name": "GitHub Actions 1000000564",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416115979,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXNCw",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416115979",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416115979",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:50:29Z",
+        "completed_at": "2026-10-06T17:54:42Z",
+        "name": "Remaining cohort package aggregator",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:50:30Z",
+            "completed_at": "2026-10-06T17:50:31Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:50:31Z",
+            "completed_at": "2026-10-06T17:50:40Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:50:40Z",
+            "completed_at": "2026-10-06T17:50:49Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:50:49Z",
+            "completed_at": "2026-10-06T17:51:08Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:51:08Z",
+            "completed_at": "2026-10-06T17:51:08Z"
+          },
+          {
+            "name": "Install access dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:51:08Z",
+            "completed_at": "2026-10-06T17:51:19Z"
+          },
+          {
+            "name": "Composer audit (access)",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:51:19Z",
+            "completed_at": "2026-10-06T17:51:20Z"
+          },
+          {
+            "name": "Install access AzGuard bridge dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-06T17:51:20Z",
+            "completed_at": "2026-10-06T17:51:29Z"
+          },
+          {
+            "name": "Composer audit (access AzGuard bridge)",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-06T17:51:29Z",
+            "completed_at": "2026-10-06T17:51:29Z"
+          },
+          {
+            "name": "Install remaining standalone package harnesses",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-06T17:51:29Z",
+            "completed_at": "2026-10-06T17:52:52Z"
+          },
+          {
+            "name": "Per-package test aggregator",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-06T17:52:52Z",
+            "completed_at": "2026-10-06T17:54:30Z"
+          },
+          {
+            "name": "Core and modules SQLite suites",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-10-06T17:54:30Z",
+            "completed_at": "2026-10-06T17:54:40Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 24,
+            "started_at": "2026-10-06T17:54:40Z",
+            "completed_at": "2026-10-06T17:54:40Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 25,
+            "started_at": "2026-10-06T17:54:40Z",
+            "completed_at": "2026-10-06T17:54:40Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416115979",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000567,
+        "runner_name": "GitHub Actions 1000000567",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416116414,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXOvg",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416116414",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416116414",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:50:40Z",
+        "completed_at": "2026-10-06T17:52:14Z",
+        "name": "Auth package (AzGuard)",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:50:41Z",
+            "completed_at": "2026-10-06T17:50:42Z"
+          },
+          {
+            "name": "Initialize containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:50:42Z",
+            "completed_at": "2026-10-06T17:50:57Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:50:57Z",
+            "completed_at": "2026-10-06T17:51:03Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:51:03Z",
+            "completed_at": "2026-10-06T17:51:09Z"
+          },
+          {
+            "name": "Install root tooling and shared test dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:51:09Z",
+            "completed_at": "2026-10-06T17:51:27Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:51:27Z",
+            "completed_at": "2026-10-06T17:51:28Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:51:28Z",
+            "completed_at": "2026-10-06T17:51:40Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-06T17:51:40Z",
+            "completed_at": "2026-10-06T17:51:41Z"
+          },
+          {
+            "name": "Auth tests",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-06T17:51:41Z",
+            "completed_at": "2026-10-06T17:51:44Z"
+          },
+          {
+            "name": "Auth tests (PG18, aut_* DDL)",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-06T17:51:44Z",
+            "completed_at": "2026-10-06T17:52:07Z"
+          },
+          {
+            "name": "PHPStan (auth/src)",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-06T17:52:07Z",
+            "completed_at": "2026-10-06T17:52:11Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 21,
+            "started_at": "2026-10-06T17:52:11Z",
+            "completed_at": "2026-10-06T17:52:12Z"
+          },
+          {
+            "name": "Stop containers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 22,
+            "started_at": "2026-10-06T17:52:12Z",
+            "completed_at": "2026-10-06T17:52:12Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 23,
+            "started_at": "2026-10-06T17:52:12Z",
+            "completed_at": "2026-10-06T17:52:12Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416116414",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000571,
+        "runner_name": "GitHub Actions 1000000571",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 112416116605,
+        "run_id": 37506417560,
+        "workflow_name": "CI",
+        "head_branch": "main",
+        "run_url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/runs/37506417560",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOU-gNGs8AAAAaLIXPfQ",
+        "head_sha": "184bb782791034abedcaec2207b010eb940f60b6",
+        "url": "https://api.github.com/repos/ax1oma/corex-mirror/actions/jobs/112416116605",
+        "html_url": "https://github.com/ax1oma/corex-mirror/actions/runs/37506417560/job/112416116605",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-06T17:48:42Z",
+        "started_at": "2026-10-06T17:50:43Z",
+        "completed_at": "2026-10-06T17:53:29Z",
+        "name": "PHP 8.4 · Laravel 12.*",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-06T17:50:44Z",
+            "completed_at": "2026-10-06T17:50:45Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-06T17:50:45Z",
+            "completed_at": "2026-10-06T17:50:57Z"
+          },
+          {
+            "name": "Run shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-06T17:50:57Z",
+            "completed_at": "2026-10-06T17:51:12Z"
+          },
+          {
+            "name": "Constrain Laravel version",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-06T17:51:12Z",
+            "completed_at": "2026-10-06T17:51:12Z"
+          },
+          {
+            "name": "Laravel 12 test stack",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-06T17:51:12Z",
+            "completed_at": "2026-10-06T17:51:12Z"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-06T17:51:12Z",
+            "completed_at": "2026-10-06T17:51:28Z"
+          },
+          {
+            "name": "Composer audit",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-06T17:51:28Z",
+            "completed_at": "2026-10-06T17:51:29Z"
+          },
+          {
+            "name": "Tests",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-06T17:51:29Z",
+            "completed_at": "2026-10-06T17:53:25Z"
+          },
+          {
+            "name": "Runtime globals gate",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-06T17:53:25Z",
+            "completed_at": "2026-10-06T17:53:26Z"
+          },
+          {
+            "name": "Config cache check",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-06T17:53:26Z",
+            "completed_at": "2026-10-06T17:53:26Z"
+          },
+          {
+            "name": "Configuration reference",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-06T17:53:26Z",
+            "completed_at": "2026-10-06T17:53:27Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 22,
+            "started_at": "2026-10-06T17:53:27Z",
+            "completed_at": "2026-10-06T17:53:27Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 23,
+            "started_at": "2026-10-06T17:53:27Z",
+            "completed_at": "2026-10-06T17:53:27Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/ax1oma/corex-mirror/check-runs/112416116605",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000572,
+        "runner_name": "GitHub Actions 1000000572",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      }
+    ]
+  },
+  "cause": "Only Static analysis & code style failed: stale MigrationPublishTest ignore; subsequent tests-lint uncovered direct writes in new baseline fixtures and missing SchemaGate symbol discovery. All corrected without adding ignore entries."
+}

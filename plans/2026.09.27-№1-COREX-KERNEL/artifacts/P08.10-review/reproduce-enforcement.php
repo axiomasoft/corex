@@ -1,6 +1,9 @@
 <?php
 
 declare(strict_types=1);
+use CoreX\Tests\Golden\Support\SchemaCatalogue;
+use Illuminate\Database\Capsule\Manager;
+use Illuminate\Filesystem\Filesystem;
 
 $repo = getcwd();
 require $repo.'/vendor/autoload.php';
@@ -10,7 +13,8 @@ require_once $repo.'/tests/Golden/Support/SchemaCatalogue.php';
 // Isolated static fixture: shipped product files are never edited or executed.
 $root = sys_get_temp_dir().'/corex-p0810-review-'.bin2hex(random_bytes(8));
 $path = 'packages/core/database/migrations/tenant';
-$fs = new Illuminate\Filesystem\Filesystem;
+$fs = new Filesystem;
+
 try {
     $fs->makeDirectory($root.'/'.$path, 0700, true);
     $fs->makeDirectory($root.'/docs/architecture', 0700, true);
@@ -29,21 +33,23 @@ try {
 
 // Same isolated endpoint as the completed PG validations, no other suites running.
 putenv('APP_ENV=testing');
-$db = new Illuminate\Database\Capsule\Manager;
+$db = new Manager;
 $db->addConnection(['driver' => 'pgsql', 'host' => '127.0.0.1', 'port' => '5434', 'database' => 'corex_test', 'username' => 'corex', 'password' => 'corex', 'charset' => 'utf8', 'prefix' => '', 'schema' => 'public']);
 $c = $db->getConnection();
+
 if (! preg_match('/^[a-z0-9_]+_test$/', $c->getDatabaseName()) || $c->selectOne('SELECT current_database() AS name')->name !== 'corex_test') {
     throw new RuntimeException('Wrong test database.');
 }
 $c->beginTransaction();
+
 try {
     $c->statement('CREATE TABLE p0810_review_probe (workspace_id uuid, code text)');
     $c->statement('CREATE UNIQUE INDEX p0810_review_probe_uq ON p0810_review_probe (workspace_id, code) NULLS NOT DISTINCT');
-    $a = CoreX\Tests\Golden\Support\SchemaCatalogue::of($c)['tables']['p0810_review_probe'];
+    $a = SchemaCatalogue::of($c)['tables']['p0810_review_probe'];
     $actualA = $c->selectOne("SELECT pg_get_indexdef('p0810_review_probe_uq'::regclass) AS definition")->definition;
     $c->statement('DROP INDEX p0810_review_probe_uq');
     $c->statement('CREATE UNIQUE INDEX p0810_review_probe_uq ON p0810_review_probe (workspace_id, code)');
-    $b = CoreX\Tests\Golden\Support\SchemaCatalogue::of($c)['tables']['p0810_review_probe'];
+    $b = SchemaCatalogue::of($c)['tables']['p0810_review_probe'];
     $actualB = $c->selectOne("SELECT pg_get_indexdef('p0810_review_probe_uq'::regclass) AS definition")->definition;
     echo json_encode(['probe' => 'golden-null-uniqueness', 'catalogues_equal' => $a === $b, 'before_ddl' => $actualA, 'after_ddl' => $actualB, 'catalogue_index' => $a['indexes']], JSON_THROW_ON_ERROR)."\n";
     $c->insert("INSERT INTO p0810_review_probe VALUES (NULL, 'same'), (NULL, 'same')");

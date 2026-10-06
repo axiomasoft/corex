@@ -6,6 +6,7 @@ use CoreX\Messaging\Contracts\WorkerRuntime;
 use CoreX\Messaging\Internal\DatabasePollPubSub;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;
+use Psr\Clock\ClockInterface;
 
 uses()->group('pg');
 
@@ -121,10 +122,23 @@ it('(г) D44: a rolling restart of the SAME subscriber resumes from its persiste
 });
 
 it('(д) corex:messaging:prune-pubsub truncates rows older than the threshold, leaving fresh rows intact', function (): void {
-    pubsubPg()->table('sys_pubsub_messages')->insert([
-        ['channel' => 'module.enabled', 'payload' => '{"module":"stale"}', 'created_at' => now()->subDays(60)],
-        ['channel' => 'module.enabled', 'payload' => '{"module":"fresh"}', 'created_at' => now()],
-    ]);
+    foreach (['stale' => now()->subDays(60), 'fresh' => now()] as $module => $createdAt) {
+        $clock = new class($createdAt->toDateTimeImmutable()) implements ClockInterface
+        {
+            public function __construct(private readonly DateTimeImmutable $instant) {}
+
+            public function now(): DateTimeImmutable
+            {
+                return $this->instant;
+            }
+        };
+        $pubsub = app()->make(DatabasePollPubSub::class, [
+            'connection' => PUBSUB_DB_POLL_TEST_CONNECTION,
+            'runtime' => new WorkerConsoleRuntime,
+            'clock' => $clock,
+        ]);
+        $pubsub->publish('module.enabled', ['module' => $module]);
+    }
 
     $this->artisan('corex:messaging:prune-pubsub', [
         '--older-than' => '30 days',
