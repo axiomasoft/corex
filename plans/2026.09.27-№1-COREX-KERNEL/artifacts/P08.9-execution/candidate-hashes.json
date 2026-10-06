@@ -1,0 +1,13 @@
+{
+  "README.md": "03ce6783c8100a36a999b6bb70e07aacf6072e7f3b785a8106bae729714b6bf8",
+  "docs/architecture/schema-policy.md": "73a1564a39ee6dfee11ad27912cab6cf445f3de6b9b5ac1e683664d41b677d00",
+  "docs/architecture/README.md": "650b14dd77931988ea07334f17ea8a9edbd80bcab982a0dbc1931ce2a98678a5",
+  "docs/architecture/constitution.md": "21dcd5cec8fb60988885c847bb5de99ae897d52315cb4941d10799f2697e7735",
+  "docs/architecture/data-ownership-policy.md": "85c2ea5a55aced15618340f338dc0a9028b7cb10360301242cc521a35a8de273",
+  "docs/architecture/table-ownership.md": "681c9db6e82395e50373a5cdaa1a6b01eb2257e55bf7c9961726601c0c7c123f",
+  "docs/dev-doctrine.md": "3ec002168e7ac319e1b3ace4d64fa360b6de959b2743a04b46e9168b52d30de9",
+  "scripts/schema-gate.php": "20730757b9acd5fbb3050ed439ad1df61cf5a08843a2f8c3b160365ddb38a782",
+  "scripts/table-ownership-gate.php": "517d35dfb2e876ca22e34a933bbc6836bfcf2ae1830525f2898ac10e3aa0a905",
+  "scripts/schema-gate-pending.json": null,
+  "tests/Unit/SchemaGateTest.php": "622c153077d345c9c190acfcb5ee745bfaac9096cc4b0d2adc45ea4c15e5f611"
+}

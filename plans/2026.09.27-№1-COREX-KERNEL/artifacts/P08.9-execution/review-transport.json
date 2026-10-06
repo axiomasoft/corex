@@ -1,0 +1,27 @@
+{
+  "stopReason": "cancelled",
+  "sessionId": "19ce957d-51e6-4a83-92a0-5c3500e2ac19",
+  "requestId": "8c1f3186-1c99-486d-b813-a6071683013b",
+  "usage": {
+    "input_tokens": 130742,
+    "cache_read_input_tokens": 770944,
+    "cache_creation_input_tokens": 0,
+    "output_tokens": 28904,
+    "reasoning_tokens": 26658,
+    "total_tokens": 930590
+  },
+  "num_turns": 15,
+  "total_cost_usd": 0.2789292,
+  "modelUsage": {
+    "grok-4.7-build": {
+      "inputTokens": 130742,
+      "outputTokens": 28904,
+      "cacheReadInputTokens": 770944,
+      "cacheCreationInputTokens": 0,
+      "modelCalls": 15,
+      "costUSD": 0.2789292
+    }
+  },
+  "completed_review_round": false,
+  "continuation": "same native session; final verdict pending"
+}

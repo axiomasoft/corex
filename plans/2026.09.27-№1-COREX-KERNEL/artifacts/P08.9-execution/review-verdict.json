@@ -1,0 +1,29 @@
+{
+  "status": "GREEN",
+  "verdict": "review: grok/grok-4.7/high GREEN\n\nRemoving the pending inventory leaves S1–S9 unconditional. The previous pending file was `[]`, and the baseline-true path in `scripts/schema-gate.php` is unchanged: S2, S3, S4, S6, and S8 always run, and `migration()` still scans `up()` after a filename or date hit. Purity (S5/S7), ownership (S9), and literal object checks (S4) still run, including invoked helpers and raw SQL. Live `new SchemaGate(...)` callers use the three-argument form: `scripts/schema-gate.php`, `scripts/table-ownership-gate.php`, and `tests/Unit/SchemaGateTest.php`. The isolated S1–S9 negative controls remain, and the old pending waivers now require S2/S8 together with S3/S4/S5/S6/S7/S9.\n\n`docs/architecture/schema-policy.md` matches the registry, scopes, `tenant` / `tenant-cloud` / `root` / `budget` sets, Laravel `migrations` journal, `corex:schema:migrate` / `status` signatures, production `--force`, dedicated connection behavior, and `ModuleLifecycle` enable/upgrade. DATA-005 and DATA-007, the architecture index, and the `table-ownership.md` preamble agree: the gate covers S1–S9, Golden compares DDL catalogs, review covers layout and types the scanner does not express, and byte immutability is a release control. S8 stays the pre-rc baseline (`version = 1`, date `2026_10_01`); later generations are explicitly future. The setup docs describe `corex:schema:*` and state that packages do not publish migrations or call `loadMigrationsFrom`.\n\nMaterial residual limits: this turn did not re-run the suite or recompute hashes; the verdict uses the supplied ledger (`checks.json`: V1–V8, Pint, ownership-caller, and `git diff --check` green; V2 and V5 raw exit 1 with the expected output; `V7.log` anti-weakening OK) and the owner statement that candidate hashes are unchanged. `tests/Golden/Support/SchemaEnvironment.php` still treats a missing `scripts/schema-gate-pending.json` as `[]`, which matches the deleted empty list and does not exempt S1–S9. `status()` already includes module sets while default `migrate()` does not; that inherited split is outside this diff.\n\nEvidence inspected: `product.diff`, `P08.9.json`, `review-contract.txt`, `checks.json`, `V7.log`, the completion note, `candidate-hashes.json`, `scripts/schema-gate.php`, `scripts/table-ownership-gate.php`, `tests/Unit/SchemaGateTest.php`, `SchemaEnvironment.php`, `LaravelSchemaMigrator.php`, both schema commands, `TaggedSchemaSets.php`, `SchemaSet.php`, `DatabaseRegistrar.php`, `LifecycleRegistrar.php`, `DatabaseModuleLifecycle.php`, `MigrationWaveOrchestrator.php`, `schema-sets.json`, `schema-policy.md`, the DATA articles, the architecture index, `table-ownership.md`, `docs/dev-doctrine.md`, and the root `README.md`.",
+  "provider": "grok",
+  "selected_model": "grok-4.7",
+  "actual_model": "grok-4.7",
+  "actual_effort": "high",
+  "session_id": "19ce957d-51e6-4a83-92a0-5c3500e2ac19",
+  "request_id": "0daef854-ae42-4e26-9a02-3280f1965b24",
+  "context_parameter": null,
+  "stop_reason": "end_turn",
+  "completed_review_rounds": 1,
+  "transport_continuation": "Same session resumed after 15-turn transport limit; one-turn final verdict, no duplicate review.",
+  "candidate_hashes": "candidate-hashes.json",
+  "executor_verified_candidate_unchanged_after_review": true,
+  "model_usage": {
+    "grok-4.7-build": {
+      "inputTokens": 2277,
+      "outputTokens": 6097,
+      "cacheReadInputTokens": 101120,
+      "cacheCreationInputTokens": 0,
+      "modelCalls": 1,
+      "costUSD": 0.03117664
+    }
+  },
+  "reviewed_diff_archive": "reviewed-product.diff.gz",
+  "reviewed_diff_sha256": "7407b7c9996264b1fc7b976426a521cd0581bb3e83c97e72507755e3a4ff3a9e",
+  "diff_transport_note": "Exact reviewer input archived with gzip. Text product.diff uses zero context after review to avoid whitespace diagnostics from blank unified-diff context lines; product inputs unchanged."
+}

@@ -28,9 +28,8 @@ final class SchemaGate
     private array $catalogue = [];
 
     /** @param SchemaManifest $manifest
-     * @param list<string> $pending
      * @param array<string, string> $allowlist */
-    public function __construct(private string $root, private array $manifest, private array $pending, private array $allowlist)
+    public function __construct(private string $root, private array $manifest, private array $allowlist)
     {
         $path = $root.'/docs/architecture/table-ownership.md';
 
@@ -57,7 +56,7 @@ final class SchemaGate
                 $this->hit('S1', $set['path'], 1, 'registered set has no migration files');
             }
 
-            if (! in_array($set['package'], $this->pending, true) && $set['version'] !== 1) {
+            if ($set['version'] !== 1) {
                 $this->hit('S8', $set['path'], 1, 'baseline set version must be 1');
             }
         }
@@ -81,7 +80,6 @@ final class SchemaGate
                         continue;
                     }
                     $set = $sets[0];
-                    $baseline = ! in_array($set['package'], $this->pending, true);
                     $basename = basename($relative);
 
                     if (isset($seen[$basename])) {
@@ -89,15 +87,15 @@ final class SchemaGate
                     }
                     $seen[$basename] = $relative;
 
-                    if ($baseline && (preg_match('/^\d{4}_\d{2}_\d{2}_(\d{2})\d{4}_(create|add)_[a-z0-9_]+\.php$/', $basename, $match) !== 1
-                        || $match[1] !== ($this->manifest['packages'][$set['package']] ?? null))) {
+                    if (preg_match('/^\d{4}_\d{2}_\d{2}_(\d{2})\d{4}_(create|add)_[a-z0-9_]+\.php$/', $basename, $match) !== 1
+                        || $match[1] !== ($this->manifest['packages'][$set['package']] ?? null)) {
                         $this->hit('S2', $relative, 1, 'invalid baseline filename or package sequence prefix');
                     }
 
-                    if ($baseline && ! str_starts_with($basename, '2026_10_01_')) {
+                    if (! str_starts_with($basename, '2026_10_01_')) {
                         $this->hit('S8', $relative, 1, 'baseline date must be 2026_10_01');
                     }
-                    $this->migration($relative, $set['package'], $set['scope'], $baseline);
+                    $this->migration($relative, $set['package'], $set['scope']);
                 }
             }
         }
@@ -106,7 +104,7 @@ final class SchemaGate
         return $this->hits;
     }
 
-    private function migration(string $file, string $package, string $scope, bool $baseline): void
+    private function migration(string $file, string $package, string $scope): void
     {
         $source = (string) file_get_contents($this->root.'/'.$file);
         $code = self::code($source);
@@ -143,13 +141,13 @@ final class SchemaGate
             $variables[$assignment[1] !== '' ? '$'.$assignment[1] : 'self::'.$assignment[2]] = $assignment[4];
         }
         foreach ($bodies as $body) {
-            $this->structure($file, $package, $scope, $baseline, $body, $variables);
+            $this->structure($file, $package, $scope, $body, $variables);
         }
     }
 
     /** @param array{body: string, line: int} $up
      * @param array<string, string> $variables */
-    private function structure(string $file, string $package, string $scope, bool $baseline, array $up, array $variables): void
+    private function structure(string $file, string $package, string $scope, array $up, array $variables): void
     {
         $calls = self::calls($up['body']);
         $tables = [];
@@ -180,10 +178,6 @@ final class SchemaGate
                 if ($call['offset'] > $candidate['start'] && $call['offset'] < $candidate['end']) {
                     $table = $candidate['name'];
                 }
-            }
-
-            if (! $baseline) {
-                continue;
             }
 
             if ($name === 'constrained' || preg_match('/^(?:nullable)?(?:Uuid|Ulid|Numeric)?[mM]orphs$/', $name) === 1) {
@@ -247,20 +241,18 @@ final class SchemaGate
                 $this->ownership($file, $line, $match[1], $package, $scope);
             }
 
-            if ($baseline) {
-                // RENAME references the old object; S4 applies to its new literal name.
-                if (preg_match('/\bRENAME\s+CONSTRAINT\s+["`]?([a-z0-9_]+)["`]?\s+TO\s+(["`]?[a-z0-9_]+["`]?)/i', $sql, $rename) === 1) {
-                    preg_match('/\bALTER\s+TABLE\s+["`]?([a-z0-9_]+)/i', $sql, $target);
-                    $this->object($file, $line, trim($rename[2], '"`'), $target[1] ?? '', $scope, register: false);
-                    $sql = str_replace($rename[0], '', $sql);
-                } elseif (preg_match('/\bRENAME\s+CONSTRAINT\b/i', $sql) === 1) {
-                    $this->hit('S4', $file, $line, 'literal constraint rename target required');
-                }
-                preg_match_all('/\b(?:CONSTRAINT|(?:UNIQUE\s+)?INDEX)\s+["`]?([a-z0-9_]+)["`]?/i', $sql, $names);
-                foreach ($names[1] as $object) {
-                    preg_match('/\b(?:ALTER\s+TABLE|ON|CREATE\s+TABLE)\s+["`]?([a-z0-9_]+)/i', $sql, $target);
-                    $this->object($file, $line, $object, $target[1] ?? '', $scope);
-                }
+            // RENAME references the old object; S4 applies to its new literal name.
+            if (preg_match('/\bRENAME\s+CONSTRAINT\s+["`]?([a-z0-9_]+)["`]?\s+TO\s+(["`]?[a-z0-9_]+["`]?)/i', $sql, $rename) === 1) {
+                preg_match('/\bALTER\s+TABLE\s+["`]?([a-z0-9_]+)/i', $sql, $target);
+                $this->object($file, $line, trim($rename[2], '"`'), $target[1] ?? '', $scope, register: false);
+                $sql = str_replace($rename[0], '', $sql);
+            } elseif (preg_match('/\bRENAME\s+CONSTRAINT\b/i', $sql) === 1) {
+                $this->hit('S4', $file, $line, 'literal constraint rename target required');
+            }
+            preg_match_all('/\b(?:CONSTRAINT|(?:UNIQUE\s+)?INDEX)\s+["`]?([a-z0-9_]+)["`]?/i', $sql, $names);
+            foreach ($names[1] as $object) {
+                preg_match('/\b(?:ALTER\s+TABLE|ON|CREATE\s+TABLE)\s+["`]?([a-z0-9_]+)/i', $sql, $target);
+                $this->object($file, $line, $object, $target[1] ?? '', $scope);
             }
         }
     }
@@ -603,11 +595,9 @@ final class SchemaGate
 
                 return 0;
             }
-            /** @var list<string> $pending */
-            $pending = is_file($root.'/scripts/schema-gate-pending.json') ? json_decode((string) file_get_contents($root.'/scripts/schema-gate-pending.json'), true, flags: JSON_THROW_ON_ERROR) : [];
             /** @var array<string, string> $allowlist */
             $allowlist = json_decode((string) file_get_contents($root.'/scripts/schema-gate-allowlist.json'), true, flags: JSON_THROW_ON_ERROR);
-            $hits = (new SchemaGate($root, $manifest, $pending, $allowlist))->run();
+            $hits = (new SchemaGate($root, $manifest, $allowlist))->run();
             foreach ($hits as $hit) {
                 fwrite(STDERR, "{$hit['code']} {$hit['file']}:{$hit['line']} {$hit['message']}\n");
             }
@@ -615,7 +605,7 @@ final class SchemaGate
             if ($hits !== []) {
                 return 1;
             }
-            fwrite(STDOUT, 'schema-gate: OK ('.count($manifest['sets']).' sets, '.count($pending)." pending packages)\n");
+            fwrite(STDOUT, 'schema-gate: OK ('.count($manifest['sets'])." sets)\n");
 
             return 0;
         } catch (Throwable $error) {

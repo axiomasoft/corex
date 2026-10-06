@@ -34,6 +34,19 @@ FlexStore) без переписывания фундамента. Моноре�
 `php artisan vendor:publish --tag=corex-config`; параметры модулей находятся в `config/corex.php`
 в разделе `modules`. Для пакетов используются собственные config-ключи и publish-теги из их README.
 
+Схема пакетов устанавливается из зарегистрированных наборов:
+
+```bash
+php artisan corex:schema:migrate --scope=tenant
+php artisan corex:schema:status --scope=tenant
+```
+
+В production для миграции нужен `--force`. Для tenancy центральная база устанавливается
+через `corex:schema:migrate --scope=central --database=<central>`, отдельное соединение
+бюджетов — через `--scope=dedicated`; модули создают свою схему при активации через
+`ModuleLifecycle`. Наборы, драйверы и правила формы — в
+[политике схемы](docs/architecture/schema-policy.md).
+
 ## Стек
 
 - PHP 8.4–8.5, Laravel 12–13 (см. [[ADR-001 Stack]]).

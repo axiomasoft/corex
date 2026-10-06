@@ -92,6 +92,23 @@ API, политиками или задачами между проектами.
 - Тег ставится на закрытии фазы по GREEN-аудиту + запись в per-package `CHANGELOG.md`;
   1.0 не ставится, пока контракты не обкатаны потребителями (D17).
 
+### Схема пакетов
+
+Схема объявляется наборами `SchemaSet` через SPI `SchemaSetProvider` и исполняется
+`SchemaMigrator` на базе выбранной scope; журнал — Laravel `migrations` этой базы.
+Пакеты не публикуют миграции и не вызывают `loadMigrationsFrom`.
+
+Установка: `php artisan corex:schema:migrate --scope=tenant` (в production — `--force`);
+проверка: `php artisan corex:schema:status --scope=tenant`. Центральная база tenancy:
+`corex:schema:migrate --scope=central --database=<central>`; выделенные соединения:
+`corex:schema:migrate --scope=dedicated`. Module-наборы исполняет `ModuleLifecycle`.
+
+Статьи DATA-005/DATA-007 и [политика схемы](architecture/schema-policy.md) закрепляют
+форму baseline и неизменность выпущенных файлов с `1.0.0-rc.1`; новая форма — новый файл
+и version + 1. `composer schema-gate` проверяет S1–S9 на всём дереве, Golden-схема —
+каталог DDL PostgreSQL/SQLite. Владение таблицей и scope сверяются с
+[каталогом владения](architecture/table-ownership.md).
+
 ### Bridge-пакеты
 
 - Пакет-мост **декорирует** контракты своих хостов и **не владеет** предметными контрактами.

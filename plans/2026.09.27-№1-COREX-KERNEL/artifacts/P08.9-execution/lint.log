@@ -1,0 +1,2 @@
+> vendor/bin/pint --test 'scripts/schema-gate.php' 'scripts/table-ownership-gate.php' 'tests/Unit/SchemaGateTest.php'
+{"tool":"pint","result":"passed"}

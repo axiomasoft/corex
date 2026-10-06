@@ -14,6 +14,7 @@
 | `structure-profiles.md` | Раскладка корневых и feature modules, процедуры STR-002…STR-006 | При реорганизации `src/` |
 | `api-policy.md` | Публичная поверхность, BC, депрекация | Рядом со статьями API-* |
 | `config-policy.md` | Классификация конфигурации и ввод ключей | Рядом со статьями CFG-* |
+| [schema-policy.md](schema-policy.md) | Наборы, scope, исполнение и форма схемы | Рядом со статьями DATA-005 и DATA-007 |
 | `data-ownership-policy.md` | Владение таблицами и исключения FK | Рядом со статьями DATA-* |
 | `message-policy.md` | Конверт, именование и версии сообщений | Рядом со статьями MSG-* |
 | `extension-policy.md` | Реестры и lifecycle расширений | Рядом со статьями EXT-* |
@@ -64,12 +65,13 @@
 | API-007 | API | `scripts/contract-guard.sh` (warn-прокси на диффе `src/Contracts/**`) | исполняется |
 | API-008 | API | нет — P13 (snapshot), P3 (BC-дифф) | объявлено, фаза P13 |
 | API-009 | API | ревью + `scripts/contract-guard.sh` | исполняется |
-| DATA-001 | DATA | нет — P2 (реестр), P3 (гейт) | объявлено, фаза P2 |
-| DATA-002 | DATA | нет — P3 | объявлено, фаза P3 |
-| DATA-003 | DATA | нет — P3 | объявлено, фаза P3 |
-| DATA-004 | DATA | нет — P3 | объявлено, фаза P3 |
-| DATA-005 | DATA | `git diff --stat -- 'packages/*/database/**'` в Validation каждого code-item'а | исполняется |
+| DATA-001 | DATA | `composer table-ownership-gate`; `composer schema-gate` → S9 | исполняется |
+| DATA-002 | DATA | `composer schema-gate` → S9; `composer table-ownership-gate`; ревью ALTER | исполняется (создание), ревью (ALTER) |
+| DATA-003 | DATA | `composer table-write-ownership-gate` | исполняется |
+| DATA-004 | DATA | `composer table-ownership-gate` → T4 | исполняется |
+| DATA-005 | DATA | Golden-схема (DDL); `composer schema-gate` → S8 (baseline до rc); проверка сохранности файлов при выпуске | гейты исполняются; неизменность выпущенных файлов — с rc |
 | DATA-006 | DATA | owner-gate фазы (G-DDL) | объявлено, фаза P1 |
+| DATA-007 | DATA | `composer schema-gate` → S1–S9; Golden-схема; ревью формы | исполняется (гейт и Golden), ревью |
 | RUN-001 | RUN | нет — P4 | объявлено, фаза P4 |
 | RUN-002 | RUN | нет — P3 (гейт сериализуемости), P4 | объявлено, фаза P3 |
 | RUN-003 | RUN | нет — P3 | объявлено, фаза P3 |

@@ -1,0 +1,171 @@
+[
+  {
+    "id": "V1",
+    "command": [
+      "test",
+      "!",
+      "-e",
+      "scripts/schema-gate-pending.json"
+    ],
+    "exit_code": 0,
+    "expected_exit": 0,
+    "status": "green",
+    "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.9-execution/V1.log"
+  },
+  {
+    "id": "V2",
+    "command": [
+      "grep",
+      "-c",
+      "pending",
+      "scripts/schema-gate.php"
+    ],
+    "exit_code": 1,
+    "expected_exit": 1,
+    "status": "green",
+    "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.9-execution/V2.log"
+  },
+  {
+    "id": "V3",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "schema-gate"
+    ],
+    "exit_code": 0,
+    "expected_exit": 0,
+    "status": "green",
+    "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.9-execution/V3.log"
+  },
+  {
+    "id": "V4",
+    "command": [
+      "grep",
+      "-n",
+      "-E",
+      "DATA-005|DATA-007",
+      "docs/architecture/constitution.md"
+    ],
+    "exit_code": 0,
+    "expected_exit": 0,
+    "status": "green",
+    "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.9-execution/V4.log"
+  },
+  {
+    "id": "V5",
+    "command": [
+      "git",
+      "grep",
+      "-n",
+      "-E",
+      "vendor:publish --tag=corex[a-z-]*-migrations|corex-migrations-tenant",
+      "--",
+      "docs",
+      "packages",
+      "products",
+      "README.md",
+      ":!**/CHANGELOG.md",
+      ":!docs/audit-*"
+    ],
+    "exit_code": 1,
+    "expected_exit": 1,
+    "status": "green",
+    "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.9-execution/V5.log"
+  },
+  {
+    "id": "V6",
+    "command": [
+      "scripts/php84",
+      "php",
+      "scripts/package-docs-gate.php"
+    ],
+    "exit_code": 0,
+    "expected_exit": 0,
+    "status": "green",
+    "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.9-execution/V6.log"
+  },
+  {
+    "id": "V8",
+    "command": [
+      "scripts/php84",
+      "vendor/bin/pest",
+      "tests/Unit/SchemaGateTest.php"
+    ],
+    "exit_code": 0,
+    "expected_exit": 0,
+    "status": "green",
+    "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.9-execution/V8.log"
+  },
+  {
+    "id": "lint",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "lint:check",
+      "--",
+      "scripts/schema-gate.php",
+      "scripts/table-ownership-gate.php",
+      "tests/Unit/SchemaGateTest.php"
+    ],
+    "exit_code": 0,
+    "expected_exit": 0,
+    "status": "green",
+    "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.9-execution/lint.log"
+  },
+  {
+    "id": "ownership-caller",
+    "command": [
+      "scripts/php84",
+      "composer",
+      "table-ownership-gate"
+    ],
+    "exit_code": 0,
+    "expected_exit": 0,
+    "status": "green",
+    "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.9-execution/ownership-caller.log"
+  },
+  {
+    "id": "agent-docs",
+    "command": [
+      "bash",
+      "scripts/build-agent-docs.sh",
+      "--check"
+    ],
+    "exit_code": 1,
+    "expected_exit": 0,
+    "status": "non-gating-baseline",
+    "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.9-execution/agent-docs.log",
+    "note": "AGENTS.md matches source; pre-existing CLAUDE.md managed Swissknifeman/mAInd additions differ from the entrypoint-only generator. DATA articles are not copied by this script; no generation required by P08.9."
+  },
+  {
+    "id": "diff",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "expected_exit": 0,
+    "status": "green",
+    "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.9-execution/diff.log"
+  },
+  {
+    "id": "V7",
+    "command": [
+      "bash",
+      "scripts/anti-weakening-gate.sh"
+    ],
+    "exit_code": 0,
+    "expected_exit": 0,
+    "status": "green",
+    "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.9-execution/V7.log"
+  },
+  {
+    "id": "V9",
+    "procedure": "D111–D114 applicability mapped to file:line and affected checks in canonical completion JSON",
+    "exit_code": 0,
+    "expected_exit": 0,
+    "status": "green",
+    "log": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P08.9-execution/V9.log"
+  }
+]

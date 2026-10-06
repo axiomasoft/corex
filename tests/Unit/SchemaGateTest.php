@@ -7,7 +7,7 @@ use Illuminate\Filesystem\Filesystem;
 require_once dirname(__DIR__, 2).'/scripts/schema-gate.php';
 
 /** @return list<array{code: string, file: string, line: int, message: string}> */
-function schemaGateProbe(string $source, string $filename = '2026_10_01_010010_create_sys_gate_probe.php', int $version = 1, string $scope = 'tenant', string $catalogue = 'sys_gate_probe', array $pending = [], array $allowlist = []): array
+function schemaGateProbe(string $source, string $filename = '2026_10_01_010010_create_sys_gate_probe.php', int $version = 1, string $scope = 'tenant', string $catalogue = 'sys_gate_probe', array $allowlist = []): array
 {
     $root = sys_get_temp_dir().'/corex-schema-gate-'.bin2hex(random_bytes(12));
     $path = 'packages/core/database/migrations/tenant';
@@ -24,7 +24,7 @@ function schemaGateProbe(string $source, string $filename = '2026_10_01_010010_c
             'drivers' => ['pgsql', 'sqlite'], 'lifecycle' => 'platform', 'requires' => [], 'connection' => null,
         ]]];
 
-        return (new SchemaGate($root, $manifest, $pending, $allowlist))->run();
+        return (new SchemaGate($root, $manifest, $allowlist))->run();
     } finally {
         $filesystem->deleteDirectory($root);
     }
@@ -48,15 +48,19 @@ it('rejects each schema rule with its own diagnostic code', function (string $co
     }
 })->with(['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9']);
 
-it('enforces purity enum and ownership even for pending packages', function (string $code): void {
+it('enforces purity enum and ownership even for malformed filenames', function (string $code): void {
     $source = (string) file_get_contents(__DIR__.'/../fixtures/schema-gate/'.$code.'/migration.php.fixture');
-    $hits = schemaGateProbe($source, filename: 'old_migration.php', catalogue: $code === 'S9' ? 'other_table' : 'sys_gate_probe', pending: ['axiomasoft/corex']);
-    expect(array_values(array_unique(array_column($hits, 'code'))))->toBe([$code]);
+    $hits = schemaGateProbe($source, filename: 'old_migration.php', catalogue: $code === 'S9' ? 'other_table' : 'sys_gate_probe');
+    $codes = array_values(array_unique(['S2', $code, 'S8']));
+    sort($codes);
+    expect(array_values(array_unique(array_column($hits, 'code'))))->toBe($codes);
 })->with(['S5', 'S7', 'S9']);
 
-it('temporarily admits only the pending baseline shape rules', function (string $code): void {
+it('enforces baseline shape rules for every package even with legacy filenames and versions', function (string $code): void {
     $source = (string) file_get_contents(__DIR__.'/../fixtures/schema-gate/'.$code.'/migration.php.fixture');
-    expect(schemaGateProbe($source, filename: 'old_migration.php', version: 7, pending: ['axiomasoft/corex']))->toBe([]);
+    $codes = array_values(array_unique(['S2', $code, 'S8']));
+    sort($codes);
+    expect(array_values(array_unique(array_column(schemaGateProbe($source, filename: 'old_migration.php', version: 7), 'code'))))->toBe($codes);
 })->with(['S2', 'S3', 'S4', 'S6', 'S8']);
 
 it('admits only finite table column integer exceptions', function (): void {
@@ -109,7 +113,7 @@ it('checks ownership for helpers and every callback syntax', function (string $s
     } else {
         $source = preg_replace('/function \(Blueprint \$table\): void \{.*?\}/s', '$callback', $source, 1);
     }
-    expect(array_values(array_unique(array_column(schemaGateProbe($source, catalogue: 'other_table', pending: ['axiomasoft/corex']), 'code'))))->toBe(['S9']);
+    expect(array_values(array_unique(array_column(schemaGateProbe($source, catalogue: 'other_table'), 'code'))))->toBe(['S9']);
 })->with(['helper', 'arrow', 'variable']);
 
 it('applies baseline rules inside invoked helpers', function (string $code): void {

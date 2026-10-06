@@ -1,0 +1,30 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P08.9-execution-completion",
+  "title": "P08.9 execution completion",
+  "sections": [
+    {
+      "id": "result",
+      "title": "Result",
+      "text": "P08.9 completed GREEN: schema policy created; DATA-001–005 and new DATA-007, ownership catalog/index and setup commands aligned; temporary package exemptions and all gate branches removed. Dependent table-ownership-gate constructor call updated; scoped maintenance deviation, no behavior change beyond unconditional baseline enforcement."
+    },
+    {
+      "id": "validation",
+      "title": "Affected validation",
+      "text": "V1–V9 GREEN; raw commands/exits in @plan/artifacts/P08.9-execution/checks.json. V2 grep prints 0 and exits 1 as expected; V5 has no output and exits 1. Registered check exit 0 means the declared acceptance predicate passed; raw exits remain in the ledger. V8: 39 tests / 61 assertions. Scoped Pint and ownership-caller checks GREEN. V7 passed on the committed product candidate; closure bookkeeping does not change its product inputs (candidate-hashes.json verified before and after independent review). No unrelated package, PG or Golden reruns. Existing managed CLAUDE.md additions explain the optional non-gating generator mismatch; DATA is not copied to entrypoints."
+    },
+    {
+      "id": "self-check",
+      "title": "Self-check D111–D114",
+      "text": "self-check: GREEN\n\n| Normative row | File:line / applicability | Evidence |\n|:--|:--|:--|\n| D111.1 — delivery without publish/load | docs/architecture/schema-policy.md:36 | V5 |\n| D111.2 — set fields, tagged registration, immutable registry | docs/architecture/schema-policy.md:7 | policy self-check against SchemaSet/TaggedSchemaSets; V3 |\n| D111.3 — single Laravel journal | docs/architecture/schema-policy.md:58 | policy self-check against LaravelSchemaMigrator |\n| D111.4 — commands, scope, driver checks | docs/architecture/schema-policy.md:62 | policy self-check against SchemaMigrateCommand/SchemaStatusCommand |\n| D111.5 — module lifecycle from registry | docs/architecture/schema-policy.md:50 | policy self-check; unchanged implementation |\n| D111.6 — central, tenant waves and template | docs/architecture/schema-policy.md:75 | policy self-check; unchanged implementation |\n| D111.7 — version and post-rc new file | docs/architecture/schema-policy.md:143 | V4; unchanged package constants outside item |\n| D111.8 — MigratesSchemaSets tests | docs/architecture/schema-policy.md:51 | unchanged harness; V8 uses static disposable fixtures |\n| D112 — deterministic schema and clean up() | docs/architecture/schema-policy.md:102 | V8 S7 cases; host/AzGuard exceptions unchanged |\n| D113.4.1 — file layout/codes | docs/architecture/schema-policy.md:82 | V3; V8 S1/S2; one-table rule verified by review, not claimed as scanner enforcement |\n| D113.4.2 — literal names | docs/architecture/schema-policy.md:88 | V8 S3/S4 including fluent/named/helper/SQL cases |\n| D113.4.3 — types and finite integer exceptions | docs/architecture/schema-policy.md:94 | V8 S5/S6; UUID/morph/bigint policy and unchanged Golden inputs |\n| D113.4.4 — purity and preserved down guards | docs/architecture/schema-policy.md:102 | V8 S7 helper/raw SQL and valid down/comments |\n| D113.4.5/4.6 — contents and drivers | docs/architecture/schema-policy.md:106 | documentation only; migrations and Golden unchanged; package/DB suites not rerun |\n| D113.§5 — S1–S9 without package exemptions | scripts/schema-gate.php:59 | V1/V2/V3; V8 nine negative controls and strengthened legacy tests |\n| D114 — tenancy invariants/data fields | outside P08.9; no product, migration or tenancy test edits | not applicable |\n\nAll nine required negative-control codes remain tested; 39 tests/61 assertions GREEN. No package source, migration, Golden, public contract, threshold or allowlist changes. Constructor caller adapted in scripts/table-ownership-gate.php; this bounded dependent maintenance is recorded as a deviation. Static scanner tests create random owned temporary roots and delete only those; default Testbench uses sqlite :memory:, no PG connection. Agent docs do not copy DATA and were not regenerated; existing managed CLAUDE.md additions explain the unrelated optional generator mismatch."
+    },
+    {
+      "id": "review",
+      "title": "Independent final review",
+      "text": "review: grok/grok-4.7/high GREEN\n\nOwner-requested independent final review of the complete P08.9 diff, native Grok session 19ce957d-51e6-4a83-92a0-5c3500e2ac19, observed model grok-4.7, effort high, no context parameter. One completed review round; first transport reached its bound, the same session resumed solely to return its final verdict. Full verdict, inspected inputs and residual limitations: @plan/artifacts/P08.9-execution/review-verdict.json. No confirmed findings. Product hashes verified unchanged after review. No schema or release qualification claimed; later generations and byte immutability enforcement remain release controls."
+    }
+  ],
+  "applies_to": [
+    "P08.9"
+  ]
+}

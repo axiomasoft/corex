@@ -1,0 +1,16 @@
+{
+  "base_commit": "34d09f203d5cc0dc389d1b72ea2b5d3af4a4c496",
+  "files": [
+    "README.md",
+    "docs/architecture/schema-policy.md",
+    "docs/architecture/README.md",
+    "docs/architecture/constitution.md",
+    "docs/architecture/data-ownership-policy.md",
+    "docs/architecture/table-ownership.md",
+    "docs/dev-doctrine.md",
+    "scripts/schema-gate.php",
+    "scripts/table-ownership-gate.php",
+    "scripts/schema-gate-pending.json",
+    "tests/Unit/SchemaGateTest.php"
+  ]
+}

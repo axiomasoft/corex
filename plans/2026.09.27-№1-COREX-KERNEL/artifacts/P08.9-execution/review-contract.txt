@@ -1,0 +1,167 @@
+3. Нормативная модель механики (D111)
+**3.1 Наборы.** Единица схемы — `SchemaSet` (VO ядра, `CoreX\Database\Data\SchemaSet`):
+
+| Поле | Тип | Правило |
+|:--|:--|:--|
+| `id` | string | `<composer-name>:<set>`; `<set>` = имя каталога; уникален в реестре |
+| `package` | string | composer name владельца |
+| `scope` | `SchemaScope` | `Central` (центральная база, только tenancy), `Tenant` (база аккаунта; в boxed — default connection), `Dedicated` (собственное соединение пакета) |
+| `lifecycle` | `SchemaLifecycle` | `Module` — пакет объявляет `extra.corex.module`, таблицы создаёт `ModuleLifecycle::enable()`; иначе `Platform` |
+| `path` | string | абсолютный `packages/<pkg>/database/migrations/<set>` (через `dirname(__DIR__, n)` в провайдере) |
+| `version` | int ≥ 1 | поколение набора; baseline = 1 |
+| `drivers` | list<string> | содержит `pgsql`; `sqlite` — если набор мигрирует на SQLite (правило §4.6) |
+| `requires` | list<string> | composer names, чьи наборы обязаны быть зарегистрированы; иначе набор неактивен (например `tenant-cloud` требует tenancy) |
+| `connection` | ?string | только `Dedicated`; имя соединения из Options пакета-владельца |
+
+Каталоги наборов (D113): `root` (Central), `tenant` (Tenant), `tenant-cloud` (Tenant + requires `axiomasoft/corex-tenancy`), `budget` (Dedicated).
+Сопоставление с каталогом владения: `tenant_scope` `root`→`Central`, `tenant`→`Tenant`, `shared-budget`→`Dedicated`.
+
+**3.2 Регистрация.** Пакет объявляет наборы классом `<Pkg>SchemaSets implements CoreX\Database\Contracts\SchemaSetProvider`
+(`#[Spi(kind: SpiKind::Implement)]` в контракте; реализация — `src/Internal/` корневого модуля пакета или модуля-владельца схемы) и
+в своём провайдере `register()`: `$this->app->tag([<Pkg>SchemaSets::class], SchemaSetProvider::class);` — тот же шов, что
+`ConfigReportSection` (`packages/access/src/CoreAuthServiceProvider.php:30`). Ядро регистрирует свой провайдер так же.
+Реестр `CoreX\Database\Contracts\SchemaSets` (singleton, `TaggedSchemaSets`) при первом разрешении собирает теги, сортирует по `id`
+и проверяет: дубликат `id` → `SchemaSetException::duplicateSet`; `Dedicated` без `connection` или не-Dedicated с `connection` →
+`invalidSet`; `drivers` без `pgsql` → `invalidSet`; одинаковый basename файла в двух наборах одной scope → `duplicateMigration`;
+путь не существует → `invalidSet`. Результат неизменяем (compile at boot, D22).
+
+**3.3 Журнал.** Только Laravel `migrations` той базы, где исполнен набор; строка = basename. Отдельного журнала, отпечатков и
+repair нет (у CoreX нет переменных «spaces», в отличие от chatom; сверка §3.8).
+
+**3.4 Исполнение.** `CoreX\Database\Contracts\SchemaMigrator` (`#[Spi(kind: SpiKind::Call)]`), реализация `Internal\LaravelSchemaMigrator`
+поверх `Illuminate\Database\Migrations\Migrator::usingConnection()`:
+- `migrate(SchemaScope $scope, ?string $connection = null, bool $includeModules = false): list<string>` — активные наборы scope
+  (lifecycle Platform; Module — только при `$includeModules`), пути одним вызовом `run()` (Migrator сортирует по basename глобально, L1);
+  для `Dedicated` каждый набор исполняется на своём `connection`, аргумент `$connection` запрещён (`InvalidArgumentException`).
+  Перед запуском: драйвер соединения ∉ `drivers` набора → `SchemaSetException::unsupportedDriver` (без частичного запуска).
+- `migrateSets(list<string> $ids, ?string $connection = null): list<string>` — явный список (тесты, модульный lifecycle).
+- `status(SchemaScope $scope, ?string $connection = null): list<SchemaSetStatus>` — по набору: id, scope, lifecycle, version,
+  applied (имена из журнала ∩ файлы), pending (файлы − журнал), unknown (строки журнала с префиксом baseline набора без файла).
+- Команды ядра: `corex:schema:migrate {--scope=tenant} {--database=} {--modules} {--force}` (production без `--force` → отказ, как
+  `migrate`), `corex:schema:status {--scope=tenant} {--database=}` (exit 1, если есть pending/unknown). Default `--database` —
+  default connection. Простой `php artisan migrate` таблицы пакетов больше не создаёт.
+
+**3.5 Модули.** `LifecycleRegistrar::moduleWiring()` берёт `migrationPaths[package] = path` Tenant-набора с lifecycle Module из
+`SchemaSets`; `codeVersions` по-прежнему из `installed.json`. Остальной `DatabaseModuleLifecycle` не меняется (claims, rollback).
+
+**3.6 Tenancy.** `MigrationWaveOrchestrator::defaultMigrationRunner()` вызывает
+`SchemaMigrator::migrate(SchemaScope::Tenant, 'tenant')` (advisory lock и транзакция сохраняются); модульные наборы аккаунта
+догоняются `ModuleLifecycle::upgrade()` (без изменений). Центральная база:
+`corex:schema:migrate --scope=central --database=<central>`; шаблон аккаунта: `corex:schema:migrate --scope=tenant --modules --database=<template>`.
+`root_account_schema_state`/`root_migration_batches` — операторские волны, смысл не меняется.
+
+**3.7 Версия.** `SchemaSet::version` заменяет `CoreServiceProvider::SCHEMA_VERSION` и `ModulesServiceProvider::SCHEMA_VERSION`
+(удаляются, D01). Правило после `1.0.0-rc.1` (schema-policy): выпущенный файл неизменен; новая форма — новый файл в наборе
+(`<дата>_<PP><NNNN>_<verb>_<table>`), `version + 1` в том же commit.
+
+**3.8 Сверка с chatom PLAN2.D25** (закрывает строку «Схема — открыто» в `research-04-architecture` §12):
+
+| chatom | CoreX P08 | Итог |
+|:--|:--|:--|
+| Laravel `migrations` — единственный журнал | то же | совпадает |
+| миграции не публикуются, default space — `loadMigrationsFrom` | не публикуются; запуск — явный `SchemaMigrator` по scope (несколько баз: central/tenant/dedicated) | совпадает по сути; отличие — scope вместо space |
+| schema steps + генерация тонких файлов per space, отпечаток space_state, doctor/repair | статичные файлы baseline v1; без генератора/отпечатка: схема не параметризуется (D112) | осознанное отличие: у CoreX нет параметров схемы |
+| golden DDL ловит изменение выпущенных шагов | Golden-схема per scope (P08.3) | совпадает |
+| правила формы: имена ≤63 с suffix, bigint счётчики, без DB enum, актор — пара `type/id varchar` | D113 | совпадает |
+
+4. Правила формы baseline (D112, D113)
+**4.1 Раскладка и имена файлов.** `packages/<pkg>/database/migrations/<set>/2026_10_01_<PP><NNNN>_create_<table>.php`, один файл —
+одна таблица со всеми её индексами/unique/FK/CHECK/комментариями. FK, который нельзя создать в файле таблицы (цикл между таблицами
+пакета или набор `tenant-cloud`), — `2026_10_01_<PP><NNNN>_add_<table>_<purpose>.php`. `NNNN` — шаг 0010, 0020, …, порядок
+внутри пакета: таблица раньше ссылающихся на неё. Файл — `return new class extends Migration`.
+
+| PP | Пакет | Наборы |
+|:--|:--|:--|
+| 01 | axiomasoft/corex | `tenant` (sys_*, mod_*) |
+| 02 | axiomasoft/corex-tenancy | `root`, `tenant` |
+| 03 | axiomasoft/corex-access | `tenant`, `tenant-cloud` |
+| 04 | axiomasoft/corex-access-azguard | `tenant` |
+| 05 | axiomasoft/corex-operations | `tenant`, `budget` |
+| 06 | axiomasoft/corex-webhooks | `tenant` |
+| 07 | axiomasoft/corex-panels | `tenant` (Module) |
+| 08 | axiomasoft/corex-custom-fields | `tenant` |
+| 09 | axiomasoft/corex-intl | `tenant` (Module) |
+| 10 | axiomasoft/corex-media | `tenant` (Module) |
+| 11 | axiomasoft/corex-notifications | `tenant` (Module) |
+| 12 | axiomasoft/corex-search | `tenant` |
+| 13 | axiomasoft/corex-transfer | `tenant` |
+| 14 | axiomasoft/corex-wakeup | `tenant` (Module) |
+| 15 | axiomasoft/corex-workflow | `tenant` (Module) |
+| 16 | axiomasoft/corex-tasks | `tenant` (Module) |
+| 17 | axiomasoft/corex-tasks-workflow | `tenant` (Module) |
+| 50 | flex/crm | `tenant` (Module) |
+
+Пример: `packages/core/database/migrations/tenant/2026_10_01_010010_create_mod_modules.php`. Дата `2026_10_01` фиксирована и
+предшествует любой будущей миграции (§3.7). Basename уникален глобально, потому что таблица имеет одного владельца.
+
+**4.2 Имена объектов.** Каждый PK/unique/index/FK/CHECK имеет явное литеральное имя `<table>_<purpose>_<kind>`,
+`kind ∈ {pk, uq, ix, fk, ck}`; PK — `<table>_pk` через `$table->primary([...], '<table>_pk')` (не `->primary()` на колонке).
+Длина ≤ 63 байта; если естественное имя длиннее — `substr(natural, 0, 51) . '_' . substr(sha1(natural), 0, 8) . '_' . kind`
+(51+1+8+1+2 = 63; функция в examples §6 только для автора, в файле — литерал). Существующие суффиксы `_idx`→`_ix`, `_unique`→`_uq`,
+`_primary`→`_pk`, `_foreign`→`_fk`. Запрещены: `->unique()`/`->index()`/`->primary()` без имени, `->constrained()`,
+`foreignId…->constrained()`, `*Morphs()`/`nullable*Morphs()` (создают неназванный индекс), `->foreign($cols)` без второго аргумента.
+
+**4.3 Типы.**
+- Без DB enum/set: `->enum(`, `->set(`, `CREATE TYPE … AS ENUM` запрещены; значение — `string(<len>)` + CHECK (PG).
+- Ключи: `uuid` (D112). Ссылки на ключи CoreX — `uuid`. Полиморфная пара — `<name>_type string(64)` + `<name>_id string(64)`
+  + явный индекс `(<name>_type, <name>_id)`: принимает uuid/ulid/int хоста.
+- Счётчики/позиции/попытки/длительности/поколения — `bigInteger`/`unsignedBigInteger` (знак — как сейчас):
+
+| Колонки (таблица) | Решение |
+|:--|:--|
+| `attempts`/`attempt` (sys_outbox_messages, ntf_deliveries, med_operations, sys_attribute_documents, sys_api_idempotency, sys_api_bulk_operations, sys_api_webhook_*, sys_wakeup_requests, sys_workflow_intents, root_wakeup_reconciliation_state), `replay_count`, `batch_seq` | bigint |
+| `position`, `sort_order` (crm_pipelines/stages/deals/…, tsk_stages, tsk_tasks, sys_departments, sys_saved_views, crm parity-таблицы) | bigint |
+| `estimated_minutes`, `estimate_minutes`, `spent_minutes`, `minutes` (tsk_*), `duration_sec` (crm_activities) | bigint |
+| `db_count` (root_clusters), `version`/`template_version` (root_templates, root_clusters, root_accounts), `from_version`/`to_version` (root_migration_batches), `current_version`/`target_version` (root_account_schema_state) | bigint |
+| `last_activity` (sessions, unix-время) | bigint |
+| `probability` (crm_stages, 0–100), `score` (crm_leads, 0–100), `http_status` (webhooks, 100–599), `pg_port`/`pgbouncer_port` (1–65535), `embedding_dim`, `width`/`height` (med_conversions, px), `contract_version`/`envelope_version` (sys_outbox_messages), `topic_version` (webhooks), `db_soft_limit`/`pending_pool_size` (лимиты конфигурации кластера) | оставить тип; строка в allowlist гейта с причиной |
+
+  Новая 32-бит колонка вне allowlist — нарушение `schema-gate` (`S6`).
+- Время, json/jsonb, длины строк, nullability, default — как в текущей финальной форме цепочки (после всех ALTER), кроме перечисленного здесь и в D114.
+
+**4.4 Чистота файла.** Миграция использует только `Illuminate\…` и PHP: без `config()`, `env()`, `app()`, `resolve()`, моделей,
+классов пакетов, `Schema::connection()`, `DB::connection()` (соединение задаёт мигратор); без вставки/изменения данных. `down()`
+удаляет созданное файлом в обратном порядке. Правила чистоты относятся к `up()`: существующие охранники `down()` (например `MigrationRollbackDenied` в `ntf_deliveries` с `app()->environment('testing')`) сохраняются дословно — DDL от них не зависит.
+
+**4.5 Состав.** Baseline = финальная форма текущей цепочки пакета (все ALTER свёрнуты) + нормализации §4.2–4.4 + D112 + D114.
+Иных добавлений/удалений колонок, индексов, ограничений нет. Расхождение «финальная форма цепочки на PG ≠ baseline на PG» по
+колонкам/типам/nullability/индексам/ограничениям вне перечня — дефект (проверка — runbook §6.4 шаг 3, сравнение каталогов).
+
+**4.6 Драйверы.** `drivers` набора = `['pgsql']` плюс `'sqlite'`, если хотя бы один тест пакета сегодня исполняет эти миграции на
+SQLite (определяется прогоном до правки: `scripts/php84 composer --working-dir=packages/<pkg> test` с `--filter`-ом не требуется —
+grep `facts/test-migration-refs.txt` по файлам SQLite-TestCase пакета, затем подтверждение прогоном). Набор с `sqlite` обязан
+мигрировать fresh на SQLite: PG-only объекты (CHECK через ALTER, partial/expression index, jsonb-операторы, COMMENT, триггеры) —
+только в ветке `if (Schema::getConnection()->getDriverName() === 'pgsql')`; таблицы, колонки и непартиционные индексы одинаковы на
+обоих драйверах. Ни один пакет не теряет SQLite-поддержку, которая есть сегодня.
+
+5. Гейт схемы и Golden (P08.3)
+**`scripts/schema-gate.php`** (composer `schema-gate`, в `ci-deferred-guard.sh` как соседние гейты). Статический разбор shipped-миграций
+(`packages/*/database/migrations/**`, `products/*/database/migrations/**`, без `tests/`) и списка наборов
+(`scripts/schema-sets.json`, генерируется `php scripts/schema-gate.php --write-sets` из реестра Testbench-приложения со всеми
+провайдерами; `--check` сверяет). Проверки:
+
+| Код | Правило |
+|:--|:--|
+| S1 | файл лежит в каталоге зарегистрированного набора; набор с файлами существует; каталог без набора — ошибка |
+| S2 | имя файла `^\d{4}_\d{2}_\d{2}_(\d{2})\d{4}_(create|add)_[a-z0-9_]+\.php$`; `PP` = код пакета (§4.1); basename уникален по репозиторию |
+| S3 | запрещённые вызовы §4.2 (неназванные индексы/FK, `constrained`, `*Morphs`) |
+| S4 | литеральные имена объектов: `<table>_…_(pk|uq|ix|fk|ck)`, ≤ 63 байт, уникальны по scope |
+| S5 | без `->enum(`, `->set(`, `AS ENUM` |
+| S6 | 32-бит целые только из allowlist `scripts/schema-gate-allowlist.json` (таблица.колонка → причина) |
+| S7 | чистота §4.4 в теле `up()`: запрещённые функции/классы, `DB::connection`, `Schema::connection`, insert/update |
+| S8 | `version` набора = 1 и все файлы набора имеют дату `2026_10_01` (до rc) |
+| S9 | каждая создаваемая таблица есть в `table-ownership.md`, владелец = пакет набора, `tenant_scope` соответствует scope (§3.1); заменяет T1/T2 для новых путей, T4 остаётся в `table-ownership-gate.php` |
+
+Временный список `scripts/schema-gate-pending.json` — пакеты, ещё не переведённые на baseline; для них S2/S3/S4/S6/S8 не применяются,
+S1/S5/S7 применяются. Список только сокращается (P08.4–P08.8 удаляют свои пакеты), P08.9 удаляет файл и ветку кода.
+Негативные контроли (обязательны, D-rule плана): на временной копии файла фикстуры гейт краснеет с каждым кодом S1–S9.
+
+**Golden-схема** `tests/Golden/SchemaGoldenTest.php` (group `pg`) + `tests/Golden/schema/{tenant,central,dedicated}.pgsql.json`
+и `tests/Golden/SchemaSqliteGoldenTest.php` + `tests/Golden/schema/tenant.sqlite.json`: fresh база (PG `DROP SCHEMA public CASCADE`
+→ `CREATE SCHEMA public`; SQLite `:memory:`), `SchemaMigrator::migrate(scope, includeModules: true)` для всех наборов scope (sqlite — только
+наборы с `sqlite`), затем канонический каталог (таблицы, колонки с типом/nullability/default, PK/unique/index по имени с колонками и
+предикатом, FK по имени, CHECK по имени и выражению, enum-типы) — сериализатор `tests/Golden/Support/SchemaCatalogue.php`
+(по образцу `packages/tenancy/src/Provisioning/Internal/Database/SchemaCatalogueSerializer.php`, без OID/ACL). Утверждения:
+(a) нет enum-типов; (b) все имена ≤ 63; (c) каталог = golden-файл; обновление — `GOLDEN_UPDATE=1` с классом изменения в Completion Notes.
+Повторный `migrate` → «Nothing to migrate», `status` без pending. Матрица CI: PG-лейн уже идёт на postgres 16 и 18 (`.github/workflows/ci.yml:81`),
+SQLite — root-лейн; оба исполняют Golden (D73: фаза закрывается зелёным hosted CI).
