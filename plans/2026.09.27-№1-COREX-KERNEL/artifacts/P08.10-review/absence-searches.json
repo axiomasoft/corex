@@ -1,0 +1,49 @@
+[
+  {
+    "query": "no-publish-load",
+    "command": [
+      "git",
+      "grep",
+      "-n",
+      "-E",
+      "publishes\\(.*migrations|publishesMigrations|loadMigrationsFrom|migrations-tenant|-migrations-budget",
+      "--",
+      "packages/*/src",
+      "products/*/src"
+    ],
+    "raw_exit": 1,
+    "output": ""
+  },
+  {
+    "query": "no-configured-schema",
+    "command": [
+      "git",
+      "grep",
+      "-n",
+      "-E",
+      "IdStrategy|HasConfiguredId|IdColumns|idStrategy|ids\\.strategy|corex\\.tables",
+      "--",
+      "packages",
+      "products",
+      "tests",
+      "docs/architecture",
+      ":!**/CHANGELOG.md"
+    ],
+    "raw_exit": 1,
+    "output": ""
+  },
+  {
+    "query": "no-tenancy-json",
+    "command": [
+      "git",
+      "grep",
+      "-n",
+      "-E",
+      "data->|jsonb_set|jsonb_exists",
+      "--",
+      "packages/tenancy/src"
+    ],
+    "raw_exit": 1,
+    "output": ""
+  }
+]

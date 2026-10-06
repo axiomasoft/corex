@@ -2,3 +2,7 @@
 # Open questions — PLAN3 Plan №1 — CoreX Kernel 1.0: архитектурный идеал ядра и чистый API
 
 No open questions.
+
+## Blocked items
+
+- P08.10 — Review P08: Owning P08.3 continuation must correct F1/F2 and run affected gate/catalogue checks; then bounded independent P08.10 re-review. No repair authorized inside this read-only item. Hosted CI on final phase commit remains required under D73.

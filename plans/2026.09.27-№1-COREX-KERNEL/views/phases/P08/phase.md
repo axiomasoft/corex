@@ -120,6 +120,16 @@ detailed
 ]
 ```
 
+## Closed
+
+```json
+{
+  "at": "2026-10-06T13:46:00Z",
+  "result": "blocked",
+  "summary": "10 item(s): 6 done, 3 done_with_deviations, 1 blocked"
+}
+```
+
 ## Orchestration
 
 ```json

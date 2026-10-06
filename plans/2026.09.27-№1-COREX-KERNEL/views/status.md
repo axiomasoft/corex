@@ -384,7 +384,7 @@ Restore Actions capacity and obtain a green `CI` run before release, before trea
 
 Closed 2026-10-05T19:56:21Z (🟠 Done with deviations): 6 item(s): 5 done, 1 done_with_deviations
 
-## P08 — Схема: baseline v1 · 🟡 In progress
+## P08 — Схема: baseline v1 · 🔴 Blocked
 
 | Item | Title | Status | Route | Updated |
 |:--|:--|:--|:--|:--|
@@ -397,7 +397,9 @@ Closed 2026-10-05T19:56:21Z (🟠 Done with deviations): 6 item(s): 5 done, 1 do
 | P08.7 | Baseline v1: custom-fields, intl, media, notifications, search, wakeup, workflow | 🟢 Done | implementation/high | 2026-10-06T12:49:14Z |
 | P08.8 | Baseline v1: tasks, tasks-workflow, transfer, flex/crm | 🟢 Done | implementation/high | 2026-10-06T12:50:00Z |
 | P08.9 | Политика схемы, доктрина DATA и закрытие pending | 🟠 Done with deviations | implementation/high | 2026-10-06T13:30:21Z |
-| P08.10 | Review P08 | ⬜ Not started | frontier/high | 2026-10-05T17:26:41Z |
+| P08.10 | Review P08 | 🔴 Blocked | frontier/high | 2026-10-06T13:46:00Z |
+
+Closed 2026-10-06T13:46:00Z (🔴 Blocked): 10 item(s): 6 done, 3 done_with_deviations, 1 blocked
 
 ## P09 — Планка качества и release-квалификация `1.0.0-rc.1` · ⬜ Skeleton
 
