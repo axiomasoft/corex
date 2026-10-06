@@ -105,6 +105,38 @@ it('returns false from validateCredentials() for a wrong password', function ():
     expect($provider->validateCredentials($user, ['password' => 'wrong-password']))->toBeFalse();
 });
 
+it('denies password authentication and performs no rehash for an identity without a hash', function (): void {
+    ['id' => $id] = insertUserPUP(['password_hash' => null]);
+    $provider = makeDefaultProviderPUP();
+    $user = $provider->retrieveById($id);
+
+    expect($user->getAuthPassword())->toBe('')
+        ->and($provider->validateCredentials($user, ['password' => 'correct-password']))->toBeFalse();
+
+    DB::connection()->flushQueryLog();
+    DB::connection()->enableQueryLog();
+    $provider->rehashPasswordIfRequired($user, ['password' => 'correct-password'], force: true);
+
+    expect(DB::connection()->getQueryLog())->toBeEmpty();
+});
+
+it('denies malformed credentials without issuing a database query', function (array $credentials): void {
+    $provider = makeDefaultProviderPUP();
+    $user = new PrincipalIdentity(type: PrincipalType::User, id: 'user', passwordHash: 'hash');
+    DB::connection()->flushQueryLog();
+    DB::connection()->enableQueryLog();
+
+    expect($provider->retrieveByCredentials($credentials))->toBeNull()
+        ->and($provider->validateCredentials($user, $credentials))->toBeFalse();
+    $provider->rehashPasswordIfRequired($user, $credentials, force: true);
+
+    expect(DB::connection()->getQueryLog())->toBeEmpty();
+})->with([
+    'numeric keys' => [[0 => 'email', 1 => 'password']],
+    'array values' => [['email' => ['invalid'], 'password' => ['invalid']]],
+    'empty values' => [['email' => '', 'password' => '']],
+]);
+
 // (д) верный пароль → Auth::attempt() кладёт PrincipalIdentity(User, users.id).
 it('logs a PrincipalIdentity(User) in via Auth::attempt() on the right password', function (): void {
     config(['auth.providers.users.driver' => 'corex-principal']);
@@ -203,6 +235,28 @@ it('works against a table with entirely different column names, driven purely by
 
     expect($attempted)->toBeTrue()
         ->and(Auth::user()->principalId())->toBe($id);
+});
+
+it('compares email case insensitively and binds its value independently of configured identifiers', function (): void {
+    ['id' => $id] = insertUserPUP(['email' => "Quoted'User@example.test"]);
+
+    expect(makeDefaultProviderPUP()->retrieveByCredentials(['email' => "QUOTED'USER@EXAMPLE.TEST"])->getAuthIdentifier())->toBe($id)
+        ->and(makeDefaultProviderPUP()->retrieveByCredentials(['email' => "' OR 1=1 --"]))->toBeNull();
+});
+
+it('rejects non-string configured identity identifiers instead of casting them into principals', function (): void {
+    Schema::create('invalid_identity_users', function (Blueprint $table): void {
+        $table->integer('id')->primary();
+        $table->string('email');
+        $table->string('password_hash')->nullable();
+        $table->boolean('is_active');
+        $table->timestamp('deleted_at')->nullable();
+    });
+    DB::table('invalid_identity_users')->insert(['id' => 7, 'email' => 'invalid@example.test', 'is_active' => true]);
+    $provider = new PrincipalUserProvider(options: AuthOptions::fromArray(['identity' => ['table' => 'invalid_identity_users']]));
+
+    expect($provider->retrieveById(7))->toBeNull()
+        ->and($provider->retrieveByCredentials(['email' => 'invalid@example.test']))->toBeNull();
 });
 
 // (и) rehashPasswordIfRequired(): обновляет колонку пароля при

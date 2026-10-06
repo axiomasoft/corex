@@ -1,0 +1,33 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:check-evidence:v1",
+  "evidence_id": "PLAN3.P09.2.V15",
+  "check_id": "V15",
+  "subject": "PLAN3.P09.2",
+  "procedure": {
+    "cwd": "/home/vostrikov/projects/packages/corex",
+    "procedure": "Static pg inventory tools and reject generation of an empty PG validation"
+  },
+  "candidate": {
+    "head": "2ba95c5edf90378cdbd90a7cdffdaea25619c217"
+  },
+  "started_at": "2026-10-06T20:54:27.209329+00:00",
+  "finished_at": "2026-10-06T20:54:27.211229+00:00",
+  "producer": {
+    "kind": "executor",
+    "actor": {
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "session": "01a112f7-4b02-7e32-b20d-726a983dfe23"
+    }
+  },
+  "environment": {
+    "platform": "PHP8.4.26 via scripts/php84; PostgreSQL16/corex_test serial where applicable"
+  },
+  "log": {
+    "path": "plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P09.2-execution/V15-receipt.json",
+    "sha256": "02a6c66c6a6da64165d65442d2902da97e12c7556e7945c733ba38603fe8c0f4"
+  },
+  "verdict": "pass",
+  "observation": "Tools PG inventory has zero tests; phpunit failOnEmptyTestSuite=true. Generation of an empty tools --group=pg validation was explicitly refused. No empty test suite was run."
+}

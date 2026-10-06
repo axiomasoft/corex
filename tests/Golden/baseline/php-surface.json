@@ -1127,7 +1127,7 @@
             },
             "getAuthPassword": {
                 "params": [],
-                "return": "?string",
+                "return": "string",
                 "static": false
             },
             "getAuthPasswordName": {
@@ -1776,6 +1776,45 @@
             "merge": {
                 "params": [],
                 "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\Access\\Identity\\Internal\\LowercaseColumn": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "Illuminate\\Contracts\\Database\\Query\\Expression"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "column",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "getValue": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "grammar",
+                        "type": "Illuminate\\Database\\Grammar",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
                 "static": false
             }
         },

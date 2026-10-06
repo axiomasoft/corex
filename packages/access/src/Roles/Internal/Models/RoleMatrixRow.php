@@ -55,7 +55,10 @@ final class RoleMatrixRow extends Model
     #[Override]
     protected function affectsSystemRole(): bool
     {
-        return Role::withTrashed()->whereIn('id', array_filter([$this->role_id, $this->getRawOriginal('role_id')]))
+        return Role::withTrashed()->getQuery()->whereIn('id', array_filter(
+            [$this->role_id, $this->getRawOriginal('role_id')],
+            static fn (mixed $id): bool => is_string($id) && $id !== '',
+        ))
             ->where('is_system', true)->exists();
     }
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — strict Access types
+
+- `PrincipalIdentity::getAuthPassword()` now returns `string`, matching Laravel's authentication contract. Identities without a password hash return an empty string and still deny password authentication and rehashing.
+- Credentials PHPDoc accepts integer and string keys as required by Laravel's `UserProvider`; named credential validation is unchanged. Database authority identifiers, scope values, cache versions and increment results are checked before use; malformed state is rejected.
+- Access analysis has no PHPStan baseline entries and a zero debt ceiling; query predicates, valid authentication and schema are preserved.
+
 ## Unreleased — baseline v1
 
 - Схема: наборы `tenant` и `tenant-cloud`, baseline v1. Cloud FK требуют tenancy; boxed использует только `tenant`. Baseline заменяет невыпущенную upgrade-цепочку.

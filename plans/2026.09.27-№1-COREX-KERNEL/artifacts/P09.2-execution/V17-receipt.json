@@ -1,0 +1,7 @@
+{
+  "id": "V17",
+  "command": "scripts/php84 composer lint:check",
+  "exit_code": 0,
+  "duration_seconds": 3.464,
+  "log": "V17.log"
+}

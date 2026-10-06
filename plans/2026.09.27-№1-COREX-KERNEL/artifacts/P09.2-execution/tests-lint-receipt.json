@@ -1,0 +1,7 @@
+{
+  "id": "tests-lint",
+  "command": "scripts/php84 vendor/bin/phpstan analyse -c phpstan-tests-lint.neon packages/access/tests --memory-limit=2G --no-progress",
+  "exit_code": 0,
+  "duration_seconds": 3.753,
+  "log": "tests-lint.log"
+}

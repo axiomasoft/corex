@@ -1,0 +1,7 @@
+{
+  "id": "V18",
+  "command": "scripts/php84 composer bc-check",
+  "exit_code": 0,
+  "duration_seconds": 291.616,
+  "log": "V18.log"
+}

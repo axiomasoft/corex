@@ -12,6 +12,7 @@ use Illuminate\Cache\Lock;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Cache\LockProvider;
 use Illuminate\Contracts\Cache\Repository;
+use UnexpectedValueException;
 
 /**
  * Versioned cache key for one role's compiled scope-map (B-11 §5.5) — bumped
@@ -31,7 +32,21 @@ final readonly class ScopeMapVersion implements ScopeMapVersions
 
     public function current(string $roleId): int
     {
-        return (int) $this->store()->get($this->key($roleId), 0);
+        $value = $this->store()->get($this->key($roleId), 0);
+
+        if (is_int($value) && $value >= 0) {
+            return $value;
+        }
+
+        if (is_string($value) && ctype_digit($value)) {
+            $version = filter_var($value, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0]]);
+
+            if (is_int($version)) {
+                return $version;
+            }
+        }
+
+        throw new UnexpectedValueException('Scope map cache versions must be non-negative integers.');
     }
 
     /** Bumps and returns the new version. */
@@ -40,7 +55,11 @@ final readonly class ScopeMapVersion implements ScopeMapVersions
         return ($this->invalidator($roleId))();
     }
 
-    /** Capture the tenant key before an outer transaction can switch context. */
+    /**
+     * Capture the tenant key before an outer transaction can switch context.
+     *
+     * @return Closure(): int
+     */
     public function invalidator(string $roleId): Closure
     {
         $store = $this->store();
@@ -50,7 +69,13 @@ final readonly class ScopeMapVersion implements ScopeMapVersions
             $increment = static function () use ($store, $key): int {
                 $store->add($key, 0);
 
-                return (int) $store->increment($key);
+                $version = $store->increment($key);
+
+                if (! is_int($version) || $version < 1) {
+                    throw new UnexpectedValueException('The scope map cache failed to increment its version.');
+                }
+
+                return $version;
             };
             $backend = $store->getStore();
 
@@ -67,7 +92,13 @@ final readonly class ScopeMapVersion implements ScopeMapVersions
                 $lock->betweenBlockedAttemptsSleepFor(50);
             }
 
-            return $lock->block(5, $increment);
+            $version = $lock->block(5, $increment);
+
+            if (! is_int($version)) {
+                throw new UnexpectedValueException('The scope map cache lock did not return the incremented version.');
+            }
+
+            return $version;
         };
     }
 

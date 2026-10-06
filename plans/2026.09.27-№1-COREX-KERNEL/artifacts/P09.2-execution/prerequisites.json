@@ -1,0 +1,24 @@
+{
+  "previous_item": "PLAN3.P09.1",
+  "closed_P08": {
+    "at": "2026-10-06T19:12:32Z",
+    "result": "done_with_deviations",
+    "summary": "10 item(s): 8 done, 2 done_with_deviations"
+  },
+  "prior_verified_readiness": {
+    "passed": true,
+    "run_id": 37508077385,
+    "sha": "1f824f74fa0044819f991346e484dad82872827a",
+    "jobs": 37,
+    "independent_review": "P09-D125-admission",
+    "reviewed_contracts_match": true,
+    "start_bookkeeping_excluded": [
+      "status",
+      "result",
+      "updated_at"
+    ],
+    "deferred_absent": true
+  },
+  "source": "plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P09.1-execution/V0-verification.json",
+  "method": "Current closed phase/dependency admission; previous item retained live P08 CI and independent design evidence. No repeated external CI check claimed."
+}

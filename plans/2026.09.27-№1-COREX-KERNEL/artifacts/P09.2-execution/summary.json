@@ -1,0 +1,203 @@
+{
+  "item": "PLAN3.P09.2",
+  "status": "green",
+  "source_sha": "2ba95c5edf90378cdbd90a7cdffdaea25619c217",
+  "phpstan_before": 30,
+  "phpstan_after": 0,
+  "baseline_entries": 0,
+  "access_ceiling": 0,
+  "checks": {
+    "V1": {
+      "id": "V1",
+      "command": "scripts/php84 vendor/bin/phpstan analyse -c packages/access/phpstan.neon --memory-limit=2G --no-progress",
+      "exit_code": 0,
+      "log": "V1.log",
+      "observation": "Actual successful command exit recorded by exec before receipt construction",
+      "log_sha256": "c10f74fb840de989bba7e9c2dfee7f8419b5d2ac0cc0daf18a4a187f6530aa43"
+    },
+    "V7": {
+      "id": "V7",
+      "command": "scripts/php84 composer --working-dir=packages/access test -- --exclude-group=pg",
+      "exit_code": 0,
+      "log": "V7.log",
+      "observation": "Actual successful command exit recorded by exec before receipt construction",
+      "log_sha256": "54df71c02226749a86de2283632608e6b70d153d4060858ada952caedcb6dd15"
+    },
+    "V12": {
+      "id": "V12",
+      "command": "PGSQL_PORT=5434 scripts/php84 composer --working-dir=packages/access test:pg",
+      "exit_code": 0,
+      "duration_seconds": 26.378,
+      "log": "V12.log",
+      "log_sha256": "f6d426a993855ddc97fe7f30c13e5637d6560d3b1c4764b4af9b9f9dab2e3b3e"
+    },
+    "V15": {
+      "id": "V15",
+      "procedure": "Static pg inventory tools and reject generation of an empty PG validation",
+      "pg_test_files": [],
+      "pg_tests": 0,
+      "failOnEmptyTestSuite": true,
+      "attempted_generated_validation": "scripts/php84 composer --working-dir=packages/tools test -- --group=pg",
+      "rejection": "EMPTY_PG_SUITE: refusing generated tools --group=pg validation",
+      "ran_empty_suite": false,
+      "exit_code": 0
+    },
+    "V17": {
+      "id": "V17",
+      "command": "scripts/php84 composer lint:check",
+      "exit_code": 0,
+      "duration_seconds": 3.464,
+      "log": "V17.log",
+      "log_sha256": "18b94ca6b64dc05fa6c861c92fa49242e090852a0c2b13c09a30ea6463c7de8c"
+    },
+    "V18": {
+      "id": "V18",
+      "command": "scripts/php84 composer bc-check",
+      "exit_code": 0,
+      "duration_seconds": 291.616,
+      "log": "V18.log",
+      "log_sha256": "5de82eea7bf5494f1b3fe71b5727a0583981f386c91049e6ef3ca4b2abc0e7a3"
+    },
+    "V19": {
+      "id": "V19",
+      "command": "scripts/php84 composer php-api",
+      "exit_code": 0,
+      "duration_seconds": 5.596,
+      "log": "V19.log",
+      "log_sha256": "265e0f9fdf5cd1d1282e4a2cbe0dc2aae92a809e7016271ec509ac9d4ee8e428"
+    },
+    "V20": {
+      "id": "V20",
+      "command": "scripts/php84 composer schema-gate",
+      "exit_code": 0,
+      "duration_seconds": 0.67,
+      "log": "V20.log",
+      "log_sha256": "5008a66e9922d243d99c31686cfbb795d49dbaf5c1ef57f6e655e2faa259869d"
+    },
+    "V21": {
+      "id": "V21",
+      "command": "scripts/php84 composer golden",
+      "exit_code": 0,
+      "duration_seconds": 7.486,
+      "log": "V21.log",
+      "log_sha256": "546414966daf8223c4913b6b49e40532f4ac4ae6dd034018584f815f13a69380"
+    },
+    "V22": {
+      "id": "V22",
+      "command": "bash scripts/mutation-check.sh --all",
+      "exit_code": 0,
+      "duration_seconds": 15.289,
+      "log": "V22.log",
+      "log_sha256": "c327c895ee3d0f18c52e5f97cd0f8bbd9a31e728ea1e4d3739444a4a4dd8e5ea"
+    }
+  },
+  "tests": {
+    "V7": {
+      "tests": 51,
+      "assertions": 89
+    },
+    "V12": {
+      "tests": 111,
+      "assertions": 323
+    }
+  },
+  "fixed_mutations_killed": 35,
+  "api_delta_paths": [
+    "/symbols/CoreX\\Access\\Access\\Laravel\\PrincipalIdentity/methods/getAuthPassword/return",
+    "/symbols/CoreX\\Access\\Identity\\Laravel\\PrincipalUserProvider/methods/rehashPasswordIfRequired/doc/@param",
+    "/symbols/CoreX\\Access\\Identity\\Laravel\\PrincipalUserProvider/methods/retrieveByCredentials/doc/@param",
+    "/symbols/CoreX\\Access\\Identity\\Laravel\\PrincipalUserProvider/methods/validateCredentials/doc/@param"
+  ],
+  "golden_delta_paths": [
+    "/CoreX\\Access\\Access\\Laravel\\PrincipalIdentity/methods/getAuthPassword/return",
+    "/CoreX\\Access\\Identity\\Internal\\LowercaseColumn"
+  ],
+  "immutable_paths_verified": [
+    "packages/access/composer.json",
+    "packages/access/database/migrations/tenant-cloud/2026_10_01_030050_add_aut_role_assignments_cloud_fks.php",
+    "packages/access/database/migrations/tenant/2026_10_01_030010_create_aut_roles.php",
+    "packages/access/database/migrations/tenant/2026_10_01_030020_create_aut_role_matrix.php",
+    "packages/access/database/migrations/tenant/2026_10_01_030030_create_aut_role_assignments.php",
+    "packages/access/database/migrations/tenant/2026_10_01_030040_create_aut_direct_grants.php",
+    "packages/access/database/seeders/SystemRolesSeeder.php",
+    "packages/access/phpstan.neon",
+    "packages/access/phpunit.xml",
+    "scripts/mutation-check.sh",
+    "scripts/mutations/API-default-deny.patch",
+    "scripts/mutations/API-module-activation.patch",
+    "scripts/mutations/API-physical-context.patch",
+    "scripts/mutations/API-undeclared-input.patch",
+    "scripts/mutations/P05-scoped-to-singleton.patch",
+    "scripts/mutations/P06-egress-skip-on-delivery.patch",
+    "scripts/mutations/P1.14-foreign-prefix-fp.patch",
+    "scripts/mutations/P1.14-pg-lane-split.patch",
+    "scripts/mutations/P1.15-drop-entities.patch",
+    "scripts/mutations/P1.15-rename-check.patch",
+    "scripts/mutations/P1.15-silent-empty.patch",
+    "scripts/mutations/P1.16-no-epoch-bump.patch",
+    "scripts/mutations/P1.16-statereader-bare-binding.patch",
+    "scripts/mutations/P1.16-tags-back.patch",
+    "scripts/mutations/P1.17-stage-order-swap.patch",
+    "scripts/mutations/P1.17-tableprefix-skip.patch",
+    "scripts/mutations/P1.18-enable-swallow.patch",
+    "scripts/mutations/P1.18-purge-order.patch",
+    "scripts/mutations/P1.19-drop-precision.patch",
+    "scripts/mutations/P1.21-always-excluded-removed.patch",
+    "scripts/mutations/P1.21-getattributes-create.patch",
+    "scripts/mutations/P1.21-killswitch-writeseam.patch",
+    "scripts/mutations/P1.21-killswitch.patch",
+    "scripts/mutations/P1.22-drop-unique-index.patch",
+    "scripts/mutations/P1.22-drop-workspace-branch.patch",
+    "scripts/mutations/P1.23-event-in-transaction.patch",
+    "scripts/mutations/P1.23-move-workspace-filter.patch",
+    "scripts/mutations/P1.23-stale-read.patch",
+    "scripts/mutations/P1.24-bare-runninginconsole-guard.patch",
+    "scripts/mutations/P1.24-cursor-start-zero.patch",
+    "scripts/mutations/P1.25-domainevent-drop.patch",
+    "scripts/mutations/P1.25-null-provider-binding.patch",
+    "scripts/mutations/P1.29-move-parent-workspace.patch",
+    "scripts/mutations/P1.29-upgrade-swallow.patch",
+    "scripts/mutations/P10-pg-outside-group.patch"
+  ],
+  "product_paths": [
+    "packages/access/CHANGELOG.md",
+    "packages/access/phpstan-baseline.neon",
+    "packages/access/resources/contracts/php-api.json",
+    "packages/access/src/Access/Internal/DefaultAccessChecker.php",
+    "packages/access/src/Access/Internal/ScopePredicate.php",
+    "packages/access/src/Access/Laravel/PrincipalIdentity.php",
+    "packages/access/src/Identity/Internal/LowercaseColumn.php",
+    "packages/access/src/Identity/Laravel/PrincipalUserProvider.php",
+    "packages/access/src/Matrix/Internal/ScopeMapVersion.php",
+    "packages/access/src/Roles/Internal/Models/Role.php",
+    "packages/access/src/Roles/Internal/Models/RoleMatrixRow.php",
+    "packages/access/tests/Feature/PrincipalUserProviderTest.php",
+    "packages/access/tests/Feature/ScopeMapVersionTest.php",
+    "packages/access/tests/Unit/PrincipalIdentityTest.php",
+    "scripts/quality-ceilings.json",
+    "tests/Golden/baseline/php-surface.json"
+  ],
+  "product_sha256": {
+    "packages/access/CHANGELOG.md": "13f8316a199abca58087ef4b957009cfbf89e40ad45d9dfd4a2ad39cbf9f909d",
+    "packages/access/phpstan-baseline.neon": "4b3227fab5b697264e8532b59f5cdd96c86a0ff1fa484cc1a869af36ae91530a",
+    "packages/access/resources/contracts/php-api.json": "885cf2daa9f42e64ea0a8ff392c480d6106aed17613badd31bd4ae0f8f06f5cc",
+    "packages/access/src/Access/Internal/DefaultAccessChecker.php": "aba6e7bc5182a9e27f2d75f8639f2cd03c4fa1e8970cc051842ad5f2e31df955",
+    "packages/access/src/Access/Internal/ScopePredicate.php": "aa08bdb3ef84e2e2cfafb4eba2dc3d1fb0de7bfd8df61b18fb7ce3e4c03766db",
+    "packages/access/src/Access/Laravel/PrincipalIdentity.php": "772489b5a9a87ef70be1bd7db26f45f24fae5ddc9a6ffc18f935ffc700011b47",
+    "packages/access/src/Identity/Internal/LowercaseColumn.php": "277d35c4a4b00b6d312e606a4add73239da3b9c8f2cca42187df83bac894fb3c",
+    "packages/access/src/Identity/Laravel/PrincipalUserProvider.php": "de934053e59a364fab264e2542f606b8f8f87b313207412596539ce55aa33d4e",
+    "packages/access/src/Matrix/Internal/ScopeMapVersion.php": "49febd995c0384b84e6383f1b0cc4abf8bf6e4963db1fb3cfa1852498d87bb4d",
+    "packages/access/src/Roles/Internal/Models/Role.php": "aa06be1ef32a7db7b48f208154f6244933ee63cb1179b04919452d019a58d8f7",
+    "packages/access/src/Roles/Internal/Models/RoleMatrixRow.php": "6f7d9d32740c09ba126b21561034eb97089649bed8c0edad91df66627f4d5bd8",
+    "packages/access/tests/Feature/PrincipalUserProviderTest.php": "8b305e1a8cbe4c18e1903113c48e603650adf335883bd4466fd29c3e6d21ca0a",
+    "packages/access/tests/Feature/ScopeMapVersionTest.php": "2cf8f89c25ef8d13a7b1c0d19f84f6b87f3dab525728b178dedf891a8b331a27",
+    "packages/access/tests/Unit/PrincipalIdentityTest.php": "c6c38b171fe42a0e08f0e8e6bebe9b7f314f2b9935eb3c4165f2c7c77942a620",
+    "scripts/quality-ceilings.json": "26e8110a5aa0756e5af4ddf0f109c4736284377fbf1672088ef2375075be50dc",
+    "tests/Golden/baseline/php-surface.json": "65e43d66e6977746e5a29d827c7660f6a17f09f7375467fcafa7ca314604a635"
+  },
+  "schema_unchanged": true,
+  "bc_base_and_approvals_unchanged": true,
+  "deviation": "D127: string/empty password contract and three truthful credentials PHPDoc parameters; quoted internal SQL expression.",
+  "environment": "PHP 8.4.26 via scripts/php84; PostgreSQL16 on 127.0.0.1:5434/corex_test; serial PG execution.",
+  "review_and_hosted_ci": "Remain owned by P09.8; no publication/release action."
+}

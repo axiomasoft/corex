@@ -1,7 +1,7 @@
 {
     "schema": "corex-quality-ceilings/1",
     "phpstan": {
-        "access": 30,
+        "access": 0,
         "access-azguard": 0,
         "core": 0,
         "custom-fields": 132,

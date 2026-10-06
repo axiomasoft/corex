@@ -1,0 +1,7 @@
+{
+  "id": "V19",
+  "command": "scripts/php84 composer php-api",
+  "exit_code": 0,
+  "duration_seconds": 5.596,
+  "log": "V19.log"
+}

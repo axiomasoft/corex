@@ -102,7 +102,7 @@
                     "abstract": false,
                     "by_reference": false,
                     "parameters": [],
-                    "return": "?string",
+                    "return": "string",
                     "doc": []
                 },
                 "getAuthPasswordName": {
@@ -763,7 +763,7 @@
                     "return": "void",
                     "doc": {
                         "@param": [
-                            "array<string, mixed> $credentials"
+                            "array<array-key, mixed> $credentials"
                         ]
                     }
                 },
@@ -787,7 +787,7 @@
                     "return": "?Illuminate\\Contracts\\Auth\\Authenticatable",
                     "doc": {
                         "@param": [
-                            "array<string, mixed> $credentials"
+                            "array<array-key, mixed> $credentials"
                         ]
                     }
                 },
@@ -898,7 +898,7 @@
                     "return": "bool",
                     "doc": {
                         "@param": [
-                            "array<string, mixed> $credentials"
+                            "array<array-key, mixed> $credentials"
                         ]
                     }
                 }

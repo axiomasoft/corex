@@ -1,0 +1,7 @@
+{
+  "id": "ceilings",
+  "command": "scripts/php84 php scripts/quality-ceiling-guard.php",
+  "exit_code": 0,
+  "duration_seconds": 0.046,
+  "log": "ceilings.log"
+}

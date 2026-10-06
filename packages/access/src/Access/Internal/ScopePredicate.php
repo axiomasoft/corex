@@ -16,6 +16,7 @@ use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Builder as SchemaBuilder;
+use UnexpectedValueException;
 
 use function data_get;
 
@@ -50,7 +51,7 @@ final readonly class ScopePredicate
     public function applyTo(Builder $q, Scope $scope, Principal $p): Builder
     {
         return match ($scope) {
-            Scope::None => $q->whereRaw('1 = 0'),
+            Scope::None => $this->applyNone($q),
             Scope::Own => $q->where($q->getModel()->qualifyColumn('owner_id'), $p->principalId()),
             Scope::Dept => $this->applyDepartment($q, $p, tree: false),
             Scope::DeptTree => $this->applyDepartment($q, $p, tree: true),
@@ -77,32 +78,45 @@ final readonly class ScopePredicate
      * @param  Builder<Model>  $q
      * @return Builder<Model>
      */
+    private function applyNone(Builder $q): Builder
+    {
+        $q->getQuery()->whereRaw('1 = 0');
+
+        return $q;
+    }
+
+    /**
+     * @param  Builder<Model>  $q
+     * @return Builder<Model>
+     */
     private function applyDepartment(Builder $q, Principal $p, bool $tree): Builder
     {
         if ($p->principalType() !== PrincipalType::User) {
-            return $q->whereRaw('1 = 0');
+            return $this->applyNone($q);
         }
 
         if (! $this->schema()->hasTable('users') || ! $this->schema()->hasTable(DepartmentQueries::table())) {
-            return $q->whereRaw('1 = 0');
+            return $this->applyNone($q);
         }
 
         $principalDeptId = $this->connections->connection()->table('users')->where('id', $p->principalId())->value('department_id');
 
         if (! is_string($principalDeptId)) {
-            return $q->whereRaw('1 = 0');
+            return $this->applyNone($q);
         }
 
         $column = $q->getModel()->qualifyColumn('owner_id');
 
         if (! $tree) {
-            return $q->whereIn($column, $this->connections->connection()->table('users')->where('department_id', $principalDeptId)->select('id'));
+            $q->getQuery()->whereIn($column, $this->connections->connection()->table('users')->where('department_id', $principalDeptId)->select('id'));
+
+            return $q;
         }
 
         $principalPath = DepartmentQueries::path($principalDeptId);
 
         if (! is_string($principalPath)) {
-            return $q->whereRaw('1 = 0');
+            return $this->applyNone($q);
         }
 
         // ONE `path <@` subquery (premortem A6) — no recursive traversal: the
@@ -110,7 +124,9 @@ final readonly class ScopePredicate
         // users lookup, never per-row.
         $deptIds = DepartmentQueries::subtreeIds($principalPath);
 
-        return $q->whereIn($column, $this->connections->connection()->table('users')->whereIn('department_id', $deptIds)->select('id'));
+        $q->getQuery()->whereIn($column, $this->connections->connection()->table('users')->whereIn('department_id', $deptIds)->select('id'));
+
+        return $q;
     }
 
     /**
@@ -171,13 +187,15 @@ final readonly class ScopePredicate
         // visible (D107) — mirrors matchesWorkspace()'s own no-context denial
         // of a workspace-carrying record.
         if ($ctxWorkspace === null) {
-            return $q->whereNull($column);
+            $q->getQuery()->whereNull($column);
+
+            return $q;
         }
 
         $visibleIds = $this->visibleWorkspaceIds($ctxWorkspace);
 
         return $q->where(function (Builder $query) use ($column, $visibleIds): void {
-            $query->whereIn($column, $visibleIds)->orWhereNull($column);
+            $query->getQuery()->whereIn($column, $visibleIds)->orWhereNull($column);
         });
     }
 
@@ -220,12 +238,19 @@ final readonly class ScopePredicate
             return [$ctxWorkspace->id];
         }
 
-        /** @var list<string> */
-        return $this->connections->connection()->table('wsp_workspaces')
+        $values = $this->connections->connection()->table('wsp_workspaces')
             ->whereRaw('path <@ ?::ltree', [$ctxWorkspace->path])
-            ->pluck('id')
-            ->map(static fn (mixed $id): string => (string) $id)
-            ->all();
+            ->pluck('id');
+
+        $ids = [];
+        foreach ($values as $id) {
+            if (! is_string($id)) {
+                throw new UnexpectedValueException('Workspace identifiers must be strings.');
+            }
+            $ids[] = $id;
+        }
+
+        return $ids;
     }
 
     /**

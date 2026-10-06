@@ -62,7 +62,7 @@ final class Role extends BaseModel
     #[Override]
     protected function affectsSystemRole(): bool
     {
-        return (bool) $this->is_system || (bool) $this->getRawOriginal('is_system');
+        return $this->is_system || (bool) $this->getRawOriginal('is_system');
     }
 
     /** @return array<string, string> */

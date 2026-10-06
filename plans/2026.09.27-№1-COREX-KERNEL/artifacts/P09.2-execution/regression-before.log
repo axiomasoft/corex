@@ -1,0 +1,83 @@
+> pest --exclude-group=pg '--filter=empty password string|without a hash'
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\PrincipalUserProviderTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit denies password authentication and performs no rehash for an ide[39m[90m…[39m [90m0.17s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Unit\PrincipalIdentityTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit returns an empty password string for an identity without a local hash with (CoreX\Access\Enums\PrincipalType Enum (ApiKey, 'api_key'))[39m
+  [31;1m⨯[39;22m[90m [39m[90mit returns an empty password string for an identity without a local hash with (CoreX\Access\Enums\PrincipalType Enum (User, 'user'))[39m
+  [31;1m⨯[39;22m[90m [39m[90mit returns an empty password string for an identity without a local hash with (CoreX\Access\Enums\PrincipalType Enum (Agent, 'agent'))[39m
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\PrincipalUserProviderTest[22m [90m>[39m it denies password auth…   
+[39;1m  Failed asserting that null is identical to ''.[39;22m
+
+  at [32mtests/Feature/PrincipalUserProviderTest.php[39m:[32m113[39m
+    109▕     ['id' => $id] = insertUserPUP(['password_hash' => null]);
+    110▕     $provider = makeDefaultProviderPUP();
+    111▕     $user = $provider->retrieveById($id);
+    112▕ 
+  ➜ 113▕     expect($user->getAuthPassword())->toBe('')
+    114▕         ->and($provider->validateCredentials($user, ['password' => 'correct-password']))->toBeFalse();
+    115▕ 
+    116▕     DB::connection()->flushQueryLog();
+    117▕     DB::connection()->enableQueryLog();
+
+  [33m1   [39m[39;1mtests/Feature/PrincipalUserProviderTest.php[39;22m:[39;1m113[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\PrincipalIdentityTest[22m [90m>[39m it returns an empty password s…   
+[39;1m  Failed asserting that null is identical to ''.[39;22m
+
+  at [32mtests/Unit/PrincipalIdentityTest.php[39m:[32m11[39m
+      7▕ 
+      8▕ it('returns an empty password string for an identity without a local hash', function (PrincipalType $type): void {
+      9▕     $identity = new PrincipalIdentity(type: $type, id: '019b30e6-5861-7000-8000-000000000001');
+     10▕ 
+  ➜  11▕     expect($identity->getAuthPassword())->toBe('');
+     12▕ })->with(PrincipalType::cases());
+     13▕ 
+     14▕ it('returns the supplied password hash unchanged', function (): void {
+     15▕     $identity = new PrincipalIdentity(type: PrincipalType::User, id: '019b30e6-5861-7000-8000-000000000001', passwordHash: 'stored-hash');
+
+  [33m1   [39m[39;1mtests/Unit/PrincipalIdentityTest.php[39;22m:[39;1m11[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\PrincipalIdentityTest[22m [90m>[39m it returns an empty password s…   
+[39;1m  Failed asserting that null is identical to ''.[39;22m
+
+  at [32mtests/Unit/PrincipalIdentityTest.php[39m:[32m11[39m
+      7▕ 
+      8▕ it('returns an empty password string for an identity without a local hash', function (PrincipalType $type): void {
+      9▕     $identity = new PrincipalIdentity(type: $type, id: '019b30e6-5861-7000-8000-000000000001');
+     10▕ 
+  ➜  11▕     expect($identity->getAuthPassword())->toBe('');
+     12▕ })->with(PrincipalType::cases());
+     13▕ 
+     14▕ it('returns the supplied password hash unchanged', function (): void {
+     15▕     $identity = new PrincipalIdentity(type: PrincipalType::User, id: '019b30e6-5861-7000-8000-000000000001', passwordHash: 'stored-hash');
+
+  [33m1   [39m[39;1mtests/Unit/PrincipalIdentityTest.php[39;22m:[39;1m11[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\PrincipalIdentityTest[22m [90m>[39m it returns an empty password s…   
+[39;1m  Failed asserting that null is identical to ''.[39;22m
+
+  at [32mtests/Unit/PrincipalIdentityTest.php[39m:[32m11[39m
+      7▕ 
+      8▕ it('returns an empty password string for an identity without a local hash', function (PrincipalType $type): void {
+      9▕     $identity = new PrincipalIdentity(type: $type, id: '019b30e6-5861-7000-8000-000000000001');
+     10▕ 
+  ➜  11▕     expect($identity->getAuthPassword())->toBe('');
+     12▕ })->with(PrincipalType::cases());
+     13▕ 
+     14▕ it('returns the supplied password hash unchanged', function (): void {
+     15▕     $identity = new PrincipalIdentity(type: PrincipalType::User, id: '019b30e6-5861-7000-8000-000000000001', passwordHash: 'stored-hash');
+
+  [33m1   [39m[39;1mtests/Unit/PrincipalIdentityTest.php[39;22m:[39;1m11[39;22m
+
+
+  [90mTests:[39m    [31;1m4 failed[39;22m[90m (4 assertions)[39m
+  [90mDuration:[39m [39m0.30s[39m
+  [90mRandom Order Seed:[39m [39m1791319824[39m
+
+Script pest --exclude-group=pg handling the test event returned with error code 1

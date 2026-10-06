@@ -1,0 +1,7 @@
+{
+  "id": "V22",
+  "command": "bash scripts/mutation-check.sh --all",
+  "exit_code": 0,
+  "duration_seconds": 15.289,
+  "log": "V22.log"
+}

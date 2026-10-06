@@ -6,6 +6,7 @@ namespace CoreX\Access\Identity\Laravel;
 
 use CoreX\Access\Access\Laravel\PrincipalIdentity;
 use CoreX\Access\Enums\PrincipalType;
+use CoreX\Access\Identity\Internal\LowercaseColumn;
 use CoreX\Access\Laravel\AuthOptions;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Override;
 use SensitiveParameter;
+use stdClass;
 
 /**
  * The boxed-and-cloud login lane's own {@see UserProvider} (D125, OQ-18
@@ -65,7 +67,7 @@ final class PrincipalUserProvider implements UserProvider
         // Intentionally empty: no remember_token column to persist into.
     }
 
-    /** @param  array<string, mixed>  $credentials */
+    /** @param  array<array-key, mixed>  $credentials */
     #[Override]
     public function retrieveByCredentials(#[SensitiveParameter] array $credentials): ?Authenticatable
     {
@@ -79,13 +81,13 @@ final class PrincipalUserProvider implements UserProvider
         // validated separately by validateCredentials()); the unique index on
         // this schema is `lower(email)`, so the match is case-insensitive.
         $row = $this->query()
-            ->whereRaw('lower('.$this->emailColumn().') = ?', [mb_strtolower($email)])
+            ->where(new LowercaseColumn($this->emailColumn()), mb_strtolower($email))
             ->first();
 
         return $this->toPrincipal($row);
     }
 
-    /** @param  array<string, mixed>  $credentials */
+    /** @param  array<array-key, mixed>  $credentials */
     #[Override]
     public function validateCredentials(Authenticatable $user, #[SensitiveParameter] array $credentials): bool
     {
@@ -99,7 +101,7 @@ final class PrincipalUserProvider implements UserProvider
         return Hash::check($password, $hash);
     }
 
-    /** @param  array<string, mixed>  $credentials */
+    /** @param  array<array-key, mixed>  $credentials */
     #[Override]
     public function rehashPasswordIfRequired(Authenticatable $user, #[SensitiveParameter] array $credentials, bool $force = false): void
     {
@@ -115,7 +117,7 @@ final class PrincipalUserProvider implements UserProvider
         }
 
         app(IdentityPasswordRehasher::class)->rehash(
-            identityId: (string) $user->getAuthIdentifier(),
+            identityId: $user->getAuthIdentifier(),
             expectedHash: $hash,
             replacementHash: Hash::make($password),
             table: $this->options->identityTable,
@@ -133,17 +135,24 @@ final class PrincipalUserProvider implements UserProvider
             ->whereNull($this->deletedAtColumn());
     }
 
-    private function toPrincipal(?object $row): ?PrincipalIdentity
+    private function toPrincipal(?stdClass $row): ?PrincipalIdentity
     {
         if ($row === null) {
             return null;
         }
 
-        $hash = $row->{$this->passwordColumn()} ?? null;
+        $attributes = get_object_vars($row);
+        $id = $attributes[$this->idColumn()] ?? null;
+
+        if (! is_string($id) || $id === '') {
+            return null;
+        }
+
+        $hash = $attributes[$this->passwordColumn()] ?? null;
 
         return new PrincipalIdentity(
             type: PrincipalType::User,
-            id: (string) $row->{$this->idColumn()},
+            id: $id,
             passwordHash: is_string($hash) ? $hash : null,
         );
     }

@@ -19,6 +19,7 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Override;
 use Psr\Clock\ClockInterface;
+use UnexpectedValueException;
 
 /**
  * Two-phase AccessChecker. Permissions come from the native role matrix and
@@ -143,7 +144,7 @@ final class DefaultAccessChecker implements AccessChecker
         $connection = $this->connections->connection();
         $now = $this->clock->now();
 
-        return $connection->table('aut_role_assignments')
+        $values = $connection->table('aut_role_assignments')
             ->whereIn('role_id', $connection->table('aut_roles')->select('id')->whereNull('deleted_at'))
             ->where('principal_type', $p->principalType()->value)
             ->where('principal_id', $p->principalId())
@@ -159,8 +160,17 @@ final class DefaultAccessChecker implements AccessChecker
             })
             ->pluck('role_id')
             ->unique()
-            ->values()
-            ->all();
+            ->values();
+
+        $roleIds = [];
+        foreach ($values as $value) {
+            if (! is_string($value)) {
+                throw new UnexpectedValueException('Role assignment identifiers must be strings.');
+            }
+            $roleIds[] = $value;
+        }
+
+        return $roleIds;
     }
 
     /** @param list<string> $roleIds */
@@ -172,12 +182,16 @@ final class DefaultAccessChecker implements AccessChecker
             ->where('action', $action);
     }
 
-    /** @param Collection<int, string> $values */
+    /** @param Collection<array-key, mixed> $values */
     private function maxOf(Collection $values): Scope
     {
         $winner = Scope::None;
 
         foreach ($values as $value) {
+            if (! is_string($value)) {
+                throw new UnexpectedValueException('Role matrix scopes must be strings.');
+            }
+
             $candidate = Scope::from($value);
 
             if ($candidate->weight() > $winner->weight()) {

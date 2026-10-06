@@ -66,16 +66,16 @@ final class PrincipalIdentity implements Authenticatable, Principal
     }
 
     /**
-     * `null` for the `agent`/`api_key` lanes (no password) and for the OIDC
+     * An empty string for the `agent`/`api_key` lanes (no password) and for the OIDC
      * lane (never constructed with a hash — `Auth::loginUsingId()` skips
      * credential validation entirely); the local login lane
      * ({@see CoreX\Access\Identity\Laravel\PrincipalUserProvider}) is the only constructor of a
      * `PrincipalIdentity` that passes one.
      */
     #[Override]
-    public function getAuthPassword(): ?string
+    public function getAuthPassword(): string
     {
-        return $this->passwordHash;
+        return $this->passwordHash ?? '';
     }
 
     #[Override]
