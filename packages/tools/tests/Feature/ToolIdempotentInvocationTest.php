@@ -11,7 +11,6 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\CoreServiceProvider;
 use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Database\Contracts\SchemaMigrator;
-use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Data\Api;
 use CoreX\Modules\Data\ModuleManifest;
@@ -95,7 +94,6 @@ final class ToolIdempotentInvocationTest extends TestCase
         $this->connection = DB::connection('sqlite');
         Schema::dropIfExists('sys_api_idempotency');
         Schema::dropIfExists('idempotent_effects');
-        $migration = require app(SchemaSets::class)->get('axiomasoft/corex-operations:tenant')->path.'/create_sys_api_idempotency_table.php';
         app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
         Schema::create('idempotent_effects', static function (Blueprint $table): void {
             $table->id();

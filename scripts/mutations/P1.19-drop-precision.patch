@@ -1,11 +1,10 @@
-diff --git a/packages/core/database/migrations/pg/2026_07_13_110000_create_sys_audit_log_table.php b/packages/core/database/migrations/pg/2026_07_13_110000_create_sys_audit_log_table.php
-index 551ef59..4291612 100644
---- a/packages/core/database/migrations/pg/2026_07_13_110000_create_sys_audit_log_table.php
-+++ b/packages/core/database/migrations/pg/2026_07_13_110000_create_sys_audit_log_table.php
-@@ -35,7 +35,7 @@ return new class extends Migration
- 
+diff --git a/packages/core/database/migrations/tenant/2026_10_01_010050_create_sys_audit_log.php b/packages/core/database/migrations/tenant/2026_10_01_010050_create_sys_audit_log.php
+--- a/packages/core/database/migrations/tenant/2026_10_01_010050_create_sys_audit_log.php
++++ b/packages/core/database/migrations/tenant/2026_10_01_010050_create_sys_audit_log.php
+@@ -16,7 +16,7 @@
          Schema::create($table, function (Blueprint $table): void {
-             $table->uuid('id')->primary();
+             $table->uuid('id');
+             $table->primary(['id'], 'sys_audit_log_pk');
 -            $table->timestampTz('occurred_at', precision: 6)->useCurrent();
 +            $table->timestampTz('occurred_at')->useCurrent();
              $table->string('actor_type', 16);

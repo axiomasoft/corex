@@ -122,6 +122,41 @@ public function write() { $this->db->table($this->tables->definitions)->delete()
         code, output = self.run_gate(body, package="core", extra={"custom-fields": source})
         self.assertEqual(0, code, output)
 
+    def test_literal_attribute_tables_binding_resolves_exact_class(self):
+        source = r'''namespace CoreX\CustomFields\Data;
+class AttributeTables { public function __construct(public string $documents) {} }
+function bind() { return new AttributeTables(documents: 'sys_settings'); }'''
+        body = r'''namespace Demo; class Writer {
+public function __construct(private \CoreX\CustomFields\Data\AttributeTables $tables) {}
+public function write() { $this->db->table($this->tables->documents)->delete(); }}'''
+        code, output = self.run_gate(body, package="core", extra={"custom-fields": source})
+        self.assertEqual(0, code, output)
+        code, output = self.run_gate(body, extra={"custom-fields": source})
+        self.assertEqual(1, code, output)
+        self.assertIn("owned by axiomasoft/corex", output)
+
+    def test_unrelated_attribute_tables_binding_does_not_resolve(self):
+        source = r'''namespace Other;
+class AttributeTables { public function __construct(public string $documents) {} }
+function bind() { return new AttributeTables(documents: 'sys_settings'); }'''
+        body = r'''namespace Demo; class Writer {
+public function __construct(private \CoreX\CustomFields\Data\AttributeTables $tables) {}
+public function write() { $this->db->table($this->tables->documents)->delete(); }}'''
+        code, output = self.run_gate(body, package="core", extra={"custom-fields": source})
+        self.assertEqual(1, code, output)
+        self.assertIn("dynamic table name on write", output)
+
+    def test_dynamic_attribute_tables_binding_does_not_use_literal_default(self):
+        source = r'''namespace CoreX\CustomFields\Data;
+class AttributeTables { public function __construct(public string $documents = 'sys_settings') {} }
+function bind($table) { return new AttributeTables(documents: $table); }'''
+        body = r'''namespace Demo; class Writer {
+public function __construct(private \CoreX\CustomFields\Data\AttributeTables $tables) {}
+public function write() { $this->db->table($this->tables->documents)->delete(); }}'''
+        code, output = self.run_gate(body, package="core", extra={"custom-fields": source})
+        self.assertEqual(1, code, output)
+        self.assertIn("dynamic table name on write", output)
+
 
 if __name__ == "__main__":
     unittest.main()

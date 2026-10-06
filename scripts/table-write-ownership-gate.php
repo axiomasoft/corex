@@ -163,6 +163,32 @@ foreach ($trees as $tree) {
         }
     }
 }
+// P08 providers now supply literal package-owned names instead of config ?? defaults.
+// Read only constructions of the exact options class in its owning package.
+$constructedDefaults = [];
+foreach ($trees as $file => $tree) {
+    foreach ($finder->findInstanceOf($tree, Expr\New_::class) as $new) {
+        if (! $new->class instanceof Node\Name) {
+            continue;
+        }
+        $type = $new->class->toString();
+
+        if (($optionOwners[$type] ?? null) !== $files[$file]) {
+            continue;
+        }
+        foreach ($new->args as $arg) {
+            if (! $arg instanceof Node\Arg || ! $arg->name instanceof Node\Identifier) {
+                continue;
+            }
+            $constructedDefaults[$type.'.'.$arg->name->toString()][] = $arg->value instanceof Node\Scalar\String_
+                ? $arg->value->value
+                : '';
+        }
+    }
+}
+foreach ($constructedDefaults as $slot => $values) {
+    $typedDefaults[$slot] = in_array('', $values, true) ? '' : implode('|', array_unique($values));
+}
 foreach ($files as $owner) {
     $tableDefaults[$owner] = array_merge($tableDefaults[$owner] ?? [], $typedDefaults);
 }

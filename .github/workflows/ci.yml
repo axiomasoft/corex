@@ -53,7 +53,7 @@ jobs:
         run: composer require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
 
       - name: Install dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress --with "illuminate/contracts:$LARAVEL_VERSION"
+        run: php scripts/ci-composer-update.php --with "illuminate/contracts:$LARAVEL_VERSION"
 
       - name: Composer audit
         run: composer audit --locked
@@ -115,7 +115,7 @@ jobs:
         run: composer require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
 
       - name: Install dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress --with "illuminate/contracts:$LARAVEL_VERSION"
+        run: php scripts/ci-composer-update.php --with "illuminate/contracts:$LARAVEL_VERSION"
 
       - name: Composer audit
         run: composer audit --locked
@@ -170,7 +170,7 @@ jobs:
         run: composer --working-dir=packages/operations require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
 
       - name: Install root tooling and shared test dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress --with "illuminate/contracts:$LARAVEL_VERSION"
+        run: php scripts/ci-composer-update.php --with "illuminate/contracts:$LARAVEL_VERSION"
 
       - name: Composer audit
         run: composer audit --locked
@@ -219,7 +219,7 @@ jobs:
         run: composer --working-dir=packages/tools require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
 
       - name: Install root tooling and shared test dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress --with "illuminate/contracts:$LARAVEL_VERSION"
+        run: php scripts/ci-composer-update.php --with "illuminate/contracts:$LARAVEL_VERSION"
 
       - name: Composer audit
         run: composer audit --locked
@@ -268,7 +268,7 @@ jobs:
         run: composer --working-dir=packages/webhooks require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
 
       - name: Install root tooling and shared test dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress --with "illuminate/contracts:$LARAVEL_VERSION"
+        run: php scripts/ci-composer-update.php --with "illuminate/contracts:$LARAVEL_VERSION"
 
       - name: Composer audit
         run: composer audit --locked
@@ -298,7 +298,7 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
       - name: Install dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
+        run: php scripts/ci-composer-update.php
 
       - name: Composer audit
         run: composer audit --locked
@@ -340,7 +340,7 @@ jobs:
           extensions: mbstring, pdo, pdo_pgsql, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
       - name: Install dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
+        run: php scripts/ci-composer-update.php
 
       - name: Composer audit
         run: composer audit --locked
@@ -381,7 +381,7 @@ jobs:
           extensions: mbstring, pdo, pdo_pgsql, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd, xdebug
           coverage: xdebug
       - name: Install root tooling and shared test dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
+        run: php scripts/ci-composer-update.php
 
       - name: Composer audit
         run: composer audit --locked
@@ -419,7 +419,7 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd, gd, xdebug
           coverage: xdebug
       - name: Install root tooling and shared test dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
+        run: php scripts/ci-composer-update.php
 
       - name: Composer audit
         run: composer audit --locked
@@ -463,7 +463,7 @@ jobs:
           extensions: mbstring, pdo, pdo_pgsql, sqlite, pdo_sqlite, bcmath, curl, intl, zip, gd
           coverage: none
       - name: Install root tooling and shared test dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
+        run: php scripts/ci-composer-update.php
 
       - name: Composer audit
         run: composer audit --locked
@@ -533,7 +533,7 @@ jobs:
         run: composer --working-dir=packages/tenancy require --dev 'pestphp/pest:^4.7' --no-update --no-interaction
 
       - name: Install root tooling and shared test dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress --with "illuminate/contracts:$LARAVEL_VERSION"
+        run: php scripts/ci-composer-update.php --with "illuminate/contracts:$LARAVEL_VERSION"
 
       - name: Composer audit
         run: composer audit --locked
@@ -601,7 +601,7 @@ jobs:
           coverage: xdebug
 
       - name: Install root tooling and shared test dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
+        run: php scripts/ci-composer-update.php
 
       - name: Composer audit
         run: composer audit --locked
@@ -638,7 +638,7 @@ jobs:
           coverage: xdebug
 
       - name: Install dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
+        run: php scripts/ci-composer-update.php
 
       - name: Composer audit
         run: composer audit --locked
@@ -701,7 +701,7 @@ jobs:
           coverage: xdebug
 
       - name: Install root tooling and shared test dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
+        run: php scripts/ci-composer-update.php
 
       - name: Composer audit
         run: composer audit --locked
@@ -764,7 +764,7 @@ jobs:
           coverage: none
 
       - name: Install root tooling and shared test dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
+        run: php scripts/ci-composer-update.php
 
       - name: Composer audit
         run: composer audit --locked
@@ -807,7 +807,7 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
+        run: php scripts/ci-composer-update.php
 
       - name: Composer audit
         run: composer audit --locked
@@ -876,7 +876,7 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
+        run: php scripts/ci-composer-update.php
 
       - name: Composer audit
         run: composer audit --locked
@@ -922,7 +922,7 @@ jobs:
           coverage: xdebug
 
       - name: Install dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
+        run: php scripts/ci-composer-update.php
 
       - name: Composer audit
         run: composer audit --locked
@@ -966,7 +966,7 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
+        run: php scripts/ci-composer-update.php
 
       - name: Composer audit
         run: composer audit --locked
@@ -1030,7 +1030,7 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
+        run: php scripts/ci-composer-update.php
 
       - name: Composer audit
         run: composer audit --locked
@@ -1081,7 +1081,7 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
           coverage: none
       - name: Install dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
+        run: php scripts/ci-composer-update.php
       - name: Composer audit
         run: composer audit --locked
       - name: Golden snapshots
@@ -1102,7 +1102,7 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
           coverage: none
       - name: Install dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
+        run: php scripts/ci-composer-update.php
       - name: Composer audit
         run: composer audit --locked
       - name: Strict ownership
@@ -1125,7 +1125,7 @@ jobs:
           extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
           coverage: none
       - name: Install dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
+        run: php scripts/ci-composer-update.php
       - name: Composer audit
         run: composer audit --locked
       - name: Analyse every standalone package

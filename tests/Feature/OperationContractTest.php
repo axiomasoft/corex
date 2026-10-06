@@ -9,7 +9,6 @@ use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Database\Contracts\SchemaMigrator;
-use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Data\Api;
 use CoreX\Modules\Data\ModuleManifest;
@@ -61,7 +60,6 @@ final class OperationContractTest extends TestCase
         parent::setUp();
         $this->app['config']->set('app.key', 'p13-contract-test-secret');
         Schema::dropIfExists('sys_api_idempotency');
-        $migration = require app(SchemaSets::class)->get('axiomasoft/corex-operations:tenant')->path.'/create_sys_api_idempotency_table.php';
         app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
 
         $input = self::schema(['title' => ['type' => 'string']]);
