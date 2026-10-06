@@ -10,6 +10,7 @@ use CoreX\Media\Contracts\MediaPolicy;
 use CoreX\Media\MediaServiceProvider;
 use CoreX\Storage\Contracts\TenantStorage;
 use CoreX\Time\Laravel\TimeRegistrar;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Mockery;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -35,7 +36,7 @@ abstract class TestCase extends Orchestra
 
     protected function defineDatabaseMigrations(): void
     {
-        $this->migrateSchemaSets(['axiomasoft/corex-media:tenant'], 'sqlite');
+        $this->migrateSchemaSets(['axiomasoft/corex-media:tenant'], DB::getDefaultConnection());
     }
 
     #[Override]

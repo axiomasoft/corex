@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Schema;
 
 require_once __DIR__.'/../../wakeup/tests/Support/PackageBridge.php';
 use CoreX\Database\Laravel\DatabaseRegistrar;
+use Illuminate\Support\Facades\DB;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Override;
 
@@ -46,8 +47,8 @@ abstract class TestCase extends Orchestra
         Schema::dropIfExists('ntf_recipient_state');
         Schema::dropIfExists('ntf_notifications');
         Schema::dropIfExists('sys_wakeup_requests');
-        $this->migrateSchemaSets(['axiomasoft/corex-wakeup:tenant'], 'sqlite');
-        $this->migrateSchemaSets(['axiomasoft/corex-notifications:tenant'], 'sqlite');
+        $this->migrateSchemaSets(['axiomasoft/corex-wakeup:tenant'], DB::getDefaultConnection());
+        $this->migrateSchemaSets(['axiomasoft/corex-notifications:tenant'], DB::getDefaultConnection());
     }
 
     #[Override]

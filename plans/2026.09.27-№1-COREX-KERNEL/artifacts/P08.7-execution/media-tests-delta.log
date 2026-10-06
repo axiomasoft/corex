@@ -1,0 +1,36 @@
+> pest --exclude-group=pg
+
+   PASS  CoreX\Media\Tests\ConfigReportSectionTest
+  ✓ section registers in report order and redacts its secrets            0.08s
+
+   PASS  Tests\Conversion\ConversionEdgeCasesTest
+  ✓ it does not advertise a conversion when no matching driver is insta… 0.05s
+  ✓ it keeps malformed source conversions pending for durable retry ins… 0.02s
+  ✓ it rejects output facts that exceed the immutable conversion profil… 0.02s
+
+   PASS  Tests\Conversion\ConversionTest
+  ✓ it creates one bounded GD thumbnail for a file/profile/version       0.02s
+  ✓ it purges a published conversion together with its deleting origina… 0.02s
+
+   PASS  Tests\Feature\MediaLifecycleEdgeCasesTest
+  ✓ it keeps staged uploads private and schedules their purge when stor… 0.02s
+  ✓ it keeps attachment operations idempotent and rejects unavailable f… 0.01s
+  ✓ it marks a failed purge unknown instead of publishing a false delet… 0.01s
+  ✓ it rejects malformed trusted media inputs before creating storage k… 0.01s
+  ✓ it rejects an unregistered purpose and a server-detected executable… 0.01s
+  ✓ it rechecks policy before publishing uploaded bytes and when an aut… 0.01s
+  ✓ it publishes media as a standalone CoreX module                      0.01s
+
+   PASS  Tests\Feature\MediaLifecycleTest
+  ✓ it stores, reads, replays, attaches, and detaches private media      0.02s
+  ✓ it denies all operations until a consumer policy explicitly allows…  0.01s
+  ✓ it rejects a replay key with a different content digest              0.01s
+  ✓ it refuses deletion while an authoritative relation exists and purg… 0.02s
+
+   PASS  Tests\Unit\MediaOptionsTest
+  ✓ it rejects a non-positive max upload bytes limit with (0)
+  ✓ it rejects a non-positive max upload bytes limit with (-1)
+  ✓ it rejects an empty allowed mime type list
+
+  Tests:    20 passed (58 assertions)
+  Duration: 0.42s

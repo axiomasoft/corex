@@ -639,7 +639,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_rate_batches_operation_key_unique",
+                    "name": "corex_rate_batches_operation_key_uq",
                     "kind": "uq",
                     "columns": [
                         "operation_key"
@@ -648,7 +648,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "corex_rate_batches_pkey",
+                    "name": "corex_rate_batches_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -660,23 +660,23 @@
             "foreign_keys": [],
             "checks": [
                 {
-                    "name": "corex_rate_batches_format_hash_chk",
+                    "name": "corex_rate_batches_format_hash_ck",
                     "expression": "(format_hash ~ '^[a-f0-9]{64}$'::text)"
                 },
                 {
-                    "name": "corex_rate_batches_generation_chk",
+                    "name": "corex_rate_batches_generation_ck",
                     "expression": "((generation >= (0)::numeric) AND (generation <= '18446744073709551615'::numeric))"
                 },
                 {
-                    "name": "corex_rate_batches_operation_key_chk",
+                    "name": "corex_rate_batches_operation_key_ck",
                     "expression": "(operation_key ~ '^[a-f0-9]{64}$'::text)"
                 },
                 {
-                    "name": "corex_rate_batches_payload_hash_chk",
+                    "name": "corex_rate_batches_payload_hash_ck",
                     "expression": "(payload_hash ~ '^[a-f0-9]{64}$'::text)"
                 },
                 {
-                    "name": "corex_rate_batches_state_chk",
+                    "name": "corex_rate_batches_state_ck",
                     "expression": "((state)::text = ANY ((ARRAY['staged'::character varying, 'published'::character varying, 'conflict'::character varying, 'failed'::character varying])::text[]))"
                 }
             ],
@@ -712,7 +712,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_rate_current_pkey",
+                    "name": "corex_rate_current_pk",
                     "kind": "pk",
                     "columns": [
                         "base",
@@ -738,7 +738,7 @@
             ],
             "checks": [
                 {
-                    "name": "corex_rate_current_generation_chk",
+                    "name": "corex_rate_current_generation_ck",
                     "expression": "((generation >= (0)::numeric) AND (generation <= '18446744073709551615'::numeric))"
                 }
             ],
@@ -804,7 +804,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_rate_snapshots_pkey",
+                    "name": "corex_rate_snapshots_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -813,7 +813,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "corex_rate_snapshots_publication_unique",
+                    "name": "corex_rate_snapshots_publication_uq",
                     "kind": "uq",
                     "columns": [
                         "source",
@@ -830,7 +830,7 @@
             "foreign_keys": [],
             "checks": [
                 {
-                    "name": "corex_rate_snapshots_payload_hash_chk",
+                    "name": "corex_rate_snapshots_payload_hash_ck",
                     "expression": "(payload_hash ~ '^[a-f0-9]{64}$'::text)"
                 }
             ],
@@ -871,7 +871,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_reference_aliases_pkey",
+                    "name": "corex_reference_aliases_pk",
                     "kind": "pk",
                     "columns": [
                         "snapshot_id",
@@ -922,7 +922,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_reference_current_pkey",
+                    "name": "corex_reference_current_pk",
                     "kind": "pk",
                     "columns": [
                         "dataset_key"
@@ -946,7 +946,7 @@
             ],
             "checks": [
                 {
-                    "name": "corex_reference_current_generation_chk",
+                    "name": "corex_reference_current_generation_ck",
                     "expression": "((generation >= (0)::numeric) AND (generation <= '18446744073709551615'::numeric))"
                 }
             ],
@@ -987,7 +987,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_reference_datasets_pkey",
+                    "name": "corex_reference_datasets_pk",
                     "kind": "pk",
                     "columns": [
                         "snapshot_id"
@@ -999,15 +999,15 @@
             "foreign_keys": [],
             "checks": [
                 {
-                    "name": "corex_reference_datasets_normalized_hash_chk",
+                    "name": "corex_reference_datasets_normalized_hash_ck",
                     "expression": "(normalized_hash ~ '^[a-f0-9]{64}$'::text)"
                 },
                 {
-                    "name": "corex_reference_datasets_raw_hash_chk",
+                    "name": "corex_reference_datasets_raw_hash_ck",
                     "expression": "(raw_hash ~ '^[a-f0-9]{64}$'::text)"
                 },
                 {
-                    "name": "corex_reference_datasets_state_chk",
+                    "name": "corex_reference_datasets_state_ck",
                     "expression": "((state)::text = ANY ((ARRAY['staged'::character varying, 'published'::character varying, 'retired'::character varying])::text[]))"
                 }
             ],
@@ -1078,7 +1078,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_reference_records_pkey",
+                    "name": "corex_reference_records_pk",
                     "kind": "pk",
                     "columns": [
                         "snapshot_id",
@@ -1089,7 +1089,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "corex_reference_records_scan_idx",
+                    "name": "corex_reference_records_scan_ix",
                     "kind": "ix",
                     "columns": [
                         "snapshot_id",
@@ -1128,7 +1128,7 @@
             ],
             "checks": [
                 {
-                    "name": "corex_reference_records_parent_chk",
+                    "name": "corex_reference_records_parent_ck",
                     "expression": "((parent_namespace IS NULL) = (parent_source_id IS NULL))"
                 }
             ],
@@ -1189,7 +1189,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_search_dirty_lane_key_record_id_revision_unique",
+                    "name": "corex_search_dirty_lane_key_record_id_revision_uq",
                     "kind": "uq",
                     "columns": [
                         "lane_key",
@@ -1200,7 +1200,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "corex_search_dirty_lane_key_submitted_at_sequence_index",
+                    "name": "corex_search_dirty_lane_key_submitted_at_sequence_ix",
                     "kind": "ix",
                     "columns": [
                         "lane_key",
@@ -1279,7 +1279,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_search_lanes_pkey",
+                    "name": "corex_search_lanes_pk",
                     "kind": "pk",
                     "columns": [
                         "lane_key"
@@ -1362,7 +1362,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_search_rebuilds_lane_key_to_generation_unique",
+                    "name": "corex_search_rebuilds_lane_key_to_generation_uq",
                     "kind": "uq",
                     "columns": [
                         "lane_key",
@@ -1372,7 +1372,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "corex_search_rebuilds_pkey",
+                    "name": "corex_search_rebuilds_pk",
                     "kind": "pk",
                     "columns": [
                         "rebuild_id"
@@ -4029,7 +4029,7 @@
             },
             "indexes": [
                 {
-                    "name": "med_conversions_file_id_profile_key_profile_digest_source_versi",
+                    "name": "med_conversions_file_id_profile_key_profile_digest__67e95e41_uq",
                     "kind": "uq",
                     "columns": [
                         "file_id",
@@ -4041,7 +4041,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "med_conversions_pkey",
+                    "name": "med_conversions_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -4052,7 +4052,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "med_conversions_file_id_foreign",
+                    "name": "med_conversions_file_id_fk",
                     "columns": [
                         "file_id"
                     ],
@@ -4151,7 +4151,7 @@
             },
             "indexes": [
                 {
-                    "name": "med_files_pkey",
+                    "name": "med_files_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -4160,7 +4160,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "med_files_request_key_unique",
+                    "name": "med_files_request_key_uq",
                     "kind": "uq",
                     "columns": [
                         "request_key"
@@ -4181,9 +4181,9 @@
                     "default": null
                 },
                 "attempts": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
-                    "default": "0"
+                    "default": "'0'::bigint"
                 },
                 "claim_epoch": {
                     "type": "bigint",
@@ -4253,7 +4253,7 @@
             },
             "indexes": [
                 {
-                    "name": "med_operations_operation_key_unique",
+                    "name": "med_operations_operation_key_uq",
                     "kind": "uq",
                     "columns": [
                         "operation_key"
@@ -4262,7 +4262,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "med_operations_pkey",
+                    "name": "med_operations_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -4271,7 +4271,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "med_operations_state_next_attempt_at_index",
+                    "name": "med_operations_state_next_attempt_at_ix",
                     "kind": "ix",
                     "columns": [
                         "state",
@@ -4283,7 +4283,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "med_operations_file_id_foreign",
+                    "name": "med_operations_file_id_fk",
                     "columns": [
                         "file_id"
                     ],
@@ -4337,7 +4337,7 @@
             },
             "indexes": [
                 {
-                    "name": "med_relations_file_id_entity_handle_entity_id_slot_unique",
+                    "name": "med_relations_file_id_entity_handle_entity_id_slot_uq",
                     "kind": "uq",
                     "columns": [
                         "file_id",
@@ -4349,7 +4349,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "med_relations_pkey",
+                    "name": "med_relations_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -4360,7 +4360,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "med_relations_file_id_foreign",
+                    "name": "med_relations_file_id_fk",
                     "columns": [
                         "file_id"
                     ],
@@ -4662,7 +4662,7 @@
                     "default": null
                 },
                 "attempts": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
                     "default": null
                 },
@@ -4754,7 +4754,7 @@
             },
             "indexes": [
                 {
-                    "name": "ntf_deliveries_delivery_key_unique",
+                    "name": "ntf_deliveries_delivery_key_uq",
                     "kind": "uq",
                     "columns": [
                         "delivery_key"
@@ -4763,7 +4763,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "ntf_deliveries_pkey",
+                    "name": "ntf_deliveries_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -4772,7 +4772,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "ntf_deliveries_scan_idx",
+                    "name": "ntf_deliveries_scan_ix",
                     "kind": "ix",
                     "columns": [
                         "state",
@@ -4784,7 +4784,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "ntf_deliveries_digest_run_id_foreign",
+                    "name": "ntf_deliveries_digest_run_id_fk",
                     "columns": [
                         "digest_run_id"
                     ],
@@ -4795,7 +4795,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "ntf_deliveries_notification_id_foreign",
+                    "name": "ntf_deliveries_notification_id_fk",
                     "columns": [
                         "notification_id"
                     ],
@@ -4834,7 +4834,7 @@
             },
             "indexes": [
                 {
-                    "name": "ntf_digest_items_notification_id_channel_unique",
+                    "name": "ntf_digest_items_notification_id_channel_uq",
                     "kind": "uq",
                     "columns": [
                         "notification_id",
@@ -4844,7 +4844,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "ntf_digest_items_pkey",
+                    "name": "ntf_digest_items_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -4855,7 +4855,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "ntf_digest_items_notification_id_foreign",
+                    "name": "ntf_digest_items_notification_id_fk",
                     "columns": [
                         "notification_id"
                     ],
@@ -4866,7 +4866,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "ntf_digest_items_run_id_foreign",
+                    "name": "ntf_digest_items_run_id_fk",
                     "columns": [
                         "run_id"
                     ],
@@ -4883,7 +4883,7 @@
         "ntf_digest_runs": {
             "columns": {
                 "batch_seq": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
                     "default": null
                 },
@@ -4935,7 +4935,7 @@
             },
             "indexes": [
                 {
-                    "name": "ntf_digest_runs_pkey",
+                    "name": "ntf_digest_runs_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -4944,7 +4944,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "ntf_digest_runs_recipient_kind_recipient_id_period_period_start",
+                    "name": "ntf_digest_runs_recipient_kind_recipient_id_period__27ecc408_uq",
                     "kind": "uq",
                     "columns": [
                         "recipient_kind",
@@ -5041,7 +5041,7 @@
             },
             "indexes": [
                 {
-                    "name": "ntf_notifications_pkey",
+                    "name": "ntf_notifications_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -5050,7 +5050,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "ntf_notifications_recipient_kind_recipient_id_request_key_uniqu",
+                    "name": "ntf_notifications_recipient_kind_recipient_id_request_key_uq",
                     "kind": "uq",
                     "columns": [
                         "recipient_kind",
@@ -5061,7 +5061,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "ntf_notifications_scan_idx",
+                    "name": "ntf_notifications_scan_ix",
                     "kind": "ix",
                     "columns": [
                         "recipient_kind",
@@ -5097,7 +5097,7 @@
             },
             "indexes": [
                 {
-                    "name": "ntf_recipient_state_pkey",
+                    "name": "ntf_recipient_state_pk",
                     "kind": "pk",
                     "columns": [
                         "kind",
@@ -5878,7 +5878,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_attribute_backfills_attribute_id_to_revision_index",
+                    "name": "sys_attribute_backfills_attribute_id_to_revision_ix",
                     "kind": "ix",
                     "columns": [
                         "attribute_id",
@@ -5888,7 +5888,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_attribute_backfills_pkey",
+                    "name": "sys_attribute_backfills_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -5981,7 +5981,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_attribute_definitions_entity_attribute_id_revision_index",
+                    "name": "sys_attribute_definitions_entity_attribute_id_revision_ix",
                     "kind": "ix",
                     "columns": [
                         "entity",
@@ -5992,7 +5992,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_attribute_definitions_pkey",
+                    "name": "sys_attribute_definitions_pk",
                     "kind": "pk",
                     "columns": [
                         "attribute_id",
@@ -6031,7 +6031,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_attribute_documents_pkey",
+                    "name": "sys_attribute_documents_pk",
                     "kind": "pk",
                     "columns": [
                         "entity",
@@ -6065,7 +6065,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_attribute_eav_records_pkey",
+                    "name": "sys_attribute_eav_records_pk",
                     "kind": "pk",
                     "columns": [
                         "entity",
@@ -6104,7 +6104,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_attribute_eav_values_pkey",
+                    "name": "sys_attribute_eav_values_pk",
                     "kind": "pk",
                     "columns": [
                         "entity",
@@ -6159,7 +6159,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_attribute_key_reservations_attribute_id_current_revision_in",
+                    "name": "sys_attribute_key_reservations_attribute_id_current_revision_ix",
                     "kind": "ix",
                     "columns": [
                         "attribute_id",
@@ -6169,7 +6169,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_attribute_key_reservations_pkey",
+                    "name": "sys_attribute_key_reservations_pk",
                     "kind": "pk",
                     "columns": [
                         "entity",
@@ -6191,9 +6191,9 @@
                     "default": null
                 },
                 "attempts": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
-                    "default": "0"
+                    "default": "'0'::bigint"
                 },
                 "created_at": {
                     "type": "timestamp(0) with time zone",
@@ -6258,7 +6258,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_attribute_schema_operations_operation_key_unique",
+                    "name": "sys_attribute_schema_operations_operation_key_uq",
                     "kind": "uq",
                     "columns": [
                         "operation_key"
@@ -6267,7 +6267,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_attribute_schema_operations_pkey",
+                    "name": "sys_attribute_schema_operations_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -6310,7 +6310,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_attribute_write_tokens_pkey",
+                    "name": "sys_attribute_write_tokens_pk",
                     "kind": "pk",
                     "columns": [
                         "operation_key"
@@ -7385,7 +7385,7 @@
         "sys_wakeup_requests": {
             "columns": {
                 "attempt": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
                     "default": null
                 },
@@ -7482,7 +7482,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_wakeup_requests_pkey",
+                    "name": "sys_wakeup_requests_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -7491,7 +7491,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_wakeup_requests_scan_idx",
+                    "name": "sys_wakeup_requests_scan_ix",
                     "kind": "ix",
                     "columns": [
                         "status",
@@ -7502,7 +7502,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_wakeup_requests_workspace_scope_key_kind_request_key_unique",
+                    "name": "sys_wakeup_requests_workspace_scope_key_kind_request_key_uq",
                     "kind": "uq",
                     "columns": [
                         "workspace_scope_key",
@@ -7513,7 +7513,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_wakeup_requests_workspace_scope_key_request_key_unique",
+                    "name": "sys_wakeup_requests_workspace_scope_key_request_key_uq",
                     "kind": "uq",
                     "columns": [
                         "workspace_scope_key",
@@ -7530,9 +7530,9 @@
         "sys_workflow_intents": {
             "columns": {
                 "attempt": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
-                    "default": "0"
+                    "default": "'0'::bigint"
                 },
                 "claim_epoch": {
                     "type": "bigint",
@@ -7622,7 +7622,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_workflow_intents_pkey",
+                    "name": "sys_workflow_intents_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -7631,7 +7631,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_workflow_intents_request_key_unique",
+                    "name": "sys_workflow_intents_request_key_uq",
                     "kind": "uq",
                     "columns": [
                         "request_key"
@@ -7640,7 +7640,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_workflow_intents_state_updated_at_index",
+                    "name": "sys_workflow_intents_state_updated_at_ix",
                     "kind": "ix",
                     "columns": [
                         "state",

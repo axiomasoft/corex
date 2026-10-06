@@ -1,0 +1,151 @@
+{
+    "driver": "pgsql",
+    "tables": {
+        "sys_wakeup_requests": {
+            "columns": {
+                "attempt": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": null
+                },
+                "completed_at": {
+                    "type": "timestamp(0) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "created_at": {
+                    "type": "timestamp(0) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "failure_code": {
+                    "type": "character varying(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "fire_at": {
+                    "type": "timestamp(0) with time zone",
+                    "nullable": false,
+                    "default": null
+                },
+                "generation": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "kind": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "lease_until": {
+                    "type": "timestamp(0) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "payload": {
+                    "type": "json",
+                    "nullable": false,
+                    "default": null
+                },
+                "period": {
+                    "type": "character varying(16)",
+                    "nullable": true,
+                    "default": null
+                },
+                "request_digest": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "request_key": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "retry_at": {
+                    "type": "timestamp(0) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "status": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(0) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "window_end": {
+                    "type": "timestamp(0) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "window_start": {
+                    "type": "timestamp(0) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "workspace_scope_key": {
+                    "type": "character varying(255)",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "sys_wakeup_requests_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "sys_wakeup_requests_scan_idx",
+                    "kind": "ix",
+                    "columns": [
+                        "status",
+                        "retry_at",
+                        "fire_at"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "sys_wakeup_requests_workspace_scope_key_kind_request_key_unique",
+                    "kind": "uq",
+                    "columns": [
+                        "workspace_scope_key",
+                        "kind",
+                        "request_key"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "sys_wakeup_requests_workspace_scope_key_request_key_unique",
+                    "kind": "uq",
+                    "columns": [
+                        "workspace_scope_key",
+                        "request_key"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [],
+            "triggers": []
+        }
+    },
+    "enum_types": []
+}

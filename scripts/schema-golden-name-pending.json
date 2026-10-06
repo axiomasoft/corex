@@ -2,17 +2,5 @@
     "corex_task_occurrences.corex_task_occurrences_series_key_immutable_revision_occurrence_key_unique": {
         "package": "axiomasoft/corex-tasks-workflow",
         "reason": "Existing SQLite Laravel unique name before package baseline; normalize in P08.7."
-    },
-    "med_conversions.med_conversions_file_id_profile_key_profile_digest_source_version_unique": {
-        "package": "axiomasoft/corex-media",
-        "reason": "Existing SQLite Laravel unique name before package baseline; normalize in P08.6."
-    },
-    "ntf_digest_runs.ntf_digest_runs_recipient_kind_recipient_id_period_period_start_batch_seq_unique": {
-        "package": "axiomasoft/corex-notifications",
-        "reason": "Existing SQLite Laravel unique name before package baseline; normalize in P08.6."
-    },
-    "ntf_notifications.ntf_notifications_recipient_kind_recipient_id_request_key_unique": {
-        "package": "axiomasoft/corex-notifications",
-        "reason": "Existing SQLite Laravel unique name before package baseline; normalize in P08.6."
     }
 }

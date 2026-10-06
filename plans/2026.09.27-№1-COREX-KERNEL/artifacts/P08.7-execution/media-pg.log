@@ -1,0 +1,29 @@
+> pest --group=pg
+
+   FAIL  Tests\Pg\ConversionConcurrencyTest
+  ⨯ it uses a PostgreSQL file-row lock across independent connections
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Pg\ConversionConcurrencyTest > it uses a Po…  QueryException
+  SQLSTATE[HY000]: General error: 1 table "med_relations" has more than one primary key (Connection: sqlite, Database: :memory:, SQL: create table "med_relations" ("id" integer primary key autoincrement not null, "file_id" varchar not null, "entity_handle" varchar not null, "entity_id" varchar not null, "slot" varchar not null, "created_at" datetime, "updated_at" datetime, foreign key("file_id") references "med_files"("id") on delete restrict, primary key ("id")))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:595
+    591▕             if ($this->pretending()) {
+    592▕                 return true;
+    593▕             }
+    594▕
+  ➜ 595▕             $statement = $this->getPdo()->prepare($query);
+    596▕
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕
+    599▕             $this->recordsHaveBeenModified();
+
+      +8 vendor frames
+  9   database/migrations/tenant/2026_10_01_100020_create_med_relations.php:13
+      +8 vendor frames
+  18  /home/vostrikov/projects/packages/corex/packages/core/src/Database/Internal/LaravelSchemaMigrator.php:118
+
+
+  Tests:    1 failed (0 assertions)
+  Duration: 0.12s
+
+Script pest --group=pg handling the test:pg event returned with error code 2

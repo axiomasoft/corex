@@ -1,0 +1,257 @@
+{
+    "driver": "pgsql",
+    "tables": {
+        "corex_search_dirty": {
+            "columns": {
+                "completed_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "lane_key": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "payload_hash": {
+                    "type": "character(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "record_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "restore_epoch": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "revision": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "schema_hash": {
+                    "type": "character(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "sequence": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "nextval('corex_search_dirty_sequence_seq'::regclass)"
+                },
+                "submitted_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "tombstone": {
+                    "type": "boolean",
+                    "nullable": false,
+                    "default": "false"
+                }
+            },
+            "indexes": [
+                {
+                    "name": "corex_search_dirty_lane_key_record_id_revision_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "lane_key",
+                        "record_id",
+                        "revision"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "corex_search_dirty_lane_key_submitted_at_sequence_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "lane_key",
+                        "submitted_at",
+                        "sequence"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "corex_search_dirty_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "sequence"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [],
+            "triggers": []
+        },
+        "corex_search_lanes": {
+            "columns": {
+                "active_task": {
+                    "type": "character varying(255)",
+                    "nullable": true,
+                    "default": null
+                },
+                "claim_epoch": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "'0'::bigint"
+                },
+                "committed_revision": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "'0'::bigint"
+                },
+                "created_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "generation": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "lane_key": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "request_hash": {
+                    "type": "character(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "restore_epoch": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "state": {
+                    "type": "character varying(24)",
+                    "nullable": false,
+                    "default": "'ready'::character varying"
+                },
+                "updated_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "corex_search_lanes_pk",
+                    "kind": "pk",
+                    "columns": [
+                        "lane_key"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [],
+            "triggers": []
+        },
+        "corex_search_rebuilds": {
+            "columns": {
+                "created_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "fence_revision": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "from_generation": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "lane_key": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "marker_hash": {
+                    "type": "character(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "rebuild_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "restore_epoch": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "schema_hash": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "state": {
+                    "type": "character varying(24)",
+                    "nullable": false,
+                    "default": "'pending'::character varying"
+                },
+                "swap_task": {
+                    "type": "character varying(255)",
+                    "nullable": true,
+                    "default": null
+                },
+                "swapped_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "to_generation": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "corex_search_rebuilds_lane_key_to_generation_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "lane_key",
+                        "to_generation"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "corex_search_rebuilds_pk",
+                    "kind": "pk",
+                    "columns": [
+                        "rebuild_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [],
+            "triggers": []
+        }
+    },
+    "enum_types": []
+}

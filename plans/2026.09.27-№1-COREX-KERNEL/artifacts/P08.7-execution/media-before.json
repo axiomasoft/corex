@@ -1,0 +1,421 @@
+{
+    "driver": "pgsql",
+    "tables": {
+        "med_conversions": {
+            "columns": {
+                "created_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "file_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "height": {
+                    "type": "integer",
+                    "nullable": true,
+                    "default": null
+                },
+                "id": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "nextval('med_conversions_id_seq'::regclass)"
+                },
+                "mime_type": {
+                    "type": "character varying(255)",
+                    "nullable": true,
+                    "default": null
+                },
+                "object_key": {
+                    "type": "character varying(255)",
+                    "nullable": true,
+                    "default": null
+                },
+                "profile_digest": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "profile_key": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "size_bytes": {
+                    "type": "bigint",
+                    "nullable": true,
+                    "default": null
+                },
+                "source_version": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "state": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "width": {
+                    "type": "integer",
+                    "nullable": true,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "med_conversions_file_id_profile_key_profile_digest_source_versi",
+                    "kind": "uq",
+                    "columns": [
+                        "file_id",
+                        "profile_key",
+                        "profile_digest",
+                        "source_version"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "med_conversions_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [
+                {
+                    "name": "med_conversions_file_id_foreign",
+                    "columns": [
+                        "file_id"
+                    ],
+                    "references": "med_files(id)",
+                    "on_delete": "RESTRICT",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                }
+            ],
+            "checks": [],
+            "triggers": []
+        },
+        "med_files": {
+            "columns": {
+                "created_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "deleted_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "kind": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "mime_type": {
+                    "type": "character varying(255)",
+                    "nullable": false,
+                    "default": null
+                },
+                "object_key": {
+                    "type": "character varying(255)",
+                    "nullable": false,
+                    "default": null
+                },
+                "request_digest": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "request_key": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "sha256": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "size_bytes": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "state": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "uploaded_actor_id": {
+                    "type": "character varying(128)",
+                    "nullable": true,
+                    "default": null
+                },
+                "uploaded_actor_kind": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "version": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "workspace_scope_key": {
+                    "type": "character varying(128)",
+                    "nullable": true,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "med_files_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "med_files_request_key_unique",
+                    "kind": "uq",
+                    "columns": [
+                        "request_key"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [],
+            "triggers": []
+        },
+        "med_operations": {
+            "columns": {
+                "attempt_object_key": {
+                    "type": "character varying(255)",
+                    "nullable": true,
+                    "default": null
+                },
+                "attempts": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": "0"
+                },
+                "claim_epoch": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "'0'::bigint"
+                },
+                "created_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "file_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "id": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "nextval('med_operations_id_seq'::regclass)"
+                },
+                "kind": {
+                    "type": "character varying(32)",
+                    "nullable": false,
+                    "default": null
+                },
+                "lease_until": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "next_attempt_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "operation_key": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "profile_digest": {
+                    "type": "character(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "profile_key": {
+                    "type": "character varying(128)",
+                    "nullable": true,
+                    "default": null
+                },
+                "source_version": {
+                    "type": "bigint",
+                    "nullable": true,
+                    "default": null
+                },
+                "state": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "med_operations_operation_key_unique",
+                    "kind": "uq",
+                    "columns": [
+                        "operation_key"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "med_operations_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "med_operations_state_next_attempt_at_index",
+                    "kind": "ix",
+                    "columns": [
+                        "state",
+                        "next_attempt_at"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [
+                {
+                    "name": "med_operations_file_id_foreign",
+                    "columns": [
+                        "file_id"
+                    ],
+                    "references": "med_files(id)",
+                    "on_delete": "RESTRICT",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                }
+            ],
+            "checks": [],
+            "triggers": []
+        },
+        "med_relations": {
+            "columns": {
+                "created_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "entity_handle": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "entity_id": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "file_id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "id": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "nextval('med_relations_id_seq'::regclass)"
+                },
+                "slot": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "med_relations_file_id_entity_handle_entity_id_slot_unique",
+                    "kind": "uq",
+                    "columns": [
+                        "file_id",
+                        "entity_handle",
+                        "entity_id",
+                        "slot"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "med_relations_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [
+                {
+                    "name": "med_relations_file_id_foreign",
+                    "columns": [
+                        "file_id"
+                    ],
+                    "references": "med_files(id)",
+                    "on_delete": "RESTRICT",
+                    "on_update": "NO ACTION",
+                    "deferrable": false,
+                    "initially_deferred": false
+                }
+            ],
+            "checks": [],
+            "triggers": []
+        }
+    },
+    "enum_types": []
+}

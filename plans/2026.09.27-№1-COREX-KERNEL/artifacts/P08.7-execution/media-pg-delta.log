@@ -1,0 +1,30 @@
+> pest --group=pg
+
+   FAIL  Tests\Pg\ConversionConcurrencyTest
+  ⨯ it uses a PostgreSQL file-row lock across independent connections    0.08s
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Pg\ConversionConcurrencyTest > it uses a Po…  QueryException
+  SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "med_files" does not exist
+LINE 1: select * from "med_files" where "request_key" = $1 limit 1
+                      ^ (Connection: pgsql, Host: 127.0.0.1, Port: 5434, Database: corex_test, SQL: select * from "med_files" where "request_key" = pg-lock-request limit 1)
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:440
+    436▕             );
+    437▕
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕
+  ➜ 440▕             $statement->execute();
+    441▕
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      +7 vendor frames
+  8   src/Internal/SqlMediaLibrary.php:62
+  9   tests/Pg/ConversionConcurrencyTest.php:39
+
+
+  Tests:    1 failed (0 assertions)
+  Duration: 0.13s
+
+Script pest --group=pg handling the test:pg event returned with error code 2

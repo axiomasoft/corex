@@ -1,0 +1,2 @@
+sys_workflow_intents: rename indexes sys_workflow_intents_state_updated_at_index -> sys_workflow_intents_state_updated_at_ix
+sys_workflow_intents: rename indexes sys_workflow_intents_request_key_unique -> sys_workflow_intents_request_key_uq

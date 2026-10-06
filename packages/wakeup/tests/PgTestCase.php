@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Wakeup\Tests;
 
 use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 use Override;
 use RuntimeException;
 
@@ -39,8 +39,8 @@ abstract class PgTestCase extends TestCase
     #[Override]
     protected function defineDatabaseMigrations(): void
     {
-        Schema::dropIfExists('wakeup_effects');
-        Schema::dropIfExists('sys_wakeup_requests');
+        DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
+        DB::statement('CREATE SCHEMA public');
 
         parent::defineDatabaseMigrations();
     }

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — baseline v1
+
+- Схема: набор(ы) `tenant`, baseline v1. Baseline заменяет невыпущенную upgrade-цепочку; новая установка использует финальную схему.
+
 ## Unreleased — deterministic schema (P08.2)
 
 - Remove the tables configuration and internal Options table map; storage tables use package-owned literals while AttributeTables remains available for explicit composition.

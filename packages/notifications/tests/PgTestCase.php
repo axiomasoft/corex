@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Notifications\Tests;
 
 use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 use Override;
 use RuntimeException;
 
@@ -39,12 +39,8 @@ abstract class PgTestCase extends TestCase
     #[Override]
     protected function defineDatabaseMigrations(): void
     {
-        Schema::dropIfExists('ntf_digest_items');
-        Schema::dropIfExists('ntf_digest_runs');
-        Schema::dropIfExists('ntf_deliveries');
-        Schema::dropIfExists('ntf_recipient_state');
-        Schema::dropIfExists('ntf_notifications');
-        Schema::dropIfExists('sys_wakeup_requests');
+        DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
+        DB::statement('CREATE SCHEMA public');
 
         parent::defineDatabaseMigrations();
     }

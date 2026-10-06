@@ -1,0 +1,133 @@
+{
+    "driver": "sqlite",
+    "tables": {
+        "sys_workflow_intents": {
+            "columns": {
+                "attempt": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": "'0'"
+                },
+                "claim_epoch": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": "'0'"
+                },
+                "context_hash": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "created_at": {
+                    "type": "datetime",
+                    "nullable": true,
+                    "default": null
+                },
+                "definition_ref": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
+                "generation": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": "'0'"
+                },
+                "id": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "kind": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "module": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "payload": {
+                    "type": "text",
+                    "nullable": false,
+                    "default": null
+                },
+                "payload_hash": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "provider_instance": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                },
+                "request_key": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "restore_epoch": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "state": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "subject_ref": {
+                    "type": "varchar",
+                    "nullable": false,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "datetime",
+                    "nullable": true,
+                    "default": null
+                },
+                "version_ref": {
+                    "type": "varchar",
+                    "nullable": true,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "sqlite_autoindex_sys_workflow_intents_1",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "sys_workflow_intents_request_key_uq",
+                    "kind": "uq",
+                    "columns": [
+                        "request_key"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "sys_workflow_intents_state_updated_at_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "state",
+                        "updated_at"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [],
+            "triggers": []
+        }
+    },
+    "enum_types": []
+}

@@ -162,7 +162,7 @@ operations, независимые модули, детерминированн�
 | P05 | Typed config, композиция и порты | detailed | 4/4 | 🟢 Done |
 | P06 | Operations, tools, webhooks и wire | detailed | 5/5 | 🟠 Done with deviations |
 | P07 | Tenancy, access, независимость модулей | detailed | 6/6 | 🟠 Done with deviations |
-| P08 | Схема: baseline v1 | detailed | 6/10 | 🟡 In progress |
+| P08 | Схема: baseline v1 | detailed | 7/10 | 🟡 In progress |
 | P09 | Планка качества и release-квалификация `1.0.0-rc.1` | skeleton | 0/0 | ⬜ Skeleton |
 | P10 | Зелёный hosted CI на базе P04 | detailed | 4/4 | 🟢 Done |
 

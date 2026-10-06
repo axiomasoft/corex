@@ -70,7 +70,7 @@
             "package": "axiomasoft/corex-custom-fields",
             "name": "tenant",
             "scope": "tenant",
-            "path": "packages/custom-fields/database/migrations",
+            "path": "packages/custom-fields/database/migrations/tenant",
             "version": 1,
             "drivers": [
                 "pgsql"
@@ -84,7 +84,7 @@
             "package": "axiomasoft/corex-intl",
             "name": "tenant",
             "scope": "tenant",
-            "path": "packages/intl/database/migrations",
+            "path": "packages/intl/database/migrations/tenant",
             "version": 1,
             "drivers": [
                 "pgsql",
@@ -99,7 +99,7 @@
             "package": "axiomasoft/corex-media",
             "name": "tenant",
             "scope": "tenant",
-            "path": "packages/media/database/migrations",
+            "path": "packages/media/database/migrations/tenant",
             "version": 1,
             "drivers": [
                 "pgsql",
@@ -114,7 +114,7 @@
             "package": "axiomasoft/corex-notifications",
             "name": "tenant",
             "scope": "tenant",
-            "path": "packages/notifications/database/migrations",
+            "path": "packages/notifications/database/migrations/tenant",
             "version": 1,
             "drivers": [
                 "pgsql",
@@ -174,7 +174,7 @@
             "package": "axiomasoft/corex-search",
             "name": "tenant",
             "scope": "tenant",
-            "path": "packages/search/database/migrations",
+            "path": "packages/search/database/migrations/tenant",
             "version": 1,
             "drivers": [
                 "pgsql",
@@ -262,7 +262,7 @@
             "package": "axiomasoft/corex-wakeup",
             "name": "tenant",
             "scope": "tenant",
-            "path": "packages/wakeup/database/migrations",
+            "path": "packages/wakeup/database/migrations/tenant",
             "version": 1,
             "drivers": [
                 "pgsql",
@@ -292,7 +292,7 @@
             "package": "axiomasoft/corex-workflow",
             "name": "tenant",
             "scope": "tenant",
-            "path": "packages/workflow/database/migrations",
+            "path": "packages/workflow/database/migrations/tenant",
             "version": 1,
             "drivers": [
                 "pgsql",

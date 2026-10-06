@@ -1,0 +1,14 @@
+med_conversions: rename indexes med_conversions_pkey -> med_conversions_pk
+med_conversions: rename indexes med_conversions_file_id_profile_key_profile_digest_source_versi -> med_conversions_file_id_profile_key_profile_digest__67e95e41_uq
+med_conversions: rename foreign_keys med_conversions_file_id_foreign -> med_conversions_file_id_fk
+med_files: rename indexes med_files_pkey -> med_files_pk
+med_files: rename indexes med_files_request_key_unique -> med_files_request_key_uq
+med_operations: ~type attempts 'integer' -> 'bigint'
+med_operations: ~default attempts '0' -> "'0'::bigint"
+med_operations: rename indexes med_operations_state_next_attempt_at_index -> med_operations_state_next_attempt_at_ix
+med_operations: rename indexes med_operations_pkey -> med_operations_pk
+med_operations: rename indexes med_operations_operation_key_unique -> med_operations_operation_key_uq
+med_operations: rename foreign_keys med_operations_file_id_foreign -> med_operations_file_id_fk
+med_relations: rename indexes med_relations_pkey -> med_relations_pk
+med_relations: rename indexes med_relations_file_id_entity_handle_entity_id_slot_unique -> med_relations_file_id_entity_handle_entity_id_slot_uq
+med_relations: rename foreign_keys med_relations_file_id_foreign -> med_relations_file_id_fk

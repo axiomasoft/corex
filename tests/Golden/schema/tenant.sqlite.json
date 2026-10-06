@@ -247,7 +247,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_rate_batches_operation_key_unique",
+                    "name": "corex_rate_batches_operation_key_uq",
                     "kind": "uq",
                     "columns": [
                         "operation_key"
@@ -268,8 +268,8 @@
             "foreign_keys": [],
             "checks": [],
             "triggers": {
-                "corex_rate_batches_operation_key_chk": "CREATE TRIGGER corex_rate_batches_operation_key_chk BEFORE INSERT ON corex_rate_batches BEGIN SELECT CASE WHEN length(NEW.operation_key) = 64 AND NEW.operation_key NOT GLOB '*[^a-f0-9]*' THEN 0 ELSE RAISE(ABORT, 'invalid operation_key') END; END",
-                "corex_rate_batches_state_chk": "CREATE TRIGGER corex_rate_batches_state_chk BEFORE INSERT ON corex_rate_batches BEGIN SELECT CASE WHEN NEW.state IN ('staged','published','conflict','failed') THEN 0 ELSE RAISE(ABORT, 'invalid state') END; END"
+                "corex_rate_batches_operation_key_ck": "CREATE TRIGGER corex_rate_batches_operation_key_ck BEFORE INSERT ON corex_rate_batches BEGIN SELECT CASE WHEN length(NEW.operation_key) = 64 AND NEW.operation_key NOT GLOB '*[^a-f0-9]*' THEN 0 ELSE RAISE(ABORT, 'invalid operation_key') END; END",
+                "corex_rate_batches_state_ck": "CREATE TRIGGER corex_rate_batches_state_ck BEFORE INSERT ON corex_rate_batches BEGIN SELECT CASE WHEN NEW.state IN ('staged','published','conflict','failed') THEN 0 ELSE RAISE(ABORT, 'invalid state') END; END"
             }
         },
         "corex_rate_current": {
@@ -379,7 +379,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_rate_snapshots_publication_unique",
+                    "name": "corex_rate_snapshots_publication_uq",
                     "kind": "uq",
                     "columns": [
                         "source",
@@ -405,7 +405,7 @@
             "foreign_keys": [],
             "checks": [],
             "triggers": {
-                "corex_rate_snapshots_payload_hash_chk": "CREATE TRIGGER corex_rate_snapshots_payload_hash_chk BEFORE INSERT ON corex_rate_snapshots BEGIN SELECT CASE WHEN length(NEW.payload_hash) = 64 AND NEW.payload_hash NOT GLOB '*[^a-f0-9]*' THEN 0 ELSE RAISE(ABORT, 'invalid payload_hash') END; END"
+                "corex_rate_snapshots_payload_hash_ck": "CREATE TRIGGER corex_rate_snapshots_payload_hash_ck BEFORE INSERT ON corex_rate_snapshots BEGIN SELECT CASE WHEN length(NEW.payload_hash) = 64 AND NEW.payload_hash NOT GLOB '*[^a-f0-9]*' THEN 0 ELSE RAISE(ABORT, 'invalid payload_hash') END; END"
             }
         },
         "corex_reference_aliases": {
@@ -542,7 +542,7 @@
             "foreign_keys": [],
             "checks": [],
             "triggers": {
-                "corex_reference_datasets_state_chk": "CREATE TRIGGER corex_reference_datasets_state_chk BEFORE INSERT ON corex_reference_datasets BEGIN SELECT CASE WHEN NEW.state IN ('staged','published','retired') THEN 0 ELSE RAISE(ABORT, 'invalid state') END; END"
+                "corex_reference_datasets_state_ck": "CREATE TRIGGER corex_reference_datasets_state_ck BEFORE INSERT ON corex_reference_datasets BEGIN SELECT CASE WHEN NEW.state IN ('staged','published','retired') THEN 0 ELSE RAISE(ABORT, 'invalid state') END; END"
             }
         },
         "corex_reference_records": {
@@ -610,7 +610,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_reference_records_scan_idx",
+                    "name": "corex_reference_records_scan_ix",
                     "kind": "ix",
                     "columns": [
                         "snapshot_id",
@@ -635,7 +635,7 @@
             "foreign_keys": [],
             "checks": [],
             "triggers": {
-                "corex_reference_records_parent_chk": "CREATE TRIGGER corex_reference_records_parent_chk BEFORE INSERT ON corex_reference_records BEGIN SELECT CASE WHEN (NEW.parent_namespace IS NULL) = (NEW.parent_source_id IS NULL) THEN 0 ELSE RAISE(ABORT, 'invalid parent identity') END; END",
+                "corex_reference_records_parent_ck": "CREATE TRIGGER corex_reference_records_parent_ck BEFORE INSERT ON corex_reference_records BEGIN SELECT CASE WHEN (NEW.parent_namespace IS NULL) = (NEW.parent_source_id IS NULL) THEN 0 ELSE RAISE(ABORT, 'invalid parent identity') END; END",
                 "corex_reference_records_snapshot_fk": "CREATE TRIGGER corex_reference_records_snapshot_fk BEFORE INSERT ON corex_reference_records BEGIN SELECT CASE WHEN EXISTS (SELECT 1 FROM corex_reference_datasets WHERE snapshot_id = NEW.snapshot_id) THEN 0 ELSE RAISE(ABORT, 'invalid snapshot_id') END; END"
             }
         },
@@ -694,7 +694,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_search_dirty_lane_key_record_id_revision_unique",
+                    "name": "corex_search_dirty_lane_key_record_id_revision_uq",
                     "kind": "uq",
                     "columns": [
                         "lane_key",
@@ -705,7 +705,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "corex_search_dirty_lane_key_submitted_at_sequence_index",
+                    "name": "corex_search_dirty_lane_key_submitted_at_sequence_ix",
                     "kind": "ix",
                     "columns": [
                         "lane_key",
@@ -867,7 +867,7 @@
             },
             "indexes": [
                 {
-                    "name": "corex_search_rebuilds_lane_key_to_generation_unique",
+                    "name": "corex_search_rebuilds_lane_key_to_generation_uq",
                     "kind": "uq",
                     "columns": [
                         "lane_key",
@@ -3348,7 +3348,7 @@
             },
             "indexes": [
                 {
-                    "name": "med_conversions_file_id_profile_key_profile_digest_source_version_unique",
+                    "name": "med_conversions_file_id_profile_key_profile_digest__67e95e41_uq",
                     "kind": "uq",
                     "columns": [
                         "file_id",
@@ -3470,7 +3470,7 @@
             },
             "indexes": [
                 {
-                    "name": "med_files_request_key_unique",
+                    "name": "med_files_request_key_uq",
                     "kind": "uq",
                     "columns": [
                         "request_key"
@@ -3572,7 +3572,7 @@
             },
             "indexes": [
                 {
-                    "name": "med_operations_operation_key_unique",
+                    "name": "med_operations_operation_key_uq",
                     "kind": "uq",
                     "columns": [
                         "operation_key"
@@ -3590,7 +3590,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "med_operations_state_next_attempt_at_index",
+                    "name": "med_operations_state_next_attempt_at_ix",
                     "kind": "ix",
                     "columns": [
                         "state",
@@ -3656,7 +3656,7 @@
             },
             "indexes": [
                 {
-                    "name": "med_relations_file_id_entity_handle_entity_id_slot_unique",
+                    "name": "med_relations_file_id_entity_handle_entity_id_slot_uq",
                     "kind": "uq",
                     "columns": [
                         "file_id",
@@ -3793,7 +3793,7 @@
             },
             "indexes": [
                 {
-                    "name": "ntf_deliveries_delivery_key_unique",
+                    "name": "ntf_deliveries_delivery_key_uq",
                     "kind": "uq",
                     "columns": [
                         "delivery_key"
@@ -3802,7 +3802,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "ntf_deliveries_scan_idx",
+                    "name": "ntf_deliveries_scan_ix",
                     "kind": "ix",
                     "columns": [
                         "state",
@@ -3873,7 +3873,7 @@
             },
             "indexes": [
                 {
-                    "name": "ntf_digest_items_notification_id_channel_unique",
+                    "name": "ntf_digest_items_notification_id_channel_uq",
                     "kind": "uq",
                     "columns": [
                         "notification_id",
@@ -3974,7 +3974,7 @@
             },
             "indexes": [
                 {
-                    "name": "ntf_digest_runs_recipient_kind_recipient_id_period_period_start_batch_seq_unique",
+                    "name": "ntf_digest_runs_recipient_kind_recipient_id_period__27ecc408_uq",
                     "kind": "uq",
                     "columns": [
                         "recipient_kind",
@@ -4080,7 +4080,7 @@
             },
             "indexes": [
                 {
-                    "name": "ntf_notifications_recipient_kind_recipient_id_request_key_unique",
+                    "name": "ntf_notifications_recipient_kind_recipient_id_request_key_uq",
                     "kind": "uq",
                     "columns": [
                         "recipient_kind",
@@ -4091,7 +4091,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "ntf_notifications_scan_idx",
+                    "name": "ntf_notifications_scan_ix",
                     "kind": "ix",
                     "columns": [
                         "recipient_kind",
@@ -5009,7 +5009,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_wakeup_requests_scan_idx",
+                    "name": "sys_wakeup_requests_scan_ix",
                     "kind": "ix",
                     "columns": [
                         "status",
@@ -5020,7 +5020,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_wakeup_requests_workspace_scope_key_kind_request_key_unique",
+                    "name": "sys_wakeup_requests_workspace_scope_key_kind_request_key_uq",
                     "kind": "uq",
                     "columns": [
                         "workspace_scope_key",
@@ -5031,7 +5031,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_wakeup_requests_workspace_scope_key_request_key_unique",
+                    "name": "sys_wakeup_requests_workspace_scope_key_request_key_uq",
                     "kind": "uq",
                     "columns": [
                         "workspace_scope_key",
@@ -5149,7 +5149,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_workflow_intents_request_key_unique",
+                    "name": "sys_workflow_intents_request_key_uq",
                     "kind": "uq",
                     "columns": [
                         "request_key"
@@ -5158,7 +5158,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_workflow_intents_state_updated_at_index",
+                    "name": "sys_workflow_intents_state_updated_at_ix",
                     "kind": "ix",
                     "columns": [
                         "state",

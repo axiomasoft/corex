@@ -1,0 +1,358 @@
+> pest --exclude-group=pg
+
+   PASS  CoreX\Media\Tests\ConfigReportSectionTest
+  ✓ section registers in report order and redacts its secrets            0.12s
+
+   FAIL  Tests\Conversion\ConversionEdgeCasesTest
+  ⨯ it does not advertise a conversion when no matching driver is installed
+  ⨯ it keeps malformed source conversions pending for durable retry instead of publishing output
+  ⨯ it rejects output facts that exceed the immutable conversion profile
+
+   FAIL  Tests\Conversion\ConversionTest
+  ⨯ it creates one bounded GD thumbnail for a file/profile/version
+  ⨯ it purges a published conversion together with its deleting original
+
+   FAIL  Tests\Feature\MediaLifecycleEdgeCasesTest
+  ⨯ it keeps staged uploads private and schedules their purge when storage write fails
+  ⨯ it keeps attachment operations idempotent and rejects unavailable files
+  ⨯ it marks a failed purge unknown instead of publishing a false delete
+  ⨯ it rejects malformed trusted media inputs before creating storage keys
+  ⨯ it rejects an unregistered purpose and a server-detected executable MIME type
+  ⨯ it rechecks policy before publishing uploaded bytes and when an authorized handle is consumed
+  ⨯ it publishes media as a standalone CoreX module
+
+   FAIL  Tests\Feature\MediaLifecycleTest
+  ⨯ it stores, reads, replays, attaches, and detaches private media
+  ⨯ it denies all operations until a consumer policy explicitly allows them
+  ⨯ it rejects a replay key with a different content digest
+  ⨯ it refuses deletion while an authoritative relation exists and purges after detach
+
+   PASS  Tests\Unit\MediaOptionsTest
+  ✓ it rejects a non-positive max upload bytes limit with (0)
+  ✓ it rejects a non-positive max upload bytes limit with (-1)
+  ✓ it rejects an empty allowed mime type list
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Conversion\ConversionEdgeCasesTest > it doe…  QueryException
+  SQLSTATE[HY000]: General error: 1 table "med_relations" has more than one primary key (Connection: sqlite, Database: :memory:, SQL: create table "med_relations" ("id" integer primary key autoincrement not null, "file_id" varchar not null, "entity_handle" varchar not null, "entity_id" varchar not null, "slot" varchar not null, "created_at" datetime, "updated_at" datetime, foreign key("file_id") references "med_files"("id") on delete restrict, primary key ("id")))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:595
+    591▕             if ($this->pretending()) {
+    592▕                 return true;
+    593▕             }
+    594▕
+  ➜ 595▕             $statement = $this->getPdo()->prepare($query);
+    596▕
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕
+    599▕             $this->recordsHaveBeenModified();
+
+      +8 vendor frames
+  9   database/migrations/tenant/2026_10_01_100020_create_med_relations.php:13
+      +8 vendor frames
+  18  /home/vostrikov/projects/packages/corex/packages/core/src/Database/Internal/LaravelSchemaMigrator.php:118
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Conversion\ConversionEdgeCasesTest > it kee…  QueryException
+  SQLSTATE[HY000]: General error: 1 table "med_relations" has more than one primary key (Connection: sqlite, Database: :memory:, SQL: create table "med_relations" ("id" integer primary key autoincrement not null, "file_id" varchar not null, "entity_handle" varchar not null, "entity_id" varchar not null, "slot" varchar not null, "created_at" datetime, "updated_at" datetime, foreign key("file_id") references "med_files"("id") on delete restrict, primary key ("id")))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:595
+    591▕             if ($this->pretending()) {
+    592▕                 return true;
+    593▕             }
+    594▕
+  ➜ 595▕             $statement = $this->getPdo()->prepare($query);
+    596▕
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕
+    599▕             $this->recordsHaveBeenModified();
+
+      +8 vendor frames
+  9   database/migrations/tenant/2026_10_01_100020_create_med_relations.php:13
+      +8 vendor frames
+  18  /home/vostrikov/projects/packages/corex/packages/core/src/Database/Internal/LaravelSchemaMigrator.php:118
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Conversion\ConversionEdgeCasesTest > it rej…  QueryException
+  SQLSTATE[HY000]: General error: 1 table "med_relations" has more than one primary key (Connection: sqlite, Database: :memory:, SQL: create table "med_relations" ("id" integer primary key autoincrement not null, "file_id" varchar not null, "entity_handle" varchar not null, "entity_id" varchar not null, "slot" varchar not null, "created_at" datetime, "updated_at" datetime, foreign key("file_id") references "med_files"("id") on delete restrict, primary key ("id")))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:595
+    591▕             if ($this->pretending()) {
+    592▕                 return true;
+    593▕             }
+    594▕
+  ➜ 595▕             $statement = $this->getPdo()->prepare($query);
+    596▕
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕
+    599▕             $this->recordsHaveBeenModified();
+
+      +8 vendor frames
+  9   database/migrations/tenant/2026_10_01_100020_create_med_relations.php:13
+      +8 vendor frames
+  18  /home/vostrikov/projects/packages/corex/packages/core/src/Database/Internal/LaravelSchemaMigrator.php:118
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Conversion\ConversionTest > it creates one…   QueryException
+  SQLSTATE[HY000]: General error: 1 table "med_relations" has more than one primary key (Connection: sqlite, Database: :memory:, SQL: create table "med_relations" ("id" integer primary key autoincrement not null, "file_id" varchar not null, "entity_handle" varchar not null, "entity_id" varchar not null, "slot" varchar not null, "created_at" datetime, "updated_at" datetime, foreign key("file_id") references "med_files"("id") on delete restrict, primary key ("id")))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:595
+    591▕             if ($this->pretending()) {
+    592▕                 return true;
+    593▕             }
+    594▕
+  ➜ 595▕             $statement = $this->getPdo()->prepare($query);
+    596▕
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕
+    599▕             $this->recordsHaveBeenModified();
+
+      +8 vendor frames
+  9   database/migrations/tenant/2026_10_01_100020_create_med_relations.php:13
+      +8 vendor frames
+  18  /home/vostrikov/projects/packages/corex/packages/core/src/Database/Internal/LaravelSchemaMigrator.php:118
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Conversion\ConversionTest > it purges a pub…  QueryException
+  SQLSTATE[HY000]: General error: 1 table "med_relations" has more than one primary key (Connection: sqlite, Database: :memory:, SQL: create table "med_relations" ("id" integer primary key autoincrement not null, "file_id" varchar not null, "entity_handle" varchar not null, "entity_id" varchar not null, "slot" varchar not null, "created_at" datetime, "updated_at" datetime, foreign key("file_id") references "med_files"("id") on delete restrict, primary key ("id")))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:595
+    591▕             if ($this->pretending()) {
+    592▕                 return true;
+    593▕             }
+    594▕
+  ➜ 595▕             $statement = $this->getPdo()->prepare($query);
+    596▕
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕
+    599▕             $this->recordsHaveBeenModified();
+
+      +8 vendor frames
+  9   database/migrations/tenant/2026_10_01_100020_create_med_relations.php:13
+      +8 vendor frames
+  18  /home/vostrikov/projects/packages/corex/packages/core/src/Database/Internal/LaravelSchemaMigrator.php:118
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Feature\MediaLifecycleEdgeCasesTest > it ke…  QueryException
+  SQLSTATE[HY000]: General error: 1 table "med_relations" has more than one primary key (Connection: sqlite, Database: :memory:, SQL: create table "med_relations" ("id" integer primary key autoincrement not null, "file_id" varchar not null, "entity_handle" varchar not null, "entity_id" varchar not null, "slot" varchar not null, "created_at" datetime, "updated_at" datetime, foreign key("file_id") references "med_files"("id") on delete restrict, primary key ("id")))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:595
+    591▕             if ($this->pretending()) {
+    592▕                 return true;
+    593▕             }
+    594▕
+  ➜ 595▕             $statement = $this->getPdo()->prepare($query);
+    596▕
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕
+    599▕             $this->recordsHaveBeenModified();
+
+      +8 vendor frames
+  9   database/migrations/tenant/2026_10_01_100020_create_med_relations.php:13
+      +8 vendor frames
+  18  /home/vostrikov/projects/packages/corex/packages/core/src/Database/Internal/LaravelSchemaMigrator.php:118
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Feature\MediaLifecycleEdgeCasesTest > it ke…  QueryException
+  SQLSTATE[HY000]: General error: 1 table "med_relations" has more than one primary key (Connection: sqlite, Database: :memory:, SQL: create table "med_relations" ("id" integer primary key autoincrement not null, "file_id" varchar not null, "entity_handle" varchar not null, "entity_id" varchar not null, "slot" varchar not null, "created_at" datetime, "updated_at" datetime, foreign key("file_id") references "med_files"("id") on delete restrict, primary key ("id")))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:595
+    591▕             if ($this->pretending()) {
+    592▕                 return true;
+    593▕             }
+    594▕
+  ➜ 595▕             $statement = $this->getPdo()->prepare($query);
+    596▕
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕
+    599▕             $this->recordsHaveBeenModified();
+
+      +8 vendor frames
+  9   database/migrations/tenant/2026_10_01_100020_create_med_relations.php:13
+      +8 vendor frames
+  18  /home/vostrikov/projects/packages/corex/packages/core/src/Database/Internal/LaravelSchemaMigrator.php:118
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Feature\MediaLifecycleEdgeCasesTest > it ma…  QueryException
+  SQLSTATE[HY000]: General error: 1 table "med_relations" has more than one primary key (Connection: sqlite, Database: :memory:, SQL: create table "med_relations" ("id" integer primary key autoincrement not null, "file_id" varchar not null, "entity_handle" varchar not null, "entity_id" varchar not null, "slot" varchar not null, "created_at" datetime, "updated_at" datetime, foreign key("file_id") references "med_files"("id") on delete restrict, primary key ("id")))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:595
+    591▕             if ($this->pretending()) {
+    592▕                 return true;
+    593▕             }
+    594▕
+  ➜ 595▕             $statement = $this->getPdo()->prepare($query);
+    596▕
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕
+    599▕             $this->recordsHaveBeenModified();
+
+      +8 vendor frames
+  9   database/migrations/tenant/2026_10_01_100020_create_med_relations.php:13
+      +8 vendor frames
+  18  /home/vostrikov/projects/packages/corex/packages/core/src/Database/Internal/LaravelSchemaMigrator.php:118
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Feature\MediaLifecycleEdgeCasesTest > it re…  QueryException
+  SQLSTATE[HY000]: General error: 1 table "med_relations" has more than one primary key (Connection: sqlite, Database: :memory:, SQL: create table "med_relations" ("id" integer primary key autoincrement not null, "file_id" varchar not null, "entity_handle" varchar not null, "entity_id" varchar not null, "slot" varchar not null, "created_at" datetime, "updated_at" datetime, foreign key("file_id") references "med_files"("id") on delete restrict, primary key ("id")))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:595
+    591▕             if ($this->pretending()) {
+    592▕                 return true;
+    593▕             }
+    594▕
+  ➜ 595▕             $statement = $this->getPdo()->prepare($query);
+    596▕
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕
+    599▕             $this->recordsHaveBeenModified();
+
+      +8 vendor frames
+  9   database/migrations/tenant/2026_10_01_100020_create_med_relations.php:13
+      +8 vendor frames
+  18  /home/vostrikov/projects/packages/corex/packages/core/src/Database/Internal/LaravelSchemaMigrator.php:118
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Feature\MediaLifecycleEdgeCasesTest > it re…  QueryException
+  SQLSTATE[HY000]: General error: 1 table "med_relations" has more than one primary key (Connection: sqlite, Database: :memory:, SQL: create table "med_relations" ("id" integer primary key autoincrement not null, "file_id" varchar not null, "entity_handle" varchar not null, "entity_id" varchar not null, "slot" varchar not null, "created_at" datetime, "updated_at" datetime, foreign key("file_id") references "med_files"("id") on delete restrict, primary key ("id")))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:595
+    591▕             if ($this->pretending()) {
+    592▕                 return true;
+    593▕             }
+    594▕
+  ➜ 595▕             $statement = $this->getPdo()->prepare($query);
+    596▕
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕
+    599▕             $this->recordsHaveBeenModified();
+
+      +8 vendor frames
+  9   database/migrations/tenant/2026_10_01_100020_create_med_relations.php:13
+      +8 vendor frames
+  18  /home/vostrikov/projects/packages/corex/packages/core/src/Database/Internal/LaravelSchemaMigrator.php:118
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Feature\MediaLifecycleEdgeCasesTest > it re…  QueryException
+  SQLSTATE[HY000]: General error: 1 table "med_relations" has more than one primary key (Connection: sqlite, Database: :memory:, SQL: create table "med_relations" ("id" integer primary key autoincrement not null, "file_id" varchar not null, "entity_handle" varchar not null, "entity_id" varchar not null, "slot" varchar not null, "created_at" datetime, "updated_at" datetime, foreign key("file_id") references "med_files"("id") on delete restrict, primary key ("id")))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:595
+    591▕             if ($this->pretending()) {
+    592▕                 return true;
+    593▕             }
+    594▕
+  ➜ 595▕             $statement = $this->getPdo()->prepare($query);
+    596▕
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕
+    599▕             $this->recordsHaveBeenModified();
+
+      +8 vendor frames
+  9   database/migrations/tenant/2026_10_01_100020_create_med_relations.php:13
+      +8 vendor frames
+  18  /home/vostrikov/projects/packages/corex/packages/core/src/Database/Internal/LaravelSchemaMigrator.php:118
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Feature\MediaLifecycleEdgeCasesTest > it pu…  QueryException
+  SQLSTATE[HY000]: General error: 1 table "med_relations" has more than one primary key (Connection: sqlite, Database: :memory:, SQL: create table "med_relations" ("id" integer primary key autoincrement not null, "file_id" varchar not null, "entity_handle" varchar not null, "entity_id" varchar not null, "slot" varchar not null, "created_at" datetime, "updated_at" datetime, foreign key("file_id") references "med_files"("id") on delete restrict, primary key ("id")))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:595
+    591▕             if ($this->pretending()) {
+    592▕                 return true;
+    593▕             }
+    594▕
+  ➜ 595▕             $statement = $this->getPdo()->prepare($query);
+    596▕
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕
+    599▕             $this->recordsHaveBeenModified();
+
+      +8 vendor frames
+  9   database/migrations/tenant/2026_10_01_100020_create_med_relations.php:13
+      +8 vendor frames
+  18  /home/vostrikov/projects/packages/corex/packages/core/src/Database/Internal/LaravelSchemaMigrator.php:118
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Feature\MediaLifecycleTest > it stores, rea…  QueryException
+  SQLSTATE[HY000]: General error: 1 table "med_relations" has more than one primary key (Connection: sqlite, Database: :memory:, SQL: create table "med_relations" ("id" integer primary key autoincrement not null, "file_id" varchar not null, "entity_handle" varchar not null, "entity_id" varchar not null, "slot" varchar not null, "created_at" datetime, "updated_at" datetime, foreign key("file_id") references "med_files"("id") on delete restrict, primary key ("id")))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:595
+    591▕             if ($this->pretending()) {
+    592▕                 return true;
+    593▕             }
+    594▕
+  ➜ 595▕             $statement = $this->getPdo()->prepare($query);
+    596▕
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕
+    599▕             $this->recordsHaveBeenModified();
+
+      +8 vendor frames
+  9   database/migrations/tenant/2026_10_01_100020_create_med_relations.php:13
+      +8 vendor frames
+  18  /home/vostrikov/projects/packages/corex/packages/core/src/Database/Internal/LaravelSchemaMigrator.php:118
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Feature\MediaLifecycleTest > it denies all…   QueryException
+  SQLSTATE[HY000]: General error: 1 table "med_relations" has more than one primary key (Connection: sqlite, Database: :memory:, SQL: create table "med_relations" ("id" integer primary key autoincrement not null, "file_id" varchar not null, "entity_handle" varchar not null, "entity_id" varchar not null, "slot" varchar not null, "created_at" datetime, "updated_at" datetime, foreign key("file_id") references "med_files"("id") on delete restrict, primary key ("id")))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:595
+    591▕             if ($this->pretending()) {
+    592▕                 return true;
+    593▕             }
+    594▕
+  ➜ 595▕             $statement = $this->getPdo()->prepare($query);
+    596▕
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕
+    599▕             $this->recordsHaveBeenModified();
+
+      +8 vendor frames
+  9   database/migrations/tenant/2026_10_01_100020_create_med_relations.php:13
+      +8 vendor frames
+  18  /home/vostrikov/projects/packages/corex/packages/core/src/Database/Internal/LaravelSchemaMigrator.php:118
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Feature\MediaLifecycleTest > it rejects a r…  QueryException
+  SQLSTATE[HY000]: General error: 1 table "med_relations" has more than one primary key (Connection: sqlite, Database: :memory:, SQL: create table "med_relations" ("id" integer primary key autoincrement not null, "file_id" varchar not null, "entity_handle" varchar not null, "entity_id" varchar not null, "slot" varchar not null, "created_at" datetime, "updated_at" datetime, foreign key("file_id") references "med_files"("id") on delete restrict, primary key ("id")))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:595
+    591▕             if ($this->pretending()) {
+    592▕                 return true;
+    593▕             }
+    594▕
+  ➜ 595▕             $statement = $this->getPdo()->prepare($query);
+    596▕
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕
+    599▕             $this->recordsHaveBeenModified();
+
+      +8 vendor frames
+  9   database/migrations/tenant/2026_10_01_100020_create_med_relations.php:13
+      +8 vendor frames
+  18  /home/vostrikov/projects/packages/corex/packages/core/src/Database/Internal/LaravelSchemaMigrator.php:118
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  Tests\Feature\MediaLifecycleTest > it refuses del…  QueryException
+  SQLSTATE[HY000]: General error: 1 table "med_relations" has more than one primary key (Connection: sqlite, Database: :memory:, SQL: create table "med_relations" ("id" integer primary key autoincrement not null, "file_id" varchar not null, "entity_handle" varchar not null, "entity_id" varchar not null, "slot" varchar not null, "created_at" datetime, "updated_at" datetime, foreign key("file_id") references "med_files"("id") on delete restrict, primary key ("id")))
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:595
+    591▕             if ($this->pretending()) {
+    592▕                 return true;
+    593▕             }
+    594▕
+  ➜ 595▕             $statement = $this->getPdo()->prepare($query);
+    596▕
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕
+    599▕             $this->recordsHaveBeenModified();
+
+      +8 vendor frames
+  9   database/migrations/tenant/2026_10_01_100020_create_med_relations.php:13
+      +8 vendor frames
+  18  /home/vostrikov/projects/packages/corex/packages/core/src/Database/Internal/LaravelSchemaMigrator.php:118
+
+
+  Tests:    16 failed, 4 passed (7 assertions)
+  Duration: 0.44s
+
+Script pest --exclude-group=pg handling the test event returned with error code 2

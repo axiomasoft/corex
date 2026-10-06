@@ -1,0 +1,9 @@
+schema-gate: schema-sets.json written
+sys_workflow_intents: ~type attempt 'integer' -> 'bigint'
+sys_workflow_intents: ~default attempt '0' -> "'0'::bigint"
+sys_workflow_intents: rename indexes sys_workflow_intents_state_updated_at_index -> sys_workflow_intents_state_updated_at_ix
+sys_workflow_intents: rename indexes sys_workflow_intents_pkey -> sys_workflow_intents_pk
+sys_workflow_intents: rename indexes sys_workflow_intents_request_key_unique -> sys_workflow_intents_request_key_uq
+
+sys_workflow_intents: rename indexes sys_workflow_intents_state_updated_at_index -> sys_workflow_intents_state_updated_at_ix
+sys_workflow_intents: rename indexes sys_workflow_intents_request_key_unique -> sys_workflow_intents_request_key_uq

@@ -1,0 +1,5 @@
+sys_wakeup_requests: ~type attempt 'integer' -> 'bigint'
+sys_wakeup_requests: rename indexes sys_wakeup_requests_scan_idx -> sys_wakeup_requests_scan_ix
+sys_wakeup_requests: rename indexes sys_wakeup_requests_pkey -> sys_wakeup_requests_pk
+sys_wakeup_requests: rename indexes sys_wakeup_requests_workspace_scope_key_kind_request_key_unique -> sys_wakeup_requests_workspace_scope_key_kind_request_key_uq
+sys_wakeup_requests: rename indexes sys_wakeup_requests_workspace_scope_key_request_key_unique -> sys_wakeup_requests_workspace_scope_key_request_key_uq

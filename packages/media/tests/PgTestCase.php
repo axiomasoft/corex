@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Media\Tests;
 
 use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 use Override;
 use RuntimeException;
 
@@ -39,10 +39,8 @@ abstract class PgTestCase extends TestCase
     #[Override]
     protected function defineDatabaseMigrations(): void
     {
-        Schema::dropIfExists('med_operations');
-        Schema::dropIfExists('med_conversions');
-        Schema::dropIfExists('med_relations');
-        Schema::dropIfExists('med_files');
+        DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
+        DB::statement('CREATE SCHEMA public');
 
         parent::defineDatabaseMigrations();
     }

@@ -1,0 +1,133 @@
+{
+    "driver": "pgsql",
+    "tables": {
+        "sys_workflow_intents": {
+            "columns": {
+                "attempt": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": "0"
+                },
+                "claim_epoch": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "'0'::bigint"
+                },
+                "context_hash": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "created_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "definition_ref": {
+                    "type": "character varying(255)",
+                    "nullable": true,
+                    "default": null
+                },
+                "generation": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": "'0'::bigint"
+                },
+                "id": {
+                    "type": "uuid",
+                    "nullable": false,
+                    "default": null
+                },
+                "kind": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": null
+                },
+                "module": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "payload": {
+                    "type": "json",
+                    "nullable": false,
+                    "default": null
+                },
+                "payload_hash": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "provider_instance": {
+                    "type": "character varying(255)",
+                    "nullable": true,
+                    "default": null
+                },
+                "request_key": {
+                    "type": "character varying(128)",
+                    "nullable": false,
+                    "default": null
+                },
+                "restore_epoch": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "state": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": null
+                },
+                "subject_ref": {
+                    "type": "character varying(255)",
+                    "nullable": false,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(0) without time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "version_ref": {
+                    "type": "character varying(255)",
+                    "nullable": true,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "sys_workflow_intents_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "sys_workflow_intents_request_key_unique",
+                    "kind": "uq",
+                    "columns": [
+                        "request_key"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "sys_workflow_intents_state_updated_at_index",
+                    "kind": "ix",
+                    "columns": [
+                        "state",
+                        "updated_at"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [],
+            "triggers": []
+        }
+    },
+    "enum_types": []
+}

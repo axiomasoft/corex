@@ -1,12 +1,5 @@
 [
-    "axiomasoft/corex-custom-fields",
-    "axiomasoft/corex-intl",
-    "axiomasoft/corex-media",
-    "axiomasoft/corex-notifications",
-    "axiomasoft/corex-search",
     "axiomasoft/corex-transfer",
-    "axiomasoft/corex-wakeup",
-    "axiomasoft/corex-workflow",
     "axiomasoft/corex-tasks",
     "axiomasoft/corex-tasks-workflow",
     "flex/crm"

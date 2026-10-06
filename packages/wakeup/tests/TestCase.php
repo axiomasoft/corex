@@ -13,6 +13,7 @@ use CoreX\Time\Laravel\LaravelClock;
 use CoreX\Wakeup\WakeupServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\DateFactory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Override;
@@ -46,7 +47,7 @@ abstract class TestCase extends Orchestra
 
     protected function defineDatabaseMigrations(): void
     {
-        $this->migrateSchemaSets(['axiomasoft/corex-wakeup:tenant'], 'sqlite');
+        $this->migrateSchemaSets(['axiomasoft/corex-wakeup:tenant'], DB::getDefaultConnection());
         Schema::create('wakeup_effects', function (Blueprint $table): void {
             $table->string('request_key')->primary();
         });

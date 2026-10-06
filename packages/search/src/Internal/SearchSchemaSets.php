@@ -16,7 +16,7 @@ final readonly class SearchSchemaSets implements SchemaSetProvider
         $root = dirname(__DIR__, 2).'/database/migrations';
 
         return [
-            new SchemaSet(package: 'axiomasoft/corex-search', name: 'tenant', scope: SchemaScope::Tenant, path: $root, version: 1, drivers: ['pgsql', 'sqlite']),
+            new SchemaSet(package: 'axiomasoft/corex-search', name: 'tenant', scope: SchemaScope::Tenant, path: $root.'/tenant', version: 1, drivers: ['pgsql', 'sqlite']),
         ];
     }
 }

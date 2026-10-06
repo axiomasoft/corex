@@ -54,19 +54,23 @@ function databaseDefinition(
 }
 
 it('migrates and rolls back the three owned catalogue tables on an empty database', function (): void {
-    $migration = require app(SchemaSets::class)->get('axiomasoft/corex-custom-fields:tenant')->path.'/2026_09_24_000002_create_attribute_definitions.php';
 
     expect(Schema::hasTable('sys_attribute_definitions'))->toBeTrue()
         ->and(Schema::hasTable('sys_attribute_key_reservations'))->toBeTrue()
         ->and(Schema::hasTable('sys_attribute_backfills'))->toBeTrue();
 
-    $migration->down();
+    $this->artisan('migrate:rollback', [
+        '--database' => 'pgsql',
+        '--path' => app(SchemaSets::class)->get('axiomasoft/corex-custom-fields:tenant')->path,
+        '--realpath' => true,
+        '--step' => 3,
+    ])->assertSuccessful();
 
     expect(Schema::hasTable('sys_attribute_definitions'))->toBeFalse()
         ->and(Schema::hasTable('sys_attribute_key_reservations'))->toBeFalse()
         ->and(Schema::hasTable('sys_attribute_backfills'))->toBeFalse();
 
-    $migration->up();
+    $this->migrateSchemaSets(['axiomasoft/corex-custom-fields:tenant'], 'pgsql');
 });
 
 it('retains immutable revisions and projects only the latest revision', function (): void {

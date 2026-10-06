@@ -8,6 +8,7 @@ use CoreX\Database\Laravel\DatabaseRegistrar;
 use CoreX\Database\Testing\MigratesSchemaSets;
 use CoreX\Notifications\NotificationsServiceProvider;
 use CoreX\Time\Laravel\SystemClock;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Override;
@@ -40,6 +41,6 @@ abstract class DisabledSchedulingCase extends Orchestra
         Schema::dropIfExists('ntf_deliveries');
         Schema::dropIfExists('ntf_recipient_state');
         Schema::dropIfExists('ntf_notifications');
-        $this->migrateSchemaSets(['axiomasoft/corex-notifications:tenant'], 'sqlite');
+        $this->migrateSchemaSets(['axiomasoft/corex-notifications:tenant'], DB::getDefaultConnection());
     }
 }
