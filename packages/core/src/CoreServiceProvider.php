@@ -12,6 +12,7 @@ use CoreX\Config\Internal\Commands\ValidateConfigCommand;
 use CoreX\Config\Laravel\ConfigRegistrar;
 use CoreX\Context\Laravel\ContextRegistrar;
 use CoreX\Data\Laravel\DataRegistrar;
+use CoreX\Database\Laravel\DatabaseRegistrar;
 use CoreX\Departments\Laravel\DepartmentsRegistrar;
 use CoreX\Errors\Internal\PackageProblemDefinitions;
 use CoreX\Errors\Laravel\ErrorsRegistrar;
@@ -35,15 +36,6 @@ use Override;
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class CoreServiceProvider extends ServiceProvider
 {
-    /**
-     * Shipped schema generation of the sys_* migration set. A consumer
-     * publishes a COPY of the migrations, so a package upgrade cannot mutate
-     * them in place — schema changes ship as NEW additive migration files under
-     * the same publish tag and bump this constant. Lets a host verify which
-     * generation its published set is on before re-running vendor:publish.
-     */
-    public const int SCHEMA_VERSION = 1;
-
     /** @var list<class-string<PackageRegistrar>> */
     private const array REGISTRARS = [
         ErrorsRegistrar::class,
@@ -51,6 +43,7 @@ final class CoreServiceProvider extends ServiceProvider
         ConfigRegistrar::class,
         ContextRegistrar::class,
         DataRegistrar::class,
+        DatabaseRegistrar::class,
         MessagingRegistrar::class,
         SettingsRegistrar::class,
         AuditRegistrar::class,
@@ -92,22 +85,6 @@ final class CoreServiceProvider extends ServiceProvider
                 ValidateConfigCommand::class,
             ]);
         }
-
-        // NO loadMigrationsFrom: every sys_* migration is PG-only
-        // DDL living in database/migrations/pg/, and this provider is registered
-        // by sqlite-backed consumer suites too — an unconditional load would
-        // break them. Consumers get the schema through publish + an explicit,
-        // tenant-scoped migrate (see README).
-        //
-        // Connection-scoped publish: sys_* is TENANT-schema DDL. The
-        // `-tenant` tag names that scope so a consumer never runs it on the
-        // central/root connection by accident (pre-mortem P1R C5) — the plain
-        // `corex-migrations` alias stays for the common single-DB (boxed) case.
-        // Under P2 (DB-per-account) the consumer runs
-        // `migrate --database=<tenant>` after publishing.
-        $this->publishes([
-            __DIR__.'/../database/migrations/pg' => database_path('migrations'),
-        ], ['corex-migrations', 'corex-migrations-tenant']);
 
         $this->publishes([
             __DIR__.'/../config/corex.php' => config_path('corex.php'),

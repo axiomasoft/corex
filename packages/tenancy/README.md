@@ -79,3 +79,11 @@ Package error identities use backed enums and a boot compiled kernel registry.
 Error constructors require `ErrorCode`; descriptors keep scoped string wire codes.
 See the monorepo [error contract](../../docs/reference/errors.md) for contributions,
 validated replay and safe mapping.
+
+## Schema installation
+
+Register the package provider, then run `php artisan corex:schema:migrate --scope=tenant --database=<tenant>`. Module sets are installed by `ModuleLifecycle::enable()`; template preparation includes them with `--modules`. Inspect the journal with `corex:schema:status`.
+
+### Registered schema scopes
+
+Use `corex:schema:migrate --scope=central --database=<central>` for the control plane and `corex:schema:migrate --scope=tenant --modules --database=<template>` for an account template. Migration waves run all platform Tenant sets on the account connection; enabled modules upgrade through their lifecycle.

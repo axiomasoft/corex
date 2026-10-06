@@ -141,6 +141,26 @@
         },
         "readonly": true
     },
+    "CoreX\\AccessAzguard\\Internal\\AccessAzguardSchemaSets": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Database\\Contracts\\SchemaSetProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "sets": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
     "CoreX\\AccessAzguard\\Internal\\AutMatrixGrantSource": {
         "abstract": false,
         "constants": [],
@@ -1892,6 +1912,26 @@
         "parent": null,
         "properties": [],
         "readonly": false
+    },
+    "CoreX\\Access\\Internal\\AccessSchemaSets": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Database\\Contracts\\SchemaSetProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "sets": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
     },
     "CoreX\\Access\\Internal\\Support\\AccessConfigSection": {
         "abstract": false,
@@ -7242,12 +7282,7 @@
     },
     "CoreX\\CoreServiceProvider": {
         "abstract": false,
-        "constants": {
-            "SCHEMA_VERSION": {
-                "type": "int",
-                "value": 1
-            }
-        },
+        "constants": [],
         "final": true,
         "interfaces": [],
         "internal": false,
@@ -9129,6 +9164,26 @@
                 "type": "array"
             }
         },
+        "readonly": true
+    },
+    "CoreX\\CustomFields\\Internal\\CustomFieldsSchemaSets": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Database\\Contracts\\SchemaSetProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "sets": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
         "readonly": true
     },
     "CoreX\\CustomFields\\Internal\\Integration\\AttributeMessageContractRegistry": {
@@ -13093,6 +13148,373 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Database\\Contracts\\SchemaMigrator": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "migrate": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Database\\Enums\\SchemaScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "connection",
+                        "type": "?string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": false,
+                        "name": "includeModules",
+                        "type": "bool",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            },
+            "migrateSets": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "ids",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "connection",
+                        "type": "?string",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            },
+            "status": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Database\\Enums\\SchemaScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "connection",
+                        "type": "?string",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Database\\Contracts\\SchemaSetProvider": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "sets": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Database\\Contracts\\SchemaSets": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "interface",
+        "methods": {
+            "all": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "forScope": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Database\\Enums\\SchemaScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "includeModules",
+                        "type": "bool",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            },
+            "get": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "id",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Database\\Data\\SchemaSet",
+                "static": false
+            },
+            "moduleSet": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "package",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "?CoreX\\Database\\Data\\SchemaSet",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Database\\Data\\SchemaSet": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "package",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Database\\Enums\\SchemaScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "path",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "version",
+                        "type": "int",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": [
+                            "pgsql"
+                        ],
+                        "name": "drivers",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": {
+                            "enum": "CoreX\\Database\\Enums\\SchemaLifecycle",
+                            "case": "Platform",
+                            "value": "platform"
+                        },
+                        "name": "lifecycle",
+                        "type": "CoreX\\Database\\Enums\\SchemaLifecycle",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": [],
+                        "name": "requires",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "connection",
+                        "type": "?string",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "id": {
+                "params": [],
+                "return": "string",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "connection": {
+                "name": "connection",
+                "readonly": true,
+                "static": false,
+                "type": "?string"
+            },
+            "drivers": {
+                "name": "drivers",
+                "readonly": true,
+                "static": false,
+                "type": "array"
+            },
+            "lifecycle": {
+                "name": "lifecycle",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Database\\Enums\\SchemaLifecycle"
+            },
+            "name": {
+                "name": "name",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "package": {
+                "name": "package",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "path": {
+                "name": "path",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "requires": {
+                "name": "requires",
+                "readonly": true,
+                "static": false,
+                "type": "array"
+            },
+            "scope": {
+                "name": "scope",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Database\\Enums\\SchemaScope"
+            },
+            "version": {
+                "name": "version",
+                "readonly": true,
+                "static": false,
+                "type": "int"
+            }
+        },
+        "readonly": true
+    },
+    "CoreX\\Database\\Data\\SchemaSetStatus": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "set",
+                        "type": "CoreX\\Database\\Data\\SchemaSet",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "applied",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "pending",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": [],
+                        "name": "unknown",
+                        "type": "array",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": {
+            "applied": {
+                "name": "applied",
+                "readonly": true,
+                "static": false,
+                "type": "array"
+            },
+            "pending": {
+                "name": "pending",
+                "readonly": true,
+                "static": false,
+                "type": "array"
+            },
+            "set": {
+                "name": "set",
+                "readonly": true,
+                "static": false,
+                "type": "CoreX\\Database\\Data\\SchemaSet"
+            },
+            "unknown": {
+                "name": "unknown",
+                "readonly": true,
+                "static": false,
+                "type": "array"
+            }
+        },
+        "readonly": true
+    },
     "CoreX\\Database\\Enums\\IdStrategy": {
         "abstract": false,
         "constants": {
@@ -13182,6 +13604,535 @@
                 "type": "string"
             }
         },
+        "readonly": false
+    },
+    "CoreX\\Database\\Enums\\SchemaLifecycle": {
+        "abstract": false,
+        "constants": {
+            "Module": {
+                "type": "CoreX\\Database\\Enums\\SchemaLifecycle",
+                "value": {
+                    "enum": "CoreX\\Database\\Enums\\SchemaLifecycle",
+                    "case": "Module",
+                    "value": "module"
+                }
+            },
+            "Platform": {
+                "type": "CoreX\\Database\\Enums\\SchemaLifecycle",
+                "value": {
+                    "enum": "CoreX\\Database\\Enums\\SchemaLifecycle",
+                    "case": "Platform",
+                    "value": "platform"
+                }
+            }
+        },
+        "final": true,
+        "interfaces": [
+            "BackedEnum",
+            "UnitEnum"
+        ],
+        "internal": false,
+        "kind": "enum",
+        "methods": {
+            "cases": {
+                "params": [],
+                "return": "array",
+                "static": true
+            },
+            "from": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "static",
+                "static": true
+            },
+            "tryFrom": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "?static",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "name": {
+                "name": "name",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "value": {
+                "name": "value",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\Database\\Enums\\SchemaScope": {
+        "abstract": false,
+        "constants": {
+            "Central": {
+                "type": "CoreX\\Database\\Enums\\SchemaScope",
+                "value": {
+                    "enum": "CoreX\\Database\\Enums\\SchemaScope",
+                    "case": "Central",
+                    "value": "central"
+                }
+            },
+            "Dedicated": {
+                "type": "CoreX\\Database\\Enums\\SchemaScope",
+                "value": {
+                    "enum": "CoreX\\Database\\Enums\\SchemaScope",
+                    "case": "Dedicated",
+                    "value": "dedicated"
+                }
+            },
+            "Tenant": {
+                "type": "CoreX\\Database\\Enums\\SchemaScope",
+                "value": {
+                    "enum": "CoreX\\Database\\Enums\\SchemaScope",
+                    "case": "Tenant",
+                    "value": "tenant"
+                }
+            }
+        },
+        "final": true,
+        "interfaces": [
+            "BackedEnum",
+            "UnitEnum"
+        ],
+        "internal": false,
+        "kind": "enum",
+        "methods": {
+            "cases": {
+                "params": [],
+                "return": "array",
+                "static": true
+            },
+            "from": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "static",
+                "static": true
+            },
+            "tryFrom": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "string|int",
+                        "variadic": false
+                    }
+                ],
+                "return": "?static",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": {
+            "name": {
+                "name": "name",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            },
+            "value": {
+                "name": "value",
+                "readonly": true,
+                "static": false,
+                "type": "string"
+            }
+        },
+        "readonly": false
+    },
+    "CoreX\\Database\\Exceptions\\SchemaSetException": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Errors\\Contracts\\DescribesError",
+            "Stringable",
+            "Throwable"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "duplicateMigration": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "first",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "second",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            },
+            "duplicateSet": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "id",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            },
+            "errorDescriptor": {
+                "params": [],
+                "return": "CoreX\\Errors\\Data\\ErrorDescriptor",
+                "static": false
+            },
+            "invalidSet": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "id",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            },
+            "unknownSet": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "id",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            },
+            "unsupportedDriver": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "id",
+                        "type": "string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "driver",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "self",
+                "static": true
+            }
+        },
+        "parent": "CoreX\\Errors\\Exceptions\\CodedException",
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Database\\Internal\\Commands\\SchemaMigrateCommand": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "Symfony\\Component\\Console\\Command\\SignalableCommandInterface"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "confirmToProceed": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "default": "Application In Production",
+                        "name": "warning",
+                        "type": "",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "callback",
+                        "type": "",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "migrator",
+                        "type": "CoreX\\Database\\Contracts\\SchemaMigrator",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": false
+            }
+        },
+        "parent": "Illuminate\\Console\\Command",
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Database\\Internal\\Commands\\SchemaStatusCommand": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "Symfony\\Component\\Console\\Command\\SignalableCommandInterface"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "handle": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "migrator",
+                        "type": "CoreX\\Database\\Contracts\\SchemaMigrator",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": false
+            }
+        },
+        "parent": "Illuminate\\Console\\Command",
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Database\\Internal\\CoreSchemaSets": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Database\\Contracts\\SchemaSetProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "sets": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\Database\\Internal\\LaravelSchemaMigrator": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Database\\Contracts\\SchemaMigrator"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "sets",
+                        "type": "CoreX\\Database\\Contracts\\SchemaSets",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "migrator",
+                        "type": "Illuminate\\Database\\Migrations\\Migrator",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "db",
+                        "type": "Illuminate\\Database\\DatabaseManager",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "migrate": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Database\\Enums\\SchemaScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "connection",
+                        "type": "?string",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": false,
+                        "name": "includeModules",
+                        "type": "bool",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            },
+            "migrateSets": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "ids",
+                        "type": "array",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "connection",
+                        "type": "?string",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            },
+            "status": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Database\\Enums\\SchemaScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "default": null,
+                        "name": "connection",
+                        "type": "?string",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\Database\\Internal\\TaggedSchemaSets": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Database\\Contracts\\SchemaSets"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "providers",
+                        "type": "iterable",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "all": {
+                "params": [],
+                "return": "array",
+                "static": false
+            },
+            "forScope": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "scope",
+                        "type": "CoreX\\Database\\Enums\\SchemaScope",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "includeModules",
+                        "type": "bool",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": false
+            },
+            "get": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "id",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "CoreX\\Database\\Data\\SchemaSet",
+                "static": false
+            },
+            "moduleSet": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "package",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "?CoreX\\Database\\Data\\SchemaSet",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
         "readonly": false
     },
     "CoreX\\Database\\Laravel\\BaseModel": {
@@ -13369,6 +14320,45 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Database\\Laravel\\DatabaseRegistrar": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Modules\\Contracts\\PackageRegistrar"
+        ],
+        "internal": false,
+        "kind": "class",
+        "methods": {
+            "boot": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            },
+            "register": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "app",
+                        "type": "Illuminate\\Contracts\\Foundation\\Application",
+                        "variadic": false
+                    }
+                ],
+                "return": "void",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Database\\Laravel\\HasConfiguredId": {
         "abstract": false,
         "constants": [],
@@ -13476,6 +14466,18 @@
         "readonly": false
     },
     "CoreX\\Database\\Laravel\\ResolvesCoreOptions": {
+        "abstract": false,
+        "constants": [],
+        "final": false,
+        "interfaces": [],
+        "internal": false,
+        "kind": "trait",
+        "methods": [],
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Database\\Testing\\MigratesSchemaSets": {
         "abstract": false,
         "constants": [],
         "final": false,
@@ -14729,6 +15731,46 @@
                     "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
                     "case": "RegistryInputUnavailable",
                     "value": "core.registry_input_unavailable"
+                }
+            },
+            "SchemaDuplicateMigration": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "SchemaDuplicateMigration",
+                    "value": "core.schema_duplicate_migration"
+                }
+            },
+            "SchemaDuplicateSet": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "SchemaDuplicateSet",
+                    "value": "core.schema_duplicate_set"
+                }
+            },
+            "SchemaInvalidSet": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "SchemaInvalidSet",
+                    "value": "core.schema_invalid_set"
+                }
+            },
+            "SchemaUnknownSet": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "SchemaUnknownSet",
+                    "value": "core.schema_unknown_set"
+                }
+            },
+            "SchemaUnsupportedDriver": {
+                "type": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                "value": {
+                    "enum": "CoreX\\Errors\\Enums\\CoreErrorCode",
+                    "case": "SchemaUnsupportedDriver",
+                    "value": "core.schema_unsupported_driver"
                 }
             },
             "ScopeContextMismatch": {
@@ -17729,6 +18771,26 @@
                 "type": "array"
             }
         },
+        "readonly": true
+    },
+    "CoreX\\Intl\\Internal\\IntlSchemaSets": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Database\\Contracts\\SchemaSetProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "sets": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
         "readonly": true
     },
     "CoreX\\Intl\\IntlModule": {
@@ -23688,6 +24750,26 @@
         "parent": null,
         "properties": [],
         "readonly": false
+    },
+    "CoreX\\Media\\Internal\\MediaSchemaSets": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Database\\Contracts\\SchemaSetProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "sets": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
     },
     "CoreX\\Media\\Internal\\SqlMediaLibrary": {
         "abstract": false,
@@ -34884,12 +35966,7 @@
     },
     "CoreX\\Modules\\ModulesServiceProvider": {
         "abstract": false,
-        "constants": {
-            "SCHEMA_VERSION": {
-                "type": "int",
-                "value": 1
-            }
-        },
+        "constants": [],
         "final": true,
         "interfaces": [],
         "internal": false,
@@ -39120,6 +40197,26 @@
                 "type": "bool"
             }
         },
+        "readonly": true
+    },
+    "CoreX\\Notifications\\Internal\\NotificationsSchemaSets": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Database\\Contracts\\SchemaSetProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "sets": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
         "readonly": true
     },
     "CoreX\\Notifications\\Laravel\\NotificationsBindingsRegistrar": {
@@ -46818,6 +47915,38 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Operations\\Internal\\OperationsSchemaSets": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Database\\Contracts\\SchemaSetProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "__construct": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "schema",
+                        "type": "CoreX\\Operations\\Laravel\\ApiSchemaRegistrar",
+                        "variadic": false
+                    }
+                ],
+                "return": "",
+                "static": false
+            },
+            "sets": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
     "CoreX\\Operations\\Invocation\\Contracts\\ContextResolver": {
         "abstract": false,
         "constants": [],
@@ -52016,6 +53145,26 @@
                 "type": "string"
             }
         },
+        "readonly": true
+    },
+    "CoreX\\Panels\\Internal\\PanelsSchemaSets": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Database\\Contracts\\SchemaSetProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "sets": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
         "readonly": true
     },
     "CoreX\\Panels\\Laravel\\PanelsBindingsRegistrar": {
@@ -57883,6 +59032,26 @@
         },
         "readonly": true
     },
+    "CoreX\\Search\\Internal\\SearchSchemaSets": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Database\\Contracts\\SchemaSetProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "sets": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
     "CoreX\\Search\\Internal\\Support\\SearchConfigSection": {
         "abstract": false,
         "constants": [],
@@ -61178,6 +62347,26 @@
         },
         "readonly": true
     },
+    "CoreX\\TasksWorkflow\\Internal\\TasksWorkflowSchemaSets": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Database\\Contracts\\SchemaSetProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "sets": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
     "CoreX\\TasksWorkflow\\Laravel\\CompletionBindings": {
         "abstract": false,
         "constants": [],
@@ -61777,6 +62966,26 @@
         "parent": null,
         "properties": [],
         "readonly": false
+    },
+    "CoreX\\Tasks\\Internal\\TasksSchemaSets": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Database\\Contracts\\SchemaSetProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "sets": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
     },
     "CoreX\\Tasks\\Planning\\Contracts\\TaskOperationReceipts": {
         "abstract": false,
@@ -67729,6 +68938,12 @@
                     },
                     {
                         "byRef": false,
+                        "name": "schema",
+                        "type": "CoreX\\Database\\Contracts\\SchemaMigrator",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
                         "default": null,
                         "name": "migrationRunner",
                         "type": "?Closure",
@@ -72196,6 +73411,26 @@
                         "variadic": false
                     }
                 ],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
+    "CoreX\\Tenancy\\Internal\\TenancySchemaSets": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Database\\Contracts\\SchemaSetProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "sets": {
+                "params": [],
                 "return": "array",
                 "static": false
             }
@@ -85216,6 +86451,26 @@
         },
         "readonly": true
     },
+    "CoreX\\Transfer\\Internal\\TransferSchemaSets": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Database\\Contracts\\SchemaSetProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "sets": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
     "CoreX\\Transfer\\Internal\\Transfer\\ExecutionGuard": {
         "abstract": false,
         "constants": [],
@@ -86197,6 +87452,26 @@
                 "type": "int"
             }
         },
+        "readonly": true
+    },
+    "CoreX\\Wakeup\\Internal\\WakeupSchemaSets": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Database\\Contracts\\SchemaSetProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "sets": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
         "readonly": true
     },
     "CoreX\\Wakeup\\Laravel\\WakeupBindingsRegistrar": {
@@ -89712,6 +90987,26 @@
         "properties": [],
         "readonly": true
     },
+    "CoreX\\Webhooks\\Internal\\WebhooksSchemaSets": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Database\\Contracts\\SchemaSetProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "sets": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
+    },
     "CoreX\\Webhooks\\Laravel\\WebhookBindingsRegistrar": {
         "abstract": false,
         "constants": [],
@@ -90925,6 +92220,26 @@
                 "type": "bool"
             }
         },
+        "readonly": true
+    },
+    "CoreX\\Workflow\\Internal\\WorkflowSchemaSets": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Database\\Contracts\\SchemaSetProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "sets": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
         "readonly": true
     },
     "CoreX\\Workflow\\Laravel\\WorkflowBindingFactory": {
@@ -93836,6 +95151,26 @@
         "parent": "CoreX\\Database\\Laravel\\BaseModel",
         "properties": [],
         "readonly": false
+    },
+    "Flex\\Crm\\Internal\\CrmSchemaSets": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [
+            "CoreX\\Database\\Contracts\\SchemaSetProvider"
+        ],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "sets": {
+                "params": [],
+                "return": "array",
+                "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": true
     },
     "Flex\\Crm\\Lead\\Actions\\ConvertLead": {
         "abstract": false,

@@ -7,6 +7,8 @@ namespace CoreX\Workflow\Tests;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
+use CoreX\Database\Laravel\DatabaseRegistrar;
+use CoreX\Database\Testing\MigratesSchemaSets;
 use CoreX\Time\Laravel\TimeRegistrar;
 use CoreX\Workflow\Contracts\EngineAdapter;
 use CoreX\Workflow\Data\SignalRequest;
@@ -47,6 +49,8 @@ final class FakeEngineAdapter implements EngineAdapter
 
 abstract class TestCase extends Orchestra
 {
+    use MigratesSchemaSets;
+
     #[Override]
     protected function getPackageProviders($app): array
     {
@@ -56,6 +60,7 @@ abstract class TestCase extends Orchestra
     #[Override]
     protected function defineEnvironment($app): void
     {
+        (new DatabaseRegistrar)->register($app);
         $app['config']->set('database.default', 'sqlite');
         $app['config']->set('database.connections.sqlite.database', ':memory:');
         $app['config']->set('corex-workflow.enforce_declarations', false);
@@ -63,7 +68,7 @@ abstract class TestCase extends Orchestra
 
     protected function defineDatabaseMigrations(): void
     {
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->migrateSchemaSets(['axiomasoft/corex-workflow:tenant'], 'sqlite');
     }
 
     #[Override]

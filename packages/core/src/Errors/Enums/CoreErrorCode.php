@@ -47,6 +47,12 @@ enum CoreErrorCode: string implements ErrorCode
     case UnknownMessageContract = 'core.unknown_message_contract';
     case UnsupportedScopeException = 'core.unsupported_scope_exception';
 
+    case SchemaInvalidSet = 'core.schema_invalid_set';
+    case SchemaDuplicateSet = 'core.schema_duplicate_set';
+    case SchemaDuplicateMigration = 'core.schema_duplicate_migration';
+    case SchemaUnknownSet = 'core.schema_unknown_set';
+    case SchemaUnsupportedDriver = 'core.schema_unsupported_driver';
+
     public function value(): string
     {
         return $this->value;

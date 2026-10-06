@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Tasks\Tests;
 
+use CoreX\Database\Testing\MigratesSchemaSets;
 use CoreX\Tasks\Tests\Support\TasksTestCase;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
@@ -11,6 +12,8 @@ use Override;
 
 abstract class PgTestCase extends TasksTestCase
 {
+    use MigratesSchemaSets;
+
     /** @param Application $app */
     #[Override]
     protected function defineEnvironment($app): void
@@ -37,7 +40,9 @@ abstract class PgTestCase extends TasksTestCase
 
     protected function migrateTasks(): int
     {
-        return $this->migratePath(__DIR__.'/../database/migrations');
+        $this->migrateSchemaSets(['axiomasoft/corex-tasks:tenant'], 'pgsql');
+
+        return 0;
     }
 
     protected function migrateFile(string $file): int

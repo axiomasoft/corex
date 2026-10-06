@@ -6,7 +6,9 @@ namespace CoreX\Panels;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
+use CoreX\Database\Contracts\SchemaSetProvider;
 use CoreX\Modules\Contracts\PackageRegistrar;
+use CoreX\Panels\Internal\PanelsSchemaSets;
 use CoreX\Panels\Laravel\PanelsBindingsRegistrar;
 use CoreX\Panels\SavedViews\Laravel\SavedViewsBindingsRegistrar;
 use Illuminate\Support\ServiceProvider;
@@ -21,6 +23,8 @@ final class PanelsServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        $this->app->tag([PanelsSchemaSets::class], SchemaSetProvider::class);
+
         $this->app->booted($this->publishMigrations(...));
         $this->mergeConfigFrom(__DIR__.'/../config/corex-panels.php', 'corex-panels');
 
@@ -36,8 +40,5 @@ final class PanelsServiceProvider extends ServiceProvider
         }
     }
 
-    private function publishMigrations(): void
-    {
-        $this->publishes([__DIR__.'/../database/migrations/pg' => database_path('migrations')], ['corex-panels-migrations', 'corex-panels-migrations-tenant']);
-    }
+    private function publishMigrations(): void {}
 }

@@ -13,6 +13,7 @@ use CoreX\Tests\Support\SourceScanner;
  */
 const CORE_ZONE_ALLOWED = [
     'Foundation' => [],
+    'Database' => ['Foundation'],
     'Modules' => ['Foundation', 'TenancyContracts', 'Audit', 'Settings', 'SavedViews', 'Storage', 'Messaging', 'Features', 'Departments', 'Money'],
     'TenancyContracts' => ['Foundation'],
     'Audit' => ['Foundation', 'TenancyContracts'],
@@ -44,6 +45,7 @@ const CORE_ZONE_COMPOSITION = [
     'packages/core/src/Config/Internal/ApplicationLocator.php',
     'packages/core/src/Context/Laravel/ContextRegistrar.php',
     'packages/core/src/Data/Laravel/DataRegistrar.php',
+    'packages/core/src/Database/Laravel/DatabaseRegistrar.php',
     'packages/core/src/Departments/Laravel/DepartmentsRegistrar.php',
     'packages/core/src/Errors/Laravel/ErrorsRegistrar.php',
     'packages/core/src/Errors/Laravel/ProblemRegistryFactory.php',
@@ -64,6 +66,12 @@ const CORE_ZONE_E_BASEMODEL = 'packages/core/src/Database/Laravel/BaseModel.php'
  * @var array<string, list<string>>
  */
 const CORE_ZONE_EXACT_IMPORTS = [
+    'packages/core/src/Modules/Laravel/LifecycleRegistrar.php' => [
+        'CoreX\\Database\\Contracts\\SchemaSets',
+        'CoreX\\Database\\Enums\\SchemaLifecycle',
+        'CoreX\\Database\\Enums\\SchemaScope',
+        'CoreX\\Database\\Exceptions\\SchemaSetException',
+    ],
     'packages/core/src/Context/Internal/ImpersonationGuard.php' => ['CoreX\\Audit\\Internal\\AuditLog'],
     'packages/core/src/Data/Data/DataScope.php' => [
         'CoreX\\Context\\Data\\TenantContext',
@@ -171,6 +179,21 @@ const CORE_ZONE_PREFIX = [
  * @var array<string, string>
  */
 const CORE_ZONE_DUMP = [
+    'Database/Contracts/SchemaMigrator.php' => 'Database',
+    'Database/Contracts/SchemaSetProvider.php' => 'Database',
+    'Database/Contracts/SchemaSets.php' => 'Database',
+    'Database/Data/SchemaSet.php' => 'Database',
+    'Database/Data/SchemaSetStatus.php' => 'Database',
+    'Database/Enums/SchemaLifecycle.php' => 'Database',
+    'Database/Enums/SchemaScope.php' => 'Database',
+    'Database/Exceptions/SchemaSetException.php' => 'Database',
+    'Database/Internal/Commands/SchemaMigrateCommand.php' => 'Database',
+    'Database/Internal/Commands/SchemaStatusCommand.php' => 'Database',
+    'Database/Internal/CoreSchemaSets.php' => 'Database',
+    'Database/Internal/LaravelSchemaMigrator.php' => 'Database',
+    'Database/Internal/TaggedSchemaSets.php' => 'Database',
+    'Database/Testing/MigratesSchemaSets.php' => 'Database',
+
     'Observability/Contracts/TracePropagation.php' => 'Foundation',
     'Messaging/PHPStan/DurablePayloadTypeChecker.php' => 'Foundation',
     'Messaging/PHPStan/Rules/DurablePayloadPromotedPropertyRule.php' => 'Foundation',

@@ -7,9 +7,11 @@ namespace CoreX\Intl;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Config\Contracts\ConfigReportSection;
+use CoreX\Database\Contracts\SchemaSetProvider;
 use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Intl\Errors\Internal\PackageProblemDefinitions;
 use CoreX\Intl\Internal\IntlConfigSection;
+use CoreX\Intl\Internal\IntlSchemaSets;
 use CoreX\Intl\Laravel\IntlBindingsRegistrar;
 use CoreX\Intl\Laravel\IntlReferenceRegistrar;
 use CoreX\Intl\Money\Laravel\MoneyCast;
@@ -27,6 +29,8 @@ final class IntlServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        $this->app->tag([IntlSchemaSets::class], SchemaSetProvider::class);
+
         ProblemDefinitions::register($this->app, __DIR__.'/../composer.json', PackageProblemDefinitions::class);
 
         $this->app->tag([IntlConfigSection::class], ConfigReportSection::class);
@@ -50,7 +54,6 @@ final class IntlServiceProvider extends ServiceProvider
             __DIR__.'/../config/corex-intl.php' => config_path('corex-intl.php'),
         ], 'corex-intl-config');
 
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
     }
 
     private static function registerMoneyCast(FieldCastRegistry $casts): void

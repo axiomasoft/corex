@@ -57,12 +57,7 @@ beforeEach(function (): void {
     settingsPg()->statement('CREATE SCHEMA public');
     DB::purge(SETTINGS_TEST_CONNECTION);
 
-    $this->artisan('migrate', [
-        '--database' => SETTINGS_TEST_CONNECTION,
-        '--path' => realpath(__DIR__.'/../../packages/core/database/migrations/pg'),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex:tenant'], SETTINGS_TEST_CONNECTION);
 });
 
 it('cascades user over workspace over account over manifest default', function (): void {

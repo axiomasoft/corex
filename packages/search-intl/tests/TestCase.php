@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\SearchIntl\Tests;
 
+use CoreX\Database\Testing\MigratesSchemaSets;
 use CoreX\Intl\IntlServiceProvider;
 use CoreX\Search\SearchServiceProvider;
 use CoreX\SearchIntl\Contracts\SavedViewLabelReader;
@@ -11,10 +12,13 @@ use CoreX\SearchIntl\Internal\LocalizedFieldProjector;
 use CoreX\SearchIntl\Internal\SqlSavedViewLabelReader;
 use CoreX\SearchIntl\SearchIntlServiceProvider;
 use CoreX\SearchIntl\Tests\Support\SearchIntlTestCase;
+use Illuminate\Support\Facades\DB;
 use Override;
 
 abstract class TestCase extends SearchIntlTestCase
 {
+    use MigratesSchemaSets;
+
     /**
      * @return list<class-string>
      */
@@ -32,7 +36,7 @@ abstract class TestCase extends SearchIntlTestCase
     #[Override]
     protected function defineDatabaseMigrations(): void
     {
-        $this->loadMigrationsFrom(dirname(__DIR__, 2).'/intl/database/migrations');
+        $this->migrateSchemaSets(['axiomasoft/corex-intl:tenant'], DB::getDefaultConnection());
     }
 
     #[Override]

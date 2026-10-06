@@ -7,6 +7,8 @@ namespace CoreX\Webhooks\Tests\Feature;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\Data\Data\DataScope;
+use CoreX\Database\Contracts\SchemaMigrator;
+use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Operations\Laravel\ApiSchemaRegistrar;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
@@ -44,8 +46,8 @@ final class WebhookConcurrencyTest extends TestCase
 
         try {
             $this->selectSchema($database);
-            $migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_webhook_tables.php';
-            $migration->up();
+            $migration = require app(SchemaSets::class)->get('axiomasoft/corex-webhooks:tenant')->path.'/create_sys_api_webhook_tables.php';
+            app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
             $connection = DB::connection('api_pg_tenant');
             $clock = new FrozenClock(new DateTimeImmutable('2026-09-26T12:00:00.000000+00:00'));
             $scope = $this->scope($connection);
@@ -187,6 +189,8 @@ final class WebhookConcurrencyTest extends TestCase
     private function selectSchema(string $database): void
     {
         $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(SchemaSets::class);
+        $this->app->forgetInstance(SchemaMigrator::class);
         $this->app['config']->set('database.connections.api_budget_stub', [
             'driver' => 'sqlite', 'database' => ':memory:', 'prefix' => '',
         ]);

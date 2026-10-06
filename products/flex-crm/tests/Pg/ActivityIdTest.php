@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use CoreX\Config\Data\CoreOptions;
+use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Database\Enums\IdStrategy;
 use Flex\Crm\Activity\Actions\LogActivity;
 use Flex\Crm\Activity\Enums\ActivityType;
@@ -24,7 +25,7 @@ it('stores and resolves activity subjects on PostgreSQL for the configured ID st
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     AccountFixture::migrate();
-    $this->artisan('migrate', ['--path' => realpath(__DIR__.'/../../database/migrations'), '--realpath' => true, '--force' => true])->assertSuccessful();
+    $this->migrateSchemaSets(['flex/crm:tenant'], DB::getDefaultConnection());
     $ctx = TestContext::seed('pgsql')->current();
     $subject = Company::query()->create(['name' => 'Subject', 'workspace_id' => $strategy === 'int' ? (int) $ctx->tenant->workspace->id : $ctx->tenant->workspace->id]);
     $activity = app(LogActivity::class)->handle($subject, ActivityType::Call, 'Compatible ID');
@@ -37,7 +38,7 @@ it('converts with canonical deal associations under enum configured IDs', functi
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     AccountFixture::migrate();
-    $this->artisan('migrate', ['--path' => realpath(__DIR__.'/../../database/migrations'), '--realpath' => true, '--force' => true])->assertSuccessful();
+    $this->migrateSchemaSets(['flex/crm:tenant'], DB::getDefaultConnection());
     TestContext::seed('pgsql');
     config(['corex.ids.strategy' => IdStrategy::from($strategy)]);
     app()->forgetInstance(CoreOptions::class);
@@ -53,9 +54,9 @@ it('widens a legacy activity morph column before a UUID insert', function (): vo
     config(['database.default' => 'pgsql']);
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
-    (require __DIR__.'/../../database/migrations/2026_06_14_000160_create_crm_activities_table.php')->up();
+    (require app(SchemaSets::class)->get('flex/crm:tenant')->path.'/2026_06_14_000160_create_crm_activities_table.php')->up();
     DB::statement('ALTER TABLE crm_activities ALTER COLUMN subject_id TYPE varchar(26) USING subject_id::text');
-    $migration = require __DIR__.'/../../database/migrations/2026_09_14_000001_widen_activity_subject_id.php';
+    $migration = require app(SchemaSets::class)->get('flex/crm:tenant')->path.'/2026_09_14_000001_widen_activity_subject_id.php';
     $migration->up();
     $id = (string) Str::uuid7();
     DB::table('crm_activities')->insert(['id' => $id, 'subject_id' => $id, 'subject_type' => 'crm.company', 'type' => 'note', 'summary' => 'Legacy UUID']);

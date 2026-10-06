@@ -1,5 +1,7 @@
 ## Unreleased — delivery budget and tenant egress
 
+- Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
+
 - Breaking pre-1.0 (PLAN3.P06.4): `WebhookHttpResult::$errorCode` now accepts `?WebhookFailureReason`, with 20 typed delivery causes; transport errors use the declared reason set and SQL persists enum values.
 - Added public `WebhookFailureReason`, canonical `WebhookDestination` and implementable `WebhookEgressPolicy`. Hosts can restrict destinations on subscription create/update and before every delivery attempt, retry and replay; denial produces `webhooks.webhook_egress_denied` (422) or terminal `egress_denied` without network I/O.
 - `WebhookOptions` adds required `maxAttempts` and `retryHorizonSeconds`; configuration defaults to 12/259200. Ordinary retries and expired leases share one budget, including equality at the horizon and attempt-first precedence. Unknown acknowledgement history and fencing are preserved.

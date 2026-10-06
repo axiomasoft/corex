@@ -53,7 +53,7 @@ Package identity stays `axiomasoft/corex-panels`, namespace `CoreX\Panels`, with
 
 Install with `composer require axiomasoft/corex-panels`. The consuming application registers tagged `PanelProvider` implementations and uses `PanelCatalogue` with its current entity/module context.
 
-SavedViews owns two PostgreSQL tenant migrations. Publish them with `php artisan vendor:publish --tag=corex-panels-migrations-tenant`, then run `php artisan migrate --database=<tenant>` on the account database. `corex-panels-migrations` publishes the same files for a single database installation. The package does not load these migrations automatically.
+SavedViews owns a PostgreSQL Module schema set. Enable its module through `ModuleLifecycle`, or prepare a template with `php artisan corex:schema:migrate --scope=tenant --modules --database=<tenant>`.
 
 ## Configuration
 

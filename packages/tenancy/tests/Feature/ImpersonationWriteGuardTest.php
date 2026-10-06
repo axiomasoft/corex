@@ -90,19 +90,9 @@ beforeEach(function (): void {
         $table->string('name')->nullable();
     });
 
-    test()->artisan('migrate', [
-        '--database' => 'pgsql',
-        '--path' => realpath(__DIR__.'/../../database/migrations/root'),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    test()->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
 
-    test()->artisan('migrate', [
-        '--database' => 'pgsql',
-        '--path' => realpath(__DIR__.'/../../vendor/axiomasoft/corex/database/migrations/pg'),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    test()->migrateSchemaSets(['axiomasoft/corex:tenant'], 'pgsql');
 
     config(['queue.default' => 'sync']);
 });

@@ -38,12 +38,7 @@ beforeEach(function (): void {
     pubsubPg()->statement('CREATE SCHEMA public');
     DB::purge(PUBSUB_DB_POLL_TEST_CONNECTION);
 
-    $this->artisan('migrate', [
-        '--database' => PUBSUB_DB_POLL_TEST_CONNECTION,
-        '--path' => realpath(__DIR__.'/../../packages/core/database/migrations/pg'),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex:tenant'], PUBSUB_DB_POLL_TEST_CONNECTION);
 });
 
 function pollingPubSub(): DatabasePollPubSub

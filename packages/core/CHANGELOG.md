@@ -2,6 +2,9 @@
 
 ## Unreleased — scheduling contracts (P07.5)
 
+- Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
+- Add the schema registry, migrator, scope/lifecycle DTOs, commands and testing trait; remove provider schema-version constants. Add coded schema errors.
+
 - Added kernel module `CoreX\Scheduling`. Moved `WakeupScheduler`, `DueWakeupSource`, `DueWakeupHandler`, `WakeupRequest`, `WakeupWindow`, `WakeupDelivery`, `WakeupHandlerDefinition`, `ScheduleResult`, `CancelResult` and `SweepResult` from `CoreX\Wakeup` with no aliases. `DueWakeupSource::TAG` is `corex.scheduling.due-sources`; `WakeupHandlerDefinition::TAG` is `corex.scheduling.wakeup-handlers`.
 
 ## Unreleased — PLAN3.P07.3 mandatory synchronous audit

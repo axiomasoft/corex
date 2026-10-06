@@ -24,3 +24,7 @@ Install with `composer require axiomasoft/corex-transfer` through the configured
 ## Configuration
 
 `corex-transfer.limits` defaults to 1,048,576 bytes per record, 256 fields and batches of 500 rows. Select bounded limits for the input and retain immutable source/manifest and checkpoint identities across retries. Consumer-owned credentials belong in the application integration, not the transfer payload.
+
+## Schema installation
+
+Register the package provider, then run `php artisan corex:schema:migrate --scope=tenant --database=<tenant>`. Module sets are installed by `ModuleLifecycle::enable()`; template preparation includes them with `--modules`. Inspect the journal with `corex:schema:status`.

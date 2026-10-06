@@ -1,0 +1,26 @@
+[
+  {
+    "original": "php-api-write.log",
+    "gzip": "php-api-write.log.gz",
+    "uncompressed_sha256": "c8ae6d89f7afe2a9fc9ccc64c01a3d22bade0125873dc6b53e9437d2703b8ffa",
+    "bytes": 3987526
+  },
+  {
+    "original": "V16-validation.log",
+    "gzip": "V16-validation.log.gz",
+    "uncompressed_sha256": "9a053f1a1f180e65df03f4b13f10837575979833f87b4aad3f9b67f903cf7681",
+    "bytes": 3987569
+  },
+  {
+    "original": "php-api-final-write.log",
+    "gzip": "php-api-final-write.log.gz",
+    "uncompressed_sha256": "c8ae6d89f7afe2a9fc9ccc64c01a3d22bade0125873dc6b53e9437d2703b8ffa",
+    "bytes": 3987526
+  },
+  {
+    "original": "php-api-repeat-write.log",
+    "gzip": "php-api-repeat-write.log.gz",
+    "uncompressed_sha256": "c8ae6d89f7afe2a9fc9ccc64c01a3d22bade0125873dc6b53e9437d2703b8ffa",
+    "bytes": 3987526
+  }
+]

@@ -8,8 +8,6 @@ use Illuminate\Support\Str;
 
 uses()->group('pg');
 
-const ROOT_MIGRATIONS_PATH = __DIR__.'/../../database/migrations/root';
-
 /** @return list<string> */
 function rootTableNames(): array
 {
@@ -41,12 +39,7 @@ beforeEach(function (): void {
     DB::statement('CREATE SCHEMA public');
     DB::purge('pgsql');
 
-    $this->artisan('migrate', [
-        '--database' => 'pgsql',
-        '--path' => realpath(ROOT_MIGRATIONS_PATH),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
 });
 
 function makeCluster(): string

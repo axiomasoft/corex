@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Tests;
 
 use CoreX\CoreServiceProvider;
+use CoreX\Database\Testing\MigratesSchemaSets;
 use CoreX\Tenancy\Contracts\TemplateIntegrityVerifier as TemplateIntegrityVerifierContract;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use CoreX\Tenancy\Provisioning\Internal\Database\SchemaCatalogueSerializer;
@@ -29,6 +30,9 @@ abstract class TestCase extends Orchestra
 {
     use IsolatesDatabasePath {
         resolveApplicationCore as private resolveIsolatedApplicationCore;
+    }
+    use MigratesSchemaSets {
+        migrateSchemaSets as public;
     }
 
     /**

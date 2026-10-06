@@ -42,8 +42,6 @@ use Psr\Clock\ClockInterface;
 // fatal-collide with PendingPoolTest.php).
 uses()->group('pg');
 
-const ROOT_MIGRATIONS_PATH_LC = __DIR__.'/../../database/migrations/root';
-
 const LC_TEMPLATE_DB = 'tpl_tenant_v1_lifecycle_test';
 
 beforeEach(function (): void {
@@ -55,12 +53,7 @@ beforeEach(function (): void {
     DB::statement('CREATE SCHEMA public');
     DB::purge('pgsql');
 
-    test()->artisan('migrate', [
-        '--database' => 'pgsql',
-        '--path' => realpath(ROOT_MIGRATIONS_PATH_LC),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    test()->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
 
     DB::statement('DROP DATABASE IF EXISTS '.LC_TEMPLATE_DB);
     DB::statement('CREATE DATABASE '.LC_TEMPLATE_DB);

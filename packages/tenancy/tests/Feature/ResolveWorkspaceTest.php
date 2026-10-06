@@ -7,6 +7,7 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Internal\NullTenancyManager;
+use CoreX\Database\Contracts\SchemaMigrator;
 use CoreX\Departments\Internal\Models\Department;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Identity\Internal\Models\User;
@@ -20,28 +21,18 @@ use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 uses()->group('pg');
 
-const ROOT_MIGRATIONS_PATH_RW = __DIR__.'/../../database/migrations/root';
-const TENANT_MIGRATIONS_PATH_RW = __DIR__.'/../../database/migrations/tenant';
-const CORE_MIGRATIONS_PATH_RW = __DIR__.'/../../vendor/axiomasoft/corex/database/migrations/pg';
-
 beforeEach(function (): void {
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     DB::purge('pgsql');
 
-    $this->artisan('migrate', [
-        '--database' => 'pgsql',
-        '--path' => realpath(ROOT_MIGRATIONS_PATH_RW),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
 
     config(['corex-tenancy.workspace.path_segment' => 'w']);
     app()->forgetInstance(TenancyOptions::class);
@@ -108,18 +99,8 @@ function initializedAccountRW(array $overrides = []): Account
 
     initTenantContext($account);
 
-    Artisan::call('migrate', [
-        '--database' => 'tenant',
-        '--path' => realpath(CORE_MIGRATIONS_PATH_RW),
-        '--realpath' => true,
-        '--force' => true,
-    ]);
-    Artisan::call('migrate', [
-        '--database' => 'tenant',
-        '--path' => realpath(TENANT_MIGRATIONS_PATH_RW),
-        '--realpath' => true,
-        '--force' => true,
-    ]);
+    app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex:tenant'], 'tenant');
+    app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-tenancy:tenant'], 'tenant');
 
     return $account;
 }

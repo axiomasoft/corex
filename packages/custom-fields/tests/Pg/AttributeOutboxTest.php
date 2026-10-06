@@ -14,6 +14,8 @@ use CoreX\CustomFields\Tests\Support\PgTestSupport;
 use CoreX\Data\Data\RecordRef;
 use CoreX\Data\Data\WriteToken;
 use CoreX\Data\Internal\ArrayDataScopeCodec;
+use CoreX\Database\Contracts\SchemaMigrator;
+use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Messaging\Exceptions\UnknownMessageContract;
 use CoreX\Messaging\Testing\MessagingFixtures;
 use CoreX\Time\Testing\FrozenClock;
@@ -24,8 +26,8 @@ uses(PgTestCase::class)->group('pg');
 
 beforeEach(function (): void {
     Schema::dropIfExists(app(CoreOptions::class)->outboxMessagesTable);
-    $migration = require __DIR__.'/../../../core/database/migrations/pg/2026_09_20_100000_create_sys_outbox_messages_table.php';
-    $migration->up();
+    $migration = require app(SchemaSets::class)->get('axiomasoft/corex:tenant')->path.'/2026_09_20_100000_create_sys_outbox_messages_table.php';
+    app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex:tenant'], DB::getDefaultConnection());
 });
 
 function p107Store(string $engine, bool $declareContract = true): AttributeStore

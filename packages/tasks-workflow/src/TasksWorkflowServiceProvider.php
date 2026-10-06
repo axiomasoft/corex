@@ -9,6 +9,7 @@ use CoreX\Attributes\SpiKind;
 use CoreX\Config\Contracts\RuntimeConfigCheck;
 use CoreX\Context\Contracts\TenantContextRestorer;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
+use CoreX\Database\Contracts\SchemaSetProvider;
 use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Recurrence\Contracts\RecurrenceExpander;
 use CoreX\Recurrence\Laravel\RecurrenceFactory;
@@ -20,6 +21,7 @@ use CoreX\TasksWorkflow\Errors\Internal\PackageProblemDefinitions;
 use CoreX\TasksWorkflow\Internal\DangerousModesCheck;
 use CoreX\TasksWorkflow\Internal\SqlTaskRecurrenceMaterializer;
 use CoreX\TasksWorkflow\Internal\TasksWorkflowOptions;
+use CoreX\TasksWorkflow\Internal\TasksWorkflowSchemaSets;
 use CoreX\TasksWorkflow\Laravel\CompletionBindings;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
@@ -32,6 +34,8 @@ final class TasksWorkflowServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        $this->app->tag([TasksWorkflowSchemaSets::class], SchemaSetProvider::class);
+
         ProblemDefinitions::register($this->app, __DIR__.'/../composer.json', PackageProblemDefinitions::class);
 
         $this->mergeConfigFrom(__DIR__.'/../config/corex-tasks-workflow.php', 'corex-tasks-workflow');

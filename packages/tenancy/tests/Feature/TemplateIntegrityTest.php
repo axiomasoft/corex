@@ -11,7 +11,6 @@ use Illuminate\Support\Str;
 
 uses()->group('pg');
 
-const ROOT_MIGRATIONS_PATH_TEMPLATE_INTEGRITY = __DIR__.'/../../database/migrations/root';
 const TEMPLATE_INTEGRITY_DB = 'tpl_integrity_test';
 
 beforeEach(function (): void {
@@ -19,12 +18,7 @@ beforeEach(function (): void {
     DB::statement('CREATE SCHEMA public');
     DB::purge('pgsql');
 
-    $this->artisan('migrate', [
-        '--database' => 'pgsql',
-        '--path' => realpath(ROOT_MIGRATIONS_PATH_TEMPLATE_INTEGRITY),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
 
     DB::statement('DROP DATABASE IF EXISTS '.TEMPLATE_INTEGRITY_DB);
     DB::statement('CREATE DATABASE '.TEMPLATE_INTEGRITY_DB);

@@ -2,6 +2,8 @@
 
 ## Unreleased — wakeup suggest removed (P07.5)
 
+- Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
+
 - The package no longer suggests `axiomasoft/corex-wakeup`. Materialization schedules through the kernel `CoreX\Scheduling\Contracts\WakeupScheduler` when that binding exists.
 
 ## Unreleased — typed Options and runtime configuration checks (P05.1)

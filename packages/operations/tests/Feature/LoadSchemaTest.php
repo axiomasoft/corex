@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\Tests\Feature;
 
-use CoreX\Operations\ApiServiceProvider;
+use CoreX\Database\Contracts\SchemaMigrator;
+use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Operations\Laravel\ApiSchemaRegistrar;
 use CoreX\Operations\Tests\TestCase;
 use Illuminate\Database\Connection;
@@ -41,23 +42,15 @@ final class LoadSchemaTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_publication_is_inert_and_requires_explicit_schema_identity(): void
+    public function test_schema_registration_is_inert_and_requires_explicit_identity(): void
     {
         self::assertFalse(DB::connection('sqlite')->getSchemaBuilder()->hasTable('sys_api_budget_buckets'));
-
-        $budget = ApiServiceProvider::pathsToPublish(ApiServiceProvider::class, 'corex-operations-migrations-budget');
-        $tenant = ApiServiceProvider::pathsToPublish(ApiServiceProvider::class, 'corex-operations-migrations-tenant');
-
-        self::assertSame([
-            realpath(__DIR__.'/../../database/migrations/budget') => database_path('migrations/budget'),
-        ], array_combine(array_map('realpath', array_keys($budget)), array_values($budget)));
-        self::assertSame([
-            realpath(__DIR__.'/../../database/migrations/create_sys_api_idempotency_table.php') => database_path('migrations/tenant/create_sys_api_idempotency_table.php'),
-            realpath(__DIR__.'/../../database/migrations/tenant') => database_path('migrations/tenant'),
-        ], array_combine(array_map('realpath', array_keys($tenant)), array_values($tenant)));
-
+        $this->app['config']->set('corex-operations.schema', null);
+        $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(SchemaSets::class);
+        $this->app->forgetInstance(SchemaMigrator::class);
         $this->expectException(InvalidArgumentException::class);
-        $this->app->make(ApiSchemaRegistrar::class);
+        $this->app->make(SchemaSets::class);
     }
 
     public function test_sqlite_schemas_constraints_isolation_and_rollback(): void
@@ -185,6 +178,8 @@ final class LoadSchemaTest extends TestCase
     private function selectSchema(string $budget, string $tenant): void
     {
         $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(SchemaSets::class);
+        $this->app->forgetInstance(SchemaMigrator::class);
         $this->app['config']->set('corex-operations.schema', [
             'budget' => [
                 'connection' => $budget,
@@ -202,15 +197,15 @@ final class LoadSchemaTest extends TestCase
     /** @return array{Migration, Migration, Migration} */
     private function migrateAll(bool $includeBudget = true): array
     {
-        $budget = require __DIR__.'/../../database/migrations/budget/create_sys_api_budget_tables.php';
-        $bulk = require __DIR__.'/../../database/migrations/tenant/create_sys_api_bulk_operations_table.php';
-        $webhook = require __DIR__.'/../../../webhooks/database/migrations/tenant/create_sys_api_webhook_tables.php';
+        $budget = require app(SchemaSets::class)->get('axiomasoft/corex-operations:budget')->path.'/create_sys_api_budget_tables.php';
+        $bulk = require app(SchemaSets::class)->get('axiomasoft/corex-operations:tenant')->path.'/create_sys_api_bulk_operations_table.php';
+        $webhook = require app(SchemaSets::class)->get('axiomasoft/corex-webhooks:tenant')->path.'/create_sys_api_webhook_tables.php';
 
         if ($includeBudget) {
-            $budget->up();
+            app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:budget']);
         }
-        $bulk->up();
-        $webhook->up();
+        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
 
         return [$budget, $bulk, $webhook];
     }

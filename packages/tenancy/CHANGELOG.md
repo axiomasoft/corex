@@ -2,6 +2,9 @@
 
 ## Unreleased — PLAN3.P07.6 host-cache correction
 
+- Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
+- `MigrationWaveOrchestrator` now requires `SchemaMigrator` and migrates all platform tenant sets on the account connection.
+
 - Fence host mappings after committed account/domain saves and deletes, including cascade deletion.
   Late cache publication cannot restore a revoked mapping; transactional resolutions bypass shared cache
   to prevent publishing rolled-back verification. A shared generation invalidates all warmed host mappings

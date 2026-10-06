@@ -19,9 +19,6 @@ use Illuminate\Support\Str;
 
 uses()->group('pg');
 
-const CORE_MIGRATIONS_PATH_WSP = __DIR__.'/../../vendor/axiomasoft/corex/database/migrations/pg';
-const TENANT_MIGRATIONS_PATH_WSP = __DIR__.'/../../database/migrations/tenant';
-
 beforeEach(function (): void {
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
@@ -31,19 +28,9 @@ beforeEach(function (): void {
     // sys_departments/sys_department_user, axiomasoft/corex-tenancy owns
     // users/wsp_*/the integration FK — two ordered migrate calls, same as
     // a real golden-template build.
-    $this->artisan('migrate', [
-        '--database' => 'pgsql',
-        '--path' => realpath(CORE_MIGRATIONS_PATH_WSP),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex:tenant'], 'pgsql');
 
-    $this->artisan('migrate', [
-        '--database' => 'pgsql',
-        '--path' => realpath(TENANT_MIGRATIONS_PATH_WSP),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex-tenancy:tenant'], 'pgsql');
 });
 
 function makeUserWsp(array $overrides = []): User

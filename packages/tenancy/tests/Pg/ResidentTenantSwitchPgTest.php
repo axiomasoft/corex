@@ -71,9 +71,9 @@ beforeEach(function (): void {
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     DB::purge('pgsql');
-    $this->artisan('migrate', ['--database' => 'pgsql', '--path' => realpath(__DIR__.'/../../database/migrations/root'), '--realpath' => true, '--force' => true])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
     // The central database carries the kernel tables too: a leaked write lands there and is visible.
-    $this->artisan('migrate', ['--database' => 'pgsql', '--path' => realpath(__DIR__.'/../../../core/database/migrations/pg'), '--realpath' => true, '--force' => true])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex:tenant'], 'pgsql');
 
     $this->databases = [];
     $this->accounts = [];
@@ -94,7 +94,7 @@ beforeEach(function (): void {
     // Kernel tables inside each tenant database: run the same migration files in that tenant's context.
     foreach ($this->accounts as $account) {
         app(TenancyManager::class)->runFor($account, null, function (): void {
-            $this->artisan('migrate', ['--database' => 'tenant', '--path' => realpath(__DIR__.'/../../../core/database/migrations/pg'), '--realpath' => true, '--force' => true])->run();
+            $this->migrateSchemaSets(['axiomasoft/corex:tenant'], 'tenant');
         });
     }
 

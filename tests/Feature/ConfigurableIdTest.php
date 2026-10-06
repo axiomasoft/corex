@@ -152,12 +152,7 @@ it('core tables build and accept a settings row under the ulid id strategy', fun
     DB::connection('pgsql')->statement('CREATE SCHEMA public');
     DB::purge('pgsql');
 
-    $this->artisan('migrate', [
-        '--database' => 'pgsql',
-        '--path' => realpath(__DIR__.'/../../packages/core/database/migrations/pg'),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex:tenant'], 'pgsql');
 
     // The id column must be the ulid type (PG char(26) → 'bpchar'), NOT 'uuid'
     // — a hardcoded uuid('id') regression would report 'uuid' here.

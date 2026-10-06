@@ -7,6 +7,10 @@ namespace CoreX\Modules\Laravel;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenantContextResolver;
+use CoreX\Database\Contracts\SchemaSets;
+use CoreX\Database\Enums\SchemaLifecycle;
+use CoreX\Database\Enums\SchemaScope;
+use CoreX\Database\Exceptions\SchemaSetException;
 use CoreX\Modules\Contracts\ModuleLifecycle;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Contracts\ModuleStateReader;
@@ -51,29 +55,31 @@ final class LifecycleRegistrar implements PackageRegistrar
             return new DatabaseRecordsRegistrar($app->make(ConnectionResolverInterface::class), $app->make(ClockInterface::class), $app->make(ModulesOptions::class)->connection);
         });
 
-        // codeVersions / migrationPaths (composer name → value) come from
-        // installed.json (empty autowired arrays = migrations never run
-        // in prod). Exposed as an overridable binding so tests inject stub paths
-        // and resolve the lifecycle from the container, not a hand-built ctor.
-        $app->singleton('corex.modules.wiring', fn (): array => $this->moduleWiring());
+        // Keep the assembled wiring overridable for isolated lifecycle tests.
+        $app->singleton('corex.modules.wiring', fn (): array => $this->moduleWiring($app->make(SchemaSets::class)));
 
         $app->singleton(ModuleLifecycle::class, static fn (Application $app): DatabaseModuleLifecycle => self::moduleLifecycle($app));
     }
 
     /**
-     * Build codeVersions / migrationPaths from `vendor/composer/installed.json`
-     * (type: corex-module): version → codeVersions, install-path +
-     * `/database/migrations` → migrationPaths. Empty when there is no
-     * installed.json (testbench) or no module packages — real deploys populate
-     * both so {@see DatabaseModuleLifecycle::runModuleMigrations()} actually
-     * runs each module's migrations (empty autowired arrays ran nothing).
+     * Module versions come from Composer; schema paths come from their owners' registered sets.
      *
      * @return array{codeVersions: array<string, string>, migrationPaths: array<string, string>}
      */
-    private function moduleWiring(): array
+    private function moduleWiring(SchemaSets $sets): array
     {
         $codeVersions = [];
         $migrationPaths = [];
+        foreach ($sets->all() as $set) {
+            if ($set->scope === SchemaScope::Tenant && $set->lifecycle === SchemaLifecycle::Module) {
+                $moduleSet = $sets->moduleSet($set->package);
+
+                if ($moduleSet === null) {
+                    throw SchemaSetException::invalidSet($set->id());
+                }
+                $migrationPaths[$set->package] = $moduleSet->path;
+            }
+        }
 
         $path = base_path('vendor/composer/installed.json');
 
@@ -90,7 +96,6 @@ final class LifecycleRegistrar implements PackageRegistrar
 
         /** @var list<mixed> $packages */
         $packages = is_array($data['packages'] ?? null) ? $data['packages'] : $data;
-        $composerDir = dirname($path);
 
         foreach ($packages as $package) {
             if (! is_array($package) || ($package['type'] ?? null) !== 'corex-module') {
@@ -105,16 +110,6 @@ final class LifecycleRegistrar implements PackageRegistrar
 
             if (is_string($package['version'] ?? null)) {
                 $codeVersions[$name] = $package['version'];
-            }
-
-            $installPath = $package['install-path'] ?? null;
-
-            if (is_string($installPath)) {
-                $migrationsDir = realpath($composerDir.'/'.$installPath.'/database/migrations');
-
-                if ($migrationsDir !== false) {
-                    $migrationPaths[$name] = $migrationsDir;
-                }
             }
         }
 

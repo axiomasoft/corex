@@ -2,6 +2,8 @@
 
 ## Unreleased — ports instead of facades, helpers and static state (P05.3)
 
+- Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
+
 - Planning services take `ConnectionResolverInterface` and `ClockInterface` through constructors instead of facades and helpers. `Planning\Laravel\PlanningCommand` accepts an optional trailing `TaskOperationReceipts` (resolved from the container when absent).
 
 ## Unreleased — thin providers and registrars (P05.2)

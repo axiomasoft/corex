@@ -4,17 +4,24 @@ declare(strict_types=1);
 
 namespace CoreX\TasksWorkflow\Tests;
 
+use CoreX\Database\Contracts\SchemaSetProvider;
+use CoreX\Database\Testing\MigratesSchemaSets;
+use CoreX\Wakeup\Internal\WakeupSchemaSets;
+use CoreX\Workflow\Internal\WorkflowSchemaSets;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 use Override;
 
 abstract class PgTestCase extends TestCase
 {
+    use MigratesSchemaSets;
+
     /** @param Application $app */
     #[Override]
     protected function defineEnvironment($app): void
     {
         parent::defineEnvironment($app);
+        $app->tag([WakeupSchemaSets::class, WorkflowSchemaSets::class], SchemaSetProvider::class);
 
         $app['config']->set('database.default', 'pgsql');
     }
@@ -36,27 +43,30 @@ abstract class PgTestCase extends TestCase
 
     protected function migrateTasks(): int
     {
-        return $this->migratePath(__DIR__.'/../../tasks/database/migrations');
+        $this->migrateSchemaSets(['axiomasoft/corex-tasks:tenant'], 'pgsql');
+
+        return 0;
     }
 
     protected function migrateTasksWorkflow(): int
     {
-        return $this->migrateFile(__DIR__.'/../database/migrations/2026_09_15_000072_create_task_series_mapping.php');
+        $this->migrateSchemaSets(['axiomasoft/corex-tasks-workflow:tenant'], 'pgsql');
+
+        return 0;
     }
 
     protected function migrateWakeup(): int
     {
-        return $this->migratePath(__DIR__.'/../../wakeup/database/migrations');
+        $this->migrateSchemaSets(['axiomasoft/corex-wakeup:tenant'], 'pgsql');
+
+        return 0;
     }
 
     protected function migrateWorkflow(): int
     {
-        return $this->migratePath(__DIR__.'/../../workflow/database/migrations');
-    }
+        $this->migrateSchemaSets(['axiomasoft/corex-workflow:tenant'], 'pgsql');
 
-    protected function migrateFile(string $file): int
-    {
-        return $this->migratePath($file);
+        return 0;
     }
 
     private function migratePath(string $path): int

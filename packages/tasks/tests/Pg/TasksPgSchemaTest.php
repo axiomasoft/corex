@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use CoreX\Database\Contracts\SchemaSets;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
@@ -98,7 +99,7 @@ it('refuses to rewrite a non-empty legacy Tasks schema', function (): void {
     ];
 
     foreach ($legacyFiles as $file) {
-        expect($this->migrateFile(__DIR__.'/../../database/migrations/'.$file))->toBe(0);
+        expect($this->migrateFile(app(SchemaSets::class)->get('axiomasoft/corex-tasks:tenant')->path.'/'.$file))->toBe(0);
     }
 
     DB::table('tsk_processes')->insert([
@@ -110,7 +111,7 @@ it('refuses to rewrite a non-empty legacy Tasks schema', function (): void {
     ]);
 
     expect(fn () => $this->migrateFile(
-        __DIR__.'/../../database/migrations/2026_09_11_000260_align_tasks_with_approved_schema.php',
+        app(SchemaSets::class)->get('axiomasoft/corex-tasks:tenant')->path.'/2026_09_11_000260_align_tasks_with_approved_schema.php',
     ))->toThrow(RuntimeException::class);
 
     expect(Schema::hasTable('tsk_processes'))->toBeTrue()

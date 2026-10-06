@@ -9,12 +9,7 @@ beforeEach(function (): void {
     config(['database.default' => 'pgsql']);
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
-    test()->artisan('migrate', [
-        '--database' => 'pgsql',
-        '--path' => realpath(__DIR__.'/../../database/migrations/pg'),
-        '--realpath' => true,
-        '--force' => true,
-    ])->assertSuccessful();
+    test()->migrateSchemaSets(['axiomasoft/corex:tenant'], 'pgsql');
 });
 
 it('inserts exactly one inbox row when two connections race on the same key', function (): void {

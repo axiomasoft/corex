@@ -5,6 +5,11 @@ declare(strict_types=1);
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
+use CoreX\Database\Contracts\SchemaSets;
+use CoreX\Database\Data\SchemaSet;
+use CoreX\Database\Enums\SchemaLifecycle;
+use CoreX\Database\Enums\SchemaScope;
+use CoreX\Database\Internal\TaggedSchemaSets;
 use CoreX\Features\Contracts\FeatureFlags;
 use CoreX\Features\Internal\DatabaseFeatureFlags;
 use CoreX\Messaging\Events\DomainEvent;
@@ -34,6 +39,7 @@ use CoreX\Modules\Internal\Registry\CompiledModuleRegistry;
 use CoreX\Modules\Internal\Registry\RepositoryModuleRegistryCache;
 use CoreX\Modules\Internal\Support\ModulesOptions;
 use CoreX\Modules\ModulesServiceProvider;
+use CoreX\Tests\Fixtures\Schema\FixtureSchemaSets;
 use CoreX\Tests\Stubs\Lifecycle\StubBaseModule;
 use CoreX\Tests\Stubs\Lifecycle\StubDependentModule;
 use CoreX\Tests\Stubs\Lifecycle\StubFailingModule;
@@ -139,12 +145,7 @@ beforeEach(function (): void {
         StubFkModule::class,
     ]));
 
-    $this->artisan('migrate', [
-        '--database' => LIFECYCLE_TEST_CONNECTION,
-        '--path' => realpath(__DIR__.'/../../packages/core/database/migrations'),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex:tenant-modules'], LIFECYCLE_TEST_CONNECTION);
 
     $this->registryPath = sys_get_temp_dir().'/corex_modules_lifecycle_test_'.bin2hex(random_bytes(4)).'.php';
     CompiledModuleRegistry::writeAtomic($this->registryPath, [
@@ -673,12 +674,7 @@ it('never dispatches ModuleEnabled when the enabling transaction rolls back — 
 });
 
 it('defines a manifest-declared feature flag in sys_feature_flags when its module is enabled (P1.25, A68, test г)', function (): void {
-    $this->artisan('migrate', [
-        '--database' => LIFECYCLE_TEST_CONNECTION,
-        '--path' => realpath(__DIR__.'/../../packages/core/database/migrations/pg'),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex:tenant'], LIFECYCLE_TEST_CONNECTION);
 
     $this->app->instance(FeatureFlags::class, new DatabaseFeatureFlags(connection: LIFECYCLE_TEST_CONNECTION));
 
@@ -741,4 +737,20 @@ it('resolves ModuleStateReader from the registered ModulesOptions connection, no
     $reader = app(ModuleStateReader::class);
 
     expect($reader->enabledFor(lifecycleCtx()))->toHaveKey('corex/stub-base');
+});
+
+it('enables a module using its registered set without an installed migration directory', function (): void {
+    require_once __DIR__.'/../Fixtures/Schema/FixtureSchemaSets.php';
+    $set = new SchemaSet(
+        package: 'corex/stub-base', name: 'tenant', scope: SchemaScope::Tenant,
+        path: lifecycleStubsPath('base'), version: 1, lifecycle: SchemaLifecycle::Module,
+    );
+    app()->instance(SchemaSets::class, new TaggedSchemaSets([
+        new FixtureSchemaSets([$set]),
+    ]));
+    app()->forgetInstance('corex.modules.wiring');
+    app()->forgetInstance(ModuleLifecycle::class);
+    app()->forgetInstance(RecordsRegistrar::class);
+    app(ModuleLifecycle::class)->enable('corex/stub-base');
+    expect(Schema::connection(LIFECYCLE_TEST_CONNECTION)->hasTable('sba_widgets'))->toBeTrue();
 });

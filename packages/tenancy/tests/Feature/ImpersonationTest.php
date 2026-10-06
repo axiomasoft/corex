@@ -6,6 +6,7 @@ use CoreX\Context\Contracts\ImpersonationService;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Exceptions\ImpersonationRestrictedException;
+use CoreX\Database\Contracts\SchemaMigrator;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Authentication\Exceptions\OidcAuthenticationException;
 use CoreX\Tenancy\Authentication\Internal\Oidc\OidcClient;
@@ -19,7 +20,6 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
@@ -81,21 +81,12 @@ const IM_AUTHORIZATION_ENDPOINT = IM_ISSUER.'/authorize';
 const IM_TOKEN_ENDPOINT = IM_ISSUER.'/token';
 const IM_JWKS_URI = IM_ISSUER.'/jwks';
 
-const ROOT_MIGRATIONS_PATH_IM = __DIR__.'/../../database/migrations/root';
-const TENANT_MIGRATIONS_PATH_IM = __DIR__.'/../../database/migrations/tenant';
-const CORE_MIGRATIONS_PATH_IM = __DIR__.'/../../vendor/axiomasoft/corex/database/migrations/pg';
-
 beforeEach(function (): void {
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     DB::purge('pgsql');
 
-    test()->artisan('migrate', [
-        '--database' => 'pgsql',
-        '--path' => realpath(ROOT_MIGRATIONS_PATH_IM),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    test()->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
 
     config(['queue.default' => 'sync']);
 
@@ -259,18 +250,8 @@ function initAccountWithTenantIM(): Account
     /** @var TenancyManager $manager */
     $manager = app(TenancyManager::class);
     $manager->runFor($ref, null, function (): void {
-        Artisan::call('migrate', [
-            '--database' => 'tenant',
-            '--path' => realpath(CORE_MIGRATIONS_PATH_IM),
-            '--realpath' => true,
-            '--force' => true,
-        ]);
-        Artisan::call('migrate', [
-            '--database' => 'tenant',
-            '--path' => realpath(TENANT_MIGRATIONS_PATH_IM),
-            '--realpath' => true,
-            '--force' => true,
-        ]);
+        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex:tenant'], 'tenant');
+        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-tenancy:tenant'], 'tenant');
     });
 
     return $account;

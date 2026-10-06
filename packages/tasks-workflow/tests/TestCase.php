@@ -7,6 +7,7 @@ namespace CoreX\TasksWorkflow\Tests;
 use CoreX\CoreServiceProvider;
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Internal\AllowAllDataScopeAuthorizer;
+use CoreX\Database\Testing\MigratesSchemaSets;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Tasks\Access\Contracts\TaskAccess;
@@ -23,6 +24,7 @@ use Override;
 abstract class TestCase extends Orchestra
 {
     use IsolatesDatabasePath;
+    use MigratesSchemaSets;
 
     #[Override]
     protected function setUp(): void
@@ -95,8 +97,10 @@ abstract class TestCase extends Orchestra
     protected function defineDatabaseMigrations(): void
     {
         $this->loadMigrationsFrom(__DIR__.'/../../tasks/tests/database/migrations');
-        $this->loadMigrationsFrom(__DIR__.'/../../tasks/database/migrations');
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        $this->loadMigrationsFrom(__DIR__.'/../../tasks/database/migrations/2026_09_15_000071_create_task_operation_receipts.php');
+    }
+
+    protected function defineDatabaseMigrationsAfterDatabaseRefreshed(): void
+    {
+        $this->migrateSchemaSets(['axiomasoft/corex-tasks:tenant', 'axiomasoft/corex-tasks-workflow:tenant'], 'testbench');
     }
 }

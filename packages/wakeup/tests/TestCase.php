@@ -7,6 +7,8 @@ namespace CoreX\Wakeup\Tests;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
+use CoreX\Database\Laravel\DatabaseRegistrar;
+use CoreX\Database\Testing\MigratesSchemaSets;
 use CoreX\Time\Laravel\LaravelClock;
 use CoreX\Wakeup\WakeupServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
@@ -26,6 +28,8 @@ final class TestTenantContextResolver implements TenantContextResolver
 
 abstract class TestCase extends Orchestra
 {
+    use MigratesSchemaSets;
+
     #[Override]
     protected function getPackageProviders($app): array
     {
@@ -35,13 +39,14 @@ abstract class TestCase extends Orchestra
     #[Override]
     protected function defineEnvironment($app): void
     {
+        (new DatabaseRegistrar)->register($app);
         $app['config']->set('database.default', 'sqlite');
         $app['config']->set('database.connections.sqlite.database', ':memory:');
     }
 
     protected function defineDatabaseMigrations(): void
     {
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->migrateSchemaSets(['axiomasoft/corex-wakeup:tenant'], 'sqlite');
         Schema::create('wakeup_effects', function (Blueprint $table): void {
             $table->string('request_key')->primary();
         });

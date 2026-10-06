@@ -26,8 +26,6 @@ use Illuminate\Support\Str;
 
 uses()->group('pg');
 
-const ROOT_MIGRATIONS_PATH_DT = __DIR__.'/../../database/migrations/root';
-
 final class FakeDomainTrustPolicyDT implements DomainTrustPolicy
 {
     public bool $accepts = true;
@@ -123,12 +121,7 @@ beforeEach(function (): void {
     DB::statement('CREATE SCHEMA public');
     DB::purge('pgsql');
 
-    $this->artisan('migrate', [
-        '--database' => 'pgsql',
-        '--path' => realpath(ROOT_MIGRATIONS_PATH_DT),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
 });
 
 function domainTrustAccountDT(): string

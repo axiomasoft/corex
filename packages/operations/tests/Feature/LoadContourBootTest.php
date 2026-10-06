@@ -9,6 +9,8 @@ use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Internal\ArrayDataScopeCodec;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Database\Contracts\SchemaMigrator;
+use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Operations\Bulk\Contracts\BulkTransferFactory;
 use CoreX\Operations\Bulk\Data\BulkOperationDefinition;
 use CoreX\Operations\Bulk\Internal\SqlBulkOperationStore;
@@ -73,13 +75,15 @@ final class LoadContourBootTest extends TestCase
         $this->configure('api_budget_stub');
         $this->configure('api_tenant');
         $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(SchemaSets::class);
+        $this->app->forgetInstance(SchemaMigrator::class);
         $this->app['config']->set('corex-operations.schema', [
             'budget' => ['connection' => 'api_budget_stub', 'driver' => 'sqlite', 'database' => ':memory:'],
             'tenant' => ['connection' => 'api_tenant', 'driver' => 'sqlite', 'database' => ':memory:'],
         ]);
         $connection = DB::connection('api_tenant');
-        $migration = require dirname(__DIR__, 2).'/database/migrations/tenant/create_sys_api_bulk_operations_table.php';
-        $migration->up();
+        $migration = require app(SchemaSets::class)->get('axiomasoft/corex-operations:tenant')->path.'/create_sys_api_bulk_operations_table.php';
+        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
         $contexts = new ContextFixture;
         $contexts->initialize(new AccountRef('account-1', 'account', 'active', [], []));
         $clock = new FrozenClock(new DateTimeImmutable('2026-09-26T12:00:00.000000+00:00'));

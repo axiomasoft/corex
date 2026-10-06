@@ -11,6 +11,8 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\CoreServiceProvider;
 use CoreX\Data\Data\DataScope;
+use CoreX\Database\Contracts\SchemaMigrator;
+use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Enums\MessageClass;
@@ -393,7 +395,9 @@ final class WebhookApiRetentionTest extends TestCase
     private function migrate(string $directory, string $file): void
     {
         $this->app->forgetInstance(ApiSchemaRegistrar::class);
-        $migration = require __DIR__."/../../database/migrations/{$directory}/{$file}";
+        $this->app->forgetInstance(SchemaSets::class);
+        $this->app->forgetInstance(SchemaMigrator::class);
+        $migration = require app(SchemaSets::class)->get("axiomasoft/corex-webhooks:{$directory}")->path."/{$file}";
         $migration->up();
     }
 
@@ -417,6 +421,8 @@ final class WebhookApiRetentionTest extends TestCase
         string $tenantDatabase,
     ): void {
         $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(SchemaSets::class);
+        $this->app->forgetInstance(SchemaMigrator::class);
         $this->app['config']->set('corex-operations.schema', [
             'budget' => ['connection' => $budget, 'driver' => $budgetDriver, 'database' => $budgetDatabase],
             'tenant' => ['connection' => $tenant, 'driver' => $tenantDriver, 'database' => $tenantDatabase],

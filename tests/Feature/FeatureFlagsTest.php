@@ -42,12 +42,7 @@ beforeEach(function (): void {
     featureFlagsPg()->statement('CREATE SCHEMA public');
     DB::purge(FEATURE_FLAGS_TEST_CONNECTION);
 
-    $this->artisan('migrate', [
-        '--database' => FEATURE_FLAGS_TEST_CONNECTION,
-        '--path' => realpath(__DIR__.'/../../packages/core/database/migrations/pg'),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex:tenant'], FEATURE_FLAGS_TEST_CONNECTION);
 });
 
 it('stamps a DomainEvent with a UUIDv7 eventId, occurredAt and a stable name()', function (): void {

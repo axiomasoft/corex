@@ -9,12 +9,7 @@ beforeEach(function (): void {
     config(['database.default' => 'pgsql']);
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
-    $this->artisan('migrate', [
-        '--database' => 'pgsql',
-        '--path' => realpath(__DIR__.'/../../database/migrations/pg'),
-        '--realpath' => true,
-        '--force' => true,
-    ])->assertSuccessful();
+    $this->migrateSchemaSets(['axiomasoft/corex-panels:tenant'], 'pgsql');
 });
 
 it('creates the saved-view scope lock before the composite view foreign key', function (): void {

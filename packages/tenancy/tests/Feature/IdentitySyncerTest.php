@@ -5,21 +5,18 @@ declare(strict_types=1);
 use CoreX\Context\Contracts\IdentityPasswordRehasher;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
+use CoreX\Database\Contracts\SchemaMigrator;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Identity\Contracts\IdentitySyncer;
 use CoreX\Tenancy\Identity\Events\UserSynced;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 
 uses()->group('pg');
 
-const ROOT_MIGRATIONS_PATH_IS = __DIR__.'/../../database/migrations/root';
-const TENANT_MIGRATIONS_PATH_IS = __DIR__.'/../../database/migrations/tenant';
 // P2.6's integration-FK migration (C4/D14) needs sys_departments — owned by
 // axiomasoft/corex, assembled here the same way a real golden-template build would.
-const CORE_MIGRATIONS_PATH_IS = __DIR__.'/../../vendor/axiomasoft/corex/database/migrations/pg';
 
 const TENANT_DB_IS = 'acc_is_test';
 
@@ -28,12 +25,7 @@ beforeEach(function (): void {
     DB::statement('CREATE SCHEMA public');
     DB::purge('pgsql');
 
-    $this->artisan('migrate', [
-        '--database' => 'pgsql',
-        '--path' => realpath(ROOT_MIGRATIONS_PATH_IS),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
 
     DB::statement('DROP DATABASE IF EXISTS '.TENANT_DB_IS);
     DB::statement('CREATE DATABASE '.TENANT_DB_IS);
@@ -110,18 +102,8 @@ function migrateUsersTableIS(AccountRef $ref): void
     $manager = app(TenancyManager::class);
 
     $manager->runFor($ref, null, function (): void {
-        Artisan::call('migrate', [
-            '--database' => 'tenant',
-            '--path' => realpath(CORE_MIGRATIONS_PATH_IS),
-            '--realpath' => true,
-            '--force' => true,
-        ]);
-        Artisan::call('migrate', [
-            '--database' => 'tenant',
-            '--path' => realpath(TENANT_MIGRATIONS_PATH_IS),
-            '--realpath' => true,
-            '--force' => true,
-        ]);
+        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex:tenant'], 'tenant');
+        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-tenancy:tenant'], 'tenant');
     });
 }
 

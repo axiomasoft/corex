@@ -12,31 +12,17 @@ lifecycle-FSM (`enable`/`disable`/`upgrade`/`archive`/`purge`) и реестр �
 только pure-PHP код; lifecycle/purge/кеш-инвалидация проверяются
 исключительно на `composer test:pg`.
 
-## Установка миграций (важно)
+## Установка схемы
 
-Таблицы модульной системы (`mod_modules`, `mod_records`, `mod_lifecycle_log`) —
-**PostgreSQL-only** (advisory-locks, `CHECK`, jsonb) и **тенантские**. Пакет их
-**НЕ подключает автоматически** — схема ставится явной публикацией:
+Таблицы `mod_modules`, `mod_records`, `mod_lifecycle_log` принадлежат tenant-набору ядра:
 
 ```bash
-# 1. Скопировать миграции в приложение
-php artisan vendor:publish --tag=corex-migrations
-
-# 2. Прогнать их НА ТЕНАНТСКОМ коннекшене
-php artisan migrate --database=<tenant>
+php artisan corex:schema:migrate --scope=tenant --database=<tenant>
 ```
 
-Тег `corex-migrations-tenant` — синоним, явно называющий скоуп
-коннекшена (`mod_*` — тенант-схема). Коннекшн, на котором работает hot-path
-реестра и lifecycle, задаётся `config('corex.modules.connection')` (`null` =
-дефолтный; под P2 TenancyManager подменяет дефолт на базу тенанта).
-
-### Версия схемы и апгрейды
-
-Потребитель публикует **копию** миграций; изменения схемы поставляются **новыми
-аддитивными миграциями** под тем же тегом (при апгрейде повторите
-`vendor:publish` + `migrate`). Текущее поколение —
-`CoreX\Modules\ModulesServiceProvider::SCHEMA_VERSION`.
+Соединение lifecycle задаётся `corex.modules.connection` (`null` = default).
+Пути Module-наборов объявляют пакеты через `SchemaSetProvider`; lifecycle берёт их из `SchemaSets`.
+Версия набора — `SchemaSet::version`; новые файлы исполняются командой схемы без копирования в приложение.
 
 ## Идентификаторы и время
 

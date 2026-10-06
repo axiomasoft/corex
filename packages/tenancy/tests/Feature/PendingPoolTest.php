@@ -15,8 +15,6 @@ use Illuminate\Support\Str;
 
 uses()->group('pg');
 
-const ROOT_MIGRATIONS_PATH_PENDING = __DIR__.'/../../database/migrations/root';
-
 const PENDING_TEMPLATE_DB = 'tpl_tenant_v1_pending_test';
 
 beforeEach(function (): void {
@@ -24,12 +22,7 @@ beforeEach(function (): void {
     DB::statement('CREATE SCHEMA public');
     DB::purge('pgsql');
 
-    $this->artisan('migrate', [
-        '--database' => 'pgsql',
-        '--path' => realpath(ROOT_MIGRATIONS_PATH_PENDING),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
 
     // Golden-template fixture, same one ProvisioningTest (P2.3) uses.
     DB::statement('DROP DATABASE IF EXISTS '.PENDING_TEMPLATE_DB);

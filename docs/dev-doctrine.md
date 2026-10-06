@@ -53,7 +53,7 @@ API, политиками или задачами между проектами.
 ## 3. Нейминг-канон
 
 - Публичная поверхность `corex/*` — только `corex`-идентификаторы: раздел `corex.modules` в `config/corex.php`,
-  env `COREX_MODULES_*`, artisan `corex:modules:*`, publish-теги `corex-{config,migrations,migrations-tenant}`, компилят
+  env `COREX_MODULES_*`, artisan `corex:modules:*`, publish-тег `corex-config`, команды схемы `corex:schema:migrate|status`, компилят
   `bootstrap/cache/corex_modules.php`, PHPStan-параметр `corexModules`. Новых `flex`-идентификаторов
   в `corex/*`-пакетах не заводить (P3.3).
 - `flex/crm` — ЦЕЛЕВОЕ имя слоя L2, а не легаси (D82): обратный ренейм в `corex/crm` запрещён.

@@ -21,6 +21,7 @@ use CoreX\Context\Data\TenantContext;
 use CoreX\Context\Data\WorkspaceRef;
 use CoreX\Context\Internal\NullTenancyManager;
 use CoreX\Context\Internal\SingleAccountResolver;
+use CoreX\Database\Contracts\SchemaMigrator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Database\Schema\Blueprint;
@@ -47,7 +48,7 @@ beforeEach(function (): void {
         $table->string('scope');
         $table->timestamps();
     });
-    (require dirname(__DIR__, 2).'/database/migrations/tenant/2026_10_04_000001_create_aut_azguard_role_links_table.php')->up();
+    app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-access-azguard:tenant'], DB::getDefaultConnection());
     Schema::create('aut_role_assignments', static function (Blueprint $table): void {
         $table->uuid('id')->primary();
         $table->uuid('role_id');

@@ -1,0 +1,2 @@
+> php scripts/ownership-gate.php --strict
+ownership OK: 647 identifiers, 0 baselined

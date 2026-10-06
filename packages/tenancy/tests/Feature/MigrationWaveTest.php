@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
+use CoreX\Database\Contracts\SchemaMigrator;
+use CoreX\Database\Enums\SchemaScope;
 use CoreX\Tenancy\Account\Internal\DatabaseTenantProvisioner;
 use CoreX\Tenancy\Account\Internal\Models\AccountSchemaState;
 use CoreX\Tenancy\Account\Internal\PendingPool;
@@ -20,8 +22,6 @@ use Illuminate\Support\Str;
 // "LC" suffix (Pest loads every test file into one process).
 uses()->group('pg');
 
-const ROOT_MIGRATIONS_PATH_MW = __DIR__.'/../../database/migrations/root';
-
 const MW_TEMPLATE_DB = 'tpl_tenant_v1_migwave_test';
 
 beforeEach(function (): void {
@@ -29,12 +29,7 @@ beforeEach(function (): void {
     DB::statement('CREATE SCHEMA public');
     DB::purge('pgsql');
 
-    test()->artisan('migrate', [
-        '--database' => 'pgsql',
-        '--path' => realpath(ROOT_MIGRATIONS_PATH_MW),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    test()->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
 
     if (DB::selectOne('SELECT datname FROM pg_database WHERE datname = ?', [MW_TEMPLATE_DB]) !== null) {
         DB::statement('ALTER DATABASE '.MW_TEMPLATE_DB.' WITH IS_TEMPLATE false');
@@ -159,6 +154,7 @@ it('AC-11: a failing account does not abort the batch; a second failure escalate
     $batchId = makeMwBatch();
 
     $orchestrator = new MigrationWaveOrchestrator(
+        schema: app(SchemaMigrator::class),
         centralConnection: 'pgsql',
         tenancy: app(TenancyManager::class),
         templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
@@ -209,6 +205,7 @@ it('AC-12: the migration run issues pg_advisory_xact_lock(hashtext(\'fld_ddl\'))
     // covered by the AC-11 test) — irrelevant to AC-12, which only asserts
     // the lock CALL itself was issued.
     $orchestrator = new MigrationWaveOrchestrator(
+        schema: app(SchemaMigrator::class),
         centralConnection: 'pgsql',
         tenancy: app(TenancyManager::class),
         templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
@@ -225,6 +222,7 @@ it('creates root_account_schema_state rows (current_version=0) for accounts miss
     expect(AccountSchemaState::query()->where('account_id', $accountId)->exists())->toBeFalse();
 
     $orchestrator = new MigrationWaveOrchestrator(
+        schema: app(SchemaMigrator::class),
         centralConnection: 'pgsql',
         tenancy: app(TenancyManager::class),
         templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
@@ -246,6 +244,7 @@ it('corex:tenancy:migrate requires --batch and does not hard-fail the command on
     $batchId = makeMwBatch();
 
     app()->instance(MigrationWaveOrchestrator::class, new MigrationWaveOrchestrator(
+        schema: app(SchemaMigrator::class),
         centralConnection: 'pgsql',
         tenancy: app(TenancyManager::class),
         templateIntegrityVerifier: app(TemplateIntegrityVerifier::class),
@@ -260,4 +259,17 @@ it('corex:tenancy:migrate requires --batch and does not hard-fail the command on
 
     expect(AccountSchemaState::query()->findOrFail($goodId)->status)->toBe('ok')
         ->and(AccountSchemaState::query()->findOrFail($badId)->status)->toBe('failed');
+});
+
+it('runs registered platform tenant schema sets on the account connection', function (): void {
+    makeMwAccounts(1);
+    $batchId = makeMwBatch();
+    $schema = Mockery::mock(SchemaMigrator::class);
+    $schema->shouldReceive('migrate')->once()->with(SchemaScope::Tenant, 'tenant')->andReturn([]);
+    $orchestrator = new MigrationWaveOrchestrator(
+        centralConnection: 'pgsql', tenancy: app(TenancyManager::class),
+        templateIntegrityVerifier: app(TemplateIntegrityVerifier::class), schema: $schema,
+    );
+    $orchestrator->runBatch($batchId);
+    expect(DB::table('root_account_schema_state')->where('batch_id', $batchId)->value('status'))->toBe('ok');
 });

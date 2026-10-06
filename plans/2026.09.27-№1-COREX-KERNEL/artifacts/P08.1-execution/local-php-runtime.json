@@ -1,0 +1,18 @@
+{
+  "php": "8.4.26",
+  "redis": "6.3.0",
+  "igbinary": "3.2.16",
+  "php_ini_scan_dir": "/etc/php/8.4/cli/conf.d:/home/vostrikov/projects/packages/corex/build/php84/redis-runtime/ini",
+  "packages": [
+    {
+      "file": "php8.4-igbinary_3.2.16-6+ubuntu24.04.1+deb.sury.org+1_amd64.deb",
+      "sha256": "3ddb9baeda046ea7a42408b730cb2abd6cb1fa765ea86e5df8ed481cc0a053ab"
+    },
+    {
+      "file": "php8.4-redis_6.3.0-2+ubuntu24.04.1+deb.sury.org+1_amd64.deb",
+      "sha256": "0b5e1e6c229b0d4a809447263770ea18de4d4230c2ad211e375011dd975da0c3"
+    }
+  ],
+  "scope": "project-local PHP runtime for acceptance checks",
+  "redis_endpoint": "P3_REDIS_PORT is unset; existing optional Redis endpoint tests retain their own isolation gate"
+}

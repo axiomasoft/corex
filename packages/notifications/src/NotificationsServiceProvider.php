@@ -6,10 +6,12 @@ namespace CoreX\Notifications;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
+use CoreX\Database\Contracts\SchemaSetProvider;
 use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Notifications\Delivery\Internal\Commands\SweepNotificationDeliveries;
 use CoreX\Notifications\Errors\Internal\PackageProblemDefinitions;
+use CoreX\Notifications\Internal\NotificationsSchemaSets;
 use CoreX\Notifications\Laravel\NotificationsBindingsRegistrar;
 use CoreX\Notifications\Laravel\NotificationsDigestRegistrar;
 use Illuminate\Support\ServiceProvider;
@@ -24,6 +26,8 @@ final class NotificationsServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        $this->app->tag([NotificationsSchemaSets::class], SchemaSetProvider::class);
+
         ProblemDefinitions::register($this->app, __DIR__.'/../composer.json', PackageProblemDefinitions::class);
 
         $this->mergeConfigFrom(__DIR__.'/../config/corex-notifications.php', 'corex-notifications');

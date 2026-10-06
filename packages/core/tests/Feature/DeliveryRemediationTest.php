@@ -19,7 +19,7 @@ beforeEach(function (): void {
     app()->forgetInstance(CoreOptions::class);
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
-    $this->artisan('migrate', ['--path' => realpath(__DIR__.'/../../database/migrations/pg'), '--realpath' => true, '--force' => true])->assertSuccessful();
+    $this->migrateSchemaSets(['axiomasoft/corex:tenant'], DB::getDefaultConnection());
 });
 
 it('records committed audit only after the outer transaction succeeds', function (): void {

@@ -14,8 +14,6 @@ use Illuminate\Support\Str;
 
 uses()->group('pg');
 
-const ROOT_MIGRATIONS_PATH_TM = __DIR__.'/../../database/migrations/root';
-
 const TENANT_DB_TM = 'acc_tm_test';
 
 beforeEach(function (): void {
@@ -23,12 +21,7 @@ beforeEach(function (): void {
     DB::statement('CREATE SCHEMA public');
     DB::purge('pgsql');
 
-    $this->artisan('migrate', [
-        '--database' => 'pgsql',
-        '--path' => realpath(ROOT_MIGRATIONS_PATH_TM),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
 
     // A real (empty) tenant database — DatabaseTenancyBootstrapper checks
     // existence in local/testing envs; no clone/provisioning pipeline needed

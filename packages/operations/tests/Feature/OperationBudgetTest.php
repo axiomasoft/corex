@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Operations\Tests\Feature;
 
 use CoreX\Config\Data\SecretRef;
+use CoreX\Database\Contracts\SchemaMigrator;
+use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Operations\Cost\Data\ActualCost;
 use CoreX\Operations\Cost\Data\BudgetScope;
 use CoreX\Operations\Cost\Data\EstimatedCost;
@@ -43,8 +45,8 @@ final class OperationBudgetTest extends TestCase
         $this->configureSqlite('api_tenant_stub');
         $this->selectSchema('api_budget', 'api_tenant_stub');
         $this->connection = DB::connection('api_budget');
-        $this->migration = require __DIR__.'/../../database/migrations/budget/create_sys_api_budget_tables.php';
-        $this->migration->up();
+        $this->migration = require app(SchemaSets::class)->get('axiomasoft/corex-operations:budget')->path.'/create_sys_api_budget_tables.php';
+        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:budget'], null);
         $this->clock = new FrozenClock(new DateTimeImmutable('2026-09-25T10:00:00.000000+00:00'));
     }
 
@@ -234,8 +236,8 @@ final class OperationBudgetTest extends TestCase
 
         try {
             $this->selectSchema('api_pg_budget', 'api_tenant_stub');
-            $migration = require __DIR__.'/../../database/migrations/budget/create_sys_api_budget_tables.php';
-            $migration->up();
+            $migration = require app(SchemaSets::class)->get('axiomasoft/corex-operations:budget')->path.'/create_sys_api_budget_tables.php';
+            app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:budget'], null);
             $children = $this->forkReservations();
 
             foreach ($children as $child) {
@@ -396,6 +398,8 @@ final class OperationBudgetTest extends TestCase
     private function selectSchema(string $budget, string $tenant): void
     {
         $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(SchemaSets::class);
+        $this->app->forgetInstance(SchemaMigrator::class);
         $this->app['config']->set('corex-operations.schema', [
             'budget' => [
                 'connection' => $budget,

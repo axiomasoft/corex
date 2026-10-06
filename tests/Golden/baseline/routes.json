@@ -1,6 +1,6 @@
 [
     {
-        "action": "CoreX\\Operations\\Http\\DiscoveryController@root",
+        "action": "CoreX\\Operations\\Internal\\Http\\DiscoveryController@root",
         "methods": [
             "GET"
         ],
@@ -120,7 +120,7 @@
         "uri": "api/v1/webhook-subscriptions/{id}/disable"
     },
     {
-        "action": "CoreX\\Operations\\Http\\DiscoveryController@capabilities",
+        "action": "CoreX\\Operations\\Internal\\Http\\DiscoveryController@capabilities",
         "methods": [
             "GET"
         ],
@@ -128,7 +128,7 @@
         "uri": "api/{version}/capabilities"
     },
     {
-        "action": "CoreX\\Operations\\Http\\DiscoveryController@openapi",
+        "action": "CoreX\\Operations\\Internal\\Http\\DiscoveryController@openapi",
         "methods": [
             "GET"
         ],
@@ -136,7 +136,7 @@
         "uri": "api/{version}/openapi.json"
     },
     {
-        "action": "CoreX\\Operations\\Http\\ApiController",
+        "action": "CoreX\\Operations\\Internal\\Http\\ApiController",
         "methods": [
             "GET",
             "POST",

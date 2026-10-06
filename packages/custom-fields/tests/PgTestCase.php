@@ -5,17 +5,21 @@ declare(strict_types=1);
 namespace CoreX\CustomFields\Tests;
 
 use CoreX\CoreServiceProvider;
-use Illuminate\Support\Facades\Schema;
+use CoreX\CustomFields\AttributesServiceProvider;
+use CoreX\Database\Testing\MigratesSchemaSets;
+use Illuminate\Support\Facades\DB;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Override;
 use RuntimeException;
 
 abstract class PgTestCase extends Orchestra
 {
+    use MigratesSchemaSets;
+
     #[Override]
     protected function getPackageProviders($app): array
     {
-        return [CoreServiceProvider::class];
+        return [CoreServiceProvider::class, AttributesServiceProvider::class];
     }
 
     #[Override]
@@ -45,11 +49,9 @@ abstract class PgTestCase extends Orchestra
 
     protected function defineDatabaseMigrations(): void
     {
-        Schema::dropIfExists('sys_attribute_schema_operations');
-        Schema::dropIfExists('sys_attribute_eav_values');
-        Schema::dropIfExists('sys_attribute_eav_records');
-        Schema::dropIfExists('sys_attribute_write_tokens');
-        Schema::dropIfExists('sys_attribute_documents');
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
+        DB::statement('CREATE SCHEMA public');
+        DB::purge('pgsql');
+        $this->migrateSchemaSets(['axiomasoft/corex-custom-fields:tenant'], DB::getDefaultConnection());
     }
 }

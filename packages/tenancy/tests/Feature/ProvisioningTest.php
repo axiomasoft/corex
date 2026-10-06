@@ -17,8 +17,6 @@ use Illuminate\Support\Str;
 
 uses()->group('pg');
 
-const ROOT_MIGRATIONS_PATH_PROVISIONING = __DIR__.'/../../database/migrations/root';
-
 const TEMPLATE_DB = 'tpl_tenant_v1_test';
 
 beforeEach(function (): void {
@@ -26,12 +24,7 @@ beforeEach(function (): void {
     DB::statement('CREATE SCHEMA public');
     DB::purge('pgsql');
 
-    $this->artisan('migrate', [
-        '--database' => 'pgsql',
-        '--path' => realpath(ROOT_MIGRATIONS_PATH_PROVISIONING),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
 
     // Golden-template fixture: a real (tiny) database with data, set as a
     // Postgres template so `CREATE DATABASE … TEMPLATE` can clone it.

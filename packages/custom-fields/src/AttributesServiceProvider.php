@@ -7,9 +7,11 @@ namespace CoreX\CustomFields;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\CustomFields\Errors\Internal\PackageProblemDefinitions;
+use CoreX\CustomFields\Internal\CustomFieldsSchemaSets;
 use CoreX\CustomFields\Internal\Laravel\AttributeBindingsRegistrar;
 use CoreX\CustomFields\Internal\Laravel\AttributeCompositionRegistrar;
 use CoreX\CustomFields\Internal\Laravel\AttributeMessagingRegistrar;
+use CoreX\Database\Contracts\SchemaSetProvider;
 use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use Illuminate\Support\ServiceProvider;
@@ -28,6 +30,8 @@ final class AttributesServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        $this->app->tag([CustomFieldsSchemaSets::class], SchemaSetProvider::class);
+
         ProblemDefinitions::register($this->app, __DIR__.'/../composer.json', PackageProblemDefinitions::class);
 
         $this->mergeConfigFrom(__DIR__.'/../config/corex-custom-fields.php', 'corex-custom-fields');

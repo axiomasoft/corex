@@ -8,12 +8,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-// Append-style audit of every enable/disable/upgrade/archive/purge — used to
-// diagnose partial-failure retries (AC-7/AC-13). Published under
-// `corex-migrations`/`corex-migrations-tenant` (D33/D43).
-// id/actor_id follow config('corex.ids.strategy') via IdColumns (D3/A58);
-// timestampTz precision is explicit µs (D32/A66). DB_SCHEMA.md §3.3
-// mod_lifecycle_log.
+// Executed from the package schema set on its declared connection.
 return new class extends Migration
 {
     public function up(): void

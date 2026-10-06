@@ -14,6 +14,12 @@ final class PackageProblemDefinitions implements ProblemDefinitionProvider
 {
     public function definitions(): iterable
     {
+        yield new ProblemDefinition(CoreErrorCode::SchemaInvalidSet, 'urn:corex:problem:core.schema_invalid_set', 500, 'Invalid schema set.', false, ErrorCategory::Internal, []);
+        yield new ProblemDefinition(CoreErrorCode::SchemaDuplicateSet, 'urn:corex:problem:core.schema_duplicate_set', 500, 'Duplicate schema set.', false, ErrorCategory::Internal, []);
+        yield new ProblemDefinition(CoreErrorCode::SchemaDuplicateMigration, 'urn:corex:problem:core.schema_duplicate_migration', 500, 'Duplicate schema migration.', false, ErrorCategory::Internal, []);
+        yield new ProblemDefinition(CoreErrorCode::SchemaUnknownSet, 'urn:corex:problem:core.schema_unknown_set', 500, 'Unknown schema set.', false, ErrorCategory::Internal, []);
+        yield new ProblemDefinition(CoreErrorCode::SchemaUnsupportedDriver, 'urn:corex:problem:core.schema_unsupported_driver', 500, 'Unsupported schema driver.', false, ErrorCategory::Internal, []);
+
         yield new ProblemDefinition(CoreErrorCode::CentralContextException, 'urn:corex:problem:core.central_context_exception', 403, 'Central context exception.', false, ErrorCategory::Authorization, []);
         yield new ProblemDefinition(CoreErrorCode::CompilationException, 'urn:corex:problem:core.compilation_exception', 500, 'Compilation exception.', false, ErrorCategory::Internal, []);
         yield new ProblemDefinition(CoreErrorCode::CrossWorkspaceMoveException, 'urn:corex:problem:core.cross_workspace_move_exception', 409, 'Cross workspace move exception.', false, ErrorCategory::Conflict, []);

@@ -27,7 +27,7 @@ beforeEach(function (): void {
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     DB::purge('pgsql');
-    $this->artisan('migrate', ['--database' => 'pgsql', '--path' => realpath(__DIR__.'/../../database/migrations/root'), '--realpath' => true, '--force' => true])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
     DB::statement('CREATE TABLE scope_markers (marker text NOT NULL)');
 
     $this->databases = [];

@@ -7,11 +7,14 @@ namespace CoreX\Operations\Tests\Feature;
 use CoreX\Config\Data\SecretRef;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
-use CoreX\Operations\ApiServiceProvider;
+use CoreX\Database\Contracts\SchemaMigrator;
+use CoreX\Database\Contracts\SchemaSets;
+use CoreX\Database\Enums\SchemaScope;
 use CoreX\Operations\Idempotency\Contracts\IdempotencyStore;
 use CoreX\Operations\Idempotency\Data\IdempotencyAttempt;
 use CoreX\Operations\Idempotency\Data\IdempotencyScope;
 use CoreX\Operations\Idempotency\Internal\SqlIdempotencyStore;
+use CoreX\Operations\Laravel\ApiSchemaRegistrar;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Tests\TestCase;
 use CoreX\Operations\Validation\Laravel\JsonCanonical;
@@ -48,8 +51,8 @@ final class IdempotencyStoreTest extends TestCase
         parent::setUp();
         $this->connection = DB::connection('sqlite');
         Schema::connection('sqlite')->dropIfExists('sys_api_idempotency');
-        $this->migration = require __DIR__.'/../../database/migrations/create_sys_api_idempotency_table.php';
-        $this->migration->up();
+        $this->migration = require app(SchemaSets::class)->get('axiomasoft/corex-operations:tenant')->path.'/create_sys_api_idempotency_table.php';
+        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], 'sqlite');
         Schema::connection('sqlite')->create('idempotency_effects', static function (Blueprint $table): void {
             $table->string('value')->primary();
         });
@@ -240,18 +243,20 @@ final class IdempotencyStoreTest extends TestCase
         $this->migration->up();
     }
 
-    public function test_provider_binds_store_and_publishes_only_an_explicit_tenant_tag(): void
+    public function test_provider_binds_store_and_registers_a_tenant_schema(): void
     {
         $this->app['config']->set('app.key', 'provider-test-secret');
         $this->app->instance(TenantContextResolver::class, $this->contexts);
 
         self::assertInstanceOf(SqlIdempotencyStore::class, $this->app->make(IdempotencyStore::class));
 
-        $published = ApiServiceProvider::pathsToPublish(ApiServiceProvider::class, 'corex-operations-migrations-tenant');
-        self::assertSame([
-            realpath(__DIR__.'/../../database/migrations/create_sys_api_idempotency_table.php') => database_path('migrations/tenant/create_sys_api_idempotency_table.php'),
-            realpath(__DIR__.'/../../database/migrations/tenant') => database_path('migrations/tenant'),
-        ], array_combine(array_map('realpath', array_keys($published)), array_values($published)));
+        $this->app['config']->set('database.connections.api_schema_budget', ['driver' => 'sqlite', 'database' => ':memory:', 'prefix' => '']);
+        $this->app['config']->set('corex-operations.schema', [
+            'budget' => ['connection' => 'api_schema_budget', 'driver' => 'sqlite', 'database' => ':memory:'],
+            'tenant' => ['connection' => 'sqlite', 'driver' => 'sqlite', 'database' => ':memory:'],
+        ]);
+        $sets = $this->app->make(SchemaSets::class);
+        self::assertSame(SchemaScope::Tenant, $sets->get('axiomasoft/corex-operations:tenant')->scope);
     }
 
     #[Group('pg')]
@@ -269,8 +274,8 @@ final class IdempotencyStoreTest extends TestCase
 
         $this->configurePostgres($database);
         Schema::connection('pgsql')->dropIfExists('sys_api_idempotency');
-        $migration = require __DIR__.'/../../database/migrations/create_sys_api_idempotency_table.php';
-        $migration->up();
+        $migration = require app(SchemaSets::class)->get('axiomasoft/corex-operations:tenant')->path.'/create_sys_api_idempotency_table.php';
+        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], 'pgsql');
 
         $children = [];
 
@@ -406,5 +411,11 @@ final class IdempotencyStoreTest extends TestCase
         DB::purge('pgsql');
 
         self::assertSame($database, DB::connection('pgsql')->getDatabaseName());
+        $this->app['config']->set('corex-operations.schema.tenant', ['connection' => 'pgsql', 'driver' => 'pgsql', 'database' => $database]);
+        $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(SchemaSets::class);
+        $this->app->forgetInstance(SchemaMigrator::class);
+        DB::connection('pgsql')->statement('DROP SCHEMA IF EXISTS public CASCADE');
+        DB::connection('pgsql')->statement('CREATE SCHEMA public');
     }
 }

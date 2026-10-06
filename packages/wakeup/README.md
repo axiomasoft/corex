@@ -27,3 +27,7 @@ Register exported `DueWakeupHandler` implementations in `corex-wakeup.handlers` 
 ## Failure semantics
 
 Unknown kinds, unsupported versions and stale generation/lease claims cannot execute a handler. Attempts are bounded by `corex-wakeup.max_attempts` (default 5); leases default to 60 seconds. Reconcile retained/quarantined durable state and handler version before retry, rather than deleting the request identity.
+
+## Schema installation
+
+Register the package provider, then run `php artisan corex:schema:migrate --scope=tenant --database=<tenant>`. Module sets are installed by `ModuleLifecycle::enable()`; template preparation includes them with `--modules`. Inspect the journal with `corex:schema:status`.

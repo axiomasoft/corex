@@ -11,3 +11,7 @@ Consumers must bind `MediaPolicy`, provide the existing `TenantStorage` contract
 ## Installation
 
 Install with `composer require axiomasoft/corex-media` through your configured distribution channel. Supply the existing tenant storage binding and a `MediaPolicy`, then install the package-owned media schema on the tenant connection. Upload/read permissions remain denied until the host policy authorizes them; configure the private storage disk before accepting uploads.
+
+## Schema installation
+
+Register the package provider, then run `php artisan corex:schema:migrate --scope=tenant --database=<tenant>`. Module sets are installed by `ModuleLifecycle::enable()`; template preparation includes them with `--modules`. Inspect the journal with `corex:schema:status`.

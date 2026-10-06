@@ -9,24 +9,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-// PG-only (D12): jsonb + CHECK + BRIN have no sqlite equivalent. NOT
-// auto-loaded — CoreServiceProvider publishes migrations/pg/ under the tag
-// `corex-migrations`/`corex-migrations-tenant` (D33/D43). PG-lane tests migrate
-// it explicitly by --path (AuditLogTest), same pattern as
-// SettingsTest/ModuleLifecycleTest. Replaces corex_audit_logs (D1/D36 —
-// greenfield). No updated_at: DB_SCHEMA.md §Конфликт-2 (resolved 2026-07-13) —
-// append-only with zero legitimate post-insert fields does not get one.
-// id/actor_id/workspace_id/entity_id follow config('corex.ids.strategy') via
-// IdColumns (D3/A58). timestampTz precision is explicit µs (D32/A66/A72): PG
-// ROUNDS timestamp(0), so occurred_at at .600 would be written as +1s — the
-// chronological order of a legally significant append-only audit must not lie.
-// `seq bigserial` (D42/pre-mortem P1R C6) is the monotonic audit cursor:
-// UUIDv7 `id` (ms precision + random tail) and occurred_at (accepting-node
-// clock) do not give monotonicity across nodes, so keyset pagination sorts and
-// tie-breaks ONLY by seq. bigserial is a plain surrogate cursor, NOT the PK
-// (id stays the UUIDv7 identity) — beyond the DRAFT DB_SCHEMA catalog, D-log
-// D42.
-// See DB_SCHEMA.md §3.2 sys_audit_log for the column-by-column source.
+// Executed from the package schema set on its declared connection.
 return new class extends Migration
 {
     public function up(): void

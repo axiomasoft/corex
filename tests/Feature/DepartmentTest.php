@@ -72,12 +72,7 @@ beforeEach(function (): void {
     departmentsPg()->statement('CREATE SCHEMA public');
     DB::purge(DEPARTMENTS_TEST_CONNECTION);
 
-    $this->artisan('migrate', [
-        '--database' => DEPARTMENTS_TEST_CONNECTION,
-        '--path' => realpath(__DIR__.'/../../packages/core/database/migrations/pg'),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex:tenant'], DEPARTMENTS_TEST_CONNECTION);
 });
 
 it('AC-24a: reparents the whole subtree in EXACTLY ONE UPDATE (query count, A25/A27)', function (): void {

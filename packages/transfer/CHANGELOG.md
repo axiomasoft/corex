@@ -2,6 +2,8 @@
 
 ## Unreleased — typed Options and runtime configuration checks (P05.1)
 
+- Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
+
 - Added internal `TransferOptions`, a lazy singleton resolved in `boot()`.
 
 ## Unreleased — kernel package and API migration

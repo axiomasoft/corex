@@ -11,6 +11,8 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Database\Contracts\SchemaMigrator;
+use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Errors\Contracts\ProblemRegistry;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessageEnvelope;
@@ -59,8 +61,8 @@ final class WebhookReplayTest extends TestCase
         $this->configure('api_tenant');
         $this->selectSchema();
         $this->connection = DB::connection('api_tenant');
-        $migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_webhook_tables.php';
-        $migration->up();
+        $migration = require app(SchemaSets::class)->get('axiomasoft/corex-webhooks:tenant')->path.'/create_sys_api_webhook_tables.php';
+        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
         $this->clock = new FrozenClock(new DateTimeImmutable('2026-09-26T16:00:00.000000+00:00'));
         $contexts = new ContextFixture;
         $contexts->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
@@ -215,8 +217,8 @@ final class WebhookReplayTest extends TestCase
 
         try {
             $this->selectPostgresSchema($database);
-            $migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_webhook_tables.php';
-            $migration->up();
+            $migration = require app(SchemaSets::class)->get('axiomasoft/corex-webhooks:tenant')->path.'/create_sys_api_webhook_tables.php';
+            app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
             $this->connection = DB::connection('api_p1416_tenant');
             $contexts = new ContextFixture;
             $contexts->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
@@ -357,6 +359,8 @@ final class WebhookReplayTest extends TestCase
     private function selectSchema(): void
     {
         $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(SchemaSets::class);
+        $this->app->forgetInstance(SchemaMigrator::class);
         $this->app['config']->set('corex-operations.schema', [
             'budget' => ['connection' => 'api_budget_stub', 'driver' => 'sqlite', 'database' => ':memory:'],
             'tenant' => ['connection' => 'api_tenant', 'driver' => 'sqlite', 'database' => ':memory:'],
@@ -382,6 +386,8 @@ final class WebhookReplayTest extends TestCase
     private function selectPostgresSchema(string $database): void
     {
         $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(SchemaSets::class);
+        $this->app->forgetInstance(SchemaMigrator::class);
         $this->app['config']->set('corex-operations.schema', [
             'budget' => ['connection' => 'api_budget_stub', 'driver' => 'sqlite', 'database' => ':memory:'],
             'tenant' => ['connection' => 'api_p1416_tenant', 'driver' => 'pgsql', 'database' => $database],

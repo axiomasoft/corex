@@ -4,26 +4,31 @@ declare(strict_types=1);
 
 namespace CoreX\Transfer\Tests;
 
-use Illuminate\Support\Facades\Schema;
+use CoreX\CoreServiceProvider;
+use CoreX\Database\Contracts\SchemaMigrator;
+use CoreX\Transfer\TransferServiceProvider;
+use Illuminate\Support\Facades\DB;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Override;
 use RuntimeException;
 
 abstract class PgTestCase extends Orchestra
 {
+    protected function getPackageProviders($app): array
+    {
+        return [CoreServiceProvider::class, TransferServiceProvider::class];
+    }
+
     #[Override]
     protected function setUp(): void
     {
         parent::setUp();
 
-        foreach (['corex_export_parts', 'corex_export_manifests', 'corex_transfer_outbox', 'corex_transfer_refs', 'corex_transfer_rows', 'corex_transfer_jobs'] as $table) {
-            Schema::dropIfExists($table);
-        }
+        DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
+        DB::statement('CREATE SCHEMA public');
+        DB::purge('pgsql');
 
-        $migration = require __DIR__.'/../database/migrations/2026_09_15_000001_create_corex_transfer_tables.php';
-        $migration->up();
-        $exportMigration = require __DIR__.'/../database/migrations/2026_09_15_000002_create_corex_export_manifest_tables.php';
-        $exportMigration->up();
+        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-transfer:tenant'], DB::getDefaultConnection());
     }
 
     #[Override]

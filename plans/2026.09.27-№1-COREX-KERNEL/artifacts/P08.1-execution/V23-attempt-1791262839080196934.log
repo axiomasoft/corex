@@ -1,0 +1,2 @@
+S3 packages/core/src/Database/Laravel/DatabaseRegistrar.php:28 factory closure is not a single return
+S3 packages/core/src/Database/Laravel/DatabaseRegistrar.php:45 factory closure is not a single return

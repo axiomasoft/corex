@@ -157,7 +157,7 @@ beforeEach(function (): void {
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     DB::purge('pgsql');
-    $this->artisan('migrate', ['--database' => 'pgsql', '--path' => realpath(__DIR__.'/../../database/migrations/root'), '--realpath' => true, '--force' => true])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
     $suffix = bin2hex(random_bytes(8));
     $this->p32Databases = ['tpl_p32_'.$suffix.'_test', 'acc_p32_archive_'.$suffix.'_test', 'acc_p32_lab_'.$suffix.'_test', 'acc_p32_restore_'.$suffix.'_test'];
     foreach ($this->p32Databases as $index => $name) {

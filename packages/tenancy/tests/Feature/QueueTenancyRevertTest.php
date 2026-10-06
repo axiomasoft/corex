@@ -14,8 +14,6 @@ use Illuminate\Support\Str;
 
 uses()->group('pg');
 
-const ROOT_MIGRATIONS_PATH_QTR = __DIR__.'/../../database/migrations/root';
-
 const TENANT_DB_QTR = 'acc_qtr_test';
 
 beforeEach(function (): void {
@@ -23,12 +21,7 @@ beforeEach(function (): void {
     DB::statement('CREATE SCHEMA public');
     DB::purge('pgsql');
 
-    $this->artisan('migrate', [
-        '--database' => 'pgsql',
-        '--path' => realpath(ROOT_MIGRATIONS_PATH_QTR),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
 
     DB::statement('DROP DATABASE IF EXISTS '.TENANT_DB_QTR);
     DB::statement('CREATE DATABASE '.TENANT_DB_QTR);

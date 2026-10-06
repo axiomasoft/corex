@@ -9,18 +9,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-// PG-only (D12): jsonb + CHECK + UNIQUE NULLS NOT DISTINCT have no sqlite
-// equivalent. NOT auto-loaded — CoreServiceProvider publishes this dir under
-// the tag `corex-migrations`/`corex-migrations-tenant` (D33/D43); the consumer
-// runs `vendor:publish` then `migrate --database=<tenant>`. PG-lane tests
-// migrate it explicitly by --path (tests/Feature/SettingsTest.php), same
-// pattern as ModuleLifecycleTest. Replaces corex_settings (D1/D36 — greenfield,
-// no prod data to migrate).
-// id/scope_id follow config('corex.ids.strategy') via IdColumns (D3/A58): the
-// key seam is public, so a hardcoded uuid would break ulid/int installs.
-// timestampTz precision is explicit µs (D32/A66): PG rounds timestamp(0), which
-// would corrupt chronological order in time-sensitive tables.
-// See DB_SCHEMA.md §3.2 sys_settings for the column-by-column source.
+// Executed from the package schema set on its declared connection.
 return new class extends Migration
 {
     public function up(): void

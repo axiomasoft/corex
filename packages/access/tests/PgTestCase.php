@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace CoreX\Access\Tests;
 
 use CoreX\Access\Tests\Support\CoreAuthTestCase;
+use CoreX\Access\Tests\Support\FixtureTenantSchemaSets;
+use CoreX\Database\Contracts\SchemaSetProvider;
+use CoreX\Database\Testing\MigratesSchemaSets;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 use Override;
@@ -18,10 +21,13 @@ use Override;
  */
 abstract class PgTestCase extends CoreAuthTestCase
 {
+    use MigratesSchemaSets;
+
     /** @param Application $app */
     #[Override]
     protected function defineEnvironment($app): void
     {
+        $app->tag([FixtureTenantSchemaSets::class], SchemaSetProvider::class);
         parent::defineEnvironment($app);
 
         $app['config']->set('database.default', 'pgsql');
@@ -48,13 +54,13 @@ abstract class PgTestCase extends CoreAuthTestCase
     /** Tenant-DB aut_* migrations under test — no cross-package FK. */
     protected function migrateAutSchema(): void
     {
-        $this->migratePath(__DIR__.'/../database/migrations/tenant');
+        $this->migrateSchemaSets(['axiomasoft/corex-access:tenant'], 'pgsql');
     }
 
     /** Cloud-only cross-package FK (D102) — requires the users/wsp_workspaces fixtures below to already exist. */
     protected function migrateCloudFks(): void
     {
-        $this->migratePath(__DIR__.'/../database/migrations/tenant-cloud');
+        $this->migrateSchemaSets(['axiomasoft/corex-access:tenant-cloud'], 'pgsql');
     }
 
     /** Minimal users/wsp_workspaces fixtures (D105) — real axiomasoft/corex-tenancy is not a dependency (boxed doctrine). */
@@ -73,7 +79,7 @@ abstract class PgTestCase extends CoreAuthTestCase
      */
     protected function migrateCoreDepartments(): void
     {
-        $this->migratePath(__DIR__.'/../vendor/axiomasoft/corex/database/migrations/pg');
+        $this->migrateSchemaSets(['axiomasoft/corex:tenant'], 'pgsql');
     }
 
     private function migratePath(string $path): void

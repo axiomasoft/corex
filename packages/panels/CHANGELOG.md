@@ -2,6 +2,8 @@
 
 ## Unreleased — thin providers and registrars (P05.2)
 
+- Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
+
 - `PanelsServiceProvider` delegates to `SavedViewsBindingsRegistrar` and `PanelsBindingsRegistrar`; `SavedViewsRegistrar::register()` stays as a deprecated shim.
 
 ## Unreleased — typed Options and runtime configuration checks (P05.1)

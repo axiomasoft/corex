@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use CoreX\Context\Contracts\TenancyManager;
+use CoreX\Database\Contracts\SchemaMigrator;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Laravel\Http\Middleware\ResolveTenantFromHost;
 use CoreX\Tenancy\Laravel\Http\Middleware\ScopeSessionToTenant;
@@ -11,7 +12,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Session\FileSessionHandler;
 use Illuminate\Session\Store;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
@@ -19,21 +19,12 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 uses()->group('pg');
 
-const ROOT_MIGRATIONS_PATH_TSS = __DIR__.'/../../database/migrations/root';
-const TENANT_MIGRATIONS_PATH_TSS = __DIR__.'/../../database/migrations/tenant';
-const CORE_MIGRATIONS_PATH_TSS = __DIR__.'/../../vendor/axiomasoft/corex/database/migrations/pg';
-
 beforeEach(function (): void {
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     DB::purge('pgsql');
 
-    $this->artisan('migrate', [
-        '--database' => 'pgsql',
-        '--path' => realpath(ROOT_MIGRATIONS_PATH_TSS),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
 
     config(['session.driver' => 'database']);
 });
@@ -103,19 +94,9 @@ function makeAccountTSS(array $overrides = []): Account
  *  axiomasoft/corex's `sys_departments` to already exist on the same (now-switched) connection. */
 function migrateTenantSessionsTSS(): void
 {
-    Artisan::call('migrate', [
-        '--database' => 'tenant',
-        '--path' => realpath(CORE_MIGRATIONS_PATH_TSS),
-        '--realpath' => true,
-        '--force' => true,
-    ]);
+    app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex:tenant'], 'tenant');
 
-    Artisan::call('migrate', [
-        '--database' => 'tenant',
-        '--path' => realpath(TENANT_MIGRATIONS_PATH_TSS),
-        '--realpath' => true,
-        '--force' => true,
-    ]);
+    app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-tenancy:tenant'], 'tenant');
 }
 
 /** Runs the middleware with the given session and returns the HTTP status it ended with. */

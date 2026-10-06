@@ -11,6 +11,8 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\CoreServiceProvider;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Database\Contracts\SchemaMigrator;
+use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Data\Api;
 use CoreX\Modules\Data\ModuleManifest;
@@ -61,6 +63,11 @@ final class ToolCostInvocationTest extends TestCase
     {
         $app['config']->set('database.default', 'sqlite');
         $app['config']->set('database.connections.sqlite.database', ':memory:');
+        $app['config']->set('database.connections.api_schema_budget', ['driver' => 'sqlite', 'database' => ':memory:', 'prefix' => '']);
+        $app['config']->set('corex-operations.schema', [
+            'budget' => ['connection' => 'api_schema_budget', 'driver' => 'sqlite', 'database' => ':memory:'],
+            'tenant' => ['connection' => 'sqlite', 'driver' => 'sqlite', 'database' => ':memory:'],
+        ]);
         $app['config']->set('cache.default', 'array');
         $app['config']->set('session.driver', 'array');
         $app['config']->set('queue.default', 'sync');
@@ -82,7 +89,7 @@ final class ToolCostInvocationTest extends TestCase
         $this->tenants->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
         $this->principal = new IdentityFixture;
         Schema::dropIfExists('sys_api_idempotency');
-        (require __DIR__.'/../../../operations/database/migrations/create_sys_api_idempotency_table.php')->up();
+        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
     }
 
     protected function tearDown(): void
@@ -178,6 +185,8 @@ final class ToolCostInvocationTest extends TestCase
         ]);
         DB::purge('api_budget_admission');
         $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(SchemaSets::class);
+        $this->app->forgetInstance(SchemaMigrator::class);
         $this->app['config']->set('corex-operations.schema', [
             'budget' => [
                 'connection' => 'api_budget_admission',
@@ -191,7 +200,7 @@ final class ToolCostInvocationTest extends TestCase
             ],
         ]);
         $connection = DB::connection('api_budget_admission');
-        (require __DIR__.'/../../../operations/database/migrations/budget/create_sys_api_budget_tables.php')->up();
+        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:budget'], null);
 
         return InvocationFixtures::sqlBudget(
             connection: $connection,

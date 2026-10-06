@@ -9,5 +9,6 @@ parameters:
     paths:
         - src
         - database/migrations
+        - tests/Support/CoreXTestCase.php
     checkModelProperties: true
     checkPhpDocMissingReturn: true

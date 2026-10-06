@@ -273,7 +273,7 @@ Boxed installations may use two connection names to the same database. Payloads 
 choose either connection. Table ownership and retention are recorded in
 [table-ownership.md](../../docs/architecture/table-ownership.md).
 
-Publish `corex-operations-migrations-budget` and `corex-operations-migrations-tenant`, then apply the new
+Run `php artisan corex:schema:migrate --scope=dedicated` for the configured budget connection and `php artisan corex:schema:migrate --scope=tenant --database=<tenant>` to apply the
 migrations explicitly to their owning databases using the host's migration procedure.
 Provider boot never runs DDL. Configure a host-owned `scope_hmac_secret` and stable
 `installation_id`, and set `corex-operations.cost.enabled=true`. The shipped activation flag is

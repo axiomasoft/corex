@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Flex\Crm;
 
+use CoreX\Database\Contracts\SchemaSetProvider;
+use Flex\Crm\Internal\CrmSchemaSets;
 use Flex\Crm\Support\CrmOptions;
 use Illuminate\Support\ServiceProvider;
 
@@ -11,6 +13,8 @@ final class CrmServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
+        $this->app->tag([CrmSchemaSets::class], SchemaSetProvider::class);
+
         $this->mergeConfigFrom(__DIR__.'/../config/flex-crm.php', 'flex-crm');
 
         $raw = $this->app['config']->get('flex-crm', []);

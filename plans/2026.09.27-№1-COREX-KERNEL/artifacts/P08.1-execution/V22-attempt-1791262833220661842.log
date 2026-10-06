@@ -1,0 +1,6 @@
+> bash scripts/ci-deferred-guard.sh php scripts/package-graph-gate.php
+HOST-RESERVED NAMESPACE: CoreX\SearchMeilisearch\ host=axiomasoft/corex-search owner=axiomasoft/corex-search-meilisearch — host-reserved adapter namespace; host defines zero classes under the prefix; class_counts={"axiomasoft/corex-search":0,"axiomasoft/corex-search-meilisearch":9}
+packages/tenancy/src/Account/WakeupForeignContextProbe.php:7: CoreX\Wakeup\Contracts\WakeupScheduleHint [R1] → axiomasoft/corex-wakeup (undeclared cross-package dependency)
+packages/tenancy/src/Account/WakeupForeignContextProbe.php:13: CoreX\Tenancy\Account\WakeupForeignContextProbe [R4b] → axiomasoft/corex-tenancy (API-UNCLASSIFIED Missing Api/Spi annotation)
+package-graph-gate: 2 violation(s)
+Script bash scripts/ci-deferred-guard.sh php scripts/package-graph-gate.php handling the package-graph-gate event returned with error code 1

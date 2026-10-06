@@ -2,6 +2,8 @@
 
 ## Unreleased — native authorization (P07.4)
 
+- Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
+
 - Breaking before 1.0: access evaluates its own role matrix and direct grants; AzGuard integration moved to the optional `corex-access-azguard` package.
 - Added `aut_direct_grants` and the `RoleMatrixCompiled` event. Compilation dispatches synchronously in the tenant transaction and invalidates scope versions after commit.
 - Removed `aut_roles.azguard_role_id`, `RoleView::azguardRoleId`, `RoleMatrixData::bindAzGuardRole`, and AzGuard options. Access checks deny inactive entities before reading cached scopes or grants.

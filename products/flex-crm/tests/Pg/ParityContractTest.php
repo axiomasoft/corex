@@ -37,7 +37,7 @@ beforeEach(function (): void {
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     AccountFixture::migrate();
-    $this->artisan('migrate', ['--path' => realpath(__DIR__.'/../../database/migrations'), '--realpath' => true, '--force' => true])->assertSuccessful();
+    $this->migrateSchemaSets(['flex/crm:tenant'], DB::getDefaultConnection());
     $this->crmContext = TestContext::seed('pgsql');
 });
 

@@ -225,6 +225,46 @@
             "retryable": false
         },
         {
+            "category": "internal",
+            "code": "core.schema_duplicate_migration",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "internal",
+            "code": "core.schema_duplicate_set",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "internal",
+            "code": "core.schema_invalid_set",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "internal",
+            "code": "core.schema_unknown_set",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
+            "category": "internal",
+            "code": "core.schema_unsupported_driver",
+            "detail_keys": [],
+            "owner": "axiomasoft/corex",
+            "path": null,
+            "retryable": false
+        },
+        {
             "category": "authorization",
             "code": "core.scope_context_mismatch",
             "detail_keys": [],

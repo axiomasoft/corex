@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Tenancy\Contracts\PrincipalWorkspaceResolver;
 use CoreX\Tenancy\Identity\Internal\Models\User;
 use CoreX\Tenancy\Workspace\Exceptions\NoDefaultWorkspaceException;
@@ -32,7 +33,7 @@ it('resolves explicit principals across two isolated account databases without a
             DB::setDefaultConnection($connection);
             expect(DB::connection()->getDatabaseName())->toBe($database);
 
-            foreach ([__DIR__.'/../../vendor/axiomasoft/corex/database/migrations/pg', __DIR__.'/../../database/migrations/tenant'] as $path) {
+            foreach ([app(SchemaSets::class)->get('axiomasoft/corex:tenant')->path, app(SchemaSets::class)->get('axiomasoft/corex-tenancy:tenant')->path] as $path) {
                 $this->artisan('migrate', ['--database' => $connection, '--path' => realpath($path), '--realpath' => true, '--force' => true])->assertExitCode(0);
             }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tasks\Tests\Support;
 
 use CoreX\CoreServiceProvider;
+use CoreX\Database\Testing\MigratesSchemaSets;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Tasks\TasksServiceProvider;
 use Illuminate\Foundation\Application;
@@ -16,6 +17,7 @@ use Orchestra\Testbench\TestCase as Orchestra;
 abstract class TasksTestCase extends Orchestra
 {
     use IsolatesDatabasePath;
+    use MigratesSchemaSets;
 
     /**
      * @param  Application  $app
@@ -57,6 +59,11 @@ abstract class TasksTestCase extends Orchestra
     protected function defineDatabaseMigrations(): void
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
+
+    }
+
+    protected function defineDatabaseMigrationsAfterDatabaseRefreshed(): void
+    {
+        $this->migrateSchemaSets(['axiomasoft/corex-tasks:tenant'], 'testbench');
     }
 }

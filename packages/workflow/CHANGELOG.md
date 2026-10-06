@@ -2,6 +2,8 @@
 
 ## Unreleased — thin providers and registrars (P05.2)
 
+- Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
+
 - The workflow binding is assembled by `WorkflowBindingFactory`.
 
 ## Unreleased — typed Options and runtime configuration checks (P05.1)

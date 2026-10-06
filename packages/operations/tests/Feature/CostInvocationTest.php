@@ -9,6 +9,7 @@ use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Database\Contracts\SchemaMigrator;
 use CoreX\Errors\Contracts\ProblemRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Data\Api;
@@ -46,6 +47,7 @@ use CoreX\Operations\Invocation\Data\OperationResult;
 use CoreX\Operations\Invocation\Internal\DefaultOperationInvoker;
 use CoreX\Operations\Invocation\Internal\OperationDispatcher;
 use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
+use CoreX\Operations\Laravel\ApiSchemaRegistrar;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
 use CoreX\Operations\Testing\ModuleFixture;
@@ -77,7 +79,7 @@ final class CostInvocationTest extends TestCase
         $this->tenants->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));
         $this->principal = new IdentityFixture;
         Schema::dropIfExists('sys_api_idempotency');
-        (require __DIR__.'/../../database/migrations/create_sys_api_idempotency_table.php')->up();
+        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
     }
 
     protected function tearDown(): void

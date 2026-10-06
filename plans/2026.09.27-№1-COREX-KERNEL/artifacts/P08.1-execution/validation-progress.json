@@ -1,0 +1,11 @@
+[
+  {
+    "id": "V14",
+    "cmd": "bash scripts/anti-weakening-gate.sh",
+    "exit": 0,
+    "expected_exit": 0,
+    "green": true,
+    "seconds": 4.64,
+    "log": "plans/2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.1-execution/V14-validation.log"
+  }
+]

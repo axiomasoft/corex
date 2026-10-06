@@ -9,12 +9,13 @@ use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
+use CoreX\Database\Contracts\SchemaMigrator;
+use CoreX\Database\Enums\SchemaScope;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Account\Internal\Models\AccountSchemaState;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
 use CoreX\Tenancy\Provisioning\Internal\Models\MigrationBatch;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
@@ -41,6 +42,7 @@ final class MigrationWaveOrchestrator
         private readonly string $centralConnection,
         private readonly TenancyManager $tenancy,
         private readonly TemplateIntegrityVerifier $templateIntegrityVerifier,
+        private readonly SchemaMigrator $schema,
         private readonly ?Closure $migrationRunner = null,
     ) {}
 
@@ -128,7 +130,7 @@ final class MigrationWaveOrchestrator
 
         try {
             $this->tenancy->runFor($accountRef, null, function () use ($accountRef): void {
-                $runner = $this->migrationRunner ?? self::defaultMigrationRunner();
+                $runner = $this->migrationRunner ?? $this->defaultMigrationRunner();
                 $runner($accountRef);
             });
 
@@ -149,26 +151,21 @@ final class MigrationWaveOrchestrator
     /**
      * @return Closure(AccountRef):void
      */
-    private static function defaultMigrationRunner(): Closure
+    private function defaultMigrationRunner(): Closure
     {
         // $account is not needed by the default runner itself (it acts on
         // whichever account TenancyManager::runFor() already switched the
         // 'tenant' connection to) — kept in the signature only so a
         // caller-supplied $migrationRunner can log/branch on it.
-        return static function (AccountRef $account): void {
-            DB::connection('tenant')->transaction(static function () use ($account): void {
+        return function (AccountRef $account): void {
+            DB::connection('tenant')->transaction(function () use ($account): void {
                 // AC-12 — the advisory-lock CALL is the actual requirement
                 // here (B-15 DDL-worker coordination itself is Scope
                 // Excluded); `pg_advisory_xact_lock` auto-releases at
                 // transaction end.
                 DB::connection('tenant')->select("SELECT pg_advisory_xact_lock(hashtext('fld_ddl')) /* account:{$account->id} */");
 
-                Artisan::call('migrate', [
-                    '--database' => 'tenant',
-                    '--path' => realpath(__DIR__.'/../../../database/migrations/tenant'),
-                    '--realpath' => true,
-                    '--force' => true,
-                ]);
+                $this->schema->migrate(SchemaScope::Tenant, 'tenant');
             });
         };
     }

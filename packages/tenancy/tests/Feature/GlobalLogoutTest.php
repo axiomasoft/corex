@@ -25,19 +25,12 @@ uses()->group('pg');
 beforeAll(fn () => TestCase::$oidcEnabled = true);
 afterAll(fn () => TestCase::$oidcEnabled = false);
 
-const ROOT_MIGRATIONS_PATH_GL = __DIR__.'/../../database/migrations/root';
-
 beforeEach(function (): void {
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     DB::purge('pgsql');
 
-    $this->artisan('migrate', [
-        '--database' => 'pgsql',
-        '--path' => realpath(ROOT_MIGRATIONS_PATH_GL),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
 
     // See OidcLoginTest.php's beforeEach for why this is necessary:
     // routes/oidc.php's 'tenant' group carries no session-starting

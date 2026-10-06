@@ -9,6 +9,8 @@ use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Internal\ArrayDataScopeCodec;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Database\Contracts\SchemaMigrator;
+use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Operations\Bulk\Data\BulkOperation;
 use CoreX\Operations\Bulk\Data\BulkOperationDefinition;
 use CoreX\Operations\Bulk\Enums\BulkOperationStatus;
@@ -48,12 +50,14 @@ final class BulkResultAccessTest extends TestCase
         DB::purge('api_budget_stub');
         DB::purge('api_tenant');
         $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(SchemaSets::class);
+        $this->app->forgetInstance(SchemaMigrator::class);
         $this->app['config']->set('corex-operations.schema', [
             'budget' => ['connection' => 'api_budget_stub', 'driver' => 'sqlite', 'database' => ':memory:'],
             'tenant' => ['connection' => 'api_tenant', 'driver' => 'sqlite', 'database' => ':memory:'],
         ]);
         $connection = DB::connection('api_tenant');
-        (require __DIR__.'/../../database/migrations/tenant/create_sys_api_bulk_operations_table.php')->up();
+        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
         $contexts = new ContextFixture;
         $contexts->initialize(new AccountRef('account-1', 'account', 'active', [], []));
         $clock = new FrozenClock(new DateTimeImmutable('2026-09-25T10:00:00.000000+00:00'));

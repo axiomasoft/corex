@@ -2,6 +2,8 @@
 
 ## Unreleased — thin providers and registrars (P05.2)
 
+- Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
+
 - `AttributesServiceProvider` delegates to messaging, composition and bindings registrars; multi-statement closures moved to `AttributeStoreFactory`, `SchemaOperationsFactory` and `FieldCatalogueFactory`. With the kernel provider the module registry is always bound, so `SchemaOperations` resolves to the queued DDL implementation.
 
 ## Unreleased — typed Options and runtime configuration checks (P05.1)

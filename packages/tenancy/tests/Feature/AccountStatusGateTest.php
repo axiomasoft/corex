@@ -23,19 +23,12 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 uses()->group('pg');
 
-const ROOT_MIGRATIONS_PATH_ASG = __DIR__.'/../../database/migrations/root';
-
 beforeEach(function (): void {
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     DB::purge('pgsql');
 
-    $this->artisan('migrate', [
-        '--database' => 'pgsql',
-        '--path' => realpath(ROOT_MIGRATIONS_PATH_ASG),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
 
     config([
         'corex-tenancy.status_gate.payment_route' => '/billing',

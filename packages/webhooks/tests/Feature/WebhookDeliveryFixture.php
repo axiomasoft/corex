@@ -9,6 +9,8 @@ use CoreX\Config\Data\SecretRef;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
+use CoreX\Database\Contracts\SchemaMigrator;
+use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Enums\MessageClass;
@@ -49,8 +51,8 @@ trait WebhookDeliveryFixture
         $this->configure('api_tenant');
         $this->selectSchema();
         $this->connection = DB::connection('api_tenant');
-        $migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_webhook_tables.php';
-        $migration->up();
+        $migration = require app(SchemaSets::class)->get('axiomasoft/corex-webhooks:tenant')->path.'/create_sys_api_webhook_tables.php';
+        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
         $this->connection->getSchemaBuilder()->create(app(CoreOptions::class)->inboxMessagesTable, function (Blueprint $table): void {
             $table->string('consumer', 120);
             $table->string('message_id', 64);
@@ -166,6 +168,8 @@ trait WebhookDeliveryFixture
     private function selectSchema(): void
     {
         $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(SchemaSets::class);
+        $this->app->forgetInstance(SchemaMigrator::class);
         $this->app['config']->set('corex-operations.schema', [
             'budget' => ['connection' => 'api_budget_stub', 'driver' => 'sqlite', 'database' => ':memory:'],
             'tenant' => ['connection' => 'api_tenant', 'driver' => 'sqlite', 'database' => ':memory:'],

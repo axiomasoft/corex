@@ -7,11 +7,13 @@ namespace CoreX\Search;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Config\Contracts\ConfigReportSection;
+use CoreX\Database\Contracts\SchemaSetProvider;
 use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Search\Contracts\SearchProvider;
 use CoreX\Search\Errors\Internal\PackageProblemDefinitions;
 use CoreX\Search\Internal\SearchManager;
 use CoreX\Search\Internal\SearchOptions;
+use CoreX\Search\Internal\SearchSchemaSets;
 use CoreX\Search\Internal\Support\SearchConfigSection;
 use CoreX\Search\Laravel\SearchPortBindings;
 use Illuminate\Contracts\Config\Repository;
@@ -25,6 +27,8 @@ final class SearchServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        $this->app->tag([SearchSchemaSets::class], SchemaSetProvider::class);
+
         ProblemDefinitions::register($this->app, __DIR__.'/../composer.json', PackageProblemDefinitions::class);
 
         $this->app->tag([SearchConfigSection::class], ConfigReportSection::class);

@@ -636,6 +636,15 @@
                             "flags": 68
                         },
                         {
+                            "name": "schema",
+                            "type": "CoreX\\Database\\Contracts\\SchemaMigrator",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "default": null,
+                            "flags": 68
+                        },
+                        {
                             "name": "migrationRunner",
                             "type": "?Closure",
                             "by_reference": false,

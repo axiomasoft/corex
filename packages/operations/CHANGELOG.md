@@ -2,6 +2,8 @@
 
 ## Unreleased — strict input envelopes and RFC 9457 errors
 
+- Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
+
 - Breaking before 1.0: operation errors always use `application/problem+json` with registry-owned type/title and occurrence detail; successes contain only data and meta. Remove Accept negotiation and the configurable problem type base.
 - Add the public InputEnvelope enum and Operation inputEnvelope policy derived by OperationFactory; reject invalid envelopes, unsupported media types and undeclared fields with distinct registered codes.
 

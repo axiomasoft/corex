@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Flex\Crm\Tests\Support;
 
 use CoreX\CoreServiceProvider;
+use CoreX\Database\Testing\MigratesSchemaSets;
 use CoreX\Intl\IntlServiceProvider;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Internal\Compiler\RegistryCompiler;
@@ -22,11 +23,9 @@ use Orchestra\Testbench\TestCase as Orchestra;
 abstract class CrmTestCase extends Orchestra
 {
     use IsolatesDatabasePath;
+    use MigratesSchemaSets;
 
-    protected function defineDatabaseMigrations(): void
-    {
-        $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
-    }
+    protected function defineDatabaseMigrations(): void {}
 
     /**
      * @param  Application  $app
@@ -62,6 +61,13 @@ abstract class CrmTestCase extends Orchestra
             'database' => ':memory:',
             'prefix' => '',
         ]);
+        $app['config']->set('database.connections.api_schema_budget', [
+            'driver' => 'sqlite', 'database' => ':memory:', 'prefix' => '',
+        ]);
+        $app['config']->set('corex-operations.schema', [
+            'budget' => ['connection' => 'api_schema_budget', 'driver' => 'sqlite', 'database' => ':memory:'],
+            'tenant' => ['connection' => 'testbench', 'driver' => 'sqlite', 'database' => ':memory:'],
+        ]);
         $app['config']->set('database.connections.pgsql', [
             'driver' => 'pgsql',
             'host' => getenv('PGSQL_HOST') ?: '127.0.0.1',
@@ -74,5 +80,10 @@ abstract class CrmTestCase extends Orchestra
             'schema' => 'public',
         ]);
         $app['config']->set('corex.audit.enabled', false);
+    }
+
+    protected function defineDatabaseMigrationsAfterDatabaseRefreshed(): void
+    {
+        $this->migrateSchemaSets(['flex/crm:tenant'], 'testbench');
     }
 }

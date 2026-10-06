@@ -65,3 +65,7 @@ composer --working-dir=products/flex-crm analyse
 
 Company/contact fields follow approved storage, including JSON channels and PostgreSQL GIN indexes;
 legacy `custom_fields` on those two models are not part of that contract.
+
+## Schema installation
+
+Register the package provider, then run `php artisan corex:schema:migrate --scope=tenant --database=<tenant>`. Module sets are installed by `ModuleLifecycle::enable()`; template preparation includes them with `--modules`. Inspect the journal with `corex:schema:status`.

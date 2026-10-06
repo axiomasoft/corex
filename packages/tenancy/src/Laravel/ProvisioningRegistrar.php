@@ -9,6 +9,7 @@ use CoreX\Attributes\SpiKind;
 use CoreX\Context\Contracts\ImpersonationGuard;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Contracts\TenantDatabaseLifecycle;
+use CoreX\Database\Contracts\SchemaMigrator;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Modules\Laravel\RegistersNothingOnBoot;
 use CoreX\Tenancy\Account\Internal\DatabaseTenantProvisioner;
@@ -94,6 +95,7 @@ final class ProvisioningRegistrar implements PackageRegistrar
                 centralConnection: $app->make(TenancyOptions::class)->centralConnection,
                 tenancy: $app->make(TenancyManager::class),
                 templateIntegrityVerifier: $app->make(TemplateIntegrityVerifier::class),
+                schema: $app->make(SchemaMigrator::class),
             ),
         );
     }

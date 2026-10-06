@@ -1,0 +1,950 @@
+[
+  {
+    "path": "api/v1/errors.json",
+    "exists": true
+  },
+  {
+    "path": "api/v1/manifest.json",
+    "exists": true
+  },
+  {
+    "path": "docs/architecture/exceptions/DATA-004/aut-role-assignments-cloud-fk.md",
+    "exists": true
+  },
+  {
+    "path": "docs/dev-doctrine.md",
+    "exists": true
+  },
+  {
+    "path": "docs/reference/public-api.md",
+    "exists": true
+  },
+  {
+    "path": "packages/access-azguard/CHANGELOG.md",
+    "exists": true
+  },
+  {
+    "path": "packages/access-azguard/README.md",
+    "exists": true
+  },
+  {
+    "path": "packages/access-azguard/src/AccessAzguardServiceProvider.php",
+    "exists": true
+  },
+  {
+    "path": "packages/access-azguard/src/Internal/AccessAzguardSchemaSets.php",
+    "exists": true
+  },
+  {
+    "path": "packages/access-azguard/tests/Feature/AzGuardBridgeTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/access/CHANGELOG.md",
+    "exists": true
+  },
+  {
+    "path": "packages/access/README.md",
+    "exists": true
+  },
+  {
+    "path": "packages/access/database/migrations/tenant-cloud/2026_07_26_200004_add_aut_cross_package_fks.php",
+    "exists": true
+  },
+  {
+    "path": "packages/access/src/CoreAuthServiceProvider.php",
+    "exists": true
+  },
+  {
+    "path": "packages/access/src/Internal/AccessSchemaSets.php",
+    "exists": true
+  },
+  {
+    "path": "packages/access/tests/PgTestCase.php",
+    "exists": true
+  },
+  {
+    "path": "packages/access/tests/Support/FixtureTenantSchemaSets.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/CHANGELOG.md",
+    "exists": true
+  },
+  {
+    "path": "packages/core/README.md",
+    "exists": true
+  },
+  {
+    "path": "packages/core/database/migrations/2026_07_13_000000_create_mod_modules_table.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/database/migrations/2026_07_13_000002_create_mod_lifecycle_log_table.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/database/migrations/pg/2026_07_13_100000_create_sys_settings_table.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/database/migrations/pg/2026_07_13_110000_create_sys_audit_log_table.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/database/migrations/pg/2026_07_13_120000_create_sys_feature_flags_table.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/database/migrations/pg/2026_07_13_120001_create_sys_feature_overrides_table.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/database/migrations/pg/2026_07_13_130000_create_sys_departments_table.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/database/migrations/pg/2026_07_13_130001_create_sys_department_user_table.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/database/migrations/pg/2026_07_13_140000_create_sys_pubsub_messages_table.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/docs/modules/README.md",
+    "exists": true
+  },
+  {
+    "path": "packages/core/phpstan.neon",
+    "exists": true
+  },
+  {
+    "path": "packages/core/resources/contracts/php-api.json",
+    "exists": true
+  },
+  {
+    "path": "packages/core/src/CoreServiceProvider.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/src/Database/Contracts/SchemaMigrator.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/src/Database/Contracts/SchemaSetProvider.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/src/Database/Contracts/SchemaSets.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/src/Database/Data/SchemaSet.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/src/Database/Data/SchemaSetStatus.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/src/Database/Enums/SchemaLifecycle.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/src/Database/Enums/SchemaScope.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/src/Database/Exceptions/SchemaSetException.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/src/Database/Internal/Commands/SchemaMigrateCommand.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/src/Database/Internal/Commands/SchemaStatusCommand.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/src/Database/Internal/CoreSchemaSets.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/src/Database/Internal/LaravelSchemaMigrator.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/src/Database/Internal/TaggedSchemaSets.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/src/Database/Laravel/DatabaseRegistrar.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/src/Database/Testing/MigratesSchemaSets.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/src/Errors/Enums/CoreErrorCode.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/src/Errors/Internal/PackageProblemDefinitions.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/src/Modules/Laravel/LifecycleRegistrar.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/src/Modules/ModulesServiceProvider.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/tests/Feature/AuditImpersonationTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/tests/Feature/DeliveryRemediationTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/tests/Fixtures/PublishFailureFixture.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/tests/Modules/Feature/LifecycleRemediationTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/tests/Pg/InboxConcurrencyTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/tests/Pg/MessagingSchemaTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/tests/Pg/OutboxAppendPgTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/tests/Pg/OutboxRelayTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/core/tests/Support/CoreXTestCase.php",
+    "exists": true
+  },
+  {
+    "path": "packages/custom-fields/CHANGELOG.md",
+    "exists": true
+  },
+  {
+    "path": "packages/custom-fields/README.md",
+    "exists": true
+  },
+  {
+    "path": "packages/custom-fields/src/AttributesServiceProvider.php",
+    "exists": true
+  },
+  {
+    "path": "packages/custom-fields/src/Internal/CustomFieldsSchemaSets.php",
+    "exists": true
+  },
+  {
+    "path": "packages/custom-fields/tests/Pg/AttributeOutboxTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/custom-fields/tests/Pg/DatabaseFieldCatalogueTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/custom-fields/tests/PgTestCase.php",
+    "exists": true
+  },
+  {
+    "path": "packages/intl/CHANGELOG.md",
+    "exists": true
+  },
+  {
+    "path": "packages/intl/README.md",
+    "exists": true
+  },
+  {
+    "path": "packages/intl/src/Internal/IntlSchemaSets.php",
+    "exists": true
+  },
+  {
+    "path": "packages/intl/src/IntlServiceProvider.php",
+    "exists": true
+  },
+  {
+    "path": "packages/intl/tests/PgTestCase.php",
+    "exists": true
+  },
+  {
+    "path": "packages/intl/tests/TestCase.php",
+    "exists": true
+  },
+  {
+    "path": "packages/media/CHANGELOG.md",
+    "exists": true
+  },
+  {
+    "path": "packages/media/README.md",
+    "exists": true
+  },
+  {
+    "path": "packages/media/src/Internal/MediaSchemaSets.php",
+    "exists": true
+  },
+  {
+    "path": "packages/media/src/MediaServiceProvider.php",
+    "exists": true
+  },
+  {
+    "path": "packages/media/tests/TestCase.php",
+    "exists": true
+  },
+  {
+    "path": "packages/notifications/CHANGELOG.md",
+    "exists": true
+  },
+  {
+    "path": "packages/notifications/README.md",
+    "exists": true
+  },
+  {
+    "path": "packages/notifications/src/Internal/NotificationsSchemaSets.php",
+    "exists": true
+  },
+  {
+    "path": "packages/notifications/src/NotificationsServiceProvider.php",
+    "exists": true
+  },
+  {
+    "path": "packages/notifications/tests/DisabledSchedulingCase.php",
+    "exists": true
+  },
+  {
+    "path": "packages/notifications/tests/TestCase.php",
+    "exists": true
+  },
+  {
+    "path": "packages/operations/CHANGELOG.md",
+    "exists": true
+  },
+  {
+    "path": "packages/operations/README.md",
+    "exists": true
+  },
+  {
+    "path": "packages/operations/database/migrations/tenant/create_sys_api_idempotency_table.php",
+    "exists": true
+  },
+  {
+    "path": "packages/operations/src/ApiServiceProvider.php",
+    "exists": true
+  },
+  {
+    "path": "packages/operations/src/Internal/OperationsSchemaSets.php",
+    "exists": true
+  },
+  {
+    "path": "packages/operations/tests/Feature/ApiRetentionTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/operations/tests/Feature/ApiRoutesTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/operations/tests/Feature/AuthorizationLayersTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/operations/tests/Feature/BulkApiTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/operations/tests/Feature/BulkResultAccessTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/operations/tests/Feature/BulkStoreTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/operations/tests/Feature/BulkTransferTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/operations/tests/Feature/CostInvocationTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/operations/tests/Feature/IdempotencyStoreTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/operations/tests/Feature/IdempotentInvocationTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/operations/tests/Feature/LoadContourBootTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/operations/tests/Feature/LoadSchemaTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/operations/tests/Feature/OperationBudgetTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/operations/tests/TestCase.php",
+    "exists": true
+  },
+  {
+    "path": "packages/panels/CHANGELOG.md",
+    "exists": true
+  },
+  {
+    "path": "packages/panels/README.md",
+    "exists": true
+  },
+  {
+    "path": "packages/panels/src/Internal/PanelsSchemaSets.php",
+    "exists": true
+  },
+  {
+    "path": "packages/panels/src/PanelsServiceProvider.php",
+    "exists": true
+  },
+  {
+    "path": "packages/panels/tests/SavedViews/SavedViewPgSchemaTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/panels/tests/SavedViewsTestCase.php",
+    "exists": true
+  },
+  {
+    "path": "packages/search-intl/tests/TestCase.php",
+    "exists": true
+  },
+  {
+    "path": "packages/search/CHANGELOG.md",
+    "exists": true
+  },
+  {
+    "path": "packages/search/README.md",
+    "exists": true
+  },
+  {
+    "path": "packages/search/src/Internal/SearchSchemaSets.php",
+    "exists": true
+  },
+  {
+    "path": "packages/search/src/SearchServiceProvider.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tasks-workflow/CHANGELOG.md",
+    "exists": true
+  },
+  {
+    "path": "packages/tasks-workflow/README.md",
+    "exists": true
+  },
+  {
+    "path": "packages/tasks-workflow/src/Internal/TasksWorkflowSchemaSets.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tasks-workflow/src/TasksWorkflowServiceProvider.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tasks-workflow/tests/Pg/MaterializationPgTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tasks-workflow/tests/Pg/WorkUnitIsolationPgTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tasks-workflow/tests/PgTestCase.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tasks-workflow/tests/TestCase.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tasks/CHANGELOG.md",
+    "exists": true
+  },
+  {
+    "path": "packages/tasks/README.md",
+    "exists": true
+  },
+  {
+    "path": "packages/tasks/src/Internal/TasksSchemaSets.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tasks/src/TasksServiceProvider.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tasks/tests/Pg/PlanningConcurrencyTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tasks/tests/Pg/TasksPgSchemaTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tasks/tests/PgTestCase.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tasks/tests/Support/TasksTestCase.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/CHANGELOG.md",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/README.md",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/resources/contracts/php-api.json",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/src/Account/Laravel/MigrationWaveOrchestrator.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/src/Internal/TenancySchemaSets.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/src/Laravel/ProvisioningRegistrar.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/src/TenancyServiceProvider.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Arch/NoCrossDbFkTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/AccountLifecycleTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/AccountStatusGateTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/ClaimLifecycleConformanceTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/DomainTrustTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/GlobalLogoutTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/HostResolutionTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/IdentitySyncerTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/ImpersonationAuditTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/ImpersonationTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/ImpersonationWriteGuardTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/MembershipProjectionTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/MigrationWaveTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/OidcLoginTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/PackageEngineDiscoveryTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/PendingPoolTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/PrincipalWorkspaceTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/ProviderRemediationTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/ProvisioningTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/QueueTenancyRevertTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/QueueTenantContextTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/ResolveWorkspaceTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/RootSchemaTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/SignupIdempotencyTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/TemplateIntegrityTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/TenancyManagerTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/TenantSessionScopeHttpTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/TenantSessionScopeTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Feature/WorkspaceResolverTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Pg/ClaimLifecycleConcurrencyTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Pg/ImpersonationProfileTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Pg/PhysicalContextConformanceTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Pg/ProductionPairStoreConformanceTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Pg/ResidentTenantSwitchPgTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Pg/ScopeBoundaryPgTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tenancy/tests/Pg/WakeupRoutingTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tools/tests/Feature/ToolCostInvocationTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/tools/tests/Feature/ToolIdempotentInvocationTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/transfer/CHANGELOG.md",
+    "exists": true
+  },
+  {
+    "path": "packages/transfer/README.md",
+    "exists": true
+  },
+  {
+    "path": "packages/transfer/src/Internal/TransferSchemaSets.php",
+    "exists": true
+  },
+  {
+    "path": "packages/transfer/src/TransferServiceProvider.php",
+    "exists": true
+  },
+  {
+    "path": "packages/transfer/tests/PgTestCase.php",
+    "exists": true
+  },
+  {
+    "path": "packages/wakeup/CHANGELOG.md",
+    "exists": true
+  },
+  {
+    "path": "packages/wakeup/README.md",
+    "exists": true
+  },
+  {
+    "path": "packages/wakeup/src/Internal/WakeupSchemaSets.php",
+    "exists": true
+  },
+  {
+    "path": "packages/wakeup/src/WakeupServiceProvider.php",
+    "exists": true
+  },
+  {
+    "path": "packages/wakeup/tests/TestCase.php",
+    "exists": true
+  },
+  {
+    "path": "packages/webhooks/CHANGELOG.md",
+    "exists": true
+  },
+  {
+    "path": "packages/webhooks/README.md",
+    "exists": true
+  },
+  {
+    "path": "packages/webhooks/src/Internal/WebhooksSchemaSets.php",
+    "exists": true
+  },
+  {
+    "path": "packages/webhooks/src/WebhooksServiceProvider.php",
+    "exists": true
+  },
+  {
+    "path": "packages/webhooks/tests/Feature/WebhookApiRetentionTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/webhooks/tests/Feature/WebhookConcurrencyTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/webhooks/tests/Feature/WebhookDeliveryFixture.php",
+    "exists": true
+  },
+  {
+    "path": "packages/webhooks/tests/Feature/WebhookFanoutTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/webhooks/tests/Feature/WebhookLoadContourIntegrationTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/webhooks/tests/Feature/WebhookManagementTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/webhooks/tests/Feature/WebhookRedactionTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/webhooks/tests/Feature/WebhookReplayTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/webhooks/tests/Feature/WebhookSubscriptionTest.php",
+    "exists": true
+  },
+  {
+    "path": "packages/workflow/CHANGELOG.md",
+    "exists": true
+  },
+  {
+    "path": "packages/workflow/README.md",
+    "exists": true
+  },
+  {
+    "path": "packages/workflow/src/Internal/WorkflowSchemaSets.php",
+    "exists": true
+  },
+  {
+    "path": "packages/workflow/src/WorkflowServiceProvider.php",
+    "exists": true
+  },
+  {
+    "path": "packages/workflow/tests/TestCase.php",
+    "exists": true
+  },
+  {
+    "path": "products/flex-crm/CHANGELOG.md",
+    "exists": true
+  },
+  {
+    "path": "products/flex-crm/README.md",
+    "exists": true
+  },
+  {
+    "path": "products/flex-crm/src/CrmServiceProvider.php",
+    "exists": true
+  },
+  {
+    "path": "products/flex-crm/src/Internal/CrmSchemaSets.php",
+    "exists": true
+  },
+  {
+    "path": "products/flex-crm/tests/Pg/ActivityIdTest.php",
+    "exists": true
+  },
+  {
+    "path": "products/flex-crm/tests/Pg/ConversionConcurrencyTest.php",
+    "exists": true
+  },
+  {
+    "path": "products/flex-crm/tests/Pg/FullStorageParityTest.php",
+    "exists": true
+  },
+  {
+    "path": "products/flex-crm/tests/Pg/ModuleLifecycleTest.php",
+    "exists": true
+  },
+  {
+    "path": "products/flex-crm/tests/Pg/ParityContractTest.php",
+    "exists": true
+  },
+  {
+    "path": "products/flex-crm/tests/Pg/UpgradeSafetyTest.php",
+    "exists": true
+  },
+  {
+    "path": "products/flex-crm/tests/Support/CrmTestCase.php",
+    "exists": true
+  },
+  {
+    "path": "scripts/bc/approved-deltas.json",
+    "exists": true
+  },
+  {
+    "path": "tests/Arch/CoreZoneTest.php",
+    "exists": true
+  },
+  {
+    "path": "tests/Feature/AuditLogTest.php",
+    "exists": true
+  },
+  {
+    "path": "tests/Feature/ConfigurableIdTest.php",
+    "exists": true
+  },
+  {
+    "path": "tests/Feature/DepartmentTest.php",
+    "exists": true
+  },
+  {
+    "path": "tests/Feature/FeatureFlagsTest.php",
+    "exists": true
+  },
+  {
+    "path": "tests/Feature/ImpersonatedActorTest.php",
+    "exists": true
+  },
+  {
+    "path": "tests/Feature/MigrationPublishTest.php",
+    "exists": false
+  },
+  {
+    "path": "tests/Feature/ModuleLifecycleTest.php",
+    "exists": true
+  },
+  {
+    "path": "tests/Feature/OperationContractTest.php",
+    "exists": true
+  },
+  {
+    "path": "tests/Feature/PubSubDatabasePollTest.php",
+    "exists": true
+  },
+  {
+    "path": "tests/Feature/SchemaSetsPgTest.php",
+    "exists": true
+  },
+  {
+    "path": "tests/Feature/SchemaSetsTest.php",
+    "exists": true
+  },
+  {
+    "path": "tests/Feature/SettingsTest.php",
+    "exists": true
+  },
+  {
+    "path": "tests/Fixtures/Schema/FixtureSchemaSets.php",
+    "exists": true
+  },
+  {
+    "path": "tests/Fixtures/Schema/dedicated/2026_10_01_970010_create_schema_dedicated.php",
+    "exists": true
+  },
+  {
+    "path": "tests/Fixtures/Schema/module/2026_10_01_980030_create_schema_module.php",
+    "exists": true
+  },
+  {
+    "path": "tests/Fixtures/Schema/platform/2026_10_01_980010_create_schema_platform.php",
+    "exists": true
+  },
+  {
+    "path": "tests/Golden/REBASELINE.md",
+    "exists": true
+  },
+  {
+    "path": "tests/Golden/baseline/php-surface.json",
+    "exists": true
+  },
+  {
+    "path": "tests/Golden/baseline/routes.json",
+    "exists": true
+  },
+  {
+    "path": "tests/Golden/baseline/wire.json",
+    "exists": true
+  },
+  {
+    "path": "tests/fixtures/public-error-contract.php",
+    "exists": true
+  }
+]

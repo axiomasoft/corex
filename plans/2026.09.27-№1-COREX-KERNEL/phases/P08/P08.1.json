@@ -2,7 +2,7 @@
   "$schema": "urn:swissknifeman:task:plan:item:v1",
   "id": "P08.1",
   "title": "Наборы схемы: реестр, исполнитель, команды, без publish",
-  "status": "todo",
+  "status": "done_with_deviations",
   "summary": "Ядро получает SPI наборов схемы (`SchemaSet`, `SchemaSetProvider`, `SchemaSets`, `SchemaMigrator`), команды `corex:schema:migrate|status` и тестовый трейт; каждый пакет со схемой объявляет свои наборы, ни один пакет не публикует миграции, module lifecycle и wave runner tenancy берут пути из реестра.",
   "why": "D111: три расходящихся механизма доставки схемы (publish, loadMigrationsFrom, install-path) и wave runner, мигрирующий только каталог tenancy, — дефект целостности tenant-баз. Hard risk: ошибка выбора соединения создаёт tenant-таблицы в центральной базе — защищено тем, что ни одна команда не берёт scope по умолчанию из пути и драйвер/соединение проверяются до запуска.",
   "scope": {
@@ -166,8 +166,8 @@
   "validation": [
     {
       "id": "V1",
-      "cmd": "scripts/php84 vendor/bin/pest tests/Feature/SchemaSetsTest.php",
-      "expect": "exit 0; 8 сценариев examples §8 присутствуют и проходят",
+      "cmd": "scripts/php84 vendor/bin/pest tests/Feature/SchemaSetsTest.php tests/Feature/SchemaSetsPgTest.php",
+      "expect": "exit0; all8 examples scenarios across SQLite andPG files, including actual registry-only ModuleLifecycle enable",
       "kind": "acceptance"
     },
     {
@@ -335,6 +335,146 @@
     "status": "not_needed",
     "notes": "Внешние факты собраны при дизайне: @plan/knowledge/research-P08-design-rag.json."
   },
-  "result": null,
-  "updated_at": "2026-10-05T17:26:34Z"
+  "result": {
+    "started_at": "2026-10-06T06:43:53Z",
+    "finished_at": "2026-10-06T06:43:54Z",
+    "executor": {
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "session": "01a10f68-3050-7891-800a-b11794180f29"
+    },
+    "notes": "SchemaSet SPI/registry/runner, commands, all package declarations and migration integrations complete. V1–V25 GREEN. Full root/package/PG/architecture/lint/analysis/BC lanes passed; final23 schema,17 root hook,56 tenancy hook tests and actual committed V14 passed. D98 37/37 killed. self-check: GREEN. One native Grok review RED with4 Major findings, all corrected and checked by executor; no second review per owner. Completion @plan/knowledge/artifacts-P08.1-execution-completion.json. One scoped commit; P08.2 not executed.",
+    "deviations": [
+      "Requested grok/grok-4.7/500k: native session d532b10b-284d-443b-b478-e76257d55426 proves grok-4.7/high and supported500000, but500k was not pinned; session/load reports default256000. No effective500k claim or second review. Implementation acceptance checks GREEN."
+    ],
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-10-06T06:43:54Z"
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-10-06T06:43:54Z"
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-10-06T06:43:54Z"
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-10-06T06:43:54Z"
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-10-06T06:43:54Z"
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-10-06T06:43:54Z"
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-10-06T06:43:54Z"
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-10-06T06:43:54Z"
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-10-06T06:43:54Z"
+      },
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-10-06T06:43:54Z"
+      },
+      {
+        "id": "V11",
+        "exit": 0,
+        "at": "2026-10-06T06:43:54Z"
+      },
+      {
+        "id": "V12",
+        "exit": 0,
+        "at": "2026-10-06T06:43:54Z"
+      },
+      {
+        "id": "V13",
+        "exit": 0,
+        "at": "2026-10-06T06:43:54Z"
+      },
+      {
+        "id": "V14",
+        "exit": 0,
+        "at": "2026-10-06T06:43:54Z"
+      },
+      {
+        "id": "V15",
+        "exit": 0,
+        "at": "2026-10-06T06:43:54Z"
+      },
+      {
+        "id": "V16",
+        "exit": 0,
+        "at": "2026-10-06T06:43:54Z"
+      },
+      {
+        "id": "V17",
+        "exit": 0,
+        "at": "2026-10-06T06:43:54Z"
+      },
+      {
+        "id": "V18",
+        "exit": 0,
+        "at": "2026-10-06T06:43:54Z"
+      },
+      {
+        "id": "V19",
+        "exit": 0,
+        "at": "2026-10-06T06:43:54Z"
+      },
+      {
+        "id": "V20",
+        "exit": 0,
+        "at": "2026-10-06T06:43:54Z"
+      },
+      {
+        "id": "V21",
+        "exit": 0,
+        "at": "2026-10-06T06:43:54Z"
+      },
+      {
+        "id": "V22",
+        "exit": 0,
+        "at": "2026-10-06T06:43:54Z"
+      },
+      {
+        "id": "V23",
+        "exit": 0,
+        "at": "2026-10-06T06:43:54Z"
+      },
+      {
+        "id": "V24",
+        "exit": 0,
+        "at": "2026-10-06T06:43:54Z"
+      },
+      {
+        "id": "V25",
+        "exit": 0,
+        "at": "2026-10-06T06:43:54Z"
+      }
+    ]
+  },
+  "updated_at": "2026-10-06T06:43:54Z"
 }

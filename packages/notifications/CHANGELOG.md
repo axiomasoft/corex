@@ -2,6 +2,8 @@
 
 ## Unreleased — digest wakeup without a wakeup package dependency (P07.5)
 
+- Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
+
 - Breaking (pre-1.0): removed the production `axiomasoft/corex-wakeup` requirement. The package keeps it as `require-dev` so the base API compare and the digest bridge tests can install the runner. An enabled digest tags `WakeupHandlerDefinition` and `DueWakeupSource` instead of writing `corex-wakeup.handlers`. `DigestSchedulerCheck` rejects an enabled digest when `WakeupScheduler` is not bound. Disabled digests still freeze a batch and never schedule.
 
 ## Unreleased — thin providers and registrars (P05.2)

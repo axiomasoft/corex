@@ -13,3 +13,7 @@ Install with `composer require axiomasoft/corex-workflow` from the approved Core
 ## Failure semantics
 
 Missing bindings, unavailable adapters and declaration/fingerprint mismatches are rejected before admitting an engine effect. A durable intent does not prove completion of an external engine action. Preserve its identity and reconcile unknown outcomes before retry.
+
+## Schema installation
+
+Register the package provider, then run `php artisan corex:schema:migrate --scope=tenant --database=<tenant>`. Module sets are installed by `ModuleLifecycle::enable()`; template preparation includes them with `--modules`. Inspect the journal with `corex:schema:status`.

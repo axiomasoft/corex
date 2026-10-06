@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+use CoreX\Tenancy\Internal\TenancySchemaSets;
 
 // B-11 §7.3 п.2 / AC-29 — тенантские таблицы не ссылаются на root и наоборот.
 //
@@ -321,37 +322,16 @@ test('root-directory migrations create only root_ tables and tenant-directory mi
         ->and($misplaced)->toBe([]);
 });
 
-test('the central and tenant runners load disjoint migration paths', function () use ($packageRoot): void {
+test('the central and tenant runners use disjoint registered schema scopes', function () use ($packageRoot): void {
     $provider = (string) file_get_contents($packageRoot.'/src/TenancyServiceProvider.php');
-    $orchestrator = (string) file_get_contents($packageRoot.'/src/Account/Laravel/MigrationWaveOrchestrator.php');
-
-    // Публикация разведена по тегам: root-директория — только под
-    // `corex-tenancy-migrations` (central-коннект), tenant-директория — только под
-    // `corex-tenancy-migrations-tenant`.
-    preg_match_all(
-        "/__DIR__\.'\/\.\.\/database\/migrations\/(root|tenant)'.*?\], '([a-z-]+)'/s",
-        $provider,
-        $publishes,
-        PREG_SET_ORDER,
-    );
-
-    $tags = [];
-
-    foreach ($publishes as $publish) {
-        $tags[$publish[1]] = $publish[2];
+    $sets = new TenancySchemaSets;
+    $byName = [];
+    foreach ($sets->sets() as $set) {
+        $byName[$set->name] = $set->scope->value;
     }
-
-    expect($tags)->toBe(['root' => 'corex-tenancy-migrations', 'tenant' => 'corex-tenancy-migrations-tenant']);
-
-    // Ни одна из директорий не загружается безусловно: ВЫЗОВ
-    // `$this->loadMigrationsFrom(...)` погнал бы root_ DDL на коннект по
-    // умолчанию потребителя (D14/D33). Проверяется вызов, не упоминание —
-    // докблок провайдера объясняет ровно это решение и обязан остаться.
-    expect(preg_match('/\$this->loadMigrationsFrom\s*\(/', $provider))->toBe(0);
-
-    // `corex:tenancy:migrate` (волна P2.12) знает ТОЛЬКО tenant-путь.
-    preg_match_all("/database\/migrations\/(root|tenant)/", $orchestrator, $runnerPaths);
-
-    expect($runnerPaths[1])->not->toBe([])
-        ->and(array_unique($runnerPaths[1]))->toBe(['tenant']);
+    expect($byName)->toBe(['root' => 'central', 'tenant' => 'tenant'])
+        ->and(preg_match('/\$this->loadMigrationsFrom\s*\(/', $provider))->toBe(0);
+    $orchestrator = (string) file_get_contents($packageRoot.'/src/Account/Laravel/MigrationWaveOrchestrator.php');
+    expect($orchestrator)->toContain("\$this->schema->migrate(SchemaScope::Tenant, 'tenant')")
+        ->not->toContain('database/migrations/root');
 });

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CoreX\Media\Tests;
 
+use CoreX\Database\Laravel\DatabaseRegistrar;
+use CoreX\Database\Testing\MigratesSchemaSets;
 use CoreX\Media\Contracts\MediaPolicy;
 use CoreX\Media\MediaServiceProvider;
 use CoreX\Storage\Contracts\TenantStorage;
@@ -15,6 +17,8 @@ use Override;
 
 abstract class TestCase extends Orchestra
 {
+    use MigratesSchemaSets;
+
     #[Override]
     protected function getPackageProviders($app): array
     {
@@ -24,13 +28,14 @@ abstract class TestCase extends Orchestra
     #[Override]
     protected function defineEnvironment($app): void
     {
+        (new DatabaseRegistrar)->register($app);
         $app['config']->set('database.default', 'sqlite');
         $app['config']->set('database.connections.sqlite.database', ':memory:');
     }
 
     protected function defineDatabaseMigrations(): void
     {
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->migrateSchemaSets(['axiomasoft/corex-media:tenant'], 'sqlite');
     }
 
     #[Override]

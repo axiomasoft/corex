@@ -10,6 +10,8 @@ use CoreX\Context\Contracts\TenantContextResolver;
 use CoreX\Context\Data\AccountRef;
 use CoreX\CoreServiceProvider;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Database\Contracts\SchemaMigrator;
+use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Modules\Data\Api;
 use CoreX\Modules\Data\ModuleManifest;
@@ -31,6 +33,7 @@ use CoreX\Operations\Invocation\Data\InvocationMetadata;
 use CoreX\Operations\Invocation\Data\OperationInvocation;
 use CoreX\Operations\Invocation\Internal\OperationDispatcher;
 use CoreX\Operations\Invocation\Laravel\ResolvedContexts;
+use CoreX\Operations\Laravel\ApiSchemaRegistrar;
 use CoreX\Operations\Testing\ContextFixture;
 use CoreX\Operations\Testing\IdentityFixture;
 use CoreX\Operations\Testing\ModuleFixture;
@@ -59,6 +62,11 @@ final class ToolIdempotentInvocationTest extends TestCase
     {
         $app['config']->set('database.default', 'sqlite');
         $app['config']->set('database.connections.sqlite.database', ':memory:');
+        $app['config']->set('database.connections.api_schema_budget', ['driver' => 'sqlite', 'database' => ':memory:', 'prefix' => '']);
+        $app['config']->set('corex-operations.schema', [
+            'budget' => ['connection' => 'api_schema_budget', 'driver' => 'sqlite', 'database' => ':memory:'],
+            'tenant' => ['connection' => 'sqlite', 'driver' => 'sqlite', 'database' => ':memory:'],
+        ]);
         $app['config']->set('cache.default', 'array');
         $app['config']->set('session.driver', 'array');
         $app['config']->set('queue.default', 'sync');
@@ -87,8 +95,8 @@ final class ToolIdempotentInvocationTest extends TestCase
         $this->connection = DB::connection('sqlite');
         Schema::dropIfExists('sys_api_idempotency');
         Schema::dropIfExists('idempotent_effects');
-        $migration = require __DIR__.'/../../../operations/database/migrations/create_sys_api_idempotency_table.php';
-        $migration->up();
+        $migration = require app(SchemaSets::class)->get('axiomasoft/corex-operations:tenant')->path.'/create_sys_api_idempotency_table.php';
+        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
         Schema::create('idempotent_effects', static function (Blueprint $table): void {
             $table->id();
             $table->string('value');

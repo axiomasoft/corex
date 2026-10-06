@@ -10,6 +10,8 @@ use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\Data\Data\DataScope;
 use CoreX\Data\Internal\ArrayDataScopeCodec;
 use CoreX\Data\Laravel\JsonDocuments;
+use CoreX\Database\Contracts\SchemaMigrator;
+use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Operations\Bulk\Data\BulkOperation;
 use CoreX\Operations\Bulk\Data\BulkOperationDefinition;
 use CoreX\Operations\Bulk\Enums\BulkOperationStatus;
@@ -46,8 +48,8 @@ final class BulkStoreTest extends TestCase
         $this->configureSqlite('api_tenant');
         $this->selectSchema('api_budget_stub', 'api_tenant');
         $this->connection = DB::connection('api_tenant');
-        $this->migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_bulk_operations_table.php';
-        $this->migration->up();
+        $this->migration = require app(SchemaSets::class)->get('axiomasoft/corex-operations:tenant')->path.'/create_sys_api_bulk_operations_table.php';
+        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
         $this->contexts = $this->contexts();
         $this->clock = new FrozenClock(new DateTimeImmutable('2026-09-25T10:00:00.000000+00:00'));
         $this->store = $this->store($this->connection, $this->clock);
@@ -235,8 +237,8 @@ final class BulkStoreTest extends TestCase
 
         try {
             $this->selectSchema('api_budget_stub', 'api_pg_tenant');
-            $migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_bulk_operations_table.php';
-            $migration->up();
+            $migration = require app(SchemaSets::class)->get('axiomasoft/corex-operations:tenant')->path.'/create_sys_api_bulk_operations_table.php';
+            app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
             $scope = $this->scope(DB::connection('api_pg_tenant'));
             $submissions = $this->forkPostgresSubmissions($scope);
 
@@ -506,6 +508,8 @@ final class BulkStoreTest extends TestCase
     private function selectSchema(string $budget, string $tenant): void
     {
         $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(SchemaSets::class);
+        $this->app->forgetInstance(SchemaMigrator::class);
         $this->app['config']->set('corex-operations.schema', [
             'budget' => [
                 'connection' => $budget,

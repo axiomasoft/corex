@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Intl\Tests;
 
+use CoreX\Database\Testing\MigratesSchemaSets;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 use Override;
@@ -11,6 +12,8 @@ use RuntimeException;
 
 abstract class PgTestCase extends TestCase
 {
+    use MigratesSchemaSets;
+
     /** @param Application $app */
     #[Override]
     protected function defineEnvironment($app): void
@@ -38,11 +41,8 @@ abstract class PgTestCase extends TestCase
 
     protected function migrateIntl(): int
     {
-        return $this->artisan('migrate', [
-            '--database' => 'pgsql',
-            '--path' => realpath(__DIR__.'/../database/migrations'),
-            '--realpath' => true,
-            '--force' => true,
-        ])->run();
+        $this->migrateSchemaSets(['axiomasoft/corex-intl:tenant'], 'pgsql');
+
+        return 0;
     }
 }

@@ -8,6 +8,8 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Exceptions\ScopeContextMismatch;
 use CoreX\Context\Internal\GuardedTenantContextRestorer;
 use CoreX\Data\Data\DataScope;
+use CoreX\Database\Contracts\SchemaMigrator;
+use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Data\MessagePayload;
@@ -47,8 +49,8 @@ final class WebhookSubscriptionTest extends TestCase
         $this->configure('api_budget_stub');
         $this->configure('api_tenant');
         $this->selectSchema();
-        $migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_webhook_tables.php';
-        $migration->up();
+        $migration = require app(SchemaSets::class)->get('axiomasoft/corex-webhooks:tenant')->path.'/create_sys_api_webhook_tables.php';
+        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
         $contexts = new ContextFixture;
         $contexts->initialize(new AccountRef('account-1', 'account', 'active', [], []));
         $connection = DB::connection('api_tenant');
@@ -182,8 +184,10 @@ final class WebhookSubscriptionTest extends TestCase
                 'database' => $database,
             ]);
             $this->app->forgetInstance(ApiSchemaRegistrar::class);
-            $migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_webhook_tables.php';
-            $migration->up();
+            $this->app->forgetInstance(SchemaSets::class);
+            $this->app->forgetInstance(SchemaMigrator::class);
+            $migration = require app(SchemaSets::class)->get('axiomasoft/corex-webhooks:tenant')->path.'/create_sys_api_webhook_tables.php';
+            app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
             $connection = DB::connection('api_pg_tenant');
             $contexts = new ContextFixture;
             $contexts->initialize(new AccountRef('account-1', 'account', 'active', [], []));
@@ -273,6 +277,8 @@ final class WebhookSubscriptionTest extends TestCase
     private function selectSchema(): void
     {
         $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(SchemaSets::class);
+        $this->app->forgetInstance(SchemaMigrator::class);
         $this->app['config']->set('corex-operations.schema', [
             'budget' => ['connection' => 'api_budget_stub', 'driver' => 'sqlite', 'database' => ':memory:'],
             'tenant' => ['connection' => 'api_tenant', 'driver' => 'sqlite', 'database' => ':memory:'],

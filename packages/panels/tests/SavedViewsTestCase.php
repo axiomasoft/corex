@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Panels\Tests;
 
 use CoreX\CoreServiceProvider;
+use CoreX\Database\Testing\MigratesSchemaSets;
+use CoreX\Panels\PanelsServiceProvider;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as Orchestra;
 
@@ -15,6 +17,7 @@ use Orchestra\Testbench\TestCase as Orchestra;
 abstract class SavedViewsTestCase extends Orchestra
 {
     use IsolatesDatabasePath;
+    use MigratesSchemaSets;
 
     /**
      * @param  Application  $app
@@ -24,6 +27,7 @@ abstract class SavedViewsTestCase extends Orchestra
     {
         return [
             CoreServiceProvider::class,
+            PanelsServiceProvider::class,
         ];
     }
 

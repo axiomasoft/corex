@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
+use CoreX\Database\Contracts\SchemaMigrator;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Authentication\Internal\Oidc\OidcClient;
 use CoreX\Tenancy\Tests\Stubs\StubIdentityProvider;
 use CoreX\Tenancy\Tests\TestCase;
 use Firebase\JWT\JWT;
 use Illuminate\Session\Middleware\StartSession;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -39,21 +39,12 @@ const OL_AUTHORIZATION_ENDPOINT = OL_ISSUER.'/authorize';
 const OL_TOKEN_ENDPOINT = OL_ISSUER.'/token';
 const OL_JWKS_URI = OL_ISSUER.'/jwks';
 
-const ROOT_MIGRATIONS_PATH_OL = __DIR__.'/../../database/migrations/root';
-const TENANT_MIGRATIONS_PATH_OL = __DIR__.'/../../database/migrations/tenant';
-const CORE_MIGRATIONS_PATH_OL = __DIR__.'/../../vendor/axiomasoft/corex/database/migrations/pg';
-
 beforeEach(function (): void {
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     DB::purge('pgsql');
 
-    $this->artisan('migrate', [
-        '--database' => 'pgsql',
-        '--path' => realpath(ROOT_MIGRATIONS_PATH_OL),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
 
     config(['queue.default' => 'sync']);
 
@@ -157,18 +148,8 @@ function initAccountWithTenantOL(): Account
     /** @var TenancyManager $manager */
     $manager = app(TenancyManager::class);
     $manager->runFor($ref, null, function (): void {
-        Artisan::call('migrate', [
-            '--database' => 'tenant',
-            '--path' => realpath(CORE_MIGRATIONS_PATH_OL),
-            '--realpath' => true,
-            '--force' => true,
-        ]);
-        Artisan::call('migrate', [
-            '--database' => 'tenant',
-            '--path' => realpath(TENANT_MIGRATIONS_PATH_OL),
-            '--realpath' => true,
-            '--force' => true,
-        ]);
+        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex:tenant'], 'tenant');
+        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-tenancy:tenant'], 'tenant');
     });
 
     return $account;

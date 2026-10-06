@@ -22,8 +22,7 @@ use Mockery\MockInterface;
 beforeEach(function (): void {
     $this->resetPgSchema();
     expect($this->migrateFixtures())->toBe(0)
-        ->and($this->migrateTasks())->toBe(0)
-        ->and($this->migrateFile(__DIR__.'/../../database/migrations/2026_09_15_000071_create_task_operation_receipts.php'))->toBe(0);
+        ->and($this->migrateTasks())->toBe(0);
 
     $modules = Mockery::mock(ModuleRegistry::class, function (MockInterface $mock): void {
         $mock->shouldReceive('isActive')->byDefault()->andReturnTrue();

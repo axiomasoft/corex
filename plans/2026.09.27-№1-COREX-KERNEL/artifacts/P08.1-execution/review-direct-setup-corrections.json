@@ -1,0 +1,172 @@
+[
+  {
+    "file": "packages/access-azguard/tests/Feature/AzGuardBridgeTest.php",
+    "set": "axiomasoft/corex-access-azguard:tenant",
+    "connection": "DB::getDefaultConnection()"
+  },
+  {
+    "file": "packages/custom-fields/tests/Pg/AttributeOutboxTest.php",
+    "set": "axiomasoft/corex:tenant",
+    "connection": "DB::getDefaultConnection()"
+  },
+  {
+    "file": "packages/transfer/tests/PgTestCase.php",
+    "set": "axiomasoft/corex-transfer:tenant",
+    "connection": "DB::getDefaultConnection()"
+  },
+  {
+    "file": "packages/transfer/tests/PgTestCase.php",
+    "set": "axiomasoft/corex-transfer:tenant",
+    "connection": "DB::getDefaultConnection()"
+  },
+  {
+    "file": "packages/operations/tests/Feature/OperationBudgetTest.php",
+    "set": "axiomasoft/corex-operations:budget",
+    "connection": "null"
+  },
+  {
+    "file": "packages/operations/tests/Feature/OperationBudgetTest.php",
+    "set": "axiomasoft/corex-operations:budget",
+    "connection": "null"
+  },
+  {
+    "file": "packages/operations/tests/Feature/LoadContourBootTest.php",
+    "set": "axiomasoft/corex-operations:tenant",
+    "connection": "app(ApiSchemaRegistrar::class)->tenant()->getName()"
+  },
+  {
+    "file": "packages/operations/tests/Feature/BulkTransferTest.php",
+    "set": "axiomasoft/corex-operations:tenant",
+    "connection": "app(ApiSchemaRegistrar::class)->tenant()->getName()"
+  },
+  {
+    "file": "packages/operations/tests/Feature/BulkApiTest.php",
+    "set": "axiomasoft/corex-operations:tenant",
+    "connection": "app(ApiSchemaRegistrar::class)->tenant()->getName()"
+  },
+  {
+    "file": "packages/operations/tests/Feature/BulkStoreTest.php",
+    "set": "axiomasoft/corex-operations:tenant",
+    "connection": "app(ApiSchemaRegistrar::class)->tenant()->getName()"
+  },
+  {
+    "file": "packages/operations/tests/Feature/BulkStoreTest.php",
+    "set": "axiomasoft/corex-operations:tenant",
+    "connection": "app(ApiSchemaRegistrar::class)->tenant()->getName()"
+  },
+  {
+    "file": "packages/operations/tests/Feature/IdempotentInvocationTest.php",
+    "set": "axiomasoft/corex-operations:tenant",
+    "connection": "app(ApiSchemaRegistrar::class)->tenant()->getName()"
+  },
+  {
+    "file": "packages/operations/tests/Feature/ApiRoutesTest.php",
+    "set": "axiomasoft/corex-operations:tenant",
+    "connection": "app(ApiSchemaRegistrar::class)->tenant()->getName()"
+  },
+  {
+    "file": "packages/operations/tests/Feature/IdempotencyStoreTest.php",
+    "set": "axiomasoft/corex-operations:tenant",
+    "connection": "app(ApiSchemaRegistrar::class)->tenant()->getName()"
+  },
+  {
+    "file": "packages/operations/tests/Feature/IdempotencyStoreTest.php",
+    "set": "axiomasoft/corex-operations:tenant",
+    "connection": "app(ApiSchemaRegistrar::class)->tenant()->getName()"
+  },
+  {
+    "file": "packages/operations/tests/Feature/BulkResultAccessTest.php",
+    "set": "axiomasoft/corex-operations:tenant",
+    "connection": "app(ApiSchemaRegistrar::class)->tenant()->getName()"
+  },
+  {
+    "file": "packages/operations/tests/Feature/AuthorizationLayersTest.php",
+    "set": "axiomasoft/corex-operations:tenant",
+    "connection": "app(ApiSchemaRegistrar::class)->tenant()->getName()"
+  },
+  {
+    "file": "packages/operations/tests/Feature/CostInvocationTest.php",
+    "set": "axiomasoft/corex-operations:tenant",
+    "connection": "app(ApiSchemaRegistrar::class)->tenant()->getName()"
+  },
+  {
+    "file": "packages/webhooks/tests/Feature/WebhookFanoutTest.php",
+    "set": "axiomasoft/corex-webhooks:tenant",
+    "connection": "app(ApiSchemaRegistrar::class)->tenant()->getName()"
+  },
+  {
+    "file": "packages/webhooks/tests/Feature/WebhookFanoutTest.php",
+    "set": "axiomasoft/corex-webhooks:tenant",
+    "connection": "app(ApiSchemaRegistrar::class)->tenant()->getName()"
+  },
+  {
+    "file": "packages/webhooks/tests/Feature/WebhookRedactionTest.php",
+    "set": "axiomasoft/corex-webhooks:tenant",
+    "connection": "app(ApiSchemaRegistrar::class)->tenant()->getName()"
+  },
+  {
+    "file": "packages/webhooks/tests/Feature/WebhookDeliveryFixture.php",
+    "set": "axiomasoft/corex-webhooks:tenant",
+    "connection": "app(ApiSchemaRegistrar::class)->tenant()->getName()"
+  },
+  {
+    "file": "packages/webhooks/tests/Feature/WebhookLoadContourIntegrationTest.php",
+    "set": "axiomasoft/corex-webhooks:tenant",
+    "connection": "app(ApiSchemaRegistrar::class)->tenant()->getName()"
+  },
+  {
+    "file": "packages/webhooks/tests/Feature/WebhookLoadContourIntegrationTest.php",
+    "set": "axiomasoft/corex-webhooks:tenant",
+    "connection": "app(ApiSchemaRegistrar::class)->tenant()->getName()"
+  },
+  {
+    "file": "packages/webhooks/tests/Feature/WebhookManagementTest.php",
+    "set": "axiomasoft/corex-webhooks:tenant",
+    "connection": "app(ApiSchemaRegistrar::class)->tenant()->getName()"
+  },
+  {
+    "file": "packages/webhooks/tests/Feature/WebhookReplayTest.php",
+    "set": "axiomasoft/corex-webhooks:tenant",
+    "connection": "app(ApiSchemaRegistrar::class)->tenant()->getName()"
+  },
+  {
+    "file": "packages/webhooks/tests/Feature/WebhookReplayTest.php",
+    "set": "axiomasoft/corex-webhooks:tenant",
+    "connection": "app(ApiSchemaRegistrar::class)->tenant()->getName()"
+  },
+  {
+    "file": "packages/webhooks/tests/Feature/WebhookConcurrencyTest.php",
+    "set": "axiomasoft/corex-webhooks:tenant",
+    "connection": "app(ApiSchemaRegistrar::class)->tenant()->getName()"
+  },
+  {
+    "file": "packages/webhooks/tests/Feature/WebhookSubscriptionTest.php",
+    "set": "axiomasoft/corex-webhooks:tenant",
+    "connection": "app(ApiSchemaRegistrar::class)->tenant()->getName()"
+  },
+  {
+    "file": "packages/webhooks/tests/Feature/WebhookSubscriptionTest.php",
+    "set": "axiomasoft/corex-webhooks:tenant",
+    "connection": "app(ApiSchemaRegistrar::class)->tenant()->getName()"
+  },
+  {
+    "file": "packages/tools/tests/Feature/ToolCostInvocationTest.php",
+    "set": "axiomasoft/corex-operations:tenant",
+    "connection": "app(ApiSchemaRegistrar::class)->tenant()->getName()"
+  },
+  {
+    "file": "packages/tools/tests/Feature/ToolCostInvocationTest.php",
+    "set": "axiomasoft/corex-operations:budget",
+    "connection": "null"
+  },
+  {
+    "file": "packages/tools/tests/Feature/ToolIdempotentInvocationTest.php",
+    "set": "axiomasoft/corex-operations:tenant",
+    "connection": "app(ApiSchemaRegistrar::class)->tenant()->getName()"
+  },
+  {
+    "file": "tests/Feature/OperationContractTest.php",
+    "set": "axiomasoft/corex-operations:tenant",
+    "connection": "app(ApiSchemaRegistrar::class)->tenant()->getName()"
+  }
+]

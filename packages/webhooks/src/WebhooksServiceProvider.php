@@ -6,6 +6,7 @@ namespace CoreX\Webhooks;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
+use CoreX\Database\Contracts\SchemaSetProvider;
 use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Operations\OpenApi\Contracts\ContractSnapshotSection;
 use CoreX\Webhooks\Data\WebhookOptions;
@@ -13,6 +14,7 @@ use CoreX\Webhooks\Errors\Internal\PackageProblemDefinitions;
 use CoreX\Webhooks\Internal\Commands\DeliverWebhooks;
 use CoreX\Webhooks\Internal\Commands\PruneWebhooks;
 use CoreX\Webhooks\Internal\WebhookSnapshotSection;
+use CoreX\Webhooks\Internal\WebhooksSchemaSets;
 use CoreX\Webhooks\Laravel\WebhookBindingsRegistrar;
 use Illuminate\Support\ServiceProvider;
 use Override;
@@ -24,6 +26,8 @@ final class WebhooksServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        $this->app->tag([WebhooksSchemaSets::class], SchemaSetProvider::class);
+
         ProblemDefinitions::register($this->app, __DIR__.'/../composer.json', PackageProblemDefinitions::class);
 
         $this->mergeConfigFrom(__DIR__.'/../config/corex-webhooks.php', 'corex-webhooks');
@@ -46,6 +50,6 @@ final class WebhooksServiceProvider extends ServiceProvider
         }
 
         $this->publishes([__DIR__.'/../config/corex-webhooks.php' => config_path('corex-webhooks.php')], 'corex-webhooks-config');
-        $this->publishes([__DIR__.'/../database/migrations/tenant/create_sys_api_webhook_tables.php' => database_path('migrations/tenant/create_sys_api_webhook_tables.php')], 'corex-webhooks-migrations-tenant');
+
     }
 }

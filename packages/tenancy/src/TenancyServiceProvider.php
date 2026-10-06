@@ -7,9 +7,11 @@ namespace CoreX\Tenancy;
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Config\Contracts\ConfigReportSection;
+use CoreX\Database\Contracts\SchemaSetProvider;
 use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Tenancy\Errors\Internal\PackageProblemDefinitions;
+use CoreX\Tenancy\Internal\TenancySchemaSets;
 use CoreX\Tenancy\Laravel\AuthenticationRegistrar;
 use CoreX\Tenancy\Laravel\ConsoleRegistrar;
 use CoreX\Tenancy\Laravel\DatabaseRegistrar;
@@ -34,6 +36,8 @@ final class TenancyServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        $this->app->tag([TenancySchemaSets::class], SchemaSetProvider::class);
+
         ProblemDefinitions::register($this->app, __DIR__.'/../composer.json', PackageProblemDefinitions::class);
 
         TenancyPortBindings::register($this->app);
@@ -49,23 +53,6 @@ final class TenancyServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // root_* migrations are PG-only DDL (jsonb/CHECK/UNIQUE NULLS NOT
-        // DISTINCT) targeting the CENTRAL connection, never a tenant/account
-        // database (D14). Publish-only, not loadMigrationsFrom (mirrors
-        // axiomasoft/corex CoreServiceProvider D33/A19/A62): an unconditional load
-        // would run root_ DDL against whatever connection a consumer's own
-        // migrator defaults to. A consumer publishes then runs
-        // `migrate --database=<central> --path=database/migrations/root`.
-        $this->publishes([
-            __DIR__.'/../database/migrations/root' => database_path('migrations/root'),
-        ], 'corex-tenancy-migrations');
-
-        // Tenant-DB DDL (`users`, D14/D16) — same publish-only rationale as
-        // root above; a consumer's golden-template build assembles these
-        // (P2.12), never an ad hoc migrate on a live tenant connection.
-        $this->publishes([
-            __DIR__.'/../database/migrations/tenant' => database_path('migrations/tenant'),
-        ], 'corex-tenancy-migrations-tenant');
 
         $this->publishes([
             __DIR__.'/../config/corex-tenancy.php' => config_path('corex-tenancy.php'),

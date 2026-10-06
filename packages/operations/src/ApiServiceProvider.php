@@ -6,6 +6,7 @@ namespace CoreX\Operations;
 
 use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
+use CoreX\Database\Contracts\SchemaSetProvider;
 use CoreX\Errors\Laravel\ProblemDefinitions;
 use CoreX\Modules\Contracts\PackageRegistrar;
 use CoreX\Operations\Bulk\Data\BulkOptions;
@@ -13,6 +14,7 @@ use CoreX\Operations\Bulk\Internal\Commands\WorkBulkOperations;
 use CoreX\Operations\Bulk\Laravel\BulkBindingsRegistrar;
 use CoreX\Operations\Cost\Laravel\CostBindingsRegistrar;
 use CoreX\Operations\Errors\Internal\PackageProblemDefinitions;
+use CoreX\Operations\Internal\OperationsSchemaSets;
 use CoreX\Operations\Laravel\ApiSchemaBindingsRegistrar;
 use CoreX\Operations\Laravel\Commands\PruneApiOperations;
 use CoreX\Operations\Laravel\HttpRegistrar;
@@ -41,6 +43,8 @@ final class ApiServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
+        $this->app->tag([OperationsSchemaSets::class], SchemaSetProvider::class);
+
         ProblemDefinitions::register($this->app, __DIR__.'/../composer.json', PackageProblemDefinitions::class);
 
         $this->mergeConfigFrom(__DIR__.'/../config/corex-operations.php', 'corex-operations');
@@ -65,16 +69,6 @@ final class ApiServiceProvider extends ServiceProvider
         foreach (self::REGISTRARS as $registrar) {
             (new $registrar)->boot($this->app);
         }
-
-        $this->publishes([
-            __DIR__.'/../database/migrations/create_sys_api_idempotency_table.php' => database_path('migrations/tenant/create_sys_api_idempotency_table.php'),
-        ], 'corex-operations-migrations-tenant');
-        $this->publishes([
-            __DIR__.'/../database/migrations/budget' => database_path('migrations/budget'),
-        ], 'corex-operations-migrations-budget');
-        $this->publishes([
-            __DIR__.'/../database/migrations/tenant' => database_path('migrations/tenant'),
-        ], 'corex-operations-migrations-tenant');
 
         $this->publishes([__DIR__.'/../config/corex-operations.php' => config_path('corex-operations.php')], 'corex-operations-config');
     }

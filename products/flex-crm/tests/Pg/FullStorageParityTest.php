@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use CoreX\Database\Contracts\SchemaSets;
 use Flex\Crm\Tests\Support\AccountFixture;
 use Flex\Crm\Tests\Support\StorageCatalogue;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +19,7 @@ beforeEach(function (): void {
 });
 
 it('matches every actual enabled column constraint and index against approved DDL', function (): void {
-    $this->artisan('migrate', ['--path' => realpath(__DIR__.'/../../database/migrations'), '--realpath' => true, '--force' => true])->assertSuccessful();
+    $this->migrateSchemaSets(['flex/crm:tenant'], DB::getDefaultConnection());
     DB::transaction(function (): void {
         DB::statement('CREATE SCHEMA crm_reference_test');
         DB::statement('SET LOCAL search_path TO crm_reference_test,public');
@@ -34,7 +35,7 @@ it('matches every actual enabled column constraint and index against approved DD
 });
 
 it('refuses populated legacy sales tables before changing any storage', function (string $table): void {
-    foreach (glob(__DIR__.'/../../database/migrations/*.php') as $path) {
+    foreach (glob(app(SchemaSets::class)->get('flex/crm:tenant')->path.'/*.php') as $path) {
         if (str_contains($path, '2026_09_15')) {
             continue;
         }
@@ -49,7 +50,7 @@ it('refuses populated legacy sales tables before changing any storage', function
     DB::table($table)->insert($values);
     $rowBefore = (array) DB::table($table)->where('id', $id)->first();
     $before = StorageCatalogue::read(DB::connection(), 'public');
-    $migration = require __DIR__.'/../../database/migrations/2026_09_15_000001_full_storage_parity.php';
+    $migration = require app(SchemaSets::class)->get('flex/crm:tenant')->path.'/2026_09_15_000001_full_storage_parity.php';
     expect(fn () => $migration->up())->toThrow(RuntimeException::class, 'CRM_PARITY_UPGRADE_REQUIRES_EXPORT');
     expect(StorageCatalogue::read(DB::connection(), 'public'))->toBe($before)
         ->and((array) DB::table($table)->where('id', $id)->first())->toBe($rowBefore)

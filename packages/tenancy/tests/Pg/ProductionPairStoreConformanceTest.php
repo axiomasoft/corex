@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Tenancy\Membership\Data\PairKey;
 use CoreX\Tenancy\Membership\Exceptions\InboxConflict;
 use CoreX\Tenancy\Membership\Exceptions\PairStoreViolation;
@@ -11,7 +12,6 @@ use CoreX\Tenancy\Tests\Support\Membership\TransportFixture;
 use CoreX\Tenancy\Tests\TestCase;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 
 uses(TestCase::class);
 
@@ -21,12 +21,13 @@ const PHYSICAL_PAIR_OPERATION = '33333333-3333-4333-8333-333333333333';
 const PHYSICAL_INBOX_OWNER = '44444444-4444-4444-8444-444444444444';
 
 beforeEach(function (): void {
-    Schema::dropIfExists('tnt_membership_inbox');
-    Schema::dropIfExists('tnt_membership_pairs');
+    DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
+    DB::statement('CREATE SCHEMA public');
+    DB::purge('pgsql');
+    $this->migrateSchemaSets(['axiomasoft/corex:tenant', 'axiomasoft/corex-tenancy:tenant'], 'pgsql');
 
     /** @var Migration $migration */
-    $migration = require __DIR__.'/../../database/migrations/tenant/2026_09_15_000700_create_membership_adapter_tables.php';
-    $migration->up();
+    $migration = require app(SchemaSets::class)->get('axiomasoft/corex-tenancy:tenant')->path.'/2026_09_15_000700_create_membership_adapter_tables.php';
     $this->migration = $migration;
 });
 

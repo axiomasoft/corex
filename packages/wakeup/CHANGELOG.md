@@ -2,6 +2,8 @@
 
 ## Unreleased — scheduling contracts moved to the kernel (P07.5)
 
+- Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
+
 - Breaking (pre-1.0, PLAN3.D01/D96): the ten scheduling contracts and data types now live in `CoreX\Scheduling`. This package implements them and still owns `DueWakeupSweeper` and `WakeupScheduleHint`. Handler definitions come from `corex-wakeup.handlers` and the `corex.scheduling.wakeup-handlers` tag; a duplicate kind is `InvalidConfiguration`. Due sources use `corex.scheduling.due-sources`.
 
 ## Unreleased — thin providers and registrars (P05.2)

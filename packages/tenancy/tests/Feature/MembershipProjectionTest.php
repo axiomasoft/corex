@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
+use CoreX\Database\Contracts\SchemaMigrator;
 use CoreX\Tenancy\Account\Contracts\AccountRead;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Contracts\CentralApiClient;
@@ -22,27 +23,17 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Session\ArraySessionHandler;
 use Illuminate\Session\Store;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-
-const ROOT_MIGRATIONS_PATH_MP = __DIR__.'/../../database/migrations/root';
-const TENANT_MIGRATIONS_PATH_MP = __DIR__.'/../../database/migrations/tenant';
-const CORE_MIGRATIONS_PATH_MP = __DIR__.'/../../vendor/axiomasoft/corex/database/migrations/pg';
 
 beforeEach(function (): void {
     DB::statement('DROP SCHEMA IF EXISTS public CASCADE');
     DB::statement('CREATE SCHEMA public');
     DB::purge('pgsql');
 
-    $this->artisan('migrate', [
-        '--database' => 'pgsql',
-        '--path' => realpath(ROOT_MIGRATIONS_PATH_MP),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex-tenancy:root'], 'pgsql');
 });
 
 afterEach(function (): void {
@@ -100,18 +91,8 @@ function migrateMembershipProjectionTenant(Account $account): void
     /** @var TenancyManager $manager */
     $manager = app(TenancyManager::class);
     $manager->runFor(membershipProjectionRef($account), null, function (): void {
-        Artisan::call('migrate', [
-            '--database' => 'tenant',
-            '--path' => realpath(CORE_MIGRATIONS_PATH_MP),
-            '--realpath' => true,
-            '--force' => true,
-        ]);
-        Artisan::call('migrate', [
-            '--database' => 'tenant',
-            '--path' => realpath(TENANT_MIGRATIONS_PATH_MP),
-            '--realpath' => true,
-            '--force' => true,
-        ]);
+        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex:tenant'], 'tenant');
+        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-tenancy:tenant'], 'tenant');
     });
 }
 

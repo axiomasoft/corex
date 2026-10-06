@@ -8,6 +8,8 @@ use CoreX\Config\Data\CoreOptions;
 use CoreX\Config\Data\SecretRef;
 use CoreX\Context\Data\AccountRef;
 use CoreX\CoreServiceProvider;
+use CoreX\Database\Contracts\SchemaMigrator;
+use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Messaging\Contracts\DurableMessagePublisher;
 use CoreX\Messaging\Contracts\MessagePublisher;
 use CoreX\Messaging\Data\MessageContract;
@@ -49,8 +51,8 @@ final class WebhookFanoutTest extends TestCase
         $this->configure('api_budget_stub');
         $this->configure('api_tenant');
         $this->selectSchema('api_tenant');
-        $migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_webhook_tables.php';
-        $migration->up();
+        $migration = require app(SchemaSets::class)->get('axiomasoft/corex-webhooks:tenant')->path.'/create_sys_api_webhook_tables.php';
+        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
         $this->inbox();
     }
 
@@ -164,8 +166,8 @@ final class WebhookFanoutTest extends TestCase
 
         try {
             $this->selectSchema('api_pg_tenant');
-            $migration = require __DIR__.'/../../database/migrations/tenant/create_sys_api_webhook_tables.php';
-            $migration->up();
+            $migration = require app(SchemaSets::class)->get('axiomasoft/corex-webhooks:tenant')->path.'/create_sys_api_webhook_tables.php';
+            app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
             $this->inbox('api_pg_tenant');
             $connection = DB::connection('api_pg_tenant');
             $this->subscribe('sub-pg', $connection->getName());
@@ -267,6 +269,8 @@ final class WebhookFanoutTest extends TestCase
     private function selectSchema(string $tenant): void
     {
         $this->app->forgetInstance(ApiSchemaRegistrar::class);
+        $this->app->forgetInstance(SchemaSets::class);
+        $this->app->forgetInstance(SchemaMigrator::class);
         $driver = (string) $this->app['config']->get('database.connections.'.$tenant.'.driver');
         $database = (string) $this->app['config']->get('database.connections.'.$tenant.'.database');
         $this->app['config']->set('corex-operations.schema', [

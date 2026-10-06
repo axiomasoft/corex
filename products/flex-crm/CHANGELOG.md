@@ -5,6 +5,8 @@
 
 ## [Unreleased]
 
+- Schema delivery now uses tagged `SchemaSetProvider` declarations and `corex:schema:migrate`; migration publishing is removed.
+
 ### Changed
 
 - CRM entities enter the runtime registry and morph map through the compiled `CrmModule` manifest; the provider no longer depends on a Testing registry.

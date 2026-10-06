@@ -107,12 +107,7 @@ it('sys_audit_actor_ck accepts support after the widening migration (D137)', fun
     DB::connection('pgsql')->statement('CREATE SCHEMA public');
     DB::purge('pgsql');
 
-    test()->artisan('migrate', [
-        '--database' => 'pgsql',
-        '--path' => realpath(__DIR__.'/../../packages/core/database/migrations/pg'),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    test()->migrateSchemaSets(['axiomasoft/corex:tenant'], 'pgsql');
 
     // Outside impersonation — regression (ц): the original vocabulary still writes.
     DB::connection('pgsql')->table('sys_audit_log')->insert([
@@ -151,12 +146,7 @@ it('mod_ll_actor_ck accepts support after the widening migration — CurrentActo
     DB::connection('pgsql')->statement('CREATE SCHEMA public');
     DB::purge('pgsql');
 
-    test()->artisan('migrate', [
-        '--database' => 'pgsql',
-        '--path' => realpath(__DIR__.'/../../packages/core/database/migrations'),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    test()->migrateSchemaSets(['axiomasoft/corex:tenant-modules'], 'pgsql');
 
     // Outside impersonation — regression (ц): the original vocabulary still writes.
     DB::connection('pgsql')->table('mod_lifecycle_log')->insert([

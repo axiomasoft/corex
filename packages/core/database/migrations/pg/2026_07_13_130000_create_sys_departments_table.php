@@ -9,13 +9,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-// PG-only (D12): ltree/GIST have no sqlite equivalent. Published under the tag
-// `corex-migrations`/`corex-migrations-tenant` (D33/D43), not auto-loaded on
-// the sqlite default lane. id/workspace_id/parent_id/head_user_id follow
-// config('corex.ids.strategy') via IdColumns (D3/A58); workspace_id/head_user_id
-// are loose references — the FKs land with axiomasoft/corex-tenancy and axiomasoft/corex-access (P2,
-// DB_SCHEMA C4). timestampTz precision is explicit µs (D32/A66). See
-// DB_SCHEMA.md §3.2 sys_departments; B-10 §2 for the DDL this mirrors.
+// Executed from the package schema set on its declared connection.
 return new class extends Migration
 {
     public function up(): void

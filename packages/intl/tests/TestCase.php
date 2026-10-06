@@ -6,13 +6,17 @@ namespace CoreX\Intl\Tests;
 
 use CoreX\Data\Contracts\DataScopeAuthorizer;
 use CoreX\Data\Internal\AllowAllDataScopeAuthorizer;
+use CoreX\Database\Testing\MigratesSchemaSets;
 use CoreX\Intl\IntlServiceProvider;
 use CoreX\Intl\Tests\Support\IntlTestCase;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\DB;
 use Override;
 
 abstract class TestCase extends IntlTestCase
 {
+    use MigratesSchemaSets;
+
     #[Override]
     protected function setUp(): void
     {
@@ -36,8 +40,8 @@ abstract class TestCase extends IntlTestCase
     }
 
     #[Override]
-    protected function defineDatabaseMigrations(): void
+    protected function defineDatabaseMigrationsAfterDatabaseRefreshed(): void
     {
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->migrateSchemaSets(['axiomasoft/corex-intl:tenant'], DB::getDefaultConnection());
     }
 }

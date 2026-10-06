@@ -19,43 +19,27 @@ PG-нативные конструкции без SQLite-эквивалента.
 целостности/конкурентности проверяются исключительно на PG-лейне
 (`composer test:pg`).
 
-## Установка миграций (важно)
+## Установка схемы
 
-Настройки ядра публикуются через `php artisan vendor:publish --tag=corex-config` в `config/corex.php`.
-Подсистема модулей использует вложенный раздел `modules` (`corex.modules.connection`, `corex.modules.cache.*`)
-и переменные `COREX_MODULES_*`. Теги `corex-migrations` и `corex-migrations-tenant` публикуют обе группы
-миграций ядра: `sys_*` и `mod_*`. SavedViews поставляется пакетом `axiomasoft/corex-panels` и публикуется
-отдельно через `corex-panels-migrations-tenant` на том же tenant-коннекшене.
-
-Миграции ядра (`sys_*`) — **PostgreSQL-only** (jsonb, `CHECK`, `UNIQUE NULLS NOT
-DISTINCT`, BRIN, ltree/GIST) и **тенантские** (живут в базе аккаунта, не в
-корневой control-plane БД). Поэтому пакет их **НЕ подключает автоматически**
-(`loadMigrationsFrom` сломал бы sqlite-сьюты потребителя и прогнал бы
-тенантский DDL на дефолтном коннекшене). Схема ставится явной публикацией:
+Настройки публикуются через `php artisan vendor:publish --tag=corex-config`.
+Наборы `sys_*` и `mod_*` принадлежат ядру и выполняются непосредственно из пакета на PostgreSQL tenant-соединении:
 
 ```bash
-# 1. Скопировать миграции в приложение
-php artisan vendor:publish --tag=corex-migrations
-
-# 2. Прогнать их НА ТЕНАНТСКОМ коннекшене (под DB-per-account, P2 — это база
-#    аккаунта; в boxed/single-DB установке это дефолтный коннекшен)
-php artisan migrate --database=<tenant>
+php artisan corex:schema:migrate --scope=tenant --database=<tenant>
+php artisan corex:schema:status --scope=tenant --database=<tenant>
 ```
 
-Тег `corex-migrations-tenant` — синоним `corex-migrations`, явно называющий
-скоуп коннекшена: `sys_*` — **тенант-схема**. Корневые (`root_*`) таблицы —
-предмет отдельного пакета/плана (P2) и публикуются отдельным тегом на
-центральный коннекшен. Никогда не гоняйте `corex-migrations` на корневом
-коннекшене — это засорит golden-шаблон аккаунта чужими таблицами.
+В single-DB установке можно опустить `--database`: используется default connection.
+В DB-per-account tenant-схема создаётся только на базе аккаунта; central-схема принадлежит tenancy.
+Модульные наборы создаёт `ModuleLifecycle::enable()`; `--modules` явно включает их при подготовке шаблона.
+Для production команда требует подтверждения или `--force`. Обычный `artisan migrate` создаёт только схему приложения.
 
 ### Версия схемы и апгрейды
 
-Потребитель публикует **копию** миграций, поэтому апгрейд пакета не может
-изменить уже опубликованные файлы «на месте». Изменения схемы поставляются
-**новыми аддитивными миграциями** под тем же тегом: при обновлении пакета
-повторите `vendor:publish --tag=corex-migrations` (без `--force` — дозабирает
-только новые файлы) и `migrate`. Текущее поколение схемы —
-`CoreX\CoreServiceProvider::SCHEMA_VERSION`.
+Поколение каждого набора доступно через `CoreX\Database\Data\SchemaSet::version` в реестре
+`CoreX\Database\Contracts\SchemaSets`. Файлы исполняются из пакета; копии в приложении не нужны.
+После фиксации baseline изменение схемы поставляется новым файлом с повышением версии набора.
+Повторный `corex:schema:migrate` применяет только отсутствующие в журнале Laravel `migrations` файлы.
 
 ## Стратегия идентификаторов
 

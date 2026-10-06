@@ -161,12 +161,7 @@ beforeEach(function (): void {
     auditPg()->statement('CREATE SCHEMA public');
     DB::purge(AUDIT_TEST_CONNECTION);
 
-    $this->artisan('migrate', [
-        '--database' => AUDIT_TEST_CONNECTION,
-        '--path' => realpath(__DIR__.'/../../packages/core/database/migrations/pg'),
-        '--realpath' => true,
-        '--force' => true,
-    ])->run();
+    $this->migrateSchemaSets(['axiomasoft/corex:tenant'], AUDIT_TEST_CONNECTION);
 
     $this->app->instance(AuditLogger::class, auditLogger());
 });

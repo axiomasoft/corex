@@ -11,6 +11,7 @@ use CoreX\CustomFields\Internal\ScopeDenied;
 use CoreX\CustomFields\Internal\Storage\ScopeConnectionGuard;
 use CoreX\CustomFields\Tests\Pg\DatabaseFieldCataloguePgTestCase;
 use CoreX\CustomFields\Tests\Support\PgTestSupport;
+use CoreX\Database\Contracts\SchemaSets;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -53,7 +54,7 @@ function databaseDefinition(
 }
 
 it('migrates and rolls back the three owned catalogue tables on an empty database', function (): void {
-    $migration = require __DIR__.'/../../database/migrations/2026_09_24_000002_create_attribute_definitions.php';
+    $migration = require app(SchemaSets::class)->get('axiomasoft/corex-custom-fields:tenant')->path.'/2026_09_24_000002_create_attribute_definitions.php';
 
     expect(Schema::hasTable('sys_attribute_definitions'))->toBeTrue()
         ->and(Schema::hasTable('sys_attribute_key_reservations'))->toBeTrue()
