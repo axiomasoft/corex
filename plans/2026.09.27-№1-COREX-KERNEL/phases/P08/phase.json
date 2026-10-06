@@ -82,9 +82,9 @@
     }
   ],
   "closed": {
-    "at": "2026-10-06T13:46:00Z",
-    "result": "blocked",
-    "summary": "10 item(s): 6 done, 3 done_with_deviations, 1 blocked"
+    "at": "2026-10-06T19:12:32Z",
+    "result": "done_with_deviations",
+    "summary": "10 item(s): 8 done, 2 done_with_deviations"
   },
   "orchestration": {
     "strategy": "sequential"
@@ -149,6 +149,11 @@
       "id": "Phase-Handoff",
       "title": "Phase Handoff",
       "text": "—"
+    },
+    {
+      "id": "repair-hosted-wait",
+      "title": "P08 repair accepted on exact hosted proof",
+      "text": "P08.3 done and P08.10 done. F1/F2 independentlyCLOSED, final7source hashes unchanged from Grok review. Final code1f824f74fa0044819f991346e484dad82872827a onlocalmain and owner-createdax1oma/corex-mirror main; CI37508077385 completed/success37/37, deferredabsent. D73acceptance met. Machine closed.result=done_with_deviations retains2previous documented deviations, no repair/CI blocker. Completion knowledge/artifacts-P08-repair-closure-completion, actual full hosted inventory artifacts/P08-closure-readiness/hosted-receipt-ax1oma.json. P09 alltodo and unstarted; P09.1 dependency satisfied but owner_gate P09-DESIGN-P08 ungranted; readiness artifact current, historical facts unchanged. No publication/tags/trust/memory operations."
     }
   ]
 }

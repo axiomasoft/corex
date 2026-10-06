@@ -1,0 +1,132 @@
+# Primary source capture
+
+Date: 2026-10-06
+Tool: urllib.request GET
+URL: https://raw.githubusercontent.com/danharrin/monorepo-split-github-action/64498811856d440ceeea37737feac43ffcb2c623/README.md
+SHA256: 92b3b6956707195f7024eb43afef56d4a25adccdb264b6b68e83164b8735a000
+
+```text
+# GitHub Action for Monorepo Split
+
+**Version 2.0 now supports split to GitHub and Gitlab private repositories!**
+
+<br>
+
+Do you have [a monorepo](https://tomasvotruba.com/cluster/monorepo-from-zero-to-hero/) project on GitHub and need split packages to many repositories? Add this GitHub Action to your workflow and let it split your packages on every commit and tag.
+
+## Docker Image
+
+The Docker image is published to GitHub Container Registry (ghcr.io) and is available at:
+- `ghcr.io/danharrin/monorepo-split:latest` (latest main branch)
+- `ghcr.io/danharrin/monorepo-split:TAG` (specific tags)
+
+The image is automatically built and published on every push to the main branch and on every tag.
+
+> [!NOTE]
+> The image was previously hosted on Docker Hub as `symplify2/monorepo-split:latest`. It has been migrated to GitHub Container Registry for better integration with the project.
+
+### How does the Split Result Look Like?
+
+This repository splits tests into [symplify/monorepo-split-github-action-test](https://github.com/symplify/monorepo-split-github-action-test) repository.
+
+Not on every commit, but only if contents of `/tests/packages/some-package` directory changes.
+Try it yourself - send PR with change in [that directory](/tests/packages/some-package).
+
+<br>
+
+## Docs
+
+- [How to Use on Gitlab](docs/how_to_use_on_gitlab.md)
+
+## Config
+
+Split is basically git push or local directory to remote git repository. This remote repository can be located on GitHub or Gitlab. To be able to do that, it needs `GITHUB_TOKEN` or `GITLAB_TOKEN` with write repository access:
+
+```yaml
+env:
+    GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+    # or
+    GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+```
+
+Make sure to add this access token in "Secrets" of package settings at https://github.com/<organization>/<package>/settings/environments
+
+<br>
+
+## Define your GitHub Workflow
+
+```yaml
+name: 'Packages Split'
+
+on:
+    push:
+        branches:
+            - main
+        tags:
+            - '*'
+
+env:
+    # 1. for Github split
+    GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+
+    # 2. for Gitlab split
+    GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+
+jobs:
+    packages_split:
+        runs-on: ubuntu-latest
+
+        strategy:
+            fail-fast: false
+            matrix:
+                # define package to repository map
+                package:
+                    -
+                        local_path: 'easy-coding-standard'
+                        split_repository: 'easy-coding-standard'
+
+        steps:
+            -   uses: actions/checkout@v2
+
+            # no tag
+            -
+                if: "!startsWith(github.ref, 'refs/tags/')"
+                uses: danharrin/monorepo-split-github-action@v2.4.0
+                with:
+                    # ↓ split "packages/easy-coding-standard" directory
+                    package_directory: 'packages/${{ matrix.package.local_path }}'
+
+                    # ↓ into https://github.com/symplify/easy-coding-standard repository
+                    repository_organization: 'symplify'
+                    repository_name: '${{ matrix.package.split_repository }}'
+
+                    # [optional, with "github.com" as default]
+                    repository_host: git.private.com:1234
+
+                    # ↓ the user signed under the split commit
+                    user_name: "kaizen-ci"
+                    user_email: "info@kaizen-ci.org"
+
+            # with tag
+            -
+                if: "startsWith(github.ref, 'refs/tags/')"
+                uses: danharrin/monorepo-split-github-action@v2.4.0
+                with:
+                    tag: ${GITHUB_REF#refs/tags/}
+
+                    # ↓ split "packages/easy-coding-standard" directory
+                    package_directory: 'packages/${{ matrix.package.local_path }}'
+
+                    # ↓ into https://github.com/symplify/easy-coding-standard repository
+                    repository_organization: 'symplify'
+                    repository_name: '${{ matrix.package.split_repository }}'
+
+                    # [optional, with "github.com" as default]
+                    repository_host: git.private.com:1234
+
+                    # ↓ the user signed under the split commit
+                    user_name: "kaizen-ci"
+                    user_email: "info@kaizen-ci.org"
+```
+
+```

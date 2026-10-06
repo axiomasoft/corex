@@ -1,0 +1,39 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D123",
+  "title": "owner-question: Access channel and corex-full composition",
+  "date": "2026-10-06",
+  "status": "open",
+  "question": "Какой release-канал у native axiomasoft/corex-access после P07.4: public (входит в full-public) или private (исключён из full-public)? Подтвердить отдельно канал access-azguard.",
+  "options": [
+    {
+      "id": "A",
+      "text": "Native access public; full-public includes its complete public closure; optional AzGuard bridge private."
+    },
+    {
+      "id": "B",
+      "text": "Native access private and optional AzGuard bridge private; full-public excludes both."
+    }
+  ],
+  "context": "Access source composer has only CoreX, Illuminate and clock runtime dependencies. Only legacy release-1.0-policy calls access private; D119 had no accepted policy basis. AzGuard dependency visibility is unverified.",
+  "consequences": [
+    "Owner only. P09.6 stops before channel table/profile/SBOM classification is finalized. Public dependency set is computed from accepted channel map, then proven to have no private closure.",
+    "22 identities stay fixed; public/private counts are computed after answer, not hardcoded to 20/2."
+  ],
+  "applies_to": [
+    "P09.6",
+    "P09.16"
+  ],
+  "actor": {
+    "provider": "codex",
+    "model": "gpt-6.1-sol",
+    "effort": "high"
+  },
+  "sections": [
+    {
+      "id": "owner-clarification-2026-10-06",
+      "title": "Owner clarification: repository visibility",
+      "text": "Owner replies in current P08 repair: «это будет полностью публиный репозиторий, название я поменяю»; later clarification «azguard открытый, corex пока будет закрытым». AzGuard public source verified without authentication; CoreX repository remains private for now. This establishes repository visibility, not a final release-channel map for native access/access-azguard or corex-full. D123 stays open until that publication policy is explicit; neither proposed A nor B is inferred from repository visibility. No visibility/manifest/channel changes or publication authorized."
+    }
+  ]
+}

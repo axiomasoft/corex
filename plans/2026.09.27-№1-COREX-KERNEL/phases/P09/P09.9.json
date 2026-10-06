@@ -1,0 +1,125 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P09.9",
+  "title": "Preflight Infection 0.35.6 × Pest 5.2.1 / PHPUnit 13.3.4 + bounded fallback",
+  "status": "todo",
+  "summary": "Preflight Infection 0.35.6 × Pest 5.2.1 / PHPUnit 13.3.4 + bounded fallback",
+  "why": "Bounded owner of verified P09 review defect; explicit acceptance and dependencies prevent hidden work.",
+  "scope": {
+    "include": [
+      "Preflight Infection 0.35.6 × Pest 5.2.1 / PHPUnit 13.3.4 + bounded fallback"
+    ],
+    "exclude": [
+      "Remote writes/publication unless exact separate external gate supplied; no unrelated P08/product behavior change."
+    ]
+  },
+  "depends_on": [
+    "P09.4"
+  ],
+  "decisions": [
+    "D118",
+    "D120",
+    "D17",
+    "D18",
+    "D19",
+    "D73",
+    "D103",
+    "D113",
+    "D121"
+  ],
+  "reads": [
+    {
+      "ref": "knowledge/research-P09-design#basis",
+      "why": "Canonical verified runbook",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#mutation",
+      "why": "Canonical verified runbook",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#checks",
+      "why": "Canonical verified runbook",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "composer.json",
+      "change": "modify"
+    },
+    {
+      "path": "composer.lock",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/quality/infection-spike.py",
+      "change": "create"
+    },
+    {
+      "path": "scripts/quality/infection-compatibility.json",
+      "change": "create"
+    },
+    {
+      "path": "scripts/quality/tests/test_infection_spike.py",
+      "change": "create"
+    }
+  ],
+  "rules": [
+    "Соблюдать D118/D121/D120, D17/D18/D19/D73/D103/D113; никаких внешних записей.",
+    "Сохранять чужие изменения; source facts пересверяются. PHP84 wrapper обязателен; перед PG — skill db-test-preflight и только *_test.",
+    "Поведение/API/SPI/schema не менять молча ради зелёного tooling; precise decision+CHANGELOG+API/Golden для public delta.",
+    "Каждый новый gate негатив-проверен на temp fixtures; coverage/MSI/quality scopes и пороги не снижать. Если packages/*/src меняется, surviving fixed mutations --all до завершения.",
+    "Self-check + scoped checks; repair owning item. Независимое full-review фазы отдельное P09.8 по действующим требованиям плана.",
+    "Current design session does not execute this item. Admission waits independent different-model design review; owner D122/D123/D124 stay unresolved for dependent release steps."
+  ],
+  "guidance": "Execute only after admission, from required section. Produce real fresh raw outputs; new commands below are owned deliverables, not present-at-design assumptions.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "scripts/php84 python3 scripts/quality/infection-spike.py --package tenancy --matrix all --output build/quality/infection-spike",
+      "expect": "exit0 4 version cells × SQLite/PG, real Pest test+mutants+raw XML/JUnit/flags/versions; bounded adapter fallback same cells",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "python3 scripts/quality/infection-spike.py --check build/quality/infection-spike/receipt.json",
+      "expect": "exit0 full actual matrix, no downgrade/missing flags",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "python3 -m unittest discover -s scripts/quality/tests -p test_infection_spike.py",
+      "expect": "exit0 fake/missing/PHPUnit-only/failed cell receipt negatives",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "scripts/php84 composer audit --locked",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Exact compatibility receipt and locked verified adapter route or BLOCKED with version/process conflict; budgets 2h+2h, no other MSI execution before success"
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "xhigh"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed",
+    "notes": "RAG:— current source facts",
+    "captures": []
+  },
+  "result": null,
+  "updated_at": "2026-10-06T16:12:08Z"
+}

@@ -1,0 +1,188 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P09.15",
+  "title": "DoD rewrite: JSON owners, 27 fresh assertions and missing producers",
+  "status": "todo",
+  "summary": "DoD rewrite: JSON owners, 27 fresh assertions and missing producers",
+  "why": "Bounded owner of verified P09 review defect; explicit acceptance and dependencies prevent hidden work.",
+  "scope": {
+    "include": [
+      "DoD rewrite: JSON owners, 27 fresh assertions and missing producers"
+    ],
+    "exclude": [
+      "Remote writes/publication unless exact separate external gate supplied; no unrelated P08/product behavior change."
+    ]
+  },
+  "depends_on": [
+    "P09.14"
+  ],
+  "decisions": [
+    "D118",
+    "D120",
+    "D17",
+    "D18",
+    "D19",
+    "D73",
+    "D103",
+    "D113",
+    "D121"
+  ],
+  "reads": [
+    {
+      "ref": "knowledge/research-P09-design#basis",
+      "why": "Canonical verified runbook",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#dod-map",
+      "why": "Canonical verified runbook",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#checks",
+      "why": "Canonical verified runbook",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#grok-repair",
+      "why": "Verified G1–G6 corrections and executable runtime boundary",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "scripts/dod-1.0.py",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/dod-1.0.json",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/distribution/tests/**",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/quality/dod-evidence.py",
+      "change": "create"
+    },
+    {
+      "path": "scripts/quality/tests/test_dod_evidence.py",
+      "change": "create"
+    },
+    {
+      "path": "scripts/supported-releases.json",
+      "change": "create"
+    },
+    {
+      "path": "packages/core/tests/Feature/ReleaseContextLifecycleTest.php",
+      "change": "create"
+    },
+    {
+      "path": "scripts/tests/test_dod_1_0.py",
+      "change": "modify"
+    },
+    {
+      "path": "docs/architecture/dod-1.0.md",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/quality/octane-proof.py",
+      "change": "create"
+    },
+    {
+      "path": "scripts/quality/tests/test_octane_proof.py",
+      "change": "create"
+    },
+    {
+      "path": "packages/core/tests/Release/OctaneLifecycleTest.php",
+      "change": "create"
+    },
+    {
+      "path": "packages/core/tests/Release/octane-consumer/**",
+      "change": "create"
+    }
+  ],
+  "rules": [
+    "Соблюдать D118/D121/D120, D17/D18/D19/D73/D103/D113; никаких внешних записей.",
+    "Сохранять чужие изменения; source facts пересверяются. PHP84 wrapper обязателен; перед PG — skill db-test-preflight и только *_test.",
+    "Поведение/API/SPI/schema не менять молча ради зелёного tooling; precise decision+CHANGELOG+API/Golden для public delta.",
+    "Каждый новый gate негатив-проверен на temp fixtures; coverage/MSI/quality scopes и пороги не снижать. Если packages/*/src меняется, surviving fixed mutations --all до завершения.",
+    "Self-check + scoped checks; repair owning item. Независимое full-review фазы отдельное P09.8 по действующим требованиям плана.",
+    "Current design session does not execute this item. Admission waits independent different-model design review; owner D122/D123/D124 stay unresolved for dependent release steps.",
+    "DOD-08 requires actual Octane Worker execution, request and queue scenarios, independently named mandatory evidence. Modeled forgetScopedInstances proof is diagnostic only; no downgrade decision or fabricated execution."
+  ],
+  "guidance": "Execute only after admission, from required section. Produce real fresh raw outputs; new commands below are owned deliverables, not present-at-design assumptions. Regenerate docs/architecture/dod-1.0.md using python3 scripts/dod-1.0.py render before render --check; this existing default target was verified in runner. Preserve every assertion and negative fixture from scripts/tests/test_dod_1_0.py.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "python3 -m unittest discover -s scripts/quality/tests -p test_dod_evidence.py",
+      "expect": "exit0 all27 mapped, owner JSON/unknown-id/missing hash/legacy/stale/first-release negative controls",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "python3 scripts/dod-1.0.py render --check",
+      "expect": "exit0 projection equals rewritten canonical manifest",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "scripts/php84 vendor/bin/pest tests/Feature/ResidentLifecycleTest.php packages/core/tests/Unit/TenantContextRestorerTest.php packages/core/tests/Feature/ReleaseContextLifecycleTest.php",
+      "expect": "exit0 request/scoped reset/queue two-tenant/failure cleanup assertions; negative singleton/reset controls demonstrated",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "procedure": "DoD collector schema/input smoke on temp current rc fixture, using explicit --candidate --evidence-dir.",
+      "expect": "Missing release evidence and legacy/mismatched receipt return exit1 exact assertion+PLAN3 item, complete valid fixture passes; no real qualification claimed",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "python3 -m unittest discover -s scripts/tests -p test_dod_1_0.py",
+      "expect": "exit0 existing regression suite adapted to all27 JSON owners/strict receipts; legacy-negative coverage preserved",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "cmd": "scripts/php84 python3 scripts/quality/octane-proof.py --source-root . --matrix all --evidence-dir build/quality/P09.15/octane",
+      "expect": "exit0 real Octane Worker boot/handle/request termination in persistent PHP process on all4 supported cells; source proof only, all handler cases counted",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "cmd": "python3 -m unittest discover -s scripts/quality/tests -p test_octane_proof.py",
+      "expect": "exit0 missing/unexecuted/wrong handler/model-only/skip/lock/hash/cleanup failure receipts RED",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "procedure": "DoD producer negative fixture: omit any one Transfer exact JUnit case or replace DOD-08 octane executed with missing/false/model-only/skipped handler; run collector/checker fixture.",
+      "expect": "Missing mandatory actual behavior stays RED; no aggregate-suite or modeled pass",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "DoD 27-row mapping/JSON owner resolution; strict required candidate fingerprints; fresh scorecard/lifecycle/structure/first-release producers and regression tests; no legacy receipt fallback",
+    "Actual Octane Worker handler harness + receipt/provenance; unexecuted Octane keeps DOD-08 RED; unchanged Octane/request/queue assertion"
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "xhigh"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed",
+    "notes": "RAG:— current source facts",
+    "captures": []
+  },
+  "result": null,
+  "updated_at": "2026-10-06T16:43:21Z"
+}

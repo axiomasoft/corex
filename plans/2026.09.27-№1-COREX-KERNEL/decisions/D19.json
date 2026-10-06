@@ -3,13 +3,14 @@
   "id": "D19",
   "title": "release (accepted)",
   "date": "2026-09-27",
-  "status": "accepted",
+  "status": "superseded",
   "decision": "Монорепо — источник истины; read-only split-репозитории `axiomasoft/corex-*` через `danharrin/monorepo-split-github-action`; lockstep-версии всех пакетов; опциональный metapackage `axiomasoft/corex-full`; первый релиз `1.0.0-rc.1`. Публикация (Packagist, split repos, теги, push) — owner-gate P09.",
   "rationale": "`pplx-11` (lockstep для одного продукта, split read-only, metapackage); chatom PLAN2.D28 — единая модель экосистемы.",
   "applies_to": [
     "P09"
   ],
   "supersedes": [],
+  "superseded_by": "D122",
   "actor": {
     "provider": "legacy",
     "model": "author-choice (claude-opus-5-5/high) по мандату владельца «есть идеальное решение — утверждай» (`brief/00-brief.md` B6)"

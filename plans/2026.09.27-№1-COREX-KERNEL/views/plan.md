@@ -162,8 +162,8 @@ operations, независимые модули, детерминированн�
 | P05 | Typed config, композиция и порты | detailed | 4/4 | 🟢 Done |
 | P06 | Operations, tools, webhooks и wire | detailed | 5/5 | 🟠 Done with deviations |
 | P07 | Tenancy, access, независимость модулей | detailed | 6/6 | 🟠 Done with deviations |
-| P08 | Схема: baseline v1 | detailed | 9/10 | 🔴 Blocked |
-| P09 | Планка качества и release-квалификация `1.0.0-rc.1` | skeleton | 0/0 | ⬜ Skeleton |
+| P08 | Схема: baseline v1 | detailed | 10/10 | 🟠 Done with deviations |
+| P09 | Планка качества и release-квалификация `1.0.0-rc.1` | detailed | 0/17 | ⬜ Not started |
 | P10 | Зелёный hosted CI на базе P04 | detailed | 4/4 | 🟢 Done |
 
 ## Decisions
@@ -188,7 +188,7 @@ operations, независимые модули, детерминированн�
 | D16 | dependencies (accepted) | accepted | 2026-09-27 |
 | D17 | quality-bar (accepted) | accepted | 2026-09-27 |
 | D18 | ci-supply-chain (accepted) | accepted | 2026-09-27 |
-| D19 | release (accepted) | accepted | 2026-09-27 |
+| D19 | release (accepted) | superseded | 2026-09-27 |
 | D20 | schema (accepted) | accepted | 2026-09-27 |
 | D21 | rolling-execution (accepted) | accepted | 2026-09-27 |
 | D22 | ecosystem-principles (accepted) | accepted | 2026-09-27 |
@@ -287,3 +287,10 @@ operations, независимые модули, детерминированн�
 | D115 | Техническое закрытие P07 после зелёного hosted CI | accepted | 2026-10-05 |
 | D116 | P08.2: формат ResourceId принадлежит operations, не схеме БД | accepted | 2026-10-06 |
 | D117 | P08.2: снять obsolete schema bridge и использовать native quiet UUID generation | accepted | 2026-10-06 |
+| D118 | P09: дизайн сейчас, исполнение после P08, JSON runtime и последовательный маршрут | accepted | 2026-10-06 |
+| D119 | P09: состав rc, sealed exporter, split и граница публикации | superseded | 2026-10-06 |
+| D120 | P09: применение D17 без ослабления и достоверный MSI | accepted | 2026-10-06 |
+| D121 | P09 correction: rc metadata, real migrations and pending owner policies | accepted | 2026-10-06 |
+| D122 | owner-question: amend/supersede D19 split mechanism | accepted | 2026-10-06 |
+| D123 | owner-question: Access channel and corex-full composition | open | 2026-10-06 |
+| D124 | owner-question: hosted delivery of pinned AzGuard input | accepted | 2026-10-06 |

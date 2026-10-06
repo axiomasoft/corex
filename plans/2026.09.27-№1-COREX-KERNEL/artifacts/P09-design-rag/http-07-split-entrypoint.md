@@ -1,0 +1,214 @@
+# Primary source capture
+
+Date: 2026-10-06
+Tool: urllib.request GET
+URL: https://raw.githubusercontent.com/danharrin/monorepo-split-github-action/64498811856d440ceeea37737feac43ffcb2c623/entrypoint.php
+SHA256: edaaf85ddf3458535ea45a49f371caacee974df174cc9ee41445c54ee5c11df6
+
+```text
+<?php
+
+declare(strict_types=1);
+
+use Symplify\MonorepoSplit\Config;
+use Symplify\MonorepoSplit\ConfigFactory;
+use Symplify\MonorepoSplit\Exception\ConfigurationException;
+
+require_once __DIR__ . '/src/autoload.php';
+
+note('Resolving configuration...');
+
+$configFactory = new ConfigFactory();
+try {
+    $config = $configFactory->create(getenv());
+} catch (ConfigurationException $configurationException) {
+    error($configurationException->getMessage());
+    exit(1);
+}
+
+exec('git config --system --add safe.directory /github/workspace');
+exec('git config --system --add safe.directory /tmp/monorepo_split/build_directory');
+
+setupGitCredentials($config);
+
+
+$cloneDirectory = sys_get_temp_dir() . '/monorepo_split/clone_directory';
+$buildDirectory = sys_get_temp_dir() . '/monorepo_split/build_directory';
+
+$hostRepositoryOrganizationName = $config->getGitRepository();
+
+// info
+$clonedRepository = 'https://' . $hostRepositoryOrganizationName;
+$cloningMessage = sprintf('Cloning "%s" repository to "%s" directory', $clonedRepository, $cloneDirectory);
+note($cloningMessage);
+
+$commandLine = 'git clone -- https://' . $config->getAccessToken() . '@' . $hostRepositoryOrganizationName . ' ' . $cloneDirectory;
+exec_with_note($commandLine);
+
+$baseDir = getcwd();
+
+chdir($cloneDirectory);
+
+exec_with_output_print('git fetch');
+
+note(sprintf('Trying to checkout %s branch', $config->getBranch()));
+
+// if the given branch doesn't exist it returns empty string
+exec(sprintf('git checkout %s', $config->getBranch()), $output, $exitCode);
+$branchSwitchedSuccessfully = ($exitCode === 0);
+
+// if the branch doesn't exist we create it and push to origin
+// otherwise we just checkout to the given branch
+if (! $branchSwitchedSuccessfully) {
+    note(sprintf('Creating branch "%s" as it doesn\'t exist', $config->getBranch()));
+
+    exec_with_output_print(sprintf('git checkout -b %s', $config->getBranch()));
+    exec_with_output_print(sprintf('git push --quiet origin %s', $config->getBranch()));
+}
+
+chdir($baseDir);
+
+note('Cleaning destination repository of old files');
+// We're only interested in the .git directory, move it to $TARGET_DIR and use it from now on
+mkdir($buildDirectory . '/.git', 0777, true);
+
+execOrDie(sprintf('cp -r %s %s', $cloneDirectory . '/.git', $buildDirectory));
+
+
+// cleanup old unused data to avoid pushing them
+execOrDie('rm -rf ' . $cloneDirectory);
+// exec('rm -rf .git');
+
+
+// copy the package directory including all hidden files to the clone dir
+// make sure the source dir ends with `/.` so that all contents are copied (including .github etc)
+$copyMessage = sprintf('Copying contents to git repo of "%s" branch', $config->getCommitHash());
+note($copyMessage);
+$commandLine = sprintf('cp -ra %s %s', $config->getPackageDirectory() . '/.', $buildDirectory);
+execOrDie($commandLine);
+
+note('Files that will be pushed');
+list_directory_files($buildDirectory);
+
+
+// WARNING! this function happen before we change directory
+// if we do this in split repository, the original hash is missing there and it will fail
+$commitMessage = createCommitMessage($config->getCommitHash());
+
+
+$formerWorkingDirectory = getcwd();
+chdir($buildDirectory);
+
+$restoreChdirMessage = sprintf('Changing directory from "%s" to "%s"', $formerWorkingDirectory, $buildDirectory);
+note($restoreChdirMessage);
+
+
+
+// avoids doing the git commit failing if there are no changes to be commit, see https://stackoverflow.com/a/8123841/1348344
+exec_with_output_print('git status');
+
+// "status --porcelain" retrieves all modified files, no matter if they are newly created or not,
+// when "diff-index --quiet HEAD" only checks files that were already present in the project.
+execOrDie('git status --porcelain', $changedFiles);
+
+// $changedFiles is an array that contains the list of modified files, and is empty if there are no changes.
+
+if ($changedFiles) {
+    note('Adding git commit');
+
+    exec_with_output_print('git add .');
+
+    $message = sprintf('Pushing git commit with "%s" message to "%s"', $commitMessage, $config->getBranch());
+    note($message);
+
+    execOrDie('git commit --message ' . escapeshellarg($commitMessage));
+    execOrDie('git push --quiet origin ' . $config->getBranch());
+} else {
+    note('No files to change');
+}
+
+
+// push tag if present
+if ($config->getTag()) {
+    $message = sprintf('Publishing "%s"', $config->getTag());
+    note($message);
+
+    $commandLine = sprintf('git tag %s -m "%s"', $config->getTag(), $message);
+    exec_with_note($commandLine);
+
+    exec_with_note('git push --quiet origin ' . $config->getTag());
+}
+
+
+// restore original directory to avoid nesting WTFs
+chdir($formerWorkingDirectory);
+$chdirMessage = sprintf('Changing directory from "%s" to "%s"', $buildDirectory, $formerWorkingDirectory);
+note($chdirMessage);
+
+
+function createCommitMessage(string $commitSha): string
+{
+    execOrDie("git show -s --format=%B {$commitSha}", $outputLines);
+    return $outputLines[0] ?? '';
+}
+
+
+function note(string $message): void
+{
+    echo PHP_EOL . PHP_EOL . "\033[0;33m[NOTE] " . $message . "\033[0m" . PHP_EOL . PHP_EOL;
+}
+
+function error(string $message): void
+{
+    echo PHP_EOL . PHP_EOL . "\033[0;31m[ERROR] " . $message . "\033[0m" . PHP_EOL . PHP_EOL;
+}
+
+
+
+
+function list_directory_files(string $directory): void
+{
+    exec_with_output_print('ls -la ' . $directory);
+}
+
+
+/********************* helper functions *********************/
+
+/** @phpstan-ignore-next-line */
+function execOrDie(string $command, ?array &$output = []): string|false
+{
+    $result = exec($command, $output, $errorCode);
+    if ($errorCode === 0) {
+        return $result;
+    }
+
+    echo implode(PHP_EOL, $output);
+    exit(1);
+}
+
+function exec_with_note(string $commandLine): void
+{
+    note('Running: ' . $commandLine);
+    execOrDie($commandLine);
+}
+
+
+function exec_with_output_print(string $commandLine): void
+{
+    execOrDie($commandLine, $outputLines);
+    echo implode(PHP_EOL, $outputLines);
+}
+
+
+function setupGitCredentials(Config $config): void
+{
+    if ($config->getUserName()) {
+        execOrDie('git config --global user.name ' . escapeshellarg($config->getUserName()));
+    }
+
+    if ($config->getUserEmail()) {
+        execOrDie('git config --global user.email ' . escapeshellarg($config->getUserEmail()));
+    }
+}
+
+```

@@ -1,0 +1,31 @@
+{
+  "plan_check": {
+    "exit": 0,
+    "errors": 0,
+    "warnings": 0
+  },
+  "plan_render_check": {
+    "exit": 0
+  },
+  "git_diff_check": {
+    "exit": 0
+  },
+  "source_commit": "1f824f74fa0044819f991346e484dad82872827a",
+  "remote_ref": "ax1oma/corex-mirror refs/heads/main",
+  "remote_sha": "1f824f74fa0044819f991346e484dad82872827a",
+  "CI_run_id": 37508077385,
+  "CI_completed_success_jobs": 37,
+  "P08_result": "done_with_deviations",
+  "P08_3": "done",
+  "P08_10": "done",
+  "P09_items_all_todo": 17,
+  "P09_source_files_preserved": 68,
+  "historical_facts_unchanged": true,
+  "facts_exact_delta_keys": [
+    "anchors..github/workflows/ci.yml",
+    "anchors.scripts/schema-gate.php",
+    "source_commit"
+  ],
+  "next": "waiting: gate P09-DESIGN-P08",
+  "deferred_flag_absent": true
+}

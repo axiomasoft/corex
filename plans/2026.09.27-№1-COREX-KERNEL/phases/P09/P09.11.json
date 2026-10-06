@@ -1,0 +1,225 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P09.11",
+  "title": "Строгие operations/tools/webhooks без baseline (347)",
+  "status": "todo",
+  "summary": "Строгие operations/tools/webhooks без baseline (347)",
+  "why": "Bounded owner of verified P09 review defect; explicit acceptance and dependencies prevent hidden work.",
+  "scope": {
+    "include": [
+      "Строгие operations/tools/webhooks без baseline (347)"
+    ],
+    "exclude": [
+      "Remote writes/publication unless exact separate external gate supplied; no unrelated P08/product behavior change."
+    ]
+  },
+  "depends_on": [
+    "P09.10"
+  ],
+  "decisions": [
+    "D118",
+    "D120",
+    "D17",
+    "D18",
+    "D19",
+    "D73",
+    "D103",
+    "D113",
+    "D121"
+  ],
+  "reads": [
+    {
+      "ref": "knowledge/research-P09-design#basis",
+      "why": "Canonical verified runbook",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#typing",
+      "why": "Canonical verified runbook",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#checks",
+      "why": "Canonical verified runbook",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/operations/src/**",
+      "change": "modify"
+    },
+    {
+      "path": "packages/tools/src/**",
+      "change": "modify"
+    },
+    {
+      "path": "packages/webhooks/src/**",
+      "change": "modify"
+    },
+    {
+      "path": "packages/operations/phpstan*.neon",
+      "change": "modify"
+    },
+    {
+      "path": "packages/tools/phpstan*.neon",
+      "change": "modify"
+    },
+    {
+      "path": "packages/webhooks/phpstan*.neon",
+      "change": "modify"
+    },
+    {
+      "path": "packages/operations/tests/**",
+      "change": "modify"
+    },
+    {
+      "path": "packages/tools/tests/**",
+      "change": "modify"
+    },
+    {
+      "path": "packages/webhooks/tests/**",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/quality-ceilings.json",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/mutations/*.patch",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/mutation-check.sh",
+      "change": "modify"
+    }
+  ],
+  "rules": [
+    "Соблюдать D118/D121/D120, D17/D18/D19/D73/D103/D113; никаких внешних записей.",
+    "Сохранять чужие изменения; source facts пересверяются. PHP84 wrapper обязателен; перед PG — skill db-test-preflight и только *_test.",
+    "Поведение/API/SPI/schema не менять молча ради зелёного tooling; precise decision+CHANGELOG+API/Golden для public delta.",
+    "Каждый новый gate негатив-проверен на temp fixtures; coverage/MSI/quality scopes и пороги не снижать. Если packages/*/src меняется, surviving fixed mutations --all до завершения.",
+    "Self-check + scoped checks; repair owning item. Независимое full-review фазы отдельное P09.8 по действующим требованиям плана.",
+    "Current design session does not execute this item. Admission waits independent different-model design review; owner D122/D123/D124 stay unresolved for dependent release steps."
+  ],
+  "guidance": "Execute only after admission, from required section. Produce real fresh raw outputs; new commands below are owned deliverables, not present-at-design assumptions.",
+  "validation": [
+    {
+      "id": "V3",
+      "cmd": "scripts/php84 vendor/bin/phpstan analyse -c packages/operations/phpstan.neon --memory-limit=2G --no-progress",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "scripts/php84 vendor/bin/phpstan analyse -c packages/tools/phpstan.neon --memory-limit=2G --no-progress",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "scripts/php84 vendor/bin/phpstan analyse -c packages/webhooks/phpstan.neon --memory-limit=2G --no-progress",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "cmd": "scripts/php84 composer --working-dir=packages/operations test -- --exclude-group=pg",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "cmd": "scripts/php84 composer --working-dir=packages/tools test -- --exclude-group=pg",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V11",
+      "cmd": "scripts/php84 composer --working-dir=packages/webhooks test -- --exclude-group=pg",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V14",
+      "cmd": "PGSQL_PORT=5434 scripts/php84 composer --working-dir=packages/operations test -- --group=pg",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V16",
+      "cmd": "PGSQL_PORT=5434 scripts/php84 composer --working-dir=packages/webhooks test -- --group=pg",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "cmd": "scripts/php84 php scripts/quality/release-quality.php --stage=security",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V17",
+      "cmd": "scripts/php84 composer lint:check",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V18",
+      "cmd": "scripts/php84 composer bc-check",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V19",
+      "cmd": "scripts/php84 composer php-api",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V20",
+      "cmd": "scripts/php84 composer schema-gate",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V21",
+      "cmd": "scripts/php84 composer golden",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V22",
+      "cmd": "bash scripts/mutation-check.sh --all",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V30",
+      "cmd": "scripts/php84 php scripts/quality-ceiling-guard.php --tighten",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Empty named package baselines, own zero ceilings and all affected existing SQLite/PG outputs; tools has only SQLite, security stage closes in P09.11"
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "xhigh"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed",
+    "notes": "RAG:— current source facts",
+    "captures": []
+  },
+  "result": null,
+  "updated_at": "2026-10-06T16:12:08Z"
+}

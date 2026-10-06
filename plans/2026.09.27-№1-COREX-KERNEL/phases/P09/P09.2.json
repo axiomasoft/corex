@@ -1,0 +1,176 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P09.2",
+  "title": "Строгий Access без baseline (30), корректные SQLite/PG lanes",
+  "status": "todo",
+  "summary": "Access проходит strict analysis с пустым baseline и ceiling0; tenancy и operations/tools/webhooks имеют отдельные зависимые items.",
+  "why": "Типы authority и состояния tenancy нельзя исправлять фиктивными casts; нужны реальные boundary checks.",
+  "scope": {
+    "include": [
+      "Only packages/access typing/tests and ceiling=0; tenancy/operations/tools/webhooks moved to P09.10/P09.11"
+    ],
+    "exclude": [
+      "Публикация, push/tags/mirrors/Packagist/secrets/trust.",
+      "Незаявленные продуктовые API/schema изменения."
+    ]
+  },
+  "depends_on": [
+    "P09.1"
+  ],
+  "decisions": [
+    "D118",
+    "D120",
+    "D17",
+    "D18",
+    "D19",
+    "D73",
+    "D103",
+    "D113",
+    "D121"
+  ],
+  "reads": [
+    {
+      "ref": "knowledge/research-P09-design#basis",
+      "why": "База/cohort",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#typing",
+      "why": "Алгоритм и runbook",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#checks",
+      "why": "Acceptance/failure/review",
+      "required": true
+    },
+    {
+      "ref": "knowledge/artifacts-P09-design-examples#typing",
+      "why": "Worked examples",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#dod-map",
+      "why": "Current assertion ownership and fresh receipt requirements",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/access/src/**",
+      "change": "modify"
+    },
+    {
+      "path": "packages/access/phpstan*.neon",
+      "change": "modify"
+    },
+    {
+      "path": "packages/access/tests/**",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/quality-ceilings.json",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/mutations/*.patch",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/mutation-check.sh",
+      "change": "modify"
+    }
+  ],
+  "rules": [
+    "Соблюдать D118/D121/D120, D17/D18/D19/D73/D103/D113; никаких внешних записей.",
+    "Сохранять чужие изменения; source facts пересверяются. PHP84 wrapper обязателен; перед PG — skill db-test-preflight и только *_test.",
+    "Поведение/API/SPI/schema не менять молча ради зелёного tooling; precise decision+CHANGELOG+API/Golden для public delta.",
+    "Каждый новый gate негатив-проверен на temp fixtures; coverage/MSI/quality scopes и пороги не снижать. Если packages/*/src меняется, surviving fixed mutations --all до завершения.",
+    "Self-check + scoped checks; repair owning item. Независимое full-review фазы отдельное P09.8 по действующим требованиям плана.",
+    "Current design session does not execute this item. Admission waits independent different-model design review; owner D122/D123/D124 stay unresolved for dependent release steps."
+  ],
+  "guidance": "Выполнить соответствующую секцию досье в context pack. Сначала реальная диагностика из версии/файла, затем узкая правка и affected check. Raw вывод сохранить в artifacts/P09.2-execution; результирующие claims только по фактически запущенным командам. Будущие scripts из Validation создаются этим item или предыдущим, не предположены существующими при дизайне. Own only Access30 baseline corrections; V12 test:pg; V15 is inventory/no-empty-suite control, tools suite belongs P09.11.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "scripts/php84 vendor/bin/phpstan analyse -c packages/access/phpstan.neon --memory-limit=2G --no-progress",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "cmd": "scripts/php84 composer --working-dir=packages/access test -- --exclude-group=pg",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V12",
+      "cmd": "PGSQL_PORT=5434 scripts/php84 composer --working-dir=packages/access test:pg",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V17",
+      "cmd": "scripts/php84 composer lint:check",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V18",
+      "cmd": "scripts/php84 composer bc-check",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V19",
+      "cmd": "scripts/php84 composer php-api",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V20",
+      "cmd": "scripts/php84 composer schema-gate",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V21",
+      "cmd": "scripts/php84 composer golden",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V22",
+      "cmd": "bash scripts/mutation-check.sh --all",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V15",
+      "procedure": "Static pg inventory tools: inspect packages/tools/tests group declarations and phpunit failOnEmptyTestSuite; do not run an empty tools --group=pg suite. P09.11 owns tools SQLite suite.",
+      "expect": "tools pg tests=0 recorded; attempted generated empty PG validation rejected",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Access full source/owned migration paths at PHPStan max/strict/bleedingEdge, empty baseline, zero access ceiling; actual SQLite+PG test:pg outputs"
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "xhigh"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed",
+    "notes": "RAG:— current source facts",
+    "captures": []
+  },
+  "result": null,
+  "updated_at": "2026-10-06T16:15:26Z"
+}

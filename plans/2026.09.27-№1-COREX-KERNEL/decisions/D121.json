@@ -1,0 +1,22 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D121",
+  "title": "P09 correction: rc metadata, real migrations and pending owner policies",
+  "date": "2026-10-06",
+  "status": "accepted",
+  "context": "Verified against scripts/schema-sets.json, scripts/manifest-check.py, composer.lock and JSON review B1/B5/B7. D119 had unsupported owner choices.",
+  "decision": "Supersedes D119. Preserve D19 lockstep and first 1.0.0-rc.1, optional-to-install corex-full (required candidate deliverable). Candidate identities: 21 existing CoreX packages plus full; channel counts and public dependency set remain pending D123. Access has no AzGuard runtime requirement; legacy channel cannot settle its policy. Split implementation remains D19 until owner answers D122; deterministic archive export is local preparation, not approval of an alternative remote mechanism. Include every declared SchemaSet path under database/migrations/, including root, tenant, tenant-cloud and budget from scripts/schema-sets.json. Source internal requirements, including full, remain ^1.0@dev; exporter writes exact =1.0.0-rc.1 dependencies. No source version. Before candidate build P09.6 changes access-azguard extra.corex.stability from unreleased to stable and removes manifest UNRELEASED exception; this is BC enforcement metadata, not a declaration that the rc version is Composer-stable or that its channel is public. D17 blocking BC applies to every rc library including the bridge; full receives dependency/manifest compatibility checks and no vacuous PHP Roave pass. Public roots keep minimum-stability=stable with explicit root @RC allowance on each reachable internal rc package; no minimum-stability=dev workaround. Rector/Pint exclude all packages/products database/migrations trees while PHPStan includes owned directories. Publication remains separate owner grant. No split, access channel or hosted credentials authorization is inferred.",
+  "rationale": "Resolve executable technical contradictions without exercising reserved owner decisions. Optional consumption differs from required export of the optional metapackage.",
+  "applies_to": [
+    "P09"
+  ],
+  "supersedes": [
+    "D119"
+  ],
+  "actor": {
+    "provider": "codex",
+    "model": "gpt-6.1-sol",
+    "effort": "high"
+  },
+  "answered_by": "agent"
+}

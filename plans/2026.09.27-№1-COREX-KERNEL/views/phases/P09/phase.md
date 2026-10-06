@@ -5,39 +5,250 @@ Source: [JSON](../../../phases/P09/phase.json). This view is for people; agents 
 
 ## Design
 
-skeleton
+detailed
 
 ## Goal
 
-> СКЕЛЕТ — не детализирован, разворачивается `design-phase: task:plan-design 2026.09.27-№1-COREX-KERNEL P09`
-
-Доводит код до D17 (PHPStan max + strict + bleedingEdge с пустым baseline, Rector, mutation MSI по зонам, Roave per package блокирующий, unused-public), финализирует docs (README каждого пакета, docs-public, upgrade-free release notes), настраивает split (`danharrin/monorepo-split-github-action`) и lockstep, metapackage, SBOM; квалифицирует `1.0.0-rc.1`. Публикация — owner-gate.
-
-> **Контракт фазы (предварительный).** Потребляет: D17, D18, D19. Скоуп — ниже; детализация, досье, примеры и маршруты — при дизайне фазы.
-
-> Phase Assurance: release; live action only under owner-gate.
+Полный D17 без baseline и измеряемый MSI95/90/75; current standalone distributable lockstep1.0.0-rc.1 квалифицирован по D18/D19, docs/SBOM/current candidate evidence готовы. Публикация отдельным owner grant после reviewable packet.
 
 ## Context
 
-> СКЕЛЕТ — не детализирован, разворачивается `design-phase: task:plan-design 2026.09.27-№1-COREX-KERNEL P09`
+Дизайн по явному вызову владельца `$ task:plan-design 2026.09.27-№1-COREX-KERNEL P09`, source 3b46c9a10b1c7a574336a0b49530ea70ce03c05a. P08.10 blocked: два P2 замечания к S6 и PG Golden; P08 не закрыта. JSON/runtime layout v4 уже принят текущим деревом; stale projection с plan-work.py неприменима.
 
-Доводит код до D17 (PHPStan max + strict + bleedingEdge с пустым baseline, Rector, mutation MSI по зонам, Roave per package блокирующий, unused-public), финализирует docs (README каждого пакета, docs-public, upgrade-free release notes), настраивает split (`danharrin/monorepo-split-github-action`) и lockstep, metapackage, SBOM; квалифицирует `1.0.0-rc.1`. Публикация — owner-gate.
+Решения D118/D120/D121 (D119 superseded); runbook knowledge/research-P09-design; exact source facts/read captures attached. Execution strictly waits P08.10 satisfied and P08 final hosted close. Новые commands validation являются deliverables, не запускались при дизайне. JSON API current supersedes old runtime commands for this phase.
+Corrected through JSON review B1–B7/S8–S14. D121 supersedes D119; owner-question D122/D123/D124 remain OPEN. Execution not admitted: needs fresh different-model independent read-only design review, P08 hosted closure and downstream exact owner/external gates.
 
-> **Контракт фазы (предварительный).** Потребляет: D17, D18, D19. Скоуп — ниже; детализация, досье, примеры и маршруты — при дизайне фазы.
+## Contract
 
-> Phase Assurance: release; live action only under owner-gate.
+```json
+{
+  "consumes": [
+    "D17/D18/D19/D73/D103/D113",
+    "D118/D120/D121",
+    "P08 closed schema/UUIDv7 + P07 tenancy + P10 CI",
+    "Accepted owner D122/D123/D124 before affected release steps"
+  ],
+  "produces": [
+    "Strict zero-debt quality; full-source valid MSI; current reproducible rc + docs/consumer/SBOM/DoD evidence; exact publication operator packet"
+  ],
+  "boundaries": [
+    "This design session: no execution/product/P08/remote/memory writes",
+    "P09.17 external hosted boundary requires exact owner-operated branch push/dispatch precondition; no tags or split publication",
+    "No threshold/gate scope/BC rebase weakened; owner choices remain questions"
+  ]
+}
+```
+
+## Scope
+
+```json
+{
+  "include": [
+    "PHPStan all root/package/product contours, Rector/Pint/quality AST/unused-public/dependency analyser",
+    "Mutation95/90/75, per-package Roave/API/schema compatibility",
+    "22 rc identities, current profiles, docs, SBOM and qualified-candidate operator packet",
+    "Independent final full-review under standing plan policy; hosted final CI D73"
+  ],
+  "exclude": [
+    "Publication, mirrors/repo creation/tags/Packagist/secrets/trust and all agent remote writes in this design session",
+    "Future hosted branch push/dispatch only owner-operated P09.17 external precondition, excluded from routine implementation authority",
+    "P08 finding repair or unrelated product change"
+  ]
+}
+```
 
 ## Depends on
 
-- P00
+- P08
+- P10
+
+## Pitfalls
+
+- P08.10 blocked; first P09 dependency explicit.
+- baseline counts are facts, not fresh PHPStan run; fixed mutations not MSI.
+- Legacy distribution prefix/tombstone/schema/1.0.0-only/receipts cannot certify rc.
+- Private AzGuard closure cannot be silently dropped.
+- No current hosted/Packagist/publication proof asserted.
+
+## Deliverables
+
+- Knowledge dossier/examples/RAG + raw captures/facts
+- 17 bounded design contracts and ordered recommended solo batches; no execution result claimed
+- Qualified rc/evidence/independent verdict at execution only
+
+## Assurance
+
+```json
+{
+  "impact": "public release/API/schema and security metric integrity",
+  "seams": [
+    "Per-package toolchain ↔ aggregate CI",
+    "Committed source ↔ sealed archive ↔ pristine consumer",
+    "Source-bound evidence ↔ hosted runner ↔ later exact owner grant"
+  ],
+  "live": true,
+  "note": "Live boundary is hosted evidence, publication is future separate authority. No automatic writes."
+}
+```
+
+## Supporting
+
+- @plan/knowledge/research-P09-design.json
+- @plan/knowledge/artifacts-P09-design-examples.json
+- @plan/knowledge/research-P09-design-rag.json
+- @plan/artifacts/P09-design/facts.json
+- @plan/artifacts/P09-design-rag/README.md
+- @plan/knowledge/artifacts-P09-design-review.json
+- @plan/knowledge/artifacts-P09-design-review-repair-completion.json
+- @plan/knowledge/artifacts-P09-grok47-design-review.json
+- @plan/knowledge/artifacts-P09-grok47-design-recheck.json
+- @plan/knowledge/artifacts-P09-grok47-review-repair-completion.json
 
 ## Items
 
-
+- P09.1
+- P09.2
+- P09.10
+- P09.11
+- P09.3
+- P09.4
+- P09.9
+- P09.5
+- P09.12
+- P09.13
+- P09.14
+- P09.15
+- P09.6
+- P09.16
+- P09.7
+- P09.17
+- P09.8
 
 ## Batches
 
-
+```json
+[
+  {
+    "id": "B09-1",
+    "items": [
+      "P09.1"
+    ],
+    "mode": "recommended"
+  },
+  {
+    "id": "B09-2",
+    "items": [
+      "P09.2"
+    ],
+    "mode": "recommended"
+  },
+  {
+    "id": "B09-3",
+    "items": [
+      "P09.10"
+    ],
+    "mode": "recommended"
+  },
+  {
+    "id": "B09-4",
+    "items": [
+      "P09.11"
+    ],
+    "mode": "recommended"
+  },
+  {
+    "id": "B09-5",
+    "items": [
+      "P09.3"
+    ],
+    "mode": "recommended"
+  },
+  {
+    "id": "B09-6",
+    "items": [
+      "P09.4"
+    ],
+    "mode": "recommended"
+  },
+  {
+    "id": "B09-7",
+    "items": [
+      "P09.9"
+    ],
+    "mode": "recommended"
+  },
+  {
+    "id": "B09-8",
+    "items": [
+      "P09.5"
+    ],
+    "mode": "recommended"
+  },
+  {
+    "id": "B09-9",
+    "items": [
+      "P09.12"
+    ],
+    "mode": "recommended"
+  },
+  {
+    "id": "B09-10",
+    "items": [
+      "P09.13"
+    ],
+    "mode": "recommended"
+  },
+  {
+    "id": "B09-11",
+    "items": [
+      "P09.14"
+    ],
+    "mode": "recommended"
+  },
+  {
+    "id": "B09-12",
+    "items": [
+      "P09.15"
+    ],
+    "mode": "recommended"
+  },
+  {
+    "id": "B09-13",
+    "items": [
+      "P09.6"
+    ],
+    "mode": "recommended"
+  },
+  {
+    "id": "B09-14",
+    "items": [
+      "P09.16"
+    ],
+    "mode": "recommended"
+  },
+  {
+    "id": "B09-15",
+    "items": [
+      "P09.7"
+    ],
+    "mode": "recommended"
+  },
+  {
+    "id": "B09-16",
+    "items": [
+      "P09.17"
+    ],
+    "mode": "recommended"
+  },
+  {
+    "id": "B09-17",
+    "items": [
+      "P09.8"
+    ],
+    "mode": "recommended"
+  }
+]
+```
 
 ## Orchestration
 
@@ -47,37 +258,18 @@ skeleton
 }
 ```
 
-## P09 — Планка качества и release-квалификация `1.0.0-rc.1`
+## Routing and dependencies
 
-> **Статус дизайна:** skeleton (D21); items детализируются `task:plan-design 2026.09.27-№1-COREX-KERNEL P09` после закрытия предыдущей фазы, по фактическому коду.
+P09.1 → P09.2 → P09.10 → P09.11 → P09.3 → P09.4 → P09.9 → P09.5 → P09.12 → P09.13 → P09.14 → P09.15 → P09.6 → P09.16 → P09.7 → P09.17 → P09.8. Workflow/packet builder P09.16 before final freeze P09.7; concrete packet before external P09.17 hosted owner action. P09.1 owner-backed prior-phase/design gate; P09.6 waits D122/D123; P09.17 owner_gate waits D124 and exact operator precondition. No admission authorized here.
 
-## Phase Context
+## OPEN OWNER QUESTIONS / STOP
 
-> СКЕЛЕТ — не детализирован, разворачивается `design-phase: task:plan-design 2026.09.27-№1-COREX-KERNEL P09`
+D122: D19 split mechanism amendment; no automatic supersede until owner answer. D123: native Access and bridge channels/full-public composition. D124: approved hosted pinned AzGuard input. These are real unresolved gates, not choices delegated to executor. P09 design verdict remains awaiting independent read-only different-model review.
 
-Доводит код до D17 (PHPStan max + strict + bleedingEdge с пустым baseline, Rector, mutation MSI по зонам, Roave per package блокирующий, unused-public), финализирует docs (README каждого пакета, docs-public, upgrade-free release notes), настраивает split (`danharrin/monorepo-split-github-action`) и lockstep, metapackage, SBOM; квалифицирует `1.0.0-rc.1`. Публикация — owner-gate.
+## Design correction self-check
 
-> **Контракт фазы (предварительный).** Потребляет: D17, D18, D19. Скоуп — ниже; детализация, досье, примеры и маршруты — при дизайне фазы.
+B1–B7/S8–S14 amendments are in canonical dossier/examples/items/decisions. Facts are source-bound, all assertion producers have owners; new CLI actual smoke before qualification. Tool compatibility and hosted digest reproduction still require execution receipts. plan.py check/render consistency is not a GREEN design review. No P08 repair or product test suite executed.
 
-> Phase Assurance: release; live action only under owner-gate.
+## Independent Grok review and correction state
 
-## Scope Included (planned)
-
-quality gates strict; docs; split/release workflow (dry-run); release notes; owner-gate публикации.
-
-## Scope Excluded
-
-Публикация без owner-gate.
-
-## Dependencies
-
-Предыдущая фаза закрыта; glossary/карты P00.
-
-## Items
-
-| ID | Title | Status | Updated |
-|:--|:--|:--|:--|
-
-## Phase Handoff
-
-—
+Observed requested grok/grok-4.7 / actual CLI selector grok-4.7, server usage alias grok-4.7-build. First verdict NEEDS CHANGES G1–G6, author corrections recorded in dossier/items; bounded fresh read-only recheck completed: design-consistent / OWNER-WAIT, G1–G6 closed-in-design, no new RG. Machine kinds: owner_gate P09-DESIGN-P08/P09-RELEASE-POLICY/P09-HOSTED, no unstartable external_gate or routine hosted residue. No gates granted and all items todo. D122–D124 remain OPEN owner questions.

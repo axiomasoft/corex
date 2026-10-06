@@ -1,0 +1,144 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P09.12",
+  "title": "MSI security: тесты каждого package-fragment ≥95%",
+  "status": "todo",
+  "summary": "MSI security: тесты каждого package-fragment ≥95%",
+  "why": "Bounded owner of verified P09 review defect; explicit acceptance and dependencies prevent hidden work.",
+  "scope": {
+    "include": [
+      "MSI security: тесты каждого package-fragment ≥95%"
+    ],
+    "exclude": [
+      "Remote writes/publication unless exact separate external gate supplied; no unrelated P08/product behavior change."
+    ]
+  },
+  "depends_on": [
+    "P09.5"
+  ],
+  "decisions": [
+    "D118",
+    "D120",
+    "D17",
+    "D18",
+    "D19",
+    "D73",
+    "D103",
+    "D113",
+    "D121"
+  ],
+  "reads": [
+    {
+      "ref": "knowledge/research-P09-design#basis",
+      "why": "Canonical verified runbook",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#mutation",
+      "why": "Canonical verified runbook",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#checks",
+      "why": "Canonical verified runbook",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#grok-repair",
+      "why": "Verified G1–G6 corrections and executable runtime boundary",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/*/tests/**",
+      "change": "modify"
+    },
+    {
+      "path": "tests/**",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/quality/mutation-equivalents.json",
+      "change": "any",
+      "note": "Created by predecessor item; then amended here."
+    },
+    {
+      "path": "scripts/quality/mutation-zero-ledger.json",
+      "change": "any",
+      "note": "Created by predecessor item; then amended here."
+    },
+    {
+      "path": "scripts/quality/tests/fixtures/**",
+      "change": "modify"
+    }
+  ],
+  "rules": [
+    "Соблюдать D118/D121/D120, D17/D18/D19/D73/D103/D113; никаких внешних записей.",
+    "Сохранять чужие изменения; source facts пересверяются. PHP84 wrapper обязателен; перед PG — skill db-test-preflight и только *_test.",
+    "Поведение/API/SPI/schema не менять молча ради зелёного tooling; precise decision+CHANGELOG+API/Golden для public delta.",
+    "Каждый новый gate негатив-проверен на temp fixtures; coverage/MSI/quality scopes и пороги не снижать. Если packages/*/src меняется, surviving fixed mutations --all до завершения.",
+    "Self-check + scoped checks; repair owning item. Независимое full-review фазы отдельное P09.8 по действующим требованиям плана.",
+    "Current design session does not execute this item. Admission waits independent different-model design review; owner D122/D123/D124 stay unresolved for dependent release steps."
+  ],
+  "guidance": "Execute only after admission, from required section. Produce real fresh raw outputs; new commands below are owned deliverables, not present-at-design assumptions.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "PGSQL_PORT=5434 scripts/php84 python3 scripts/quality/mutation.py --zone security",
+      "expect": "exit0 every security behavioral package-fragment ≥95%, positive valid mutants, fresh SQLite/required PG hashes; AST declaration ledger reviewed separately",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "scripts/php84 composer lint:check",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "scripts/php84 composer analyse",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "bash scripts/mutation-check.sh --all",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "python3 scripts/quality/mutation.py --check-ledgers",
+      "expect": "exit0 per-fragment/global equivalents≤5%, exact reproduced exclusions, unchanged hashes",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "procedure": "Inspect raw core×security fragment source manifest for all current Data authz/Modules/Internal/Gate paths, confirm actual fragment MSI ≥95%; missing file/downgraded mapping refuses receipt.",
+      "expect": "Security receipt covers named real authz code, not empty Modules/Gate or aggregate masking",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "security fresh fragment receipts/survivor regressions; two4h rounds limit then honest BLOCKED; no source/mutator/threshold narrowing"
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "xhigh"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed",
+    "notes": "RAG:— current source facts",
+    "captures": []
+  },
+  "result": null,
+  "updated_at": "2026-10-06T16:43:21Z"
+}

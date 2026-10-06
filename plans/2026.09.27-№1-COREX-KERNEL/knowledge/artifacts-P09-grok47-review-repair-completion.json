@@ -1,0 +1,40 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:document:v1",
+  "id": "artifacts-P09-grok47-review-repair-completion",
+  "title": "P09 Grok review implemented in design — G1–G6 closed-in-design, OWNER-WAIT",
+  "sections": [
+    {
+      "id": "result",
+      "title": "Outcome",
+      "text": "Owner requested grok/grok-4.7 sub-agent and execution of its report. Native Codex sub-agent model pool does not contain Grok; launched an independent Grok CLI session with exact --model grok-4.7 --reasoning-effort high --permission-mode plan and read tool allowlist, fresh context without author conversation. First report NEEDS CHANGES G1–G6; verified each against real code, amended ONLY P09 design via plan.py. Fresh bounded Grok recheck concluded design-consistent / OWNER-WAIT, G1–G6 closed-in-design, no RG. Both process init selectors grok-4.7; parent observed server usage alias grok-4.7-build (recorded separately, not substituted model claim). Both reviewers used only read_file/list_dir/grep and all tracked/nonignored file hashes unchanged. No unconditional GREEN/admission."
+    },
+    {
+      "id": "trace",
+      "title": "G1–G6 verification and correction",
+      "text": "| Finding | Independent parent verification | Canonical design correction | Grok bounded recheck |\n|---|---|---|---|\n| G1 | Confirmed: Task lifecycle.py:118–125 unconditionally waits external_gate; :527–538 and :852–866 accept only owner_gate grants. Tests engine/test_lifecycle.py:214–236 cover both cases, read only. | P09.1/P09.17 authority owner_gate with existing readiness/hosted ids; scopes require actual proofs/owner scope, no grants recorded. | closed-in-design |\n| G2 | Confirmed: prior P09.6 routine and P09.16 routine with leftover hosted gate were ignored by _gate_wait. D122/D123 open and D19 accepted. | P09.6/P09.16 owner_gate P09-RELEASE-POLICY; full closure/accepted choices/effective D19 checks, no stale P09-HOSTED on local16; D124 remains17. | closed-in-design |\n| G3 | Confirmed: actual implementations under Modules/Internal/Gate; Modules/Gate empty. Data contracts/adapters implement data-scope authz outside earlier security map. | Explicit real activation+all Data security95 before other, anchor inventory/negative downgrades in P09.5 V11/P09.12 V6; MSI/5% cap unchanged. | closed-in-design |\n| G4 | Confirmed: original facts.py includes current HEAD plus hashes of files P09.1 modifies; lifecycle requires all acceptance exits0. Direct after-work equality cannot hold. | Immutable historical facts, separate exact closed-P08 rebase, frozen pre/write-set and post scope guard. P09.1 owns facts-guard.py/tests, V2 sealed-pre verification, V19 post, V18/V20 negatives; own edits no longer require overwriting design facts. | closed-in-design |\n| G5 | Partly confirmed: aggregate test:pg is insufficient acceptance, resume not explicit. Reviewer lexical claim overstated absence: SqlTransferExecutorTest:76 applied=1/refs1 already proves dedup; :142–145 invalid1/applied1/refs1 already proves partial rollback. No product test run. | Preserve two existing semantic cases; only new persisted-checkpoint/new-executor resume planned. P09.13 V6–V9 exact3 filtered nonempty/assertive/no-skips JUnit; P09.15 collector --only DOD-12 checks every case instead of aggregate exit0. | closed-in-design (rechecked with corrected factual premise) |\n| G6 | Confirmed: original ResidentLifecycleTest is a modeled scoped reset; no current actual Octane consumer handler proof; DOD08 still asserts Octane/request/queue. | Preserve assertion. P09.15 owns real Octane Worker harness/CLI/strict required execution receipt; source prototype vs P09.6 archive smoke vs P09.7 final actual proof separated. Missing/model-only/skipped handler RED; all auxiliary locks audited. Official sources inspected, compatibility solve/run still unverified. | closed-in-design |"
+    },
+    {
+      "id": "review-links",
+      "title": "Durable independent reports",
+      "text": "Initial report: knowledge/artifacts-P09-grok47-design-review.json, session01a11208-9782-74c0-a6ef-d14bc9ae622b, verbatim final only. Bounded recheck: knowledge/artifacts-P09-grok47-design-recheck.json, session01a1121c-52b3-71a3-b92c-a7c1c9dd956e, verbatim final only. No hidden reasoning/transcript copied into plan. Original B1–B7/S8–S14 review JSON preserved. This is design correction/recheck, not product execution, lifecycle review P09.8 or completed implementation proof."
+    },
+    {
+      "id": "checks",
+      "title": "Validation and scope",
+      "text": "After design corrections plan.py check PLAN3: exit0, 0 errors / 1 unchanged P08.3 modify_missing warning. plan.py render PLAN3 --check: exit0. Final check/render/diff repeated after saving these documents. All17 P09 items remain todo, no grant/decide/start/finish/design-done. Next waits blocked P08.10. Tracked non-plan files and original raw facts/captures unchanged; only canonical P09 specs/knowledge and their tool-generated views/journal changed. No P08/product fixes, product test/DB/Composer execution, publish, push, dispatch, secret/trust change or memory write."
+    },
+    {
+      "id": "owner-question",
+      "title": "Remaining owner wait",
+      "text": "D122 split: approve D19 amendment to deterministic sealed exporter/exact-publish or retain action with approved exact-output proof; formal D19 supersede only after answer. D123 native Access/bridge channels and consequent public full closure. D124 approved hosted pinned AzGuard delivery/read path. Questions remain OPEN. P09.6/16 held by P09-RELEASE-POLICY; P09.17 held by P09-HOSTED. P09.1 additionally waits predecessor P08 closure and future owner-backed readiness scope; this design request grants no execution. No new user permission is requested for the completed reversible design corrections."
+    },
+    {
+      "id": "limits",
+      "title": "Future implementation evidence",
+      "text": "All new CLI/gates/tests are planned owners/deliverables, not implementation added here. Actual Infection/Pest/PHPUnit spike, MSI scores/negative controls, Octane solve and real handler matrix, Transfer resume regression, Composer stable-root rc closure/audits, hosted byte reproducibility and receipts remain future acceptance. RAG official Octane Worker/2.x manifest inspected to ground actual-handler harness; source links in dossier are source feasibility, not installed-version or tested compatibility proof."
+    }
+  ],
+  "applies_to": [
+    "P09"
+  ]
+}
