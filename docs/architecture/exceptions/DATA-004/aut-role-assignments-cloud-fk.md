@@ -3,7 +3,7 @@
 **Нарушаемая статья.** DATA-004
 
 **Затронутые пути.**
-`packages/access/database/migrations/tenant-cloud/2026_07_26_200004_add_aut_cross_package_fks.php`;
+`packages/access/database/migrations/tenant-cloud/2026_10_01_030050_add_aut_role_assignments_cloud_fks.php`;
 столбцы `aut_role_assignments.workspace_id → wsp_workspaces.id`,
 `aut_role_assignments.granted_by → users.id`.
 

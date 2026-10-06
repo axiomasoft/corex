@@ -9,12 +9,10 @@ use CoreX\Database\Contracts\SchemaSets;
 use CoreX\Operations\Laravel\ApiSchemaRegistrar;
 use CoreX\Operations\Tests\TestCase;
 use Illuminate\Database\Connection;
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
-use LogicException;
 use PHPUnit\Framework\Attributes\Group;
 
 final class LoadSchemaTest extends TestCase
@@ -194,18 +192,18 @@ final class LoadSchemaTest extends TestCase
         ]);
     }
 
-    /** @return array{Migration, Migration, Migration} */
+    /** @return array{string, string, string} */
     private function migrateAll(bool $includeBudget = true): array
     {
-        $budget = require app(SchemaSets::class)->get('axiomasoft/corex-operations:budget')->path.'/create_sys_api_budget_tables.php';
-        $bulk = require app(SchemaSets::class)->get('axiomasoft/corex-operations:tenant')->path.'/create_sys_api_bulk_operations_table.php';
-        $webhook = require app(SchemaSets::class)->get('axiomasoft/corex-webhooks:tenant')->path.'/create_sys_api_webhook_tables.php';
+        $budget = 'axiomasoft/corex-operations:budget';
+        $bulk = 'axiomasoft/corex-operations:tenant';
+        $webhook = 'axiomasoft/corex-webhooks:tenant';
 
         if ($includeBudget) {
-            app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:budget']);
+            $this->migrateSchemaSets(['axiomasoft/corex-operations:budget']);
         }
-        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
-        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
 
         return [$budget, $bulk, $webhook];
     }
@@ -236,14 +234,14 @@ final class LoadSchemaTest extends TestCase
             ['id', 'keys', 'estimate', 'charged', 'recipe_hash', 'state', 'created_at', 'expires_at'],
             $budget->getSchemaBuilder()->getColumnListing('sys_api_budget_reservations'),
         );
-        self::assertContains('sys_api_budget_reservations_retention_idx', array_column($budget->getSchemaBuilder()->getIndexes('sys_api_budget_reservations'), 'name'));
-        self::assertContains('sys_api_bulk_operations_submission_unique', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_bulk_operations'), 'name'));
-        self::assertContains('sys_api_bulk_operations_claim_idx', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_bulk_operations'), 'name'));
-        self::assertContains('sys_api_webhook_subscriptions_lookup_idx', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_webhook_subscriptions'), 'name'));
-        self::assertContains('sys_api_webhook_deliveries_event_unique', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_webhook_deliveries'), 'name'));
-        self::assertContains('sys_api_webhook_deliveries_claim_idx', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_webhook_deliveries'), 'name'));
-        self::assertContains('sys_api_webhook_attempts_number_unique', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_webhook_attempts'), 'name'));
-        self::assertContains('sys_api_webhook_attempts_delivery_idx', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_webhook_attempts'), 'name'));
+        self::assertContains('sys_api_budget_reservations_retention_ix', array_column($budget->getSchemaBuilder()->getIndexes('sys_api_budget_reservations'), 'name'));
+        self::assertContains('sys_api_bulk_operations_submission_uq', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_bulk_operations'), 'name'));
+        self::assertContains('sys_api_bulk_operations_claim_ix', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_bulk_operations'), 'name'));
+        self::assertContains('sys_api_webhook_subscriptions_lookup_ix', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_webhook_subscriptions'), 'name'));
+        self::assertContains('sys_api_webhook_deliveries_event_uq', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_webhook_deliveries'), 'name'));
+        self::assertContains('sys_api_webhook_deliveries_claim_ix', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_webhook_deliveries'), 'name'));
+        self::assertContains('sys_api_webhook_attempts_number_uq', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_webhook_attempts'), 'name'));
+        self::assertContains('sys_api_webhook_attempts_delivery_ix', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_webhook_attempts'), 'name'));
     }
 
     private function assertNegativeFixtures(Connection $budget, Connection $tenant): void
@@ -303,16 +301,12 @@ final class LoadSchemaTest extends TestCase
         ]);
     }
 
-    private function runDown(Migration $migration): void
+    private function runDown(string $id): void
     {
-        if (! is_callable([$migration, 'down'])) {
-            throw new LogicException('API schema migration must provide down().');
-        }
-
-        call_user_func([$migration, 'down']);
+        $set = app(SchemaSets::class)->get($id);
+        $this->rollbackSchemaSet($id, $set->connection ?? app(ApiSchemaRegistrar::class)->tenant()->getName());
     }
 
-    /** @param callable(): mixed $operation */
     private function expectQueryFailure(callable $operation): void
     {
         try {

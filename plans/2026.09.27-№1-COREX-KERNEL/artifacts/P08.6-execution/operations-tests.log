@@ -1,0 +1,280 @@
+> pest
+
+   PASS  CoreX\Operations\Tests\Feature\ApiRetentionTest
+  ✓ retention windows reject unsafe configuration                        0.11s
+  ✓ clock clears owned bulk results then tombstones and keeps active ro… 0.02s
+  ✓ bulk prune is limited to one hundred rows                            0.05s
+  ✓ reservation expiry never refunds and held reservation keeps buckets  0.03s
+  ✓ command prunes only the restored scope and rejects an unbounded bat… 0.06s
+  ✓ postgresql retention uses isolated schemas                           0.13s
+
+   PASS  CoreX\Operations\Tests\Feature\ApiRoutesTest
+  ✓ route list is exact and boot is idempotent                           0.02s
+  ✓ root discovery exposes code profile only                             0.03s
+  ✓ capabilities follow activation and ignore forged payload             0.02s
+  ✓ async sets location and deprecation headers are exact                0.03s
+  ✓ disabled routes register none                                        0.02s
+
+   PASS  CoreX\Operations\Tests\Feature\AuthorizationLayersTest
+  ✓ resource ids round trip all supported formats and reject mismatch    0.02s
+  ✓ default client scope policy allows only unscoped operations          0.01s
+  ✓ replay rechecks scope actor and read fields without invoking handle… 0.01s
+  ✓ idempotent authorization denials leave no terminal store row         0.02s
+
+   PASS  CoreX\Operations\Tests\Feature\BulkApiTest
+  ✓ submit is accepted once and poll cancel cover the status matrix      0.03s
+  ✓ result matrix is not ready then sealed then expired and partial fai… 0.02s
+
+   PASS  CoreX\Operations\Tests\Feature\BulkResultAccessTest
+  ✓ foreign caller and revoked field access do not read the result       0.02s
+  ✓ failure cursor rejects limits above 100                              0.02s
+
+   PASS  CoreX\Operations\Tests\Feature\BulkStoreTest
+  ✓ same submission returns one operation and pending polling needs no…  0.02s
+  ✓ state transition matrix and cancel completion fence                  0.03s
+  ✓ expired lease takeover and stale revision are rejected               0.02s
+  ✓ wrong active connection and unsafe input references fail closed      0.02s
+  ✓ postgresql concurrent submission and cancel completion race          0.20s
+
+   PASS  CoreX\Operations\Tests\Feature\BulkTransferTest
+  ✓ missing factory and package fail before submit                       0.02s
+  ✓ import resume does not repeat sink effects around checkpoint crashe… 0.02s
+  ✓ repeat create returns the current token and export rotates an unsea… 0.02s
+  ✓ stamp drift fails before the next batch and observers cannot change… 0.02s
+
+   PASS  CoreX\Operations\Tests\Feature\ContractSnapshotTest
+  ✓ generation is byte stable and check detects drift                    0.06s
+
+   PASS  CoreX\Operations\Tests\Feature\CostInvocationTest
+  ✓ budget denial rolls back unstarted idempotency and replay charges b… 0.02s
+  ✓ post admission unknown keeps estimate and store failure is not rate… 0.02s
+  ✓ http rate limit keeps retry after and store failure has no retry he… 0.02s
+
+   PASS  CoreX\Operations\Tests\Feature\ErrorRepresentationTest
+  ✓ every category preserves machine fields and registry identity        0.01s
+  ✓ every registered problem can be serialized                           0.02s
+  ✓ human message change leaves the machine fixture unchanged            0.01s
+  ✓ accept always receives problem json with data set #0                 0.03s
+  ✓ accept always receives problem json with data set #1                 0.01s
+  ✓ accept always receives problem json with data set #2                 0.01s
+  ✓ accept always receives problem json with data set #3                 0.01s
+  ✓ accept always receives problem json with data set #4                 0.01s
+  ✓ accept always receives problem json with data set #5                 0.01s
+  ✓ retry after requires a named bounded policy                          0.01s
+  ✓ unknown exception stays a safe internal error                        0.01s
+
+   PASS  CoreX\Operations\Tests\Feature\IdempotencyStoreTest
+  ✓ fresh attempt completes and replays canonical outcome without stori… 0.02s
+  ✓ conflict contract mismatch takeover fence and retention matrix       0.02s
+  ✓ effect and terminal outcome roll back together before retry          0.02s
+  ✓ mutations require the active tenant connection and transaction       0.02s
+  ✓ migration has exact columns unique key and scoped rollback           0.02s
+  ✓ provider binds store and registers a tenant schema                   0.02s
+  ✓ two postgresql connections racing on one key yield one owner         0.35s
+
+   PASS  CoreX\Operations\Tests\Feature\IdempotentInvocationTest
+  ✓ same key replays across transports and rechecks current authority    0.02s
+  ✓ required forbidden conflict in progress and contract mismatch skip…  0.02s
+  ✓ auth validation and mapped internal failures have distinct persiste… 0.02s
+  ✓ terminal store failure rolls back effect and retry commits once      0.02s
+  ✓ ambiguous commit requires reconciliation without second effect       0.02s
+
+   PASS  CoreX\Operations\Tests\Feature\InputEnvelopeTest
+  ✓ input envelope and strictness with data set "query"                  0.02s
+  ✓ input envelope and strictness with data set "strict query"           0.01s
+  ✓ input envelope and strictness with data set "media type"             0.01s
+  ✓ input envelope and strictness with data set "query before media typ… 0.01s
+  ✓ input envelope and strictness with data set "query with body"        0.01s
+  ✓ input envelope and strictness with data set "array"                  0.02s
+  ✓ input envelope and strictness with data set "malformed"              0.01s
+  ✓ input envelope and strictness with data set "scalar"                 0.02s
+  ✓ input envelope and strictness with data set "strict body"            0.01s
+  ✓ input envelope and strictness with data set "object"                 0.02s
+  ✓ input envelope and strictness with data set "field validation"       0.02s
+
+   PASS  CoreX\Operations\Tests\Feature\LoadContourBootTest
+  ✓ public surface keeps transfer optional on laravel 12 or 13           0.03s
+  ✓ boot keeps cost and bulk transfer disabled                           0.01s
+  ✓ missing transfer package fails before submit and installed ports ar… 0.02s
+
+   FAIL  CoreX\Operations\Tests\Feature\LoadSchemaTest
+  ✓ schema registration is inert and requires explicit identity          0.01s
+  ⨯ sqlite schemas constraints isolation and rollback                    0.02s
+  ⨯ postgresql schema and constraints                                    0.17s
+
+   PASS  CoreX\Operations\Tests\Feature\OperationBudgetTest
+  ✓ reserve debits four hmac buckets without persisting scope identifie… 0.02s
+  ✓ default global enforcement observes lower scope debt                 0.02s
+  ✓ enforced deficit rolls back every bucket debit and reservation       0.02s
+  ✓ settlement refunds once and conflicting terminal outcome cannot ref… 0.02s
+  ✓ reject refunds once and actual overrun becomes debt                  0.02s
+  ✓ expired and missing reservations never refund                        0.02s
+  ✓ scope isolation refill and clock rollback are deterministic          0.02s
+  ✓ postgresql concurrent reserve admits only available global capacity  0.16s
+
+   PASS  CoreX\Operations\Tests\Feature\OperationErrorBoundaryTest
+  ✓ problem wire snapshot has registry identity and no envelope          0.02s
+  ✓ four argument api error still describes itself                       0.01s
+  ✓ explicit api error keeps its status                                  0.01s
+  ✓ described error maps every category to its default status            0.01s
+  ✓ unknown exception reports once and leaks nothing                     0.01s
+  ✓ a broken descriptor producer maps to the safe internal error         0.01s
+  ✓ framework fallbacks stay safe and gain a category                    0.01s
+  ✓ boundary preserves valid correlation internally without wire change  0.01s
+
+   PASS  CoreX\Operations\Tests\Feature\OperationParityTest
+  ✓ denied activation and authorization skip the handler                 0.02s
+  ✓ throwing handler restores request context                            0.01s
+
+   PASS  CoreX\Operations\Tests\Feature\PlatformTest
+  ✓ default authentication and authorization deny                        0.02s
+  ✓ explicit mutation receives trusted context and envelope              0.01s
+  ✓ unknown routes methods versions and metadata are not executable      0.02s
+  ✓ missing boxed and disabled contexts fail closed                      0.02s
+  ✓ boxed profile requires explicit configuration                        0.01s
+  ✓ context and module state are read on every dispatch                  0.01s
+  ✓ malformed or forged input is rejected with data set #0               0.01s
+  ✓ malformed or forged input is rejected with data set #1               0.01s
+  ✓ malformed or forged input is rejected with data set #2               0.01s
+  ✓ malformed or forged input is rejected with data set #3               0.01s
+  ✓ malformed or forged input is rejected with data set #4               0.01s
+  ✓ malformed or forged input is rejected with data set #5               0.02s
+  ✓ malformed or forged input is rejected with data set #6               0.01s
+  ✓ malformed or forged input is rejected with data set #7               0.01s
+  ✓ handler errors have stable status and no infrastructure details wit… 0.02s
+  ✓ handler errors have stable status and no infrastructure details wit… 0.02s
+  ✓ handler errors have stable status and no infrastructure details wit… 0.02s
+  ✓ handler errors have stable status and no infrastructure details wit… 0.02s
+  ✓ handler errors have stable status and no infrastructure details wit… 0.02s
+  ✓ handler errors have stable status and no infrastructure details wit… 0.02s
+  ✓ handler errors have stable status and no infrastructure details wit… 0.02s
+  ✓ compilation preserves provenance roundtrip and old resource metadat… 0.01s
+  ✓ duplicate parameterized routes are compile errors                    0.01s
+  ✓ openapi is deterministic and derived from operations only            0.02s
+  ✓ provider mounts package routes and application can mount an explici… 0.02s
+  ✓ error boundary normalizes upstream errors with named version and re… 0.04s
+  ✓ generated request id is shared by the boundary and dispatcher        0.02s
+  ✓ query in a mutation and non json body are rejected                   0.02s
+  ✓ disabled account is rejected                                         0.01s
+  ✓ invalid declarations fail compilation with data set #0               0.02s
+  ✓ invalid declarations fail compilation with data set #1               0.01s
+  ✓ invalid declarations fail compilation with data set #2               0.01s
+  ✓ invalid declarations fail compilation with data set #3               0.01s
+  ✓ invalid declarations fail compilation with data set #4               0.02s
+  ✓ invalid declarations fail compilation with data set #5               0.02s
+  ✓ invalid declarations fail compilation with data set #6               0.01s
+  ✓ invalid declarations fail compilation with data set #7               0.02s
+  ✓ equal specificity overlapping routes are compile errors              0.01s
+  ✓ equivalent cross method templates require identical parameter names  0.02s
+  ✓ module adapters receive context only during the current operation    0.02s
+
+   PASS  CoreX\Operations\Tests\Feature\StoredOperationOutcomeTest
+  ✓ registered error roundtrip preserves identity and descriptor         0.03s
+  ✓ unknown code and corrupt occurrence become safe registered errors    0.01s
+  ✓ queue serialization restores the registered enum identity            0.01s
+  ✓ raw string cannot construct an api error                             0.01s
+
+   PASS  Tests\Unit\ApiOperationContractTest
+  ✓ it keeps legacy operation declarations on the compatibility matrix   0.03s
+  ✓ it rejects illegal mode, method and idempotency pairs with dataset…  0.01s
+  ✓ it rejects illegal mode, method and idempotency pairs with dataset…  0.01s
+  ✓ it rejects illegal mode, method and idempotency pairs with dataset…  0.01s
+  ✓ it rejects illegal mode, method and idempotency pairs with dataset…  0.01s
+  ✓ it rejects illegal mode, method and idempotency pairs with dataset…  0.01s
+  ✓ it rejects illegal mode, method and idempotency pairs with dataset…  0.01s
+  ✓ it rejects illegal mode, method and idempotency pairs with dataset…  0.01s
+  ✓ it rejects duplicate fields and scopes, bad capability and deprecat… 0.01s
+  ✓ it marks bulk modes unsupported and refuses enabled execution        0.01s
+  ✓ it projects the same contract hash when declaration order is revers… 0.01s
+  ✓ it reuses tagged compiler contributions across repeated compilation… 0.01s
+
+   PASS  Tests\Unit\ApiOperationCostTest
+  ✓ it keeps legacy declarations on default cost behavior and hash       0.03s
+  ✓ it rejects unknown keys, negative weights, overflow bounds and miss… 0.01s
+  ✓ it rejects unknown keys, negative weights, overflow bounds and miss… 0.01s
+  ✓ it rejects unknown keys, negative weights, overflow bounds and miss… 0.01s
+  ✓ it rejects unknown keys, negative weights, overflow bounds and miss… 0.01s
+  ✓ it rejects unknown keys, negative weights, overflow bounds and miss… 0.01s
+  ✓ it rejects unknown keys, negative weights, overflow bounds and miss… 0.01s
+  ✓ it rejects unknown keys, negative weights, overflow bounds and miss… 0.01s
+  ✓ it compiles reversed cost declarations to the same canonical recipe… 0.01s
+  ✓ it accepts an explicit bulk recipe                                   0.01s
+
+   PASS  CoreX\Operations\Tests\Unit\ApiProfileTest
+  ✓ reversed registry order keeps profile bytes and hash                 0.02s
+  ✓ activation changes effective capability without profile hash         0.01s
+  ✓ hidden denial omits unknown capabilities and unsupported operations… 0.01s
+  ✓ invalid profile inputs fail                                          0.01s
+  ✓ provider boots with typed options                                    0.01s
+
+   PASS  CoreX\Operations\Tests\Unit\CursorCodecTest
+  ✓ golden wire round trips and page encodes after assembly              0.01s
+  ✓ tamper unknown and expired key and expired cursor are invalid        0.01s
+  ✓ previous key verifies until it leaves the ring                       0.01s
+  ✓ scope direction order arity and type mismatches are invalid          0.01s
+  ✓ reversed operation order keeps the registry bytes                    0.01s
+
+   PASS  CoreX\Operations\Tests\Unit\InvocationMetadataTest
+  ✓ four argument construction falls back to request id
+  ✓ valid correlation id is preserved
+  ✓ missing correlation id falls back to request id
+  ✓ invalid correlation and request ids are rejected identically
+  ✓ invalid correlation falls back to valid request id
+
+   PASS  Tests\Unit\OperationCostTest
+  ✓ it estimates table-driven weights, page, export, field, relation, f… 0.02s
+  ✓ it denies overflow and absent bounded export                         0.01s
+  ✓ it does not call database, cache or network while estimating         0.02s
+  ✓ it keeps old positional constructors working and hashes cost additi… 0.01s
+
+   PASS  Tests\Unit\OperationRegistryDeterminismTest
+  ✓ it rejects duplicate normalized route identity and names both owner… 0.01s
+
+   PASS  Tests\Unit\OperationTest
+  ✓ it projects compiler metadata onto the runtime descriptor
+
+   PASS  CoreX\Operations\Tests\Unit\SchemaBudgetTest
+  ✓ admits small object schema
+  ✓ rejects remote ref in budget pass
+  ✓ assert payload rejects oversized raw json
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  CoreX\Operations\Tests\Feature\LoadSchemaTest > sqlite schemas co…
+  Failed asserting that an array contains 'sys_api_webhook_subscriptions_lookup_ix'.
+
+  at tests/Feature/LoadSchemaTest.php:240
+    236▕         );
+    237▕         self::assertContains('sys_api_budget_reservations_retention_ix', array_column($budget->getSchemaBuilder()->getIndexes('sys_api_budget_reservations'), 'name'));
+    238▕         self::assertContains('sys_api_bulk_operations_submission_uq', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_bulk_operations'), 'name'));
+    239▕         self::assertContains('sys_api_bulk_operations_claim_ix', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_bulk_operations'), 'name'));
+  ➜ 240▕         self::assertContains('sys_api_webhook_subscriptions_lookup_ix', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_webhook_subscriptions'), 'name'));
+    241▕         self::assertContains('sys_api_webhook_deliveries_event_uq', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_webhook_deliveries'), 'name'));
+    242▕         self::assertContains('sys_api_webhook_deliveries_claim_ix', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_webhook_deliveries'), 'name'));
+    243▕         self::assertContains('sys_api_webhook_attempts_number_uq', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_webhook_attempts'), 'name'));
+    244▕         self::assertContains('sys_api_webhook_attempts_delivery_ix', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_webhook_attempts'), 'name'));
+
+  1   tests/Feature/LoadSchemaTest.php:240
+  2   tests/Feature/LoadSchemaTest.php:72
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  CoreX\Operations\Tests\Feature\LoadSchemaTest > postgresql schema…
+  Failed asserting that an array contains 'sys_api_webhook_subscriptions_lookup_ix'.
+
+  at tests/Feature/LoadSchemaTest.php:240
+    236▕         );
+    237▕         self::assertContains('sys_api_budget_reservations_retention_ix', array_column($budget->getSchemaBuilder()->getIndexes('sys_api_budget_reservations'), 'name'));
+    238▕         self::assertContains('sys_api_bulk_operations_submission_uq', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_bulk_operations'), 'name'));
+    239▕         self::assertContains('sys_api_bulk_operations_claim_ix', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_bulk_operations'), 'name'));
+  ➜ 240▕         self::assertContains('sys_api_webhook_subscriptions_lookup_ix', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_webhook_subscriptions'), 'name'));
+    241▕         self::assertContains('sys_api_webhook_deliveries_event_uq', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_webhook_deliveries'), 'name'));
+    242▕         self::assertContains('sys_api_webhook_deliveries_claim_ix', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_webhook_deliveries'), 'name'));
+    243▕         self::assertContains('sys_api_webhook_attempts_number_uq', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_webhook_attempts'), 'name'));
+    244▕         self::assertContains('sys_api_webhook_attempts_delivery_ix', array_column($tenant->getSchemaBuilder()->getIndexes('sys_api_webhook_attempts'), 'name'));
+
+  1   tests/Feature/LoadSchemaTest.php:240
+  2   tests/Feature/LoadSchemaTest.php:148
+
+
+  Tests:    2 failed, 178 passed (2185 assertions)
+  Duration: 4.13s
+
+Script pest handling the test event returned with error code 1

@@ -1,0 +1,140 @@
+{
+    "driver": "pgsql",
+    "tables": {
+        "sys_api_budget_buckets": {
+            "columns": {
+                "available": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "capacity": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "key": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "last_refill_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": null
+                },
+                "last_used_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": null
+                },
+                "refill_rate": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "sys_api_budget_buckets_pk",
+                    "kind": "pk",
+                    "columns": [
+                        "key"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [
+                {
+                    "name": "sys_api_budget_buckets_counts_ck",
+                    "expression": "((capacity >= 0) AND (refill_rate >= 0))"
+                }
+            ],
+            "triggers": []
+        },
+        "sys_api_budget_reservations": {
+            "columns": {
+                "charged": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "created_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": null
+                },
+                "estimate": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "expires_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": null
+                },
+                "id": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "keys": {
+                    "type": "json",
+                    "nullable": false,
+                    "default": null
+                },
+                "recipe_hash": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "state": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "sys_api_budget_reservations_pk",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "sys_api_budget_reservations_retention_ix",
+                    "kind": "ix",
+                    "columns": [
+                        "state",
+                        "expires_at"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [
+                {
+                    "name": "sys_api_budget_reservations_counts_ck",
+                    "expression": "((estimate >= 0) AND (charged >= 0))"
+                },
+                {
+                    "name": "sys_api_budget_reservations_keys_ck",
+                    "expression": "(jsonb_array_length((keys)::jsonb) = 4)"
+                },
+                {
+                    "name": "sys_api_budget_reservations_state_ck",
+                    "expression": "((state)::text = ANY ((ARRAY['held'::character varying, 'settled'::character varying, 'rejected'::character varying, 'abandoned'::character varying])::text[]))"
+                }
+            ],
+            "triggers": []
+        }
+    },
+    "enum_types": []
+}

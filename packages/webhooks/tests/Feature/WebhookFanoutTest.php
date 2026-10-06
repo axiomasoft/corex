@@ -50,8 +50,8 @@ final class WebhookFanoutTest extends TestCase
         $this->configure('api_budget_stub');
         $this->configure('api_tenant');
         $this->selectSchema('api_tenant');
-        $migration = require app(SchemaSets::class)->get('axiomasoft/corex-webhooks:tenant')->path.'/create_sys_api_webhook_tables.php';
-        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+
+        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
         $this->inbox();
     }
 
@@ -165,8 +165,8 @@ final class WebhookFanoutTest extends TestCase
 
         try {
             $this->selectSchema('api_pg_tenant');
-            $migration = require app(SchemaSets::class)->get('axiomasoft/corex-webhooks:tenant')->path.'/create_sys_api_webhook_tables.php';
-            app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+
+            $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
             $this->inbox('api_pg_tenant');
             $connection = DB::connection('api_pg_tenant');
             $this->subscribe('sub-pg', $connection->getName());

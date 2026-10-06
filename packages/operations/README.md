@@ -446,3 +446,5 @@ Package error identities use backed enums and a boot compiled kernel registry.
 Error constructors require `ErrorCode`; descriptors keep scoped string wire codes.
 See the monorepo [error contract](../../docs/reference/errors.md) for contributions,
 validated replay and safe mapping.
+
+Схема: набор(ы) `tenant` и `budget` (Dedicated), baseline v1. Baseline заменяет невыпущенную upgrade-цепочку; новая установка использует финальную схему.

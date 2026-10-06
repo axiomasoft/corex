@@ -22,7 +22,6 @@ use CoreX\Time\Testing\FrozenClock;
 use DateInterval;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -35,8 +34,6 @@ final class IdempotencyStoreTest extends TestCase
     private const string RawKey = 'customer-visible-key';
 
     private const string Secret = 'test-hmac-secret';
-
-    private Migration $migration;
 
     private Connection $connection;
 
@@ -51,8 +48,8 @@ final class IdempotencyStoreTest extends TestCase
         parent::setUp();
         $this->connection = DB::connection('sqlite');
         Schema::connection('sqlite')->dropIfExists('sys_api_idempotency');
-        $this->migration = require app(SchemaSets::class)->get('axiomasoft/corex-operations:tenant')->path.'/create_sys_api_idempotency_table.php';
-        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], 'sqlite');
+
+        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], 'sqlite');
         Schema::connection('sqlite')->create('idempotency_effects', static function (Blueprint $table): void {
             $table->string('value')->primary();
         });
@@ -234,13 +231,13 @@ final class IdempotencyStoreTest extends TestCase
         Schema::connection('sqlite')->create('idempotency_sentinel', static function (Blueprint $table): void {
             $table->id();
         });
-        $this->migration->down();
+        $this->rollbackSchemaSet('axiomasoft/corex-operations:tenant', 'sqlite');
 
         self::assertFalse(Schema::connection('sqlite')->hasTable('sys_api_idempotency'));
         self::assertTrue(Schema::connection('sqlite')->hasTable('idempotency_sentinel'));
 
         Schema::connection('sqlite')->drop('idempotency_sentinel');
-        $this->migration->up();
+        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], 'sqlite');
     }
 
     public function test_provider_binds_store_and_registers_a_tenant_schema(): void
@@ -274,8 +271,8 @@ final class IdempotencyStoreTest extends TestCase
 
         $this->configurePostgres($database);
         Schema::connection('pgsql')->dropIfExists('sys_api_idempotency');
-        $migration = require app(SchemaSets::class)->get('axiomasoft/corex-operations:tenant')->path.'/create_sys_api_idempotency_table.php';
-        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], 'pgsql');
+
+        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], 'pgsql');
 
         $children = [];
 

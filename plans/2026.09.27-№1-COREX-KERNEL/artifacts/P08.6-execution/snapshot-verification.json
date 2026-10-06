@@ -1,0 +1,186 @@
+{
+  "status": "GREEN",
+  "snapshots": 30,
+  "checks": [
+    {
+      "item": "P08.6",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.6-execution/access-azguard-before.json",
+      "tables": 1,
+      "driver": "pgsql"
+    },
+    {
+      "item": "P08.6",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.6-execution/access-azguard-before.sqlite.json",
+      "tables": 1,
+      "driver": "sqlite"
+    },
+    {
+      "item": "P08.6",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.6-execution/access-before.json",
+      "tables": 24,
+      "driver": "pgsql"
+    },
+    {
+      "item": "P08.6",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.6-execution/operations-before.json",
+      "tables": 2,
+      "driver": "pgsql"
+    },
+    {
+      "item": "P08.6",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.6-execution/operations-before.sqlite.json",
+      "tables": 2,
+      "driver": "sqlite"
+    },
+    {
+      "item": "P08.6",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.6-execution/operations-budget-before.json",
+      "tables": 2,
+      "driver": "pgsql"
+    },
+    {
+      "item": "P08.6",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.6-execution/operations-budget-before.sqlite.json",
+      "tables": 2,
+      "driver": "sqlite"
+    },
+    {
+      "item": "P08.6",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.6-execution/webhooks-before.json",
+      "tables": 3,
+      "driver": "pgsql"
+    },
+    {
+      "item": "P08.6",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.6-execution/webhooks-before.sqlite.json",
+      "tables": 3,
+      "driver": "sqlite"
+    },
+    {
+      "item": "P08.7",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.7-execution/custom-fields-before.json",
+      "tables": 8,
+      "driver": "pgsql"
+    },
+    {
+      "item": "P08.7",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.7-execution/intl-before.json",
+      "tables": 7,
+      "driver": "pgsql"
+    },
+    {
+      "item": "P08.7",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.7-execution/intl-before.sqlite.json",
+      "tables": 7,
+      "driver": "sqlite"
+    },
+    {
+      "item": "P08.7",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.7-execution/media-before.json",
+      "tables": 4,
+      "driver": "pgsql"
+    },
+    {
+      "item": "P08.7",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.7-execution/media-before.sqlite.json",
+      "tables": 4,
+      "driver": "sqlite"
+    },
+    {
+      "item": "P08.7",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.7-execution/notifications-before.json",
+      "tables": 5,
+      "driver": "pgsql"
+    },
+    {
+      "item": "P08.7",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.7-execution/notifications-before.sqlite.json",
+      "tables": 5,
+      "driver": "sqlite"
+    },
+    {
+      "item": "P08.7",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.7-execution/search-before.json",
+      "tables": 3,
+      "driver": "pgsql"
+    },
+    {
+      "item": "P08.7",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.7-execution/search-before.sqlite.json",
+      "tables": 3,
+      "driver": "sqlite"
+    },
+    {
+      "item": "P08.7",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.7-execution/wakeup-before.json",
+      "tables": 1,
+      "driver": "pgsql"
+    },
+    {
+      "item": "P08.7",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.7-execution/wakeup-before.sqlite.json",
+      "tables": 1,
+      "driver": "sqlite"
+    },
+    {
+      "item": "P08.7",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.7-execution/workflow-before.json",
+      "tables": 1,
+      "driver": "pgsql"
+    },
+    {
+      "item": "P08.7",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.7-execution/workflow-before.sqlite.json",
+      "tables": 1,
+      "driver": "sqlite"
+    },
+    {
+      "item": "P08.8",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.8-execution/crm-before.json",
+      "tables": 32,
+      "driver": "pgsql"
+    },
+    {
+      "item": "P08.8",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.8-execution/crm-before.sqlite.json",
+      "tables": 15,
+      "driver": "sqlite"
+    },
+    {
+      "item": "P08.8",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.8-execution/tasks-before.json",
+      "tables": 29,
+      "driver": "pgsql"
+    },
+    {
+      "item": "P08.8",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.8-execution/tasks-before.sqlite.json",
+      "tables": 12,
+      "driver": "sqlite"
+    },
+    {
+      "item": "P08.8",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.8-execution/tasks-workflow-before.json",
+      "tables": 3,
+      "driver": "pgsql"
+    },
+    {
+      "item": "P08.8",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.8-execution/tasks-workflow-before.sqlite.json",
+      "tables": 3,
+      "driver": "sqlite"
+    },
+    {
+      "item": "P08.8",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.8-execution/transfer-before.json",
+      "tables": 6,
+      "driver": "pgsql"
+    },
+    {
+      "item": "P08.8",
+      "before": "2026.09.27-\u21161-COREX-KERNEL/artifacts/P08.8-execution/transfer-before.sqlite.json",
+      "tables": 6,
+      "driver": "sqlite"
+    }
+  ]
+}

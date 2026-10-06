@@ -1,0 +1,16 @@
+sys_api_webhook_attempts: ~type attempt 'integer' -> 'bigint'
+sys_api_webhook_attempts: rename indexes sys_api_webhook_attempts_delivery_idx -> sys_api_webhook_attempts_delivery_ix
+sys_api_webhook_attempts: rename indexes sys_api_webhook_attempts_pkey -> sys_api_webhook_attempts_pk
+sys_api_webhook_attempts: rename indexes sys_api_webhook_attempts_number_unique -> sys_api_webhook_attempts_number_uq
+sys_api_webhook_attempts: rename checks webhook_attempts_counts -> sys_api_webhook_attempts_counts_ck
+sys_api_webhook_deliveries: ~type attempt 'integer' -> 'bigint'
+sys_api_webhook_deliveries: ~type replay_count 'integer' -> 'bigint'
+sys_api_webhook_deliveries: rename indexes sys_api_webhook_deliveries_claim_idx -> sys_api_webhook_deliveries_claim_ix
+sys_api_webhook_deliveries: rename indexes sys_api_webhook_deliveries_pkey -> sys_api_webhook_deliveries_pk
+sys_api_webhook_deliveries: rename indexes sys_api_webhook_deliveries_event_unique -> sys_api_webhook_deliveries_event_uq
+sys_api_webhook_deliveries: rename checks webhook_deliveries_status -> sys_api_webhook_deliveries_status_ck
+sys_api_webhook_deliveries: rename checks webhook_deliveries_counts -> sys_api_webhook_deliveries_counts_ck
+sys_api_webhook_subscriptions: rename indexes sys_api_webhook_subscriptions_lookup_idx -> sys_api_webhook_subscriptions_lookup_ix
+sys_api_webhook_subscriptions: rename indexes sys_api_webhook_subscriptions_pkey -> sys_api_webhook_subscriptions_pk
+sys_api_webhook_subscriptions: rename checks webhook_subscriptions_status -> sys_api_webhook_subscriptions_status_ck
+sys_api_webhook_subscriptions: rename checks webhook_subscriptions_counts -> sys_api_webhook_subscriptions_counts_ck

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Webhooks\Tests;
 
 use CoreX\CoreServiceProvider;
+use CoreX\Database\Testing\MigratesSchemaSets;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Operations\ApiServiceProvider;
 use CoreX\Webhooks\WebhooksServiceProvider;
@@ -13,6 +14,8 @@ use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
 {
+    use MigratesSchemaSets;
+
     protected function setUp(): void
     {
         parent::setUp();

@@ -1,0 +1,345 @@
+{
+    "driver": "pgsql",
+    "tables": {
+        "sys_api_webhook_attempts": {
+            "columns": {
+                "attempt": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": null
+                },
+                "delivery_id": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "duration_ms": {
+                    "type": "bigint",
+                    "nullable": true,
+                    "default": null
+                },
+                "error_code": {
+                    "type": "character varying(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "finished_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "http_status": {
+                    "type": "smallint",
+                    "nullable": true,
+                    "default": null
+                },
+                "id": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "lease_owner": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "outcome": {
+                    "type": "character varying(32)",
+                    "nullable": false,
+                    "default": null
+                },
+                "started_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "sys_api_webhook_attempts_delivery_idx",
+                    "kind": "ix",
+                    "columns": [
+                        "delivery_id",
+                        "started_at"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "sys_api_webhook_attempts_number_unique",
+                    "kind": "uq",
+                    "columns": [
+                        "delivery_id",
+                        "attempt"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "sys_api_webhook_attempts_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [
+                {
+                    "name": "webhook_attempts_counts",
+                    "expression": "((attempt >= 0) AND ((http_status IS NULL) OR (http_status >= 0)) AND ((duration_ms IS NULL) OR (duration_ms >= 0)))"
+                }
+            ],
+            "triggers": []
+        },
+        "sys_api_webhook_deliveries": {
+            "columns": {
+                "attempt": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": null
+                },
+                "body": {
+                    "type": "text",
+                    "nullable": false,
+                    "default": null
+                },
+                "body_hash": {
+                    "type": "character(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "created_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": null
+                },
+                "endpoint_snapshot": {
+                    "type": "text",
+                    "nullable": false,
+                    "default": null
+                },
+                "event_id": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "expires_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": null
+                },
+                "finished_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "id": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "last_error": {
+                    "type": "text",
+                    "nullable": true,
+                    "default": null
+                },
+                "lease_owner": {
+                    "type": "character varying(64)",
+                    "nullable": true,
+                    "default": null
+                },
+                "lease_until": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": true,
+                    "default": null
+                },
+                "major": {
+                    "type": "character varying(32)",
+                    "nullable": false,
+                    "default": null
+                },
+                "next_attempt_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": null
+                },
+                "replay_count": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": null
+                },
+                "scope": {
+                    "type": "json",
+                    "nullable": false,
+                    "default": null
+                },
+                "status": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": null
+                },
+                "subscription_id": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "subscription_revision": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "topic": {
+                    "type": "character varying(191)",
+                    "nullable": false,
+                    "default": null
+                },
+                "topic_version": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "sys_api_webhook_deliveries_claim_idx",
+                    "kind": "ix",
+                    "columns": [
+                        "status",
+                        "next_attempt_at",
+                        "lease_until"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "sys_api_webhook_deliveries_event_unique",
+                    "kind": "uq",
+                    "columns": [
+                        "subscription_id",
+                        "event_id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "sys_api_webhook_deliveries_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [
+                {
+                    "name": "webhook_deliveries_counts",
+                    "expression": "((subscription_revision >= 0) AND (topic_version >= 0) AND (attempt >= 0) AND (replay_count >= 0))"
+                },
+                {
+                    "name": "webhook_deliveries_status",
+                    "expression": "((status)::text = ANY ((ARRAY['pending'::character varying, 'sending'::character varying, 'retry'::character varying, 'succeeded'::character varying, 'dead'::character varying])::text[]))"
+                }
+            ],
+            "triggers": []
+        },
+        "sys_api_webhook_subscriptions": {
+            "columns": {
+                "created_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": null
+                },
+                "endpoint_url": {
+                    "type": "text",
+                    "nullable": false,
+                    "default": null
+                },
+                "id": {
+                    "type": "character varying(64)",
+                    "nullable": false,
+                    "default": null
+                },
+                "key_refs": {
+                    "type": "json",
+                    "nullable": false,
+                    "default": null
+                },
+                "major": {
+                    "type": "character varying(32)",
+                    "nullable": false,
+                    "default": null
+                },
+                "max_pii_class": {
+                    "type": "character varying(32)",
+                    "nullable": false,
+                    "default": null
+                },
+                "revision": {
+                    "type": "bigint",
+                    "nullable": false,
+                    "default": null
+                },
+                "status": {
+                    "type": "character varying(16)",
+                    "nullable": false,
+                    "default": null
+                },
+                "topic": {
+                    "type": "character varying(191)",
+                    "nullable": false,
+                    "default": null
+                },
+                "topic_version": {
+                    "type": "integer",
+                    "nullable": false,
+                    "default": null
+                },
+                "updated_at": {
+                    "type": "timestamp(6) with time zone",
+                    "nullable": false,
+                    "default": null
+                }
+            },
+            "indexes": [
+                {
+                    "name": "sys_api_webhook_subscriptions_lookup_idx",
+                    "kind": "ix",
+                    "columns": [
+                        "status",
+                        "topic",
+                        "major"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                },
+                {
+                    "name": "sys_api_webhook_subscriptions_pkey",
+                    "kind": "pk",
+                    "columns": [
+                        "id"
+                    ],
+                    "predicate": null,
+                    "method": "btree"
+                }
+            ],
+            "foreign_keys": [],
+            "checks": [
+                {
+                    "name": "webhook_subscriptions_counts",
+                    "expression": "((revision >= 0) AND (topic_version >= 0))"
+                },
+                {
+                    "name": "webhook_subscriptions_status",
+                    "expression": "((status)::text = ANY ((ARRAY['active'::character varying, 'disabled'::character varying])::text[]))"
+                }
+            ],
+            "triggers": []
+        }
+    },
+    "enum_types": []
+}

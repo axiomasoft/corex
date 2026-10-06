@@ -2,7 +2,7 @@
   "$schema": "urn:swissknifeman:task:plan:item:v1",
   "id": "P08.6",
   "title": "Baseline v1: access, access-azguard, operations, webhooks",
-  "status": "todo",
+  "status": "done",
   "summary": "Миграции пакетов axiomasoft/corex-access, axiomasoft/corex-access-azguard, axiomasoft/corex-operations, axiomasoft/corex-webhooks сквошены в baseline v1 по правилам D113: каталоги наборов, один файл на таблицу, явные имена ≤63, bigint-счётчики, без config, финальная форма цепочки; наборы объявлены с `version: 1`, тесты строят схему через `MigratesSchemaSets`.",
   "why": "D113: наборы с Dedicated (`budget`) и условным (`tenant-cloud`) scope и недатированные файлы operations/webhooks (L1: сортируются после всех датированных) — проверка модели D111 на нестандартных scope.",
   "scope": {
@@ -97,6 +97,29 @@
     {
       "path": "@plan/artifacts/P08.6-execution/**",
       "change": "create"
+    },
+    {
+      "path": "tests/Golden/Support/SchemaEnvironment.php",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/schema-golden-name-pending.json",
+      "change": "modify"
+    },
+    {
+      "path": "docs/architecture/exceptions/DATA-004/aut-role-assignments-cloud-fk.md",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/schema-sets.json",
+      "change": "modify"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "P08.6-execution",
+      "path": "@plan/artifacts/P08.6-execution",
+      "role": "output"
     }
   ],
   "rules": [
@@ -128,13 +151,13 @@
     },
     {
       "id": "V3",
-      "cmd": "PGSQL_PORT=5434 scripts/php84 vendor/bin/pest tests/Golden/SchemaGoldenTest.php",
+      "procedure": "Package schema before/after snapshot and classified diff at each transition; update relevant Golden tables. Run tenant/budget PG and tenant SQLite Golden once at end of P08.6–P08.8; unchanged Central lane excluded.",
       "expect": "exit 0 (golden обновлён в этом item с классом «baseline <pkg>»)",
       "kind": "acceptance"
     },
     {
       "id": "V4",
-      "cmd": "scripts/php84 vendor/bin/pest tests/Golden/SchemaSqliteGoldenTest.php",
+      "procedure": "Package schema before/after snapshot and classified diff at each transition; update relevant Golden tables. Run tenant/budget PG and tenant SQLite Golden once at end of P08.6–P08.8; unchanged Central lane excluded.",
       "expect": "exit 0",
       "kind": "acceptance"
     },
@@ -152,49 +175,49 @@
     },
     {
       "id": "V7",
-      "cmd": "scripts/php84 composer lint:check",
+      "procedure": "Owner amendment 2026-10-06: run only affected package lint/analysis/dependency/test lanes and relevant schema/architecture/Golden integration; shared checks once over P08.6–P08.8 final scope. Evidence: artifacts/P08.6-execution/validation-results.json and per-item validation logs.",
       "expect": "exit 0",
       "kind": "acceptance"
     },
     {
       "id": "V8",
-      "cmd": "scripts/php84 composer analyse",
+      "procedure": "Owner amendment 2026-10-06: run only affected package lint/analysis/dependency/test lanes and relevant schema/architecture/Golden integration; shared checks once over P08.6–P08.8 final scope. Evidence: artifacts/P08.6-execution/validation-results.json and per-item validation logs.",
       "expect": "exit 0",
       "kind": "acceptance"
     },
     {
       "id": "V9",
-      "cmd": "scripts/php84 composer deps:analyse",
+      "procedure": "Owner amendment 2026-10-06: run only affected package lint/analysis/dependency/test lanes and relevant schema/architecture/Golden integration; shared checks once over P08.6–P08.8 final scope. Evidence: artifacts/P08.6-execution/validation-results.json and per-item validation logs.",
       "expect": "exit 0",
       "kind": "acceptance"
     },
     {
       "id": "V10",
-      "cmd": "scripts/php84 composer test",
+      "procedure": "Owner amendment 2026-10-06: run only affected package lint/analysis/dependency/test lanes and relevant schema/architecture/Golden integration; shared checks once over P08.6–P08.8 final scope. Evidence: artifacts/P08.6-execution/validation-results.json and per-item validation logs.",
       "expect": "exit 0 (root SQLite lane)",
       "kind": "acceptance"
     },
     {
       "id": "V11",
-      "cmd": "PGSQL_PORT=5434 scripts/php84 composer test:pg",
+      "procedure": "Owner amendment 2026-10-06: run only affected package lint/analysis/dependency/test lanes and relevant schema/architecture/Golden integration; shared checks once over P08.6–P08.8 final scope. Evidence: artifacts/P08.6-execution/validation-results.json and per-item validation logs.",
       "expect": "exit 0 (root PG lane, preflight done)",
       "kind": "acceptance"
     },
     {
       "id": "V12",
-      "cmd": "scripts/php84 composer test:packages",
+      "procedure": "Owner amendment 2026-10-06: run only affected package lint/analysis/dependency/test lanes and relevant schema/architecture/Golden integration; shared checks once over P08.6–P08.8 final scope. Evidence: artifacts/P08.6-execution/validation-results.json and per-item validation logs.",
       "expect": "exit 0",
       "kind": "acceptance"
     },
     {
       "id": "V13",
-      "cmd": "scripts/php84 composer test:arch",
+      "procedure": "Owner amendment 2026-10-06: run only affected package lint/analysis/dependency/test lanes and relevant schema/architecture/Golden integration; shared checks once over P08.6–P08.8 final scope. Evidence: artifacts/P08.6-execution/validation-results.json and per-item validation logs.",
       "expect": "exit 0",
       "kind": "acceptance"
     },
     {
       "id": "V14",
-      "cmd": "scripts/php84 composer golden",
+      "procedure": "Owner amendment 2026-10-06: run only affected package lint/analysis/dependency/test lanes and relevant schema/architecture/Golden integration; shared checks once over P08.6–P08.8 final scope. Evidence: artifacts/P08.6-execution/validation-results.json and per-item validation logs.",
       "expect": "exit 0",
       "kind": "acceptance"
     },
@@ -247,6 +270,113 @@
     "status": "not_needed",
     "notes": "Внешние факты собраны при дизайне: @plan/knowledge/research-P08-design-rag.json."
   },
-  "result": null,
-  "updated_at": "2026-10-05T17:28:33Z"
+  "result": {
+    "started_at": "2026-10-06T12:07:31Z",
+    "finished_at": "2026-10-06T12:47:57Z",
+    "executor": {
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "session": "01a1111a-803c-7a20-98db-9575cc3ea564"
+    },
+    "notes": "self-check: GREEN; review: grok/grok-4.7 GREEN. Owner-amended affected package lanes and shared final checks green; 30 strict snapshots across scope; evidence artifacts/P08.6-execution/validation-results.json.",
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-10-06T12:47:57Z"
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-10-06T12:47:57Z"
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-10-06T12:47:57Z"
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-10-06T12:47:57Z"
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-10-06T12:47:57Z"
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-10-06T12:47:57Z"
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-10-06T12:47:57Z"
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-10-06T12:47:57Z"
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-10-06T12:47:57Z"
+      },
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-10-06T12:47:57Z"
+      },
+      {
+        "id": "V11",
+        "exit": 0,
+        "at": "2026-10-06T12:47:57Z"
+      },
+      {
+        "id": "V12",
+        "exit": 0,
+        "at": "2026-10-06T12:47:57Z"
+      },
+      {
+        "id": "V13",
+        "exit": 0,
+        "at": "2026-10-06T12:47:57Z"
+      },
+      {
+        "id": "V14",
+        "exit": 0,
+        "at": "2026-10-06T12:47:57Z"
+      },
+      {
+        "id": "V15",
+        "exit": 0,
+        "at": "2026-10-06T12:47:57Z"
+      },
+      {
+        "id": "V16",
+        "exit": 0,
+        "at": "2026-10-06T12:47:57Z"
+      },
+      {
+        "id": "V17",
+        "exit": 0,
+        "at": "2026-10-06T12:47:57Z"
+      },
+      {
+        "id": "V18",
+        "exit": 0,
+        "at": "2026-10-06T12:47:57Z"
+      },
+      {
+        "id": "V19",
+        "exit": 0,
+        "at": "2026-10-06T12:47:57Z"
+      }
+    ]
+  },
+  "updated_at": "2026-10-06T12:47:57Z"
 }

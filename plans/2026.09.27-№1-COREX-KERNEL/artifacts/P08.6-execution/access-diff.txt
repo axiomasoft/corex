@@ -1,0 +1,8 @@
+aut_direct_grants: rename indexes aut_direct_grants_lookup -> aut_direct_grants_lookup_ix
+aut_direct_grants: rename indexes aut_direct_grants_pkey -> aut_direct_grants_pk
+aut_role_assignments: rename indexes aut_assignments_principal_ix -> aut_role_assignments_principal_ix
+aut_role_assignments: rename indexes aut_role_assignments_pkey -> aut_role_assignments_pk
+aut_role_assignments: rename foreign_keys aut_role_assignments_role_id_foreign -> aut_role_assignments_role_id_fk
+aut_role_matrix: rename indexes aut_role_matrix_pkey -> aut_role_matrix_pk
+aut_role_matrix: rename foreign_keys aut_role_matrix_role_id_foreign -> aut_role_matrix_role_id_fk
+aut_roles: rename indexes aut_roles_pkey -> aut_roles_pk

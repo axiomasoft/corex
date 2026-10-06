@@ -1,5 +1,9 @@
 ## Unreleased — delivery budget and tenant egress
 
+## Unreleased — baseline v1
+
+- Схема: набор(ы) `tenant`, baseline v1. Baseline заменяет невыпущенную upgrade-цепочку; новая установка использует финальную схему.
+
 ## Unreleased — schema set connection ownership
 
 - Shipped migrations obtain their `up()` connection from the schema migrator's current connection. Test retention fixtures use `SchemaMigrator` instead of calling migration `up()` directly. DDL is unchanged.

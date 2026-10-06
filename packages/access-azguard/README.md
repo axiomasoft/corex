@@ -11,3 +11,5 @@ The package is unreleased while AzGuard has no stable published release. Configu
 Register both access providers and run `php artisan corex:schema:migrate --scope=tenant --database=<tenant>`. The bridge migration creates `aut_azguard_role_links`; it does not change `aut_roles`. Publish `corex-access-azguard-config` to change the AzGuard pins or disable this package's singular `PermissionLayer` binding when another integration owns it.
 
 The listener runs synchronously inside Access compilation's tenant transaction. An exception rolls back native compilation and the mirror. A missing role is an error. Without this bridge, Access compiles and evaluates permissions through its own data.
+
+Схема: набор(ы) `tenant`, baseline v1. Baseline заменяет невыпущенную upgrade-цепочку; новая установка использует финальную схему.

@@ -46,8 +46,8 @@ final class BulkTransferTest extends TestCase
         $this->configureSqlite('api_tenant');
         $this->selectSchema('api_budget_stub', 'api_tenant');
         $this->connection = DB::connection('api_tenant');
-        $migration = require app(SchemaSets::class)->get('axiomasoft/corex-operations:tenant')->path.'/create_sys_api_bulk_operations_table.php';
-        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+
+        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
         $contexts = new ContextFixture;
         $contexts->initialize(new AccountRef('account-1', 'account', 'active', [], []));
         $this->clock = new FrozenClock(new DateTimeImmutable('2026-09-25T10:00:00.000000+00:00'));

@@ -1,0 +1,2 @@
+> cd ../.. && vendor/bin/phpstan analyse -c packages/access-azguard/phpstan.neon --memory-limit=2G --no-progress
+{"tool":"phpstan","result":"passed","errors":0}

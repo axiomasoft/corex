@@ -1,0 +1,333 @@
+> pest
+
+   FAIL  CoreX\Webhooks\Tests\Feature\WebhookApiRetentionTest
+  ⨯ retention windows reject unsafe configuration
+  ⨯ expired webhook body cannot replay and tombstone preserves dedup
+  ⨯ shorter body window expires replay with the body
+  ⨯ postgresql retention uses isolated schemas
+  ⨯ command prunes only the restored scope and rejects an unbounded batch
+  ⨯ command without a trusted scope preserves tenant rows
+
+   PASS  CoreX\Webhooks\Tests\Feature\WebhookConcurrencyTest
+  ✓ two workers claim once and late ack cannot overwrite the new lease   0.16s
+
+   PASS  CoreX\Webhooks\Tests\Feature\WebhookDeliveryTest
+  ✓ response matrix is fenced and retry is bounded                       0.05s
+  ✓ retry after jitter attempt and seventy two hour horizons are finite  0.02s
+  ✓ ack loss repeats same id and body with fresh signature and one rece… 0.02s
+
+   PASS  CoreX\Webhooks\Tests\Feature\WebhookEgressPolicyTest
+  ✓ create and update are denied before any write                        0.03s
+  ✓ revocation stops delivery before dns and transport including replay  0.02s
+  ✓ revocation is checked again on an ordinary retry                     0.02s
+  ✓ denial persistence failure is not reclassified as dns retry          0.02s
+  ✓ spi failure stops before dns and is not reclassified                 0.02s
+  ✓ default binding is permissive and host binding is preserved          0.02s
+
+   PASS  CoreX\Webhooks\Tests\Feature\WebhookFanoutTest
+  ✓ projection failure rolls back inbox and delivery together            0.03s
+  ✓ duplicate event creates one delivery and forwards the existing publ… 0.02s
+  ✓ oversize payload is dead and a lossy publisher is rejected           0.02s
+  ✓ postgresql inbox and delivery roll back together                     0.09s
+
+   PASS  CoreX\Webhooks\Tests\Feature\WebhookLoadContourBootTest
+  ✓ boot disables remote delivery and reports missing signing            0.02s
+
+   FAIL  CoreX\Webhooks\Tests\Feature\WebhookLoadContourIntegrationTest
+  ⨯ postgresql fanout delivers once to the local receiver                0.02s
+  ⨯ boxed and cloud scopes stay on the configured connection             0.02s
+
+   PASS  CoreX\Webhooks\Tests\Feature\WebhookManagementTest
+  ✓ delivery history is bounded scoped and cursor bound to tenant clien… 0.02s
+  ✓ detail attempts and subscription projection are public safe          0.02s
+  ✓ literal routes forward every operation through the shared dispatche… 0.01s
+  ✓ shared dispatcher preserves idempotency key for required replay      0.01s
+  ✓ route contract requires actor scope and transactional idempotency    0.02s
+
+   PASS  CoreX\Webhooks\Tests\Feature\WebhookRedactionTest
+  ✓ public attempt history has an exact safe shape                       0.03s
+
+   PASS  CoreX\Webhooks\Tests\Feature\WebhookReplayTest
+  ✓ replay keeps delivery identity bytes destination and monotonic atte… 0.02s
+  ✓ succeeded replay requires explicit confirmation and audit reason     0.02s
+  ✓ active lease changed or disabled destination removed topic expiry a… 0.02s
+  ✓ range is bounded to twenty four hours one hundred and a fixed upper… 0.02s
+  ✓ postgresql scope predicate and replay cas                            0.09s
+
+   PASS  CoreX\Webhooks\Tests\Feature\WebhookRetryBudgetTest
+  ✓ recovery uses options and keeps unknown ack with data set "attempt…  0.04s
+  ✓ recovery uses options and keeps unknown ack with data set "raised a… 0.02s
+  ✓ recovery uses options and keeps unknown ack with data set "just bef… 0.02s
+  ✓ recovery uses options and keeps unknown ack with data set "at horiz… 0.02s
+  ✓ recovery uses options and keeps unknown ack with data set "after ho… 0.02s
+  ✓ recovery uses options and keeps unknown ack with data set "both lim… 0.02s
+  ✓ normal retry uses same budget with data set "attempt limit"          0.02s
+  ✓ normal retry uses same budget with data set "raised attempt limit"   0.02s
+  ✓ normal retry uses same budget with data set "just before horizon"    0.02s
+  ✓ normal retry uses same budget with data set "at horizon"             0.02s
+  ✓ normal retry uses same budget with data set "after horizon"          0.02s
+  ✓ normal retry uses same budget with data set "both limits"            0.02s
+  ✓ success and permanent http failure preserve classification when bud… 0.02s
+  ✓ claim rejection persists typed endpoint and signing reasons          0.02s
+  ✓ transport rejections override untrusted http status without disabli… 0.03s
+  ✓ options reject invalid attempt and horizon ranges                    0.02s
+
+   PASS  CoreX\Webhooks\Tests\Feature\WebhookSubscriptionTest
+  ✓ unknown contract version schema and class names are rejected         0.05s
+  ✓ unknown version and schema are rejected                              0.02s
+  ✓ sensitive topics require an ability and secrets are always denied    0.02s
+  ✓ subscription is optimistic capped and tenant scoped                  0.05s
+  ✓ postgresql subscription revision is optimistic                       0.07s
+  ✓ projector exports only the public allow list                         0.02s
+
+   PASS  CoreX\Webhooks\Tests\Feature\WebhookTransportTest
+  ✓ local receiver fixture observes exact wire bytes and pinned tls hos… 0.02s
+  ✓ loopback tls receiver preserves hostname and exact wire body         0.14s
+  ✓ redirect is returned once and never followed                         0.02s
+  ✓ response body and headers have hard caps                             0.01s
+  ✓ socket peer must equal the prevalidated pin                          0.01s
+  ✓ wrong peer takes precedence over response overflow                   0.01s
+  ✓ missing curl fails closed without attempting dns or network          0.03s
+
+   PASS  CoreX\Webhooks\Tests\Feature\WebhooksProviderTest
+  ✓ webhooks owns delivery and retention commands                        0.06s
+  ✓ discovered webhooks provider boots without opting into engine route… 0.01s
+
+   PASS  CoreX\Webhooks\Tests\Unit\WebhookCompatibilityTest
+  ✓ planted webhook incompatibilities fail and additive topics pass      0.09s
+
+   PASS  CoreX\Webhooks\Tests\Unit\WebhookFailureReasonTest
+  ✓ http classification with data set #200
+  ✓ http classification with data set #204
+  ✓ http classification with data set #299
+  ✓ http classification with data set #301
+  ✓ http classification with data set #307
+  ✓ http classification with data set #399
+  ✓ http classification with data set #400
+  ✓ http classification with data set #401
+  ✓ http classification with data set #404
+  ✓ http classification with data set #499
+  ✓ http classification with data set #410
+  ✓ http classification with data set #408
+  ✓ http classification with data set #425
+  ✓ http classification with data set #429
+  ✓ http classification with data set #500
+  ✓ http classification with data set #503
+  ✓ http classification with data set #599
+  ✓ every reason round trips and has explicit permanence and terminality
+
+   PASS  CoreX\Webhooks\Tests\Unit\WebhookOptionsParserTest
+  ✓ parses topics and canonical projector mapping                        0.01s
+  ✓ rejects invalid configuration with field diagnostics with data set #0
+  ✓ rejects invalid configuration with field diagnostics with data set #1
+  ✓ rejects invalid configuration with field diagnostics with data set #2
+  ✓ rejects invalid configuration with field diagnostics with data set #3
+  ✓ rejects invalid configuration with field diagnostics with data set #4
+  ✓ rejects invalid configuration with field diagnostics with data set #5
+  ✓ rejects invalid configuration with field diagnostics with data set #6
+  ✓ rejects invalid configuration with field diagnostics with data set #7
+  ✓ rejects invalid configuration with field diagnostics with data set #8
+  ✓ rejects invalid configuration with field diagnostics with data set #9
+  ✓ rejects invalid configuration with field diagnostics with data set #10
+  ✓ rejects invalid configuration with field diagnostics with data set #11
+  ✓ rejects invalid configuration with field diagnostics with data set #12
+  ✓ rejects invalid configuration with field diagnostics with data set #13
+
+   PASS  CoreX\Webhooks\Tests\Unit\WebhookRotationTest
+  ✓ old and new signatures verify during overlap in deterministic order  0.02s
+  ✓ http success does not infer readiness and regular revoke requires c… 0.01s
+  ✓ compromise can revoke without readiness confirmation                 0.01s
+
+   PASS  CoreX\Webhooks\Tests\Unit\WebhookSignatureTest
+  ✓ independent known hmac bytes and exact headers                       0.02s
+  ✓ secret format base64 and length are strict with data set "missing p… 0.01s
+  ✓ secret format base64 and length are strict with data set "invalid b… 0.01s
+  ✓ secret format base64 and length are strict with data set "31 bytes"  0.01s
+  ✓ secret format base64 and length are strict with data set "33 bytes"  0.01s
+  ✓ secret format base64 and length are strict with data set "non-canon… 0.01s
+  ✓ receiver denies raw tamper stale and future timestamps               0.01s
+
+   PASS  CoreX\Webhooks\Tests\Unit\WebhookSnapshotSectionTest
+  ✓ contract filters major and sorts topics versions and required field… 0.01s
+
+   PASS  CoreX\Webhooks\Tests\Unit\WebhookUrlPolicyTest
+  ✓ public dns set is canonicalized and pinned deterministically         0.01s
+  ✓ private reserved metadata mapped and mixed dns sets are denied with… 0.01s
+  ✓ private reserved metadata mapped and mixed dns sets are denied with… 0.01s
+  ✓ private reserved metadata mapped and mixed dns sets are denied with… 0.01s
+  ✓ private reserved metadata mapped and mixed dns sets are denied with… 0.01s
+  ✓ private reserved metadata mapped and mixed dns sets are denied with… 0.01s
+  ✓ private reserved metadata mapped and mixed dns sets are denied with… 0.01s
+  ✓ private reserved metadata mapped and mixed dns sets are denied with… 0.01s
+  ✓ private reserved metadata mapped and mixed dns sets are denied with… 0.01s
+  ✓ private reserved metadata mapped and mixed dns sets are denied with… 0.01s
+  ✓ private reserved metadata mapped and mixed dns sets are denied with… 0.01s
+  ✓ private reserved metadata mapped and mixed dns sets are denied with… 0.01s
+  ✓ private reserved metadata mapped and mixed dns sets are denied with… 0.01s
+  ✓ private reserved metadata mapped and mixed dns sets are denied with… 0.01s
+  ✓ private reserved metadata mapped and mixed dns sets are denied with… 0.01s
+  ✓ private reserved metadata mapped and mixed dns sets are denied with… 0.01s
+  ✓ ambiguous or credential bearing urls are denied with data set "http… 0.01s
+  ✓ ambiguous or credential bearing urls are denied with data set "non…  0.01s
+  ✓ ambiguous or credential bearing urls are denied with data set "user… 0.01s
+  ✓ ambiguous or credential bearing urls are denied with data set "quer… 0.01s
+  ✓ ambiguous or credential bearing urls are denied with data set "frag… 0.01s
+  ✓ ambiguous or credential bearing urls are denied with data set "ip l… 0.01s
+  ✓ ambiguous or credential bearing urls are denied with data set "ipv6… 0.01s
+  ✓ ambiguous or credential bearing urls are denied with data set "ambi… 0.01s
+  ✓ ambiguous or credential bearing urls are denied with data set "ambi… 0.01s
+  ✓ ambiguous or credential bearing urls are denied with data set "unic… 0.01s
+  ✓ ambiguous or credential bearing urls are denied with data set "trai… 0.01s
+  ✓ ambiguous or credential bearing urls are denied with data set "enco… 0.01s
+  ✓ ambiguous or credential bearing urls are denied with data set "back… 0.01s
+  ✓ empty dns is retryable unavailable                                   0.01s
+  ✓ every attempt resolves again but an existing request keeps its pin   0.01s
+  ✓ organization owned ranges are denied after public validation         0.01s
+  ✓ request body and timeout caps are enforced                           0.01s
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  CoreX\Webhooks\Tests\Feature\WebhookApiRetentionTest > ret…  Error
+  Call to undefined method CoreX\Webhooks\Tests\Feature\WebhookApiRetentionTest::migrateSchemaSets()
+
+  at tests/Feature/WebhookApiRetentionTest.php:400
+    396▕     {
+    397▕         $this->app->forgetInstance(ApiSchemaRegistrar::class);
+    398▕         $this->app->forgetInstance(SchemaSets::class);
+    399▕         $this->app->forgetInstance(SchemaMigrator::class);
+  ➜ 400▕         $this->migrateSchemaSets(["axiomasoft/corex-webhooks:{$directory}"], app(ApiSchemaRegistrar::class)->tenant()->getName());
+    401▕     }
+    402▕
+    403▕     private function configure(string $name, string $driver, string $database): void
+    404▕     {
+
+  1   tests/Feature/WebhookApiRetentionTest.php:400
+  2   tests/Feature/WebhookApiRetentionTest.php:88
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  CoreX\Webhooks\Tests\Feature\WebhookApiRetentionTest > exp…  Error
+  Call to undefined method CoreX\Webhooks\Tests\Feature\WebhookApiRetentionTest::migrateSchemaSets()
+
+  at tests/Feature/WebhookApiRetentionTest.php:400
+    396▕     {
+    397▕         $this->app->forgetInstance(ApiSchemaRegistrar::class);
+    398▕         $this->app->forgetInstance(SchemaSets::class);
+    399▕         $this->app->forgetInstance(SchemaMigrator::class);
+  ➜ 400▕         $this->migrateSchemaSets(["axiomasoft/corex-webhooks:{$directory}"], app(ApiSchemaRegistrar::class)->tenant()->getName());
+    401▕     }
+    402▕
+    403▕     private function configure(string $name, string $driver, string $database): void
+    404▕     {
+
+  1   tests/Feature/WebhookApiRetentionTest.php:400
+  2   tests/Feature/WebhookApiRetentionTest.php:88
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  CoreX\Webhooks\Tests\Feature\WebhookApiRetentionTest > sho…  Error
+  Call to undefined method CoreX\Webhooks\Tests\Feature\WebhookApiRetentionTest::migrateSchemaSets()
+
+  at tests/Feature/WebhookApiRetentionTest.php:400
+    396▕     {
+    397▕         $this->app->forgetInstance(ApiSchemaRegistrar::class);
+    398▕         $this->app->forgetInstance(SchemaSets::class);
+    399▕         $this->app->forgetInstance(SchemaMigrator::class);
+  ➜ 400▕         $this->migrateSchemaSets(["axiomasoft/corex-webhooks:{$directory}"], app(ApiSchemaRegistrar::class)->tenant()->getName());
+    401▕     }
+    402▕
+    403▕     private function configure(string $name, string $driver, string $database): void
+    404▕     {
+
+  1   tests/Feature/WebhookApiRetentionTest.php:400
+  2   tests/Feature/WebhookApiRetentionTest.php:88
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  CoreX\Webhooks\Tests\Feature\WebhookApiRetentionTest > pos…  Error
+  Call to undefined method CoreX\Webhooks\Tests\Feature\WebhookApiRetentionTest::migrateSchemaSets()
+
+  at tests/Feature/WebhookApiRetentionTest.php:400
+    396▕     {
+    397▕         $this->app->forgetInstance(ApiSchemaRegistrar::class);
+    398▕         $this->app->forgetInstance(SchemaSets::class);
+    399▕         $this->app->forgetInstance(SchemaMigrator::class);
+  ➜ 400▕         $this->migrateSchemaSets(["axiomasoft/corex-webhooks:{$directory}"], app(ApiSchemaRegistrar::class)->tenant()->getName());
+    401▕     }
+    402▕
+    403▕     private function configure(string $name, string $driver, string $database): void
+    404▕     {
+
+  1   tests/Feature/WebhookApiRetentionTest.php:400
+  2   tests/Feature/WebhookApiRetentionTest.php:88
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  CoreX\Webhooks\Tests\Feature\WebhookApiRetentionTest > com…  Error
+  Call to undefined method CoreX\Webhooks\Tests\Feature\WebhookApiRetentionTest::migrateSchemaSets()
+
+  at tests/Feature/WebhookApiRetentionTest.php:400
+    396▕     {
+    397▕         $this->app->forgetInstance(ApiSchemaRegistrar::class);
+    398▕         $this->app->forgetInstance(SchemaSets::class);
+    399▕         $this->app->forgetInstance(SchemaMigrator::class);
+  ➜ 400▕         $this->migrateSchemaSets(["axiomasoft/corex-webhooks:{$directory}"], app(ApiSchemaRegistrar::class)->tenant()->getName());
+    401▕     }
+    402▕
+    403▕     private function configure(string $name, string $driver, string $database): void
+    404▕     {
+
+  1   tests/Feature/WebhookApiRetentionTest.php:400
+  2   tests/Feature/WebhookApiRetentionTest.php:88
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  CoreX\Webhooks\Tests\Feature\WebhookApiRetentionTest > com…  Error
+  Call to undefined method CoreX\Webhooks\Tests\Feature\WebhookApiRetentionTest::migrateSchemaSets()
+
+  at tests/Feature/WebhookApiRetentionTest.php:400
+    396▕     {
+    397▕         $this->app->forgetInstance(ApiSchemaRegistrar::class);
+    398▕         $this->app->forgetInstance(SchemaSets::class);
+    399▕         $this->app->forgetInstance(SchemaMigrator::class);
+  ➜ 400▕         $this->migrateSchemaSets(["axiomasoft/corex-webhooks:{$directory}"], app(ApiSchemaRegistrar::class)->tenant()->getName());
+    401▕     }
+    402▕
+    403▕     private function configure(string $name, string $driver, string $database): void
+    404▕     {
+
+  1   tests/Feature/WebhookApiRetentionTest.php:400
+  2   tests/Feature/WebhookApiRetentionTest.php:88
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  CoreX\Webhooks\Tests\Feature\WebhookLoadContourIntegration…  Error
+  Call to undefined method CoreX\Webhooks\Tests\Feature\WebhookLoadContourIntegrationTest::migrateSchemaSets()
+
+  at tests/Feature/WebhookLoadContourIntegrationTest.php:128
+    124▕
+    125▕         try {
+    126▕             $this->selectSchema('api_budget_stub', 'sqlite', ':memory:', 'api_p1420_tenant', 'pgsql', $database);
+    127▕
+  ➜ 128▕             $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+    129▕             $connection = DB::connection('api_p1420_tenant');
+    130▕             $connection->getSchemaBuilder()->create('sys_inbox_messages', function (Blueprint $table): void {
+    131▕                 $table->string('consumer', 120);
+    132▕                 $table->uuid('message_id');
+
+  1   tests/Feature/WebhookLoadContourIntegrationTest.php:128
+
+  ────────────────────────────────────────────────────────────────────────────
+   FAILED  CoreX\Webhooks\Tests\Feature\WebhookLoadContourIntegration…  Error
+  Call to undefined method CoreX\Webhooks\Tests\Feature\WebhookLoadContourIntegrationTest::migrateSchemaSets()
+
+  at tests/Feature/WebhookLoadContourIntegrationTest.php:276
+    272▕         $this->configureSqlite('api_budget_stub');
+    273▕         $this->configureSqlite('api_tenant');
+    274▕         $this->selectSchema('api_budget_stub', 'sqlite', ':memory:', 'api_tenant', 'sqlite', ':memory:');
+    275▕
+  ➜ 276▕         $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+    277▕         $connection = DB::connection('api_tenant');
+    278▕         $account = new AccountRef('account-1', 'account', 'active', [], []);
+    279▕         $contexts = new ContextFixture;
+    280▕         $contexts->value = new TenantContext($account, null, true);
+
+  1   tests/Feature/WebhookLoadContourIntegrationTest.php:276
+
+
+  Tests:    8 failed, 135 passed (721 assertions)
+  Duration: 2.67s
+
+Script pest handling the test event returned with error code 2

@@ -16,7 +16,7 @@
             },
             "indexes": [
                 {
-                    "name": "aut_azguard_role_links_azguard_role_id_unique",
+                    "name": "aut_azguard_role_links_azguard_role_id_uq",
                     "kind": "uq",
                     "columns": [
                         "azguard_role_id"
@@ -4294,7 +4294,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_api_bulk_operations_claim_idx",
+                    "name": "sys_api_bulk_operations_claim_ix",
                     "kind": "ix",
                     "columns": [
                         "status",
@@ -4305,7 +4305,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_api_bulk_operations_submission_unique",
+                    "name": "sys_api_bulk_operations_submission_uq",
                     "kind": "uq",
                     "columns": [
                         "major",
@@ -4319,12 +4319,12 @@
             "foreign_keys": [],
             "checks": [],
             "triggers": {
-                "bulk_operations_counts_insert": "CREATE TRIGGER \"bulk_operations_counts_insert\" BEFORE INSERT ON \"sys_api_bulk_operations\" WHEN NOT (NEW.revision >= 0 AND NEW.attempt >= 0) BEGIN SELECT RAISE(ABORT, 'bulk_operations_counts'); END",
-                "bulk_operations_counts_update": "CREATE TRIGGER \"bulk_operations_counts_update\" BEFORE UPDATE ON \"sys_api_bulk_operations\" WHEN NOT (NEW.revision >= 0 AND NEW.attempt >= 0) BEGIN SELECT RAISE(ABORT, 'bulk_operations_counts'); END",
-                "bulk_operations_status_insert": "CREATE TRIGGER \"bulk_operations_status_insert\" BEFORE INSERT ON \"sys_api_bulk_operations\" WHEN NOT (NEW.status IN ('pending', 'running', 'cancelling', 'cancelled', 'completed', 'failed', 'expired')) BEGIN SELECT RAISE(ABORT, 'bulk_operations_status'); END",
-                "bulk_operations_status_update": "CREATE TRIGGER \"bulk_operations_status_update\" BEFORE UPDATE ON \"sys_api_bulk_operations\" WHEN NOT (NEW.status IN ('pending', 'running', 'cancelling', 'cancelled', 'completed', 'failed', 'expired')) BEGIN SELECT RAISE(ABORT, 'bulk_operations_status'); END",
-                "bulk_operations_terminal_status_insert": "CREATE TRIGGER \"bulk_operations_terminal_status_insert\" BEFORE INSERT ON \"sys_api_bulk_operations\" WHEN NOT (NEW.terminal_status IS NULL OR NEW.terminal_status IN ('cancelled', 'completed', 'failed')) BEGIN SELECT RAISE(ABORT, 'bulk_operations_terminal_status'); END",
-                "bulk_operations_terminal_status_update": "CREATE TRIGGER \"bulk_operations_terminal_status_update\" BEFORE UPDATE ON \"sys_api_bulk_operations\" WHEN NOT (NEW.terminal_status IS NULL OR NEW.terminal_status IN ('cancelled', 'completed', 'failed')) BEGIN SELECT RAISE(ABORT, 'bulk_operations_terminal_status'); END"
+                "sys_api_bulk_operations_counts_ck_insert": "CREATE TRIGGER \"sys_api_bulk_operations_counts_ck_insert\" BEFORE INSERT ON \"sys_api_bulk_operations\" WHEN NOT (NEW.revision >= 0 AND NEW.attempt >= 0) BEGIN SELECT RAISE(ABORT, 'sys_api_bulk_operations_counts_ck'); END",
+                "sys_api_bulk_operations_counts_ck_update": "CREATE TRIGGER \"sys_api_bulk_operations_counts_ck_update\" BEFORE UPDATE ON \"sys_api_bulk_operations\" WHEN NOT (NEW.revision >= 0 AND NEW.attempt >= 0) BEGIN SELECT RAISE(ABORT, 'sys_api_bulk_operations_counts_ck'); END",
+                "sys_api_bulk_operations_status_ck_insert": "CREATE TRIGGER \"sys_api_bulk_operations_status_ck_insert\" BEFORE INSERT ON \"sys_api_bulk_operations\" WHEN NOT (NEW.status IN ('pending', 'running', 'cancelling', 'cancelled', 'completed', 'failed', 'expired')) BEGIN SELECT RAISE(ABORT, 'sys_api_bulk_operations_status_ck'); END",
+                "sys_api_bulk_operations_status_ck_update": "CREATE TRIGGER \"sys_api_bulk_operations_status_ck_update\" BEFORE UPDATE ON \"sys_api_bulk_operations\" WHEN NOT (NEW.status IN ('pending', 'running', 'cancelling', 'cancelled', 'completed', 'failed', 'expired')) BEGIN SELECT RAISE(ABORT, 'sys_api_bulk_operations_status_ck'); END",
+                "sys_api_bulk_operations_terminal_status_ck_insert": "CREATE TRIGGER \"sys_api_bulk_operations_terminal_status_ck_insert\" BEFORE INSERT ON \"sys_api_bulk_operations\" WHEN NOT (NEW.terminal_status IS NULL OR NEW.terminal_status IN ('cancelled', 'completed', 'failed')) BEGIN SELECT RAISE(ABORT, 'sys_api_bulk_operations_terminal_status_ck'); END",
+                "sys_api_bulk_operations_terminal_status_ck_update": "CREATE TRIGGER \"sys_api_bulk_operations_terminal_status_ck_update\" BEFORE UPDATE ON \"sys_api_bulk_operations\" WHEN NOT (NEW.terminal_status IS NULL OR NEW.terminal_status IN ('cancelled', 'completed', 'failed')) BEGIN SELECT RAISE(ABORT, 'sys_api_bulk_operations_terminal_status_ck'); END"
             }
         },
         "sys_api_idempotency": {
@@ -4392,7 +4392,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_api_idempotency_retention_idx",
+                    "name": "sys_api_idempotency_retention_ix",
                     "kind": "ix",
                     "columns": [
                         "state",
@@ -4402,7 +4402,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_api_idempotency_scope_key_unique",
+                    "name": "sys_api_idempotency_scope_key_uq",
                     "kind": "uq",
                     "columns": [
                         "scope_hash",
@@ -4480,7 +4480,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_api_webhook_attempts_delivery_idx",
+                    "name": "sys_api_webhook_attempts_delivery_ix",
                     "kind": "ix",
                     "columns": [
                         "delivery_id",
@@ -4490,7 +4490,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_api_webhook_attempts_number_unique",
+                    "name": "sys_api_webhook_attempts_number_uq",
                     "kind": "uq",
                     "columns": [
                         "delivery_id",
@@ -4503,8 +4503,8 @@
             "foreign_keys": [],
             "checks": [],
             "triggers": {
-                "webhook_attempts_counts_insert": "CREATE TRIGGER \"webhook_attempts_counts_insert\" BEFORE INSERT ON \"sys_api_webhook_attempts\" WHEN NOT (NEW.attempt >= 0 AND (NEW.http_status IS NULL OR NEW.http_status >= 0) AND (NEW.duration_ms IS NULL OR NEW.duration_ms >= 0)) BEGIN SELECT RAISE(ABORT, 'webhook_attempts_counts'); END",
-                "webhook_attempts_counts_update": "CREATE TRIGGER \"webhook_attempts_counts_update\" BEFORE UPDATE ON \"sys_api_webhook_attempts\" WHEN NOT (NEW.attempt >= 0 AND (NEW.http_status IS NULL OR NEW.http_status >= 0) AND (NEW.duration_ms IS NULL OR NEW.duration_ms >= 0)) BEGIN SELECT RAISE(ABORT, 'webhook_attempts_counts'); END"
+                "sys_api_webhook_attempts_counts_ck_insert": "CREATE TRIGGER \"sys_api_webhook_attempts_counts_ck_insert\" BEFORE INSERT ON \"sys_api_webhook_attempts\" WHEN NOT (NEW.attempt >= 0 AND (NEW.http_status IS NULL OR NEW.http_status >= 0) AND (NEW.duration_ms IS NULL OR NEW.duration_ms >= 0)) BEGIN SELECT RAISE(ABORT, 'sys_api_webhook_attempts_counts_ck'); END",
+                "sys_api_webhook_attempts_counts_ck_update": "CREATE TRIGGER \"sys_api_webhook_attempts_counts_ck_update\" BEFORE UPDATE ON \"sys_api_webhook_attempts\" WHEN NOT (NEW.attempt >= 0 AND (NEW.http_status IS NULL OR NEW.http_status >= 0) AND (NEW.duration_ms IS NULL OR NEW.duration_ms >= 0)) BEGIN SELECT RAISE(ABORT, 'sys_api_webhook_attempts_counts_ck'); END"
             }
         },
         "sys_api_webhook_deliveries": {
@@ -4626,7 +4626,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_api_webhook_deliveries_claim_idx",
+                    "name": "sys_api_webhook_deliveries_claim_ix",
                     "kind": "ix",
                     "columns": [
                         "status",
@@ -4637,7 +4637,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_api_webhook_deliveries_event_unique",
+                    "name": "sys_api_webhook_deliveries_event_uq",
                     "kind": "uq",
                     "columns": [
                         "subscription_id",
@@ -4650,10 +4650,10 @@
             "foreign_keys": [],
             "checks": [],
             "triggers": {
-                "webhook_deliveries_counts_insert": "CREATE TRIGGER \"webhook_deliveries_counts_insert\" BEFORE INSERT ON \"sys_api_webhook_deliveries\" WHEN NOT (NEW.subscription_revision >= 0 AND NEW.topic_version >= 0 AND NEW.attempt >= 0 AND NEW.replay_count >= 0) BEGIN SELECT RAISE(ABORT, 'webhook_deliveries_counts'); END",
-                "webhook_deliveries_counts_update": "CREATE TRIGGER \"webhook_deliveries_counts_update\" BEFORE UPDATE ON \"sys_api_webhook_deliveries\" WHEN NOT (NEW.subscription_revision >= 0 AND NEW.topic_version >= 0 AND NEW.attempt >= 0 AND NEW.replay_count >= 0) BEGIN SELECT RAISE(ABORT, 'webhook_deliveries_counts'); END",
-                "webhook_deliveries_status_insert": "CREATE TRIGGER \"webhook_deliveries_status_insert\" BEFORE INSERT ON \"sys_api_webhook_deliveries\" WHEN NOT (NEW.status IN ('pending', 'sending', 'retry', 'succeeded', 'dead')) BEGIN SELECT RAISE(ABORT, 'webhook_deliveries_status'); END",
-                "webhook_deliveries_status_update": "CREATE TRIGGER \"webhook_deliveries_status_update\" BEFORE UPDATE ON \"sys_api_webhook_deliveries\" WHEN NOT (NEW.status IN ('pending', 'sending', 'retry', 'succeeded', 'dead')) BEGIN SELECT RAISE(ABORT, 'webhook_deliveries_status'); END"
+                "sys_api_webhook_deliveries_counts_ck_insert": "CREATE TRIGGER \"sys_api_webhook_deliveries_counts_ck_insert\" BEFORE INSERT ON \"sys_api_webhook_deliveries\" WHEN NOT (NEW.subscription_revision >= 0 AND NEW.topic_version >= 0 AND NEW.attempt >= 0 AND NEW.replay_count >= 0) BEGIN SELECT RAISE(ABORT, 'sys_api_webhook_deliveries_counts_ck'); END",
+                "sys_api_webhook_deliveries_counts_ck_update": "CREATE TRIGGER \"sys_api_webhook_deliveries_counts_ck_update\" BEFORE UPDATE ON \"sys_api_webhook_deliveries\" WHEN NOT (NEW.subscription_revision >= 0 AND NEW.topic_version >= 0 AND NEW.attempt >= 0 AND NEW.replay_count >= 0) BEGIN SELECT RAISE(ABORT, 'sys_api_webhook_deliveries_counts_ck'); END",
+                "sys_api_webhook_deliveries_status_ck_insert": "CREATE TRIGGER \"sys_api_webhook_deliveries_status_ck_insert\" BEFORE INSERT ON \"sys_api_webhook_deliveries\" WHEN NOT (NEW.status IN ('pending', 'sending', 'retry', 'succeeded', 'dead')) BEGIN SELECT RAISE(ABORT, 'sys_api_webhook_deliveries_status_ck'); END",
+                "sys_api_webhook_deliveries_status_ck_update": "CREATE TRIGGER \"sys_api_webhook_deliveries_status_ck_update\" BEFORE UPDATE ON \"sys_api_webhook_deliveries\" WHEN NOT (NEW.status IN ('pending', 'sending', 'retry', 'succeeded', 'dead')) BEGIN SELECT RAISE(ABORT, 'sys_api_webhook_deliveries_status_ck'); END"
             }
         },
         "sys_api_webhook_subscriptions": {
@@ -4725,7 +4725,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_api_webhook_subscriptions_lookup_idx",
+                    "name": "sys_api_webhook_subscriptions_lookup_ix",
                     "kind": "ix",
                     "columns": [
                         "status",
@@ -4739,10 +4739,10 @@
             "foreign_keys": [],
             "checks": [],
             "triggers": {
-                "webhook_subscriptions_counts_insert": "CREATE TRIGGER \"webhook_subscriptions_counts_insert\" BEFORE INSERT ON \"sys_api_webhook_subscriptions\" WHEN NOT (NEW.revision >= 0 AND NEW.topic_version >= 0) BEGIN SELECT RAISE(ABORT, 'webhook_subscriptions_counts'); END",
-                "webhook_subscriptions_counts_update": "CREATE TRIGGER \"webhook_subscriptions_counts_update\" BEFORE UPDATE ON \"sys_api_webhook_subscriptions\" WHEN NOT (NEW.revision >= 0 AND NEW.topic_version >= 0) BEGIN SELECT RAISE(ABORT, 'webhook_subscriptions_counts'); END",
-                "webhook_subscriptions_status_insert": "CREATE TRIGGER \"webhook_subscriptions_status_insert\" BEFORE INSERT ON \"sys_api_webhook_subscriptions\" WHEN NOT (NEW.status IN ('active', 'disabled')) BEGIN SELECT RAISE(ABORT, 'webhook_subscriptions_status'); END",
-                "webhook_subscriptions_status_update": "CREATE TRIGGER \"webhook_subscriptions_status_update\" BEFORE UPDATE ON \"sys_api_webhook_subscriptions\" WHEN NOT (NEW.status IN ('active', 'disabled')) BEGIN SELECT RAISE(ABORT, 'webhook_subscriptions_status'); END"
+                "sys_api_webhook_subscriptions_counts_ck_insert": "CREATE TRIGGER \"sys_api_webhook_subscriptions_counts_ck_insert\" BEFORE INSERT ON \"sys_api_webhook_subscriptions\" WHEN NOT (NEW.revision >= 0 AND NEW.topic_version >= 0) BEGIN SELECT RAISE(ABORT, 'sys_api_webhook_subscriptions_counts_ck'); END",
+                "sys_api_webhook_subscriptions_counts_ck_update": "CREATE TRIGGER \"sys_api_webhook_subscriptions_counts_ck_update\" BEFORE UPDATE ON \"sys_api_webhook_subscriptions\" WHEN NOT (NEW.revision >= 0 AND NEW.topic_version >= 0) BEGIN SELECT RAISE(ABORT, 'sys_api_webhook_subscriptions_counts_ck'); END",
+                "sys_api_webhook_subscriptions_status_ck_insert": "CREATE TRIGGER \"sys_api_webhook_subscriptions_status_ck_insert\" BEFORE INSERT ON \"sys_api_webhook_subscriptions\" WHEN NOT (NEW.status IN ('active', 'disabled')) BEGIN SELECT RAISE(ABORT, 'sys_api_webhook_subscriptions_status_ck'); END",
+                "sys_api_webhook_subscriptions_status_ck_update": "CREATE TRIGGER \"sys_api_webhook_subscriptions_status_ck_update\" BEFORE UPDATE ON \"sys_api_webhook_subscriptions\" WHEN NOT (NEW.status IN ('active', 'disabled')) BEGIN SELECT RAISE(ABORT, 'sys_api_webhook_subscriptions_status_ck'); END"
             }
         },
         "sys_saved_view_scopes": {

@@ -23,7 +23,6 @@ use CoreX\Time\Testing\FrozenClock;
 use DateInterval;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\Group;
@@ -39,8 +38,6 @@ final class BulkStoreTest extends TestCase
 
     private SqlBulkOperationStore $store;
 
-    private Migration $migration;
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -48,8 +45,8 @@ final class BulkStoreTest extends TestCase
         $this->configureSqlite('api_tenant');
         $this->selectSchema('api_budget_stub', 'api_tenant');
         $this->connection = DB::connection('api_tenant');
-        $this->migration = require app(SchemaSets::class)->get('axiomasoft/corex-operations:tenant')->path.'/create_sys_api_bulk_operations_table.php';
-        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+
+        $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
         $this->contexts = $this->contexts();
         $this->clock = new FrozenClock(new DateTimeImmutable('2026-09-25T10:00:00.000000+00:00'));
         $this->store = $this->store($this->connection, $this->clock);
@@ -237,8 +234,8 @@ final class BulkStoreTest extends TestCase
 
         try {
             $this->selectSchema('api_budget_stub', 'api_pg_tenant');
-            $migration = require app(SchemaSets::class)->get('axiomasoft/corex-operations:tenant')->path.'/create_sys_api_bulk_operations_table.php';
-            app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+
+            $this->migrateSchemaSets(['axiomasoft/corex-operations:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
             $scope = $this->scope(DB::connection('api_pg_tenant'));
             $submissions = $this->forkPostgresSubmissions($scope);
 

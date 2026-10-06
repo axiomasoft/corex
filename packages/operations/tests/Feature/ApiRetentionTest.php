@@ -374,7 +374,7 @@ final class ApiRetentionTest extends TestCase
         $this->app->forgetInstance(ApiSchemaRegistrar::class);
         $this->app->forgetInstance(SchemaSets::class);
         $this->app->forgetInstance(SchemaMigrator::class);
-        app(SchemaMigrator::class)->migrateSets(["axiomasoft/corex-operations:{$directory}"], $directory === 'budget' ? null : app(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(["axiomasoft/corex-operations:{$directory}"], $directory === 'budget' ? null : app(ApiSchemaRegistrar::class)->tenant()->getName());
     }
 
     private function configure(string $name, string $driver, string $database): void

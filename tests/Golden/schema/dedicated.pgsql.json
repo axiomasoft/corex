@@ -36,7 +36,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_api_budget_buckets_pkey",
+                    "name": "sys_api_budget_buckets_pk",
                     "kind": "pk",
                     "columns": [
                         "key"
@@ -48,7 +48,7 @@
             "foreign_keys": [],
             "checks": [
                 {
-                    "name": "budget_buckets_counts",
+                    "name": "sys_api_budget_buckets_counts_ck",
                     "expression": "((capacity >= 0) AND (refill_rate >= 0))"
                 }
             ],
@@ -99,7 +99,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_api_budget_reservations_pkey",
+                    "name": "sys_api_budget_reservations_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -108,7 +108,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_api_budget_reservations_retention_idx",
+                    "name": "sys_api_budget_reservations_retention_ix",
                     "kind": "ix",
                     "columns": [
                         "state",
@@ -121,15 +121,15 @@
             "foreign_keys": [],
             "checks": [
                 {
-                    "name": "budget_reservations_counts",
+                    "name": "sys_api_budget_reservations_counts_ck",
                     "expression": "((estimate >= 0) AND (charged >= 0))"
                 },
                 {
-                    "name": "budget_reservations_keys",
+                    "name": "sys_api_budget_reservations_keys_ck",
                     "expression": "(jsonb_array_length((keys)::jsonb) = 4)"
                 },
                 {
-                    "name": "budget_reservations_state",
+                    "name": "sys_api_budget_reservations_state_ck",
                     "expression": "((state)::text = ANY ((ARRAY['held'::character varying, 'settled'::character varying, 'rejected'::character varying, 'abandoned'::character varying])::text[]))"
                 }
             ],

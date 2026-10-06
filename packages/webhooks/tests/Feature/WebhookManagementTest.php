@@ -63,8 +63,8 @@ final class WebhookManagementTest extends TestCase
         $this->configure('api_tenant');
         $this->selectSchema();
         $this->connection = DB::connection('api_tenant');
-        $migration = require app(SchemaSets::class)->get('axiomasoft/corex-webhooks:tenant')->path.'/create_sys_api_webhook_tables.php';
-        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+
+        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
         $this->clock = new FrozenClock(new DateTimeImmutable('2026-09-26T15:00:00.000000+00:00'));
         $this->contexts = new ContextFixture;
         $this->contexts->initialize(new AccountRef('account-a', 'account-a', 'active', [], []));

@@ -2,7 +2,7 @@
   "$schema": "urn:swissknifeman:task:plan:item:v1",
   "id": "P08.8",
   "title": "Baseline v1: tasks, tasks-workflow, transfer, flex/crm",
-  "status": "todo",
+  "status": "in_progress",
   "summary": "Миграции пакетов axiomasoft/corex-tasks, axiomasoft/corex-tasks-workflow, axiomasoft/corex-transfer, flex/crm сквошены в baseline v1 по правилам D113: каталоги наборов, один файл на таблицу, явные имена ≤63, bigint-счётчики, без config, финальная форма цепочки; наборы объявлены с `version: 1`, тесты строят схему через `MigratesSchemaSets`.",
   "why": "D113: самые длинные upgrade-цепочки (tasks align, crm parity) и полиморфные колонки ulid (аудит 2026-09-14: char(26) несовместим с uuid-ключами); fresh≡upgraded не требуется.",
   "scope": {
@@ -108,6 +108,29 @@
     {
       "path": "@plan/artifacts/P08.8-execution/**",
       "change": "create"
+    },
+    {
+      "path": "scripts/schema-sets.json",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/anti-weakening-allowances.txt",
+      "change": "modify"
+    },
+    {
+      "path": "packages/{tasks,tasks-workflow,transfer}/phpstan-baseline.neon",
+      "change": "modify"
+    },
+    {
+      "path": "products/flex-crm/phpstan-baseline.neon",
+      "change": "modify"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "P08.8-execution",
+      "path": "@plan/artifacts/P08.8-execution",
+      "role": "output"
     }
   ],
   "rules": [
@@ -139,13 +162,13 @@
     },
     {
       "id": "V3",
-      "cmd": "PGSQL_PORT=5434 scripts/php84 vendor/bin/pest tests/Golden/SchemaGoldenTest.php",
+      "procedure": "Package schema before/after snapshot and classified diff at each transition; update relevant Golden tables. Run tenant/budget PG and tenant SQLite Golden once at end of P08.6–P08.8; unchanged Central lane excluded.",
       "expect": "exit 0 (golden обновлён в этом item с классом «baseline <pkg>»)",
       "kind": "acceptance"
     },
     {
       "id": "V4",
-      "cmd": "scripts/php84 vendor/bin/pest tests/Golden/SchemaSqliteGoldenTest.php",
+      "procedure": "Package schema before/after snapshot and classified diff at each transition; update relevant Golden tables. Run tenant/budget PG and tenant SQLite Golden once at end of P08.6–P08.8; unchanged Central lane excluded.",
       "expect": "exit 0",
       "kind": "acceptance"
     },
@@ -169,49 +192,49 @@
     },
     {
       "id": "V8",
-      "cmd": "scripts/php84 composer lint:check",
+      "procedure": "Owner amendment 2026-10-06: run only affected package lint/analysis/dependency/test lanes and relevant schema/architecture/Golden integration; shared checks once over P08.6–P08.8 final scope. Evidence: artifacts/P08.6-execution/validation-results.json and per-item validation logs.",
       "expect": "exit 0",
       "kind": "acceptance"
     },
     {
       "id": "V9",
-      "cmd": "scripts/php84 composer analyse",
+      "procedure": "Owner amendment 2026-10-06: run only affected package lint/analysis/dependency/test lanes and relevant schema/architecture/Golden integration; shared checks once over P08.6–P08.8 final scope. Evidence: artifacts/P08.6-execution/validation-results.json and per-item validation logs.",
       "expect": "exit 0",
       "kind": "acceptance"
     },
     {
       "id": "V10",
-      "cmd": "scripts/php84 composer deps:analyse",
+      "procedure": "Owner amendment 2026-10-06: run only affected package lint/analysis/dependency/test lanes and relevant schema/architecture/Golden integration; shared checks once over P08.6–P08.8 final scope. Evidence: artifacts/P08.6-execution/validation-results.json and per-item validation logs.",
       "expect": "exit 0",
       "kind": "acceptance"
     },
     {
       "id": "V11",
-      "cmd": "scripts/php84 composer test",
+      "procedure": "Owner amendment 2026-10-06: run only affected package lint/analysis/dependency/test lanes and relevant schema/architecture/Golden integration; shared checks once over P08.6–P08.8 final scope. Evidence: artifacts/P08.6-execution/validation-results.json and per-item validation logs.",
       "expect": "exit 0 (root SQLite lane)",
       "kind": "acceptance"
     },
     {
       "id": "V12",
-      "cmd": "PGSQL_PORT=5434 scripts/php84 composer test:pg",
+      "procedure": "Owner amendment 2026-10-06: run only affected package lint/analysis/dependency/test lanes and relevant schema/architecture/Golden integration; shared checks once over P08.6–P08.8 final scope. Evidence: artifacts/P08.6-execution/validation-results.json and per-item validation logs.",
       "expect": "exit 0 (root PG lane, preflight done)",
       "kind": "acceptance"
     },
     {
       "id": "V13",
-      "cmd": "scripts/php84 composer test:packages",
+      "procedure": "Owner amendment 2026-10-06: run only affected package lint/analysis/dependency/test lanes and relevant schema/architecture/Golden integration; shared checks once over P08.6–P08.8 final scope. Evidence: artifacts/P08.6-execution/validation-results.json and per-item validation logs.",
       "expect": "exit 0",
       "kind": "acceptance"
     },
     {
       "id": "V14",
-      "cmd": "scripts/php84 composer test:arch",
+      "procedure": "Owner amendment 2026-10-06: run only affected package lint/analysis/dependency/test lanes and relevant schema/architecture/Golden integration; shared checks once over P08.6–P08.8 final scope. Evidence: artifacts/P08.6-execution/validation-results.json and per-item validation logs.",
       "expect": "exit 0",
       "kind": "acceptance"
     },
     {
       "id": "V15",
-      "cmd": "scripts/php84 composer golden",
+      "procedure": "Owner amendment 2026-10-06: run only affected package lint/analysis/dependency/test lanes and relevant schema/architecture/Golden integration; shared checks once over P08.6–P08.8 final scope. Evidence: artifacts/P08.6-execution/validation-results.json and per-item validation logs.",
       "expect": "exit 0",
       "kind": "acceptance"
     },
@@ -264,6 +287,14 @@
     "status": "not_needed",
     "notes": "Внешние факты собраны при дизайне: @plan/knowledge/research-P08-design-rag.json."
   },
-  "result": null,
-  "updated_at": "2026-10-05T17:28:34Z"
+  "result": {
+    "started_at": "2026-10-06T12:07:31Z",
+    "executor": {
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "session": "01a1111a-803c-7a20-98db-9575cc3ea564"
+    }
+  },
+  "updated_at": "2026-10-06T12:40:20Z"
 }

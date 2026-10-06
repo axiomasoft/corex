@@ -13,6 +13,7 @@ use CoreX\CoreServiceProvider;
 use CoreX\Data\Data\DataScope;
 use CoreX\Database\Contracts\SchemaMigrator;
 use CoreX\Database\Contracts\SchemaSets;
+use CoreX\Database\Testing\MigratesSchemaSets;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Enums\MessageClass;
@@ -47,6 +48,8 @@ use PHPUnit\Framework\Attributes\Group;
 
 final class WebhookApiRetentionTest extends TestCase
 {
+    use MigratesSchemaSets;
+
     protected function defineEnvironment($app): void
     {
         $app['config']->set('database.default', 'sqlite');
@@ -397,7 +400,7 @@ final class WebhookApiRetentionTest extends TestCase
         $this->app->forgetInstance(ApiSchemaRegistrar::class);
         $this->app->forgetInstance(SchemaSets::class);
         $this->app->forgetInstance(SchemaMigrator::class);
-        app(SchemaMigrator::class)->migrateSets(["axiomasoft/corex-webhooks:{$directory}"], app(ApiSchemaRegistrar::class)->tenant()->getName());
+        $this->migrateSchemaSets(["axiomasoft/corex-webhooks:{$directory}"], app(ApiSchemaRegistrar::class)->tenant()->getName());
     }
 
     private function configure(string $name, string $driver, string $database): void

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — baseline v1
+
+- Схема: наборы `tenant` и `tenant-cloud`, baseline v1. Cloud FK требуют tenancy; boxed использует только `tenant`. Baseline заменяет невыпущенную upgrade-цепочку.
+
 ## Unreleased — deterministic schema (P08.2)
 
 - Generate model identifiers with Laravel HasUuids (UUIDv7); schema keys use literal UUID columns.

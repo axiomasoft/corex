@@ -1,8 +1,4 @@
 [
-    "axiomasoft/corex-access",
-    "axiomasoft/corex-access-azguard",
-    "axiomasoft/corex-operations",
-    "axiomasoft/corex-webhooks",
     "axiomasoft/corex-custom-fields",
     "axiomasoft/corex-intl",
     "axiomasoft/corex-media",

@@ -16,7 +16,7 @@
             },
             "indexes": [
                 {
-                    "name": "aut_azguard_role_links_azguard_role_id_unique",
+                    "name": "aut_azguard_role_links_azguard_role_id_uq",
                     "kind": "uq",
                     "columns": [
                         "azguard_role_id"
@@ -25,7 +25,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "aut_azguard_role_links_pkey",
+                    "name": "aut_azguard_role_links_pk",
                     "kind": "pk",
                     "columns": [
                         "role_id"
@@ -83,7 +83,7 @@
             },
             "indexes": [
                 {
-                    "name": "aut_direct_grants_lookup",
+                    "name": "aut_direct_grants_lookup_ix",
                     "kind": "ix",
                     "columns": [
                         "principal_type",
@@ -94,7 +94,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "aut_direct_grants_pkey",
+                    "name": "aut_direct_grants_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -157,20 +157,20 @@
             },
             "indexes": [
                 {
-                    "name": "aut_assignments_principal_ix",
-                    "kind": "ix",
+                    "name": "aut_role_assignments_pk",
+                    "kind": "pk",
                     "columns": [
-                        "principal_type",
-                        "principal_id"
+                        "id"
                     ],
                     "predicate": null,
                     "method": "btree"
                 },
                 {
-                    "name": "aut_role_assignments_pkey",
-                    "kind": "pk",
+                    "name": "aut_role_assignments_principal_ix",
+                    "kind": "ix",
                     "columns": [
-                        "id"
+                        "principal_type",
+                        "principal_id"
                     ],
                     "predicate": null,
                     "method": "btree"
@@ -201,7 +201,7 @@
                     "initially_deferred": false
                 },
                 {
-                    "name": "aut_role_assignments_role_id_foreign",
+                    "name": "aut_role_assignments_role_id_fk",
                     "columns": [
                         "role_id"
                     ],
@@ -290,7 +290,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "aut_role_matrix_pkey",
+                    "name": "aut_role_matrix_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -314,7 +314,7 @@
             ],
             "foreign_keys": [
                 {
-                    "name": "aut_role_matrix_role_id_foreign",
+                    "name": "aut_role_matrix_role_id_fk",
                     "columns": [
                         "role_id"
                     ],
@@ -396,7 +396,7 @@
             },
             "indexes": [
                 {
-                    "name": "aut_roles_pkey",
+                    "name": "aut_roles_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -5185,7 +5185,7 @@
                     "default": null
                 },
                 "attempt": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
                     "default": null
                 },
@@ -5312,7 +5312,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_api_bulk_operations_claim_idx",
+                    "name": "sys_api_bulk_operations_claim_ix",
                     "kind": "ix",
                     "columns": [
                         "status",
@@ -5323,7 +5323,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_api_bulk_operations_pkey",
+                    "name": "sys_api_bulk_operations_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -5332,7 +5332,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_api_bulk_operations_submission_unique",
+                    "name": "sys_api_bulk_operations_submission_uq",
                     "kind": "uq",
                     "columns": [
                         "major",
@@ -5346,15 +5346,15 @@
             "foreign_keys": [],
             "checks": [
                 {
-                    "name": "bulk_operations_counts",
+                    "name": "sys_api_bulk_operations_counts_ck",
                     "expression": "((revision >= 0) AND (attempt >= 0))"
                 },
                 {
-                    "name": "bulk_operations_status",
+                    "name": "sys_api_bulk_operations_status_ck",
                     "expression": "((status)::text = ANY ((ARRAY['pending'::character varying, 'running'::character varying, 'cancelling'::character varying, 'cancelled'::character varying, 'completed'::character varying, 'failed'::character varying, 'expired'::character varying])::text[]))"
                 },
                 {
-                    "name": "bulk_operations_terminal_status",
+                    "name": "sys_api_bulk_operations_terminal_status_ck",
                     "expression": "((terminal_status IS NULL) OR ((terminal_status)::text = ANY ((ARRAY['cancelled'::character varying, 'completed'::character varying, 'failed'::character varying])::text[])))"
                 }
             ],
@@ -5363,7 +5363,7 @@
         "sys_api_idempotency": {
             "columns": {
                 "attempt": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
                     "default": null
                 },
@@ -5425,7 +5425,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_api_idempotency_retention_idx",
+                    "name": "sys_api_idempotency_retention_ix",
                     "kind": "ix",
                     "columns": [
                         "state",
@@ -5435,7 +5435,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_api_idempotency_scope_key_unique",
+                    "name": "sys_api_idempotency_scope_key_uq",
                     "kind": "uq",
                     "columns": [
                         "scope_hash",
@@ -5452,7 +5452,7 @@
         "sys_api_webhook_attempts": {
             "columns": {
                 "attempt": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
                     "default": null
                 },
@@ -5504,7 +5504,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_api_webhook_attempts_delivery_idx",
+                    "name": "sys_api_webhook_attempts_delivery_ix",
                     "kind": "ix",
                     "columns": [
                         "delivery_id",
@@ -5514,7 +5514,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_api_webhook_attempts_number_unique",
+                    "name": "sys_api_webhook_attempts_number_uq",
                     "kind": "uq",
                     "columns": [
                         "delivery_id",
@@ -5524,7 +5524,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_api_webhook_attempts_pkey",
+                    "name": "sys_api_webhook_attempts_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -5536,7 +5536,7 @@
             "foreign_keys": [],
             "checks": [
                 {
-                    "name": "webhook_attempts_counts",
+                    "name": "sys_api_webhook_attempts_counts_ck",
                     "expression": "((attempt >= 0) AND ((http_status IS NULL) OR (http_status >= 0)) AND ((duration_ms IS NULL) OR (duration_ms >= 0)))"
                 }
             ],
@@ -5545,7 +5545,7 @@
         "sys_api_webhook_deliveries": {
             "columns": {
                 "attempt": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
                     "default": null
                 },
@@ -5615,7 +5615,7 @@
                     "default": null
                 },
                 "replay_count": {
-                    "type": "integer",
+                    "type": "bigint",
                     "nullable": false,
                     "default": null
                 },
@@ -5652,7 +5652,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_api_webhook_deliveries_claim_idx",
+                    "name": "sys_api_webhook_deliveries_claim_ix",
                     "kind": "ix",
                     "columns": [
                         "status",
@@ -5663,7 +5663,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_api_webhook_deliveries_event_unique",
+                    "name": "sys_api_webhook_deliveries_event_uq",
                     "kind": "uq",
                     "columns": [
                         "subscription_id",
@@ -5673,7 +5673,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_api_webhook_deliveries_pkey",
+                    "name": "sys_api_webhook_deliveries_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -5685,11 +5685,11 @@
             "foreign_keys": [],
             "checks": [
                 {
-                    "name": "webhook_deliveries_counts",
+                    "name": "sys_api_webhook_deliveries_counts_ck",
                     "expression": "((subscription_revision >= 0) AND (topic_version >= 0) AND (attempt >= 0) AND (replay_count >= 0))"
                 },
                 {
-                    "name": "webhook_deliveries_status",
+                    "name": "sys_api_webhook_deliveries_status_ck",
                     "expression": "((status)::text = ANY ((ARRAY['pending'::character varying, 'sending'::character varying, 'retry'::character varying, 'succeeded'::character varying, 'dead'::character varying])::text[]))"
                 }
             ],
@@ -5755,7 +5755,7 @@
             },
             "indexes": [
                 {
-                    "name": "sys_api_webhook_subscriptions_lookup_idx",
+                    "name": "sys_api_webhook_subscriptions_lookup_ix",
                     "kind": "ix",
                     "columns": [
                         "status",
@@ -5766,7 +5766,7 @@
                     "method": "btree"
                 },
                 {
-                    "name": "sys_api_webhook_subscriptions_pkey",
+                    "name": "sys_api_webhook_subscriptions_pk",
                     "kind": "pk",
                     "columns": [
                         "id"
@@ -5778,11 +5778,11 @@
             "foreign_keys": [],
             "checks": [
                 {
-                    "name": "webhook_subscriptions_counts",
+                    "name": "sys_api_webhook_subscriptions_counts_ck",
                     "expression": "((revision >= 0) AND (topic_version >= 0))"
                 },
                 {
-                    "name": "webhook_subscriptions_status",
+                    "name": "sys_api_webhook_subscriptions_status_ck",
                     "expression": "((status)::text = ANY ((ARRAY['active'::character varying, 'disabled'::character varying])::text[]))"
                 }
             ],

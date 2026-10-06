@@ -1,0 +1,13 @@
+{
+  "status": "GREEN",
+  "files": [
+    "packages/operations/database/migrations/budget/2026_10_01_050010_create_sys_api_budget_buckets.php",
+    "packages/operations/database/migrations/budget/2026_10_01_050020_create_sys_api_budget_reservations.php",
+    "packages/operations/database/migrations/tenant/2026_10_01_050020_create_sys_api_idempotency.php",
+    "packages/operations/database/migrations/tenant/2026_10_01_050030_create_sys_api_bulk_operations.php",
+    "packages/webhooks/database/migrations/tenant/2026_10_01_060010_create_sys_api_webhook_subscriptions.php",
+    "packages/webhooks/database/migrations/tenant/2026_10_01_060020_create_sys_api_webhook_deliveries.php",
+    "packages/webhooks/database/migrations/tenant/2026_10_01_060030_create_sys_api_webhook_attempts.php"
+  ],
+  "pending": []
+}

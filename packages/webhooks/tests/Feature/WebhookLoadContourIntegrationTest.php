@@ -16,6 +16,7 @@ use CoreX\Data\Contracts\DataScopeCodec;
 use CoreX\Data\Data\DataScope;
 use CoreX\Database\Contracts\SchemaMigrator;
 use CoreX\Database\Contracts\SchemaSets;
+use CoreX\Database\Testing\MigratesSchemaSets;
 use CoreX\Messaging\Data\MessageContract;
 use CoreX\Messaging\Data\MessageEnvelope;
 use CoreX\Messaging\Data\MessagePayload;
@@ -58,6 +59,8 @@ use PHPUnit\Framework\Attributes\Group;
 
 final class WebhookLoadContourIntegrationTest extends TestCase
 {
+    use MigratesSchemaSets;
+
     protected function defineEnvironment($app): void
     {
         $app['config']->set('database.default', 'sqlite');
@@ -124,8 +127,8 @@ final class WebhookLoadContourIntegrationTest extends TestCase
 
         try {
             $this->selectSchema('api_budget_stub', 'sqlite', ':memory:', 'api_p1420_tenant', 'pgsql', $database);
-            $migration = require app(SchemaSets::class)->get('axiomasoft/corex-webhooks:tenant')->path.'/create_sys_api_webhook_tables.php';
-            app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+
+            $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
             $connection = DB::connection('api_p1420_tenant');
             $connection->getSchemaBuilder()->create('sys_inbox_messages', function (Blueprint $table): void {
                 $table->string('consumer', 120);
@@ -272,8 +275,8 @@ final class WebhookLoadContourIntegrationTest extends TestCase
         $this->configureSqlite('api_budget_stub');
         $this->configureSqlite('api_tenant');
         $this->selectSchema('api_budget_stub', 'sqlite', ':memory:', 'api_tenant', 'sqlite', ':memory:');
-        $migration = require app(SchemaSets::class)->get('axiomasoft/corex-webhooks:tenant')->path.'/create_sys_api_webhook_tables.php';
-        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
+
+        $this->migrateSchemaSets(['axiomasoft/corex-webhooks:tenant'], app(ApiSchemaRegistrar::class)->tenant()->getName());
         $connection = DB::connection('api_tenant');
         $account = new AccountRef('account-1', 'account', 'active', [], []);
         $contexts = new ContextFixture;

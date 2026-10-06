@@ -5,14 +5,27 @@ declare(strict_types=1);
 namespace CoreX\Operations\Tests;
 
 use CoreX\CoreServiceProvider;
+use CoreX\Database\Contracts\SchemaSets;
+use CoreX\Database\Testing\MigratesSchemaSets;
 use CoreX\Modules\ModulesServiceProvider;
 use CoreX\Operations\ApiServiceProvider;
 use CoreX\Webhooks\WebhooksServiceProvider;
+use Illuminate\Database\Migrations\Migrator;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
 {
+    use MigratesSchemaSets;
+
+    protected function rollbackSchemaSet(string $id, ?string $connection = null): void
+    {
+        $set = $this->app->make(SchemaSets::class)->get($id);
+        $migrator = $this->app->make('migrator');
+        assert($migrator instanceof Migrator);
+        $migrator->usingConnection($set->connection ?? $connection, fn () => $migrator->rollback([$set->path], ['step' => count(glob($set->path.'/*.php') ?: [])]));
+    }
+
     protected function setUp(): void
     {
         parent::setUp();

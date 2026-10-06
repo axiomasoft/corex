@@ -19,7 +19,6 @@ use CoreX\Time\Testing\FrozenClock;
 use DateInterval;
 use DateTimeImmutable;
 use Illuminate\Database\Connection;
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Group;
 use RuntimeException;
@@ -36,8 +35,6 @@ final class OperationBudgetTest extends TestCase
 
     private FrozenClock $clock;
 
-    private Migration $migration;
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -45,8 +42,8 @@ final class OperationBudgetTest extends TestCase
         $this->configureSqlite('api_tenant_stub');
         $this->selectSchema('api_budget', 'api_tenant_stub');
         $this->connection = DB::connection('api_budget');
-        $this->migration = require app(SchemaSets::class)->get('axiomasoft/corex-operations:budget')->path.'/create_sys_api_budget_tables.php';
-        app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:budget'], null);
+
+        $this->migrateSchemaSets(['axiomasoft/corex-operations:budget'], null);
         $this->clock = new FrozenClock(new DateTimeImmutable('2026-09-25T10:00:00.000000+00:00'));
     }
 
@@ -236,8 +233,8 @@ final class OperationBudgetTest extends TestCase
 
         try {
             $this->selectSchema('api_pg_budget', 'api_tenant_stub');
-            $migration = require app(SchemaSets::class)->get('axiomasoft/corex-operations:budget')->path.'/create_sys_api_budget_tables.php';
-            app(SchemaMigrator::class)->migrateSets(['axiomasoft/corex-operations:budget'], null);
+
+            $this->migrateSchemaSets(['axiomasoft/corex-operations:budget'], null);
             $children = $this->forkReservations();
 
             foreach ($children as $child) {
