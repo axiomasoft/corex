@@ -7,7 +7,8 @@
   "why": "Механическая final/readonly/private трансформация может сломать extension SPI или runtime hooks; protected entrypoints проверяются source ledger.",
   "scope": {
     "include": [
-      "Root tooling dependencies/config, whole source mechanical modernization; exact unused-public entrypoints ledger; отрицательные AST fixtures"
+      "Root tooling dependencies/config, whole source mechanical modernization; exact unused-public entrypoints ledger; отрицательные AST fixtures",
+      "Explicit owner amendment: bounded confirmed CI repair and authorized scoped product commits/push to axiomik/corex-mirror, no force/tags; acceptance limited to changed inputs with retained unaffected receipts and final ordinary hosted CI."
     ],
     "exclude": [
       "Публикация, push/tags/mirrors/Packagist/secrets/trust.",
@@ -65,121 +66,12 @@
   ],
   "task_files": [
     {
-      "path": "composer.json",
-      "change": "modify"
-    },
-    {
-      "path": "composer.lock",
-      "change": "modify"
-    },
-    {
-      "path": "rector.php",
-      "change": "modify"
-    },
-    {
-      "path": "pint.json",
-      "change": "modify"
-    },
-    {
-      "path": "packages/*/src/**",
-      "change": "any"
-    },
-    {
-      "path": "products/flex-crm/src/**",
-      "change": "modify"
-    },
-    {
-      "path": "scripts/quality/release-quality.php",
-      "change": "any",
-      "note": "Создаётся в predecessor item; далее изменяется при реализации этого item."
-    },
-    {
-      "path": "scripts/quality/unused-public.php",
-      "change": "create"
-    },
-    {
-      "path": "scripts/quality/public-entrypoints.json",
-      "change": "create"
-    },
-    {
-      "path": "tests/Arch/UnusedPublicGateTest.php",
-      "change": "create"
-    },
-    {
       "path": ".github/workflows/ci.yml",
       "change": "modify"
     },
     {
-      "path": "scripts/mutations/*.patch",
-      "change": "modify"
-    },
-    {
-      "path": "scripts/mutation-check.sh",
-      "change": "modify"
-    },
-    {
-      "path": "scripts/distribution/audit-roots.py",
-      "change": "create"
-    },
-    {
-      "path": "scripts/distribution/tests/test_audit_roots.py",
-      "change": "create"
-    },
-    {
-      "path": "scripts/quality/rector/**",
-      "change": "create"
-    },
-    {
-      "path": "tests/Tooling/Rector/**",
-      "change": "create"
-    },
-    {
-      "path": "tests/Arch/RectorLaravelSubsetTest.php",
-      "change": "create"
-    },
-    {
-      "path": "packages/*/resources/contracts/php-api.json",
-      "change": "modify"
-    },
-    {
-      "path": "packages/*/CHANGELOG.md",
-      "change": "modify"
-    },
-    {
-      "path": "tests/Golden/baseline/php-surface.json",
-      "change": "modify"
-    },
-    {
-      "path": "tests/Golden/REBASELINE.md",
-      "change": "modify"
-    },
-    {
-      "path": "packages/*/tests/**",
-      "change": "modify"
-    },
-    {
-      "path": "products/flex-crm/tests/**",
-      "change": "modify"
-    },
-    {
-      "path": "tests/**/*.php",
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09-repair/P09.4-*",
       "change": "any"
-    },
-    {
-      "path": "scripts/**/*.php",
-      "change": "any"
-    },
-    {
-      "path": "artifacts/P12-package-graph/report.json",
-      "change": "modify"
-    },
-    {
-      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/**",
-      "change": "create"
-    },
-    {
-      "path": "scripts/bc/approved-deltas.json",
-      "change": "modify"
     }
   ],
   "rules": [
@@ -196,116 +88,14 @@
   "validation": [
     {
       "id": "V1",
-      "cmd": "scripts/php84 composer validate --strict",
+      "cmd": "COMPOSER_NO_AUDIT=1 scripts/php84 env -u COMPOSER_NO_AUDIT python3 scripts/distribution/audit-roots.py --scope source --source-root=/tmp/corex-p09-audit-source --evidence-dir=plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09-repair/P09.4-audits-final",
       "expect": "exit 0",
       "kind": "acceptance"
     },
     {
       "id": "V2",
-      "cmd": "scripts/php84 composer audit --locked",
+      "cmd": "scripts/php84 python3 -m unittest discover -s scripts/distribution/tests -p test_audit_roots.py",
       "expect": "exit 0",
-      "kind": "acceptance"
-    },
-    {
-      "id": "V3",
-      "cmd": "scripts/php84 composer refactor:check",
-      "expect": "exit 0",
-      "kind": "acceptance"
-    },
-    {
-      "id": "V4",
-      "cmd": "scripts/php84 composer lint:check",
-      "expect": "exit 0",
-      "kind": "acceptance"
-    },
-    {
-      "id": "V5",
-      "cmd": "scripts/php84 composer analyse",
-      "expect": "exit 0",
-      "kind": "acceptance"
-    },
-    {
-      "id": "V6",
-      "cmd": "scripts/php84 php scripts/quality/release-quality.php --stage=all",
-      "expect": "exit 0",
-      "kind": "acceptance"
-    },
-    {
-      "id": "V7",
-      "cmd": "scripts/php84 php scripts/quality/unused-public.php --check",
-      "expect": "exit 0",
-      "kind": "acceptance"
-    },
-    {
-      "id": "V8",
-      "cmd": "scripts/php84 vendor/bin/pest tests/Arch/UnusedPublicGateTest.php tests/Arch/QualityReleaseGateTest.php",
-      "expect": "exit 0",
-      "kind": "acceptance"
-    },
-    {
-      "id": "V9",
-      "cmd": "scripts/php84 composer test:packages",
-      "expect": "exit 0",
-      "kind": "acceptance"
-    },
-    {
-      "id": "V10",
-      "cmd": "scripts/php84 composer test",
-      "expect": "exit 0",
-      "kind": "acceptance"
-    },
-    {
-      "id": "V11",
-      "cmd": "PGSQL_PORT=5434 scripts/php84 composer test:pg",
-      "expect": "exit 0",
-      "kind": "acceptance"
-    },
-    {
-      "id": "V12",
-      "cmd": "scripts/php84 composer deps:analyse",
-      "expect": "exit 0",
-      "kind": "acceptance"
-    },
-    {
-      "id": "V13",
-      "cmd": "scripts/php84 composer bc-check",
-      "expect": "exit 0",
-      "kind": "acceptance"
-    },
-    {
-      "id": "V14",
-      "cmd": "scripts/php84 composer php-api",
-      "expect": "exit 0",
-      "kind": "acceptance"
-    },
-    {
-      "id": "V15",
-      "cmd": "scripts/php84 composer schema-gate",
-      "expect": "exit 0",
-      "kind": "acceptance"
-    },
-    {
-      "id": "V16",
-      "cmd": "scripts/php84 composer golden",
-      "expect": "exit 0",
-      "kind": "acceptance"
-    },
-    {
-      "id": "V17",
-      "cmd": "bash scripts/mutation-check.sh --all",
-      "expect": "exit 0",
-      "kind": "acceptance"
-    },
-    {
-      "id": "V18",
-      "cmd": "scripts/php84 vendor/bin/pest tests/Arch/MigrationToolingGuardTest.php",
-      "expect": "exit 0",
-      "kind": "acceptance"
-    },
-    {
-      "id": "V19",
-      "cmd": "scripts/php84 python3 scripts/distribution/audit-roots.py --scope source --evidence-dir build/quality/audits",
-      "expect": "exit0 root+all source harness manifests/locks; missing audit or insecure bypass RED",
       "kind": "acceptance"
     }
   ],
@@ -314,7 +104,7 @@
   ],
   "route": {
     "class": "implementation",
-    "effort": "xhigh"
+    "effort": "high"
   },
   "review": {
     "mode": "none"
@@ -338,154 +128,29 @@
     "U5"
   ],
   "result": {
-    "started_at": "2026-10-07T07:51:05Z",
-    "finished_at": "2026-10-07T09:14:40Z",
+    "started_at": "2026-10-07T18:24:47Z",
+    "finished_at": "2026-10-07T18:31:24Z",
     "executor": {
       "provider": "codex",
-      "model": "gpt-6.4-sol",
-      "effort": "xhigh",
-      "session": "01a11556-286d-7d20-9f4d-7de210341a65"
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "session": "01a11796-aa4e-7081-a4c1-16e2352fc5bf"
     },
-    "notes": "All19declared checks actualGREEN with hash-bound logs/evidence in artifacts/P09.4-execution/acceptance.json and validation/. D129: owner-requested Perplexity+primary research implements root-dev native36rule46fileLaravel subset;173officialfixtures+3policy controls176tests241assertions, reproducibility/tamper/suppression negatives. Strict audit23source roots genuine0; no abandoned dependency/audit waiver. D130:80current API metadata deltas/native signatures unchanged; exact173Golden deltas/routes/events/wire preserved;1exact historical unpublished OpenTelemetryBridge::record removal approval, unchanged BC base.35fixedmutations REDunderdefect thenrestore,117migrationfiles byte-identical. Root1290tests/6584assertions;PG247/4832;all22package/product suites;zero strict analysis/source/unused debt. U1-U5accepted;native runtime sequential Rector same scope. ScopeD125local only; no hostedCI/PHP8.5/PG18 or independent phase review claimed. One manual scoped commit follows because Taskhelper excludes alreadytrackedgeneratedviews. Full independent review remainsP09.8; task:review P09.4 recommended for finitepublicmetadata/historicaldelta.",
+    "notes": "Bounded CI audit environment repair: all direct ordinary Composer audit steps and source audit unset COMPOSER_NO_AUDIT at command boundary. Hostile inherited=1 source snapshot audit GREEN25roots;22fail-closed controls pass; raw logs/manifests/locks under P09-repair/P09.4-audits-final. No audit-roots.py weakening; previous unchanged source/type/API results retained.",
     "checks": [
       {
         "id": "V1",
         "exit": 0,
-        "at": "2026-10-07T09:14:40Z",
-        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V1.json"
+        "at": "2026-10-07T18:31:24Z"
       },
       {
         "id": "V2",
         "exit": 0,
-        "at": "2026-10-07T09:14:40Z",
-        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V2.json"
-      },
-      {
-        "id": "V3",
-        "exit": 0,
-        "at": "2026-10-07T09:14:40Z",
-        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V3.json"
-      },
-      {
-        "id": "V4",
-        "exit": 0,
-        "at": "2026-10-07T09:14:40Z",
-        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V4.json"
-      },
-      {
-        "id": "V5",
-        "exit": 0,
-        "at": "2026-10-07T09:14:40Z",
-        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V5.json"
-      },
-      {
-        "id": "V6",
-        "exit": 0,
-        "at": "2026-10-07T09:14:40Z",
-        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V6.json"
-      },
-      {
-        "id": "V7",
-        "exit": 0,
-        "at": "2026-10-07T09:14:40Z",
-        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V7.json"
-      },
-      {
-        "id": "V8",
-        "exit": 0,
-        "at": "2026-10-07T09:14:40Z",
-        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V8.json"
-      },
-      {
-        "id": "V9",
-        "exit": 0,
-        "at": "2026-10-07T09:14:40Z",
-        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V9.json"
-      },
-      {
-        "id": "V10",
-        "exit": 0,
-        "at": "2026-10-07T09:14:40Z",
-        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V10.json"
-      },
-      {
-        "id": "V11",
-        "exit": 0,
-        "at": "2026-10-07T09:14:40Z",
-        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V11.json"
-      },
-      {
-        "id": "V12",
-        "exit": 0,
-        "at": "2026-10-07T09:14:40Z",
-        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V12.json"
-      },
-      {
-        "id": "V13",
-        "exit": 0,
-        "at": "2026-10-07T09:14:40Z",
-        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V13.json"
-      },
-      {
-        "id": "V14",
-        "exit": 0,
-        "at": "2026-10-07T09:14:40Z",
-        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V14.json"
-      },
-      {
-        "id": "V15",
-        "exit": 0,
-        "at": "2026-10-07T09:14:40Z",
-        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V15.json"
-      },
-      {
-        "id": "V16",
-        "exit": 0,
-        "at": "2026-10-07T09:14:40Z",
-        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V16.json"
-      },
-      {
-        "id": "V17",
-        "exit": 0,
-        "at": "2026-10-07T09:14:40Z",
-        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V17.json"
-      },
-      {
-        "id": "V18",
-        "exit": 0,
-        "at": "2026-10-07T09:14:40Z",
-        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V18.json"
-      },
-      {
-        "id": "V19",
-        "exit": 0,
-        "at": "2026-10-07T09:14:40Z",
-        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V19.json"
+        "at": "2026-10-07T18:31:24Z"
       }
-    ],
-    "evidence": [
-      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V1.json",
-      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V2.json",
-      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V3.json",
-      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V4.json",
-      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V5.json",
-      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V6.json",
-      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V7.json",
-      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V8.json",
-      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V9.json",
-      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V10.json",
-      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V11.json",
-      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V12.json",
-      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V13.json",
-      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V14.json",
-      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V15.json",
-      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V16.json",
-      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V17.json",
-      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V18.json",
-      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V19.json"
     ]
   },
-  "updated_at": "2026-10-07T09:14:40Z",
+  "updated_at": "2026-10-07T18:31:24Z",
   "orchestration": {
     "strategy": "dag"
   }

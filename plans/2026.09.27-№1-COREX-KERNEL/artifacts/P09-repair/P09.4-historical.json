@@ -1,0 +1,492 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P09.4",
+  "title": "Rector PHP8.4/Laravel12, final/readonly/named и unused-public",
+  "status": "done",
+  "summary": "Whole maintained source проходит чистый Rector/Pint и проверенные правила классов/DTO/calls; unresolved unused-public отсутствует.",
+  "why": "Механическая final/readonly/private трансформация может сломать extension SPI или runtime hooks; protected entrypoints проверяются source ledger.",
+  "scope": {
+    "include": [
+      "Root tooling dependencies/config, whole source mechanical modernization; exact unused-public entrypoints ledger; отрицательные AST fixtures"
+    ],
+    "exclude": [
+      "Публикация, push/tags/mirrors/Packagist/secrets/trust.",
+      "Незаявленные продуктовые API/schema изменения."
+    ]
+  },
+  "depends_on": [
+    "P09.3"
+  ],
+  "decisions": [
+    "D118",
+    "D120",
+    "D17",
+    "D18",
+    "D19",
+    "D73",
+    "D103",
+    "D113",
+    "D121",
+    "D125",
+    "D129",
+    "D130"
+  ],
+  "reads": [
+    {
+      "ref": "knowledge/research-P09-design#repository-only",
+      "why": "Действующий scope владельца и граница отменённых release работ",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#basis",
+      "why": "База/cohort",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#style",
+      "why": "Алгоритм и runbook",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#checks",
+      "why": "Acceptance/failure/review",
+      "required": true
+    },
+    {
+      "ref": "knowledge/artifacts-P09-design-examples#rector",
+      "why": "Worked examples",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design-rag#sources",
+      "why": "Version-bound tooling",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "composer.json",
+      "change": "modify"
+    },
+    {
+      "path": "composer.lock",
+      "change": "modify"
+    },
+    {
+      "path": "rector.php",
+      "change": "modify"
+    },
+    {
+      "path": "pint.json",
+      "change": "modify"
+    },
+    {
+      "path": "packages/*/src/**",
+      "change": "any"
+    },
+    {
+      "path": "products/flex-crm/src/**",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/quality/release-quality.php",
+      "change": "any",
+      "note": "Создаётся в predecessor item; далее изменяется при реализации этого item."
+    },
+    {
+      "path": "scripts/quality/unused-public.php",
+      "change": "create"
+    },
+    {
+      "path": "scripts/quality/public-entrypoints.json",
+      "change": "create"
+    },
+    {
+      "path": "tests/Arch/UnusedPublicGateTest.php",
+      "change": "create"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/mutations/*.patch",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/mutation-check.sh",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/distribution/audit-roots.py",
+      "change": "create"
+    },
+    {
+      "path": "scripts/distribution/tests/test_audit_roots.py",
+      "change": "create"
+    },
+    {
+      "path": "scripts/quality/rector/**",
+      "change": "create"
+    },
+    {
+      "path": "tests/Tooling/Rector/**",
+      "change": "create"
+    },
+    {
+      "path": "tests/Arch/RectorLaravelSubsetTest.php",
+      "change": "create"
+    },
+    {
+      "path": "packages/*/resources/contracts/php-api.json",
+      "change": "modify"
+    },
+    {
+      "path": "packages/*/CHANGELOG.md",
+      "change": "modify"
+    },
+    {
+      "path": "tests/Golden/baseline/php-surface.json",
+      "change": "modify"
+    },
+    {
+      "path": "tests/Golden/REBASELINE.md",
+      "change": "modify"
+    },
+    {
+      "path": "packages/*/tests/**",
+      "change": "modify"
+    },
+    {
+      "path": "products/flex-crm/tests/**",
+      "change": "modify"
+    },
+    {
+      "path": "tests/**/*.php",
+      "change": "any"
+    },
+    {
+      "path": "scripts/**/*.php",
+      "change": "any"
+    },
+    {
+      "path": "artifacts/P12-package-graph/report.json",
+      "change": "modify"
+    },
+    {
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/**",
+      "change": "create"
+    },
+    {
+      "path": "scripts/bc/approved-deltas.json",
+      "change": "modify"
+    }
+  ],
+  "rules": [
+    "Соблюдать D125, D118/D120 и технические правила D121, D17/D73/D103/D113. Release-положения прежнего дизайна исключены D125; внешние записи не разрешены.",
+    "Сохранять чужие изменения; source facts пересверяются. PHP84 wrapper обязателен; перед PG — skill db-test-preflight и только *_test.",
+    "Поведение/API/SPI/schema не менять молча ради зелёного tooling; precise decision+CHANGELOG+API/Golden для public delta.",
+    "Каждый новый gate негатив-проверен на temp fixtures; coverage/MSI/quality scopes и пороги не снижать. Если packages/*/src меняется, surviving fixed mutations --all до завершения.",
+    "Self-check + scoped checks; repair owning item. Независимое full-review фазы отдельное P09.8 по действующим требованиям плана.",
+    "Изменение scope не запускает исполнение. При запуске проверить актуальное завершение P08 и independent corrected-design review. Release owner questions/grants не являются допуском для code-items.",
+    "\nMigration protection is installed in P09.1 before any broad tooling run and retained in P09.4: Rector withSkip contains real absolute expanded packages/*/database/migrations and products/*/database/migrations directory roots; Pint notPath regex ^(?:packages|products)/[^/]+/database/migrations/.*\\.php$. Preserve every current Pint exclusion. Protection applies to root, tenant, tenant-cloud, budget and all nested baseline files. PHPStan continues to include those owned paths. New tests/Arch/MigrationToolingGuardTest.php uses temp source fixture, snapshots SHA256 of all declared migration PHP files, applies Rector+Pint there and requires identical bytes. Plant a rewriteable/poorly formatted migration and remove each protection independently: corresponding tooling rewrites it and guard exits1; restore exclusion gives exit0 with same migration hash. Merely parsing config or dry-run exit0 does not prove this guard. Metadata/Golden equality cannot substitute for byte equality. Hand type correction is permitted only pre-release with schema/Golden/API checks, never automatic cosmetic rewriting.\n",
+    "D125: выполнять только repository scope; требования к rc/candidate/SBOM/27-row release DoD и публикации пропущены, не переносить их в этот item."
+  ],
+  "guidance": "Сначала применить scope D125 и knowledge/research-P09-design#repository-only. Выполнить соответствующую секцию досье в context pack. Сначала реальная диагностика из версии/файла, затем узкая правка и affected check. Raw вывод сохранить в artifacts/P09.4-execution; результирующие claims только по фактически запущенным командам. Будущие scripts из Validation создаются этим item или предыдущим, не предположены существующими при дизайне.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "scripts/php84 composer validate --strict",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "scripts/php84 composer audit --locked",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "scripts/php84 composer refactor:check",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "scripts/php84 composer lint:check",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "scripts/php84 composer analyse",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V6",
+      "cmd": "scripts/php84 php scripts/quality/release-quality.php --stage=all",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V7",
+      "cmd": "scripts/php84 php scripts/quality/unused-public.php --check",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V8",
+      "cmd": "scripts/php84 vendor/bin/pest tests/Arch/UnusedPublicGateTest.php tests/Arch/QualityReleaseGateTest.php",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V9",
+      "cmd": "scripts/php84 composer test:packages",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V10",
+      "cmd": "scripts/php84 composer test",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V11",
+      "cmd": "PGSQL_PORT=5434 scripts/php84 composer test:pg",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V12",
+      "cmd": "scripts/php84 composer deps:analyse",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V13",
+      "cmd": "scripts/php84 composer bc-check",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V14",
+      "cmd": "scripts/php84 composer php-api",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V15",
+      "cmd": "scripts/php84 composer schema-gate",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V16",
+      "cmd": "scripts/php84 composer golden",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V17",
+      "cmd": "bash scripts/mutation-check.sh --all",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V18",
+      "cmd": "scripts/php84 vendor/bin/pest tests/Arch/MigrationToolingGuardTest.php",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V19",
+      "cmd": "scripts/php84 python3 scripts/distribution/audit-roots.py --scope source --evidence-dir build/quality/audits",
+      "expect": "exit0 root+all source harness manifests/locks; missing audit or insecure bypass RED",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Rector full contour clean; AST quality/unused controls fail closed; immutable schema/API/SPI preserved; lock contains supported tool versions"
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "xhigh"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "required",
+    "status": "complete",
+    "notes": "Primary captures+research-P09-design-rag; dependency solve VERIFY-AT-EXEC",
+    "captures": [
+      "@plan/artifacts/P09-design-rag/README.md"
+    ]
+  },
+  "units": [
+    "U1",
+    "U2",
+    "U3",
+    "U4",
+    "U5"
+  ],
+  "result": {
+    "started_at": "2026-10-07T07:51:05Z",
+    "finished_at": "2026-10-07T09:14:40Z",
+    "executor": {
+      "provider": "codex",
+      "model": "gpt-6.4-sol",
+      "effort": "xhigh",
+      "session": "01a11556-286d-7d20-9f4d-7de210341a65"
+    },
+    "notes": "All19declared checks actualGREEN with hash-bound logs/evidence in artifacts/P09.4-execution/acceptance.json and validation/. D129: owner-requested Perplexity+primary research implements root-dev native36rule46fileLaravel subset;173officialfixtures+3policy controls176tests241assertions, reproducibility/tamper/suppression negatives. Strict audit23source roots genuine0; no abandoned dependency/audit waiver. D130:80current API metadata deltas/native signatures unchanged; exact173Golden deltas/routes/events/wire preserved;1exact historical unpublished OpenTelemetryBridge::record removal approval, unchanged BC base.35fixedmutations REDunderdefect thenrestore,117migrationfiles byte-identical. Root1290tests/6584assertions;PG247/4832;all22package/product suites;zero strict analysis/source/unused debt. U1-U5accepted;native runtime sequential Rector same scope. ScopeD125local only; no hostedCI/PHP8.5/PG18 or independent phase review claimed. One manual scoped commit follows because Taskhelper excludes alreadytrackedgeneratedviews. Full independent review remainsP09.8; task:review P09.4 recommended for finitepublicmetadata/historicaldelta.",
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-10-07T09:14:40Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V1.json"
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-10-07T09:14:40Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V2.json"
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-10-07T09:14:40Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V3.json"
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-10-07T09:14:40Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V4.json"
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-10-07T09:14:40Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V5.json"
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-10-07T09:14:40Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V6.json"
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-10-07T09:14:40Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V7.json"
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-10-07T09:14:40Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V8.json"
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-10-07T09:14:40Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V9.json"
+      },
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-10-07T09:14:40Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V10.json"
+      },
+      {
+        "id": "V11",
+        "exit": 0,
+        "at": "2026-10-07T09:14:40Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V11.json"
+      },
+      {
+        "id": "V12",
+        "exit": 0,
+        "at": "2026-10-07T09:14:40Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V12.json"
+      },
+      {
+        "id": "V13",
+        "exit": 0,
+        "at": "2026-10-07T09:14:40Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V13.json"
+      },
+      {
+        "id": "V14",
+        "exit": 0,
+        "at": "2026-10-07T09:14:40Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V14.json"
+      },
+      {
+        "id": "V15",
+        "exit": 0,
+        "at": "2026-10-07T09:14:40Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V15.json"
+      },
+      {
+        "id": "V16",
+        "exit": 0,
+        "at": "2026-10-07T09:14:40Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V16.json"
+      },
+      {
+        "id": "V17",
+        "exit": 0,
+        "at": "2026-10-07T09:14:40Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V17.json"
+      },
+      {
+        "id": "V18",
+        "exit": 0,
+        "at": "2026-10-07T09:14:40Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V18.json"
+      },
+      {
+        "id": "V19",
+        "exit": 0,
+        "at": "2026-10-07T09:14:40Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V19.json"
+      }
+    ],
+    "evidence": [
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V1.json",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V2.json",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V3.json",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V4.json",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V5.json",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V6.json",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V7.json",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V8.json",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V9.json",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V10.json",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V11.json",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V12.json",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V13.json",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V14.json",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V15.json",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V16.json",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V17.json",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V18.json",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.4-execution/validation/V19.json"
+    ]
+  },
+  "updated_at": "2026-10-07T09:14:40Z",
+  "orchestration": {
+    "strategy": "dag"
+  }
+}

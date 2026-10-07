@@ -55,7 +55,7 @@ jobs:
         run: php scripts/ci-composer-update.php --with "illuminate/contracts:$LARAVEL_VERSION"
 
       - name: Composer audit
-        run: composer audit --locked
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Tests
         run: composer test
@@ -147,7 +147,7 @@ jobs:
         run: php scripts/ci-composer-update.php --with "illuminate/contracts:$LARAVEL_VERSION"
 
       - name: Composer audit
-        run: composer audit --locked
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Prepare PostgreSQL test databases
         run: |
@@ -194,13 +194,13 @@ jobs:
         run: php scripts/ci-composer-update.php --with "illuminate/contracts:$LARAVEL_VERSION"
 
       - name: Composer audit
-        run: composer audit --locked
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Install dependencies
         run: composer --working-dir=packages/operations update --prefer-dist --no-interaction --no-progress --with "laravel/framework:$LARAVEL_VERSION"
 
       - name: Composer audit
-        run: composer audit --locked --working-dir=packages/operations
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/operations
       - name: Operations tests and coverage
         run: composer --working-dir=packages/operations test:coverage
       - name: Operations static analysis
@@ -235,13 +235,13 @@ jobs:
         run: php scripts/ci-composer-update.php --with "illuminate/contracts:$LARAVEL_VERSION"
 
       - name: Composer audit
-        run: composer audit --locked
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Install dependencies
         run: composer --working-dir=packages/tools update --prefer-dist --no-interaction --no-progress --with "laravel/framework:$LARAVEL_VERSION"
 
       - name: Composer audit
-        run: composer audit --locked --working-dir=packages/tools
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/tools
       - name: Tools tests and coverage
         run: composer --working-dir=packages/tools test:coverage
       - name: Tools static analysis
@@ -276,13 +276,13 @@ jobs:
         run: php scripts/ci-composer-update.php --with "illuminate/contracts:$LARAVEL_VERSION"
 
       - name: Composer audit
-        run: composer audit --locked
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Install dependencies
         run: composer --working-dir=packages/webhooks update --prefer-dist --no-interaction --no-progress --with "laravel/framework:$LARAVEL_VERSION"
 
       - name: Composer audit
-        run: composer audit --locked --working-dir=packages/webhooks
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/webhooks
       - name: Webhooks tests and coverage
         run: composer --working-dir=packages/webhooks test:coverage
       - name: Webhooks static analysis
@@ -306,7 +306,7 @@ jobs:
         run: php scripts/ci-composer-update.php
 
       - name: Composer audit
-        run: composer audit --locked
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked
       - name: Wakeup tests
         run: composer --working-dir=packages/wakeup test
       - name: Notification tests
@@ -348,7 +348,7 @@ jobs:
         run: php scripts/ci-composer-update.php
 
       - name: Composer audit
-        run: composer audit --locked
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked
       - name: PostgreSQL delivery admission test
         run: composer --working-dir=packages/notifications test:pg
         env:
@@ -389,13 +389,13 @@ jobs:
         run: php scripts/ci-composer-update.php
 
       - name: Composer audit
-        run: composer audit --locked
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Install dependencies
         run: composer --working-dir=packages/panels update --prefer-dist --no-interaction --no-progress
 
       - name: Composer audit
-        run: composer audit --locked --working-dir=packages/panels
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/panels
       - name: Panels SQLite tests
         run: composer --working-dir=packages/panels test -- --exclude-group=pg
       - name: Panels tests and coverage
@@ -427,13 +427,13 @@ jobs:
         run: php scripts/ci-composer-update.php
 
       - name: Composer audit
-        run: composer audit --locked
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Install dependencies
         run: composer --working-dir=packages/media update --prefer-dist --no-interaction --no-progress
 
       - name: Composer audit
-        run: composer audit --locked --working-dir=packages/media
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/media
       - name: Media tests and coverage
         run: composer --working-dir=packages/media test:coverage
       - name: Media static analysis
@@ -471,13 +471,13 @@ jobs:
         run: php scripts/ci-composer-update.php
 
       - name: Composer audit
-        run: composer audit --locked
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Install dependencies
         run: composer --working-dir=packages/media update --prefer-dist --no-interaction --no-progress
 
       - name: Composer audit
-        run: composer audit --locked --working-dir=packages/media
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/media
       - name: Media PostgreSQL concurrency test
         run: composer --working-dir=packages/media test:pg
         env:
@@ -533,13 +533,13 @@ jobs:
         run: php scripts/ci-composer-update.php --with "illuminate/contracts:$LARAVEL_VERSION"
 
       - name: Composer audit
-        run: composer audit --locked
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Install dependencies
         run: composer --working-dir=packages/tenancy update --prefer-dist --no-interaction --no-progress --with "laravel/framework:$LARAVEL_VERSION"
 
       - name: Composer audit
-        run: composer audit --locked --working-dir=packages/tenancy
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/tenancy
 
       - name: Install PostgreSQL 18 client
         run: |
@@ -601,13 +601,13 @@ jobs:
         run: php scripts/ci-composer-update.php
 
       - name: Composer audit
-        run: composer audit --locked
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Install dependencies
         run: composer --working-dir=products/flex-crm update --prefer-dist --no-interaction --no-progress
 
       - name: Composer audit
-        run: composer audit --locked --working-dir=products/flex-crm
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=products/flex-crm
 
       - name: Crm tests
         run: composer --working-dir=products/flex-crm test
@@ -638,28 +638,28 @@ jobs:
         run: php scripts/ci-composer-update.php
 
       - name: Composer audit
-        run: composer audit --locked
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Install access dependencies
         run: composer --working-dir=packages/access update --prefer-dist --no-interaction --no-progress
 
       - name: Composer audit (access)
-        run: composer audit --locked --working-dir=packages/access
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/access
 
       - name: Install access AzGuard bridge dependencies
         run: composer --working-dir=packages/access-azguard update --prefer-dist --no-interaction --no-progress
 
       - name: Composer audit (access AzGuard bridge)
-        run: composer audit --locked --working-dir=packages/access-azguard
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/access-azguard
 
       - name: Install remaining standalone package harnesses
         run: |
           for package in media tasks tasks-workflow panels operations tenancy webhooks tools recurrence; do
             composer --working-dir="packages/$package" update --prefer-dist --no-interaction --no-progress
-            composer audit --locked --working-dir="packages/$package"
+            env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir="packages/$package"
           done
           composer --working-dir=products/flex-crm update --prefer-dist --no-interaction --no-progress
-          composer audit --locked --working-dir=products/flex-crm
+          env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=products/flex-crm
 
       - name: Per-package test aggregator
         run: composer test:packages
@@ -701,13 +701,13 @@ jobs:
         run: php scripts/ci-composer-update.php
 
       - name: Composer audit
-        run: composer audit --locked
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Install dependencies
         run: composer --working-dir=packages/tasks update --prefer-dist --no-interaction --no-progress
 
       - name: Composer audit
-        run: composer audit --locked --working-dir=packages/tasks
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/tasks
 
       - name: Tasks tests
         run: composer --working-dir=packages/tasks test
@@ -764,13 +764,13 @@ jobs:
         run: php scripts/ci-composer-update.php
 
       - name: Composer audit
-        run: composer audit --locked
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Install dependencies
         run: composer --working-dir=packages/access update --prefer-dist --no-interaction --no-progress
 
       - name: Composer audit
-        run: composer audit --locked --working-dir=packages/access
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/access
 
       - name: Auth tests
         run: composer --working-dir=packages/access test
@@ -807,7 +807,7 @@ jobs:
         run: php scripts/ci-composer-update.php
 
       - name: Composer audit
-        run: composer audit --locked
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Architecture & layer rules (CoreX ↛ Flex, core isolation)
         run: composer test:arch
@@ -876,7 +876,7 @@ jobs:
         run: php scripts/ci-composer-update.php
 
       - name: Composer audit
-        run: composer audit --locked
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Backward compatibility (bc-check)
         run: bash scripts/bc-check.sh
@@ -922,7 +922,7 @@ jobs:
         run: php scripts/ci-composer-update.php
 
       - name: Composer audit
-        run: composer audit --locked
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Prepare PostgreSQL test databases
         run: |
@@ -966,19 +966,19 @@ jobs:
         run: composer install --prefer-dist --no-interaction --no-progress
 
       - name: Composer audit
-        run: composer audit --locked
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Install access dependencies
         run: composer --working-dir=packages/access update --prefer-dist --no-interaction --no-progress
 
       - name: Composer audit (access)
-        run: composer audit --locked --working-dir=packages/access
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/access
 
       - name: Install access AzGuard bridge dependencies
         run: composer --working-dir=packages/access-azguard update --prefer-dist --no-interaction --no-progress
 
       - name: Composer audit (access AzGuard bridge)
-        run: composer audit --locked --working-dir=packages/access-azguard
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir=packages/access-azguard
 
       - name: PHPStan
         run: composer analyse
@@ -996,7 +996,7 @@ jobs:
         run: python3 -m unittest discover -s scripts/distribution/tests -p test_audit_roots.py
 
       - name: Audit every maintained Composer source root
-        run: python3 scripts/distribution/audit-roots.py --scope source --evidence-dir build/quality/audits
+        run: env -u COMPOSER_NO_AUDIT python3 scripts/distribution/audit-roots.py --scope source --evidence-dir build/quality/audits
 
       # Второй, самостоятельный прогон (P1.28/D48): 9 правил corex/modules-lint
       # на tests/ через phpstan-tests-lint.neon (без larastan — иначе Pest-идиома
@@ -1138,7 +1138,7 @@ jobs:
         run: php scripts/ci-composer-update.php
 
       - name: Composer audit
-        run: composer audit --locked
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked
 
       - name: Mutation registry — every case must red under sabotage
         run: bash scripts/mutation-check.sh --all
@@ -1188,7 +1188,7 @@ jobs:
       - name: Install dependencies
         run: php scripts/ci-composer-update.php
       - name: Composer audit
-        run: composer audit --locked
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked
       - name: Golden snapshots
         run: composer golden
 
@@ -1209,7 +1209,7 @@ jobs:
       - name: Install dependencies
         run: php scripts/ci-composer-update.php
       - name: Composer audit
-        run: composer audit --locked
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked
       - name: Strict ownership
         run: php scripts/ownership-gate.php --strict
       - name: Rename completeness
@@ -1232,13 +1232,13 @@ jobs:
       - name: Install dependencies
         run: php scripts/ci-composer-update.php
       - name: Composer audit
-        run: composer audit --locked
+        run: env -u COMPOSER_NO_AUDIT composer audit --locked
       - name: Analyse every standalone package
         run: bash scripts/dependency-analyser.sh --all
       - name: Audit every standalone package lockfile
         run: |
           for manifest in packages/*/composer.json products/*/composer.json; do
-            composer audit --locked --working-dir="$(dirname "$manifest")"
+            env -u COMPOSER_NO_AUDIT composer audit --locked --working-dir="$(dirname "$manifest")"
           done
 
   zizmor:
