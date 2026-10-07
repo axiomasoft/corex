@@ -1,0 +1,4 @@
+Get:1 https://apt.postgresql.org/pub/repos/apt noble-pgdg InRelease [189 kB]
+Get:2 https://apt.postgresql.org/pub/repos/apt noble-pgdg/main amd64 Packages [897 kB]
+Fetched 1086 kB in 3s (311 kB/s)
+Reading package lists...

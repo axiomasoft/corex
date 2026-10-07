@@ -1,0 +1,173 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:item:v1",
+  "id": "P09.13",
+  "title": "Регрессии Transfer: resume/idempotency/partial-failure; MSI отложен по D133",
+  "status": "done",
+  "summary": "Обычные поведенческие PG-регрессии Transfer без мутационных прогонов.",
+  "why": "Bounded owner of verified P09 review defect; explicit acceptance and dependencies prevent hidden work.",
+  "scope": {
+    "include": [
+      "Independent ordinary Transfer resume/idempotency/partial-failure regression evidence.",
+      "Explicit owner amendment: bounded confirmed CI repair and authorized scoped product commits/push to axiomik/corex-mirror, no force/tags; acceptance limited to changed inputs with retained unaffected receipts and final ordinary hosted CI."
+    ],
+    "exclude": [
+      "Remote writes/publication unless exact separate external gate supplied; no unrelated P08/product behavior change.",
+      "Mutation/MSI qualification deferred by D133."
+    ]
+  },
+  "depends_on": [
+    "P09.12"
+  ],
+  "decisions": [
+    "D118",
+    "D120",
+    "D17",
+    "D18",
+    "D19",
+    "D73",
+    "D103",
+    "D113",
+    "D121",
+    "D125",
+    "D133"
+  ],
+  "reads": [
+    {
+      "ref": "knowledge/research-P09-design#repository-only",
+      "why": "Действующий scope владельца и граница отменённых release работ",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#basis",
+      "why": "Canonical verified runbook",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#mutation",
+      "why": "Canonical verified runbook",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#checks",
+      "why": "Canonical verified runbook",
+      "required": true
+    },
+    {
+      "ref": "knowledge/research-P09-design#grok-repair",
+      "why": "Verified G1–G6 corrections and executable runtime boundary",
+      "required": true
+    }
+  ],
+  "task_files": [
+    {
+      "path": "packages/transfer/tests/**",
+      "change": "modify"
+    },
+    {
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09-repair/P09.13-*",
+      "change": "any"
+    }
+  ],
+  "rules": [
+    "Соблюдать D125, D118/D120 и технические правила D121, D17/D73/D103/D113. Release-положения прежнего дизайна исключены D125; внешние записи не разрешены.",
+    "Сохранять чужие изменения; source facts пересверяются. PHP84 wrapper обязателен; перед PG — skill db-test-preflight и только *_test.",
+    "Поведение/API/SPI/schema не менять молча ради зелёного tooling; precise decision+CHANGELOG+API/Golden для public delta.",
+    "D133: до конца PLAN3 mutation/Infection/MSI/probes/registry/ledger replay не выполняются. Обычные behavior, coverage, analysis, BC/API/schema проверки сохраняются.",
+    "Self-check + scoped checks; repair owning item. Независимое full-review фазы отдельное P09.8 по действующим требованиям плана.",
+    "Изменение scope не запускает исполнение. При запуске проверить актуальное завершение P08 и independent corrected-design review. Release owner questions/grants не являются допуском для code-items.",
+    "Регрессионная защита transfer требует resume/idempotency/partial failure behavioral PG tests, not codec-only evidence.",
+    "G5 behavioral proof is three explicit cases. Reuse existing dedup (assert target applied exactly1, refs1) and failed-row-savepoint (one invalid + one applied row, successful ref1); they already prove idempotency/partial failure despite lacking those exact words in titles. Add only missing named multi-step restart/resume regression. No duplicated cosmetic idempotency/partial-failure tests needed.",
+    "D125: выполнять только repository scope; требования к rc/candidate/SBOM/27-row release DoD и публикации пропущены, не переносить их в этот item."
+  ],
+  "guidance": "Сначала применить scope D125 и knowledge/research-P09-design#repository-only. Execute only after admission, from required section. Produce real fresh raw outputs; new commands below are owned deliverables, not present-at-design assumptions. D133 has priority over all old mutation-related text and the previous cheaper-model prompt: no further mutation work during PLAN3; only independent ordinary scope remains. Owner steering in this execution: «никаких длинных прогонов, никаких мутаторов, ты делай только то, что по задаче качественно». Run only the three named short Transfer cases and scoped file Pint/PHPStan; no broad suites. Use dedicated corex_p0913_transfer_test.",
+  "validation": [
+    {
+      "id": "V1",
+      "cmd": "PGSQL_DATABASE=corex_p09_repair_transfer_test PGSQL_PORT=5434 scripts/php84 composer test:pg -- --testsuite=TransferPackage",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V2",
+      "cmd": "PGSQL_DATABASE=corex_p09_repair_transfer_test PGSQL_PORT=5434 scripts/php84 composer --working-dir=packages/transfer test:pg",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V3",
+      "cmd": "PGSQL_PORT=1 scripts/php84 composer --working-dir=packages/transfer test",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V4",
+      "cmd": "scripts/php84 vendor/bin/pint --test packages/transfer/tests",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
+      "id": "V5",
+      "cmd": "scripts/php84 vendor/bin/phpstan analyse -c 'plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.13-execution/phpstan-scoped.neon' --memory-limit=1G --no-progress",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    }
+  ],
+  "deliverables": [
+    "Named source regression resume/idempotency/partial-failure JUnit evidence; resume new executor case and existing semantic tests preserved"
+  ],
+  "route": {
+    "class": "implementation",
+    "effort": "high"
+  },
+  "review": {
+    "mode": "none"
+  },
+  "authority": {
+    "kind": "routine"
+  },
+  "rag": {
+    "need": "none",
+    "status": "not_needed",
+    "notes": "RAG:— current source facts",
+    "captures": []
+  },
+  "result": {
+    "started_at": "2026-10-07T18:32:50Z",
+    "finished_at": "2026-10-07T18:35:21Z",
+    "executor": {
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "session": "01a11796-aa4e-7081-a4c1-16e2352fc5bf"
+    },
+    "notes": "Standard root composer test:pg -- --testsuite=TransferPackage and package composer test:pg both24tests118assertions GREEN; hermetic package test13tests31assertions with closed PG port; affected Pint/PHPStan GREEN. File-level base/group with redundant package binding removed; isolated *_test preflight retained, ordinary behavioral assertions unchanged. No mutation work.",
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-10-07T18:35:21Z"
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-10-07T18:35:21Z"
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-10-07T18:35:21Z"
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-10-07T18:35:21Z"
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-10-07T18:35:21Z"
+      }
+    ]
+  },
+  "updated_at": "2026-10-07T18:35:21Z"
+}

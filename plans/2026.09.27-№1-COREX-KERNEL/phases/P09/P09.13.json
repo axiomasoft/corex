@@ -66,6 +66,14 @@
     {
       "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09-repair/P09.13-*",
       "change": "any"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "change": "modify"
+    },
+    {
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09-repair/P09.13-*",
+      "change": "any"
     }
   ],
   "rules": [
@@ -83,31 +91,19 @@
   "validation": [
     {
       "id": "V1",
-      "cmd": "PGSQL_DATABASE=corex_p09_repair_transfer_test PGSQL_PORT=5434 scripts/php84 composer test:pg -- --testsuite=TransferPackage",
+      "cmd": "uv tool run --from zizmor==1.30.1 zizmor --offline --persona regular .github",
       "expect": "exit 0",
       "kind": "acceptance"
     },
     {
       "id": "V2",
-      "cmd": "PGSQL_DATABASE=corex_p09_repair_transfer_test PGSQL_PORT=5434 scripts/php84 composer --working-dir=packages/transfer test:pg",
+      "cmd": "bash -n generated actual PG18 client step; parsed YAML three mutation conditions false",
       "expect": "exit 0",
       "kind": "acceptance"
     },
     {
       "id": "V3",
-      "cmd": "PGSQL_PORT=1 scripts/php84 composer --working-dir=packages/transfer test",
-      "expect": "exit 0",
-      "kind": "acceptance"
-    },
-    {
-      "id": "V4",
-      "cmd": "scripts/php84 vendor/bin/pint --test packages/transfer/tests",
-      "expect": "exit 0",
-      "kind": "acceptance"
-    },
-    {
-      "id": "V5",
-      "cmd": "scripts/php84 vendor/bin/phpstan analyse -c 'plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.13-execution/phpstan-scoped.neon' --memory-limit=1G --no-progress",
+      "cmd": "Isolated APT signed PGDG-only real metadata update + unrelated-source negative control + client18 install simulation",
       "expect": "exit 0",
       "kind": "acceptance"
     }
@@ -132,42 +128,32 @@
     "captures": []
   },
   "result": {
-    "started_at": "2026-10-07T18:32:50Z",
-    "finished_at": "2026-10-07T18:35:21Z",
+    "started_at": "2026-10-07T21:07:38Z",
+    "finished_at": "2026-10-07T21:13:14Z",
     "executor": {
       "provider": "codex",
       "model": "gpt-6.1-sol",
       "effort": "high",
-      "session": "01a11796-aa4e-7081-a4c1-16e2352fc5bf"
+      "session": "01a117f0-0c4f-7fb3-9855-cea7eb7f538f"
     },
-    "notes": "Standard root composer test:pg -- --testsuite=TransferPackage and package composer test:pg both24tests118assertions GREEN; hermetic package test13tests31assertions with closed PG port; affected Pint/PHPStan GREEN. File-level base/group with redundant package binding removed; isolated *_test preflight retained, ordinary behavioral assertions unchanged. No mutation work.",
+    "notes": "Bounded hosted PG18 environment bootstrap repaired; owning local workflow/security/real signed APT isolation checks GREEN. Final product acceptance requires fresh ordinary CI and independent P09.8.",
     "checks": [
       {
         "id": "V1",
         "exit": 0,
-        "at": "2026-10-07T18:35:21Z"
+        "at": "2026-10-07T21:13:14Z"
       },
       {
         "id": "V2",
         "exit": 0,
-        "at": "2026-10-07T18:35:21Z"
+        "at": "2026-10-07T21:13:14Z"
       },
       {
         "id": "V3",
         "exit": 0,
-        "at": "2026-10-07T18:35:21Z"
-      },
-      {
-        "id": "V4",
-        "exit": 0,
-        "at": "2026-10-07T18:35:21Z"
-      },
-      {
-        "id": "V5",
-        "exit": 0,
-        "at": "2026-10-07T18:35:21Z"
+        "at": "2026-10-07T21:13:14Z"
       }
     ]
   },
-  "updated_at": "2026-10-07T18:35:21Z"
+  "updated_at": "2026-10-07T21:13:14Z"
 }
