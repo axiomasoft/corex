@@ -66,6 +66,10 @@
   ],
   "task_files": [
     {
+      "path": "phpstan-tests-lint.neon",
+      "change": "modify"
+    },
+    {
       "path": ".github/workflows/ci.yml",
       "change": "modify"
     },
@@ -88,13 +92,13 @@
   "validation": [
     {
       "id": "V1",
-      "cmd": "COMPOSER_NO_AUDIT=1 scripts/php84 env -u COMPOSER_NO_AUDIT python3 scripts/distribution/audit-roots.py --scope source --source-root=/tmp/corex-p09-audit-source --evidence-dir=plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09-repair/P09.4-audits-final",
+      "cmd": "scripts/php84 composer analyse:tests-lint",
       "expect": "exit 0",
       "kind": "acceptance"
     },
     {
       "id": "V2",
-      "cmd": "scripts/php84 python3 -m unittest discover -s scripts/distribution/tests -p test_audit_roots.py",
+      "cmd": "uv tool run --from zizmor==1.30.1 zizmor --offline --persona regular .github",
       "expect": "exit 0",
       "kind": "acceptance"
     }
@@ -128,29 +132,29 @@
     "U5"
   ],
   "result": {
-    "started_at": "2026-10-07T18:24:47Z",
-    "finished_at": "2026-10-07T18:31:24Z",
+    "started_at": "2026-10-07T20:03:37Z",
+    "finished_at": "2026-10-07T20:04:54Z",
     "executor": {
       "provider": "codex",
       "model": "gpt-6.1-sol",
       "effort": "high",
-      "session": "01a11796-aa4e-7081-a4c1-16e2352fc5bf"
+      "session": "01a117f0-0c4f-7fb3-9855-cea7eb7f538f"
     },
-    "notes": "Bounded CI audit environment repair: all direct ordinary Composer audit steps and source audit unset COMPOSER_NO_AUDIT at command boundary. Hostile inherited=1 source snapshot audit GREEN25roots;22fail-closed controls pass; raw logs/manifests/locks under P09-repair/P09.4-audits-final. No audit-roots.py weakening; previous unchanged source/type/API results retained.",
+    "notes": "Second bounded repair: explicit symbol discovery of maintained SourceSnapshot in tests-lint config, no suppressions/level/path/ceiling changes. Standard Composer analyse:tests-lint GREEN; pinned Zizmor GREEN; remaining direct Octane consumer audit boundary unsets COMPOSER_NO_AUDIT. Previous source audit25roots/22controls and hosted source audit on84228516 were GREEN; new manifests will be reaudited by final ordinary CI.",
     "checks": [
       {
         "id": "V1",
         "exit": 0,
-        "at": "2026-10-07T18:31:24Z"
+        "at": "2026-10-07T20:04:54Z"
       },
       {
         "id": "V2",
         "exit": 0,
-        "at": "2026-10-07T18:31:24Z"
+        "at": "2026-10-07T20:04:54Z"
       }
     ]
   },
-  "updated_at": "2026-10-07T18:31:24Z",
+  "updated_at": "2026-10-07T20:04:54Z",
   "orchestration": {
     "strategy": "dag"
   }

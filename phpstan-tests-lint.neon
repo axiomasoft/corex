@@ -27,6 +27,7 @@ parameters:
 
     scanFiles:
         - scripts/schema-gate.php
+        - scripts/quality/rector/Import/SourceSnapshot.php
 
     paths:
         - tests

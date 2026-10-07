@@ -95,7 +95,7 @@ jobs:
         run: composer --working-dir=packages/core/tests/Release/octane-consumer install --prefer-dist --no-interaction --no-progress --no-scripts
 
       - name: Audit Octane consumer lock
-        run: composer --working-dir=packages/core/tests/Release/octane-consumer audit --locked
+        run: env -u COMPOSER_NO_AUDIT composer --working-dir=packages/core/tests/Release/octane-consumer audit --locked
 
       - name: Receipt integrity controls
         run: python3 -m unittest discover -s scripts/quality/tests -p test_octane_proof.py
