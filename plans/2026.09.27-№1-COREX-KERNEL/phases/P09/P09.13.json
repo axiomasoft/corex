@@ -7,7 +7,8 @@
   "why": "Bounded owner of verified P09 review defect; explicit acceptance and dependencies prevent hidden work.",
   "scope": {
     "include": [
-      "Independent ordinary Transfer resume/idempotency/partial-failure regression evidence."
+      "Independent ordinary Transfer resume/idempotency/partial-failure regression evidence.",
+      "Explicit owner amendment: bounded confirmed CI repair and authorized scoped product commits/push to axiomik/corex-mirror, no force/tags; acceptance limited to changed inputs with retained unaffected receipts and final ordinary hosted CI."
     ],
     "exclude": [
       "Remote writes/publication unless exact separate external gate supplied; no unrelated P08/product behavior change.",
@@ -59,16 +60,12 @@
   ],
   "task_files": [
     {
-      "path": "packages/*/tests/**",
+      "path": "packages/transfer/tests/**",
       "change": "modify"
     },
     {
-      "path": "tests/**",
-      "change": "modify"
-    },
-    {
-      "path": "packages/transfer/tests/Pg/ReleaseResumeTest.php",
-      "change": "create"
+      "path": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09-repair/P09.13-*",
+      "change": "any"
     }
   ],
   "rules": [
@@ -85,39 +82,33 @@
   "guidance": "Сначала применить scope D125 и knowledge/research-P09-design#repository-only. Execute only after admission, from required section. Produce real fresh raw outputs; new commands below are owned deliverables, not present-at-design assumptions. D133 has priority over all old mutation-related text and the previous cheaper-model prompt: no further mutation work during PLAN3; only independent ordinary scope remains. Owner steering in this execution: «никаких длинных прогонов, никаких мутаторов, ты делай только то, что по задаче качественно». Run only the three named short Transfer cases and scoped file Pint/PHPStan; no broad suites. Use dedicated corex_p0913_transfer_test.",
   "validation": [
     {
+      "id": "V1",
+      "cmd": "PGSQL_DATABASE=corex_p09_repair_transfer_test PGSQL_PORT=5434 scripts/php84 composer test:pg -- --testsuite=TransferPackage",
+      "expect": "exit 0",
+      "kind": "acceptance"
+    },
+    {
       "id": "V2",
-      "cmd": "scripts/php84 vendor/bin/pint --test packages/transfer/tests/Pg/ReleaseResumeTest.php packages/transfer/tests/Pg/SqlTransferExecutorTest.php",
+      "cmd": "PGSQL_DATABASE=corex_p09_repair_transfer_test PGSQL_PORT=5434 scripts/php84 composer --working-dir=packages/transfer test:pg",
       "expect": "exit 0",
       "kind": "acceptance"
     },
     {
       "id": "V3",
-      "cmd": "scripts/php84 vendor/bin/phpstan analyse -c 'plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.13-execution/phpstan-scoped.neon' --memory-limit=1G",
-      "expect": "exit0 adopted test-lint AST rules on the single new test, without unrelated root-suite ignore exceptions; production types unchanged",
+      "cmd": "PGSQL_PORT=1 scripts/php84 composer --working-dir=packages/transfer test",
+      "expect": "exit 0",
       "kind": "acceptance"
     },
     {
-      "id": "V6",
-      "cmd": "PGSQL_DATABASE=corex_p0913_transfer_test PGSQL_PORT=5434 scripts/php84 vendor/bin/pest --test-directory=packages/transfer/tests --configuration=packages/transfer/phpunit.xml --bootstrap=vendor/autoload.php packages/transfer/tests/Pg/ReleaseResumeTest.php --group=pg --filter='resumes the persisted checkpoint in a new executor without replaying committed rows' --log-junit=build/quality/P09.13/transfer-resume.xml",
-      "expect": "exit0 exactly named non-skipped behavioral case against preflighted isolated *_test DB; raw JUnit retained",
+      "id": "V4",
+      "cmd": "scripts/php84 vendor/bin/pint --test packages/transfer/tests",
+      "expect": "exit 0",
       "kind": "acceptance"
     },
     {
-      "id": "V7",
-      "cmd": "PGSQL_DATABASE=corex_p0913_transfer_test PGSQL_PORT=5434 scripts/php84 vendor/bin/pest --test-directory=packages/transfer/tests --configuration=packages/transfer/phpunit.xml --bootstrap=vendor/autoload.php packages/transfer/tests/Pg/SqlTransferExecutorTest.php --group=pg --filter='deduplicates an identical external record across independent jobs before target apply' --log-junit=build/quality/P09.13/transfer-idempotency.xml",
-      "expect": "exit0 exactly named non-skipped behavioral case against preflighted isolated *_test DB; raw JUnit retained",
-      "kind": "acceptance"
-    },
-    {
-      "id": "V8",
-      "cmd": "PGSQL_DATABASE=corex_p0913_transfer_test PGSQL_PORT=5434 scripts/php84 vendor/bin/pest --test-directory=packages/transfer/tests --configuration=packages/transfer/phpunit.xml --bootstrap=vendor/autoload.php packages/transfer/tests/Pg/SqlTransferExecutorTest.php --group=pg --filter='rolls back only the failed row savepoint and continues the batch' --log-junit=build/quality/P09.13/transfer-partial-failure.xml",
-      "expect": "exit0 exactly named non-skipped behavioral case against preflighted isolated *_test DB; raw JUnit retained",
-      "kind": "acceptance"
-    },
-    {
-      "id": "V9",
-      "cmd": "python3 -c 'import xml.etree.ElementTree as E; rows=[(\"build/quality/P09.13/transfer-resume.xml\",\"resumes the persisted checkpoint in a new executor without replaying committed rows\"),(\"build/quality/P09.13/transfer-idempotency.xml\",\"deduplicates an identical external record across independent jobs before target apply\"),(\"build/quality/P09.13/transfer-partial-failure.xml\",\"rolls back only the failed row savepoint and continues the batch\")]; docs=[(E.parse(p).getroot(),n)for p,n in rows]; assert all(len(r.findall(\".//testcase\"))==1 and n in r.find(\".//testcase\").get(\"name\",\"\") and int(r.find(\".//testcase\").get(\"assertions\",\"0\"))>0 and not any(r.findall(\".//\"+tag)for tag in [\"skipped\",\"failure\",\"error\"]) for r,n in docs), \"missing/skipped/wrong Transfer DoD case\"; print(\"Transfer DoD cases OK\")'",
-      "expect": "exit0 all3 exact JUnit testcases/assertions; missing/empty/wrong/skipped case RED",
+      "id": "V5",
+      "cmd": "scripts/php84 vendor/bin/phpstan analyse -c 'plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.13-execution/phpstan-scoped.neon' --memory-limit=1G --no-progress",
+      "expect": "exit 0",
       "kind": "acceptance"
     }
   ],
@@ -126,7 +117,7 @@
   ],
   "route": {
     "class": "implementation",
-    "effort": "xhigh"
+    "effort": "high"
   },
   "review": {
     "mode": "none"
@@ -141,47 +132,42 @@
     "captures": []
   },
   "result": {
-    "started_at": "2026-10-07T16:25:05Z",
-    "finished_at": "2026-10-07T16:35:58Z",
+    "started_at": "2026-10-07T18:32:50Z",
+    "finished_at": "2026-10-07T18:35:21Z",
     "executor": {
       "provider": "codex",
       "model": "gpt-6.1-sol",
-      "effort": "xhigh",
-      "session": "01a1166d-625e-7e72-8dac-6b75526f9292"
+      "effort": "high",
+      "session": "01a11796-aa4e-7081-a4c1-16e2352fc5bf"
     },
-    "notes": "Added real PostgreSQL two-step restart/resume regression: a new executor/source/sink reads the persisted ordinal/offset, completes checkpoint2 with both distinct row/ref/target writes, preserves accumulated stats, and refuses stale token or source drift before writes. Existing dedup and savepoint tests retained; removed only duplicate inherited PgTestCase binding rejected by Pest5. Three exact cases: 35+2+4 assertions, each <0.3s. Scoped Pint and adopted test-lint PHPStan rules GREEN. Owner requested no broad/long runs; none performed. D133 mutation cancellation honored. Evidence artifacts/P09.13-execution/checks.json and copied raw JUnit. Production/API/schema unchanged.",
+    "notes": "Standard root composer test:pg -- --testsuite=TransferPackage and package composer test:pg both24tests118assertions GREEN; hermetic package test13tests31assertions with closed PG port; affected Pint/PHPStan GREEN. File-level base/group with redundant package binding removed; isolated *_test preflight retained, ordinary behavioral assertions unchanged. No mutation work.",
     "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-10-07T18:35:21Z"
+      },
       {
         "id": "V2",
         "exit": 0,
-        "at": "2026-10-07T16:35:58Z"
+        "at": "2026-10-07T18:35:21Z"
       },
       {
         "id": "V3",
         "exit": 0,
-        "at": "2026-10-07T16:35:58Z"
+        "at": "2026-10-07T18:35:21Z"
       },
       {
-        "id": "V6",
+        "id": "V4",
         "exit": 0,
-        "at": "2026-10-07T16:35:58Z"
+        "at": "2026-10-07T18:35:21Z"
       },
       {
-        "id": "V7",
+        "id": "V5",
         "exit": 0,
-        "at": "2026-10-07T16:35:58Z"
-      },
-      {
-        "id": "V8",
-        "exit": 0,
-        "at": "2026-10-07T16:35:58Z"
-      },
-      {
-        "id": "V9",
-        "exit": 0,
-        "at": "2026-10-07T16:35:58Z"
+        "at": "2026-10-07T18:35:21Z"
       }
     ]
   },
-  "updated_at": "2026-10-07T16:35:58Z"
+  "updated_at": "2026-10-07T18:35:21Z"
 }

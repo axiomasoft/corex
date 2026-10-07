@@ -27,9 +27,12 @@ use CoreX\Transfer\Data\TransferLimits;
 use CoreX\Transfer\Data\TransferRef;
 use CoreX\Transfer\Internal\Transfer\SqlTransferExecutor;
 use CoreX\Transfer\Internal\Transfer\TransferUnavailable;
+use CoreX\Transfer\Tests\PgTestCase;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+
+uses(PgTestCase::class)->group('pg');
 
 it('resumes the persisted checkpoint in a new executor without replaying committed rows', function (): void {
     $hash = hash('sha256', 'resume-source');
