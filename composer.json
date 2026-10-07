@@ -219,6 +219,9 @@
         "quality:ceilings": "php scripts/quality-ceiling-guard.php",
         "deps:analyse": "bash scripts/dependency-analyser.sh --all",
         "php-api": "php scripts/php-api.php --strict --check",
-        "schema-gate": "bash scripts/ci-deferred-guard.sh php scripts/schema-gate.php"
+        "schema-gate": "bash scripts/ci-deferred-guard.sh php scripts/schema-gate.php",
+        "mutation:inventory": "python3 scripts/quality/mutation.py --inventory --check",
+        "mutation:self-test": "python3 scripts/quality/mutation.py --self-test",
+        "mutation": "python3 scripts/quality/mutation.py"
     }
 }

@@ -976,6 +976,90 @@ jobs:
       - name: Rector
         run: composer refactor:check
 
+  mutation-inventory:
+    name: Mutation inventory and parser controls
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.fragments.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd
+          coverage: none
+      - name: Install pinned dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+      - name: Exhaustive fragments and AST declaration ledger
+        run: python3 scripts/quality/mutation.py --inventory --check
+      - name: Strict parser negative controls
+        run: python3 scripts/quality/mutation.py --self-test
+      - name: Materialize package-fragment shards
+        id: fragments
+        run: echo "matrix=$(python3 scripts/quality/mutation.py --matrix)" >> "$GITHUB_OUTPUT"
+
+  mutation-fragments:
+    name: MSI · ${{ matrix.package }} · ${{ matrix.zone }}
+    needs: mutation-inventory
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix: ${{ fromJSON(needs.mutation-inventory.outputs.matrix) }}
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_DB: corex_test
+          POSTGRES_USER: corex
+          POSTGRES_PASSWORD: corex
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U corex -d corex_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      MUTATION_PACKAGE: ${{ matrix.package }}
+      MUTATION_ZONE: ${{ matrix.zone }}
+      PGSQL_HOST: 127.0.0.1
+      PGSQL_PORT: '5432'
+      PGSQL_USERNAME: corex
+      PGSQL_PASSWORD: corex
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, pdo_pgsql, bcmath, curl, intl, zip, gd, pcntl, pcov
+          coverage: pcov
+      - name: Install pinned dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+      - name: Measure full package-fragment MSI
+        run: python3 scripts/quality/mutation.py --package "$MUTATION_PACKAGE" --zone "$MUTATION_ZONE"
+      - name: Retain raw mutant processes and coverage
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: mutation-${{ matrix.package }}-${{ matrix.zone }}
+          path: |
+            build/quality/mutation/**/receipt.json
+            build/quality/mutation/**/processes/**
+            build/quality/mutation/**/invalid/**
+            build/quality/mutation/**/sqlite/**
+            build/quality/mutation/**/pgsql/**
+          retention-days: 7
+
   mutation-check:
     permissions:
       contents: read

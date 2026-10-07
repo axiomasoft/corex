@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd" bootstrap="/home/vostrikov/projects/packages/corex/build/quality/mutation/probe-/tenancy-security/3c0e36bbb4bd4e70af6a3a092ec0dccf/pgsql/tmp/infection/bootstrap.1a8d45671ced8563e34fe9c60c4af4a6.php" colors="true" executionOrder="random" failOnWarning="true" failOnRisky="true" failOnEmptyTestSuite="true" beStrictAboutOutputDuringTests="true">
+    <testsuites><testsuite name="probe"><file>/home/vostrikov/projects/packages/corex/build/quality/mutation/probe-/tenancy-security/3c0e36bbb4bd4e70af6a3a092ec0dccf/sandbox/packages/tenancy/tests/Unit/DatabaseValueTest.php</file></testsuite></testsuites><php>
+        <ini name="memory_limit" value="1G"/>
+
+        
+        <env name="PGOPTIONS" value="-c timezone=UTC" force="true"/>
+    <env name="APP_ENV" value="testing" force="true"/></php>
+<source><include><file>/home/vostrikov/projects/packages/corex/build/quality/mutation/probe-/tenancy-security/3c0e36bbb4bd4e70af6a3a092ec0dccf/sandbox/packages/tenancy/src/Provisioning/Internal/DatabaseValue.php</file></include></source></phpunit>

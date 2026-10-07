@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "pg_isready",
+    "-h",
+    "127.0.0.1",
+    "-p",
+    "5434",
+    "-U",
+    "corex",
+    "-d",
+    "corex_msi_tenancy_security_test"
+  ],
+  "duration_seconds": 0.032,
+  "exit": 0,
+  "stderr": {
+    "path": "pg-ready.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stdout": {
+    "path": "pg-ready.stdout",
+    "sha256": "b7f336de2f26ceef534674b3e6dc13dd026689a6ff8b24c7ebe5e5b9d7481962"
+  },
+  "timed_out": false
+}

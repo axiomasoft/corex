@@ -1,0 +1,39 @@
+
+    ____      ____          __  _
+   /  _/___  / __/__  _____/ /_(_)___  ____
+   / // __ \/ /_/ _ \/ ___/ __/ / __ \/ __ \
+ _/ // / / / __/  __/ /__/ /_/ / /_/ / / / /
+/___/_/ /_/_/  \___/\___/\__/_/\____/_/ /_/
+
+#StandWithUkraine
+
+Infection - PHP Mutation Testing Framework version 0.35.6
+
+[notice] You are running Infection with PCOV enabled.
+[notice] Running Infection with 1 thread.
+
+Running initial tests with Pest version 5.2.1
+
+.: killed by tests, A: killed by SA, M: escaped, U: uncovered
+E: fatal error, X: syntax error, T: timed out, S: skipped, I: ignored
+
+
+Generate mutants...
+
+Processing source code files...
+....
+
+4 mutations were generated:
+       4 mutants were killed by Test Framework
+
+Metrics:
+         Mutation Score Indicator (MSI): 100%
+         Mutation Code Coverage: 100%
+         Covered Code MSI: 100%
+
+Please note that some mutants will inevitably be harmless (i.e. false positives).
+
+Generated Reports:
+         - /home/vostrikov/projects/packages/corex/build/quality/mutation/probe-/tenancy-security/3c0e36bbb4bd4e70af6a3a092ec0dccf/pgsql/mutants.json
+
+Time: 0s. Memory: 22.00MB. Threads: 1

@@ -1,0 +1,25 @@
+
+  ⨯........
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Packages\tenancy\tests\Unit\DatabaseValueTest >…  RuntimeException   
+  Expected a database text value.
+
+  at packages/tenancy/src/Provisioning/Internal/DatabaseValue.php:16
+     12▕ {
+     13▕     public static function text(mixed $value): string
+     14▕     {
+     15▕         if (! is_string($value)) {
+  ➜  16▕             throw new RuntimeException('Expected a database text value.');
+     17▕         }
+     18▕ 
+     19▕         return $value;
+     20▕     }
+
+  1   packages/tenancy/src/Provisioning/Internal/DatabaseValue.php:16
+  2   packages/tenancy/tests/Unit/DatabaseValueTest.php:28
+
+
+  Tests:    1 failed, 8 passed (12 assertions)
+  Duration: 0.06s
+  Random Order Seed: 1791377130
+

@@ -2,7 +2,7 @@
   "$schema": "urn:swissknifeman:task:plan:item:v1",
   "id": "P09.5",
   "title": "MSI runner, exhaustive fragments, strict parser and CI shards",
-  "status": "todo",
+  "status": "done",
   "summary": "Create fail-closed fragment runner after proven compatibility; behavioral score improvements owned by P09.12–14.",
   "why": "Timeout/error/zero mutants и stale coverage способны ложно сертифицировать security поведение.",
   "scope": {
@@ -98,6 +98,22 @@
     {
       "path": "scripts/quality/mutation-zero-ledger.json",
       "change": "create"
+    },
+    {
+      "path": "scripts/quality/mutation-ast.php",
+      "change": "create"
+    },
+    {
+      "path": "scripts/quality/README.md",
+      "change": "create"
+    },
+    {
+      "path": "scripts/quality/tests/fixtures/mutation/README.md",
+      "change": "create"
+    },
+    {
+      "path": "scripts/quality/tests/fixtures/mutation/infection-0.35.6.json",
+      "change": "create"
     }
   ],
   "rules": [
@@ -187,6 +203,64 @@
       "@plan/artifacts/P09-design-rag/README.md"
     ]
   },
-  "result": null,
-  "updated_at": "2026-10-06T19:25:11Z"
+  "result": {
+    "started_at": "2026-10-07T11:58:44Z",
+    "finished_at": "2026-10-07T12:49:24Z",
+    "executor": {
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "session": "01a11638-28f4-78a2-aa0a-beda523d1583"
+    },
+    "attempt_id": "P09.5-20261007-final",
+    "notes": "Strict MSI runner, exhaustive 1476-file/25-fragment map, exact 354-file AST ledger and isolated CI shards. All declared checks GREEN: 33 self-tests, 35 fixed sabotage controls, full PHPStan/Pint/audit and real four-mutant Infection probe. Probe is not full-zone MSI. No package/API/schema or pin changes; independent review remains P09.8. Evidence artifacts/P09.5-execution/completion.json and completion.md.",
+    "checks": [
+      {
+        "id": "V1",
+        "exit": 0,
+        "at": "2026-10-07T12:49:24Z"
+      },
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-10-07T12:49:24Z"
+      },
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-10-07T12:49:24Z"
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-10-07T12:49:24Z"
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-10-07T12:49:24Z"
+      },
+      {
+        "id": "V7",
+        "exit": 0,
+        "at": "2026-10-07T12:49:24Z"
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-10-07T12:49:24Z"
+      },
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-10-07T12:49:24Z"
+      },
+      {
+        "id": "V11",
+        "exit": 0,
+        "at": "2026-10-07T12:49:24Z"
+      }
+    ]
+  },
+  "updated_at": "2026-10-07T12:49:24Z"
 }

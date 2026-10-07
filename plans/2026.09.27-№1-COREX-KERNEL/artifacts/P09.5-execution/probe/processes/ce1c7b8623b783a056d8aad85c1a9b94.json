@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "/usr/bin/php8.4",
+    "/home/vostrikov/projects/packages/corex/build/quality/mutation/probe-/tenancy-security/3c0e36bbb4bd4e70af6a3a092ec0dccf/sandbox/vendor/bin/../pestphp/pest/bin/pest",
+    "--configuration=/home/vostrikov/projects/packages/corex/build/quality/mutation/probe-/tenancy-security/3c0e36bbb4bd4e70af6a3a092ec0dccf/pgsql/tmp/infection/pest.ce1c7b8623b783a056d8aad85c1a9b94.xml",
+    "--compact",
+    "--colors=never"
+  ],
+  "duration_seconds": 0.114,
+  "exit": 2,
+  "stderr": {
+    "path": "processes/ce1c7b8623b783a056d8aad85c1a9b94.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stdout": {
+    "path": "processes/ce1c7b8623b783a056d8aad85c1a9b94.stdout",
+    "sha256": "9a38bbba2d60ffd402addb782c169761b79fdd2d4c5943b8f9311f9221a2b4bf"
+  },
+  "terminated": false
+}
