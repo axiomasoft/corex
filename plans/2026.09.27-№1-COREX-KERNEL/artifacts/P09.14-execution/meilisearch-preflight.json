@@ -1,0 +1,24 @@
+{
+  "endpoint": "http://127.0.0.1:32771",
+  "container": "/corex_p0914_meilisearch",
+  "image": "getmeili/meilisearch:v1.16",
+  "image_id": "sha256:4883d230a8fe18ee1117aa48cd83473f8aa3ede2215ce2e788c0c9f77391d524",
+  "running": true,
+  "tmpfs": {
+    "/meili_data": ""
+  },
+  "health": {
+    "status": "available"
+  },
+  "version": {
+    "commitSha": "a2c96d40d313cb7a143a93ad5f2fb52b5eaafe47",
+    "commitDate": "2025-08-04T10:40:12.000000000Z",
+    "pkgVersion": "1.16.0"
+  },
+  "indexes": {
+    "results": [],
+    "offset": 0,
+    "limit": 20,
+    "total": 0
+  }
+}

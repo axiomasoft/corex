@@ -1,0 +1,18 @@
+{
+  "meilisearch.xml": {
+    "cases": 3,
+    "assertions": 18,
+    "seconds": 1.4700410000000002
+  },
+  "postgres-search.xml": {
+    "cases": 4,
+    "assertions": 13,
+    "seconds": 0.170841
+  },
+  "meilisearch_cleanup": {
+    "results": [],
+    "offset": 0,
+    "limit": 20,
+    "total": 0
+  }
+}

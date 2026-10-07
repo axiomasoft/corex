@@ -6,14 +6,12 @@ use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
 use CoreX\Data\Data\DataScope;
 use CoreX\Search\Contracts\SearchSchema;
+use CoreX\Search\Data\SearchFilter;
 use CoreX\Search\Data\SearchQuery;
 use CoreX\Search\Data\SearchSnapshot;
 use CoreX\Search\Internal\Postgres\PostgresSearchProvider;
 use CoreX\Search\Internal\Query\SearchCursorCodec;
-use CoreX\Search\Tests\PgTestCase;
 use Illuminate\Support\Facades\DB;
-
-uses(PgTestCase::class)->group('pg');
 
 beforeEach(function (): void {
     DB::statement('DROP TABLE IF EXISTS corex_search_provider_test');
@@ -54,6 +52,17 @@ it('uses allowlisted schema identifiers and bound text-query values', function (
 
     expect($page->candidates)->toHaveCount(2)
         ->and($page->candidates[0]->record->id)->toBe('equipment-1');
+
+    $filtered = $provider->query(scope: $scope, query: new SearchQuery(
+        entity: 'equipment', schemaHash: str_repeat('a', 64), text: 'pump',
+        filters: [new SearchFilter(field: 'status', values: ['active'])],
+    ));
+
+    expect(array_map(static fn ($candidate): string => $candidate->record->id, $filtered->candidates))->toBe(['equipment-1'])
+        ->and(fn (): mixed => $provider->query(scope: $scope, query: new SearchQuery(
+            entity: 'equipment', schemaHash: str_repeat('a', 64), text: 'pump',
+            filters: [new SearchFilter(field: 'unapproved', values: ['active'])],
+        )))->toThrow(InvalidArgumentException::class);
 })->group('pg');
 
 it('uses an opaque cursor bound to its scope and query', function (): void {
@@ -80,11 +89,23 @@ it('uses an opaque cursor bound to its scope and query', function (): void {
 
     $second = $provider->query(scope: $scope, query: new SearchQuery(entity: 'equipment', schemaHash: str_repeat('a', 64), text: 'pump', limit: 1, afterId: $first->nextAfterId));
 
-    expect($second->candidates[0]->record->id)->not->toBe($first->candidates[0]->record->id);
+    expect($second->candidates[0]->record->id)->toBe('equipment-2')
+        ->and(fn (): mixed => $provider->query(scope: $scope, query: new SearchQuery(
+            entity: 'equipment', schemaHash: str_repeat('a', 64), text: 'archived', limit: 1, afterId: $first->nextAfterId,
+        )))->toThrow(InvalidArgumentException::class);
 })->group('pg');
 
 it('keeps physically separate account databases and their cursors isolated', function (): void {
-    foreach (['search_a' => 'corex_search_a_test', 'search_b' => 'corex_search_b_test'] as $name => $database) {
+    $databases = [
+        'search_a' => getenv('PGSQL_SEARCH_A_DATABASE') ?: 'corex_search_a_test',
+        'search_b' => getenv('PGSQL_SEARCH_B_DATABASE') ?: 'corex_search_b_test',
+    ];
+
+    if ($databases['search_a'] === $databases['search_b'] || in_array(false, array_map(static fn (string $database): bool => preg_match('/\A[a-z0-9_]+_test\z/D', $database) === 1, $databases), true)) {
+        throw new RuntimeException('Search account fixtures require distinct databases ending in _test.');
+    }
+
+    foreach ($databases as $name => $database) {
         config()->set("database.connections.{$name}", [
             'driver' => 'pgsql', 'host' => getenv('PGSQL_HOST') ?: '127.0.0.1', 'port' => getenv('PGSQL_PORT') ?: '5434',
             'database' => $database, 'username' => getenv('PGSQL_USERNAME') ?: 'corex', 'password' => getenv('PGSQL_PASSWORD') ?: 'corex',

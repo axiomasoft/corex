@@ -1,0 +1,13 @@
+includes:
+    - /home/vostrikov/projects/packages/corex/packages/core/extension.neon
+    - /home/vostrikov/projects/packages/corex/vendor/pestphp/pest/extension.neon
+
+parameters:
+    level: 0
+    tmpDir: /home/vostrikov/projects/packages/corex/build/phpstan-p0914-tests
+    paths:
+        - /home/vostrikov/projects/packages/corex/packages/search/tests/Pg/PostgresSearchProviderTest.php
+        - /home/vostrikov/projects/packages/corex/packages/search-meilisearch/tests/MeilisearchTestCase.php
+        - /home/vostrikov/projects/packages/corex/packages/search-meilisearch/tests/Pest.php
+        - /home/vostrikov/projects/packages/corex/packages/search-meilisearch/tests/Feature/MeilisearchSearchProviderTest.php
+        - /home/vostrikov/projects/packages/corex/packages/search-meilisearch/tests/Feature/IndexLifecycleTest.php

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="Packages\search\tests\Pg\PostgresSearchProviderTest" file="packages/search/tests/Pg/PostgresSearchProviderTest.php" tests="4" assertions="13" errors="0" failures="0" skipped="0" time="0.170841">
+    <testcase name="it uses allowlisted schema identifiers and bound text-query values" file="packages/search/tests/Pg/PostgresSearchProviderTest.php::it uses allowlisted schema identifiers and bound text-query values" class="Packages\search\tests\Pg\PostgresSearchProviderTest" classname="Packages.search.tests.Pg.PostgresSearchProviderTest" assertions="4" time="0.067521"/>
+    <testcase name="it uses an opaque cursor bound to its scope and query" file="packages/search/tests/Pg/PostgresSearchProviderTest.php::it uses an opaque cursor bound to its scope and query" class="Packages\search\tests\Pg\PostgresSearchProviderTest" classname="Packages.search.tests.Pg.PostgresSearchProviderTest" assertions="4" time="0.023008"/>
+    <testcase name="it keeps physically separate account databases and their cursors isolated" file="packages/search/tests/Pg/PostgresSearchProviderTest.php::it keeps physically separate account databases and their cursors isolated" class="Packages\search\tests\Pg\PostgresSearchProviderTest" classname="Packages.search.tests.Pg.PostgresSearchProviderTest" assertions="2" time="0.053296"/>
+    <testcase name="it preserves phrase search across nullable schema columns without interpreting text as SQL" file="packages/search/tests/Pg/PostgresSearchProviderTest.php::it preserves phrase search across nullable schema columns without interpreting text as SQL" class="Packages\search\tests\Pg\PostgresSearchProviderTest" classname="Packages.search.tests.Pg.PostgresSearchProviderTest" assertions="3" time="0.027016"/>
+  </testsuite>
+</testsuites>

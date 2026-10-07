@@ -8,17 +8,15 @@ use CoreX\Data\Data\DataScope;
 use CoreX\Search\Data\SearchFilter;
 use CoreX\Search\Data\SearchQuery;
 use CoreX\SearchMeilisearch\Internal\MeilisearchSearchProvider;
-use Meilisearch\Client;
 
 it('returns candidate identifiers only from an isolated local Meilisearch service', function (): void {
-    $client = new Client('http://127.0.0.1:7700');
-    $index = $client->index('corex-p66-query');
+    $index = $this->index('query');
     $task = $index->addDocuments([
         ['id' => 'machine-1', 'title' => 'Hydraulic pump'],
         ['id' => 'machine-2', 'title' => 'Hydraulic valve'],
     ], 'id');
-    $client->waitForTask($task['taskUid']);
-    $adapter = new MeilisearchSearchProvider(client: $client, indexUid: 'corex-p66-query');
+    $this->client->waitForTask($task['taskUid']);
+    $adapter = new MeilisearchSearchProvider(client: $this->client, indexUid: $index->getUid());
     $scope = DataScope::fromTenantContext(
         context: new TenantContext(account: new AccountRef(id: 'account-a', slug: 'account-a', status: 'active', features: [], limits: []), boxed: false),
         connectionIdentity: 'pgsql:account-a',
@@ -31,9 +29,19 @@ it('returns candidate identifiers only from an isolated local Meilisearch servic
         query: new SearchQuery(entity: 'machine', schemaHash: str_repeat('a', 64), text: 'hydraulic'),
     );
 
+    $limited = $adapter->query(scope: $scope, query: new SearchQuery(entity: 'machine', schemaHash: str_repeat('a', 64), text: 'hydraulic', limit: 1));
+
     expect($page->candidates)->toHaveCount(2)
+        ->and(array_map(static fn ($candidate): string => $candidate->record->id, $page->candidates))->toContain('machine-1', 'machine-2')
         ->and($page->candidates[0]->record->entity)->toBe('machine')
-        ->and($page->candidates[0]->record->id)->toBeString()
+        ->and($page->truncated)->toBeFalse()
+        ->and($limited->candidates)->toHaveCount(1)
+        ->and($limited->truncated)->toBeTrue()
+        ->and($limited->nextAfterId)->toBeNull()
+        ->and(fn (): mixed => $adapter->query(
+            scope: $scope,
+            query: new SearchQuery(entity: 'machine', schemaHash: str_repeat('a', 64), text: 'hydraulic', afterId: 'unsupported'),
+        ))->toThrow(InvalidArgumentException::class)
         ->and(fn (): mixed => $adapter->query(
             scope: $scope,
             query: new SearchQuery(entity: 'machine', schemaHash: str_repeat('a', 64), text: 'hydraulic', filters: [new SearchFilter(field: 'status', values: ['active'])]),
