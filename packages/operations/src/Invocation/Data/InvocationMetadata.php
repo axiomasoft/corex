@@ -21,7 +21,7 @@ final readonly class InvocationMetadata
         ?string $correlationId = null,
         ?string $accept = null,
     ) {
-        $this->correlationId = self::isOpaqueId($correlationId) ? $correlationId : $requestId;
+        $this->correlationId = is_string($correlationId) && self::isOpaqueId($correlationId) ? $correlationId : $requestId;
         $this->accept = is_string($accept) ? $accept : '';
     }
 

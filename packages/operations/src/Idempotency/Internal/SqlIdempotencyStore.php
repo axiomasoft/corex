@@ -225,10 +225,10 @@ final readonly class SqlIdempotencyStore implements IdempotencyStore
         string $requestFingerprint,
         string $contractHash,
     ): IdempotencyAttempt {
-        $state = (string) $row->state;
+        $state = DatabaseValue::text(DatabaseValue::field($row, 'state'));
         $disposition = match (true) {
-            ! hash_equals((string) $row->request_fingerprint, $requestFingerprint) => IdempotencyAttempt::Conflict,
-            ! hash_equals((string) $row->contract_hash, $contractHash) => IdempotencyAttempt::ContractMismatch,
+            ! hash_equals(DatabaseValue::text(DatabaseValue::field($row, 'request_fingerprint')), $requestFingerprint) => IdempotencyAttempt::Conflict,
+            ! hash_equals(DatabaseValue::text(DatabaseValue::field($row, 'contract_hash')), $contractHash) => IdempotencyAttempt::ContractMismatch,
             in_array($state, ['completed', 'failed'], true) => IdempotencyAttempt::Replay,
             $state === 'started' => IdempotencyAttempt::InProgress,
             default => throw new RuntimeException('Idempotency row has an unknown state.'),
@@ -237,15 +237,15 @@ final readonly class SqlIdempotencyStore implements IdempotencyStore
         return new IdempotencyAttempt(
             disposition: $disposition,
             scope: $scope,
-            scopeHash: (string) $row->scope_hash,
-            keyHash: (string) $row->key_hash,
-            requestFingerprint: (string) $row->request_fingerprint,
-            contractHash: (string) $row->contract_hash,
+            scopeHash: DatabaseValue::text(DatabaseValue::field($row, 'scope_hash')),
+            keyHash: DatabaseValue::text(DatabaseValue::field($row, 'key_hash')),
+            requestFingerprint: DatabaseValue::text(DatabaseValue::field($row, 'request_fingerprint')),
+            contractHash: DatabaseValue::text(DatabaseValue::field($row, 'contract_hash')),
             state: $state,
-            attempt: (int) $row->attempt,
-            leaseToken: $row->lease_token === null ? null : (string) $row->lease_token,
-            leaseUntil: $this->date($row->lease_until),
-            outcomeJson: $row->outcome_json === null ? null : (string) $row->outcome_json,
+            attempt: DatabaseValue::integer(DatabaseValue::field($row, 'attempt')),
+            leaseToken: DatabaseValue::field($row, 'lease_token') === null ? null : DatabaseValue::text(DatabaseValue::field($row, 'lease_token')),
+            leaseUntil: $this->date(DatabaseValue::field($row, 'lease_until')),
+            outcomeJson: DatabaseValue::field($row, 'outcome_json') === null ? null : DatabaseValue::text(DatabaseValue::field($row, 'outcome_json')),
         );
     }
 
@@ -292,6 +292,6 @@ final readonly class SqlIdempotencyStore implements IdempotencyStore
 
         return $value instanceof DateTimeInterface
             ? DateTimeImmutable::createFromInterface($value)
-            : new DateTimeImmutable((string) $value);
+            : new DateTimeImmutable(DatabaseValue::text($value));
     }
 }

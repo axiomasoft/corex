@@ -1,0 +1,14 @@
+{
+  "id": "module-layout",
+  "command": "scripts/php84 python3 scripts/module-layout-gate.py",
+  "exit_code": 0,
+  "started_at": "2026-10-07T05:49:39.326287+00:00",
+  "finished_at": "2026-10-07T05:49:39.631289+00:00",
+  "duration_seconds": 0.305,
+  "log": "module-layout.log",
+  "log_sha256": "327bb6b36d8789f86bfdf1ac3d94994c82dc40d76360a0fc473a850c1d5a7bfc",
+  "environment": {
+    "PAO_DISABLE": "1",
+    "PHP": "8.4.26"
+  }
+}

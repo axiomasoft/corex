@@ -24,6 +24,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
+use UnexpectedValueException;
 
 final class OperationDispatcher implements \CoreX\Operations\Invocation\Contracts\OperationDispatcher
 {
@@ -73,6 +74,11 @@ final class OperationDispatcher implements \CoreX\Operations\Invocation\Contract
 
             if (JsonDocuments::map($result->metadata) !== []) {
                 $body = $response->getData(true);
+
+                if (! is_array($body) || ! is_array($body['meta'] ?? null)) {
+                    throw new UnexpectedValueException('Success serializer must return a metadata object.');
+                }
+
                 $body['meta'] = [...$body['meta'], ...JsonDocuments::map($result->metadata)];
                 $response->setData($body);
             }
@@ -111,7 +117,18 @@ final class OperationDispatcher implements \CoreX\Operations\Invocation\Contract
             throw new ApiError(errorCode: OperationsErrorCode::UndeclaredFields, status: 422, message: 'Input contains undeclared fields.', details: JsonDocuments::capture(['fields' => $undeclared]));
         }
 
-        return $this->validation->make($input, $operation->inputRules)->validate();
+        $validated = $this->validation->make($input, $operation->inputRules)->validate();
+        $named = [];
+
+        foreach ($validated as $key => $value) {
+            if (! is_string($key)) {
+                throw new UnexpectedValueException('Validated input keys must be named.');
+            }
+
+            $named[$key] = $value;
+        }
+
+        return $named;
     }
 
     private function idempotencyKey(Request $request): ?string

@@ -1,0 +1,15 @@
+{
+  "id": "bc-webhooks",
+  "command": "scripts/php84 composer bc-check",
+  "exit_code": 0,
+  "started_at": "2026-10-07T06:11:47.333710+00:00",
+  "finished_at": "2026-10-07T06:12:23.444428+00:00",
+  "duration_seconds": 36.111,
+  "log": "bc-webhooks.log",
+  "log_sha256": "d678aa18c4b64f330392dea82b3cc778d46fec7234f0999c850208edc0a34333",
+  "environment": {
+    "PAO_DISABLE": "1",
+    "PHP": "8.4.26",
+    "BC_CHECK_ONLY": "webhooks"
+  }
+}

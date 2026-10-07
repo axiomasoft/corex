@@ -2,7 +2,7 @@
   "$schema": "urn:swissknifeman:task:plan:item:v1",
   "id": "P09.11",
   "title": "Строгие operations/tools/webhooks без baseline (347)",
-  "status": "todo",
+  "status": "done_with_deviations",
   "summary": "Строгие operations/tools/webhooks без baseline (347)",
   "why": "Bounded owner of verified P09 review defect; explicit acceptance and dependencies prevent hidden work.",
   "scope": {
@@ -26,7 +26,8 @@
     "D103",
     "D113",
     "D121",
-    "D125"
+    "D125",
+    "D128"
   ],
   "reads": [
     {
@@ -98,6 +99,41 @@
     {
       "path": "scripts/mutation-check.sh",
       "change": "modify"
+    },
+    {
+      "path": "packages/operations/CHANGELOG.md",
+      "change": "modify"
+    },
+    {
+      "path": "packages/operations/resources/contracts/php-api.json",
+      "change": "modify"
+    },
+    {
+      "path": "docs/reference/public-api.md",
+      "change": "modify"
+    },
+    {
+      "path": "tests/Golden/baseline/php-surface.json",
+      "change": "modify"
+    },
+    {
+      "path": "tests/Golden/REBASELINE.md",
+      "change": "modify"
+    },
+    {
+      "path": "scripts/quality/release-quality.php",
+      "change": "modify"
+    },
+    {
+      "path": "tests/Arch/QualityReleaseGateTest.php",
+      "change": "modify"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "P09.11-execution-summary",
+      "path": "@plan/artifacts/P09.11-execution/summary.json",
+      "role": "output"
     }
   ],
   "rules": [
@@ -227,6 +263,101 @@
     "notes": "RAG:— current source facts",
     "captures": []
   },
-  "result": null,
-  "updated_at": "2026-10-06T19:25:11Z"
+  "result": {
+    "started_at": "2026-10-07T05:40:49Z",
+    "finished_at": "2026-10-07T06:15:41Z",
+    "executor": {
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "session": "01a114df-d721-7f52-97da-29b1eea2766a"
+    },
+    "notes": "GREEN: artifacts/P09.11-execution/summary.json and verify-artifacts.py; 137/16/194 diagnostics removed, three baselines/ceilings0, 444 package tests with3701 assertions and no skips, all35 fixed mutations strictly apply/killed/restored. Full completed Pint/BC proof retained with final affected delta lint/BC/SQLite/PG revalidation. API exact3 docs/Golden only4 Internal types; schema/manifests/locks/BC approvals unchanged. Knowledge: knowledge/artifacts-P09.11-execution. P09.8 owns independent review/security-concurrency assessment and final hosted CI.",
+    "deviations": [
+      "D128: exact three PHPDoc fields reflect numeric JSON object keys/recursive schema lists, with unchanged native signatures and preserved valid values; security gate false tools migration-path requirement repaired and negative-proven in prospectively declared owning scope."
+    ],
+    "checks": [
+      {
+        "id": "V3",
+        "exit": 0,
+        "at": "2026-10-07T06:15:41Z"
+      },
+      {
+        "id": "V4",
+        "exit": 0,
+        "at": "2026-10-07T06:15:41Z"
+      },
+      {
+        "id": "V5",
+        "exit": 0,
+        "at": "2026-10-07T06:15:41Z"
+      },
+      {
+        "id": "V6",
+        "exit": 0,
+        "at": "2026-10-07T06:15:41Z"
+      },
+      {
+        "id": "V9",
+        "exit": 0,
+        "at": "2026-10-07T06:15:41Z"
+      },
+      {
+        "id": "V10",
+        "exit": 0,
+        "at": "2026-10-07T06:15:41Z"
+      },
+      {
+        "id": "V11",
+        "exit": 0,
+        "at": "2026-10-07T06:15:41Z"
+      },
+      {
+        "id": "V14",
+        "exit": 0,
+        "at": "2026-10-07T06:15:41Z"
+      },
+      {
+        "id": "V16",
+        "exit": 0,
+        "at": "2026-10-07T06:15:41Z"
+      },
+      {
+        "id": "V17",
+        "exit": 0,
+        "at": "2026-10-07T06:15:41Z"
+      },
+      {
+        "id": "V18",
+        "exit": 0,
+        "at": "2026-10-07T06:15:41Z"
+      },
+      {
+        "id": "V19",
+        "exit": 0,
+        "at": "2026-10-07T06:15:41Z"
+      },
+      {
+        "id": "V20",
+        "exit": 0,
+        "at": "2026-10-07T06:15:41Z"
+      },
+      {
+        "id": "V21",
+        "exit": 0,
+        "at": "2026-10-07T06:15:41Z"
+      },
+      {
+        "id": "V22",
+        "exit": 0,
+        "at": "2026-10-07T06:15:41Z"
+      },
+      {
+        "id": "V30",
+        "exit": 0,
+        "at": "2026-10-07T06:15:41Z"
+      }
+    ]
+  },
+  "updated_at": "2026-10-07T06:15:41Z"
 }

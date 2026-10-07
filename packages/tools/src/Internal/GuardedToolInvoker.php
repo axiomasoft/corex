@@ -30,6 +30,7 @@ use CoreX\Tools\Data\ToolOutcome;
 use CoreX\Tools\Data\ToolResult;
 use CoreX\Tools\Errors\Enums\ToolsErrorCode;
 use Illuminate\Contracts\Container\Container;
+use InvalidArgumentException;
 use LogicException;
 use Override;
 use RuntimeException;
@@ -252,7 +253,12 @@ final class GuardedToolInvoker implements ToolInvoker
                 }
 
                 if (str_starts_with($target, 'path:')) {
-                    $parameters[substr($target, 5)] = (string) $decoded[$argumentField];
+                    $value = $decoded[$argumentField];
+
+                    if (! is_scalar($value) && $value !== null) {
+                        throw new InvalidArgumentException('Path arguments must be scalar.');
+                    }
+                    $parameters[substr($target, 5)] = (string) $value;
                 } else {
                     $input[$target] = $decoded[$argumentField];
                 }
@@ -261,7 +267,15 @@ final class GuardedToolInvoker implements ToolInvoker
             return [$input, $parameters];
         }
 
-        return [$decoded, []];
+        $named = [];
+        foreach ($decoded as $key => $value) {
+            if (! is_string($key)) {
+                throw new InvalidArgumentException('Tool input keys must be named.');
+            }
+            $named[$key] = $value;
+        }
+
+        return [$named, []];
     }
 
     private function validateOutput(ToolDescriptor $tool, JsonObject $structured, ToolCall $call): ?ToolResult

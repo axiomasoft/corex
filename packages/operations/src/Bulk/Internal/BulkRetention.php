@@ -79,7 +79,7 @@ final readonly class BulkRetention
 
         foreach ($removeRows as $row) {
             if ($this->trusted($row, $scope)) {
-                $removeIds[] = (string) $row->id;
+                $removeIds[] = DatabaseValue::text(DatabaseValue::field($row, 'id'));
             }
         }
 
@@ -103,7 +103,7 @@ final readonly class BulkRetention
 
             foreach ($clearRows as $row) {
                 if ($this->trusted($row, $scope)) {
-                    $clearIds[] = (string) $row->id;
+                    $clearIds[] = DatabaseValue::text(DatabaseValue::field($row, 'id'));
                 }
             }
         }
@@ -178,11 +178,11 @@ final readonly class BulkRetention
 
     private function trusted(object $row, DataScope $scope): bool
     {
-        if ($row->result_ref === null) {
+        if (DatabaseValue::field($row, 'result_ref') === null) {
             return true;
         }
 
-        $decoded = JsonCanonical::decode((string) $row->result_ref);
+        $decoded = JsonCanonical::decode(DatabaseValue::text(DatabaseValue::field($row, 'result_ref')));
 
         if (! is_array($decoded)) {
             return false;
@@ -205,7 +205,7 @@ final readonly class BulkRetention
             return false;
         }
 
-        if (! is_string($operationId) || ! hash_equals((string) $row->id, $operationId)) {
+        if (! is_string($operationId) || ! hash_equals(DatabaseValue::text(DatabaseValue::field($row, 'id')), $operationId)) {
             return false;
         }
 

@@ -65,6 +65,10 @@ final class OpisToolSchemaValidator
             JSON_THROW_ON_ERROR,
         );
 
+        if (! is_object($rootSchema) && ! is_bool($rootSchema) && ! is_string($rootSchema)) {
+            throw new InvalidArgumentException('Invalid admitted schema root.');
+        }
+
         $validator = new Validator(max_errors: SchemaProfile::MAX_ERRORS, stop_at_first_error: false);
         $result = $validator->validate(json_decode($value->canonicalJson, false, 512, JSON_THROW_ON_ERROR), $rootSchema);
 
@@ -88,16 +92,20 @@ final class OpisToolSchemaValidator
         }
 
         $errors = [];
+        /** @var list<ValidationError> $queue */
         $queue = [$error];
 
         while ($queue !== [] && count($errors) < SchemaProfile::MAX_ERRORS) {
             $current = array_shift($queue);
             $errors[] = [
                 'code' => $current->keyword(),
-                'pointer' => self::pointer($current->data()->fullPath()),
+                'pointer' => self::pointer(array_values($current->data()->fullPath())),
             ];
 
             foreach ($current->subErrors() as $subError) {
+                if (! $subError instanceof ValidationError) {
+                    throw new InvalidArgumentException('Invalid schema validation suberror.');
+                }
                 $queue[] = $subError;
             }
         }

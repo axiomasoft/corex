@@ -1,0 +1,8 @@
+{
+  "strict_apply_failures": [
+    {
+      "patch": "scripts/mutations/API-physical-context.patch",
+      "stderr": "error: patch failed: packages/operations/src/Invocation/Internal/TrustedContextResolver.php:34\nerror: packages/operations/src/Invocation/Internal/TrustedContextResolver.php: patch does not apply\n"
+    }
+  ]
+}

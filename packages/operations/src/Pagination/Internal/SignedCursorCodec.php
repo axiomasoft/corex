@@ -260,7 +260,7 @@ final readonly class SignedCursorCodec implements CursorCodec
         ];
     }
 
-    /** @param  array<string, mixed>  $decoded */
+    /** @param  array<array-key, mixed>  $decoded */
     private function payloadFromArray(array $decoded): ?CursorPayload
     {
         $keys = array_keys($decoded);

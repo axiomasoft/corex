@@ -62,3 +62,53 @@ it('rejects suppressed debt, incomplete analysis scopes and nonzero completed ce
         $files->deleteDirectory($fixture);
     }
 });
+
+it('admits schema-free security packages while retaining every source and migration boundary', function (): void {
+    $root = dirname(__DIR__, 2);
+    $fixture = sys_get_temp_dir().'/corex-security-quality-'.bin2hex(random_bytes(8));
+    $files = new Filesystem;
+    $packages = ['core', 'access-azguard', 'access', 'tenancy', 'operations', 'tools', 'webhooks'];
+
+    try {
+        foreach (['scripts/quality', 'tests/Support', 'tests/Golden'] as $dir) {
+            $files->makeDirectory($fixture.'/'.$dir, 0755, true);
+        }
+        $files->copy($root.'/phpstan-extensions.neon', $fixture.'/phpstan-extensions.neon');
+        $files->put($fixture.'/phpstan-baseline.neon', "parameters:\n    ignoreErrors: []\n");
+        $files->put($fixture.'/phpstan.neon', "includes:\n    - phpstan-extensions.neon\n    - phar://phpstan.phar/conf/bleedingEdge.neon\n    - phpstan-baseline.neon\nparameters:\n    level: max\n    paths:\n        - tests/Support\n        - tests/Golden\n        - scripts\n");
+        foreach ($packages as $package) {
+            $files->makeDirectory($fixture.'/packages/'.$package.'/src', 0755, true);
+            $files->put($fixture.'/packages/'.$package.'/phpstan-baseline.neon', "parameters:\n    ignoreErrors: []\n");
+            $files->put($fixture.'/packages/'.$package.'/phpstan.neon', "includes:\n    - ../../phpstan-extensions.neon\n    - phar://phpstan.phar/conf/bleedingEdge.neon\n    - phpstan-baseline.neon\nparameters:\n    level: max\n    paths:\n        - src\n");
+        }
+        $ceilings = ['phpstan' => array_fill_keys(['root', ...$packages], 0)];
+        $files->put($fixture.'/scripts/quality-ceilings.json', json_encode($ceilings, JSON_THROW_ON_ERROR));
+        $files->put($fixture.'/scripts/schema-sets.json', json_encode(['sets' => []], JSON_THROW_ON_ERROR));
+        $run = static function () use ($root, $fixture): Process {
+            $process = new Process([PHP_BINARY, $root.'/scripts/quality/release-quality.php', '--stage=security', '--root='.$fixture]);
+            $process->run();
+
+            return $process;
+        };
+        expect($run()->getExitCode())->toBe(0);
+        $path = $fixture.'/packages/tools/phpstan.neon';
+        $config = $files->get($path);
+        $files->put($path, str_replace('        - src', '        - .', $config));
+        expect($run()->getExitCode())->toBe(1)
+            ->and($run()->getErrorOutput())->toContain('tools: missing analysis path src');
+        $files->put($path, $config);
+        $files->makeDirectory($fixture.'/packages/tools/database/migrations/tenant', 0755, true);
+        $files->put($fixture.'/packages/tools/database/migrations/tenant/create.php', '<?php');
+        expect($run()->getExitCode())->toBe(1)
+            ->and($run()->getErrorOutput())->toContain('tools: missing analysis path database/migrations');
+        $files->put($fixture.'/scripts/schema-sets.json', json_encode(['sets' => [['path' => 'packages/tools/database/migrations/tenant']]], JSON_THROW_ON_ERROR));
+        $files->put($path, $config."        - database/migrations\n");
+        expect($run()->getExitCode())->toBe(0);
+        $files->deleteDirectory($fixture.'/packages/tools/database/migrations');
+        $files->put($path, $config);
+        expect($run()->getExitCode())->toBe(1)
+            ->and($run()->getErrorOutput())->toContain('tools: uncovered SchemaSet database/migrations/tenant');
+    } finally {
+        $files->deleteDirectory($fixture);
+    }
+});

@@ -1,0 +1,20 @@
+> pest '--group=pg'
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\ApiRetentionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mpostgresql retention uses isolated schemas[39m[90m                          [39m [90m0.22s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\BulkStoreTest[39m
+  [32;1m✓[39;22m[90m [39m[90mpostgresql concurrent submission and cancel completion race[39m[90m         [39m [90m0.20s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\IdempotencyStoreTest[39m
+  [32;1m✓[39;22m[90m [39m[90mtwo postgresql connections racing on one key yield one owner[39m[90m        [39m [90m0.34s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\LoadSchemaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mpostgresql schema and constraints[39m[90m                                   [39m [90m0.18s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\OperationBudgetTest[39m
+  [32;1m✓[39;22m[90m [39m[90mpostgresql concurrent reserve admits only available global capacity[39m[90m [39m [90m0.10s[39m  
+
+  [90mTests:[39m    [32;1m5 passed[39;22m[90m (87 assertions)[39m
+  [90mDuration:[39m [39m1.14s[39m
+

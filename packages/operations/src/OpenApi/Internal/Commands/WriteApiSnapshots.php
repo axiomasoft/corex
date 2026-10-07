@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CoreX\Operations\OpenApi\Internal\Commands;
 
+use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Errors\Contracts\ProblemRegistry;
 use CoreX\Modules\Contracts\ModuleRegistry;
 use CoreX\Operations\Definition\Contracts\OperationRegistry;
@@ -54,7 +55,7 @@ final class WriteApiSnapshots extends Command
         $documents = $builder->documents($contracts, $major);
         $paths = $this->paths($directory, $builder->files());
 
-        if ($this->option('check')) {
+        if ($this->option('check') === true) {
             foreach ($documents as $name => $bytes) {
                 $current = is_file($paths[$name]) ? file_get_contents($paths[$name]) : false;
 
@@ -115,7 +116,7 @@ final class WriteApiSnapshots extends Command
             throw new RuntimeException('P12 error fixture is unreadable.');
         }
 
-        return $loaded['contracts'];
+        return JsonDocuments::maps(JsonDocuments::capture($loaded['contracts']));
     }
 
     /** @param list<string> $files
@@ -136,7 +137,9 @@ final class WriteApiSnapshots extends Command
     {
         $allowed = array_flip($files);
 
-        foreach (scandir($directory) ?: [] as $entry) {
+        $entries = scandir($directory);
+
+        foreach ($entries === false ? [] : $entries as $entry) {
             if ($entry === '.' || $entry === '..') {
                 continue;
             }

@@ -1,0 +1,14 @@
+{
+  "id": "V19",
+  "command": "scripts/php84 composer php-api",
+  "exit_code": 0,
+  "started_at": "2026-10-07T06:13:03.959880+00:00",
+  "finished_at": "2026-10-07T06:13:10.129122+00:00",
+  "duration_seconds": 6.169,
+  "log": "V19.log",
+  "log_sha256": "84dabf44d4a4a88fc7f77fb2d01a988bafda44bda817d3bcd72aa1fc8bdbe3b8",
+  "environment": {
+    "PAO_DISABLE": "1",
+    "PHP": "8.4.26"
+  }
+}

@@ -95,12 +95,15 @@ final readonly class WebhookManagement
     {
         $this->assertScope($scope);
 
-        return $this->connection->table('sys_api_webhook_subscriptions')
+        $rows = $this->connection->table('sys_api_webhook_subscriptions')
             ->orderBy('created_at')
             ->orderBy('id')
             ->get()
             ->map(fn (object $row): array => $this->subscriptionRow($row))
+            ->values()
             ->all();
+
+        return array_values($rows);
     }
 
     /**
@@ -163,7 +166,7 @@ final readonly class WebhookManagement
         $last = $hasMore ? $pageRows->last() : null;
         $page = CursorPageBuilder::assemble(
             items: array_values($items),
-            nextValues: $last === null ? null : [$this->instant($last->created_at)->format('Y-m-d\TH:i:s.uP'), (string) $last->id],
+            nextValues: $last === null ? null : [$this->instant(DatabaseValue::field($last, 'created_at'))->format('Y-m-d\TH:i:s.uP'), DatabaseValue::text(DatabaseValue::field($last, 'id'))],
             codec: $this->cursors,
             registry: $registry,
             accountId: $scope->accountId,
@@ -194,20 +197,23 @@ final readonly class WebhookManagement
             throw new ApiError(OperationsErrorCode::ResourceNotFound, 404, 'Webhook delivery does not exist.', category: ErrorCategory::NotFound);
         }
 
-        return $this->connection->table('sys_api_webhook_attempts')
+        $rows = $this->connection->table('sys_api_webhook_attempts')
             ->where('delivery_id', $id)
             ->orderBy('attempt')
             ->get()
             ->map(fn (object $row): array => [
-                'attempt' => (int) $row->attempt,
-                'duration_ms' => $row->duration_ms === null ? null : (int) $row->duration_ms,
-                'error_code' => $row->error_code === null ? null : (string) $row->error_code,
-                'finished_at' => $row->finished_at === null ? null : $this->instant($row->finished_at)->format('Y-m-d\TH:i:s.uP'),
-                'http_status' => $row->http_status === null ? null : (int) $row->http_status,
-                'outcome' => (string) $row->outcome,
-                'started_at' => $this->instant($row->started_at)->format('Y-m-d\TH:i:s.uP'),
+                'attempt' => DatabaseValue::integer(DatabaseValue::field($row, 'attempt')),
+                'duration_ms' => DatabaseValue::field($row, 'duration_ms') === null ? null : DatabaseValue::integer(DatabaseValue::field($row, 'duration_ms')),
+                'error_code' => DatabaseValue::field($row, 'error_code') === null ? null : DatabaseValue::text(DatabaseValue::field($row, 'error_code')),
+                'finished_at' => DatabaseValue::field($row, 'finished_at') === null ? null : $this->instant(DatabaseValue::field($row, 'finished_at'))->format('Y-m-d\TH:i:s.uP'),
+                'http_status' => DatabaseValue::field($row, 'http_status') === null ? null : DatabaseValue::integer(DatabaseValue::field($row, 'http_status')),
+                'outcome' => DatabaseValue::text(DatabaseValue::field($row, 'outcome')),
+                'started_at' => $this->instant(DatabaseValue::field($row, 'started_at'))->format('Y-m-d\TH:i:s.uP'),
             ])
+            ->values()
             ->all();
+
+        return array_values($rows);
     }
 
     public static function deliveryOrdering(): OrderingRegistry
@@ -314,20 +320,20 @@ final readonly class WebhookManagement
     /** @return array<string, mixed> */
     private function subscriptionRow(object $row): array
     {
-        $refs = JsonCanonical::decode((string) $row->key_refs);
+        $refs = JsonCanonical::decode(DatabaseValue::text(DatabaseValue::field($row, 'key_refs')));
 
         return [
-            'created_at' => $this->instant($row->created_at)->format('Y-m-d\TH:i:s.uP'),
-            'endpoint' => $this->safeEndpoint((string) $row->endpoint_url),
-            'id' => (string) $row->id,
+            'created_at' => $this->instant(DatabaseValue::field($row, 'created_at'))->format('Y-m-d\TH:i:s.uP'),
+            'endpoint' => $this->safeEndpoint(DatabaseValue::text(DatabaseValue::field($row, 'endpoint_url'))),
+            'id' => DatabaseValue::text(DatabaseValue::field($row, 'id')),
             'key_ref_count' => is_array($refs) ? count($refs) : 0,
-            'major' => (string) $row->major,
-            'max_pii_class' => (string) $row->max_pii_class,
-            'revision' => (int) $row->revision,
-            'status' => (string) $row->status,
-            'topic' => (string) $row->topic,
-            'topic_version' => (int) $row->topic_version,
-            'updated_at' => $this->instant($row->updated_at)->format('Y-m-d\TH:i:s.uP'),
+            'major' => DatabaseValue::text(DatabaseValue::field($row, 'major')),
+            'max_pii_class' => DatabaseValue::text(DatabaseValue::field($row, 'max_pii_class')),
+            'revision' => DatabaseValue::integer(DatabaseValue::field($row, 'revision')),
+            'status' => DatabaseValue::text(DatabaseValue::field($row, 'status')),
+            'topic' => DatabaseValue::text(DatabaseValue::field($row, 'topic')),
+            'topic_version' => DatabaseValue::integer(DatabaseValue::field($row, 'topic_version')),
+            'updated_at' => $this->instant(DatabaseValue::field($row, 'updated_at'))->format('Y-m-d\TH:i:s.uP'),
         ];
     }
 
@@ -335,19 +341,19 @@ final readonly class WebhookManagement
     private function deliveryRow(object $row): array
     {
         return [
-            'attempt' => (int) $row->attempt,
-            'body_hash' => (string) $row->body_hash,
-            'created_at' => $this->instant($row->created_at)->format('Y-m-d\TH:i:s.uP'),
-            'event_id' => (string) $row->event_id,
-            'finished_at' => $row->finished_at === null ? null : $this->instant($row->finished_at)->format('Y-m-d\TH:i:s.uP'),
-            'id' => (string) $row->id,
-            'last_error' => $row->last_error === null ? null : (string) $row->last_error,
-            'major' => (string) $row->major,
-            'replay_count' => (int) $row->replay_count,
-            'status' => (string) $row->status,
-            'subscription_id' => (string) $row->subscription_id,
-            'topic' => (string) $row->topic,
-            'topic_version' => (int) $row->topic_version,
+            'attempt' => DatabaseValue::integer(DatabaseValue::field($row, 'attempt')),
+            'body_hash' => DatabaseValue::text(DatabaseValue::field($row, 'body_hash')),
+            'created_at' => $this->instant(DatabaseValue::field($row, 'created_at'))->format('Y-m-d\TH:i:s.uP'),
+            'event_id' => DatabaseValue::text(DatabaseValue::field($row, 'event_id')),
+            'finished_at' => DatabaseValue::field($row, 'finished_at') === null ? null : $this->instant(DatabaseValue::field($row, 'finished_at'))->format('Y-m-d\TH:i:s.uP'),
+            'id' => DatabaseValue::text(DatabaseValue::field($row, 'id')),
+            'last_error' => DatabaseValue::field($row, 'last_error') === null ? null : DatabaseValue::text(DatabaseValue::field($row, 'last_error')),
+            'major' => DatabaseValue::text(DatabaseValue::field($row, 'major')),
+            'replay_count' => DatabaseValue::integer(DatabaseValue::field($row, 'replay_count')),
+            'status' => DatabaseValue::text(DatabaseValue::field($row, 'status')),
+            'subscription_id' => DatabaseValue::text(DatabaseValue::field($row, 'subscription_id')),
+            'topic' => DatabaseValue::text(DatabaseValue::field($row, 'topic')),
+            'topic_version' => DatabaseValue::integer(DatabaseValue::field($row, 'topic_version')),
         ];
     }
 
@@ -374,7 +380,7 @@ final readonly class WebhookManagement
             return DateTimeImmutable::createFromInterface($value);
         }
 
-        return new DateTimeImmutable((string) $value);
+        return new DateTimeImmutable(DatabaseValue::text($value));
     }
 }
 

@@ -24,7 +24,7 @@ final class ApiToolValidator
             throw new CompilationException('Expected tool declaration.');
         }
 
-        if (! preg_match('/^[a-z][a-z0-9]*\.[a-z][a-z0-9_]*$/', $api->toolCode)) {
+        if (preg_match('/^[a-z][a-z0-9]*\.[a-z][a-z0-9_]*$/', $api->toolCode) !== 1) {
             throw new CompilationException('Invalid canonical tool code: '.$api->toolCode);
         }
 

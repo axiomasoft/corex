@@ -1,0 +1,10 @@
+{
+  "added": [
+    "CoreX\\Operations\\Bulk\\Internal\\DatabaseValue",
+    "CoreX\\Operations\\Cost\\Internal\\DatabaseValue",
+    "CoreX\\Operations\\Idempotency\\Internal\\DatabaseValue",
+    "CoreX\\Webhooks\\Internal\\DatabaseValue"
+  ],
+  "removed": [],
+  "changed": []
+}

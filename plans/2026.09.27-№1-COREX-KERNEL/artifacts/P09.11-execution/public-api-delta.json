@@ -1,0 +1,29 @@
+[
+  {
+    "path": "/symbols/CoreX\\Operations\\Validation\\Laravel\\JsonCanonical/methods/decode/doc/@return",
+    "before": [
+      "(array<string, mixed> | list<mixed> | string | int | float | bool | null)"
+    ],
+    "after": [
+      "(array<array-key, mixed> | string | int | float | bool | null)"
+    ]
+  },
+  {
+    "path": "/symbols/CoreX\\Operations\\Validation\\Laravel\\JsonCanonical/methods/decodeObject/doc/@return",
+    "before": [
+      "(array<string, mixed> | null)"
+    ],
+    "after": [
+      "(array<array-key, mixed> | null)"
+    ]
+  },
+  {
+    "path": "/symbols/CoreX\\Operations\\Validation\\Laravel\\SchemaBudget/methods/admit/doc/@param",
+    "before": [
+      "array<string, mixed> $schema"
+    ],
+    "after": [
+      "array<array-key, mixed> $schema"
+    ]
+  }
+]

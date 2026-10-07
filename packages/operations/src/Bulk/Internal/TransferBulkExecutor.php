@@ -49,7 +49,8 @@ final readonly class TransferBulkExecutor
     public function advance(BulkOperation $operation): BulkOperation
     {
         $this->assertAvailable();
-        $session = $this->factory->create($operation);
+        $factory = $this->factory ?? throw new TransferCapabilityUnavailable;
+        $session = $factory->create($operation);
         $this->assertStamp($operation, $session->token->restoreEpoch, $session->token->schemaHash, $session->token->mappingHash);
 
         if ($session->cancellation->isCancelled()) {

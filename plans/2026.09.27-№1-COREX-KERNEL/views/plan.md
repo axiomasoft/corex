@@ -162,7 +162,7 @@ operations, независимые модули, детерминированн�
 | P06 | Operations, tools, webhooks и wire | detailed | 5/5 | 🟠 Done with deviations |
 | P07 | Tenancy, access, независимость модулей | detailed | 6/6 | 🟠 Done with deviations |
 | P08 | Схема: baseline v1 | detailed | 10/10 | 🟠 Done with deviations |
-| P09 | Планка качества: типизация, tooling и тесты до выпуска | detailed | 7/17 | 🟡 In progress |
+| P09 | Планка качества: типизация, tooling и тесты до выпуска | detailed | 8/17 | 🟡 In progress |
 | P10 | Зелёный hosted CI на базе P04 | detailed | 4/4 | 🟢 Done |
 
 ## Decisions
@@ -296,3 +296,4 @@ operations, независимые модули, детерминированн�
 | D125 | P09: только улучшения репозитория; RC и релизная квалификация пропущены | accepted | 2026-10-06 |
 | D126 | P09.1: finite PHPDoc precision with runtime API/schema preservation | accepted | 2026-10-06 |
 | D127 | P09.2 finite Access authentication contract correction | accepted | 2026-10-06 |
+| D128 | P09.11: finite JSON decoder PHPDoc correction with numeric-key preservation | accepted | 2026-10-07 |

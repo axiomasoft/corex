@@ -41,14 +41,17 @@ final class ToolSchemaWorker
         }
 
         try {
-            /** @var array<string, mixed> $request */
             $request = json_decode($input, true, 512, JSON_THROW_ON_ERROR);
+
+            if (! is_array($request)) {
+                throw new RuntimeException('Worker request must be an object.');
+            }
             $action = $request['action'] ?? '';
 
             if ($action === 'admit') {
                 $handle = $validator->admit(
-                    new JsonObject((string) $request['schema']),
-                    (string) $request['profile'],
+                    new JsonObject(self::text($request['schema'] ?? null)),
+                    self::text($request['profile'] ?? null),
                 );
                 self::respond([
                     'ok' => true,
@@ -63,16 +66,26 @@ final class ToolSchemaWorker
             }
 
             if ($action === 'validate') {
-                /** @var array{digest: string, profile: string, localResources: array<string, string>} $handleData */
-                $handleData = $request['handle'];
+                $handleData = $request['handle'] ?? null;
+
+                if (! is_array($handleData) || ! is_array($handleData['localResources'] ?? null)) {
+                    throw new RuntimeException('Worker schema handle must contain resources.');
+                }
+                $resources = [];
+                foreach ($handleData['localResources'] as $key => $resource) {
+                    if (! is_string($key)) {
+                        throw new RuntimeException('Worker resource keys must be named.');
+                    }
+                    $resources[$key] = self::text($resource);
+                }
                 $handle = new SchemaHandle(
-                    digest: (string) $handleData['digest'],
-                    profile: (string) $handleData['profile'],
-                    localResources: $handleData['localResources'],
+                    digest: self::text($handleData['digest'] ?? null),
+                    profile: self::text($handleData['profile'] ?? null),
+                    localResources: $resources,
                 );
                 $validation = $validator->validate(
                     $handle,
-                    new JsonValue((string) $request['value']),
+                    new JsonValue(self::text($request['value'] ?? null)),
                 );
                 self::respond([
                     'ok' => true,
@@ -91,6 +104,15 @@ final class ToolSchemaWorker
         } catch (Throwable) {
             self::respond(['ok' => false, 'error' => ToolsErrorCode::SchemaLimit->value]);
         }
+    }
+
+    private static function text(mixed $value): string
+    {
+        if (! is_string($value)) {
+            throw new RuntimeException('Worker value must be a string.');
+        }
+
+        return $value;
     }
 
     /**

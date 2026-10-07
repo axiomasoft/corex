@@ -1,0 +1,14 @@
+{
+  "id": "V10",
+  "command": "scripts/php84 composer --working-dir=packages/tools test -- --exclude-group=pg",
+  "exit_code": 0,
+  "started_at": "2026-10-07T05:48:35.437335+00:00",
+  "finished_at": "2026-10-07T05:48:44.158981+00:00",
+  "duration_seconds": 8.722,
+  "log": "V10.log",
+  "log_sha256": "0dcbd284e1c817df6b63659ac4cd3e0b7a3f870f52cc3ba0dfec50c59ba867e5",
+  "environment": {
+    "PAO_DISABLE": "1",
+    "PHP": "8.4.26"
+  }
+}

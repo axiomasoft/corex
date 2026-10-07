@@ -23,7 +23,7 @@ final class JsonCanonical
     }
 
     /**
-     * @return array<string, mixed>|list<mixed>|string|int|float|bool|null
+     * @return array<array-key, mixed>|string|int|float|bool|null
      */
     public static function decode(string $json): array|string|int|float|bool|null
     {
@@ -37,11 +37,15 @@ final class JsonCanonical
 
         self::assertSafeNumbers($decoded);
 
+        if (! is_array($decoded) && ! is_scalar($decoded) && $decoded !== null) {
+            throw new InvalidArgumentException('Unexpected JSON value.');
+        }
+
         return $decoded;
     }
 
     /**
-     * @return array<string, mixed>|null
+     * @return array<array-key, mixed>|null
      */
     public static function decodeObject(string $json): ?array
     {
@@ -220,7 +224,7 @@ final class JsonCanonical
     {
         $hex = substr($json, $index + 1, 4);
 
-        if (! preg_match('/^[0-9a-fA-F]{4}$/', $hex)) {
+        if (preg_match('/^[0-9a-fA-F]{4}$/', $hex) !== 1) {
             throw new InvalidArgumentException('Invalid JSON unicode escape.');
         }
 

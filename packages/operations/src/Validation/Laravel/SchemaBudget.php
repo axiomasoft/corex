@@ -13,7 +13,7 @@ use InvalidArgumentException;
 final class SchemaBudget
 {
     /**
-     * @param  array<string, mixed>  $schema
+     * @param  array<array-key, mixed>  $schema
      * @return array<string, string>
      */
     public static function admit(array $schema, string $rawJson): array
@@ -53,7 +53,7 @@ final class SchemaBudget
     }
 
     /**
-     * @param  array<string, mixed>  $schema
+     * @param  array<array-key, mixed>  $schema
      */
     private static function rejectForbiddenKeywords(array $schema): void
     {
@@ -69,7 +69,7 @@ final class SchemaBudget
     }
 
     /**
-     * @param  array<string, mixed>  $schema
+     * @param  array<array-key, mixed>  $schema
      * @return array<string, string>
      */
     private static function collectResources(array $schema, string $prefix = '#'): array

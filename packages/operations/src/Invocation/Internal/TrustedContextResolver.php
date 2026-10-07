@@ -35,7 +35,7 @@ final class TrustedContextResolver implements ContextResolver
         }
 
         if ($this->requirePhysicalTenancy && ($tenant->isBoxed() || ! $this->manager->initialized()
-            || $this->manager->context() != $tenant)) {
+            || ($this->manager->context() <=> $tenant) !== 0)) {
             throw new ApiError(OperationsErrorCode::ContextRequired, 403, 'An initialized physical account context is required.');
         }
 

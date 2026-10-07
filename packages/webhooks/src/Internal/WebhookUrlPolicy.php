@@ -172,6 +172,7 @@ final readonly class WebhookUrlPolicy
     /** @return list<string> */
     private function resolveDns(string $host): array
     {
+        /** @var list<array{string, int}> $pending */
         $pending = [[$host, 0]];
         $visited = [];
         $addresses = [];

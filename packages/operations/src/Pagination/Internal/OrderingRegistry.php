@@ -28,14 +28,15 @@ final readonly class OrderingRegistry implements \CoreX\Operations\Pagination\Co
             }
 
             $descriptor = self::descriptor($operation);
-            $existing = $orderings[$descriptor['ordering']] ?? null;
+            $ordering = $descriptor['ordering'];
+            $existing = $orderings[$ordering] ?? null;
             unset($descriptor['ordering']);
 
             if ($existing !== null && $existing !== $descriptor) {
-                throw new InvalidArgumentException('Ordering version ['.JsonDocuments::optionalMap($operation->pagination)['ordering'].'] conflicts.');
+                throw new InvalidArgumentException('Ordering version ['.$ordering.'] conflicts.');
             }
 
-            $orderings[JsonDocuments::optionalMap($operation->pagination)['ordering']] = $descriptor;
+            $orderings[$ordering] = $descriptor;
         }
 
         ksort($orderings);

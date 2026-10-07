@@ -22,6 +22,7 @@ use Illuminate\Database\Connection;
 use InvalidArgumentException;
 use Override;
 use Psr\Clock\ClockInterface;
+use RuntimeException;
 
 /** @internal Tenant-local webhook subscription authority. */
 final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionStore
@@ -56,7 +57,7 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
         $this->assertEgress($scope, $subscription->endpointUrl);
 
         return $this->connection->transaction(function () use ($subscription): WebhookSubscription {
-            if ((int) $this->connection->table(self::Table)->count() >= self::CAP) {
+            if ($this->connection->table(self::Table)->count() >= self::CAP) {
                 throw new ApiError(WebhooksErrorCode::WebhookSubscriptionCap, 422, 'The webhook subscription cap is 100.', category: ErrorCategory::Validation);
             }
 
@@ -203,21 +204,31 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
 
     private function subscription(object $row): WebhookSubscription
     {
-        /** @var list<string> $keyRefs */
-        $keyRefs = JsonCanonical::decode((string) $row->key_refs);
+        $decoded = JsonCanonical::decode(DatabaseValue::text(DatabaseValue::field($row, 'key_refs')));
+
+        if (! is_array($decoded) || ! array_is_list($decoded)) {
+            throw new RuntimeException('Stored webhook key references must be a list.');
+        }
+        $keyRefs = [];
+        foreach ($decoded as $keyRef) {
+            if (! is_string($keyRef)) {
+                throw new RuntimeException('Stored webhook key references must contain strings.');
+            }
+            $keyRefs[] = $keyRef;
+        }
 
         return new WebhookSubscription(
-            id: (string) $row->id,
-            revision: (int) $row->revision,
-            major: (string) $row->major,
-            topic: (string) $row->topic,
-            topicVersion: (int) $row->topic_version,
-            endpointUrl: (string) $row->endpoint_url,
-            status: (string) $row->status,
-            maxPiiClass: (string) $row->max_pii_class,
+            id: DatabaseValue::text(DatabaseValue::field($row, 'id')),
+            revision: DatabaseValue::integer(DatabaseValue::field($row, 'revision')),
+            major: DatabaseValue::text(DatabaseValue::field($row, 'major')),
+            topic: DatabaseValue::text(DatabaseValue::field($row, 'topic')),
+            topicVersion: DatabaseValue::integer(DatabaseValue::field($row, 'topic_version')),
+            endpointUrl: DatabaseValue::text(DatabaseValue::field($row, 'endpoint_url')),
+            status: DatabaseValue::text(DatabaseValue::field($row, 'status')),
+            maxPiiClass: DatabaseValue::text(DatabaseValue::field($row, 'max_pii_class')),
             keyRefs: $keyRefs,
-            createdAt: $this->instant($row->created_at),
-            updatedAt: $this->instant($row->updated_at),
+            createdAt: $this->instant(DatabaseValue::field($row, 'created_at')),
+            updatedAt: $this->instant(DatabaseValue::field($row, 'updated_at')),
         );
     }
 
@@ -231,9 +242,10 @@ final readonly class SqlWebhookSubscriptionStore implements WebhookSubscriptionS
             return DateTimeImmutable::createFromInterface($value);
         }
 
-        return new DateTimeImmutable((string) $value);
+        return new DateTimeImmutable(DatabaseValue::text($value));
     }
 
+    /** @return int<1, 3> */
     private function transactionAttempts(): int
     {
         return $this->connection->getDriverName() === 'pgsql' ? 3 : 1;

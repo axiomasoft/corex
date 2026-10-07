@@ -8,6 +8,7 @@ use CoreX\Data\Laravel\JsonDocuments;
 use CoreX\Operations\Definition\Contracts\OperationRegistry;
 use CoreX\Operations\Definition\Contracts\SchemaContributor;
 use CoreX\Operations\OpenApi\Contracts\OpenApiDocuments;
+use InvalidArgumentException;
 
 /** Build-time installed-code projection; not a public endpoint or a grant of access. */
 final class OpenApiDocumentGenerator implements OpenApiDocuments
@@ -92,10 +93,18 @@ final class OpenApiDocumentGenerator implements OpenApiDocuments
             }
 
             if ($operation->method === 'GET') {
-                foreach ((JsonDocuments::map($operation->requestSchema)['properties'] ?? []) as $name => $schema) {
+                $requestSchema = JsonDocuments::map($operation->requestSchema);
+                $properties = $requestSchema['properties'] ?? [];
+                $required = $requestSchema['required'] ?? [];
+
+                if (! is_array($properties) || ! is_array($required)) {
+                    throw new InvalidArgumentException('Operation schema properties and required must be arrays.');
+                }
+
+                foreach ($properties as $name => $schema) {
                     $entry['parameters'][] = [
                         'name' => $name, 'in' => 'query',
-                        'required' => in_array($name, JsonDocuments::map($operation->requestSchema)['required'] ?? [], true),
+                        'required' => in_array($name, $required, true),
                         'schema' => $schema,
                     ];
                 }

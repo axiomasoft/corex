@@ -1,0 +1,14 @@
+{
+  "id": "foundation",
+  "command": "scripts/php84 php scripts/quality/release-quality.php --stage=foundation",
+  "exit_code": 0,
+  "started_at": "2026-10-07T05:51:38.093821+00:00",
+  "finished_at": "2026-10-07T05:51:38.205313+00:00",
+  "duration_seconds": 0.112,
+  "log": "foundation.log",
+  "log_sha256": "e25070e95dcea2f7f38256ca12df2cb4a1e97df633e29415cb6db780fed10602",
+  "environment": {
+    "PAO_DISABLE": "1",
+    "PHP": "8.4.26"
+  }
+}

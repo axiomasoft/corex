@@ -175,7 +175,15 @@ function check(string $root, string $stage): array
             }
         }
         $paths = strings($parameters['paths'] ?? null, $key.'.paths');
-        $required = $key === 'root' ? ['tests/Support', 'tests/Golden', 'scripts'] : ['src', 'database/migrations'];
+        $hasMigrations = is_dir($base.'/database/migrations')
+            || array_any($sets, static fn (mixed $set): bool => is_array($set)
+                && is_string($set['path'] ?? null)
+                && str_starts_with($set['path'], $dir.'/database/migrations/'));
+        $required = $key === 'root' ? ['tests/Support', 'tests/Golden', 'scripts'] : ['src'];
+
+        if ($key !== 'root' && $hasMigrations) {
+            $required[] = 'database/migrations';
+        }
         foreach ($required as $path) {
             if (! in_array($path, $paths, true)) {
                 $violations[] = "{$key}: missing analysis path {$path}";

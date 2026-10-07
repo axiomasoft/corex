@@ -1,0 +1,580 @@
+{
+  "item": "PLAN3.P09.11",
+  "status": "green",
+  "source_sha": "6ac99ac29509d7950517384b91478868bdaafd6d",
+  "phpstan_before": {
+    "operations": 137,
+    "tools": 16,
+    "webhooks": 194
+  },
+  "phpstan_after": {
+    "operations": 0,
+    "tools": 0,
+    "webhooks": 0
+  },
+  "checks": {
+    "V3": {
+      "id": "V3",
+      "command": "scripts/php84 vendor/bin/phpstan analyse -c packages/operations/phpstan.neon --memory-limit=2G --no-progress",
+      "exit_code": 0,
+      "started_at": "2026-10-07T05:54:51.346809+00:00",
+      "finished_at": "2026-10-07T05:54:53.974008+00:00",
+      "duration_seconds": 2.627,
+      "log": "V3.log",
+      "log_sha256": "9dd3eeb023e498eff4ab6e14af3d76d6e6c7672da330c9e3edf35753590df0d7",
+      "environment": {
+        "PAO_DISABLE": "1",
+        "PHP": "8.4.26"
+      }
+    },
+    "V4": {
+      "id": "V4",
+      "command": "scripts/php84 vendor/bin/phpstan analyse -c packages/tools/phpstan.neon --memory-limit=2G --no-progress",
+      "exit_code": 0,
+      "started_at": "2026-10-07T05:48:34.499177+00:00",
+      "finished_at": "2026-10-07T05:48:36.452555+00:00",
+      "duration_seconds": 1.953,
+      "log": "V4.log",
+      "log_sha256": "9dd3eeb023e498eff4ab6e14af3d76d6e6c7672da330c9e3edf35753590df0d7",
+      "environment": {
+        "PAO_DISABLE": "1",
+        "PHP": "8.4.26"
+      }
+    },
+    "V5": {
+      "id": "V5",
+      "command": "scripts/php84 vendor/bin/phpstan analyse -c packages/webhooks/phpstan.neon --memory-limit=2G --no-progress",
+      "exit_code": 0,
+      "started_at": "2026-10-07T06:02:34.001900+00:00",
+      "finished_at": "2026-10-07T06:02:35.998326+00:00",
+      "duration_seconds": 1.996,
+      "log": "V5.log",
+      "log_sha256": "9dd3eeb023e498eff4ab6e14af3d76d6e6c7672da330c9e3edf35753590df0d7",
+      "environment": {
+        "PAO_DISABLE": "1",
+        "PHP": "8.4.26"
+      }
+    },
+    "V9": {
+      "id": "V9",
+      "command": "scripts/php84 composer --working-dir=packages/operations test -- --exclude-group=pg",
+      "exit_code": 0,
+      "started_at": "2026-10-07T06:01:49.420728+00:00",
+      "finished_at": "2026-10-07T06:01:53.269222+00:00",
+      "duration_seconds": 3.849,
+      "log": "V9.log",
+      "log_sha256": "3b5818449a58410c0486ee058a81ef99086c09cd0162e3d85068de5901bd7692",
+      "environment": {
+        "PAO_DISABLE": "1",
+        "PHP": "8.4.26"
+      }
+    },
+    "V10": {
+      "id": "V10",
+      "command": "scripts/php84 composer --working-dir=packages/tools test -- --exclude-group=pg",
+      "exit_code": 0,
+      "started_at": "2026-10-07T05:48:35.437335+00:00",
+      "finished_at": "2026-10-07T05:48:44.158981+00:00",
+      "duration_seconds": 8.722,
+      "log": "V10.log",
+      "log_sha256": "0dcbd284e1c817df6b63659ac4cd3e0b7a3f870f52cc3ba0dfec50c59ba867e5",
+      "environment": {
+        "PAO_DISABLE": "1",
+        "PHP": "8.4.26"
+      }
+    },
+    "V11": {
+      "id": "V11",
+      "command": "scripts/php84 composer --working-dir=packages/webhooks test -- --exclude-group=pg",
+      "exit_code": 0,
+      "started_at": "2026-10-07T06:02:35.998803+00:00",
+      "finished_at": "2026-10-07T06:02:38.563184+00:00",
+      "duration_seconds": 2.564,
+      "log": "V11.log",
+      "log_sha256": "933e9993a5ed31f7ade5a007c67a0a8e3bb0e0d237aa7b34486ba3a12b63d2d5",
+      "environment": {
+        "PAO_DISABLE": "1",
+        "PHP": "8.4.26"
+      }
+    },
+    "V14": {
+      "id": "V14",
+      "command": "PGSQL_PORT=5434 scripts/php84 composer --working-dir=packages/operations test -- --group=pg",
+      "exit_code": 0,
+      "started_at": "2026-10-07T06:01:56.245577+00:00",
+      "finished_at": "2026-10-07T06:01:57.666094+00:00",
+      "duration_seconds": 1.421,
+      "log": "V14.log",
+      "log_sha256": "b8a25df092cd1af01b6b263e92b30b34e7460b346a260544603c6c156ef565e6",
+      "environment": {
+        "PAO_DISABLE": "1",
+        "PHP": "8.4.26",
+        "PGSQL_HOST": "127.0.0.1",
+        "PGSQL_PORT": "5434",
+        "PGSQL_DATABASE": "corex_test",
+        "PGSQL_USERNAME": "corex"
+      }
+    },
+    "V16": {
+      "id": "V16",
+      "command": "PGSQL_PORT=5434 scripts/php84 composer --working-dir=packages/webhooks test -- --group=pg",
+      "exit_code": 0,
+      "started_at": "2026-10-07T06:02:38.563630+00:00",
+      "finished_at": "2026-10-07T06:02:39.771844+00:00",
+      "duration_seconds": 1.208,
+      "log": "V16.log",
+      "log_sha256": "8d956d8a1d24771640ac8e05f1238df8030eeac8bb8026acd773e4f5960acf37",
+      "environment": {
+        "PAO_DISABLE": "1",
+        "PHP": "8.4.26",
+        "PGSQL_HOST": "127.0.0.1",
+        "PGSQL_PORT": "5434",
+        "PGSQL_DATABASE": "corex_test",
+        "PGSQL_USERNAME": "corex"
+      }
+    },
+    "V6": {
+      "id": "V6",
+      "command": "scripts/php84 php scripts/quality/release-quality.php --stage=security",
+      "exit_code": 0,
+      "started_at": "2026-10-07T06:02:39.772287+00:00",
+      "finished_at": "2026-10-07T06:02:39.956701+00:00",
+      "duration_seconds": 0.184,
+      "log": "V6.log",
+      "log_sha256": "7d4d7c5b1ce8d90d36b9089e68443c8607fa608509b385ac533dae858d382d80",
+      "environment": {
+        "PAO_DISABLE": "1",
+        "PHP": "8.4.26"
+      }
+    },
+    "V17": {
+      "id": "V17",
+      "command": "scripts/php84 composer lint:check",
+      "exit_code": 0,
+      "started_at": "2026-10-07T05:51:38.205546+00:00",
+      "finished_at": "2026-10-07T05:51:47.829431+00:00",
+      "duration_seconds": 9.624,
+      "log": "V17.log",
+      "log_sha256": "18b94ca6b64dc05fa6c861c92fa49242e090852a0c2b13c09a30ea6463c7de8c",
+      "environment": {
+        "PAO_DISABLE": "1",
+        "PHP": "8.4.26"
+      }
+    },
+    "V18": {
+      "id": "V18",
+      "command": "scripts/php84 composer bc-check",
+      "exit_code": 0,
+      "started_at": "2026-10-07T05:49:32.906560+00:00",
+      "finished_at": "2026-10-07T05:54:24.389826+00:00",
+      "duration_seconds": 291.483,
+      "log": "V18.log",
+      "log_sha256": "ea0d09ad6d44892ee12d3d090ad421b7a750bf583d0d13ff7ee944dd8f1f3a41",
+      "environment": {
+        "PAO_DISABLE": "1",
+        "PHP": "8.4.26"
+      }
+    },
+    "V19": {
+      "id": "V19",
+      "command": "scripts/php84 composer php-api",
+      "exit_code": 0,
+      "started_at": "2026-10-07T06:13:03.959880+00:00",
+      "finished_at": "2026-10-07T06:13:10.129122+00:00",
+      "duration_seconds": 6.169,
+      "log": "V19.log",
+      "log_sha256": "84dabf44d4a4a88fc7f77fb2d01a988bafda44bda817d3bcd72aa1fc8bdbe3b8",
+      "environment": {
+        "PAO_DISABLE": "1",
+        "PHP": "8.4.26"
+      }
+    },
+    "V20": {
+      "id": "V20",
+      "command": "scripts/php84 composer schema-gate",
+      "exit_code": 0,
+      "started_at": "2026-10-07T06:13:10.133026+00:00",
+      "finished_at": "2026-10-07T06:13:10.821231+00:00",
+      "duration_seconds": 0.688,
+      "log": "V20.log",
+      "log_sha256": "5008a66e9922d243d99c31686cfbb795d49dbaf5c1ef57f6e655e2faa259869d",
+      "environment": {
+        "PAO_DISABLE": "1",
+        "PHP": "8.4.26"
+      }
+    },
+    "V21": {
+      "id": "V21",
+      "command": "scripts/php84 composer golden",
+      "exit_code": 0,
+      "started_at": "2026-10-07T05:51:50.156478+00:00",
+      "finished_at": "2026-10-07T05:51:57.754163+00:00",
+      "duration_seconds": 7.598,
+      "log": "V21.log",
+      "log_sha256": "6b663cf979f83d28e631151c9eb917cbae4aa29eeb6d05d30049ee3bf122a79c",
+      "environment": {
+        "PAO_DISABLE": "1",
+        "PHP": "8.4.26"
+      }
+    },
+    "V22": {
+      "id": "V22",
+      "command": "bash scripts/mutation-check.sh --all",
+      "exit_code": 0,
+      "started_at": "2026-10-07T06:13:35.412307+00:00",
+      "finished_at": "2026-10-07T06:13:50.747002+00:00",
+      "duration_seconds": 15.335,
+      "log": "V22.log",
+      "log_sha256": "d8cdd5f17466dd56ae9f9ffa8b38fa8288eb23cf84c2059348702deb8f1aeac7",
+      "environment": {
+        "PAO_DISABLE": "1",
+        "PHP": "8.4.26",
+        "PGSQL_HOST": "127.0.0.1",
+        "PGSQL_PORT": "5434",
+        "PGSQL_DATABASE": "corex_test",
+        "PGSQL_USERNAME": "corex"
+      }
+    },
+    "V30": {
+      "id": "V30",
+      "command": "scripts/php84 php scripts/quality-ceiling-guard.php --tighten",
+      "exit_code": 0,
+      "started_at": "2026-10-07T05:49:25.882221+00:00",
+      "finished_at": "2026-10-07T05:49:25.913357+00:00",
+      "duration_seconds": 0.031,
+      "log": "V30.log",
+      "log_sha256": "0f803042208f4fe0ba2d743c2374d163f1800ec943fd15275cbce36a6dfa31a2",
+      "environment": {
+        "PAO_DISABLE": "1",
+        "PHP": "8.4.26"
+      }
+    }
+  },
+  "supplemental": {
+    "tests-lint": {
+      "id": "tests-lint",
+      "command": "scripts/php84 vendor/bin/phpstan analyse -c phpstan-tests-lint.neon packages/operations/tests packages/tools/tests packages/webhooks/tests tests/Arch/QualityReleaseGateTest.php --memory-limit=2G --no-progress",
+      "exit_code": 0,
+      "started_at": "2026-10-07T06:01:46.423252+00:00",
+      "finished_at": "2026-10-07T06:01:53.394973+00:00",
+      "duration_seconds": 6.972,
+      "log": "tests-lint.log",
+      "log_sha256": "9dd3eeb023e498eff4ab6e14af3d76d6e6c7672da330c9e3edf35753590df0d7",
+      "environment": {
+        "PAO_DISABLE": "1",
+        "PHP": "8.4.26"
+      }
+    },
+    "tests-lint-format": {
+      "id": "tests-lint-format",
+      "command": "scripts/php84 vendor/bin/pint --test packages/operations/tests packages/tools/tests packages/webhooks/tests tests/Arch/QualityReleaseGateTest.php",
+      "exit_code": 0,
+      "started_at": "2026-10-07T06:13:10.822046+00:00",
+      "finished_at": "2026-10-07T06:13:34.360783+00:00",
+      "duration_seconds": 23.539,
+      "log": "tests-lint-format.log",
+      "log_sha256": "cd1a94fc2cf6a965b86e1a4809d6c7fb9148b1ee374e1010ed2ac96ff4876ec2",
+      "environment": {
+        "PAO_DISABLE": "1",
+        "PHP": "8.4.26"
+      }
+    },
+    "root-analysis": {
+      "id": "root-analysis",
+      "command": "scripts/php84 vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=2G --no-progress",
+      "exit_code": 0,
+      "started_at": "2026-10-07T06:01:53.395663+00:00",
+      "finished_at": "2026-10-07T06:01:54.929051+00:00",
+      "duration_seconds": 1.533,
+      "log": "root-analysis.log",
+      "log_sha256": "9dd3eeb023e498eff4ab6e14af3d76d6e6c7672da330c9e3edf35753590df0d7",
+      "environment": {
+        "PAO_DISABLE": "1",
+        "PHP": "8.4.26"
+      }
+    },
+    "module-layout": {
+      "id": "module-layout",
+      "command": "scripts/php84 python3 scripts/module-layout-gate.py",
+      "exit_code": 0,
+      "started_at": "2026-10-07T05:49:39.326287+00:00",
+      "finished_at": "2026-10-07T05:49:39.631289+00:00",
+      "duration_seconds": 0.305,
+      "log": "module-layout.log",
+      "log_sha256": "327bb6b36d8789f86bfdf1ac3d94994c82dc40d76360a0fc473a850c1d5a7bfc",
+      "environment": {
+        "PAO_DISABLE": "1",
+        "PHP": "8.4.26"
+      }
+    },
+    "package-graph": {
+      "id": "package-graph",
+      "command": "scripts/php84 composer package-graph-gate",
+      "exit_code": 0,
+      "started_at": "2026-10-07T05:49:39.631509+00:00",
+      "finished_at": "2026-10-07T05:49:45.760302+00:00",
+      "duration_seconds": 6.129,
+      "log": "package-graph.log",
+      "log_sha256": "7f077ee90fc158f4fe3dbc1323b643c5c7cbf4b5a71b43abf1a64201ea1ee1fe",
+      "environment": {
+        "PAO_DISABLE": "1",
+        "PHP": "8.4.26"
+      }
+    },
+    "foundation": {
+      "id": "foundation",
+      "command": "scripts/php84 php scripts/quality/release-quality.php --stage=foundation",
+      "exit_code": 0,
+      "started_at": "2026-10-07T05:51:38.093821+00:00",
+      "finished_at": "2026-10-07T05:51:38.205313+00:00",
+      "duration_seconds": 0.112,
+      "log": "foundation.log",
+      "log_sha256": "e25070e95dcea2f7f38256ca12df2cb4a1e97df633e29415cb6db780fed10602",
+      "environment": {
+        "PAO_DISABLE": "1",
+        "PHP": "8.4.26"
+      }
+    },
+    "security-regressions": {
+      "id": "security-regressions",
+      "command": "scripts/php84 vendor/bin/pest tests/Arch/QualityReleaseGateTest.php --exclude-group=pg",
+      "exit_code": 0,
+      "started_at": "2026-10-07T05:51:37.080904+00:00",
+      "finished_at": "2026-10-07T05:51:38.093561+00:00",
+      "duration_seconds": 1.013,
+      "log": "security-regressions.log",
+      "log_sha256": "54c03b14a46e5190d5cccf6d0579b61ae213f3d9f3e93eaccf36c5c8d0f4ddfa",
+      "environment": {
+        "PAO_DISABLE": "1",
+        "PHP": "8.4.26"
+      }
+    },
+    "tools-pg-inventory": {
+      "id": "tools-pg-inventory",
+      "command": "scripts/php84 composer --working-dir=packages/tools test -- --group=pg",
+      "exit_code": 1,
+      "started_at": "2026-10-07T05:49:47.294636+00:00",
+      "finished_at": "2026-10-07T05:49:47.774824+00:00",
+      "duration_seconds": 0.48,
+      "log": "tools-pg-inventory.log",
+      "log_sha256": "f29e5372e7ade7a49867496bcb83f84e4f5160490c79d4e6ee7c09990577888a",
+      "environment": {
+        "PAO_DISABLE": "1",
+        "PHP": "8.4.26"
+      }
+    },
+    "lint-delta": {
+      "id": "lint-delta",
+      "command": "scripts/php84 vendor/bin/pint --test packages/operations/src/Bulk/Internal/SqlBulkOperationStore.php packages/webhooks/src/Internal/SqlWebhookDeliveryStore.php packages/webhooks/src/Internal/SqlWebhookSubscriptionStore.php",
+      "exit_code": 0,
+      "started_at": "2026-10-07T06:11:47.334713+00:00",
+      "finished_at": "2026-10-07T06:11:49.108656+00:00",
+      "duration_seconds": 1.774,
+      "log": "lint-delta.log",
+      "log_sha256": "cd1a94fc2cf6a965b86e1a4809d6c7fb9148b1ee374e1010ed2ac96ff4876ec2",
+      "environment": {
+        "PAO_DISABLE": "1",
+        "PHP": "8.4.26"
+      }
+    },
+    "bc-operations": {
+      "id": "bc-operations",
+      "command": "scripts/php84 composer bc-check",
+      "exit_code": 0,
+      "started_at": "2026-10-07T06:11:49.115530+00:00",
+      "finished_at": "2026-10-07T06:12:51.852473+00:00",
+      "duration_seconds": 62.737,
+      "log": "bc-operations.log",
+      "log_sha256": "1cafa72e59ae60c63cb95506df2216e71f16f7430d25cd583d79a278ad1dcbb2",
+      "environment": {
+        "PAO_DISABLE": "1",
+        "PHP": "8.4.26",
+        "BC_CHECK_ONLY": "operations"
+      }
+    },
+    "bc-webhooks": {
+      "id": "bc-webhooks",
+      "command": "scripts/php84 composer bc-check",
+      "exit_code": 0,
+      "started_at": "2026-10-07T06:11:47.333710+00:00",
+      "finished_at": "2026-10-07T06:12:23.444428+00:00",
+      "duration_seconds": 36.111,
+      "log": "bc-webhooks.log",
+      "log_sha256": "d678aa18c4b64f330392dea82b3cc778d46fec7234f0999c850208edc0a34333",
+      "environment": {
+        "PAO_DISABLE": "1",
+        "PHP": "8.4.26",
+        "BC_CHECK_ONLY": "webhooks"
+      }
+    }
+  },
+  "tests": {
+    "V9": {
+      "tests": 188,
+      "assertions": 2188,
+      "skipped": 0
+    },
+    "V10": {
+      "tests": 105,
+      "assertions": 631,
+      "skipped": 0
+    },
+    "V11": {
+      "tests": 140,
+      "assertions": 745,
+      "skipped": 0
+    },
+    "V14": {
+      "tests": 5,
+      "assertions": 87,
+      "skipped": 0
+    },
+    "V16": {
+      "tests": 6,
+      "assertions": 50,
+      "skipped": 0
+    }
+  },
+  "package_tests": 444,
+  "package_assertions": 3701,
+  "fixed_mutations_killed": 35,
+  "fixed_mutations_strict_apply": true,
+  "public_api_delta_fields": 3,
+  "golden_added_internal_types": 4,
+  "bounded_revalidation": {
+    "full_checks": [
+      "V17",
+      "V18"
+    ],
+    "preserved_completed_raw_receipts": true,
+    "changed_since_full_checks": [
+      "packages/operations/src/Bulk/Internal/SqlBulkOperationStore.php",
+      "packages/webhooks/src/Internal/SqlWebhookDeliveryStore.php",
+      "packages/webhooks/src/Internal/SqlWebhookSubscriptionStore.php",
+      "scripts/mutations/API-physical-context.patch"
+    ],
+    "public_native_and_manifest_surface_unchanged": true,
+    "delta_checks": [
+      "lint-delta",
+      "bc-operations",
+      "bc-webhooks",
+      "V3",
+      "V5",
+      "V9",
+      "V11",
+      "V14",
+      "V16"
+    ],
+    "interrupted_reruns": "User continuations restarted the tool environment; interrupted logs retained, no exit/pass claimed. Revalidate only the affected SQL type boundaries after the completed full proof, with same BC base/approvals and existing BC_CHECK_ONLY selector."
+  },
+  "changed_product_paths": [
+    "packages/operations/CHANGELOG.md",
+    "packages/operations/phpstan-baseline.neon",
+    "packages/operations/resources/contracts/php-api.json",
+    "packages/operations/src/Bulk/Internal/BulkRetention.php",
+    "packages/operations/src/Bulk/Internal/DatabaseValue.php",
+    "packages/operations/src/Bulk/Internal/SqlBulkOperationStore.php",
+    "packages/operations/src/Bulk/Internal/TransferBulkExecutor.php",
+    "packages/operations/src/Cost/Internal/BudgetRetention.php",
+    "packages/operations/src/Cost/Internal/DatabaseValue.php",
+    "packages/operations/src/Cost/Internal/SqlOperationBudget.php",
+    "packages/operations/src/Definition/Internal/OperationRegistry.php",
+    "packages/operations/src/Idempotency/Internal/DatabaseValue.php",
+    "packages/operations/src/Idempotency/Internal/SqlIdempotencyStore.php",
+    "packages/operations/src/Invocation/Data/InvocationMetadata.php",
+    "packages/operations/src/Invocation/Internal/OperationDispatcher.php",
+    "packages/operations/src/Invocation/Internal/TrustedContextResolver.php",
+    "packages/operations/src/Laravel/Support/ApiOptions.php",
+    "packages/operations/src/OpenApi/Internal/Commands/WriteApiSnapshots.php",
+    "packages/operations/src/OpenApi/Internal/ContractSnapshotBuilder.php",
+    "packages/operations/src/OpenApi/Internal/OpenApiDocumentGenerator.php",
+    "packages/operations/src/Pagination/Internal/OrderingRegistry.php",
+    "packages/operations/src/Pagination/Internal/SignedCursorCodec.php",
+    "packages/operations/src/Testing/MutatingHandler.php",
+    "packages/operations/src/Validation/Laravel/JsonCanonical.php",
+    "packages/operations/src/Validation/Laravel/SchemaBudget.php",
+    "packages/operations/tests/Unit/DatabaseValueTest.php",
+    "packages/operations/tests/Unit/JsonCanonicalTest.php",
+    "packages/operations/tests/Unit/TrustedContextResolverTest.php",
+    "packages/tools/phpstan-baseline.neon",
+    "packages/tools/src/Internal/ApiToolValidator.php",
+    "packages/tools/src/Internal/GuardedToolInvoker.php",
+    "packages/tools/src/Internal/OpisToolSchemaValidator.php",
+    "packages/tools/src/Internal/ToolSchemaWorker.php",
+    "packages/tools/tests/Unit/OpisToolSchemaValidatorTest.php",
+    "packages/tools/tests/Unit/ToolSchemaWorkerTest.php",
+    "packages/webhooks/phpstan-baseline.neon",
+    "packages/webhooks/src/Internal/Commands/DeliverWebhooks.php",
+    "packages/webhooks/src/Internal/CurlWebhookTransport.php",
+    "packages/webhooks/src/Internal/DatabaseValue.php",
+    "packages/webhooks/src/Internal/SqlWebhookDeliveryStore.php",
+    "packages/webhooks/src/Internal/SqlWebhookSubscriptionStore.php",
+    "packages/webhooks/src/Internal/WebhookFanout.php",
+    "packages/webhooks/src/Internal/WebhookManagement.php",
+    "packages/webhooks/src/Internal/WebhookReplay.php",
+    "packages/webhooks/src/Internal/WebhookUrlPolicy.php",
+    "packages/webhooks/tests/Unit/DatabaseValueTest.php",
+    "scripts/mutations/API-physical-context.patch",
+    "scripts/quality-ceilings.json",
+    "scripts/quality/release-quality.php",
+    "tests/Arch/QualityReleaseGateTest.php",
+    "tests/Golden/REBASELINE.md",
+    "tests/Golden/baseline/php-surface.json"
+  ],
+  "product_sha256": {
+    "packages/operations/CHANGELOG.md": "5cb870ff3be1abc94e779454c9e6b368c0f4fd4e53eaa1e6a95c60041e9cbd16",
+    "packages/operations/phpstan-baseline.neon": "4b3227fab5b697264e8532b59f5cdd96c86a0ff1fa484cc1a869af36ae91530a",
+    "packages/operations/resources/contracts/php-api.json": "9db324a8e56a472373be390779227fa3858f5662bc472119599ac0659e1dac7c",
+    "packages/operations/src/Bulk/Internal/BulkRetention.php": "f9701cf91437fef3e575a06ea6e827d77ab516e7971ffd7b5155eb0aac8042c4",
+    "packages/operations/src/Bulk/Internal/DatabaseValue.php": "0240c735ccd3ba3e562ae5ad93716f56dc2aecb3d9928aced9b125a5dc6ee82f",
+    "packages/operations/src/Bulk/Internal/SqlBulkOperationStore.php": "dd40b0efcb09710bfeffea7a6709cbc4576dcaa482a7339112de6b831245499c",
+    "packages/operations/src/Bulk/Internal/TransferBulkExecutor.php": "5e9843952d5338e098213f4208dd2656b30a5dcf5f04fa5e6a0efa8f57fae5f7",
+    "packages/operations/src/Cost/Internal/BudgetRetention.php": "2274669649e2d8ac6fa31f9f9ae8eb2c3fb9599eb1a16ff3a9e73e1eb8b5339c",
+    "packages/operations/src/Cost/Internal/DatabaseValue.php": "406d7e70f278dc7a11af54d044c031f1d2d79b606a7755aa93755278c0335719",
+    "packages/operations/src/Cost/Internal/SqlOperationBudget.php": "88da7fed676149ebc691c5f44d72ddc20a8048ad789e37fe86266f44001a05de",
+    "packages/operations/src/Definition/Internal/OperationRegistry.php": "7629f016ed8490004767f2107f24489191978515db1612773ad6ba3a3fbce213",
+    "packages/operations/src/Idempotency/Internal/DatabaseValue.php": "8e46bc2350afe52fe38df33076b8853d285c7bf8570b297b49a3d616acd6f3c2",
+    "packages/operations/src/Idempotency/Internal/SqlIdempotencyStore.php": "7d2e03a5163422302af303974dacfca2863e12c0b2b78fc2116b2687933a7a56",
+    "packages/operations/src/Invocation/Data/InvocationMetadata.php": "911cd7700b5653dc149adc6f36c889feea5b0e25b4a4eaba83553944506814e7",
+    "packages/operations/src/Invocation/Internal/OperationDispatcher.php": "acc92111120883ea5a7674052182a4040ff33c14602bda3903bd16c6ed0c4a51",
+    "packages/operations/src/Invocation/Internal/TrustedContextResolver.php": "edb3d72e0b394fed450ab96c710dbf44fc302cbd27bbfe2130ed778e58b8fc3c",
+    "packages/operations/src/Laravel/Support/ApiOptions.php": "d1550ef3eb0d196310dffc08891de0d644375c7180b6acd7d10b9f27837a3031",
+    "packages/operations/src/OpenApi/Internal/Commands/WriteApiSnapshots.php": "494227d49a0431e94722471da2fccefb0e4cc448b9edfae7a024504b7fd59c59",
+    "packages/operations/src/OpenApi/Internal/ContractSnapshotBuilder.php": "8c02116f9ff7a20e97b0e414024271595adb15d2e7d5bd55e6697cc9b74b4605",
+    "packages/operations/src/OpenApi/Internal/OpenApiDocumentGenerator.php": "0beb05c2cc664534f45f280e84b37181b992422688e1d9180c752681bbd279b3",
+    "packages/operations/src/Pagination/Internal/OrderingRegistry.php": "9e03d86f89c1580134bce720d78f0d895f3c8925df0772b5a07c3176d79c5d41",
+    "packages/operations/src/Pagination/Internal/SignedCursorCodec.php": "ab0831dac5f1264fede10e9155327680262acd4bcb4a1bce7ddaa0782b40c5cc",
+    "packages/operations/src/Testing/MutatingHandler.php": "4e13e5ba92770be003cfa8ea2cc10ea3893a7be427f5e3ebe9296a94619b4a01",
+    "packages/operations/src/Validation/Laravel/JsonCanonical.php": "6e25b7540b458f45a98d62c30ba6449e5739a9d4997428200353b2e573ef79dd",
+    "packages/operations/src/Validation/Laravel/SchemaBudget.php": "95bc6226b201d4b9873bb907733a637e31300274c12a0f78c3e46342b49322fa",
+    "packages/operations/tests/Unit/DatabaseValueTest.php": "8228b54c7cac6d593e68728aa56b3d09d8fafc2ffaf9a6d72c2ab8c88d9385ad",
+    "packages/operations/tests/Unit/JsonCanonicalTest.php": "dc56410a49ef6172798cf1790cf940074fb99d12c27171c67615af0d3aadf236",
+    "packages/operations/tests/Unit/TrustedContextResolverTest.php": "13b3ad834c99af59411ae12c8fff4277a9a9eecb828d669767312e4738ed3b63",
+    "packages/tools/phpstan-baseline.neon": "4b3227fab5b697264e8532b59f5cdd96c86a0ff1fa484cc1a869af36ae91530a",
+    "packages/tools/src/Internal/ApiToolValidator.php": "2c4028b730137c288a112f1467a2a24293dddc3f8014f5f3d4dc043fb4d457e8",
+    "packages/tools/src/Internal/GuardedToolInvoker.php": "0dac5c811e4bd2a588a0e9050dafdba549494b01f0dd52cc0690cc86ccabbdc2",
+    "packages/tools/src/Internal/OpisToolSchemaValidator.php": "38cf3f72c76cf3c3ec338d4570b983afebff47c1047242a8935831635b0ea781",
+    "packages/tools/src/Internal/ToolSchemaWorker.php": "4bf8f4552ee54237b84f39ec35207ae7c68e53dbc377ab7d8d2c5e2449da998e",
+    "packages/tools/tests/Unit/OpisToolSchemaValidatorTest.php": "fc347b9f301b69eaa5f8f75af4850e744ea62b3eaebe1328d098a52add3ec035",
+    "packages/tools/tests/Unit/ToolSchemaWorkerTest.php": "1057396b2c9cc2f3c489a15f6107db07a9aa37752a3191b04915ac779f308f4c",
+    "packages/webhooks/phpstan-baseline.neon": "4b3227fab5b697264e8532b59f5cdd96c86a0ff1fa484cc1a869af36ae91530a",
+    "packages/webhooks/src/Internal/Commands/DeliverWebhooks.php": "67b83969a133e81a128920defe370a22e5ffd226d9f8bc0f3f13a3cf12536714",
+    "packages/webhooks/src/Internal/CurlWebhookTransport.php": "b0d7c9ba62b93da3c84c0c5adff4a12e4a0f15cf379ecea1938499dc1953f18a",
+    "packages/webhooks/src/Internal/DatabaseValue.php": "63f2f8829f139bcaafe5ea7ea587fd048a8991859e994ca6ea942c87b03f4faf",
+    "packages/webhooks/src/Internal/SqlWebhookDeliveryStore.php": "956b4d1a67e2ba8895ff89ac5068570091ea1fe42cca6f8773428b060c753355",
+    "packages/webhooks/src/Internal/SqlWebhookSubscriptionStore.php": "75f49c9c7d3e907871ec4da707dc5f9f0b79d014c98f6da496395c20cee8089d",
+    "packages/webhooks/src/Internal/WebhookFanout.php": "9fdb1835b6993b9b0a930f5f1fb557c91b5b8e653f4eab0709938a5a5d247a5c",
+    "packages/webhooks/src/Internal/WebhookManagement.php": "e1ceef19d6138ef4abe4bfbe551f8d455bb38d91e03da756c88a3a99df0a6f92",
+    "packages/webhooks/src/Internal/WebhookReplay.php": "c35a1dce4a7190cd503b8a2e1d1b15f6dcbaf865e913c880b339eeca411e567b",
+    "packages/webhooks/src/Internal/WebhookUrlPolicy.php": "c8cee2f1f8b6d1ae6b422cfd4b27b697f6ae60d85968ba13ada575980b945652",
+    "packages/webhooks/tests/Unit/DatabaseValueTest.php": "b847840564b9f7d2a33631c8822de333625daa69d56a31243f34ed9620befa0f",
+    "scripts/mutations/API-physical-context.patch": "8a2d64b1b539eaffa5db66fa14d4bccd07474c457bd83d1f781c0e4f9b6312be",
+    "scripts/quality-ceilings.json": "a86e40b8cabd49a5da019e6802b576bb2e7743603dd681c264f1cd5fc71f522c",
+    "scripts/quality/release-quality.php": "7a0e138678711c6e57cd6dad5a475183599f738bca4466098acfdecafd1bb019",
+    "tests/Arch/QualityReleaseGateTest.php": "561270e56cb6b34c934ecd1a6b8966dec57870fcf2c7ae428c2ded04ff2ea1af",
+    "tests/Golden/REBASELINE.md": "1124fcc0b2011cca5be31991241c0f9bb9c21c4173344e75131303594dcdd708",
+    "tests/Golden/baseline/php-surface.json": "73387d71166c5ca55926e4d548a963664cc0363349346c54c8d9fb11db140376"
+  },
+  "review": "P09.8 owns independent phase review and final hosted CI under D73; no final phase/hosted/release claim.",
+  "tools_pg": "No PostgreSQL suite; actual group=pg negative inventory exits1 with No tests found; SQLite tests are nonempty and green."
+}

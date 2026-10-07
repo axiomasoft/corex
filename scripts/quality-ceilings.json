@@ -9,7 +9,7 @@
         "intl": 116,
         "media": 93,
         "notifications": 63,
-        "operations": 137,
+        "operations": 0,
         "panels": 31,
         "recurrence": 9,
         "root": 0,
@@ -19,10 +19,10 @@
         "tasks": 16,
         "tasks-workflow": 72,
         "tenancy": 0,
-        "tools": 16,
+        "tools": 0,
         "transfer": 64,
         "wakeup": 35,
-        "webhooks": 194,
+        "webhooks": 0,
         "workflow": 13
     },
     "dependencies": {

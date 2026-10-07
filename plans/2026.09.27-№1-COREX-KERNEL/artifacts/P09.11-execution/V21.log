@@ -1,0 +1,16 @@
+> vendor/bin/pest --testsuite=Golden --exclude-group=pg
+
+  [30;42;1m PASS [39;49;22m[39m GoldenTest[39m
+  [32;1m✓[39;22m[90m [39m[90mmatches the frozen golden baseline modulo planned renames with data[39m[90m…[39m [90m5.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mmatches the frozen golden baseline modulo planned renames with data[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mmatches the frozen golden baseline modulo planned renames with data[39m[90m…[39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mmatches the frozen golden baseline modulo planned renames with data[39m[90m…[39m [90m0.59s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Tests\Golden\SchemaSqliteGoldenTest[39m
+  [32;1m✓[39;22m[90m [39m[90msqlite tenant schemas[39m[90m                                               [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcatalogue keeps stored autoindex identity[39m[90m                           [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mnew long sqlite names fail without an existing pending exception[39m[90m    [39m [90m0.02s[39m  
+
+  [90mTests:[39m    [32;1m7 passed[39;22m[90m (3484 assertions)[39m
+  [90mDuration:[39m [39m7.05s[39m
+

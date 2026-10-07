@@ -148,28 +148,28 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
                 return null;
             }
 
-            $status = BulkOperationStatus::from((string) $row->status);
+            $status = BulkOperationStatus::from(DatabaseValue::text(DatabaseValue::field($row, 'status')));
             $nextStatus = $status === BulkOperationStatus::Pending
                 ? BulkOperationStatus::Running
                 : $status;
             $leaseUntil = $now->add(new DateInterval("PT{$this->leaseSeconds}S"));
             $changed = $this->connection->table(self::Table)
-                ->where('id', (string) $row->id)
+                ->where('id', DatabaseValue::text(DatabaseValue::field($row, 'id')))
                 ->where('status', $status->value)
-                ->where('revision', (int) $row->revision)
+                ->where('revision', DatabaseValue::integer(DatabaseValue::field($row, 'revision')))
                 ->update([
                     'status' => $nextStatus->value,
-                    'revision' => (int) $row->revision + 1,
+                    'revision' => DatabaseValue::integer(DatabaseValue::field($row, 'revision')) + 1,
                     'lease_owner' => $worker,
                     'lease_until' => $leaseUntil,
-                    'attempt' => (int) $row->attempt + 1,
+                    'attempt' => DatabaseValue::integer(DatabaseValue::field($row, 'attempt')) + 1,
                 ]);
 
             if ($changed !== 1) {
                 throw new RuntimeException('Bulk claim lost its compare-and-swap fence.');
             }
 
-            return $this->operation($this->requiredRow((string) $row->id));
+            return $this->operation($this->requiredRow(DatabaseValue::text(DatabaseValue::field($row, 'id'))));
         }, $this->transactionAttempts());
     }
 
@@ -197,7 +197,7 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
                 return false;
             }
 
-            $leaseUntil = $this->date($row->lease_until);
+            $leaseUntil = $this->date(DatabaseValue::field($row, 'lease_until'));
 
             if ($leaseUntil === null || $leaseUntil <= $now) {
                 return false;
@@ -340,7 +340,7 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
     {
         return hash_equals(
             JsonCanonical::encode($this->scopeCodec->encode($scope)),
-            JsonCanonical::encode($this->scopeArray($row->scope)),
+            JsonCanonical::encode($this->scopeArray(DatabaseValue::field($row, 'scope'))),
         );
     }
 
@@ -391,38 +391,38 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
     private function operation(object $row): BulkOperation
     {
         $definition = new BulkOperationDefinition(
-            id: (string) $row->id,
-            submissionId: (string) $row->submission_id,
-            operationId: (string) $row->operation_id,
-            major: (string) $row->major,
-            contractHash: (string) $row->contract_hash,
-            encodedScope: $this->canonicalScopeArray($row->scope),
-            actorId: (string) $row->actor_id,
-            clientId: (string) $row->client_id,
-            extensionStamp: JsonDocuments::capture($this->objectArray($row->extension_stamp, 'extension stamp')),
-            inputRef: JsonDocuments::capture($this->objectArray($row->input_ref, 'input reference')),
+            id: DatabaseValue::text(DatabaseValue::field($row, 'id')),
+            submissionId: DatabaseValue::text(DatabaseValue::field($row, 'submission_id')),
+            operationId: DatabaseValue::text(DatabaseValue::field($row, 'operation_id')),
+            major: DatabaseValue::text(DatabaseValue::field($row, 'major')),
+            contractHash: DatabaseValue::text(DatabaseValue::field($row, 'contract_hash')),
+            encodedScope: $this->canonicalScopeArray(DatabaseValue::field($row, 'scope')),
+            actorId: DatabaseValue::text(DatabaseValue::field($row, 'actor_id')),
+            clientId: DatabaseValue::text(DatabaseValue::field($row, 'client_id')),
+            extensionStamp: JsonDocuments::capture($this->objectArray(DatabaseValue::field($row, 'extension_stamp'), 'extension stamp')),
+            inputRef: JsonDocuments::capture($this->objectArray(DatabaseValue::field($row, 'input_ref'), 'input reference')),
         );
 
         return new BulkOperation(
             definition: $definition,
-            transferRef: JsonDocuments::nullable($this->nullableObjectArray($row->transfer_ref, 'transfer reference')),
-            status: BulkOperationStatus::from((string) $row->status),
-            terminalStatus: $row->terminal_status === null
+            transferRef: JsonDocuments::nullable($this->nullableObjectArray(DatabaseValue::field($row, 'transfer_ref'), 'transfer reference')),
+            status: BulkOperationStatus::from(DatabaseValue::text(DatabaseValue::field($row, 'status'))),
+            terminalStatus: DatabaseValue::field($row, 'terminal_status') === null
                 ? null
-                : BulkOperationStatus::from((string) $row->terminal_status),
-            revision: (int) $row->revision,
-            leaseOwner: $row->lease_owner === null ? null : (string) $row->lease_owner,
-            leaseUntil: $this->date($row->lease_until),
-            cancelRequestedAt: $this->date($row->cancel_requested_at),
-            checkpoint: JsonDocuments::capture($this->objectArray($row->checkpoint, 'checkpoint')),
-            progress: JsonDocuments::capture($this->objectArray($row->progress, 'progress')),
-            resultRef: JsonDocuments::nullable($this->nullableObjectArray($row->result_ref, 'result reference')),
-            error: JsonDocuments::nullable($this->nullableObjectArray($row->error, 'error')),
-            attempt: (int) $row->attempt,
-            nextAttemptAt: $this->requiredDate($row->next_attempt_at, 'next attempt'),
-            createdAt: $this->requiredDate($row->created_at, 'created'),
-            finishedAt: $this->date($row->finished_at),
-            expiresAt: $this->date($row->expires_at),
+                : BulkOperationStatus::from(DatabaseValue::text(DatabaseValue::field($row, 'terminal_status'))),
+            revision: DatabaseValue::integer(DatabaseValue::field($row, 'revision')),
+            leaseOwner: DatabaseValue::field($row, 'lease_owner') === null ? null : DatabaseValue::text(DatabaseValue::field($row, 'lease_owner')),
+            leaseUntil: $this->date(DatabaseValue::field($row, 'lease_until')),
+            cancelRequestedAt: $this->date(DatabaseValue::field($row, 'cancel_requested_at')),
+            checkpoint: JsonDocuments::capture($this->objectArray(DatabaseValue::field($row, 'checkpoint'), 'checkpoint')),
+            progress: JsonDocuments::capture($this->objectArray(DatabaseValue::field($row, 'progress'), 'progress')),
+            resultRef: JsonDocuments::nullable($this->nullableObjectArray(DatabaseValue::field($row, 'result_ref'), 'result reference')),
+            error: JsonDocuments::nullable($this->nullableObjectArray(DatabaseValue::field($row, 'error'), 'error')),
+            attempt: DatabaseValue::integer(DatabaseValue::field($row, 'attempt')),
+            nextAttemptAt: $this->requiredDate(DatabaseValue::field($row, 'next_attempt_at'), 'next attempt'),
+            createdAt: $this->requiredDate(DatabaseValue::field($row, 'created_at'), 'created'),
+            finishedAt: $this->date(DatabaseValue::field($row, 'finished_at')),
+            expiresAt: $this->date(DatabaseValue::field($row, 'expires_at')),
         );
     }
 
@@ -431,14 +431,15 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
     {
         $decoded = $this->decodedArray($value, 'scope');
 
+        $scope = [];
         foreach ($decoded as $key => $item) {
             if (! is_string($key) || ! is_scalar($item) && $item !== null) {
                 throw new RuntimeException('Bulk scope contains a non-scalar value.');
             }
+            $scope[$key] = $item;
         }
 
-        /** @var array<string, scalar|null> $decoded */
-        return $decoded;
+        return $scope;
     }
 
     /** @return array<string, scalar|null> */
@@ -447,7 +448,7 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
         return $this->scopeCodec->encode($this->scopeCodec->decode($this->scopeArray($value)));
     }
 
-    /** @return array<string, mixed> */
+    /** @return array<array-key, mixed> */
     private function objectArray(mixed $value, string $name): array
     {
         $decoded = $this->decodedArray($value, $name);
@@ -456,11 +457,10 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
             throw new RuntimeException("Bulk {$name} must be a JSON object.");
         }
 
-        /** @var array<string, mixed> $decoded */
         return $decoded;
     }
 
-    /** @return array<string, mixed>|null */
+    /** @return array<array-key, mixed>|null */
     private function nullableObjectArray(mixed $value, string $name): ?array
     {
         return $value === null ? null : $this->objectArray($value, $name);
@@ -492,7 +492,7 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
 
         return $value instanceof DateTimeInterface
             ? DateTimeImmutable::createFromInterface($value)
-            : new DateTimeImmutable((string) $value);
+            : new DateTimeImmutable(DatabaseValue::text($value));
     }
 
     private function requiredDate(mixed $value, string $name): DateTimeImmutable
@@ -507,6 +507,7 @@ final readonly class SqlBulkOperationStore implements BulkOperationStore
         }
     }
 
+    /** @return int<1, 3> */
     private function transactionAttempts(): int
     {
         return $this->connection->getDriverName() === 'pgsql' ? 3 : 1;

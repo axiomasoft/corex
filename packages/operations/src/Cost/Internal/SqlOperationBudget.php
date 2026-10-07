@@ -179,8 +179,8 @@ final readonly class SqlOperationBudget implements OperationBudget
                 return;
             }
 
-            $state = (string) $reservation->state;
-            $storedCharge = (int) $reservation->charged;
+            $state = DatabaseValue::text(DatabaseValue::field($reservation, 'state'));
+            $storedCharge = DatabaseValue::integer(DatabaseValue::field($reservation, 'charged'));
 
             if ($state === $outcome && $storedCharge === $charged) {
                 return;
@@ -192,7 +192,7 @@ final readonly class SqlOperationBudget implements OperationBudget
 
             $now = $this->clock->now();
 
-            if ($this->date($reservation->expires_at) <= $now) {
+            if ($this->date(DatabaseValue::field($reservation, 'expires_at')) <= $now) {
                 $this->connection->table(self::ReservationTable)
                     ->where('id', $id)
                     ->where('state', 'held')
@@ -201,22 +201,33 @@ final readonly class SqlOperationBudget implements OperationBudget
                 return;
             }
 
-            $keys = JsonCanonical::decode((string) $reservation->keys);
+            $keys = JsonCanonical::decode(DatabaseValue::text(DatabaseValue::field($reservation, 'keys')));
 
-            if (! is_array($keys) || ! array_is_list($keys) || count($keys) !== 4
-                || count(array_unique($keys)) !== 4
-                || array_filter($keys, static fn (mixed $key): bool => ! is_string($key) || preg_match('/\A[a-f0-9]{64}\z/D', $key) !== 1) !== []) {
+            if (! is_array($keys) || ! array_is_list($keys) || count($keys) !== 4) {
                 throw new RuntimeException('Budget reservation contains invalid bucket keys.');
             }
 
+            $checkedKeys = [];
+            foreach ($keys as $key) {
+                if (! is_string($key) || preg_match('/\A[a-f0-9]{64}\z/D', $key) !== 1) {
+                    throw new RuntimeException('Budget reservation contains invalid bucket keys.');
+                }
+                $checkedKeys[] = $key;
+            }
+
+            if (count(array_unique($checkedKeys)) !== 4) {
+                throw new RuntimeException('Budget reservation contains invalid bucket keys.');
+            }
+            $keys = $checkedKeys;
+
             sort($keys, SORT_STRING);
             $rows = $this->lockedBuckets($keys);
-            $estimate = (int) $reservation->estimate;
+            $estimate = DatabaseValue::integer(DatabaseValue::field($reservation, 'estimate'));
             $adjustment = $estimate - $charged;
 
             foreach ($rows as $key => $row) {
                 $available = $this->refilledAvailable($row, $now);
-                $capacity = (int) $row->capacity;
+                $capacity = DatabaseValue::integer(DatabaseValue::field($row, 'capacity'));
                 $next = $adjustment >= 0
                     ? min($capacity, $this->add($available, $adjustment))
                     : $this->subtract($available, -$adjustment);
@@ -259,7 +270,7 @@ final readonly class SqlOperationBudget implements OperationBudget
         $indexed = [];
 
         foreach ($rows as $row) {
-            $indexed[(string) $row->key] = $row;
+            $indexed[DatabaseValue::text(DatabaseValue::field($row, 'key'))] = $row;
         }
 
         return $indexed;
@@ -267,15 +278,15 @@ final readonly class SqlOperationBudget implements OperationBudget
 
     private function refilledAvailable(object $row, DateTimeImmutable $now): int
     {
-        $available = (int) $row->available;
-        $capacity = (int) $row->capacity;
-        $elapsed = max(0, $this->epochMicroseconds($now) - $this->epochMicroseconds($this->date($row->last_refill_at)));
+        $available = DatabaseValue::integer(DatabaseValue::field($row, 'available'));
+        $capacity = DatabaseValue::integer(DatabaseValue::field($row, 'capacity'));
+        $elapsed = max(0, $this->epochMicroseconds($now) - $this->epochMicroseconds($this->date(DatabaseValue::field($row, 'last_refill_at'))));
 
         if ($elapsed === 0 || $available >= $capacity) {
             return min($available, $capacity);
         }
 
-        $rate = (int) $row->refill_rate;
+        $rate = DatabaseValue::integer(DatabaseValue::field($row, 'refill_rate'));
         $refill = $elapsed > intdiv(PHP_INT_MAX, $rate) ? PHP_INT_MAX : $elapsed * $rate;
 
         return min($capacity, $this->add($available, $refill));
@@ -283,7 +294,7 @@ final readonly class SqlOperationBudget implements OperationBudget
 
     private function monotonicTime(object $row, DateTimeImmutable $now): DateTimeImmutable
     {
-        $previous = $this->date($row->last_refill_at);
+        $previous = $this->date(DatabaseValue::field($row, 'last_refill_at'));
 
         return $now >= $previous ? $now : $previous;
     }
@@ -362,6 +373,6 @@ final readonly class SqlOperationBudget implements OperationBudget
     {
         return $value instanceof DateTimeInterface
             ? DateTimeImmutable::createFromInterface($value)
-            : new DateTimeImmutable((string) $value);
+            : new DateTimeImmutable(DatabaseValue::text($value));
     }
 }

@@ -25,7 +25,13 @@ final class DeliverWebhooks extends Command
             return self::SUCCESS;
         }
 
-        $leaseOwner = (string) $this->option('worker');
+        $leaseOwner = $this->option('worker');
+
+        if (! is_string($leaseOwner)) {
+            $this->components->error('The --worker option must be a string.');
+
+            return self::INVALID;
+        }
         $max = (int) $this->option('max');
 
         if ($max < 1 || $max > 1_000) {

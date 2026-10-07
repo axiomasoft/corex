@@ -71,11 +71,11 @@ final readonly class BudgetRetention
                 ->lockForUpdate()
                 ->first();
 
-            if ($row === null || (string) $row->state !== 'held') {
+            if ($row === null || DatabaseValue::text(DatabaseValue::field($row, 'state')) !== 'held') {
                 return false;
             }
 
-            if ($this->instant($row->expires_at) > $this->clock->now()) {
+            if ($this->instant(DatabaseValue::field($row, 'expires_at')) > $this->clock->now()) {
                 return false;
             }
 
@@ -126,7 +126,7 @@ final readonly class BudgetRetention
         $deletable = [];
 
         foreach ($keys as $key) {
-            $key = (string) $key;
+            $key = DatabaseValue::text($key);
 
             if (! isset($protected[$key])) {
                 $deletable[] = $key;
@@ -155,7 +155,7 @@ final readonly class BudgetRetention
         $protected = [];
 
         foreach ($this->connection->table(self::Reservations)->where('state', 'held')->get(['keys']) as $row) {
-            $keys = JsonCanonical::decode((string) $row->keys);
+            $keys = JsonCanonical::decode(DatabaseValue::text(DatabaseValue::field($row, 'keys')));
 
             if (! is_array($keys) || ! array_is_list($keys)) {
                 return null;
@@ -173,6 +173,7 @@ final readonly class BudgetRetention
         return $protected;
     }
 
+    /** @return int<1, 3> */
     private function attempts(): int
     {
         return $this->connection->getDriverName() === 'pgsql' ? 3 : 1;
@@ -182,6 +183,6 @@ final readonly class BudgetRetention
     {
         return $value instanceof DateTimeInterface
             ? DateTimeImmutable::createFromInterface($value)
-            : new DateTimeImmutable((string) $value);
+            : new DateTimeImmutable(DatabaseValue::text($value));
     }
 }

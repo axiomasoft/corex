@@ -9,6 +9,7 @@ use CoreX\Attributes\SpiKind;
 use CoreX\Operations\Definition\Contracts\OperationHandler;
 use CoreX\Operations\Invocation\Contracts\RequestContext;
 use Illuminate\Database\ConnectionResolverInterface;
+use InvalidArgumentException;
 use Psr\Clock\ClockInterface;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
@@ -25,9 +26,15 @@ final class MutatingHandler implements OperationHandler
     {
         self::$calls++;
 
+        $operationKey = $input['operation_key'] ?? '';
+
+        if (! is_scalar($operationKey)) {
+            throw new InvalidArgumentException('Operation key must be scalar.');
+        }
+
         $this->connections->connection()->table('tool_effects')->insert([
             'account_id' => $context->tenant()->account->id,
-            'operation_key' => (string) ($input['operation_key'] ?? ''),
+            'operation_key' => (string) $operationKey,
             'payload' => json_encode($input, JSON_THROW_ON_ERROR),
             'created_at' => $this->clock->now(),
         ]);

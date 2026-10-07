@@ -24,7 +24,7 @@ final class CurlWebhookTransport implements WebhookHttpTransport
             return $this->failure(WebhookFailureReason::TransportFailure, $startedAt);
         }
 
-        if (! WebhookUrlPolicy::allowsPublicAddress($request->address)) {
+        if ($request->url === '' || ! WebhookUrlPolicy::allowsPublicAddress($request->address)) {
             return $this->failure(WebhookFailureReason::AddressNotAllowed, $startedAt);
         }
 

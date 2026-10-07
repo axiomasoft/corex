@@ -150,7 +150,7 @@ final readonly class ApiOptions
         throw new InvalidConfiguration(['default_major: must name a declared stable major']);
     }
 
-    /** @return array<string, mixed> */
+    /** @return array<array-key, mixed> */
     private static function array(mixed $value): array
     {
         return is_array($value) ? $value : [];

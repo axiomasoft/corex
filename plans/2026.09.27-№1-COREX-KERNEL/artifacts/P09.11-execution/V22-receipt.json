@@ -1,0 +1,18 @@
+{
+  "id": "V22",
+  "command": "bash scripts/mutation-check.sh --all",
+  "exit_code": 0,
+  "started_at": "2026-10-07T06:13:35.412307+00:00",
+  "finished_at": "2026-10-07T06:13:50.747002+00:00",
+  "duration_seconds": 15.335,
+  "log": "V22.log",
+  "log_sha256": "d8cdd5f17466dd56ae9f9ffa8b38fa8288eb23cf84c2059348702deb8f1aeac7",
+  "environment": {
+    "PAO_DISABLE": "1",
+    "PHP": "8.4.26",
+    "PGSQL_HOST": "127.0.0.1",
+    "PGSQL_PORT": "5434",
+    "PGSQL_DATABASE": "corex_test",
+    "PGSQL_USERNAME": "corex"
+  }
+}

@@ -10420,7 +10420,7 @@
                     "return": "(array|string|int|float|bool|null)",
                     "doc": {
                         "@return": [
-                            "(array<string, mixed> | list<mixed> | string | int | float | bool | null)"
+                            "(array<array-key, mixed> | string | int | float | bool | null)"
                         ]
                     }
                 },
@@ -10444,7 +10444,7 @@
                     "return": "?array",
                     "doc": {
                         "@return": [
-                            "(array<string, mixed> | null)"
+                            "(array<array-key, mixed> | null)"
                         ]
                     }
                 },
@@ -10634,7 +10634,7 @@
                     "return": "array",
                     "doc": {
                         "@param": [
-                            "array<string, mixed> $schema"
+                            "array<array-key, mixed> $schema"
                         ],
                         "@return": [
                             "array<string, string>"

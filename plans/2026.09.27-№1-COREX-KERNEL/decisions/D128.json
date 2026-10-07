@@ -1,0 +1,27 @@
+{
+  "$schema": "urn:swissknifeman:task:plan:decision:v1",
+  "id": "D128",
+  "title": "P09.11: finite JSON decoder PHPDoc correction with numeric-key preservation",
+  "date": "2026-10-07",
+  "status": "accepted",
+  "context": "P09.11 baseline-free diagnostics expose inaccurate JSON decoder PHPDoc: associative json_decode converts integer-looking JSON member names to PHP integer keys; non-list objects may mix string/integer keys. Preserve all currently accepted decoded values, including numeric names, rather than reject or discard them for typing.",
+  "decision": "Finite PHPDoc-only delta: JsonCanonical::decode return becomes array<array-key, mixed>|string|int|float|bool|null; JsonCanonical::decodeObject return becomes array<array-key, mixed>|null. SchemaBudget::admit schema parameter PHPDoc becomes array<array-key, mixed> because JSON object names may be numeric and recursive schema arrays include lists. These exact three PHPDoc fields change. Native signatures and runtime accepted JSON values remain unchanged; named consumers validate their own map boundaries. Record exact two manifest fields, package CHANGELOG and public API projection. Feature-owned Internal SQL adapters may add only four new Golden class surfaces; regenerate precise inventory delta without resetting BC/schema baselines or approvals. Malformed SQL/worker/protocol values fail explicitly, valid SQL/JSON behavior and established scope/value-comparison semantics remain covered by existing lanes and focused regression cases.",
+  "rationale": "Accurate public type documentation must follow PHP runtime key behavior; D120 prohibits invented PHPDoc narrowing or suppression. This is a declared finite repository correction under B6, D17 and D125, not an undeclared behavior or native API rewrite.",
+  "applies_to": [
+    "P09",
+    "P09.11"
+  ],
+  "evidence": [
+    {
+      "kind": "repo",
+      "ref": "artifacts/P09.11-execution/diagnostic-full-operations.json",
+      "note": "Original decoder return.type diagnostics and existing source."
+    }
+  ],
+  "actor": {
+    "provider": "codex",
+    "model": "gpt-6.1-sol",
+    "effort": "xhigh"
+  },
+  "answered_by": "agent"
+}

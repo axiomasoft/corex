@@ -176,7 +176,13 @@ final class ContractSnapshotBuilder
         $present = [];
 
         foreach ($errors as $row) {
-            $present[($row['owner'] ?? '')."\0".($row['code'] ?? '')] = true;
+            $owner = $row['owner'] ?? '';
+            $code = $row['code'] ?? '';
+
+            if (! is_string($owner) || ! is_string($code)) {
+                throw new InvalidArgumentException('Error contract owner and code must be strings.');
+            }
+            $present[$owner."\0".$code] = true;
         }
 
         foreach ($this->safeCodes() as $row) {
@@ -197,7 +203,7 @@ final class ContractSnapshotBuilder
         ], $errors);
     }
 
-    /** @return list<array<string, mixed>> */
+    /** @return list<array{owner: string, code: string, category: string, detail_keys: list<string>, path: null, retryable: bool}> */
     private function safeCodes(): array
     {
         $rows = [];
@@ -226,13 +232,26 @@ final class ContractSnapshotBuilder
         $paths = is_array($paths) ? $paths : [];
 
         foreach ($contour as $operation) {
-            $paths[$operation['path']][strtolower((string) $operation['method'])] = [
+            $path = $operation['path'];
+            $method = $operation['method'];
+            $status = $operation['success_status'];
+
+            if (! is_string($path) || ! is_string($method) || ! is_int($status)) {
+                throw new InvalidArgumentException('Contour operation path, method and status are invalid.');
+            }
+            $pathItem = $paths[$path] ?? [];
+
+            if (! is_array($pathItem)) {
+                throw new InvalidArgumentException('OpenAPI path item must be an object.');
+            }
+            $pathItem[strtolower($method)] = [
                 'operationId' => $operation['id'],
-                'responses' => [(string) $operation['success_status'] => ['description' => 'Success']],
+                'responses' => [(string) $status => ['description' => 'Success']],
                 'x-corex-ability' => $operation['ability'],
                 'x-corex-cost' => $operation['cost'],
                 'x-corex-module' => 'axiomasoft/corex-operations',
             ];
+            $paths[$path] = $pathItem;
         }
 
         $document['paths'] = $paths;

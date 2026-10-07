@@ -2,6 +2,8 @@
 
 ## Unreleased — baseline v1
 
+- Correct JSON decoder and schema budget PHPDoc to preserve numeric object member names and recursive schema lists; native signatures and accepted JSON values remain unchanged (PLAN3.D128).
+
 - Схема: набор(ы) `tenant` и `budget` (Dedicated), baseline v1. Baseline заменяет невыпущенную upgrade-цепочку; новая установка использует финальную схему.
 
 ## Unreleased — schema set connection ownership

@@ -85,12 +85,12 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
                 return null;
             }
 
-            $attempt = (int) $row->attempt + 1;
+            $attempt = DatabaseValue::integer(DatabaseValue::field($row, 'attempt')) + 1;
             $leaseUntil = $now->add(new DateInterval("PT{$this->leaseSeconds}S"));
             $changed = $this->connection->table(self::Table)
-                ->where('id', (string) $row->id)
-                ->where('status', (string) $row->status)
-                ->where('attempt', (int) $row->attempt)
+                ->where('id', DatabaseValue::text(DatabaseValue::field($row, 'id')))
+                ->where('status', DatabaseValue::text(DatabaseValue::field($row, 'status')))
+                ->where('attempt', DatabaseValue::integer(DatabaseValue::field($row, 'attempt')))
                 ->whereNull('lease_owner')
                 ->update([
                     'status' => 'sending',
@@ -105,8 +105,8 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
             }
 
             $this->connection->table('sys_api_webhook_attempts')->insert([
-                'id' => substr(hash('sha256', $row->id.'|'.$attempt), 0, 32),
-                'delivery_id' => $row->id,
+                'id' => substr(hash('sha256', DatabaseValue::text(DatabaseValue::field($row, 'id')).'|'.$attempt), 0, 32),
+                'delivery_id' => DatabaseValue::field($row, 'id'),
                 'attempt' => $attempt,
                 'lease_owner' => $worker,
                 'started_at' => $now,
@@ -117,7 +117,7 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
                 'error_code' => null,
             ]);
 
-            return $this->delivery($this->requiredRow((string) $row->id));
+            return $this->delivery($this->requiredRow(DatabaseValue::text(DatabaseValue::field($row, 'id'))));
         }, $this->transactionAttempts());
     }
 
@@ -146,26 +146,25 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
                 ->first();
 
             if ($subscription === null
-                || (string) $subscription->status !== 'active'
-                || (int) $subscription->revision !== $delivery->subscriptionRevision
-                || ! hash_equals((string) $subscription->endpoint_url, $delivery->endpointSnapshot)
-                || ! hash_equals((string) $subscription->topic, $delivery->topic)
-                || (int) $subscription->topic_version !== $delivery->topicVersion) {
+                || DatabaseValue::text($subscription->status) !== 'active'
+                || DatabaseValue::integer($subscription->revision) !== $delivery->subscriptionRevision
+                || ! hash_equals(DatabaseValue::text($subscription->endpoint_url), $delivery->endpointSnapshot)
+                || ! hash_equals(DatabaseValue::text($subscription->topic), $delivery->topic)
+                || DatabaseValue::integer($subscription->topic_version) !== $delivery->topicVersion) {
                 $this->rejectClaim($delivery, WebhookFailureReason::EndpointChanged, $now);
 
                 return null;
             }
 
-            $decoded = JsonCanonical::decode((string) $subscription->key_refs);
+            $decoded = JsonCanonical::decode(DatabaseValue::text($subscription->key_refs));
 
-            if (! is_array($decoded) || $decoded === [] || count($decoded) > 2
+            if (! is_array($decoded) || ! array_is_list($decoded) || $decoded === [] || count($decoded) > 2
                 || array_filter($decoded, is_string(...)) !== $decoded) {
                 $this->rejectClaim($delivery, WebhookFailureReason::SigningUnavailable, $now);
 
                 return null;
             }
 
-            /** @var list<string> $decoded */
             return $decoded;
         }, $this->transactionAttempts());
     }
@@ -366,6 +365,7 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
         }
     }
 
+    /** @return int<1, 3> */
     private function transactionAttempts(): int
     {
         return $this->connection->getDriverName() === 'pgsql' ? 3 : 1;
@@ -373,31 +373,41 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
 
     private function delivery(object $row): WebhookDelivery
     {
-        /** @var array<string, scalar|null> $scope */
-        $scope = JsonCanonical::decode((string) $row->scope);
+        $decodedScope = JsonCanonical::decode(DatabaseValue::text(DatabaseValue::field($row, 'scope')));
+
+        if (! is_array($decodedScope)) {
+            throw new RuntimeException('Stored webhook scope must be an object.');
+        }
+        $scope = [];
+        foreach ($decodedScope as $key => $value) {
+            if (! is_string($key) || (! is_scalar($value) && $value !== null)) {
+                throw new RuntimeException('Stored webhook scope must contain named scalar fields.');
+            }
+            $scope[$key] = $value;
+        }
 
         return new WebhookDelivery(
-            id: (string) $row->id,
-            subscriptionId: (string) $row->subscription_id,
-            subscriptionRevision: (int) $row->subscription_revision,
-            eventId: (string) $row->event_id,
-            topic: (string) $row->topic,
-            topicVersion: (int) $row->topic_version,
-            major: (string) $row->major,
-            endpointSnapshot: (string) $row->endpoint_snapshot,
+            id: DatabaseValue::text(DatabaseValue::field($row, 'id')),
+            subscriptionId: DatabaseValue::text(DatabaseValue::field($row, 'subscription_id')),
+            subscriptionRevision: DatabaseValue::integer(DatabaseValue::field($row, 'subscription_revision')),
+            eventId: DatabaseValue::text(DatabaseValue::field($row, 'event_id')),
+            topic: DatabaseValue::text(DatabaseValue::field($row, 'topic')),
+            topicVersion: DatabaseValue::integer(DatabaseValue::field($row, 'topic_version')),
+            major: DatabaseValue::text(DatabaseValue::field($row, 'major')),
+            endpointSnapshot: DatabaseValue::text(DatabaseValue::field($row, 'endpoint_snapshot')),
             scope: $scope,
-            body: (string) $row->body,
-            bodyHash: (string) $row->body_hash,
-            status: (string) $row->status,
-            attempt: (int) $row->attempt,
-            replayCount: (int) $row->replay_count,
-            leaseOwner: $row->lease_owner !== null ? (string) $row->lease_owner : null,
-            leaseUntil: $row->lease_until !== null ? $this->instant($row->lease_until) : null,
-            nextAttemptAt: $this->instant($row->next_attempt_at),
-            createdAt: $this->instant($row->created_at),
-            finishedAt: $row->finished_at !== null ? $this->instant($row->finished_at) : null,
-            expiresAt: $this->instant($row->expires_at),
-            lastError: $row->last_error !== null ? (string) $row->last_error : null,
+            body: DatabaseValue::text(DatabaseValue::field($row, 'body')),
+            bodyHash: DatabaseValue::text(DatabaseValue::field($row, 'body_hash')),
+            status: DatabaseValue::text(DatabaseValue::field($row, 'status')),
+            attempt: DatabaseValue::integer(DatabaseValue::field($row, 'attempt')),
+            replayCount: DatabaseValue::integer(DatabaseValue::field($row, 'replay_count')),
+            leaseOwner: DatabaseValue::field($row, 'lease_owner') !== null ? DatabaseValue::text(DatabaseValue::field($row, 'lease_owner')) : null,
+            leaseUntil: DatabaseValue::field($row, 'lease_until') !== null ? $this->instant(DatabaseValue::field($row, 'lease_until')) : null,
+            nextAttemptAt: $this->instant(DatabaseValue::field($row, 'next_attempt_at')),
+            createdAt: $this->instant(DatabaseValue::field($row, 'created_at')),
+            finishedAt: DatabaseValue::field($row, 'finished_at') !== null ? $this->instant(DatabaseValue::field($row, 'finished_at')) : null,
+            expiresAt: $this->instant(DatabaseValue::field($row, 'expires_at')),
+            lastError: DatabaseValue::field($row, 'last_error') !== null ? DatabaseValue::text(DatabaseValue::field($row, 'last_error')) : null,
         );
     }
 
@@ -411,6 +421,6 @@ final readonly class SqlWebhookDeliveryStore implements WebhookDeliveryStore
             return DateTimeImmutable::createFromInterface($value);
         }
 
-        return new DateTimeImmutable((string) $value);
+        return new DateTimeImmutable(DatabaseValue::text($value));
     }
 }

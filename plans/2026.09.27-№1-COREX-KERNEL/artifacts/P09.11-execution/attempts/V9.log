@@ -1,0 +1,292 @@
+> pest '--exclude-group=pg'
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\ApiRetentionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mretention windows reject unsafe configuration[39m[90m                       [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mclock clears owned bulk results then tombstones and keeps active ro[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mbulk prune is limited to one hundred rows[39m[90m                           [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mreservation expiry never refunds and held reservation keeps buckets[39m[90m [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcommand prunes only the restored scope and rejects an unbounded bat[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\ApiRoutesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mroute list is exact and boot is idempotent[39m[90m                          [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mroot discovery exposes code profile only[39m[90m                            [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcapabilities follow activation and ignore forged payload[39m[90m            [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90masync sets location and deprecation headers are exact[39m[90m               [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdisabled routes register none[39m[90m                                       [39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\AuthorizationLayersTest[39m
+  [32;1m✓[39;22m[90m [39m[90mresource ids round trip all supported formats and reject mismatch[39m[90m   [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdefault client scope policy allows only unscoped operations[39m[90m         [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mreplay rechecks scope actor and read fields without invoking handle[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90midempotent authorization denials leave no terminal store row[39m[90m        [39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\BulkApiTest[39m
+  [32;1m✓[39;22m[90m [39m[90msubmit is accepted once and poll cancel cover the status matrix[39m[90m     [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mresult matrix is not ready then sealed then expired and partial fai[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\BulkResultAccessTest[39m
+  [32;1m✓[39;22m[90m [39m[90mforeign caller and revoked field access do not read the result[39m[90m      [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mfailure cursor rejects limits above 100[39m[90m                             [39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\BulkStoreTest[39m
+  [32;1m✓[39;22m[90m [39m[90msame submission returns one operation and pending polling needs no[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstate transition matrix and cancel completion fence[39m[90m                 [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mexpired lease takeover and stale revision are rejected[39m[90m              [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mwrong active connection and unsafe input references fail closed[39m[90m     [39m [90m0.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\BulkTransferTest[39m
+  [32;1m✓[39;22m[90m [39m[90mmissing factory and package fail before submit[39m[90m                      [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mimport resume does not repeat sink effects around checkpoint crashe[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mrepeat create returns the current token and export rotates an unsea[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mstamp drift fails before the next batch and observers cannot change[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\ContractSnapshotTest[39m
+  [32;1m✓[39;22m[90m [39m[90mgeneration is byte stable and check detects drift[39m[90m                   [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\CostInvocationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mbudget denial rolls back unstarted idempotency and replay charges b[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mpost admission unknown keeps estimate and store failure is not rate[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhttp rate limit keeps retry after and store failure has no retry he[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\ErrorRepresentationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mevery category preserves machine fields and registry identity[39m[90m       [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mevery registered problem can be serialized[39m[90m                          [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhuman message change leaves the machine fixture unchanged[39m[90m           [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90maccept always receives problem json with data set #0[39m[90m                [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90maccept always receives problem json with data set #1[39m[90m                [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90maccept always receives problem json with data set #2[39m[90m                [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90maccept always receives problem json with data set #3[39m[90m                [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90maccept always receives problem json with data set #4[39m[90m                [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90maccept always receives problem json with data set #5[39m[90m                [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mretry after requires a named bounded policy[39m[90m                         [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90munknown exception stays a safe internal error[39m[90m                       [39m [90m0.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\IdempotencyStoreTest[39m
+  [32;1m✓[39;22m[90m [39m[90mfresh attempt completes and replays canonical outcome without stori[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mconflict contract mismatch takeover fence and retention matrix[39m[90m      [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90meffect and terminal outcome roll back together before retry[39m[90m         [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mmutations require the active tenant connection and transaction[39m[90m      [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mmigration has exact columns unique key and scoped rollback[39m[90m          [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mprovider binds store and registers a tenant schema[39m[90m                  [39m [90m0.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\IdempotentInvocationTest[39m
+  [32;1m✓[39;22m[90m [39m[90msame key replays across transports and rechecks current authority[39m[90m   [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mrequired forbidden conflict in progress and contract mismatch skip[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mauth validation and mapped internal failures have distinct persiste[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mterminal store failure rolls back effect and retry commits once[39m[90m     [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mambiguous commit requires reconciliation without second effect[39m[90m      [39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\InputEnvelopeTest[39m
+  [32;1m✓[39;22m[90m [39m[90minput envelope and strictness with data set "query"[39m[90m                 [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90minput envelope and strictness with data set "strict query"[39m[90m          [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90minput envelope and strictness with data set "media type"[39m[90m            [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90minput envelope and strictness with data set "query before media typ[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90minput envelope and strictness with data set "query with body"[39m[90m       [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90minput envelope and strictness with data set "array"[39m[90m                 [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90minput envelope and strictness with data set "malformed"[39m[90m             [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90minput envelope and strictness with data set "scalar"[39m[90m                [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90minput envelope and strictness with data set "strict body"[39m[90m           [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90minput envelope and strictness with data set "object"[39m[90m                [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90minput envelope and strictness with data set "field validation"[39m[90m      [39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\LoadContourBootTest[39m
+  [32;1m✓[39;22m[90m [39m[90mpublic surface keeps transfer optional on laravel 12 or 13[39m[90m          [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mboot keeps cost and bulk transfer disabled[39m[90m                          [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mmissing transfer package fails before submit and installed ports ar[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\LoadSchemaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mschema registration is inert and requires explicit identity[39m[90m         [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90msqlite schemas constraints isolation and rollback[39m[90m                   [39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\OperationBudgetTest[39m
+  [32;1m✓[39;22m[90m [39m[90mreserve debits four hmac buckets without persisting scope identifie[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdefault global enforcement observes lower scope debt[39m[90m                [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90menforced deficit rolls back every bucket debit and reservation[39m[90m      [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90msettlement refunds once and conflicting terminal outcome cannot ref[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mreject refunds once and actual overrun becomes debt[39m[90m                 [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mexpired and missing reservations never refund[39m[90m                       [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mscope isolation refill and clock rollback are deterministic[39m[90m         [39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\OperationErrorBoundaryTest[39m
+  [32;1m✓[39;22m[90m [39m[90mproblem wire snapshot has registry identity and no envelope[39m[90m         [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mfour argument api error still describes itself[39m[90m                      [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mexplicit api error keeps its status[39m[90m                                 [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdescribed error maps every category to its default status[39m[90m           [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90munknown exception reports once and leaks nothing[39m[90m                    [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma broken descriptor producer maps to the safe internal error[39m[90m        [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mframework fallbacks stay safe and gain a category[39m[90m                   [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mboundary preserves valid correlation internally without wire change[39m[90m [39m [90m0.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\OperationParityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mdenied activation and authorization skip the handler[39m[90m                [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthrowing handler restores request context[39m[90m                           [39m [90m0.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\PlatformTest[39m
+  [32;1m✓[39;22m[90m [39m[90mdefault authentication and authorization deny[39m[90m                       [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mexplicit mutation receives trusted context and envelope[39m[90m             [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90munknown routes methods versions and metadata are not executable[39m[90m     [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mmissing boxed and disabled contexts fail closed[39m[90m                     [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mboxed profile requires explicit configuration[39m[90m                       [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcontext and module state are read on every dispatch[39m[90m                 [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mmalformed or forged input is rejected with data set #0[39m[90m              [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mmalformed or forged input is rejected with data set #1[39m[90m              [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mmalformed or forged input is rejected with data set #2[39m[90m              [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mmalformed or forged input is rejected with data set #3[39m[90m              [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mmalformed or forged input is rejected with data set #4[39m[90m              [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mmalformed or forged input is rejected with data set #5[39m[90m              [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mmalformed or forged input is rejected with data set #6[39m[90m              [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mmalformed or forged input is rejected with data set #7[39m[90m              [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhandler errors have stable status and no infrastructure details wit[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhandler errors have stable status and no infrastructure details wit[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhandler errors have stable status and no infrastructure details wit[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhandler errors have stable status and no infrastructure details wit[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhandler errors have stable status and no infrastructure details wit[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhandler errors have stable status and no infrastructure details wit[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhandler errors have stable status and no infrastructure details wit[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcompilation preserves provenance roundtrip and old resource metadat[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mduplicate parameterized routes are compile errors[39m[90m                   [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mopenapi is deterministic and derived from operations only[39m[90m           [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mprovider mounts package routes and application can mount an explici[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90merror boundary normalizes upstream errors with named version and re[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mgenerated request id is shared by the boundary and dispatcher[39m[90m       [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mquery in a mutation and non json body are rejected[39m[90m                  [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdisabled account is rejected[39m[90m                                        [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90minvalid declarations fail compilation with data set #0[39m[90m              [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90minvalid declarations fail compilation with data set #1[39m[90m              [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90minvalid declarations fail compilation with data set #2[39m[90m              [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90minvalid declarations fail compilation with data set #3[39m[90m              [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90minvalid declarations fail compilation with data set #4[39m[90m              [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90minvalid declarations fail compilation with data set #5[39m[90m              [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90minvalid declarations fail compilation with data set #6[39m[90m              [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90minvalid declarations fail compilation with data set #7[39m[90m              [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mequal specificity overlapping routes are compile errors[39m[90m             [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mequivalent cross method templates require identical parameter names[39m[90m [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mmodule adapters receive context only during the current operation[39m[90m   [39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Feature\StoredOperationOutcomeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mregistered error roundtrip preserves identity and descriptor[39m[90m        [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90munknown code and corrupt occurrence become safe registered errors[39m[90m   [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mqueue serialization restores the registered enum identity[39m[90m           [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mraw string cannot construct an api error[39m[90m                            [39m [90m0.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\ApiOperationContractTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit keeps legacy operation declarations on the compatibility matrix[39m[90m  [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects illegal mode, method and idempotency pairs with dataset[39m[90m… [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects illegal mode, method and idempotency pairs with dataset[39m[90m… [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects illegal mode, method and idempotency pairs with dataset[39m[90m… [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects illegal mode, method and idempotency pairs with dataset[39m[90m… [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects illegal mode, method and idempotency pairs with dataset[39m[90m… [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects illegal mode, method and idempotency pairs with dataset[39m[90m… [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects illegal mode, method and idempotency pairs with dataset[39m[90m… [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects duplicate fields and scopes, bad capability and deprecat[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit marks bulk modes unsupported and refuses enabled execution[39m[90m       [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit projects the same contract hash when declaration order is revers[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit reuses tagged compiler contributions across repeated compilation[39m[90m…[39m [90m0.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\ApiOperationCostTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit keeps legacy declarations on default cost behavior and hash[39m[90m      [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects unknown keys, negative weights, overflow bounds and miss[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects unknown keys, negative weights, overflow bounds and miss[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects unknown keys, negative weights, overflow bounds and miss[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects unknown keys, negative weights, overflow bounds and miss[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects unknown keys, negative weights, overflow bounds and miss[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects unknown keys, negative weights, overflow bounds and miss[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects unknown keys, negative weights, overflow bounds and miss[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit compiles reversed cost declarations to the same canonical recipe[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit accepts an explicit bulk recipe[39m[90m                                  [39m [90m0.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Unit\ApiProfileTest[39m
+  [32;1m✓[39;22m[90m [39m[90mreversed registry order keeps profile bytes and hash[39m[90m                [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mactivation changes effective capability without profile hash[39m[90m        [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhidden denial omits unknown capabilities and unsupported operations[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90minvalid profile inputs fail[39m[90m                                         [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mprovider boots with typed options[39m[90m                                   [39m [90m0.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Unit\CursorCodecTest[39m
+  [32;1m✓[39;22m[90m [39m[90mgolden wire round trips and page encodes after assembly[39m[90m             [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mtamper unknown and expired key and expired cursor are invalid[39m[90m       [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mprevious key verifies until it leaves the ring[39m[90m                      [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mscope direction order arity and type mismatches are invalid[39m[90m         [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mreversed operation order keeps the registry bytes[39m[90m                   [39m [90m0.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Unit\DatabaseValueTest[39m
+  [32;1m✓[39;22m[90m [39m[90mlarge database counters and nullable columns are lossless[39m
+  [32;1m✓[39;22m[90m [39m[90mmalformed database counters cannot be coerced[39m
+  [32;1m✓[39;22m[90m [39m[90mmissing database column is rejected[39m
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Unit\InvocationMetadataTest[39m
+  [32;1m✓[39;22m[90m [39m[90mfour argument construction falls back to request id[39m
+  [32;1m✓[39;22m[90m [39m[90mvalid correlation id is preserved[39m
+  [32;1m✓[39;22m[90m [39m[90mmissing correlation id falls back to request id[39m
+  [32;1m✓[39;22m[90m [39m[90minvalid correlation and request ids are rejected identically[39m
+  [32;1m✓[39;22m[90m [39m[90minvalid correlation falls back to valid request id[39m
+
+  [39;41;1m FAIL [39;49;22m[39m CoreX\Operations\Tests\Unit\JsonCanonicalTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mnumeric member names and nested schema lists are preserved[39m[90m          [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mescaped duplicate numeric member names are rejected[39m
+  [32;1m✓[39;22m[90m [39m[90mscalar and list values keep their runtime types with data set #0[39m
+  [32;1m✓[39;22m[90m [39m[90mscalar and list values keep their runtime types with data set #1[39m
+  [32;1m✓[39;22m[90m [39m[90mscalar and list values keep their runtime types with data set #2[39m
+  [32;1m✓[39;22m[90m [39m[90mscalar and list values keep their runtime types with data set #3[39m
+  [32;1m✓[39;22m[90m [39m[90mscalar and list values keep their runtime types with data set #4[39m
+  [32;1m✓[39;22m[90m [39m[90mscalar and list values keep their runtime types with data set #5[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\OperationCostTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit estimates table-driven weights, page, export, field, relation, f[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit denies overflow and absent bounded export[39m[90m                        [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit does not call database, cache or network while estimating[39m[90m        [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps old positional constructors working and hashes cost additi[39m[90m…[39m [90m0.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\OperationRegistryDeterminismTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit rejects duplicate normalized route identity and names both owner[39m[90m…[39m [90m0.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\OperationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit projects compiler metadata onto the runtime descriptor[39m
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Unit\SchemaBudgetTest[39m
+  [32;1m✓[39;22m[90m [39m[90madmits small object schema[39m
+  [32;1m✓[39;22m[90m [39m[90mrejects remote ref in budget pass[39m
+  [32;1m✓[39;22m[90m [39m[90massert payload rejects oversized raw json[39m
+
+  [30;42;1m PASS [39;49;22m[39m CoreX\Operations\Tests\Unit\TrustedContextResolverTest[39m
+  [32;1m✓[39;22m[90m [39m[90mrebuilt equal contexts keep value comparison semantics[39m
+  [32;1m✓[39;22m[90m [39m[90mdifferent physical account context is rejected[39m
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mCoreX\Operations\Tests\Unit\JsonCanonicalTest[22m [90m>[39m numeric member na…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[32m     12 => 'value',[39m[39;1m
+  [39;22m[31m-    'name' => Array &1 [[39m[39;1m
+  [39;22m[31m-        0 => false,[39m[39;1m
+  [39;22m[31m-        'kind' => 'object',[39m[39;1m
+  [39;22m[31m-    ],[39m[39;1m
+  [39;22m[31m-    'items' => Array &2 [[39m[39;1m
+  [39;22m[32m+    'items' => Array &1 [[39m[39;1m
+  [39;22m[32m         0 => 1,[39m[39;1m
+  [39;22m[32m         1 => null,[39m[39;1m
+  [39;22m[32m+    ],[39m[39;1m
+  [39;22m[32m+    'name' => Array &2 [[39m[39;1m
+  [39;22m[32m+        0 => false,[39m[39;1m
+  [39;22m[32m+        'kind' => 'object',[39m[39;1m
+  [39;22m[32m     ],[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Unit/JsonCanonicalTest.php[39m:[32m21[39m
+     17▕         $expected = [12 => 'value', 'name' => [0 => false, 'kind' => 'object'], 'items' => [1, null]];
+     18▕ 
+     19▕         self::assertSame($expected, JsonCanonical::decode($json));
+     20▕         self::assertSame($expected, JsonCanonical::decodeObject($json));
+  ➜  21▕         self::assertSame($expected, JsonCanonical::decode(JsonCanonical::encode($expected)));
+     22▕     }
+     23▕ 
+     24▕     public function test_escaped_duplicate_numeric_member_names_are_rejected(): void
+     25▕     {
+
+  [33m1   [39m[39;1mtests/Unit/JsonCanonicalTest.php[39;22m:[39;1m21[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m187 passed[39;22m[90m (2188 assertions)[39m
+  [90mDuration:[39m [39m3.06s[39m
+
+Script pest handling the test event returned with error code 1

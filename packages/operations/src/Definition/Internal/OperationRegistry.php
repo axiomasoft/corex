@@ -39,8 +39,12 @@ final class OperationRegistry implements \CoreX\Operations\Definition\Contracts\
         }
 
         // Literal routes precede parameter routes; the remaining order is deterministic.
-        usort($operations, static fn (Operation $a, Operation $b): int => substr_count($a->path, '{') <=> substr_count($b->path, '{')
-            ?: strcmp($a->path, $b->path) ?: strcmp($a->method, $b->method));
+        usort($operations, static function (Operation $a, Operation $b): int {
+            $parameters = substr_count($a->path, '{') <=> substr_count($b->path, '{');
+            $path = strcmp($a->path, $b->path);
+
+            return $parameters !== 0 ? $parameters : ($path !== 0 ? $path : strcmp($a->method, $b->method));
+        });
 
         return $operations;
     }

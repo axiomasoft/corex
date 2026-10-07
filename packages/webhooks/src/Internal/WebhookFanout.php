@@ -67,14 +67,14 @@ final readonly class WebhookFanout
 
             foreach ($rows as $row) {
                 $this->connection->table('sys_api_webhook_deliveries')->insertOrIgnore([
-                    'id' => substr(hash('sha256', $row->id.'|'.$message->messageId), 0, 32),
-                    'subscription_id' => $row->id,
-                    'subscription_revision' => $row->revision,
+                    'id' => substr(hash('sha256', DatabaseValue::text(DatabaseValue::field($row, 'id')).'|'.$message->messageId), 0, 32),
+                    'subscription_id' => DatabaseValue::field($row, 'id'),
+                    'subscription_revision' => DatabaseValue::field($row, 'revision'),
                     'event_id' => $message->messageId,
                     'topic' => $topic->name,
                     'topic_version' => $topic->version,
                     'major' => $topic->major,
-                    'endpoint_snapshot' => $row->endpoint_url,
+                    'endpoint_snapshot' => DatabaseValue::field($row, 'endpoint_url'),
                     'scope' => JsonCanonical::encode($message->scope),
                     'body' => $body,
                     'body_hash' => hash('sha256', $body),

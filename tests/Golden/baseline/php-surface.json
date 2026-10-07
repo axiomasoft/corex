@@ -42975,6 +42975,61 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Operations\\Bulk\\Internal\\DatabaseValue": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "field": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "row",
+                        "type": "object",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "mixed",
+                "static": true
+            },
+            "integer": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": true
+            },
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Operations\\Bulk\\Internal\\SqlBulkOperationStore": {
         "abstract": false,
         "constants": [],
@@ -44297,6 +44352,61 @@
         "parent": null,
         "properties": [],
         "readonly": true
+    },
+    "CoreX\\Operations\\Cost\\Internal\\DatabaseValue": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "field": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "row",
+                        "type": "object",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "mixed",
+                "static": true
+            },
+            "integer": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": true
+            },
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
     },
     "CoreX\\Operations\\Cost\\Internal\\DeclaredCostEstimator": {
         "abstract": false,
@@ -47250,6 +47360,61 @@
                 "type": "string"
             }
         },
+        "readonly": false
+    },
+    "CoreX\\Operations\\Idempotency\\Internal\\DatabaseValue": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "field": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "row",
+                        "type": "object",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "mixed",
+                "static": true
+            },
+            "integer": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": true
+            },
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
         "readonly": false
     },
     "CoreX\\Operations\\Idempotency\\Internal\\DefaultReplayAuthorizer": {
@@ -89588,6 +89753,61 @@
                 ],
                 "return": "CoreX\\Webhooks\\Data\\WebhookHttpResult",
                 "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Webhooks\\Internal\\DatabaseValue": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "field": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "row",
+                        "type": "object",
+                        "variadic": false
+                    },
+                    {
+                        "byRef": false,
+                        "name": "name",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "mixed",
+                "static": true
+            },
+            "integer": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": true
+            },
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
             }
         },
         "parent": null,
