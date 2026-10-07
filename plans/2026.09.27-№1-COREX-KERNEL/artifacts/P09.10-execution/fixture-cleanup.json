@@ -1,0 +1,21 @@
+{
+  "containers": [
+    {
+      "name": "/corex-p0910-redis-test",
+      "running": false,
+      "status": "created"
+    },
+    {
+      "name": "/corex-p0910-redis19379-test",
+      "running": false,
+      "status": "exited"
+    },
+    {
+      "name": "/corex-p0910-object-test",
+      "running": false,
+      "status": "exited"
+    }
+  ],
+  "ports_released": true,
+  "container_removal": "Rejected by automatic security.safe-dirs review; containers retained stopped, no volume mounts."
+}

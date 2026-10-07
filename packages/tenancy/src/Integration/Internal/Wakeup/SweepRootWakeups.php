@@ -24,7 +24,14 @@ final class SweepRootWakeups extends Command
         }
 
         if ((bool) $this->option('reconcile')) {
-            $result = $reconciler->reconcile(limit: $limit, afterAccountId: $this->option('cursor'));
+            $cursor = $this->option('cursor');
+
+            if ($cursor !== null && ! is_string($cursor)) {
+                $this->error('The --cursor option must be an account id.');
+
+                return self::INVALID;
+            }
+            $result = $reconciler->reconcile(limit: $limit, afterAccountId: $cursor);
             $this->info("Reconciled {$result['processed']} account wakeup hints.");
 
             if ($result['next_cursor'] !== null) {

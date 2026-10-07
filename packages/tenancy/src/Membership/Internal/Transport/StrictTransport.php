@@ -56,6 +56,7 @@ final class StrictTransport implements CentralApiClient
     public function membershipFor(MembershipQuery $query): MembershipSnapshot
     {
         $http = $this->request(accountId: $query->accountId, product: $query->product, capability: 'membership.read');
+        $binding = $this->binding ?? throw new CentralUnavailable('Qualified membership binding is absent.');
 
         if (isset($this->readRequests[$query->requestId])) {
             throw new CentralProtocolViolation('Read correlation ID must be fresh.');
@@ -64,12 +65,12 @@ final class StrictTransport implements CentralApiClient
 
         try {
             // Explicit URI bytes avoid framework query/body ambiguity.
-            $response = $http->get($this->binding->readUri.'?'.$query->wireQuery());
+            $response = $http->get($binding->readUri.'?'.$query->wireQuery());
         } catch (ConnectionException) {
             throw new CentralUnavailable('Central membership read unavailable.');
         }
         $this->assertResponse(response: $response, revokeId: null);
-        $snapshot = MembershipSnapshotFactory::fromPayload(StrictJson::object($response->body()));
+        $snapshot = MembershipSnapshotFactory::fromPayload(StrictJson::namedObject($response->body()));
         $this->assertEcho(requestId: $query->requestId, identityId: $query->identityId, accountId: $query->accountId, product: $query->product, response: $snapshot);
         $key = $query->accountId.':'.$query->identityId.':'.$query->product;
         $previous = $this->snapshots[$key] ?? null;
@@ -93,8 +94,9 @@ final class StrictTransport implements CentralApiClient
             throw new CentralUnauthorized('Consumer removal permission denied.');
         }
         $http = $this->request(accountId: $request->accountId, product: $request->product, capability: 'membership.revoke');
+        $binding = $this->binding ?? throw new CentralUnavailable('Qualified membership binding is absent.');
 
-        if (! $this->binding->deduplicationQualified) {
+        if (! $binding->deduplicationQualified) {
             throw new CentralUnavailable('Revoke idempotency profile is unqualified.');
         }
         $payload = $request->payload();
@@ -106,12 +108,12 @@ final class StrictTransport implements CentralApiClient
         $this->revokeRequests[$request->requestId] = $digest;
 
         try {
-            $response = $http->post($this->binding->revokeUri, $payload);
+            $response = $http->post($binding->revokeUri, $payload);
         } catch (ConnectionException) {
             throw new RevokeUncertain($request->requestId);
         }
         $this->assertResponse(response: $response, revokeId: $request->requestId);
-        $receipt = RevokeMembershipReceiptFactory::fromPayload(StrictJson::object($response->body()));
+        $receipt = RevokeMembershipReceiptFactory::fromPayload(StrictJson::namedObject($response->body()));
         $this->assertEcho(requestId: $request->requestId, identityId: $request->identityId, accountId: $request->accountId, product: $request->product, response: $receipt);
 
         return $receipt;
@@ -149,7 +151,7 @@ final class StrictTransport implements CentralApiClient
 
         $this->assertResponse(response: $response, revokeId: null);
 
-        return $this->accountsResult(payload: StrictJson::object($response->body()), query: $query, requestId: $requestId);
+        return $this->accountsResult(payload: StrictJson::namedObject($response->body()), query: $query, requestId: $requestId);
     }
 
     private function request(string $accountId, string $product, string $capability): PendingRequest
@@ -270,6 +272,8 @@ final class StrictTransport implements CentralApiClient
 
     private static function compare(string $left, string $right): int
     {
-        return strlen($left) <=> strlen($right) ?: strcmp($left, $right);
+        $lengthComparison = strlen($left) <=> strlen($right);
+
+        return $lengthComparison !== 0 ? $lengthComparison : strcmp($left, $right);
     }
 }

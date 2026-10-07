@@ -1,0 +1,7 @@
+{
+  "id": "V2",
+  "command": "scripts/php84 vendor/bin/phpstan analyse -c packages/tenancy/phpstan.neon --memory-limit=2G --no-progress",
+  "exit_code": 0,
+  "duration_seconds": 4.897,
+  "log": "V2.log"
+}

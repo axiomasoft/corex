@@ -80,7 +80,9 @@ final class Invitation extends Model
     public function accept(string $userId, int $usersMax): ?WorkspaceMember
     {
         return $this->getConnection()->transaction(function () use ($userId, $usersMax): ?WorkspaceMember {
-            $invitation = $this->newQuery()->whereKey($this->getKey())->lockForUpdate()->firstOrFail();
+            $query = $this->newQuery()->whereKey($this->getKey());
+            $query->getQuery()->lockForUpdate();
+            $invitation = $query->firstOrFail();
             $this->setRawAttributes($invitation->getAttributes(), true);
 
             if ($this->status !== 'pending' || $this->expires_at->isPast()) {
@@ -93,8 +95,10 @@ final class Invitation extends Model
                 return null;
             }
             // All invitations for this workspace compete for the same quota resource.
-            Workspace::on($this->getConnectionName())->whereKey($this->workspace_id)->lockForUpdate()->firstOrFail();
-            $currentMembers = WorkspaceMember::on($this->getConnectionName())->where('workspace_id', $this->workspace_id)->where('status', 'active')->count();
+            $workspaceQuery = Workspace::on($this->getConnectionName())->whereKey($this->workspace_id);
+            $workspaceQuery->getQuery()->lockForUpdate();
+            $workspaceQuery->firstOrFail();
+            $currentMembers = WorkspaceMember::on($this->getConnectionName())->toBase()->where('workspace_id', $this->workspace_id)->where('status', 'active')->count();
 
             if ($currentMembers >= $usersMax) {
                 throw new InvitationNotAcceptableException("Workspace [{$this->workspace_id}] has reached its users_max limit ({$usersMax}).");

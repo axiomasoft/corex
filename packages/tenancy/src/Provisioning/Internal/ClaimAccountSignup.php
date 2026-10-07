@@ -112,7 +112,7 @@ final class ClaimAccountSignup implements ProvisioningClaim
             throw new ClaimUnavailable('The pending account changed before reservation.');
         }
 
-        return new ClaimResult(accountId: $candidate->id, replayed: false);
+        return new ClaimResult(accountId: DatabaseValue::text($candidate->id), replayed: false);
     }
 
     private function replayResult(stdClass $binding, ClaimRequest $request): ClaimResult
@@ -126,7 +126,7 @@ final class ClaimAccountSignup implements ProvisioningClaim
             throw new ClaimConflict('The signup key is already bound to a different request.');
         }
 
-        return new ClaimResult(accountId: $binding->id, replayed: true);
+        return new ClaimResult(accountId: DatabaseValue::text($binding->id), replayed: true);
     }
 
     private function lockAndVerifyTemplate(Connection $connection, QualifiedTemplate $qualifiedTemplate): void
@@ -179,7 +179,13 @@ final class ClaimAccountSignup implements ProvisioningClaim
     {
         $bytes = substr(hash('sha256', "corex:signup:v1:{$requestKey}", binary: true), 0, 8);
 
-        return (string) unpack('q', strrev($bytes))[1];
+        $unpacked = unpack('q', strrev($bytes));
+
+        if ($unpacked === false || ! is_int($unpacked[1] ?? null)) {
+            throw new ClaimUnavailable('The signup advisory lock could not be derived.');
+        }
+
+        return (string) $unpacked[1];
     }
 
     private function isCanonicalUuid(string $value): bool
@@ -202,7 +208,9 @@ final class ClaimAccountSignup implements ProvisioningClaim
     {
         $previous = $exception->getPrevious();
 
-        return $previous?->getCode() ?: null;
+        $code = $previous?->getCode();
+
+        return is_string($code) && $code !== '' ? $code : null;
     }
 
     private function connection(): Connection

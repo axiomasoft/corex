@@ -23,7 +23,7 @@ final readonly class JwsVerifier
         if (count($parts) !== 3) {
             throw new CentralUnauthorized('Invalid compact JWS.');
         }
-        $header = StrictJson::object(self::decode($parts[0]));
+        $header = StrictJson::namedObject(self::decode($parts[0]));
         Value::fields($header, ['alg', 'typ', 'kid']);
         $kid = $header['kid'];
 
@@ -39,7 +39,7 @@ final readonly class JwsVerifier
             throw new CentralUnauthorized('Invalid JWS signature.');
         }
 
-        return StrictJson::object(self::decode($parts[1]));
+        return StrictJson::namedObject(self::decode($parts[1]));
     }
 
     private static function decode(string $value): string

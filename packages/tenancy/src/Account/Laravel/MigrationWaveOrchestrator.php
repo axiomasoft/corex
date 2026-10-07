@@ -11,6 +11,7 @@ use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Database\Contracts\SchemaMigrator;
 use CoreX\Database\Enums\SchemaScope;
+use CoreX\Tenancy\Account\Internal\DatabaseValue;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Account\Internal\Models\AccountSchemaState;
 use CoreX\Tenancy\Provisioning\Internal\Database\TemplateIntegrityVerifier;
@@ -68,7 +69,7 @@ final class MigrationWaveOrchestrator
     private function assertBatchIntegrity(): void
     {
         Account::query()
-            ->whereNull('deleted_at')
+            ->where('deleted_at', null)
             ->each(function (Account $account): void {
                 $this->templateIntegrityVerifier->assertAccount($account);
             });
@@ -82,12 +83,12 @@ final class MigrationWaveOrchestrator
         $accountsWithoutState = DB::connection($this->centralConnection)
             ->table('root_accounts')
             ->whereNull('deleted_at')
-            ->whereNotIn('id', AccountSchemaState::query()->select('account_id'))
+            ->whereNotIn('id', AccountSchemaState::query()->toBase()->select('account_id'))
             ->pluck('id');
 
         foreach ($accountsWithoutState as $accountId) {
             AccountSchemaState::query()->create([
-                'account_id' => (string) $accountId,
+                'account_id' => DatabaseValue::text($accountId),
                 'current_version' => 0,
                 'target_version' => $batch->to_version,
                 'status' => 'ok',
@@ -99,11 +100,12 @@ final class MigrationWaveOrchestrator
             ->where('target_version', '<', $batch->to_version)
             ->update(['target_version' => $batch->to_version, 'batch_id' => $batch->id]);
 
-        return AccountSchemaState::query()
+        $query = AccountSchemaState::query()
             ->where('target_version', $batch->to_version)
-            ->where('current_version', '<', $batch->to_version)
-            ->orderBy('account_id')
-            ->get();
+            ->where('current_version', '<', $batch->to_version);
+        $query->getQuery()->orderBy('account_id');
+
+        return $query->get();
     }
 
     private function migrateOne(AccountSchemaState $state, MigrationBatch $batch): void
@@ -121,9 +123,9 @@ final class MigrationWaveOrchestrator
         }
 
         $accountRef = new AccountRef(
-            id: (string) $accountRow->id,
-            slug: (string) ($accountRow->slug ?? ''),
-            status: (string) $accountRow->status,
+            id: DatabaseValue::text($accountRow->id),
+            slug: DatabaseValue::text($accountRow->slug ?? ''),
+            status: DatabaseValue::text($accountRow->status),
             features: [],
             limits: [],
         );

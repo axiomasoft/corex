@@ -19,6 +19,7 @@ use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Events\Dispatcher;
 use Override;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 use Throwable;
 
 /**
@@ -212,6 +213,9 @@ final class DatabaseTenancyManager implements TenancyManager
 
     private function resetScope(): void
     {
+        if (! $this->container instanceof \Illuminate\Container\Container) {
+            throw new RuntimeException('The tenant runtime requires a container with scoped instance cleanup.');
+        }
         $this->container->forgetScopedInstances();
     }
 

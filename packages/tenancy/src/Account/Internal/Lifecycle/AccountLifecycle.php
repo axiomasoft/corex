@@ -14,6 +14,7 @@ use CoreX\Messaging\Events\DomainEvent;
 use CoreX\Tenancy\Account\Events\AccountSuspended;
 use CoreX\Tenancy\Account\Events\GraceStarted;
 use CoreX\Tenancy\Account\Events\TrialStarted;
+use CoreX\Tenancy\Account\Internal\DatabaseValue;
 use CoreX\Tenancy\Account\Internal\Models\Account;
 use CoreX\Tenancy\Account\Internal\PendingPool;
 use CoreX\Tenancy\Laravel\Support\AccountLifecyclePolicy;
@@ -124,6 +125,7 @@ final class AccountLifecycle
                 ->update(['status' => 'trial', 'trial_ends_at' => $trialEndsAt, 'updated_at' => $this->clock->now()]);
 
             $slug = $this->db()->table('root_accounts')->where('id', $account->id)->value('slug');
+            $slug = DatabaseValue::text($slug ?? '');
 
             $this->db()->table('root_domains')->insert([
                 'id' => (string) Str::uuid7(),
@@ -299,7 +301,7 @@ final class AccountLifecycle
         if ($status === null) {
             throw new RuntimeException("Account [{$accountId}] not found in root_accounts.");
         }
-        $this->fsm->assertTransition((string) $status, $to);
+        $this->fsm->assertTransition(DatabaseValue::text($status), $to);
     }
 
     private function assertAccountIntegrity(string $accountId): void
@@ -325,8 +327,13 @@ final class AccountLifecycle
         $key = 'corex-account-external:'.$accountId;
         // A separate transaction holds the lock while DROP DATABASE executes
         // outside a transaction on the central connection (PgBouncer-safe).
+        $configuration = $connection->getConfig();
+
+        if (! is_array($configuration)) {
+            throw new RuntimeException('Account operation connection configuration is unavailable.');
+        }
         $lock = $this->connectionFactory
-            ->make($connection->getConfig(), 'corex-account-operation-lock');
+            ->make($configuration, 'corex-account-operation-lock');
 
         try {
             return $lock->transaction(static function () use ($lock, $key, $operation): mixed {
@@ -347,17 +354,21 @@ final class AccountLifecycle
             throw new RuntimeException("Account [{$accountId}] not found in root_accounts.");
         }
 
-        return (string) $status;
+        return DatabaseValue::text($status);
     }
 
     private function fresh(string $accountId): AccountRef
     {
         $row = $this->db()->table('root_accounts')->where('id', $accountId)->first();
 
+        if ($row === null) {
+            throw new RuntimeException("Account [{$accountId}] not found in root_accounts.");
+        }
+
         return new AccountRef(
-            id: (string) $row->id,
-            slug: (string) $row->slug,
-            status: (string) $row->status,
+            id: DatabaseValue::text($row->id),
+            slug: DatabaseValue::text($row->slug ?? ''),
+            status: DatabaseValue::text($row->status),
             features: [],
             limits: [],
         );

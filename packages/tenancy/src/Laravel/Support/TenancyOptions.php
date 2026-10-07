@@ -470,7 +470,7 @@ final readonly class TenancyOptions
 
         foreach ($value as $key => $item) {
             if (is_string($key) && $key !== '' && is_array($item)) {
-                $resolved[$key] = $item;
+                $resolved[$key] = array_filter($item, static fn (int|string $key): bool => is_string($key), ARRAY_FILTER_USE_KEY);
             }
         }
 

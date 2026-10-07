@@ -18,7 +18,7 @@
         "search-meilisearch": 5,
         "tasks": 16,
         "tasks-workflow": 72,
-        "tenancy": 232,
+        "tenancy": 0,
         "tools": 16,
         "transfer": 64,
         "wakeup": 35,

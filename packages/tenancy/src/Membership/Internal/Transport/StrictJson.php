@@ -15,7 +15,7 @@ final class StrictJson
 
     private function __construct(private readonly string $wire) {}
 
-    /** @return array<string, mixed> */
+    /** @return array<array-key, mixed> */
     public static function object(string $wire): array
     {
         if (strlen($wire) > 65536) {
@@ -37,6 +37,20 @@ final class StrictJson
         } catch (JsonException) {
             throw new CentralProtocolViolation('Malformed wire JSON.');
         }
+    }
+
+    /** @return array<string, mixed> */
+    public static function namedObject(string $wire): array
+    {
+        $members = self::object($wire);
+
+        foreach (array_keys($members) as $key) {
+            if (! is_string($key)) {
+                throw new CentralProtocolViolation('Protocol fields must have nonnumeric names.');
+            }
+        }
+
+        return array_filter($members, static fn (int|string $key): bool => is_string($key), ARRAY_FILTER_USE_KEY);
     }
 
     private function value(int $depth): mixed
@@ -85,7 +99,10 @@ final class StrictJson
 
             return $object ? (object) $items : $items;
         }
-        preg_match('/\G(?:true|false|null|-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?)/', $this->wire, $match, offset: $this->offset);
+
+        if (preg_match('/\G(?:true|false|null|-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?)/', $this->wire, $match, offset: $this->offset) !== 1) {
+            throw new CentralProtocolViolation('Invalid wire scalar.');
+        }
         $this->offset += strlen($match[0]);
 
         return json_decode($match[0], flags: JSON_THROW_ON_ERROR | JSON_BIGINT_AS_STRING);
@@ -104,7 +121,13 @@ final class StrictJson
             }
         }
 
-        return json_decode(substr($this->wire, $start, $this->offset - $start), flags: JSON_THROW_ON_ERROR);
+        $decoded = json_decode(substr($this->wire, $start, $this->offset - $start), flags: JSON_THROW_ON_ERROR);
+
+        if (! is_string($decoded)) {
+            throw new CentralProtocolViolation('Expected a wire string.');
+        }
+
+        return $decoded;
     }
 
     private function whitespace(): void

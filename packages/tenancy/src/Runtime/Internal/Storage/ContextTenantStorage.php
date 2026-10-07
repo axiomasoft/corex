@@ -15,6 +15,7 @@ use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Filesystem\FilesystemManager;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use SplFileInfo;
 
 /**
  * Tenant-owned storage boundary for the physical DB-per-account profile.
@@ -65,6 +66,10 @@ final class ContextTenantStorage implements TenantStorage
         ));
 
         foreach ($iterator as $file) {
+            if (! $file instanceof SplFileInfo) {
+                throw new StorageOperationFailed('Storage iterator returned an invalid entry.');
+            }
+
             if ($file->isLink()) {
                 throw new StorageOperationFailed('Storage root contains a symbolic link.');
             }

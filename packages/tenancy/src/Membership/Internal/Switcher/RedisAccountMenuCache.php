@@ -106,7 +106,7 @@ final readonly class RedisAccountMenuCache implements AccountMenuCache
 
     private function decode(string $payload, AccountsQuery $query, string $membershipVersion): ?AvailableAccounts
     {
-        $decoded = StrictJson::object($payload);
+        $decoded = StrictJson::namedObject($payload);
         $keys = array_keys($decoded);
         sort($keys);
 

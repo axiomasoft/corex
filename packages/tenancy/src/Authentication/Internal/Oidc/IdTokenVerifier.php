@@ -104,7 +104,9 @@ final class IdTokenVerifier
 
         $decoded = json_decode($this->base64UrlDecode($segments[0]), true);
 
-        return is_array($decoded) ? $decoded : [];
+        return is_array($decoded)
+            ? array_filter($decoded, static fn (int|string $key): bool => is_string($key), ARRAY_FILTER_USE_KEY)
+            : [];
     }
 
     private function base64UrlDecode(string $data): string

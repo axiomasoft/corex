@@ -34,10 +34,10 @@ final class DomainTrustStateWriter
 
     public function generationFor(string $accountId, NormalizedHost $host): int
     {
-        $domain = $this->domains()
-            ->whereRaw(sql: 'lower(host) = ?', bindings: [$host->value])
-            ->whereNull(columns: 'deleted_at')
-            ->first();
+        $query = $this->domains();
+        $query->getQuery()->whereRaw(sql: 'lower(host) = ?', bindings: [$host->value])
+            ->whereNull(columns: 'deleted_at');
+        $domain = $query->first();
 
         if ($domain === null) {
             return 0;
@@ -183,11 +183,12 @@ final class DomainTrustStateWriter
 
     private function lockedDomain(NormalizedHost $host): ?Domain
     {
-        return $this->domains()
-            ->whereRaw(sql: 'lower(host) = ?', bindings: [$host->value])
+        $query = $this->domains();
+        $query->getQuery()->whereRaw(sql: 'lower(host) = ?', bindings: [$host->value])
             ->whereNull(columns: 'deleted_at')
-            ->lockForUpdate()
-            ->first();
+            ->lockForUpdate();
+
+        return $query->first();
     }
 
     private function dispatchChange(DomainTrustTransition $transition): void

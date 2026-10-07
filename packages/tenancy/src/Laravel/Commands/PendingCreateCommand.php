@@ -8,6 +8,7 @@ use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Tenancy\Account\Internal\PendingPool;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
+use CoreX\Tenancy\Provisioning\Internal\DatabaseValue;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -39,13 +40,14 @@ final class PendingCreateCommand extends Command
                 ->all();
 
         foreach ($clusters as $id) {
-            $count = $explicitCount ?? $this->topUpCount($centralConnection, $pool, (string) $id);
+            $id = DatabaseValue::text($id);
+            $count = $explicitCount ?? $this->topUpCount($centralConnection, $pool, $id);
 
             if ($count <= 0) {
                 continue;
             }
 
-            $created = $pool->createPending($count, (string) $id);
+            $created = $pool->createPending($count, $id);
 
             $this->components->info(sprintf('Cluster [%s]: created %d pending account(s).', $id, count($created)));
         }
@@ -55,10 +57,10 @@ final class PendingCreateCommand extends Command
 
     private function topUpCount(string $centralConnection, PendingPool $pool, string $clusterId): int
     {
-        $poolSize = (int) DB::connection($centralConnection)
+        $poolSize = DatabaseValue::integer(DB::connection($centralConnection)
             ->table('root_clusters')
             ->where('id', $clusterId)
-            ->value('pending_pool_size');
+            ->value('pending_pool_size') ?? 0);
 
         return max(0, $poolSize - $pool->pendingCount($clusterId));
     }

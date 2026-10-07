@@ -98,13 +98,13 @@ final class DatabaseTenantLifecycle implements TenantDatabaseLifecycle
             );
         }
 
-        $this->verifyArchive((string) $latestExport->storage_path, (int) $latestExport->size_bytes);
+        $this->verifyArchive(DatabaseValue::text($latestExport->storage_path), DatabaseValue::integer($latestExport->size_bytes));
 
         $dbName = $this->db()->table('root_accounts')
             ->where('id', $account->id)
             ->value('db_name');
 
-        if (! is_string($dbName) || ! preg_match('/\Aacc_[a-zA-Z0-9_]+\z/D', $dbName)) {
+        if (! is_string($dbName) || preg_match('/\Aacc_[a-zA-Z0-9_]+\z/D', $dbName) !== 1) {
             throw new RuntimeException('Invalid account database name; refusing DROP.');
         }
 

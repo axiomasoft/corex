@@ -1,0 +1,7 @@
+{
+  "id": "foundation",
+  "command": "scripts/php84 php scripts/quality/release-quality.php --stage=foundation",
+  "exit_code": 0,
+  "duration_seconds": 0.203,
+  "log": "foundation.log"
+}

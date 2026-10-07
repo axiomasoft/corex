@@ -8,7 +8,9 @@ use CoreX\Attributes\Spi;
 use CoreX\Attributes\SpiKind;
 use CoreX\Tenancy\Identity\Contracts\IdentitySyncer;
 use CoreX\Tenancy\Laravel\Support\TenancyOptions;
+use CoreX\Tenancy\Provisioning\Internal\DatabaseValue;
 use Illuminate\Console\Command;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -31,7 +33,7 @@ final class IdentitiesReconcileCommand extends Command
         $rows = DB::connection($centralConnection)
             ->table('root_identity_accounts as ria')
             ->join('root_identities as ri', 'ri.id', '=', 'ria.identity_id')
-            ->where(function ($query): void {
+            ->where(function (Builder $query): void {
                 $query->whereIn('ria.sync_status', ['failed', 'pending'])
                     ->orWhereColumn('ria.synced_at', '<', 'ri.updated_at');
             })
@@ -39,7 +41,7 @@ final class IdentitiesReconcileCommand extends Command
             ->get();
 
         foreach ($rows as $row) {
-            $syncer->syncToAccount((string) $row->identity_id, (string) $row->account_id);
+            $syncer->syncToAccount(DatabaseValue::text($row->identity_id), DatabaseValue::text($row->account_id));
         }
 
         $this->components->info(sprintf('Reconciled %d identity/account pair(s).', $rows->count()));

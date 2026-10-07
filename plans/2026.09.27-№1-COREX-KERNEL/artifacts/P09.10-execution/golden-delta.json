@@ -1,0 +1,11 @@
+{
+  "paths": [
+    "/CoreX\\Tenancy\\Account\\Internal\\DatabaseValue",
+    "/CoreX\\Tenancy\\Identity\\Internal\\DatabaseValue",
+    "/CoreX\\Tenancy\\Integration\\Internal\\DatabaseValue",
+    "/CoreX\\Tenancy\\Membership\\Internal\\DatabaseValue",
+    "/CoreX\\Tenancy\\Membership\\Internal\\Transport\\StrictJson/methods/namedObject",
+    "/CoreX\\Tenancy\\Provisioning\\Internal\\DatabaseValue"
+  ],
+  "public_api_unchanged": true
+}

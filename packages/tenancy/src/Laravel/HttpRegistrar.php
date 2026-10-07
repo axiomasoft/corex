@@ -39,6 +39,7 @@ use Illuminate\Routing\Router;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Override;
+use RuntimeException;
 
 #[Spi(kind: SpiKind::Call, since: '1.0')]
 final class HttpRegistrar implements PackageRegistrar
@@ -150,7 +151,7 @@ final class HttpRegistrar implements PackageRegistrar
             // Merge into an existing `tenant` group; do not replace the list. Priority (below)
             // sorts the three entries around StartSession.
             $router->middlewareGroup('tenant', [
-                ...($router->getMiddlewareGroups()['tenant'] ?? []),
+                ...self::tenantMiddleware($router),
                 ResolveTenantFromHost::class,
                 ScopeSessionToTenant::class,
                 AccountStatusGate::class,
@@ -162,13 +163,13 @@ final class HttpRegistrar implements PackageRegistrar
         }
 
         // loadRoutesFrom skips a cached route file; a naked group does not.
-        if (! ($app instanceof CachesRoutes && $app->routesAreCached())) {
+        if (! ($app instanceof CachesRoutes && self::routesAreCached($app))) {
             require dirname(__DIR__, 2).'/routes/oidc.php';
         }
 
         $router->aliasMiddleware('tenancy.oidc.session_lifetime', EnforceSessionLifetime::class);
         $router->middlewareGroup('tenant', [
-            ...($router->getMiddlewareGroups()['tenant'] ?? []),
+            ...self::tenantMiddleware($router),
             EnforceSessionLifetime::class,
         ]);
 
@@ -178,10 +179,27 @@ final class HttpRegistrar implements PackageRegistrar
 
         $router->aliasMiddleware('tenancy.impersonation.allow', AllowImpersonatedWrites::class);
         $router->middlewareGroup('tenant', [
-            ...($router->getMiddlewareGroups()['tenant'] ?? []),
+            ...self::tenantMiddleware($router),
             ImpersonationSessionGuard::class,
             DenyImpersonatedWrites::class,
         ]);
+    }
+
+    private static function routesAreCached(CachesRoutes $app): bool
+    {
+        return $app->routesAreCached();
+    }
+
+    /** @return array<array-key, mixed> */
+    private static function tenantMiddleware(Router $router): array
+    {
+        $middleware = $router->getMiddlewareGroups()['tenant'] ?? [];
+
+        if (! is_array($middleware)) {
+            throw new RuntimeException('The tenant middleware group must be an array.');
+        }
+
+        return $middleware;
     }
 
     /**

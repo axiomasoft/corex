@@ -34,6 +34,7 @@ use CoreX\Tenancy\Runtime\Internal\QueueTenantContext;
 use CoreX\Tenancy\Runtime\Internal\Storage\ContextTenantStorage;
 use CoreX\Tenancy\Runtime\Internal\TenancyManagerContextResolver;
 use Illuminate\Cache\CacheManager;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\DatabaseManager;
@@ -191,7 +192,7 @@ final class RuntimeRegistrar implements PackageRegistrar
     /** @return array<string, mixed> */
     private static function configSection(Application $app, string $key): array
     {
-        $section = $app['config']->get($key, []);
+        $section = $app->make(Repository::class)->get($key, []);
 
         if (! is_array($section)) {
             return [];

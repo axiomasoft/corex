@@ -1,0 +1,4 @@
+{
+  "method": "Direct UTC timestamps when recorded by runner; otherwise receipt modification time minus measured monotonic duration reconstructs approximate command start/finish.",
+  "product_binding": "summary.json product_sha256 binds the dirty product on source_sha; no new candidate commit or hosted proof is invented."
+}

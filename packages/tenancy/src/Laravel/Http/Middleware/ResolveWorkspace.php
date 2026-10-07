@@ -43,7 +43,7 @@ final class ResolveWorkspace
             abort(403, 'Tenancy is not initialized.');
         }
 
-        if (auth()->id() === null) {
+        if (auth()->guard()->id() === null) {
             abort(403, 'Authentication required to resolve a workspace.');
         }
 
@@ -74,14 +74,14 @@ final class ResolveWorkspace
         $configured = ($this->options ?? app(TenancyOptions::class))->workspacePathSegment;
         $marker = $configured ?? 'w';
 
-        $segments = $request->segments();
+        $segments = array_values($request->segments());
         $index = array_search($marker, $segments, true);
 
         if ($index === false) {
             return null;
         }
 
-        if (! array_key_exists($index + 1, $segments)) {
+        if (! is_string($segments[$index + 1] ?? null)) {
             abort(403, 'Workspace marker present without a following slug.');
         }
 

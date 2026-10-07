@@ -32,7 +32,7 @@ final readonly class ChannelBinding
         foreach ([$this->readUri, $this->revokeUri, $this->issuer, $this->resource] as $uri) {
             $parts = parse_url($uri);
 
-            if (! is_array($parts) || ($parts['scheme'] ?? '') !== 'https' || empty($parts['host'])
+            if (! is_array($parts) || ($parts['scheme'] ?? '') !== 'https' || ($parts['host'] ?? '') === '' || $parts['host'] === '0'
                 || isset($parts['user']) || isset($parts['pass']) || isset($parts['query']) || isset($parts['fragment'])) {
                 throw new CentralUnavailable('Qualified absolute HTTPS binding is absent.');
             }

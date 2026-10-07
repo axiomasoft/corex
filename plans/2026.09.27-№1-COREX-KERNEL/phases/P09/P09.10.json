@@ -2,7 +2,7 @@
   "$schema": "urn:swissknifeman:task:plan:item:v1",
   "id": "P09.10",
   "title": "Строгая tenancy без baseline (232)",
-  "status": "todo",
+  "status": "done",
   "summary": "Строгая tenancy без baseline (232)",
   "why": "Bounded owner of verified P09 review defect; explicit acceptance and dependencies prevent hidden work.",
   "scope": {
@@ -74,6 +74,26 @@
     {
       "path": "scripts/mutation-check.sh",
       "change": "modify"
+    },
+    {
+      "path": "tests/Golden/baseline/php-surface.json",
+      "change": "modify"
+    },
+    {
+      "path": "tests/Golden/REBASELINE.md",
+      "change": "modify"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "P09.10-execution",
+      "path": "@plan/artifacts/P09.10-execution/summary.json",
+      "role": "output"
+    },
+    {
+      "id": "P09.10-evidence-verifier",
+      "path": "@plan/artifacts/P09.10-execution/verify-artifacts.py",
+      "role": "output"
     }
   ],
   "rules": [
@@ -167,6 +187,90 @@
     "notes": "RAG:— current source facts",
     "captures": []
   },
-  "result": null,
-  "updated_at": "2026-10-06T19:25:11Z"
+  "result": {
+    "started_at": "2026-10-07T04:05:25Z",
+    "finished_at": "2026-10-07T04:36:38Z",
+    "executor": {
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "session": "01a11485-af29-7400-a2a9-3b19075de52e"
+    },
+    "notes": "PHPStan232→0, baseline/ceiling0. SQLite103 tests/157 assertions; PG528 tests/2201 assertions,0 skips including isolated Redis/S3. All10 declared checks GREEN; 35/35 fixed mutations killed/restored. API/SPI/schema/BC base/approvals unchanged; feature-local guards preserve R5. Evidence: artifacts/P09.10-execution/summary.json, checks/*.json and verify-artifacts.py. Supplemental foundation/tests-lint/layout/package-graph GREEN. Review and final hosted CI remain P09.8; no release/remote action. Owned test containers stopped; automatic safe-dirs prevented deletion.",
+    "checks": [
+      {
+        "id": "V2",
+        "exit": 0,
+        "at": "2026-10-07T04:36:38Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V2.json"
+      },
+      {
+        "id": "V8",
+        "exit": 0,
+        "at": "2026-10-07T04:36:38Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V8.json"
+      },
+      {
+        "id": "V13",
+        "exit": 0,
+        "at": "2026-10-07T04:36:38Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V13.json"
+      },
+      {
+        "id": "V17",
+        "exit": 0,
+        "at": "2026-10-07T04:36:38Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V17.json"
+      },
+      {
+        "id": "V18",
+        "exit": 0,
+        "at": "2026-10-07T04:36:38Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V18.json"
+      },
+      {
+        "id": "V19",
+        "exit": 0,
+        "at": "2026-10-07T04:36:38Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V19.json"
+      },
+      {
+        "id": "V20",
+        "exit": 0,
+        "at": "2026-10-07T04:36:38Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V20.json"
+      },
+      {
+        "id": "V21",
+        "exit": 0,
+        "at": "2026-10-07T04:36:38Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V21.json"
+      },
+      {
+        "id": "V22",
+        "exit": 0,
+        "at": "2026-10-07T04:36:38Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V22.json"
+      },
+      {
+        "id": "V30",
+        "exit": 0,
+        "at": "2026-10-07T04:36:38Z",
+        "evidence": "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V30.json"
+      }
+    ],
+    "evidence": [
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V2.json",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V8.json",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V13.json",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V17.json",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V18.json",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V19.json",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V20.json",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V21.json",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V22.json",
+      "plans/2026.09.27-№1-COREX-KERNEL/artifacts/P09.10-execution/checks/V30.json"
+    ]
+  },
+  "updated_at": "2026-10-07T04:36:38Z"
 }

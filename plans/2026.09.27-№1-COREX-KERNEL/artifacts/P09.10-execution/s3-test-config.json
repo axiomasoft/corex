@@ -1,0 +1,1 @@
+{"driver": "s3", "key": "corex-test", "secret": "corex-test-password", "region": "us-east-1", "bucket": "corex-p0910-test", "endpoint": "http://127.0.0.1:19009", "use_path_style_endpoint": true, "version": "latest", "http": {"connect_timeout": 1, "timeout": 5}}

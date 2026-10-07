@@ -7,6 +7,7 @@ namespace CoreX\Tenancy\Provisioning\Internal\Database;
 use const JSON_THROW_ON_ERROR;
 use const SORT_STRING;
 
+use CoreX\Tenancy\Provisioning\Internal\DatabaseValue;
 use Illuminate\Database\Connection;
 
 use function array_map;
@@ -41,24 +42,29 @@ final class SchemaCatalogueSerializer
 
         $schemas = [];
         foreach ($relations as $relation) {
-            $schema = (string) $relation->schema_name;
-            $table = (string) $relation->table_name;
+            $relation = DatabaseValue::row($relation);
+            $schema = DatabaseValue::text($relation->schema_name);
+            $table = DatabaseValue::text($relation->table_name);
             $schemas[$schema]['name'] = $schema;
             $schemas[$schema]['tables'][] = [
                 'name' => $table,
-                'persistence' => (string) $relation->persistence,
-                'replica_identity' => (string) $relation->replica_identity,
+                'persistence' => DatabaseValue::text($relation->persistence),
+                'replica_identity' => DatabaseValue::text($relation->replica_identity),
                 'columns' => $this->columns($connection, schema: $schema, table: $table),
                 'constraints' => $this->constraints($connection, schema: $schema, table: $table),
                 'indexes' => $this->indexes($connection, schema: $schema, table: $table),
             ];
         }
 
-        $extensions = array_map(static fn (object $extension): array => [
-            'name' => (string) $extension->name,
-            'schema' => (string) $extension->schema_name,
-            'version' => (string) $extension->version,
-        ], $connection->select(<<<'SQL'
+        $extensions = array_map(static function (mixed $row): array {
+            $extension = DatabaseValue::row($row);
+
+            return [
+                'name' => DatabaseValue::text($extension->name),
+                'schema' => DatabaseValue::text($extension->schema_name),
+                'version' => DatabaseValue::text($extension->version),
+            ];
+        }, $connection->select(<<<'SQL'
             SELECT e.extname AS name, n.nspname AS schema_name, e.extversion AS version
             FROM pg_extension e
             INNER JOIN pg_namespace n ON n.oid = e.extnamespace
@@ -86,16 +92,20 @@ final class SchemaCatalogueSerializer
     /** @return list<array<string, mixed>> */
     private function columns(Connection $connection, string $schema, string $table): array
     {
-        return array_map(static fn (object $column): array => [
-            'name' => (string) $column->name,
-            'ordinal' => (string) $column->ordinal,
-            'type' => (string) $column->type_name,
-            'nullable' => (bool) $column->nullable,
-            'default' => $column->default_expression,
-            'identity' => (string) $column->identity_kind,
-            'generated' => (string) $column->generated_kind,
-            'collation' => $column->collation_name,
-        ], $connection->select(
+        return array_values(array_map(static function (mixed $row): array {
+            $column = DatabaseValue::row($row);
+
+            return [
+                'name' => DatabaseValue::text($column->name),
+                'ordinal' => DatabaseValue::decimal($column->ordinal),
+                'type' => DatabaseValue::text($column->type_name),
+                'nullable' => (bool) $column->nullable,
+                'default' => $column->default_expression,
+                'identity' => DatabaseValue::text($column->identity_kind),
+                'generated' => DatabaseValue::text($column->generated_kind),
+                'collation' => $column->collation_name,
+            ];
+        }, $connection->select(
             query: <<<'SQL'
             SELECT a.attname AS name, a.attnum AS ordinal, format_type(a.atttypid, a.atttypmod) AS type_name,
                    NOT a.attnotnull AS nullable, pg_get_expr(d.adbin, d.adrelid, false) AS default_expression,
@@ -110,20 +120,24 @@ final class SchemaCatalogueSerializer
             ORDER BY a.attnum
             SQL,
             bindings: [$schema, $table],
-        ));
+        )));
     }
 
     /** @return list<array<string, mixed>> */
     private function constraints(Connection $connection, string $schema, string $table): array
     {
-        return array_map(static fn (object $constraint): array => [
-            'name' => (string) $constraint->name,
-            'type' => (string) $constraint->type,
-            'definition' => (string) $constraint->definition,
-            'validated' => (bool) $constraint->validated,
-            'deferrable' => (bool) $constraint->deferrable,
-            'initially_deferred' => (bool) $constraint->initially_deferred,
-        ], $connection->select(
+        return array_values(array_map(static function (mixed $row): array {
+            $constraint = DatabaseValue::row($row);
+
+            return [
+                'name' => DatabaseValue::text($constraint->name),
+                'type' => DatabaseValue::text($constraint->type),
+                'definition' => DatabaseValue::text($constraint->definition),
+                'validated' => (bool) $constraint->validated,
+                'deferrable' => (bool) $constraint->deferrable,
+                'initially_deferred' => (bool) $constraint->initially_deferred,
+            ];
+        }, $connection->select(
             query: <<<'SQL'
             SELECT con.conname AS name, con.contype AS type, pg_get_constraintdef(con.oid, false) AS definition,
                    con.convalidated AS validated, con.condeferrable AS deferrable, con.condeferred AS initially_deferred
@@ -134,18 +148,22 @@ final class SchemaCatalogueSerializer
             ORDER BY con.conname COLLATE "C"
             SQL,
             bindings: [$schema, $table],
-        ));
+        )));
     }
 
     /** @return list<array<string, mixed>> */
     private function indexes(Connection $connection, string $schema, string $table): array
     {
-        return array_map(static fn (object $index): array => [
-            'name' => (string) $index->name,
-            'definition' => (string) $index->definition,
-            'valid' => (bool) $index->valid,
-            'ready' => (bool) $index->ready,
-        ], $connection->select(
+        return array_values(array_map(static function (mixed $row): array {
+            $index = DatabaseValue::row($row);
+
+            return [
+                'name' => DatabaseValue::text($index->name),
+                'definition' => DatabaseValue::text($index->definition),
+                'valid' => (bool) $index->valid,
+                'ready' => (bool) $index->ready,
+            ];
+        }, $connection->select(
             query: <<<'SQL'
             SELECT i.relname AS name, pg_get_indexdef(i.oid, 0, false) AS definition,
                    idx.indisvalid AS valid, idx.indisready AS ready
@@ -157,7 +175,7 @@ final class SchemaCatalogueSerializer
             ORDER BY i.relname COLLATE "C"
             SQL,
             bindings: [$schema, $table],
-        ));
+        )));
     }
 
     private function sortRecursively(mixed $value): mixed

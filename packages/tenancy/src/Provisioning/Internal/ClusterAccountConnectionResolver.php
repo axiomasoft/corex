@@ -35,22 +35,23 @@ final class ClusterAccountConnectionResolver implements AccountConnectionResolve
             throw new RuntimeException("Account [{$account->id}] not found in root_accounts.");
         }
 
+        $clusterId = DatabaseValue::text($row->cluster_id);
         $cluster = $this->db()
             ->table('root_clusters')
-            ->where('id', $row->cluster_id)
+            ->where('id', $clusterId)
             ->select(['pgbouncer_host', 'pgbouncer_port', 'app_db_user'])
             ->first();
 
         if ($cluster === null) {
-            throw new RuntimeException("Cluster [{$row->cluster_id}] not found in root_clusters.");
+            throw new RuntimeException("Cluster [{$clusterId}] not found in root_clusters.");
         }
 
         return new DatabaseConnectionConfig(
             driver: 'pgsql',
-            host: $cluster->pgbouncer_host,
-            port: (int) $cluster->pgbouncer_port,
-            database: $row->db_name,
-            username: $cluster->app_db_user,
+            host: DatabaseValue::text($cluster->pgbouncer_host),
+            port: DatabaseValue::integer($cluster->pgbouncer_port),
+            database: DatabaseValue::text($row->db_name),
+            username: DatabaseValue::text($cluster->app_db_user),
         );
     }
 

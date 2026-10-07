@@ -7,11 +7,13 @@ namespace CoreX\Tenancy\Integration\Internal\Wakeup;
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
 use CoreX\Context\Data\TenantContext;
+use CoreX\Tenancy\Integration\Internal\DatabaseValue;
 use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use DateInterval;
 use DateTimeImmutable;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\ConnectionResolverInterface;
+use Illuminate\Database\Query\Builder;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
 use Throwable;
@@ -92,14 +94,14 @@ final class RootWakeupReconciler
             return $this->root()->table('root_wakeup_reconciliation_state')->where('name', 'default')->firstOrFail();
         });
 
-        if ($state->retry_at !== null && new DateTimeImmutable((string) $state->retry_at) > $this->clock->now()) {
-            return ['processed' => 0, 'next_cursor' => $state->cursor_account_id];
+        if ($state->retry_at !== null && new DateTimeImmutable(DatabaseValue::text($state->retry_at)) > $this->clock->now()) {
+            return ['processed' => 0, 'next_cursor' => $state->cursor_account_id === null ? null : DatabaseValue::text($state->cursor_account_id)];
         }
 
-        $cursor = $afterAccountId ?? $state->cursor_account_id;
+        $cursor = $afterAccountId ?? ($state->cursor_account_id === null ? null : DatabaseValue::text($state->cursor_account_id));
         $accounts = $this->root()->table('root_accounts')
             ->where('status', 'active')
-            ->when($cursor !== null, static fn ($query) => $query->where('id', '>', $cursor))
+            ->when($cursor !== null, static fn (Builder $query) => $query->where('id', '>', $cursor))
             ->orderBy('id')
             ->limit($limit)
             ->get(['id', 'slug', 'status']);
@@ -107,9 +109,9 @@ final class RootWakeupReconciler
 
         foreach ($accounts as $account) {
             $accountRef = new AccountRef(
-                id: (string) $account->id,
-                slug: (string) $account->slug,
-                status: (string) $account->status,
+                id: DatabaseValue::text($account->id),
+                slug: DatabaseValue::text($account->slug ?? ''),
+                status: DatabaseValue::text($account->status),
                 features: [],
                 limits: [],
             );
@@ -122,7 +124,7 @@ final class RootWakeupReconciler
                     callback: fn (): ?DateTimeImmutable => $this->sweeper->nextDue(context: $context),
                 );
             } catch (Throwable) {
-                $attempts = (int) $state->attempts + 1;
+                $attempts = DatabaseValue::integer($state->attempts) + 1;
                 $this->root()->table('root_wakeup_reconciliation_state')->where('name', 'default')->update([
                     'attempts' => $attempts,
                     'retry_at' => $this->clock->now()->add(new DateInterval('PT'.(min(300, 2 ** min($attempts, 8))).'S')),
@@ -158,7 +160,7 @@ final class RootWakeupReconciler
                 $now = $this->clock->now();
                 $hint = $this->root()->table('root_wakeup_hints')
                     ->where('next_fire_at', '<=', $now)
-                    ->where(static fn ($query) => $query->whereNull('leased_until')->orWhere('leased_until', '<=', $now))
+                    ->where(static fn (Builder $query) => $query->whereNull('leased_until')->orWhere('leased_until', '<=', $now))
                     ->orderBy('next_fire_at')
                     ->lockForUpdate()
                     ->first();
@@ -175,7 +177,7 @@ final class RootWakeupReconciler
                     continue;
                 }
 
-                $epoch = (int) $hint->claim_epoch + 1;
+                $epoch = DatabaseValue::integer($hint->claim_epoch) + 1;
                 $this->root()->table('root_wakeup_hints')
                     ->where('account_id', $hint->account_id)
                     ->where('hint_revision', $hint->hint_revision)
@@ -188,13 +190,13 @@ final class RootWakeupReconciler
 
                 return [
                     'account' => new AccountRef(
-                        id: (string) $account->id,
-                        slug: (string) $account->slug,
-                        status: (string) $account->status,
+                        id: DatabaseValue::text($account->id),
+                        slug: DatabaseValue::text($account->slug ?? ''),
+                        status: DatabaseValue::text($account->status),
                         features: [],
                         limits: [],
                     ),
-                    'revision' => (int) $hint->hint_revision,
+                    'revision' => DatabaseValue::integer($hint->hint_revision),
                     'epoch' => $epoch,
                 ];
             }

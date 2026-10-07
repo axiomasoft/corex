@@ -1,0 +1,7 @@
+{
+  "id": "V30",
+  "command": "scripts/php84 php scripts/quality-ceiling-guard.php --tighten",
+  "exit_code": 0,
+  "duration_seconds": 0.036,
+  "log": "V30.log"
+}

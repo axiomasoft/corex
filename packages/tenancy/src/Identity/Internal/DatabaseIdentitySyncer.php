@@ -15,6 +15,7 @@ use DateTimeImmutable;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
+use Illuminate\Database\Query\Builder;
 use InvalidArgumentException;
 use Psr\Clock\ClockInterface;
 use Throwable;
@@ -49,12 +50,12 @@ final class DatabaseIdentitySyncer implements IdentityPasswordRehasher, Identity
             throw new InvalidArgumentException('The tenancy identity writer only owns the canonical users credential mapping.');
         }
 
-        User::on($connection)
+        $query = User::on($connection)
             ->whereKey($identityId)
             ->where('password_hash', $expectedHash)
-            ->where('is_active', true)
-            ->whereNull('deleted_at')
-            ->update(['password_hash' => $replacementHash]);
+            ->where('is_active', true);
+        $query->getQuery()->whereNull('deleted_at');
+        $query->update(['password_hash' => $replacementHash]);
     }
 
     public function syncToAccount(string $identityId, string $accountId): void
@@ -88,7 +89,7 @@ final class DatabaseIdentitySyncer implements IdentityPasswordRehasher, Identity
                     // The lock also covers an absent user row, serializing first delivery.
                     $connection->select('SELECT pg_advisory_xact_lock(hashtextextended(?, 0))', ['corex-identity:'.$identityId]);
                     $existing = User::withTrashed()->whereKey($identityId)->first();
-                    $sourceUpdatedAt = new DateTimeImmutable((string) $identity->updated_at);
+                    $sourceUpdatedAt = new DateTimeImmutable(DatabaseValue::text($identity->updated_at));
                     $isMembershipActive = $this->connections->connection($this->centralConnection)->table('root_identity_accounts')
                         ->where('identity_id', $identityId)->where('account_id', $accountId)->value('status') === 'active';
 
@@ -134,7 +135,7 @@ final class DatabaseIdentitySyncer implements IdentityPasswordRehasher, Identity
                 ->where('identity_id', $identityId)
                 ->where('account_id', $accountId)
                 ->where('updated_at', $membership->updated_at)
-                ->whereExists(static fn ($query) => $query->selectRaw('1')->from('root_identities')
+                ->whereExists(static fn (Builder $query) => $query->selectRaw('1')->from('root_identities')
                     ->where('id', $identityId)->where('updated_at', $identity->updated_at))
                 ->update(['sync_status' => 'synced', 'synced_at' => $this->clock->now()]);
         }
@@ -148,7 +149,7 @@ final class DatabaseIdentitySyncer implements IdentityPasswordRehasher, Identity
             ->pluck('account_id');
 
         foreach ($accountIds as $accountId) {
-            SyncIdentityToAccount::dispatch($identityId, (string) $accountId);
+            SyncIdentityToAccount::dispatch($identityId, DatabaseValue::text($accountId));
         }
     }
 

@@ -8,9 +8,9 @@ use CoreX\Tenancy\Membership\Data\PairKey;
 use CoreX\Tenancy\Membership\Data\PairState;
 use CoreX\Tenancy\Membership\Data\PairWitness;
 use CoreX\Tenancy\Membership\Exceptions\PairStoreViolation;
+use CoreX\Tenancy\Membership\Internal\DatabaseValue;
 use CoreX\Tenancy\Membership\Internal\Transport\Value;
 use Illuminate\Database\ConnectionInterface;
-use stdClass;
 
 /** @internal Disposable PostgreSQL reference store; it is deliberately unregistered. */
 final readonly class PairStore
@@ -249,26 +249,25 @@ final readonly class PairStore
 
     private function lockedState(PairKey $key): PairState
     {
-        /** @var stdClass $row */
-        $row = $this->connection->selectOne(
+        $row = DatabaseValue::row($this->connection->selectOne(
             query: 'SELECT revision, revoke_generation, local_epoch, operation_fence, application_fence, operation_id, applied_operation_id, barrier_id, denied'.$this->snapshotSelectClause().' FROM '.$this->table.' WHERE account_id = :account_id AND identity_id = :identity_id FOR UPDATE',
             bindings: [
                 'account_id' => $key->accountId,
                 'identity_id' => $key->identityId,
             ],
-        );
+        ));
 
         return new PairState(
-            revision: (string) $row->revision,
-            revokeGeneration: (string) $row->revoke_generation,
-            localEpoch: (string) $row->local_epoch,
-            operationFence: (string) $row->operation_fence,
-            applicationFence: $row->application_fence === null ? null : (string) $row->application_fence,
-            operationId: $row->operation_id === null ? null : (string) $row->operation_id,
-            appliedOperationId: $row->applied_operation_id === null ? null : (string) $row->applied_operation_id,
-            barrierId: $row->barrier_id === null ? null : (string) $row->barrier_id,
+            revision: DatabaseValue::decimal($row->revision),
+            revokeGeneration: DatabaseValue::decimal($row->revoke_generation),
+            localEpoch: DatabaseValue::decimal($row->local_epoch),
+            operationFence: DatabaseValue::decimal($row->operation_fence),
+            applicationFence: $row->application_fence === null ? null : DatabaseValue::decimal($row->application_fence),
+            operationId: $row->operation_id === null ? null : DatabaseValue::text($row->operation_id),
+            appliedOperationId: $row->applied_operation_id === null ? null : DatabaseValue::text($row->applied_operation_id),
+            barrierId: $row->barrier_id === null ? null : DatabaseValue::text($row->barrier_id),
             denied: (bool) $row->denied,
-            snapshotDigest: $this->physical() && $row->snapshot_digest !== null ? (string) $row->snapshot_digest : null,
+            snapshotDigest: $this->physical() && $row->snapshot_digest !== null ? DatabaseValue::text($row->snapshot_digest) : null,
         );
     }
 
@@ -300,6 +299,8 @@ final readonly class PairStore
 
     private static function compare(string $left, string $right): int
     {
-        return strlen($left) <=> strlen($right) ?: strcmp($left, $right);
+        $lengthComparison = strlen($left) <=> strlen($right);
+
+        return $lengthComparison !== 0 ? $lengthComparison : strcmp($left, $right);
     }
 }

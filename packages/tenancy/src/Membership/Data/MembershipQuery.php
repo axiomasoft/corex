@@ -43,7 +43,7 @@ final readonly class MembershipQuery
         foreach (explode('&', $wire) as $pair) {
             $parts = explode('=', $pair);
 
-            if (count($parts) !== 2 || str_contains($pair, '+') || preg_match('/%(?![0-9a-fA-F]{2})/', $pair)) {
+            if (count($parts) !== 2 || str_contains($pair, '+') || preg_match('/%(?![0-9a-fA-F]{2})/', $pair) !== 0) {
                 throw new CentralProtocolViolation('Invalid scalar query encoding.');
             }
 

@@ -27,6 +27,7 @@ use CoreX\Tenancy\Laravel\WakeupRegistrar;
 use CoreX\Tenancy\Laravel\WorkspaceRegistrar;
 use CoreX\Wakeup\Contracts\DueWakeupSweeper;
 use CoreX\Wakeup\Contracts\WakeupScheduleHint;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Support\ServiceProvider;
 use Override;
 
@@ -66,7 +67,7 @@ final class TenancyServiceProvider extends ServiceProvider
     /** @return list<PackageRegistrar> */
     private function registrars(): array
     {
-        $corexTenancy = $this->app['config']->get('corex-tenancy', []);
+        $corexTenancy = $this->app->make(Repository::class)->get('corex-tenancy', []);
         $corexTenancy = is_array($corexTenancy) ? $corexTenancy : [];
 
         $registrars = [
@@ -83,14 +84,16 @@ final class TenancyServiceProvider extends ServiceProvider
 
         // TenancyOptions stays bind()-lazy (P7.2/P8.2): make() here would
         // validate OIDC before Testbench defineEnvironment fills issuer fields.
-        $oidcEnabled = (bool) ($corexTenancy['oidc']['enabled'] ?? false);
+        $oidc = is_array($corexTenancy['oidc'] ?? null) ? $corexTenancy['oidc'] : [];
+        $oidcEnabled = (bool) ($oidc['enabled'] ?? false);
 
         if ($oidcEnabled) {
             $registrars[] = new AuthenticationRegistrar;
         }
 
-        $wakeupDriver = is_string($corexTenancy['wakeup']['driver'] ?? null)
-            ? $corexTenancy['wakeup']['driver']
+        $wakeup = is_array($corexTenancy['wakeup'] ?? null) ? $corexTenancy['wakeup'] : [];
+        $wakeupDriver = is_string($wakeup['driver'] ?? null)
+            ? $wakeup['driver']
             : 'local_sweep';
 
         if (

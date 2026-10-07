@@ -11,9 +11,11 @@ use CoreX\Tenancy\Provisioning\Data\TemplateAccountView;
 use DateTimeInterface;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Str;
 use LogicException;
 use RuntimeException;
+use stdClass;
 
 /**
  * Pending-pool mechanics (B-11 §5.2, AC-4/AC-5): keeps `pending_pool_size`
@@ -109,7 +111,7 @@ final class PendingPool
                 ->where('id', $candidate->id)
                 ->update(['status' => 'provisioning']);
 
-            return $candidate->id;
+            return DatabaseValue::text($candidate->id);
         });
 
         $id = $claimedId ?? $this->cloneOne(null, 'provisioning');
@@ -138,8 +140,8 @@ final class PendingPool
 
         $query = $this->db()
             ->table('root_accounts')
-            ->where(fn ($query) => $query->where('status', 'pending')
-                ->orWhere(fn ($query) => $query->where('status', 'provisioning')->where('pool_cleanup', true)));
+            ->where(fn (Builder $query) => $query->where('status', 'pending')
+                ->orWhere(fn (Builder $query) => $query->where('status', 'provisioning')->where('pool_cleanup', true)));
 
         if ($templateVersion !== null) {
             $query->where('template_version', $templateVersion);
@@ -157,15 +159,20 @@ final class PendingPool
             // The marker makes a failed DROP recoverable by the next cleanup run.
             $claimed = $this->db()->table('root_accounts')
                 ->where('id', $row->id)
-                ->where(fn ($query) => $query->where('status', 'pending')
-                    ->orWhere(fn ($query) => $query->where('status', 'provisioning')->where('pool_cleanup', true)))
+                ->where(fn (Builder $query) => $query->where('status', 'pending')
+                    ->orWhere(fn (Builder $query) => $query->where('status', 'provisioning')->where('pool_cleanup', true)))
                 ->update(['status' => 'provisioning', 'pool_cleanup' => true]);
 
             if ($claimed !== 1) {
                 continue;
             }
 
-            $this->db()->statement('DROP DATABASE IF EXISTS "'.$row->db_name.'"');
+            $databaseName = DatabaseValue::text($row->db_name);
+
+            if (preg_match('/\Aacc_[a-zA-Z0-9_]+\z/D', $databaseName) !== 1) {
+                throw new RuntimeException('Invalid pending account database name; refusing DROP.');
+            }
+            $this->db()->statement('DROP DATABASE IF EXISTS "'.$databaseName.'"');
 
             $this->db()->transaction(function () use ($row, &$cleared): void {
                 $deleted = $this->db()
@@ -196,11 +203,11 @@ final class PendingPool
             ? $this->clusterRow($clusterId)
             : $this->leastLoadedActiveCluster();
 
-        $template = $this->readyTemplateFor((int) $cluster->template_version);
+        $template = $this->readyTemplateFor(DatabaseValue::integer($cluster->template_version));
 
         $this->templateIntegrityVerifier->verifyCurrent(
-            version: (int) $template->version,
-            clusterId: (string) $cluster->id,
+            version: DatabaseValue::integer($template->version),
+            clusterId: DatabaseValue::text($cluster->id),
         );
 
         $id = (string) Str::uuid7();
@@ -218,10 +225,10 @@ final class PendingPool
 
         $this->provisioner->provision(new ProvisionParams(
             accountId: $id,
-            clusterId: $cluster->id,
-            templateVersion: (int) $template->version,
-            embeddingModel: $template->embedding_model,
-            embeddingDim: (int) $template->embedding_dim,
+            clusterId: DatabaseValue::text($cluster->id),
+            templateVersion: DatabaseValue::integer($template->version),
+            embeddingModel: DatabaseValue::text($template->embedding_model),
+            embeddingDim: DatabaseValue::integer($template->embedding_dim),
         ));
 
         $this->db()->transaction(function () use ($cluster, $id, $status): void {
@@ -237,7 +244,7 @@ final class PendingPool
         return $id;
     }
 
-    private function clusterRow(string $clusterId): object
+    private function clusterRow(string $clusterId): stdClass
     {
         $cluster = $this->db()
             ->table('root_clusters')
@@ -251,7 +258,7 @@ final class PendingPool
         return $cluster;
     }
 
-    private function leastLoadedActiveCluster(): object
+    private function leastLoadedActiveCluster(): stdClass
     {
         $cluster = $this->db()
             ->table('root_clusters')
@@ -266,7 +273,7 @@ final class PendingPool
         return $cluster;
     }
 
-    private function readyTemplateFor(int $version): object
+    private function readyTemplateFor(int $version): stdClass
     {
         $template = $this->db()
             ->table('root_templates')

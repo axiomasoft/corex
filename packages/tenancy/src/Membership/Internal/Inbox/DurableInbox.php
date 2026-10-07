@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Membership\Internal\Inbox;
 
 use CoreX\Tenancy\Membership\Exceptions\InboxConflict;
+use CoreX\Tenancy\Membership\Internal\DatabaseValue;
 use CoreX\Tenancy\Membership\Internal\Transport\MembershipTrigger;
 use Illuminate\Database\ConnectionInterface;
 
@@ -42,7 +43,7 @@ final readonly class DurableInbox
                 bindings: ['event_id' => $trigger->eventId],
             );
 
-            if (! hash_equals((string) $existing->logical_digest, $trigger->logicalDigest())) {
+            if (! hash_equals(DatabaseValue::text(DatabaseValue::row($existing)->logical_digest), $trigger->logicalDigest())) {
                 throw new InboxConflict('Conflicting logical event ID reuse.');
             }
 

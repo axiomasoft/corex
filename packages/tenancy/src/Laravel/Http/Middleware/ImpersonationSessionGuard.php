@@ -13,6 +13,7 @@ use CoreX\Tenancy\Laravel\Support\TenancyOptions;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use RuntimeException;
 
 /**
  * TTL + revocation + banner for an active impersonated session (D144/D147/
@@ -58,6 +59,10 @@ final class ImpersonationSessionGuard
         }
 
         $response = $next($request);
+
+        if (! $response instanceof \Symfony\Component\HttpFoundation\Response) {
+            throw new RuntimeException('Impersonation middleware requires an HTTP response.');
+        }
         $response->headers->set('X-CoreX-Impersonation', $state->grantId);
 
         return $response;

@@ -11,9 +11,12 @@ use CoreX\Tenancy\Provisioning\Data\ClaimRequest;
 use CoreX\Tenancy\Provisioning\Data\QualifiedTemplate;
 use CoreX\Tenancy\Provisioning\Data\TemplateAccountView;
 use CoreX\Tenancy\Provisioning\Exceptions\TemplateIntegrityException;
+use CoreX\Tenancy\Provisioning\Internal\DatabaseValue;
 use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Connectors\ConnectionFactory;
+use Illuminate\Database\Eloquent\Model;
+use stdClass;
 
 /** @internal */
 final class TemplateIntegrityVerifier implements TemplateIntegrityChecks, TemplateIntegrityVerifierContract
@@ -33,9 +36,9 @@ final class TemplateIntegrityVerifier implements TemplateIntegrityChecks, Templa
 
         return new QualifiedTemplate(
             clusterId: $request->clusterId,
-            templateId: (string) $template->id,
-            templateVersion: (int) $template->version,
-            artifactDigest: $this->manifestFor((string) $template->id)->digest($this->serializer),
+            templateId: DatabaseValue::text($template->id),
+            templateVersion: DatabaseValue::integer($template->version),
+            artifactDigest: $this->manifestFor(DatabaseValue::text($template->id))->digest($this->serializer),
         );
     }
 
@@ -53,6 +56,7 @@ final class TemplateIntegrityVerifier implements TemplateIntegrityChecks, Templa
         ]);
     }
 
+    /** @return stdClass */
     public function assertCurrent(int $version, ?string $clusterId = null): object
     {
         return $this->verify(templateId: null, version: $version, clusterId: $clusterId);
@@ -60,11 +64,14 @@ final class TemplateIntegrityVerifier implements TemplateIntegrityChecks, Templa
 
     public function assertAccount(object $account): object
     {
+        if (! $account instanceof Model && ! $account instanceof stdClass) {
+            throw new TemplateIntegrityException('The account template view is malformed.');
+        }
         $template = $this->assertCurrent(
-            version: (int) $account->template_version,
-            clusterId: (string) $account->cluster_id,
+            version: DatabaseValue::integer($account instanceof Model ? $account->getAttribute('template_version') : $account->template_version),
+            clusterId: DatabaseValue::text($account instanceof Model ? $account->getAttribute('cluster_id') : $account->cluster_id),
         );
-        $actualHash = $this->actualHashForDatabase((string) $account->db_name);
+        $actualHash = $this->actualHashForDatabase(DatabaseValue::text($account instanceof Model ? $account->getAttribute('db_name') : $account->db_name));
 
         if ($actualHash !== $template->schema_hash) {
             throw new TemplateIntegrityException('The account database no longer matches its trusted template schema.');
@@ -73,11 +80,11 @@ final class TemplateIntegrityVerifier implements TemplateIntegrityChecks, Templa
         return $template;
     }
 
-    private function verify(?string $templateId, ?int $version, ?string $clusterId): object
+    private function verify(?string $templateId, ?int $version, ?string $clusterId): stdClass
     {
         $connection = $this->db();
 
-        return $connection->transaction(function () use ($connection, $templateId, $version, $clusterId): object {
+        return $connection->transaction(function () use ($connection, $templateId, $version, $clusterId): stdClass {
             $query = $connection->table('root_templates')->where('status', 'ready')->lockForUpdate();
 
             if ($templateId !== null) {
@@ -93,14 +100,14 @@ final class TemplateIntegrityVerifier implements TemplateIntegrityChecks, Templa
                 throw new TemplateIntegrityException('The requested template has no trusted schema hash.');
             }
 
-            $this->lock->acquire($connection, (string) $template->id);
+            $this->lock->acquire($connection, DatabaseValue::text($template->id));
 
             if ($clusterId !== null && ! $connection->table('root_clusters')
                 ->where('id', $clusterId)->where('status', 'active')->where('template_version', $template->version)->exists()) {
                 throw new TemplateIntegrityException('The cluster does not currently admit this template.');
             }
 
-            $manifest = $this->manifestFor((string) $template->id);
+            $manifest = $this->manifestFor(DatabaseValue::text($template->id));
             $manifest->assertTrusted(
                 trustedKeys: $this->tenancyOptions()->templateIntegrityTrustedKeys,
                 serializer: $this->serializer,
@@ -112,15 +119,19 @@ final class TemplateIntegrityVerifier implements TemplateIntegrityChecks, Templa
         });
     }
 
-    private function actualHash(object $template): string
+    private function actualHash(stdClass $template): string
     {
-        return $this->actualHashForDatabase((string) $template->db_name);
+        return $this->actualHashForDatabase(DatabaseValue::text($template->db_name));
     }
 
     private function actualHashForDatabase(string $database): string
     {
         $central = $this->db();
         $configuration = $central->getConfig();
+
+        if (! is_array($configuration)) {
+            throw new TemplateIntegrityException('The template connection configuration is unavailable.');
+        }
         $configuration['database'] = $database;
         $connection = $this->connectionFactory->make($configuration, 'corex-template-catalogue');
 

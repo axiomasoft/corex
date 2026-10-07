@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Integration\Internal\Wakeup;
 
 use CoreX\Context\Data\TenantContext;
+use CoreX\Tenancy\Integration\Internal\DatabaseValue;
 use CoreX\Wakeup\Contracts\WakeupScheduleHint;
 use DateTimeImmutable;
 use Illuminate\Database\ConnectionInterface;
@@ -52,14 +53,14 @@ final class RootRegistryWakeupHint implements WakeupScheduleHint
                     return;
                 }
 
-                $currentFireAt = new DateTimeImmutable((string) $hint->next_fire_at);
+                $currentFireAt = new DateTimeImmutable(DatabaseValue::text($hint->next_fire_at));
 
                 $this->root()->table('root_wakeup_hints')
                     ->where('account_id', $context->account->id)
                     ->where('hint_revision', $hint->hint_revision)
                     ->update([
                         'next_fire_at' => min($currentFireAt, $fireAt),
-                        'hint_revision' => (int) $hint->hint_revision + 1,
+                        'hint_revision' => DatabaseValue::integer($hint->hint_revision) + 1,
                         'updated_at' => $now,
                     ]);
             });

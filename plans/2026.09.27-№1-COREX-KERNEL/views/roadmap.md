@@ -40,21 +40,21 @@ Execution sheet: run the batches in order. Route is the maximum class/effort of 
 | 33 | P08 | BP08-10 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P08.10` | frontier/high | done |
 | 34 | P09 | B09-1 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.1` | implementation/xhigh | done |
 | 35 | P09 | B09-2 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.2` | implementation/xhigh | done |
-| 36 | P09 | B09-3 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.10` | implementation/xhigh | ready |
-| 37 | P09 | B09-4 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.11` | implementation/xhigh | waiting: B09-3 |
-| 38 | P09 | B09-5 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.3` | implementation/high | waiting: B09-3 |
-| 39 | P09 | B09-6 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.4` | implementation/xhigh | waiting: B09-3 |
-| 40 | P09 | B09-7 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.9` | implementation/xhigh | waiting: B09-3 |
-| 41 | P09 | B09-8 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.5` | implementation/xhigh | waiting: B09-3 |
-| 42 | P09 | B09-9 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.12` | implementation/xhigh | waiting: B09-3 |
-| 43 | P09 | B09-10 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.13` | implementation/xhigh | waiting: B09-3 |
-| 44 | P09 | B09-11 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.14` | implementation/xhigh | waiting: B09-3 |
-| 45 | P09 | B09-12 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.15` | implementation/xhigh | waiting: B09-3 |
+| 36 | P09 | B09-3 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.10` | implementation/xhigh | done |
+| 37 | P09 | B09-4 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.11` | implementation/xhigh | ready |
+| 38 | P09 | B09-5 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.3` | implementation/high | waiting: B09-4 |
+| 39 | P09 | B09-6 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.4` | implementation/xhigh | waiting: B09-4 |
+| 40 | P09 | B09-7 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.9` | implementation/xhigh | waiting: B09-4 |
+| 41 | P09 | B09-8 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.5` | implementation/xhigh | waiting: B09-4 |
+| 42 | P09 | B09-9 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.12` | implementation/xhigh | waiting: B09-4 |
+| 43 | P09 | B09-10 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.13` | implementation/xhigh | waiting: B09-4 |
+| 44 | P09 | B09-11 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.14` | implementation/xhigh | waiting: B09-4 |
+| 45 | P09 | B09-12 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.15` | implementation/xhigh | waiting: B09-4 |
 | 46 | P09 | B09-13 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.6` | implementation/xhigh | done |
 | 47 | P09 | B09-14 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.16` | frontier/high | done |
 | 48 | P09 | B09-15 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.7` | frontier/high | done |
 | 49 | P09 | B09-16 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.17` | frontier/high | done |
-| 50 | P09 | B09-17 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.8` | frontier/high | waiting: B09-3 |
+| 50 | P09 | B09-17 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P09.8` | frontier/high | waiting: B09-4 |
 | 51 | P10 | BP10-1 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P10.1` | implementation/high | done |
 | 52 | P10 | BP10-2 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P10.2` | implementation/high | done |
 | 53 | P10 | BP10-3 | `task:plan-run 2026.09.27-№1-COREX-KERNEL P10.3` | implementation/high | done |

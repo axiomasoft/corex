@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace CoreX\Tenancy\Provisioning\Internal\Database;
 
 use CoreX\Tenancy\Provisioning\Exceptions\TemplateIntegrityException;
+use CoreX\Tenancy\Provisioning\Internal\DatabaseValue;
+use stdClass;
 
 use function base64_decode;
 use function hash;
@@ -33,8 +35,14 @@ final readonly class TemplateManifest
             throw new TemplateIntegrityException('The configured template manifest is malformed.');
         }
 
+        foreach (array_keys($manifest['payload']) as $key) {
+            if (! is_string($key)) {
+                throw new TemplateIntegrityException('The template manifest payload must have named fields.');
+            }
+        }
+
         return new self(
-            payload: $manifest['payload'],
+            payload: array_filter($manifest['payload'], static fn (int|string $key): bool => is_string($key), ARRAY_FILTER_USE_KEY),
             signature: $manifest['signature'],
             trustedKeyId: $manifest['trusted_key_id'],
         );
@@ -66,23 +74,27 @@ final readonly class TemplateManifest
 
     public function assertMatches(object $template, string $actualHash): void
     {
+        if (! $template instanceof stdClass) {
+            throw new TemplateIntegrityException('The template row is malformed.');
+        }
         $expected = $this->payload['canonical_schema_sha256'] ?? null;
 
         if (! is_string($expected) || preg_match('/^[a-f0-9]{64}$/D', $expected) !== 1
             || ! isset($this->payload['template_id'], $this->payload['template_version'])
             || $this->payload['template_id'] !== $template->id
-            || (int) $this->payload['template_version'] !== (int) $template->version
+            || DatabaseValue::integer($this->payload['template_version']) !== DatabaseValue::integer($template->version)
             || $expected !== $template->schema_hash
             || $expected !== $actualHash) {
             throw new TemplateIntegrityException('The expected, recorded and actual template hashes must match.');
         }
     }
 
+    /** @return non-empty-string */
     private static function decodeBase64Url(string $value): string
     {
         $decoded = base64_decode(strtr($value, '-_', '+/'), strict: true);
 
-        if ($decoded === false) {
+        if ($decoded === false || $decoded === '') {
             throw new TemplateIntegrityException('The template manifest has invalid base64url data.');
         }
 

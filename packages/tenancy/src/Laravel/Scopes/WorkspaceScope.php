@@ -35,7 +35,7 @@ final class WorkspaceScope implements Scope
         $column = $model->qualifyColumn('workspace_id');
 
         $builder->where(static function (Builder $query) use ($column, $workspace): void {
-            $query->where($column, $workspace->id)->orWhereNull($column);
+            $query->where($column, $workspace->id)->getQuery()->orWhereNull($column);
         });
     }
 

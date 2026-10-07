@@ -65,7 +65,7 @@ final class DatabaseWorkspaceResolver implements PrincipalWorkspaceResolver, Wor
             static fn (): never => throw (new ModelNotFoundException)->setModel(Workspace::class, [$slug]),
         );
 
-        $isMember = $workspace->members()
+        $isMember = $workspace->members()->getQuery()->toBase()
             ->where('user_id', $userId)
             ->where('status', 'active')
             ->exists();

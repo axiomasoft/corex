@@ -6,6 +6,7 @@ namespace CoreX\Tenancy\Identity\Internal\Membership;
 
 use CoreX\Context\Contracts\TenancyManager;
 use CoreX\Context\Data\AccountRef;
+use CoreX\Tenancy\Identity\Internal\DatabaseValue;
 use CoreX\Tenancy\Identity\Internal\Models\User;
 use DateTimeImmutable;
 use DomainException;
@@ -42,7 +43,7 @@ final readonly class ManagementIdentityHydrator
         $deny = $identity === null || ($identity->deleted_at ?? null) !== null
             || $account->status !== 'active' || ($account->deleted_at ?? null) !== null
             || $membership?->status !== 'active' || ($membership->deleted_at ?? null) !== null;
-        $ref = new AccountRef(id: $accountId, slug: (string) ($account->slug ?? ''), status: (string) $account->status, features: [], limits: []);
+        $ref = new AccountRef(id: $accountId, slug: DatabaseValue::text($account->slug ?? ''), status: DatabaseValue::text($account->status), features: [], limits: []);
 
         try {
             $this->tenancy->runFor(account: $ref, workspace: null, callback: function () use ($identityId, $identity, $deny): void {
@@ -57,16 +58,18 @@ final readonly class ManagementIdentityHydrator
                 }
 
                 $this->connections->connection()->transaction(function () use ($identityId, $identity): void {
-                    $existing = User::withTrashed()->lockForUpdate()->find($identityId);
+                    $query = User::withTrashed();
+                    $query->getQuery()->lockForUpdate();
+                    $existing = $query->find($identityId);
 
-                    if ($existing?->trashed()) {
+                    if ($existing !== null && $existing->trashed()) {
                         $existing->is_active = false;
                         $existing->save();
 
                         return;
                     }
 
-                    $sourceTime = new DateTimeImmutable((string) $identity->updated_at);
+                    $sourceTime = new DateTimeImmutable(DatabaseValue::text($identity->updated_at));
 
                     if ($existing?->synced_at !== null && $sourceTime <= $existing->synced_at) {
                         return;
@@ -109,9 +112,9 @@ final readonly class ManagementIdentityHydrator
 
         foreach ($ids as $id) {
             try {
-                $this->hydrate(identityId: $identityId, accountId: (string) $id);
+                $this->hydrate(identityId: $identityId, accountId: DatabaseValue::text($id));
             } catch (Throwable) {
-                $this->bookkeep($identityId, (string) $id, 'failed');
+                $this->bookkeep($identityId, DatabaseValue::text($id), 'failed');
             }
         }
     }

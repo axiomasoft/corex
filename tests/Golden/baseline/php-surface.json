@@ -67648,6 +67648,43 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Tenancy\\Account\\Internal\\DatabaseValue": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "integer": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": true
+            },
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Tenancy\\Account\\Internal\\Jobs\\CreateDatabaseFromTemplate": {
         "abstract": false,
         "constants": [],
@@ -71326,6 +71363,31 @@
         "properties": [],
         "readonly": false
     },
+    "CoreX\\Tenancy\\Identity\\Internal\\DatabaseValue": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Tenancy\\Identity\\Internal\\Jobs\\SyncIdentityToAccount": {
         "abstract": false,
         "constants": [],
@@ -73122,6 +73184,43 @@
         "kind": "class",
         "methods": [],
         "parent": "Illuminate\\Database\\Eloquent\\Model",
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Tenancy\\Integration\\Internal\\DatabaseValue": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "integer": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": true
+            },
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
+            }
+        },
+        "parent": null,
         "properties": [],
         "readonly": false
     },
@@ -77356,6 +77455,55 @@
         "properties": [],
         "readonly": true
     },
+    "CoreX\\Tenancy\\Membership\\Internal\\DatabaseValue": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "decimal": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
+            },
+            "row": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "stdClass",
+                "static": true
+            },
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
     "CoreX\\Tenancy\\Membership\\Internal\\Expiration\\ExpiryScheduler": {
         "abstract": false,
         "constants": [],
@@ -79462,6 +79610,18 @@
         "internal": true,
         "kind": "class",
         "methods": {
+            "namedObject": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "wire",
+                        "type": "string",
+                        "variadic": false
+                    }
+                ],
+                "return": "array",
+                "static": true
+            },
             "object": {
                 "params": [
                     {
@@ -80372,6 +80532,67 @@
                 ],
                 "return": "string",
                 "static": false
+            }
+        },
+        "parent": null,
+        "properties": [],
+        "readonly": false
+    },
+    "CoreX\\Tenancy\\Provisioning\\Internal\\DatabaseValue": {
+        "abstract": false,
+        "constants": [],
+        "final": true,
+        "interfaces": [],
+        "internal": true,
+        "kind": "class",
+        "methods": {
+            "decimal": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
+            },
+            "integer": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "int",
+                "static": true
+            },
+            "row": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "stdClass",
+                "static": true
+            },
+            "text": {
+                "params": [
+                    {
+                        "byRef": false,
+                        "name": "value",
+                        "type": "mixed",
+                        "variadic": false
+                    }
+                ],
+                "return": "string",
+                "static": true
             }
         },
         "parent": null,
